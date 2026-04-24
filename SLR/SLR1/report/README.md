@@ -15,7 +15,7 @@ pdflatex extraction_findings.tex
 pdflatex extraction_findings.tex
 ```
 
-The generator uses deterministic numeric, categorical, and keyword-based rules only; no embedding model is used.
+The generator uses deterministic numeric, categorical, and keyword-based rules.
 
 Key outputs:
 - `extraction_findings.tex` -- LaTeX report

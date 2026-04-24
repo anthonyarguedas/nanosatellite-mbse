@@ -17,10 +17,6 @@ Results presentation will follow the bibliometric analysis proposed by [Carrera-
 
 | Population | Intervention | Comparison | Outcome | Context | Related Research Question(s) |
 |--|--|--|--|--|--|
-| Nanosatellite missions | MBSE | | Generality | | 1 |
-| Electrical Power System (EPS) for nanosatellite missions | MBSE | | Generality | | 1 |
-| EPS for nanosatellite missions | MBSE | | Reliability, reproducibility and integrability | | 2 |
-| EPS for nanosatellite missions | Verification procedure modeling using MBSE | | | | 3 |
 | EPS for nanosatellite missions | | | Novel designs | High-autonomy nanosatellite missions | 4 |
 
 ## Sources
