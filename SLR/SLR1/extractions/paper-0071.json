@@ -1,0 +1,143 @@
+{
+  "corpus_id": "paper-0071",
+  "tier": "supporting",
+  "citation": "Nagabhushan, Singh, and S (2022), A Model-Based Approach to Risk Management for RVSAT-1: a Student Nano-satellite Project - Using SysML",
+  "title": "A Model-Based Approach to Risk Management for RVSAT-1: a Student Nano-satellite Project - Using SysML",
+  "authors": [
+    "Shashank Nagabhushan",
+    "Akash Kumar Singh",
+    "Suresh Gowda S"
+  ],
+  "year": 2022,
+  "doi_or_url": "10.1109/aero53065.2022.9843435",
+  "venue_type": "conference paper, IEEE; specific venue name not stated in paper text",
+  "modeling_scope": "SysML/MBSE risk-management model for the RVSAT-1 student nanosatellite/CubeSat project. Scope covers system-level architecture, subsystem layers, WBS, cost/budget, timeline, interdependencies, risk identification, risk attributes, risk severity/likelihood/RPI classification, response strategy, mitigation and contingency plans, and general V&V traceability. It does not present an EPS/power model.",
+  "modeling_scope_categories": [
+    "system-level",
+    "architecture",
+    "budget",
+    "verification",
+    "risk",
+    "tool/process",
+    "other"
+  ],
+  "mbse_language_method_tool": "Model-Based Systems Engineering using SysML in Eclipse Papyrus IDE; uses block definition diagrams for system/subsystem architecture, use case diagrams for risk identification, activity diagrams for risk attributes, and a Risk Precedence Index / colour-coded risk cube.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Other"
+  ],
+  "robot_platform": "RVSAT-1, described as a student nano-satellite/CubeSat project and as a microbiological payload for ISRO's PSLV Stage-4 orbital platform; form factor not reported.",
+  "task_domain": "Risk management and systems engineering for a student nanosatellite/CubeSat mission, including technical, schedule, funding, staffing, logistics and infrastructure risks.",
+  "interface": "Model interfaces are mainly SysML navigation/traceability links: subsystem BDDs are hyperlinked with system-level architecture blocks, and risk-management blocks are hyperlinked to risk layers. The system-level architecture BDD represents interfaces between subsystems. Future external-tool interfacing with MATLAB Systems Composer and Simulink is mentioned.",
+  "feedback": "Risk-management loop described at process level: risk identification, risk analysis, mitigation-plan formulation, mitigation-plan implementation and risk tracking. The model aggregates likelihood and severity into RPI and colour-coded high/medium/low classes to support risk response decisions; no simulation feedback loop is reported.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Demonstrated as a proposed SysML framework/template for RVSAT-1 in Eclipse Papyrus with figures for the model tree, system context diagram, subsystem attributes layer, risk identification layer, risk attributes layer and Risk Precedence Cube. No quantitative evaluation, empirical validation, EPS test case, or measured reliability outcome is reported.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1: partially relevant because it gives a general SysML model for a nanosatellite project at system/subsystem and risk-management levels, but not an EPS/power behavioral model. RQ2: partially relevant because it claims MBSE/modeling benefits such as traceability, access, communication, knowledge reuse and risk-management support, but these are not EPS-specific and are not quantified as reliability/reproducibility/integrability results. RQ3: partially relevant because it links the layered model to general validation and verification traceability and future verification-tool interfacing, but it does not model EPS-specific verification procedures or tests.",
+  "claimed_outcomes": [
+    "The proposed risk model is claimed to enable ease of access and optimization so systems engineers can focus on value-added risk-management tasks.",
+    "The layered and hyperlinked SysML structure is claimed to provide seamless traceability and ease of access when performing validation and verification activities.",
+    "MBSE is claimed generally to improve product quality, stakeholder communication, complexity management, knowledge capture and reuse of information.",
+    "The model is claimed to enable systems understanding through integrated analytics and a model-centric technical baseline.",
+    "The modular approach is claimed to allow modification, further development, expansion beyond risk management, and future interfacing with MATLAB Systems Composer and Simulink. These are integrability-related claims but not EPS-specific."
+  ],
+  "verification_validation_linkage": "General system-level V&V linkage only. The paper quotes the INCOSE MBSE definition including support for verification and validation, states SysML supports verification and validation, and says subsystem BDD hyperlinks allow traceability and access for validation and verification activities. No EPS-specific verification procedure, test model, IVV workflow, or pre-physical-development verification case is presented.",
+  "key_findings": [
+    "RVSAT-1 previously used a document-based tailored Risk Response Matrix with risk description, severity, likelihood, response strategy, trigger and contingency plan.",
+    "The proposed method translates risk-response-matrix elements into a SysML model at system and subsystem levels.",
+    "The model is organized in layers: system architecture, subsystem tools/attributes, risk identification, and risk assessment/attributes.",
+    "Risk Identification is implemented as a SysML use case diagram with risks represented as use cases and colour-coded by risk level.",
+    "Risk Attributes are implemented as a SysML activity diagram containing type, trigger, cause/effect, likelihood/criticality, RPI, mitigation plan and contingency plan.",
+    "Risk Precedence Index is defined as severity index number multiplied by likelihood index number; RPI >= 15 is high, > 5 and < 15 is medium, and <= 5 is low.",
+    "The paper is about model-based risk management for a nanosatellite/CubeSat project, not EPS/power modeling."
+  ],
+  "limitations_gaps": [
+    "No explicit limitations or threats to validity of the proposed model are discussed.",
+    "Future scope is to interface the model with external tools such as MATLAB Systems Composer and Simulink to increase efficiency and quality of system development and verification processes.",
+    "The paper notes MBSE is relatively new and has yet to find widespread adoption across industries and organisations."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0",
+    "total_score": "1",
+    "rationale": "IEEE conference-style paper with DOI and IEEE copyright notice, so venue credibility is treated as yes. It discusses limitations of document-based approaches and existing tools, but does not discuss limitations or validity threats for its own proposed model."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Paper proposes model-based risk management for RVSAT-1 using SysML",
+      "quote": "this paper expedites a novel idea of implementing a Model-Based Approach to assess and manage the risks faced by RVSAT-1, a student nano-satellite project, using SysML",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Modeling scope is system/subsystem risk representation rather than EPS modeling",
+      "quote": "The crux of the idea is to represent the risks involved at the system and subsystem level as a model in SysML.",
+      "location": "Section 4, Proposed Methodology"
+    },
+    {
+      "claim": "Layered model scope",
+      "quote": "The different layers include system level architecture, subsystem level tools, risk identification layer and risk assessment layer.",
+      "location": "Section 1, Introduction"
+    },
+    {
+      "claim": "SysML diagrams and tool used",
+      "quote": "This method leverages various features of SysML such as Block Definition Diagram, Use Case diagram, Activity Diagram etc., to create a Model-Based Systems Engineering framework for RVSAT-1.",
+      "location": "Section 4, Proposed Methodology"
+    },
+    {
+      "claim": "Eclipse Papyrus model/template",
+      "quote": "images captured from the template of the SysML model for RVSAT1 created in the Eclipse Papyrus IDE",
+      "location": "Section 1, Introduction"
+    },
+    {
+      "claim": "V&V traceability linkage",
+      "quote": "This structure allows for seamless traceability and ease of access when performing validation and verification activities.",
+      "location": "Section 4, Proposed Methodology"
+    },
+    {
+      "claim": "Claimed MBSE outcomes",
+      "quote": "MBSE enables the generation of a system model that bolsters the ability to capture, analyze, share, and manage the data associated with the complete specification of a product, reaping benefits like improved product quality and communications among stakeholders, an increased ability to manage system complexity, better knowledge capture and reuse of information.",
+      "location": "Section 2, Model-Based Systems Engineering"
+    },
+    {
+      "claim": "Claimed benefits of proposed risk model",
+      "quote": "The proposed model for risk management enables ease of access and optimization, allowing the systems engineers to focus on value added tasks and ensure that a balanced approach is adopted towards managing risks.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Risk attributes modeled",
+      "quote": "It presents all the typical elements of a risk management plan such as type, likelihood, severity, effects, mitigation, and contingency plans.",
+      "location": "Section 4, Risk Attributes Layer"
+    },
+    {
+      "claim": "Risk Precedence Index definition",
+      "quote": "Risk Precedence Index for this proposal is defined as the product of the severity index number and the likelihood index number.",
+      "location": "Section 4, Risk Precedence Index [RPI]"
+    },
+    {
+      "claim": "Risk-level thresholds",
+      "quote": "A risk with an RPI of 15 or higher is classified as high-level risk, a risk with RPI greater than 5 and lesser than 15 is classified as mid-level risk and risks with RPI lower than or equal to 5 are classified as low-level risks.",
+      "location": "Section 4, Risk Precedence Index [RPI]"
+    },
+    {
+      "claim": "Future integrability with external tools",
+      "quote": "It can be interfaced with external tools such as MATLAB Systems Composer and Simulink in order to increase the efficiency and quality of the system development and verification processes.",
+      "location": "Section 5, Summary"
+    },
+    {
+      "claim": "Platform and mission context",
+      "quote": "Team Antariksh ... is currently involved in designing and developing RVSAT-1, a microbiological payload for ISRO's PSLV Stage-4 (PS4) orbital platform",
+      "location": "Section 1, Introduction"
+    },
+    {
+      "claim": "IEEE publication evidence",
+      "quote": "978-1-6654-3760-8/22/$31.00 ©2022 IEEE",
+      "location": "Section 1, Introduction/page header"
+    }
+  ],
+  "notes_for_consistency": "Read only paper.md. This supporting paper focuses on SysML/MBSE risk management for RVSAT-1 at system/subsystem levels. It does not present EPS/power behavior, EPS architecture, or EPS-specific verification procedures. RVSAT-1 is described both as a student nano-satellite/CubeSat project and as a microbiological payload for the PS4 orbital platform; exact CubeSat form factor is not reported."
+}

@@ -1,0 +1,147 @@
+{
+  "corpus_id": "paper-0010",
+  "tier": "supporting",
+  "citation": "Edmonson et al. (2014), Small Satellite Systems Design Methodology: A Formal and Agile Design Process",
+  "title": "Small Satellite Systems Design Methodology: A Formal and Agile Design Process",
+  "authors": [
+    "William Edmonson",
+    "Jules Chenou",
+    "Natasha Neogi",
+    "Heber Herencia-Zapana"
+  ],
+  "year": 2014,
+  "doi_or_url": "10.1109/syscon.2014.6819305",
+  "venue_type": "conference (IEEE SysCon indicated by DOI/embedded metadata; venue not stated in paper text)",
+  "modeling_scope": "System-level MBSE/design-process framework for pico-/nano-class small satellites. It links natural-language requirements, formal logical requirements, interconnected models, parametric simulations, behavioral simulations, design abstraction levels, consistency checks, and traceability/refinement verification. It is not an EPS-specific model.",
+  "modeling_scope_categories": [
+    "system-level",
+    "requirements",
+    "architecture",
+    "verification",
+    "simulation",
+    "risk",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "SysML-based MBSE with the proposed Responsive/Reliable and Formal Design (RFD) process; formal methods using higher-order logic and PVS for consistency/type-checking proof obligations; category-theoretic refinement/traceability formulation.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "CPS",
+    "Other"
+  ],
+  "robot_platform": "Pico-/nano-class small satellite systems (PNSats), stated as less than 50 kg; no named mission, CubeSat form factor, or EPS platform is reported.",
+  "task_domain": "High-confidence design methodology for small satellite space-mission systems, described as cyber-physical sensing platforms for space-based scientific investigations/Earth sensing.",
+  "interface": "SysML is proposed as a common design language across organizational disciplines and subsystem interfaces; the framework maps requirements, models, simulations, and formal PVS specifications across abstraction levels.",
+  "feedback": "Design refinement/analysis loop across abstraction levels: consistency is checked within each abstraction level and traceability/refinement between levels; the process is intended to respond to foreseen and unforeseen specification changes and to enable virtual testing at each refinement level.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Conceptual/methodological demonstration. The paper defines the RFD framework and verification formulation, then illustrates PVS specification, refinement, and a type-correctness proof obligation using a simple railway crossing example rather than a small-satellite or EPS case study.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1: partial because the paper proposes a general system-level MBSE/formal-method process for PNSats, including requirements, models, simulations, and abstraction levels, but it does not model EPS specifically. RQ2: partial because it claims MBSE/formal-method outcomes such as high-confidence/correct-by-construction design, improved reliability, reduced ambiguity, and fewer integration challenges, but these outcomes are system-level and not EPS-specific. RQ3: partial because it gives an explicit verification approach using PVS, consistency, traceability, refinement, and virtual testing, but not EPS-specific verification procedures.",
+  "claimed_outcomes": [
+    "High-confidence/correct-by-construction small-satellite designs through integration of formal methods and MBSE.",
+    "Responsiveness to system requirement/specification changes through an agile model-based design process.",
+    "Improved reliability by specifying complex systems mathematically and using formal methods alongside testing.",
+    "Reduced ambiguity and improved communication through SysML/common design semantics and formalized requirements.",
+    "Elimination or reduction of design failures and integration challenges through formal methods at appropriate design levels.",
+    "Reduced need for significant testing during system integration because virtual/formal checks occur at refinement levels.",
+    "No EPS-specific reliability, reproducibility, or integrability outcome is reported."
+  ],
+  "verification_validation_linkage": "General system-level V&V is central to the proposed process. SysML is proposed for design analysis, simulation, and V&V; PVS is used from mission objective to mission concept phases; consistency is checked across each abstraction level and traceability between abstraction levels; proof obligations/type correctness conditions are used to show consistency/refinement. No EPS-specific verification procedure is described.",
+  "key_findings": [
+    "The paper frames pico-/nano-class small satellites as cyber-physical systems whose resource constraints and subsystem interactions require integrated model-based design.",
+    "The RFD process links natural-language requirements, formal logical functions, system models, parametric simulations, and behavioral simulations across mission objective, mission characteristics, concept evaluation/selection, and domain-specific design levels.",
+    "SysML is selected as the MBSE language to support design analysis, simulation, V&V, common semantics, and potential customization through stereotypes/profiles.",
+    "Formal methods, especially PVS higher-order logic, are proposed to translate requirements and perform consistency/type-checking checks during design.",
+    "Traceability is formulated as verifiable refinement/abstraction relationships between abstraction levels, with category-theoretic notions used to constrain refinements.",
+    "The only worked example is a railway crossing specification/refinement in PVS; the paper does not provide an implemented PNSat or EPS model."
+  ],
+  "limitations_gaps": [
+    "The paper explicitly states that formal methods cannot fix incorrect assumptions made in the design phase.",
+    "The paper explicitly states that formal methods are not a panacea and that costs can be prohibitive in some design areas.",
+    "Implementation of a traceability check is stated as follow-on work.",
+    "No explicit EPS model, EPS verification procedure, or small-satellite case-study evaluation is reported."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "Credible IEEE conference paper based on DOI/embedded metadata. The paper discusses limitations of formal methods and names traceability-check implementation as future work, but it does not provide a systematic threats-to-validity or study-limitation section."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Paper scope is system-level MBSE for pico-/nano small satellites",
+      "quote": "We propose to develop a model-based systems engineering process that results in high-confidence designs for small satellite systems in the pico-/nano-class, i.e. < 50kg.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "RFD integrates formal methods and MBSE for correct-by-construction designs",
+      "quote": "This objective will be achieved through the integration of formal methods and model based systems engineering to develop an agile framework for high-confidence designs for these small systems.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Framework links requirements, models, and simulations",
+      "quote": "This paper develops an intelligent framework that ties requirements, models, and simulations in a cogent manner.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "PNSat constraints and integrated subsystem behavior motivate system-level modeling",
+      "quote": "Extreme resource constraints of size, mass, power and cost (SMAP-C) drive highly integrated designs in which the behavior of the satellite subsystems cannot be isolated from each other or from the operational algorithms or from the operating environment.",
+      "location": "Section I"
+    },
+    {
+      "claim": "SysML is the chosen MBSE language and is tied to analysis/simulation/V&V",
+      "quote": "We have chosen the graphical modeling language of SysML to be used as the basis of our design process development for small satellites and will be used for the design analysis, simulation, and verification and validation of systems.",
+      "location": "Section II.B"
+    },
+    {
+      "claim": "Formal methods/PVS support verification by translating requirements",
+      "quote": "Formal methods will provide automatic means for verification by translating requirements into a higher order logic language for which tools such as PVS can perform consistency and traceability throughout the design process.",
+      "location": "Section I"
+    },
+    {
+      "claim": "Verification is integrated across abstraction levels",
+      "quote": "This section will provide definitions and methodology for insuring a correct-by-construction system through verification across each level of abstraction through consistency checks and refinement traceability between levels of abstraction.",
+      "location": "Section IV"
+    },
+    {
+      "claim": "Consistency and traceability roles are defined",
+      "quote": "Traceability occurs between A_i's; Consistency occurs across each A_i",
+      "location": "Section IV"
+    },
+    {
+      "claim": "Outcome: reduced integration failures/challenges",
+      "quote": "By integrating formal methods into the proposed design process at the appropriate levels, many design failures and integration challenges can be eliminated.",
+      "location": "Section I"
+    },
+    {
+      "claim": "Outcome: reduced integration testing through correct-by-construction process",
+      "quote": "The integration of formal methods into the design process of a complex system can reduce the need for a significant amount testing during the system integration phase because of the 'correct by construction' nature of the process.",
+      "location": "Section I"
+    },
+    {
+      "claim": "Evaluation uses a railway crossing example rather than a satellite/EPS case",
+      "quote": "We next illustrate what a specification and refinement would resemble in PVS, whereby consistency and traceability could be formally checked between these two layers. We consider a simple railway crossing example for the purposes of exposition.",
+      "location": "Section V"
+    },
+    {
+      "claim": "Formal methods limitation",
+      "quote": "Though formal methods cannot fix incorrect assumptions made in the design phase, it can help illuminate and identify errors in reasoning",
+      "location": "Section II.C"
+    },
+    {
+      "claim": "Formal methods are not universally sufficient or cost-effective",
+      "quote": "It is clear that formal methods are not a panacea; there are areas in system design where formal methods are highly applicable, and yield great benefit, such as the specification of complex interfaces or high quality subcomponents, and other areas where the costs are prohibitive.",
+      "location": "Section II.C"
+    },
+    {
+      "claim": "Future work/gap",
+      "quote": "As a follow-on to this research will be to develop the implementation of traceability check that is to be integrated with the RFD process.",
+      "location": "Section VI"
+    }
+  ],
+  "notes_for_consistency": "Only paper.md and the embedded metadata were used. The paper is relevant as supporting system-level PNSat MBSE/formal-method evidence, but it is not EPS-specific. Venue name is not stated in the paper text; DOI/metadata indicate IEEE SysCon. No named mission, CubeSat form factor, autonomous-control allocation, communications-latency assumption, or EPS verification procedure is reported."
+}

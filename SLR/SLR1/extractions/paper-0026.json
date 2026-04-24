@@ -1,0 +1,162 @@
+{
+  "corpus_id": "paper-0026",
+  "tier": "core",
+  "citation": "Strobbe, Salas Cordero, and Vingerhoeds (2023), Open-source CubeSat MBSE Approach to Address Traceability: Power Subsystem",
+  "title": "Open-source CubeSat MBSE Approach to Address Traceability: Power Subsystem",
+  "authors": [
+    "Charlotte Strobbe",
+    "Sophia Salas Cordero",
+    "Rob Vingerhoeds"
+  ],
+  "year": 2023,
+  "doi_or_url": "10.1109/syscon53073.2023.10131054",
+  "venue_type": "conference; venue name not stated in paper text (IEEE DOI metadata indicates SysCon)",
+  "modeling_scope": "EPS-level SysML model for a CubeSat power subsystem. It covers requirements and assumptions, structure (power generation, storage, supply control, bus), behavior (use case and sequence diagrams), analysis (power budget constraint blocks and parametric diagrams), and traceability/verification via an assumptions profile and Java code that evaluates parameter changes and requirement constraints.",
+  "modeling_scope_categories": [
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "verification",
+    "operations",
+    "reference model/template",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "SysML 1.6 in Papyrus/Eclipse, using requirement diagrams, BDD, IBD, use case diagrams, sequence diagrams, parametric diagrams, a custom assumptions profile, and Java code that reads the Papyrus .uml model; based on prior CubeSat System Reference Model/SSWG work.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Other"
+  ],
+  "robot_platform": "CubeSat/nanosatellite power subsystem; no named mission; form factor not explicitly stated, though CubeSat standards from 1U to 12U and an assumption parameter size=3 are mentioned.",
+  "task_domain": "Early/conceptual CubeSat electrical power subsystem design, power budget analysis, requirements traceability, and model-based requirement verification.",
+  "interface": "Papyrus model/diagrams and tables; Papyrus .uml file is input to Java code; output is traceability table(s)/Excel with parameter old/new values and requirement-constraint status.",
+  "feedback": "Scenario-based analysis loop: user changes parameter values, code recalculates dependent power-budget parameters and flags constraints as respected/not respected. No closed-loop operational control is described.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Demonstration on a Papyrus SysML CubeSat power subsystem model. The authors apply the Java code to a power-budget scenario with assumptions and user updates (solar panel length and width, solar-cell efficiency, eclipse duty cycle, and sunlight duty cycle), compare with expected power-budget results, and show generated table/constraint flags. No quantitative time/cost study or user-study evaluation is performed.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "yes"
+  },
+  "rq_relevance": "RQ1: partial because the paper provides a generalizable EPS-level CubeSat modeling approach with requirements, structure, behavior, and analysis, but it is not a full mission model and behavior is limited to nominal examples with mission modes excluded. RQ2: partial because it claims traceability, reproducibility/accessibility, reduced design time/cost, early error detection, and possible adoption benefits, but these are not quantitatively evaluated and direct reliability improvement is not reported. RQ3: yes because EPS requirement constraints and power-budget equations are represented in the model and automatically evaluated from Papyrus model data before physical development, though no physical IVV/test procedure is modeled.",
+  "claimed_outcomes": [
+    "Model-based traceability lets designers see how parameter changes affect other parameters and whether requirements are met.",
+    "The open-source Papyrus implementation is claimed to make the modeling effort more accessible and easier to reproduce/adapt.",
+    "The approach is expected to reduce CubeSat design time/cost and lower development time/effort, but the paper does not quantify this outcome.",
+    "Traceability enabled by data integration is claimed to support automated design optimization and early detection of potential design errors.",
+    "Reusable standard profiles/components are proposed as future work that could make modeling less time-consuming and improve organizational adoption."
+  ],
+  "verification_validation_linkage": "EPS-specific model-based requirement verification is integrated through SysML requirements/constraints, assumptions, constraint blocks, and a Java code that extracts data from the Papyrus .uml file, applies parameter changes, recalculates the power budget, and outputs requirement constraints with respected/not-respected flags. The demonstration checks constraints such as Batt*1.2<BC and 0<PSAM. No physical test procedure, IVV workflow, or validation campaign is modeled.",
+  "key_findings": [
+    "The paper presents a Papyrus SysML model of a CubeSat power subsystem organized into requirements, structure, behavior, and analysis packages.",
+    "The modeled EPS architecture includes electric power generation, electric power storage, power supply control, and a bus, with component details such as solar panels, battery, voltage regulators, and protection components.",
+    "Behavior is represented with a use case diagram and sequence diagrams for nominal power subsystem functions such as generating, storing, distributing, and regulating power.",
+    "Power-budget analysis is represented with constraint blocks and parametric diagrams covering orbital period, eclipse/sunlight time, energy required, solar array power, power margin, and battery capacity.",
+    "A custom assumptions profile distinguishes assumption values from other model elements so the Java code can impose those values during analysis.",
+    "The Java code reads the Papyrus .uml file, classifies model elements, evaluates constraints, and generates traceability tables showing old/new parameter values and requirement status.",
+    "The demonstration scenario reproduces expected power-budget values in the generated table and flags one battery-capacity constraint as not respected and the solar-array margin constraint as respected."
+  ],
+  "limitations_gaps": [
+    "Only nominal behavior is shown; mission modes are explicitly not discussed, although the authors say the methodology could be extended to them.",
+    "Activity diagrams and state machine diagrams were not used because the authors considered them non-essential for this analysis, so behavioral coverage is limited.",
+    "The Java code requires specific modeling rules, including no spaces in names and Java-specified constraints, which constrains model authoring.",
+    "Further development is needed for the Java code to work with more complex SysML models such as a complete CubeSat model and to visualize changes directly in the model.",
+    "A quantitative benefit study for cost and time is proposed as future work, not performed in this paper.",
+    "Reusable standard profiles for all CubeSat components, subsystems, and requirement types remain future work; expansion to other subsystems is still in progress."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "IEEE DOI/conference-style publication supports a credible venue score. The paper discusses practical limitations and future work, but not a formal threats-to-validity section, so limitations coverage is partial."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "MBSE model is intended to support traceability and requirement verification.",
+      "quote": "By using MBSE approaches on CubeSats this paper aims to address notions of traceability and how system models can be used to verify the fulfillment of requirements.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Tooling is open-source Papyrus.",
+      "quote": "This work is carried out in Papyrus, an open-source model-based engineering tool",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Modeling scope is CubeSat power subsystem SysML.",
+      "quote": "In this paper, a CubeSat power subsystem SysML model is presented",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Model contains requirements, structure, behavior, and analysis.",
+      "quote": "The model proposed in this paper contains key information about a system, such as requirements, structure, behavior, and analysis.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Claimed outcome: designers know which requirements are met.",
+      "quote": "guaranteeing that the designers are clearly aware of which requirements are being met and which are not",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Claimed outcome: early error detection and automated optimization through data integration/traceability.",
+      "quote": "The traceability enabled by data integration can contribute to automating the design optimization of CubeSats and allow for the early detection of potential design errors.",
+      "location": "Section I"
+    },
+    {
+      "claim": "Modeling approach is intended to improve traceability and reproduction.",
+      "quote": "Illustrated with a CubeSat power subsystem model, this section presents how modeling can be realized to provide better traceability and ease of reproduction",
+      "location": "Section III"
+    },
+    {
+      "claim": "Model landing page organizes the model into major MBSE aspects.",
+      "quote": "Our power subsystem model landing page (see Fig. 1) is composed of the following fundamental aspects of the model: requirements, structure, behavior, and analysis.",
+      "location": "Section III.A"
+    },
+    {
+      "claim": "Assumptions profile supports traceability and analysis.",
+      "quote": "For our model, an assumptions profile was created and applied in order to include assumptions.",
+      "location": "Section III.B"
+    },
+    {
+      "claim": "Java code implements parameter impact traceability.",
+      "quote": "The parameter impact traceability (not-usual traceability) for the current case study was achieved through the development of a Java code",
+      "location": "Section III.C"
+    },
+    {
+      "claim": "Java code evaluates changed parameters.",
+      "quote": "Once the code is executed, the user will be able to test the scenario by changing the value of the parameters it wishes to change.",
+      "location": "Section III.C"
+    },
+    {
+      "claim": "Verification output is requirement constraint status.",
+      "quote": "the requirement constraint will be also displayed with a mention of whether is fulfilled with a \" (no-)respected\" flag",
+      "location": "Section III.C"
+    },
+    {
+      "claim": "Evaluation goal of code is impact visualization and constraint status.",
+      "quote": "The objective of this code is to facilitate the visualization of the impact of a parameter value change on the value of other parameters and whether the constraints are respected.",
+      "location": "Section IV"
+    },
+    {
+      "claim": "Demonstration reproduces expected power-budget results.",
+      "quote": "it can be observed on Fig. 7 that these results are also obtained when executing the java code",
+      "location": "Section IV"
+    },
+    {
+      "claim": "Behavioral modeling limitation: mission modes excluded.",
+      "quote": "In this paper only nominal behavior is shown as in [30] without loss of complexity, mission modes are not discussed in this paper.",
+      "location": "Section III.A.5"
+    },
+    {
+      "claim": "Diagram-scope limitation.",
+      "quote": "a choice was made to limit the sort of diagrams used, for example, AD and SMD were not used",
+      "location": "Section IV"
+    },
+    {
+      "claim": "Future quantitative benefit study is not yet done.",
+      "quote": "a quantitative benefit study could be performed in order to assess key performance indicators such as cost and time",
+      "location": "Section V"
+    }
+  ],
+  "notes_for_consistency": "Use this paper as core evidence for EPS-level MBSE traceability and model-based requirement verification. It is not a complete nanosatellite mission model. RQ2 outcomes are mostly claimed or potential rather than empirically measured; direct reliability improvement is not reported beyond requirement/power-budget constraint checking. The paper builds on the INCOSE SSWG CubeSat System Reference Model lineage, but this extraction did not use external repository links or other papers."
+}

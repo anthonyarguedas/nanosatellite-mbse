@@ -1,0 +1,159 @@
+{
+  "corpus_id": "paper-0022",
+  "tier": "supporting",
+  "citation": "Kaslow et al. (2015), CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase",
+  "title": "CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase",
+  "authors": [
+    "David Kaslow",
+    "Bradley J. Ayres",
+    "Curtis Iwata",
+    "Bungo Shiotani"
+  ],
+  "year": 2015,
+  "doi_or_url": "10.2514/6.2015-4474",
+  "venue_type": "Not reported",
+  "modeling_scope": "SysML/OOSEM CubeSat Reference Model for concept-lifecycle use. The model covers stakeholders, needs, objectives, constraints, MOEs, lifecycle stages, phases of operations, requirements, logical space/ground architecture, subsystem-level power and weight parametrics, data/information flows, interfaces to COTS simulation tools, trade studies, and general validation/verification strategy inputs. Power/EPS appears as one generic logical subsystem, not as a detailed EPS behavior model.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "verification",
+    "simulation",
+    "operations",
+    "reference model/template",
+    "lifecycle/PLM",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "Uses SysML with OOSEM methodology. Mentions graphical modeling tools; distribution mechanisms include MagicDraw, XMI, OpenMBEE, and Teamcenter. Concept trade studies may interface the mission model with a space-system model such as AGI System Tool Kit.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Cameo/MagicDraw",
+    "OpenMBEE",
+    "PLM",
+    "OOSEM",
+    "Other"
+  ],
+  "robot_platform": "CubeSat/nanosatellite platform; generic CubeSat Reference Model. Paper notes 1U, 2U, and 3U CubeSats as common, newer 6U/12U/27U specifications, and prior RAX 3U CubeSat use in earlier project phases.",
+  "task_domain": "CubeSat concept-lifecycle mission and system design, including stakeholder/MOE analysis, logical architecture, mission trade-space exploration, and power/data/communication trade studies.",
+  "interface": "System model is described as integrating discipline-specific engineering models and simulations; mission model can interface with a space-system model such as AGI System Tool Kit for input driving parameters and output quantifying parameters. Logical architecture also includes mission payload-bus adapter and space-ground communication interfaces.",
+  "feedback": "Trade-study loop uses model parameters to drive external space-system analysis and return quantifying outputs; state, parametric, and activity diagrams are then used to establish and evaluate mission trade spaces. User feedback mechanisms are mentioned for model distribution, but no detailed feedback process is reported.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Primarily descriptive/reference-model development paper. It demonstrates intended application through a concept-lifecycle trade-study workflow and cites prior RAX-phase trade studies, but the current reference model is not reported as empirically validated; the next step is an example mission-specific model and validation of MOEs/MOPs.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1 partial: the paper provides a general SysML/OOSEM CubeSat reference model and includes a generic Power logical subsystem, but it does not provide a detailed EPS behavior model or an explicit minimal-knowledge EPS modeling method. RQ2 partial: it claims MBSE/model-integration outcomes such as single source, interface management, integration with other models, reduced systems-engineering burden, checklist use, uniformity, and consistency, but not EPS-specific reliability or reproducibility outcomes. RQ3 partial: it links MBSE and the mission-specific model to verification/validation and requirements verification at system level, but no EPS-specific verification procedures are modeled or evaluated.",
+  "claimed_outcomes": [
+    "MBSE system model is claimed to be a single source for architecture development and interface management.",
+    "The system model is claimed to integrate discipline-specific engineering models and simulations.",
+    "The reference model is claimed to provide a starting point, guide, and building blocks for mission-specific CubeSat models.",
+    "The model is claimed to reduce the burden of systems-engineering tasks for small CubeSat teams.",
+    "A properly designed reference model is claimed to serve as a checklist and promote uniformity and consistency across future CubeSat models.",
+    "Reliability outcomes are not reported; EPS-specific reproducibility or integrability outcomes are not reported."
+  ],
+  "verification_validation_linkage": "General linkage only. The paper defines MBSE as supporting verification and validation from conceptual design onward, shows validation as part of reference-model development, and depicts mission-specific models receiving validation and verification strategies and supporting requirements verification. No EPS-specific verification procedure, test sequence, IVV artifact, or pre-hardware EPS verification model is reported.",
+  "key_findings": [
+    "The paper positions a CubeSat Reference Model as a SysML/OOSEM logical architecture that CubeSat teams can tailor into mission-specific models.",
+    "The model scope includes stakeholders, needs, objectives, constraints, MOEs, lifecycle stages, phases of operations, logical subsystems, subsystem-level power/weight parametrics, and data/information flows.",
+    "Power is included as a logical space subsystem responsible to generate, regulate, store, and distribute spacecraft power, but the paper does not detail EPS component behavior.",
+    "Concept-lifecycle trade studies are intended to decompose MOEs into MOPs/TPMs, identify driving and quantifying parameters, interface with external space-system tools, and evaluate trade spaces involving data acquisition/handling, power, and communication.",
+    "Verification and validation are present as general MBSE activities and mission-model inputs, but not as EPS-specific modeled procedures.",
+    "The work was still in development: external distribution, example mission-specific modeling, and MOE/MOP validation were identified as next steps."
+  ],
+  "limitations_gaps": [
+    "The paper states that a fully formed CubeSat Reference Model could be overwhelming for mission-specific teams, especially teams new to MBSE and SysML.",
+    "The reference model had not yet been publicly released; distribution, licensing, and copyright options were still under consideration.",
+    "The effort to date focused on nomenclature, stakeholders, measures, and generic logical architecture; the next step was to create an example mission-specific model and validate MOEs/MOPs.",
+    "No formal limitations or threats to validity are discussed.",
+    "No EPS-specific verification or detailed EPS behavior modeling gap is explicitly discussed, but such content is absent from the reported model details."
+  ],
+  "quality": {
+    "credible_venue_score": "0.5",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.0",
+    "rationale": "The paper has a DOI in the assigned metadata and a formal conference-paper structure, but the venue name/type is not reported in the paper text. It discusses next steps and some practical adoption/distribution issues, but not formal limitations, threats, or validity problems."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "MBSE single-source and interface-management outcome",
+      "quote": "MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Model integration outcome",
+      "quote": "The system model also integrates other discipline specific engineering models and simulations.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "SysML language and model scope",
+      "quote": "Our application of MBSE uses System Modeling Language (SysML), a graphical modeling language, to model all aspects of a system either directly or through an interface with another model.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Requirements/structure/behavior/parametric modeling scope",
+      "quote": "SysML diagrams are used to describe requirements, structures, behaviors, and parametrics from the system down to the component level.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Reference model intended as mission-specific starting point",
+      "quote": "Using the CubeSat Reference Model as a starting point, a user can populate a mission-specific model with the concept lifecycle stakeholders and stakeholder needs, objectives, constraints, and measures of effectiveness (MOEs) and carry out concept life-cycle studies.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "OOSEM method used",
+      "quote": "This has an additional goal of demonstrating Object Oriented Design Method (OOSEM) as applied to a CubeSat mission.",
+      "location": "I. Introduction"
+    },
+    {
+      "claim": "General MBSE verification/validation linkage",
+      "quote": "MBSE is the formalized application of modeling to support system requirements, design, analysis, verification, and validation activities beginning in the conceptual design phase and continuing throughout development and later life cycle phases.",
+      "location": "II.A. Model-Based Systems Engineering"
+    },
+    {
+      "claim": "Authoritative integrated repository",
+      "quote": "The model is the single, authoritative integrated repository of information. Changes to the model are automatically populated into the system views.",
+      "location": "II.B. Systems Modeling Language (SysML)"
+    },
+    {
+      "claim": "Logical architecture purpose",
+      "quote": "The CubeSat Reference Model will provide the logical architecture. It will have all the logical model elements for population by a mission specific CubeSat team.",
+      "location": "II.C. Object-Oriented System Engineering Method (OOSEM)"
+    },
+    {
+      "claim": "Power/EPS logical subsystem scope",
+      "quote": "Power - Generate, regulate, store, and distribute power to the spacecraft.",
+      "location": "III.A. Logical Architecture"
+    },
+    {
+      "claim": "Subsystem-level power/weight parametrics and data flows before distribution",
+      "quote": "Properties and parametrics at subsystem level for power and weight",
+      "location": "III.B. Model Use and Distribution"
+    },
+    {
+      "claim": "External simulation/interface for trade studies",
+      "quote": "an interface between the mission model and a space system model (e.g., AGI's System Tool Kit) are established. The interface supports the input (driving parameters) into the space system model and the output (quantifying parameters) from the space system model.",
+      "location": "III.C. Concept Life Cycle Trade Studies"
+    },
+    {
+      "claim": "Trade-space use involving power",
+      "quote": "Then, candidate models for the Data Acquisition and Handing, Power, and Communication subsystems are created. The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data to meet the established measures.",
+      "location": "III.C. Concept Life Cycle Trade Studies"
+    },
+    {
+      "claim": "Current development gap/next step",
+      "quote": "The next step is to create an example-mission specific model and to validate the MOEs and MOPs.",
+      "location": "IV. Next Steps"
+    },
+    {
+      "claim": "Claimed reduction of burden and consistency outcome",
+      "quote": "MBSE holds the promise of reducing the burden of systems engineering tasks, which is beneficial to small CubeSat teams, and a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models.",
+      "location": "V. Conclusion"
+    }
+  ],
+  "notes_for_consistency": "Read only paper.md plus assigned metadata. Venue name was not reported in the paper text. The paper is relevant mainly as a system-level CubeSat MBSE reference-model paper; EPS content is limited to a generic Power subsystem and power-related trade-study parameters. RQ2/RQ3 evidence is general MBSE/model-integration and general V&V, not EPS-specific."
+}

@@ -1,0 +1,154 @@
+{
+  "corpus_id": "paper-0041",
+  "tier": "supporting",
+  "citation": "Jbara (2025), Applying Model-Based Systems Engineering on CubeSat Budget Calculating",
+  "title": "Applying Model-Based Systems Engineering on CubeSat Budget Calculating",
+  "authors": [
+    "Ahmad Jbara"
+  ],
+  "year": 2025,
+  "doi_or_url": "10.1109/aero63441.2025.11068482",
+  "venue_type": "conference paper; venue name not stated in paper text (IEEE DOI in metadata)",
+  "modeling_scope": "OPM/OPCloud MBSE model and executable tool for CubeSat budget calculation and component selection. It models the CubeSat system as subsystems (Antenna System, TRXVU, OBC, EPS), attributes and thresholds for mass, volume, height, and power, budget-quantifying and decision-making processes, user input/output, JavaScript computations, and animated execution.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "simulation",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "Object-Process Methodology (OPM ISO 19450) in OPCloud, with Object-Process Language (OPL) generated text, computational extensions/MAXIM, and JavaScript code embedded in computational processes; SysML is mentioned only as related/comparative context.",
+  "mbse_language_method_tool_categories": [
+    "Other"
+  ],
+  "robot_platform": "CubeSat nanosatellite platform; paper describes the 1U-12U CubeSat standard and demonstrates with ISISPACE CubeSat subsystem data (Antenna System, TRXVU, OBC, EPS); no named mission.",
+  "task_domain": "Conceptual CubeSat design support: budget calculation for mass, volume, height, and power; component-selection compliance against CubeSat constraints.",
+  "interface": "Nanosatellite Builder/user enters component attribute data in OPCloud ahead of time or at run time; values may be simulated; inputs/outputs can use Excel; OPL text provides a natural-language model view.",
+  "feedback": "Computed budgets are compared with thresholds; subprocesses return a value or \"Error\", and Decision Making changes Component Selection between accepted and not-accepted. The abstract also describes user input that can be iteratively fine-tuned to fit CubeSat limitations.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "The model is demonstrated in OPCloud by executing an OPM model with real ISISPACE subsystem specifications. Animated execution traces budget calculations, a valid case sets Component Selection to accepted, and altered data producing a Volume Budget \"Error\" leaves it not-accepted.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1 partial: the paper gives a general OPM/MBSE representation using minimal OPM elements and applies it to CubeSat budget calculation including EPS as a subsystem, but it does not model full nanosatellite mission behavior or an EPS behavioral model. RQ2 partial: it claims modeling helps screen component combinations, select reliable/compatible components, maintain coherence/consistency/synchronization, and standardize CubeSat processes, but outcomes are not measured and are not EPS-specific. RQ3 partial: it links OPCloud execution/simulation to validation, verification, testing, and uses real data to verify the model/tool, but it does not define EPS-specific verification procedures or IVV artifacts.",
+  "claimed_outcomes": [
+    "Automation and significant shortening of the CubeSat budget-calculation/component-screening process.",
+    "Formal model makes the budget-calculation process clear, unambiguous, and understandable through graphical OPM and OPL text.",
+    "Rapid screening of component combinations is claimed to increase chances of selecting reliable, compatible components.",
+    "Model modifications and augmentations can be made without altering embedded code, helping keep the system coherent, consistent, and synchronized.",
+    "Adopting OPM MBSE is claimed to support standardizing/formulating CubeSat processes and helping professionals navigate CubeSat design complexity."
+  ],
+  "verification_validation_linkage": "General model/tool V&V linkage only. OPCloud is said to provide visual simulation engines supporting validation, verification, and testing. The paper verifies/demonstrates the budget model with real ISISPACE subsystem data and threshold/error cases. No EPS-specific verification procedure, test plan, IVV workflow, or physical-development V&V model is reported.",
+  "key_findings": [
+    "The proposed OPM model represents Budget Calculating at the top level with CubeSat NanoSatellite System, Nanosatellite Builder, Component Selection states, and output budget objects.",
+    "Budget Calculating is refined into Budget Quantifying and Decision Making; Budget Quantifying is further refined into Height, Mass, Volume, and Power Budget Calculating subprocesses.",
+    "The CubeSat system is decomposed into Antenna System, TRXVU, OBC, and EPS; each subsystem is modeled with attributes needed for calculations, including EPS power, mass, height, length, and width.",
+    "OPCloud computational processes use JavaScript code to compute budgets and return either a budget value or an \"Error\" when a threshold is exceeded.",
+    "Animated execution in OPCloud is used to visualize data/control flow and demonstrate component-selection acceptance or rejection."
+  ],
+  "limitations_gaps": [
+    "The paper states that the work is not comprehensive and uses selected budget calculations to demonstrate the automated budget-calculation tool.",
+    "The paper describes the model as a proof of concept and notes that more attributes can be added to make it more comprehensive.",
+    "Advanced input/output mechanisms are stated to be beyond the scope of the work.",
+    "Formal threats to validity are not discussed."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "Conference-style publication with IEEE DOI metadata supports venue credibility, although the extracted text does not print the venue name. Limitations are mentioned only as scope/proof-of-concept statements; no formal validity/threats discussion is provided."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "MBSE budget-calculation scope",
+      "quote": "This work presents a tool based on Model-Based Systems Engineering (MBSE) for automating the process of budget calculation - mass, volume, power, and energy - for CubeSat nanosatellites",
+      "location": "Abstract"
+    },
+    {
+      "claim": "User-iterative budget fitting feedback",
+      "quote": "based on user input which can be iteratively finetuned to fit the CubeSat limitations",
+      "location": "Abstract"
+    },
+    {
+      "claim": "OPM method and executable/simulation toolchain",
+      "quote": "it uses OPM to conceptually model it, applies OPM's computational capabilities on the produced model to calculate its budgets using OPM's coding capabilities, and eventually visually simulates the model by OPM's execution feature",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Minimal/general OPM modeling primitives",
+      "quote": "OPM provides a succinct graphical notation for a minimal set of universal things—objects and processes—for modeling systems of all kinds in a single diagram kind",
+      "location": "Section 1, Introduction"
+    },
+    {
+      "claim": "Purpose: formal model plus automation",
+      "quote": "The purpose of this work is two-fold: (1) formally modeling the budget calculating process, and (2) using the model to automate and facilitate this process.",
+      "location": "Section 4"
+    },
+    {
+      "claim": "CubeSat decomposition includes EPS",
+      "quote": "Other objects, Antenna System, TRXVU, OBC, and EPS, appear in this diagram",
+      "location": "Section 4, Budget Calculation OPM Model"
+    },
+    {
+      "claim": "EPS attributes modeled for budget calculations",
+      "quote": "the EPS object is unfolded into Figure 8... each of these unfolded objects is composed of other objects that represent their attributes",
+      "location": "Section 4, Budget Calculation OPM Model"
+    },
+    {
+      "claim": "Computational extension and embedded code",
+      "quote": "we leverage OPM's extension MAXIM... with the ability to infuse computations and code into the previously qualitative-only OPM model",
+      "location": "Section 4, Automating the Budget Calculating Process"
+    },
+    {
+      "claim": "Input/output mechanisms",
+      "quote": "The first way of input entering is ahead-of time input... The second way for data entering is run-time input... The third option is a simulated value",
+      "location": "Section 4, Model Input and Output Mechanisms"
+    },
+    {
+      "claim": "General V&V capability of OPCloud",
+      "quote": "OPCloud provides built-in visual simulation engines to support model validation, verification, and testing",
+      "location": "Section 2, Object Process Methodology"
+    },
+    {
+      "claim": "Evaluation with real subsystem data",
+      "quote": "To verify our model and demonstrate its usage, we use real data taken from ISISPACE—a leading company in the small satellite market",
+      "location": "Section 5"
+    },
+    {
+      "claim": "Threshold/error verification behavior",
+      "quote": "returns the calculated value if it is less or equal to the predefined threshold or \"Error\" message otherwise",
+      "location": "Section 5"
+    },
+    {
+      "claim": "Decision-making acceptance behavior",
+      "quote": "Decision Making... runs some code in JavaScript that considers all output objects to decide whether to accept the current configuration or not",
+      "location": "Section 5"
+    },
+    {
+      "claim": "Reliability/compatibility outcome claim from automation",
+      "quote": "rapidly screening combinations of candidate components and then using that screen to increase one's chances of selecting reliable, compatible components",
+      "location": "Section 1, Introduction"
+    },
+    {
+      "claim": "Coherence/consistency/synchronization outcome claim",
+      "quote": "the system model can be modified and augmented without the need to alter the code. This facilitates maintaining the system coherent, consistent, and synchronized",
+      "location": "Section 6, Conclusion"
+    },
+    {
+      "claim": "Scope limitation: not comprehensive",
+      "quote": "this work is not meant to be comprehensive in this regard, but rather to use some of the budget calculations to demonstrate a tool that automates the process of budget calculation",
+      "location": "Section 2, CubeSat Budget Calculation"
+    },
+    {
+      "claim": "Scope limitation: advanced I/O beyond scope",
+      "quote": "These are the very basic input/output mechanisms, but there are more advanced methods, but these are beyond the scope of this work.",
+      "location": "Section 4, Model Input and Output Mechanisms"
+    }
+  ],
+  "notes_for_consistency": "Supporting paper centered on an OPM/OPCloud CubeSat budget-calculation tool, not a dedicated EPS model. EPS appears as one subsystem with power, mass, and geometry attributes. Treat RQ2 and RQ3 evidence as general MBSE/tool claims, not EPS-specific or empirically quantified outcomes. Venue name is not stated in the paper text."
+}

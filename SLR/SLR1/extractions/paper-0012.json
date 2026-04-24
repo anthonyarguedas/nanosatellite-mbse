@@ -1,0 +1,154 @@
+{
+  "corpus_id": "paper-0012",
+  "tier": "supporting",
+  "citation": "Lowe and Macdonald (2014), Rapid model-based inter-disciplinary design of a CubeSat mission",
+  "title": "Rapid model-based inter-disciplinary design of a CubeSat mission",
+  "authors": [
+    "C. Lowe",
+    "M. Macdonald"
+  ],
+  "year": 2014,
+  "doi_or_url": "10.1016/j.actaastro.2014.10.002",
+  "venue_type": "Journal article, Acta Astronautica indicated by DOI stem; venue name not otherwise stated in paper text",
+  "modeling_scope": "Rapid model-based interdisciplinary CubeSat mission design architecture. Inputs and requirements feed trajectory, space segment, launch segment, ground segment, and performance models; a multi-objective genetic algorithm optimizes design variables. The space-segment model includes OTS subsystem selection and mass, volume, power, and cost budgets, including communication power demand, battery sizing, solar-array selection, de-orbit device selection, mission cost, data return, revisit, and GSD metrics. It is not a detailed EPS behavioral model.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "simulation",
+    "operations",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "Sequential programming in the Matlab environment, design structure matrix notation, analytical mission models, and a controlled elitist NSGA-II multi-objective genetic algorithm. ParaMagic for MagicDraw and Solvea for Enterprise Architecture are mentioned as examples of acausal parametric tools, but the paper says the present work uses Matlab instead.",
+  "mbse_language_method_tool_categories": [
+    "MATLAB/Simulink",
+    "Other"
+  ],
+  "robot_platform": "CubeSat/nanosatellite mission platform; CubeSat mass range 1-10 kg and discrete 1U, 2U, 3U...NU sizing are discussed. Case studies are an Earth-observation CubeSat payload and a generic scientific-payload CubeSat.",
+  "task_domain": "Conceptual and early CubeSat mission design, multidisciplinary trade-space search, and multi-objective optimization for LEO Earth observation and scientific data-return missions.",
+  "interface": "Model/data-flow interface through a design structure matrix linking optimizer, inputs/constants, trajectory, space segment, launch segment, ground segment, and performance blocks. User-defined objectives and design variables drive optimization; expert judgment is still used to select Pareto points for further analysis.",
+  "feedback": "The controlled elitist genetic algorithm manipulates mission inputs to improve objective functions, while iterative/numerical loops in Matlab solve directed model relationships. The paper also proposes developing the models through the lifecycle as information becomes available for further analysis.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable; the paper discusses ground-station visibility, communication duty cycle, and data rates, but not communications latency assumptions.",
+  "evaluation": "Two CubeSat case studies demonstrate the architecture: Case I trades ground sample distance against revisit time over altitude for an EO payload and is described as verifying the architecture; Case II trades data return against mission cost over altitude, inclination, and ground-station latitude for a generic scientific payload. Results are shown as Pareto/solution-space plots; Case II reports 51,000 model iterations with convergence after 102 generations in 10 minutes on an Intel i7 workstation.",
+  "rqs_addressed": {
+    "RQ1": "yes",
+    "RQ2": "partial",
+    "RQ3": "no"
+  },
+  "rq_relevance": "RQ1: Yes for system-level CubeSat mission modeling with EPS/power-budget elements, using a baseline interdisciplinary architecture, analytical relationships, and OTS component databases; EPS behavior is only sizing/budget-level. RQ2: Partial because the paper attributes rapid trade-space exploration, mission robustness, integrated multidisciplinary assessment, and discovery of non-intuitive near-optimal designs to the model-based architecture, but it does not make explicit EPS reliability or reproducibility claims. RQ3: No because the paper only says one case verifies the model architecture; it does not integrate formal verification, validation, IVV, or test procedures into an EPS model before hardware development.",
+  "claimed_outcomes": [
+    "Rapid trade-space exploration through analytical models rather than computationally expensive numerical orbit propagation, with Case II completing 51,000 model iterations in 10 minutes.",
+    "Potentially increased mission robustness because changes can be analyzed rapidly and the design modified appropriately.",
+    "Integrated interdisciplinary assessment of trajectory, space, launch, ground, and performance disciplines, supporting cost/performance trade-offs rather than isolated point designs.",
+    "Identification of non-intuitive near-optimal CubeSat mission designs that could be missed by traditional point-design methods.",
+    "A baseline system design can be produced for each solution point, including subsystem requirements, mass, volume, power, cost, and ground-network properties. No explicit reliability or reproducibility outcome is reported."
+  ],
+  "verification_validation_linkage": "Only informal/system-level linkage is reported: the first case study is said to verify the model architecture and show usefulness for trade studies. No formal verification/validation/test/IVV procedure model is described, and no EPS-specific verification procedure is integrated.",
+  "key_findings": [
+    "CubeSat modularity and limited capability reduce the number of design variables, making rapid mission-level trade-space search more feasible than for large spacecraft.",
+    "A baseline design structure matrix can connect trajectory, space, launch, ground, and performance models, with an optimizer manipulating inputs and requirements to improve objectives.",
+    "Power-related modeling is budget/sizing oriented: total subsystem power demand, communication duty cycle, eclipse-driven battery capacity, solar-array area, and discrete array count are calculated analytically or from OTS component databases.",
+    "Analytical long-term visibility and revisit methods are used to avoid long numerical orbit propagation for near-circular, non-repeating CubeSat orbits.",
+    "The EO case produced a simple Pareto relation between GSD, revisit time, and altitude and was used as a basic verification of the architecture.",
+    "The scientific-payload case found non-continuous Pareto trends, including optimal altitude regions just below 600 km and around 740 km, driven by discrete platform changes such as 2U-to-3U transition or addition of a de-orbit device."
+  ],
+  "limitations_gaps": [
+    "The authors state that the model architecture cannot be completely generalized because each space mission is unique; only a baseline structure can be maintained and modified per use case.",
+    "The case studies are not intended to demonstrate complete novel mission solutions; they introduce the design approach.",
+    "Several simplifying assumptions are stated, including circular orbits, long-term averages, no time-periodic orbit properties, no ground-station mask overlap, constant orbit period, communication every time a ground station is visible, and simplified data-return behavior.",
+    "The mission cost metric is explicitly comparative and not a final price estimate.",
+    "The genetic algorithm is heuristic and is described as finding near-optimal, not guaranteed globally optimal, solutions."
+  ],
+  "quality": {
+    "credible_venue_score": 1,
+    "limitations_discussed_score": 1,
+    "total_score": 2,
+    "rationale": "The DOI stem indicates Acta Astronautica and the paper is a full journal-style article with methods, results, conclusions, and references. Limitations and assumptions are discussed throughout, including generalizability, mission-cost fidelity, orbit/communication assumptions, and heuristic optimization limits."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Model-based mission trade-space architecture and scope",
+      "quote": "This work presents an architecture that identifies trends between conflicting objectives (e.g. lifecycle cost and performance) and decision variables (e.g. orbit altitude and inclination)",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Use of analytical methods for rapid convergence",
+      "quote": "The models within the architecture exploit analytic methods where possible, in order avoid computationally expensive numerical propagation, and achieve rapid convergence.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Limited generalizability with reusable baseline structure",
+      "quote": "Since each space mission is unique, the model architecture introduced here cannot be completely generalized, however a baseline structure can be maintained with modifications of the inputs and requirements made for each use case.",
+      "location": "Section 1.1"
+    },
+    {
+      "claim": "Matlab rather than acausal parametric tools used in the present work",
+      "quote": "In the present work, some of the relationships have a specific directionality and require iterative loops or other numerical methods to find a solution. As such, sequential programming is used to model the various disciplines, within the Matlab environment.",
+      "location": "Section 1.1"
+    },
+    {
+      "claim": "Architecture elements and optimizer interface",
+      "quote": "A set of inputs, which includes the mission requirements, feeds each of the mission disciplines, from which one or more performance metrics are produced. An optimizer manipulates the inputs to the system in order to improve these performance parameters, as defined by the user.",
+      "location": "Section 1.1"
+    },
+    {
+      "claim": "Space-segment design and requirements/cost selection",
+      "quote": "the most suitable CubeSat platform is selected based on compliance with mission requirements and minimum cost.",
+      "location": "Section 3.1"
+    },
+    {
+      "claim": "Power/budget modeling scope",
+      "quote": "The mass, volume, power and cost of the platform are calculated as a sum of these parameters for each sub-system.",
+      "location": "Section 3.1.1"
+    },
+    {
+      "claim": "EPS-related battery sizing dependency",
+      "quote": "power demand and eclipse conditions will drive the battery size",
+      "location": "Section 3.1.1"
+    },
+    {
+      "claim": "Solar-array sizing model",
+      "quote": "The average effective area of solar arrays projected toward the Sun ... required to satisfy power demands from sub-systems during the sunlit period ... and battery charging ... can be defined as",
+      "location": "Section 3.1.4"
+    },
+    {
+      "claim": "Evaluation as architecture verification, not formal V&V",
+      "quote": "This result verifies the model architecture and shows its usefulness at conducting trade studies via a basic example.",
+      "location": "Section 4.1"
+    },
+    {
+      "claim": "Lifecycle model development and additional analysis",
+      "quote": "Development of the models through the life-cycle, as information becomes available and experience grows, would allow additional parameters to be calculated, which can be carried through for additional analysis",
+      "location": "Section 4.1"
+    },
+    {
+      "claim": "Case II runtime and iteration count",
+      "quote": "These results were obtained in 10 minutes on a personal workstation with an Intel i7 quad-core 2.2GHz processor, with a GA population of 500 and solution convergence after 102 generations (i.e 51,000 iterations of the model architecture).",
+      "location": "Section 4.2"
+    },
+    {
+      "claim": "Main conclusion about near-optimal solutions",
+      "quote": "Global multi-objective optimization, in the form of a controlled elitist genetic algorithm, is applied to the architecture and is shown to find a Pareto set of near-optimal solutions from an arbitrary, user defined design space.",
+      "location": "Section 5"
+    },
+    {
+      "claim": "Removal of costly numerical propagation",
+      "quote": "This allows rapid, long-term visibility assessments to be made in fractions of a second (as opposed to minutes that is considered acceptable using numerical approaches)",
+      "location": "Section 5"
+    },
+    {
+      "claim": "Heuristic optimization limitation",
+      "quote": "The nature of heuristic approaches in terms of finding only near-optimal solutions is considered acceptable in this study",
+      "location": "Section 2.5"
+    },
+    {
+      "claim": "Cost-model limitation",
+      "quote": "the cost metric defined here is not intended as a final price estimate, but as a measure with which to compare the relative cost of different designs.",
+      "location": "Section 3.4.1"
+    }
+  ],
+  "notes_for_consistency": "This is a supporting system-level CubeSat mission-design paper, not a dedicated EPS MBSE paper. EPS evidence is limited to budget/sizing formulas for power demand, batteries, and solar arrays. ParaMagic/MagicDraw and Solvea/Enterprise Architecture are mentioned only as contextual examples, not as tools used in the presented model. The paper cites earlier Lowe/Macdonald/Greenland 2013 work on nano-satellite power-system dynamics, but the present paper is broader mission design. Final self-check: only paper.md was read and only extraction.json was written."
+}

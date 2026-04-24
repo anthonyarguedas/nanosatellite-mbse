@@ -1,0 +1,150 @@
+{
+  "corpus_id": "paper-0033",
+  "tier": "core",
+  "citation": "Pallamin de Almeida et al. (2021), Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View",
+  "title": "Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View",
+  "authors": [
+    "Danilo Pallamin de Almeida",
+    "Bence Graics",
+    "Ronan Arraes Jardim Chagas",
+    "Fabiano Luis de Sousa",
+    "Fátima Mattiello-Francisco"
+  ],
+  "year": 2021,
+  "doi_or_url": "10.1109/ladc53747.2021.9672594",
+  "venue_type": "conference, IEEE/LADC 2021 DOI metadata; full venue name not stated in paper text",
+  "modeling_scope": "System-level CubeSat mission operations scenario modeling with power/data budget simulation. The Mission Architecture Model uses SysML-based Class Diagrams in Capella to represent cyber-physical elements in the space and ground segments, including orbit, solar panels, equipment list, payload/platform equipment, EPS as a platform equipment item in the case model, battery pack, mass memory, ground stations, ROIs, and equipment operation functions. C2F transforms the model into a Julia configuration script for ForPlan to simulate operational scenarios and check operations requirements.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "verification",
+    "simulation",
+    "operations",
+    "reference model/template",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "Cyber-Physical system abstraction; SysML-based Class Diagrams in Capella; C2F/CapellaToForplan model-transformation and code-generation plugin built with Xtend; generated Julia configuration scripts for the ForPlan satellite simulator.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Capella/Arcadia",
+    "CPS",
+    "Other"
+  ],
+  "robot_platform": "General CubeSat-based space missions; demonstrated on NanosatC-Br2 (NCBR2), a 2U CubeSat mission.",
+  "task_domain": "Phase-0/Pre-Phase A mission concept and ConOps analysis; operational scenario simulation; power and data budget balancing for CubeSat space and ground segments.",
+  "interface": "Users create and parameterize a Capella Class Diagram Mission Architecture Model; the C2F plugin is invoked from a Capella context menu to generate a Julia script for ForPlan; ForPlan simulation outputs include battery charge and memory/data usage graphs.",
+  "feedback": "Iterative model-simulation-analysis loop: define mission elements and equipment operations, create/parameterize the MAM, convert it to a ForPlan script, simulate, analyze battery capacity and data usage outputs, and revise model parameters if requirements are not met.",
+  "control_autonomy_split": "Not applicable; the paper defines equipment operation functions for simulation but does not discuss autonomous operations/control allocation.",
+  "network_latency_assumptions": "Ground-station visibility and data transfer rates are modeled for downlink; communications latency assumptions are not reported.",
+  "evaluation": "Demonstrated through the NanosatC-Br2 2U CubeSat case. The authors generated and iterated a MAM, transformed it with C2F, ran ForPlan simulations, and inspected battery charge and mass-memory graphs over the scenario. They report that the final scenario had stable power and data balances and was used to drive flight software implementation.",
+  "rqs_addressed": {
+    "RQ1": "yes",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1 yes: the paper gives a general CubeSat operations modeling workflow and an abstract MAM structure with power-related elements such as solar panels, battery pack, equipment power consumption, and EPS in the NCBR2 platform model. RQ2 partial: it claims MBSE/model-transformation benefits for integration with simulation, usability, faster scenario changes, requirements checking, and design support, but it does not report explicit reliability or reproducibility metrics. RQ3 partial: verification is linked to Phase-0 ConOps/operations-requirements simulation and power/data budget checks before software implementation, but no EPS-specific verification procedure model, IVV plan, or formal test procedure is provided.",
+  "claimed_outcomes": [
+    "Operations simulations generated from the MAM can be used in Phase-0 mission concept analyses to verify initial operations requirements and drive later design implementation.",
+    "C2F integrates Capella MAMs with ForPlan by automatically transforming the model into a Julia simulator configuration script.",
+    "The model-based workflow removes the need for users to understand the simulator source code or manually code each scenario configuration.",
+    "Changing scenario parameters in the model is claimed to be more practical and faster than editing configuration scripts manually.",
+    "In the NanosatC-Br2 demonstration, iterative simulation supported a final operation scenario with stable power and data balances, and the scenario was used to drive flight software implementation.",
+    "No explicit reproducibility outcome and no quantified reliability improvement are reported. Reliability is only indirectly motivated through earlier statements about skipped systems-engineering practices causing mission issues or failures."
+  ],
+  "verification_validation_linkage": "The paper links the model to verification through ForPlan ConOps simulation and an explicit requirements-met iteration. It states that simulations support verification of initial operations requirements and that MBSE tools allow visual configuration plus verification and validation of operations scenarios. This is general system/operations V&V focused on power/data budgets; EPS-specific verification procedures are not modeled.",
+  "key_findings": [
+    "Academic CubeSat development often skips or rushes systems-engineering practices, including mission concept analyses, which motivates the proposed MBSE/simulation workflow.",
+    "The proposed MAM captures CubeSat operations scenario inputs as Capella/SysML Class Diagram elements such as orbit, solar panels, equipment, battery pack, ground stations, mass memory, ROIs, and operation functions.",
+    "C2F traverses the MAM and generates a Julia configuration script for ForPlan, connecting model-based architecture definition to operational simulation.",
+    "ForPlan simulates a low-Earth-orbit environment, equipment power consumption, data generation, solar interaction, and ground-station downlink for mission operations analysis.",
+    "The NanosatC-Br2 case model included platform equipment such as OBC, receiver, transmitter, magnetometer, and EPS, plus payloads SLP, SMDH, and SDATF, and was iterated to meet power and data budgets.",
+    "The final NanosatC-Br2 simulation showed stable battery charge and memory usage from the paper's perspective, supporting a valid operation scenario for further implementation."
+  ],
+  "limitations_gaps": [
+    "To use the workflow with other satellite simulators, the MAM must be changed to fit the new simulator inputs and C2F must be changed to match the new simulator configuration method.",
+    "The current approach relies on four predefined Equipment Operation Functions; future work is needed to model user-defined Equipment Operation Functions and generate them automatically in C2F.",
+    "No formal threats-to-validity discussion, quantitative accuracy validation of ForPlan results, or EPS-specific verification-procedure validation is reported."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "The paper has IEEE/LADC DOI metadata and conference-proceedings style, supporting a credible venue score. Limitations are discussed only briefly as portability to other simulators and future work on user-defined operation functions; there is no formal validity/threats section."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Modeling approach and MBSE tool basis",
+      "quote": "this article introduces a workflow based on a Cyber-Physical abstraction of CubeSat mission operation scenarios, which uses architectural models based on SysML Class Diagrams and automatic model transformation to support the simulation of these operational scenarios in an open source Model-Based System Engineering (MBSE) tool",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Phase-0 requirements verification and design support",
+      "quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements and drive further design implementations.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Power/data budget relevance",
+      "quote": "The modeling and simulation of the in-orbit operational behavior of the satellite with power and data budget analyses is a fundamental step in this stage.",
+      "location": "Section I"
+    },
+    {
+      "claim": "Workflow from architecture model to simulator",
+      "quote": "The user then creates the Mission Architecture Model (MAM), outputting the Class Diagram artifact... uses C2F to convert the model into the simulation script, which is then used to simulate the scenario in ForPlan.",
+      "location": "Section II"
+    },
+    {
+      "claim": "Iterative feedback loop and requirement checking",
+      "quote": "The user then analyses the results of the simulation outputs, such as battery capacity and data usage graphs, to see if the operations requirements are met, or if they should proceed to another iteration changing the model parameters",
+      "location": "Section II"
+    },
+    {
+      "claim": "ForPlan verification role",
+      "quote": "The ForPlan simulation tool was designed for the verification of space mission concept of operations (ConOps) during studies carried out mainly in Phase-0/Pre-Phase A",
+      "location": "Section II.A"
+    },
+    {
+      "claim": "ForPlan simulates equipment power/data and ground interaction",
+      "quote": "taking into account the operation of each individual equipment in terms of electrical power consumption and data volume generation, and the interaction of the satellite with the Sun (electrical power generation) and with the associated ground stations (data downlink)",
+      "location": "Section II.A"
+    },
+    {
+      "claim": "C2F model transformation",
+      "quote": "C2F traverses the model elements of the MAM in accordance with the predefined rules overviewed in Section II and generates Julia code based on the retrieved attributes.",
+      "location": "Section III"
+    },
+    {
+      "claim": "NanosatC-Br2 case and iteration",
+      "quote": "This model is the final version of a number of iterations of generating a model, using C2F to generate the simulation input script, simulating the defined scenario, and analyzing the simulation results.",
+      "location": "Section IV"
+    },
+    {
+      "claim": "Demonstrated power/data result",
+      "quote": "From these graphs, we can infer that the power and data balances are stable, i.e. the satellite is capable of charging the batteries for the amount used each orbit, and download the generated mission data.",
+      "location": "Section IV"
+    },
+    {
+      "claim": "Usability/integration outcome",
+      "quote": "the user is no longer required to understand how the simulator source code works, and does not have to manually code the configurations for each scenario",
+      "location": "Section V"
+    },
+    {
+      "claim": "Faster scenario changes outcome",
+      "quote": "it is much more practical and faster to change scenario parameters in the model than manually in the configuration script, facilitating the work involved.",
+      "location": "Section V"
+    },
+    {
+      "claim": "Portability limitation",
+      "quote": "In order to apply this workflow for other satellite simulators, the user would have to first change the MAM to fit the required inputs for the new simulator, and then change the C2F tool to meet the way the new simulator should be configured.",
+      "location": "Section V"
+    },
+    {
+      "claim": "Future-work limitation on operation functions",
+      "quote": "we plan to define a process to model userdefined Equipment Operation Functions and have a method in C2F to automatically generate the ForPlan function for that, in order to extend the current four pre-defined functions.",
+      "location": "Section V"
+    }
+  ],
+  "notes_for_consistency": "This core paper is strongest for system-level CubeSat operations, power/data budget modeling, and model-to-simulator integration. It is not a dedicated EPS MBSE paper: EPS appears as one equipment item in the NCBR2 platform model, while battery pack, solar panels, and power consumption are modeled for budget analysis. Verification evidence concerns ConOps/operations requirements and power/data-budget feasibility, not EPS-specific IVV/test procedures. Venue name is not printed in the extracted paper text."
+}

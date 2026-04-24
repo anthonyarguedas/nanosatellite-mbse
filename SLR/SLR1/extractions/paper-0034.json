@@ -1,0 +1,124 @@
+{
+  "corpus_id": "paper-0034",
+  "tier": "supporting",
+  "citation": "Alanazi, Jones, and Straub (2019), Requirements Modeling Language and Automated Testing for CubeSats",
+  "title": "Requirements Modeling Language and Automated Testing for CubeSats",
+  "authors": [
+    "Abdulaziz Alanazi",
+    "Andrew B. Jones",
+    "Jeremy Straub"
+  ],
+  "year": 2019,
+  "doi_or_url": "10.1109/autotestcon43700.2019.8961058",
+  "venue_type": "conference; venue name not stated in paper",
+  "modeling_scope": "Requirements modeling for a CubeSat lifecycle using RML/RMM, including high-level process flows, business objectives/rules, system and OBC requirements, code links, test-case links, results, and defect mapping. The paper mentions OBC connection to EPS but does not model EPS behavior or power budgets.",
+  "modeling_scope_categories": [
+    "system-level",
+    "requirements",
+    "architecture",
+    "verification",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "Requirements Modeling Language (RML) and Requirements Mapping Matrix (RMM); no named software tool reported. SysML is mentioned only as a contrasting language.",
+  "mbse_language_method_tool_categories": [
+    "Other"
+  ],
+  "robot_platform": "CubeSat system; NDSAT example/test satellite concept; background notes CubeSat form factors from 1U to 6U.",
+  "task_domain": "CubeSat requirements analysis, OBC software architecture, radio message handling, and camera image storage test-case mapping.",
+  "interface": "RMM maps between process flows, business objectives/rules, requirements, code, and test cases. OBC subsystem connection to communication/data handling and EPS is mentioned, but interface details are not modeled.",
+  "feedback": "Test cases and defects are mapped back to requirements/business requirements/test scenarios; RMM is described as helping identify requirements with frequent defects and missing links.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Illustrative case study for a typical CubeSat/NDSAT example using process-flow diagrams, an RMM table for radio and camera functions, OBC functional/nonfunctional requirements, and sample test cases marked pass. No empirical validation is reported; future work proposes testing the approach in an actual project.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1 partial: the paper models CubeSat requirements and system/OBC process flows with RML/RMM, but it is not an EPS model and provides only high-level behavior. RQ2 partial: it claims modeling-related requirement quality, test coverage, reduced testing time, scope/cost control, and minimal defects, but no EPS-specific reliability, reproducibility, or integrability outcomes. RQ3 partial: it explicitly links requirements to code, test cases, results, and defects for V&V, but examples are general CubeSat/OBC/radio/camera rather than EPS-specific.",
+  "claimed_outcomes": [
+    "RML is claimed to enhance requirements quality and ease analysis and elicitation.",
+    "RML is claimed to help CubeSat developers group and prioritize requirements and identify ambiguity or inconsistency.",
+    "RMM is claimed to help prioritize requirements, identify missing requirements, and highlight unnecessary requirements.",
+    "RMM is claimed to ensure every requirement is tested thoroughly and to support end-to-end test coverage where feasible.",
+    "RMM is claimed to link requirements, test cases, and defects accurately, enhance application quality, achieve quality control, reduce testing time, determine scope, implement customer requirements, and control cost.",
+    "No EPS-specific reliability, reproducibility, or integrability outcomes are reported."
+  ],
+  "verification_validation_linkage": "Explicit general V&V linkage: the RMM maps process steps, requirements, business rules/objectives, code, test-case IDs, tests, and results; the case study is presented as requirements validation and verification for a typical CubeSat. Sample tests cover radio message receipt/integrity/authentication and OBC camera image retrieval/storage. Defects can be logged and mapped to business requirements, test scenarios, and test cases. No EPS-specific verification procedure is provided.",
+  "key_findings": [
+    "The paper positions RML as a stakeholder-oriented visual requirements modeling language for CubeSat development rather than a detailed system behavior language.",
+    "The RMM traceability structure connects process flows, business objectives/rules, requirements, code, and test cases, enabling requirements-to-test mapping.",
+    "The CubeSat demonstration uses NDSAT radio and camera examples plus OBC functional and nonfunctional requirements.",
+    "The only EPS content is a brief statement that the OBC connects subsystem components with communication/data handling and the EPS; EPS behavior, budgets, and EPS V&V are not modeled.",
+    "The paper is illustrative: it reports example pass results for test cases but does not provide empirical evidence that the approach improves project outcomes."
+  ],
+  "limitations_gaps": [
+    "Future work will verify and characterize the efficacy of the proposed approach.",
+    "Future work will test the approach in an actual project and update it based on that experience.",
+    "Formal limitations, threats to validity, or evaluation limits are not otherwise discussed."
+  ],
+  "quality": {
+    "credible_venue_score": 1,
+    "limitations_discussed_score": 0.5,
+    "total_score": 1.5,
+    "rationale": "Assigned metadata provides an IEEE DOI for a conference paper, supporting venue credibility. Limitations are only indirectly acknowledged through future work to verify efficacy and test the approach in an actual project; no formal threats/validity section is included."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "RML is the reported modeling language/method.",
+      "quote": "Requirements Modeling Language (RML) is a collection of diagrams used to model software from the business analysis or product management perspective",
+      "location": "Section III, Requirements Modeling Language"
+    },
+    {
+      "claim": "RML is intended for stakeholder-readable visual requirements modeling.",
+      "quote": "Requirements Modeling Language (RML) is a language designed specifically to visually model requirements for easy consumption by stakeholders.",
+      "location": "Section I, Introduction"
+    },
+    {
+      "claim": "RMM can be automated for missing-link checks.",
+      "quote": "A Requirements Mapping Matrix (RMM) is best used by a requirement management model tool which can automate the process of checking for missing links",
+      "location": "Section III.A, Requirements Mapping Matrix"
+    },
+    {
+      "claim": "RMM traceability scope includes process flows, requirements, code, and test cases.",
+      "quote": "RMM contains multiple levels of mapping that map process flow steps to requirements, requirements to business rules, business objectives to features, features to requirements, requirements to code, and requirements to test cases",
+      "location": "Section III.A, Requirements Mapping Matrix"
+    },
+    {
+      "claim": "The CubeSat case study is framed as validation and verification.",
+      "quote": "A case study of using requirements mapping matrix (RMM) for requirements validation and verification of a typical CubeSat system is provided.",
+      "location": "Abstract; repeated in Section I, Introduction"
+    },
+    {
+      "claim": "CubeSat requirements-modeling scope.",
+      "quote": "RMM may help CubeSat developers and systems analysts prioritize requirements, identify missing requirements, and highlight unnecessary requirements.",
+      "location": "Section IV, CubeSat Requirements Modeling"
+    },
+    {
+      "claim": "RMM links test cases to CubeSat requirements.",
+      "quote": "Fig. 5 RMM for CubeSat system with tests mapped to requirements.",
+      "location": "Section IV, figure caption"
+    },
+    {
+      "claim": "The OBC/EPS relationship is mentioned but not elaborated as an EPS model.",
+      "quote": "OBC is the central component of the CubeSat system. It is connecting all subsystem components, so it can control subsystems by allowing subsystems to connect with the communication & Data handling with the Electrical Power System (EPS).",
+      "location": "Section V.A, Introduction"
+    },
+    {
+      "claim": "Claimed quality/test outcome from RMM.",
+      "quote": "RMM may enhance the quality of the application as all the features are tested.",
+      "location": "Section III.A, Requirements Mapping Matrix"
+    },
+    {
+      "claim": "Claimed testing time, scope, customer-requirement, and cost outcomes.",
+      "quote": "RMM is intended to reduce the testing time for software applications, ensure the scope of the project is well determined, that its implementation is achieved as per the customer requirements and needs, and that the cost of the project is controlled.",
+      "location": "Section III.A, Requirements Mapping Matrix"
+    },
+    {
+      "claim": "Future-work gap/limited evaluation.",
+      "quote": "Future work will include verifying and characterizing the efficacy of the proposed approach, testing it in an actual project and updating it based on this experience.",
+      "location": "Section VI, Conclusion and Future Work"
+    }
+  ],
+  "notes_for_consistency": "Supporting paper. It is CubeSat requirements/V&V modeling rather than EPS-specific MBSE; EPS is only briefly mentioned in the OBC context. Venue name is not stated in the paper text. No named RML/RMM software tool is reported."
+}

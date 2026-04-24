@@ -1,0 +1,128 @@
+{
+  "corpus_id": "paper-0059",
+  "tier": "supporting",
+  "citation": "Rehman and Fortin (2024), An Implementation of Integrated Approach in Product Life-Cycle Management Tool to Ensure Requirements-In-Loop During Complex Product Development: A Cubesat Case Study",
+  "title": "An Implementation of Integrated Approach in Product Life-Cycle Management Tool to Ensure Requirements-In-Loop During Complex Product Development: A Cubesat Case Study",
+  "authors": [
+    "Mubeen Ur Rehman",
+    "Clement Fortin"
+  ],
+  "year": 2024,
+  "doi_or_url": "10.1007/978-3-031-62578-7_21",
+  "venue_type": "Not reported",
+  "modeling_scope": "RFLP/MBSE implementation in a PLM environment for a CubeSat case study, with emphasis on requirements-in-loop, functional/logical architecture, physical architecture links, Dymola behavior simulation, DOE-based configuration exploration, and an electrical power/battery SoC viewpoint.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "verification",
+    "simulation",
+    "operations",
+    "lifecycle/PLM",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "RFLP approach in Dassault Systemes 3DExperience; requirements in ENOVIA; functional/logical architecture in CATIA using SysML; Dymola behavior models; physical architecture through assembly/part design/CAD; DOE for configuration evaluation.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "PLM",
+    "Other"
+  ],
+  "robot_platform": "CubeSat case study in Low Earth Orbit; form factor and named mission not reported.",
+  "task_domain": "Conceptual/early-phase CubeSat product development and requirements traceability, focused on electrical power behavior, battery SoC/voltage, eclipse periods, and operation sequence optimization.",
+  "interface": "Requirements parameters are defined in ENOVIA and read by CATIA functional/logical engineering, which uses Dymola behavior models; implementation functions transfer information between requirements and behavior models; subsystem interfaces transfer data/quantities; physical architecture is connected through implement relations.",
+  "feedback": "A simulation/DOE feedback loop compares model outputs with numerical requirement parameters; if a configuration does not satisfy requirements, another configuration is evaluated. EPS feedback uses power input/output, eclipse data, battery voltage, and SoC to assess requirement satisfaction.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Design research methodology prescriptive study demonstrated through a CubeSat case in 3DExperience. The authors create a simulation scenario after deployment/detumbling, feed eclipse and power-profile data into behavior models, run DOE over battery/EPS parameters, and evaluate battery voltage and SoC over 300 minutes against a requirement that SoC remain above 60%.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "yes"
+  },
+  "rq_relevance": "RQ1 partial: the paper models a CubeSat system and its electrical-power viewpoint using RFLP/PLM/SysML/Dymola, but it is a tool-specific case study rather than a general minimal-knowledge nanosatellite/EPS model. RQ2 partial: it claims traceability, decision support, configuration-management, and integration benefits from MBSE/PLM, but does not explicitly claim reliability or reproducibility outcomes. RQ3 yes: it explicitly integrates requirement parameters with behavior simulations and DOE, including EPS battery SoC and voltage verification before physical development.",
+  "claimed_outcomes": [
+    "Requirements-in-loop and requirements traceability across requirements, functional, logical, and physical RFLP stages in a PLM tool.",
+    "Timely decision support through DOE-generated configurations and simulation-based checking against requirements.",
+    "Reduced complexity of change/configuration management is claimed as a benefit of the proposed approach.",
+    "Integration/sharing of data between requirements, behavior, structure, and verification domains is claimed through the web of connections and implementation functions.",
+    "For the EPS case, the simulation is claimed to verify sufficient battery capacity and intended power-management-unit behavior because battery SoC stayed above the threshold and replenished.",
+    "No direct reliability or reproducibility outcome is explicitly attributed to MBSE/modeling."
+  ],
+  "verification_validation_linkage": "General V&V is linked through numerical requirement parameters, digital tests, behavior simulation, and DOE. EPS-specific verification is explicit: SoC must remain above 60%, Dymola/simulation outputs are compared with requirement parameters, infeasible configurations are rejected, and results are used to verify battery capacity and power-management behavior. No formal IV&V process or physical test procedure is reported.",
+  "key_findings": [
+    "The paper demonstrates an RFLP implementation in 3DExperience for a CubeSat, linking requirements in ENOVIA to functional/logical SysML architecture, Dymola behavior models, and physical architecture/CAD links.",
+    "The CubeSat case focuses on the electrical and power view, while also representing classical spacecraft subsystems such as mission design, OBC, ADCS, EPS, thermal, communication, structure, propulsion, and systems engineering.",
+    "The EPS/power simulation uses LEO/eclipse information and a power demand profile to compute power production, surplus charging power, battery voltage, and battery state of charge.",
+    "DOE is used to modify battery parameters associated with EPS and power requirements, creating hundreds of candidate configurations to find battery parameters that satisfy power requirements.",
+    "In the reported 300-minute simulation, battery SoC remained above 90%, exceeding the stated requirement that SoC remain above 60%, and the battery replenished to approximately its initial value.",
+    "The authors identify integration challenges for domain-specific tools in closed PLM environments."
+  ],
+  "limitations_gaps": [
+    "The case study is limited to a single CubeSat viewpoint focused on the electrical power view.",
+    "The launch segment was not considered because the study concentrated on the spacecraft part.",
+    "The authors note that battery and solar-panel degradation may affect long-term battery performance and should be considered when evaluating margin suitability.",
+    "The authors state that modeling system behavior in logical architectures can be challenging.",
+    "The authors state that closed PLM tools can make it difficult to integrate domain-specific tools, increasing complexity and costs.",
+    "No formal threats-to-validity discussion is reported."
+  ],
+  "quality": {
+    "credible_venue_score": "0.5",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.0",
+    "rationale": "The paper has a DOI and appears to be a formal publication, but the venue name/type is not reported in the provided text. It discusses practical challenges and gaps, but not a structured limitations or validity section."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Paper proposes MBSE/RFLP in PLM for CubeSat requirements-in-loop",
+      "quote": "we have proposed a method to implement MBSE using RFLP approach in PLM tool using a Cubesat case study, to keep requirements-in-loop during initial phase of product development",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Modeling scope is a CubeSat electrical power viewpoint",
+      "quote": "RFLP approach is implemented using Dassault Systemes 3DExperience platform to simulate a single viewpoint of a Cubesat, focusing on the electrical power view.",
+      "location": "Introduction and Problem Description"
+    },
+    {
+      "claim": "Toolchain and integration interface",
+      "quote": "Requirements structure is defined in ENOVIA environment and numerical parameters are appended to the requirements. Functional and logical engineering application in CATIA environment is made to read the requirement parameters which it then uses in behavioral modelling in Dymola.",
+      "location": "Research Methodology"
+    },
+    {
+      "claim": "SysML is used for functional architecture",
+      "quote": "The functional architecture of the system was defined using SysML, which captures the system's behavior, structure, and functionality.",
+      "location": "Systems Functional and Logical Architecture"
+    },
+    {
+      "claim": "Dymola simulation is compared against requirement parameters",
+      "quote": "The Dymola model uses numerical methods to simulate and evaluate the behavior of the component. The model compares its computational results against the numerical parameters of the specified requirements",
+      "location": "Systems Functional and Logical Architecture"
+    },
+    {
+      "claim": "EPS/battery case-study objective",
+      "quote": "the aim is to study the power curves of the onboard battery and optimize the sequence of operations to make sure the batteries does replenish after eclipse",
+      "location": "Case Study: Cubesat"
+    },
+    {
+      "claim": "EPS requirement threshold",
+      "quote": "The primary energy storage requirement specifies that the battery's SoC should not fall below 60% during mission operation, even under worst-case power requirements.",
+      "location": "Requirements Definition Modelling"
+    },
+    {
+      "claim": "DOE used for EPS/power requirement configurations",
+      "quote": "The Design of Experiments (DOE) technique is employed to modify the battery parameters associated with the EPS and power requirement parameters.",
+      "location": "Systems Functional and Logical Architecture"
+    },
+    {
+      "claim": "Simulation result verifies SoC margin",
+      "quote": "Analysis of the SoC data in 6(b) reveals that the SoC of the battery remained above 90% for a period of 300 minutes",
+      "location": "Results"
+    },
+    {
+      "claim": "Explicit tool-integration limitation",
+      "quote": "The closed nature of PLM tools can make it difficult to integrate these domain-specific tools, leading to increased complexity and costs.",
+      "location": "Conclusion"
+    }
+  ],
+  "notes_for_consistency": "Read only paper.md. Venue, form factor, named mission, network/latency assumptions, autonomy split, and formal IV&V/physical test procedures are not reported. The paper is a supporting CubeSat PLM/RFLP electrical-power case study, not a reusable nanosatellite EPS reference model."
+}

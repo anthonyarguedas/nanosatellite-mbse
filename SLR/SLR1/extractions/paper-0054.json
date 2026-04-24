@@ -1,0 +1,160 @@
+{
+  "corpus_id": "paper-0054",
+  "tier": "supporting",
+  "citation": "Nardi et al. (2025), Integrating Model-Based Systems Engineering into CubeSat Development: A Case Study of the BOREALIS Mission",
+  "title": "Integrating Model-Based Systems Engineering into CubeSat Development: A Case Study of the BOREALIS Mission",
+  "authors": [
+    "L. Nardi",
+    "S. Carletta",
+    "P. Abbasrezaee",
+    "G. Palmerini",
+    "N. Lovecchio",
+    "Nunzio Burgio",
+    "A. Santagata",
+    "Massimo Frullini",
+    "D. Calabria",
+    "M. Guardigli",
+    "Elisa Michelini",
+    "M. M. Calabretta",
+    "M. Zangheri",
+    "E. Lazzarini",
+    "A. Pace",
+    "Marco Montalti",
+    "Dario Mordini",
+    "L. Popova",
+    "S. Citraro",
+    "D. Billi",
+    "F. Lorenzini",
+    "A. Donati",
+    "M. Mirasoli",
+    "A. Nascetti"
+  ],
+  "year": 2025,
+  "doi_or_url": "10.3390/aerospace12030256",
+  "venue_type": "journal article, Aerospace 2025, 12, 256",
+  "modeling_scope": "System-level MBSE/system-engineering model for the 6U BOREALIS CubeSat from scientific, mission, and system requirements through architecture trade studies. The model covers architectural decisions for EPS/power, communications, propulsion, ADCS, OBC, data handling, thermal control, and software; multi-attribute utility and cost functions; reference architectures; Monte Carlo and sensitivity tradespace analysis; and a planned Valispace integrated design model for requirements, subsystem budgets/data, collaboration, and development tracking. EPS is represented only at high level as power-source options and P_avg Wh/kg, not as a detailed behavioral EPS model.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "verification",
+    "simulation",
+    "operations",
+    "reference model/template",
+    "lifecycle/PLM",
+    "risk",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "No SysML language is reported. Method/tooling consists of a tailored MBSE workflow using architectural decisions, mission concepts, multi-attribute utility and cost tradespace analysis, Monte Carlo simulation, sensitivity analysis, reference CubeSat architectures, GMAT/FLUKA-supported analyses, and a planned Valispace integrated design model.",
+  "mbse_language_method_tool_categories": [
+    "Other"
+  ],
+  "robot_platform": "BOREALIS, a 6U CubeSat/nanosatellite mission funded by the Italian Space Agency; 14 kg wet mass considered for transfer studies; LEO operations followed by transfer to MEO.",
+  "task_domain": "Astrobiology/space biology CubeSat mission design: in-orbit lab-on-chip study of microbial biofilms under microgravity and ionizing-radiation conditions, plus system architecture selection for LEO-to-MEO operations.",
+  "interface": "Planned Valispace integrated design model is described as an interface for subsystem teams to share real-time updates, requirements, components, budgets, data, and development tracking across the payload and CubeSat bus. Communication/data interfaces are also traded through AD2 and AD7, but no detailed interface-control model is provided.",
+  "feedback": "Design feedback loop: requirements and constraints define architectural decisions; AD options generate mission concepts; MAU/cost model, tradespace, Monte Carlo, and sensitivity analyses feed concept selection. Valispace is planned to enable real-time collaborative updates. Ground monitoring/command feedback is noted for early transfer maneuvers.",
+  "control_autonomy_split": "The mission is described as requiring autonomy, but transfer maneuvers would be monitored in real time by the ground segment and, at least in early stages, commanded by ground operators. Higher OBC processing is linked to autonomous operations and reduced ground intervention; no detailed autonomy allocation model is presented.",
+  "network_latency_assumptions": "No explicit network-latency values or assumptions are reported. The utility model considers communication data rate and data-handling options, and notes that higher data-handling capacity can reduce data-loss or latency issues during limited ground-station access.",
+  "evaluation": "Demonstrated as a BOREALIS case study. Preliminary GMAT mission analysis, FLUKA/SPENVIS/IRENE radiation/dose analysis, and COTS-derived subsystem data feed a MAU/cost model over 10 mission concepts; concepts are plotted in deterministic tradespace, benchmarked against 6U reference architectures, evaluated with 1000-iteration Monte Carlo simulations at 95% confidence, and tested by +/-30% sensitivity analysis. Concept 10 is selected as baseline.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1 partial: the paper gives a reusable high-level CubeSat MBSE/tradespace method with an EPS architectural decision and power metric, but not a general behavioral EPS model. RQ2 partial: it claims MBSE/model integration improves traceability, repeatability, robustness/reliability of decision making, collaboration, and reusability, but these outcomes are system-level rather than specifically from EPS modeling. RQ3 partial: it mentions development and verification plans and general validation against requirements, plus Monte Carlo/sensitivity and reference-architecture checks, but no explicit EPS-specific verification procedure is integrated into an EPS model.",
+  "claimed_outcomes": [
+    "MBSE/tradespace approach is claimed to support robust, data-driven decisions that optimize mission architecture for performance and cost.",
+    "The structured workflow is claimed to ensure traceability and repeatability and to be reusable for future CubeSat missions after adaptation.",
+    "The planned Valispace integrated design model is claimed to enable real-time updates, collaborative design input, requirements tracking, component budgets/data integration, and development tracking.",
+    "Monte Carlo and sensitivity analysis are claimed to enhance reliability/robustness of the chosen architecture and show stable rankings despite uncertainty and weight variations.",
+    "MBSE is generally claimed to improve collaboration and traceability, support early-stage simulations and trade-offs, reduce development time, and mitigate risks from late-stage design changes."
+  ],
+  "verification_validation_linkage": "General system-level linkage only. The paper lists development and verification plans as SE outputs for validation against mission requirements and operational readiness checks; it also benchmarks against reference CubeSat architectures and uses Monte Carlo/sensitivity analysis to validate robustness of the tradespace model. No EPS-specific verification, IVV, test-procedure model, or requirement-to-test linkage for EPS is reported.",
+  "key_findings": [
+    "BOREALIS is a 6U CubeSat mission with a lab-on-chip and fluorescence microscope payload for microbial biofilm experiments in LEO and MEO.",
+    "The MBSE model represents the system through architectural decisions for EPS, telecommunications, propulsion, ADCS sensors/actuators, OBC, data handling, thermal control, and software.",
+    "EPS modeling is limited to high-level power architecture options such as body-mounted solar arrays, large deployable solar arrays, and deployable solar arrays with high-capacity batteries, evaluated by power-generation metrics such as Wh/kg.",
+    "The MAU/cost tradespace over 10 mission concepts led to Concept 10 as baseline, combining deployable solar arrays, Hall-effect-thruster propulsion, dual UHF/S-band communications, ADCS sensors/actuators, active/passive thermal management, real-time processing, and an MCU+FPGA OBC.",
+    "Monte Carlo and sensitivity studies indicate that propulsion (AD3) and power (AD1) have the strongest effect on utility, while Concepts 10 and 8 remain robust performers.",
+    "The Valispace integrated design model is planned after baseline selection; the actual Valispace CubeSat data model is explicitly not the focus of the article."
+  ],
+  "limitations_gaps": [
+    "The model contains subjective weight assignments based on engineering judgment, although the authors test robustness with Monte Carlo and sensitivity analysis.",
+    "The authors warn that if the model is misused or built without logical constraints, it could yield misleading results.",
+    "The framework requires mission-specific tuning of equations, architectural decisions, weights, and performance parameters before reuse on other missions.",
+    "The Valispace integrated design model is still under development and is not detailed in the article.",
+    "Radiation analysis is preliminary in places: the 3D satellite layout is simplified and a calculation chain for ascending-maneuver dose is under development.",
+    "No detailed EPS behavioral model or EPS-specific verification/test-procedure integration is reported."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "Published as a peer-reviewed journal article in Aerospace with DOI and accepted/revised dates. Limitations and model caveats are discussed in several places, especially subjectivity, need for adaptation, preliminary analyses, and the under-development Valispace model, but there is no dedicated limitations/threats-to-validity section."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Paper scope is MBSE for satellite design and tradespace analysis",
+      "quote": "This study explores the systematic application of Model-Based Systems Engineering to satellite design, from conceptualisation to trade-offs, using a tradespace analysis approach supported by Monte Carlo simulations",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Reusable CubeSat-class SE/MBSE process",
+      "quote": "the system engineering (SE) process used to develop the BOREALIS 6U bus is presented. It is a systematic approach that can be reused on other missions with the same or similar CubeSat class",
+      "location": "Section 3"
+    },
+    {
+      "claim": "EPS is one architectural decision, not a detailed EPS behavioral model",
+      "quote": "AD1 Electric Power System: Body Mounted Solar Array... Large Deployable Solar Array... Deployable Solar Array High-capacity Batteries",
+      "location": "Section 4.1, Table 10"
+    },
+    {
+      "claim": "Architectural decisions define the modeled design degrees of freedom",
+      "quote": "The ADs represent the degrees of freedom of the system, presenting all the valid options on the main system elements that respect the basic mission constraints and requirements.",
+      "location": "Section 4.1"
+    },
+    {
+      "claim": "Model evaluates mission concepts using MAU and cost",
+      "quote": "The multiple mission concepts were evaluated using Multi-Attribute Utility (MAU) and cost functions to assess their performance and expense.",
+      "location": "Section 4.3"
+    },
+    {
+      "claim": "Valispace integrated design model supports integration and collaboration",
+      "quote": "a dynamic model hosted within Valispace environment... integrates all subsystems... facilitating real-time updates and collaborative design efforts across different teams",
+      "location": "Section 3.2"
+    },
+    {
+      "claim": "General verification/validation linkage exists but is system-level",
+      "quote": "Development and Verification Plans: Strategic documents that outline the procedures for system validation against the mission requirements and operational readiness checks.",
+      "location": "Section 3.2"
+    },
+    {
+      "claim": "Monte Carlo evaluation parameters",
+      "quote": "Monte Carlo simulations were performed with 1000 iterations, ensuring statistical significance in capturing the distribution of possible outcomes.",
+      "location": "Section 5.2"
+    },
+    {
+      "claim": "Sensitivity analysis found power and propulsion most impactful",
+      "quote": "the analysis confirmed the dominance of AD1 (power subsystem) and AD3 (propulsion system) as the most impactful parameters across all concepts.",
+      "location": "Section 5.3.2"
+    },
+    {
+      "claim": "Concept 10 selected baseline",
+      "quote": "Ultimately, the chosen baseline configuration aligns with Concept 10, which balances mission performance with feasibility",
+      "location": "Section 5.4"
+    },
+    {
+      "claim": "Model caveat: subjectivity and possible misuse",
+      "quote": "While the model incorporates some level of subjectivity... if misused or constructed without logical constraints, the model could yield misleading results",
+      "location": "Section 5.4"
+    },
+    {
+      "claim": "Valispace model is not detailed in the article",
+      "quote": "the model under development on Valispace to manage the actual CubeSat data is not the purpose of this article",
+      "location": "Section 3.3"
+    }
+  ],
+  "notes_for_consistency": "Supporting paper. It is directly about MBSE for a nanosatellite-class CubeSat mission, but it is not an EPS-specific paper. Treat EPS evidence as high-level architectural/power-budget modeling only. Verification evidence is general system validation/planning and model robustness analysis, not EPS-specific IVV or test-procedure modeling."
+}

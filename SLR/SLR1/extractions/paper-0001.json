@@ -1,0 +1,154 @@
+{
+  "corpus_id": "paper-0001",
+  "tier": "core",
+  "citation": "Kaslow et al. (2014), Integrated Model-Based Systems Engineering (MBSE) Applied to the Simulation of a CubeSat Mission",
+  "title": "Integrated Model-Based Systems Engineering (MBSE) Applied to the Simulation of a CubeSat Mission",
+  "authors": [
+    "D. Kaslow",
+    "G. Soremekun",
+    "Hongman Kim",
+    "Sara C. Spangelo"
+  ],
+  "year": 2014,
+  "doi_or_url": "10.1109/aero.2014.6836317",
+  "venue_type": "Conference paper; IEEE Aerospace Conference indicated by DOI metadata, but venue is not explicitly stated in the extracted paper text",
+  "modeling_scope": "Executable integrated MBSE model of the RAX three-unit CubeSat mission. Scope includes system architecture, requirements, mission operations states, power collection, power management/battery energy state, data collection/management, communications/downlink, orbital and ground-station context, external analytical/simulation models, trade studies, and simulation-based requirement checking. Detailed modeling is intentionally limited mainly to energy and data dynamics; non-critical subsystems such as attitude determination and control are grouped into a Bus subsystem.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "verification",
+    "simulation",
+    "operations",
+    "reference model/template",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "SysML model in MagicDraw with Cameo Simulation Toolkit; ModelCenter workflows imported as SysML constraint blocks through MBSE Analyzer; external analyses and simulations in STK, MATLAB, and Java scripts; model developed from the published SSWG CubeSat reference model.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Cameo/MagicDraw",
+    "MATLAB/Simulink",
+    "Other"
+  ],
+  "robot_platform": "Radio Aurora Explorer (RAX), a three-unit CubeSat mission/platform developed by SRI International and the Michigan Exploration Laboratory; the authors state the model is a prototype and not an accurate RAX satellite model.",
+  "task_domain": "CubeSat space-weather science mission and mission-design trade analysis: RAX studies ionospheric electron-density irregularities by receiving radar-scatter signals, processing/storing science data, and downlinking payload and telemetry data through ground stations.",
+  "interface": "Tool/model integration interface between MagicDraw SysML diagrams, Cameo Simulation Toolkit behavioral execution, MBSE Analyzer, ModelCenter, STK, MATLAB, and Java scripts. Requirements are linked to calculated Vehicle properties through SysML satisfy relationships; ModelCenter analyses are imported as constraint blocks used in parametric diagrams.",
+  "feedback": "During behavioral simulation, the top-level activity steps through time; UpdateStates calls MBSE Analyzer to execute ModelCenter-backed parametric diagrams; returned state values influence subsequent activity and state-machine execution. Time histories of energy, data, download, and operational states are collected and used to evaluate behavior and requirements.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Ground-station network assumptions are modeled for downlink trade studies, including station locations, altitude, minimum elevation angle, and communication efficiency for Ann Arbor, Fairbanks, and Menlo Park. No communication latency assumptions are reported.",
+  "evaluation": "The integrated model is demonstrated by executing representative RAX mission simulations and collecting time histories of system states. Four trade studies vary solar panel area, maximum battery capacity, orbital altitude, and ground-station network; results are compared against energy and data-download requirements.",
+  "rqs_addressed": {
+    "RQ1": "yes",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1: yes, because the paper gives a system-level CubeSat MBSE approach with SysML architecture, requirements, behavior, parametrics, and integrated power/data simulations, while explicitly minimizing detailed subsystem modeling. RQ2: partial, because integrability and requirement-checking outcomes are attributed to MBSE/model integration, and reuse/extension is planned, but reliability and reproducibility are not directly evaluated. RQ3: partial, because requirements are linked to simulated properties and checked through behavioral mission simulations, including EPS-related energy limits and battery capacity, but the paper does not model formal test cases, IVV plans, or detailed verification procedures.",
+  "claimed_outcomes": [
+    "MBSE is claimed to integrate discipline-specific engineering models and simulations and provide a cohesive, consistent source of requirements, design, analysis, and verification.",
+    "The integrated SysML/ModelCenter/STK/MATLAB model is claimed to enable simulation of an entire CubeSat mission and assessment of component and mission-parameter sensitivities.",
+    "Simulation results are claimed to support checking system requirements, including minimum energy limit and data download requirements.",
+    "Time-history results are claimed to help understand system behavior, interactions among energy collection and data download, and model verification.",
+    "The RAX model is planned for release to the academic community as a starting point for CubeSat teams and for further study or extension; reproducibility is implied as reuse potential, not empirically assessed.",
+    "Not reported: no direct reliability improvement claim attributable to EPS modeling or MBSE was found."
+  ],
+  "verification_validation_linkage": "SysML requirements are connected to calculated Vehicle value properties with satisfy relationships, including downloadDataMB, energyLowerMargin, maxEnergyCapacity, and maxDataCapacity. Figure 6 states that RAX system requirements are verified using results of behavioral simulations. CST executes activity/state diagrams, MBSE Analyzer executes ModelCenter-backed parametric analyses, and the resulting time histories are used to check minimum energy and data-download requirements. This is simulation-based requirement verification, with EPS-specific linkage for energy/battery requirements; no formal validation campaign, IVV process, or test-procedure model is reported.",
+  "key_findings": [
+    "The paper demonstrates an executable MBSE representation of a CubeSat mission by linking a SysML system model to analytical and high-fidelity simulations through ModelCenter and MBSE Analyzer.",
+    "The RAX model includes mission architecture, ground network, external environment, vehicle subsystems, requirements, parametric analyses, activity diagrams, and a state machine for orbit, solar, experiment, and download states.",
+    "Power/EPS-relevant modeling covers power collection, power management, battery capacity, energy state update, energy lower margin, solar-panel area, and the interaction of energy collection with payload and downlink activity.",
+    "The authors intentionally reduce model detail by focusing on energy and data dynamics and grouping less critical subsystems such as attitude determination and control into a Bus subsystem.",
+    "Trade studies showed that nominal and half-size solar-panel cases stayed within modeled energy bounds, while the quarter-size solar-panel case dropped below the required minimum energy level.",
+    "A reduced battery-capacity case capped stored energy and showed potential solar-energy spillover, suggesting a possible solar-panel sizing trade.",
+    "Orbit altitude and ground-station network choices strongly affected downloaded data over 24 hours; all studied ground-station configurations satisfied the stated minimum 1 MB/day download requirement.",
+    "The paper frames the model as a proof of concept for MBSE applicability to operational CubeSat missions, not as an accurate digital representation of RAX."
+  ],
+  "limitations_gaps": [
+    "The authors explicitly state that the RAX modeling is a prototype to prove MBSE applicability and is not intended to be an accurate model of the RAX satellite.",
+    "The proof of concept is limited to energy collection/management and data collection/management.",
+    "Detailed modeling is minimized by excluding several non-critical subsystems, such as attitude determination and control, and grouping their energy/data dynamics into the Bus subsystem.",
+    "The paper notes that the trade studies varied design parameters independently, although combined effects could be studied.",
+    "The authors state that the model can be extended to include additional aspects of system behavior and more complex studies such as scheduling algorithms.",
+    "No dedicated threats-to-validity section, formal validation against flight data, or formal IVV/test-procedure model is reported."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "Credible venue is supported by the IEEE AERO DOI metadata. The paper discusses scope limits and future extensions, including that the model is not an accurate RAX model and excludes non-critical subsystems, but it does not provide a formal limitations or validity-threats discussion."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "MBSE purpose and integrability outcome",
+      "quote": "MBSE creates a system model that helps integrate other discipline specific engineering models and simulations. The system level model is initiated at the start of a project and evolves throughout development. It provides a cohesive and consistent source of system requirements, design, analysis, and verification.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Integrated executable CubeSat model scope",
+      "quote": "This paper describes an integrated, executable MBSE representation of the Radio Aurora Explorer (RAX) CubeSat mission.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Tools and external model integration",
+      "quote": "It is comprised of a SysML model created with MagicDraw, a set of analytical models developed in MATLAB, and a high fidelity space system simulation model created in STK. ModelCenter was used to integrate the analytical and simulation models.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "MBSE Analyzer bridge",
+      "quote": "The integrated analyses were linked to the SysML model using MBSE Analyzer, a bridge between SysML tools and ModelCenter.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Prototype limitation",
+      "quote": "The modeling of RAX described in paper is this intended as a prototype to prove out the applicability of MBSE for modeling operational space missions. It is not intended to be an accurate model of the RAX satellite.",
+      "location": "Section 1, Radio Aurora Explorer"
+    },
+    {
+      "claim": "System architecture and EPS-related subsystem scope",
+      "quote": "The Vehicle block definition diagram shown in Figure 5 describes the vehicle subsystems and their components, including communication, power collection, power management, data management, payload, and bus.",
+      "location": "Section 4, SysML Model"
+    },
+    {
+      "claim": "Minimal detailed modeling",
+      "quote": "Detailed modeling was minimized by excluding several other non-critical subsystems, such as attitude determination and control. The energy and data dynamics of these other subsystems, which were less important to capture in our models, are grouped into the Bus subsystem.",
+      "location": "Section 4, SysML Model"
+    },
+    {
+      "claim": "Proof-of-concept scope focused on energy and data",
+      "quote": "The proof of concept is limited to modeling energy collection and management as well as data collection and management.",
+      "location": "Section 4, SysML Model"
+    },
+    {
+      "claim": "Verification linkage from requirements to behavioral simulation",
+      "quote": "Figure 6 - RAX system requirements are verified by using the results of behavioral simulations.",
+      "location": "Section 4, Figure 6 caption"
+    },
+    {
+      "claim": "Simulation feedback loop between behavior and parametric analysis",
+      "quote": "When the UpdateStates action is reached, a call is made to MBSE Analyzer to execute various parametric diagrams via ModelCenter. The information returned from evaluating the parametric diagrams influences the flow path as CST continues to execute the activity and state machine diagrams.",
+      "location": "Section 4, Model Integration and Execution"
+    },
+    {
+      "claim": "Need and method for requirement verification over mission simulation",
+      "quote": "However, there is no readily available capability that enables verifying the impact of design decisions on mission requirements throughout the entire mission. The integrated model demonstrates how to accomplish this by performing mission simulations using MBSE models.",
+      "location": "Section 5, RAX Energy State & Data Collection Analysis"
+    },
+    {
+      "claim": "Trade-study and requirement-checking outcome",
+      "quote": "These trade studies demonstrate the ability of the model and the tools to simulate an entire CubeSat mission. The capability allows assessing sensitivity of key components and mission parameters and verifying system requirements.",
+      "location": "Section 5, RAX Energy State & Data Collection Analysis"
+    },
+    {
+      "claim": "Conclusion on energy/data requirement checking",
+      "quote": "Results of mission simulations were used to check system requirements of minimum energy limit and data download.",
+      "location": "Section 6, Conclusion"
+    },
+    {
+      "claim": "Reuse/extension claim",
+      "quote": "The model can be used as a starting point for a CubeSat team to develop their own model and perform trade studies.",
+      "location": "Section 6, Conclusion"
+    }
+  ],
+  "notes_for_consistency": "This is a core MBSE integration and trade-study demonstration for a RAX CubeSat mission, not an EPS-only paper and not an accurate RAX digital twin. Direct evidence is strongest for RQ1 system/EPS modeling and MBSE tool integration. RQ2 evidence should be limited to integrability, consistency, requirement checking, reuse/extension potential, and trade-study support; no direct reliability improvement is reported. RQ3 evidence is simulation-based requirement verification, including EPS-related energy/battery requirements, but not formal IVV/test-procedure modeling. The paper cites prior Phase I/II CubeSat reference/RAX behavior papers, so potential lineage overlap should be checked in corpus-wide synthesis. I read only paper.md and used only paper.md plus embedded assigned metadata."
+}

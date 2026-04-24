@@ -1,0 +1,195 @@
+{
+  "corpus_id": "paper-0003",
+  "tier": "supporting",
+  "citation": "Spangelo et al. (2013), Model Based Systems Engineering (MBSE) Applied to Radio Aurora Explorer (RAX) CubeSat Mission Operational Scenarios",
+  "title": "Model Based Systems Engineering (MBSE) Applied to Radio Aurora Explorer (RAX) CubeSat Mission Operational Scenarios",
+  "authors": [
+    "Sara C. Spangelo",
+    "James Cutler",
+    "L. Anderson",
+    "E. Fosse",
+    "Leo Y. Cheng",
+    "Rose Yntema",
+    "Manas Bajaj",
+    "Chris Delp",
+    "Bjorn Cole",
+    "Grant Soremekum",
+    "D. Kaslow"
+  ],
+  "year": 2013,
+  "doi_or_url": "10.1109/aero.2013.6496894",
+  "venue_type": "conference paper; venue name not stated in paper text (DOI metadata provided)",
+  "modeling_scope": "System-level CubeSat/RAX mission MBSE for operational scenarios, including mission, flight system, ground system, environment, logical and physical subsystem models, requirements traceability, architecture, behavior, state machines, parametric analyses, communication link/SNR analysis, power/energy simulation, schedules, and verification/validation support. EPS coverage is through the Power Collection and Control subsystem, on-board energy state, solar energy collection, power consumption, battery energy limits, and schedule feasibility.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "verification",
+    "simulation",
+    "operations",
+    "reference model/template",
+    "lifecycle/PLM",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "SysML with MagicDraw/No Magic Teamwork, Cameo Simulation Toolkit, ParaMagic, Systems Tool Kit (STK), PHX ModelCenter, MATLAB, Excel/Mathematica wrappers, a CubeSat-specific SysML extension/framework, and the Develop With What You Fly With philosophy.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Cameo/MagicDraw",
+    "MATLAB/Simulink",
+    "Other"
+  ],
+  "robot_platform": "RAX CubeSat/nanosatellite mission, including RAX-1 and RAX-2; paper describes CubeSats as standardized one-to-three-cube nanosatellites but does not state RAX's exact unit form factor in the extracted text.",
+  "task_domain": "Space weather mission operations for studying ionospheric plasma field-aligned irregularities using a bi-static radar configuration; modeling covers orbit/attitude context, energy collection, science data acquisition, on-board data storage, downlink/uplink, ground station access, and operational scheduling.",
+  "interface": "Tool/model integration interfaces among MagicDraw SysML models, CST, ParaMagic, STK, PHX ModelCenter, MATLAB, Excel/Mathematica; model repository/collaboration interfaces; flight-ground command and telemetry interface; subsystem interfaces among OBC, communications, payload, bus, ADCS, thermal, data handling, and power.",
+  "feedback": "Model execution supports run-view-update loops: solved parametric values can be updated back to SysML, analyses can be automatically rerun with updated parameters, expected behavior can be compared with on-flight observed behavior, and future operations can update schedules/parameters with operational performance feedback.",
+  "control_autonomy_split": "Ground operations generate command sets/schedules; the onboard computer processes uploaded commands and dispatches them to relevant subsystems near execution time. Broader autonomous control allocation is not discussed.",
+  "network_latency_assumptions": "Ground station visibility, line-of-sight access, uplink/downlink states, and ground network parameters are modeled; no network latency assumptions are reported.",
+  "evaluation": "Demonstrated as a RAX CubeSat case study by executing SysML parametric, state machine, and activity models. Examples include three ParaMagic communication SNR/link scenarios, a PHX ModelCenter power/energy/data workflow integrating STK and MATLAB, and CST behavior simulations of flight-ground and OBC/communications interactions. Formal validation against flight data is proposed as future work rather than completed.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1 partial: the paper gives a general CubeSat SysML framework/template and a RAX case including EPS/power functions, but it relies on RAX-specific mission behavior and does not frame the method as requiring minimal behavioral knowledge. RQ2 partial: it claims MBSE/model integration outcomes such as integrability, reuse, rapid scenario evaluation, robustness metrics, and requirements compliance, but does not measure reliability or reproducibility as EPS-specific outcomes. RQ3 partial: it links MBSE models to requirements compliance, V&V of software/interfaces, schedule/parameter verification, and a power scenario with violation metrics, but it does not present a dedicated EPS verification procedure prior to physical development.",
+  "claimed_outcomes": [
+    "Integrated modeling environment enables automated flow of information between simulators, reducing manual information transfer and supporting rapid evaluation of design configurations and mission scenarios.",
+    "Users can extract feasibility, performance, and robustness metrics for representative mission scenarios.",
+    "Vehicle and network parameters and operational schedules can be verified before implementation, during operations, and updated with operational performance feedback.",
+    "The model can check requirements compliance and support trade studies through SysML parametric execution and PHX ModelCenter workflows.",
+    "A CubeSat model development kit/template is intended to help future teams describe, optimize, and evaluate their satellites and mission operations.",
+    "The modular approach enabled easy model growth and simultaneous contributions by multiple modelers; reusable components and tool integration support scalability.",
+    "No direct EPS reliability improvement or empirical reproducibility metric is reported. Robustness and integrability are claimed mainly for the MBSE/integrated simulation environment."
+  ],
+  "verification_validation_linkage": "General V&V is explicit: SysML requirements can be traced to design, analysis, and verification elements; the model is said to verify design updates against mission requirements; ParaMagic/PHX workflows can verify requirements during design; CST supports verification and validation of the system; behavior simulations can compare expected and on-flight observed behavior and support V&V of mission software and interfaces. EPS-specific linkage is limited to the power scenario's energy/power simulation, requirements compliance checks, and violation outputs; no standalone EPS verification procedure is reported.",
+  "key_findings": [
+    "The RAX SysML model decomposes the CubeSat mission into launch system, environment, mission, flight system, ground system, and operational/logical subsystems, with logical and physical models separated.",
+    "The power model represents solar energy acquisition, power distribution, excess energy storage in an on-board battery, power consumption, on-board energy state, and energy/data dynamics during operations.",
+    "The paper integrates SysML with CST, ParaMagic, STK, PHX ModelCenter, and MATLAB to execute parametric, state machine, and activity models for analysis and simulation.",
+    "The communication analysis uses a SysML parametric SNR/link model and demonstrates three causalities: compute SNR from power/rate, compute required power from SNR/rate, and compute achievable data rate from power/SNR.",
+    "The power scenario uses STK, SysML, MATLAB, and PHX ModelCenter to model dynamic orbits, solar collection opportunities, ground station access, on-board operations, data download, on-board energy, and data time histories.",
+    "The behavior analysis uses CST to simulate flight-ground, OBC command dispatch, and communication subsystem state transitions for upload, downlink, beacon, nominal, and experiment modes.",
+    "The paper states that interface behavior and information exchange can be tested, and expected behavior can be compared to on-flight observed behavior.",
+    "The authors report practical challenges with tool licensing, wrapper/integration setup, debugging wrapped MATLAB/STK models, prototype STK wrapping in ParaMagic, separate simulations, and the need for later flight-data validation."
+  ],
+  "limitations_gaps": [
+    "Appropriate licenses are required for all simulation tools and vendor support was needed.",
+    "Creating and testing integration required wrapper files, wrapping models, saving, and reopening models in PHX ModelCenter and MagicDraw, making setup time consuming and inefficient.",
+    "Debugging MATLAB code and STK scenarios after wrapping into PHX ModelCenter was difficult, time consuming, and frustrating.",
+    "Wrapping STK models as parametric constraints and executing them using ParaMagic was only at a prototype stage.",
+    "Current simulations step through time for visualization; constraint-based solving with state constraints is identified as future work.",
+    "The simulations execute individually; integrating them for broader combined analyses, such as simultaneous power and communication optimization, is future work.",
+    "No unified environment for efficient verification of optimal scheduling algorithms was available; this is identified as a future need.",
+    "Comparison with real operational RAX data is proposed as future work to verify, validate, and improve the models."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "1",
+    "total_score": "2",
+    "rationale": "The paper has an IEEE DOI and conference-paper format, and it explicitly reports challenges, limitations, and future work. Venue name is not printed in the extracted paper text, but the provided DOI metadata supports a credible publication source."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Paper extends a CubeSat MBSE framework to operational behaviors and scenarios.",
+      "quote": "we extend our initial Model Based Systems Engineering (MBSE) framework developed for a small satellite mission by demonstrating the ability to model different behaviors and scenarios",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Integrated simulation tools execute SysML behavior models and subsystem states.",
+      "quote": "We integrate several simulation tools to execute SysML-based behavior models, including subsystem functions and internal states of the spacecraft.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Modeling environment provides feasibility, performance, and robustness metrics.",
+      "quote": "The integrated modeling environment enables users to extract feasibility, performance, and robustness metrics.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Model can verify parameters and schedules before implementation and during operations.",
+      "quote": "vehicle and network parameters and schedules can be verified prior to being implemented, during mission operations, and can also be updated in near real-time with operational performance feedback.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "SysML is the MBSE language used for system specification, analysis, design, optimization, and verification.",
+      "quote": "Our application of MBSE uses SysML as the modeling language for formally describing and specifying the system.",
+      "location": "Section 2, MBSE and SysML"
+    },
+    {
+      "claim": "Requirements can be traced to design, analysis, and verification elements.",
+      "quote": "Requirements text based requirements in the model that can be traced to design, analysis, and verification elements.",
+      "location": "Section 2, MBSE and SysML"
+    },
+    {
+      "claim": "The work aims at a general CubeSat model development kit/template.",
+      "quote": "Our overall plan is to develop a CubeSat model development kit for the CubeSat community",
+      "location": "Section 3, MBSE Approach to CubeSat Design"
+    },
+    {
+      "claim": "The model includes complete mission scope and subsystem interfaces.",
+      "quote": "The entire satellite mission including flight system, ground system, and targets of interest subsystems, and components and their interfaces",
+      "location": "Section 3, MBSE Approach to CubeSat Design"
+    },
+    {
+      "claim": "The model supports verification of design updates against requirements.",
+      "quote": "The model will enable verification that design updates comply with mission requirements.",
+      "location": "Section 3, MBSE Approach to CubeSat Design"
+    },
+    {
+      "claim": "Power/EPS function is modeled.",
+      "quote": "The Power Collection and Control subsystem is responsible for acquiring energy by body-fixed solar panels, distributing power to support ongoing operations, and storing excess energy for future use in an on-board battery.",
+      "location": "Section 5, RAX SysML Model"
+    },
+    {
+      "claim": "PHX ModelCenter integration automates data flow among simulators.",
+      "quote": "PHX ModelCenter executes the workflow, automatically transferring data between the simulators.",
+      "location": "Section 4, Model-Based Engineering Environment"
+    },
+    {
+      "claim": "Power scenario models dynamic orbits, energy collection, download opportunities, and schedules.",
+      "quote": "We model dynamic orbits, opportunities to collect energy and download data, realistic schedules.",
+      "location": "Section 6, Power Analysis"
+    },
+    {
+      "claim": "Power simulation supports trade studies and requirements compliance.",
+      "quote": "This simulation environment enables us to evaluate design configurations, perform trade studies, and check requirements compliance.",
+      "location": "Section 6, Power Analysis"
+    },
+    {
+      "claim": "CST supports verification and validation.",
+      "quote": "CST functionality also supports verification and validation of the system.",
+      "location": "Section 6, Flight System Behavior Analysis"
+    },
+    {
+      "claim": "Behavior models can test interfaces and compare expected to observed flight behavior.",
+      "quote": "the actual information exchange between systems to be depicted and tested. The expected behavior as well as onflight observed behavior can be compared to what the model predicts.",
+      "location": "Section 6, Flight System Behavior Analysis"
+    },
+    {
+      "claim": "Early-phase simulations support V&V of software and interfaces.",
+      "quote": "these types of simulations will allow for verification and validation of the mission software and interfaces throughout the development lifecycle.",
+      "location": "Section 6, Flight System Behavior Analysis"
+    },
+    {
+      "claim": "Modular approach supports model growth and multiple contributors.",
+      "quote": "using a modular approach, which enabled easy growth of the model and multiple modelers to simultaneously contribute to the model.",
+      "location": "Section 7, Summary"
+    },
+    {
+      "claim": "Tool licensing is a stated challenge.",
+      "quote": "Appropriate licenses are required for all simulation tools which can be challenging, and required vendor support.",
+      "location": "Section 7, Lessons Learned: Challenges and Successes"
+    },
+    {
+      "claim": "Model integration setup is time consuming and inefficient.",
+      "quote": "creating and testing the integration of models can be time consuming and inefficient.",
+      "location": "Section 7, Lessons Learned: Challenges and Successes"
+    },
+    {
+      "claim": "Flight-data comparison is future validation work, not completed evaluation.",
+      "quote": "comparing results from our simulation environment based on our modeling framework to real data from operational missions such as RAX will provide a means to verify, validate, and improve the models.",
+      "location": "Section 7, Future Work"
+    }
+  ],
+  "notes_for_consistency": "This is a supporting paper and extends a 2012 CubeSat MBSE paper cited by the authors. It is system-level with meaningful EPS/power modeling, but not an EPS-only paper. RQ2 outcomes are mostly integrability, robustness, reuse, and requirements-compliance claims from MBSE/model integration, not measured EPS reliability. RQ3 evidence is general V&V plus power-scenario requirements/violation checks, not a dedicated EPS verification-procedure model. Venue name is not explicit in paper.md; author spelling for Grant Soremekum/Soremekun differs between title metadata and biography, so metadata spelling is used."
+}

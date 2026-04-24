@@ -1,0 +1,160 @@
+{
+  "corpus_id": "paper-0039",
+  "tier": "core",
+  "citation": "Gregory et al. (2020), Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites",
+  "title": "Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites",
+  "authors": [
+    "John M. Gregory",
+    "Jin S. Kang",
+    "R. Bruninga",
+    "R. Sega",
+    "J. Borky",
+    "D. Kaslow",
+    "George H. Downey"
+  ],
+  "year": 2020,
+  "doi_or_url": "10.1109/aero47225.2020.9172748",
+  "venue_type": "conference/proceedings-style paper; venue name not explicitly reported in paper.md (assigned DOI: 10.1109/aero47225.2020.9172748)",
+  "modeling_scope": "System-level CubeSat MBSE template for the PSAT1U 1U CubeSat, based on the CubeSat System Reference Model. Scope includes space/ground architecture hierarchy, subsystem/component packages, interfaces, payload design envelope, EPS components and power budget, and change propagation through model relationships.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "reference model/template",
+    "tool/process",
+    "other"
+  ],
+  "mbse_language_method_tool": "Model-Based Systems Engineering using the INCOSE Space Systems Working Group CubeSat System Reference Model (CSRM), SysML, and CAMEO Systems Modeler MBSE Software V19.0.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Cameo/MagicDraw",
+    "Other"
+  ],
+  "robot_platform": "PSAT1U, a 1U CubeSat-class educational satellite/nanosatellite platform intended as a modular architecture for student-built missions.",
+  "task_domain": "CubeSat-class satellite system design and education; reusable/template mission-specific CubeSat development with EPS/power, payload, ADCS, communications, and ground/space segment modeling.",
+  "interface": "Model interfaces include subsystem/component relationships in CAMEO/SysML, documented architecture packages, and payload physical/electrical envelope constraints. EPS-related interfaces include solar arrays, batteries, power buses, watchdog reset circuit relationships, and links to ADCS/payload/communications subsystems.",
+  "feedback": "The paper demonstrates model change propagation: editing a component such as the watchdog timer specification propagates through defined relationships to the power subsystem and other related elements. It also describes hardware watchdog heartbeat/reset behavior, but no simulation or V&V feedback loop is reported.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable; VHF uplink/downlink link budgets are reported, but no network latency assumptions are discussed.",
+  "evaluation": "The model is demonstrated through PSAT1U examples and screenshots/diagrams: architecture hierarchy, ADCS block definition diagram, EPS package diagram with power budget, watchdog-timer change propagation, and generic/defined payload specifications. No quantitative empirical evaluation of time savings, reliability, reproducibility, or integration quality is reported.",
+  "rqs_addressed": {
+    "RQ1": "yes",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1: yes, because the paper presents a general CubeSat-class MBSE template/reference-model approach for PSAT1U and includes EPS/package/power-budget modeling. RQ2: partial, because the paper claims design-cycle efficiency, automatic change propagation, reuse, and easier integration/design-space understanding from MBSE, but does not provide measured reliability or reproducibility outcomes. RQ3: partial, because MBSE is defined as supporting verification and validation and classroom use mentions analysis/testing, but the paper does not present explicit EPS-specific verification procedures, IV&V artifacts, or test-procedure models.",
+  "claimed_outcomes": [
+    "The standardized MBSE template is claimed to make the CubeSat design cycle more efficient and reduce future design/development times.",
+    "Defined relationships are claimed to propagate system changes automatically and avoid manual propagation across related subsystems/components.",
+    "The template is claimed to make the payload design space easier to understand and allow users to focus on mission payloads, analysis, testing, decisions, and trades rather than already-defined subsystems.",
+    "The approach is claimed to let discipline-specific experts and undergraduate students benefit from systems engineering tools without becoming expert MBSE users.",
+    "The PSAT1U/MBSE template is claimed to support reuse/tailoring for future CubeSat-class systems or mission-specific PSAT1U instances. No MBSE-attributed reliability metric is reported."
+  ],
+  "verification_validation_linkage": "General linkage only. The introduction quotes the standard MBSE definition including support for requirements, design, analysis, verification, and validation across lifecycle phases, and classroom use says students focus on analysis and testing. The PSAT1U model evidence shown is architecture/specification/budget/change-propagation documentation; no explicit EPS-specific verification procedure, IV&V process, or test model is reported.",
+  "key_findings": [
+    "The paper develops a PSAT1U baseline MBSE model from the CSRM as a standardized template for CubeSat-class satellites.",
+    "The baseline model defines important PSAT1U subsystems, components, and interfaces while intentionally leaving payload and mission-specific modules undefined for later tailoring.",
+    "The model uses CAMEO Systems Modeler V19.0 and SysML/CSRM structures, including architecture hierarchy packages for space segment, ground segment, subsystems, and components.",
+    "EPS modeling is present: the paper shows a power subsystem package with batteries, regulators/converters, solar arrays, custom battery board/power circuits and switches, processor/memory, software, and an as-designed power budget embedded in subsystem specification documentation.",
+    "The paper demonstrates model-based integration/change management with a watchdog timer reset circuit related to the power subsystem, where specification changes propagate automatically through model relationships.",
+    "The payload template defines mass, volume, and power constraints so mission teams can add mission-specific payload details within the modeled envelope.",
+    "The classroom implementation positions the template as a teaching and design-support tool, not as a full MBSE training exercise.",
+    "Reliability statements about NiCd batteries and watchdog timers are tied to EPS hardware design choices, not to MBSE/modeling outcomes."
+  ],
+  "limitations_gaps": [
+    "No formal limitations or threats-to-validity section is provided.",
+    "The paper explicitly notes that teaching students all of MBSE and tool use is beyond the scope of the course.",
+    "The template is constrained to missions whose payloads operate within the envelope defined by the model."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "Formal conference/proceedings-style paper with assigned IEEE DOI metadata. Limitations are discussed only briefly as course-scope and payload-envelope constraints; there is no formal validity/threats discussion."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "MBSE/template motivation and outcome",
+      "quote": "apply Model-Based Systems Engineering (MBSE) methodology to CubeSats, providing a standardized template that the developers can use to make the design cycle more efficient",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Model purpose for education and reduced development time",
+      "quote": "The aim of this model is to aid in the education of undergraduate engineering students in their capstone design course as well as to reduce design and development times for future CubeSat systems.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "General MBSE scope includes V&V, but as definition rather than implemented procedure",
+      "quote": "the formalized application of modeling to support system requirements, design, analysis, verification and validation activities beginning in the conceptual design phase and continuing throughout development and later life cycle phases",
+      "location": "Section 1, Introduction"
+    },
+    {
+      "claim": "CSRM is the reference/template basis",
+      "quote": "the CubeSat System Reference Model (CSRM) ... providing the \"logical elements [which] can be reused as a starting point for a mission-specific CubeSat logical architecture\"",
+      "location": "Section 1, Introduction"
+    },
+    {
+      "claim": "CSRM modeling scope spans system, ground, subsystems, and components",
+      "quote": "the CSRM, which serves as an MBSE template for modeling the space system, ground system, and each of the subsystems and components of a CubeSat System",
+      "location": "Section 3, CubeSat System Reference Model"
+    },
+    {
+      "claim": "Baseline model definition and template scope",
+      "quote": "The PSAT1U Baseline Model is an MBSE representation of the satellite developed using the CSRM as a starting point.",
+      "location": "Section 4, PSAT1U Baseline Model"
+    },
+    {
+      "claim": "Model leaves payload/mission open and defines interfaces",
+      "quote": "defines all of the important subsystems, components, and interfaces of the PSAT1U, but leaves the payload and mission specific modules undefined",
+      "location": "Section 4, PSAT1U Baseline Model"
+    },
+    {
+      "claim": "MBSE tool",
+      "quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.",
+      "location": "Section 4, PSAT1U Baseline Model"
+    },
+    {
+      "claim": "EPS package modeling",
+      "quote": "Figure 15 is the package diagram describing the EPS for the spacecraft. In it, each of the main component parts are described",
+      "location": "Section 4, PSAT1U Baseline Model"
+    },
+    {
+      "claim": "EPS budget/specification captured in model",
+      "quote": "Within the specification for the EPS, pertinent information such as the as-designed power budget ... is also available.",
+      "location": "Section 4, PSAT1U Baseline Model"
+    },
+    {
+      "claim": "Automatic change propagation/integration linkage",
+      "quote": "any changes made to the Watchdog Timer specification are automatically propagated to the Power subsystem and to any other subsystems or components with a relationship to the Watchdog Timer",
+      "location": "Section 5.1, Propagating Changes"
+    },
+    {
+      "claim": "Change propagation claimed to improve design-cycle efficiency",
+      "quote": "this procedure can add efficiency to the design cycle time and allow a user to spend more time concentrating on the important decisions and trades",
+      "location": "Section 5.1, Propagating Changes"
+    },
+    {
+      "claim": "Payload/design-space template outcome",
+      "quote": "allows the user to quickly survey and understand the payload design space without wasting precious time on well understood or defined subsystems and components",
+      "location": "Section 5.2, Payload Design Template"
+    },
+    {
+      "claim": "Classroom implementation limitation",
+      "quote": "It is beyond the scope of this course to teach these students all there is to know about MBSE and how to utilize its tools.",
+      "location": "Section 5.3, Classroom Implementation"
+    },
+    {
+      "claim": "Testing mentioned generally, not as explicit EPS verification model",
+      "quote": "This allows students to remain focused on the analysis, testing and making decisions that will be critical to their mission success.",
+      "location": "Section 5.3, Classroom Implementation"
+    },
+    {
+      "claim": "Conclusion on design-space understanding and propagation",
+      "quote": "The model aids in the design process by ensuring the design space is easily understood and by propagating system changes automatically and seamlessly.",
+      "location": "Section 6, Conclusion"
+    }
+  ],
+  "notes_for_consistency": "Read only paper.md and used assigned metadata from the prompt. Do not count EPS hardware reliability claims about NiCd batteries or watchdog timers as MBSE-attributed reliability outcomes. RQ3 evidence is only general MBSE/V&V and classroom testing language; no explicit EPS verification/test procedure model is reported. Venue name is not printed in paper.md, though assigned DOI metadata indicates an IEEE/AERO proceedings-style source."
+}

@@ -1,0 +1,159 @@
+{
+  "corpus_id": "paper-0079",
+  "tier": "core",
+  "citation": "Guo, Gill, and Figari (2014), Model-based systems engineering to support the development of nanosatellites",
+  "title": "Model-based systems engineering to support the development of nanosatellites",
+  "authors": [
+    "Jian Guo",
+    "Eberhard Gill",
+    "Stefano Figari"
+  ],
+  "year": 2014,
+  "doi_or_url": "Not reported",
+  "venue_type": "conference paper, International Astronautical Congress (IAC-14-D1.6.3)",
+  "modeling_scope": "System-level MBSE for the DelFFi nanosatellite mission using SysML requirements, stereotypes, requirement traceability, subsystem requirement breakdowns including EPS, and executable SysML parametric diagrams linked to MATLAB/Simulink ADCS simulations. The detailed verification example is ADCS detumbling and AOCS/GNC/onboard software integration, not EPS behavior.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "verification",
+    "simulation",
+    "reference model/template",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "SysML with requirement diagrams, stereotypes, blocks, parametric diagrams, and executable SysML; MATLAB/Simulink ADCS models; ParaSolver used between Artisan Studio SysML and MATLAB; MDE/automatic C code generation for onboard software.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "MATLAB/Simulink",
+    "Other"
+  ],
+  "robot_platform": "DelFFi mission within QB50: two identical triple-unit CubeSats/nano-satellites, Delta and Phi, advancing the Delfi-n3Xt platform.",
+  "task_domain": "Nano-satellite mission and system definition; autonomous formation flying and thermosphere science; ADCS/AOCS/GNC design verification and onboard software development.",
+  "interface": "Executable SysML/ParaSolver interface transfers values between Artisan Studio SysML instances and MATLAB/Simulink results; Simulink models are translated to hardware-independent C code and integrated with lower-layer ADCS onboard software for HIL/flight-software verification.",
+  "feedback": "Verification and development loops are described: MATLAB results are transferred back to SysML to update requirement status; code verification models feed back into the MBSE environment; the MDE process supports iterative changes to models, parameters, and algorithms when requirements change.",
+  "control_autonomy_split": "Autonomous formation flying is a mission objective and ADCS/GNC modes are simulated, but no detailed human/autonomy control allocation split is reported.",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Demonstrated through the DelFFi case study with SysML mission/system/subsystem requirements, an executable SysML ADCS4simulation parametric model linked to MATLAB/Simulink, and a detumble-mode simulation checking ADCS-F.34; the paper also presents a conceptual MDE workflow for Simulink-to-C-code onboard software integration.",
+  "rqs_addressed": {
+    "RQ1": "yes",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1: yes, because the paper gives a system-level SysML/MBSE approach for a nanosatellite mission, including requirements, traceability, templates, subsystem breakdowns, and executable model linkage; EPS is mentioned as a subsystem but not detailed. RQ2: partial, because reliability, reuse, traceability, integration, efficiency, and quality outcomes are claimed for MBSE/MDE/model sharing, but they are ADCS/onboard-software or general system outcomes rather than EPS-specific outcomes. RQ3: partial, because verification is explicitly integrated through executable SysML and MATLAB/Simulink simulations before physical implementation, but the detailed procedure verifies ADCS detumbling and code/flight software, not EPS-specific verification.",
+  "claimed_outcomes": [
+    "Improved requirements traceability and overall model consistency through SysML requirements tables and diagrams; not EPS-specific.",
+    "Reusable model/template approach for nanosatellite development; the paper states templates and guidelines are vital to make the model reusable.",
+    "Model sharing between MBSE and MDE reuses ADCS models from early design through code generation, reducing duplicate work and allowing engineers to focus on models rather than programming.",
+    "Seamless integration of requirement development, model verification, automatic code generation, and verification is claimed to improve development efficiency and product/code quality.",
+    "A more reliable AOCS/GNC system and higher code quality are expected/claimed because simulation models and onboard software are kept structurally consistent.",
+    "No EPS-specific reliability, reproducibility, or integrability outcome is reported."
+  ],
+  "verification_validation_linkage": "General and ADCS-specific linkage is strong: SysML requirements are refined by constraint blocks and executable parametric diagrams; ParaSolver links Artisan Studio SysML instance values to MATLAB/Simulink and returns simulation outputs; ADCS-F.34 detumbling is verified by simulation and its SysML requirement status changes from TBC to Satisfied. The MBSE environment also links requirement models, verified ADCS models, code verification models, FM testing, and flight software. EPS-specific verification procedures are not reported.",
+  "key_findings": [
+    "The paper proposes MBSE as a gap-filling methodology for nano-satellite development, using DelFFi as the case study.",
+    "SysML stereotypes and requirement diagrams are used to derive customer needs, mission statements, mission requirements, system requirements, and low-level subsystem requirements.",
+    "EPS appears in the modeled subsystem/domain list and power-related requirements appear in overview diagrams, but the paper does not present a detailed EPS model.",
+    "Executable SysML is implemented via parametric diagrams that call external MATLAB/Simulink simulations.",
+    "The detailed verification example checks the ADCS detumbling requirement ADCS-F.34 by simulating an initial 10 deg/s rotational rate and comparing results with the less-than-1 deg/s within one day goal.",
+    "The MDE/onboard-software workflow links model libraries, Simulink solutions, automatic C code generation, HIL/code verification, and flight model testing."
+  ],
+  "limitations_gaps": [
+    "Requirement diagrams can become cluttered; the paper recommends partitioning requirements analysis across dedicated diagrams.",
+    "The paper reports ambiguity in choosing SysML relations such as containment, derive, trace, and refine.",
+    "A proper testing architecture was still to be defined for the testing requirement.",
+    "SysML stereotypes are case-specific and need reconsideration case by case.",
+    "The paper recommends stronger collaboration between experienced SysML users and domain experts.",
+    "No detailed EPS-specific modeling, simulation, or verification procedure is presented; the detailed executable-model evidence is ADCS-focused."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "The paper is an IAC conference paper. It discusses practical limitations and modeling problems such as diagram clutter, relation ambiguity, undefined testing architecture, case-specific stereotypes, and need for domain-expert collaboration, but it does not provide a formal threats-to-validity section."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Paper scope is MBSE for nano-satellite development.",
+      "quote": "This paper presented a gap-filling methodology utilizing Model-Based Systems Engineering (MBSE) in support of nano-satellite development.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Main MBSE focus is requirements, validation, and onboard software linkage.",
+      "quote": "this paper focuses on two particular aspects of applying MBSE: requirements development and design validation, and their link with onboard software development.",
+      "location": "Section I, Introduction"
+    },
+    {
+      "claim": "SysML is used as MBSE language/tool.",
+      "quote": "SysML is a general-purpose graphical modeling language that supports the analysis, specification, design, verification, and validation of complex systems.",
+      "location": "Section II.II, SysML"
+    },
+    {
+      "claim": "EPS is included only as one low-level subsystem/domain in the SysML requirement development.",
+      "quote": "low level requirements of the following subsystems or domains are developed using SysML: ... Electrical Power Subsystem (EPS)",
+      "location": "Section III.II.III, Low Level Requirement"
+    },
+    {
+      "claim": "Executable SysML approach uses parametric diagrams.",
+      "quote": "Executable SysML is realized with parametric diagram.",
+      "location": "Section III.III.I, Executable SysML Model"
+    },
+    {
+      "claim": "SysML-to-MATLAB interface and result feedback are reported.",
+      "quote": "ParaSolver is used to create intermediate input and output files to communicate SysML instance values from the SysML tool Artisan Studio, and to transfer MATLAB results to SysML instance values (targets).",
+      "location": "Section III.III.III, SysML Driven ADCS Simulations"
+    },
+    {
+      "claim": "Verification is run from SysML for ADCS modes.",
+      "quote": "simulations are performed from SysML, aiming at investigating the satellite behavior in the five ADCS modes, i.e. detumble, coarse sun pointing, fine sun pointing, thruster pointing and ground station tracking.",
+      "location": "Section III.III.III, SysML Driven ADCS Simulations"
+    },
+    {
+      "claim": "ADCS detumbling requirement verification result is fed back into SysML status.",
+      "quote": "this verification is actually implemented automatically by transferring MATLAB results to SysML instance values after the simulation and changing the \"Requirement Status\" of ADCS-F.34 from \"TBC\" to \"Satisfied\".",
+      "location": "Section III.III.III, SysML Driven ADCS Simulations"
+    },
+    {
+      "claim": "Onboard software workflow uses verified Simulink models and automatic code generation.",
+      "quote": "the ADCS models that have been developed as Simulink blocks for early stage phases and verified using executable SysML are translated automatically to hardware-independent C codes",
+      "location": "Section IV.II, Bridging MBSE and Onboard Software"
+    },
+    {
+      "claim": "Model reuse and quality/integrability outcomes are claimed.",
+      "quote": "The ADCS models developed earlier can be re-used, and the engineers can focus more on developing the models rather than programming.",
+      "location": "Section IV.II, Bridging MBSE and Onboard Software"
+    },
+    {
+      "claim": "Quality improvement is attributed to consistency between simulation models and onboard software.",
+      "quote": "A second benefit is the increase in quality of the codes since the consistency of the simulation models and the onboard software is structurally assured.",
+      "location": "Section IV.II, Bridging MBSE and Onboard Software"
+    },
+    {
+      "claim": "Traceability outcome is claimed.",
+      "quote": "Requirements traceability appeared to be very much improved.",
+      "location": "Section VIII, Conclusions"
+    },
+    {
+      "claim": "Collaborative MBSE workspace integrates models and verification/code-generation activities.",
+      "quote": "This workspace integrates discipline-specific models capable of performing all aspects of the system definition.",
+      "location": "Section VIII, Conclusions"
+    },
+    {
+      "claim": "Testing architecture gap is explicit.",
+      "quote": "About the 'Testing' requirement instead, a proper testing architecture still to be defined",
+      "location": "Section III.II.II, System Requirement"
+    },
+    {
+      "claim": "SysML relation ambiguity is reported.",
+      "quote": "it was several times noticed that little difference was found between the use of, for instance a containment relationship, instead of a derive relationship.",
+      "location": "Section III.II.II, System Requirement"
+    },
+    {
+      "claim": "Stereotypes are not universal.",
+      "quote": "Stereotypes do not benefit of universality though, but they need to be reconsidered case by case.",
+      "location": "Section VIII, Conclusions"
+    }
+  ],
+  "notes_for_consistency": "Core nanosatellite MBSE paper, but detailed executable verification is ADCS/AOCS-GNC rather than EPS. EPS is named in the low-level subsystem requirement list and power supply/power budget appear in diagrams, but no EPS-specific model, behavior, metrics, or verification workflow is described. Claims of reliability/quality/integration should be coded as general MBSE/MDE or ADCS/onboard-software outcomes, not EPS-specific outcomes."
+}

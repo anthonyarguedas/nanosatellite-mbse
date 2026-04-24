@@ -1,0 +1,147 @@
+{
+  "corpus_id": "paper-0024",
+  "tier": "supporting",
+  "citation": "Menshenin et al. (2020), Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design",
+  "title": "Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design",
+  "authors": [
+    "Yaroslav Menshenin",
+    "Dominik Knoll",
+    "Yana Brovar",
+    "Clement Fortin"
+  ],
+  "year": 2020,
+  "doi_or_url": "10.1007/978-3-030-62807-9_47; https://inria.hal.science/hal-03753120v1",
+  "venue_type": "conference, 17th IFIP International Conference on Product Lifecycle Management (PLM)",
+  "modeling_scope": "Analyzes MBSE-to-PLM data flow from conceptual design to detailed design by mapping OPM, CPM, and STEP AP 242 entities with a DSM. Demonstrates the mapping on a CubeSat Earth-observation mission and a thermal-control subsystem; the Power System appears only as a high-level satellite subsystem and no EPS-specific model is developed.",
+  "modeling_scope_categories": [
+    "system-level",
+    "architecture",
+    "lifecycle/PLM",
+    "tool/process",
+    "other"
+  ],
+  "mbse_language_method_tool": "Object-Process Methodology (OPM) with Object-Process Diagram/Language is used for conceptual modeling; Core Product Model (CPM) and STEP AP 242 are used as PLM/detailed-design representations; Design Structure Matrix (DSM) maps entity correspondences; NIST STEP File Analyzer and Viewer (SFA) is used for STEP counts. SysML is mentioned only as background/future work.",
+  "mbse_language_method_tool_categories": [
+    "PLM",
+    "Other"
+  ],
+  "robot_platform": "Small satellite/CubeSat Earth Observation Mission; form factor and named mission not reported.",
+  "task_domain": "Conceptual-to-detailed design digital-engineering integration for a CubeSat Earth-observation mission; MBSE/PLM data-flow and ontology correspondence analysis.",
+  "interface": "Model/data integration interface among OPM conceptual design, CPM PLM representation, and STEP AP 242 detailed design; downstream correspondences are represented through a DSM. STEP AP 242 entity information is analyzed with the NIST SFA tool.",
+  "feedback": "Thermal-control example represents sensors, controller, heating/cooling processes, and state changes based on measured temperature thresholds; no simulation or V&V feedback loop is reported.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Analytical demonstration: extracts 23 entities from OPM, CPM, and STEP, maps full/partial correspondences with DSM, summarizes frequency of entity appearance, and illustrates the approach with OPM/CPM CubeSat thermal-control representations plus STEP AP 242 entity counts from an SFA-generated spreadsheet.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "no"
+  },
+  "rq_relevance": "RQ1: partial because the paper shows general CubeSat mission and subsystem modeling with OPM/CPM/STEP mappings, but the detailed example is thermal control and the EPS/power system is only a high-level node. RQ2: partial because it claims integrability/data-flow/design-heritage benefits from MBSE/PLM integration, but not EPS-specific reliability or reproducibility outcomes. RQ3: no because no EPS-specific or mission-specific verification procedure is modeled; V&V is only mentioned as a general SysML capability.",
+  "claimed_outcomes": [
+    "MBSE/PLM integration is claimed to facilitate better data flow from conceptual design to detailed design.",
+    "A well-integrated MBSE/PLM chain is claimed to help store design heritage and track how system architecture changes through the design process.",
+    "DSM mapping is claimed to identify overlaps, gaps, and misfits between conceptual and detailed-design model entities.",
+    "The paper identifies a fundamental integration issue: MBSE needs explicit space and time representations, while current PLM systems represent space in detail but leave time mostly implicit.",
+    "No EPS-specific reliability or reproducibility outcome is reported. Integrability claims are general MBSE/PLM claims, not EPS-specific claims."
+  ],
+  "verification_validation_linkage": "No paper-specific verification, validation, IVV, or test procedure linkage is demonstrated. The paper states in background that SysML diagrams support verification and validation, but its actual analysis focuses on OPM, CPM, STEP, and DSM data correspondences rather than V&V modeling.",
+  "key_findings": [
+    "OPM represents conceptual system information with objects, processes, states, and relationships; the paper treats states as linking object/space and process/time representations.",
+    "CPM and STEP are treated as PLM/detailed-design representations that are mainly geometry- or space-centric; CPM adds function and behavior entities but still lacks complete state conformity with OPM.",
+    "The DSM analysis maps 23 selected entities across OPM, CPM, and STEP and distinguishes full versus partial correspondences for downstream conceptual-to-detailed data flow.",
+    "The CubeSat example decomposes an Earth-observation satellite into subsystems including Optical Instrument, Power System, Structure, Communications, Thermal Control System, and ADCS; only the thermal-control subsystem is elaborated in detail.",
+    "In the simplified STEP AP 242 CubeSat assembly, geometry dominates the entity counts, while feature definition, material, product specification, action, and process plan counts are zero.",
+    "The conclusion frames absent or weak representation of time and state in PLM as a major gap for MBSE/PLM integration."
+  ],
+  "limitations_gaps": [
+    "The authors explicitly scope the analysis to unidirectional data flow from conceptual design to detailed design and include only downstream correspondences.",
+    "The authors call the analysis a limited first step and propose future extension to other product development and lifecycle phases.",
+    "Future work is stated to include more entity types, relationships within and between each domain, and additional models such as SysML.",
+    "For this review, a key gap is that the detailed CubeSat demonstration concerns thermal control rather than EPS/power, and no EPS-specific V&V or reliability modeling is reported."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "Published in the IFIP International Conference on Product Lifecycle Management proceedings with DOI, so venue credibility is acceptable. Scope limits and future-work gaps are discussed, but there is no formal validity/threats section."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Paper scope is MBSE/PLM integration from conceptual to detailed design.",
+      "quote": "Its full-scale integration into the Product Lifecycle Management (PLM) would allow to facilitate a better data flow from conceptual design to detailed design.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "The paper focuses on OPM, CPM, and STEP models.",
+      "quote": "we discuss such data flow focusing on three core models: Object-Process Methodology (OPM), Core product model (CPM), and STEP.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "DSM is the analysis method for model/entity integration.",
+      "quote": "To analyze the MBSE to PLM data integration, we propose to use the Design Structure Matrix (DSM).",
+      "location": "Section 1"
+    },
+    {
+      "claim": "OPM is selected as the conceptual-design basis.",
+      "quote": "Since OPM is able to represent the essence of systems well, we take this standard as a basis for the analysis at the conceptual design phase",
+      "location": "Section 2"
+    },
+    {
+      "claim": "OPM represents system elements and behavior with objects, processes, and states.",
+      "quote": "OPM specifies the core elements of a system as the objects and processes, and related states.",
+      "location": "Section 2.1"
+    },
+    {
+      "claim": "CubeSat/small-satellite demonstration platform and mission domain.",
+      "quote": "As an example of a technical system, we chose a small satellite. The mission to be fulfilled by the satellite is to observe the earth surface and transmit the recorded images to the ground",
+      "location": "Section 4"
+    },
+    {
+      "claim": "Power system is present only as a high-level subsystem in the CubeSat mission model.",
+      "quote": "The satellite consists of a number of subsystems, namely an Optical Instrument, a Power System, a Structure, a Communications System, a Thermal Control System, and an Attitude Determination and Control System (ADCS).",
+      "location": "Section 4"
+    },
+    {
+      "claim": "Detailed subsystem example is thermal control, not EPS.",
+      "quote": "Following the OPM approach, we can zoom-in on the thermal control system, to represent and design its structure and behavior.",
+      "location": "Section 4"
+    },
+    {
+      "claim": "Thermal model includes state-based control feedback, but not V&V.",
+      "quote": "The controller handles the two processes 'heating' and 'cooling'... The Thermal Control System can be in one of the three possible states depending on the measured temperatures.",
+      "location": "Section 4"
+    },
+    {
+      "claim": "General integrability outcome claimed for MBSE/PLM chain.",
+      "quote": "A well-integrated chain between MBSE and PLM is essential to facilitate the data flow from the conceptual design to the detailed design.",
+      "location": "Section 2"
+    },
+    {
+      "claim": "Design-heritage and architecture-tracking outcome claimed.",
+      "quote": "Such a chain would allow a product design team to store the design heritage and keep track of how the systems architecture transforms through the design process.",
+      "location": "Section 2"
+    },
+    {
+      "claim": "Actual V&V evidence is only background about SysML, not a demonstrated procedure.",
+      "quote": "The system modeling language (SysML) has a grammar of 9 types of diagrams that support specification, analysis, design, verification, and validation of systems",
+      "location": "Section 2"
+    },
+    {
+      "claim": "STEP evaluation uses SFA entity-count analysis.",
+      "quote": "a spreadsheet of all entity and attribute information was created in the STEP analyzer and viewer (SFA) tool [18] developed by NIST.",
+      "location": "Section 4"
+    },
+    {
+      "claim": "Main integration gap is representation of time and space across MBSE and PLM.",
+      "quote": "the fundamental problem associated with the integration of MBSE and PLM is due to the fundamental essence of systems... the need to explicitly represent time and space",
+      "location": "Section 5"
+    },
+    {
+      "claim": "The paper explicitly states limitations and future work.",
+      "quote": "The limited but revealing analysis is only a first step... future work, we see the extension to other product development and lifecycle phases",
+      "location": "Section 5"
+    }
+  ],
+  "notes_for_consistency": "Read only paper.md. Supporting paper for MBSE/PLM integration rather than an EPS-specific nanosatellite study. It mentions SysML as background/future work but analyzes OPM, CPM, STEP, and DSM. RQ2 evidence is limited to general integrability/data-flow/design-heritage claims from MBSE/PLM integration; no EPS-specific reliability, reproducibility, or verification claims are present."
+}

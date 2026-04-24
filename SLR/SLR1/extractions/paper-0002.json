@@ -1,0 +1,135 @@
+{
+  "corpus_id": "paper-0002",
+  "tier": "core",
+  "citation": "Kaslow et al. (2017), A Model-Based Systems Engineering (MBSE) Approach for Defining the Behaviors of CubeSats",
+  "title": "A Model-Based Systems Engineering (MBSE) Approach for Defining the Behaviors of CubeSats",
+  "authors": [
+    "David Kaslow",
+    "Bradley Ayres",
+    "Philip T. Cahill",
+    "Laura Hart",
+    "Rose Yntema"
+  ],
+  "year": 2017,
+  "doi_or_url": "10.1109/aero.2017.7943865",
+  "venue_type": "conference paper; IEEE venue name not explicitly stated in paper.md",
+  "modeling_scope": "System-level CubeSat mission-enterprise behavior modeling. The paper starts from mission requirements, identifies enterprise-level use cases for collecting and distributing mission data, refines requirements with use cases, captures use-case descriptions, models scenarios as SysML activities/activity diagrams, links activities to use cases, and decomposes activities into a functional architecture/activity hierarchy. It is not EPS-specific; verification is mentioned as general MBSE scope and future work, not implemented as procedures.",
+  "modeling_scope_categories": [
+    "system-level",
+    "requirements",
+    "architecture",
+    "operations",
+    "reference model/template",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "SysML within an MBSE approach; requirements diagrams, use case diagrams, use-case descriptions/specifications, activity diagrams, refine relationships, and activity hierarchies/functional decomposition. MagicDraw by No Magic Inc. is used in examples to capture use-case descriptions. The method draws from existing use-case and systems-engineering practices and is described as tool-independent.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Cameo/MagicDraw",
+    "Other"
+  ],
+  "robot_platform": "Generic CubeSat mission/platform, framed as the CubeSat Mission Enterprise/CubeSat Enterprise; paper describes the 1U CubeSat standard and scalability but uses no specific CubeSat mission as the worked example.",
+  "task_domain": "CubeSat development and mission behavior definition for collecting, downlinking, post-processing, generating products from, and distributing mission data.",
+  "interface": "Actor/model and mission interfaces are modeled: a Chief Scientist actor invokes CubeSat Enterprise use cases; SysML refine relationships connect requirements, use cases, and activities; activity diagrams show input/output flows between Ground Segment and Space Segment, including spacecraft command sequence uplink and mission data downlink.",
+  "feedback": "Recursive refinement/decomposition is described from mission requirements to use cases to activities and down to lower levels of the mission hierarchy. No simulation feedback loop or closed-loop analysis is reported.",
+  "control_autonomy_split": "Not applicable",
+  "network_latency_assumptions": "Not applicable",
+  "evaluation": "Demonstrated through worked SysML examples for Collect Mission Data and Distribute Mission Data from the CubeSat Reference Model, including requirements diagrams, use case diagrams, MagicDraw use-case specifications, activity diagrams, and activity hierarchies. No empirical, quantitative, or physical validation is reported.",
+  "rqs_addressed": {
+    "RQ1": "yes",
+    "RQ2": "partial",
+    "RQ3": "no"
+  },
+  "rq_relevance": "RQ1: yes for general system-level CubeSat mission modeling because the paper gives an eight-step MBSE/SysML method from mission requirements to a functional architecture/activity hierarchy; it is not EPS-specific. RQ2: partial because it claims MBSE/model-centric outcomes such as repeatability, single-source-of-truth, traceability, reduced development risk, improved quality, recursive use, and generalizability, but reports no EPS-specific or measured reliability/reproducibility/integrability outcomes. RQ3: no because verification appears only in the generic MBSE definition and future-work discussion; no verification/test/IVV procedures are modeled, and none are EPS-specific.",
+  "claimed_outcomes": [
+    "The approach is claimed to provide a repeatable, generalized method for CubeSat development teams using top-down requirements analysis, use-case development, and functional analysis.",
+    "The system model is claimed to serve as a single source of truth for mission-domain elements, requirements, use cases, and activities.",
+    "The paper states MBSE benefits over document-based approaches as enhanced communications, reduced development risk, improved quality, and enhanced knowledge transfer.",
+    "The conclusion claims clear traceability from mission requirements to required functionality.",
+    "The approach is claimed to be recursive across levels of the mission hierarchy.",
+    "The approach is claimed to be generalizable, tool-independent, and compatible with many systems-engineering methodologies.",
+    "No EPS-specific reliability, reproducibility, or integrability outcome is reported."
+  ],
+  "verification_validation_linkage": "General MBSE is defined as supporting requirements, design, analysis, verification, and validation across the life cycle. The actual approach focuses on requirements analysis and functional analysis. Future work identifies verification of functional requirements as needing more in-depth discussion. No explicit modeled verification/validation/test/IVV procedures are provided, and none are EPS-specific.",
+  "key_findings": [
+    "The paper proposes an eight-step MBSE approach for CubeSat behavior definition that begins with mission requirements and ends with a functional architecture modeled as a SysML activity hierarchy.",
+    "Generic Collect Mission Data and Distribute Mission Data requirements are refined by enterprise-level use cases for a CubeSat Enterprise.",
+    "Use-case descriptions include scope, actors, stakeholders, preconditions, triggers, and postconditions, and are captured in the MagicDraw use-case specification documentation/hyperlinks tab.",
+    "Use-case scenarios are modeled with SysML activities and activity diagrams; activities are related back to use cases using refine relationships.",
+    "The worked behavior model covers mission tasking, generation of mission-data collection and space-ground communication schedules, command-sequence uplink, mission-data collection/pre-processing, downlink, post-processing, data-product generation, and distribution to the Chief Scientist.",
+    "Activity decomposition can continue to the subsystem level; the paper says the same approach can be recursively applied at the CubeSat level.",
+    "The paper leaves nonfunctional requirements, interface requirements, allocation, and verification of functional requirements for future work."
+  ],
+  "limitations_gaps": [
+    "Only functional requirements are addressed; nonfunctional and interface requirements are left for future work.",
+    "Allocation of behaviors to structural elements is only touched upon and needs deeper discussion.",
+    "Verification of functional requirements is identified as future work needing more in-depth discussion.",
+    "Only the main success scenario is shown in examples; anomalous scenarios such as inability to uplink commands or downlink mission data are noted but not modeled in the paper.",
+    "No EPS-specific model, outcome, or verification procedure is presented.",
+    "No formal threats-to-validity section or quantitative evaluation is reported."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "0.5",
+    "total_score": "1.5",
+    "rationale": "The paper has an IEEE DOI/copyright and is a conference-style paper, supporting venue credibility. It discusses scope limitations and future work, including functional-only coverage, missing nonfunctional/interface requirements, allocation, verification, and anomalous scenarios, but does not provide a formal validity/threats discussion."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "Overall modeling scope and SysML activity hierarchy",
+      "quote": "an eight-step approach for defining the behaviors of CubeSats that begins with mission requirements and ends with a functional architecture modeled as an activity hierarchy using the Object Management Group's (OMG) Systems Modeling Language (SysML)",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Repeatable generalized method",
+      "quote": "This approach provides a repeatable, generalized method for CubeSat development teams to follow that incorporates standard systems engineering practices such as: a top-down approach, requirements analysis, use case development, and functional analysis.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Single-source-of-truth/model integration outcome",
+      "quote": "artifacts produced using this approach, such as definitions of the mission domain elements, requirements, use cases, and activities, are captured in a system model which serves as a single-source-of-truth for members of the CubeSat development team.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Claimed MBSE benefits",
+      "quote": "Some of the benefits of using an MBSE approach over a traditional document-based approach are: enhanced communications, reduced development risk, improved quality, and enhanced knowledge transfer",
+      "location": "Abstract"
+    },
+    {
+      "claim": "General MBSE V&V linkage but not procedure implementation",
+      "quote": "MBSE is defined as the formalized application of modeling to support system requirements, design, analysis verification, and validation activities beginning in the conceptual design phase and continuing throughout development and later life cycle phases",
+      "location": "Section 2, Model-Based Systems Engineering"
+    },
+    {
+      "claim": "Actual method focus",
+      "quote": "The approach here focuses on the requirements analysis and functional analysis parts of the systems engineering process.",
+      "location": "Section 2, Model-Based Systems Engineering"
+    },
+    {
+      "claim": "SysML language",
+      "quote": "SysML is commonly used in MBSE. It is a graphical modeling language developed by the Object Management Group (OMG)",
+      "location": "Section 2, The Systems Modeling Language (SysML)"
+    },
+    {
+      "claim": "MagicDraw tool use",
+      "quote": "In this example, the MagicDraw modeling tool developed by No Magic Inc. is used.",
+      "location": "Section 4, Step 5 - Capture the Use Case Descriptions in the Model"
+    },
+    {
+      "claim": "Scenario modeling method and limitation to success scenario",
+      "quote": "Only the main success scenario is shown in the examples. However, teams should also consider anomalous scenarios as well. For example, the inability to uplink commands or downlink mission data.",
+      "location": "Section 4, Step 6 - Model the Use Case Scenarios"
+    },
+    {
+      "claim": "Conclusion benefits: traceability, recursion, generalizability",
+      "quote": "Traceability: There is clear traceability from the mission requirements to the functionality required to satisfy those requirements. Recursive: The approach can be recursively applied at all levels of the mission hierarchy... Generalizability. This approach is not dependent on any specific tool",
+      "location": "Section 5, Conclusion"
+    },
+    {
+      "claim": "Explicit future work and verification gap",
+      "quote": "The approach presented here just focuses on functional requirements. Future work is needed to address nonfunctional and interface requirements... Related topics are the allocation of the behaviors to the structural elements responsible for performing those behaviors and verification of the functional requirements.",
+      "location": "Section 5, Future Work"
+    }
+  ],
+  "notes_for_consistency": "Core CubeSat Reference Model lineage paper. Treat as system-level CubeSat mission behavior MBSE, not EPS modeling. Outcomes are claimed MBSE/process benefits, not measured EPS reliability/reproducibility/integrability evidence. Verification is a general MBSE concept and future-work gap, not an implemented V&V procedure. Self-check: only paper.md was read and only extraction.json was written."
+}

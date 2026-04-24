@@ -1,0 +1,159 @@
+{
+  "corpus_id": "paper-0078",
+  "tier": "supporting",
+  "citation": "Buitrago-Leiva et al. (2024), Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission",
+  "title": "Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission",
+  "authors": [
+    "Jeimmy Nataly Buitrago-Leiva",
+    "Juan José Mejía",
+    "Juan Francisco Puerta-Ibarra",
+    "Ignacio Francisco Acero-Niño",
+    "Andrés Felipe Guarnizo-Saavedra",
+    "Julian Rodriguez-Ferreira",
+    "Leandro Rojas-Rodriguez",
+    "Francisco Luis Hernández-Torres",
+    "Cristian Esteban Arango-Cotacio",
+    "Jorge Enrique Salazar-Morales",
+    "Miguel Angel Herrera-Cruz",
+    "Mario Linares-Vásquez",
+    "Jose Fernando Jiménez-Vargas",
+    "Jorge Enríque Espíndola-Díaz",
+    "Óscar Javier Montañez-Sogamoso",
+    "Adriano Camps"
+  ],
+  "year": 2024,
+  "doi_or_url": "10.3390/aerospace11090758",
+  "venue_type": "journal article, Aerospace 11(9), 758",
+  "modeling_scope": "Preliminary system and subsystem design of the 3ColStar 1U CubeSat mission. The model covers stakeholder needs, requirements, operational scenarios, logical and physical architectures, interfaces, traceability matrices, operational modes, and subsystem designs. EPS is included through power generation, storage, distribution, monitoring/control, power budgets, and an EPS physical architecture, but the paper is not dedicated solely to EPS modeling.",
+  "modeling_scope_categories": [
+    "system-level",
+    "EPS/power",
+    "requirements",
+    "architecture",
+    "budget",
+    "verification",
+    "simulation",
+    "operations",
+    "risk",
+    "tool/process"
+  ],
+  "mbse_language_method_tool": "Arcadia method with Capella modeling tool version 6.1 is the main MBSE implementation; SysML is also named as part of the MBSE approach. Agile/Scrum practices are integrated. Validation/simulation tools named include Ansys STK, NASA GMAT, MATLAB/Simulink, DRAMA, and in-house MATLAB scripts.",
+  "mbse_language_method_tool_categories": [
+    "SysML",
+    "Capella/Arcadia",
+    "MATLAB/Simulink",
+    "Other"
+  ],
+  "robot_platform": "3ColStar KiboCUBE Colombia 1U CubeSat/small satellite mission for ISS Kibo deployment; the 1U constraint is approximately 10 x 10 x 10 cm and 1.33 kg or less.",
+  "task_domain": "Preliminary design of a CubeSat mission for space weather/solar wind particle monitoring, IoT connectivity demonstration, and Colombian space-technology capacity building.",
+  "interface": "Capella captures requirements-to-function/component/test-case links and logical/physical interfaces. Technical interfaces include subsystem links such as payload-OBC SPI, OBC-EPS and OBC-ADCS I2C, OBC-COMMS UART/SPI-3Wire, VBATT, and 3.3 V/5.0 V power distribution; EPS distributes energy to ADCS, OBC, payload, thermal, and communications subsystems.",
+  "feedback": "Weekly sprints, sprint reviews, stakeholder feedback, and cross-functional meetings updated the centralized Capella model. The model supports traceability and V&V feedback through test cases and simulations. ADCS architecture also includes sensor/control feedback from IMU, magnetometer, fine sun sensor, GPS, magnetorquers, and reaction wheel.",
+  "control_autonomy_split": "ADCS control allocation is discussed as either centralized, with the OBC executing the attitude determination and control algorithm, or distributed, with an ADCS MCU/FPGA controller. Ground Mode gives the operator total spacecraft control for contingency scenarios.",
+  "network_latency_assumptions": "Not applicable; communication contacts, data rates, uplink/downlink bands, and link-budget characteristics are discussed, but no network latency assumption is reported.",
+  "evaluation": "Case-study demonstration on the 3ColStar preliminary design completed over 4 months. Evaluation/demonstration includes Capella operational/logical/physical architecture diagrams, requirements traceability, EPS power budget tables by mode, orbital simulations with NASA GMAT and DRAMA, thermal analysis with in-house MATLAB scripts, link-budget analysis, and comparison of the 4-month design duration with ECSS/NASA planning recommendations. The authors state they did not run a comparative study against a traditional approach.",
+  "rqs_addressed": {
+    "RQ1": "partial",
+    "RQ2": "partial",
+    "RQ3": "partial"
+  },
+  "rq_relevance": "RQ1: Partial because the paper provides a system-level MBSE process and EPS/power architecture for a 1U CubeSat, but it is a mission-specific preliminary design rather than a general EPS reference model requiring minimal behavioral knowledge. RQ2: Partial because it claims MBSE/Capella improved consistency, traceability, integration, communication, error reduction, and reliability at the system design level; it does not isolate reliability/reproducibility/integrability outcomes from EPS modeling alone, and no explicit reproducibility outcome is reported. RQ3: Partial because it links requirements, design elements, test cases, simulations, and V&V in Capella, but EPS-specific verification procedures are limited to power-budget/model traceability rather than detailed EPS test-procedure modeling.",
+  "claimed_outcomes": [
+    "MBSE rigorously managed technical consistency across architectural documents, ensuring coherency and minimizing errors.",
+    "Arcadia/Capella digitalized the system as models containing requirements, architecture, and interfaces.",
+    "Agile sprints and MBSE are claimed to improve team communication accuracy, communication, and efficiency in preliminary satellite design.",
+    "A unified Capella model integrated subsystem designs and traced them to high-level requirements; changes in one subsystem were reflected in the overall model for continuous V&V of coherence.",
+    "The authors claim the integration of Capella helped avoid design rework and complete the preliminary design in 4 months.",
+    "The authors state that MBSE led to a more reliable and well-planned satellite design.",
+    "No explicit reproducibility outcome is reported."
+  ],
+  "verification_validation_linkage": "General system V&V is explicitly linked to MBSE: requirements are connected to functions, logical components, physical designs, and verification test cases in Capella; V&V is supported with additional tools including Ansys STK, NASA GMAT, MATLAB and Simulink; component-to-system elements are linked to test cases and validation criteria. Figure A4 describes system verification and validation in nominal operation. EPS-specific linkage is indirect: EPS requirements, logical functions, physical components, power budgets, and physical architecture are modeled, but detailed EPS verification procedures or EPS test scripts are not reported.",
+  "key_findings": [
+    "The paper applies Arcadia/Capella MBSE and Agile/Scrum practices to the preliminary design of the 3ColStar 1U CubeSat mission.",
+    "The system model includes operational entities, stakeholder needs, requirements, logical architecture, physical architecture, subsystem interfaces, operational modes, and traceability mechanisms.",
+    "EPS is represented with requirements for continuous power, efficient solar generation/distribution, and space-environment resistance; logical functions for generation, storage, and distribution; physical components including solar panels, batteries, and PMUs; power-budget tables by mission mode; and a physical EPS architecture.",
+    "The satellite design includes major subsystems such as structure, EPS, OBC, ADCS, communications, thermal control, space-weather payload, and IoT payload.",
+    "The MBSE/agile process used weekly sprints, subsystem backlogs, cross-functional meetings, and model-governance roles to coordinate distributed institutional teams.",
+    "Verification and validation are treated mainly at system level through traceability, test cases, operational-state diagrams, and supporting simulations/analyses before physical implementation."
+  ],
+  "limitations_gaps": [
+    "Actual manufacturing of the subsystems had not yet started; the work reports preliminary design activities.",
+    "The thermal analysis is explicitly described as preliminary and requiring further detailed design analysis for long-term reliable performance.",
+    "The authors did not conduct a comparative study of the presented approach versus a traditional approach because of budget constraints and the burden of having two teams use different approaches.",
+    "A comprehensive comparison with the Spiral Model and other iterative approaches was beyond the paper's scope and is proposed as future work.",
+    "EPS-specific verification procedures are not detailed beyond power-budget analysis, requirement traceability, and inclusion in the system architecture."
+  ],
+  "quality": {
+    "credible_venue_score": "1",
+    "limitations_discussed_score": "1",
+    "total_score": "2",
+    "rationale": "The paper is a 2024 journal article in Aerospace with DOI, received/revised/accepted dates, and open-access publication metadata. It explicitly discusses limitations/future work, including lack of comparative study, preliminary thermal analysis, and need for future methodological comparisons."
+  },
+  "evidence_quotes": [
+    {
+      "claim": "MBSE outcome: consistency and error reduction",
+      "quote": "Through Model-Based Systems Engineering (MBSE), technical consistency was rigorously managed across various architectural documents, ensuring coherency and minimizing errors.",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Main MBSE method/tool and model contents",
+      "quote": "the preliminary design was developed, with the implementation of the Arcadia Method, supported by the Capella modeling tool. This allowed the digitalization of the system, which was represented by models that contain requirements, architecture, and interfaces",
+      "location": "Abstract"
+    },
+    {
+      "claim": "Agile process and claimed communication/efficiency benefits",
+      "quote": "the preliminary design process was streamlined and completed within an accelerated time frame of 4 months, with weekly sprints driving progress based on the scrum methodology",
+      "location": "Abstract"
+    },
+    {
+      "claim": "MBSE frameworks used in preliminary design",
+      "quote": "The MBSE approach utilized SysML and Arcadia/Capella frameworks, which provided structured methods for modeling system requirements, architecture, and interactions.",
+      "location": "Section 2.3 Preliminary Design"
+    },
+    {
+      "claim": "EPS/power-budget modeling scope",
+      "quote": "The power budget computes the power and energy demand; energy generation; storage; distribution, monitoring and control.",
+      "location": "Section 2.3.1 Electric Power Systems-Power Budget"
+    },
+    {
+      "claim": "Capella version and traceability role",
+      "quote": "Capella, an open-source MBSE software (version 6.1), facilitated the transition from a traditional document-based approach to a dynamic model analysis and traceability of functionalities throughout the mission.",
+      "location": "Section 3.3 Integration of System Requirements within the Capella System Model"
+    },
+    {
+      "claim": "Requirements linked to verification test cases",
+      "quote": "This was achieved by creating traceability links between the requirements and their associated system functions, logical components, and verification test cases.",
+      "location": "Section 3.3 Integration of System Requirements within the Capella System Model"
+    },
+    {
+      "claim": "System-level V&V tooling",
+      "quote": "From the system architecture based on the Capella model, the validation and verification were established by using additional tools, such as Ansys STK, NASA GMAT, Matlab and Simulink, throughout the project.",
+      "location": "Section 3.3 Integration of System Requirements within the Capella System Model"
+    },
+    {
+      "claim": "EPS logical and physical model contents",
+      "quote": "Logical Functions: power generation, storage, and distribution. Physical Components: solar panels, batteries, and power management units (PMUs).",
+      "location": "Section 3.3.1 Subsystem Design Integration, Power Subsystem (EPS)"
+    },
+    {
+      "claim": "System model integration and continuous V&V",
+      "quote": "Changes in one subsystem's design were reflected in the overall model, allowing for continuous verification and validation of the system's coherence.",
+      "location": "Section 4.1 3ColStar KiboCUBE Agile Methodology Implementation"
+    },
+    {
+      "claim": "Reliability/well-planned design outcome attributed to MBSE",
+      "quote": "By adopting MBSE, the technical and operational feasibility of the 3ColStar mission was thoroughly assessed and optimized from the early stages, leading to a more reliable and well-planned satellite design.",
+      "location": "Section 5 Discussion"
+    },
+    {
+      "claim": "Limitation: no comparative study",
+      "quote": "we did not conduct a comparative study of the presented approach versus a traditional one because of budget constraints and the burden of having two different teams working with different approaches.",
+      "location": "Section 6 Conclusions"
+    },
+    {
+      "claim": "Limitation: preliminary thermal analysis",
+      "quote": "this analysis is preliminary and further detailed design analysis is crucial to refine the thermal control system and ensure long-term reliable performance.",
+      "location": "Section 2.3.2 Thermal Subsystem"
+    }
+  ],
+  "notes_for_consistency": "Supporting paper. The strongest evidence is for system-level Agile MBSE using Arcadia/Capella; EPS appears as one modeled subsystem with power-budget and physical-architecture detail. RQ2 and RQ3 evidence is mostly system-level rather than EPS-specific. Reproducibility is not explicitly claimed. No other files or internet sources were used."
+}
