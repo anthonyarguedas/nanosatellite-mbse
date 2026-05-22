@@ -788,48 +788,57 @@ def stacked_barh_figure(
 
 
 def prisma_svg(counts: Dict[str, int]) -> str:
-    width, height = 980, 760
-    boxes = [
-        ("Identification", f"Raw merged search records: {counts['raw_records']}\nDuplicates removed: {counts['duplicates_removed']}", "#DBEAFE"),
-        ("Screening", f"Unique records screened: {counts['unique_records_screened']}\nRecords excluded: {counts['excluded_screening']}", "#E0F2FE"),
-        ("Retrieval", f"Reports sought for retrieval: {counts['reports_sought']}\nReports not retrieved/inaccessible: {counts['not_retrieved']}", "#DCFCE7"),
-        ("Extraction", f"Accessible reports extracted: {counts['extracted']}", "#FEF3C7"),
-        ("Included", f"Studies in extraction synthesis: {counts['extracted']}", "#F3E8FF"),
-    ]
+    """Compact article-facing PRISMA-style flow figure.
+
+    The figure deliberately omits provenance notes and file names; those belong in
+    reproducibility documentation, not in the article graphic.
+    """
+    width, height = 900, 500
     body: List[str] = []
-    body.append(svg_text(width / 2, 38, "PRISMA-style SLR1 flow", 22, anchor="middle", weight="bold"))
-    box_w, box_h = 700, 100
-    x = (width - box_w) / 2
-    y = 80
-    for idx, (header, content, color) in enumerate(boxes):
-        yy = y + idx * 130
-        body.append(f'<rect x="{x}" y="{yy}" width="{box_w}" height="{box_h}" rx="16" fill="{color}" stroke="#334155" stroke-width="1.3"/>')
-        body.append(svg_text(width / 2, yy + 30, header, 17, anchor="middle", weight="bold"))
-        for line_i, line in enumerate(content.split("\n")):
-            body.append(svg_text(width / 2, yy + 58 + line_i * 19, line, 14, anchor="middle"))
-        if idx < len(boxes) - 1:
-            x1, y1 = width / 2, yy + box_h
-            x2, y2 = width / 2, yy + 130
-            body.append(f'<line x1="{x1}" y1="{y1 + 8}" x2="{x2}" y2="{y2 - 14}" stroke="#334155" stroke-width="2"/>')
-            body.append(f'<polygon points="{x2-7},{y2-14} {x2+7},{y2-14} {x2},{y2-2}" fill="#334155"/>')
-    body.append(svg_text(width / 2, height - 24, "Counts parsed from the existing scoping-review LaTeX report.", 12, anchor="middle", color="#475569"))
+    main_x, main_w, main_h = 100, 430, 72
+    side_x, side_w, side_h = 595, 230, 54
+    y_values = [34, 144, 254, 364]
+    main_boxes = [
+        ("Records identified", f"n = {counts['raw_records']}", "#DBEAFE"),
+        ("Records screened", f"n = {counts['unique_records_screened']}", "#E0F2FE"),
+        ("Reports sought for retrieval", f"n = {counts['reports_sought']}", "#DCFCE7"),
+        ("Studies included in synthesis", f"n = {counts['extracted']}", "#F3E8FF"),
+    ]
+    side_boxes = [
+        ("Duplicates removed", f"n = {counts['duplicates_removed']}", 55),
+        ("Records excluded", f"n = {counts['excluded_screening']}", 165),
+        ("Reports not retrieved", f"n = {counts['not_retrieved']}", 275),
+    ]
+
+    # Main flow boxes.
+    for idx, (header, count_text, color) in enumerate(main_boxes):
+        y = y_values[idx]
+        body.append(f'<rect x="{main_x}" y="{y}" width="{main_w}" height="{main_h}" rx="10" fill="{color}" stroke="#334155" stroke-width="1.5"/>')
+        body.append(svg_text(main_x + 18, y + 30, header, 18, weight="bold"))
+        body.append(svg_text(main_x + 18, y + 55, count_text, 16, color="#1F2937"))
+        if idx < len(main_boxes) - 1:
+            x_mid = main_x + main_w / 2
+            y1 = y + main_h
+            y2 = y_values[idx + 1]
+            body.append(f'<line x1="{x_mid}" y1="{y1 + 6}" x2="{x_mid}" y2="{y2 - 10}" stroke="#334155" stroke-width="2"/>')
+            body.append(f'<polygon points="{x_mid-7},{y2-10} {x_mid+7},{y2-10} {x_mid},{y2}" fill="#334155"/>')
+
+    # Exclusion/removal boxes to the right, connected to the relevant stage.
+    for idx, (header, count_text, y) in enumerate(side_boxes):
+        body.append(f'<rect x="{side_x}" y="{y}" width="{side_w}" height="{side_h}" rx="8" fill="#F8FAFC" stroke="#64748B" stroke-width="1.2"/>')
+        body.append(svg_text(side_x + 14, y + 23, header, 14, weight="bold", color="#1F2937"))
+        body.append(svg_text(side_x + 14, y + 43, count_text, 13, color="#374151"))
+        source_y = [y_values[0] + main_h / 2, y_values[1] + main_h / 2, y_values[2] + main_h / 2][idx]
+        target_y = y + side_h / 2
+        body.append(f'<line x1="{main_x + main_w + 8}" y1="{source_y}" x2="{side_x - 10}" y2="{target_y}" stroke="#64748B" stroke-width="1.6"/>')
+        body.append(f'<polygon points="{side_x-10},{target_y-5} {side_x-10},{target_y+5} {side_x},{target_y}" fill="#64748B"/>')
+
     return svg_document(width, height, "\n".join(body))
 
 
 def copy_or_generate_prisma(counts: Dict[str, int]) -> None:
     FIG_DIR.mkdir(parents=True, exist_ok=True)
-    copied_pdf = False
-    copied_png = False
-    source_pdf = SCOPING_DIR / "figures" / "prisma_flow.pdf"
-    source_png = SCOPING_DIR / "figures" / "prisma_flow.png"
-    if source_pdf.exists():
-        shutil.copy2(source_pdf, FIG_DIR / "prisma_flow.pdf")
-        copied_pdf = True
-    if source_png.exists():
-        shutil.copy2(source_png, FIG_DIR / "prisma_flow.png")
-        copied_png = True
-    if not (copied_pdf and copied_png):
-        write_svg_figure("prisma_flow", prisma_svg(counts))
+    write_svg_figure("prisma_flow", prisma_svg(counts))
 
 
 def generate_figures(
