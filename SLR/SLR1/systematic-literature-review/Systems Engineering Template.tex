@@ -21,9 +21,9 @@
 \usepackage{siunitx}
 
 \makeatletter
-\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
-  \errmessage{\noexpand\@combinedblfloats could not be patched}%
-}%
+\@ifundefined{@combinedblfloats}{}{%
+  \patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{}%
+}
 \makeatother
 
 \newif\iflatexml\latexmlfalse
@@ -390,7 +390,6 @@ The evidence base itself is immature.  The scoping limitations coded 31 studies 
 Use of Buruso et al.'s Table~5 gaps is another limitation.  The gaps were used as a positioning and sensitizing frame, not as an independent coding validation instrument \cite{Buruso2026MBSESpace}.  Mapping nanosatellite studies onto those broad gaps is useful for comparison, but the resulting categories are coarse and should be interpreted as evidence-strength descriptors rather than definitive classifications of each study.
 
 \FloatBarrier
-\bibliographystyle{plainnat}
 \bibliography{bibliography/converted_to_latex}
 
 \end{document}
