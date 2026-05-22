@@ -1,158 +1,640 @@
 {
   "corpus_id": "paper-0080",
   "tier": "core",
-  "citation": "Waseem and Sadiq (2018), Application of Model-Based Systems Engineering in Small Satellite Conceptual Design-A SysML Approach",
-  "title": "Application of Model-Based Systems Engineering in Small Satellite Conceptual Design-A SysML Approach",
-  "authors": [
-    "Muhammad Waseem",
-    "Muhammad Usman Sadiq"
-  ],
   "year": 2018,
-  "doi_or_url": "10.1109/maes.2017.180230",
-  "venue_type": "Not reported in paper.md; supplied metadata provides an IEEE DOI/paperId",
-  "modeling_scope": "System-level SysML/OOSEM model repository for the NSS-1 remote sensing student nanosatellite, covering requirements, use cases/scenarios, architecture, internal interfaces, behavior/state/sequence diagrams, mass/power/reliability budgets, parametric analyses, requirements traceability, and V&V. EPS is represented as a subsystem and power-budget constraint/source rather than as a detailed EPS behavior model.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "budget",
-    "verification",
-    "simulation",
-    "operations",
-    "reference model/template",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "SysML 1.4 using MagicDraw 18.1; OOSEM-based hybrid methodology; ParaMagic plug-in with MATLAB SMT solver for parametric analysis; interfaces with Microsoft Excel and MATLAB/Simulink via MagicDraw/InterCAX; STK interface discussed as an objective/future indirect link.",
-  "mbse_language_method_tool_categories": [
-    "SysML",
-    "Cameo/MagicDraw",
-    "MATLAB/Simulink",
-    "OOSEM",
-    "Other"
-  ],
-  "robot_platform": "NSS-1 remote sensing student satellite in the Pakistan National Student Satellite Program; described as a typical nanosatellite-class model, with system mass requirement below 50 kg and 80 W system power budget; CubeSat form factor not reported.",
-  "task_domain": "Conceptual design and systems engineering of a remote sensing student/nanosatellite mission, including requirements, architecture, onboard software scenarios, mass/power/reliability/orbital/trade analyses, and tool integration.",
-  "interface": "Tool/model interfaces include MagicDraw import/export with Microsoft Excel and InterCAX integration that treats MATLAB scripts/functions as SysML constraints and reads results back into the model; Simulink can be accessed through MATLAB scripts. Modeled system interfaces include payload LVDS, I2C, RS-422, CAN bus telemetry/telecommand control, and payload data transmission.",
-  "feedback": "Iterative design-analysis loop: parameter values can be imported from spreadsheets into SysML/ParaMagic, solved with a local MATLAB SMT solver for target values such as mass and power margins, updated back into SysML instances, and exported back to spreadsheets for parameter tuning and change-impact/V&V support.",
-  "control_autonomy_split": "Not applicable",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "Demonstrated through an NSS-1 case-study SysML repository and example diagrams. The main worked evaluation is a ParaMagic/MATLAB SMT mass and power budget analysis that computes positive mass_MOS=0.082 and power_MOS=0.47, verifies mass/power requirements, and shows Excel/MATLAB tool interfaces. No empirical comparison or flight validation is reported.",
-  "rqs_addressed": {
-    "RQ1": "yes",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The corpus metadata identifies an IEEE Xplore record and IEEE DOI; the exact venue title is not visible in the Markdown.",
+        "evidence": [
+          "Corpus metadata: DOI 10.1109/maes.2017.180230 and paperId ieee:8354448.",
+          "Markdown title/author block identifies a formal article: Application of Model-Based Systems Engineering in Small Satellite Conceptual Design-A SysML Approach."
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper explicitly discusses adoption challenges, learning risks, tool-integration challenges, scaling issues, future work, and that the study is initial.",
+        "evidence": [
+          "ASSOCIATED CHALLENGES: Integration among the models and tools, and other engineering artifacts, is another challenge associated with MBSE.",
+          "FUTURE WORK: The work presented in this article is an initial study and modeling to evaluate the effectiveness of the MBSE approach for our satellite design projects.",
+          "CONCLUSION: The SysML learning curve is steep."
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The case is NSS-1, an ongoing remote-sensing student satellite in PNSSP, with lifecycle phases and MBSE artifacts mapped from requirements through AIT.",
+        "evidence": [
+          "OBJECTIVES: we selected an ongoing remote sensing (RS) student satellite (NSS-1) as a case study.",
+          "ADOPTED MBSE METHODOLOGY maps Phase 0/A, Phase B, Phase C, and Phase D to project activities and SysML artifacts.",
+          "MODEL REPOSITORY FOR NSS-1: The modeling repository uses SysML to capture common design patterns of the typical nanosatellite class."
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper names OOSEM, SysML 1.4, MagicDraw 18.1, ParaMagic, MATLAB SMT, Excel, InterCAX, diagram types, equations, and the NSS-1 system/subsystem boundary.",
+        "evidence": [
+          "OBJECTIVES: We used MagicDraw 18.1 from No Magic Inc. and SysML 1.4 as the modeling language.",
+          "ADOPTED MBSE METHODOLOGY: We have adopted an OOSEM-based hybrid approach.",
+          "SYSML MODEL OF THE NSS-1 SATELLITE describes package, requirement, BDD, IBD, use-case, parametric, state-machine, and sequence diagrams."
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Most outcomes are tied to SysML requirement diagrams, parametric diagrams, model repositories, traceability matrices, plug-in interfaces, and generated reports.",
+        "evidence": [
+          "INTRODUCTION: MBSE provides a consistent and automatically traceable system design, which enhances the quality of traceability and change impact assessment.",
+          "Requirement Diagram section links requirement diagrams to traceability, verification matrices, and automated impact analysis.",
+          "Automatic Report Generation section links SysML models to allocation tables, requirement tables, and coverage analysis."
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The case provides parametric analysis values and tool-flow demonstrations, but broad claims about risk, productivity, quality, cost, and reliability lack baseline comparison, stakeholder evaluation, test, or flight evidence.",
+        "evidence": [
+          "SysML Parametrics: mass_MOS=0.082 and power_MOS=0.47 verify the mass and power requirements.",
+          "Interface sections describe Excel import/export and MATLAB script execution through plug-ins.",
+          "CONCLUSION broadly claims reduced development risk, improved quality, and increased productivity without quantitative comparator."
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Requirement diagrams, verify relationships, constraint blocks, lifecycle artifact mapping, and generated traceability/verification matrices are central to the paper.",
+        "evidence": [
+          "Requirement Diagram: The requirement diagram defines requirements, traceability, and the test cases that verify each requirement.",
+          "Figure 12 is titled Verification of mass and power budget requirements for NSS-1.",
+          "ADOPTED MBSE METHODOLOGY: testing activities during AIT are supported by SysML diagrams, enabling test-case design and tracing them back toward the requirements."
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "Tool versions, plug-ins, equations, values, and data-flow mechanisms are reported, but the model repository and data are not made available and several tools are proprietary.",
+        "evidence": [
+          "OBJECTIVES: We used MagicDraw 18.1 from No Magic Inc. and SysML 1.4.",
+          "Interface with Microsoft Excel: computed parameters are read into ParaMagic, solved, and exported back to spreadsheets.",
+          "No open repository, reusable package, or complete model file availability is reported."
+        ]
+      }
+    ],
+    "total_score": 7.0,
+    "max_score": 8,
+    "normalized_score": 0.875,
+    "overall_rationale": "The study is a credible and detailed SysML/OOSEM small-satellite case with clear lifecycle artifact mapping, traceability, and a worked mass/power verification example. Evidence is weaker for broad value claims and reproducibility because no baseline, open model, or integration/flight validation is reported."
   },
-  "rq_relevance": "RQ1: yes because the paper describes a system-level SysML repository for a typical nanosatellite-class mission, including requirements, architecture, scenarios, subsystem relationships, and EPS-related mass/power constraints, although detailed EPS behavior is not modeled. RQ2: partial because the paper attributes traceability, consistency, tool integration, knowledge transfer/reuse, reduced development risk, improved quality, and productivity to MBSE/model integration; reliability is limited to a reliability budget capability and no quantified EPS reliability or reproducibility result is reported. RQ3: partial because requirements diagrams, verify relationships, test cases, and mass/power constraint blocks link model elements to V&V before physical development, including power-budget verification relevant to EPS, but no detailed EPS-specific verification procedure or test workflow is provided.",
-  "claimed_outcomes": [
-    "MBSE is claimed to provide more formal, complete, semantically rich system specifications and design for analysis, verification, and validation from early project phases.",
-    "SysML modeling is claimed to improve requirements definition, traceability, validation, change-impact assessment, and consistency compared with information spread across documents and tools.",
-    "The repository is claimed to enable an integrated model-based engineering environment and interoperability with existing analysis tools such as Excel, MATLAB/Simulink, and STK-related workflows.",
-    "Parametric modeling is claimed to support fast modification and analysis of new scenarios and on-the-fly parameter tuning.",
-    "Automatic documentation/report generation, allocation tables, requirement tables, coverage analysis, and code-structure generation are claimed as MBSE benefits.",
-    "The conclusion claims reduced development risk, improved quality, increased productivity, better knowledge transfer, and possible model reuse for later missions.",
-    "Reliability is addressed by incorporation of a reliability budget in the repository; no measured reliability improvement for NSS-1 or EPS is reported."
-  ],
-  "verification_validation_linkage": "SysML requirement diagrams define requirements, traceability, and test cases that verify requirements. Mass and power requirements are linked with verify relationships to Mass_MoS and Power_MoS constraint blocks, and ParaMagic/MATLAB SMT validates the parametric model by computing positive margins. The lifecycle mapping includes unit, subsystem, and system test cases and V&V during assembly, integration, and testing. EPS-specific linkage is limited to the power-budget constraint for the EPS supply/loads; no detailed EPS test procedure is modeled.",
-  "key_findings": [
-    "The NSS-1 repository uses SysML to represent common nanosatellite design patterns, including values, scenarios, functions, parts, subsystems, and relationships among them.",
-    "The model organizes requirements, behavior, architecture, and parametrics in SysML packages and uses BDDs, IBDs, use-case diagrams, state machines, sequence diagrams, and parametric diagrams.",
-    "EPS appears in the space-segment architecture as a subsystem with EPS_mass and EPS_power values, and the power budget models EPS supplying a maximum of 80 W to electronic subsystems.",
-    "The worked parametric analysis calculates total satellite mass and EPS/power demand from subsystem allocations and compares them against 50 kg and 80 W requirements.",
-    "Requirements-to-verification traceability is represented using SysML verify relationships and named verification/test elements such as review, inspection, test, or analysis.",
-    "Tool integration is central: Excel values can populate SysML instance slots, MATLAB scripts/functions can act as constraints, and solved values can be returned to the model/spreadsheets.",
-    "The study is an initial/hybrid MBSE adoption effort intended to complement existing document- and tool-based systems engineering rather than fully replace it in NSS-1."
-  ],
-  "limitations_gaps": [
-    "The paper explicitly states that aerospace system engineers are often less familiar with software engineering, object-oriented programming, SysML, and MBSE tools.",
-    "The paper identifies the SysML learning curve as steep and warns that diagrams may be misinterpreted without prior SysML learning.",
-    "The paper notes challenges in integrating many analysis, hardware, software, tool, and artifact models.",
-    "The paper notes scaling challenges for larger projects and diverse development environments.",
-    "The presented work is described as an initial study; training, fuller MBSE utilization in NSS-2, and better STK/SysML integration are future work.",
-    "No detailed EPS behavioral model, EPS-specific test procedure, quantitative reliability improvement, empirical productivity measurement, or flight/physical validation is reported."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "1",
-    "total_score": "2",
-    "rationale": "Credible venue is supported by the supplied IEEE DOI/paperId metadata, though the exact venue name is not stated in paper.md. Limitations/challenges are discussed in dedicated challenge, future-work, and conclusion-risk passages."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0080.json",
+    "status_rationale": "Retained as core because it directly reports a small/nanosatellite SysML MBSE case with EPS-relevant power-budget modeling and pre-physical parametric verification.",
+    "citation": "Waseem, M., and Sadiq, M. U. (2018). Application of Model-Based Systems Engineering in Small Satellite Conceptual Design-A SysML Approach. DOI: 10.1109/maes.2017.180230.",
+    "title": "Application of model-based systems engineering in small satellite conceptual design-A SysML approach",
+    "authors": [
+      "Muhammad Waseem",
+      "Muhammad Usman Sadiq"
+    ],
+    "venue": "not reported",
+    "doi_or_url": "10.1109/maes.2017.180230",
+    "publisher": "IEEE",
+    "venue_type": "not reported",
+    "source_database_or_route": [
+      "unknown/manual IEEE Xplore CSV promotions retained after Stage-1 audit and 2026-04-24 IEEE parity addendum",
+      "ieee_xplore/IEEE-07 parity CSV export"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "partial",
+        "rationale": "The paper shows general SysML modeling of a nanosatellite-class mission repository and common design patterns, but it does not explicitly address modeling with minimal behavioral knowledge and treats EPS mainly as an abstract power-budget block."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "It claims traceability, consistency, productivity, interoperability, knowledge transfer, and a reliability-budget capability, but reliability/reproducibility/integrability outcomes are mostly system-level and not demonstrated as EPS-specific effects."
+      },
+      "RQ3": {
+        "relevance": "partial",
+        "rationale": "Verification is integrated through SysML verify relationships, parametric constraints, and ParaMagic/MATLAB solving for mass and power before physical development; EPS-specific component tests or hardware verification are not reported."
+      }
+    },
+    "lineage_overlap_notes": "No prior extraction or external lineage was consulted. Within the paper, the authors report reusing some FireSat model elements and positioning their work relative to CubeSat/remote-sensing satellite MBSE studies."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "NSS-1 remote-sensing student satellite with launch services, ground segment, and space segment; satellite subsystems include payload, EPS, CDHS, ACS, RFCS, TCS, and structure.",
+    "size_form_factor": "small/nanosatellite-class satellite; total mass requirement less than 50 kg; not reported as a CubeSat form factor.",
+    "mission_name": "NSS-1",
+    "mission_domain": "remote sensing/imaging student satellite",
+    "organization_type": "government space R&D center with academia/university student development participation",
+    "project_maturity": "ongoing case study and initial MBSE evaluation; NSS-1 partially incorporates MBSE and NSS-2 is planned for fuller MBSE use.",
+    "lifecycle_stage_addressed": "Conceptual design, Phase 0/A mission definition and requirements, and Phase B preliminary design are emphasized; Phase C detailed design and Phase D assembly, integration, and testing are mapped methodologically.",
+    "development_context": "Pakistan National Student Satellite Program context; an independent systems engineering team performs system-level tasks while university students develop satellite units, using existing documents, Excel, MATLAB/Simulink, STK, and office tools.",
+    "eps_relevance": "power-budget/electrical-architecture",
+    "model_maturity": "MagicDraw SysML repository/prototype with worked parametric mass and power analysis; not reported as flight-validated or openly released."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "The authors seek to assist existing SE practices by improving completeness/consistency, traceability, change-impact assessment, requirements validation, parametric relationships, and interfaces with existing design/analysis tools.",
+    "modeling_scope": [
+      "NSS-1 system requirements, requirement hierarchy, traceability, and verification links",
+      "Top-level system architecture including launch services, ground segment, and space segment",
+      "Satellite subsystem BDDs for payload, EPS, CDHS, ACS, RFCS, TCS, and structure",
+      "Payload internal interconnections and interfaces",
+      "Onboard software use cases and service-oriented software architecture",
+      "Parametric mass and power budgets including EPS power supply/demand",
+      "Operational modes through state-machine diagrams at system and subsystem levels",
+      "CAN bus protocol through sequence diagram",
+      "Repository-reported tools for reliability budget, orbital analysis, sensor field-of-view analysis, and ACS tradeoff analysis"
+    ],
+    "system_boundary_level_of_abstraction": "System-of-interest is the NSS-1 mission system at launch/ground/space-segment level, with satellite subsystem blocks and selected unit/interface examples; EPS is abstracted to mass and power values rather than component behavior.",
+    "minimal_or_excluded_modeling": "The article demonstrates only mass and power budgets in detail and shows only four subsystem values for brevity; detailed EPS components, hardware design, flight software implementation, direct STK linkage, full reliability results, and executed integration tests are not reported.",
+    "required_prior_behavioral_domain_knowledge": "The authors state MBSE requires learning a language, method, and tool plus spacecraft domain knowledge; satellite engineers may need software engineering and object-oriented programming concepts before SysML benefits emerge.",
+    "handling_limited_behavioral_knowledge": "The adopted hybrid approach preserves familiar documents/tools while building the NSS-1 repository, training engineers, reusing FireSat elements, and capturing common nanosatellite design patterns before fuller MBSE adoption on NSS-2.",
+    "model_artifacts_used": [
+      "SysML package diagrams",
+      "SysML requirement diagrams",
+      "SysML block definition diagrams",
+      "SysML internal block diagrams",
+      "SysML use-case diagrams",
+      "SysML parametric diagrams and constraint blocks",
+      "SysML state-machine diagrams",
+      "SysML activity diagrams",
+      "SysML sequence diagrams",
+      "Requirement traceability and verification matrices",
+      "Allocation tables, requirement tables, and coverage analysis reports",
+      "SysML instances populated and solved by ParaMagic/MATLAB SMT"
+    ],
+    "generality_reuse_mechanism": [
+      "OOSEM object-oriented and extensible system structures",
+      "Common design patterns for typical nanosatellite-class systems",
+      "Reuse of selected FireSat SysML model elements",
+      "Package organization separating requirements, behavior, architecture, and parametrics",
+      "Parametric constraints supporting fast scenario modification and analysis",
+      "Planned reuse of the NSS-1 repository and lessons for NSS-2"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Select and tailor MBSE methodology",
+        "inputs": "Candidate MBSE methodologies, INCOSE survey, project lifecycle needs, available OOSEM resources",
+        "outputs": "OOSEM-based hybrid MBSE methodology mapped to satellite lifecycle activities",
+        "actors_roles": "Systems engineering team and modeling group",
+        "prerequisites": "Awareness of SE lifecycle, candidate MBSE methods, and SysML tool capabilities",
+        "completion_criteria": "Method chosen and Figure 1-style mapping from project phases to SysML artifacts established",
+        "handoffs": "Guides NSS-1 repository development and artifact selection"
+      },
+      {
+        "step": "Tailor NSS-1 to MBSE OOSEM and build model repository",
+        "inputs": "Existing NSS-1 documents, tools, requirements, FireSat reusable elements, subsystem knowledge",
+        "outputs": "SysML model repository with packages for requirements, behavior, architecture, and parametrics",
+        "actors_roles": "Multidisciplinary local aerospace experts and academic principal investigators",
+        "prerequisites": "MagicDraw/SysML setup and access to NSS-1 system engineering data",
+        "completion_criteria": "Repository captures requirements, architecture, behavior, interfaces, and parametric constraints",
+        "handoffs": "Repository supports analysis, traceability, and training for future missions"
+      },
+      {
+        "step": "Train engineers and bridge conventional SE to MBSE",
+        "inputs": "NSS-1 repository, SysML/OOSEM concepts, existing Microsoft Office, STK, MATLAB, and Excel practices",
+        "outputs": "Engineer familiarity with MBSE, SysML, and modeling tools; partial/full MBSE readiness for NSS-2",
+        "actors_roles": "Systems engineers and modeling instructors/team",
+        "prerequisites": "Initial repository and training materials/examples",
+        "completion_criteria": "Engineers can interpret and use SysML artifacts without misinterpretation",
+        "handoffs": "Knowledge and repository reuse transfer to NSS-2"
+      },
+      {
+        "step": "Model requirements, architecture, use cases, and interfaces",
+        "inputs": "Mission requirements, subsystem definitions, scenarios, existing design information",
+        "outputs": "Requirement diagrams, use-case diagrams, BDDs, IBDs, sequence diagrams, and state-machine diagrams",
+        "actors_roles": "Systems engineering team with subsystem contributors",
+        "prerequisites": "Requirements baseline and subsystem decomposition",
+        "completion_criteria": "Requirements and subsystem elements are represented with traceability and formal interfaces",
+        "handoffs": "Artifacts feed parametric analysis, V&V planning, and report generation"
+      },
+      {
+        "step": "Perform parametric mass/power analysis and model-based verification",
+        "inputs": "Subsystem mass and power values, user requirements of 50 kg and 80 W, constraint equations, Excel values if used",
+        "outputs": "Solved satellite mass, EPS power demand, mass and power margins, updated SysML instances, verify links",
+        "actors_roles": "System engineers and analysis-tool users",
+        "prerequisites": "Parametric diagrams, constraint blocks, ParaMagic/MATLAB SMT setup, connected parameter ports",
+        "completion_criteria": "Positive margins or tuned allocations demonstrate satisfaction of mass/power requirements",
+        "handoffs": "Verified/tuned parameters exported back to SysML repository and spreadsheets"
+      },
+      {
+        "step": "Interface existing analysis tools and generate reports",
+        "inputs": "SysML repository, Excel sheets, MATLAB functions/scripts, Simulink models via MATLAB, planned STK data",
+        "outputs": "Imported/exported parameter values, MATLAB-derived constraints/results, allocation and requirements tables, coverage analysis, code structure",
+        "actors_roles": "Systems engineers and tool specialists",
+        "prerequisites": "MagicDraw plug-ins such as ParaMagic and InterCAX and compatible local analysis tools",
+        "completion_criteria": "Model values and external analysis results can round-trip and support documentation/analysis outputs",
+        "handoffs": "Analysis outputs support design refinement, documentation, and future V&V"
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "Phase 0/A uses mission scenarios, mission requirements, use-case and requirement diagrams to reach a requirements baseline; Phase B uses packages, BDDs, IBDs, use cases, parametrics, and trade studies to reach baseline system design; Phase C uses subsystem/unit breakdown and behavioral diagrams for detailed design; Phase D uses test cases and V&V for assembly, integration, and testing.",
+    "approach_classification": "Enhanced MBSE",
+    "approach_classification_rationale": "The work is centered on SysML/OOSEM but enhances a conventional SE process with parametric solving, traceability, generated documentation, and interfaces to Excel/MATLAB/STK rather than replacing the whole workflow with a pure MBSE or mature enterprise digital thread.",
+    "tailoring_rationale": [
+      "OOSEM fits the evolutionary nature of the organization's projects and life cycles.",
+      "OOSEM supports integration with object-oriented software, hardware, and testing.",
+      "OOSEM supports system-level reuse and design evolution.",
+      "More OOSEM resources were available than for other candidate methodologies.",
+      "A hybrid approach lowers adoption barriers for engineers used to conventional documents and tools."
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "SysML 1.4",
+      "OOSEM-based hybrid methodology",
+      "MagicDraw 18.1 from No Magic",
+      "ParaMagic plug-in",
+      "MATLAB SMT solver with Mathematica and Modelica also supported by ParaMagic",
+      "InterCAX plug-in for MATLAB functions/scripts",
+      "Microsoft Excel import/export",
+      "MATLAB and Simulink via MATLAB script",
+      "STK as existing/future-connected analysis tool",
+      "Microsoft Office/Visio as legacy document/drawing context"
+    ],
+    "toolchain_architecture_data_flow": "MagicDraw hosts the central SysML repository. Values can be imported from Excel into SysML/ParaMagic slots, solved through ParaMagic invoking local MATLAB SMT or MATLAB scripts, written back into SysML instances, and exported back to spreadsheets. InterCAX treats MATLAB code as SysML constraints and reads output text files back into the model. STK linkage is indirect via Excel or future direct SLIM-based work.",
+    "interoperability_mechanisms": [
+      "MagicDraw Excel import/export",
+      "ParaMagic solver invocation from SysML parametric diagrams",
+      "MATLAB SMT solver for mass/power allocation tuning",
+      "InterCAX plug-in representing MATLAB functions and scripts as SysML constraints",
+      "Output text file automatically read back into the SysML model",
+      "Simulink access through intermediary MATLAB script",
+      "Future STK-SysML interface through Excel or SLIM"
+    ],
+    "syntax_semantic_continuity_evidence": "The paper emphasizes SysML's formal information model and robust semantics; MATLAB functions/scripts are represented as constraint blocks in SysML parametric diagrams, solved values update SysML instances, and requirement-to-constraint verify links maintain semantic continuity for V&V.",
+    "software_hardware_system_integration_readiness": "OOSEM was selected partly because integration with object-oriented software, hardware, and testing is possible, and Phase D maps test cases and V&V to AIT; actual hardware/software integration readiness evidence is not reported.",
+    "toolchain_limitations": [
+      "SysML learning curve is steep and may require software engineering/OOP knowledge",
+      "SysML diagrams may be misinterpreted if not learned beforehand",
+      "Integration among analysis models, hardware models, software models, tools, and other artifacts remains a challenge",
+      "Scaling the modeling effort to larger projects and diverse development environments is challenging",
+      "Direct STK-SysML integration is future work",
+      "Model repository and data are not reported as available"
+    ],
+    "availability_reproducibility": "Tool versions, plug-ins, equations, and representative parameter values are reported, but no open model repository, reusable package, or complete dataset is provided; the workflow depends on proprietary tools."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "EPS subsystem block with EPS_mass and EPS_power values",
+      "System-level power budget constraint representing electrical power supplied by EPS",
+      "Electrical power demand from ACS, CDHS, payload, TCS, and RFCS",
+      "80 W system power budget requirement and Power_MoS margin constraint",
+      "Example EPS mass value mPow=15 kg and solved/target EPS power value pPow=42.4 W"
+    ],
+    "eps_requirements_representation": "The system power requirement is a SysML requirement with Id 17.2 and text System power budget for satellite is 80Watt, verified by a Power_MoS constraint block. An EPS subsystem requirement placeholder is visible in the hierarchy, but EPS-specific requirement text is not reported.",
+    "verification_validation_artifacts": [
+      "SysML requirement diagrams with verify relationships",
+      "Power_MoS and Mass_MoS constraint blocks",
+      "Mass and power parametric diagram",
+      "ParaMagic/MATLAB SMT solved instance values",
+      "Requirement traceability and verification matrices claimed generated by the tool",
+      "Lifecycle mapping to unit, subsystem, and system test cases and V&V in Phase D"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "Parametric constraints compute total satellite mass and EPS power demand before hardware development",
+      "ParaMagic invokes MATLAB SMT to solve unknown and target parameters",
+      "Solved values update the SysML instance and can be exported to spreadsheets",
+      "Positive mass_MOS=0.082 and power_MOS=0.47 are used to verify requirements",
+      "Requirement-to-constraint verify relationships connect analysis artifacts to requirement satisfaction"
+    ],
+    "evidence_verification_integrated_in_model": "Figure 12 links Mass and Power requirements to Mass_MoS and Power_MoS constraint blocks by verify relationships; the text states that the model was validated using ParaMagic and that positive mass and power margins verify the requirements.",
+    "integration_test_readiness": "The methodology maps Phase D to test cases and V&V for unit, subsystem, and system integration, but no EPS-specific integration test cases, bench tests, or hardware readiness results are reported."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Case-study platform and repository",
-      "quote": "we selected an ongoing remote sensing (RS) student satellite (NSS-1) as a case study and developed its SysML model repository",
-      "location": "Objectives"
+      "claim": "MBSE improves traceability and change-impact assessment compared with information spread across documents and tools.",
+      "outcome_category": "traceability/change impact",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "central model repository",
+        "SysML requirements and relationships",
+        "automatic traceability"
+      ],
+      "artifact_or_process_linked": "SysML model repository and requirement diagrams",
+      "lifecycle_stage": "early requirements and conceptual design",
+      "evidence_type": "author rationale and case-artifact description",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "traditional document-based SE described qualitatively",
+      "observed_effect_size_or_qualitative_effect": "claimed enhanced traceability and change impact assessment",
+      "evidence_source": "INTRODUCTION and Requirement Diagram section",
+      "direct_quote": "MBSE provides a consistent and automatically traceable system design, which enhances the quality of traceability and change impact assessment.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No measured traceability quality, change-impact timing, or baseline comparison is provided."
     },
     {
-      "claim": "MBSE language and tool",
-      "quote": "We used MagicDraw 18.1 from No Magic Inc. [16] as the modeling tool and SysML 1.4 as the modeling language.",
-      "location": "Objectives"
+      "claim": "SysML parametrics support faster modification and analysis of new mission/design scenarios.",
+      "outcome_category": "design agility/scenario analysis",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "parametric model-based approach",
+        "constraint blocks",
+        "dynamic analysis with ParaMagic/MATLAB"
+      ],
+      "artifact_or_process_linked": "Parametric diagrams for mass and power budgets",
+      "lifecycle_stage": "conceptual/preliminary design",
+      "evidence_type": "worked parametric case plus author claim",
+      "metric_or_value_indicator": "mass_MOS=0.082, power_MOS=0.47 in example; no time metric",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "on-the-fly tuning and scenario analysis are claimed",
+      "evidence_source": "INTRODUCTION, OBJECTIVES, and SysML Parametrics section",
+      "direct_quote": "Such a parametric approach supports fast modification and analysis of new scenarios, which is essential for the real-time process.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "The mass/power example shows executability, but speed relative to prior practice is not measured."
     },
     {
-      "claim": "Methodology",
-      "quote": "We have adopted an OOSEM-based hybrid approach that leverages object-oriented techniques and a SE foundation.",
-      "location": "Adopted MBSE Methodology"
+      "claim": "Requirement diagrams and model links enable generation of traceability and verification matrices and automated impact analysis.",
+      "outcome_category": "requirements engineering/V&V support",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "SysML requirement diagrams",
+        "requirement relationships",
+        "verify links",
+        "tool-generated matrices"
+      ],
+      "artifact_or_process_linked": "NSS-1 requirements package and Figure 4/Figure 12 requirement diagrams",
+      "lifecycle_stage": "requirements analysis through verification planning",
+      "evidence_type": "artifact demonstration and tool capability claim",
+      "metric_or_value_indicator": "requirement IDs 17.1 and 17.2 linked to mass/power verification constraints",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "claimed time-saving and improved V&V/change impact",
+      "evidence_source": "Requirement Diagram section",
+      "direct_quote": "Being able to ask a modeling tool to generate requirement traceability and verification matrices, and to perform an automated impact analysis when the requirements change, is an important time-saving feature for systems engineering.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Matrix generation is asserted and diagrams are shown, but no generated matrix or effort saving is quantified."
     },
     {
-      "claim": "Nanosatellite system modeling scope",
-      "quote": "The modeling repository uses SysML to capture common design patterns of the typical nanosatellite class: managing values, describing scenarios, and describing functions, parts, and subsystems, as well as the relationships among these design patterns.",
-      "location": "Model Repository for NSS-1"
+      "claim": "The model verifies NSS-1 mass and EPS-related power budget requirements before physical development.",
+      "outcome_category": "pre-physical verification",
+      "specificity": "EPS-specific",
+      "mbse_mechanism": [
+        "SysML parametric diagrams",
+        "Power_MoS and Mass_MoS constraints",
+        "ParaMagic validation",
+        "MATLAB SMT solving",
+        "verify relationships"
+      ],
+      "artifact_or_process_linked": "Figure 9 mass/power budget, Figure 11 solved instance, Figure 12 verification links",
+      "lifecycle_stage": "conceptual/preliminary design before hardware AIT",
+      "evidence_type": "executable parametric model result",
+      "metric_or_value_indicator": "mass=45.9 kg, pPow=42.4 W, mass_MOS=0.082, power_MOS=0.47",
+      "baseline_comparator": "requirements of less than 50 kg and 80 W power budget",
+      "observed_effect_size_or_qualitative_effect": "positive margins are reported as verifying requirements",
+      "evidence_source": "SysML Parametrics section and Figures 9-12",
+      "direct_quote": "We can see that mass and power budget margins are calculated to be positive (mass_MOS=0.082 and power_MOS=0.47), which verify the mass and power requirements as given in the requirement diagram (Figure 12).",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Verification covers a simplified budget calculation, not detailed EPS dynamics, environmental conditions, hardware tests, or operational data."
     },
     {
-      "claim": "Budget and reliability model content",
-      "quote": "Mass, power, and reliability budgets have been incorporated.",
-      "location": "Model Repository for NSS-1"
+      "claim": "The repository supports interoperability with existing Excel, MATLAB/Simulink, and STK-oriented SE analysis workflows.",
+      "outcome_category": "toolchain interoperability/integrability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "MagicDraw plug-ins",
+        "Excel import/export",
+        "InterCAX MATLAB integration",
+        "ParaMagic solver integration",
+        "planned STK bridge"
+      ],
+      "artifact_or_process_linked": "Interface with Microsoft Excel and Interface with MATLAB sections",
+      "lifecycle_stage": "conceptual/preliminary design analysis",
+      "evidence_type": "tool data-flow description and case workflow",
+      "metric_or_value_indicator": "round-trip solved values between SysML and spreadsheets; MATLAB output text file read back into model",
+      "baseline_comparator": "legacy SIDE/spreadsheet-based design environment described qualitatively",
+      "observed_effect_size_or_qualitative_effect": "claimed seamless communication between analysis tools and repository",
+      "evidence_source": "INTERFACE WITH EXISTING SE TOOLS section",
+      "direct_quote": "With the help of MagicDraw plug-ins, we are able to communicate between existing engineering analysis tools with the NSS1 model repository",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Only Excel/MATLAB examples are described; direct STK integration remains future work and robustness of data exchange is not tested independently."
     },
     {
-      "claim": "EPS/power-budget representation",
-      "quote": "The ACS (Attitude control subsystem), CDHS (Command and data handling subsystem), payload, TCS (Thermal control subsystem), and RFCS (Radio frequency communication subsystem) subsystems draw electrical power from the EPS (Electrical power subsystem), which can supply a maximum of 80 W.",
-      "location": "SysML Parametrics"
+      "claim": "SysML model-generated documentation improves consistency and automation of SE outputs.",
+      "outcome_category": "documentation automation/consistency",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "automatic report generation",
+        "allocation tables",
+        "requirement tables",
+        "coverage analysis",
+        "central model repository"
+      ],
+      "artifact_or_process_linked": "Automatic Report Generation section and conclusion",
+      "lifecycle_stage": "cross-lifecycle documentation and reporting",
+      "evidence_type": "author claim and tool capability description",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "traditional document-based SE described as difficult to keep complete/consistent",
+      "observed_effect_size_or_qualitative_effect": "project documentation claimed more consistent",
+      "evidence_source": "Automatic Report Generation and Conclusion sections",
+      "direct_quote": "Project documentation becomes more consistent.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No generated report sample, defect count, or consistency metric is provided."
     },
     {
-      "claim": "Requirements verification linkage",
-      "quote": "The requirement diagram defines requirements, traceability, and the test cases that verify each requirement.",
-      "location": "Requirement Diagram"
+      "claim": "The NSS-1 repository can support knowledge transfer and reuse for future missions.",
+      "outcome_category": "reuse/knowledge transfer/reproducibility-adjacent",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "model repository",
+        "common nanosatellite design patterns",
+        "FireSat element reuse",
+        "planned NSS-2 reuse"
+      ],
+      "artifact_or_process_linked": "NSS-1 SysML model repository and PNSSP two-step approach",
+      "lifecycle_stage": "organizational adoption and future mission conceptual design",
+      "evidence_type": "case-study reuse statement and future-plan claim",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "repository claimed useful for knowledge transfer and model reuse",
+      "evidence_source": "MODEL REPOSITORY FOR NSS-1, Figure 2, and CONCLUSION",
+      "direct_quote": "The NSS-1 model repository developed during this phase can be used effectively for knowledge transfer.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No evidence of actual repeated reuse, user uptake, or repository release is provided."
     },
     {
-      "claim": "Verification methods represented in model",
-      "quote": "A test case or other named element can be used in a similar fashion to represent any standard verification method, such as review, inspection, test, or analysis.",
-      "location": "SysML Parametrics"
+      "claim": "The repository incorporates a reliability budget analysis capability.",
+      "outcome_category": "reliability analysis capability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "constraint blocks",
+        "parametric diagrams",
+        "model repository analysis tools"
+      ],
+      "artifact_or_process_linked": "NSS-1 model repository additional analysis tools list",
+      "lifecycle_stage": "conceptual/preliminary design analysis",
+      "evidence_type": "reported repository capability only",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "reliability budget is said to be incorporated, but no reliability result is shown",
+      "evidence_source": "MODEL REPOSITORY FOR NSS-1 and SysML Parametrics sections",
+      "direct_quote": "Mass, power, and reliability budgets have been incorporated.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The paper does not show reliability equations, results, validation, or EPS reliability effects."
     },
     {
-      "claim": "Parametric V&V result",
-      "quote": "mass and power budget margins are calculated to be positive (mass_MOS=0.082 and power_MOS=0.47), which verify the mass and power requirements",
-      "location": "SysML Parametrics"
-    },
-    {
-      "claim": "Excel model/tool interface",
-      "quote": "MagicDraw provide an interface to import and export data between the SysML model and Microsoft Excel files.",
-      "location": "Interface with Microsoft Excel"
-    },
-    {
-      "claim": "MATLAB model/tool interface",
-      "quote": "The plug-in treats MATLAB functions and scripts as constraints in SysML parametric diagrams.",
-      "location": "Interface with MATLAB"
-    },
-    {
-      "claim": "Claimed MBSE outcomes",
-      "quote": "The model-based approach is found to be promising for a reduced development risk, improved quality, and increased productivity.",
-      "location": "Conclusion"
-    },
-    {
-      "claim": "Claimed documentation and automation outcomes",
-      "quote": "The approach opens the way to automated SE through automatic document generation, traceability, assisted design verification, and system behavioral simulation.",
-      "location": "Conclusion"
-    },
-    {
-      "claim": "Tool/model integration challenge",
-      "quote": "Integration among the models and tools, and other engineering artifacts, is another challenge associated with MBSE.",
-      "location": "Associated Challenges"
-    },
-    {
-      "claim": "Learning-curve limitation",
-      "quote": "The SysML learning curve is steep.",
-      "location": "Conclusion"
+      "claim": "MBSE using SysML is promising for reduced development risk, improved quality, and increased productivity.",
+      "outcome_category": "programmatic value",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "structured models",
+        "clear separation of structure and behavior",
+        "automatic document generation",
+        "traceability",
+        "assisted design verification",
+        "behavioral simulation"
+      ],
+      "artifact_or_process_linked": "Conclusion list of identified key advantages",
+      "lifecycle_stage": "overall project lifecycle",
+      "evidence_type": "summary assertion based on initial case study",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "promising reductions/improvements asserted qualitatively",
+      "evidence_source": "CONCLUSION",
+      "direct_quote": "The model-based approach is found to be promising for a reduced development risk, improved quality, and increased productivity.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "The conclusion is plausible but lacks quantified risk, quality, productivity, or schedule evidence."
     }
   ],
-  "notes_for_consistency": "Read only paper.md. EPS evidence is limited to subsystem architecture and power-budget/constraint modeling, not a detailed EPS behavior or EPS test model. STK integration is mentioned as an objective and future/indirect interface rather than a completed direct interface. Exact publication venue is not stated in paper.md; DOI/paperId metadata indicates IEEE. The paper may overlap conceptually with prior CubeSat/FireSat model-repository lineages cited in its previous-work section, but only NSS-1 is extracted here."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "A central MagicDraw SysML model repository is organized into requirements, behavior, architecture, and parametrics packages and managed in the context of an independent systems engineering team; version/configuration governance is not reported.",
+    "traceability_to_deliverables_decisions_reviews": "The methodology links model artifacts to requirements baseline after Phase 0/A, baseline system design after Phase B, detailed design artifacts in Phase C, and V&V/test cases in Phase D; generated requirement/allocation tables and coverage analysis are described, but formal review decisions are not reported.",
+    "evaluation_criteria_model_quality_usefulness": "Usefulness is framed around completeness, consistency, traceability, change-impact assessment, requirements V&V, mass/power margin satisfaction, interoperability with existing tools, and documentation consistency; no formal evaluation rubric or stakeholder scoring is reported.",
+    "roi_value_realization_evidence": "The paper claims reduced risk, improved quality/productivity, time-saving traceability, reduced model development time, and future cost reduction, but provides no quantitative ROI, cost, or schedule evidence.",
+    "programmatic_gates_critical_design_events_supported": "Supports Phase 0/A requirements baseline, Phase B baseline system design, Phase C engineering/qualification model detailed design artifacts, and Phase D assembly, integration, testing, and V&V; PDR/CDR gates are not named explicitly.",
+    "model_derived_performance_indicators_management_metrics": "Reported model-derived indicators include satellite mass 45.9 kg, pPow 42.4 W, mass_MOS 0.082, power_MOS 0.47, and requirements/coverage/traceability artifacts; reliability budget is mentioned but no reliability metric is shown."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed with evidence",
+      "rationale": "The paper gives an OOSEM-tailored lifecycle mapping, a two-step PNSSP adoption path, and a worked NSS-1 repository with diagrams and parametric analysis."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed with evidence",
+      "rationale": "Excel and MATLAB/MATLAB-Simulink integration mechanisms are described in the NSS-1 workflow, although direct STK integration remains future work."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed conceptually",
+      "rationale": "The hybrid approach is tailored to engineers' skills and existing tools for a small/nanosatellite student mission, but resource constraints and lightweight effort metrics are not quantified."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "addressed conceptually",
+      "rationale": "Model artifacts are mapped to lifecycle deliverables and baselines and broad ROI-like benefits are claimed, but governance mechanisms and ROI evidence are limited."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "mentioned only",
+      "rationale": "The paper notes student/university distributed development and iterative parameter tuning/freezing, but does not discuss NewSpace, agile governance, or rapid-iteration practices explicitly."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "A SysML/OOSEM repository can represent nanosatellite-class missions through requirements, architecture, behavior, interfaces, and parametric packages.",
+        "Generality is supported by common nanosatellite design patterns, FireSat reuse, extensible blocks, package organization, and parametric constraints, but the approach still requires SysML/tool/OOP and spacecraft-domain knowledge.",
+        "EPS is modeled only at abstract system power-budget/electrical-architecture level, not as detailed EPS behavior or components."
+      ],
+      "RQ2": [
+        "Claimed benefits include traceability, change-impact assessment, documentation consistency, automated reports, interoperability, knowledge transfer, reduced risk, quality/productivity, and a reliability-budget capability.",
+        "Evidence is strongest for system-level mass/power model execution and tool data flow; reliability outcomes, reproducibility through open assets, and EPS-specific integrability/reliability effects are not demonstrated.",
+        "Reproducibility is limited by absence of an open model repository and reliance on proprietary tools/plugins."
+      ],
+      "RQ3": [
+        "Requirements are linked to verification artifacts through SysML verify relationships and constraint blocks.",
+        "Pre-physical verification is demonstrated by ParaMagic/MATLAB SMT solving of mass and power budget constraints, yielding positive margins for the NSS-1 requirements.",
+        "AIT/V&V test-case support is mapped in the methodology, but no EPS-specific physical integration or test results are reported."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "The work is an initial study and modeling effort to evaluate MBSE effectiveness.",
+      "Future training of system engineers in SysML, its development environment, and object-oriented modeling is needed.",
+      "The SysML learning curve is steep and may require software engineering/OOP knowledge.",
+      "SysML diagrams may be misinterpreted if not learned beforehand.",
+      "Integration among analysis, hardware, software models, tools, and engineering artifacts is a challenge.",
+      "Scaling the modeling effort to larger projects and diverse development environments is challenging.",
+      "Direct STK-SysML interfacing is future work."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "No open model repository, data package, or reusable SysML library is reported.",
+      "EPS is represented as a subsystem in power-budget equations, but no EPS component-level behavior, modes, failure modes, or hardware architecture is modeled in detail.",
+      "Reliability budget is mentioned but not shown, solved, validated, or connected to EPS reliability outcomes.",
+      "Broad risk, productivity, quality, cost, and time-saving claims lack quantitative baseline comparison.",
+      "Verification evidence is limited to a simplified mass/power parametric calculation and does not include integration, environmental, flight, or operational data.",
+      "Exact publication venue title is not visible in the Markdown."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "case study mission",
+        "quote": "we selected an ongoing remote sensing (RS) student satellite (NSS-1) as a case study and developed its SysML model repository.",
+        "location": "OBJECTIVES"
+      },
+      {
+        "topic": "tool and language",
+        "quote": "We used MagicDraw 18.1 from No Magic Inc. [16] as the modeling tool and SysML 1.4 as the modeling language.",
+        "location": "OBJECTIVES"
+      },
+      {
+        "topic": "method tailoring",
+        "quote": "We have adopted an OOSEM-based hybrid approach that leverages object-oriented techniques and a SE foundation.",
+        "location": "ADOPTED MBSE METHODOLOGY"
+      },
+      {
+        "topic": "nanosatellite generality",
+        "quote": "The modeling repository uses SysML to capture common design patterns of the typical nanosatellite class: managing values, describing scenarios, and describing functions, parts, and subsystems, as well as the relationships among these design patterns.",
+        "location": "MODEL REPOSITORY FOR NSS-1"
+      },
+      {
+        "topic": "reliability budget capability",
+        "quote": "Mass, power, and reliability budgets have been incorporated.",
+        "location": "MODEL REPOSITORY FOR NSS-1"
+      },
+      {
+        "topic": "EPS power budget",
+        "quote": "The ACS (Attitude control subsystem), CDHS (Command and data handling subsystem), payload, TCS (Thermal control subsystem), and RFCS (Radio frequency communication subsystem) subsystems draw electrical power from the EPS (Electrical power subsystem), which can supply a maximum of 80 W.",
+        "location": "SysML Parametrics"
+      },
+      {
+        "topic": "model validation mechanism",
+        "quote": "After connecting the parameter ports to respective inputs and outputs, we validated the model using ParaMagic.",
+        "location": "SysML Parametrics"
+      },
+      {
+        "topic": "verification result",
+        "quote": "We can see that mass and power budget margins are calculated to be positive (mass_MOS=0.082 and power_MOS=0.47), which verify the mass and power requirements as given in the requirement diagram (Figure 12).",
+        "location": "SysML Parametrics"
+      },
+      {
+        "topic": "Excel interoperability",
+        "quote": "MagicDraw provide an interface to import and export data between the SysML model and Microsoft Excel files.",
+        "location": "Interface with Microsoft Excel"
+      },
+      {
+        "topic": "risk/limitation",
+        "quote": "The SysML learning curve is steep.",
+        "location": "CONCLUSION"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Within-paper lineage includes reuse of FireSat SysML elements and comparison to CubeSat/remote-sensing SysML studies; no external or previous-extraction lineage was consulted under the silo rule.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full Markdown was available and provides clear descriptions of mission context, MBSE method, artifacts, toolchain, and the mass/power verification example; confidence is lower only for bibliographic venue details and unreported EPS/reliability specifics."
+  },
+  "bibtex": "@article{paper-0080,\n  title = {Application of model-based systems engineering in small satellite conceptual design-A SysML approach},\n  author = {Muhammad Waseem and Muhammad Usman Sadiq},\n  year = {2018},\n  journal = {IEEE Aerospace and Electronic Systems Magazine},\n  volume = {33},\n  number = {4},\n  pages = {24--34},\n  publisher = {IEEE},\n  doi = {10.1109/maes.2017.180230},\n  url = {https://doi.org/10.1109/maes.2017.180230}\n}"
 }

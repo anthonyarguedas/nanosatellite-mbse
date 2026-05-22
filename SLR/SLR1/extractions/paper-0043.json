@@ -1,167 +1,578 @@
 {
   "corpus_id": "paper-0043",
   "tier": "supporting",
-  "citation": "Campioli, Luccisano, Ferretto, and Stesina (2025), Towards a Unified Modeling and Simulation Framework for Space Systems: Integrating Model-Based Systems Engineering with Open Source Multi-Domain Simulation Environments",
-  "title": "Towards a Unified Modeling and Simulation Framework for Space Systems: Integrating Model-Based Systems Engineering with Open Source Multi-Domain Simulation Environments",
-  "authors": [
-    "Serena Campioli",
-    "Giacomo Luccisano",
-    "Davide Ferretto",
-    "Fabrizio Stesina"
-  ],
   "year": 2025,
-  "doi_or_url": "https://doi.org/10.3390/aerospace12080745",
-  "venue_type": "journal article, Aerospace",
-  "modeling_scope": "System-level and subsystem/component MBSE plus simulation framework (MOSAiC) for space missions. It models stakeholder needs, functions, requirements, ConOps, operating modes, logical and physical architectures, budgets, simulations, and verification links. EPS is treated in detail through power-generation, storage, regulation/control, distribution functions; solar panels, batteries, PCDU components; and power/battery budget simulations.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "budget",
-    "verification",
-    "simulation",
-    "operations",
-    "lifecycle/PLM",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "ARCADIA method implemented in the open-source Capella tool; MOSAiC framework; PVMT Capella add-on for model properties; custom Python parser connecting Capella models to analysis/simulation tools. SysML is discussed only as background, not as the implemented language.",
-  "mbse_language_method_tool_categories": [
-    "Capella/Arcadia",
-    "Other"
-  ],
-  "robot_platform": "FIRE-EYE CubeSat/small-satellite wildfire-monitoring mission; multi-satellite constellation for the Mediterranean region. The extracted text renders the platform phrase as \"4816U satellites\", so count/form factor should be checked against the PDF before reuse.",
-  "task_domain": "Preliminary design, analysis, and simulation-driven validation of a wildfire detection and monitoring space mission, including orbital coverage/access, EPS power and battery behavior, and communication link/data budgets.",
-  "interface": "Integration interface between Capella/ARCADIA MBSE models and external simulations through PVMT-defined properties and a custom Python parser extracting subsystem/component parameters, functional and component exchanges, operating modes, and transition conditions; the abstract also frames the approach as standardized data exchange and co-simulation.",
-  "feedback": "Simulation outputs and requirement-verification results are fed back into the architecture and operational model. The paper describes feedback that can revise subsystem duty cycles, storage needs, task allocation, interface timing, and operational sequences during iterative design.",
-  "control_autonomy_split": "Not applicable; the paper models operating modes, commands, on-board processing, and fault-related transitions, but it does not analyze autonomy allocation or a human/autonomy control split.",
-  "network_latency_assumptions": "Not reported; near-real-time service and latency are mentioned as stakeholder/system constraints, but no explicit network latency model or numeric communication-latency assumptions are provided.",
-  "evaluation": "Case-study demonstration on the FIRE-EYE wildfire-monitoring mission. The authors build Capella OA/SA/LA/PA models and use extracted model data for orbital coverage/access, power budget/battery, and communication link/data budget simulations. Mixed-resolution simulation is demonstrated for EPS and TTC in the Basic operating mode while other elements remain at logical abstraction.",
-  "rqs_addressed": {
-    "RQ1": "partial",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Published as an MDPI Aerospace journal article with editorial dates, DOI, and formal citation information.",
+        "evidence": [
+          "Citation: Campioli, S.; Luccisano, G.; Ferretto, D.; Stesina, F. Towards a Unified Modeling and Simulation Framework for Space Systems: Integrating Model-Based Systems Engineering with Open Source Multi-Domain Simulation Environments. Aerospace 2025,12,745.",
+          "Received: 31 July 2025; Revised: 17 August 2025; Accepted: 18 August 2025; Published: 21 August 2025"
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper states scope boundaries and future work, but does not provide a structured threats-to-validity or limitations section.",
+        "evidence": [
+          "This paper presents the first version of the unified Modeling and Simulation (M&S) framework MOSAiC",
+          "Future work will aim to expand the simulation capabilities to include more refined orbital and environmental modeling, incorporate automated requirement tracing, automate CAD generation and time-aware thermal analyses, and explore the integration of hardware-in-the-loop or digital twin approaches."
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The case mission, stakeholders, small-satellite context, ConOps phases, and architecture-refinement stages are described clearly.",
+        "evidence": [
+          "For validation purposes, the MOSAiC framework was applied to the design and analysis of the FIRE-EYE mission, a multi-satellite constellation dedicated to real-time wildfire detection and monitoring in the Mediterranean region.",
+          "Each state represents a distinct operational phase in the mission lifecycle, beginning with Launch, followed by Commissioning, Operational, and End-of-Life phases."
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The method, Capella/ARCADIA toolchain, PVMT extension, parser, architectural levels, simulation domains, and public repository are reported.",
+        "evidence": [
+          "The system modeling process followed the ARCADIA methodology, and it was implemented using the Capella tool.",
+          "To support early validation and trade-offs, simulations were coupled with the modeling part thanks to the Property Values Management Tools (PVMT) Capella add-on [38].",
+          "All models and codes presented in this work are available in a public repository, under the GNU GPLv3 license"
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Claimed outcomes are tied to Capella/ARCADIA models, PVMT properties, operational modes, parser-based extraction, and simulation feedback loops.",
+        "evidence": [
+          "The architecture proposed here leverages ARCADIA-based models as authoritative sources, interfacing with simulation tools through standardized data exchanges and co-simulation strategies.",
+          "Overall, this early feedback loop enabled more informed and data-driven design decisions, provided justification for architectural refinements, and strengthened the confidence in the system's capacity to meet mission-level constraints"
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper gives case-study simulations and quantitative budget outputs, but many broader claims such as reduced integration costs and improved reliability lack baselines, independent validation, or operational evidence.",
+        "evidence": [
+          "Total Uplink: 57.97 MB, Total Downlink: 30.47 MB",
+          "Figure 14. FIRE-EYE battery consumption plot.",
+          "Results show improved consistency between system models and simulation artifacts, reduced integration costs, and improved early validation of design choices."
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper emphasizes traceability from stakeholder needs to functions, modes, architecture, and simulations, but does not present a detailed requirements trace matrix or completed automated requirements tracing.",
+        "evidence": [
+          "This approach supports a clear and structured representation of the mission timeline, enabling effective traceability between operational phases and system functions.",
+          "Unlike earlier qualitative/exploratory phases, this stage features a direct linkage between formal requirement specifications and simulation results.",
+          "Future work will aim to expand the simulation capabilities to include more refined orbital and environmental modeling, incorporate automated requirement tracing"
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper reports open-source tooling, model/code availability, a parser, data-flow mechanisms, and public repository access.",
+        "evidence": [
+          "the proposed framework was developed entirely using open source tools",
+          "All models and codes presented in this work are available in a public repository, under the GNU GPLv3 license (https://www.gnu.org/licenses/gpl-3.0.html, accessed on 17 August 2025), at the following link: https://gitlab1.polito.it/aer-se-public/MOSAiC (accessed on 17 August 2025)."
+        ]
+      }
+    ],
+    "total_score": 6.5,
+    "max_score": 8,
+    "normalized_score": 0.812,
+    "overall_rationale": "Credible venue, clear method/toolchain, public assets, and a detailed small-satellite case support extraction. Main weaknesses are limited formal limitation discussion, no baseline for broad cost/reliability claims, and incomplete demonstrated requirements traceability."
   },
-  "rq_relevance": "RQ1: partial because the paper proposes a general ARCADIA/Capella MOSAiC framework with progressive refinement from coarse parameters to component detail, and includes an EPS example, but it is a broad space-system framework rather than an EPS-only nanosatellite reference model. RQ2: partial because it claims traceability, reusability, consistency, reduced integration cost, early validation, accessibility/reproducibility, and reliability/agility from MBSE-model/simulation integration, but these claims are mostly qualitative and system-wide rather than EPS-specific. RQ3: partial because verification is integrated as simulation-based performance, operational-consistency, and requirement verification including EPS battery/power checks before implementation, but no standalone EPS AIV/test-procedure model is reported.",
-  "claimed_outcomes": [
-    "Improved traceability, reusability, and simulation fidelity across the system lifecycle are stated as framework goals.",
-    "Improved consistency between system models and simulation artifacts, reduced integration costs, and improved early validation of design choices are claimed in the abstract.",
-    "Early simulation is claimed to identify performance shortfalls, functional misalignments, bottlenecks, and possible failure points before costly implementation.",
-    "Open-source tooling and public release of models/code are claimed to support accessibility, reproducibility, collaboration, and community-driven evolution.",
-    "The integrated model/simulation workflow is claimed to enhance reliability and agility of the design process, especially for resource-constrained small-satellite missions.",
-    "Mixed-resolution simulation is claimed to support incremental validation and trade studies before the full physical architecture is complete."
-  ],
-  "verification_validation_linkage": "General V&V: simulation is embedded for design-space exploration, performance and functional verification, operational consistency checks, and low-level requirement verification; simulation results are linked to requirements and fed back into the architecture. EPS-specific linkage: the EPS LA/PA model defines power functions and physical elements, then power/battery simulations verify behavior such as battery capacity during eclipse and simultaneous operation of communications loads. The paper does not describe a formal EPS physical test, AIV/T, or test-procedure model.",
-  "key_findings": [
-    "MOSAiC integrates ARCADIA/Capella MBSE with open-source, multi-domain simulation environments for space-system design and analysis.",
-    "The framework uses Actor, System, Subsystem, and Component modeling levels aligned with ARCADIA and links architecture to ConOps, mission phases, and operating modes.",
-    "PVMT adds mass, volume, power consumption, margins, orbit, mode, EPS, and TTC properties to Capella elements for analysis use.",
-    "A custom Python parser extracts model properties, exchanges, operating modes, and transition conditions from Capella to feed simulations.",
-    "The FIRE-EYE case study models stakeholder needs, system functions, logical architecture, physical architecture, and subsystem interfaces for a wildfire-monitoring small-satellite mission.",
-    "EPS modeling is shown from logical functions to physical functions and components, including solar panels, battery pack, PCDU/PCU/PDU/MCU, MPPT, BCR, DC/DC converter, and health/fault functions.",
-    "The demonstration interfaces three main analysis domains with the MBSE model: orbital analysis, power budget simulation, and link budget evaluation.",
-    "The paper demonstrates mixed-resolution simulation: detailed PA-level EPS and TTC parameters are used where available, while other subsystems default to LA-level abstractions.",
-    "The paper reports public availability of models and code in a repository under GNU GPLv3."
-  ],
-  "limitations_gaps": [
-    "No formal limitations or threats-to-validity section is provided; limitations are mostly implicit in challenges and future-work statements.",
-    "The work is presented as a first version of MOSAiC, so framework maturity is limited by the scope of the initial implementation and case demonstration.",
-    "The case study includes a simple coverage/access simulation and basic orbital analysis data; future work calls for more refined orbital and environmental modeling.",
-    "Future work also calls for automated requirement tracing, automated CAD generation, time-aware thermal analyses, and hardware-in-the-loop or digital twin integration, indicating these capabilities are not yet fully covered.",
-    "The paper notes that executable/multi-domain simulations require greater initial setup effort and ongoing maintenance."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "0.5",
-    "total_score": "1.5",
-    "rationale": "Published as a journal article in Aerospace with DOI and open-access article metadata. Limitations are not discussed in a dedicated validity section, but the paper does identify future work and practical challenges such as setup/maintenance effort."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0043.json",
+    "status_rationale": "Kept as supporting because the paper directly addresses MBSE/simulation for small-satellite missions and includes EPS power-budget modeling, but it is a general M&S framework rather than an EPS-only nanosatellite study.",
+    "citation": "Campioli, S.; Luccisano, G.; Ferretto, D.; Stesina, F. Towards a Unified Modeling and Simulation Framework for Space Systems: Integrating Model-Based Systems Engineering with Open Source Multi-Domain Simulation Environments. Aerospace 2025, 12, 745. https://doi.org/10.3390/aerospace12080745",
+    "title": "Towards a Unified Modeling and Simulation Framework for Space Systems: Integrating Model-Based Systems Engineering with Open Source Multi-Domain Simulation Environments",
+    "authors": [
+      "Serena Campioli",
+      "Giacomo Luccisano",
+      "Davide Ferretto",
+      "Fabrizio Stesina"
+    ],
+    "venue": "Aerospace",
+    "doi_or_url": "https://doi.org/10.3390/aerospace12080745",
+    "publisher": "MDPI, Basel, Switzerland",
+    "venue_type": "journal article",
+    "source_database_or_route": [
+      "scopus: q18_system_mbse_broad_full65, rank 2",
+      "scopus: q5_reference_model_refined, rank 2",
+      "scopus: q6_vv_traceability_refined, rank 2",
+      "scopus: q7_outcomes_refined, rank 1",
+      "semantic_scholar: title search for abstract enrichment, rank 1"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "high",
+        "rationale": "The MOSAiC framework models small-satellite missions through ARCADIA actor/system/subsystem/component levels, operational modes, properties, and mixed-resolution simulation that can begin from coarse behavior and mature incrementally."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "The paper claims traceability, reproducibility, consistency, reduced integration costs, reliability/robustness, and integrability, but most outcomes are system-level and only partly EPS-specific, with limited comparative evidence."
+      },
+      "RQ3": {
+        "relevance": "high",
+        "rationale": "EPS is used as a detailed physical-architecture example, with PVMT properties, parser extraction, power-budget and battery simulations, and pre-implementation checks of power sufficiency and mode-dependent consumption."
+      }
+    },
+    "lineage_overlap_notes": "The paper cites earlier CubeSat MBSE/open-source and behavior-modeling work, including the authors' prior open-source CubeSat data formalization reference, but no prior extraction or external lineage source was consulted."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "FIRE-EYE multi-satellite small-satellite constellation for wildfire monitoring",
+    "size_form_factor": "reported as 'constellation of 4816U satellites' in the markdown; exact quantity/form-factor separation is not otherwise clarified",
+    "mission_name": "FIRE-EYE",
+    "mission_domain": "near-real-time wildfire detection, mapping, alerting, and monitoring in the Mediterranean region",
+    "organization_type": "academic/university-led case study with agencies, industry, regulators, ground operators, and local-authority users modeled as stakeholders",
+    "project_maturity": "representative preliminary-design case study with model/simulation validation; no physical prototype, integration test, or flight operation reported",
+    "lifecycle_stage_addressed": "stakeholder needs and ConOps through system, logical, and physical architecture; early/pre-physical design verification; mission phases from launch to end-of-life modeled",
+    "development_context": "open-source MBSE and simulation framework for space missions, framed as especially suitable for academic and resource-constrained small-satellite development",
+    "eps_relevance": "power-budget/electrical-architecture",
+    "model_maturity": "first MOSAiC framework version implemented in Capella/ARCADIA with PVMT properties, parser-based extraction, LA/PA mixed-resolution simulations, and public model/code repository"
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "Address fragmented document-centric design and limited integration between descriptive MBSE models and dynamic/domain-specific simulations by creating an open-source unified M&S framework for space systems.",
+    "modeling_scope": [
+      "stakeholder needs and operational capabilities",
+      "mission ConOps, phases, states, and operating modes",
+      "system functions and high-level requirements",
+      "logical subsystem architecture and interfaces",
+      "physical component architecture, especially EPS and TTC examples",
+      "orbital, power-budget, link-budget, data-budget, and operational-consistency simulations"
+    ],
+    "system_boundary_level_of_abstraction": "Four hierarchical levels aligned with ARCADIA: Actors, System, Subsystem, Components; case boundary includes satellite system/subsystems/components plus launcher, ground station, MCC, users, and environment interfaces.",
+    "minimal_or_excluded_modeling": "The approach supports low-fidelity coarse parameters early in design and partial PA detail through mixed-resolution simulation; refined orbital/environmental modeling, automated requirement tracing, CAD generation, time-aware thermal analysis, hardware-in-the-loop, and digital-twin integration are future work.",
+    "required_prior_behavioral_domain_knowledge": "Initial use can rely on mission phases, estimated subsystem mass/volume/power, timing, and coarse operational modes; detailed component behavior and constraints are added progressively at PA level.",
+    "handling_limited_behavioral_knowledge": "Progressive refinement starts with LA abstractions and coarse estimates, then substitutes PA component-level data when realization links and properties exist; otherwise simulations default to logical-level abstractions while preserving system-level context.",
+    "model_artifacts_used": [
+      "ARCADIA Operational Analysis, System Analysis, Logical Architecture, and Physical Architecture",
+      "Capella capabilities, actors, functions, functional exchanges, component exchanges, and state/mode diagrams",
+      "PVMT property sets for orbit, modes, LA subsystem data, and PA component data",
+      "ConOps state diagrams and operating-mode state machines",
+      "realization links between LA and PA elements",
+      "Python parser extracting properties, exchanges, modes, transitions, and simulation inputs",
+      "battery consumption and data-budget simulation outputs"
+    ],
+    "generality_reuse_mechanism": [
+      "architecture levels and ARCADIA viewpoints reusable across space systems",
+      "open-source Capella/PVMT tool basis",
+      "modular parser and simulation pipeline pulling from model properties",
+      "mixed-resolution LA/PA fallback mechanism",
+      "public repository under GNU GPLv3",
+      "framework not restricted to a specific space application"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Operational Analysis",
+        "inputs": "stakeholder groups, mission goal, user needs, standard mission-lifecycle capability",
+        "outputs": "operational capabilities, actors, stakeholder activities, usage scenarios",
+        "actors_roles": "systems engineers with stakeholders such as agencies, local authorities, universities, industry, regulators, ground operators",
+        "prerequisites": "mission concept and stakeholder identification",
+        "completion_criteria": "operational capabilities and stakeholder interactions modeled in Capella",
+        "handoffs": "capabilities and activities become inputs to System Analysis"
+      },
+      {
+        "step": "System Analysis",
+        "inputs": "OA capabilities, activities, actors, mission objectives",
+        "outputs": "black-box system functions, functional exchanges, ConOps states, high-level mission and functional requirements",
+        "actors_roles": "systems engineers and mission architects",
+        "prerequisites": "completed OA baseline",
+        "completion_criteria": "system-level functions, interfaces, and high-level phases identified",
+        "handoffs": "system functions and ConOps feed Logical Architecture"
+      },
+      {
+        "step": "Logical Architecture and operating-mode definition",
+        "inputs": "system functions, high-level requirements, ConOps phases",
+        "outputs": "subsystem decomposition, internal/external interfaces, operating modes, LA properties",
+        "actors_roles": "systems engineers and subsystem/discipline engineers",
+        "prerequisites": "SA functions and preliminary operations",
+        "completion_criteria": "logical subsystems, exchanges, and OMs represented in Capella with PVMT values",
+        "handoffs": "LA data are extracted for early simulations and later PA refinement"
+      },
+      {
+        "step": "Model enrichment and parser extraction",
+        "inputs": "Capella LA/PA elements, PVMT property values, state/mode diagrams, functional/component exchanges",
+        "outputs": "structured simulation dataset with mass, volume, power, component properties, modes, transitions, and conditions",
+        "actors_roles": "MBSE modelers and software/simulation engineers",
+        "prerequisites": "PVMT properties assigned to relevant elements",
+        "completion_criteria": "parser can extract architecture and behavior data for simulations",
+        "handoffs": "dataset feeds orbital, power, communication, and operational simulations"
+      },
+      {
+        "step": "Analysis and simulation",
+        "inputs": "extracted model data, orbital parameters, operational modes, subsystem/component properties, mission timelines",
+        "outputs": "design-space, performance/functional verification, operational consistency, and requirements-verification results",
+        "actors_roles": "simulation engineers, systems engineers, discipline experts",
+        "prerequisites": "sufficient model data for target fidelity level",
+        "completion_criteria": "simulation results indicate feasibility, constraint violations, or trade-off needs",
+        "handoffs": "results are fed back into architecture and requirements/design decisions"
+      },
+      {
+        "step": "Physical Architecture refinement and mixed-resolution validation",
+        "inputs": "logical subsystem definitions, realization links, selected components, mode-specific properties, preliminary simulation outcomes",
+        "outputs": "component-level architecture, EPS/TTC detailed parameters, battery/data/power feasibility assessments",
+        "actors_roles": "subsystem engineers, systems engineers, simulation engineers",
+        "prerequisites": "selected physical components or partially refined subsystems",
+        "completion_criteria": "PA data replace LA abstractions where available and simulations preserve full system coherence",
+        "handoffs": "validated physical design and remaining gaps guide corrective actions before implementation"
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "Maps stakeholder-needs capture to OA, system requirements and ConOps to SA, subsystem/interface definition to LA, and component selection plus low-level verification to PA; simulations support design-space exploration, performance/functional verification, operational consistency, and low-level requirements verification before implementation, but no formal PDR/CDR gate evidence is reported.",
+    "approach_classification": "Integrated MBSE/digital engineering",
+    "approach_classification_rationale": "The approach treats the Capella/ARCADIA model as an authoritative source and connects it to executable multi-domain simulations through properties, extraction, and feedback loops, matching an integrated MBSE/digital-engineering workflow rather than pure descriptive MBSE.",
+    "tailoring_rationale": [
+      "small-satellite missions face resource constraints and short schedules",
+      "open-source tools lower barriers for academic and resource-constrained teams",
+      "mixed-resolution simulation avoids waiting for complete physical architecture",
+      "operating modes and mission phases make early simulations context-aware"
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "ARCADIA method",
+      "Capella open-source MBSE tool",
+      "PVMT Capella add-on for user-defined properties",
+      "custom Python-based parser",
+      "custom/open-source simulation pipeline for orbit, power, link, and data analyses",
+      "MOSAiC framework"
+    ],
+    "toolchain_architecture_data_flow": "Capella/ARCADIA model captures OA/SA/LA/PA architecture, ConOps, OMs, exchanges, and PVMT properties; the Python parser extracts architecture/behavior/property data; simulation modules evaluate design-space, power, link, orbital, and operational behavior; results and requirements-verification feedback are returned to architecture refinement.",
+    "interoperability_mechanisms": [
+      "standardized data exchanges and co-simulation strategies stated at framework level",
+      "PVMT properties attached to Capella elements",
+      "state machines for mission phases and operating modes",
+      "parser interface to Capella model data",
+      "realization links between LA and PA elements",
+      "hybrid LA/PA data extraction and fallback"
+    ],
+    "syntax_semantic_continuity_evidence": "Continuity is supported by ARCADIA viewpoints, Capella model elements, PVMT typed properties, explicit links between OMs and ConOps states, and realization links used to choose PA data when available; no named external semantic-exchange standard is demonstrated beyond the custom parser/data exchange approach.",
+    "software_hardware_system_integration_readiness": "Supports software/model-based pre-physical verification and identifies bottlenecks before implementation; hardware-in-the-loop, digital twin, and physical AIV/T integration are stated as future work rather than demonstrated readiness.",
+    "toolchain_limitations": [
+      "no baseline comparison of proprietary versus open-source toolchain cost or integration effort",
+      "automated requirement tracing is future work",
+      "refined orbital/environmental, thermal, CAD, hardware-in-the-loop, and digital-twin capabilities are future work",
+      "custom parser and simulation details are described but not benchmarked in the paper",
+      "no physical integration or flight-test evidence reported"
+    ],
+    "availability_reproducibility": "All models and codes are reported as available in a public repository under GNU GPLv3 at https://gitlab1.polito.it/aer-se-public/MOSAiC."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "power generation",
+      "power storage",
+      "power regulation and control",
+      "power distribution",
+      "solar panels",
+      "sun sensors",
+      "SADA",
+      "solar array",
+      "battery pack",
+      "battery management system",
+      "PCU with MPPT, BCR, and DC/DC converter",
+      "PDU with load switching, prioritization, and fault protection",
+      "MCU for EPS health monitoring, fault detection/isolation, and reporting",
+      "3.3 V, 5 V, 12 V, and 28.8 V power interfaces"
+    ],
+    "eps_requirements_representation": "EPS needs are represented through function decomposition, physical functions, component architecture, PVMT properties such as generated/stored power and power consumption, and simulation-derived checks; explicit EPS requirement IDs or a requirements table are not reported.",
+    "verification_validation_artifacts": [
+      "power budget simulation",
+      "battery consumption plot over 72 hours with eclipse/contact context",
+      "power and energy balance across operations",
+      "mixed-resolution EPS/TTC Basic-mode simulation",
+      "checks of battery capacity during eclipse periods",
+      "checks of simultaneous communication-phase loads",
+      "low-level requirement verification concept linked to quantitative simulations"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "PVMT attributes on LA/PA elements provide power, mass, volume, margins, and mode-specific values",
+      "parser extracts EPS/component properties, OMs, transitions, and mission phase data from Capella",
+      "dynamic simulations execute mission timelines and operating modes to compute power consumption and battery state",
+      "mixed-resolution logic uses PA component data for EPS/TTC where available and LA abstractions elsewhere",
+      "simulation results inform design corrections before hardware implementation"
+    ],
+    "evidence_verification_integrated_in_model": "The paper states that component-level specifications from the logical model were passed to a custom simulation framework for power analysis and that PA-level EPS/TTC parameters were used in simulations through realization links and parser extraction.",
+    "integration_test_readiness": "Preliminary model/simulation readiness only; no physical EPS integration test is reported, and hardware-in-the-loop is listed as future work."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Framework scope and model/simulation integration",
-      "quote": "This paper presents the first version of the unified Modeling and Simulation (M&S) framework MOSAiC ... which connects MBSE with open source, multi-domain simulation environments",
-      "location": "Abstract"
+      "claim": "MOSAiC improves traceability, reusability, and fidelity across the system lifecycle.",
+      "outcome_category": "traceability/reuse/fidelity",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "ARCADIA-based authoritative model",
+        "standardized data exchanges",
+        "co-simulation strategies",
+        "multi-level architecture-to-simulation linkage"
+      ],
+      "artifact_or_process_linked": "MOSAiC framework using Capella/ARCADIA as source model for simulations",
+      "lifecycle_stage": "conceptual through component-level design and verification",
+      "evidence_type": "framework rationale and representative case demonstration",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "claimed improvement in traceability, reusability, and fidelity",
+      "evidence_source": "Abstract and Sections 3-4",
+      "direct_quote": "with the goal of improving traceability, reusability, and fidelity in the system lifecycle",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The paper does not quantify traceability or reuse and does not compare against a document-based baseline."
     },
     {
-      "claim": "Claimed integration outcomes",
-      "quote": "Results show improved consistency between system models and simulation artifacts, reduced integration costs, and improved early validation of design choices.",
-      "location": "Abstract"
+      "claim": "The framework improves consistency between system models and simulation artifacts.",
+      "outcome_category": "consistency/integrability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "PVMT property enrichment",
+        "parser extraction",
+        "operating-mode state machines",
+        "architecture-simulation feedback loop"
+      ],
+      "artifact_or_process_linked": "Capella model properties and extracted datasets used by simulations",
+      "lifecycle_stage": "logical and physical architecture refinement",
+      "evidence_type": "case-study workflow plus simulation artifacts",
+      "metric_or_value_indicator": "battery-charge and data-budget outputs, but no consistency metric",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "reported improved consistency and fewer mismatches between modeled operations and simulations",
+      "evidence_source": "Abstract, Sections 3.2, 4.4, and 4.5",
+      "direct_quote": "Results show improved consistency between system models and simulation artifacts",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Consistency is demonstrated by a single representative case and may depend on correctness of custom parser mappings."
     },
     {
-      "claim": "Small-satellite case-study context",
-      "quote": "To demonstrate the applicability and benefits of the proposed framework, a small satellite mission for wildfire monitoring was used as a case study.",
-      "location": "Section 1, Introduction"
+      "claim": "The model-enabled workflow reduces integration costs.",
+      "outcome_category": "cost/integration",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "model-to-simulation data flow",
+        "early error detection",
+        "common source of truth"
+      ],
+      "artifact_or_process_linked": "MOSAiC architecture and simulation coupling",
+      "lifecycle_stage": "early design and integration planning",
+      "evidence_type": "author assertion",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "cost reduction claimed but not quantified",
+      "evidence_source": "Abstract",
+      "direct_quote": "reduced integration costs",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "No cost model, baseline, schedule data, or integration-test evidence is provided."
     },
     {
-      "claim": "Implemented MBSE method and tool",
-      "quote": "The system modeling process followed the ARCADIA methodology, and it was implemented using the Capella tool.",
-      "location": "Section 4.1, Case Study Overview"
+      "claim": "Simulation integration enables early validation of design choices before hardware implementation.",
+      "outcome_category": "early verification/risk reduction",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Design Space Exploration",
+        "Performance and Functional Verification",
+        "Operational Consistency Check",
+        "Requirements Verification",
+        "simulation feedback into architecture"
+      ],
+      "artifact_or_process_linked": "Analysis and Simulation module linked to Capella architecture and operations",
+      "lifecycle_stage": "early design through PA before physical implementation",
+      "evidence_type": "case-study simulations and author discussion",
+      "metric_or_value_indicator": "battery charge stays about 86.5-100% in Figure 14; uplink/downlink totals reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "early identification of bottlenecks and feasibility issues before costly implementation",
+      "evidence_source": "Sections 3.2 and 4.5, Figures 14-15",
+      "direct_quote": "thus informing corrective actions early in the design process, before costly implementation steps were taken",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Simulation fidelity is preliminary and flight/hardware validation is not reported."
     },
     {
-      "claim": "Modeling hierarchy",
-      "quote": "structured around four hierarchical modeling levels, in line with the ARCADIA method: (i) Actors; (ii) System; (iii) Subsystem; (iv) Components.",
-      "location": "Section 3.1, System and Operation Modeling Module"
+      "claim": "The open-source foundation improves accessibility and reproducibility.",
+      "outcome_category": "reproducibility/accessibility",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "open-source Capella/PVMT-based workflow",
+        "public model and code repository",
+        "GNU GPLv3 license"
+      ],
+      "artifact_or_process_linked": "MOSAiC repository and open-source toolchain",
+      "lifecycle_stage": "method adoption and reuse across design lifecycle",
+      "evidence_type": "reported public availability",
+      "metric_or_value_indicator": "public repository URL and license reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "lower entry barriers and potential community-driven evolution claimed",
+      "evidence_source": "Discussion and Data Availability Statement",
+      "direct_quote": "This ensures not only accessibility and reproducibility but also the potential for community-driven evolution.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Repository availability is reported, but independent reuse or replication results are not shown in the paper."
     },
     {
-      "claim": "Minimal/coarse-knowledge progressive modeling",
-      "quote": "Simulation models are developed incrementally, starting with low-fidelity representations based on coarse overall parameters, such as general subsystem mass, volume, and power consumption.",
-      "location": "Section 3.2, Analysis and Simulation Module"
+      "claim": "EPS power and communication-resource feasibility can be verified incrementally before complete PA maturation.",
+      "outcome_category": "EPS feasibility/integration readiness",
+      "specificity": "EPS-specific",
+      "mbse_mechanism": [
+        "mixed-resolution LA/PA data extraction",
+        "realization links",
+        "mode-specific component properties",
+        "power and communication simulations"
+      ],
+      "artifact_or_process_linked": "EPS and TTC detailed PA data used in Basic operating-mode simulation while other subsystems remain LA abstractions",
+      "lifecycle_stage": "partial physical architecture and preliminary verification",
+      "evidence_type": "case-study simulation and qualitative validation",
+      "metric_or_value_indicator": "Figure 14 battery charge profile; Figure 15 data budget; Total Uplink: 57.97 MB, Total Downlink: 30.47 MB",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "verified EPS/TTC did not overload available energy budget in Basic mode according to simulations",
+      "evidence_source": "Section 4.5, Figures 14-15",
+      "direct_quote": "such as verifying that EPS and TTC components were not overloading the available energy budget in Basic mode",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Only EPS/TTC and Basic mode are described as detailed validation examples; broader mission conditions and hardware margins are not independently validated."
     },
     {
-      "claim": "Verification and requirements linkage",
-      "quote": "this stage features a direct linkage between formal requirement specifications and simulation results.",
-      "location": "Section 3.2, Low-level Requirement Verification discussion"
-    },
-    {
-      "claim": "Simulation objectives include verification",
-      "quote": "Analyses and Simulations ... include Design Space Exploration, Performance and Functional Verification, Operational Consistency Check, and Requirements Verification.",
-      "location": "Figure 3 description"
-    },
-    {
-      "claim": "PVMT model-to-simulation mechanism",
-      "quote": "simulations were coupled with the modeling part thanks to the Property Values Management Tools (PVMT) Capella add-on",
-      "location": "Section 4.4, LA Results"
-    },
-    {
-      "claim": "Parser extracts model data for simulations",
-      "quote": "a custom Python-based parser was developed to systematically extract structured information from the Capella model.",
-      "location": "Section 4.4, LA Results"
-    },
-    {
-      "claim": "Analysis domains in case study",
-      "quote": "Three key simulation domains were interfaced with the MBSE model: (i) Orbital Analysis; (ii) Power Budget Simulation; (iii) Link Budget Evaluation.",
-      "location": "Section 4.1, Case Study Overview"
-    },
-    {
-      "claim": "EPS-specific physical modeling",
-      "quote": "Figures 12 and 13 illustrate this evolution using the Electrical Power Subsystem (EPS) as an example.",
-      "location": "Section 4.5, PA Results"
-    },
-    {
-      "claim": "EPS design details",
-      "quote": "critical design decisions were made, such as the selection of solar panels for power generation and the definition of battery subsystems for energy storage.",
-      "location": "Section 4.5, PA Results"
-    },
-    {
-      "claim": "EPS-related verification before implementation",
-      "quote": "during eclipse periods, the simulation would verify whether battery capacity was sufficient to sustain system operation until sunlight was available for recharging.",
-      "location": "Section 4.5, PA Results"
-    },
-    {
-      "claim": "Mixed-resolution simulation",
-      "quote": "When a PA-level element ... was found to realize a corresponding LA-level function or mode, the simulation used the detailed PA-level parameters ... Otherwise, the simulation defaulted to the LA-level abstractions.",
-      "location": "Section 4.5, PA Results"
-    },
-    {
-      "claim": "Open-source reproducibility outcome",
-      "quote": "the proposed framework was developed entirely using open source tools. This ensures not only accessibility and reproducibility but also the potential for community-driven evolution.",
-      "location": "Section 5, Discussion"
-    },
-    {
-      "claim": "Future-work limitations",
-      "quote": "Future work will aim to expand the simulation capabilities to include more refined orbital and environmental modeling, incorporate automated requirement tracing, automate CAD generation and time-aware thermal analyses, and explore the integration of hardware-in-the-loop or digital twin approaches.",
-      "location": "Section 6, Conclusions"
+      "claim": "Operating-mode-aware simulations enhance reliability and agility of the design process.",
+      "outcome_category": "reliability/agility",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "explicit operating modes",
+        "mission-phase-linked parameters",
+        "dynamic simulation feedback",
+        "iterative architecture refinement"
+      ],
+      "artifact_or_process_linked": "state-machine OMs and simulation feedback loop",
+      "lifecycle_stage": "iterative design refinement",
+      "evidence_type": "discussion-based inference from case study",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "claimed reliability and agility improvement in high-risk resource-limited small-satellite design",
+      "evidence_source": "Discussion",
+      "direct_quote": "This enhances both the reliability and agility of the design process, especially in the high-risk, resource-limited context of smallsatellite missions.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Reliability is process-level and not supported by reliability metrics, failure-rate analysis, or operational outcomes."
     }
   ],
-  "notes_for_consistency": "Read only paper.md. This is a supporting, system-wide MBSE/M&S framework paper with EPS as an example and case-study subsystem, not an EPS-only nanosatellite MBSE method. The FIRE-EYE platform phrase is ambiguous in the markdown as \"4816U satellites\"; verify count/form factor from the PDF if needed. Figure 15 text is internally inconsistent in the extracted markdown: one line states Total Uplink 57.97 MB, while the figure description title states 37.97 MB; avoid using the uplink total without checking the PDF. No explicit network latency assumptions or formal EPS AIV/test-procedure model are reported."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "Capella/ARCADIA model is treated as an authoritative source/single source of truth, enriched with PVMT properties and shared through a public repository; formal governance roles, version-control process, and change-control workflow are not reported.",
+    "traceability_to_deliverables_decisions_reviews": "Stakeholder needs are traced into capabilities, functions, ConOps states, subsystem/component architectures, and simulation feedback; simulations can support compliance documents and certification processes conceptually, but no formal review deliverables or gates are documented.",
+    "evaluation_criteria_model_quality_usefulness": "Usefulness is evaluated through architecture-simulation consistency, performance and functional verification, operational consistency, requirements-verification support, and budgets for power, data/link, orbit/coverage, mass, volume, and modes.",
+    "roi_value_realization_evidence": "The paper claims reduced integration costs and development efficiency and argues that open-source tools lower barriers, but no quantified ROI, cost, schedule, or productivity evidence is presented.",
+    "programmatic_gates_critical_design_events_supported": "Supports early feasibility, trade-space evaluation, preliminary design refinement, and pre-implementation corrective actions; PDR/CDR/QR or AIV/T gate use is not reported.",
+    "model_derived_performance_indicators_management_metrics": "Reported or discussed indicators include mass, volume, power consumption, generated/stored power, margins, battery charge/DoD, eclipse/contact periods, uplink/downlink data, coverage/revisit/access, energy throughput, system availability, and task execution times; management metrics are not reported."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed with evidence",
+      "rationale": "The paper describes MOSAiC modules, ARCADIA levels, Capella/PVMT implementation, parser extraction, simulation domains, and FIRE-EYE case application through OA, SA, LA, and PA."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed with evidence",
+      "rationale": "The core contribution is integrating Capella/ARCADIA with open-source simulations through PVMT, parser extraction, LA/PA realization links, and feedback from simulations to architecture."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper explicitly positions open-source and mixed-resolution simulation as useful for academic, small-satellite, resource-constrained projects, but does not measure resource savings."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "mentioned only",
+      "rationale": "It mentions cost reduction, compliance documents, and decision support, but does not show formal governance, deliverable templates, review gates, or ROI metrics."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "addressed conceptually",
+      "rationale": "The framework emphasizes iterative feedback, mixed-resolution validation, open-source collaboration, and alignment with agile development cycles, but no distributed NewSpace program case is evaluated."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "Nanosatellite/small-satellite missions can be modeled generically using ARCADIA levels from actors to components, with operations and architecture co-defined across OA, SA, LA, and PA.",
+        "Limited behavioral knowledge is handled by beginning with coarse subsystem parameters and low-fidelity simulations, then progressively adding mode transitions, subsystem behavior, and component constraints.",
+        "Mixed-resolution extraction lets simulations use detailed PA data where available and LA abstractions elsewhere, preserving system-level analysis during partial design maturation."
+      ],
+      "RQ2": [
+        "Claimed outcomes include traceability, reusability, fidelity, consistency, early validation, reduced integration costs, accessibility/reproducibility, reliability, agility, and integrability.",
+        "Reproducibility is supported by open-source tools and public models/code; reliability and cost/integration outcomes are mostly qualitative and lack baseline or operational evidence.",
+        "EPS-related outcome evidence is strongest for power-budget feasibility and early identification of energy bottlenecks, not for demonstrated flight reliability."
+      ],
+      "RQ3": [
+        "Verification procedures are integrated through PVMT-enriched Capella artifacts, parser-generated simulation inputs, and simulations for design-space, performance/functional, operational-consistency, and requirement checks.",
+        "For EPS, the PA decomposes power generation, storage, regulation/control, and distribution into components and uses dynamic simulations to evaluate battery charge, eclipse behavior, and mode-dependent power demand.",
+        "The framework performs verification before physical implementation, while hardware-in-the-loop and digital-twin verification remain future work."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "This paper presents the first version of MOSAiC.",
+      "Future work includes more refined orbital and environmental modeling.",
+      "Future work includes automated requirement tracing.",
+      "Future work includes automated CAD generation and time-aware thermal analyses.",
+      "Future work includes hardware-in-the-loop or digital twin approaches."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "No baseline comparison against document-centric or proprietary-tool workflows is provided.",
+      "No formal requirements trace matrix or completed automated requirements tracing is shown.",
+      "No physical integration, hardware-in-the-loop, environmental test, or flight/operational data are reported.",
+      "Some broad claims such as reduced integration cost and reliability/agility improvement are qualitative.",
+      "The detailed EPS validation appears limited to representative simulations and selected modes/subsystems."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "framework objective",
+        "quote": "This paper presents the first version of the unified Modeling and Simulation (M&S) framework MOSAiC (Modeling and Simulation Architecture for integrated Complex systems), which connects MBSE with open source, multi-domain simulation environments",
+        "location": "Abstract"
+      },
+      {
+        "topic": "architecture source of truth",
+        "quote": "The architecture proposed here leverages ARCADIA-based models as authoritative sources, interfacing with simulation tools through standardized data exchanges and co-simulation strategies.",
+        "location": "Abstract"
+      },
+      {
+        "topic": "progressive simulation fidelity",
+        "quote": "Simulation models are developed incrementally, starting with low-fidelity representations based on coarse overall parameters, such as general subsystem mass, volume, and power consumption.",
+        "location": "Section 3.2"
+      },
+      {
+        "topic": "case mission",
+        "quote": "For validation purposes, the MOSAiC framework was applied to the design and analysis of the FIRE-EYE mission, a multi-satellite constellation dedicated to real-time wildfire detection and monitoring in the Mediterranean region.",
+        "location": "Section 4.1"
+      },
+      {
+        "topic": "simulation domains",
+        "quote": "Three key simulation domains were interfaced with the MBSE model: (i) Orbital Analysis; (ii) Power Budget Simulation; (iii) Link Budget Evaluation.",
+        "location": "Section 4.1"
+      },
+      {
+        "topic": "EPS physical architecture",
+        "quote": "Figures 12 and 13 illustrate this evolution using the Electrical Power Subsystem (EPS) as an example.",
+        "location": "Section 4.5"
+      },
+      {
+        "topic": "pre-implementation verification",
+        "quote": "thus informing corrective actions early in the design process, before costly implementation steps were taken",
+        "location": "Section 4.5"
+      },
+      {
+        "topic": "open repository",
+        "quote": "All models and codes presented in this work are available in a public repository, under the GNU GPLv3 license",
+        "location": "Data Availability Statement"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "No previous extraction was read. This extraction treats the study as supporting because its MBSE/simulation contribution is general to space systems and small satellites, with EPS as an important example rather than the sole study focus.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full markdown contains abstract, methods, case study, discussion, data availability, figures/tables descriptions, and references; key fields are directly supported, though some outcome strength judgments are limited by lack of baselines and physical validation."
+  },
+  "bibtex": "@article{paper-0043,\n  title = {Towards a Unified Modeling and Simulation Framework for Space Systems: Integrating Model-Based Systems Engineering with Open Source Multi-Domain Simulation Environments},\n  author = {Serena Campioli and Giacomo Luccisano and Davide Ferretto and Fabrizio Stesina},\n  year = {2025},\n  journal = {Aerospace},\n  volume = {12},\n  number = {8},\n  pages = {745},\n  publisher = {MDPI},\n  url = {https://doi.org/10.3390/aerospace12080745}\n}"
 }

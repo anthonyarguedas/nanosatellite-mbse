@@ -1,160 +1,562 @@
 {
   "corpus_id": "paper-0027",
   "tier": "supporting",
-  "citation": "Cordero et al. (2022), MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study",
-  "title": "MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study",
-  "authors": [
-    "Sophia Salas Cordero",
-    "Thibault Gateau",
-    "Rob Vingerhoeds"
-  ],
   "year": 2022,
-  "doi_or_url": "10.1109/syscon53536.2022.9773818",
-  "venue_type": "conference, IEEE SysCon inferred from DOI metadata; venue name not stated in paper text",
-  "modeling_scope": "Preliminary CubeSat system/CDE model integrated with Nanospace: requirements and constraints, mission/orbit, telecommunications, energy and power, structure, budgets, dependency graph/DSM, SysML requirements/function/state/internal block/parametric diagrams, and simulation scripts for power, data, link, and reentry checks. EPS is covered as an energy/power budget and constraint-checking area, not as a standalone EPS behavioral model.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "budget",
-    "verification",
-    "simulation",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "SysML model in an unnamed SysML tool; dependency graphs and design structure matrices; MB2DM to generate DSMs from SysML; Nanospace GUI/database/API; Python scripts using GMAT, Dosa, Stela, Celestlab for preliminary analyses. OPM and ARCADIA/Capella are mentioned as alternatives, not used in the experiment.",
-  "mbse_language_method_tool_categories": [
-    "SysML",
-    "Other"
-  ],
-  "robot_platform": "CubeSat/nanosatellite platform; CREME CubeSat Radiation Environment Monitoring Experiment in LEO; paper explores 2U feasibility and then 3U design scenario with deployable solar arrays.",
-  "task_domain": "Concurrent preliminary design of CubeSats, using the CREME radiation-monitoring CubeSat as a case study; mission/orbit, power, telecommunications, data, structural, and reentry trade-offs.",
-  "interface": "Nanospace web GUI, database, and API for parameter storage, data sharing, third-party expert software exchange, and envisioned integration with an MBSE tool through API links to budgets, reports, DSMs, and parameter relations.",
-  "feedback": "Dependency graph and DSM show feedback loops and indicate which script parts/design parameters must be rerun or updated after unmet requirements; simulations feed intermediate results back into Nanospace for team sharing.",
-  "control_autonomy_split": "Not applicable",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "Demonstrated through the CREME simplified but real CubeSat use case, SysML/DSM experiment, and semi-automated Python/GMAT/Dosa/Stela/Celestlab analyses. Iterations check power DoD, data/link budget, and reentry constraints. No controlled performance comparison of Nanospace with versus without MBSE is reported; this is proposed as future work.",
-  "rqs_addressed": {
-    "RQ1": "partial",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The supplied corpus metadata reports an IEEE DOI/paperId for a conference-style proceedings paper; the Markdown itself is formatted as a technical conference paper with authors, abstract, index terms, figures, tables, and references.",
+        "evidence": [
+          "Corpus metadata DOI: 10.1109/syscon53536.2022.9773818; paperId: ieee:9773818.",
+          "Markdown title page: \"MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study\" and \"Index Terms—CubeSats, MBSE, Preliminary Design, Concurrent Engineering (CE).\""
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The authors state multiple scope boundaries and assumptions, including omitted mission modes and omitted subsystems, simplified/worst-case assumptions, human expertise requirements, and future work needed for integration and evaluation.",
+        "evidence": [
+          "\"Only a subset of the CREME project's requirements and constraints is considered in this paper due to space constraints.\"",
+          "\"Without loss of complexity, mission modes are not discussed in this paper.\"",
+          "\"In the example presented in this paper, neither Attitude Determination and Control System (ADCS), nor radiation or thermal considerations are included.\"",
+          "\"Human expertise is required in the process.\""
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper clearly situates the work in CubeSat concurrent preliminary/conceptual design and describes the CREME LEO radiation-monitoring CubeSat use case, payload, institutions, constraints, and iteration context.",
+        "evidence": [
+          "\"Nanospace is a web application dedicated to facilitate concurrent engineering during the preliminary design phase of CubeSats.\"",
+          "\"Its objective is to measure the radiation environment in Low Earth Orbit (LEO).\"",
+          "\"As a simulation scenario, as a first step it will be verified whether a 2U CubeSat would be feasible in terms of power consumption\""
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper identifies SysML, Nanospace, MB2DM, DSM/dependency artifacts, Python/GMAT/Dosa/Stela/CelestLab scripts, and the CubeSat system boundary, but the MBSE model contents, tool versions, algorithms, URLs, and exchange details are not sufficiently detailed for full replication.",
+        "evidence": [
+          "\"As an experiment, a CubeSat model was realised in a SysML tool, creating requirements diagrams, realising a functional diagram using the state machine diagram, then an internal block diagram was used, as well as internal diagrams for each subsystem using the parametric diagram.\"",
+          "\"The open-source Nanospace framework [7] is a dedicated open-source concurrent design engineering tool, mainly consisting of a GUI, a database and an API\"",
+          "\"MBSE software connectivity does not come automatically and few models can be exchanged between software without information loss.\""
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Most claimed benefits are linked to MBSE artifacts or model-enabled processes such as SysML-derived DSMs, dependency graphs, Nanospace requirement flags, change propagation, traceability, reuse, and semi-automated analysis loops.",
+        "evidence": [
+          "\"MBSE can be used to capture the system dependencies represented in Figs.1 and 2, allowing to reuse knowledge from previous CubeSat missions.\"",
+          "\"This paper shows how MBSE system models could enhance the propagation of parameter updates or changes on Nanospace, whether using parametric design structure matrices or dependency graphs.\"",
+          "\"The main outcome of parametric DSMs from MBSE models could constitute a powerful tool that can be used to set a sequencing within the design steps with NanoSpace\""
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The CREME scenario provides simulation outputs and constraint-check examples, including power/DoD plots and design iterations, but the broader MBSE value claims are not supported by baseline comparison, stakeholder evaluation, repeated reuse, integration testing, or flight data.",
+        "evidence": [
+          "\"Simulation allows for a first check on the order of magnitude of available power\"",
+          "\"Simulation shows that, in spite of heavy transceiver data burst, batteries are able to recharge see Fig. 4.\"",
+          "\"Finally, it would be good to compare the performance of Nanospace with and without a MBSE vision\""
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "Requirements and constraints are represented in tables and Nanospace, then related to dependency graphs, DSMs, and simulation checks, but there is no complete requirements-to-design-to-verification traceability model or lifecycle gate trace.",
+        "evidence": [
+          "\"Requirements (see table II) are set into Nanospace, and, depending on the known unknowns, design parameters are set as much as possible.\"",
+          "\"The dependency graph (Fig. 1) or the design structure matrix (Fig. 2) are available to show the feedback loops and sequence of which part of the script should be re-run.\"",
+          "Fig. 5 caption: \"Requirements concerning telecommunication aspects are not compliant yet.\""
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "Open-source Nanospace, AGPL scripts, example input/output, APIs, and a data-flow concept are reported, but the Markdown lacks usable script/model URLs and the authors explicitly identify continuity and information-loss issues across tools.",
+        "evidence": [
+          "\"For CREME's preliminary design Python scripts were developed and used; they can be accessed here $ ^{1} $ under the AGPL v3 license.\"",
+          "\"Nanospace allows for direct information exchange between third-party expert software\"",
+          "\"The lack of data continuity throughout the complete system life cycle is one of the biggest lacks of the mentioned CDE tools\""
+        ]
+      }
+    ],
+    "total_score": 6.0,
+    "max_score": 8,
+    "normalized_score": 0.75,
+    "overall_rationale": "The paper is credible and context-rich, with clear CubeSat preliminary-design scope and concrete power/data/reentry simulations. Its main weakness for extraction is that MBSE-Nanospace integration is an early conceptual effort: model artifacts, algorithms, availability, formal traceability, and comparative evidence are only partially reported."
   },
-  "rq_relevance": "RQ1 partial: the paper models CubeSat preliminary design at system level with requirements, budgets, dependencies, SysML, DSMs, and an energy/power budget, but it does not present a general EPS behavioral model with minimal prior knowledge. RQ2 partial: it claims MBSE/model integration benefits such as reuse, traceability, communication, consistency, faster convergence, and data/tool integration, but does not provide EPS-specific reliability or reproducibility evidence. RQ3 partial: it links MBSE to design/verification in general and shows pre-physical simulation checks for power DoD and other constraints, but it does not define explicit EPS verification procedures inside an MBSE model.",
-  "claimed_outcomes": [
-    "MBSE may let Nanospace reuse knowledge, accelerate design convergence, and speed inspection of candidate architectures.",
-    "Claimed MBSE benefits include better communication/information sharing, increased traceability and reuse, reduced time and cost, improved consistency, system understanding, and systems design.",
-    "Nanospace supports direct information exchange between third-party expert software, transparent data visualization, concurrent data access, and sharing of intermediate results.",
-    "SysML-derived DSMs can provide change-propagation information, indicate unsatisfied requirements in the UI, and show which design parameters must be updated.",
-    "Reliability outcomes attributed to MBSE/EPS modeling: Not reported.",
-    "Reproducibility outcomes are not stated directly; the closest claimed outcomes are knowledge reuse, traceability, and archiving/reusing knowledge."
-  ],
-  "verification_validation_linkage": "General MBSE definition and discussion link modeling to requirements, design, analysis, verification, and validation. In the CREME case, simulations check requirements/constraints before physical development, including EPS-related battery depth-of-discharge/power feasibility, telecom data/link budget, and reentry. Nanospace UI can mark requirements as satisfied or not. No explicit EPS-specific verification procedure model or IVV workflow is reported.",
-  "key_findings": [
-    "The paper frames Nanospace as an open-source web CDE environment for academic CubeSat preliminary design and examines early MBSE integration challenges.",
-    "CubeSat preliminary design is represented through requirements, constraints, subsystem parameters, budgets, dependency graphs, and DSMs across mission/orbit, telecom, onboard computing, energy and power, structure, payload, and ground segment.",
-    "In the CREME example, payload and platform estimates lead to power and communications constraints; a 2U scenario with four 4 W solar arrays violates the battery DoD constraint, while a 3U scenario with four 6 W arrays can recharge the battery in the shown simulation.",
-    "The 2000 km SSO scenario fails the 25-year reentry constraint, illustrating how DSM/dependency information guides which parameters need redesign.",
-    "A CubeSat SysML experiment used requirements diagrams, a state-machine functional diagram, internal block diagrams, and parametric diagrams for subsystems; DSMs can be generated from SysML models using MB2DM.",
-    "The paper identifies tool/data integration as a key challenge: different tools are used for different purposes, MBSE connectivity is not automatic, and information can be lost across tools.",
-    "Nanospace is presented as a facilitator for data storage and sharing, not an autonomous preliminary design tool; human expertise and external analysis tools remain required."
-  ],
-  "limitations_gaps": [
-    "Only a subset of CREME requirements and constraints is considered because of space constraints.",
-    "Mission modes are not discussed, although the authors state the concept could be extended to include them.",
-    "ADCS, radiation, and thermal considerations are excluded from the example, although described as modularly addable.",
-    "The process is semi-automatic and requires human expertise to avoid non-converging designs and make trade-offs.",
-    "The paper states that lack of data continuity across the lifecycle and coherence between tools is a major issue for CDE tools including Nanospace.",
-    "MBSE software connectivity does not come automatically, and model exchange can lose information.",
-    "Manual construction of dependency graphs is called counter-intuitive; further MB2DM integration and Nanospace database redesign are needed.",
-    "Comparison of Nanospace performance with and without an MBSE vision is proposed as future work, not performed."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "1",
-    "total_score": "2",
-    "rationale": "IEEE DOI/conference metadata indicates a credible conference venue. The paper explicitly discusses limitations and gaps including restricted scope, excluded mission modes/subsystems, semi-automation with human expertise, data continuity, tool connectivity, database redesign, and future comparative evaluation."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0027.json",
+    "status_rationale": "Retained as supporting: it directly addresses MBSE/CDE integration for CubeSat preliminary design and includes power-budget/energy subsystem examples, but it is not a dedicated EPS MBSE or verification-method paper.",
+    "citation": "Sophia Salas Cordero, Thibault Gateau, and Rob Vingerhoeds (2022). MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study. DOI: 10.1109/syscon53536.2022.9773818.",
+    "title": "MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study",
+    "authors": [
+      "Sophia Salas Cordero",
+      "Thibault Gateau",
+      "Rob Vingerhoeds"
+    ],
+    "venue": "not reported",
+    "doi_or_url": "10.1109/syscon53536.2022.9773818",
+    "publisher": "IEEE",
+    "venue_type": "conference paper",
+    "source_database_or_route": [
+      "unknown route: SLR/SLR1/searches/ieee_manual_promoted_records.json; Manual IEEE Xplore CSV promotions retained after Stage-1 audit; rank 2",
+      "semantic_scholar abstract enrichment: paper-0027_semantic_title.json; title query; rank 1"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "partial",
+        "rationale": "The paper models a nanosatellite mission at system/preliminary-design level using requirements, constraints, simplified discipline parameters, dependency graphs, DSMs, and known-unknown assumptions; EPS is represented mainly through power-budget parameters rather than a full EPS behavioral model."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "It claims MBSE/Nanospace can improve reuse, traceability, consistency, communication, time/cost, and integrability/data continuity, but the claims are mostly system-level and conceptual rather than EPS-specific or empirically demonstrated."
+      },
+      "RQ3": {
+        "relevance": "partial",
+        "rationale": "Pre-physical simulations and Nanospace requirement flags check power/DoD, data, link-budget, and reentry constraints; however, verification is not presented as a formal integrated EPS model-based verification procedure."
+      }
+    },
+    "lineage_overlap_notes": "No other papers or prior extractions were consulted. This extraction treats the study as part of the Nanospace/CREME CubeSat preliminary-design line, with MBSE integration still in an early research stage."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "CREME CubeSat platform developed by ISAE-SUPAERO with ONERA payload, used as a simplified but real case study.",
+    "size_form_factor": "CubeSat; payload is 1.5U; the scenario first checks 2U feasibility and then moves to a 3U option for power feasibility.",
+    "mission_name": "CubeSat Radiation Environment Monitoring Experiment (CREME)",
+    "mission_domain": "Low Earth Orbit radiation environment and space-weather monitoring; measurements around Earth and South Atlantic Anomaly visits.",
+    "organization_type": "Academic/university space center context with research institute payload; ISAE-SUPAERO, ONERA, CSUT, and Occitanie region funding context are mentioned.",
+    "project_maturity": "Approved project that started late 2020; paper uses preliminary/intermediary design results and simplified scenario iterations.",
+    "lifecycle_stage_addressed": "Concurrent conceptual/preliminary design before physical development; early mission feasibility and architecture iteration.",
+    "development_context": "Open-source, web-based concurrent design engineering for academic/New Space CubeSat teams using Nanospace, scripts, and third-party analysis tools.",
+    "eps_relevance": "power-budget/electrical-architecture",
+    "model_maturity": "Early MBSE-Nanospace integration experiment; SysML and DSM concepts plus semi-automated analysis scripts, not a mature integrated digital thread."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "Assess how an MBSE approach can be incorporated into the open-source Nanospace CDE framework for CubeSat preliminary design, especially to manage parameter dependencies, data continuity, change propagation, and knowledge reuse.",
+    "modeling_scope": [
+      "CubeSat mission requirements and constraints",
+      "Preliminary orbit, telecommunications, data, energy/power, structural, payload, and ground-segment parameters",
+      "Dependency graph and design structure matrix for design-parameter interactions",
+      "SysML requirements, functional/state-machine, internal block, subsystem, and parametric diagrams in an experiment",
+      "Nanospace database, API, UI, budgets, reports, and requirement-compliance flags",
+      "Simulation scripts for orbit/contact/eclipses, link budget, power/battery DoD, and reentry checks"
+    ],
+    "system_boundary_level_of_abstraction": "System-level CubeSat mission and subsystem preliminary design; discipline-level parameters and constraints rather than detailed component, circuit, or high-fidelity behavioral models.",
+    "minimal_or_excluded_modeling": "Only a subset of CREME requirements/constraints is used; mission modes are omitted; ADCS, radiation, and thermal considerations are omitted from the example; circular orbit and worst-case assumptions are used; scripts are described as simple pedagogical preliminary-design analysis.",
+    "required_prior_behavioral_domain_knowledge": "Some orbital mechanics and CubeSat design expertise is required for choices such as SSO inclination, RAAN worst-case selection, margins, available flight-proven technology, platform power estimates, and trade-offs when constraints fail.",
+    "handling_limited_behavioral_knowledge": "The paper uses known unknowns, expert estimates, margins, flight-proven technology preferences, simplified constraints, worst-case scenarios, and modular dependency models that can be refined or extended later.",
+    "model_artifacts_used": [
+      "Requirements extract table",
+      "Constraints extract table",
+      "CubeSat simplified design-parameters table",
+      "Dependency graph of case-study design parameters",
+      "CREME design structure matrix",
+      "Nanospace UI requirement-compliance view",
+      "SysML requirements, state-machine, internal block, subsystem, and parametric diagrams",
+      "MB2DM-generated DSM concept",
+      "YAML input file, Python scripts, GMAT script, Dosa link-budget analysis, Stela reentry analysis, CelestLab, Markdown report"
+    ],
+    "generality_reuse_mechanism": [
+      "Modular discipline/parameter representation lets omitted subsystems be added later",
+      "MBSE diagrams can be reshaped to meet new mission expectations without starting from zero",
+      "SysML-derived DSMs and dependency graphs support sequencing and change propagation",
+      "Nanospace database/API stores and shares parameters and intermediary results",
+      "Open-source framework and scripts are intended to support reuse and educational accessibility"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Capture mission needs, requirements, constraints, and known unknowns in Nanospace.",
+        "inputs": "CREME stakeholder needs, payload constraints, expert estimates, CubeSat regulations, preliminary mission objectives.",
+        "outputs": "Requirements/constraints tables, initial design parameters, Nanospace database entries, compliance values.",
+        "actors_roles": "System engineer, payload principal investigator, subsystem experts, academic CubeSat team.",
+        "prerequisites": "Initial mission concept and available expert estimates or order-of-magnitude values.",
+        "completion_criteria": "Not formalized; parameters are set as much as possible and requirements are available for analysis.",
+        "handoffs": "Database/API values feed dependency modeling and semi-automated analysis scripts."
+      },
+      {
+        "step": "Represent parameter dependencies with a dependency graph, DSM, and experimental SysML model.",
+        "inputs": "Requirements, constraints, subsystem parameter relations, CREME case dependencies.",
+        "outputs": "Dependency graph, design structure matrix, SysML model diagrams, candidate change-propagation information.",
+        "actors_roles": "MBSE/system engineer and discipline experts.",
+        "prerequisites": "SysML tool or dependency-capture method; knowledge of subsystem inputs/outputs.",
+        "completion_criteria": "Not formalized; graph/DSM is available to identify feedback loops and script rerun sequence.",
+        "handoffs": "DSM/dependency outputs guide Nanospace UI warnings, analysis sequence, and design iteration."
+      },
+      {
+        "step": "Run semi-automated preliminary mission analyses.",
+        "inputs": "Nanospace/API-updated parameters, YAML inputs, orbital parameters, power consumption values, ground-station assumptions.",
+        "outputs": "Eclipse/contact events, link budget, data budget, battery remaining power/DoD plots, reentry check, Markdown report, intermediary results in Nanospace.",
+        "actors_roles": "Subsystem experts operate or interpret scripts; system engineer coordinates iteration.",
+        "prerequisites": "Python scripts and supporting tools such as GMAT, Dosa, Stela, and CelestLab.",
+        "completion_criteria": "Constraint checks indicate whether requirements such as DoD, data-rate, link-margin, and reentry thresholds are satisfied.",
+        "handoffs": "Unsatisfied requirements and intermediary results return to the team through Nanospace for design trades."
+      },
+      {
+        "step": "Iterate architecture and trade decisions when constraints are not met.",
+        "inputs": "Simulation results, Nanospace requirement status, DSM/dependency guidance, expert judgment.",
+        "outputs": "Design decisions such as changing from 2U to 3U, selecting S-band for data rate, or revisiting altitude/structure for reentry compliance.",
+        "actors_roles": "Subsystem experts, system engineer, project team.",
+        "prerequisites": "Analysis results identifying violated constraints and available trade alternatives.",
+        "completion_criteria": "Not formalized; preliminary design converges sufficiently or alternatives are identified for further iteration.",
+        "handoffs": "Updated parameters are stored in Nanospace and may trigger further analysis/model updates."
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "Mapped to conceptual/preliminary design activities: requirements capture, design/architecture analysis, parameter trade-off, early verification checks, and preliminary design synthesis reports. Formal lifecycle gates such as PDR/CDR are not specified.",
+    "approach_classification": "Integrated MBSE/digital engineering",
+    "approach_classification_rationale": "The work attempts to connect MBSE/SysML artifacts, DSM generation, a shared CDE database/UI/API, and external analysis/simulation tools into an early digital-thread-like workflow, though the integration remains incomplete.",
+    "tailoring_rationale": [
+      "Academic and New Space CubeSat teams may lack established communities of practice and need accessible guidance.",
+      "Open-source tools are emphasized for education and broad accessibility.",
+      "CubeSat preliminary design is highly constrained by volume, power, launch opportunities, and COTS/flight-proven component availability.",
+      "Human expertise and lightweight semi-automation are retained because fully autonomous preliminary design is not feasible."
+    ],
+    "adoption_guidance_for_new_users": "implied from case study"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "SysML",
+      "Nanospace web CDE framework with GUI, database, and API",
+      "MB2DM for DSM generation from SysML models",
+      "Design structure matrices and dependency graphs",
+      "Python scripts",
+      "GMAT for orbit propagation, eclipse determination, and ground-station contacts",
+      "Dosa for link budget analysis",
+      "Stela for reentry/disposal compliance analysis",
+      "CelestLab mentioned as part of the tool set in conclusion"
+    ],
+    "toolchain_architecture_data_flow": "Nanospace DB stores parameter IDs and values and connects to the Nanospace UI; the UI/API connects to analysis outputs such as budgets, reports, and DSMs and to an MBSE tool containing parameter relations, units, types, subsystem tree, internal/external dependencies, mission modes, and requirements. Scripts update the database through the Nanospace API and intermediary results are stored/shared in Nanospace.",
+    "interoperability_mechanisms": [
+      "Nanospace API",
+      "Shared Nanospace database",
+      "Direct information exchange with third-party expert software",
+      "YAML input file for scripts",
+      "Markdown preliminary-design report output",
+      "MB2DM algorithm to generate DSMs from SysML models",
+      "Manual or semi-automatic mapping of dependencies until deeper integration is developed"
+    ],
+    "syntax_semantic_continuity_evidence": "The paper explicitly identifies poor data continuity and model-exchange information loss as obstacles, and proposes richer parameter metadata/relations and API-mediated flow between Nanospace and MBSE tools as a remedy.",
+    "software_hardware_system_integration_readiness": "Software-level preliminary design readiness only; no hardware-in-the-loop, EPS hardware, integration-test bench, or flight/operations evidence is reported.",
+    "toolchain_limitations": [
+      "MBSE software connectivity does not come automatically.",
+      "Few models can be exchanged between software without information loss.",
+      "Current Nanospace database structure needs reassessment to include parameter details and relations.",
+      "Manual construction of dependency graphs is described as counter-intuitive.",
+      "Human expertise is required to avoid non-converging designs and interpret trades.",
+      "The MBSE-Nanospace integration shown is an initial envisioned step, not a complete implemented workflow."
+    ],
+    "availability_reproducibility": "Nanospace is described as open-source and the CREME preliminary-design Python scripts are said to be available under AGPL v3 with example YAML input and outputs, but the converted Markdown does not expose usable footnote URLs and the SysML model itself is not made available in the text."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "Solar panels/solar arrays",
+      "Batteries/accumulators",
+      "Battery depth of discharge (DoD)",
+      "Payload power consumption",
+      "Platform average power consumption",
+      "Transceiver burst power consumption",
+      "Eclipse duration/time",
+      "Satellite power consumption",
+      "Energy generation and remaining power plots"
+    ],
+    "eps_requirements_representation": "Energy/power is represented as a preliminary-design discipline with inputs mission lifetime, payload power, and eclipse duration and outputs number/capacity of solar panels and batteries. EPS-related constraints include C-06 DoD above 70% and C-08 payload average power consumption of 6 W; Nanospace UI can show requirements such as DoD_>_70% as satisfied or unsatisfied.",
+    "verification_validation_artifacts": [
+      "Constraint C-06: battery DoD shall remain above 70%",
+      "Constraint C-08: payload average power consumption is 6 W",
+      "Battery remaining power/DoD simulation plots for 2U and 3U scenarios",
+      "Nanospace UI requirement-compliance flags",
+      "Power-generation assumptions for 4 W and 6 W solar panels/arrays",
+      "Markdown report output from preliminary-design scripts"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "Python preliminary-design scripts",
+      "GMAT eclipse/contact calculations",
+      "Simulation of battery DoD over representative orbit periods",
+      "Worst-case noon/midnight SSO solar illumination scenario",
+      "Nanospace requirement checks and shared intermediary results",
+      "Iterative comparison of 2U and 3U power feasibility before hardware development"
+    ],
+    "evidence_verification_integrated_in_model": "Partial. Requirements and design parameters are stored in Nanospace, updated through the API, and displayed as compliance flags, while dependency graphs/DSMs guide reruns. The actual power verification is performed by scripts connected to Nanospace rather than by a fully integrated executable EPS SysML model.",
+    "integration_test_readiness": "Preliminary analysis only; no EPS integration-test procedures, test benches, hardware qualification, or physical validation readiness are reported."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Nanospace scope and CubeSat preliminary design context",
-      "quote": "Nanospace is a web application dedicated to facilitate concurrent engineering during the preliminary design phase of CubeSats.",
-      "location": "Abstract"
+      "claim": "MBSE integration can enhance propagation of parameter updates or changes in Nanospace using DSMs or dependency graphs.",
+      "outcome_category": "change propagation and traceability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "SysML-derived dependency representation",
+        "Design structure matrix",
+        "Dependency graph",
+        "Nanospace requirement status and parameter database"
+      ],
+      "artifact_or_process_linked": "Dependency graph Fig. 1, DSM Fig. 2, Nanospace UI Fig. 5, MB2DM-generated DSM concept.",
+      "lifecycle_stage": "preliminary/conceptual design",
+      "evidence_type": "case illustration and tool concept",
+      "metric_or_value_indicator": "not reported beyond requirement status flags and example sequence guidance",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Authors state that model-derived dependencies can show feedback loops, identify which script portions should be rerun, and flag unsatisfied requirements.",
+      "evidence_source": "Sections III.C, IV, and V; Figs. 1, 2, 5, and 6.",
+      "direct_quote": "\"This paper shows how MBSE system models could enhance the propagation of parameter updates or changes on Nanospace, whether using parametric design structure matrices or dependency graphs.\"",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The integration is not evaluated against a baseline and may depend on manual dependency capture and expert interpretation."
     },
     {
-      "claim": "Study focus on MBSE integration with Nanospace",
-      "quote": "the early endeavours of the incorporation of a Model-based Systems Engineering (MBSE) approach to the open-source Nanospace framework is discussed",
-      "location": "Abstract"
+      "claim": "MBSE can support knowledge reuse, faster design convergence, and faster inspection of candidate CubeSat architectures.",
+      "outcome_category": "reuse and schedule/design convergence",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Reusable MBSE diagrams",
+        "Captured system dependencies",
+        "Nanospace database/API",
+        "Parametric DSMs"
+      ],
+      "artifact_or_process_linked": "MBSE diagrams reshaped for new missions; dependency graph and DSM reused to guide iterations.",
+      "lifecycle_stage": "preliminary design",
+      "evidence_type": "author claim supported by illustrative case",
+      "metric_or_value_indicator": "faster convergence claimed but no time metric reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Claimed ability to avoid starting from zero and inspect candidate architectures faster.",
+      "evidence_source": "Abstract, Introduction, Section III.A.",
+      "direct_quote": "\"Nanospace may benefit from MBSE, as MBSE facilitates knowledge reuse; which could allow a faster design convergence and faster inspection of candidate architectures.\"",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "No reuse event, convergence time, or comparison with non-MBSE Nanospace is provided."
     },
     {
-      "claim": "Claimed MBSE benefits",
-      "quote": "MBSE provides good benefits... better communication/information sharing, increased traceability and capacity for reuse, reduce time and cost, improved consistency, system understanding and systems design.",
-      "location": "Section I"
+      "claim": "Nanospace facilitates concurrent engineering by managing shared data storage and data sharing between experts, including remote transparency.",
+      "outcome_category": "collaboration and integrability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Shared database",
+        "API-mediated exchange",
+        "Transparent UI visualization",
+        "Concurrent access to data"
+      ],
+      "artifact_or_process_linked": "Nanospace GUI, database, API, UI and storage of intermediary results.",
+      "lifecycle_stage": "preliminary design concurrent sessions",
+      "evidence_type": "tool description and case workflow",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Intermediary results can be stored and shared between experts; UI can visualize requirement status.",
+      "evidence_source": "Sections III.C, IV, and V.",
+      "direct_quote": "\"Concurrent engineering is facilitated by Nanospace, a database managing data storage and data sharing between the experts.\"",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The paper does not present user-study, collaboration, or integration-performance evidence."
     },
     {
-      "claim": "Paper contribution and modeling scope",
-      "quote": "assess how the incorporation of a Model-based Systems Engineering approach to the concurrent preliminary design of CubeSats... can be realised",
-      "location": "Section I"
+      "claim": "Semi-automated scripts and Nanospace-linked analysis support early verification of power feasibility and constraint satisfaction before physical development.",
+      "outcome_category": "pre-physical verification and feasibility checking",
+      "specificity": "EPS-specific",
+      "mbse_mechanism": [
+        "Requirement/constraint representation in Nanospace",
+        "Dependency-guided reruns",
+        "Simulation scripts linked to the database",
+        "Power/DoD model outputs"
+      ],
+      "artifact_or_process_linked": "C-06 DoD constraint, 2U/3U battery remaining power simulations, Nanospace database/API.",
+      "lifecycle_stage": "preliminary design before hardware development",
+      "evidence_type": "simulation/checking without baseline comparator",
+      "metric_or_value_indicator": "2U: 4 solar arrays of 4 W insufficient; 3U: 4 solar arrays of 6 W, 24 W generated; DoD threshold 70%; platform 8 W plus payload 6 W and transceiver burst up to total 24 W.",
+      "baseline_comparator": "Scenario comparison between infeasible 2U assumption and feasible 3U assumption, but no external baseline.",
+      "observed_effect_size_or_qualitative_effect": "The design iteration moves from 2U to 3U because the initial power input was insufficient and the 3U scenario allows batteries to recharge in simulation.",
+      "evidence_source": "Sections II.B, III.B, III.C; Figs. 3 and 4.",
+      "direct_quote": "\"Simulation shows that, in spite of heavy transceiver data burst, batteries are able to recharge see Fig. 4.\"",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "The analysis uses simplified assumptions, excludes mission modes and several subsystems, and is not validated against hardware or flight data."
     },
     {
-      "claim": "EPS/power budget modeling scope",
-      "quote": "Energy and Power... involves checking the ability of the platform to provide enough power for the mission.",
-      "location": "Table I"
+      "claim": "Parametric DSMs generated from MBSE models can sequence design steps and support co-located collaborative model-based conceptual design.",
+      "outcome_category": "process sequencing and collaborative design",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "Parametric DSMs",
+        "SysML-to-DSM generation algorithm",
+        "Design-step sequencing",
+        "Change management"
+      ],
+      "artifact_or_process_linked": "MB2DM algorithm and parametric DSMs from SysML models.",
+      "lifecycle_stage": "conceptual/preliminary design",
+      "evidence_type": "conceptual tool proposal",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "The paper argues DSMs can provide insight and sequencing, but does not measure process improvement.",
+      "evidence_source": "Introduction and Section IV.",
+      "direct_quote": "\"The main outcome of parametric DSMs from MBSE models could constitute a powerful tool that can be used to set a sequencing within the design steps with NanoSpace\"",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "DSM usefulness is plausible but not tested with teams or compared to manual sequencing."
     },
     {
-      "claim": "Power criticality and battery DoD constraint",
-      "quote": "without power, the CubeSat would basically become space debris... the battery's Depth of Discharge (DoD) must remain above a threshold",
-      "location": "Section II.B"
-    },
-    {
-      "claim": "MBSE captures dependencies and supports reuse/traceability",
-      "quote": "MBSE can be used to capture the system dependencies represented in Figs.1 and 2, allowing to reuse knowledge from previous CubeSat missions.",
-      "location": "Section III.A"
-    },
-    {
-      "claim": "Nanospace API and semi-automated parameter updates",
-      "quote": "Requirements... are set into Nanospace... They are automatically updated in the database through Nanospace API.",
-      "location": "Section III.C"
-    },
-    {
-      "claim": "Feedback loops and rerun sequencing",
-      "quote": "The dependency graph... or the design structure matrix... are available to show the feedback loops and sequence of which part of the script should be re-run.",
-      "location": "Section III.C"
-    },
-    {
-      "claim": "EPS-related pre-physical simulation check",
-      "quote": "Simulation allows for a first check on the order of magnitude of available power... the power input from the solar panels is insufficient... a violation of constraint C-06",
-      "location": "Section III.C"
-    },
-    {
-      "claim": "DSM/SysML/Nanospace change propagation",
-      "quote": "Nanospace benefits from the change propagation information available from DSMs that for instance can be automatically generated from SysML models by the tool MB2DM.",
-      "location": "Section IV"
-    },
-    {
-      "claim": "General verification linkage",
-      "quote": "Models are used to represent the system and enable to better master the design and the verification of complex systems.",
-      "location": "Section IV"
-    },
-    {
-      "claim": "SysML experiment details",
-      "quote": "a CubeSat model was realised in a SysML tool, creating requirements diagrams, realising a functional diagram using the state machine diagram, then an internal block diagram was used, as well as internal diagrams for each subsystem using the parametric diagram.",
-      "location": "Section IV"
-    },
-    {
-      "claim": "Tool integration limitation",
-      "quote": "MBSE software connectivity does not come automatically and few models can be exchanged between software without information loss.",
-      "location": "Section IV"
-    },
-    {
-      "claim": "Conclusion on MBSE effect in Nanospace",
-      "quote": "MBSE system models could enhance the propagation of parameter updates or changes on Nanospace, whether using parametric design structure matrices or dependency graphs.",
-      "location": "Section V"
-    },
-    {
-      "claim": "Nanospace is not autonomous and needs external tools",
-      "quote": "It cannot realise a preliminary design autonomously, but needs to work with other tools",
-      "location": "Section V"
+      "claim": "Open-source Nanospace and scripts improve accessibility and reproducibility for educational CubeSat preliminary design.",
+      "outcome_category": "reproducibility and accessibility",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Open-source CDE environment",
+        "AGPL-licensed scripts",
+        "Example YAML input and output reports",
+        "Reusable preliminary-design framework"
+      ],
+      "artifact_or_process_linked": "Nanospace framework and CREME preliminary-design scripts.",
+      "lifecycle_stage": "preliminary design and education",
+      "evidence_type": "availability statement",
+      "metric_or_value_indicator": "AGPL v3 license stated; no reproducibility success rate reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Accessibility is claimed for educational purposes; actual independent reproduction is not shown.",
+      "evidence_source": "Introduction and Section III.B.",
+      "direct_quote": "\"The work presented in this paper considers open-source concurrent design tools in order to guarantee the accessibility of the further mentioned tools to everyone.\"",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The converted Markdown does not provide usable repository URLs, and the SysML model availability is not reported."
     }
   ],
-  "notes_for_consistency": "Read only paper.md. The paper is supporting rather than core for the protocol because it is a system-level CubeSat preliminary design/MBSE-Nanospace integration paper with an EPS/power budget example, not a dedicated EPS MBSE model. Venue name is not printed in the paper text; conference/IEEE SysCon is inferred from embedded DOI metadata. No explicit reliability outcome, reproducibility result, autonomous control split, network latency assumption, or EPS-specific MBSE verification procedure is reported."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "No formal model governance process is specified. The paper contrasts current manual system-engineer monitoring with a desired MBSE/Nanospace database/API approach for shared data, requirement status, and change propagation.",
+    "traceability_to_deliverables_decisions_reviews": "Requirements/constraints are linked to design decisions in the case: C-07 drives at least 2U, C-06 drives power feasibility and 3U reconsideration, C-01 drives S-band transmitter choice, and C-05 drives altitude/structure trade. Deliverables mentioned include budgets, reports, DSMs, and Nanospace requirement flags; formal reviews are not reported.",
+    "evaluation_criteria_model_quality_usefulness": "Constraint satisfaction, data continuity, change propagation, parameter-update propagation, feedback-loop visibility, data sharing, transparency, reuse, and future comparison of Nanospace with/without MBSE are the implied criteria.",
+    "roi_value_realization_evidence": "The paper cites and claims benefits such as reduced time/cost, faster convergence, reuse, and improved consistency, but provides no quantitative ROI, schedule, cost, or productivity evidence.",
+    "programmatic_gates_critical_design_events_supported": "Supports conceptual/preliminary design feasibility assessment; no explicit PDR, CDR, qualification, launch readiness, or operations gates are supported.",
+    "model_derived_performance_indicators_management_metrics": "Battery DoD percentage, power consumption/generation in watts, payload/platform data rates in Mbits/day, visibility/contact time, link-budget margin/Eb/N0, BER, orbital altitude/inclination/RAAN, reentry time, mass/volume, number/capacity of solar panels and batteries, and requirement compliance status."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper gives a worked CREME iteration and semi-automated workflow, but the complete MBSE-Nanospace pathway is framed as early integration work and future development rather than a validated implementation playbook."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed conceptually",
+      "rationale": "Tool fragmentation and data continuity are central topics, with API/DB/MBSE-tool data-flow proposals, but the authors state model exchange remains difficult and full integration is not yet achieved."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed with evidence",
+      "rationale": "The case explicitly tailors to CubeSat constraints, open-source/academic needs, simplified scripts, known unknowns, volume and power limits, and 2U-to-3U trade-off evidence."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "mentioned only",
+      "rationale": "Budgets, reports, requirements, cost/time claims, and future comparison are mentioned, but there is no governance model, decision-rights definition, lifecycle review structure, or ROI evidence."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper discusses New Space/academia lacking communities of practice, concurrent/remote data sharing, and iterative design, but does not present an agile method or rapid-iteration empirical evaluation."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "A general CubeSat preliminary-design model can be built from simplified discipline inputs/outputs, requirements, constraints, dependency graphs, and DSMs, with EPS represented by power-budget parameters such as payload/platform power, eclipse duration, solar panels, batteries, and DoD.",
+        "The approach explicitly accommodates limited behavioral knowledge through known unknowns, margins, expert estimates, worst-case assumptions, and modular dependencies that can later add mission modes or omitted subsystems."
+      ],
+      "RQ2": [
+        "Claimed MBSE/Nanospace outcomes include improved communication, information sharing, traceability, reuse, consistency, system understanding, time/cost reduction, and data continuity, but evidence is mostly conceptual and system-level.",
+        "Reproducibility/accessibility is supported by open-source Nanospace and AGPL scripts, but model and URL details are incomplete in the Markdown, limiting independent assessment."
+      ],
+      "RQ3": [
+        "Pre-physical verification is demonstrated mainly through semi-automated scripts and Nanospace requirement flags: DoD, power generation, contact time, link budget, data rate, and reentry constraints are checked before hardware development.",
+        "The EPS-related verification is not a fully integrated SysML/EPS V&V procedure; it is a database/API-linked preliminary simulation and constraint-checking workflow."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "Only a subset of CREME requirements and constraints is considered due to space constraints.",
+      "Mission modes are not discussed.",
+      "ADCS, radiation, and thermal considerations are excluded from the example.",
+      "The process remains semi-automatic and requires human expertise.",
+      "MBSE software connectivity does not come automatically and model exchange can lose information.",
+      "Manual dependency-graph construction is counter-intuitive and MB2DM/Nanospace UI integration needs further development.",
+      "Nanospace database structure needs reassessment to include parameter details and relations.",
+      "Future work should compare Nanospace performance with and without an MBSE vision."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "Venue name is not visible in the Markdown and is not supplied in the metadata beyond IEEE DOI/paperId.",
+      "The SysML model, DSM-generation algorithm details, and repository URLs are insufficiently reported for full replication.",
+      "MBSE value claims lack baseline comparison, quantified outcome metrics, stakeholder evaluation, reuse evidence, integration testing, or operational/flight data.",
+      "EPS is treated as a power-budget/electrical-architecture concern, not as a detailed EPS architecture or behavioral MBSE model.",
+      "Traceability from requirements to model elements, analyses, and verification artifacts is illustrative but not complete or formalized."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "Nanospace preliminary-design context",
+        "quote": "Nanospace is a web application dedicated to facilitate concurrent engineering during the preliminary design phase of CubeSats.",
+        "location": "Abstract"
+      },
+      {
+        "topic": "MBSE reuse/convergence claim",
+        "quote": "Nanospace may benefit from MBSE, as MBSE facilitates knowledge reuse; which could allow a faster design convergence and faster inspection of candidate architectures.",
+        "location": "Abstract"
+      },
+      {
+        "topic": "Scope boundary",
+        "quote": "Only a subset of the CREME project's requirements and constraints is considered in this paper due to space constraints.",
+        "location": "Section II.B"
+      },
+      {
+        "topic": "Mission modes omitted",
+        "quote": "Without loss of complexity, mission modes are not discussed in this paper.",
+        "location": "Section II"
+      },
+      {
+        "topic": "Subsystems omitted",
+        "quote": "In the example presented in this paper, neither Attitude Determination and Control System (ADCS), nor radiation or thermal considerations are included.",
+        "location": "Section II.B"
+      },
+      {
+        "topic": "MBSE dependency capture",
+        "quote": "MBSE can be used to capture the system dependencies represented in Figs.1 and 2, allowing to reuse knowledge from previous CubeSat missions.",
+        "location": "Section III.A"
+      },
+      {
+        "topic": "Script availability",
+        "quote": "For CREME's preliminary design Python scripts were developed and used; they can be accessed here $ ^{1} $ under the AGPL v3 license.",
+        "location": "Section III.B"
+      },
+      {
+        "topic": "Semi-automatic process and human expertise",
+        "quote": "The process is semi-automatic, which allows to avoid getting stuck in non-converging designs (human expertise is required).",
+        "location": "Section III.C"
+      },
+      {
+        "topic": "Power verification result",
+        "quote": "Simulation shows that, in spite of heavy transceiver data burst, batteries are able to recharge see Fig. 4.",
+        "location": "Section III.C"
+      },
+      {
+        "topic": "Toolchain limitation",
+        "quote": "MBSE software connectivity does not come automatically and few models can be exchanged between software without information loss.",
+        "location": "Section IV"
+      },
+      {
+        "topic": "Conclusion on MBSE change propagation",
+        "quote": "This paper shows how MBSE system models could enhance the propagation of parameter updates or changes on Nanospace, whether using parametric design structure matrices or dependency graphs.",
+        "location": "Section V"
+      },
+      {
+        "topic": "Need for future evaluation",
+        "quote": "Finally, it would be good to compare the performance of Nanospace with and without a MBSE vision, both with expert teams as well as beginners or students.",
+        "location": "Section V"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Classify as supporting rather than core: it is valuable for open-source CubeSat preliminary-design MBSE/CDE, data continuity, DSM generation, and power-budget verification examples, but does not provide a dedicated EPS MBSE method with formal verification traceability.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full Markdown was available and directly supports the main classifications; confidence is reduced only for venue naming, missing footnote URLs, and sparse MBSE implementation details."
+  },
+  "bibtex": "@inproceedings{paper-0027,\n  title = {MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study},\n  author = {Sophia Salas Cordero and Thibault Gateau and Rob Vingerhoeds},\n  year = {2022},\n  booktitle = {IEEE International Systems Conference (SysCon)},\n  publisher = {IEEE},\n  doi = {10.1109/syscon53536.2022.9773818},\n  url = {https://doi.org/10.1109/syscon53536.2022.9773818}\n}"
 }

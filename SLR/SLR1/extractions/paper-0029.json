@@ -1,160 +1,573 @@
 {
   "corpus_id": "paper-0029",
   "tier": "core",
-  "citation": "Luccisano et al. (2024), Open-Source Data Formalization through Model-Based Systems Engineering for Concurrent Preliminary Design of CubeSats",
-  "title": "Open-Source Data Formalization through Model-Based Systems Engineering for Concurrent Preliminary Design of CubeSats",
-  "authors": [
-    "Giacomo Luccisano",
-    "Sophia Salas Cordero",
-    "Thibault Gateau",
-    "Nicole Viola"
-  ],
   "year": 2024,
-  "doi_or_url": "10.3390/aerospace11090702",
-  "venue_type": "journal article, Aerospace",
-  "modeling_scope": "System-level CubeSat preliminary-design model using SysML block definition diagrams and UML stereotypes to represent spacecraft architecture, requirements, operating modes, component/system design parameters, mass/volume/power/link/data budget inputs, orbit, ground stations, communications, EPS batteries/solar arrays, and integration with simulation/analysis tools. EPS is modeled within the overall platform through power-budget data, battery/solar-array stereotypes, operating-mode power consumption, and EPS requirements in the case study.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "budget",
-    "simulation",
-    "reference model/template",
-    "lifecycle/PLM",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "SysML with UML stereotypes, block definition diagrams, Gaphor open-source modeling tool, Python model parser for .xml model files, Nanostar software suite for simulations/analyses; open-source repository under GPLv3 reported.",
-  "mbse_language_method_tool_categories": [
-    "SysML",
-    "Other"
-  ],
-  "robot_platform": "CubeSat/nanosatellite spacecraft platform; proof-of-concept case is The White Compass (TWC), a theoretical academic concept with a constellation of 12 small satellites in two high elliptical Molniya-like orbits. Specific CubeSat form factor not reported.",
-  "task_domain": "Concurrent preliminary design of CubeSat missions; case-study mission domain is GNSS service provision across the Arctic region with power and data budget generation.",
-  "interface": "Tool/model integration interface: UML stereotypes encode design parameters in the SysML/Gaphor model file; a parser extracts them into a software-readable database used by Nanostar or other simulation and analysis tools. The model is described as the primary design interface and single source of truth for engineers.",
-  "feedback": "The parser can be reversed to update model files after analysis or optimization, and generated dependency graphs show how changes in one variable affect other model elements; simulations produce system budgets and reports that can feed design iterations.",
-  "control_autonomy_split": "Not applicable",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "Demonstrated through an end-to-end proof-of-concept on the TWC theoretical mission: the SysML model is parsed into a database and linked to NSS tools to generate power and data budgets, a requirements list, and a dependency graph. The paper calls this a preliminary validation of the formalization, not an empirical mission validation.",
-  "rqs_addressed": {
-    "RQ1": "yes",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Published as an open-access article in the MDPI journal Aerospace with DOI, editorial dates, and citation metadata visible.",
+        "evidence": [
+          "Citation: Luccisano, G.; Salas Cordero, S.; Gateau, T.; Viola, N. Open-Source Data Formalization through Model-Based Systems Engineering for Concurrent Preliminary Design of CubeSats. Aerospace 2024, 11, 702.",
+          "Published: 27 August 2024",
+          "Copyright: 2024 by the authors. Licensee MDPI, Basel, Switzerland."
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The discussion explicitly identifies limitations, assumptions, design decisions, future work, tool-specific constraints, and mission-scope restrictions.",
+        "evidence": [
+          "However, the development of the proposed CubeSat SysML model formalization and its integration with open-source tools for PD involved several limitations and design decisions, and assumptions",
+          "One significant limitation encountered, as anticipated, was the modeling-tool-specific nature of the parser.",
+          "Another limitation is the focus on low Earth orbit (LEO) missions"
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper is explicitly about CubeSat preliminary design and demonstrates the approach on the academic TWC mission concept, including mission objective and orbit context.",
+        "evidence": [
+          "This paper focuses on formalizing a CubeSat model for use across various stages of the PD phase.",
+          "The chosen case study is the \"The White Compass (TWC) mission, a theoretical academic concept developed during the \"Space Mission and Systems Design\" course at Politecnico di Torino.",
+          "The TWC mission aims to deliver GNSS services across the Arctic region using a constellation of 12 small satellites in two high elliptical Molniya-like orbits"
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The work defines SysML/UML stereotypes, model artifacts, parser/database flow, Gaphor/NSS tools, and a public repository, giving enough detail for comparison and partial replication.",
+        "evidence": [
+          "The proposed framework possesses the following main three steps:",
+          "Below, the revised set of stereotypes is introduced, and they are SystemComp; SystemMain; Battery and SolarArray; Transmitter and Receiver; Orbit and PropagationLosses; GroundStation; and last but not least, Operating Mode.",
+          "The source code of the parser developed within the context of work is available in a public repository"
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Most central claims are tied to SysML models, UML stereotypes, the parser, a database, dependency graphs, and NSS tool integration.",
+        "evidence": [
+          "The proposed formalization positions the CubeSat SysML model as the central data source throughout the design process.",
+          "The novelty of this approach resides in its capability to include relevant design parameters within a CubeSat model",
+          "The parser allows the parsing process to be inverted to facilitate automatic updates to model files after analysis or optimization tasks."
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "A case-study proof of concept demonstrates model-to-tool data extraction and budget outputs, but there is no baseline comparison, stakeholder evaluation, independent reuse, integration test, or flight evidence for broader efficiency/reliability claims.",
+        "evidence": [
+          "Figure 7. TWC output power and data budgets.",
+          "A proof of concept is presented with the SysML model of the TWC mission, integrated with the NSS mission analysis tools via a dedicated parser, successfully generating power and data budgets.",
+          "Total TC during period : 2717.11Mb"
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The model can export requirements and dependencies, but explicit requirement-to-design-to-verification trace links or lifecycle-gate traceability are not demonstrated.",
+        "evidence": [
+          "A supplementary result of the parsing process is a requirements list",
+          "Another product of the parsing process is the dependency graph",
+          "This graph provides a comprehensive visual overview of the dependencies and interactions among various elements within the model."
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The article states that the work uses open-source tools, provides code/data/documentation in a public GPLv3 repository, and describes the model-file/database data exchange mechanism.",
+        "evidence": [
+          "The entire process is conducted with the exclusive use of open-source tools",
+          "The source codes and associated documentation are available in a public repository",
+          "The original data presented in the study are openly available in a public GitLab repository"
+        ]
+      }
+    ],
+    "total_score": 7.0,
+    "max_score": 8,
+    "normalized_score": 0.875,
+    "overall_rationale": "Strong paper for an open-source CubeSat MBSE preliminary-design workflow with clear artifacts, limitations, and toolchain availability; evidence is mainly a theoretical case-study proof of concept, with limited formal traceability and no physical, operational, or comparative validation."
   },
-  "rq_relevance": "RQ1 yes: the paper directly proposes a reusable, general CubeSat SysML model and generalized operating-mode formalization using UML stereotypes, with EPS/power data included through Battery, SolarArray, SystemMain, OperatingMode, and power-budget parameters. RQ2 partial: it claims integrability, data continuity, reusability, transparency, efficiency, consistency, and single-source-of-truth benefits from MBSE/model integration, but does not empirically demonstrate EPS reliability or reproducibility outcomes as mission outcomes. RQ3 partial: the model includes requirements extraction, EPS requirements, and pre-development power/data-budget simulations, but it does not model explicit EPS verification/test/IVV procedures or verification-case linkages; validation is of the proposed formalization through a proof of concept.",
-  "claimed_outcomes": [
-    "A generic CubeSat SysML model with UML stereotypes can serve as a central data source or single source of truth throughout preliminary design.",
-    "The parser enables integration between the CubeSat model and open-source simulation/analysis tools by extracting data into a software-readable database.",
-    "The framework claims to reduce data fragmentation and support seamless information flow across design stages and discipline-specific tools.",
-    "The approach supports reusability across CubeSat missions because the stereotypes and parser can be reused with compliant models by changing the input data.",
-    "Automatic model updates after analysis or optimization are claimed to reduce manual intervention and support a dynamic, responsive design process.",
-    "The TWC case shows generation of power and data budgets, requirements lists, and dependency graphs from the model/toolchain.",
-    "System reliability improvement is not directly demonstrated; reliability is discussed mainly as a general MBSE/open-source motivation rather than as a measured EPS outcome."
-  ],
-  "verification_validation_linkage": "No explicit EPS-specific verification, test, or IVV procedure model is provided. The paper defines MBSE as supporting verification and validation, includes SysML requirements and a parser-generated requirements list with EPS requirements, and uses NSS simulations to generate power/data budgets before physical development. The case study is described as a preliminary validation/proof of concept of the formalization rather than a formal verification procedure for the EPS.",
-  "key_findings": [
-    "The proposed framework has three main steps: characterize data in a CubeSat SysML model through UML stereotypes, parse the model file into a software-readable data structure, and use the database with simulation and analysis tools.",
-    "Operating modes are generalized for LEO CubeSats using activation criteria such as eclipse, ground-station/target line of sight, latitude/longitude zone, true-anomaly range, time interval, default mode, and priority, with variables for power consumption and data rates.",
-    "The stereotype set includes SystemComp, SystemMain, Battery, SolarArray, Transmitter, Receiver, Orbit, PropagationLosses, GroundStation, and OperatingMode to capture data needed for mass, volume, power, link, and data budgets.",
-    "EPS/power modeling is represented through battery capacity, solar-array generated power, subsystem/component power states, operating-mode power consumption, and power-budget simulations; the TWC data summary reports battery capacity, solar array power, and stand-by/phasing/servicing OM consumption.",
-    "The Gaphor-focused parser extracts applied-stereotype data from .xml model files and can also generate requirements lists and dependency graphs.",
-    "The TWC proof of concept links the parsed model to NSS tools and produces power and data budget plots, demonstrating model-to-analysis integration in an open-source workflow."
-  ],
-  "limitations_gaps": [
-    "The parser is tailored to Gaphor model files and cannot automatically extract data from models developed with other tools without source-code modification.",
-    "The operating-mode generalization focuses on LEO missions and excludes non-nominal and early-orbit/off-nominal modes such as detumbling, calibration, and safe modes.",
-    "The generic framework may require additional customization for highly specialized missions.",
-    "The case study notes an NSS tool limitation: orbit eccentricity was considered null because of limitations within the simulation tools used.",
-    "More complex subsystem characterization, including AOCS and propulsion, Delta-V budgets, propellant budgets, fuller dependency graphs, and broader mission types, is left for future work.",
-    "No formal EPS verification/test procedure integration or empirical reliability assessment is reported."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "1",
-    "total_score": "2",
-    "rationale": "Published as a 2024 journal article in Aerospace with DOI and article metadata. The Discussion and Conclusions explicitly describe limitations, assumptions, design decisions, and future work."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0029.json",
+    "status_rationale": "Retained as core because the full text directly addresses CubeSat MBSE preliminary design, reusable SysML/UML model formalization, open-source tool integration, and power/EPS-related model-based analyses.",
+    "citation": "Luccisano, G.; Salas Cordero, S.; Gateau, T.; Viola, N. Open-Source Data Formalization through Model-Based Systems Engineering for Concurrent Preliminary Design of CubeSats. Aerospace 2024, 11, 702. https://doi.org/10.3390/aerospace11090702",
+    "title": "Open-Source Data Formalization through Model-Based Systems Engineering for Concurrent Preliminary Design of CubeSats",
+    "authors": [
+      "Giacomo Luccisano",
+      "Sophia Salas Cordero",
+      "Thibault Gateau",
+      "Nicole Viola"
+    ],
+    "venue": "Aerospace, 11(9), Article 702",
+    "doi_or_url": "10.3390/aerospace11090702",
+    "publisher": "MDPI, Basel, Switzerland",
+    "venue_type": "peer-reviewed journal article",
+    "source_database_or_route": [
+      "scopus",
+      "semantic_scholar abstract_enrichment"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "high",
+        "rationale": "The article directly formalizes a reusable CubeSat SysML model and abstracts operating modes and subsystem data so preliminary design can proceed with limited detailed behavioral modeling."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "It provides explicit reproducibility and integrability claims for open-source SysML-to-simulation workflows and power-budget analyses, but reliability claims are mostly generic and not EPS-specific or empirically validated."
+      },
+      "RQ3": {
+        "relevance": "partial",
+        "rationale": "It shows model-derived EPS requirements lists and pre-physical power/data budget simulations, but it does not define or trace formal EPS verification procedures to model artifacts."
+      }
+    },
+    "lineage_overlap_notes": "The paper positions itself as extending NSS/open-source CubeSat preliminary-design work and MBSE challenge discussions cited in the paper; no other corpus papers or previous extractions were consulted."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "Generic CubeSat spacecraft model; use case is the TWC small-satellite constellation concept.",
+    "size_form_factor": "CubeSat/small satellite; specific U-class form factor not reported for TWC.",
+    "mission_name": "The White Compass (TWC) theoretical mission concept; also a generic CubeSat formalization.",
+    "mission_domain": "GNSS services across the Arctic region; generic CubeSat preliminary design and concurrent engineering.",
+    "organization_type": "Academic/research and open-source context involving Politecnico di Torino and ISAE-SUPAERO/Nanostar ecosystem.",
+    "project_maturity": "Theoretical academic mission concept and proof-of-concept preliminary validation; no physical development, launch, or operations reported.",
+    "lifecycle_stage_addressed": "Preliminary design phase, including concurrent design sessions and model-to-analysis iterations.",
+    "development_context": "Open-source, academic, and budget-constrained CubeSat development using MBSE plus concurrent engineering and NSS analysis tools.",
+    "eps_relevance": "power-budget/electrical-architecture",
+    "model_maturity": "Formalized SysML/UML stereotype profile and Gaphor parser implemented with a TWC proof of concept and public repository; no independent reuse or operational validation reported."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "Address data fragmentation and poor continuity between CubeSat SysML models and preliminary-design simulations by making a reusable, open-source CubeSat model the central data source for design parameters, operating modes, and budgets.",
+    "modeling_scope": [
+      "CubeSat system architecture and subsystem/component BDDs",
+      "UML stereotypes for SystemComp, SystemMain, Battery, SolarArray, Transmitter, Receiver, Orbit, PropagationLosses, GroundStation, and OperatingMode",
+      "Operating-mode generalization and activity-profile data",
+      "Requirements list extraction and dependency-graph generation",
+      "Parser/database bridge to NSS simulation tools for power and data budgets"
+    ],
+    "system_boundary_level_of_abstraction": "Spacecraft/system-level preliminary-design model with selected subsystem/component data and mission-environment entities such as orbit and ground station; mostly structural/data abstraction rather than detailed behavioral dynamics.",
+    "minimal_or_excluded_modeling": "Excludes detailed treatment of non-nominal/EOP modes such as detumbling, calibration, and safe modes; detailed AOCS/propulsion behavior and formal physical test models are future work; NSS eccentricity limitations are acknowledged.",
+    "required_prior_behavioral_domain_knowledge": "Users need mission concept, nominal operating-mode activation criteria, and approximate subsystem power/mass/data/orbit/ground-station values; detailed component behavior is not required at early stages.",
+    "handling_limited_behavioral_knowledge": "The method abstracts behavior into generalized operating-mode attributes, standby/on/peak consumption states, default/priority rules, and computeMass/computeCons flags that allow system-level values when lower-level components are not yet specified.",
+    "model_artifacts_used": [
+      "SysML block definition diagrams",
+      "UML stereotype profiles",
+      "SysML requirement elements",
+      "OperatingMode blocks/attributes",
+      "XML model file",
+      "Python model parser",
+      "software-readable database",
+      "requirements tables",
+      "dependency graphs",
+      "NSS-generated power and data budget plots/reports"
+    ],
+    "generality_reuse_mechanism": [
+      "Reusable stereotype definitions with standardized attributes and units",
+      "Generic operating-mode activation and priority schema",
+      "Parser reusable for Gaphor models compliant with the proposed stereotypes",
+      "Model data can be changed while retaining the same formalization",
+      "Open-source repository under GPLv3",
+      "Tool/language-agnostic concept, though current parser implementation is Gaphor-specific"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Characterize design data in the CubeSat SysML model",
+        "inputs": "Design parameters, operating-mode characterization, CubeSat architecture, requirements, modeling tool/methodology.",
+        "outputs": "Stereotyped SysML model and model file containing architecture, OMs, requirements, and design parameters.",
+        "actors_roles": "Systems engineer, discipline engineers, students/design team.",
+        "prerequisites": "Modeling tool capable of SysML/UML diagrams and applying the proposed stereotypes; preliminary mission data available.",
+        "completion_criteria": "Relevant spacecraft, orbit, ground-station, subsystem, EPS/power, communications, OM, and requirements data are represented with stereotypes.",
+        "handoffs": "Model file handed to the parser for extraction."
+      },
+      {
+        "step": "Parse the model file and generate exchange artifacts",
+        "inputs": "Model file, dedicated parser, known stereotype definitions, and model-file structure.",
+        "outputs": "Software-readable database plus optional requirements list and dependency graph.",
+        "actors_roles": "Systems/software engineer maintaining the parser and engineering team consuming outputs.",
+        "prerequisites": "Current implementation assumes Gaphor model files; stereotypes must be applied consistently.",
+        "completion_criteria": "Required parameters for selected simulations and reports are extracted without manual re-entry.",
+        "handoffs": "Database handed to NSS or other simulation/analysis tools."
+      },
+      {
+        "step": "Run preliminary-design simulations and analyses",
+        "inputs": "Database, NSS or other selected tools, analysis configuration, mission/OM data.",
+        "outputs": "System budgets, reports, power profiles, data budgets, and trade-off inputs.",
+        "actors_roles": "Discipline analysts and concurrent-engineering team.",
+        "prerequisites": "Simulation tools can consume the generated data structure and the selected budgets are within tool capability.",
+        "completion_criteria": "Power/data or other required budgets are produced for design review and iteration.",
+        "handoffs": "Results handed back to the engineering team and, where supported, to model-update scripts."
+      },
+      {
+        "step": "Update and iterate the central model",
+        "inputs": "Analysis results, optimized parameters, and reverse parsing/update scripts.",
+        "outputs": "Updated model file/source of truth for the next PD iteration.",
+        "actors_roles": "Systems engineer and toolchain maintainer.",
+        "prerequisites": "Model update logic implemented for affected parameters.",
+        "completion_criteria": "Design changes are reflected in the model without manual intervention where supported.",
+        "handoffs": "Updated model returns to CE/PD workflow."
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "Maps to preliminary design requirements capture, architecture definition, subsystem budgeting, mission analysis, trade-off studies, and CE reports; no explicit PDR/CDR or formal V&V gate process is demonstrated.",
+    "approach_classification": "Integrated MBSE/digital engineering",
+    "approach_classification_rationale": "The approach integrates SysML/UML MBSE artifacts with open-source parsers, databases, simulation tools, budget reports, dependency graphs, and iterative model updates rather than using SysML only as documentation.",
+    "tailoring_rationale": [
+      "CubeSat standardization supports a reusable system model.",
+      "Open-source tools fit academic and budget-constrained projects.",
+      "Preliminary design requires rapid power, data, mass, link, and volume budget iteration.",
+      "Early design often lacks complete subsystem detail, so computeMass/computeCons flags allow coarse-grained modeling.",
+      "LEO nominal operating modes were selected as the first generalization scope."
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "SysML",
+      "UML stereotypes/profiles",
+      "Gaphor open-source modeling tool for current parser implementation",
+      "Python model parser",
+      "XML model files",
+      "Nanostar software suite (NSS) v1.1",
+      "Graphviz for dependency graph output"
+    ],
+    "toolchain_architecture_data_flow": "Design parameters and OM characterization are represented through UML stereotypes in a CubeSat SysML model; the model file is parsed into a software-readable database; NSS or other tools consume the database to generate budgets/reports; selected results can be written back to the model so the model remains the single source of truth.",
+    "interoperability_mechanisms": [
+      "Stereotype-defined common attributes and units",
+      "XML model-file parsing",
+      "Python extraction library/parser",
+      "Software-readable database between model and analysis tools",
+      "Requirements and dependency graph export",
+      "Potential reverse parser for automatic model updates",
+      "Public GPLv3 repository"
+    ],
+    "syntax_semantic_continuity_evidence": "Semantic continuity is provided by stereotypes that define common parameter names, units, and model roles; syntactic continuity is implemented through Gaphor XML parsing and a database, demonstrated by TWC power/data budget generation. Cross-tool continuity is conceptual because model-file storage differs by tool.",
+    "software_hardware_system_integration_readiness": "Software-to-software integration from SysML model to NSS analyses is demonstrated; no embedded software, hardware-in-the-loop, EPS hardware, or physical integration/test readiness is reported.",
+    "toolchain_limitations": [
+      "Current parser is tailored to Gaphor model files.",
+      "Model files are not fully interoperable across SysML tools by default.",
+      "TWC eccentricity was considered null because of limitations within the simulation tools used.",
+      "LEO nominal operating modes are the primary generalization scope.",
+      "Detailed AOCS/propulsion and non-nominal/EOP modes are future work."
+    ],
+    "availability_reproducibility": "Open-access article; source code, associated documentation, and original data are reported as openly available in a public GitLab repository under GPLv3."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "EPS systemMain block in the system-level BDD",
+      "Battery capacity",
+      "Solar array produced power",
+      "Power consumption by operating mode",
+      "Battery capacity percentage profile",
+      "Solar panels and batteries in EPS requirements",
+      "Power budget inputs/outputs"
+    ],
+    "eps_requirements_representation": "EPS requirements are represented as SysML requirement elements that the parser can export as a requirements list; the excerpt includes EPS power regulation, voltage, solar-panel generation, battery DoD, capacity, and lifetime requirements.",
+    "verification_validation_artifacts": [
+      "TWC power budget output",
+      "TWC data budget output",
+      "EPS requirements list excerpt",
+      "Dependency graph showing model relationships",
+      "Preliminary proof-of-concept validation through TWC case study"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "Model-derived database consumed by NSS to simulate power and data budgets before hardware development",
+      "Battery capacity and operating-mode power profiles generated from stereotyped model data",
+      "Requirements export enables review of EPS requirements, but not verification closure",
+      "Dependency graph supports change-impact analysis before physical integration"
+    ],
+    "evidence_verification_integrated_in_model": "The model contains EPS requirements and power-related parameters, and the TWC case generates power-budget plots from model data; however, verification procedures, pass/fail criteria, verification methods, and requirement-to-verification trace links are not modeled explicitly.",
+    "integration_test_readiness": "Supports preliminary design budget analysis and requirements/report generation; no EPS integration test procedure, bench test, hardware-in-the-loop, or flight validation is reported."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Paper objective and generic CubeSat model scope",
-      "quote": "This paper focuses on formalizing a CubeSat model for use across various stages of the PD phase.",
-      "location": "Abstract"
+      "claim": "The CubeSat SysML model can serve as the central data source and integrate with simulation/analysis tools across preliminary design.",
+      "outcome_category": "integrability and data continuity",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "SysML BDDs",
+        "UML stereotypes for design parameters and OMs",
+        "model-file parser",
+        "software-readable database",
+        "NSS analysis-tool integration"
+      ],
+      "artifact_or_process_linked": "CubeSat SysML model, model file, parser, database, NSS budgets.",
+      "lifecycle_stage": "Preliminary design",
+      "evidence_type": "TWC proof-of-concept case study and generated budgets.",
+      "metric_or_value_indicator": "Power and data budgets; total visibility time 2830.33 min; TC 2717.11 Mb; TM 3056.75 Mb.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Model-derived database was used to produce TWC power/data budget outputs; no measured improvement versus document-based or manual workflow.",
+      "evidence_source": "Abstract; Section 4; Figure 7; Conclusions",
+      "direct_quote": "The proposed formalization positions the CubeSat SysML model as the central data source throughout the design process.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Single theoretical case; no independent replication, baseline comparison, physical integration, or user study."
     },
     {
-      "claim": "SysML/UML modeling method and integration objective",
-      "quote": "developing a generic CubeSat model using Systems modeling language (SysML) that includes data storage and visualization through the application of Unified modeling language (UML) stereotypes",
-      "location": "Abstract"
+      "claim": "The workflow supports automated trade-off analyses and automated updates after analyses or optimization.",
+      "outcome_category": "automation and trade-off support",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "stereotyped model parameters",
+        "parser extraction",
+        "reverse parsing/model update",
+        "analysis-tool feedback loop"
+      ],
+      "artifact_or_process_linked": "Parser, database, and model file update process.",
+      "lifecycle_stage": "Preliminary design iterations",
+      "evidence_type": "Workflow description with partial proof-of-concept; no optimization experiment metrics.",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Manual data re-entry is claimed to be reduced, but time/error reduction is not measured.",
+      "evidence_source": "Abstract; Section 3.3; Section 4; Discussion",
+      "direct_quote": "It also supports automated trade-off analyses by combining the benefits of SysML with effective data instantiating across all PD study phases.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Automation claims depend on parser coverage and tool-specific implementation; no benchmark or user evaluation."
     },
     {
-      "claim": "Central data source and tool integration outcome",
-      "quote": "The proposed formalization positions the CubeSat SysML model as the central data source throughout the design process.",
-      "location": "Abstract"
+      "claim": "The stereotype set and parser are reusable for different CubeSat missions by changing model data.",
+      "outcome_category": "reusability and generality",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "generic CubeSat SysML model",
+        "reusable UML stereotypes",
+        "generalized operating-mode schema",
+        "Gaphor parser for compliant models"
+      ],
+      "artifact_or_process_linked": "Stereotype profile, OperatingMode attributes, parser, public repository.",
+      "lifecycle_stage": "Preliminary design setup and reuse across missions",
+      "evidence_type": "Conceptual generalization plus one TWC case-study application.",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Reuse is argued from common attributes and formalized stereotypes; repeated reuse across multiple missions is not shown.",
+      "evidence_source": "Section 3.1; Section 3.3; Conclusions",
+      "direct_quote": "Once the stereotypes necessary for characterizing the S/C and mission elements have been defined, they can be reused for describing other missions, varying only by the data entered within a model.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Only one theoretical mission case is presented; specialized missions may need additional stereotypes or parser changes."
     },
     {
-      "claim": "Framework steps",
-      "quote": "Data characterization within a CubeSat SysML model through UML stereotypes... Generation of a model file parser... Implementation of the newly generated data structure with any selected set of simulation and analysis tools",
-      "location": "Section 1, Introduction"
+      "claim": "Open-source tools, data, and code improve transparency and reproducibility of the CubeSat preliminary-design workflow.",
+      "outcome_category": "reproducibility and openness",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "exclusive open-source toolchain",
+        "public GitLab repository",
+        "GPLv3 licensing",
+        "open model/parser documentation"
+      ],
+      "artifact_or_process_linked": "Gaphor/NSS/parser repository, source code, documentation, original data.",
+      "lifecycle_stage": "Preliminary design and future reuse",
+      "evidence_type": "Reported public code/data availability and open-source licensing.",
+      "metric_or_value_indicator": "GPLv3 public repository availability; no reproducibility study.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Assets are made available for inspection and reuse, supporting reproducibility assessment.",
+      "evidence_source": "Abstract; Section 3.3; Conclusions; Data Availability Statement",
+      "direct_quote": "The source codes and associated documentation are available in a public repository",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Availability does not prove successful third-party reproduction; repository longevity and dependency versions may affect continuity."
     },
     {
-      "claim": "EPS/power-budget data are part of the model",
-      "quote": "Power Budget: Essential for mission viability, this budget calculates power needs for all S/C components and generation capabilities, considering the impact of operational orbit on eclipse durations.",
-      "location": "Section 2, CubeSat Preliminary Design"
+      "claim": "Dependency graphs generated from model data help engineers understand dependencies and design-change impacts.",
+      "outcome_category": "traceability and change-impact analysis",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "SysML associations",
+        "stereotyped parameter links",
+        "parser-generated Graphviz dependency graph"
+      ],
+      "artifact_or_process_linked": "Payload relationship graph and proposed full CubeSat dependency graph.",
+      "lifecycle_stage": "Preliminary design trade-off and change management",
+      "evidence_type": "Example graph artifact for TWC payload; qualitative rationale.",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "A graph visually maps relationships among components, OMs, and power attributes; decision improvement is not measured.",
+      "evidence_source": "Section 4; Figure 9",
+      "direct_quote": "This graph provides a comprehensive visual overview of the dependencies and interactions among various elements within the model.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Graph usefulness is plausible but not evaluated with users or design-change case studies."
     },
     {
-      "claim": "Operating-mode generalization supports general modeling with limited mission-specific behavior",
-      "quote": "The proposed generalization offers a structured approach to defining any set of OMs, integrating a range of parameters and sub-parameters that capture the essence of an S/C's operational scenario.",
-      "location": "Section 3.1.2, Proposed OM Generalization"
+      "claim": "Model-derived simulations can assess EPS-related power feasibility before physical development.",
+      "outcome_category": "model-based analysis and verification readiness",
+      "specificity": "EPS-specific",
+      "mbse_mechanism": [
+        "Battery and SolarArray stereotypes",
+        "SystemMain power-consumption attributes",
+        "OperatingMode activity profile",
+        "NSS power-budget simulation"
+      ],
+      "artifact_or_process_linked": "TWC EPS/power data in Table 9 and power budget in Figure 7.",
+      "lifecycle_stage": "Preliminary design before physical development",
+      "evidence_type": "Executable simulation/budget output for a theoretical case.",
+      "metric_or_value_indicator": "Battery capacity 1036.8 Wh; solar array power 2021.0 W; standby/phasing/servicing OM consumption; battery capacity percentage plot.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Power budget plot shows battery capacity cycling approximately between 90% and 100% for the TWC scenario.",
+      "evidence_source": "Table 9; Figure 7; Conclusions",
+      "direct_quote": "successfully generating power and data budgets.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Theoretical mission; simulation limitations acknowledged; no hardware test or requirement pass/fail verification closure."
     },
     {
-      "claim": "EPS-specific stereotypes",
-      "quote": "Battery and SolarArray stereotypes encompass the battery's capacity and the power generated by solar arrays, in addition to the attributes introduced by SystemComp.",
-      "location": "Section 3.2.3, Battery and SolarArray"
+      "claim": "Requirements can be extracted from the SysML model into deliverable tables, including EPS requirements.",
+      "outcome_category": "requirements management and deliverable generation",
+      "specificity": "EPS-specific",
+      "mbse_mechanism": [
+        "SysML requirement stereotype",
+        "model parser",
+        "requirements list export"
+      ],
+      "artifact_or_process_linked": "Figure 8 EPS requirements list output.",
+      "lifecycle_stage": "Preliminary design requirements review",
+      "evidence_type": "Artifact example; no downstream verification trace.",
+      "metric_or_value_indicator": "Excerpt lists R-FUN-EPS-001 through R-FUN-EPS-010.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "The parser can produce a formatted requirements list from model elements.",
+      "evidence_source": "Section 4; Figure 8",
+      "direct_quote": "A supplementary result of the parsing process is a requirements list",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "List generation is not equivalent to traceability or verification; no requirements quality evaluation is reported."
     },
     {
-      "claim": "Parser and software-readable database",
-      "quote": "extracting all the necessary data for simulation and analysis activities becomes feasible, independently from the variety and number of blocks in the model.",
-      "location": "Section 3.3, Model Parser"
-    },
-    {
-      "claim": "Automatic update/feedback loop",
-      "quote": "The parsing process can also be reversed to enable automatic updates to model files following analysis or optimization activities.",
-      "location": "Section 3.3, Model Parser"
-    },
-    {
-      "claim": "Case-study evaluation",
-      "quote": "The chosen case study is the 'The White Compass (TWC) mission, a theoretical academic concept",
-      "location": "Section 4, Use Case Application"
-    },
-    {
-      "claim": "EPS requirements are extracted but not formal verification procedures",
-      "quote": "A supplementary result of the parsing process is a requirements list... The electrical power system shall provide and regulate sufficient power to all other subsystems' components in each mission phase",
-      "location": "Section 4, Figure 8"
-    },
-    {
-      "claim": "Open-source integrability outcome",
-      "quote": "This integration enabled the generation of power and data budgets for the TWC theoretical mission, showcasing the model's practical applicability.",
-      "location": "Section 5, Discussion"
-    },
-    {
-      "claim": "Single source of truth/integrability claim",
-      "quote": "Positioning the model as the single source of truth ensures coherence and accuracy across all design stages, supporting efficient updates and modifications.",
-      "location": "Section 5, Discussion"
-    },
-    {
-      "claim": "Tool-specific parser limitation",
-      "quote": "One significant limitation encountered, as anticipated, was the modeling-tool-specific nature of the parser.",
-      "location": "Section 5, Discussion"
-    },
-    {
-      "claim": "LEO/off-nominal operating-mode limitation",
-      "quote": "Another limitation is the focus on low Earth orbit (LEO) missions... This focus excludes non-nominal conditions such as detumbling, calibration, or safe modes.",
-      "location": "Section 5, Discussion"
-    },
-    {
-      "claim": "Proof-of-concept conclusion",
-      "quote": "A proof of concept is presented with the SysML model of the TWC mission, integrated with the NSS mission analysis tools via a dedicated parser, successfully generating power and data budgets.",
-      "location": "Section 6, Conclusions and Future Perspectives"
+      "claim": "MBSE integrated with simulations is expected to improve complexity management, efficiency, and reliability.",
+      "outcome_category": "reliability and process quality",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "centralized model information",
+        "integrated simulations",
+        "shared system understanding"
+      ],
+      "artifact_or_process_linked": "General MBSE rationale cited in the introduction, not a directly evaluated artifact in the case study.",
+      "lifecycle_stage": "Conceptual and later lifecycle phases",
+      "evidence_type": "Background/literature-supported assertion within the paper.",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "No reliability effect is measured for the TWC model or EPS.",
+      "evidence_source": "Introduction",
+      "direct_quote": "INCOSE \"SE Vision 2035\" [15] foresees that the future of SE heavily relies on MBSE, with advanced models and integrated simulations that enhance system complexity management, efficiency, and reliability.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "This is a general cited expectation, not an empirical outcome of the presented CubeSat/EPS workflow."
     }
   ],
-  "notes_for_consistency": "Self-check: only paper.md was read and only extraction.json was written. Treat as a core source for open-source, system-level CubeSat MBSE/data-formalization and model-to-analysis integration. EPS evidence is present through power-budget data, Battery/SolarArray/SystemMain/OperatingMode stereotypes, and EPS requirements, but the paper is not an EPS-only model and does not report explicit EPS test-procedure modeling or empirical EPS reliability outcomes. The work is positioned within the Nanostar software suite/Nanospace lineage and cites related prior works by Salas Cordero, Gateau, and colleagues."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "The SysML model is intended as the central data reference/single source of truth, with standardized stereotypes, parser-mediated database generation, and possible automatic write-back after analyses; formal governance roles or configuration-management rules are not reported.",
+    "traceability_to_deliverables_decisions_reviews": "Deliverables include requirements lists, dependency graphs, budgets, and reports that can inform PD trade-offs; no explicit requirement-to-verification trace matrix, decision log, or formal review-gate evidence is shown.",
+    "evaluation_criteria_model_quality_usefulness": "Usefulness is illustrated by successful TWC power/data budget generation and by qualitative discussion of flexibility, precision, efficiency, and reuse; no model-quality metrics, stakeholder scoring, or independent assessment is reported.",
+    "roi_value_realization_evidence": "The article claims open-source and reusable modeling can support quicker, cost-effective, budget-constrained design, but it provides no ROI, cost, schedule, or productivity measurements.",
+    "programmatic_gates_critical_design_events_supported": "Preliminary design and concurrent engineering sessions are supported; no PDR, CDR, qualification, acceptance, or flight readiness gate is explicitly linked.",
+    "model_derived_performance_indicators_management_metrics": "Power consumption profiles, required batteries/solar cells, battery capacity percentage, data flow/TC/TM quantities, visibility time, mass/volume/link/data budgets, and requirements-list counts are available or implied; management metrics are not reported."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed with evidence",
+      "rationale": "The paper gives a three-step formalization, stereotype definitions, parser workflow, and TWC case that generates power/data budgets."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed with evidence",
+      "rationale": "Data fragmentation is the central problem; the SysML-stereotype-parser-database-NSS chain is demonstrated, though cross-tool interoperability remains limited by Gaphor-specific parsing."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper targets open-source, academic, and budget-constrained CubeSat design and early-stage incomplete architectures, but it does not quantify resource burden or compare lightweight alternatives."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "addressed conceptually",
+      "rationale": "Budgets, reports, requirements lists, and dependency graphs are deliverables linked to the central model; ROI and formal governance are asserted or implied rather than measured."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "mentioned only",
+      "rationale": "The article discusses CE, real-time collaboration, future real-time versioning/cloud storage, and dynamic updates, but gives no agile/distributed team implementation evidence."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "A general CubeSat model is built with SysML BDDs plus UML stereotypes that standardize subsystem, orbit, ground-station, communications, EPS/power, and operating-mode data.",
+        "Limited behavioral knowledge is handled by abstracting behavior into operating-mode activation criteria, priority/default flags, and coarse power states rather than detailed dynamic behavior.",
+        "SystemMain computeMass/computeCons flags let early-stage models use subsystem-level values when component detail is missing."
+      ],
+      "RQ2": [
+        "Reproducibility is supported by open-source tooling and a public GPLv3 repository with code, data, and documentation.",
+        "Integrability is supported by a parser/database bridge between SysML model files and NSS analyses, demonstrated through TWC power/data budgets.",
+        "Reliability benefits are mostly general MBSE/open-source expectations; no EPS reliability improvement is empirically measured."
+      ],
+      "RQ3": [
+        "Pre-physical analysis is integrated by extracting model data into NSS power/data budget simulations, including EPS-related battery and solar-array parameters.",
+        "EPS requirements can be exported from the SysML model, but verification methods, pass/fail criteria, and trace links are not modeled explicitly.",
+        "The paper supports verification-readiness through budgets and requirement visibility rather than formal EPS verification procedures."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "The parser is modeling-tool-specific and tailored to Gaphor.",
+      "Model file formats are not fully interoperable across SysML tools.",
+      "Operating-mode generalization focuses on LEO missions and excludes EOP/off-nominal scenarios such as detumbling, calibration, and safe modes.",
+      "Generic framework may require customization for specialized missions.",
+      "NSS tool approximations are acknowledged, including ECC treated as null in the TWC simulation.",
+      "Future work includes broader parser compatibility, non-nominal OMs, more detailed AOCS/propulsion, delta-V/propellant budgets, comprehensive dependency graphs, parser output selection interfaces, and other database formats such as SQL."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "Evidence is limited to one theoretical academic mission case and no physical, operational, or flight validation is provided.",
+      "No baseline comparison quantifies time, cost, error, integration, or reliability improvements.",
+      "EPS modeling is mainly budget/requirements oriented and does not include detailed EPS behavior, fault modes, verification procedures, or hardware tests.",
+      "Requirement export is demonstrated, but requirement-to-design-to-verification traceability is not.",
+      "Open-source availability supports reproducibility, but no third-party reproduction or repeated reuse is reported."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "central model",
+        "quote": "The proposed formalization positions the CubeSat SysML model as the central data source throughout the design process.",
+        "location": "Abstract"
+      },
+      {
+        "topic": "research objective",
+        "quote": "How to formalize a CubeSat model that is general enough to be reusable across different mission designs, yet detailed enough for a comprehensive representation of the systems?",
+        "location": "Introduction"
+      },
+      {
+        "topic": "operating-mode abstraction",
+        "quote": "The proposed generalization offers a structured approach to defining any set of OMs",
+        "location": "Section 3.1.2"
+      },
+      {
+        "topic": "toolchain parser",
+        "quote": "extracting all the necessary data for simulation and analysis activities becomes feasible, independently from the variety and number of blocks in the model.",
+        "location": "Section 3.3"
+      },
+      {
+        "topic": "EPS requirements",
+        "quote": "The electrical power system shall provide and regulate sufficient power to all other subsystems' components in each mission phase",
+        "location": "Figure 8"
+      },
+      {
+        "topic": "limitations",
+        "quote": "One significant limitation encountered, as anticipated, was the modeling-tool-specific nature of the parser.",
+        "location": "Discussion"
+      },
+      {
+        "topic": "repository availability",
+        "quote": "The source codes and associated documentation are available in a public repository",
+        "location": "Conclusions and Future Perspectives"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Extraction uses only the specified paper and provided corpus metadata. Classed as core because the paper directly addresses CubeSat MBSE model formalization and includes EPS/power-budget artifacts, but RQ3 evidence should be synthesized cautiously as verification-readiness rather than formal verification integration.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full markdown paper was available and contains explicit method, toolchain, case-study, limitations, and data-availability statements; uncertainty remains only around details confined to figures/repository and the absence of formal V&V evidence."
+  },
+  "bibtex": "@article{paper-0029,\n  title = {Open-Source Data Formalization through Model-Based Systems Engineering for Concurrent Preliminary Design of CubeSats},\n  author = {Giacomo Luccisano and Sophia Salas Cordero and Thibault Gateau and Nicole Viola},\n  year = {2024},\n  journal = {Aerospace},\n  volume = {11},\n  number = {9},\n  pages = {702},\n  publisher = {MDPI},\n  doi = {10.3390/aerospace11090702},\n  url = {https://doi.org/10.3390/aerospace11090702}\n}"
 }

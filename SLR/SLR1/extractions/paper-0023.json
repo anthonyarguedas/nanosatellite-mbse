@@ -1,152 +1,668 @@
 {
   "corpus_id": "paper-0023",
   "tier": "core",
-  "citation": "Hanafi et al. (2024), Effective Model-Based Systems Engineering framework for academic nanosatellite project management and design",
-  "title": "Effective Model-Based Systems Engineering framework for academic nanosatellite project management and design",
-  "authors": [
-    "Ahmed Hanafi",
-    "Zakaria Moutakki",
-    "Mohamed Karim",
-    "Tajjeeddine Rachidi"
-  ],
   "year": 2024,
-  "doi_or_url": "10.1007/s12567-024-00542-2",
-  "venue_type": "journal article/original paper; venue name not reported in paper.md",
-  "modeling_scope": "System-level MBSE framework for academic CubeSat/nanosatellite project management and design, covering lifecycle phases, mission analysis, needs and requirements definition, functional breakdown, PBS/WBS/CBS, system architecture, structure and behavior models, operations/ConOps, requirements traceability, and verification. Includes EPS/power subsystem requirements, structure, internal power/data interfaces, power buses, telemetry/commands, and LEOP power-bus activation behavior.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "budget",
-    "verification",
-    "simulation",
-    "operations",
-    "reference model/template",
-    "lifecycle/PLM",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "SysML implemented with No Magic MagicDraw and Cameo Simulation Toolkit; framework based on ECSS project/system engineering standards, NASA systems engineering guidance, and a project/product breakdown/view-based MBSE approach. Future work proposes executable SysML and MATLAB/STK integration.",
-  "mbse_language_method_tool_categories": [
-    "SysML",
-    "Cameo/MagicDraw",
-    "Other"
-  ],
-  "robot_platform": "MASAT1 Moroccan university nanosatellite/CubeSat mission, including space segment, ground segment, platform subsystems, payload, and a 1U CubeSat mass requirement example; main payload is an FPGA-based reconfigurable secondary onboard computer.",
-  "task_domain": "Academic nanosatellite mission preparation, project management, mission analysis, requirements engineering, product/work/cost breakdown, system/subsystem design, EPS/power architecture, LEOP and operations modeling.",
-  "interface": "SysML model interfaces include requirements-to-design and requirements-to-verification trace links, package/diagram organization, and subsystem data, power, and service flows. The EPS internal block diagram models solar panel, battery, power control unit, power management software, power buses, I2C/UART, telemetry, commands, and power-point tracking connections; space/ground interfaces include beacon, commands, and clock synchronization.",
-  "feedback": "Iterative needs/requirements/ConOps refinement and functional-breakdown loops are modeled. Requirements tables/matrices provide satisfaction and verification feedback. Operational behavior uses battery-voltage thresholds for safe/critical/nominal transitions and LEOP power-bus activation.",
-  "control_autonomy_split": "The model includes onboard autonomy requirements: automatic space-segment supervision, at least 36 hours of operation without ground intervention, automatic launch-to-safe-mode transition after separation, and delayed antenna deployment until adequate power conditions. Ground station commands also appear in LEOP and operational transitions. MASAT1 uses passive attitude control, while an attitude-control mode is included to generalize the model.",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "Qualitative demonstration through application to the MASAT1 mission analysis and PBS modeling case. The paper illustrates SysML package, requirements, BDD, IBD, state-machine, and activity diagrams, including EPS/power examples; it does not report quantitative validation, simulation results, or measured reliability/integration outcomes.",
-  "rqs_addressed": {
-    "RQ1": "yes",
-    "RQ2": "partial",
-    "RQ3": "yes"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The markdown identifies the work as an original paper with received/revised/accepted/published dates, DOI metadata, and Springer Nature/Council of European Aerospace Societies publication context.",
+        "evidence": [
+          "ORIGINAL PAPER",
+          "Received: 20 September 2023 / Revised: 9 January 2024 / Accepted: 9 February 2024 / Published online: 19 March 2024 The Author(s), under exclusive licence to Council of European Aerospace Societies 2024",
+          "Publisher's Note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations."
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper gives clear scope boundaries and future work but does not provide a systematic limitations or threats-to-validity discussion.",
+        "evidence": [
+          "This paper aims to build on the work of the cited article to provide a detailed, easy-to-understand, and effective Model-Based Systems Engineering for those wishing to launch a CubeSat project, including the initial phases of preparation, management, and analysis, tailored for university projects carried out by cohorts of students.",
+          "The second part describes the MBSE Framework approach applied to the mission analysis phase of the MASAT1 Project.",
+          "The next step of this work is to improve the viability and practicality of the product breakdown structure model by integrating external analysis and simulation tools such as MATLAB and STK."
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The academic nanosatellite context, MASAT1 mission, and lifecycle phases/reviews are described clearly, with the case application focused on mission analysis and early design.",
+        "evidence": [
+          "MASAT1 is a nanosatellite project initiated at the University of Sidi Mohamed Ben Abdellah, Fez, Morocco to put in place the basic and indispensable technologies (hardware and software) necessary to build a resilient, ready-to-fly CubeSat system, with efficient power management and low-cost mission control ground station [21].",
+          "We have then summarized the cycle of a typical nanosatellite mission in 4 phases with deliverables reviews for each phase (Fig. 5):",
+          "Phase A of Mission Analysis results in a broad definition of the mission system, its functional and operational requirements, its architecture, and its constraints."
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper identifies SysML, MagicDraw/Cameo, ECSS/NASA tailoring, package structure, requirements, structural, behavioral, and verification artifacts, and a system boundary spanning space and ground segments with subsystem detail.",
+        "evidence": [
+          "Implementation of MBSE is enabled by",
+          "We used No Magic MagicDraw modeler with SysML and Cameo Simulation toolkit plugin.",
+          "By integrating this methodology, as well as referring to the work of SSWG [6] [7] [8] and Guo et al. [10], we have organized our PBS model elements into packages structured by both SysML diagram type and hierarchy concurrently.",
+          "Figure 11 shows the organizational package diagram of the MASAT1 mission model."
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Most concrete value claims are tied to model-based process flows, views, packages, PBS/WBS/CBS derivation, and requirements traceability artifacts.",
+        "evidence": [
+          "To improve communication, planning, management, and development, we implemented this approach, replacing ad hoc procedures in the work organization with process flow and model based on the different views of the system architecture.",
+          "The proposed modeling also facilitated the development of key documents in a nanosatellite project, namely the product breakdown structure (PBS), which has been relatively detailed in the paper.",
+          "These tables describe the requirements and their relationship to other SysML design elements to facilitate requirements traceability, satisfaction, and verification."
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The MASAT1 case provides illustrative model artifacts and traceability examples, but no quantitative metrics, baseline comparison, stakeholder evaluation, simulation output, integration/test, or flight evidence.",
+        "evidence": [
+          "The proposed model-based approach is the result of experience gained from the MASAT1 project, a Moroccan university nanosatellite, and it is based on an architectural framework that allows the system to be described via a set of views.",
+          "The proposed modeling also facilitated the development of key documents in a nanosatellite project, namely the product breakdown structure (PBS), which has been relatively detailed in the paper.",
+          "The aim is to develop an executable SysML model with a graphical user interface to provide insight into how nanosatellites work."
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper explicitly uses SysML requirements tables and matrices with Satisfied By and Verified By relations linking requirements to design elements and behavioral verification artifacts.",
+        "evidence": [
+          "The \"Satisfied By\" column shows the model elements that fulfill the requirement. For example, the \"Power System\" subsystem must satisfy operational requirement 100.1.6.",
+          "The 'Verified By' column shows the specific test cases that determine how the system meets the requirement. For example, the \"Bus System Activation\" activity diagram (Fig. 23), which is part of the LEOP flow (Fig. 22), is used to verify operational requirement 100.1.6.",
+          "The requirements matrix is another important SysML element that can be generated for requirements to design trace as shown in the extract from the mission Satisfy Requirement Matrix in Fig. 16:"
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The toolchain, package organization, identifiers, and diagrams give partial reproducibility, but no model repository, data exchange format/API, complete model, or open-source assets are reported; external tool integration is future work.",
+        "evidence": [
+          "The aim of using MBSE for a nanosatellite project is to create a model framework or repository that can be used by university teams (with limited resources) wishing to design CubeSat or Nanosatellite projects.",
+          "We used No Magic MagicDraw modeler with SysML and Cameo Simulation toolkit plugin.",
+          "The next step of this work is to improve the viability and practicality of the product breakdown structure model by integrating external analysis and simulation tools such as MATLAB and STK."
+        ]
+      }
+    ],
+    "total_score": 6.5,
+    "max_score": 8,
+    "normalized_score": 0.812,
+    "overall_rationale": "The paper is a credible, highly relevant MBSE case/framework paper with clear academic nanosatellite context, SysML artifacts, lifecycle tailoring, and explicit requirements-to-design/verification traceability. Evidence is mainly conceptual and illustrative from MASAT1 rather than measured, executable, integrated, or flight-validated."
   },
-  "rq_relevance": "RQ1: yes because the paper proposes a reusable MBSE/SysML framework/repository for academic CubeSat/nanosatellite missions with limited resources and includes system and EPS/power models. RQ2: partial because it claims MBSE improves mission reliability, traceability, design consistency, quality, communication, planning, management, and document generation, but does not quantify reliability/reproducibility/integrability outcomes and most claims are system-level rather than EPS-specific. RQ3: yes because requirements tables explicitly link requirements to satisfied-by and verified-by model elements/test cases, and LEOP/power-bus activation behavior is used to verify an operational requirement satisfied by the Power System; however, this is model-level verification, not an executed physical test campaign.",
-  "claimed_outcomes": [
-    "MBSE and SysML are claimed to improve mission reliability by focusing on engineering aspects of projects.",
-    "MBSE is claimed to provide better traceability, design consistency, quality improvement, and reduced document management overhead.",
-    "The proposed modeling is claimed to improve communication, planning, management, and development by replacing ad hoc procedures with process flows and model-based views.",
-    "The model is claimed to facilitate development of key project documents, especially the product breakdown structure, and to support derivation of WBS and CBS.",
-    "The PBS model repository is intended to be reusable by university teams for requirements, design, analysis, verification, and validation activities.",
-    "SysML requirements tables and matrices are claimed to facilitate requirements traceability, satisfaction, and verification.",
-    "SysML internal block diagrams are used to model subsystem data, power, and service interfaces, supporting design integration; no measured integration outcome is reported."
-  ],
-  "verification_validation_linkage": "The framework includes lifecycle reviews (MCR, MRR, SDR, PDR, CDR, SAR, PRR, ORR, DR), a Verification package, and requirements tables with Satisfied By and Verified By columns. The Verified By column identifies specific test cases/model elements used to determine how requirements are met. EPS-related linkage appears where the Power System satisfies operational requirements such as mode transition, and LEOP Flow plus Bus System Activation verify requirement 100.1.6. The power-bus activation state machine uses Vbat > Vsafe and Vbat < Vcritic transitions between LEOP safe and critical modes. No completed physical V&V results are reported.",
-  "key_findings": [
-    "The paper adapts ECSS/NASA-style project breakdown and lifecycle practices into a simplified MBSE framework for student-driven academic nanosatellite projects.",
-    "The framework organizes nanosatellite models into views/packages for lifecycle, mission analysis, formal design, production/integration, deployment/operation, requirements, structure, behavior, verification, and parametric analysis.",
-    "MASAT1 is used as the case application; its product tree decomposes the mission into space segment, platform subsystems, power system, OBC, communication, attitude/thermal control, payload, and ground segment.",
-    "EPS/power is explicitly modeled through power-system requirements, a BDD of components and characteristics, and an IBD of power, telemetry, command, bus, and software connections.",
-    "SysML requirements diagrams, tables, and matrices are used to organize requirements and connect them to satisfying subsystems and verifying activities/test cases.",
-    "Operational behavior is modeled with ConOps state machines and LEOP activity flows, including power-system activation, battery charging, bus activation, communication activation, and voltage-threshold transitions.",
-    "The paper is mainly a framework and case-demonstration paper; it does not provide quantitative evidence that the model improved mission reliability or integration performance."
-  ],
-  "limitations_gaps": [
-    "Not discussed as a formal limitations or threats-to-validity section.",
-    "Explicit future work states that viability and practicality of the PBS model should be improved by integrating external analysis and simulation tools such as MATLAB and STK.",
-    "The paper states a future goal of developing executable SysML modeling approaches and an executable SysML model with a graphical user interface.",
-    "No quantitative evaluation, physical test results, or measured MBSE impact on reliability, reproducibility, or integrability is reported."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "0.5",
-    "total_score": "1.5",
-    "rationale": "Credible publication context: original paper with DOI, published online in 2024 with Springer Nature/Council of European Aerospace Societies notices. Limitations are only partly addressed through future-work statements; no formal validity/threats discussion or quantitative evaluation is provided."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0023.json",
+    "status_rationale": "Retained as core because the full text directly proposes an MBSE/SysML framework for academic nanosatellite project management and design, applies it to MASAT1, and includes power-system/EPS-relevant structure, requirements, interface, and verification examples.",
+    "citation": "Hanafi, A., Moutakki, Z., Karim, M., & Rachidi, T. (2024). Effective Model-Based Systems Engineering framework for academic nanosatellite project management and design. DOI: 10.1007/s12567-024-00542-2.",
+    "title": "Effective Model-Based Systems Engineering framework for academic nanosatellite project management and design",
+    "authors": [
+      "Ahmed Hanafi",
+      "Zakaria Moutakki",
+      "Mohamed Karim",
+      "Tajjeeddine Rachidi"
+    ],
+    "venue": "not reported in markdown",
+    "doi_or_url": "10.1007/s12567-024-00542-2",
+    "publisher": "Springer Nature / Council of European Aerospace Societies",
+    "venue_type": "journal article",
+    "source_database_or_route": [
+      "scopus",
+      "semantic_scholar"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "high",
+        "rationale": "Directly addresses general nanosatellite mission modeling through an MBSE/SysML framework and includes EPS-relevant power-system requirements, components, interfaces, and behavior at early design abstraction. The limited-prior-knowledge aspect is implicit in the focus on first-time, limited-resource academic teams rather than experimentally tested."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "Claims improved reliability, traceability, consistency, reuse, communication, and management, with some EPS robustness requirements and interface models, but provides little measured evidence and only partial reproducibility/integrability evidence."
+      },
+      "RQ3": {
+        "relevance": "partial",
+        "rationale": "Shows pre-physical model-level verification integration via SysML Verified By links, LEOP activity flow, and Bus System Activation state machine involving the power system, but does not report executable verification results, physical tests, or comprehensive EPS verification procedures."
+      }
+    },
+    "lineage_overlap_notes": "No comparison with prior extractions or other papers was performed under the silo rules. Within this paper, the authors position their framework relative to SSWG CubeSat MBSE, NASA MBSE strategy, and Guo et al.'s DelFFi nanosatellite MBSE work."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "Academic nanosatellite/CubeSat project, with MASAT1 used as the case application.",
+    "size_form_factor": "1U CubeSat elements are shown, including a 1.33 kg 1U mass restriction and 1U CubeSat skeleton.",
+    "mission_name": "MASAT1",
+    "mission_domain": "Low Earth Orbit academic technology-demonstration nanosatellite with FPGA-based secondary onboard computer, efficient power management, and low-cost ground-station objective.",
+    "organization_type": "University/academic project at Sidi Mohamed Ben Abdellah University, Fez, Morocco, with CNRST as main customer/funder.",
+    "project_maturity": "First university nanosatellite project under development; paper emphasizes mission analysis and early design, with no flight or integration status reported.",
+    "lifecycle_stage_addressed": "Framework covers mission analysis, formal design, production/integration, and deployment/operation; MASAT1 application focuses primarily on Phase A mission analysis and PBS preparation for formal design.",
+    "development_context": "Limited-resource, student-driven academic context outside mature space agency or industrial support structures; ECSS/NASA processes are simplified for university nanosatellite use.",
+    "eps_relevance": "power-budget/electrical-architecture",
+    "model_maturity": "SysML conceptual/early-design model with requirements, package, structural, interface, behavior, and verification traceability artifacts; executable SysML and external simulation integration are future work."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "Improve the success and early project management/design of university nanosatellite missions where traditional DBSE/ECSS practices are over-specified and academic teams have limited resources and experience.",
+    "modeling_scope": [
+      "Academic nanosatellite lifecycle views and project timeline",
+      "Mission analysis view with needs definition, requirements definition, and functional breakdown processes",
+      "Product breakdown structure, work breakdown structure, and cost breakdown structure derivation",
+      "MASAT1 system requirements organization, requirement diagrams, tables, and matrices",
+      "Space and ground segment structural decomposition",
+      "Power-system block definition and internal block/interface diagrams",
+      "Concept of operations, LEOP activity flow, and bus activation state machine",
+      "Verification package and requirement Verified By links"
+    ],
+    "system_boundary_level_of_abstraction": "Model boundary spans the nanosatellite project, space segment, payload, platform subsystems, ground segment, and selected subsystem/component detail; EPS is represented at component/interface level, not at circuit, electrochemical, or detailed power-budget simulation level.",
+    "minimal_or_excluded_modeling": "Business Agreement Structure is neglected for student projects; ECSS PBS is simplified; detailed executable simulation, MATLAB/STK integration, complete formal design, production/integration, operations, and physical test results are outside the reported work.",
+    "required_prior_behavioral_domain_knowledge": "Not quantified. The framework assumes basic familiarity with nanosatellite functions, stakeholder needs, requirements, ConOps, and ECSS/NASA systems-engineering concepts, while aiming to be understandable for first-time university CubeSat teams.",
+    "handling_limited_behavioral_knowledge": "The method starts from stakeholders, needs/goals/objectives, ConOps, and top-level requirements, then incrementally derives functions, product structure, interfaces, and behavior diagrams; reusable views and standards-derived categories reduce dependence on detailed prior behavior knowledge.",
+    "model_artifacts_used": [
+      "SysML package diagrams",
+      "SysML requirements diagrams",
+      "SysML requirements tables",
+      "SysML requirements matrices",
+      "Block definition diagrams",
+      "Internal block diagrams",
+      "Activity diagrams",
+      "State machine diagrams",
+      "Sequence/timeline diagram",
+      "Product tree",
+      "PBS/WBS/CBS artifacts",
+      "ConOps",
+      "Review deliverables such as MCR, MRR, SDR, PDR, CDR, SAR, PRR, ORR, and DR"
+    ],
+    "generality_reuse_mechanism": [
+      "ECSS and NASA handbook tailoring to academic nanosatellite context",
+      "Architectural framework with lifecycle views MAV, FDV, PIV, and DOV",
+      "Reusable PBS model repository organized by hierarchy and SysML diagram type",
+      "Standards-derived requirement categories and identifier mapping",
+      "Generic ConOps/mode structure, including optional attitude control mode to generalize beyond MASAT1",
+      "Package dependencies from stakeholders to requirements, structure, behavior, verification, and parametrics"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Tailor space-systems standards and define the MBSE framework",
+        "inputs": "ECSS project management/engineering standards, NASA systems-engineering guidance, academic nanosatellite constraints, and MASAT1 experience.",
+        "outputs": "Simplified lifecycle, architectural views, and adjusted PBS-oriented management/design framework.",
+        "actors_roles": "Systems engineers, supervising teachers, student project team, and project stakeholders.",
+        "prerequisites": "Mission idea, academic project context, and agreement to use SysML/MBSE.",
+        "completion_criteria": "Lifecycle phases, key reviews, viewpoints, and simplified management structures are defined.",
+        "handoffs": "Feeds mission analysis and model repository organization."
+      },
+      {
+        "step": "Needs definition and Mission Concept Review",
+        "inputs": "Stakeholder list, mission needs, goals, objectives, constraints, and initial mission concept.",
+        "outputs": "Validated NGOs, initial ConOps, success criteria, and MCR document.",
+        "actors_roles": "Project engineering team, CNRST customer, research professors, and other stakeholders.",
+        "prerequisites": "Stakeholders identified and mission concept initiated.",
+        "completion_criteria": "Mission Concept Review is validated.",
+        "handoffs": "Triggers requirements definition process."
+      },
+      {
+        "step": "Requirements definition and Mission Requirements Review",
+        "inputs": "Validated MCR, NGOs, ConOps, constraints, and ECSS engineering standards.",
+        "outputs": "Top-level mission and functional requirements, system concept/architecture, lifecycle cost estimates, and MRR/SRR requirement sets.",
+        "actors_roles": "Systems engineers/modelers with subsystem stakeholders.",
+        "prerequisites": "Validated MCR and agreed requirement categories/identifiers.",
+        "completion_criteria": "Mission Requirements Review is validated and requirements are organized for SysML modeling.",
+        "handoffs": "Feeds functional breakdown and formal design."
+      },
+      {
+        "step": "Functional breakdown and product/work/cost structure derivation",
+        "inputs": "Top-level requirements, ConOps, and MRR baseline.",
+        "outputs": "Functional breakdown structure, product tree/PBS, WBS, and CBS.",
+        "actors_roles": "Project engineering team and subsystem leads.",
+        "prerequisites": "Requirements sufficiently stable for decomposition.",
+        "completion_criteria": "Logical decomposition model is analyzed/baselined and System Definition Review is validated.",
+        "handoffs": "Feeds preliminary/formal design and management planning."
+      },
+      {
+        "step": "Build the SysML PBS model repository",
+        "inputs": "Product tree, requirements categories, stakeholder/mission packages, and chosen SysML toolchain.",
+        "outputs": "Packages for stakeholders, requirements, structure, behavior, verification, parametric analysis, and launch/operation facility.",
+        "actors_roles": "MBSE modelers and subsystem engineers.",
+        "prerequisites": "MagicDraw/Cameo SysML environment and agreed package/identifier conventions.",
+        "completion_criteria": "Package structure aligns with hierarchy and diagram types.",
+        "handoffs": "Enables requirements, structural, behavioral, and verification model development."
+      },
+      {
+        "step": "Develop linked requirements, structure, behavior, and verification artifacts",
+        "inputs": "SysML repository, requirements, PBS, subsystem definitions, and ConOps.",
+        "outputs": "Requirement diagrams/tables/matrices; BDD/IBD models; ConOps/activity/state-machine diagrams; Satisfied By and Verified By links.",
+        "actors_roles": "Systems engineers, modelers, subsystem teams, and verification planners.",
+        "prerequisites": "Requirements and product structure are modeled sufficiently for trace links.",
+        "completion_criteria": "Requirements are linked to design elements and model-level verification/test cases.",
+        "handoffs": "Supports formal design, future executable simulation, and production/integration planning."
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "The framework maps Phase A Mission Analysis to needs definition, requirements definition, and functional breakdown with MCR/MRR/SDR-style reviews; Phase B Formal Design to preliminary design and PDR/CDR; Phase C Production & Integration to final design, integration, verification/acceptance, PRR/SAR; and Phase D Deployment & Operation to preparation, operations, ORR, and decommissioning review.",
+    "approach_classification": "Enhanced MBSE",
+    "approach_classification_rationale": "The work is a SysML MBSE approach enhanced by tailoring ECSS/NASA project-management structures, lifecycle reviews, PBS/WBS/CBS governance, and academic-resource constraints; it is not yet an integrated digital-engineering environment because external analysis/simulation integration is future work.",
+    "tailoring_rationale": [
+      "ECSS standards are considered over-specified for nanosatellite projects.",
+      "Academic nanosatellite projects are not typically customer-supplier relationships.",
+      "Functional requirements are mainly derived from mission objectives.",
+      "Budget is directly allocated to hardware acquisition and software development, so schedule and cost structures can be derived from the product tree.",
+      "Student personnel can change continuously, and Business Agreement Structure can be neglected.",
+      "Framework is intended for limited-resource teams wishing to start CubeSat/nanosatellite projects."
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "SysML",
+      "No Magic MagicDraw modeler",
+      "Cameo Simulation Toolkit plugin",
+      "ECSS-based project planning and engineering references",
+      "NASA systems-engineering handbook/project management guidance",
+      "SysML package, requirement, BDD, IBD, activity, state-machine, and parametric modeling approach"
+    ],
+    "toolchain_architecture_data_flow": "The SysML repository is organized into packages by hierarchy and diagram type: mission stakeholders and requirements feed structure; requirements link to behavior, verification, and parametric packages; BDD elements provide subsystem/component definitions and IBDs capture data, power, and service flows. External MATLAB/STK analysis integration is proposed as future work.",
+    "interoperability_mechanisms": [
+      "SysML package dependencies/refine relationships across lifecycle views",
+      "Requirement Satisfied By and Verified By relationships",
+      "Requirement matrices for requirements-to-design trace",
+      "Ports and flow lines in internal block diagrams for data, power, and service exchanges",
+      "Signal send/receive actions linking behavior diagrams",
+      "Consistent product-tree and requirements identifiers",
+      "Planned integration with MATLAB and STK"
+    ],
+    "syntax_semantic_continuity_evidence": "Requirements categories from the SRR are mapped to SysML identifiers, product tree items use the same numeric hierarchy, and requirements tables/matrices retain links from stakeholder needs to requirements, subsystem design elements, and verification behaviors.",
+    "software_hardware_system_integration_readiness": "The structural model explicitly includes both hardware and software blocks, such as Power Management Software, Cde & Data Handling Software, and communication software, and IBDs show subsystem data/power flows. Actual hardware/software integration readiness or test status is not reported.",
+    "toolchain_limitations": [
+      "No downloadable SysML model or repository is reported.",
+      "No implemented data exchange mechanism/API is reported.",
+      "Executable SysML, MATLAB, and STK integration are future work.",
+      "Tool comparison notes lower robustness/simulation in free tools and medium/high cost in MagicDraw/Rhapsody.",
+      "No evidence of round-trip continuity from requirements to external simulations, hardware tests, or operations is provided."
+    ],
+    "availability_reproducibility": "Partially reproducible from the paper's process descriptions, diagrams, package organization, and standards references, but model files, complete requirements set, executable scripts, data, and open-source assets are not reported."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "Power System",
+      "Solar Panel",
+      "Solar Cell",
+      "Battery",
+      "Battery Heater",
+      "Power Control Unit",
+      "Power Converter",
+      "Power Conditioner",
+      "Power Distribution",
+      "Power Management Software",
+      "Power-Point Tracking Controller",
+      "Housekeeping Measurements",
+      "Battery Protection SW",
+      "Cde & Data Interface",
+      "Kill Switch",
+      "RBF pin",
+      "3.3 Power Bus",
+      "5V Power Bus",
+      "Thermistor",
+      "Coarse sun sensor"
+    ],
+    "eps_requirements_representation": "Power-system requirements are represented under category 212 with operational, functional, design, interface, physical, and product-assurance identifiers. The paper shows design power-system requirements for power margin, PV cell justification, topology, degradation factors, battery recharge, power distribution/failure protection, and structural current-path constraints, plus space-segment requirements involving optimal power supply before antenna deployment.",
+    "verification_validation_artifacts": [
+      "SysML requirements diagrams and tables",
+      "Satisfied By and Verified By columns",
+      "Mission requirements matrix",
+      "LEOP Flow activity diagram",
+      "Bus System Activation state machine",
+      "CubeSat ConOps state machine",
+      "Lifecycle review gates including MCR, MRR, SDR, PDR, CDR, SAR, PRR, ORR, and DR"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "Link requirements to model elements through Satisfied By relationships before hardware realization.",
+      "Link requirements to behavior/test-case artifacts through Verified By relationships.",
+      "Use LEOP activity flow and Bus System Activation state machine to verify mode-transition behavior involving power-system activation and battery-voltage thresholds.",
+      "Use design reviews to validate mission concept, requirements, system definition, preliminary design, and acceptance readiness.",
+      "Potentially execute/simulate in Cameo or future MATLAB/STK integrations, although no executed results are reported."
+    ],
+    "evidence_verification_integrated_in_model": "The paper explicitly states that the Verified By column identifies test cases and gives Bus System Activation/LEOP as a verification example for operational requirement 100.1.6; it also states that the LEOP flow activity diagram can verify functional or operational requirements.",
+    "integration_test_readiness": "Model-level readiness is partial: interfaces, power/data flows, requirements, and verification links are modeled, and Phase C includes verification and acceptance, but no EPS hardware tests, simulation outputs, integration results, or acceptance data are reported."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Paper purpose and scope",
-      "quote": "This paper aims to contribute to research efforts to improve the success of university nanosatellite missions using Model-Based Systems Engineering (MBSE) to facilitate the initial project management and design phases.",
-      "location": "Abstract"
+      "claim": "MBSE/SysML improves university nanosatellite mission reliability compared with traditional document-based practice.",
+      "outcome_category": "reliability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Formal application of modeling to requirements, analysis, design, and verification",
+        "SysML views covering structure and behavior",
+        "Shift away from over-specified DBSE procedures"
+      ],
+      "artifact_or_process_linked": "MBSE framework and SysML model views across mission analysis and design.",
+      "lifecycle_stage": "Conceptual design through lifecycle phases, emphasized in early mission analysis/design.",
+      "evidence_type": "Author assertion with motivating failure-rate context; no measured reliability outcome.",
+      "metric_or_value_indicator": "University mission early failure rate around 40% is cited as motivation, but no MASAT1 reliability metric is reported.",
+      "baseline_comparator": "Traditional DBSE/ECSS-style document-based procedures are discussed as the problematic baseline, without quantitative comparison.",
+      "observed_effect_size_or_qualitative_effect": "Not measured; qualitative claim of improved reliability.",
+      "evidence_source": "Section 1 Introduction",
+      "direct_quote": "The combination of Model-Based Systems Engineering (MBSE) and Systems Modeling Language (SysML) emerged as an alternative management and design approach that improves mission reliability by focusing on the engineering aspects of projects.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "Reliability improvement could depend on team expertise, component choices, funding, testing rigor, and operations; no baseline or flight data are provided."
     },
     {
-      "claim": "View-based architectural framework",
-      "quote": "The proposed model-based approach is the result of experience gained from the MASAT1 project, a Moroccan university nanosatellite, and it is based on an architectural framework that allows the system to be described via a set of views.",
-      "location": "Abstract"
+      "claim": "MBSE provides better traceability, design consistency, quality improvement, and reduced document-management overhead.",
+      "outcome_category": "traceability/consistency/quality/documentation",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "SysML requirement diagrams and tables",
+        "Requirement relationships to design and verification elements",
+        "Model repository as coherent body of knowledge"
+      ],
+      "artifact_or_process_linked": "Requirements diagrams, requirements tables, satisfy/verify links, and requirements matrices.",
+      "lifecycle_stage": "Mission analysis and design, with lifecycle continuity claimed.",
+      "evidence_type": "General MBSE claim plus MASAT1 illustrative traceability artifacts.",
+      "metric_or_value_indicator": "No quality or overhead metric reported.",
+      "baseline_comparator": "Document-Based Systems Engineering is the implied baseline.",
+      "observed_effect_size_or_qualitative_effect": "Requirements tables and matrices demonstrate trace links, but quality/overhead improvements are not measured.",
+      "evidence_source": "Section 1 Introduction and Section 5.1 Requirements modeling",
+      "direct_quote": "Typical advantages of MBSE are that it provides better traceability, design consistency, quality improvement, and reduced document management overhead.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Traceability artifacts are shown, but broader consistency, quality, and overhead benefits are asserted rather than evaluated."
     },
     {
-      "claim": "Reusable framework for limited-resource university teams",
-      "quote": "The aim of using MBSE for a nanosatellite project is to create a model framework or repository that can be used by university teams (with limited resources) wishing to design CubeSat or Nanosatellite projects.",
-      "location": "Section 2"
+      "claim": "The framework can guide limited-resource university teams through nanosatellite mission design and management.",
+      "outcome_category": "process guidance/reuse",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Reusable model framework/repository",
+        "Lifecycle views and process flows",
+        "ECSS/NASA tailoring for academic context"
+      ],
+      "artifact_or_process_linked": "Lifecycle view, mission analysis process flows, and PBS model repository.",
+      "lifecycle_stage": "Mission analysis through design, verification, and validation as a planned lifecycle pathway.",
+      "evidence_type": "Conceptual framework and MASAT1 case illustration.",
+      "metric_or_value_indicator": "No adoption, time, cost, or learning metric reported.",
+      "baseline_comparator": "Ad hoc procedures and over-specified DBSE standards are discussed qualitatively.",
+      "observed_effect_size_or_qualitative_effect": "Qualitative guidance through processes and views.",
+      "evidence_source": "Section 2 MBSE and SysML overview",
+      "direct_quote": "This type of formal modeling application will guide them through the entire nanosatellite mission design and management process (mission analysis, system design verification, and validation).",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No independent team adoption, reproducibility exercise, or educational evaluation is reported."
     },
     {
-      "claim": "MBSE language and tool",
-      "quote": "We used No Magic MagicDraw modeler with SysML and Cameo Simulation toolkit plugin.",
-      "location": "Section 2"
+      "claim": "Modeling facilitated creation of key project-management deliverables, especially the PBS, and supports WBS/CBS derivation.",
+      "outcome_category": "project deliverables/governance",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Product tree modeled as SysML structure",
+        "PBS as project design-management backbone",
+        "Functional breakdown to product/work/cost structures"
+      ],
+      "artifact_or_process_linked": "MASAT1 product tree, PBS package organization, WBS, and CBS derivation.",
+      "lifecycle_stage": "Mission analysis and preparation for formal design.",
+      "evidence_type": "Case-study model artifact and conclusion claim.",
+      "metric_or_value_indicator": "Existence of product tree/PBS/WBS/CBS artifacts; no quantitative management metric.",
+      "baseline_comparator": "Ad hoc/document-based organization is qualitatively contrasted.",
+      "observed_effect_size_or_qualitative_effect": "Key deliverables were produced and relatively detailed in the paper.",
+      "evidence_source": "Section 6 Conclusion",
+      "direct_quote": "The proposed modeling also facilitated the development of key documents in a nanosatellite project, namely the product breakdown structure (PBS), which has been relatively detailed in the paper.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "The artifact production is visible, but facilitation versus a non-MBSE baseline is not measured."
     },
     {
-      "claim": "Claimed reliability outcome",
-      "quote": "The combination of Model-Based Systems Engineering (MBSE) and Systems Modeling Language (SysML) emerged as an alternative management and design approach that improves mission reliability by focusing on the engineering aspects of projects.",
-      "location": "Section 1"
+      "claim": "The MBSE approach improved communication, planning, management, and development by replacing ad hoc organization with process flows and architectural views.",
+      "outcome_category": "communication/planning/management",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Process-flow modeling",
+        "Architecture viewpoints",
+        "Common SysML repository"
+      ],
+      "artifact_or_process_linked": "Mission analysis flow diagrams, lifecycle views, and model-based architecture views.",
+      "lifecycle_stage": "Early project organization through mission analysis/design.",
+      "evidence_type": "Author conclusion supported by illustrated process-flow artifacts.",
+      "metric_or_value_indicator": "No communication or schedule metric reported.",
+      "baseline_comparator": "Ad hoc procedures in work organization.",
+      "observed_effect_size_or_qualitative_effect": "Qualitative improvement claimed; no measured effect size.",
+      "evidence_source": "Section 6 Conclusion",
+      "direct_quote": "To improve communication, planning, management, and development, we implemented this approach, replacing ad hoc procedures in the work organization with process flow and model based on the different views of the system architecture.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Improvement could be due to process discipline or team experience rather than MBSE artifacts alone; no stakeholder assessment reported."
     },
     {
-      "claim": "Claimed MBSE benefits",
-      "quote": "Typical advantages of MBSE are that it provides better traceability, design consistency, quality improvement, and reduced document management overhead.",
-      "location": "Section 1"
+      "claim": "SysML internal block diagrams improve integrability by modeling data, power, and service connections between subsystem components.",
+      "outcome_category": "integrability/interface clarity",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "BDD-to-IBD structural decomposition",
+        "Ports and flow lines",
+        "Explicit data and power/service interfaces"
+      ],
+      "artifact_or_process_linked": "MASAT1 space segment data-flow IBD and power-system interconnection IBD.",
+      "lifecycle_stage": "Formal design preparation and subsystem integration planning.",
+      "evidence_type": "Model artifact demonstration in figures; no integration test result.",
+      "metric_or_value_indicator": "No interface defect, integration time, or compatibility metric reported.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Interfaces among power, OBC, communication, payload, and buses are explicitly represented.",
+      "evidence_source": "Section 5.2 Structural modeling",
+      "direct_quote": "The SysML internal block diagrams (ibd) can be used to model connections between bdd internal components in terms of data, power, or service flow.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Interface clarity does not prove integration success; no hardware/software integration evidence is reported."
     },
     {
-      "claim": "EPS/power requirements modeling",
-      "quote": "Some subsystem requirements have been adjusted to meet the specific requirements of the MASAT1 project, such as the power subsystem design requirements, as shown in Fig. 14.",
-      "location": "Section 5.1"
+      "claim": "EPS-related verification can be integrated before physical development by linking requirements to model test cases and behavior diagrams.",
+      "outcome_category": "verification/validation",
+      "specificity": "EPS-specific",
+      "mbse_mechanism": [
+        "Verified By relationships in requirements table",
+        "LEOP activity flow",
+        "Bus System Activation state machine",
+        "Power System satisfies mode-transition requirement"
+      ],
+      "artifact_or_process_linked": "Requirement 100.1.6, Power System Satisfied By link, LEOP Flow, and Bus System Activation state machine.",
+      "lifecycle_stage": "Mission analysis/formal design before production and integration.",
+      "evidence_type": "SysML traceability and behavior artifact example.",
+      "metric_or_value_indicator": "Requirement 100.1.6 is linked to Power System and Bus System Activation; no pass/fail result reported.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Model records how a behavior/test case determines requirement satisfaction.",
+      "evidence_source": "Section 5.1 Requirements modeling and Section 5.3 Behavior modeling",
+      "direct_quote": "The 'Verified By' column shows the specific test cases that determine how the system meets the requirement. For example, the \"Bus System Activation\" activity diagram (Fig. 23), which is part of the LEOP flow (Fig. 22), is used to verify operational requirement 100.1.6.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "The model-level verification linkage is present, but no executed simulation, test evidence, or verification coverage analysis is reported."
     },
     {
-      "claim": "Subsystem interface modeling",
-      "quote": "The SysML internal block diagrams (ibd) can be used to model connections between bdd internal components in terms of data, power, or service flow.",
-      "location": "Section 5.2"
+      "claim": "Operational modes and EPS-aware power management support robustness/reliability and failure containment.",
+      "outcome_category": "EPS reliability/robustness",
+      "specificity": "EPS-specific",
+      "mbse_mechanism": [
+        "Operational mode requirements",
+        "Battery-voltage state transitions in ConOps",
+        "Power distribution protection concept",
+        "Power Management Software and Battery Protection SW modeled in the EPS block"
+      ],
+      "artifact_or_process_linked": "Operational mission requirements, design power-system requirements, CubeSat ConOps, and Power System BDD/IBD.",
+      "lifecycle_stage": "Requirements and early design.",
+      "evidence_type": "Modeled requirements and behavior diagrams; no validation result.",
+      "metric_or_value_indicator": "Battery voltage transition thresholds are shown in ConOps; detailed power budget/reliability metrics are not reported.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Robustness and failure-propagation prevention are specified as requirements/design intent.",
+      "evidence_source": "Figure 13 operational mission requirements and Figure 14 design power-system requirements",
+      "direct_quote": "The power distribution must be made in accordance with the needs of the different loads, both static and dynamic, as well as the power/energy characteristics of the sources. A protection concept must be put in place to prevent the propagation of failures between subsystems",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Requirements express intent rather than demonstrated EPS reliability; no reliability analysis, simulation, or test result is provided."
     },
     {
-      "claim": "Requirements traceability and verification",
-      "quote": "These tables describe the requirements and their relationship to other SysML design elements to facilitate requirements traceability, satisfaction, and verification.",
-      "location": "Section 5.1"
-    },
-    {
-      "claim": "Verified-by test-case linkage",
-      "quote": "The 'Verified By' column shows the specific test cases that determine how the system meets the requirement.",
-      "location": "Section 5.1"
-    },
-    {
-      "claim": "Model-level verification using LEOP and bus activation",
-      "quote": "The LEOP flow activity diagram is also a way to \"verify\" functional or operational requirements, such as the Bus System Activation state machine (Fig. 23), which verifies operational requirements 100.1.6.",
-      "location": "Section 5.3"
-    },
-    {
-      "claim": "Power-system operational model",
-      "quote": "Power system components and characteristics",
-      "location": "Fig. 18 caption"
-    },
-    {
-      "claim": "Claimed project-management outcome",
-      "quote": "The proposed modeling also facilitated the development of key documents in a nanosatellite project, namely the product breakdown structure (PBS), which has been relatively detailed in the paper.",
-      "location": "Conclusion"
-    },
-    {
-      "claim": "Future-work limitation",
-      "quote": "The next step of this work is to improve the viability and practicality of the product breakdown structure model by integrating external analysis and simulation tools such as MATLAB and STK.",
-      "location": "Conclusion"
+      "claim": "The model repository is intended to be reusable by other university CubeSat/nanosatellite teams.",
+      "outcome_category": "reproducibility/reuse",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Model framework/repository",
+        "Generic package organization",
+        "Standards-based requirement categories",
+        "Generalized ConOps elements"
+      ],
+      "artifact_or_process_linked": "Nanosatellite PBS package organization and reusable framework views.",
+      "lifecycle_stage": "Project start and mission design/management.",
+      "evidence_type": "Design intention and illustrative repository structure; no released model or reuse case.",
+      "metric_or_value_indicator": "No number of reused packages or teams reported.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Reusable package structure is described, but actual reuse is not demonstrated.",
+      "evidence_source": "Section 2 and Section 5",
+      "direct_quote": "The aim of using MBSE for a nanosatellite project is to create a model framework or repository that can be used by university teams (with limited resources) wishing to design CubeSat or Nanosatellite projects.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No model availability, licensing, training material, or independent replication is reported."
     }
   ],
-  "notes_for_consistency": "This is primarily a system/project-management MBSE framework paper with an EPS/power subsystem example. Treat RQ2 outcomes as qualitative MBSE claims, not measured EPS reliability evidence. Treat RQ3 as model-level verification linkage with an EPS/power-bus example, not completed physical verification. Venue name was not explicit in paper.md. Self-check: only paper.md was read and only extraction.json was written."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "Governance is organized around ECSS/NASA-tailored lifecycle phases, view packages, requirements identifiers, and PBS/WBS/CBS structures. Configuration/change-control strategy and model governance roles are not detailed.",
+    "traceability_to_deliverables_decisions_reviews": "The model links stakeholder needs to MCR, requirements to MRR/SRR, functional breakdown to SDR, and design artifacts to PBS/WBS/CBS; PDR, CDR, PRR, SAR, ORR, and decommissioning review are included as lifecycle gates.",
+    "evaluation_criteria_model_quality_usefulness": "Mission success criteria and evaluation criteria are part of the mission definition/requirements flow, but no explicit model-quality criteria or stakeholder usefulness evaluation is reported.",
+    "roi_value_realization_evidence": "No quantitative ROI evidence is reported. The paper claims reduced document-management overhead and derives cost breakdown from WBS/PBS, but does not measure cost, schedule, rework, or productivity effects.",
+    "programmatic_gates_critical_design_events_supported": "Mission Concept Review, Mission Requirements Review, System Definition Review, Preliminary Design Review, Critical Design Review, Production Readiness Review, System Acceptance Review, Operational Readiness Review, and Decommissioning Review.",
+    "model_derived_performance_indicators_management_metrics": "Lifecycle cost estimates, CBS, typical phase durations, power margin requirement, battery-voltage mode thresholds, and requirement satisfaction/verification links are model-relevant indicators, but no management metric results are reported."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed with evidence",
+      "rationale": "The paper provides phase/process flows and applies them to MASAT1 with concrete SysML artifacts, though not an evaluated step-by-step deployment playbook."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper compares SysML tools, names MagicDraw/Cameo, describes SysML links/flows, and proposes MATLAB/STK integration, but provides no implemented exchange mechanism or continuity evidence."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed with evidence",
+      "rationale": "The central framework tailors ECSS/NASA practices for limited-resource, student-driven academic nanosatellites and illustrates the tailoring in MASAT1."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "addressed conceptually",
+      "rationale": "PBS/WBS/CBS and review gates are central, but cost/schedule/ROI benefits are not measured."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "mentioned only",
+      "rationale": "The paper mentions fast/cost-effective nanosatellites, iterative/recursive needs-requirements flows, and changing student personnel, but does not address agile, distributed, or rapid-iteration engineering practices in depth."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "A general academic nanosatellite model can be organized as SysML lifecycle/views and a PBS repository that starts with stakeholders, needs/goals/objectives, ConOps, top-level requirements, and functional breakdown.",
+        "EPS/power modeling is included at an early-design abstraction through 212 Power System requirements, Power System BDD components, power/data IBD interfaces, and bus activation behavior.",
+        "The approach reduces dependence on detailed prior behavior knowledge by giving first-time teams standards-derived process flows, package structures, and reusable requirement/product identifiers, but it does not prove minimal-knowledge usability empirically."
+      ],
+      "RQ2": [
+        "The authors claim MBSE improves reliability, traceability, design consistency, communication, planning, management, development, and deliverable generation.",
+        "Reproducibility is supported conceptually by reusable packages and standards-derived structure, but no model repository/open assets are provided.",
+        "Integrability is supported by hardware/software BDDs and IBD data/power/service flows, but no integration test or flight evidence is reported."
+      ],
+      "RQ3": [
+        "Verification is integrated into the model through requirements tables/matrices with Satisfied By and Verified By columns.",
+        "The EPS-adjacent Power System satisfies mode-transition requirement 100.1.6, and the Bus System Activation state machine within the LEOP flow is given as the verification artifact.",
+        "The paper reports model-level verification linkage rather than executed simulations, verification coverage metrics, physical tests, or acceptance results."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "The reported application is focused on the mission analysis phase and PBS development for MASAT1.",
+      "The authors state that executable SysML modeling is a future goal.",
+      "The next step is integration with external analysis and simulation tools such as MATLAB and STK and development of a graphical user interface."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "No downloadable model, full requirements database, scripts, or open-source repository are reported.",
+      "No quantitative reliability, cost, schedule, communication, or reproducibility metrics are reported.",
+      "No executable simulation results, model checks, power-budget analysis, EPS test results, integration evidence, or flight/operations data are reported.",
+      "Venue name is not visible in the markdown, though DOI and publisher context are provided.",
+      "The EPS treatment is illustrative within a broader nanosatellite MBSE framework rather than a complete EPS-focused MBSE method."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "paper objective",
+        "quote": "This paper aims to contribute to research efforts to improve the success of university nanosatellite missions using Model-Based Systems Engineering (MBSE) to facilitate the initial project management and design phases.",
+        "location": "Abstract"
+      },
+      {
+        "topic": "model framework basis",
+        "quote": "The proposed model-based approach is the result of experience gained from the MASAT1 project, a Moroccan university nanosatellite, and it is based on an architectural framework that allows the system to be described via a set of views.",
+        "location": "Abstract"
+      },
+      {
+        "topic": "academic pain point",
+        "quote": "However, with our limited resources, we encountered great difficulty in getting the project off to a good start, as most of the documentation and articles available cover the technical aspects of a CubeSat mission [11] and few articles detail the preparation and early phase management of a university nanosatellite mission.",
+        "location": "Section 1 Introduction"
+      },
+      {
+        "topic": "MBSE repository goal",
+        "quote": "The aim of using MBSE for a nanosatellite project is to create a model framework or repository that can be used by university teams (with limited resources) wishing to design CubeSat or Nanosatellite projects.",
+        "location": "Section 2 MBSE and SysML overview"
+      },
+      {
+        "topic": "toolchain",
+        "quote": "We used No Magic MagicDraw modeler with SysML and Cameo Simulation toolkit plugin.",
+        "location": "Section 2 MBSE and SysML overview"
+      },
+      {
+        "topic": "standards tailoring",
+        "quote": "The standard project breakdown method we just described works quite efficiently in an industrial customer-supplier relationship. However, some specificities of nanosatellite projects in an academic context allow for simplifying this structure model, since they are not in a customer-supplier relationship.",
+        "location": "Section 3.2"
+      },
+      {
+        "topic": "mission context",
+        "quote": "MASAT1 is a nanosatellite project initiated at the University of Sidi Mohamed Ben Abdellah, Fez, Morocco to put in place the basic and indispensable technologies (hardware and software) necessary to build a resilient, ready-to-fly CubeSat system, with efficient power management and low-cost mission control ground station [21].",
+        "location": "Section 4.1 Mission definition process"
+      },
+      {
+        "topic": "requirements modeling",
+        "quote": "The system requirements for the MASAT1 mission are implemented in the MBSE model using the requirement diagrams and tables available in SysML.",
+        "location": "Section 5.1 Requirements modeling"
+      },
+      {
+        "topic": "traceability",
+        "quote": "These tables describe the requirements and their relationship to other SysML design elements to facilitate requirements traceability, satisfaction, and verification.",
+        "location": "Section 5.1 Requirements modeling"
+      },
+      {
+        "topic": "EPS satisfy link",
+        "quote": "The \"Satisfied By\" column shows the model elements that fulfill the requirement. For example, the \"Power System\" subsystem must satisfy operational requirement 100.1.6.",
+        "location": "Section 5.1 Requirements modeling"
+      },
+      {
+        "topic": "verification link",
+        "quote": "The 'Verified By' column shows the specific test cases that determine how the system meets the requirement. For example, the \"Bus System Activation\" activity diagram (Fig. 23), which is part of the LEOP flow (Fig. 22), is used to verify operational requirement 100.1.6.",
+        "location": "Section 5.1 Requirements modeling"
+      },
+      {
+        "topic": "interface/integration modeling",
+        "quote": "The SysML internal block diagrams (ibd) can be used to model connections between bdd internal components in terms of data, power, or service flow.",
+        "location": "Section 5.2 Structural modeling"
+      },
+      {
+        "topic": "behavioral verification",
+        "quote": "The LEOP flow activity diagram is also a way to \"verify\" functional or operational requirements, such as the Bus System Activation state machine (Fig. 23), which verifies operational requirements 100.1.6. that validate operational requirement 100.1.6.",
+        "location": "Section 5.3 Behavior modeling"
+      },
+      {
+        "topic": "project-management outcome",
+        "quote": "To improve communication, planning, management, and development, we implemented this approach, replacing ad hoc procedures in the work organization with process flow and model based on the different views of the system architecture.",
+        "location": "Section 6 Conclusion"
+      },
+      {
+        "topic": "future executable/simulation gap",
+        "quote": "The next step of this work is to improve the viability and practicality of the product breakdown structure model by integrating external analysis and simulation tools such as MATLAB and STK.",
+        "location": "Section 6 Conclusion"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Extraction used only the supplied corpus metadata and the specified markdown paper. No previous extraction, sources.bib, or other paper was read.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "Full markdown was available and directly addressed MBSE/SysML modeling, MASAT1 context, power-system artifacts, and verification traceability. Confidence is reduced only for venue naming and unreported model availability/evaluation details."
+  },
+  "bibtex": "@article{paper-0023,\n  title = {Effective Model-Based Systems Engineering framework for academic nanosatellite project management and design},\n  author = {Ahmed Hanafi and Zakaria Moutakki and Mohamed Karim and Tajjeeddine Rachidi},\n  year = {2024},\n  journal = {CEAS Space Journal},\n  publisher = {Springer Nature},\n  doi = {10.1007/s12567-024-00542-2},\n  url = {https://doi.org/10.1007/s12567-024-00542-2}\n}"
 }

@@ -1,157 +1,591 @@
 {
   "corpus_id": "paper-0081",
   "tier": "core",
-  "citation": "Mastropietro, Račkauskas, and Knopp (2025), Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain",
-  "title": "Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain",
-  "authors": [
-    "A. Mastropietro",
-    "S. Račkauskas",
-    "A. Knopp"
-  ],
   "year": 2025,
-  "doi_or_url": "10.1109/isse65546.2025.11370070",
-  "venue_type": "Conference/IEEE publication indicated by DOI metadata; exact venue name not stated in paper.md",
-  "modeling_scope": "System-level New Space/small-satellite platform MBSE focused on reusable functional architectures, stakeholder/mission context, requirements traceability, system and logical architecture, standard baselines/functional libraries, digital thread, physical-architecture linkage, and automation. EPS/power appears as an example through electric power regulation/distribution mapping and a Provide Power capability linked to PCDU, but no detailed EPS model is presented.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "budget",
-    "verification",
-    "operations",
-    "reference model/template",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "Tailored ARCADIA methodology in Capella, incorporating FAS concepts and object-oriented functional grouping; automation via Python4Capella, custom APIs, Capella libraries/REC-RPL, functional libraries in JSON/YAML/spreadsheets, PVMT, and Filtering Add-On. SysML/SysML v2 are discussed as standards/context rather than the implemented toolchain.",
-  "mbse_language_method_tool_categories": [
-    "Capella/Arcadia",
-    "System-as-Code",
-    "Other"
-  ],
-  "robot_platform": "New Space small-satellite/satellite-platform context; satellite platform selected as System of Interest; pilot with Kongsberg NanoAvionics demonstration mission. Specific CubeSat/nanosatellite form factor not reported.",
-  "task_domain": "Standardized satellite platform development and payload integration for Satellite-as-a-Service/New Space missions; service domains listed as communications, navigation, earth observation, and research and development.",
-  "interface": "Functional and component interfaces/exchanges in Capella; payload-to-standard-platform interface context; Python4Capella/API interface to Capella Java model elements; bidirectional links to external sources such as Excel/JSON and potential simulation environments.",
-  "feedback": "Iterative validation and refinement of generated model elements and functional libraries; bidirectional data flow allows external data/model updates. No operational closed-loop feedback is reported.",
-  "control_autonomy_split": "Not applicable",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "Pilot implementation with Kongsberg NanoAvionics on a demonstration mission. The approach was evaluated across satellite platform modeling, functional library development, digital thread, and automation; validation used manual inspection, Capella built-in model validation tools, functional-library/interconnection tests, and demonstrations of bidirectional data flow and automated model-element generation.",
-  "rqs_addressed": {
-    "RQ1": "partial",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The corpus metadata identifies an IEEE record and DOI for an ISSE conference paper, which is a credible engineering venue route.",
+        "evidence": [
+          "Corpus metadata: paperId 'ieee:11370070' and DOI '10.1109/isse65546.2025.11370070'.",
+          "Paper front matter title: 'Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain'."
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper explicitly reports scope choices and several implementation limitations.",
+        "evidence": [
+          "Section III.B: 'For this research, the satellite platform was chosen as the primary SoI'.",
+          "Section V: 'limitations were observed in the maintainability of the custom automation layer'.",
+          "Section V: 'Manually constructing the functional libraries presents limitations in terms of scalability and maintainability.'"
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The New Space/small-satellite context and lifecycle layers are clear, but the demonstration mission is not named or characterized in technical detail.",
+        "evidence": [
+          "Section II.A: 'The Satellite as Service model relies heavily on small satellites, classified by mass into nano-, micro-, and mini-satellites'.",
+          "Section III: 'The model begins at the Operational Analysis (OA) level... System Analysis (SA) and Logical Architecture (LA)... Physical Architecture (PA)'.",
+          "Section IV: 'using a demonstration mission to evaluate the methodology'"
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The method, toolchain, layers, artifacts, and automation architecture are sufficiently described for comparison and partial replication, though not accompanied by released code.",
+        "evidence": [
+          "Section II.C: 'a tailored application of the ARCADIA methodology is presented, incorporating key concepts from the FAS methodologies'.",
+          "Section III.C: 'Python scripts are used to to read and write from/to the Capella model.'",
+          "Section III.C: 'For each function, the library defines its name, parent function, kind, and implementation case'."
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Most benefits are tied to functional libraries, Capella elements, object-oriented grouping, automated generation, and digital-thread data flow.",
+        "evidence": [
+          "Abstract: 'An automated framework was developed to support fast, consistent deployment of satellite digital models across missions'.",
+          "Section III.B: 'automating a modular functional design enables standardized digital replicability of the logical architecture and traceability of the model'.",
+          "Section IV: 'automated generation of model elements via extended API interfaces.'"
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "A pilot implementation, manual inspection, and Capella model validation provide some evidence, but the paper gives no metrics, comparator, stakeholder evaluation, flight data, or integration-test results.",
+        "evidence": [
+          "Section IV: 'A pilot implementation of the proposed modeling approach was conducted in collaboration with Kongsberg NanoAvionics'.",
+          "Section IV: 'manual inspection of the resulting model... and through Capella's built-in model validation tools.'",
+          "No quantitative deployment-time, defect-reduction, or reuse metrics are reported."
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper defines and claims traceability across capabilities, functions, logical components, and physical architecture, but it does not show concrete requirement-to-test traces or a trace matrix from the pilot.",
+        "evidence": [
+          "Section II.B: 'MBSE ensures traceability across all system elements'.",
+          "Section III.B: 'This approach strengthens traceability between stakeholder needs and system functionality'.",
+          "Section III.D: 'preserving traceability to earlier design decisions.'"
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper reports data exchange formats, APIs, and architecture, but does not report availability of the generated model, scripts, or functional libraries.",
+        "evidence": [
+          "Section III.C: 'various formats can be used as structured databases, including JavaScript Object Notation (JSON), YAML, or spreadsheets.'",
+          "Section III.C: 'a new interface was developed to integrate with the Filtering Add-On'.",
+          "Section V: 'Capella does not natively support code-model parallelism'."
+        ]
+      }
+    ],
+    "total_score": 6.0,
+    "max_score": 8,
+    "normalized_score": 0.75,
+    "overall_rationale": "The paper gives a credible and detailed MBSE automation concept with a pilot implementation and explicit limitations, but evidence is mostly qualitative and system-level; no open artifacts, quantitative comparator, or EPS-specific verification case is provided."
   },
-  "rq_relevance": "RQ1: Partial because the paper gives a general MBSE approach for small-satellite/satellite-platform functional modeling with reusable baselines and limited power/EPS examples, but does not develop a detailed EPS behavior model. RQ2: Partial because modeling is claimed to improve modularity, traceability, replicability, reuse, consistency, and integration, but these outcomes are mostly system/platform-level and not specific to EPS reliability. RQ3: Partial because the paper reports model/workflow validation and Capella validation tools, but EPS-specific verification procedures before physical development are not modeled; automated functional verification is identified as future work.",
-  "claimed_outcomes": [
-    "Automated framework supports fast, consistent deployment of satellite digital models across missions.",
-    "Object-oriented functional analysis plus System-as-Code is claimed to streamline standard satellite-platform development and support broader MBSE adoption.",
-    "The approach is claimed to enhance model modularity, traceability, and replicability.",
-    "The automated workflow demonstrated integration of functional analysis, reuse of standard structures, and model-data interaction across abstraction layers.",
-    "Bidirectional data flow between Capella and external sources such as Excel and JSON was demonstrated.",
-    "Initial support for model variability is claimed through the Filtering Add-On and 150% models.",
-    "Reliability is discussed mainly as a benefit of standardization and reuse in Satellite-as-a-Service; no EPS-specific reliability improvement is demonstrated."
-  ],
-  "verification_validation_linkage": "General model/workflow V&V only. Validation used manual inspection of generated Capella models, Capella built-in model validation tools, and incremental checks of functional libraries and interconnections. The paper says future work may add automated functional verification mechanisms. No EPS-specific verification, test, or IVV procedure model is reported.",
-  "key_findings": [
-    "The paper proposes an object-oriented functional modeling approach for New Space satellite platforms, using functional groups derived from use cases as reusable building blocks.",
-    "The satellite platform, rather than the entire mission or company scope, is selected as the primary System of Interest to balance clarity, modularity, and future extension.",
-    "A tailored ARCADIA/Capella process incorporates FAS-style functional elements, interfaces, and connections across System Analysis and Logical Architecture layers.",
-    "Automation is implemented through Python4Capella, custom APIs, and use-case functional libraries that generate and manipulate Capella model elements.",
-    "Power/EPS is addressed only as a domain example: the paper mentions electric power regulation and distribution mapping and a Provide Power capability linked to PCDU.",
-    "The pilot implementation with Kongsberg NanoAvionics confirmed feasibility for automated generation, functional-library integration, model variability support, and bidirectional data exchange.",
-    "The paper explicitly reports maintainability and scalability limits in the custom automation layer and manually constructed functional libraries."
-  ],
-  "limitations_gaps": [
-    "Initial modeling effort is higher during transition to a System-as-Code framework.",
-    "The custom automation layer is spread across multiple custom APIs and Python classes, creating maintainability concerns that require disciplined management.",
-    "Manual construction of functional libraries limits scalability and maintainability.",
-    "Functional-interface initialization from a dedicated model through scriptable APIs is described as needed to improve robustness and reduce implementation time and error.",
-    "Capella does not natively support code-model parallelism.",
-    "Automated functional verification mechanisms are left for future work.",
-    "No detailed EPS-specific model, EPS-specific outcomes, or EPS verification procedures are reported."
-  ],
-  "quality": {
-    "credible_venue_score": 1,
-    "limitations_discussed_score": 1,
-    "total_score": 2,
-    "rationale": "IEEE DOI metadata and conference-paper format support venue credibility, although the exact venue name is not printed in paper.md. The paper explicitly discusses limitations, maintainability/scalability problems, and future verification work."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0081.json",
+    "status_rationale": "Retained as core per corpus tier because it directly addresses reusable MBSE automation for New Space small-satellite platforms, although EPS content is adjacent rather than central.",
+    "citation": "A. Mastropietro, S. Račkauskas, and A. Knopp, 'Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain,' 2025, doi: 10.1109/isse65546.2025.11370070.",
+    "title": "Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain",
+    "authors": [
+      "Alessandro Mastropietro",
+      "Saulius Račkauskas",
+      "Andreas Knopp"
+    ],
+    "venue": "2025 IEEE International Symposium on Systems Engineering (ISSE)",
+    "doi_or_url": "10.1109/isse65546.2025.11370070",
+    "publisher": "IEEE",
+    "venue_type": "conference paper",
+    "source_database_or_route": [
+      "unknown: SLR/SLR1/searches/ieee_manual_promoted_records.json",
+      "ieee_xplore: SLR/SLR1/searches/ieee-xplore-csv-drop/7.csv",
+      "ieee_xplore: SLR/SLR1/searches/ieee-xplore-csv-drop/23.csv"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "partial",
+        "rationale": "The paper substantially addresses general New Space/small-satellite platform modeling with object-oriented functional groups and automation, but EPS modeling and minimal behavioral knowledge are only indirectly addressed through generic power examples and abstract functional libraries."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "It claims reliability-related standardization, replicability, reuse, and integration benefits for satellite platform MBSE, but not as outcomes of EPS-specific modeling."
+      },
+      "RQ3": {
+        "relevance": "partial",
+        "rationale": "It describes pre-physical structural and semantic validation of generated Capella models, but not EPS-specific verification procedures or requirements/test integration."
+      }
+    },
+    "lineage_overlap_notes": "The paper positions itself against isolated small-satellite/CubeSat MBSE efforts and cites CubeSat reference-model and small-satellite design work; no previous extraction or corpus lineage file was read."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "Standardized New Space satellite platform used in a Satellite-as-a-Service business model; satellite platform selected as the system of interest.",
+    "size_form_factor": "Small satellites, including nano-, micro-, and mini-satellites; CubeSat standardization is cited as context, but no specific form factor is reported for the pilot.",
+    "mission_name": "Demonstration mission with Kongsberg NanoAvionics; name not reported.",
+    "mission_domain": "Commercial New Space services; mission objective domains listed as communications, navigation, earth observation, and research and development.",
+    "organization_type": "Industry small-satellite manufacturer/platform provider collaborating with academic researchers.",
+    "project_maturity": "Pilot implementation/demonstration mission; not a flight-qualified or operational deployment report.",
+    "lifecycle_stage_addressed": "Operational Analysis, System Analysis, Logical Architecture, and Physical Architecture, with emphasis on early functional analysis and automated model generation before physical development.",
+    "development_context": "Satellite-as-Service platform supplier integrates customer or third-party payloads into standardized buses while managing mission-specific customization.",
+    "eps_relevance": "EPS-adjacent",
+    "model_maturity": "Automated Capella model and functional libraries validated for structural/semantic consistency in a pilot; no released model, hardware integration, or flight use reported."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "Satellite digital models are often mission-specific and isolated; reuse is cumbersome and error-prone, risking inconsistent traceability and functional misalignment. The paper proposes automated object-oriented functional modeling to generate reusable satellite platform functional architectures.",
+    "modeling_scope": [
+      "New Space operational context and stakeholders at OA level",
+      "Satellite platform as primary system of interest",
+      "Capability/use-case groups such as Mission Goal, System Support, Safety, Reach Space, Zero Debris, Encryption, and Mission Phases",
+      "System Analysis and Logical Architecture functional elements, interfaces, and exchanges",
+      "Logical components, ports, and component exchanges",
+      "Physical Architecture and digital-thread handoff",
+      "Functional libraries and automation scripts for model generation",
+      "Variability management through 150% models"
+    ],
+    "system_boundary_level_of_abstraction": "The entire mission, company scope, and satellite platform are considered, but the satellite platform is selected as the SoI. Modeling spans operational context through logical/physical architecture, with solution-independent functional analysis before physical allocation.",
+    "minimal_or_excluded_modeling": "Detailed subsystem behavior, full mission linked models, explicit EPS design analysis, flight software/hardware implementation, and operational/flight validation are not reported; functional architecture is emphasized over behavioral simulation.",
+    "required_prior_behavioral_domain_knowledge": "Users need stakeholder needs, mission objectives, standard platform baselines, use cases, established functional analyses/logical architectures, and discipline inputs such as power regulation/distribution concerns; detailed dynamic behavior is not required in the presented functional-library approach.",
+    "handling_limited_behavioral_knowledge": "Limited behavior knowledge is handled by abstract capability groupings, reusable functional groups, standardized baselines from previous missions, inheritance/encapsulation/polymorphism, and mission-specific extension of pre-defined functional libraries.",
+    "model_artifacts_used": [
+      "Capella OA/SA/LA/PA model layers",
+      "Capabilities and capability realizations",
+      "Functional elements, interfaces, and connections/exchanges",
+      "Logical functions and logical components",
+      "Component ports and component exchanges",
+      "Functional tree for Provide System Support",
+      "Use Case Functional Libraries",
+      "Python abstract and use-case classes",
+      "Main automation script",
+      "User-defined API layer and Capella Simplified API interfaces",
+      "JSON/YAML/spreadsheet library data",
+      "PVMT parameter mappings",
+      "REC-RPL library/replica mechanisms",
+      "Filtering Add-On 150% model support"
+    ],
+    "generality_reuse_mechanism": [
+      "Object-oriented abstraction and encapsulation of functions and components",
+      "Inheritance and polymorphism for reusable use-case classes",
+      "Capability grouping based on use cases",
+      "Import of pre-validated logical architecture baselines",
+      "Structured functional libraries for functions, components, exchanges, and implementation cases",
+      "Automated generation/manipulation of Capella elements through Python4Capella",
+      "External library formats such as JSON, YAML, and spreadsheets",
+      "Variability management through 150% models"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Model New Space operational context and mission objective at OA level",
+        "inputs": "Stakeholder roles, commercial service context, mission objective domains, customer/platform/payload relationships",
+        "outputs": "Operational actors/interactions and mission objective basis for later analysis",
+        "actors_roles": "Systems engineers with service provider, payload provider, platform provider, final user, and regulatory stakeholders",
+        "prerequisites": "Defined New Space scenario and mission/service objectives",
+        "completion_criteria": "Stakeholders, responsibilities, operational interactions, and broad mission domain are captured",
+        "handoffs": "Feeds System Analysis capability and requirement definition"
+      },
+      {
+        "step": "Select system of interest and organize capabilities/use cases",
+        "inputs": "Mission/customer requirements, platform supplier scope, available satellite platform baselines",
+        "outputs": "Satellite platform SoI and grouped capabilities such as System Support, Safety, Encryption, and mission phases",
+        "actors_roles": "Systems engineer, platform provider, discipline engineers",
+        "prerequisites": "Agreement on boundary among entire mission, company responsibility, or satellite platform",
+        "completion_criteria": "SoI and capability grouping support modularity and mission-specific extension",
+        "handoffs": "Feeds functional grouping and functional-library definition"
+      },
+      {
+        "step": "Define object-oriented functional architecture and libraries",
+        "inputs": "Use cases, standardized functional analyses, logical architecture baselines, functions/components/exchanges",
+        "outputs": "Structured Use Case Functional Libraries with functions, components, interfaces/exchanges, cardinality, inclusion, and implementation-case fields",
+        "actors_roles": "Systems engineers and subsystem/domain engineers maintaining standard baselines",
+        "prerequisites": "Functional grouping rules and ARCADIA/FAS metamodel mapping",
+        "completion_criteria": "Libraries encode reusable SA/LA elements and interconnections for selected capabilities",
+        "handoffs": "Feeds Python class implementation and automated model generation"
+      },
+      {
+        "step": "Implement automation architecture in Capella",
+        "inputs": "Capella model, Python4Capella, Capella APIs, functional libraries, user-defined API mappings, add-on APIs",
+        "outputs": "Main automation script, abstract base class, use-case Python classes, API layer for uncovered Capella elements",
+        "actors_roles": "MBSE tool developer, systems engineer, automation engineer",
+        "prerequisites": "Capella/Python4Capella environment and metamodel knowledge",
+        "completion_criteria": "Scripts can read/write model elements and instantiate library-defined capability groups",
+        "handoffs": "Feeds generated System Analysis and Logical Architecture models"
+      },
+      {
+        "step": "Generate, refine, and configure SA/LA model elements",
+        "inputs": "Mission objectives, selected libraries, implementation cases, parameters, baseline architecture choices",
+        "outputs": "Generated functional elements, logical functions, components, ports, exchanges, and capability realizations in Capella",
+        "actors_roles": "Systems engineer operating the automation with discipline-engineer review",
+        "prerequisites": "Validated libraries and executable API mappings",
+        "completion_criteria": "Generated model contains intended elements without omissions or unintended artifacts",
+        "handoffs": "Feeds physical architecture, parameterization, and digital-thread integrations"
+      },
+      {
+        "step": "Develop physical architecture, digital thread, and validation checks",
+        "inputs": "Generated LA model, product breakdown, parameters, external data sources such as Excel/JSON, PVMT mappings",
+        "outputs": "Physical architecture links, parameterized discipline views, bidirectional data flow, validation findings",
+        "actors_roles": "Systems engineer, discipline engineers, model/tool developers",
+        "prerequisites": "Generated model with element IDs available for post-generation mappings",
+        "completion_criteria": "Manual inspection, functional-library checks, and Capella validation confirm structural/semantic consistency",
+        "handoffs": "Feeds engineering decisions such as electronics layout/cable routing and future external simulation integration"
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "The workflow maps to ARCADIA OA, SA, LA, and PA activities: stakeholder/mission modeling, system functional analysis, logical architecture and component allocation, physical product breakdown, and model validation. Formal project gates such as PDR/CDR are not reported.",
+    "approach_classification": "Integrated MBSE/digital engineering",
+    "approach_classification_rationale": "The work combines ARCADIA/FAS MBSE in Capella with System-as-Code automation, external data sources, API-based model manipulation, variability management, and digital-thread concepts.",
+    "tailoring_rationale": [
+      "Satellite platform was chosen as SoI to match New Space platform-provider responsibility and avoid excessive multi-model mission effort.",
+      "ARCADIA/Capella was selected because Python4Capella supports code integration and System-as-Code experimentation.",
+      "Capability grouping reflects recurring standardized satellite platform functions and mission-specific payload integration needs.",
+      "Functional libraries support reusable platform baselines while allowing customization for varying mission scenarios."
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "ARCADIA methodology",
+      "Capella modeling tool",
+      "Functional Architecture for Systems (FAS) concepts",
+      "Object-oriented functional analysis",
+      "Python4Capella",
+      "Capella Simplified API and user-defined API layer",
+      "Capella REC-RPL and Libraries",
+      "Capella Filtering Add-On for 150% models",
+      "Property Value Management Tool (PVMT)",
+      "JSON, YAML, and spreadsheet functional-library formats",
+      "SysML mentioned as background"
+    ],
+    "toolchain_architecture_data_flow": "Functional library data are represented in structured files and encapsulated by use-case Python classes that inherit common behavior from an abstract class. A main script imports libraries, instantiates/configures functional groups, and uses Python4Capella/API mappings to create or modify SA/LA Capella elements. Post-generation IDs support PVMT parameter mapping, and Python4Capella enables bidirectional data exchange with external sources and future simulation environments.",
+    "interoperability_mechanisms": [
+      "Python scripts read/write Capella model elements",
+      "User-defined API maps Python classes to Eclipse Java/ARCADIA metamodel elements not covered by the simplified API",
+      "Simplified API for Capella Add-Ons",
+      "New interface to Capella Filtering Add-On",
+      "REC-RPL and Capella Library reuse",
+      "JSON/YAML/spreadsheet data exchange",
+      "PVMT parameter mapping",
+      "External Excel and JSON sources in validation"
+    ],
+    "syntax_semantic_continuity_evidence": "The API mapping follows ARCADIA metamodel specifications for SA and LA, and the pilot used manual inspection, functional-library interconnection checks, and Capella built-in validation to confirm semantic correctness and structural consistency.",
+    "software_hardware_system_integration_readiness": "The PA step is intended to consolidate product breakdown, parameters, and discipline views; a power-demanding component is linked to PCDU decisions for electronics layout and cable routing. No hardware integration test, software-in-the-loop, or flight readiness evidence is reported.",
+    "toolchain_limitations": [
+      "Capella's static nature limits interoperability",
+      "Capella does not natively support code-model parallelism",
+      "Custom automation layer across APIs and Python classes has maintainability risk",
+      "Manual construction of functional libraries is not scalable or maintainable",
+      "Capella element IDs are assigned only after model generation, complicating pre-defined parameter mapping",
+      "No released model, library, or script package is reported"
+    ],
+    "availability_reproducibility": "The paper reports architecture, formats, and API concepts but does not report public availability of the Capella model, Python scripts, or functional libraries; reproducibility is therefore partial and depends on reimplementation."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "Provide Power capability",
+      "Power Conditioning and Distribution Unit (PCDU)",
+      "electric power regulation and distribution mapping",
+      "power-demanding components",
+      "power consumption as a platform-selection criterion",
+      "power supply as a recurring spacecraft functional subsystem"
+    ],
+    "eps_requirements_representation": "EPS requirements are not explicitly represented. Power consumption is mentioned as a customer/platform matching criterion, and power-demanding components can trigger a Provide Power capability, but no EPS requirement objects, budgets, margins, or tests are shown.",
+    "verification_validation_artifacts": [
+      "Manual inspection of generated model",
+      "Capella built-in model validation tools",
+      "Functional-library interconnection checks",
+      "Incremental checks from individual elements to complete functional groups",
+      "Model-based verification strategies mentioned as ECSS background"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "Pre-physical structural and semantic validation of generated Capella model elements",
+      "Manual inspection for omissions and unintended artifacts",
+      "Capella built-in validation checks",
+      "Iterative validation of interconnections within and across functional groups"
+    ],
+    "evidence_verification_integrated_in_model": "Verification is integrated only at the generic model-structure level: the pilot checked generated Capella elements and library interconnections. The paper explicitly states that automated functional verification is future work and does not demonstrate EPS-specific verification integration.",
+    "integration_test_readiness": "EPS-specific integration/test readiness is not reported. The PA/digital-thread concept could support electronics layout and cable-routing decisions through the PCDU link, but no integration-test procedure or result is given."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Problem addressed: isolated models, reuse difficulty, traceability and functional alignment risks",
-      "quote": "satellite digital models are often developed in isolation and tailored to specific mission objectives... the reuse of model elements remains cumbersome and error-prone, leading to risks of inconsistent traceability and functional misalignment across missions",
-      "location": "Abstract"
+      "claim": "The automated framework supports fast and consistent deployment of satellite digital models across missions.",
+      "outcome_category": "automation; reproducibility; schedule efficiency",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "System-as-Code automation",
+        "Python4Capella API manipulation",
+        "standard functional libraries",
+        "use-case capability grouping"
+      ],
+      "artifact_or_process_linked": "Main automation script instantiates predefined functional groups and generates Capella model elements from functional libraries.",
+      "lifecycle_stage": "SA/LA model generation and early platform configuration",
+      "evidence_type": "Pilot implementation narrative plus validation of automated element generation; no timing metric.",
+      "metric_or_value_indicator": "fast and consistent deployment claimed; no quantified deployment-time or defect metric",
+      "baseline_comparator": "manual modeling is implied as time-consuming and resource-intensive but not measured",
+      "observed_effect_size_or_qualitative_effect": "qualitative feasibility of automated generation and manipulation",
+      "evidence_source": "Abstract; Section III.C; Section IV",
+      "direct_quote": "An automated framework was developed to support fast, consistent deployment of satellite digital models across missions, leveraging standard solutions and use cases.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No quantitative comparator; demonstration mission details and artifact availability are limited."
     },
     {
-      "claim": "Proposed modeling approach and automation",
-      "quote": "this paper proposes an object-oriented functional approach for managing satellite platform digitalization in a modular and reusable manner through functional grouping",
-      "location": "Abstract"
+      "claim": "Object-oriented functional grouping improves modularity, traceability, replicability, reuse, and maintainability across missions.",
+      "outcome_category": "traceability; reuse; maintainability; reproducibility",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "FAS functional grouping",
+        "ARCADIA capabilities/capability realizations",
+        "OOP abstraction and encapsulation",
+        "standard baselines and libraries"
+      ],
+      "artifact_or_process_linked": "Capability groups, functional elements/interfaces/connections, logical functions/components, and use-case libraries.",
+      "lifecycle_stage": "Functional analysis and logical architecture",
+      "evidence_type": "Conceptual method with pilot refinement; no reuse count or maintenance metric.",
+      "metric_or_value_indicator": "standardized digital replicability and traceability claimed; not quantified",
+      "baseline_comparator": "mission-specific isolated digital models described as cumbersome and error-prone",
+      "observed_effect_size_or_qualitative_effect": "qualitative support for modular reusable functional architecture",
+      "evidence_source": "Section III.B; Section V",
+      "direct_quote": "automating a modular functional design enables standardized digital replicability of the logical architecture and traceability of the model, ensuring alignment with industry standards while facilitating reuse and maintainability across missions.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Benefits are plausible but not independently evaluated; functional libraries themselves require significant disciplined maintenance."
     },
     {
-      "claim": "System-as-Code outcome",
-      "quote": "By enabling configuration and workflow automation, the approach contributes to the System as Code transition in systems engineering.",
-      "location": "Abstract"
+      "claim": "The automated workflow produced structurally and semantically consistent model elements in the pilot.",
+      "outcome_category": "model quality; consistency; verification",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "manual inspection of generated Capella elements",
+        "Capella built-in validation",
+        "incremental functional-library testing",
+        "API mapping to ARCADIA metamodel"
+      ],
+      "artifact_or_process_linked": "Generated Capella SA/LA model elements and interconnections within/across functional groups.",
+      "lifecycle_stage": "Model generation validation before physical development",
+      "evidence_type": "Pilot model checks using inspection and tool validation.",
+      "metric_or_value_indicator": "correct elements without omissions/unintended artifacts; no defect counts reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "semantic correctness and structural consistency confirmed qualitatively",
+      "evidence_source": "Section IV Validation",
+      "direct_quote": "This dual approach confirmed both the semantic correctness and structural consistency of the automated workflow",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Validation scope and criteria are described at high level; no independent review, test log, or benchmark is provided."
     },
     {
-      "claim": "Implemented MBSE methodology and toolchain",
-      "quote": "a tailored application of the ARCADIA methodology is presented, incorporating key concepts from the FAS methodologies... ARCADIA was selected because of the coding integration capabilities given by the Python4Capella add-on",
-      "location": "Section II.C, Methodologies"
+      "claim": "The approach enables digital-thread interoperability and bidirectional data flow between Capella and external sources.",
+      "outcome_category": "integrability; interoperability; lifecycle continuity",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "Python4Capella read/write access",
+        "extended API interfaces",
+        "external Excel/JSON sources",
+        "structured data formats"
+      ],
+      "artifact_or_process_linked": "Capella model elements, external Excel/JSON data, API interfaces, and functional-library data structures.",
+      "lifecycle_stage": "Digital thread from functional/logical model toward physical architecture and discipline data",
+      "evidence_type": "Pilot demonstration of bidirectional data flow; no formal interoperability benchmark.",
+      "metric_or_value_indicator": "bidirectional data flow demonstrated; no data-volume, latency, or round-trip consistency metric",
+      "baseline_comparator": "Capella static model limitations are contrasted conceptually with dynamic Python4Capella access",
+      "observed_effect_size_or_qualitative_effect": "qualitative feasibility of model-data interaction across abstraction layers",
+      "evidence_source": "Section III.D; Section IV",
+      "direct_quote": "The System as Code approach was validated by demonstrating bidirectional data flow between the Capella model and external sources (e.g., Excel, JSON), and automated generation of model elements via extended API interfaces.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "External integrations are illustrative; no evidence for sustained toolchain operation in production or with simulation environments."
     },
     {
-      "claim": "Modeling scope selects satellite platform as SoI",
-      "quote": "For this research, the satellite platform was chosen as the primary SoI, aligning with the practical needs of the New Space industry while allowing future extension to broader system elements.",
-      "location": "Section III.B, Functional Analysis"
+      "claim": "The model can support integration decisions for electrical/power architecture when payload or components demand power.",
+      "outcome_category": "integration support; electrical architecture",
+      "specificity": "EPS-specific",
+      "mbse_mechanism": [
+        "Provide Power capability",
+        "linking logical/physical architecture",
+        "digital-thread discipline views"
+      ],
+      "artifact_or_process_linked": "Provide Power capability linked to Power Conditioning and Distribution Unit (PCDU), electronics layout, and cable routing decisions.",
+      "lifecycle_stage": "Physical Architecture and discipline handoff",
+      "evidence_type": "Conceptual example; no EPS case result or test.",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "illustrates potential trace from power demand to PCDU-related decisions",
+      "evidence_source": "Section III.D Physical Architecture and Digital Thread",
+      "direct_quote": "adding a power-demanding component triggers the Provide Power capability, linking it to the Power Conditioning and Distribution Unit (PCDU), and informing decisions on electronics layout and cable routing.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The example is not developed into an EPS model with requirements, budgets, simulations, or integration tests."
     },
     {
-      "claim": "Reusable functional architecture and traceability goal",
-      "quote": "automating a modular functional design enables standardized digital replicability of the logical architecture and traceability of the model",
-      "location": "Section III.B, Functional Analysis"
+      "claim": "Standardization and reuse contribute to competitive, reliable, and cost-efficient satellite service.",
+      "outcome_category": "reliability; cost; standardization",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "standardized platforms",
+        "reusable architectures",
+        "modularity and traceability"
+      ],
+      "artifact_or_process_linked": "Standard satellite platforms and reusable model elements; claim is broader than the pilot artifacts.",
+      "lifecycle_stage": "Platform product-line and mission customization",
+      "evidence_type": "Background assertion; no empirical reliability or cost data.",
+      "metric_or_value_indicator": "reliable service and costefficient alternative claimed; no reliability/cost values",
+      "baseline_comparator": "fully custom satellites mentioned conceptually",
+      "observed_effect_size_or_qualitative_effect": "not measured",
+      "evidence_source": "Section I.A",
+      "direct_quote": "Standardization and re-usability play a pivotal role in delivering a competitive and reliable service, providing a costefficient alternative to fully custom satellites.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "Reliability and cost effects could stem from heritage hardware, organizational process, or supplier experience rather than MBSE automation alone."
     },
     {
-      "claim": "EPS/power is only an example concern",
-      "quote": "the model can emphasize specific concerns such as electric power regulation and distribution mapping, attitude control modes, variability management, inputs for thermal analysis, or system-level budgeting",
-      "location": "Section III.B, Functional Analysis"
-    },
-    {
-      "claim": "Power capability linked to PCDU in physical architecture discussion",
-      "quote": "adding a power-demanding component triggers the Provide Power capability, linking it to the Power Conditioning and Distribution Unit (PCDU)",
-      "location": "Section III.D, Physical Architecture and Digital Thread"
-    },
-    {
-      "claim": "Automation architecture and external integration",
-      "quote": "Python scripts are used to to read and write from/to the Capella model... can be used to connect the model with external resources",
-      "location": "Section III.C, Automating"
-    },
-    {
-      "claim": "Validation setting",
-      "quote": "A pilot implementation of the proposed modeling approach was conducted in collaboration with Kongsberg NanoAvionics, a small satellites manufacturer, using a demonstration mission",
-      "location": "Section IV, Validation"
-    },
-    {
-      "claim": "Validation method",
-      "quote": "performed through manual inspection of the resulting model... and through Capella's built-in model validation tools",
-      "location": "Section IV, Validation"
-    },
-    {
-      "claim": "Verification is future work, not integrated functional verification",
-      "quote": "Further work may explore the integration of automated functional verification mechanisms to complement the structural and semantic validation demonstrated in this study",
-      "location": "Section IV, Validation"
-    },
-    {
-      "claim": "Claimed benefits and tradeoff",
-      "quote": "While the initial modeling effort is higher... the benefits in terms of faster model deployment and consistent reusability outweigh the short-term cost.",
-      "location": "Section V, Conclusions"
-    },
-    {
-      "claim": "Limitations in automation maintainability and library scalability",
-      "quote": "limitations were observed in the maintainability of the custom automation layer... Manually constructing the functional libraries presents limitations in terms of scalability and maintainability.",
-      "location": "Section V, Conclusions"
-    },
-    {
-      "claim": "Capella code-model limitation",
-      "quote": "While Capella does not natively support code-model parallelism, the Python4Capella integration enabled structured automation and bidirectional data exchange",
-      "location": "Section V, Conclusions"
+      "claim": "The workflow provides initial support for model variability through 150% models.",
+      "outcome_category": "variability management; reuse",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Filtering Add-On integration",
+        "150% model representation",
+        "configuration management across mission scenarios"
+      ],
+      "artifact_or_process_linked": "Custom interface to Capella Filtering Add-On and model variability structures.",
+      "lifecycle_stage": "Platform configuration and mission-specific customization",
+      "evidence_type": "Implementation description and conclusion statement; no variability scenario metric.",
+      "metric_or_value_indicator": "initial support for model variability; no number of variants or reuse rate",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "qualitative initial support for variability",
+      "evidence_source": "Section III.C; Section V",
+      "direct_quote": "a new interface was developed to integrate with the Filtering Add-On, which supports the creation of 150% models",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The paper does not report an evaluated set of variants or configuration-error reductions."
     }
   ],
-  "notes_for_consistency": "Read only paper.md and used the embedded assignment metadata for DOI, authors, year, tier, and corpus_id. The paper is system/platform-level New Space MBSE and only touches EPS/power through examples; classify EPS-specific RQ evidence conservatively. The paper reference list contains an apparent self/LLM citation [6] used repeatedly in text; no duplication lineage can be established from paper.md alone."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "Governance is implied through standardized functional libraries, platform baselines, configuration management, 150% variability models, and disciplined management of custom APIs/classes; no formal governance board, ownership model, or versioning procedure is reported.",
+    "traceability_to_deliverables_decisions_reviews": "Traceability is described from stakeholder needs and mission objectives to capabilities, functions, logical components, physical architecture, product breakdown, parameters, and documentation. Specific deliverables, review gates, and compliance matrices from the pilot are not shown.",
+    "evaluation_criteria_model_quality_usefulness": "Manual inspection for omissions/unintended artifacts, Capella built-in validation, interconnection checks, semantic correctness, structural consistency, and ability to demonstrate automated generation and bidirectional data flow.",
+    "roi_value_realization_evidence": "Qualitative claim that faster deployment and reusability outweigh higher initial modeling effort; no cost, schedule, labor, defect, or reuse metrics are provided.",
+    "programmatic_gates_critical_design_events_supported": "Formal programmatic gates such as SRR, PDR, CDR, or TRR are not reported; the PA/digital-thread step supports engineering decisions such as electronics layout and cable routing.",
+    "model_derived_performance_indicators_management_metrics": "not reported"
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed with evidence",
+      "rationale": "The paper provides a concrete Capella/Python4Capella workflow, library structure, API architecture, and pilot implementation, although not a full reproducible playbook."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed with evidence",
+      "rationale": "It directly addresses Capella interoperability through Python4Capella, APIs, external Excel/JSON data flow, PVMT, and add-on integration, and reports toolchain limitations."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed conceptually",
+      "rationale": "The approach is tailored to New Space/small-satellite reuse and chooses satellite platform scope to limit effort, but it does not quantify resource savings or lightweight adoption burden."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "addressed conceptually",
+      "rationale": "Traceability, configuration management, and faster deployment value are discussed, but governance roles, deliverable templates, and ROI metrics are not provided."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper frames the work around Satellite-as-Service, fast deployment, standardization, and System-as-Code automation, but it does not evaluate distributed teams or iterative agile cadence."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "A general small-satellite platform model can be organized around New Space stakeholders, mission objective domains, a satellite-platform SoI, and reusable capability groups across OA, SA, LA, and PA layers.",
+        "Limited behavioral detail is handled through abstract functional groups, standard functional libraries, pre-validated baselines, and object-oriented reuse rather than detailed subsystem simulation.",
+        "EPS is only represented adjacent to the system model through power-demanding components, Provide Power capability, PCDU links, power consumption criteria, and electrical regulation/distribution mapping examples."
+      ],
+      "RQ2": [
+        "Claimed reproducibility outcomes include standardized digital replicability, reusable functional libraries, automated model generation, and consistent deployment across missions.",
+        "Claimed integrability outcomes include bidirectional data flow with Excel/JSON, external data/source connection through Python4Capella, and digital-thread handoff to physical architecture and discipline views.",
+        "Reliability is claimed mainly at the platform-standardization level, not demonstrated as an EPS or model-derived reliability improvement."
+      ],
+      "RQ3": [
+        "The pilot integrates pre-physical validation at the model-structure level using manual inspection, functional-library interconnection checks, and Capella built-in model validation.",
+        "No EPS-specific verification artifacts, requirements, test cases, power-budget checks, or hardware integration tests are reported.",
+        "The paper states that automated functional verification mechanisms are future work."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "Initial modeling effort is higher during the transition to System as Code.",
+      "The custom automation layer across multiple APIs and Python classes requires disciplined management and has maintainability limitations.",
+      "Manual construction of functional libraries has scalability and maintainability limitations.",
+      "Capella's static nature limits interoperability, and Capella does not natively support code-model parallelism.",
+      "Capella element IDs are assigned only after model generation, so parameter mapping cannot be fully pre-defined.",
+      "Further work may integrate automated functional verification mechanisms."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "Pilot mission details, stakeholder evaluation, and quantitative metrics are absent.",
+      "No public Capella model, functional-library data, or Python scripts are reported.",
+      "EPS content is illustrative and adjacent, not a dedicated EPS model or verification case.",
+      "Venue details are not visible in the markdown front matter and are inferred from included IEEE/DOI metadata.",
+      "Reliability, cost, and schedule benefits are mostly asserted or conceptually motivated rather than empirically measured."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "problem statement",
+        "quote": "Even when based on standard methodologies, the reuse of model elements remains cumbersome and error-prone, leading to risks of inconsistent traceability and functional misalignment across missions.",
+        "location": "Abstract"
+      },
+      {
+        "topic": "scope boundary",
+        "quote": "For this research, the satellite platform was chosen as the primary SoI, aligning with the practical needs of the New Space industry while allowing future extension to broader system elements.",
+        "location": "Section III.B Functional Analysis"
+      },
+      {
+        "topic": "functional grouping and reuse",
+        "quote": "The objective of this structured capability mapping is to enhance modularity, support traceability between mission and system-level requirements, and facilitate the reuse of standard architectural elements within MBSE workflows.",
+        "location": "Section III.B Functional Analysis"
+      },
+      {
+        "topic": "automation architecture",
+        "quote": "Main Automation Script is used to deploy the automation program within Capella.",
+        "location": "Section III.C Automating"
+      },
+      {
+        "topic": "data formats",
+        "quote": "various formats can be used as structured databases, including JavaScript Object Notation (JSON), YAML, or spreadsheets.",
+        "location": "Section III.C Automating"
+      },
+      {
+        "topic": "EPS-adjacent power integration",
+        "quote": "adding a power-demanding component triggers the Provide Power capability, linking it to the Power Conditioning and Distribution Unit (PCDU), and informing decisions on electronics layout and cable routing.",
+        "location": "Section III.D Physical Architecture and Digital Thread"
+      },
+      {
+        "topic": "pilot validation",
+        "quote": "The validation of the automating architecture was performed through manual inspection of the resulting model, ensuring that automation produced the correct elements without omissions or unintended artifacts, and through Capella's built-in model validation tools.",
+        "location": "Section IV Validation"
+      },
+      {
+        "topic": "future verification gap",
+        "quote": "Further work may explore the integration of automated functional verification mechanisms to complement the structural and semantic validation demonstrated in this study",
+        "location": "Section IV Validation"
+      },
+      {
+        "topic": "conclusion and limitations",
+        "quote": "While Capella does not natively support code-model parallelism, the Python4Capella integration enabled structured automation and bidirectional data exchange",
+        "location": "Section V Conclusions"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Core tier retained from corpus metadata. Extraction treats the paper as New Space small-satellite MBSE automation with EPS-adjacent evidence only; no prior extractions or other papers were consulted.",
+    "extraction_confidence": "medium",
+    "extraction_confidence_reason": "The full markdown provides clear method and validation descriptions, but EPS relevance, venue details, and outcome evidence are indirect or qualitative."
+  },
+  "bibtex": "@inproceedings{paper-0081,\n  title = {Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain},\n  author = {Alessandro Mastropietro and Saulius Račkauskas and Andreas Knopp},\n  year = {2025},\n  booktitle = {IEEE International Symposium on Systems Engineering (ISSE)},\n  publisher = {IEEE},\n  doi = {10.1109/isse65546.2025.11370070},\n  url = {https://doi.org/10.1109/isse65546.2025.11370070}\n}"
 }

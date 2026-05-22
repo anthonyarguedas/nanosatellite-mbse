@@ -1,175 +1,644 @@
 {
   "corpus_id": "paper-0031",
   "tier": "core",
-  "citation": "Kaslow et al. (2016), CubeSat Model-Based System Engineering (MBSE) reference model - Development and distribution - Interim status",
-  "title": "CubeSat Model-Based System Engineering (MBSE) reference model - Development and distribution - Interim status",
-  "authors": [
-    "D. Kaslow",
-    "B. Ayres",
-    "Phil Cahill",
-    "L. Hart",
-    "Rose Yntema"
-  ],
   "year": 2016,
-  "doi_or_url": "10.2514/6.2016-5551",
-  "venue_type": "conference, 32nd Space Symposium Technical Track, Colorado Springs, Colorado",
-  "modeling_scope": "System-level CubeSat MBSE reference model. The paper describes a logical SysML framework for CubeSat missions covering stakeholders, needs/objectives/constraints, measures, requirements, use cases, lifecycle stages, phases of operations, CubeSat domain/enterprise, generic space and ground logical architectures, and subsystem decomposition including a power subsystem. It also summarizes earlier RAX work that modeled behaviors, solar-energy collection/storage, subsystem power consumption, communications, simulations, and trade studies.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "verification",
-    "simulation",
-    "operations",
-    "reference model/template",
-    "lifecycle/PLM",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "SysML using No Magic graphical modeling tools/MagicDraw; OOSEM as the stated systems engineering method; distribution/interface mechanisms include MagicDraw, ZIP, XMI, OpenMBEE, and Teamcenter. The paper also emphasizes interfaces with other engineering models and simulations.",
-  "mbse_language_method_tool_categories": [
-    "SysML",
-    "Cameo/MagicDraw",
-    "OpenMBEE",
-    "PLM",
-    "OOSEM",
-    "Other"
-  ],
-  "robot_platform": "CubeSat/nanosatellite platform. The paper defines CubeSats as miniature spacecraft based on a 10-cm unit cube, about one kilogram per cube, typically 1U to 3U with some up to 6U; it also discusses the three-unit RAX CubeSat as prior application context.",
-  "task_domain": "Generic CubeSat mission and systems engineering reference model for future CubeSat developers, educational use, and evaluation on actual CubeSat projects; prior mission context includes RAX ionospheric science and FireSat as a hypothetical example.",
-  "interface": "The paper states that MBSE integrates requirements and interfaces in a single system model and helps integrate discipline-specific engineering models and simulations. It also identifies distribution/model-exchange interfaces such as MagicDraw, ZIP file, XMI file, OpenMBEE, and Teamcenter, and addresses CubeSat interfaces with ground systems, launch/deploy services, GPS, and relay satellites.",
-  "feedback": "Model updates are described as automatically propagated into system views; previous phases executed behaviors and constraint equations for operational trade studies. The distribution concept includes user feedback mechanisms from model users back to the SSWG team. No closed-loop EPS or autonomy feedback controller is described.",
-  "control_autonomy_split": "Not applicable",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "Status/progress paper rather than quantitative validation. It demonstrates the approach through summarized prior phases: SysML application to RAX, behavior simulation, interfaces with commercial simulation tools, executable constraints, and two trade studies on onboard energy versus solar panel/battery parameters and data downlink versus orbit/ground-station network. The current reference model is illustrated with scope, stakeholder, requirement, domain, architecture, and distribution views.",
-  "rqs_addressed": {
-    "RQ1": "yes",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper is presented as a conference/technical-track publication at the 32nd Space Symposium and reports a DOI in the corpus metadata.",
+        "evidence": [
+          "$ 3 2 ^{n d} $ Space Symposium, Technical Track, Colorado Springs, Colorado, United States of America Presented on April 11-12, 2016",
+          "corpus metadata DOI: 10.2514/6.2016-5551"
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper gives explicit scope boundaries for the reference model and notes limits of earlier hypothetical modeling and future work still needed.",
+        "evidence": [
+          "For the purposes of the model, the GPS and relay satellites are not considered part of the Space and Ground Systems.",
+          "Modeling FireSat demonstrated the application of SysML but the hypothetical nature of FireSat precluded anyone from actually building a real space system from the model. Therefore, the practical use of the model could not be demonstrated or verified.",
+          "The future plans include: (i) refining the CubeSat Reference Model to include additional details for each of the model elements, (ii) verifying the correctness of the model..."
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "CubeSat form factor, example missions, enterprise context, lifecycle stages, and operations phases are all described.",
+        "evidence": [
+          "A CubeSat is a type of miniature spacecraft with a form factor based on the standardized unit cube, which is 10-centimeters on a side, and it weighs approximately one kilogram per cube.",
+          "The reference model can support all life cycle stages for a CubeSat mission.",
+          "The model also supports all phases of operations: pre-launch integration and test, launch, early orbit checkout, and full mission operations."
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper identifies SysML, OOSEM, No Magic tools, model-element types, and a logical CubeSat boundary, but it is an interim-status description without enough detailed model content or release instructions to replicate the model independently.",
+        "evidence": [
+          "The project's application of MBSE uses the Systems Modeling Language (SysML) and graphical modeling tools from No Magic.",
+          "The CubeSat Reference Model will provide the logical architecture.",
+          "The CubeSat Reference Model is approaching a sufficient level of maturity to begin sharing with the rest of the MBSE community."
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Claims about integration, propagation, documentation generation, reuse, checklists, and consistency are explicitly tied to the SysML/reference-model workflow.",
+        "evidence": [
+          "At the core of MBSE is the development of the system model that helps integrate other discipline-specific engineering models and simulations.",
+          "This allows for a full exploration of the model, and changes are automatically propagated and reflected in every view of the system.",
+          "a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models."
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper reports prior simulations and trade-study demonstrations, but provides no quantitative metrics, baseline comparison, independent stakeholder evaluation, integration/test result, or operational evidence for the current reference model.",
+        "evidence": [
+          "In the past phases of the project, the team has created the initial iteration of the reference model, applied it to the Radio Aurora Explorer (RAX) mission, executed simulations of system behaviors...",
+          "Two trade studies were demonstrated: 1) On-board energy level as a function of solar panel area and maximum battery capacity and 2) quantity of data downlinked as a function of orbital altitude and ground station network.",
+          "MBSE holds the promise of reducing the burden of systems engineering tasks..."
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper explicitly describes traces among needs, objectives, measures, requirements, use cases, and subsystem requirements, and shows Cal Poly requirements modeled in SysML.",
+        "evidence": [
+          "Figure 8 illustrates the hierarchy of mission needs, objectives, and constraints; technical measures, requirements, and use cases.",
+          "For example measures of effectiveness trace to mission objectives which refine mission needs.",
+          "Mission use cases refine mission requirements and system requirements trace to mission use cases."
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The authors describe planned distribution, model files, walkthrough videos, XMI/OpenMBEE/Teamcenter options, and licensing considerations, but the release is not yet complete and reproducible assets are not shown as available.",
+        "evidence": [
+          "the SSWG team is developing a model distribution process to share to external entities",
+          "In addition to the model file, the distribution will include video recordings that explain and walk through the model and its components.",
+          "Distribution Mechanisms, which lists \"MagicDraw,\" \"ZIP File,\" \"XMI File,\" \"OpenMBEE,\" and \"Teamcenter.\""
+        ]
+      }
+    ],
+    "total_score": 6.5,
+    "max_score": 8,
+    "normalized_score": 0.812,
+    "overall_rationale": "The paper is a credible CubeSat MBSE interim-status conference paper with clear system context, SysML/OOSEM artifacts, traceability concepts, and distribution plans. Quality is limited by lack of detailed replication instructions, incomplete release/verification status, and mostly asserted rather than measured outcomes."
   },
-  "rq_relevance": "RQ1: yes, because the paper's main contribution is a generic CubeSat SysML reference model with stakeholder, requirement, lifecycle, operation, domain, enterprise, and logical architecture elements, and it includes a power subsystem and prior power-behavior modeling. RQ2: partial, because it claims MBSE/model integration benefits such as integrating discipline-specific models, automatic propagation of changes, model-generated documentation, reusability, reduced SE burden, and uniformity/consistency, but it does not provide measured reliability outcomes. RQ3: partial, because verification/validation and testing are included at a general system/process level and future model-correctness verification is planned, but EPS-specific verification procedures are not modeled in detail.",
-  "claimed_outcomes": [
-    "Integrability: the system model is claimed to integrate discipline-specific engineering models and simulations and to keep requirements and interfaces in a single model.",
-    "Change consistency: the paper claims that changes are automatically propagated and reflected in every view of the system.",
-    "Documentation/reproducibility support: the paper states that documentation should be generated from the model rather than the model from documents.",
-    "Reuse and consistency: the reference model is claimed to provide logical architecture elements reusable for mission-specific CubeSats and to promote uniformity and consistency across future CubeSat models.",
-    "Systems-engineering efficiency: MBSE is claimed to hold promise for reducing the burden of systems engineering tasks for small CubeSat teams.",
-    "Reliability outcomes are not reported as measured or explicitly attributed to the model."
-  ],
-  "verification_validation_linkage": "General V&V linkage is present. The paper defines MBSE as supporting requirements, design, analysis, verification, and validation across the lifecycle; the stakeholder model includes a Tester responsible for V&V; the Cal Poly Design Specification model includes testing requirements; the reference model supports pre-launch integration and test; and next steps include verifying model correctness. EPS-specific verification procedures are not reported.",
-  "key_findings": [
-    "The INCOSE SSWG Challenge Team is developing a CubeSat Reference Model as a SysML logical framework for future CubeSat developers.",
-    "The reference model scope includes mission stakeholders, lifecycle stages from concept through retirement, and operations phases including launch, early operations, and normal operations.",
-    "The model incorporates needs, objectives, constraints, measures of effectiveness/performance, technical performance measures, requirements, and use cases with trace/refine/derive relationships.",
-    "The CubeSat enterprise is decomposed into space and ground systems plus external services such as ground-station services and transport/launch/deploy services.",
-    "The CubeSat logical architecture includes subsystems such as mission data acquisition/processing, communications, power, thermal, propulsion, command and data handling, guidance/navigation/control, attitude determination/control, and structures/mechanisms.",
-    "The Cal Poly CubeSat Design Specification was translated into a SysML model providing physical, mechanical, electrical, testing, and operational requirements.",
-    "Earlier phases modeled RAX mission behaviors including mission data collection/downlink, solar energy collection/storage, subsystem power consumption, and communications performance, and used executable behaviors/constraints for trade studies.",
-    "The distribution plan includes model files, video walk-throughs, copyright/licensing, MagicDraw, ZIP, XMI, OpenMBEE, Teamcenter, and user feedback mechanisms."
-  ],
-  "limitations_gaps": [
-    "The paper states that the earlier FireSat example was hypothetical, so a real space system could not be built from that model and practical use could not be demonstrated or verified.",
-    "The CubeSat Reference Model is described as still maturing; future work includes refining model elements, verifying correctness, resolving copyright/licensing, and developing a release process.",
-    "No quantitative evaluation of reliability, reproducibility, or integrability outcomes is reported.",
-    "No EPS-specific verification procedure is described beyond the general power-subsystem architecture and prior energy modeling context."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "0.5",
-    "total_score": "1.5",
-    "rationale": "Credible conference venue with DOI and Space Symposium Technical Track identification. Limitations are only indirectly discussed through the FireSat verification limitation, current model maturity, and future verification/refinement plans; there is no formal threats-to-validity section."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0031.json",
+    "status_rationale": "Retained as core because it directly concerns development and distribution of a generic CubeSat MBSE/SysML reference model and reports lifecycle, traceability, reuse, toolchain, and limited power-subsystem modeling context relevant to the review questions.",
+    "citation": "Kaslow, Ayres, Chonoles, Hart, Yntema, Levi, Gasster, Shiotani, and Massa (2016), Developing and Distributing a CubeSat Model-Based Systems Engineering (MBSE) Reference Model - Status, 32nd Space Symposium Technical Track.",
+    "title": "Developing and Distributing a CubeSat Model-Based Systems Engineering (MBSE) Reference Model - Status",
+    "authors": [
+      "David Kaslow",
+      "Bradley Ayres",
+      "Michael Jesse Chonoles",
+      "Laura Hart",
+      "Rose Yntema",
+      "Alejandro G. Levi",
+      "Samuel D. Gasster",
+      "Bungo Shiotani",
+      "Chris Massa"
+    ],
+    "venue": "32nd Space Symposium, Technical Track, Colorado Springs, Colorado, United States of America",
+    "doi_or_url": "10.2514/6.2016-5551",
+    "publisher": "not reported",
+    "venue_type": "conference technical track",
+    "source_database_or_route": [
+      "scopus",
+      "semantic_scholar abstract_enrichment"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "partial",
+        "rationale": "The paper substantially describes general CubeSat mission modeling via a reusable SysML logical reference model, but EPS/power modeling is only summarized from prior phases and not developed as the central contribution."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "It claims model-enabled integrability, reuse, uniformity, consistency, and reduced SE burden, but does not claim or evidence EPS-specific reliability or measured reproducibility outcomes."
+      },
+      "RQ3": {
+        "relevance": "none",
+        "rationale": "The paper mentions generic verification/validation support, Cal Poly testing requirements, and future model correctness verification, but does not integrate or evaluate EPS-specific verification procedures prior to physical development."
+      }
+    },
+    "lineage_overlap_notes": "The paper explicitly summarizes the SSWG MBSE Challenge sequence from FireSat through RAX behavior modeling, RAX trade studies, enterprise modeling, and the current reference-model distribution phase; extraction treats those prior-phase results only as stated in this paper."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "Generic CubeSat/CubeSat Enterprise reference model; prior Radio Aurora Explorer (RAX) CubeSat and hypothetical FireSat are used as lineage examples.",
+    "size_form_factor": "CubeSat standardized unit cube, 10 cm on a side and approximately 1 kg per cube; typically one to three units, with some up to six units; RAX described as a three-unit CubeSat.",
+    "mission_name": "CubeSat Reference Model; prior examples include Radio Aurora Explorer (RAX) and hypothetical FireSat.",
+    "mission_domain": "Space systems domain for CubeSat missions, including space system, ground system, launch/deployment services, external environment, external constraints, and operations phases.",
+    "organization_type": "INCOSE Space Systems Working Group Challenge Team with students, professors, engineers, software developers, government, industry, academia, and modeling/simulation tool providers.",
+    "project_maturity": "Current Phase 4/interim status; generic logical architecture and Cal Poly requirements model exist, distribution is being developed, and correctness verification/release planning remain future work.",
+    "lifecycle_stage_addressed": "Concept, development, production, operation, and retirement; operations phases include pre-launch integration and test, launch, early orbit checkout, and full mission operations.",
+    "development_context": "Collaborative INCOSE SSWG MBSE Challenge project to develop and share a reusable SysML reference model for future CubeSat developers, classrooms, and potential actual CubeSat projects.",
+    "eps_relevance": "power-budget/electrical-architecture",
+    "model_maturity": "Logical CubeSat reference model down to subsystem level with stakeholder/requirements structure and distribution plans; detailed element refinement and model correctness verification are not complete."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "Develop and distribute a CubeSat SysML reference model that captures basic CubeSat project features, supports future CubeSat developers, reduces systems-engineering burden for small teams, and promotes uniformity and consistency.",
+    "modeling_scope": [
+      "mission stakeholders and their needs, objectives, constraints, and measures of effectiveness",
+      "CubeSat lifecycle stages from conception through retirement",
+      "phases of operations including pre-launch integration/test, launch, early orbit checkout, and full mission operations",
+      "CubeSat domain, enterprise, external environment, external constraints, regulations, and services",
+      "CubeSat space system and ground system logical architectures",
+      "Cal Poly CubeSat Design Specification requirements model",
+      "mission needs/objectives/constraints, technical measures, requirements, and use cases",
+      "prior power, communication, state, and operational behavior/trade-study models summarized from earlier phases"
+    ],
+    "system_boundary_level_of_abstraction": "Generic logical reference architecture for CubeSat Enterprise, including CubeSat Space System and Ground System plus external services/constraints/environments; decomposition reaches logical subsystem level rather than mission-specific physical component design.",
+    "minimal_or_excluded_modeling": "GPS and relay satellites are outside the Space and Ground Systems unless developed by the CubeSat project; external transport, launch, deployment, and ground-station services are treated as provided services; detailed model-element refinement, mission-specific physical architecture, and model correctness verification are future work.",
+    "required_prior_behavioral_domain_knowledge": "not reported as a prerequisite; the model is grounded in SysML, OOSEM, Cal Poly CubeSat Design Specification, INCOSE/NASA handbooks, and Space Mission Engineering, with user tailoring implied.",
+    "handling_limited_behavioral_knowledge": "The paper emphasizes a reusable logical architecture and requirements/stakeholder/constraint hierarchy that users can tailor before choosing mission-specific physical architectures; prior behavior modeling is used for trade-study demonstrations rather than required for all reference-model elements.",
+    "model_artifacts_used": [
+      "SysML blocks, actors, flows, signals, ports, properties, constraints",
+      "block definition diagrams",
+      "internal block diagrams",
+      "requirement diagrams",
+      "activity diagrams",
+      "sequence diagrams",
+      "state diagrams",
+      "use case diagrams",
+      "parametric diagrams",
+      "Cal Poly CubeSat Design Specification model",
+      "stakeholder definitions",
+      "mission/system/subsystem requirements and use cases",
+      "measures of effectiveness, measures of performance, and technical performance measures as block value properties",
+      "logical architecture diagrams for CubeSat and ground system",
+      "distribution package with model file and video walkthroughs planned"
+    ],
+    "generality_reuse_mechanism": [
+      "generic logical CubeSat architecture reusable for mission-specific CubeSats",
+      "general subsystem decomposition that users can tailor",
+      "standard nomenclature and definitions",
+      "requirements foundation from Cal Poly CubeSat Design Specification",
+      "foundations from INCOSE and NASA systems engineering handbooks and Space Mission Engineering",
+      "distribution via MagicDraw, ZIP file, XMI file, OpenMBEE, and Teamcenter options",
+      "user feedback mechanisms back to SSWG"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Identify mission stakeholders",
+        "inputs": "CubeSat sponsor, user, operator, project roles, supplier/acquirer, launch and communication service roles, regulatory agencies",
+        "outputs": "Stakeholder definitions and interests captured in the model",
+        "actors_roles": "SSWG team; stakeholder classes such as sponsor, user, operator, project manager, project engineer, developer, tester, acquirer, supplier, launch service integrator, communication service integrator",
+        "prerequisites": "Mission or reference-model scope and awareness of CubeSat regulatory context",
+        "completion_criteria": "not reported",
+        "handoffs": "Stakeholder definitions feed needs/objectives/constraints and measures"
+      },
+      {
+        "step": "Capture needs, objectives, constraints, and measures",
+        "inputs": "Stakeholder concerns, regulatory constraints, mission objectives, measures of effectiveness",
+        "outputs": "Hierarchy linking mission needs, objectives, constraints, measures, requirements, and use cases",
+        "actors_roles": "Mission engineer, project engineer, SSWG modelers, stakeholders",
+        "prerequisites": "Identified stakeholders and domain constraints",
+        "completion_criteria": "Trace relationships represented in SysML",
+        "handoffs": "Feeds mission/system/subsystem requirements and use cases"
+      },
+      {
+        "step": "Incorporate foundation standards and specifications",
+        "inputs": "Cal Poly CubeSat Design Specification, INCOSE handbook, NASA handbook, Space Mission Engineering/New SMAD",
+        "outputs": "Modeled requirements for physical, mechanical, electrical, testing, and operational constraints; standard terminology",
+        "actors_roles": "SSWG modelers and CubeSat domain experts",
+        "prerequisites": "Access to public standards/specifications",
+        "completion_criteria": "Cal Poly Design Specification documentation translated into SysML model elements",
+        "handoffs": "Requirements foundation informs logical architecture and mission-specific tailoring"
+      },
+      {
+        "step": "Define CubeSat domain and enterprise boundary",
+        "inputs": "Stakeholders, external environment, external constraints, space/ground/launch/communications service concepts",
+        "outputs": "CubeSat Domain and CubeSat Enterprise model with boundaries for space system, ground system, provided services, and external systems",
+        "actors_roles": "SSWG team and domain experts",
+        "prerequisites": "Reference-model scope agreement",
+        "completion_criteria": "Logical domain/enterprise relationships represented in the reference model",
+        "handoffs": "Feeds subsystem logical architecture"
+      },
+      {
+        "step": "Define logical space and ground architectures",
+        "inputs": "CubeSat enterprise boundary, requirements/use cases, subsystem taxonomy",
+        "outputs": "Logical architecture for CubeSat subsystems and ground-system subsystems",
+        "actors_roles": "Systems engineers/modelers; future CubeSat project users",
+        "prerequisites": "Domain model and requirements structure",
+        "completion_criteria": "General decomposition down to logical subsystem level",
+        "handoffs": "Users tailor logical elements to mission-specific physical architectures"
+      },
+      {
+        "step": "Distribute and support use of the model",
+        "inputs": "CubeSat Reference Model, copyright/license decisions, walkthrough material, distribution formats",
+        "outputs": "Model file, video walkthroughs, possible MagicDraw/ZIP/XMI/OpenMBEE/Teamcenter distribution, user feedback",
+        "actors_roles": "SSWG team and external users including CubeSat teams and classroom instructors",
+        "prerequisites": "Sufficient model maturity and licensing environment",
+        "completion_criteria": "not reported; release plan/process still being developed",
+        "handoffs": "External users produce mission-specific CubeSat models or classroom examples and provide feedback"
+      },
+      {
+        "step": "Refine and verify the reference model",
+        "inputs": "Current reference model, user feedback, detailed model-element requirements",
+        "outputs": "More detailed and correctness-verified model",
+        "actors_roles": "SSWG team and potentially external users",
+        "prerequisites": "Current model baseline and release/copyright process",
+        "completion_criteria": "not reported; listed as future work",
+        "handoffs": "Future releases of the reference model"
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "The MBSE definition maps modeling to requirements, design, analysis, verification, and validation from conceptual design through later lifecycle phases; the reference model supports concept, development, production, operations, retirement, and operations phases such as pre-launch integration/test, launch, early orbit checkout, and full mission operations. Specific PDR/CDR gates are not reported.",
+    "approach_classification": "Integrated MBSE/digital engineering",
+    "approach_classification_rationale": "The core approach is a SysML/OOSEM system model, but the paper explicitly frames the model as integrating discipline-specific engineering models and simulations, reports prior interfaces with commercial simulation tools, behavior/constraint execution, and trade studies, and plans data distribution/exchange mechanisms such as XMI/OpenMBEE/Teamcenter.",
+    "tailoring_rationale": [
+      "small CubeSat teams can use the reference model as a checklist to reduce systems-engineering burden",
+      "logical elements can be reused for mission-specific CubeSat physical architectures",
+      "general system decomposition can be tailored to project needs",
+      "external regulations, launch/deployment services, and ground-station services can be represented as project-specific constraints or services",
+      "educational and actual CubeSat project users require distributable and reusable model assets"
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "Systems Modeling Language (SysML)",
+      "Object-Oriented Systems Engineering Method (OOSEM)",
+      "No Magic graphical modeling tools",
+      "MagicDraw",
+      "XMI",
+      "OpenMBEE",
+      "Teamcenter",
+      "commercial simulation tools (unnamed, from prior phases)",
+      "WebEx/video model walkthroughs"
+    ],
+    "toolchain_architecture_data_flow": "A central SysML reference model contains requirements, interfaces, structure, behavior, parametric views, stakeholder needs, measures, and logical architecture. Traditional documents can be generated from the model, updates propagate to views, the model can interface with other models/simulations, and external users receive model files/walkthroughs through distribution mechanisms and provide feedback to SSWG.",
+    "interoperability_mechanisms": [
+      "interfaces with other discipline-specific engineering models and simulations",
+      "commercial simulation tool interfaces (reported from earlier phases)",
+      "XMI file exchange",
+      "MagicDraw model files",
+      "ZIP file distribution",
+      "OpenMBEE",
+      "Teamcenter",
+      "generated documents from the model"
+    ],
+    "syntax_semantic_continuity_evidence": "SysML provides common element/diagram semantics and XMI is listed as an exchange mechanism; the paper claims model changes propagate to all views, but it does not report an executed syntax/semantic exchange validation for the current reference model.",
+    "software_hardware_system_integration_readiness": "The model is intended to support pre-launch integration and test, launch, early orbit checkout, full operations, and building the physical system from the model, but the current paper reports no completed hardware/software integration or test results for the reference model.",
+    "toolchain_limitations": [
+      "model distribution process is still being developed",
+      "copyright and licensing environment is still under consideration",
+      "model correctness verification is future work",
+      "commercial simulation tools are not named or detailed in this paper",
+      "no reported validation of XMI/OpenMBEE/Teamcenter data exchange continuity"
+    ],
+    "availability_reproducibility": "The reference model is approaching maturity for sharing and planned distribution includes model file and walkthrough videos, but availability is not reported as completed; reproducibility is therefore prospective rather than demonstrated."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "Power Subsys logical subsystem",
+      "solar energy collection",
+      "energy storage",
+      "battery maximum capacity",
+      "subsystem power consumption",
+      "solar panel area",
+      "on-board energy level"
+    ],
+    "eps_requirements_representation": "EPS-specific requirements are not reported. The paper states that the Cal Poly model provides physical, mechanical, electrical, testing, and operational requirements, and the generic hierarchy can trace subsystem requirements to technical performance measures.",
+    "verification_validation_artifacts": [
+      "generic SysML requirements and testing requirements from Cal Poly CubeSat Design Specification",
+      "Tester stakeholder definition for verification and validation processes",
+      "hierarchy connecting requirements, use cases, and technical measures",
+      "prior behavior/constraint simulations and operational trade studies",
+      "future model-correctness verification"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "generic MBSE support for verification and validation from conceptual design",
+      "model-based representation of testing requirements",
+      "execution of behavior and constraint equations for trade studies in prior phases",
+      "planned verification of the correctness of the reference model"
+    ],
+    "evidence_verification_integrated_in_model": "Only generic evidence is provided: MBSE is defined as supporting verification/validation, the Cal Poly specification model includes testing requirements, and tester roles are modeled. No EPS-specific verification procedure is integrated or demonstrated.",
+    "integration_test_readiness": "The reference model supports pre-launch integration and test as an operations phase, but no EPS integration-test plan, readiness criterion, or physical integration result is reported."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Paper purpose and MBSE reference-model status",
-      "quote": "This paper reports on our current progress in the development of the CubeSat Reference Model and plans for the future.",
-      "location": "Abstract"
+      "claim": "A system model can integrate discipline-specific engineering models and simulations.",
+      "outcome_category": "integrability",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "central SysML system model",
+        "interfaces with other models",
+        "integration of discipline-specific simulations"
+      ],
+      "artifact_or_process_linked": "MBSE system model and interfaces with other models",
+      "lifecycle_stage": "conceptual design through later lifecycle phases",
+      "evidence_type": "author assertion with prior-project summary",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "document-centric systems engineering described as separate documents",
+      "observed_effect_size_or_qualitative_effect": "claimed integration of engineering models and simulations",
+      "evidence_source": "Abstract and Model-Based Systems Engineering section",
+      "direct_quote": "At the core of MBSE is the development of the system model that helps integrate other discipline-specific engineering models and simulations.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No integration metric or current-model interoperability result is reported; integration may depend on tool-specific implementation."
     },
     {
-      "claim": "System model integrates discipline-specific models and simulations",
-      "quote": "At the core of MBSE is the development of the system model that helps integrate other discipline-specific engineering models and simulations.",
-      "location": "Abstract"
+      "claim": "Requirements and interfaces in a single model improve consistency by propagating updates to system views.",
+      "outcome_category": "consistency/change management",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "single system model",
+        "integrated requirements and interfaces",
+        "view generation from common model elements"
+      ],
+      "artifact_or_process_linked": "SysML elements and diagrams/views",
+      "lifecycle_stage": "requirements, design, analysis, verification, and validation activities",
+      "evidence_type": "conceptual explanation",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "requirements and interfaces in isolated engineering artifacts",
+      "observed_effect_size_or_qualitative_effect": "changes are claimed to be automatically reflected in every view",
+      "evidence_source": "Model-Based Systems Engineering section and Figure 2 description",
+      "direct_quote": "changes are automatically propagated and reflected in every view of the system.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Automatic propagation is a tool/modeling-environment capability but no change case or defect-reduction evidence is shown."
     },
     {
-      "claim": "Modeling language and broad CubeSat scope",
-      "quote": "the team has been working to create a system model that captures many of the basic features of a CubeSat project using the Systems Modeling Language (SysML)",
-      "location": "Abstract"
+      "claim": "The model should be the authoritative source for documentation and physical-system development.",
+      "outcome_category": "reproducibility/configuration continuity",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "document generation from model",
+        "model-as-design-authority"
+      ],
+      "artifact_or_process_linked": "SysML model and generated documents",
+      "lifecycle_stage": "development and later lifecycle phases",
+      "evidence_type": "author assertion",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "document-centric engineering",
+      "observed_effect_size_or_qualitative_effect": "claimed shift from documents to model-driven development",
+      "evidence_source": "Model-Based Systems Engineering section",
+      "direct_quote": "the physical system should be built using the model and not to the documentation.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "No actual build, audit trail, or configuration-management result is reported for the current reference model."
     },
     {
-      "claim": "Prior RAX simulation and trade-study context",
-      "quote": "the team has created the initial iteration of the reference model, applied it to the Radio Aurora Explorer (RAX) mission, executed simulations of system behaviors, interfaced with commercial simulation tools, and demonstrated how behaviors and constraint equations can be executed to perform operational trade studies.",
-      "location": "Abstract"
+      "claim": "A CubeSat reference model can reduce the burden of systems engineering tasks for small CubeSat teams.",
+      "outcome_category": "cost/schedule/workload",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "reusable reference model",
+        "checklist function",
+        "standard nomenclature and definitions"
+      ],
+      "artifact_or_process_linked": "CubeSat Reference Model",
+      "lifecycle_stage": "future CubeSat development projects",
+      "evidence_type": "author claim/prospective benefit",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "promised reduction in SE burden",
+      "evidence_source": "Conclusion",
+      "direct_quote": "MBSE holds the promise of reducing the burden of systems engineering tasks, which is beneficial to small CubeSat teams",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "Benefit is prospective; no effort, schedule, defect, or adoption data are reported."
     },
     {
-      "claim": "MBSE supports requirements, analysis, verification, and validation",
-      "quote": "MBSE is the formalized application of modeling to support key systems engineering tasks for addressing requirements, design, analysis, validation and verification.",
-      "location": "Model-Based Systems Engineering"
+      "claim": "The reference model can promote uniformity and consistency across future CubeSat models.",
+      "outcome_category": "standardization/consistency",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "properly designed reference model",
+        "checklist",
+        "generic logical architecture"
+      ],
+      "artifact_or_process_linked": "CubeSat Reference Model and logical subsystem decomposition",
+      "lifecycle_stage": "future mission-specific modeling",
+      "evidence_type": "conceptual mechanism",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "claimed checklist and uniformity benefit",
+      "evidence_source": "Conclusion",
+      "direct_quote": "a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No repeated reuse, model comparison, or conformance assessment is reported."
     },
     {
-      "claim": "Integrated requirements/interfaces and automatic propagation",
-      "quote": "requirements and interfaces are not contained in isolated engineering artifacts as done previously but are now integrated within a single system model. This allows for a full exploration of the model, and changes are automatically propagated and reflected in every view of the system.",
-      "location": "Model-Based Systems Engineering"
+      "claim": "Reusable logical architecture elements can support mission-specific CubeSat physical architectures.",
+      "outcome_category": "reuse/tailoring",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "logical architecture",
+        "OOSEM logical-to-physical architecture transition",
+        "tailorable subsystem decomposition"
+      ],
+      "artifact_or_process_linked": "CubeSat Reference Model logical elements",
+      "lifecycle_stage": "concept and design",
+      "evidence_type": "model-architecture description",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "logical elements are intended for reuse in mission-specific models",
+      "evidence_source": "Object-Oriented Systems Engineering Method section and Space and Ground Subsystems section",
+      "direct_quote": "These logical elements can be reused for specifying a mission specific CubeSat.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No external project reuse result is reported; usability may depend on model completeness and licensing."
     },
     {
-      "claim": "SysML and No Magic tools",
-      "quote": "The project's application of MBSE uses the Systems Modeling Language (SysML) and graphical modeling tools from No Magic.",
-      "location": "Systems Modeling Language"
+      "claim": "Executable behaviors and constraints enabled operational trade studies, including power/energy trade studies.",
+      "outcome_category": "analysis/trade-space exploration",
+      "specificity": "power-budget/electrical-architecture",
+      "mbse_mechanism": [
+        "behavior modeling",
+        "constraint-equation execution",
+        "time-stepped scenario model"
+      ],
+      "artifact_or_process_linked": "RAX behavior model and trade-study model summarized from earlier phases",
+      "lifecycle_stage": "concept/design analysis",
+      "evidence_type": "reported prior simulation/trade-study demonstration",
+      "metric_or_value_indicator": "on-board energy level as a function of solar panel area and maximum battery capacity; data downlinked as a function of altitude and ground-station network",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "demonstrated ability to explore power and communications trades",
+      "evidence_source": "Abstract and SSWG MBSE Challenge Project Early Phases section",
+      "direct_quote": "Two trade studies were demonstrated: 1) On-board energy level as a function of solar panel area and maximum battery capacity and 2) quantity of data downlinked as a function of orbital altitude and ground station network.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Details and results are not reproduced in this paper; evidence is a summary of earlier work rather than a current full case report."
     },
     {
-      "claim": "OOSEM method",
-      "quote": "SysML is modeling language which can support various system engineering methodologies including the methodology used by this team, Object-Oriented Systems Engineering Method (OOSEM)",
-      "location": "Object-Oriented Systems Engineering Method"
+      "claim": "Translating the Cal Poly CubeSat Design Specification into SysML provides a requirements foundation for CubeSat projects.",
+      "outcome_category": "requirements/compliance traceability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "requirements modeling",
+        "SysML requirement hierarchy",
+        "standard specification translation"
+      ],
+      "artifact_or_process_linked": "Cal Poly CubeSat Design Specification SysML model",
+      "lifecycle_stage": "requirements and design",
+      "evidence_type": "model artifact description",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "source specification document",
+      "observed_effect_size_or_qualitative_effect": "requirements foundation made available inside the reference model",
+      "evidence_source": "Development of the CubeSat Reference Model section",
+      "direct_quote": "This model provides the foundation for specifying a CubeSat's physical, mechanical, electrical, testing, and operational requirements.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The paper does not report completeness checks, compliance outcomes, or verification of translation accuracy."
     },
     {
-      "claim": "Reference model reusable logical architecture",
-      "quote": "The CubeSat Reference Model will provide the logical architecture. These logical elements can be reused for specifying a mission specific CubeSat.",
-      "location": "Object-Oriented Systems Engineering Method"
-    },
-    {
-      "claim": "Prior EPS/power modeling",
-      "quote": "A model for the power subsystem accounted for solar energy collection and storage and subsystem power consumption.",
-      "location": "SSWG MBSE Challenge Project Early Phases"
-    },
-    {
-      "claim": "Prior power and communications trade studies",
-      "quote": "Two trade studies were demonstrated: 1) On-board energy level as a function of solar panel area and maximum battery capacity and 2) quantity of data downlinked as a function of orbital altitude and ground station network.",
-      "location": "SSWG MBSE Challenge Project Early Phases"
-    },
-    {
-      "claim": "Current reference-model scope includes lifecycle and operations",
-      "quote": "The reference model can support all life cycle stages for a CubeSat mission. For example, for an academic CubeSat project, the likely stages would be concept, development, production, operational, and retirement. The model also supports all phases of operations: pre-launch integration and test, launch, early orbit checkout, and full mission operations.",
-      "location": "Development of the CubeSat Reference Model"
-    },
-    {
-      "claim": "Cal Poly requirements modeled, including electrical/testing/operations",
-      "quote": "the translation of the Cal Poly CubeSat Design Specification documentation into a SysML model. This model provides the foundation for specifying a CubeSat's physical, mechanical, electrical, testing, and operational requirements.",
-      "location": "Development of the CubeSat Reference Model"
-    },
-    {
-      "claim": "Generic subsystem decomposition includes power subsystem",
-      "quote": "The CubeSat Reference Model includes a general system decomposition that users can tailor to suit their particular project needs.",
-      "location": "Space and Ground Subsystems"
-    },
-    {
-      "claim": "Distribution mechanisms and feedback",
-      "quote": "the SSWG team is developing a model distribution process to share to external entities",
-      "location": "Distribution of the CubeSat Reference Model"
-    },
-    {
-      "claim": "Model immaturity/future verification",
-      "quote": "The future plans include: (i) refining the CubeSat Reference Model to include additional details for each of the model elements, (ii) verifying the correctness of the model, (iii) working with INCOSE on model copyright and licensing and (iv) developing a release plan and process for distributing the model.",
-      "location": "Next Steps"
-    },
-    {
-      "claim": "Claimed outcomes: reduced burden, checklist, uniformity/consistency",
-      "quote": "MBSE holds the promise of reducing the burden of systems engineering tasks, which is beneficial to small CubeSat teams, and a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models.",
-      "location": "Conclusion"
-    },
-    {
-      "claim": "Explicit limitation of earlier hypothetical model",
-      "quote": "the hypothetical nature of FireSat precluded anyone from actually building a real space system from the model. Therefore, the practical use of the model could not be demonstrated or verified.",
-      "location": "SSWG MBSE Challenge Project Early Phases"
+      "claim": "Distribution mechanisms and walkthroughs will support education, evaluation, and reuse of the reference model.",
+      "outcome_category": "reproducibility/reuse",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "model file distribution",
+        "video walkthroughs",
+        "license/copyright environment",
+        "user feedback loop"
+      ],
+      "artifact_or_process_linked": "CubeSat Reference Model distribution process",
+      "lifecycle_stage": "adoption and future project tailoring",
+      "evidence_type": "planned process",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "planned sharing with external entities, classrooms, and actual CubeSat projects",
+      "evidence_source": "Distribution of the CubeSat Reference Model section",
+      "direct_quote": "In addition to the model file, the distribution will include video recordings that explain and walk through the model and its components.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The distribution is still under development and no adoption/reuse evidence is reported."
     }
   ],
-  "notes_for_consistency": "Read only paper.md. Some metadata differs between the embedded assignment and the paper title page: paper.md title page says 'Developing and Distributing a CubeSat Model-Based Systems Engineering (MBSE) Reference Model - Status' and lists additional/different authors (David Kaslow, Bradley Ayres, Michael Jesse Chonoles, Laura Hart, Rose Yntema, Alejandro G. Levi, Samuel D. Gasster, Bungo Shiotani, Chris Massa). The extraction keeps the assigned corpus metadata for title/authors/DOI while noting this ambiguity. EPS evidence is mostly at subsystem or prior-phase power-model level, not detailed EPS V&V."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "The SSWG team is developing distribution, copyright, and licensing processes, with model walkthroughs and user feedback mechanisms; the paper notes an obligation to protect team-member investment and create a licensing environment conducive to user support.",
+    "traceability_to_deliverables_decisions_reviews": "The model traces mission needs, objectives, constraints, measures, requirements, use cases, system requirements, and subsystem requirements. Traditional documents can be generated from the model, but specific review gates or project deliverables are not detailed.",
+    "evaluation_criteria_model_quality_usefulness": "Measures of effectiveness, measures of performance, and technical performance measures are incorporated as block value properties; model correctness verification is planned. No quantitative usefulness or quality evaluation is reported.",
+    "roi_value_realization_evidence": "The paper claims the promise of reduced systems-engineering burden for small CubeSat teams, but reports no ROI, cost, schedule, staffing, reuse, or defect metrics.",
+    "programmatic_gates_critical_design_events_supported": "The model supports lifecycle stages from concept through retirement and operations phases including pre-launch integration/test, launch, early orbit checkout, and full mission operations; named programmatic gates such as SRR/PDR/CDR are not reported.",
+    "model_derived_performance_indicators_management_metrics": "Measures of effectiveness, measures of performance, and technical performance measures are modeled as block value properties; project-management metrics are not reported."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper lays out phases, model-scope inputs, stakeholder/requirements architecture, domain/enterprise decomposition, and distribution plans, but lacks a step-by-step implementation playbook or completed external adoption case for the current reference model."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper identifies SysML/No Magic, interfaces with other models, commercial simulation tools, XMI, OpenMBEE, and Teamcenter, but does not present a validated toolchain continuity or data-exchange result."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed conceptually",
+      "rationale": "Small CubeSat teams, checklist value, reusable logical elements, and tailorable decompositions are explicit, but resource savings and tailoring effort are not measured."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "addressed conceptually",
+      "rationale": "Copyright, licensing, release planning, feedback mechanisms, and document generation are described, but ROI/value realization and review-gate deliverables are not evidenced."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "mentioned only",
+      "rationale": "The team is distributed across government, industry, academia, and tool providers and uses outreach/feedback mechanisms, but agile, NewSpace, or rapid-iteration practices are not addressed."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "A generic CubeSat mission can be represented as a SysML/OOSEM reference model with stakeholder needs, objectives, constraints, lifecycle phases, operations phases, domain/enterprise boundaries, and space/ground logical subsystem architectures.",
+        "The model handles early or incomplete mission-specific knowledge by providing reusable logical elements and a general decomposition that users tailor into mission-specific physical architectures.",
+        "EPS relevance is limited to the Power Subsys and summarized prior behavior/trade-study modeling for solar energy collection, storage, consumption, solar panel area, battery capacity, and on-board energy level."
+      ],
+      "RQ2": [
+        "Claimed model-enabled outcomes include integrability of discipline models/simulations, automatic view consistency, document generation, reuse, checklist support, uniformity, consistency, and prospective reduction of SE burden for small CubeSat teams.",
+        "Reproducibility is addressed prospectively through planned model-file distribution, walkthrough videos, MagicDraw/ZIP/XMI/OpenMBEE/Teamcenter mechanisms, and licensing/copyright work.",
+        "Reliability outcomes are not claimed or evidenced, and most value claims lack metrics or baseline comparison; the strongest evidence is a reported prior RAX simulation/trade-study demonstration."
+      ],
+      "RQ3": [
+        "No EPS-specific verification procedure is integrated or demonstrated in the current reference model.",
+        "Generic V&V support appears through the MBSE definition, Cal Poly testing requirements in SysML, tester stakeholder definitions, requirements/use-case/measure traceability, and pre-launch integration/test lifecycle coverage.",
+        "Verification of reference-model correctness is explicitly future work, and no physical integration/test or flight evidence is reported."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "The hypothetical FireSat model could not demonstrate or verify practical use because no real space system could be built from it.",
+      "The current effort has focused on standard nomenclature/definitions, stakeholders/needs/objectives/measures, and generic architecture down to the logical subsystem level.",
+      "Future plans include refining details for each model element and verifying correctness of the model.",
+      "Copyright, licensing, release plan, and distribution process remain in development.",
+      "GPS and relay satellites are outside the modeled Space and Ground Systems unless the CubeSat system develops its own relay satellites."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "No EPS-specific requirements set, verification procedure, integration test, or reliability assessment is provided.",
+      "No quantitative cost/schedule/reuse/consistency metrics or baseline comparator are reported for the current reference model.",
+      "Distribution and availability are planned rather than completed, limiting reproducibility assessment.",
+      "Toolchain interoperability is named but not validated with exchange or semantic-continuity evidence in this paper.",
+      "Claims about reducing SE burden and promoting uniformity remain prospective."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "MBSE definition",
+        "quote": "Model-based systems engineering (MBSE) is the formalized application of modeling to support system requirements, design, analysis, verification and validation activities beginning in the conceptual design phase and continuing throughout development and later life cycle phases.",
+        "location": "Model-Based Systems Engineering section"
+      },
+      {
+        "topic": "central model integration",
+        "quote": "At the core of MBSE is the development of the system model that helps integrate other discipline-specific engineering models and simulations.",
+        "location": "Abstract"
+      },
+      {
+        "topic": "tool and language",
+        "quote": "The project's application of MBSE uses the Systems Modeling Language (SysML) and graphical modeling tools from No Magic.",
+        "location": "Systems Modeling Language section"
+      },
+      {
+        "topic": "logical reuse",
+        "quote": "These logical elements can be reused for specifying a mission specific CubeSat.",
+        "location": "Object-Oriented Systems Engineering Method section"
+      },
+      {
+        "topic": "CubeSat lifecycle",
+        "quote": "The reference model can support all life cycle stages for a CubeSat mission.",
+        "location": "Development of the CubeSat Reference Model section"
+      },
+      {
+        "topic": "operations phases",
+        "quote": "The model also supports all phases of operations: pre-launch integration and test, launch, early orbit checkout, and full mission operations.",
+        "location": "Development of the CubeSat Reference Model section"
+      },
+      {
+        "topic": "power trade study",
+        "quote": "Two trade studies were demonstrated: 1) On-board energy level as a function of solar panel area and maximum battery capacity and 2) quantity of data downlinked as a function of orbital altitude and ground station network.",
+        "location": "SSWG MBSE Challenge Project Early Phases section"
+      },
+      {
+        "topic": "distribution package",
+        "quote": "In addition to the model file, the distribution will include video recordings that explain and walk through the model and its components.",
+        "location": "Distribution of the CubeSat Reference Model section"
+      },
+      {
+        "topic": "future verification",
+        "quote": "The future plans include: (i) refining the CubeSat Reference Model to include additional details for each of the model elements, (ii) verifying the correctness of the model",
+        "location": "Next Steps section"
+      },
+      {
+        "topic": "claimed burden and consistency",
+        "quote": "MBSE holds the promise of reducing the burden of systems engineering tasks, which is beneficial to small CubeSat teams, and a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models.",
+        "location": "Conclusion"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Because this is an interim-status/reference-model paper that summarizes earlier SSWG work, prior RAX behavior simulations and trade studies are coded as evidence reported in this paper, not as independently re-extracted results from the earlier papers.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full Markdown paper was available and clearly describes the reference-model scope, tools, artifacts, distribution plans, and future work. Confidence is lower only for detailed EPS verification and outcome measurement because the paper does not report them."
+  },
+  "bibtex": "@inproceedings{paper-0031,\n  title = {Developing and Distributing a CubeSat Model-Based Systems Engineering (MBSE) Reference Model - Status},\n  author = {David Kaslow and Bradley Ayres and Michael Jesse Chonoles and Laura Hart and Rose Yntema and Alejandro G. Levi and Samuel D. Gasster and Bungo Shiotani and Chris Massa},\n  year = {2016},\n  booktitle = {AIAA Conference Proceedings},\n  publisher = {American Institute of Aeronautics and Astronautics},\n  doi = {10.2514/6.2016-5551},\n  url = {https://doi.org/10.2514/6.2016-5551}\n}"
 }

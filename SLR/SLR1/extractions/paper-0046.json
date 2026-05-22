@@ -1,144 +1,535 @@
 {
   "corpus_id": "paper-0046",
   "tier": "supporting",
-  "citation": "Peters, Fortin, and McSorley (2022), Investigating the Effectiveness of a Causal MBSE Software Tool in Modelling CubeSat Conceptual Design Data",
-  "title": "Investigating the Effectiveness of a Causal MBSE Software Tool in Modelling CubeSat Conceptual Design Data",
-  "authors": [
-    "Stephen Peters",
-    "C. Fortin",
-    "G. McSorley"
-  ],
   "year": 2022,
-  "doi_or_url": "10.1007/978-3-030-94399-8_10",
-  "venue_type": "conference/proceedings chapter; venue name not stated in paper text",
-  "modeling_scope": "CubeSat conceptual design data modeled with OPAL, a SAPPhIRE causality-based MBSE/PLM support tool. Scope includes a system-level CubeSat subsystem interface view and subsystem models, with design files linked to SAPPhIRE elements such as inputs, organs, parts, physical effects, states, and actions. EPS appears as one subsystem, represented through power generation/distribution behavior, power budget spreadsheets, requirements, solar-panel data sheets, and assembly files. The model supports data navigation, causal traceability, heterogeneous file access, and change-propagation reasoning, but not requirements verification.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "budget",
-    "simulation",
-    "lifecycle/PLM",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "SAPPhIRE model of causality implemented in OPAL, a JavaFX-based proof-of-concept MBSE software tool for conceptual design data capture, management, representation, and sharing. CEDESK informed subsystem views. SysML is mentioned only for comparison, not used as the modeling language.",
-  "mbse_language_method_tool_categories": [
-    "PLM",
-    "Other"
-  ],
-  "robot_platform": "SpudNik-1 CubeSat project at the University of Prince Edward Island; form factor not reported.",
-  "task_domain": "CubeSat conceptual design support, concurrent conceptual design data management, subsystem behavior modeling, causal traceability, and change propagation across subsystems.",
-  "interface": "OPAL provides a JavaFX graphical user interface with a high-level system model scene, subsystem SAPPhIRE model scenes, buttons/links to requirements and BOM, subsystem interface arrows, selectable SAPPhIRE element blocks, and links that open or display live design files such as spreadsheets, CAD, code, analysis, and simulation data.",
-  "feedback": "The SAPPhIRE representation includes feedforward and feedback causal links between inputs, physical effects, states, organs, and parts. OPAL evaluation tasks required users to trace data flow and explain how a design change propagates through subsystem interfaces. No closed-loop spacecraft control feedback analysis is reported.",
-  "control_autonomy_split": "Not applicable",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "The authors surveyed SpudNik-1 conceptual design files, built OPAL as a proof-of-concept, and tested it with 15 UPEI engineering students. Participants received about a 15-minute introduction, completed about 45 minutes of tasks covering file location, interface/data-flow tracing, and change propagation, then answered Likert-scale and qualitative survey questions. Reported averages ranged from 5.67 to 6.40 on a 7-point scale.",
-  "rqs_addressed": {
-    "RQ1": "partial",
-    "RQ2": "partial",
-    "RQ3": "no"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The corpus metadata reports a DOI and Scopus provenance for a formally published 2022 contribution; the markdown presents a complete scholarly paper with references.",
+        "evidence": [
+          "Metadata DOI: 10.1007/978-3-030-94399-8_10.",
+          "Metadata provenance includes Scopus records for multiple search routes."
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper states limits of the student survey, version capture, physical-phenomena data, and OPAL's requirements-verification capability.",
+        "evidence": [
+          "\"This is one of the limitations with conducting a survey using engineering students.\"",
+          "\"Another limiting factor of the survey was, while thorough, it could not capture file versions or represent the evolution of the design files.\"",
+          "\"OPAL has very limited representation of the extensive requirements found in the CubeSat project. It cannot be used as an effective requirements verification tool in this state.\""
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The case is explicitly a UPEI CubeSat, SpudNik-1, focused on conceptual design ending at Mission Concept Review.",
+        "evidence": [
+          "\"All work for this survey took place at the University of Prince Edward Island (UPEI) using the CubeSat 'SpudNik-1'as a case study.\"",
+          "\"The first major design review, the Mission Concept Review, was taken as a reference point marking the end of the conceptual design phase.\""
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The method, SAPPhIRE elements, OPAL requirements, JavaFX scenes, and file mappings are described well enough for comparison, but software/data availability and implementation detail are insufficient for full replication.",
+        "evidence": [
+          "\"There are two JavaFX $ ^{\\mathrm{TM}} $ scenes that define the OPAL GUI, these being the system and subsystem models.\"",
+          "\"Each element block in each system model is connected to the relevant conceptual design data, as summarized in Table 2.\"",
+          "\"While these connections were made manually for the proof-of-concept tool, future iterations will allow for user created links and a simplified update process to manage iterations.\""
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Claims are directly attributed to OPAL, SAPPhIRE visual models, causal links, and system/subsystem model views.",
+        "evidence": [
+          "\"the visual representation of the data via the SAPPhIRE Models made it significantly easier to be able to track and find data using the causal links\"",
+          "\"OPAL is a Model Based Systems Engineering (MBSE) software tool for the capture, management, representation and sharing of conceptual design data.\""
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Evidence consists of a case-study file survey, a prototype OPAL tool, task-based user testing with 15 participants, survey metrics, and qualitative feedback; no flight or operational evidence is provided.",
+        "evidence": [
+          "\"the total number of participants was set at 15\"",
+          "\"Table 4. Statistical results\" reports averages including 6.13 for user friendliness and 6.00 for showing how changes propagate.",
+          "\"Participants were asked to evaluate OPAL based on six characteristics shown in Fig. 5.\""
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "Design files and some requirements spreadsheets are mapped to SAPPhIRE elements, but formal requirements/V&V traceability is limited and OPAL is explicitly not an effective requirements-verification tool.",
+        "evidence": [
+          "\"Every file was systematically investigated and evaluated on whether it fit the description of the SAPPhIRE model elements.\"",
+          "Table 1 maps EPS elements including Action to \"SpudNik-1 requirements(.xlsx)\".",
+          "\"It cannot be used as an effective requirements verification tool in this state.\""
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper reports tool concepts and data-link mechanisms, but OPAL/data availability is not reported and continuity is weakened by manual live-file links and no version tracking.",
+        "evidence": [
+          "\"At the moment, these connections are made with the live files, so iterations are not tracked within OPAL.\"",
+          "\"Future work could explore how SAPPhIRE can represent digital information flow in later stages of the lifecycle, as well as integrating a SQL server to allow for concurrent use and collaboration.\""
+        ]
+      }
+    ],
+    "total_score": 6.5,
+    "max_score": 8,
+    "normalized_score": 0.812,
+    "overall_rationale": "A clear CubeSat conceptual-design case and OPAL user study provide useful evidence for model-based data navigation, integration, and change tracing, but replication assets, formal verification, and lifecycle continuity are limited."
   },
-  "rq_relevance": "RQ1: Partial because the paper presents a general CubeSat conceptual design MBSE representation with SAPPhIRE/OPAL and includes EPS as one subsystem, but it is not an EPS-specific general behavioral model. RQ2: Partial because the paper claims modeling/tool outcomes for data integration, traceability, file finding, ease of use, and change management; reliability and reproducibility outcomes are not reported, and EPS-specific outcomes are limited. RQ3: No because the paper does not integrate EPS verification procedures; it explicitly states OPAL cannot serve as an effective requirements verification tool in its current state.",
-  "claimed_outcomes": [
-    "Integrability/data integration: OPAL was designed as a central data repository incorporating files from all six SpudNik-1 subsystems and integrating code, analysis, spreadsheet, CAD, and other file types.",
-    "Traceability and data access: the paper claims visual SAPPhIRE models and causal links made it easier to navigate, locate, track, and find conceptual design data, including outside a participant's subsystem of expertise.",
-    "Ease of use/training: the abstract reports that 85% of students found OPAL easy to use after a short introduction; the user-friendliness average was 6.13/7.",
-    "Change management: survey averages were 6.00/7 for showing how changes propagate and 5.80/7 for easier management of design changes with OPAL.",
-    "Model feasibility: the authors conclude that OPAL can integrate data files to create a sufficiently detailed system model and that a simplified representation of an entire system is feasible using SAPPhIRE.",
-    "Reliability outcomes: Not reported.",
-    "Reproducibility outcomes: Not reported."
-  ],
-  "verification_validation_linkage": "No spacecraft or EPS verification/test/IVV procedure is integrated into the model. The study evaluates the OPAL tool through student usability/task testing. The paper explicitly states that OPAL has very limited requirements representation and cannot be used as an effective requirements verification tool in its current state.",
-  "key_findings": [
-    "The SpudNik-1 conceptual design file survey found EPS-related data that could be mapped to SAPPhIRE elements, including requirements, power budget spreadsheets, solar-panel data sheets, and assembly files; no appropriate file was found for the Physical Phenomena element.",
-    "OPAL links SAPPhIRE subsystem elements to relevant live conceptual design files and provides a high-level system architecture/interface view for navigating between CubeSat subsystems.",
-    "Participants could use OPAL after a short introduction; the quantitative survey showed high average ratings for user friendliness, logical layout, change propagation, and change management.",
-    "Tasks involving interfaces and causality were harder for participants than simple file location, partly because causality and MBSE/PLM semantics were unfamiliar.",
-    "The paper positions SAPPhIRE/OPAL as a behavior-centered navigation and data-management aid for conceptual design rather than a complete requirements-management or verification tool."
-  ],
-  "limitations_gaps": [
-    "The file survey found no appropriate file corresponding to the Physical Phenomena element, likely because subsystem experts did not explicitly share qualitative behavior descriptions.",
-    "The authors state that use of engineering students is a limitation of the survey and that industry settings may make Physical Phenomena information more relevant.",
-    "The survey could not capture file versions or represent the evolution of design files; the SAPPhIRE models reflected the end state of conceptual design.",
-    "OPAL proof-of-concept links were made manually, and live-file connections mean iterations are not tracked within OPAL.",
-    "Participants experienced confusion with SAPPhIRE element names such as Organ and Physical Phenomena; the authors suggest renaming or better training.",
-    "OPAL has very limited representation of requirements and cannot be used as an effective requirements verification tool in its current state.",
-    "A separate requirements-management tool may create integration issues unless OPAL's ontology is extended or future digital artifact exchange approaches address the gap.",
-    "Future work is needed for later lifecycle stages, SQL server integration, concurrent use, and collaboration."
-  ],
-  "quality": {
-    "credible_venue_score": "0.5",
-    "limitations_discussed_score": "1",
-    "total_score": "1.5",
-    "rationale": "The paper has a Springer-style DOI and proceedings/chapter format, but the accessible text does not state the specific venue name. Limitations, problems, and future-work gaps are discussed explicitly in the survey, tool implementation, and implications sections."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0046.json",
+    "status_rationale": "Kept as supporting: the paper directly addresses CubeSat conceptual-design MBSE/PLM data modeling and includes an EPS subsystem example, but it is not primarily EPS-specific and explicitly lacks requirements-verification capability.",
+    "citation": "Peters, S., Fortin, C., & McSorley, G. (2022). Investigating the Effectiveness of a Causal MBSE Software Tool in Modelling CubeSat Conceptual Design Data. https://doi.org/10.1007/978-3-030-94399-8_10",
+    "title": "Investigating the Effectiveness of a Causal MBSE Software Tool in Modelling CubeSat Conceptual Design Data",
+    "authors": [
+      "Stephen Peters",
+      "Clément Fortin",
+      "Grant McSorley"
+    ],
+    "venue": "not reported in markdown; Springer book/proceedings chapter inferred from DOI pattern and corpus DOI",
+    "doi_or_url": "10.1007/978-3-030-94399-8_10",
+    "publisher": "Springer (not explicitly shown in markdown)",
+    "venue_type": "book chapter or conference proceedings chapter",
+    "source_database_or_route": [
+      "scopus: scopus_q5_reference_model_refined.json",
+      "scopus: scopus_q6_vv_traceability_refined.json",
+      "scopus: scopus_q7_outcomes_refined.json",
+      "scopus: scopus_q18_system_mbse_broad_full65.json",
+      "scopus: scopus_q24_test_evaluation_stage1_recall.json",
+      "semantic_scholar: abstract_enrichment/paper-0046_semantic_title.json"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "partial",
+        "rationale": "Provides a general SAPPhIRE/OPAL approach for representing CubeSat subsystem behavior and system interfaces with limited user training, including an EPS example, but does not present a general nanosatellite mission/EPS reference model."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "Claims improved data finding, traceability, file integration, and change-propagation understanding at CubeSat system level; reliability and reproducibility outcomes are not directly evaluated and EPS-specific outcome evidence is limited."
+      },
+      "RQ3": {
+        "relevance": "none",
+        "rationale": "The paper explicitly states OPAL cannot be used as an effective requirements verification tool and reports no EPS pre-physical verification procedure."
+      }
+    },
+    "lineage_overlap_notes": "No previous extraction or lineage files were consulted. The paper itself notes prior related work on CubeSat behavioural models and positions this study as integrating SAPPhIRE into an MBSE environment through OPAL."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "CubeSat system case study using UPEI SpudNik-1 conceptual design data.",
+    "size_form_factor": "CubeSat; exact unit/form factor not reported.",
+    "mission_name": "SpudNik-1",
+    "mission_domain": "Low-cost space science/CubeSat conceptual design; subsystems include optical payload, structure, communications, thermal, electrical power, and ADCS/control.",
+    "organization_type": "University/student engineering design team at the University of Prince Edward Island; tool tested by engineering students and graduate researchers.",
+    "project_maturity": "Conceptual-design end state at Mission Concept Review; OPAL is a proof-of-concept support tool.",
+    "lifecycle_stage_addressed": "Conceptual design, with discussion of possible later lifecycle support as future work.",
+    "development_context": "Survey of existing SpudNik-1 digital design files followed by prototype OPAL development and independent task-based testing by 15 UPEI engineering participants.",
+    "eps_relevance": "power-budget/electrical-architecture",
+    "model_maturity": "Manual, live-file-linked prototype with system and subsystem SAPPhIRE views; evaluated for usability/data management but not production or flight qualified."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "OPAL was developed because conceptual design is behavior-rich and iterative, while PLM/MBSE tools can struggle to maintain coherent product definitions and conceptual design support tools are limited.",
+    "modeling_scope": [
+      "SpudNik-1 system-level subsystem architecture and interdependencies",
+      "SAPPhIRE causal subsystem models for CubeSat subsystems",
+      "Conceptual design data files mapped to SAPPhIRE elements",
+      "EPS/electrical-power subsystem power-generation and distribution data as one mapped subsystem",
+      "Task scenarios for file location, data-flow/interface tracing, and change propagation"
+    ],
+    "system_boundary_level_of_abstraction": "Conceptual, file-to-model and subsystem-interface level: OPAL represents the CubeSat as a high-level system view plus subsystem causal models, not detailed physics simulation or hardware implementation.",
+    "minimal_or_excluded_modeling": "Monetary budgets and schedules were ignored; file versions/design evolution were not captured; Physical Phenomena had no EPS representative file; requirements are only limited spreadsheet links; verification is excluded.",
+    "required_prior_behavioral_domain_knowledge": "The approach relies on users understanding system behavior to navigate causal links, but the study found users could operate OPAL after an approximately 15-minute introduction and CubeSat familiarity did not significantly differentiate results.",
+    "handling_limited_behavioral_knowledge": "A standardized SAPPhIRE GUI exposes behavior, function, and structure in a common layout so users can navigate by causal links even outside their subsystem expertise; explicit Physical Phenomena labels may help capture tacit behavior but initially confused users.",
+    "model_artifacts_used": [
+      "SAPPhIRE elements: Action, State, Physical Phenomena, Physical Effect, Inputs, oRgans, Subset of Parts",
+      "OPAL system model scene showing SpudNik-1 subsystem interdependencies",
+      "OPAL subsystem model scenes with element blocks and linked design data",
+      "Table 1 EPS file mapping: requirements spreadsheet, orbital power-generation spreadsheet, solar-panel datasheet, power-subsystem assembly",
+      "Table 2 behavior and analysis files across optical payload, structure, communications, thermal, electrical power, and ADCS",
+      "OPAL requirements OPAL-1 through OPAL-6"
+    ],
+    "generality_reuse_mechanism": [
+      "Use of SAPPhIRE as a common causal ontology across subsystems",
+      "Consistent visual layout for every subsystem",
+      "Inputs/States links to connect subsystem models",
+      "Central repository pattern linking heterogeneous design files to model elements",
+      "Potential future user-created links and SQL-backed concurrent collaboration"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Survey conceptual design data",
+        "inputs": "SpudNik-1 shared-drive digital files at the end of conceptual design/Mission Concept Review.",
+        "outputs": "Files evaluated and mapped to SAPPhIRE elements; non-relevant budgets/schedules excluded.",
+        "actors_roles": "Researchers/authors using project knowledge and online database access.",
+        "prerequisites": "Access to CubeSat design files and understanding of SAPPhIRE element definitions.",
+        "completion_criteria": "All relevant files systematically investigated and categorized by model element.",
+        "handoffs": "Mapped data informed OPAL requirements and subsystem model content."
+      },
+      {
+        "step": "Define OPAL requirements",
+        "inputs": "Survey findings, SAPPhIRE model structure, desired empirical-study tasks.",
+        "outputs": "OPAL-1 to OPAL-6 requirements for SAPPhIRE representation, GUI, central repository, heterogeneous file integration, visuals, and system interdependency view.",
+        "actors_roles": "Tool developers/researchers.",
+        "prerequisites": "Identified subsystem files and conceptual-design support objectives.",
+        "completion_criteria": "Requirements listed in Table 3.",
+        "handoffs": "Requirements guided JavaFX GUI/prototype development."
+      },
+      {
+        "step": "Create system model scene",
+        "inputs": "Subsystem models and major subsystem interfaces.",
+        "outputs": "High-level OPAL GUI view of SpudNik-1 subsystems and interdependencies, with navigation to subsystem models.",
+        "actors_roles": "OPAL developers.",
+        "prerequisites": "Arrangement and connection concept for multiple SAPPhIRE models.",
+        "completion_criteria": "Simplified system view implemented and accessible.",
+        "handoffs": "Users enter subsystem views from the system scene."
+      },
+      {
+        "step": "Create subsystem model scenes and file links",
+        "inputs": "SAPPhIRE element definitions, mapped design files, CEDESK-inspired linking concepts, JavaFX libraries.",
+        "outputs": "Subsystem models where element selections display spreadsheet text or launch linked CAD/other files.",
+        "actors_roles": "OPAL developers.",
+        "prerequisites": "Manual paths/links to live conceptual design files.",
+        "completion_criteria": "Element blocks connected to relevant design data.",
+        "handoffs": "Prototype ready for task-based user testing."
+      },
+      {
+        "step": "Conduct task-based OPAL evaluation",
+        "inputs": "Prototype OPAL, approximately 15-minute SAPPhIRE/OPAL introduction, three task segments, survey instrument.",
+        "outputs": "Participant task experience, six quantitative ratings, and qualitative feedback.",
+        "actors_roles": "15 UPEI engineering participants; researchers administering independent tests under ethics approval.",
+        "prerequisites": "Ethics approval and recruited participants.",
+        "completion_criteria": "Participants completed locating-information, interface/data-flow tracing, and change-propagation tasks plus survey.",
+        "handoffs": "Results informed discussion and recommendations."
+      },
+      {
+        "step": "Analyze results and identify improvements",
+        "inputs": "Survey metrics, participant feedback, observed task difficulty.",
+        "outputs": "Recommendations such as renaming SAPPhIRE elements, improving introductions, adding requirements-management semantics, and future SQL/concurrent collaboration.",
+        "actors_roles": "Authors/researchers.",
+        "prerequisites": "Completed user study.",
+        "completion_criteria": "Discussion and conclusion identify effectiveness, limitations, and future work.",
+        "handoffs": "Future OPAL/SAPPhIRE tool development."
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "The workflow is anchored to conceptual design and Mission Concept Review. It supports information retrieval, interface/data-flow tracing, and design-change propagation, but is not mapped to formal V&V gates or later program reviews.",
+    "approach_classification": "Enhanced MBSE",
+    "approach_classification_rationale": "OPAL is described as an MBSE software tool, but it enhances model-centric practice with SAPPhIRE causal semantics and PLM-like file repository/linking rather than implementing a standard SysML-only or fully integrated digital-engineering environment.",
+    "tailoring_rationale": [
+      "Conceptual design is highly iterative and behavior-rich.",
+      "Existing PLM tools are centered on product architecture and geometric models.",
+      "Conceptual design carries high committed-cost leverage and low defect-extraction cost.",
+      "CubeSat/New Space development needs accessible, low-barrier collaboration support.",
+      "Proof-of-concept evaluation prioritized front-end simplicity and short training."
+    ],
+    "adoption_guidance_for_new_users": "implied from case study"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "SAPPhIRE Model of Causality",
+      "OPAL proof-of-concept MBSE software tool",
+      "JavaFX GUI scenes",
+      "CEDESK used as a reference for subsystem views and linking concepts",
+      "SpudNik-1 shared-drive conceptual design files",
+      "Excel spreadsheets, SolidWorks/CAD assemblies/simulations, MATLAB files, OSLO optical CAD, PDF datasheets"
+    ],
+    "toolchain_architecture_data_flow": "Users provide a path to the conceptual design files folder, navigate from an OPAL system view to subsystem SAPPhIRE views, select element-block entries, and retrieve linked live design data such as spreadsheet sections or launched CAD assemblies.",
+    "interoperability_mechanisms": [
+      "Manual file-to-SAPPhIRE-element links",
+      "GUI-level navigation across system and subsystem views",
+      "Display of relevant spreadsheet sections as text",
+      "Launching external CAD assemblies from model elements",
+      "Subsystem interfaces represented through Inputs and States",
+      "Future user-created links, simplified update process, SQL server, and possible DEIX alignment"
+    ],
+    "syntax_semantic_continuity_evidence": "Semantic continuity is provided by mapping heterogeneous files to common SAPPhIRE elements and linking Inputs/States across subsystems; syntax continuity is limited because files remain in native external formats and versions are not tracked.",
+    "software_hardware_system_integration_readiness": "Conceptual software prototype only; no hardware-in-the-loop, onboard software integration, flight integration, or physical EPS testing is reported.",
+    "toolchain_limitations": [
+      "Connections were made manually for the proof-of-concept tool.",
+      "Connections use live files and iterations are not tracked within OPAL.",
+      "Requirements representation is very limited.",
+      "A parallel requirements-management tool may create integration issues.",
+      "OPAL availability, model package, and SpudNik-1 data release are not reported.",
+      "Concurrent collaboration requires future SQL server integration."
+    ],
+    "availability_reproducibility": "Tool and model/data availability are not reported. The paper gives enough information to compare the approach conceptually, but internal CubeSat files, manual links, and absent version control limit reproducibility."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "Electrical power subsystem behavior: power generation and distribution",
+      "Action: SpudNik-1 requirements (.xlsx)",
+      "Input: Parametric orbital power generation (.xlsx)",
+      "Organ: Solar panel data sheet (.pdf)",
+      "Subset of parts: Power subsystem assembly (.sldasm)",
+      "Physical Effect: Parametric orbital power generation (.xlsx)",
+      "State: Parametric orbital power generation (.xlsx)",
+      "Physical Phenomena: no appropriate file"
+    ],
+    "eps_requirements_representation": "EPS Action is represented by a linked SpudNik-1 requirements spreadsheet, but OPAL has only very limited requirements representation and no effective requirements-verification function.",
+    "verification_validation_artifacts": [],
+    "pre_physical_development_verification_mechanism": [],
+    "evidence_verification_integrated_in_model": "No EPS verification integration is reported; the authors state, \"It cannot be used as an effective requirements verification tool in this state.\"",
+    "integration_test_readiness": "not reported for EPS; no integration test, model check, hardware test, or pre-physical EPS verification procedure is described."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "OPAL is an MBSE tool for conceptual design data management.",
-      "quote": "OPAL is a Model Based Systems Engineering (MBSE) software tool for the capture, management, representation and sharing of conceptual design data.",
-      "location": "Introduction"
+      "claim": "Students could effectively use OPAL after a short introduction, suggesting low training overhead for the conceptual-design support workflow.",
+      "outcome_category": "usability and adoption effort",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "SAPPhIRE-based OPAL GUI",
+        "consistent system/subsystem model views",
+        "short structured introduction"
+      ],
+      "artifact_or_process_linked": "OPAL prototype and user-testing procedure",
+      "lifecycle_stage": "conceptual design",
+      "evidence_type": "task-based user study and survey metrics",
+      "metric_or_value_indicator": "15 participants; approximately 15-minute introduction; abstract reports 85% found it easy to use; Table 4 user-friendliness average 6.13/7 and logical-layout average 6.40/7.",
+      "baseline_comparator": "No randomized baseline; contrasted generally with participants' traditional file management practices.",
+      "observed_effect_size_or_qualitative_effect": "High subjective usability ratings after brief training.",
+      "evidence_source": "Abstract; Section 5 Testing of OPAL; Table 4 Statistical results",
+      "direct_quote": "The results of the study show that the students were able to effectively utilize OPAL's functions with only a short introduction, with 85% reporting it easy to use.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Small student sample, prototype tasks, no timing benchmark, and possible novelty or facilitator effects."
     },
     {
-      "claim": "The model/method is SAPPhIRE causality-based.",
-      "quote": "The structure of the system models is based on the SAPPhIRE model of causality.",
-      "location": "Introduction"
+      "claim": "OPAL made conceptual design data easier to track and find using visual SAPPhIRE causal links.",
+      "outcome_category": "traceability and information retrieval",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "visual SAPPhIRE models",
+        "causal links",
+        "central data repository",
+        "system/subsystem GUI navigation"
+      ],
+      "artifact_or_process_linked": "Linked model elements and conceptual design files across CubeSat subsystems",
+      "lifecycle_stage": "conceptual design",
+      "evidence_type": "user study with subjective comparison to traditional file management; qualitative feedback",
+      "metric_or_value_indicator": "Table 4 includes high ratings for logical layout (6.40/7) and relationship clarity within/between subsystems (5.80/7 and 5.67/7).",
+      "baseline_comparator": "Participants' traditional file management software and practices, but not a controlled benchmark.",
+      "observed_effect_size_or_qualitative_effect": "Authors report significantly easier tracking/finding across subsystems.",
+      "evidence_source": "Abstract; Section 5.2 Results",
+      "direct_quote": "In contrast to their traditional file management software and practices, the visual representation of the data via the SAPPhIRE Models made it significantly easier to be able to track and find data using the causal links, regardless of the subsystem being studied.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Outcome is subjective and not backed by objective retrieval-time or error-rate metrics."
     },
     {
-      "claim": "EPS is included as one CubeSat subsystem and is represented by power behavior and a power budget.",
-      "quote": "Electrical power | Power generation and distribution | Power budget | ExcelTM(xlsx)",
-      "location": "Table 2"
+      "claim": "OPAL can integrate heterogeneous CubeSat data files into a sufficiently detailed system model.",
+      "outcome_category": "integrability and model completeness",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "SAPPhIRE element mapping",
+        "central repository requirement",
+        "manual links to native files",
+        "system and subsystem model scenes"
+      ],
+      "artifact_or_process_linked": "Tables 1-3, OPAL requirements, and linked subsystem model screens",
+      "lifecycle_stage": "conceptual design",
+      "evidence_type": "case-study prototype integration of files across six subsystems",
+      "metric_or_value_indicator": "Six subsystem categories in Table 2; OPAL-3 requires files from all six subsystems; OPAL-4 covers code, analysis, and spreadsheet data.",
+      "baseline_comparator": "No integrated-tool baseline.",
+      "observed_effect_size_or_qualitative_effect": "Authors conclude the model is sufficiently detailed for the study tasks.",
+      "evidence_source": "Section 3 Survey; Section 4 Development of OPAL; Conclusion",
+      "direct_quote": "The results indicate that OPAL can integrate the data files to create a sufficiently detailed system model.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Integration is manual, proof-of-concept, and not validated for configuration management, semantic consistency, or concurrent engineering."
     },
     {
-      "claim": "EPS model files are mapped to SAPPhIRE elements.",
-      "quote": "Table 1. Files used to create the EPS model",
-      "location": "Table 1"
+      "claim": "OPAL supports understanding of interfaces and change propagation during iterative conceptual design.",
+      "outcome_category": "change management and interface traceability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Inputs/States links between SAPPhIRE models",
+        "visual subsystem interdependency graph",
+        "causal model navigation"
+      ],
+      "artifact_or_process_linked": "Segment 2 data-flow/interface tasks and Segment 3 change-propagation tasks",
+      "lifecycle_stage": "conceptual design",
+      "evidence_type": "task-based user study, survey metrics, participant quote",
+      "metric_or_value_indicator": "Table 4: relationships between subsystems average 5.67/7; within subsystems 5.80/7; changes propagate 6.00/7; easier to manage design changes 5.80/7.",
+      "baseline_comparator": "No controlled baseline; tasks compared implicitly to expected difficulty of poorly managed databases.",
+      "observed_effect_size_or_qualitative_effect": "Participants rated change propagation and design-change management positively; interface tasks were more difficult than file-location tasks.",
+      "evidence_source": "Sections 5.1, 5.2, and 6.1",
+      "direct_quote": "The visualization of all the subsystems made it easier to understand the relationship and its interactions between each subsystem. Therefore tracking how a change to one component could affect the subsystem and components was easy.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Causality concepts were unfamiliar; task solutions may have improved after explanation; ratings remain subjective."
     },
     {
-      "claim": "OPAL requirements include central repository and heterogeneous file integration.",
-      "quote": "The tool shall act as a central data repository, incorporating files from all 6 subsystems of SpudNik-1 within the same program",
-      "location": "Table 3, OPAL-3"
+      "claim": "The consistent SAPPhIRE layout helps users navigate outside their subsystem expertise.",
+      "outcome_category": "cross-disciplinary collaboration and knowledge access",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "standardized SAPPhIRE element layout",
+        "subsystem-independent causal ontology",
+        "visual data organization by behavior"
+      ],
+      "artifact_or_process_linked": "OPAL subsystem models and user navigation tasks",
+      "lifecycle_stage": "conceptual design",
+      "evidence_type": "user-study observations and survey analysis",
+      "metric_or_value_indicator": "5/15 participants had no previous CubeSat experience; CubeSat familiarity and education level did not significantly differentiate quantitative results.",
+      "baseline_comparator": "No formal expert/non-expert benchmark beyond correlation checks.",
+      "observed_effect_size_or_qualitative_effect": "Little observed increase in difficulty between subsystems and easier navigation outside subsystem expertise.",
+      "evidence_source": "Section 5.2 Results; Section 6.1 Individual Segments",
+      "direct_quote": "The standardized, visual layout of OPAL made it easier to navigate and locate data, even when operating outside of the subsystem of expertise.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Participant tasks were limited and idealized; non-experts may not face the complexity of real design responsibility."
     },
     {
-      "claim": "OPAL integrates analysis/spreadsheet/code-type data.",
-      "quote": "The tool shall allow for integration of previously identified file types such as code, analysis, and spreadsheet data",
-      "location": "Table 3, OPAL-4"
-    },
-    {
-      "claim": "System view supports subsystem interfaces and navigation.",
-      "quote": "The system model is a high-level view of the system architecture and allows a user to navigate and view the interfaces between the subsystems.",
-      "location": "Section 4"
-    },
-    {
-      "claim": "Tool evaluation design.",
-      "quote": "The testing procedure involved a ~15-min introduction to the SAPPhIRE model and OPAL, and then immediately proceeded to the evaluation, which took an average of 45 min.",
-      "location": "Section 5"
-    },
-    {
-      "claim": "Ease-of-use outcome.",
-      "quote": "The results of the study show that the students were able to effectively utilize OPAL's functions with only a short introduction, with 85% reporting it easy to use.",
-      "location": "Abstract"
-    },
-    {
-      "claim": "Visual causal representation improved data tracking and finding.",
-      "quote": "the visual representation of the data via the SAPPhIRE Models made it significantly easier to be able to track and find data using the causal links, regardless of the subsystem being studied.",
-      "location": "Abstract"
-    },
-    {
-      "claim": "OPAL is not a requirements verification tool.",
-      "quote": "It cannot be used as an effective requirements verification tool in this state.",
-      "location": "Section 6.2"
-    },
-    {
-      "claim": "Iteration tracking limitation.",
-      "quote": "At the moment, these connections are made with the live files, so iterations are not tracked within OPAL.",
-      "location": "Section 4.1"
-    },
-    {
-      "claim": "System-level representation feasibility.",
-      "quote": "the concept of a simplified representation of an entire system has been shown to be feasible using SAPPhIRE.",
-      "location": "Conclusion"
+      "claim": "A simplified representation of an entire CubeSat system is feasible using SAPPhIRE and may bridge behavior, requirements/functions, and structure views.",
+      "outcome_category": "model generality and abstraction",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "unified SAPPhIRE representation",
+        "causal links among function, structure, and behavior",
+        "system/subsystem model hierarchy"
+      ],
+      "artifact_or_process_linked": "OPAL system model scene and subsystem SAPPhIRE views",
+      "lifecycle_stage": "conceptual design; proposed later lifecycle extension",
+      "evidence_type": "single-case prototype demonstration and author interpretation",
+      "metric_or_value_indicator": "No objective abstraction metric; supported by prototype feasibility and user ratings.",
+      "baseline_comparator": "Compared conceptually with SysML diagrams, not empirically.",
+      "observed_effect_size_or_qualitative_effect": "Authors state feasibility of simplified whole-system representation.",
+      "evidence_source": "Conclusion",
+      "direct_quote": "At the very least, the concept of a simplified representation of an entire system has been shown to be feasible using SAPPhIRE.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Feasibility is based on one proof-of-concept model and not on reusable, independently validated model packages."
     }
   ],
-  "notes_for_consistency": "This is a supporting paper for the protocol: it is CubeSat conceptual-design MBSE/tool research with EPS as one modeled subsystem, not an EPS-specific MBSE verification study. It cites an earlier Peters/Fortin/McSorley SAPPhIRE CubeSat lifecycle paper as prior work; potential lineage should be checked only at corpus level. Fields on network latency, autonomous control split, reliability outcomes, reproducibility outcomes, and EPS-specific verification are not reported. Self-check: only paper.md was read, all extracted claims are supported by paper.md or embedded metadata, and only extraction.json was written."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "OPAL acts as a central data repository with manually linked live files; no version control, change approval workflow, access-control, or model-governance policy is reported.",
+    "traceability_to_deliverables_decisions_reviews": "The Mission Concept Review is used as the conceptual-design end-state reference. Some deliverable files, requirements spreadsheets, and BOM/Req GUI elements are linked, but traceability to formal decisions or reviews is not developed.",
+    "evaluation_criteria_model_quality_usefulness": "The study evaluated user friendliness, logical layout, subsystem relationship clarity, change propagation clarity, and ease of managing design changes; task segments covered locating files, tracing data flow, and explaining change propagation.",
+    "roi_value_realization_evidence": "The literature review notes conceptual design can embody 70% of committed costs and low defect-extraction costs, but OPAL ROI, schedule, reliability, or cost savings are not measured.",
+    "programmatic_gates_critical_design_events_supported": "Mission Concept Review/end of conceptual design is referenced; no PDR, CDR, test readiness review, or flight readiness gate support is reported.",
+    "model_derived_performance_indicators_management_metrics": "Only user-study ratings are reported; no model-derived KPIs, reliability metrics, power margins, requirement coverage metrics, or management dashboards are reported."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed with evidence",
+      "rationale": "The paper describes surveying files, defining requirements, building OPAL system/subsystem views, linking artifacts, and testing with 15 participants."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed with evidence",
+      "rationale": "OPAL demonstrates manual access to spreadsheets, CAD, MATLAB/analysis files, PDFs, and subsystem links, but interoperability is GUI/file-link based rather than semantic exchange or version-controlled continuity."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed with evidence",
+      "rationale": "A CubeSat student context and approximately 15-minute training with positive usability ratings provide evidence for lightweight adoption, though no cost or staffing metrics are measured."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "mentioned only",
+      "rationale": "The paper references Mission Concept Review and conceptual-design cost leverage, but does not implement model governance, decision gates, ROI tracking, or deliverable approval workflows."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "addressed conceptually",
+      "rationale": "The introduction situates CubeSats in New Space and emphasizes rapid conceptual-design iteration/change propagation, but distributed/agile processes and concurrent collaboration are future work."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "SAPPhIRE causal elements provide a common structure for representing CubeSat subsystem behavior, structure, function/action, and inter-subsystem Inputs/States links at conceptual-design abstraction.",
+        "The EPS was represented as one subsystem using a requirements spreadsheet, orbital power-generation spreadsheet, solar-panel datasheet, and power-subsystem assembly, with no appropriate Physical Phenomena file.",
+        "OPAL's consistent GUI and short training suggest a lightweight system-level modeling approach for CubeSat conceptual design, but not a complete general EPS reference model."
+      ],
+      "RQ2": [
+        "Claimed outcomes are mainly improved traceability, data finding, heterogeneous file integration, change propagation, cross-subsystem navigation, and low training burden.",
+        "Integrability is supported by a six-subsystem case and user-study ratings; reliability and reproducibility are not directly measured, and EPS-specific outcomes are limited to model inclusion."
+      ],
+      "RQ3": [
+        "No EPS pre-physical verification procedure is integrated into the model.",
+        "The authors explicitly state OPAL cannot be used as an effective requirements verification tool in its current state."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "Physical Phenomena had no appropriate file to map to in the surveyed data.",
+      "Student-team survey context may limit applicability to industry settings.",
+      "The survey could not capture file versions or design evolution.",
+      "Manual live-file connections do not track iterations within OPAL.",
+      "SAPPhIRE element names such as Organ and Physical Phenomena confused users.",
+      "OPAL has very limited requirements representation and cannot perform effective requirements verification.",
+      "A parallel requirements-management tool could create an integration issue.",
+      "Later lifecycle information flow and SQL-backed concurrent collaboration are future work."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "Single CubeSat/student case limits generalization to other nanosatellite missions and industry programs.",
+      "No objective baseline metrics for retrieval time, error reduction, design quality, reliability, reproducibility, or integration readiness are reported.",
+      "No EPS-specific model checking, simulation verification, test generation, or hardware integration is reported.",
+      "OPAL/software, model packages, and SpudNik-1 data are not reported as available for independent replication.",
+      "The approach is not connected to formal SysML requirements/V&V workflows or programmatic design-review gates beyond MCR reference."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "OPAL objective",
+        "quote": "OPAL is a Model Based Systems Engineering (MBSE) software tool for the capture, management, representation and sharing of conceptual design data.",
+        "location": "Introduction"
+      },
+      {
+        "topic": "Conceptual design lifecycle gate",
+        "quote": "The first major design review, the Mission Concept Review, was taken as a reference point marking the end of the conceptual design phase.",
+        "location": "Section 3.1"
+      },
+      {
+        "topic": "EPS mapping",
+        "quote": "Table 1. Files used to create the EPS model",
+        "location": "Section 3.1, Table 1"
+      },
+      {
+        "topic": "Data scope exclusion",
+        "quote": "All other data, such as monetary budgets and schedules, was ignored for this study.",
+        "location": "Section 3.1"
+      },
+      {
+        "topic": "No Physical Phenomena file",
+        "quote": "Figure 2 shows that the Physical Phenomena had no appropriate file to map it to",
+        "location": "Section 3.2"
+      },
+      {
+        "topic": "Manual live-file links",
+        "quote": "At the moment, these connections are made with the live files, so iterations are not tracked within OPAL.",
+        "location": "Section 4.1"
+      },
+      {
+        "topic": "User-study size and procedure",
+        "quote": "The testing procedure involved a $ \\sim 1 5 $ -min introduction to the SAPPhIRE model and OPAL, and then immediately proceeded to the evaluation, which took an average of 45 min.",
+        "location": "Section 5"
+      },
+      {
+        "topic": "Requirements verification limitation",
+        "quote": "It cannot be used as an effective requirements verification tool in this state.",
+        "location": "Section 6.2"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Siloed extraction only. Classify as supporting because it is a CubeSat conceptual-design MBSE/causal-modeling study with an EPS model example, not an EPS verification or flight/integration study.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full markdown was available and contains clear methods, tables, results, and limitations; venue details are incomplete in the markdown and the study is only indirectly EPS-specific."
+  },
+  "bibtex": "@incollection{paper-0046,\n  title = {Investigating the Effectiveness of a Causal MBSE Software Tool in Modelling CubeSat Conceptual Design Data},\n  author = {Stephen Peters and Clément Fortin and Grant McSorley},\n  year = {2022},\n  booktitle = {Conference proceedings (Springer volume)},\n  publisher = {Springer},\n  doi = {10.1007/978-3-030-94399-8_10},\n  url = {https://doi.org/10.1007/978-3-030-94399-8_10}\n}"
 }

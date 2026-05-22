@@ -1,181 +1,579 @@
 {
   "corpus_id": "paper-0015",
   "tier": "core",
-  "citation": "Kaslow and Madni (2017), Validation and Verification of MBSE-compliant CubeSat Reference Model",
-  "title": "Validation and Verification of MBSE-compliant CubeSat Reference Model",
-  "authors": [
-    "David Kaslow",
-    "Azad M. Madni"
-  ],
   "year": 2017,
-  "doi_or_url": "10.1007/978-3-319-62217-0_27",
-  "venue_type": "conference, 15th Annual Conference on Systems Engineering Research (CSER)",
-  "modeling_scope": "System-level CubeSat Reference Model for a generic CubeSat mission domain. Scope includes domain/enterprise, space and ground segments, logical subsystem architecture including a high-level Power Subsystem, requirements/use-case/technical-measure traceability, logical-to-physical architecture development, behaviors, structures, validation and verification packages, mission-specific customization workflow, and mission modeling/V&V scenarios. EPS is represented only as a logical power subsystem, not as a detailed EPS behavioral model.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "verification",
-    "simulation",
-    "operations",
-    "reference model/template",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "MBSE using SysML and Object-Oriented Systems Engineering Methodology (OOSEM); CubeSat Reference Model as an OMG-oriented specification/reference model; modeling tool and COTS modeling/simulation tools are mentioned but not named.",
-  "mbse_language_method_tool_categories": [
-    "SysML",
-    "OOSEM",
-    "Other"
-  ],
-  "robot_platform": "CubeSat/nanosatellite platform; CubeSat described as a low-cost standardized nanosatellite, basic 1U unit 10x10x10 cm and about 1.3 kg, with 1U/2U/3U common configurations; model targets university CubeSat teams and mission-specific CubeSat projects.",
-  "task_domain": "Generic CubeSat mission analysis, design, development, deployment, and operations across space and ground segments; mission-specific CubeSat model derivation from a reference model.",
-  "interface": "Model interfaces include stakeholder viewpoints, requirements traceability, space/ground segment and subsystem relationships, Ground Station Services and Transport/Launch/Deploy Services, spacecraft-ground communications, and model-to-tool integration with unnamed COTS modeling tools for mission scenario execution.",
-  "feedback": "Technical measures are modeled as measurable block value properties that can be compared with target values. V&V workflow uses viewpoints as objective evidence, a CRM populated with a representative mission for verification, and mission modeling/V&V scenarios linked to validation and verification activities.",
-  "control_autonomy_split": "Not applicable",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "The paper demonstrates the CRM concept through SysML-style views/figures of the CubeSat domain, space and ground segments, requirements hierarchy, mission-specific development flow, and V&V workflow. It proposes validation/verification through viewpoints, representative-mission population, independent review for SysML compliance, and mission modeling scenarios; it does not report empirical test metrics or a completed mission-specific evaluation.",
-  "rqs_addressed": {
-    "RQ1": "partial",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper appears in the 15th Annual Conference on Systems Engineering Research proceedings and has a Springer DOI in the supplied metadata.",
+        "evidence": [
+          "Header: 15th Annual Conference on Systems Engineering Research Disciplinary Convergence: Implications for Systems Engineering Research.",
+          "Metadata DOI: 10.1007/978-3-319-62217-0_27."
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The authors state model-scope boundaries, user assumptions, and future-work needs, although not in a formal threats-to-validity section.",
+        "evidence": [
+          "Abstract: \"Further research is needed into how best to augment with other models to facilitate CubeSat test and evaluation.\"",
+          "Section 1: \"Even though it is at least three levels of abstraction away from any physical instantiation\".",
+          "Section 2: \"The model is being developed assuming that the members of the team have an intermediate-level understanding of space mission analysis and design, Model-Based Systems Engineering (MBSE), Systems Modeling Language (SysML), and that their work is being guided by subject matter experts.\""
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The text describes CubeSat form factors, university mission context, space/ground segments, stakeholders, and the intended design-development lifecycle use of the CRM.",
+        "evidence": [
+          "Section 1: \"A CubeSat is a low-cost standardized nanosatellite.\"",
+          "Section 2: \"The CRM is intended to be used by university project teams designing space missions utilizing the CubeSat form-factor.\"",
+          "Section 3: \"The final step in Figure 5 is to complete the CubeSat mission design and to develop the CubeSat space and ground segments.\""
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper identifies MBSE, OOSEM, SysML, packages, requirements traces, viewpoints, and system boundaries, but does not name a concrete tool, version, repository, or implementation details sufficient for full replication.",
+        "evidence": [
+          "Section 1: \"The term 'Model as used in Model-Based Systems Engineering (MBSE) is represented using a language such as Systems Modeling Language (SysML).\"",
+          "Section 2: \"There are packages for the domain, enterprise, space and ground segments, and space and ground subsystems.\"",
+          "Section 4: \"The CubeSat SysML model and the modeling tool can be configured to execute a mission scenario.\""
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Claims about design support, V&V, productivity, reuse, traceability, and objective evidence are tied to the CRM, SysML model elements, viewpoints, and requirements/use-case/measure relationships.",
+        "evidence": [
+          "Abstract: \"The intent of the model is to facilitate the design, verification and validation of CubeSat design.\"",
+          "Section 1: \"Encouraging the various Mission-specific CubeSat development teams to adopt MBSE, Object Oriented System Engineering Methodology (OOSEM), and SysML and providing them a standard Reference Model for their development will boost the efficiency and productivity of less experienced teams without any negative impacts.\"",
+          "Section 4: \"Figure 6 illustrates that viewpoints into the CRM will provide the objective evidence needed for validation.\""
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper provides model views and a conceptual V&V approach, but no metrics, completed case-study results, baseline comparison, test data, or flight evidence for the claimed outcomes.",
+        "evidence": [
+          "Section 4: \"The CRM will be populated with a representative mission, and then the viewpoints will provide the objective evidence for verification.\"",
+          "Conclusion: \"This activity is expected to continue into the foreseeable future resulting in further advances in MBSE.\"",
+          "Abstract: \"Further research is needed into how best to augment with other models to facilitate CubeSat test and evaluation.\""
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The model explicitly links mission, segment, and subsystem requirements to use cases and technical measures; V&V evidence is linked to viewpoints and validation/verification packages.",
+        "evidence": [
+          "Section 2: \"Segment requirements are derived from mission requirements and trace to mission use cases. Segment requirements trace to measures of performance which trace to measures of effectiveness.\"",
+          "Section 2: \"Subsystem requirements are derived from segment requirements and trace to segment use cases.\"",
+          "Section 2: \"The enterprise, segment, and subsystems packages contain behaviors, structures, validation, and verification packages.\""
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The CRM is intended for delivery to mission teams and eventual OMG specification, but the paper does not provide a repository, model files, named tools, or detailed data-exchange mechanisms.",
+        "evidence": [
+          "Section 1: \"Develop the CRM as an Object Management Group (OMG) specification.\"",
+          "Section 1: \"The CRM will be delivered by SSWG to Mission-specific CubeSat development teams\".",
+          "Section 4: \"This includes interfacing with commercial off-the-shelf (COTS) modeling tools [7].\""
+        ]
+      }
+    ],
+    "total_score": 6.5,
+    "max_score": 8,
+    "normalized_score": 0.812,
+    "overall_rationale": "The paper gives a credible, detailed conceptual MBSE reference-model and V&V treatment for CubeSat development, with strong context and traceability. Empirical outcome evidence, EPS detail, named toolchain information, and reproducible model availability remain limited."
   },
-  "rq_relevance": "RQ1: partial because the paper gives a general MBSE/SysML CubeSat mission reference model and includes a high-level Power Subsystem, but it does not develop detailed EPS behavior. RQ2: partial because it claims modeling outcomes such as design/V&V facilitation, customization, reuse, communication, and efficiency/productivity; reliability is represented as a requirement/traceability concern rather than an achieved reliability outcome, and reproducibility/integrability are not empirically measured. RQ3: partial because validation and verification are central and integrated into the CRM through viewpoints, packages, representative missions, and V&V scenarios, but the procedures are system/model-level rather than EPS-specific.",
-  "claimed_outcomes": [
-    "The CRM is intended to facilitate CubeSat design, verification, and validation.",
-    "The CRM is intended to support customization for specific CubeSat missions by mission-specific teams.",
-    "Providing a standard Reference Model with MBSE, OOSEM, and SysML is claimed to boost efficiency and productivity of less experienced teams without negative impacts.",
-    "A reference model is claimed to foster clear communications within collaborative stakeholder teams through an interlinked set of concepts.",
-    "CRM logical elements are intended for reuse as the starting point for mission-specific logical architecture and later physical architecture.",
-    "Reliability can be represented as a non-functional requirement and traced to lower-level requirements such as redundancy management, but no reliability improvement is measured or claimed as demonstrated.",
-    "Mission scenario execution and interface with COTS modeling tools are claimed as possible for V&V scenarios, but tool identities and integration performance are not reported."
-  ],
-  "verification_validation_linkage": "Strong general V&V linkage. The CRM contains validation and verification packages; mission-specific teams develop a validation and verification approach; validation and verification are defined using objective evidence, with verification methods including inspection, analysis, demonstration, and test. CRM validation uses viewpoints; CRM verification uses viewpoints after populating the CRM with a representative mission; mission-specific models and CubeSats use viewpoints and V&V scenarios supported by mission modeling. No EPS-specific verification procedure is described.",
-  "key_findings": [
-    "The CubeSat Reference Model is a generic MBSE/SysML reference model for the CubeSat mission domain, intended as a starting point for mission-specific CubeSat teams.",
-    "The CRM models CubeSat mission enterprise context, stakeholders, external environment, external constraints, space segment, ground segment, and services such as ground station and transport/launch/deploy services.",
-    "The space segment logical architecture decomposes the CubeSat into subsystems including Mission Payload, Communication, Command and Data Handling, Attitude Determination and Control, Guidance/Navigation/Control, Structures and Mechanisms, Power, Thermal, and Propulsion.",
-    "The Power Subsystem is only defined at a high level as generating, regulating, storing, and distributing power to the spacecraft.",
-    "Requirements are organized across enterprise, segment, and subsystem packages and traced to mission needs, objectives, constraints, use cases, measures of effectiveness, measures of performance, and technical performance measures.",
-    "Mission-specific model development is presented as populating CRM mission needs/objectives/constraints/measures, creating mission-specific logical architecture, then developing physical architecture and mission design.",
-    "V&V is integrated through model packages and viewpoints, with representative mission population for CRM verification and V&V scenarios/mission modeling for mission-specific models and CubeSats.",
-    "The paper does not provide detailed EPS behavioral modeling, EPS-specific verification procedures, quantitative evaluation results, or empirical evidence of reliability/reproducibility/integrability improvements."
-  ],
-  "limitations_gaps": [
-    "Further research is needed into how to augment the CRM with other models for CubeSat test and evaluation.",
-    "The paper states challenges including no agreed-upon process for developing a CubeSat Enterprise and that no mission-specific CubeSat Enterprise had been modeled to date.",
-    "The CRM assumes users have intermediate-level understanding of space mission analysis and design, MBSE, and SysML, guided by subject matter experts.",
-    "The CRM is described as at least three levels of abstraction away from physical instantiation, so it does not provide a detailed physical EPS design.",
-    "Budget constraints and varying team skill/experience are identified as continuing challenges.",
-    "No formal threats-to-validity section or quantitative validation results are reported."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "0.5",
-    "total_score": "1.5",
-    "rationale": "Published as a conference paper in the 15th Annual Conference on Systems Engineering Research. The paper discusses challenges, assumptions, abstraction limits, and future research needs, but does not include a formal limitations or threats-to-validity section."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0015.json",
+    "status_rationale": "Retained as core because the full text directly addresses an MBSE-compliant CubeSat reference model and model-integrated V&V. Its EPS relevance is adjacent rather than EPS-specific.",
+    "citation": "Kaslow, D., and Madni, A. M. (2017). Validation and Verification of MBSE-compliant CubeSat Reference Model. 15th Annual Conference on Systems Engineering Research: Disciplinary Convergence: Implications for Systems Engineering Research. DOI: 10.1007/978-3-319-62217-0_27.",
+    "title": "Validation and Verification of MBSE-compliant CubeSat Reference Model",
+    "authors": [
+      "David Kaslow",
+      "Azad M. Madni"
+    ],
+    "venue": "15th Annual Conference on Systems Engineering Research: Disciplinary Convergence: Implications for Systems Engineering Research",
+    "doi_or_url": "10.1007/978-3-319-62217-0_27",
+    "publisher": "Springer",
+    "venue_type": "conference proceedings book chapter",
+    "source_database_or_route": [
+      "scopus",
+      "google_scholar abstract_enrichment",
+      "semantic_scholar abstract_enrichment"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "partial",
+        "rationale": "The paper substantially addresses generic CubeSat mission modeling with a reusable CRM, but EPS appears only as a logical Power Subsystem block and the approach assumes intermediate domain/MBSE/SysML knowledge rather than minimal behavioral knowledge."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "It claims system-level reuse, productivity, flexibility, traceability, and reliability-requirement decomposition benefits, but not EPS-specific reliability, reproducibility, or integrability outcomes, and no outcome metrics are reported."
+      },
+      "RQ3": {
+        "relevance": "partial",
+        "rationale": "The paper centers on pre-physical-development model V&V through viewpoints, requirements traces, representative missions, and mission-scenario modeling, but this is for the CubeSat system/reference model rather than EPS-specific verification."
+      }
+    },
+    "lineage_overlap_notes": "The paper references prior INCOSE SSWG CubeSat MBSE work on behaviors, COTS simulation, trade studies, and CRM status. This extraction treats those only as author-reported lineage within the current paper and does not rely on prior papers."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "Generic CubeSat mission enterprise and mission-specific CubeSat instantiations derived from the CRM.",
+    "size_form_factor": "CubeSat 1U basic unit of 10x10x10 cm and about 1.3 kg; 1U, 2U, and 3U configurations described as common.",
+    "mission_name": "CubeSat Reference Model; no single operational mission name reported.",
+    "mission_domain": "Generic university-class CubeSat space missions, including space segment, ground segment, launch/deploy services, external environment, and regulatory constraints.",
+    "organization_type": "INCOSE Space Systems Working Group challenge team with academics, students, NASA/industry practitioners, software developers, and commercial tool-vendor representatives; target users are university CubeSat teams.",
+    "project_maturity": "Reference model under development for mission-team use and eventual OMG specification; not a completed flight mission study.",
+    "lifecycle_stage_addressed": "Early mission definition, requirements, logical architecture, physical architecture derivation, design/development, and pre-physical validation/verification planning.",
+    "development_context": "MBSE Challenge Project applying MBSE, OOSEM, SysML, and reference modeling to CubeSat development since 2011.",
+    "eps_relevance": "EPS-adjacent",
+    "model_maturity": "MBSE-compliant conceptual/logical CRM with described package organization, views, traceability patterns, and proposed V&V approach; executable mission-scenario capability and model distribution details are not fully reported."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "Create a reusable CubeSat Reference Model to facilitate CubeSat design, verification, and validation amid no agreed CubeSat enterprise process, no prior mission-specific CubeSat enterprise model, varying team skills, and budget constraints.",
+    "modeling_scope": [
+      "CubeSat domain and mission enterprise with stakeholders, external environment, external constraints, and services.",
+      "CubeSat space segment, CubeSat block, spacecraft bus, and logical subsystems including power.",
+      "Ground segment and ground subsystems.",
+      "Mission needs, objectives, constraints, requirements, measures of effectiveness/performance, technical performance measures, and use cases.",
+      "Validation and verification viewpoints, representative mission population, and mission-scenario modeling."
+    ],
+    "system_boundary_level_of_abstraction": "Generic CubeSat mission domain/enterprise reference model; authors state it is at least three levels of abstraction away from physical instantiation and primarily provides logical architecture elements.",
+    "minimal_or_excluded_modeling": "Not a specific mission design; detailed physical components, detailed subsystem behavior, EPS electrical architecture, integration/test results, and full test/evaluation augmentation are not provided. Mission teams develop physical architecture and mission-specific details.",
+    "required_prior_behavioral_domain_knowledge": "Intermediate understanding of space mission analysis/design, MBSE, and SysML plus subject-matter-expert guidance is assumed.",
+    "handling_limited_behavioral_knowledge": "The CRM reduces blank-slate modeling by supplying generic logical components, stakeholder/requirement/use-case/measure structures, and viewpoints that teams can populate and tailor; it does not provide an automated method for discovering unknown behavior.",
+    "model_artifacts_used": [
+      "SysML block definition diagrams for CubeSat domain, space segment, and ground segment.",
+      "Domain, enterprise, space/ground segment, and subsystem packages.",
+      "Behavior, structure, validation, and verification packages.",
+      "Requirements hierarchy with trace, refine, and deriveReqt relationships.",
+      "Technical measures as block value properties.",
+      "Architecture viewpoints and views.",
+      "Representative mission and V&V scenarios/mission modeling."
+    ],
+    "generality_reuse_mechanism": [
+      "Reference model described as methodology-neutral and technology-agnostic, based on a domain-specific ontology.",
+      "Reusable CRM logical elements act as a starting point for mission-specific logical architecture.",
+      "Mission teams populate mission statements, objectives, measures, stakeholders, concerns, use cases, requirements, and V&V approach.",
+      "Subsystem definitions may be modified, added, or removed according to allocated requirements.",
+      "Planned OMG specification supports standardization; future metadata-tagged reference-model libraries are proposed."
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Develop the generic CRM logical architecture and package structure.",
+        "inputs": "CubeSat domain knowledge, stakeholders, regulations, CubeSat specification, mission-enterprise concepts, SME input.",
+        "outputs": "SysML CRM packages for domain, enterprise, space/ground segments, subsystems, behaviors, structures, validation, and verification.",
+        "actors_roles": "INCOSE SSWG challenge team, academics/students, NASA and industry practitioners, software developers, tool-vendor representatives, SMEs.",
+        "prerequisites": "MBSE/SysML competence and CubeSat domain expertise.",
+        "completion_criteria": "Logical architecture, subsystem decomposition, requirements/measure/use-case patterns, and V&V packages represented.",
+        "handoffs": "CRM delivered to mission-specific CubeSat teams as a starting point."
+      },
+      {
+        "step": "Populate mission-specific enterprise information.",
+        "inputs": "CRM plus mission statement, mission objectives, stakeholder needs/concerns, constraints, and measures of effectiveness.",
+        "outputs": "Mission-specific logical architecture baseline with mission needs, objectives, constraints, measures, use cases, and requirements.",
+        "actors_roles": "Mission-specific CubeSat team guided by subject matter experts.",
+        "prerequisites": "Intermediate space mission analysis/design, MBSE, and SysML understanding.",
+        "completion_criteria": "Mission-specific enterprise needs, objectives, constraints, and MOEs are populated and related to requirements and use cases.",
+        "handoffs": "Logical-architecture refinement and segment/subsystem requirement allocation."
+      },
+      {
+        "step": "Refine logical architecture and allocate requirements.",
+        "inputs": "Mission requirements, mission use cases, segment use cases, technical measures, and CRM subsystem definitions.",
+        "outputs": "Segment and subsystem requirements, measures of performance, technical performance measures, behavior/data-flow descriptions, and adjusted subsystem definitions.",
+        "actors_roles": "Mission engineers, project engineers, developers, testers, and stakeholders.",
+        "prerequisites": "Mission-specific needs and objectives defined.",
+        "completion_criteria": "Requirements trace to use cases and measures across enterprise, segment, and subsystem layers.",
+        "handoffs": "Logical architecture handed to physical architecture development."
+      },
+      {
+        "step": "Create the physical architecture from the logical architecture.",
+        "inputs": "Logical components and functional/performance subsystem requirements.",
+        "outputs": "Candidate hardware, software, persistent data, and operational procedures for mission-specific CubeSat and ground segments.",
+        "actors_roles": "Mission-specific development team, subsystem designers, developers, and testers.",
+        "prerequisites": "Allocated logical subsystem requirements and performance criteria.",
+        "completion_criteria": "Subsystem component types are determined to meet functional and performance requirements.",
+        "handoffs": "Mission design and development."
+      },
+      {
+        "step": "Conduct model-centered validation and verification.",
+        "inputs": "CRM viewpoints, representative mission population, mission-specific model viewpoints, V&V scenarios, and mission modeling configuration.",
+        "outputs": "Objective evidence for CRM validation, CRM verification, and mission-specific model validation/verification; potential executable mission scenarios interfacing with COTS modeling tools.",
+        "actors_roles": "SSWG, independent SysML review team, OMG reviewers, regulatory stakeholders, mission-specific teams, testers.",
+        "prerequisites": "Model elements, relationships, viewpoints, and scenarios defined.",
+        "completion_criteria": "Viewpoints demonstrate stakeholder concerns, SysML guideline compliance, specification qualification, and mission-specific V&V evidence; exact criteria are not quantified.",
+        "handoffs": "Verified/validated model evidence supports mission-specific CubeSat design, development, and later system V&V."
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "The approach maps CRM/model work to requirements definition, design, analysis, validation, and verification; Figure 5 maps logical architecture to physical architecture to mission design/development. No named PDR/CDR or formal lifecycle gate mapping is reported.",
+    "approach_classification": "Pure MBSE",
+    "approach_classification_rationale": "The approach is framed as MBSE using SysML, OOSEM, reference-model packages, viewpoints, and model-based traceability. COTS simulation-tool interfacing is mentioned but not developed enough to classify it as an integrated digital-engineering toolchain.",
+    "tailoring_rationale": [
+      "University CubeSat teams have differing engineering and development skills.",
+      "Budget constraints continue to drive CubeSat development.",
+      "No agreed-upon process for developing a CubeSat enterprise is reported.",
+      "The CRM is flexible enough for mission teams to customize, modify, add, or remove subsystems."
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "Model-Based Systems Engineering (MBSE)",
+      "Systems Modeling Language (SysML)",
+      "Object Oriented System Engineering Methodology (OOSEM)",
+      "CubeSat Reference Model (CRM)",
+      "ISO/IEC/IEEE 42010 viewpoints and views",
+      "Commercial off-the-shelf modeling tools, not named"
+    ],
+    "toolchain_architecture_data_flow": "CRM SysML packages provide domain, enterprise, segment, subsystem, behavior, structure, validation, and verification content; mission teams populate mission-specific needs/objectives/constraints/measures and derive logical then physical architecture. Viewpoints and V&V scenarios provide model evidence, and the SysML model/modeling tool can execute mission scenarios and interface with COTS modeling tools.",
+    "interoperability_mechanisms": [
+      "SysML standard modeling language",
+      "Planned OMG specification",
+      "Architecture viewpoints/views",
+      "Trace/refine/deriveReqt relationships across requirements, measures, and use cases",
+      "COTS modeling-tool interfacing for mission scenarios"
+    ],
+    "syntax_semantic_continuity_evidence": "The paper states an independent review team will validate accepted SysML modeling guideline compliance and that OMG review/approval will qualify the CRM as a specification; no exchange-test or round-trip evidence is reported.",
+    "software_hardware_system_integration_readiness": "Logical architecture is intended to be transformed into physical architecture containing hardware, software, persistent data, and procedures, but actual software/hardware integration readiness or test results are not reported.",
+    "toolchain_limitations": [
+      "Specific SysML/modeling tool and version are not named.",
+      "No public model repository or downloadable asset is provided in the paper.",
+      "COTS tool interface details and data-exchange formats are not described.",
+      "Further research is needed to augment the CRM with other models for CubeSat test and evaluation."
+    ],
+    "availability_reproducibility": "The CRM is intended to be delivered to mission-specific teams and developed as an OMG specification, but the paper provides no model files, repository, version identifiers, or implementation package sufficient for independent reproduction."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "Power Subsystem logical block, documented as: Generate, regulate, store, and distribute power to the spacecraft."
+    ],
+    "eps_requirements_representation": "Subsystem requirements are represented generically as derived from segment requirements and traced to segment use cases and technical performance measures. No power/EPS-specific requirements, constraints, or power-budget parameters are shown.",
+    "verification_validation_artifacts": [
+      "Validation and verification packages within enterprise, segment, and subsystem packages.",
+      "Architecture viewpoints and views for stakeholder concerns and compliance evidence.",
+      "Requirements, use-case, and technical-measure trace relationships.",
+      "CRM populated with a representative mission for CRM verification.",
+      "Mission-specific model viewpoints and V&V scenarios.",
+      "Mission modeling and executable mission scenario configuration with possible COTS tool interface."
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "Populate the CRM with a representative mission and use viewpoints as objective evidence for CRM verification.",
+      "Use mission-specific CubeSat model viewpoints as objective evidence for model validation and verification before physical CubeSat realization.",
+      "Configure the CubeSat SysML model and modeling tool to execute mission scenarios.",
+      "Trace mission, segment, and subsystem requirements to use cases and technical measures."
+    ],
+    "evidence_verification_integrated_in_model": "Section 2 states that enterprise, segment, and subsystem packages contain validation and verification packages; Section 4 states that viewpoints into the CRM and mission-specific model provide objective evidence for validation and verification.",
+    "integration_test_readiness": "The model supports conceptual V&V scenarios and COTS mission-modeling interfaces, but EPS-specific tests, physical integration tests, and CubeSat test/evaluation augmentation are not reported."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Paper purpose and CRM role in design/V&V",
-      "quote": "The intent of the model is to facilitate the design, verification and validation of CubeSat design.",
-      "location": "Abstract"
+      "claim": "The CRM facilitates CubeSat design, verification, and validation.",
+      "outcome_category": "design and V&V facilitation",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "MBSE-compliant CubeSat Reference Model",
+        "SysML views",
+        "validation and verification approach"
+      ],
+      "artifact_or_process_linked": "CRM model views and V&V approach in the abstract and Section 4.",
+      "lifecycle_stage": "early design through pre-physical validation and verification",
+      "evidence_type": "author claim supported by conceptual model artifacts",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Facilitation is asserted, not measured.",
+      "evidence_source": "Abstract; Sections 2 and 4",
+      "direct_quote": "The intent of the model is to facilitate the design, verification and validation of CubeSat design.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No executed case study, metric, or independent stakeholder evaluation is reported in this paper."
     },
     {
-      "claim": "Customization and mission-specific reuse",
-      "quote": "The CRM is being developed with sufficient flexibility to support customization for specific CubeSat missions by mission-specific CubeSat teams.",
-      "location": "Abstract"
+      "claim": "The CRM is flexible and reusable for mission-specific CubeSat teams.",
+      "outcome_category": "reuse and customization",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "generic logical architecture",
+        "mission-specific population",
+        "modifiable subsystem definitions"
+      ],
+      "artifact_or_process_linked": "Figure 5 mission-specific model process and Section 3 customization steps.",
+      "lifecycle_stage": "mission definition and logical architecture",
+      "evidence_type": "process description and model-structure explanation",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Reusable starting point asserted; no reuse trial results reported.",
+      "evidence_source": "Abstract; Sections 2 and 3",
+      "direct_quote": "The CRM is being developed with sufficient flexibility to support customization for specific CubeSat missions by mission-specific CubeSat teams.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Flexibility may depend on team expertise and tool support; the paper does not show successful independent customization."
     },
     {
-      "claim": "Platform is CubeSat/nanosatellite",
-      "quote": "A CubeSat is a low-cost standardized nanosatellite.",
-      "location": "Section 1"
+      "claim": "A standard CRM with MBSE, OOSEM, and SysML will boost efficiency and productivity for less experienced CubeSat teams without negative impacts.",
+      "outcome_category": "efficiency and productivity",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "standard reference model",
+        "OOSEM",
+        "SysML",
+        "MBSE adoption"
+      ],
+      "artifact_or_process_linked": "Section 1 rationale for adopting CRM as common development basis.",
+      "lifecycle_stage": "development process adoption",
+      "evidence_type": "author assertion",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "less experienced teams without the standard reference model are implied but not measured",
+      "observed_effect_size_or_qualitative_effect": "Boost is asserted with no quantified effect.",
+      "evidence_source": "Section 1",
+      "direct_quote": "Encouraging the various Mission-specific CubeSat development teams to adopt MBSE, Object Oriented System Engineering Methodology (OOSEM), and SysML and providing them a standard Reference Model for their development will boost the efficiency and productivity of less experienced teams without any negative impacts.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "Efficiency may be offset by learning curve, tool cost, or modeling overhead; no baseline data are provided."
     },
     {
-      "claim": "MBSE Challenge Project goals",
-      "quote": "Demonstrate Model-Based Systems Engineering (MBSE) methodology as applied to a CubeSat mission; Provide a CubeSat Reference Model (CRM) for CubeSat teams to use as the starting point for developing mission-specific CubeSat models; and Develop the CRM as an Object Management Group (OMG) specification.",
-      "location": "Section 1"
+      "claim": "The CRM improves requirements traceability across stakeholder needs, objectives, measures, use cases, and segment/subsystem requirements.",
+      "outcome_category": "traceability and consistency",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "SysML trace relationships",
+        "deriveReqt relationships",
+        "refine relationships",
+        "technical measures as value properties"
+      ],
+      "artifact_or_process_linked": "Figure 4 hierarchy of mission needs, objectives, constraints, technical measures, requirements, and use cases.",
+      "lifecycle_stage": "requirements engineering and logical architecture",
+      "evidence_type": "model artifact/diagram and explanatory text",
+      "metric_or_value_indicator": "No trace completeness metric reported.",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Trace structure is explicitly represented; effect on defects or rework not measured.",
+      "evidence_source": "Section 2 and Figure 4",
+      "direct_quote": "Segment requirements are derived from mission requirements and trace to mission use cases. Segment requirements trace to measures of performance which trace to measures of effectiveness.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "The diagram shows intended trace semantics but not model completeness, maintenance burden, or trace correctness in use."
     },
     {
-      "claim": "Reference model communication/integration role",
-      "quote": "It consists of an interlinked set of concepts produced by a body of subject matter experts with the express purpose of fostering clear communications within collaborative teams of stakeholders.",
-      "location": "Section 1"
+      "claim": "Viewpoints into the CRM and mission-specific model can provide objective evidence for validation and verification before physical development.",
+      "outcome_category": "pre-development V&V integration",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "architecture viewpoints",
+        "CRM populated with representative mission",
+        "mission-specific model viewpoints",
+        "V&V scenarios"
+      ],
+      "artifact_or_process_linked": "Figure 6 validation and verification workflow.",
+      "lifecycle_stage": "pre-physical model validation and verification",
+      "evidence_type": "conceptual V&V workflow",
+      "metric_or_value_indicator": "objective evidence is named but not operationalized into metrics",
+      "baseline_comparator": "traditional pre-MBSE requirements-document negotiation is mentioned for model-element definition, but no comparison is performed",
+      "observed_effect_size_or_qualitative_effect": "V&V evidence pathway is described; verification results are not reported.",
+      "evidence_source": "Section 4 and Figure 6",
+      "direct_quote": "The CRM will be populated with a representative mission, and then the viewpoints will provide the objective evidence for verification.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Viewpoints may document evidence without assuring semantic correctness; representative mission results are not shown."
     },
     {
-      "claim": "CRM abstraction level",
-      "quote": "the CubeSat Reference Model is an abstract framework for understanding the relationships among the entities of the CubeSat environment.",
-      "location": "Section 1"
+      "claim": "The CubeSat SysML model can execute mission scenarios and interface with COTS modeling tools, supporting V&V scenarios.",
+      "outcome_category": "simulation interoperability",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "configured SysML model",
+        "modeling tool",
+        "COTS modeling-tool interface",
+        "mission modeling"
+      ],
+      "artifact_or_process_linked": "Figure 6 mission modeling and V&V scenarios.",
+      "lifecycle_stage": "model-based analysis and V&V",
+      "evidence_type": "author statement referencing capability; no current execution output shown",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Capability is stated; no simulation results or interoperability tests are reported.",
+      "evidence_source": "Section 4",
+      "direct_quote": "The CubeSat SysML model and the modeling tool can be configured to execute a mission scenario. This includes interfacing with commercial off-the-shelf (COTS) modeling tools [7].",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The statement may depend on prior work and unspecified tools; no data-flow, interface, or validation details are given here."
     },
     {
-      "claim": "Use of SysML for MBSE model",
-      "quote": "The term \"Model as used in Model-Based Systems Engineering (MBSE) is represented using a language such as Systems Modeling Language (SysML).",
-      "location": "Section 1"
+      "claim": "The CRM can support reliability-related requirements decomposition, including identifying redundancy needs.",
+      "outcome_category": "reliability requirements representation",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "functional/non-functional requirement classification",
+        "requirements decomposition",
+        "trace relationships to lower-level requirements"
+      ],
+      "artifact_or_process_linked": "Section 2 discussion of functional and non-functional requirements.",
+      "lifecycle_stage": "requirements engineering",
+      "evidence_type": "illustrative explanation",
+      "metric_or_value_indicator": "no reliability metric or target value reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Reliability decomposition is illustrated conceptually, not evaluated.",
+      "evidence_source": "Section 2",
+      "direct_quote": "For example, a top-level mission reliability requirement may lead to lower level requirements that identify where redundancy would be needed.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No actual reliability requirement, redundancy allocation, analysis, or verification result is shown; not EPS-specific."
     },
     {
-      "claim": "Mission teams use CRM for requirements, V&V, and architecture",
-      "quote": "Develop their Use Cases, System and Subsystem requirements, and Validation and Verification approach; and Refine the Logical Architecture and develop the Physical Architecture.",
-      "location": "Section 1"
-    },
-    {
-      "claim": "Claimed efficiency/productivity outcome",
-      "quote": "providing them a standard Reference Model for their development will boost the efficiency and productivity of less experienced teams without any negative impacts.",
-      "location": "Section 1"
-    },
-    {
-      "claim": "CRM provides logical architecture",
-      "quote": "The CRM provides the logical architecture of a CubeSat.",
-      "location": "Section 2"
-    },
-    {
-      "claim": "Power subsystem scope",
-      "quote": "Power Subsystem ... Generate, regulate, store, and distribute power to the spacecraft.",
-      "location": "Figure 2 description"
-    },
-    {
-      "claim": "Model contains validation and verification packages",
-      "quote": "The enterprise, segment, and subsystems packages contain behaviors, structures, validation, and verification packages.",
-      "location": "Section 2"
-    },
-    {
-      "claim": "Requirements and measures traceability",
-      "quote": "Subsystem requirements are derived from segment requirements and trace to segment use cases. Subsystem requirements trace to technical performance measures which trace to measures of performance and to measures of effectiveness.",
-      "location": "Section 2"
-    },
-    {
-      "claim": "Reliability represented as a requirements concern",
-      "quote": "Examples of non-functional requirements include safety, security, usability, reliability, and performance.",
-      "location": "Section 2"
-    },
-    {
-      "claim": "Reliability traceability example, not demonstrated reliability improvement",
-      "quote": "a top-level mission reliability requirement may lead to lower level requirements that identify where redundancy would be needed.",
-      "location": "Section 2"
-    },
-    {
-      "claim": "Verification methods",
-      "quote": "Verification methods include inspection, analysis, demonstration, and test.",
-      "location": "Section 4"
-    },
-    {
-      "claim": "CRM validation and verification approach",
-      "quote": "viewpoints into the CRM will provide the objective evidence needed for validation. The CRM will be populated with a representative mission, and then the viewpoints will provide the objective evidence for verification.",
-      "location": "Section 4"
-    },
-    {
-      "claim": "Mission modeling and tool integration for V&V scenarios",
-      "quote": "The CubeSat SysML model and the modeling tool can be configured to execute a mission scenario. This includes interfacing with commercial off-the-shelf (COTS) modeling tools.",
-      "location": "Section 4"
-    },
-    {
-      "claim": "Future work/test and evaluation gap",
-      "quote": "Further research is needed into how best to augment with other models to facilitate CubeSat test and evaluation.",
-      "location": "Abstract"
-    },
-    {
-      "claim": "Development challenge/gap",
-      "quote": "There is currently no agreed-upon process for developing a CubeSat Enterprise",
-      "location": "Section 1"
+      "claim": "Future metadata-tagged libraries of reference models could improve retrieval and reuse across domains and missions.",
+      "outcome_category": "future reproducibility and reuse",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "reference-model library",
+        "metadata tagging",
+        "standardized CRM/specification"
+      ],
+      "artifact_or_process_linked": "Conclusion future-work statement.",
+      "lifecycle_stage": "future knowledge management and reuse",
+      "evidence_type": "future-work assertion",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "No observed effect; proposed future development.",
+      "evidence_source": "Conclusion",
+      "direct_quote": "Future advances include the development of a library of reference models (for different domains and missions) that are metadata-tagged for easy retrieval.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "Future library availability and adoption are not demonstrated."
     }
   ],
-  "notes_for_consistency": "Only paper.md was used. The paper is part of an INCOSE SSWG CubeSat Reference Model lineage and cites earlier CRM status papers, but this extraction uses only statements in this paper. EPS evidence is limited to the high-level Power Subsystem block; V&V evidence is strong at CRM/mission-model level but not EPS-specific. Named modeling tools are not reported."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "SSWG develops the CRM for university teams; regulatory agencies, Cal Poly, INCOSE, OMG, SSWG, and university teams are treated as stakeholders. Independent review is planned for SysML guideline compliance and OMG review/approval for specification status.",
+    "traceability_to_deliverables_decisions_reviews": "Model traceability links stakeholder needs/objectives/constraints to measures, mission/segment/subsystem requirements, and use cases. Viewpoints are proposed as deliverables for validation, verification, regulatory compliance, licenses, and authorizations. No formal review gate deliverables are named.",
+    "evaluation_criteria_model_quality_usefulness": "CRM validation depends on stakeholder-concern viewpoints, SysML modeling-guideline compliance, and OMG specification qualification; mission-specific V&V depends on viewpoints and mission modeling. No quantitative model-quality criteria are reported.",
+    "roi_value_realization_evidence": "The paper claims boosted efficiency and productivity for less experienced teams, but provides no ROI, cost, schedule, rework, or defect-reduction evidence.",
+    "programmatic_gates_critical_design_events_supported": "not reported; the paper supports design/development and V&V conceptually but does not map to PDR, CDR, launch readiness, or acceptance gates.",
+    "model_derived_performance_indicators_management_metrics": "Measures of effectiveness, key performance parameters, measures of performance, and technical performance measures are included as technical measures and block value properties; no management dashboard or reported metric values are provided."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed conceptually",
+      "rationale": "Figure 5 and Section 3 provide phases from CRM population to logical architecture, physical architecture, and mission design/development, but do not provide a detailed playbook or empirical implementation results."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed conceptually",
+      "rationale": "SysML, planned OMG specification, viewpoints, and COTS tool interfacing are mentioned, but tool names, exchange formats, and interoperability evidence are absent."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed conceptually",
+      "rationale": "The CRM is motivated by varying university-team skill and budget constraints and allows subsystem tailoring, but no lightweight tailoring method, effort estimate, or resource measurement is supplied."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "addressed conceptually",
+      "rationale": "Stakeholder roles, independent review, OMG approval, compliance viewpoints, and technical measures are described; ROI and formal project-gate deliverables remain unmeasured and mostly unspecified."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "mentioned only",
+      "rationale": "The paper addresses low-cost university CubeSat teams and team collaboration but does not discuss agile, distributed development, rapid iteration, or NewSpace-specific cadence."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "A generic CubeSat mission can be modeled with a high-abstraction CRM covering domain, mission enterprise, space/ground segments, stakeholders, requirements, measures, use cases, and logical subsystems.",
+        "The CRM enables mission-specific tailoring by populating needs, objectives, constraints, MOEs, use cases, requirements, and physical architecture decisions.",
+        "EPS is represented only as a generic Power Subsystem logical block; no detailed EPS behavior, electrical architecture, or power budget is modeled.",
+        "The approach reduces blank-slate modeling but assumes intermediate space mission, MBSE, and SysML knowledge plus SME guidance."
+      ],
+      "RQ2": [
+        "Claimed outcomes include flexibility, reuse, design/V&V facilitation, traceability, productivity, simulation-tool interfacing, and future reference-model retrieval.",
+        "Reliability appears as a non-functional requirement example that can decompose into redundancy-related lower-level requirements, but no reliability analysis or EPS reliability outcome is reported.",
+        "Reproducibility and integrability are conceptual: planned OMG specification, reusable logical elements, and COTS tool interfacing are described without model availability, metrics, or integration-test evidence."
+      ],
+      "RQ3": [
+        "Verification and validation are integrated into the model via validation/verification packages, requirements traces, viewpoints, representative mission population, and V&V scenarios.",
+        "Mission-specific model viewpoints are proposed to provide objective evidence for validating and verifying the model before physical CubeSat development.",
+        "The SysML model can be configured to execute mission scenarios and interface with COTS modeling tools, but no EPS-specific or executed verification result is shown."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "Further research is needed to augment the CRM with other models for CubeSat test and evaluation.",
+      "The CRM is at least three levels of abstraction away from any physical instantiation.",
+      "Use assumes intermediate understanding of space mission analysis/design, MBSE, and SysML plus SME guidance.",
+      "Requirement relationships in Figure 4 are illustrative, not prescriptive.",
+      "The CRM activity is ongoing and expected to continue into the foreseeable future."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "No EPS-specific architecture, behavior, requirements, power-budget variables, or verification procedures are presented.",
+      "No named SysML tool, model version, repository, data-exchange format, or reproducible model package is provided.",
+      "No empirical metrics, baseline comparison, flight/operational data, integration-test results, or stakeholder evaluation are reported for outcomes.",
+      "No detailed lifecycle gate mapping, governance workflow, or ROI evidence is provided.",
+      "COTS simulation integration is asserted but not documented with interface details or results in this paper."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "CubeSat context",
+        "quote": "A CubeSat is a low-cost standardized nanosatellite.",
+        "location": "Section 1, Introduction"
+      },
+      {
+        "topic": "reference-model abstraction",
+        "quote": "Thus, the CubeSat Reference Model is an abstract framework for understanding the relationships among the entities of the CubeSat environment.",
+        "location": "Section 1, Introduction"
+      },
+      {
+        "topic": "scope boundary",
+        "quote": "Even though it is at least three levels of abstraction away from any physical instantiation, it still provides valuable assistance to the Mission-specific CubeSat development teams.",
+        "location": "Section 1, Introduction"
+      },
+      {
+        "topic": "target users and assumptions",
+        "quote": "The CRM is intended to be used by university project teams designing space missions utilizing the CubeSat form-factor.",
+        "location": "Section 2, CubeSat Reference Model Development"
+      },
+      {
+        "topic": "power subsystem",
+        "quote": "Generate, regulate, store, and distribute power to the spacecraft.",
+        "location": "Figure 2, CubeSat Space Segment"
+      },
+      {
+        "topic": "model packages include V&V",
+        "quote": "The enterprise, segment, and subsystems packages contain behaviors, structures, validation, and verification packages.",
+        "location": "Section 2, Model Organization"
+      },
+      {
+        "topic": "requirements traceability",
+        "quote": "Subsystem requirements are derived from segment requirements and trace to segment use cases.",
+        "location": "Section 2, Requirements"
+      },
+      {
+        "topic": "mission-specific pathway",
+        "quote": "The first step is taking the CRM and populating the mission-specific enterprise needs, objectives, constraints, and measures of effectiveness to create a mission-specific logical architecture.",
+        "location": "Section 3, Mission-Specific CubeSat Model"
+      },
+      {
+        "topic": "V&V objective evidence",
+        "quote": "Figure 6 illustrates that viewpoints into the CRM will provide the objective evidence needed for validation.",
+        "location": "Section 4, Approach to Validation and Verification"
+      },
+      {
+        "topic": "scenario execution and COTS tools",
+        "quote": "The CubeSat SysML model and the modeling tool can be configured to execute a mission scenario. This includes interfacing with commercial off-the-shelf (COTS) modeling tools [7].",
+        "location": "Section 4, Approach to Validation and Verification"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Treat this paper as an SSWG CRM V&V/status paper building on prior CRM and behavior-modeling publications cited by the authors. For synthesis, separate current-paper conceptual claims from prior-work claims referenced but not evidenced here.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full Markdown text is available and clearly describes the CRM, model scope, traceability, and V&V approach; confidence is lower only for unavailable or absent EPS-specific/toolchain/outcome details, which are explicitly marked."
+  },
+  "bibtex": "@incollection{paper-0015,\n  title = {Validation and Verification of MBSE-compliant CubeSat Reference Model},\n  author = {David Kaslow and Azad M. Madni},\n  year = {2017},\n  booktitle = {Proceedings of the 15th Annual Conference on Systems Engineering Research},\n  publisher = {Springer},\n  doi = {10.1007/978-3-319-62217-0_27},\n  url = {https://doi.org/10.1007/978-3-319-62217-0_27}\n}"
 }

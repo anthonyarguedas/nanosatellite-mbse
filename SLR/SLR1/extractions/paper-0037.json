@@ -1,155 +1,636 @@
 {
   "corpus_id": "paper-0037",
   "tier": "supporting",
-  "citation": "Chiu, Marquez, and Asundi (2023), Model Based Systems Engineering with a Docs-as-Code Approach for the SeaLion CubeSat Project",
-  "title": "Model Based Systems Engineering with a Docs-as-Code Approach for the SeaLion CubeSat Project",
-  "authors": [
-    "Kevin Chiu",
-    "Sean Marquez",
-    "Sharanabasaweshwara A. Asundi"
-  ],
   "year": 2023,
-  "doi_or_url": "10.3390/systems11070320",
-  "venue_type": "journal article, Systems 2023, 11, 320",
-  "modeling_scope": "System-level SeaLion CubeSat mission architecture for configuration management, design, specification, and flight-software implementation. The model covers references, stakeholder needs, user stories, data structures, generated documents/diagrams/tables, and an in-progress component/DOF structure for BOMs, assembly instructions, interfaces, and N2 charts. EPS/power appears only incidentally through a power-module example, battery health fields, and EPS board/battery interfaces; no detailed EPS behavioral model is presented.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "verification",
-    "operations",
-    "reference model/template",
-    "tool/process",
-    "other"
-  ],
-  "mbse_language_method_tool": "Mach 30 Modeling Language (M30ML) using lightweight YAML files in a docs-as-code workflow; models persisted on the local filesystem/GitHub and used to generate UML-style diagrams, tables, and documents through templates such as Liquid/Jinja2. The paper also discusses OML/LinkML lineage, NASA systems engineering guidance, and a Distributed OSHW Framework extension for components; SysML v1/v2 and PlantUML were considered but not selected.",
-  "mbse_language_method_tool_categories": [
-    "Docs-as-code",
-    "Other"
-  ],
-  "robot_platform": "SeaLion 3U CubeSat mission/platform, a joint ODU, USCGA, and AFIT CubeSat with three payloads; original paper content is based on the prior VLEO mission profile before a later launch/profile change.",
-  "task_domain": "CubeSat mission and flight-software architecture for on-orbit validation of an Impedance Probe, multispectral sensor, and deployable composite structure; also supports ground-station operations, component documentation, assembly planning, and interface planning.",
-  "interface": "YAML model files interface with document-generation tools and version-control workflows; generated diagrams/tables are used for team communication. Operationally, data structures model information transmitted between the ground station operator and CubeSat. The in-progress component extension aims to model mechanical and electrical component interfaces and generate N2 diagrams.",
-  "feedback": "Model-to-document feedback is described: edits to YAML model files can immediately regenerate diagrams, tables, and documents while keeping dependencies in sync. Operational feedback is also represented through user stories and data structures for viewing beacon/telemetry data to verify nominal satellite, health, mission, AODS, and GPS status.",
-  "control_autonomy_split": "Not applicable",
-  "network_latency_assumptions": "Not applicable",
-  "evaluation": "Demonstrated through the SeaLion mission architecture implementation: examples of YAML references, stakeholder needs, user stories, data structures, generated UML diagrams, generated tables, a docs-as-code manuscript, and an in-progress component/DOF structure. The language choice is supported by a qualitative downselect table; no quantitative experiment or controlled validation is reported.",
-  "rqs_addressed": {
-    "RQ1": "partial",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Published as a peer-reviewed journal article in Systems with DOI, dates, and MDPI publisher information visible.",
+        "evidence": [
+          "Citation: Chiu, K.; Marquez, S.; Asundi, S. Model Based Systems Engineering with a Docs-as-Code Approach for the SeaLion CubeSat Project. Systems 2023, 11, 320. https://doi.org/10.3390/ systems11070320",
+          "Received: 25 April 2023",
+          "Accepted: 2 June 2023",
+          "Published: 23 June 2023"
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper explicitly bounds the implementation to the original mission profile, identifies component modeling as work in progress, and discusses training, communication, and legacy-work limitations.",
+        "evidence": [
+          "At the time of publication of this article, the implementation of the SeaLion mission architecture was performed to the prior mission parameters where the SeaLion CubeSat was designed for a short lifespan compared to now greatly extended planned lifespan.",
+          "Components is currently a work in progress at time of publication of this article and will be addressed with future required work.",
+          "Current guides are lists of definitions and format guides rather than a step-by-step tutorial on using the approach, which has caused confusion among members that attempted to learn the material by themselves."
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The mission, platform, payloads, organizations, launch profile, and architecture-development stage are described in detail.",
+        "evidence": [
+          "The SeaLion CubeSat mission is a joint project between Old Dominion University (ODU), the United States Coast Guard Academy (USCGA), and the Air Force Institute of Technology (AFIT).",
+          "The end goal is to produce a 3U CubeSat consisting of three payloads for on-orbit validation.",
+          "The content presented in this article is based on the prior mission profile from the launch at WFF into VLEO."
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper names the language, rationale, file/folder structure, artifact types, examples, and generation mechanisms sufficiently for comparison and partial replication.",
+        "evidence": [
+          "M30ML was chosen for its lightweight human and machine-readable textual syntax, file-based model interchange support (for persisting models directly on the local filesystem), ability to generate both textual and graphical views, and relatively minimal overhead with modern doctools [29].",
+          "The SeaLion mission architecture is organized into two main folders of architecture and of components [13].",
+          "YAML files are automatically processed using templates language (e.g., Jinja2) via a build shell script."
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Claims about ease of use, traceability, documentation generation, consistency, and change accommodation are tied to YAML/M30ML models, generated diagrams/tables, templates, and docs-as-code workflow.",
+        "evidence": [
+          "These tools generate documents via its own code for easy presentation on a local file system without any proprietary software while keeping the model content format-agnostic.",
+          "Figure 20 is a UML diagram of mapping of user stories to data structures generated from the YAML file shown in Figure 19.",
+          "This means that any changes made to the SeaLion mission architecture model can immediately be used to generate new documents."
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper provides case-study artifacts, generated views, repository availability, and anecdotal training observations, but no measured baseline comparison, model checking, integration-test, or flight/operational evidence.",
+        "evidence": [
+          "Multiple team members of the SeaLion mission have been able to quickly learn the methodology of using the docs-as-code approach within a short training session with an experienced member.",
+          "A conference proceeding manuscript presented in AIAA SciTech 2023 was created purely by a docs-as-code format [4].",
+          "Implementation of the overall mission architecture has been successful for the original mission profile."
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Traceability is central and is implemented through derivedFrom fields linking references, stakeholder needs, user stories, and data structures, with generated UML mappings.",
+        "evidence": [
+          "For the mission architecture shown in Figure 9, generally data structures are derived from user stories. Furthermore, user stories are subsequently derived from stakeholder needs with their respective references.",
+          "The derived from field is used to tie back the data structure to a user story YAML file should it be applicable.",
+          "Figure 16 is an excerpt of mapping of stakeholder needs to user stories."
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper reports a public repository, local plain-text YAML persistence, Git-compatible workflow, non-proprietary document generation, and model-to-document continuity mechanisms.",
+        "evidence": [
+          "The SeaLion mission architecture and methodology is available in a publicly accessible repository.",
+          "Documents should be in plain text as to be compatible with modern distributed version control system (e.g., Git) and for ease of use;",
+          "Proprietary services are not required to generate documentation, modify documentation, or modify models."
+        ]
+      }
+    ],
+    "total_score": 7.5,
+    "max_score": 8,
+    "normalized_score": 0.938,
+    "overall_rationale": "Strong reporting of venue, CubeSat context, method/toolchain, traceability, and reproducible docs-as-code artifacts; evidence for outcomes is mainly artifact-based and anecdotal rather than quantified, tested, or operational."
   },
-  "rq_relevance": "RQ1 is partially addressed because the paper explains a lightweight, file-based MBSE/docs-as-code method for modeling a CubeSat mission architecture with minimal training, but it is not a general EPS behavioral model. RQ2 is partially addressed because it claims MBSE/model integration outcomes such as reduced ambiguity, reduced duplication, automated traceability, configuration management, synchronized generated documents, interface-conflict identification, and improved CubeSat success aims, but these are not demonstrated as EPS-specific outcomes. RQ3 is partially addressed because verification and validation are linked to stakeholder needs, user stories, telemetry/data structures, and general MBSE activities, but no EPS-specific verification procedure or formal IVV/test model is presented.",
-  "claimed_outcomes": [
-    "The approach is intended to assist improving CubeSat success rates for university teams by making systems engineering tools readily available and usable.",
-    "MBSE is claimed to reduce ambiguity from informal language and minimize duplicated content compared with document-based systems engineering.",
-    "Model-based documents are claimed to support automated traceability, easier change accommodation, and information sharing.",
-    "The docs-as-code workflow is claimed to support configuration management with Git-like tools, local filesystem persistence, plain-text documents, and use without proprietary software.",
-    "Generated documents, diagrams, tables, and text are claimed to update from model changes and keep dependent mission-architecture content in sync.",
-    "The component/interface extension is intended to identify interface conflict areas and input/output dependency assumptions and requirements through N2 diagrams.",
-    "Team members are reported to have learned the docs-as-code methodology quickly in a short training session, although self-learning materials were not yet adequate."
-  ],
-  "verification_validation_linkage": "General system V&V linkage is present. The paper states that MBSE models were used for design, specification, analysis, verification, and validation. Stakeholder needs and user stories include validating payloads, verifying DeCS behavior, verifying nominal satellite operation, and verifying/validating health, mission, AODS sensor, and GPS data. The linkage is through requirements/user-story traceability and telemetry data structures, not through an EPS-specific verification/test/IVV procedure.",
-  "key_findings": [
-    "SeaLion used MBSE with a docs-as-code approach in which YAML model files are the source for generated documents, diagrams, tables, and references.",
-    "M30ML was selected because it was lightweight, human- and machine-readable, file-based, capable of textual and graphical view generation, and lower overhead for modern document tools than the alternatives considered.",
-    "The main mission-architecture chain is references to stakeholder needs to user stories to data structures, providing traceability from mission objectives to operator actions and data packets.",
-    "The model includes operational data structures such as satellite health, mission data, AODS/GPS data, and beacon/telemetry packets exchanged between the CubeSat and ground station operator.",
-    "A component-modeling extension based on a Distributed OSHW Framework is under development to represent components/subcomponents, parts, functions, interfaces, tools, precautions, BOMs, and assembly steps.",
-    "The paper provides only limited EPS/power content: a power-module component example, battery health/temperature fields, and EPS board/battery interfaces in an example N2 chart.",
-    "The authors report practical benefits for low-experience university teams, but they also identify required future work on mission-profile updates, tutorials, component implementation, and communication practices."
-  ],
-  "limitations_gaps": [
-    "The published implementation was based on the prior VLEO mission profile and had not yet been updated for the later launch/profile change.",
-    "Component implementation was still a work in progress, and several component data structures were still under contention at the time of publication.",
-    "The N2 chart/interface-generation capability is described as an end goal or future extension rather than a completed capability.",
-    "Future work is required to create tutorials for self-learning; existing guides were definitions and format guides and caused confusion for some members.",
-    "The authors observed that effective communication is necessary because unavailable subsystem team members can delay architecture completion and legacy work capture required frequent meetings.",
-    "The paper does not present a detailed EPS behavioral model or EPS-specific verification/test procedure."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "0.5",
-    "total_score": "1.5",
-    "rationale": "Published as an open-access article in Systems with DOI. The paper discusses future work and practical implementation problems, but it does not provide a formal threats-to-validity or rigorous evaluation limitations section."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0037.json",
+    "status_rationale": "Kept as supporting because it is a CubeSat MBSE/docs-as-code case study with reusable modeling and toolchain evidence, but it is not an EPS-specific modeling or verification study.",
+    "citation": "Chiu, K.; Marquez, S.; Asundi, S. Model Based Systems Engineering with a Docs-as-Code Approach for the SeaLion CubeSat Project. Systems 2023, 11, 320. https://doi.org/10.3390/systems11070320",
+    "title": "Model Based Systems Engineering with a Docs-as-Code Approach for the SeaLion CubeSat Project",
+    "authors": [
+      "Kevin Chiu",
+      "Sean Marquez",
+      "Sharanabasaweshwara A. Asundi"
+    ],
+    "venue": "Systems",
+    "doi_or_url": "10.3390/systems11070320",
+    "publisher": "MDPI",
+    "venue_type": "journal article",
+    "source_database_or_route": [
+      "scopus: searches/scopus_q5_reference_model_refined.json",
+      "scopus: searches/scopus_q18_system_mbse_broad_full65.json",
+      "semantic_scholar: abstract_enrichment/paper-0037_semantic_title.json"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "partial",
+        "rationale": "Directly addresses general CubeSat mission/flight-software architecture modeling with lightweight YAML artifacts and limited training, but not EPS behavior modeling."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "Claims system-level reliability, reproducibility, traceability, and integration benefits from MBSE/docs-as-code, but these outcomes are not EPS-specific and are weakly evidenced."
+      },
+      "RQ3": {
+        "relevance": "partial",
+        "rationale": "Includes general verification/validation user stories and satellite-health data structures including battery fields, but no EPS-specific pre-physical verification procedure, simulation, or model checking is reported."
+      }
+    },
+    "lineage_overlap_notes": "The article states it expands a 2023 AIAA SciTech conference proceeding; no other papers, prior extractions, sources.bib, or lineage files were read under silo rules."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "SeaLion CubeSat mission architecture and associated flight-software/system documentation.",
+    "size_form_factor": "3U CubeSat",
+    "mission_name": "SeaLion",
+    "mission_domain": "On-orbit validation of three payloads: Impedance Probe, multispectral Pixel Sensor, and deployable composite structure; original profile was VLEO with short on-orbit lifetime.",
+    "organization_type": "University-led consortium involving Old Dominion University, United States Coast Guard Academy, and Air Force Institute of Technology.",
+    "project_maturity": "Prototype and pre-launch architecture implementation; planned launch profile changed before publication; components model work in progress.",
+    "lifecycle_stage_addressed": "Mission planning, concept-to-specification, flight-software architecture, documentation generation, and early component/interface/assembly planning.",
+    "development_context": "Low-budget university CubeSat team with many students new to spacecraft development and systems engineering, using COTS parts and docs-as-code to reduce training/tool overhead.",
+    "eps_relevance": "EPS-adjacent",
+    "model_maturity": "Mission architecture implemented for original mission profile with references, stakeholder needs, user stories, data structures, generated diagrams/tables, and public repository; component/DOF extensions and N2 chart generation remain under development."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "Improve university CubeSat mission success and guide flight-software implementation by replacing disconnected document-centric practices with a lightweight, traceable, plain-text MBSE/docs-as-code architecture usable by inexperienced student teams.",
+    "modeling_scope": [
+      "mission architecture",
+      "references and standards",
+      "stakeholder needs",
+      "ground-station-operator user stories",
+      "flight-software data structures and telemetry packets",
+      "generated UML diagrams, tables, and manuscripts",
+      "CubeSat and ground-station components/subcomponents",
+      "planned bill of materials, assembly instructions, interfaces, and N2 charts"
+    ],
+    "system_boundary_level_of_abstraction": "System-level CubeSat mission and ground-station interaction architecture, emphasizing ConOps/flight-software data exchanges and documentation; physical subsystem models and detailed EPS behavior are outside the demonstrated scope.",
+    "minimal_or_excluded_modeling": "No executable simulation or model checking is shown; M30ML is marked as not supporting execution semantics in the language downselect; components are work in progress; the model had not yet been updated for the new mission profile; EPS is not modeled in detail.",
+    "required_prior_behavioral_domain_knowledge": "Low for editing/reading the YAML-based method, but subsystem owners still need to provide legacy design decisions, component content, and expected behaviors to populate the architecture.",
+    "handling_limited_behavioral_knowledge": "Expected behaviors are elicited as stakeholder needs and user stories from the ground-operator perspective, then turned into data structures and generated views; experienced members provide short training and hold content-gathering meetings with subsystem contributors.",
+    "model_artifacts_used": [
+      "M30ML YAML reference files",
+      "stakeholder-need YAML files",
+      "user-story YAML files",
+      "data-structure YAML files",
+      "derivedFrom traceability fields",
+      "UML use-case and traceability diagrams",
+      "generated data-structure tables",
+      "components and parts YAML files",
+      "DOF component data structures",
+      "planned N2 charts",
+      "generated LaTeX/conference documents"
+    ],
+    "generality_reuse_mechanism": [
+      "lightweight YAML syntax",
+      "plain-text files persisted on local filesystem",
+      "Git-compatible docs-as-code workflow",
+      "format-agnostic model content separated from templates",
+      "M30ML/DOF data model extension intended as a self-describing CubeSat specification",
+      "public SeaLion mission architecture repository as reference implementation"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Select modeling language and workflow",
+        "inputs": "Candidate languages SysML v1, SysML v2, PlantUML, and M30ML; criteria in Table 1.",
+        "outputs": "M30ML selected for lightweight textual syntax, file-based interchange, view generation, and low doctool overhead.",
+        "actors_roles": "SeaLion mission architecture team.",
+        "prerequisites": "Need for model-based, locally persistent, plain-text, Git-compatible documentation.",
+        "completion_criteria": "Language chosen and docs-as-code approach adopted.",
+        "handoffs": "Selected method feeds repository/file-structure setup."
+      },
+      {
+        "step": "Create repository and folder structure",
+        "inputs": "SeaLion mission architecture concept and M30ML conventions.",
+        "outputs": "Architecture folder with references, stakeholder needs, user stories, and data structures; components folder for CubeSat/ground-station components.",
+        "actors_roles": "Mission architecture team.",
+        "prerequisites": "M30ML templates and Git/local filesystem workflow.",
+        "completion_criteria": "not reported",
+        "handoffs": "Folders provide locations for model artifact entry and traceability."
+      },
+      {
+        "step": "Capture references and stakeholder needs",
+        "inputs": "Mission objectives, CubeSat standards, stakeholder priorities from ODU and USCGA.",
+        "outputs": "Reference YAML files and primary/secondary/tertiary stakeholder-need YAML files.",
+        "actors_roles": "Mission architecture team and stakeholders.",
+        "prerequisites": "Project methodology committed to M30ML YAML modeling tools.",
+        "completion_criteria": "All stakeholder needs identified and recorded, as stated in the methodology.",
+        "handoffs": "Stakeholder needs are used to derive user stories."
+      },
+      {
+        "step": "Derive user stories",
+        "inputs": "Stakeholder needs and ground-station-operator perspective.",
+        "outputs": "User-story YAML files with actor, behavior, rationale, examples, and derivedFrom links.",
+        "actors_roles": "Ground Station Operator viewpoint; mission architecture team.",
+        "prerequisites": "Stakeholder needs available.",
+        "completion_criteria": "not reported",
+        "handoffs": "User stories lead to data structures and activity definitions."
+      },
+      {
+        "step": "Define data structures and expected behavior for flight software",
+        "inputs": "User stories and expected telemetry/command interactions.",
+        "outputs": "Data-structure YAML files such as Satellite Health Data Packet and Mission Data, with fields, types, descriptions, and derivedFrom links.",
+        "actors_roles": "Mission architecture team and flight-software/system contributors.",
+        "prerequisites": "User stories and expected data exchanges.",
+        "completion_criteria": "not reported",
+        "handoffs": "Data structures guide flight-software implementation and generated documentation."
+      },
+      {
+        "step": "Generate documentation and views",
+        "inputs": "YAML model files and templates such as Liquid/Jinja2/LaTeX.",
+        "outputs": "UML diagrams, tables, text, references, and conference/journal documents.",
+        "actors_roles": "Mission architecture team; build scripts/toolchain.",
+        "prerequisites": "Templates and build shell script.",
+        "completion_criteria": "Generated artifacts reflect current model content.",
+        "handoffs": "Generated documents support communication, review, and implementation."
+      },
+      {
+        "step": "Extend component modeling using DOF",
+        "inputs": "CubeSat/ground-station components, component parts, functions, interfaces, tools, and assembly needs.",
+        "outputs": "Component hierarchy, parts YAML, planned BOMs, assembly instructions, and future N2 interface charts.",
+        "actors_roles": "Mission architecture team and component/subsystem owners.",
+        "prerequisites": "DOF templates and component content from team members.",
+        "completion_criteria": "not reported; explicitly work in progress.",
+        "handoffs": "Intended to support assembly and interface planning."
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "The approach applies the NASA systems engineering handbook to CubeSat mission design in a top-down process from mission concept to subsystem component and flight-software specifications, with models used for design, specification, analysis, verification, and validation; explicit lifecycle review gates are not reported.",
+    "approach_classification": "Enhanced MBSE",
+    "approach_classification_rationale": "The study uses MBSE artifacts as the source of truth and enhances them with docs-as-code practices, Git-compatible plain text, templates, and automated document/view generation rather than using a conventional monolithic MBSE tool alone.",
+    "tailoring_rationale": [
+      "University CubeSat teams often have untrained students and limited resources.",
+      "M30ML has lightweight YAML syntax and minimal overhead with modern doctools.",
+      "Models should persist on a local filesystem and not require proprietary software or cloud services.",
+      "Plain text enables distributed version control and co-location with code.",
+      "Formatting-agnostic model content reduces duplicate documentation work."
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "Mach 30 Modeling Language (M30ML)",
+      "YAML",
+      "docs-as-code",
+      "Git/GitHub-style distributed version control",
+      "Liquid template language",
+      "Jinja2 template language",
+      "build shell script",
+      "UML diagram generation",
+      "LaTeX templates",
+      "asciidoctor",
+      "bibtex",
+      "Distributed OSHW Framework (DOF)",
+      "OML and LinkML influences"
+    ],
+    "toolchain_architecture_data_flow": "Plain-text YAML model files in architecture and components folders are the source content. derivedFrom links connect references, stakeholder needs, user stories, and data structures. Templates and build scripts generate diagrams, tables, text, manuscripts, and planned BOM/assembly/interface artifacts. Git/local filesystem storage provides configuration management and continuity.",
+    "interoperability_mechanisms": [
+      "file-based YAML interchange",
+      "plain-text persistence",
+      "local filesystem storage",
+      "Git-compatible version control",
+      "format-agnostic model content separated from formatting templates",
+      "template-based generation to UML diagrams, tables, LaTeX documents, and other views",
+      "non-proprietary editing and document generation"
+    ],
+    "syntax_semantic_continuity_evidence": "The paper states that models are the authoritative source of truth, that information changed in one YAML file can interact with other files through derivedFrom relationships, and that continuous updating keeps dependencies in sync when documents are regenerated.",
+    "software_hardware_system_integration_readiness": "Flight-software data structures and expected operator behaviors are modeled, but direct software code generation, hardware integration, integration testing, and flight validation are not demonstrated. Component/interface modeling for BOMs, assembly instructions, and N2 charts is under development.",
+    "toolchain_limitations": [
+      "M30ML did not support execution semantics in the language comparison table.",
+      "The architecture at publication reflected the original mission profile rather than the new launch/orbit profile.",
+      "Components implementation was work in progress.",
+      "Some component data structures were still in contention for use.",
+      "Self-learning tutorials were not yet available.",
+      "Effectiveness depends on communication and content availability from subsystem team members."
+    ],
+    "availability_reproducibility": "The SeaLion mission architecture and methodology are reported as available in a publicly accessible GitHub repository, with model content stored as local plain-text YAML and generated using non-proprietary docs-as-code tools."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "battery_health field in Satellite Health Data Packet",
+      "temperature_battery field in Satellite Health Data Packet",
+      "power-module component entry in component YAML example",
+      "EPS Board, Battery, and Solar Cells in N2 chart example",
+      "rechargeable batteries and solar panels mentioned as a trade-study result after mission-profile change"
+    ],
+    "eps_requirements_representation": "No EPS-specific requirements model is reported. EPS-adjacent information appears as satellite-health telemetry fields, a power-module component, generic CubeSat standards adherence, and example electrical interfaces.",
+    "verification_validation_artifacts": [
+      "user story to view beacon data to verify nominal satellite operation",
+      "user story to request satellite health data",
+      "Satellite Health Data Packet with battery_health, temperature_battery, mode, and state_vector fields",
+      "derivedFrom links from data structures to user stories",
+      "UML mappings from stakeholder needs to user stories and from user stories to data structures",
+      "planned N2 chart for mechanical/electrical interfaces"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "trace stakeholder needs to user stories and data structures before flight-software implementation",
+      "define health and mission telemetry packet contents before operation",
+      "generate diagrams and tables for review from the same model source",
+      "planned N2 interface chart generation to identify potential interface conflicts",
+      "not reported for EPS-specific simulation, executable checks, or physical-test procedure integration"
+    ],
+    "evidence_verification_integrated_in_model": "Partial and system-level only: user stories include verification/validation rationales and the Satellite Health Data Packet is derived from View Beacon Data and Request Satellite Health Data user stories, but the paper does not define an EPS verification procedure or executable EPS model.",
+    "integration_test_readiness": "The model can support review of telemetry definitions and planned interface/assembly documentation, but no EPS integration test, electrical power test, hardware-in-the-loop test, or flight result is reported."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Paper objective and docs-as-code MBSE approach",
-      "quote": "The SeaLion mission architecture team sought to create a model-based systems engineering approach to assist improving CubeSat success rates as well as for the SeaLion CubeSat project to guide an implementation for the flight software.",
-      "location": "Abstract"
+      "claim": "MBSE/docs-as-code tools are intended to improve university CubeSat success by making systems-engineering approaches readily available and learnable.",
+      "outcome_category": "reliability and mission assurance",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "lightweight MBSE mission architecture",
+        "docs-as-code workflow",
+        "planning/documentation/project-management simplification"
+      ],
+      "artifact_or_process_linked": "SeaLion M30ML mission architecture and generated documentation.",
+      "lifecycle_stage": "early planning and design",
+      "evidence_type": "motivation and rationale; no SeaLion success-rate measurement",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "University CubeSat failure statistics are discussed, but no controlled baseline for SeaLion is provided.",
+      "observed_effect_size_or_qualitative_effect": "Intended improvement only; no observed reliability effect reported.",
+      "evidence_source": "Section 2.2 Ensuring CubeSat Success",
+      "direct_quote": "The motivation of this article is to improve the success rate of CubeSat missions from university groups by providing readily available and usable tools for university teams.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "Mission success depends on hardware, operations, funding, launch/orbit changes, team execution, and testing beyond documentation/modeling."
     },
     {
-      "claim": "Low-training motivation",
-      "quote": "These tools generate documents via its own code for easy presentation on a local file system without any proprietary software while keeping the model content format-agnostic.",
-      "location": "Abstract"
+      "claim": "The MBSE approach reduces ambiguity and duplicate content compared with document-based systems engineering.",
+      "outcome_category": "consistency and requirements clarity",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "models as authoritative source of truth",
+        "structured modeling language",
+        "separation of model content from formatted documents"
+      ],
+      "artifact_or_process_linked": "M30ML/YAML model files replacing duplicated document content.",
+      "lifecycle_stage": "requirements, design, and documentation",
+      "evidence_type": "author rationale supported by case artifacts but no measured ambiguity/duplication metric",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "traditional document-based systems engineering discussed qualitatively",
+      "observed_effect_size_or_qualitative_effect": "Qualitative reduction in ambiguity and duplicated content asserted.",
+      "evidence_source": "Section 3 Goals",
+      "direct_quote": "A MBSE approach was adopted by the SeaLion CubeSat mission architecture team since it provided benefits such as reducing the ambiguity that usually comes with using informal language to specify systems or its various aspects.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The effect is inferred from MBSE principles and artifacts; the paper does not compare defect rates or rework before and after MBSE adoption."
     },
     {
-      "claim": "Modeling scope",
-      "quote": "This includes the modeling language, tools, and technical approach used to facilitate the configuration management, design, specification, and implementation of the SeaLion mission architecture for the flight software using a model-based approach.",
-      "location": "Section 1, Introduction"
+      "claim": "M30ML/docs-as-code is easy to learn and usable by newly admitted or minimally trained team members.",
+      "outcome_category": "adoption, usability, and training overhead",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "lightweight YAML syntax",
+        "human- and machine-readable model files",
+        "minimal doctool overhead"
+      ],
+      "artifact_or_process_linked": "YAML-based M30ML model elements and short training by an experienced member.",
+      "lifecycle_stage": "team onboarding and model authoring",
+      "evidence_type": "case-study observation without formal user study",
+      "metric_or_value_indicator": "short training session; exact duration and participant count not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Several team members reportedly learned the methodology quickly.",
+      "evidence_source": "Abstract and Section 7 Future Work and Observations",
+      "direct_quote": "Multiple team members of the SeaLion mission have been able to quickly learn the methodology of using the docs-as-code approach within a short training session with an experienced member.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Experienced mentoring, prior technical ability, and limited task scope may explain quick onboarding; self-learning guides still caused confusion."
     },
     {
-      "claim": "General V&V linkage",
-      "quote": "These models were used to conduct activities such as design, specification, analysis, verification, and validation of the system.",
-      "location": "Section 1, Introduction"
+      "claim": "Docs-as-code generation keeps documents, diagrams, tables, and dependencies synchronized with model changes.",
+      "outcome_category": "automation, consistency, and configuration management",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "YAML model as source content",
+        "template-based document generation",
+        "derivedFrom traceability",
+        "automated build script"
+      ],
+      "artifact_or_process_linked": "Generated UML diagrams, data-structure tables, references, and manuscript artifacts.",
+      "lifecycle_stage": "documentation, review, and change management",
+      "evidence_type": "case artifacts and implemented generation workflow",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "manual document update process discussed qualitatively",
+      "observed_effect_size_or_qualitative_effect": "Model changes can immediately regenerate documents and maintain dependency consistency.",
+      "evidence_source": "Section 5.5 Document Generation",
+      "direct_quote": "This means that any changes made to the SeaLion mission architecture model can immediately be used to generate new documents.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Synchronization depends on correct templates, complete model content, disciplined use of the repository, and successful build scripts."
     },
     {
-      "claim": "Mission/platform",
-      "quote": "The end goal is to produce a 3U CubeSat consisting of three payloads for on-orbit validation.",
-      "location": "Section 1.2, SeaLion Mission"
+      "claim": "The model/toolchain improves reproducibility and toolchain continuity through public, local, non-proprietary plain-text assets.",
+      "outcome_category": "reproducibility and toolchain accessibility",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "plain-text YAML",
+        "local filesystem persistence",
+        "public repository",
+        "no proprietary services",
+        "Git-compatible version control"
+      ],
+      "artifact_or_process_linked": "SeaLion mission architecture GitHub repository and YAML model files.",
+      "lifecycle_stage": "model authoring, configuration management, and reuse",
+      "evidence_type": "repository availability statement and implementation description",
+      "metric_or_value_indicator": "publicly accessible repository reported; no reuse count or replication test",
+      "baseline_comparator": "proprietary/cloud-based document/model tools discussed qualitatively",
+      "observed_effect_size_or_qualitative_effect": "Readers can assess and potentially reuse the model without proprietary software.",
+      "evidence_source": "Section 3 Goals; Section 3.2 Documents-as-Code Approach; Data Availability Statement",
+      "direct_quote": "Proprietary services are not required to generate documentation, modify documentation, or modify models.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Actual reproducibility depends on repository completeness, dependency versions, build environment, and documentation quality."
     },
     {
-      "claim": "Authoritative model goal",
-      "quote": "Ensure models are the authoritative source of truth for all artifact content (e.g., artifact structure, meta-data, boilerplate, commentary, discussion, diagrams, tables, etc.);",
-      "location": "Section 3, Goals"
+      "claim": "Traceability from stakeholder needs to user stories and data structures supports flight-software implementation and verification/validation reasoning.",
+      "outcome_category": "traceability and implementation guidance",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "derivedFrom links",
+        "stakeholder need hierarchy",
+        "user-story mapping",
+        "data-structure mapping"
+      ],
+      "artifact_or_process_linked": "StakeholderNeeds, UserStories, and DataStructures YAML files and UML traceability diagrams.",
+      "lifecycle_stage": "requirements, architecture, and flight-software specification",
+      "evidence_type": "case artifacts with examples and generated traceability views",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Trace links make provenance from objectives to data packets visible.",
+      "evidence_source": "Sections 5.1, 5.3, and 5.4",
+      "direct_quote": "For the mission architecture shown in Figure 9, generally data structures are derived from user stories. Furthermore, user stories are subsequently derived from stakeholder needs with their respective references.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Completeness and correctness of trace links are not independently verified; not every data structure is linked to a user story."
     },
     {
-      "claim": "MBSE claimed benefits",
-      "quote": "A MBSE approach was adopted by the SeaLion CubeSat mission architecture team since it provided benefits such as reducing the ambiguity that usually comes with using informal language to specify systems or its various aspects. It also minimized the duplication of content that tends to accumulate in a document-based system engineering approach.",
-      "location": "Section 3, Goals"
+      "claim": "The architecture can be adapted to a changed mission profile with limited rework and automatically updated documentation.",
+      "outcome_category": "reuse and change accommodation",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "modular mission architecture",
+        "docs-as-code regeneration",
+        "model content separated from formatting"
+      ],
+      "artifact_or_process_linked": "SeaLion mission architecture under changed launch/orbit profile.",
+      "lifecycle_stage": "change management after launch-profile change",
+      "evidence_type": "author observation/projection; no measured adaptation effort",
+      "metric_or_value_indicator": "few sessions between team members claimed; exact effort not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Authors state no extensive reworking is needed and documentation work would be eliminated for updated outputs.",
+      "evidence_source": "Section 7 Future Work and Observations",
+      "direct_quote": "The mission architecture requires only a few sessions between team members to make adaptations.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The architecture had not yet been updated at publication, so actual rework, missing content, and technical impacts were unknown."
     },
     {
-      "claim": "M30ML selection rationale",
-      "quote": "M30ML was chosen for its lightweight human and machine-readable textual syntax, file-based model interchange support (for persisting models directly on the local filesystem), ability to generate both textual and graphical views, and relatively minimal overhead with modern doctools.",
-      "location": "Section 4, Modeling Language and Methodology"
-    },
-    {
-      "claim": "Operational data structure interface",
-      "quote": "These data structures are the data that would be transmitted back and forth between ground station operator and CubeSat.",
-      "location": "Section 5.4, Data Structures"
-    },
-    {
-      "claim": "Document-generation synchronization outcome",
-      "quote": "This means that any changes made to the SeaLion mission architecture model can immediately be used to generate new documents.",
-      "location": "Section 5.5, Document Generation"
-    },
-    {
-      "claim": "Interface/N2 intended use",
-      "quote": "This would allow for a team to identify 'areas where conflicts could arise in interfaces, and highlights input and output dependency assumptions and requirements'.",
-      "location": "Section 6.2, Component Data Structure and File Implementation"
-    },
-    {
-      "claim": "Mission-profile limitation",
-      "quote": "At the time of publication of this article, the implementation of the SeaLion mission architecture was performed to the prior mission parameters where the SeaLion CubeSat was designed for a short lifespan compared to now greatly extended planned lifespan.",
-      "location": "Section 5, Architecture Implementation"
-    },
-    {
-      "claim": "Component implementation gap",
-      "quote": "Components is currently a work in progress at time of publication of this article and will be addressed with future required work.",
-      "location": "Section 5.1, File Structure"
-    },
-    {
-      "claim": "Training and tutorial gap",
-      "quote": "Multiple team members of the SeaLion mission have been able to quickly learn the methodology of using the docs-as-code approach within a short training session with an experienced member. However, a fully realized tutorial would be beneficial to allow for self-learning.",
-      "location": "Section 7, Future Work and Observations"
-    },
-    {
-      "claim": "Communication/process limitation",
-      "quote": "Additionally, observations from the implementation of the docs-as-code approach noted that an effective communication plan between team members is key to the overall effectiveness of the mission architecture.",
-      "location": "Section 7, Future Work and Observations"
+      "claim": "Component/DOF extensions and N2 charts can improve integrability by documenting interfaces, dependencies, BOMs, and assembly instructions.",
+      "outcome_category": "integrability and interface management",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "component hierarchy",
+        "component interface data structures",
+        "planned N2 chart generation",
+        "assembly step and BOM generation"
+      ],
+      "artifact_or_process_linked": "Components folder, DOF component data structure, component YAML, and N2 chart concept.",
+      "lifecycle_stage": "component/interface and assembly planning",
+      "evidence_type": "conceptual future work with example structures; no completed integration result",
+      "metric_or_value_indicator": "not reported",
+      "baseline_comparator": "not reported",
+      "observed_effect_size_or_qualitative_effect": "Intended identification of interface conflicts and dependency assumptions.",
+      "evidence_source": "Sections 6.1 and 6.2",
+      "direct_quote": "This would allow for a team to identify \"areas where conflicts could arise in interfaces, and highlights input and output dependency assumptions and requirements\" [3].",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "N2 chart automation is described as an end goal; component content availability and interface correctness are not demonstrated."
     }
   ],
-  "notes_for_consistency": "Read only paper.md and used embedded assignment metadata for corpus_id, tier, authors, year, DOI, and title. The paper is supporting rather than core for EPS-focused RQs: EPS/power content is incidental and no detailed EPS behavior or EPS-specific verification procedure is modeled. RQ2 outcomes are general MBSE/docs-as-code outcomes, not measured EPS reliability outcomes. Network latency, autonomy allocation, and quantitative evaluation are not reported."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "Models are intended to be the authoritative source of truth, stored as Git-compatible plain-text YAML on a local filesystem and used to generate formatted artifacts; effective governance also requires a communication plan and subsystem-owner content contributions.",
+    "traceability_to_deliverables_decisions_reviews": "derivedFrom fields link references to stakeholder needs, user stories, and data structures; generated UML diagrams, tables, and documents are deliverables. BOMs, assembly instructions, and N2 interface diagrams are planned component deliverables. Formal reviews or gates are not named.",
+    "evaluation_criteria_model_quality_usefulness": "Language/tool downselect criteria include extensible ontology language, textual and graphical view generation, lightweight textual syntax, minimal doctool overhead, and execution semantics. Goals also include local persistence, plain text, human/machine readability, and separation of content and formatting.",
+    "roi_value_realization_evidence": "No quantified ROI, cost, schedule, defect, or mission-success evidence is reported. Value is argued through reduced ambiguity, reduced duplication, easier training, automatic document generation, and adaptation claims.",
+    "programmatic_gates_critical_design_events_supported": "The method supports mission concept to subsystem/flight-software specification and generated documentation, but no PDR/CDR/test-readiness gates or critical design events are explicitly reported.",
+    "model_derived_performance_indicators_management_metrics": "not reported"
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed with evidence",
+      "rationale": "The paper gives an implemented pathway with language downselect, repository/folder structures, YAML examples, generated diagrams/tables, and document-generation workflow, though not a full tutorial."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed with evidence",
+      "rationale": "The approach directly targets local plain-text, Git-compatible, format-agnostic, non-proprietary model/document continuity and demonstrates generated views from YAML."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed with evidence",
+      "rationale": "Tailoring to low-budget university CubeSat teams and untrained students drives M30ML/YAML selection, minimal tool overhead, and short-training observations."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "addressed conceptually",
+      "rationale": "Authoritative-source governance, traceability, generated deliverables, and configuration management are explained, but ROI, management metrics, and formal gate evidence are absent."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "addressed conceptually",
+      "rationale": "Docs-as-code, Git, agile-style elements, and rapid documentation regeneration are aligned with distributed/iterative work, but no iteration metrics or distributed-team evaluation are reported."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "A CubeSat mission can be modeled at a general, low-overhead level using M30ML/YAML files for references, stakeholder needs, user stories, and data structures, with derivedFrom links providing traceability.",
+        "The approach captures expected ground-operator behaviors and flight-software data structures without requiring executable subsystem behavior models, making it suitable for teams with limited training but not for detailed EPS behavior analysis.",
+        "Component/DOF extensions aim to generalize CubeSat component, interface, BOM, and assembly modeling, but they were still under development."
+      ],
+      "RQ2": [
+        "Reliability/mission-success benefits are mostly aspirational and system-level, motivated by high university CubeSat failure rates; no flight or test evidence links the model to reliability outcomes.",
+        "Reproducibility is the strongest outcome: public repository, plain-text YAML, local filesystem persistence, no proprietary services, and generated documentation are clearly linked to the model/toolchain.",
+        "Integrability is addressed through traceability and planned N2/interface/assembly artifacts, but integration-test evidence is not provided."
+      ],
+      "RQ3": [
+        "Verification and validation are represented generally through MBSE activities, user stories, and data structures such as Satellite Health Data Packet, but not as formal EPS verification procedures.",
+        "Battery health and temperature fields are modeled as satellite-health telemetry, providing EPS-adjacent information before operation, but no EPS simulation, model check, power-budget verification, or hardware test integration is reported.",
+        "Planned N2 charts could support pre-physical interface review, including electrical interfaces, but the paper treats this as future work rather than demonstrated EPS verification."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "The implemented mission architecture reflected the prior mission parameters, not the newly changed mission profile.",
+      "The components folder was work in progress at publication.",
+      "Component data-structure use was still partly in contention.",
+      "Training material needed improvement because current guides were not step-by-step tutorials.",
+      "Communication with subsystem team members was necessary and unavailable contributors could delay architecture completion.",
+      "Legacy design decisions made before the architecture model had to be gathered and adapted."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "No EPS-specific architecture, requirements set, behavioral model, power-budget model, or verification procedure is demonstrated.",
+      "No quantitative evidence, baseline comparison, integration-test result, model-checking result, simulation output, or flight/operational data supports the claimed reliability or efficiency outcomes.",
+      "The method lacks demonstrated executable semantics, limiting behavioral verification claims.",
+      "The public repository is reported but was not inspected under silo rules, so reproducibility is assessed only from the paper's description.",
+      "N2 chart generation and component/interface modeling are partly future work, not validated integration evidence."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "objective and source of truth",
+        "quote": "Through model-based systems engineering (MBSE), the SeaLion mission architecture team was able to create models, as opposed to documents, that serve as the authoritative source of truth for the conduction of system engineer activities [1].",
+        "location": "Section 1 Introduction"
+      },
+      {
+        "topic": "MBSE activities",
+        "quote": "These models were used to conduct activities such as design, specification, analysis, verification, and validation of the system.",
+        "location": "Section 1 Introduction"
+      },
+      {
+        "topic": "mission context",
+        "quote": "The end goal is to produce a 3U CubeSat consisting of three payloads for on-orbit validation.",
+        "location": "Section 1.2 SeaLion Mission"
+      },
+      {
+        "topic": "team constraints",
+        "quote": "However, many of the SeaLion project team members are new to spacecraft development and systems engineering.",
+        "location": "Section 1.2 SeaLion Mission"
+      },
+      {
+        "topic": "modeling language choice",
+        "quote": "M30ML was chosen for its lightweight human and machine-readable textual syntax, file-based model interchange support (for persisting models directly on the local filesystem), ability to generate both textual and graphical views, and relatively minimal overhead with modern doctools [29].",
+        "location": "Section 4 Modeling Language and Methodology"
+      },
+      {
+        "topic": "traceability chain",
+        "quote": "For the mission architecture shown in Figure 9, generally data structures are derived from user stories. Furthermore, user stories are subsequently derived from stakeholder needs with their respective references.",
+        "location": "Section 5.1 File Structure"
+      },
+      {
+        "topic": "verification user story",
+        "quote": "As an example, the second user story desire is to \"verify that satellite is operating nominally\" [13].",
+        "location": "Section 5.3 User Stories"
+      },
+      {
+        "topic": "satellite health data",
+        "quote": "As shown in Figure 19, the data structure, with YAML file named '1-SatelliteHealth.yaml' is for determining the satellite's health.",
+        "location": "Section 5.4 Data Structures"
+      },
+      {
+        "topic": "document generation",
+        "quote": "This means that any changes made to the SeaLion mission architecture model can immediately be used to generate new documents.",
+        "location": "Section 5.5 Document Generation"
+      },
+      {
+        "topic": "public availability",
+        "quote": "The SeaLion mission architecture and methodology is available in a publicly accessible repository.",
+        "location": "Data Availability Statement"
+      },
+      {
+        "topic": "training limitation",
+        "quote": "Current guides are lists of definitions and format guides rather than a step-by-step tutorial on using the approach, which has caused confusion among members that attempted to learn the material by themselves.",
+        "location": "Section 7 Future Work and Observations"
+      },
+      {
+        "topic": "conclusion",
+        "quote": "The methodology presented herein has accomplished the ability to create individual elements of the architecture in an human readable code that is also easy to make revisions to and persists on a local file system.",
+        "location": "Section 8 Conclusions"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "Treat this as the 2023 Systems journal article and not the earlier AIAA proceeding. It is supporting evidence for lightweight CubeSat MBSE/docs-as-code and only EPS-adjacent for battery-health/electrical-interface mentions.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full Markdown paper was read and contains detailed method, context, and artifact descriptions. Confidence is lower only for EPS-specific synthesis because the paper itself provides little EPS detail."
+  },
+  "bibtex": "@article{paper-0037,\n  title = {Model Based Systems Engineering with a Docs-as-Code Approach for the SeaLion CubeSat Project},\n  author = {Kevin Chiu and Sean Marquez and Sharanabasaweshwara A. Asundi},\n  year = {2023},\n  journal = {Systems},\n  volume = {11},\n  number = {7},\n  pages = {320},\n  publisher = {MDPI},\n  doi = {10.3390/systems11070320},\n  url = {https://doi.org/10.3390/systems11070320}\n}"
 }

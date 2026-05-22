@@ -1,147 +1,686 @@
 {
   "corpus_id": "paper-0061",
   "tier": "supporting",
-  "citation": "La Bella et al. (2024), Concurrent Model-Based Approach for CubeSat Mission Design",
-  "title": "Concurrent Model-Based Approach for CubeSat Mission Design",
-  "authors": [
-    "Emanuela La Bella",
-    "Serena Campioli",
-    "Luisa Iossa",
-    "Sabrina Corpino",
-    "Fabrizio Stesina"
-  ],
   "year": 2024,
-  "doi_or_url": "10.52202/078374-0035",
-  "venue_type": "conference, 75th International Astronautical Congress (IAC), Milan, Italy, 14-18 October 2024",
-  "modeling_scope": "Concurrent model-based preliminary design approach for micro/nanosatellite and CubeSat missions, combining concurrent engineering with MBSE-supported digital tools. Scope covers mission design and analysis, ConOps, architecture, subsystem sizing, budgets, risk and cost, component selection, central data exchange, and general early verification. EPS is included as one S3D spreadsheet and as multiple CUTE-DB power technology categories, but EPS behavior modeling is not the paper's main focus.",
-  "modeling_scope_categories": [
-    "system-level",
-    "EPS/power",
-    "requirements",
-    "architecture",
-    "budget",
-    "verification",
-    "simulation",
-    "operations",
-    "reference model/template",
-    "risk",
-    "tool/process"
-  ],
-  "mbse_language_method_tool": "Concurrent Model-Based approach combining Concurrent Engineering and MBSE; S3D Tool implemented as Microsoft Excel calculation sheets plus Central Data Exchange System; CUTE-DB Excel-based CubeSat Technologies Database; supporting tools include STK, SolidWorks, Jira/Miro, Valispace, and PowerPoint. No SysML language is reported.",
-  "mbse_language_method_tool_categories": [
-    "Other"
-  ],
-  "robot_platform": "CubeSat/nanosatellite missions; demonstrated on BOSS, a 12U CubeSat mission to Bennu, plus Geo-Profundo 6U LEO CubeSat and cislunar CubeSat inspector case studies.",
-  "task_domain": "Preliminary phase 0/A CubeSat mission and system design for space exploration and observation, including BOSS asteroid in-situ observation/mapping, Geo-Profundo urban-growth monitoring and deep-space technology demonstration, and cislunar inspection feasibility.",
-  "interface": "Central Data Exchange System links discipline spreadsheets for automated/manual data exchange across mission, system, subsystem, and component levels; all team members can access it, with check alerts for common inputs. Concurrent design sessions use discipline roles, shared presentations, and CUTE-DB for component selection.",
-  "feedback": "Iterative design refinement and near-real-time concurrent teamwork are central: subsystem analyses feed the central repository, consistency checks flag shared-input issues, and each session ends with review of results and next-step definition. No closed-loop EPS simulation feedback is reported.",
-  "control_autonomy_split": "BOSS operations mention autonomous attitude and trajectory control and navigation map generation, but no detailed control allocation or human-autonomy split is reported.",
-  "network_latency_assumptions": "BOSS is described as communicating with ground stations through the mothership as relay; no network latency assumptions are reported.",
-  "evaluation": "The approach was implemented and tested in several CubeSat case studies, with BOSS described in detail through four concurrent design sessions. Effectiveness is assessed by comparing BOSS feasibility-study outputs against a traditional methodology using mass budget, Delta-V budget, cost assessment, and feasibility-analysis duration.",
-  "rqs_addressed": {
-    "RQ1": "yes",
-    "RQ2": "partial",
-    "RQ3": "partial"
+  "quality_checklist": {
+    "scale": "No=0; Insufficiently=0.5; Yes=1",
+    "items": [
+      {
+        "id": "credible_venue",
+        "question": "Was the research published in a credible venue?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper is a named conference contribution at the 75th International Astronautical Congress and states publication by the IAF.",
+        "evidence": [
+          "75th International Astronautical Congress (IAC), Milan, Italy, 14-18 October 2024.",
+          "Published by the IAF, with permission and released to the IAF to publish in all forms.",
+          "IAC-24-D3.3"
+        ]
+      },
+      {
+        "id": "limitations_scope",
+        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The authors bound the method to phase 0/A preliminary design, note that only the four-session results were compared, and identify tool gaps and future improvements.",
+        "evidence": [
+          "a design methodology particularly suitable for the phase 0/A [8] of a space project",
+          "However, the shown results only take into account the 4 sessions results and not the post-study refinement.",
+          "Firstly, the S3D Tool needs to be improved and optimised.",
+          "software environments such as Comet and Matlab's System Composer are being explored"
+        ]
+      },
+      {
+        "id": "mission_context_lifecycle",
+        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The paper describes CubeSat feasibility/preliminary design, the BOSS mission context, mission architecture, lifecycle phase, and additional CubeSat case studies.",
+        "evidence": [
+          "This paper presents a novel Concurrent Model-Based approach for CubeSat mission design",
+          "The BOSS mission is a feasibility study of a CubeSat mission, with the aim to conduct in-situ observations of the Bennu asteroid",
+          "the final mission will consist of this concept of operation involving a 12U CubeSat",
+          "another case study ... explores the feasibility of a 6U CubeSat mission in Low Earth Orbit (LEO), named Geo-Profundo"
+        ]
+      },
+      {
+        "id": "mbse_replication_clarity",
+        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The workflow, roles, sessions, and tools are described well enough for comparison, but no formal MBSE language, model repository, equations, or complete implementation is provided in the paper.",
+        "evidence": [
+          "It consists of a set of calculation sheets implemented in Microsoft Excel dedicated to the main disciplines of the preliminary design phase of a CubeSat project",
+          "Each spreadsheet is described in detail in a user manual",
+          "The different roles and the corresponding software tools used during the concurrent sessions are shown in Table 1.",
+          "The Mission Analysis and the Structure & Configuration sheets are not linked to any spreadsheet because external software ... are used for specific analyses."
+        ]
+      },
+      {
+        "id": "outcomes_linked_to_mbse",
+        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "Most claimed outcomes are tied to the Concurrent Model-Based approach, S3D, CUTE-DB, central data exchange, or concurrent design sessions.",
+        "evidence": [
+          "This combined concurrent design approach offers faster, more flexible, and transparent design management compared to traditional methods",
+          "The CE-MBSE methodology resulted in a spacecraft mass of 22.59 kg",
+          "The CE-MBSE approach projected a total mission cost of 15 million euros",
+          "This shortened timeline reflects the enhanced collaboration and integration made possible by concurrent engineering"
+        ]
+      },
+      {
+        "id": "evidence_for_claimed_outcomes",
+        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+        "score": 1,
+        "rating": "yes",
+        "rationale": "The BOSS case includes a traditional-method comparator for mass, delta-V, cost, and feasibility duration, although other quality and verification claims remain less evidenced.",
+        "evidence": [
+          "Table 3. BOSS mission design results' comparison",
+          "Mass budget 22.59kg 26.6kg",
+          "Cost assessment 15M€ 22M€",
+          "Feasibility analysis duration 1month 3months"
+        ]
+      },
+      {
+        "id": "traceability_to_model_artifacts",
+        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper reports a central repository, check column, component selection criteria, and Valispace use, but does not show explicit requirements-to-model-to-verification traceability.",
+        "evidence": [
+          "Its purpose is to ensure that up-to-date information and data are shared across different disciplines and levels (mission, system, subsystem, component) while verifying that all disciplines operate on the same assumptions.",
+          "an alert system consisting of a Check column for the input values in common between two or more disciplines has been implemented in the central repository.",
+          "The CUTE-DB has been used since Session 3, allowing the selection of one or more component options that meet mission-specific criteria and requirements.",
+          "1 System Engineer S3D Tool-Central Data Exchange System Valispace"
+        ]
+      },
+      {
+        "id": "reproducibility_toolchain_continuity",
+        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+        "score": 0.5,
+        "rating": "insufficiently",
+        "rationale": "The paper describes reusable Excel-based tools, a user manual, sources for the database, and data exchange links, but does not report public availability or enough implementation detail for independent reproduction.",
+        "evidence": [
+          "Each spreadsheet is described in detail in a user manual",
+          "a central repository, called Central Data Exchange System, was created to facilitate communication and information management during the design process.",
+          "The CUTE-DB has been populated using several sources available online [11, 12], as well as official developer websites, and it is currently updated to June 2024.",
+          "alternative environments are currently under investigation to complement or replace the current tools in use"
+        ]
+      }
+    ],
+    "total_score": 6.5,
+    "max_score": 8,
+    "normalized_score": 0.812,
+    "overall_rationale": "Credible conference paper with clear CubeSat preliminary-design context, implemented tools, and a case-study comparator. Quality is limited by lack of formal MBSE language/model availability, incomplete toolchain continuity, and weak explicit traceability or EPS-specific verification evidence."
   },
-  "rq_relevance": "RQ1 yes: the paper presents a general Concurrent Model-Based approach for CubeSat mission design with system-level models/tools and EPS sizing/database coverage. RQ2 partial: it claims model-based/concurrent outcomes for faster design, transparency, integration, consistency, error reduction, cost/time reduction, and risk reduction, but it does not attribute reliability or reproducibility outcomes specifically to EPS modeling. RQ3 partial: it links early model integration to earlier verification and mentions design/testing support, but does not provide explicit verification procedures, IVV/test models, or EPS-specific verification procedures.",
-  "claimed_outcomes": [
-    "Faster, more flexible, and transparent design management compared with traditional methods, simplifying system design flow and early decision-making.",
-    "Early model integration is claimed to allow system compatibility assessment, reduce errors and potential conflicts, and start verification earlier than traditional methodologies.",
-    "The approach is claimed to reduce development time, improve efficiency, quality, and overall performance, and reduce cost and risk through simultaneous engineering, iterative design, communication, and risk management.",
-    "The Central Data Exchange System is claimed to enable faster validation of sizing, budgets, and design, reducing manual effort and minimizing errors.",
-    "In the BOSS comparison, the CE-MBSE feasibility study reports 22.59 kg mass versus 26.6 kg, 15M€ cost versus 22M€, and 1 month duration versus 3 months for the traditional methodology; the CE-MBSE Delta-V budget is 1.33 m/s versus 0.68 m/s.",
-    "Reliability and reproducibility outcomes are not explicitly reported as outcomes of EPS modeling."
-  ],
-  "verification_validation_linkage": "General linkage only: CE/MBSE tools are said to improve design, development, and verification, and early model integration is said to let verification begin in advance. The paper does not describe an explicit V&V, IVV, test-procedure model, or EPS-specific verification procedure.",
-  "key_findings": [
-    "The proposed methodology combines concurrent engineering with MBSE to support phase 0/A CubeSat design through simultaneous system modelling and iterative refinement.",
-    "The S3D Tool provides discipline spreadsheets for CubeSat subsystem sizing and budgets, including EPS, ADCS, communications, propulsion, thermal, payload, risk, and cost.",
-    "The Central Data Exchange System shares data across mission, system, subsystem, and component levels and checks common input consistency across disciplines.",
-    "CUTE-DB is an Excel-based database of commercially available CubeSat technologies, including power system integrated units, solar cells, solar arrays, PCDUs, and batteries, with specifications such as physical, functional, environmental, power, heritage, and price fields.",
-    "The BOSS case study used four concurrent design sessions from mission objectives and ConOps through subsystem sizing, COTS component selection, final budgets, cost, and risk mitigation.",
-    "The comparison with traditional methodology suggests reduced feasibility-analysis duration and lower estimated cost for CE-MBSE, but the authors note the comparison excludes post-study refinement."
-  ],
-  "limitations_gaps": [
-    "The paper states that the S3D Tool needs improvement and optimisation.",
-    "The Optical Payload calculation sheet needs updating and integration into the central repository, and dedicated spreadsheets for other payload types are needed.",
-    "A dedicated C&DH calculation sheet must be created to standardize performance calculations and requirements tracking.",
-    "Alternative environments such as Comet and Matlab System Composer are under investigation for improved model-based design, architecture definition, and collaboration, including possible later-phase applicability.",
-    "The CUTE-DB database management approach is still under discussion, with MySQL and other database solutions being evaluated for scalability and reliability.",
-    "The comparison with traditional methodology reports that results only account for the four sessions and not post-study refinement.",
-    "No formal threats-to-validity section is provided."
-  ],
-  "quality": {
-    "credible_venue_score": "1",
-    "limitations_discussed_score": "0.5",
-    "total_score": "1.5",
-    "rationale": "Published as a 2024 IAC conference paper. It includes a lessons learned and way forward section with tool and database improvement needs, but no formal limitations or validity-threat discussion."
+  "bibliographic_review_management": {
+    "extraction_file_path": "extractions/paper-0061.json",
+    "status_rationale": "Retained as supporting: it directly addresses CubeSat mission-level concurrent MBSE and includes EPS as a modeled subsystem and power-component database category, but it is not an EPS-specific MBSE verification study.",
+    "citation": "La Bella, E., Campioli, S., Iossa, L., Corpino, S., and Stesina, F. (2024). Concurrent Model-Based Approach for CubeSat Mission Design. IAC-24-D3.3, 75th International Astronautical Congress, Milan, Italy.",
+    "title": "Concurrent Model-Based Approach for CubeSat Mission Design",
+    "authors": [
+      "Emanuela La Bella",
+      "Serena Campioli",
+      "Luisa Iossa",
+      "Sabrina Corpino",
+      "Fabrizio Stesina"
+    ],
+    "venue": "75th International Astronautical Congress (IAC), Milan, Italy, 14-18 October 2024",
+    "doi_or_url": "10.52202/078374-0035",
+    "publisher": "International Astronautical Federation (IAF)",
+    "venue_type": "conference paper",
+    "source_database_or_route": [
+      "scopus: TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (verification OR validation OR test OR testing OR IVV OR V\\&V OR \"requirements-in-loop\" OR traceability))",
+      "scopus: TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+      "scopus: TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"test and evaluation\" OR \"automated testing\" OR testing) AND (\"model-based systems engineering\" OR MBSE OR SysML OR \"requirements modeling language\" OR traceability))",
+      "google_scholar abstract enrichment by exact title",
+      "semantic_scholar abstract enrichment by exact title"
+    ],
+    "research_questions_addressed": {
+      "RQ1": {
+        "relevance": "partial",
+        "rationale": "The paper gives a general CubeSat preliminary-design modeling approach and includes EPS sheets and power-component database categories, but it does not focus on EPS behavior or explicitly analyze minimal prior behavioral knowledge."
+      },
+      "RQ2": {
+        "relevance": "partial",
+        "rationale": "It claims system-level outcomes for speed, cost, transparency, consistency, integration, and reuse, with some comparator metrics, but reliability/reproducibility/integrability are not evaluated as EPS-specific outcomes."
+      },
+      "RQ3": {
+        "relevance": "partial",
+        "rationale": "The paper states that early integration enables verification to begin earlier and describes central consistency checks, but it does not provide EPS-specific verification procedures or pre-hardware test integration."
+      }
+    },
+    "lineage_overlap_notes": "The paper itself links this approach to STAR/SPACE4YOU work and reports use on BOSS, Geo-Profundo, and a cislunar inspector mission; no prior extraction, bibliography, or external source was consulted."
   },
-  "evidence_quotes": [
+  "study_context_population": {
+    "mission_platform": "CubeSat and micro/nanosatellite missions; detailed case is BOSS asteroid-observation CubeSat feasibility study.",
+    "size_form_factor": "BOSS final concept: 12U CubeSat; other reported case: 6U Geo-Profundo CubeSat; general CubeSat methodology.",
+    "mission_name": "BOSS (Bennu Observer Small Satellites); also Geo-Profundo and an in-orbit servicing cislunar inspector feasibility study.",
+    "mission_domain": "Deep-space asteroid observation and technology demonstration; LEO urban-growth monitoring; cislunar proximity inspection.",
+    "organization_type": "Academic research group at Politecnico di Torino within SPACE4YOU/NODES, intended to support academia, large system integrators, SMEs, accelerators, and incubators.",
+    "project_maturity": "Feasibility studies and preliminary design; phase 0/A-oriented methodology.",
+    "lifecycle_stage_addressed": "Conceptual mission design through ConOps, system architecture, subsystem sizing, budgets, and preliminary component selection before physical development.",
+    "development_context": "Concurrent design sessions in the PoliTo CubeSat Concurrent Design Facility with a 12-member multidisciplinary team and digital tools including S3D, CUTE-DB, STK, SolidWorks, Valispace, Jira/Miro, and PowerPoint.",
+    "eps_relevance": "power-budget/electrical-architecture",
+    "model_maturity": "Excel-based S3D tool and CUTE-DB implemented and tested in several CubeSat case studies; central data exchange is operational, but authors report needed improvements and possible migration to other environments."
+  },
+  "mbse_objective_scope_artifacts": {
+    "stated_objective_pain_point": "To make CubeSat preliminary design faster, more flexible, transparent, collaborative, and decision-oriented by combining concurrent engineering with model-based calculation sheets and a CubeSat technology database.",
+    "modeling_scope": [
+      "Mission design timeline and operative modes",
+      "Mission analysis and launch-vehicle data",
+      "System architecture and ConOps trade-offs",
+      "ADCS sizing and budget",
+      "Communication-system sizing and budget",
+      "Electrical Power System sizing and budget",
+      "Propulsion sizing and budget",
+      "Thermal-control sizing and budget",
+      "Optical payload sizing",
+      "Risk and cost assessment",
+      "Mass and volume budgets",
+      "COTS component technology database across CubeSat subsystems"
+    ],
+    "system_boundary_level_of_abstraction": "Preliminary mission/system/subsystem/component-selection level for CubeSat phase 0/A; primarily parametric spreadsheet sizing and budgets rather than detailed physics, software, or operational behavior models.",
+    "minimal_or_excluded_modeling": "Mission Analysis and Structure & Configuration sheets are manually populated from external tools; C&DH calculation sheet is not yet created; optical payload sheet needs updating and integration; different payloads require manual data entry; no SysML model, executable behavioral model, or formal verification model is shown.",
+    "required_prior_behavioral_domain_knowledge": "Not explicitly characterized; users must provide mission-analysis and system parameters and discipline inputs, while the sheets include theory, equations, assumptions, typical literature values, and a user manual to reduce setup burden.",
+    "handling_limited_behavioral_knowledge": "The approach uses standardized spreadsheets with 'From Theory' sheets, typical values from literature, automated calculations, common inputs/outputs, and CUTE-DB component data so early teams can size subsystems without building detailed behavioral models.",
+    "model_artifacts_used": [
+      "S3D discipline spreadsheets",
+      "S3D Central Data Exchange System",
+      "CUTE-DB Excel database",
+      "Input, sizing, budget, constants, cover, and change-log sheets",
+      "ConOps alternatives and trade-off table",
+      "Mission schedule and operative modes",
+      "System and subsystem architecture descriptions",
+      "Mass and volume budget table",
+      "Cost and risk assessment spreadsheets",
+      "STK mission-analysis results",
+      "SolidWorks configuration results",
+      "Final concurrent-study presentation"
+    ],
+    "generality_reuse_mechanism": [
+      "Standardized calculation-sheet organization across disciplines",
+      "Central repository with shared assumptions across mission, system, subsystem, and component levels",
+      "CUTE-DB organized by technology class with consistent item/developer/property/heritage/price sections",
+      "Reusable four-session concurrent-design workflow adapted from ESA CDF",
+      "User manual for spreadsheets",
+      "Use across multiple case studies: BOSS, Geo-Profundo, and cislunar inspection"
+    ]
+  },
+  "implementation_pathway_tailoring": {
+    "implementation_steps_or_phases": [
+      {
+        "step": "Tool preparation",
+        "inputs": "CubeSat design disciplines, literature equations and typical values, COTS technology data from online sources and developer websites.",
+        "outputs": "S3D Excel calculation sheets, Central Data Exchange System, and CUTE-DB.",
+        "actors_roles": "STAR/PoliTo research team; discipline engineers define sheets and database fields.",
+        "prerequisites": "Preliminary design objectives, discipline scope, and available component information.",
+        "completion_criteria": "Spreadsheets and database available for concurrent design sessions.",
+        "handoffs": "Tools are handed to system engineer and discipline engineers for session use."
+      },
+      {
+        "step": "Session 1: Kick-off and start of mission design",
+        "inputs": "Mission objectives, study requirements, drivers, initial assumptions.",
+        "outputs": "Preliminary mission analysis, candidate ConOps, mission architectures, initial cost and risk assessment.",
+        "actors_roles": "Project manager, system engineer, and discipline engineers in C2DF.",
+        "prerequisites": "Concurrent team, common workspace, initial mission brief.",
+        "completion_criteria": "Mission drivers understood and first ConOps/architecture options identified.",
+        "handoffs": "Candidate ConOps and assumptions feed Session 2 consolidation."
+      },
+      {
+        "step": "Session 2: Mission design consolidation",
+        "inputs": "ConOps alternatives, mission architecture options, preliminary trajectory and risk/cost data.",
+        "outputs": "Consolidated ConOps, refined Delta-V, defined system architecture, preliminary subsystem architectures, updated cost and risk.",
+        "actors_roles": "Mission analyst, system engineer, subsystem engineers, risk/cost engineer, project manager.",
+        "prerequisites": "Session 1 options and shared assumptions.",
+        "completion_criteria": "Baseline ConOps and architecture selected sufficiently for subsystem sizing.",
+        "handoffs": "Architecture and mission parameters feed S3D subsystem sizing in Session 3."
+      },
+      {
+        "step": "Session 3: System design",
+        "inputs": "Consolidated mission/system parameters, subsystem architectures, CUTE-DB data.",
+        "outputs": "Subsystem sizing, system budgets, preliminary COTS component options.",
+        "actors_roles": "Discipline engineers use S3D/CUTE-DB; system engineer manages central data exchange.",
+        "prerequisites": "Stable baseline enough to populate linked spreadsheets and database queries.",
+        "completion_criteria": "Budgets and candidate components available for final iteration.",
+        "handoffs": "Subsystem outputs and component candidates feed baseline consolidation."
+      },
+      {
+        "step": "Session 4: Consolidation of baseline",
+        "inputs": "Subsystem sizing, component candidates, system budgets, cost and risk results.",
+        "outputs": "Selected subsystem components, final system budgets, finalized cost budget and risk mitigation actions.",
+        "actors_roles": "Full concurrent team with decisions by consensus.",
+        "prerequisites": "Session 3 sizing and component options.",
+        "completion_criteria": "Baseline consolidated and ready for final presentation.",
+        "handoffs": "Final results and lessons learned support subsequent iteration of tools and method."
+      },
+      {
+        "step": "Post-session review and lessons learned",
+        "inputs": "Design outcomes, final presentation, comparison with traditional methodology.",
+        "outputs": "Lessons learned, tool-improvement backlog, comparison metrics.",
+        "actors_roles": "Authors/research team and concurrent-study participants.",
+        "prerequisites": "Completed concurrent study.",
+        "completion_criteria": "Recommended tool and process improvements identified.",
+        "handoffs": "S3D/CUTE-DB improvement work and possible migration to Comet, System Composer, or MySQL."
+      }
+    ],
+    "mapping_to_se_activities_lifecycle_gates": "The adapted ESA CDF process maps to phase 0/A feasibility and preliminary design: requirements/drivers, ConOps trade, architecture definition, subsystem sizing, budgets, cost/risk, and baseline consolidation. It does not demonstrate later lifecycle gates such as PDR/CDR, qualification, integration, or flight operations.",
+    "approach_classification": "Integrated MBSE/digital engineering",
+    "approach_classification_rationale": "The approach integrates MBSE concepts with concurrent engineering, Excel-based parametric models, a central data exchange repository, COTS technology database, external analysis/CAD tools, and collaborative facility practices rather than relying on a single formal MBSE model.",
+    "tailoring_rationale": [
+      "CubeSat missions need fast, cost-effective preliminary design.",
+      "ESA's standard CDF workflow was shortened to four 4-hour sessions for CubeSat feasibility studies.",
+      "COTS component databases support rapid technology-realistic subsystem selection.",
+      "Phase 0/A focus allows spreadsheet-level sizing rather than high-fidelity subsystem models.",
+      "Concurrent co-location and shared data reduce sequential handoffs in early design."
+    ],
+    "adoption_guidance_for_new_users": "partial guidance"
+  },
+  "toolchain_interoperability_lifecycle_continuity": {
+    "mbse_language_method_tool": [
+      "Concurrent Engineering",
+      "Model-Based Systems Engineering",
+      "S3D Tool in Microsoft Excel",
+      "S3D Central Data Exchange System",
+      "CUTE-DB in Microsoft Excel",
+      "Valispace",
+      "Jira/Miro",
+      "Systems Tool Kit (STK)",
+      "SolidWorks",
+      "Microsoft PowerPoint",
+      "No formal MBSE language such as SysML reported"
+    ],
+    "toolchain_architecture_data_flow": "Discipline engineers enter inputs into S3D spreadsheets; linked discipline sheets automatically populate Central Data Exchange inputs/outputs where possible; users manually enter external STK/SolidWorks results; CUTE-DB supports component selection from technology data; the system engineer oversees the central repository and shared assumptions.",
+    "interoperability_mechanisms": [
+      "Excel links between discipline spreadsheets and central repository",
+      "Automated and manual data input in the Central Data Exchange System",
+      "Check column for common input values used by multiple disciplines",
+      "Common Inputs/Outputs tables across mission, system, subsystem, and component levels",
+      "Manual transfer from STK and SolidWorks analyses",
+      "Consistent CUTE-DB sections for technology classes",
+      "Concurrent design sessions and internal presentations for human coordination"
+    ],
+    "syntax_semantic_continuity_evidence": "Continuity is supported by a central repository, shared assumptions, input/output tables, and consistency alerts, but the paper does not report a formal data schema, ontology, SysML profile, API, or automated semantic validation across tools.",
+    "software_hardware_system_integration_readiness": "The toolchain supports preliminary subsystem sizing, mass/volume budgets, risk/cost assessment, and COTS component selection; it does not report readiness for software-hardware integration, bench testing, qualification, or flight verification.",
+    "toolchain_limitations": [
+      "Excel-based database and spreadsheets may need replacement or complement by Comet, Matlab System Composer, or MySQL.",
+      "Mission Analysis and Structure & Configuration sheets are not linked and require manual entry from STK/SolidWorks.",
+      "Optical Payload sheet needs updating and central-repository integration.",
+      "Dedicated C&DH calculation sheet is not yet created.",
+      "Only optical payload is directly covered; other payloads require manual insertion.",
+      "No public model/tool availability or version-control process reported."
+    ],
+    "availability_reproducibility": "The paper reports a user manual, standardized sheets, online/official sources for CUTE-DB, and a June 2024 update status, but does not state that the S3D Tool, CUTE-DB, models, manuals, or case data are publicly available."
+  },
+  "eps_verification_specific": {
+    "eps_elements_modeled": [
+      "S3D Electrical Power System (EPS) spreadsheet",
+      "CUTE-DB Power System Integrated sheet",
+      "CUTE-DB Solar Cells sheet",
+      "CUTE-DB Solar Array sheet",
+      "CUTE-DB Power Conditioning and Distribution Unit (PCDU) sheet",
+      "CUTE-DB Batteries sheet",
+      "BOSS mass/volume budget entries for PCDU + Battery pack, 6Ux2 Deployable Solar Array, and 1.5U Solar Array"
+    ],
+    "eps_requirements_representation": "EPS requirements are only represented indirectly through mission-specific criteria, shared input values, sizing/budget outputs, and component-property data; no EPS requirement model, allocation, or traceability matrix is shown.",
+    "verification_validation_artifacts": [
+      "Central Data Exchange System Check column for common inputs",
+      "S3D EPS sizing and budget outputs",
+      "Mass and volume budget table including EPS components",
+      "Component selection against mission-specific criteria and requirements",
+      "Figures of merit comparing CE-MBSE and traditional feasibility-study outputs",
+      "Final concurrent-study presentation and lessons learned"
+    ],
+    "pre_physical_development_verification_mechanism": [
+      "Early model integration to assess system compatibility",
+      "Consistency checks for shared assumptions across disciplines",
+      "Automated data transfer from discipline spreadsheets to central repository",
+      "Preliminary subsystem sizing and budget validation before component selection",
+      "Comparison of feasibility-study figures of merit before physical development"
+    ],
+    "evidence_verification_integrated_in_model": "The paper states that integrating models early allows compatibility assessment and that 'the verification process can begin in advance'; the only concrete EPS-adjacent verification mechanism shown is the central repository's common-input Check column and linked sizing/budget workflow.",
+    "integration_test_readiness": "Not reported beyond preliminary design and component-selection readiness; no EPS hardware-in-the-loop, test plan, qualification procedure, or integration-test artifact is described."
+  },
+  "claimed_outcomes_value_mechanisms_evidence": [
     {
-      "claim": "Paper scope and core methodology",
-      "quote": "This paper presents a novel Concurrent Model-Based approach for CubeSat mission design",
-      "location": "Section 1"
+      "claim": "The approach provides faster, more flexible, and transparent early CubeSat design management than traditional methods.",
+      "outcome_category": "schedule/process transparency",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Concurrent engineering",
+        "Standardized S3D calculation sheets",
+        "CUTE-DB component database",
+        "Shared central data exchange"
+      ],
+      "artifact_or_process_linked": "Concurrent Model-Based approach, S3D Tool, CUTE-DB, concurrent design sessions",
+      "lifecycle_stage": "Phase 0/A preliminary design",
+      "evidence_type": "Author claim plus BOSS case-study comparison",
+      "metric_or_value_indicator": "Feasibility-analysis duration later reported as 1 month versus 3 months",
+      "baseline_comparator": "Traditional methodology",
+      "observed_effect_size_or_qualitative_effect": "Qualitatively faster, more flexible, and transparent; time reduced from 3 months to 1 month in Table 3.",
+      "evidence_source": "Abstract; Section 4.1 Table 3",
+      "direct_quote": "This combined concurrent design approach offers faster, more flexible, and transparent design management compared to traditional methods",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "The comparator methodology is not described in detail and authors note results include only four sessions, not post-study refinement."
     },
     {
-      "claim": "Concurrent model-based method combines CE and MBSE for micro/nanosatellites",
-      "quote": "The Concurrent Model-Based approach combines the principles of CE and MBSE to achieve a more efficient and effective system design process for micro and nanosatellite missions and services",
-      "location": "Section 1"
+      "claim": "The CE-MBSE feasibility study was completed faster than the traditional study.",
+      "outcome_category": "schedule reduction",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Parallel work by discipline teams",
+        "Near-real-time communication",
+        "Centralized shared assumptions",
+        "Four-session adapted CDF workflow"
+      ],
+      "artifact_or_process_linked": "BOSS concurrent design sessions and S3D/CUTE-DB-supported workflow",
+      "lifecycle_stage": "Feasibility/preliminary design",
+      "evidence_type": "Single-case baseline comparison",
+      "metric_or_value_indicator": "Feasibility analysis duration: 1 month versus 3 months",
+      "baseline_comparator": "Traditional methodology for same feasibility study",
+      "observed_effect_size_or_qualitative_effect": "Approximately threefold shorter feasibility-analysis duration.",
+      "evidence_source": "Section 4.1 Table 3 and explanatory paragraph",
+      "direct_quote": "Using the CE-MBSE methodology, the feasibility study was completed in one month, compared to the three months required when using the traditional approach.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "No detailed description of the traditional team's staffing, scope, or maturity; shorter study may omit post-study refinement."
     },
     {
-      "claim": "S3D tool subsystem and EPS scope",
-      "quote": "It consists of a set of calculation sheets implemented in Microsoft Excel dedicated to the main disciplines of the preliminary design phase of a CubeSat project: Attitude Determination and Control System (ADCS), Communication System (CommSys), Electrical Power System (EPS), Propulsion System, Thermal Control System (TCS), Optical Payload, Risk, and Cost.",
-      "location": "Section 2.1"
+      "claim": "The CE-MBSE approach reduced the estimated spacecraft mass relative to traditional methodology.",
+      "outcome_category": "technical performance/optimization",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Integrated iterative design",
+        "Real-time subsystem feedback",
+        "S3D budget calculations",
+        "Central data exchange"
+      ],
+      "artifact_or_process_linked": "BOSS mass and volume budget generated by the Central Data Exchange System",
+      "lifecycle_stage": "Preliminary design and subsystem sizing",
+      "evidence_type": "Single-case baseline comparison",
+      "metric_or_value_indicator": "Mass budget: 22.59 kg versus 26.6 kg",
+      "baseline_comparator": "Traditional methodology",
+      "observed_effect_size_or_qualitative_effect": "Approximately 15% lower mass reported by authors.",
+      "evidence_source": "Section 4.1 Table 3",
+      "direct_quote": "The CE-MBSE methodology resulted in a spacecraft mass of 22.59 kg, which is approximately 15% lower than the 26.6 kg calculated using the traditional methodology.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "The mass difference is attributed as 'likely' due to the approach, but design assumptions, margins, and component choices are not independently controlled."
     },
     {
-      "claim": "Central data exchange and consistency checking",
-      "quote": "This repository is linked to the other spreadsheets and allows for both automated and manual data input. Its purpose is to ensure that up-to-date information and data are shared across different disciplines and levels (mission, system, subsystem, component) while verifying that all disciplines operate on the same assumptions.",
-      "location": "Section 2.1"
+      "claim": "The CE-MBSE approach lowered estimated mission cost compared with the traditional approach.",
+      "outcome_category": "cost/ROI",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Concurrent design minimizing redesigns",
+        "Resource optimization",
+        "Reduced extensive iterations across teams",
+        "Cost spreadsheet"
+      ],
+      "artifact_or_process_linked": "S3D Cost spreadsheet and BOSS feasibility comparison",
+      "lifecycle_stage": "Feasibility/preliminary design",
+      "evidence_type": "Single-case baseline comparison",
+      "metric_or_value_indicator": "Cost assessment: 15M€ versus 22M€",
+      "baseline_comparator": "Traditional methodology",
+      "observed_effect_size_or_qualitative_effect": "7M€ lower estimated mission cost.",
+      "evidence_source": "Section 4.1 Table 3 and explanatory paragraph",
+      "direct_quote": "The CE-MBSE approach projected a total mission cost of 15 million euros, which is significantly lower than the 22 million euros estimated through the traditional approach.",
+      "evidence_confidence": "Moderate",
+      "threats_or_alternative_explanations": "Cost-estimation methods and uncertainty are not detailed; cost difference may reflect different maturity or assumptions."
     },
     {
-      "claim": "CUTE-DB includes EPS/power components",
-      "quote": "The current version of the CUTE-DB is an Excel-based database, covering several CubeSat technologies such as Deployers, Structures, Command and Data Handling (C&DH) systems, EPS, ADCS, CommSys, Propulsion Systems, Navigation Systems, Optical Payloads, TCS, Docking Systems, Mechanisms, and Platforms.",
-      "location": "Section 2.2"
+      "claim": "The central data exchange improves consistency and reduces manual effort and errors.",
+      "outcome_category": "integrability/consistency/error reduction",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Automated data transfer",
+        "Central repository",
+        "Check column for shared inputs",
+        "System engineer oversight"
+      ],
+      "artifact_or_process_linked": "S3D Central Data Exchange System",
+      "lifecycle_stage": "Concurrent preliminary design sessions",
+      "evidence_type": "Mechanism description without measured error-rate evidence",
+      "metric_or_value_indicator": "No error-rate metric reported",
+      "baseline_comparator": "Implicit manual/document-centric data handling",
+      "observed_effect_size_or_qualitative_effect": "Authors claim faster validation, minimized manual effort, and minimized errors.",
+      "evidence_source": "Section 2.1; Section 3.1",
+      "direct_quote": "It allows automated data transfer from the other spreadsheets of the S3D Tool and enables faster validation of the sizing, budgets and design, reducing manual effort and minimizing errors.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The paper does not quantify errors, rework, or validation time before and after centralization."
     },
     {
-      "claim": "General verification linkage",
-      "quote": "by integrating the models early in the development process, the system compatibility can be assessed, reducing errors and minimising potential conflicts, and the verification process can begin in advance with respect to traditional methodologies.",
-      "location": "Section 2"
+      "claim": "Early model integration permits earlier compatibility assessment and verification than traditional methods.",
+      "outcome_category": "verification/risk reduction",
+      "specificity": "generic space-system",
+      "mbse_mechanism": [
+        "Early integration of discipline models",
+        "Iterative design refinement",
+        "Shared models and tools"
+      ],
+      "artifact_or_process_linked": "Concurrent Model-Based approach and integrated S3D workflow",
+      "lifecycle_stage": "Early development/preliminary design before physical development",
+      "evidence_type": "Author-stated mechanism",
+      "metric_or_value_indicator": "No verification metric reported",
+      "baseline_comparator": "Traditional methodologies",
+      "observed_effect_size_or_qualitative_effect": "Verification can begin earlier; no specific EPS verification procedure demonstrated.",
+      "evidence_source": "Section 2",
+      "direct_quote": "by integrating the models early in the development process, the system compatibility can be assessed, reducing errors and minimising potential conflicts, and the verification process can begin in advance with respect to traditional methodologies.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No verification artifacts, test cases, model checks, or pass/fail evidence are provided."
     },
     {
-      "claim": "Claimed model-based outcomes",
-      "quote": "the Concurrent Model-Based approach can significantly reduce the development time of complex systems, improve their efficiency, quality, and overall performance, as well as reduce cost and risk.",
-      "location": "Section 2"
+      "claim": "CUTE-DB enables technology-realistic COTS component selection during preliminary design.",
+      "outcome_category": "component selection/technology realism",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "CubeSat Technologies Database",
+        "Technology properties, TRL, heritage, price, and interface data",
+        "Use in Session 3 component selection"
+      ],
+      "artifact_or_process_linked": "CUTE-DB, including EPS-related sheets for power system integrated, solar cells, solar arrays, PCDU, and batteries",
+      "lifecycle_stage": "Subsystem sizing and preliminary component selection",
+      "evidence_type": "Implemented database description and BOSS case-use description",
+      "metric_or_value_indicator": "Database covers multiple technology categories and is updated to June 2024; no selection accuracy metric reported",
+      "baseline_comparator": "Traditional/manual component search implied",
+      "observed_effect_size_or_qualitative_effect": "Immediate access to component specifications and performance data; supports selection against criteria.",
+      "evidence_source": "Abstract; Sections 2.2 and 3.1",
+      "direct_quote": "The CUTE-DB provides immediate access to specifications and performance data of commercially available components, supporting not only the component selection during the design process but also ensuring that CubeSat projects are based on current technological realities.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "Database completeness, update quality, and component-selection outcomes are not independently evaluated."
     },
     {
-      "claim": "Implementation and evaluation through case studies",
-      "quote": "the Concurrent Model-Based approach and the related tools (both S3D Tool and CUTE-DB) have been implemented and tested in several case studies, including the Bennu Observer Small Satellites (BOSS) mission, the Geo-Profundo mission, and the Cislunar mission",
-      "location": "Section 3.1"
+      "claim": "The approach improves collaboration, communication, and resource sharing across disciplines.",
+      "outcome_category": "collaboration/knowledge sharing",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Concurrent design sessions",
+        "Multidisciplinary roles in C2DF",
+        "Shared central repository",
+        "Internal presentations and consensus decisions"
+      ],
+      "artifact_or_process_linked": "Four concurrent design sessions and C2DF setup",
+      "lifecycle_stage": "Preliminary design",
+      "evidence_type": "Case-study process description",
+      "metric_or_value_indicator": "No collaboration metric or stakeholder survey reported",
+      "baseline_comparator": "Sequential traditional methods implied",
+      "observed_effect_size_or_qualitative_effect": "Encouraged communication and resource sharing; team worked simultaneously on mission aspects.",
+      "evidence_source": "Abstract; Section 3.1",
+      "direct_quote": "emphasizing collaborative learning through concurrent design sessions, and encouraging both communication and resource sharing across different technical fields.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "No independent stakeholder evaluation or communication-quality measurement is provided."
     },
     {
-      "claim": "BOSS platform",
-      "quote": "the final mission will consist of this concept of operation involving a 12U CubeSat launched on Falcon Heavy inside a mothercraft towards Bennu.",
-      "location": "Section 3.2"
+      "claim": "The approach supports reuse of lessons learned and development of best practices for small-satellite design.",
+      "outcome_category": "reproducibility/reuse/knowledge management",
+      "specificity": "nanosatellite system-level",
+      "mbse_mechanism": [
+        "Standardized tools",
+        "Lessons-learned collection",
+        "Repeated application to several case studies",
+        "Shared models and methods in SPACE4YOU"
+      ],
+      "artifact_or_process_linked": "S3D, CUTE-DB, SPACE4YOU common environment, final presentations and lessons learned",
+      "lifecycle_stage": "Post-study improvement and future mission preliminary design",
+      "evidence_type": "Reported repeated application and lessons-learned activity",
+      "metric_or_value_indicator": "No reuse frequency or reproducibility metric reported",
+      "baseline_comparator": "Not reported",
+      "observed_effect_size_or_qualitative_effect": "Lessons learned were collected and used for subsequent iteration of the approach and tools.",
+      "evidence_source": "Abstract; Sections 3.2, 4.2, and 5",
+      "direct_quote": "lessons learned have been collected, allowing for a subsequent iteration of the Concurrent Model-Based approach and the related digital tools.",
+      "evidence_confidence": "Weak",
+      "threats_or_alternative_explanations": "The paper does not provide access to lessons-learned artifacts or demonstrate independent reuse."
     },
     {
-      "claim": "Comparison with traditional methodology",
-      "quote": "Using the CE-MBSE methodology, the feasibility study was completed in one month, compared to the three months required when using the traditional approach.",
-      "location": "Section 4.1"
-    },
-    {
-      "claim": "Comparison caveat",
-      "quote": "However, the shown results only take into account the 4 sessions results and not the post-study refinement.",
-      "location": "Section 4.1"
-    },
-    {
-      "claim": "Explicit tool limitations and future work",
-      "quote": "Firstly, the S3D Tool needs to be improved and optimised.",
-      "location": "Section 4.2"
-    },
-    {
-      "claim": "Need for C&DH spreadsheet",
-      "quote": "a similar calculation sheet dedicated to the Command & Data Handling (C&DH) subsystem must also be created to standardize performance calculations and requirements tracking across all key systems.",
-      "location": "Section 4.2"
+      "claim": "Future database-tool evolution is expected to improve scalable and reliable data management.",
+      "outcome_category": "toolchain reliability/data management",
+      "specificity": "generic MBSE",
+      "mbse_mechanism": [
+        "Evaluation of MySQL and other database solutions",
+        "Database management for design and testing data"
+      ],
+      "artifact_or_process_linked": "CUTE-DB future database management system",
+      "lifecycle_stage": "Future toolchain development",
+      "evidence_type": "Forward-looking author aim",
+      "metric_or_value_indicator": "No reliability or scalability metric reported",
+      "baseline_comparator": "Current Excel-based database implied",
+      "observed_effect_size_or_qualitative_effect": "Aims to make data storage, retrieval, and management more efficient, scalable, and reliable.",
+      "evidence_source": "Section 4.2",
+      "direct_quote": "the project aims to establish a more scalable and reliable system for data management.",
+      "evidence_confidence": "Unsupported",
+      "threats_or_alternative_explanations": "The MySQL investigation is future work; no implementation or evaluation is reported."
     }
   ],
-  "notes_for_consistency": "The paper is a system-level CubeSat design-method paper rather than an EPS-specific MBSE paper. EPS appears as one subsystem spreadsheet and multiple CUTE-DB power categories. Verification is discussed only at a general methodology level; no EPS-specific verification procedure is reported. SysML is not reported."
+  "governance_roi_project_decision_linkage": {
+    "model_governance_strategy": "A system engineer primarily manages the S3D central repository, while all team members can access it; discipline spreadsheets include change logs and common input checks. Governance is mostly procedural via session kickoffs, consensus decisions, final presentations, and lessons learned, with no formal configuration-management plan reported.",
+    "traceability_to_deliverables_decisions_reviews": "Deliverables include ConOps trade-off, mission architecture, subsystem architectures, system budgets, component selections, risk/cost assessments, and final presentation. Traceability from requirements to model artifacts and verification results is not shown.",
+    "evaluation_criteria_model_quality_usefulness": "Usefulness is assessed through figures of merit and case outputs: mass budget, Delta-V budget, cost assessment, feasibility duration, consistency checks, and ability to select components meeting criteria; no formal model-quality rubric is reported.",
+    "roi_value_realization_evidence": "Table 3 reports lower cost estimate (15M€ vs 22M€) and shorter feasibility duration (1 month vs 3 months), but no program-level ROI realization, operational benefit, or uncertainty analysis is reported.",
+    "programmatic_gates_critical_design_events_supported": "Supports phase 0/A feasibility, ConOps consolidation, and baseline consolidation; later gates such as PDR, CDR, qualification, integration, test readiness reviews, or launch readiness are not demonstrated.",
+    "model_derived_performance_indicators_management_metrics": "Mass budget 22.59 kg, Delta-V budget 1.33 m/s, cost assessment 15M€, feasibility duration 1 month, TRL/heritage data in CUTE-DB, risk assessment and mitigation actions."
+  },
+  "gap_mapping": {
+    "practical_implementation_pathway": {
+      "classification": "addressed with evidence",
+      "rationale": "The paper provides a four-session implementation sequence, team roles/tools, and the BOSS case-study execution through baseline consolidation."
+    },
+    "toolchain_fragmentation_interoperability": {
+      "classification": "addressed with evidence",
+      "rationale": "The central data exchange, linked spreadsheets, check column, and manual STK/SolidWorks handoffs are described and used, while limitations motivate future tool/database migration."
+    },
+    "lightweight_resource_constrained_tailoring": {
+      "classification": "addressed conceptually",
+      "rationale": "The approach tailors ESA CDF to four short sessions for CubeSat phase 0/A and uses spreadsheet/COTS database support, but resource constraints are not measured."
+    },
+    "governance_project_deliverables_roi_value": {
+      "classification": "addressed conceptually",
+      "rationale": "The paper links models to budgets, baseline decisions, risk/cost assessment, and cost/time comparisons, but lacks formal governance, ROI validation, or lifecycle gate evidence."
+    },
+    "newspace_agile_distributed_rapid_iteration": {
+      "classification": "addressed conceptually",
+      "rationale": "Rapid, parallel, iterative design is central, with Jira/Miro noted, but the paper does not describe distributed agile ceremonies or NewSpace organizational deployment."
+    }
+  },
+  "synthesis_consistency": {
+    "key_findings_by_rq": {
+      "RQ1": [
+        "General nanosatellite mission modeling is implemented as a phase 0/A concurrent workflow with standardized S3D spreadsheets, a central data repository, and CUTE-DB.",
+        "EPS is included as one S3D discipline and as multiple CUTE-DB power technology categories, but EPS behavior is not modeled in detail.",
+        "Limited early knowledge is handled by theory/formula sheets, typical values, user manuals, component property data, and shared assumptions rather than high-fidelity behavior models."
+      ],
+      "RQ2": [
+        "Claimed outcomes include faster feasibility analysis, lower estimated cost, lower mass, improved consistency, reduced manual effort/errors, better collaboration, and technology-realistic component selection.",
+        "Evidence is strongest for the BOSS one-case comparator metrics and weak for reliability, reproducibility, and integrability claims.",
+        "EPS-specific reliability or reproducibility outcomes are not reported; EPS relevance is via power components and budgets within system-level outcomes."
+      ],
+      "RQ3": [
+        "Verification is discussed as an early benefit of model integration and as central-repository consistency checking.",
+        "The concrete mechanisms are common-input checks, sizing/budget validation, compatibility assessment, and figures-of-merit comparison before physical development.",
+        "No EPS-specific verification procedure, test case, hardware-in-the-loop, or requirements-to-verification traceability artifact is shown."
+      ]
+    },
+    "author_stated_limitations_gaps": [
+      "The shown comparison uses only four concurrent sessions and not post-study refinement.",
+      "The S3D Tool needs improvement and optimization.",
+      "The Optical Payload calculation sheet needs updating and integration into the central repository.",
+      "Spreadsheets for other payloads need to be developed.",
+      "A dedicated C&DH calculation sheet must be created.",
+      "Comet and Matlab System Composer are being explored for enhanced MBSE and later-phase suitability.",
+      "MySQL and other database solutions are being evaluated to improve database management.",
+      "Mission Analysis and Structure & Configuration sheets are not linked to S3D spreadsheets and require manual input from external tools."
+    ],
+    "extractor_identified_limitations_gaps": [
+      "No formal SysML or equivalent MBSE language/model is reported.",
+      "No public availability of S3D, CUTE-DB, user manual, or case model data is stated.",
+      "No explicit EPS requirements model, power-behavior model, or EPS verification/test artifacts are provided.",
+      "The traditional-method comparator lacks methodological detail and independent validation.",
+      "No measured reliability, reproducibility, model-quality, or stakeholder-collaboration metrics are reported.",
+      "Toolchain continuity relies partly on manual transfers from STK/SolidWorks and informal presentations."
+    ],
+    "direct_evidence_quotes": [
+      {
+        "topic": "Venue",
+        "quote": "75th International Astronautical Congress (IAC), Milan, Italy, 14-18 October 2024.",
+        "location": "Header"
+      },
+      {
+        "topic": "Approach objective",
+        "quote": "This paper presents a novel Concurrent Model-Based approach for CubeSat mission design",
+        "location": "Introduction"
+      },
+      {
+        "topic": "Phase scope",
+        "quote": "a design methodology particularly suitable for the phase 0/A [8] of a space project",
+        "location": "Section 2"
+      },
+      {
+        "topic": "S3D discipline scope including EPS",
+        "quote": "Attitude Determination and Control System (ADCS), Communication System (CommSys), Electrical Power System (EPS), Propulsion System, Thermal Control System (TCS), Optical Payload, Risk, and Cost.",
+        "location": "Section 2.1"
+      },
+      {
+        "topic": "Central data exchange purpose",
+        "quote": "Its purpose is to ensure that up-to-date information and data are shared across different disciplines and levels (mission, system, subsystem, component) while verifying that all disciplines operate on the same assumptions.",
+        "location": "Section 2.1"
+      },
+      {
+        "topic": "CUTE-DB EPS-related coverage",
+        "quote": "Power System Integrated, Solar Cells, Solar Array, Power Conditioning and Distribution Unit (PCDU), Batteries",
+        "location": "Section 2.2"
+      },
+      {
+        "topic": "Verification claim",
+        "quote": "the verification process can begin in advance with respect to traditional methodologies.",
+        "location": "Section 2"
+      },
+      {
+        "topic": "Session workflow",
+        "quote": "this process has been adapted, reducing the workflow into four, 4-hour sessions",
+        "location": "Section 3.1"
+      },
+      {
+        "topic": "BOSS mission context",
+        "quote": "The BOSS mission is a feasibility study of a CubeSat mission, with the aim to conduct in-situ observations of the Bennu asteroid",
+        "location": "Section 3.2"
+      },
+      {
+        "topic": "Comparison caveat",
+        "quote": "However, the shown results only take into account the 4 sessions results and not the post-study refinement.",
+        "location": "Section 4.1"
+      },
+      {
+        "topic": "Schedule evidence",
+        "quote": "Using the CE-MBSE methodology, the feasibility study was completed in one month, compared to the three months required when using the traditional approach.",
+        "location": "Section 4.1"
+      },
+      {
+        "topic": "Future tool limitation",
+        "quote": "possible enhancements to make the methodology suitable also for the later phases of a space project.",
+        "location": "Section 4.2"
+      }
+    ],
+    "notes_for_consistency_with_lineage": "The paper's internal lineage is SPACE4YOU/STAR at Politecnico di Torino, with repeated use on BOSS, Geo-Profundo, and a cislunar inspection feasibility study. No external lineage or previous extraction was consulted under the silo rule.",
+    "extraction_confidence": "high",
+    "extraction_confidence_reason": "The full Markdown paper was available and clearly describes the mission-level method, tools, workflow, and case metrics; confidence is lower only for EPS-specific verification because the paper largely does not report it."
+  },
+  "bibtex": "@inproceedings{paper-0061,\n  title = {Concurrent Model-Based Approach for CubeSat Mission Design},\n  author = {Emanuela La Bella and Serena Campioli and Luisa Iossa and Sabrina Corpino and Fabrizio Stesina},\n  year = {2024},\n  booktitle = {International Astronautical Congress (IAC 2024)},\n  publisher = {International Astronautical Federation},\n  doi = {10.52202/078374-0035},\n  url = {https://doi.org/10.52202/078374-0035}\n}"
 }
