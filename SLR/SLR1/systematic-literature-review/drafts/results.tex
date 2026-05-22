@@ -52,18 +52,18 @@ The scoping-review limitation coding further contextualizes quality: 31 studies 
 \subsection{Modeling focus and EPS relevance}
 \label{sec:results-modeling-focus-eps}
 
-The current scoping-review focus classification distinguished three modeling-focus groups: 32 studies modeled a whole nanosatellite with EPS or power as a subsystem, 7 modeled a whole nanosatellite or generic CubeSat without explicit EPS modeling, and 1 study was EPS-only or EPS-first.  The detailed EPS-relevance coding used for this SLR is narrower: 23 studies were coded as power-budget/electrical-architecture relevant, 8 as EPS-adjacent, 7 as system-level only, 1 as EPS-specific, and 1 as not EPS-relevant.
+Modeling focus and EPS relevance were synthesized as a single mutually exclusive coding for this SLR.  Thirty-two studies contained some EPS or power relevance: 23 reported concrete power-budget or electrical-architecture artifacts, 8 were EPS-adjacent, and 1 treated the EPS itself as the primary model scope.  The remaining 8 studies did not model EPS explicitly: 7 were system-level nanosatellite or CubeSat MBSE studies without power-specific artifacts, and 1 contributed nanosatellite V\&V evidence outside the EPS domain.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.78\linewidth]{figures/eps_relevance_counts.pdf}
-\caption{EPS relevance counts in the extracted corpus.}
+\caption{Mutually exclusive EPS relevance categories in the extracted corpus.}
 \label{fig:results-eps-relevance}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{Detailed EPS relevance counts.}
+\caption{SLR coding of modeling focus and EPS relevance.}
 \label{tab:results-eps-relevance-counts}
 \begin{tabular}{lr}
 \toprule
@@ -78,9 +78,9 @@ Not EPS-relevant & 1 \\
 \end{tabular}
 \end{table}
 
-The only EPS-specific study was the open-source Papyrus/SysML power-subsystem model with Java-based parameter and requirement-traceability extraction \cite{paper-0026}.  Most EPS evidence was instead embedded in system-level models or preliminary design studies.  Examples include RAX/CubeSat energy and data simulations \cite{paper-0001,paper-0003,paper-0008}, SysML parametric mass and power-margin checks \cite{paper-0080}, Capella/Arcadia preliminary EPS allocation for 3ColStar \cite{paper-0078}, CNES concurrent electrical-architecture simulations \cite{paper-0053}, and PLM/Dymola requirements-in-the-loop power simulations \cite{paper-0059}.  The not-EPS-relevant record, EIRSAT-1, still contributed V\&V evidence through a communications-subsystem verification demonstrator rather than an EPS model \cite{paper-0063}.
+The 23 power-budget/electrical-architecture studies should therefore be read as studies with concrete power-related evidence, not as 23 EPS-centered MBSE studies.  Most of this evidence was embedded in system-level models or preliminary design studies.  Examples include RAX/CubeSat energy and data simulations \cite{paper-0001,paper-0003,paper-0008}, SysML parametric mass and power-margin checks \cite{paper-0080}, Capella/Arcadia preliminary EPS allocation for 3ColStar \cite{paper-0078}, CNES concurrent electrical-architecture simulations \cite{paper-0053}, and PLM/Dymola requirements-in-the-loop power simulations \cite{paper-0059}.  By contrast, only one study made the EPS itself the model system of interest: the open-source Papyrus/SysML power-subsystem model with Java-based parameter and requirement-traceability extraction \cite{paper-0026}.  The not-EPS-relevant record, EIRSAT-1, still contributed V\&V evidence through a communications-subsystem verification demonstrator rather than an EPS model \cite{paper-0063}.
 
-The scoping-review scope tags were broader than the SLR EPS-relevance categories: 33 studies had an EPS/power scope tag, 32 had verification in scope, 27 had budget in scope, 27 had simulation in scope, and 26 used a reference model or template.  Thus, EPS appeared frequently as a system concern, but direct EPS-first MBSE evidence was sparse.
+This synthesis is intentionally stricter than simply counting any paper that mentioned power or included a generic EPS block.  EPS appeared frequently as a system concern, but direct EPS-first MBSE evidence remained sparse.
 
 \subsection{MBSE approaches, languages, and toolchains}
 \label{sec:results-approaches-tools}
