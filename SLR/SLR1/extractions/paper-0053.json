@@ -3,587 +3,1781 @@
   "tier": "supporting",
   "year": 2025,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The corpus metadata provides a DOI and Scopus provenance, suggesting a formal indexed publication, but the paper markdown and supplied metadata do not report the venue name, publisher, or peer-review details.",
-        "evidence": [
-          "Corpus metadata DOI: 10.1117/12.3062667.",
-          "Corpus metadata provenance includes Scopus records, but the markdown does not identify the venue."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The study states its preliminary-phase scope, single 16U use case, worst-case 48-hour scenario reduction, and lifecycle-extension condition based on file-standard continuity.",
-        "evidence": [
-          "The selected use case to illustrate this paper is a 16U nanosatellite operating on low-earth orbit",
-          "reducing it to a period of 48h only that could be used to size the power subsystem and still be representative of the whole mission",
-          "it could also be implemented for phases A/B/C/D by adding a satellite manufacturer/provider in the loop as long as the files standard is still respected"
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The platform, orbit, science mission, organizations, and preliminary feasibility/pre-sizing context are described clearly.",
-        "evidence": [
-          "The selected use case to illustrate this paper is a 16U nanosatellite operating on low-earth orbit its mission being the 3D mapping of hot stars dynamic environment by using ultraviolet spectropolarimetry measurements from space for the first time.",
-          "At CNES, PASO (Orbital Systems Architecture Plateau) is leading space systems preliminary phases and aims at formulating missions needs and pre-sizing systems in order to conclude on their feasibility.",
-          "The first system analyses concluded that the best orbit for the mission is an SSO orbit at low altitudes (between 500 and 600 km)."
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The workflow, tools, artifacts, and system/EPS boundary are described well enough for comparison, but no formal MBSE language, data schema, model repository, or complete executable parameter set is provided.",
-        "evidence": [
-          "Two main tools are constituting the base of the process.",
-          "IDM-CIC: used for system description (at system and sub-systems level) and for system basic geometry definition.",
-          "Simu-CIC: used for mission scenario definition and ephemeris generation.",
-          "The model is defined in the Opalis software."
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Outcome claims are tied to the common technical reference, toolchain interoperability, standardized files, power budgets/profiles, energy-flow conversion, and Opalis simulations.",
-        "evidence": [
-          "The main added value of this process is that it allows to define an adaptable and interoperable model.",
-          "The iterative aspect of the complete workflow including the simulation methodology, coupled with the concurrent engineering process involving each subsystem expert, enables to perform several analyses, trade-off studies comparisons and sizings in parallel",
-          "the interoperability of the different tools and methods, made possible by the standardization of files format, is a real enabler for the concurrent engineering process"
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper provides case-study simulation outputs, SOC values, and final EPS sizing choices, but no baseline comparison, independent validation, stakeholder evaluation, hardware test, or flight data.",
-        "evidence": [
-          "After a few runs of simulations by making all the parameters mentioned above vary, here is the result of a stable energy budget:",
-          "the minimum SOC (State Of Charge) reached during the simulation is 85%",
-          "SOC min reached = 27.7%"
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The workflow traces practical handoffs from equipment/modes to power budget, power profile, energy flows, simulations, and sizing decisions, but no formal requirements or verification traceability matrix is reported.",
-        "evidence": [
-          "Attributing a consumed/dissipated power to each piece of equipment in order to obtain the global power budget of the system (including margins).",
-          "Converting the power budget into a power profile (system power consumption over time) using IDM-Power plugin.",
-          "The ultimate goal of the simulation process is to refine the power subsystem definition and to size elements"
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper reports data-exchange mechanisms and workflow continuity through standard files and plugins, but no model files, repository, complete data schemas, or independently reproducible assets are provided.",
-        "evidence": [
-          "It is a proprietary but open tool developed by CNES that allows performing power simulations.",
-          "It takes the CCSDS-like standard files generated by Simu-CIC (orbital scenario description) as an input",
-          "as long as the files standard is still respected"
-        ]
-      }
-    ],
-    "total_score": 5.5,
-    "max_score": 8,
-    "normalized_score": 0.688,
-    "overall_rationale": "The paper is a clear preliminary-phase EPS/electrical-architecture workflow case with concrete simulation artifacts and model-enabled claims, but venue details, formal MBSE language, reproducibility assets, and validation evidence are limited."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0053.json",
-    "status_rationale": "Retained as supporting: it directly addresses nanosatellite electrical architecture/EPS modeling, power-budget generation, toolchain interoperability, and pre-physical simulation, but provides limited formal MBSE method and validation evidence.",
-    "citation": "Boan, P. (2025). Concurrent Engineering Process for Electrical Architecture of Nanosatellites Preliminary Phases. DOI: 10.1117/12.3062667.",
-    "title": "CONCURRENT ENGINEERING PROCESS FOR ELECTRICAL ARCHITECTURE OF NANOSATELLITES PRELIMINARY PHASES",
-    "authors": [
-      "Pierre Boan"
-    ],
-    "venue": "not reported",
-    "doi_or_url": "10.1117/12.3062667",
-    "publisher": "not reported",
-    "venue_type": "not reported",
-    "source_database_or_route": [
-      "scopus",
-      "semantic_scholar abstract_enrichment"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The paper shows how to model a nanosatellite mission and EPS/electrical architecture using a common technical reference, mode-based power budgets, ephemeris-derived flows, and Opalis simulations, but does not explicitly frame the method as a general minimal-behavior-knowledge reference model."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims integrability, smooth workflow, rapid change analysis, and sizing/trade-off value from model-enabled tools; reliability is only indirectly addressed through SOC/energy margins and reproducibility is weakly supported by file-standard discussion."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "Pre-physical verification is represented by energy-balance and worst-case battery simulations with SOC thresholds, but the paper does not provide a formal verification model, requirements trace, or physical test integration."
-      }
+    "credible_venue": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Prompt metadata reports Scopus provenance and DOI 10.1117/12.3062667 for a formal scholarly paper; the supplied markdown does not name the venue, so confidence is medium.",
+      "evidence": [
+        {
+          "quote": "DOI=10.1117/12.3062667; source provenance includes scopus records.",
+          "location": "prompt metadata"
+        }
+      ],
+      "confidence": "medium"
     },
-    "lineage_overlap_notes": "No other papers or previous extractions were consulted. Possible overlap with other CNES concurrent-engineering or Opalis work is not assessed under the silo rule."
+    "limitations_discussed": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The authors state scope boundaries and a conditional future extension beyond preliminary phases, but do not discuss threats to validity, validation limits, or process-evaluation limitations in depth.",
+      "evidence": [
+        {
+          "quote": "The presented use case describes the process for preliminary phases, involving the laboratory and the space agency, but it could also be implemented for phases A/B/C/D by adding a satellite manufacturer/provider in the loop as long as the files standard is still respected.",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "The paper clearly describes the 16U nanosatellite mission concept, orbit, scientific objective, CNES/LESIA roles, and preliminary feasibility lifecycle context.",
+      "evidence": [
+        {
+          "quote": "The selected use case to illustrate this paper is a 16U nanosatellite operating on low-earth orbit its mission being the 3D mapping of hot stars dynamic environment by using ultraviolet spectropolarimetry measurements from space for the first time.",
+          "location": "Section 1"
+        },
+        {
+          "quote": "This mission concept has been carried out by the French laboratory LESIA (Laboratory for Space Studiers and Astrophysics Instrumentation) with the help of CNES which is in charge of evaluating its feasibility.",
+          "location": "Section 1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The workflow, tools, data flow, EPS elements, and simulation parameters/results are described well enough for comparison, but no model files, detailed file standards, or tool access/package details are provided and several tools are CNES-specific.",
+      "evidence": [
+        {
+          "quote": "In the end, the most common process would then be the following:",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The model is defined in the Opalis software. It is a proprietary but open tool developed by CNES that allows performing power simulations.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Outcome claims are linked to the concurrent engineering workflow, common database, standardized files, plugins, Opalis simulations, and adaptable/interoperable model rather than only to EPS hardware choices.",
+      "evidence": [
+        {
+          "quote": "The main added value of this process is that it allows to define an adaptable and interoperable model.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "Moreover, the interoperability of the different tools and methods, made possible by the standardization of files format, is a real enabler for the concurrent engineering process",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The paper provides a single use-case workflow, executable power-simulation outputs, and design-analysis results, but lacks baseline comparison, independent validation, physical test/flight evidence, or quantitative evaluation of process outcomes such as speed/ease/interoperability.",
+      "evidence": [
+        {
+          "quote": "After a few runs of simulations by making all the parameters mentioned above vary, here is the result of a stable energy budget:",
+          "location": "Section 3"
+        },
+        {
+          "quote": "One last thing to mention is that the minimum SOC (State Of Charge) reached during the simulation is 85%",
+          "location": "Section 3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The paper traces tool data flow from system description, mission scenario, budgets, modes, ephemeris, and energy flows into Opalis simulation, but it does not report formal requirements, verification matrices, design-decision trace links, or governed model traceability.",
+      "evidence": [
+        {
+          "quote": "This plugin allows to allocate the power consumptions described in the IDM-CIC power budget to system modes. It then allows to obtain a temporal view of the system's power consumption.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "It takes the CCSDS-like standard files generated by Simu-CIC (orbital scenario description) as an input in order to automatically convert the ephemeris data (such as sun angles) into flows for the solar generator.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The paper names the CNES tools, plugins, standard-file concept, and workflow, but does not make models, data, scripts, or precise exchange schemas available.",
+      "evidence": [
+        {
+          "quote": "Two main tools are constituting the base of the process. These tools are non-compulsory but are relying on standards in order to be as interoperable as possible",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The energy flows are generated by the Flows Manager plugin that is now included natively in Opalis.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "16U nanosatellite in low-Earth orbit/SSO at approximately 500-600 km.",
-    "size_form_factor": "16U",
-    "mission_name": "not reported",
-    "mission_domain": "Astrophysics mission for 3D mapping of hot stars dynamic environment using ultraviolet spectropolarimetry.",
-    "organization_type": "National space agency and research laboratory: CNES with LESIA laboratory.",
-    "project_maturity": "Preliminary feasibility assessment and pre-sizing.",
-    "lifecycle_stage_addressed": "Preliminary phases; potential extension to phases A/B/C/D is mentioned if the file standard is maintained.",
-    "development_context": "CNES PASO concurrent engineering process involving system architects, thematic experts, flight dynamics experts, electrical architect, and laboratory stakeholders.",
-    "eps_relevance": "power-budget/electrical-architecture",
-    "model_maturity": "Preliminary executable simulation workflow demonstrated on one case; no released model, physical integration, or flight validation reported."
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Prompt metadata reports Scopus provenance and DOI 10.1117/12.3062667 for a formal scholarly paper; the supplied markdown does not name the venue, so confidence is medium.",
+      "evidence": [
+        {
+          "quote": "DOI=10.1117/12.3062667; source provenance includes scopus records.",
+          "location": "prompt metadata"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The authors state scope boundaries and a conditional future extension beyond preliminary phases, but do not discuss threats to validity, validation limits, or process-evaluation limitations in depth.",
+      "evidence": [
+        {
+          "quote": "The presented use case describes the process for preliminary phases, involving the laboratory and the space agency, but it could also be implemented for phases A/B/C/D by adding a satellite manufacturer/provider in the loop as long as the files standard is still respected.",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The paper clearly describes the 16U nanosatellite mission concept, orbit, scientific objective, CNES/LESIA roles, and preliminary feasibility lifecycle context.",
+      "evidence": [
+        {
+          "quote": "The selected use case to illustrate this paper is a 16U nanosatellite operating on low-earth orbit its mission being the 3D mapping of hot stars dynamic environment by using ultraviolet spectropolarimetry measurements from space for the first time.",
+          "location": "Section 1"
+        },
+        {
+          "quote": "This mission concept has been carried out by the French laboratory LESIA (Laboratory for Space Studiers and Astrophysics Instrumentation) with the help of CNES which is in charge of evaluating its feasibility.",
+          "location": "Section 1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The workflow, tools, data flow, EPS elements, and simulation parameters/results are described well enough for comparison, but no model files, detailed file standards, or tool access/package details are provided and several tools are CNES-specific.",
+      "evidence": [
+        {
+          "quote": "In the end, the most common process would then be the following:",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The model is defined in the Opalis software. It is a proprietary but open tool developed by CNES that allows performing power simulations.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims are linked to the concurrent engineering workflow, common database, standardized files, plugins, Opalis simulations, and adaptable/interoperable model rather than only to EPS hardware choices.",
+      "evidence": [
+        {
+          "quote": "The main added value of this process is that it allows to define an adaptable and interoperable model.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "Moreover, the interoperability of the different tools and methods, made possible by the standardization of files format, is a real enabler for the concurrent engineering process",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides a single use-case workflow, executable power-simulation outputs, and design-analysis results, but lacks baseline comparison, independent validation, physical test/flight evidence, or quantitative evaluation of process outcomes such as speed/ease/interoperability.",
+      "evidence": [
+        {
+          "quote": "After a few runs of simulations by making all the parameters mentioned above vary, here is the result of a stable energy budget:",
+          "location": "Section 3"
+        },
+        {
+          "quote": "One last thing to mention is that the minimum SOC (State Of Charge) reached during the simulation is 85%",
+          "location": "Section 3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper traces tool data flow from system description, mission scenario, budgets, modes, ephemeris, and energy flows into Opalis simulation, but it does not report formal requirements, verification matrices, design-decision trace links, or governed model traceability.",
+      "evidence": [
+        {
+          "quote": "This plugin allows to allocate the power consumptions described in the IDM-CIC power budget to system modes. It then allows to obtain a temporal view of the system's power consumption.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "It takes the CCSDS-like standard files generated by Simu-CIC (orbital scenario description) as an input in order to automatically convert the ephemeris data (such as sun angles) into flows for the solar generator.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper names the CNES tools, plugins, standard-file concept, and workflow, but does not make models, data, scripts, or precise exchange schemas available.",
+      "evidence": [
+        {
+          "quote": "Two main tools are constituting the base of the process. These tools are non-compulsory but are relying on standards in order to be as interoperable as possible",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The energy flows are generated by the Flows Manager plugin that is now included natively in Opalis.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "supporting"
+      ],
+      "status": "coded",
+      "rationale": "Use prompt metadata screening_tier=supporting; the paper is relevant to EPS/electrical-architecture MBSE workflow but lacks formal RQ3 IVV and strong outcome evidence.",
+      "evidence": [
+        {
+          "quote": "screening_tier=supporting",
+          "location": "prompt metadata"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives a concrete nanosatellite electrical-architecture modeling workflow, but it is a mission-specific concurrent engineering use case rather than a general reference model for minimal behavioral knowledge.",
+      "evidence": [
+        {
+          "quote": "The objective of this paper is to describe the approach through the prism of an electrical architect",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper centrally claims interoperability, adaptable models, parallel analyses, trade studies, and feasibility decisions from the EPS/electrical workflow, all relevant to integrability and MBSE value outcomes.",
+      "evidence": [
+        {
+          "quote": "continuity and interoperability made possible between engineers and their tools by the standardization of formats and files",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses pre-physical executable power simulations and acceptance thresholds for energy feasibility, but does not present a formal IVV model, test procedures, or verification matrix integrated with EPS requirements.",
+      "evidence": [
+        {
+          "quote": "The ultimate goal of the simulation process is to refine the power subsystem definition and to size elements (in particular cells and accumulators assemblies for solar panels and battery) in order to reach an energy balance between generation, storage and usage.",
+          "location": "Section 3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A"
+      ],
+      "status": "coded",
+      "rationale": "The work concerns preliminary mission formulation, feasibility, and pre-sizing; later A/B/C/D use is described only as possible future extension.",
+      "evidence": [
+        {
+          "quote": "At CNES, PASO (Orbital Systems Architecture Plateau) is leading space systems preliminary phases and aims at formulating missions needs and pre-sizing systems in order to conclude on their feasibility.",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student",
+        "agency",
+        "agile/concurrent design",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The use case involves LESIA laboratory and CNES agency in a concurrent engineering process for a 16U nanosatellite with volume/power constraints; the paper explicitly describes mission agility and concurrent design.",
+      "evidence": [
+        {
+          "quote": "This mission concept has been carried out by the French laboratory LESIA (Laboratory for Space Studiers and Astrophysics Instrumentation) with the help of CNES which is in charge of evaluating its feasibility.",
+          "location": "Section 1"
+        },
+        {
+          "quote": "This use case is of particular interest as it depicts a highly agile mission causing a lot of interlocked trade-offs and architecture choices",
+          "location": "Section 1"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "power-budget/electrical-architecture"
+      ],
+      "status": "coded",
+      "rationale": "The paper focuses on electrical architecture, power budgets, solar-panel/battery sizing, regulators, and energy-balance simulation for a nanosatellite.",
+      "evidence": [
+        {
+          "quote": "As an electrical architect specifically, the objective of any project preliminary phase would be: To define preliminary power budgets, To pre-size solar panels and batteries",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "prototype demonstration",
+        "executable model",
+        "project-applied model"
+      ],
+      "status": "coded",
+      "rationale": "A mission use case is modeled and run through Opalis simulations with quantitative outputs and resulting preliminary architecture, but it is not validated/operational.",
+      "evidence": [
+        {
+          "quote": "After a few runs of simulations by making all the parameters mentioned above vary, here is the result of a stable energy budget",
+          "location": "Section 3"
+        },
+        {
+          "quote": "These various runs of simulations and tradeoffs finally led to the following final satellite electrical architecture",
+          "location": "Section 3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "simulation"
+      ],
+      "status": "coded",
+      "rationale": "The workflow builds a mission scenario, satellite/system and subsystem descriptions, EPS architecture, interfaces/data flows, power budgets and temporal power behavior, then uses simulation to check energy balance and feasibility.",
+      "evidence": [
+        {
+          "quote": "setting up a common technical reference (satellite description and mission), with the aim of producing system-level budgets",
+          "location": "Section 2"
+        },
+        {
+          "quote": "A model of the power sub-system: battery and solar generator assemblies, power bus topology, type of architecture, regulators",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "block definition/internal block diagrams",
+        "parametrics",
+        "trade-study models",
+        "interface control models",
+        "power budgets",
+        "executable simulations",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Reported artifacts include system/subsystem descriptions, power subsystem architecture diagrams, model parameter tables, power budgets, technology/configuration trade studies, and Opalis simulations; other artifacts include ephemeris/orbital-scenario files, energy-flow files, and temporal power profiles.",
+      "evidence": [
+        {
+          "quote": "The power profile is generated thanks to the IDM-Power plugin, based on the following power budget allocated to mission modes and the associated temporal scenario.",
+          "location": "Section 3"
+        },
+        {
+          "quote": "The tool includes precise modelling of electrical architectures including batteries, solar panels, regulators and bus topologies by taking into account the specific features of each element such as losses, temperature impacts",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper describes a repeatable workflow using standard files and common tools, though not a reusable reference model, template, or public package.",
+      "evidence": [
+        {
+          "quote": "In the end, the most common process would then be the following",
+          "location": "Section 2"
+        },
+        {
+          "quote": "as long as the files standard is still respected",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Extended MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The approach connects system/mission description, common database, plugins, and power simulations across multiple experts and domains, but does not show full digital-engineering continuity into downstream hardware/software integration or V&V.",
+      "evidence": [
+        {
+          "quote": "each architect therefore works in conjunction with each other thanks to a common database",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The combination of these two tools allows for a complete and comprehensive definition of the satellite and its orbital scenario",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "available tools",
+        "organizational constraints"
+      ],
+      "status": "coded",
+      "rationale": "Tool selection is framed around CNES concurrent-engineering tools relying on standards, and the process is organized by a concurrent engineering authority to meet scientific and technical objectives.",
+      "evidence": [
+        {
+          "quote": "Two main tools are constituting the base of the process. These tools are non-compulsory but are relying on standards in order to be as interoperable as possible",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The whole process is organized by a concurrent engineering authority who ensures that scientific and technical objectives are met.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides a numbered workflow and required inputs/outputs, but not a complete adopter playbook, training plan, or reusable package.",
+      "evidence": [
+        {
+          "quote": "0) Preliminary work:",
+          "location": "Section 2"
+        },
+        {
+          "quote": "5) Defining the simulation model Running energy balance simulations using Opalis",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "custom tools",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The toolchain is based on CNES-specific IDM-CIC, Simu-CIC, IDM-Power, Opalis, Flows Manager, IDM-View and IDM-Plot rather than listed SysML/Capella/Cameo tools.",
+      "evidence": [
+        {
+          "quote": "IDM-CIC: used for system description (at system and sub-systems level) and for system basic geometry definition.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "Simu-CIC: used for mission scenario definition and ephemeris generation.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The model is defined in the Opalis software.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "plugin",
+        "import/export"
+      ],
+      "status": "coded",
+      "rationale": "Interoperability is implemented through plugins and movement of standard/CCSDS-like files, power profiles, and ephemeris/flow data between IDM-CIC, Simu-CIC, and Opalis.",
+      "evidence": [
+        {
+          "quote": "It takes the CCSDS-like standard files generated by Simu-CIC (orbital scenario description) as an input in order to automatically convert the ephemeris data (such as sun angles) into flows for the solar generator.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "Importing power profile into the power simulation software (Opalis).",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [
+        "vendor lock-in"
+      ],
+      "status": "coded",
+      "rationale": "Extractor-identified: the workflow depends on CNES-specific tools and Opalis is described as proprietary, so reproducibility and portability may be constrained even though the authors emphasize open/standard file concepts.",
+      "evidence": [
+        {
+          "quote": "The model is defined in the Opalis software. It is a proprietary but open tool developed by CNES",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "loads",
+        "modes",
+        "margins",
+        "power budgets",
+        "degradation",
+        "interfaces"
+      ],
+      "status": "coded",
+      "rationale": "The power model covers solar generators/cells, batteries/accumulators, regulators and bus topology, system loads by mission mode, margins, end-of-life parameters, losses/temperature impacts, and electrical interfaces.",
+      "evidence": [
+        {
+          "quote": "battery and solar generator assemblies, power bus topology, type of architecture, regulators",
+          "location": "Section 2"
+        },
+        {
+          "quote": "Total w/ margin",
+          "location": "Table 1"
+        },
+        {
+          "quote": "End of life parameters considered",
+          "location": "Section 3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [
+        "simulation scenarios",
+        "acceptance criteria",
+        "executable checks"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses worst-case observation and survival scenarios, SOC/energy-balance thresholds, and executable Opalis simulations; it does not report formal test cases/procedures or a verification matrix.",
+      "evidence": [
+        {
+          "quote": "Flight dynamics experts from CNES thus extracted from the global observation plan provided by the LESIA the worst case scenarios in terms of sun illumination, reducing it to a period of 48h only that could be used to size the power subsystem and still be representative of the whole mission.",
+          "location": "Section 3"
+        },
+        {
+          "quote": "In that case, a satisfactory equilibrium for the aforementioned power subsystem would thus be defined as a battery cycling between 75% and a bit less than 100% of state of charge, meaning that the energy production is sufficient to power the satellite as well as charging the battery during low illumination time windows, while still ensuring a sufficient margin in the eventuality of a satellite malfunction.",
+          "location": "Section 3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "simulation-in-the-loop",
+        "parametric checks",
+        "trade-study verification",
+        "virtual integration"
+      ],
+      "status": "coded",
+      "rationale": "Before physical development, the approach virtually integrates mission ephemeris, power profile, and EPS model in Opalis, then varies parameters and technologies/configurations to check energy balance and survival margins.",
+      "evidence": [
+        {
+          "quote": "To do so, S and P parameters (amount of elements in Series and Parallel) are readjusted through multiple runs of simulations, until a satisfactory equilibrium state is reached at the power subsystem level.",
+          "location": "Section 3"
+        },
+        {
+          "quote": "This step is also an opportunity to carry out various trade-offs between technologies and architecture principles",
+          "location": "Section 3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No explicit links are reported from the model to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "integrability/interoperability",
+        "decision support",
+        "effort reduction",
+        "communication/stakeholder alignment",
+        "risk reduction",
+        "mission assurance",
+        "generality/reuse",
+        "lifecycle continuity"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims cover adaptable/interoperable models, fast/easy change analysis, parallel trade studies and sizing, mission-feasibility decision support, communication among experts, and possible later-lifecycle reuse.",
+      "evidence": [
+        {
+          "quote": "any change on the mission can be studied almost instantly",
+          "location": "Section 2"
+        },
+        {
+          "quote": "leading to a smooth workflow",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "EPS-specific",
+        "nanosatellite system-level",
+        "generic space-system"
+      ],
+      "status": "coded",
+      "rationale": "Most claims are tied to electrical/EPS analyses of a 16U nanosatellite use case; some interoperability and later-phase extension claims are framed more generally for satellite projects.",
+      "evidence": [
+        {
+          "quote": "from the electrical perspective",
+          "location": "Conclusion"
+        },
+        {
+          "quote": "it could also be implemented for phases A/B/C/D",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "executable simulation",
+        "parametric analysis",
+        "automated generation",
+        "model transformation",
+        "shared repository",
+        "tool integration",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms include a common database, standardized file exchange, plugins that generate/convert flows and profiles, parametric Opalis simulations, and tool interoperability.",
+      "evidence": [
+        {
+          "quote": "common database",
+          "location": "Section 2"
+        },
+        {
+          "quote": "automatically convert the ephemeris data (such as sun angles) into flows for the solar generator",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "PDR",
+        "CDR",
+        "implementation"
+      ],
+      "status": "coded",
+      "rationale": "Demonstrated claims occur in preliminary concept/feasibility work; the paper also asserts possible extension to phases A/B/C/D with a manufacturer, but without evidence for later stages.",
+      "evidence": [
+        {
+          "quote": "preliminary phases",
+          "location": "Abstract"
+        },
+        {
+          "quote": "could also be implemented for phases A/B/C/D",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration",
+        "Executable model or simulation result",
+        "Trade-study or requirements-checking result",
+        "Quantitative metric without baseline"
+      ],
+      "status": "coded",
+      "rationale": "The strongest evidence is a single use-case with simulation outputs and design trade-study results; claims about ease, smoothness, and later lifecycle extension remain asserted or conceptually argued without baseline.",
+      "evidence": [
+        {
+          "quote": "After a few runs of simulations by making all the parameters mentioned above vary, here is the result of a stable energy budget:",
+          "location": "Section 3"
+        },
+        {
+          "quote": "can be studied almost instantly",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "time",
+        "power margin",
+        "reliability proxy",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses qualitative time/ease claims and quantitative power/SOC/energy-balance indicators; SOC and energy balance are coded as other emergent indicators.",
+      "evidence": [
+        {
+          "quote": "SOCmin = 85%",
+          "location": "Figure 10 description"
+        },
+        {
+          "quote": "SOC min reached = 27.7%",
+          "location": "Figure 11 description"
+        },
+        {
+          "quote": "Power margin",
+          "location": "Figure 4 description"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No baseline such as a prior document-centric process, manual analysis, alternative toolchain, or previous mission is reported for MBSE/process outcomes.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Individual claims range from unsupported future/process assertions to moderate confidence for simulation-backed electrical sizing/feasibility outcomes; no claim reaches strong evidence due to missing baseline, independent validation, or physical/flight evidence.",
+      "evidence": [
+        {
+          "quote": "One last thing to mention is that the minimum SOC (State Of Charge) reached during the simulation is 85% which is different from the worst acceptable value for nominal operation which is 75% as mentioned previously.",
+          "location": "Section 3"
+        },
+        {
+          "quote": "could also be implemented for phases A/B/C/D",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "A concurrent engineering authority is mentioned for process coordination, but the paper does not report model ownership, configuration/change control, review process for model artifacts, quality criteria, or naming/versioning conventions.",
+      "evidence": [
+        {
+          "quote": "The whole process is organized by a concurrent engineering authority who ensures that scientific and technical objectives are met.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No cost of MBSE adoption, training/tooling effort, saved effort, schedule effect, avoided rework, reuse value, decision-quality metric, or mission-assurance value evidence is reported.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives a concrete workflow and demonstrates it on a 16U nanosatellite electrical sizing use case with simulation outputs.",
+      "evidence": [
+        {
+          "quote": "In the end, the most common process would then be the following",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The central contribution is a multi-tool data flow using common database, plugins, and standardized files to exchange data among subsystem experts.",
+      "evidence": [
+        {
+          "quote": "continuity and interoperability made possible between engineers and their tools by the standardization of formats and files",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The workflow is applied to a 16U nanosatellite with volume/power constraints and preliminary feasibility needs, but it does not evaluate MBSE burden for small teams.",
+      "evidence": [
+        {
+          "quote": "16U nanosatellite",
+          "location": "Section 1"
+        },
+        {
+          "quote": "meet the need for volume reduction for accommodation purposes",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The model outputs support feasibility, sizing, and potential revision of scientific needs, but formal deliverables, governance records, management metrics, and ROI evidence are absent.",
+      "evidence": [
+        {
+          "quote": "formulating missions needs and pre-sizing systems in order to conclude on their feasibility",
+          "location": "Abstract"
+        },
+        {
+          "quote": "potentially revise scientific ambitions and needs accordingly",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper aligns the approach with concurrent engineering, mission agility, rapid trade-off iteration, and easy change analysis, but does not explicitly discuss NewSpace or distributed agile development evidence.",
+      "evidence": [
+        {
+          "quote": "highly agile mission causing a lot of interlocked trade-offs",
+          "location": "Section 1"
+        },
+        {
+          "quote": "any change on the mission can be studied almost instantly",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "medium"
+      ],
+      "status": "coded",
+      "rationale": "The markdown is complete and the technical workflow is clear; confidence is reduced by loose MBSE terminology, missing venue details, no public model/tool assets, and limited evidence for process outcomes.",
+      "evidence": [
+        {
+          "quote": "All this is achieved thanks to a precise workflow involving multiple digital tools",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Describe the CNES concurrent-engineering approach from the electrical architect perspective for needs analysis, power budgets, system sizing, energy simulations, and interoperable digital workflow in a highly agile nanosatellite mission.",
-    "modeling_scope": [
-      "Satellite system and subsystem description",
-      "Basic satellite geometry",
-      "Mission scenario and ephemeris",
-      "Attitude over time considering mission, orbit, datalink needs, and geometry",
-      "System-level budgets including power",
-      "EPS/electrical architecture including solar generator, battery, regulators, bus topology, and loads",
-      "Mode-based power profile",
-      "Solar, albedo, and Earth infrared energy flows",
-      "Energy-balance simulations and trade-off runs"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "tool_dependency_or_vendor_lockin",
+      "interoperability_limitations",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage"
     ],
-    "system_boundary_level_of_abstraction": "System-level nanosatellite common technical reference plus EPS/power-subsystem simulation model at preliminary architecture level.",
-    "minimal_or_excluded_modeling": "The workflow uses simplified preliminary budgets, mission modes, technology libraries, and a 48-hour worst-case scenario rather than a full-year high-fidelity mission model; no detailed physical prototype, formal software model, or full requirements model is reported.",
-    "required_prior_behavioral_domain_knowledge": "Consumed/dissipated power by equipment and mission mode, observation/orbital/attitude scenario, approximate geometry, and technology parameters for solar cells, battery cells, regulators, bus topology, end-of-life and temperature assumptions.",
-    "handling_limited_behavioral_knowledge": "Limited early-phase knowledge is handled through mode-based power budgets, standard scenario files, worst-case illumination extraction, configurable technology choices, and iterative simulation/trade-off runs rather than detailed subsystem behavioral models.",
-    "model_artifacts_used": [
-      "Common technical reference / common database",
-      "IDM-CIC system and subsystem descriptions",
-      "IDM-CIC basic geometry definition",
-      "Simu-CIC mission scenario and ephemeris files",
-      "CCSDS-like standard files",
-      "Power budget with margins by mission mode",
-      "IDM-Power temporal power profile",
-      "Flows Manager energy-flow inputs",
-      "Opalis power-subsystem model",
-      "Opalis simulation result plots for stable energy and worst-case battery scenario",
-      "Final preliminary EPS architecture and sizing choices"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The demonstrated process is for preliminary phases; extension to later phases is described conditionally rather than demonstrated.",
+        "evidence_quote": "The presented use case describes the process for preliminary phases, involving the laboratory and the space agency, but it could also be implemented for phases A/B/C/D by adding a satellite manufacturer/provider in the loop as long as the files standard is still respected.",
+        "location": "Conclusion",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "author_stated",
+        "rationale": "The paper explicitly presents one selected 16U nanosatellite use case to illustrate the workflow.",
+        "evidence_quote": "The selected use case to illustrate this paper is a 16U nanosatellite operating on low-earth orbit",
+        "location": "Section 1",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "Although the EPS simulations are quantitative, the claimed MBSE/process outcomes such as ease, smooth workflow, and interoperability are not evaluated quantitatively.",
+        "absence_based_explanation": "No time, effort, defect, interoperability-error, stakeholder-rating, or reuse metric is reported for the MBSE/concurrent-engineering process outcomes.",
+        "confidence": "high",
+        "evidence_quote": "No time, effort, defect, interoperability-error, stakeholder-rating, or reuse metric is reported for the MBSE/concurrent-engineering process outcomes."
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "The paper does not compare the MBSE/concurrent workflow against a document-centric process, manual analysis, previous mission, or alternative toolchain.",
+        "absence_based_explanation": "Design alternatives are explored inside the workflow, but no baseline comparator is reported for the claimed MBSE outcomes.",
+        "confidence": "high",
+        "evidence_quote": "Design alternatives are explored inside the workflow, but no baseline comparator is reported for the claimed MBSE outcomes."
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "Simulation outputs and workflow claims are reported by the author without independent validation or external stakeholder evaluation.",
+        "absence_based_explanation": "No independent model review, third-party replication, stakeholder/user study, or validation against test/flight data is reported.",
+        "confidence": "high",
+        "evidence_quote": "No independent model review, third-party replication, stakeholder/user study, or validation against test/flight data is reported."
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "The evidence is preliminary simulation and architecture analysis only; no hardware, flat-sat, environmental, operational, or flight validation is reported.",
+        "evidence_quote": "At CNES, PASO (Orbital Systems Architecture Plateau) is leading space systems preliminary phases and aims at formulating missions needs and pre-sizing systems in order to conclude on their feasibility.",
+        "location": "Abstract",
+        "confidence": "high"
+      },
+      {
+        "flag": "tool_dependency_or_vendor_lockin",
+        "source": "extractor_identified",
+        "rationale": "The workflow relies on CNES-specific tools and Opalis is described as proprietary, which may limit external reproducibility and portability.",
+        "evidence_quote": "The model is defined in the Opalis software. It is a proprietary but open tool developed by CNES",
+        "location": "Section 2",
+        "confidence": "medium"
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "author_stated",
+        "rationale": "The authors make later-phase continuity conditional on respecting file standards, implying interoperability depends on continued standard compliance.",
+        "evidence_quote": "as long as the files standard is still respected",
+        "location": "Conclusion",
+        "confidence": "medium"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "The paper does not report public availability of IDM-CIC/Simu-CIC/Opalis models, scenario files, power profiles, scripts, or data packages.",
+        "absence_based_explanation": "No repository, supplementary material, model download, or reusable package is mentioned in the supplied markdown.",
+        "confidence": "high",
+        "evidence_quote": "No repository, supplementary material, model download, or reusable package is mentioned in the supplied markdown."
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "author_stated",
+        "rationale": "The demonstrated scope is preliminary phases; later A/B/C/D coverage is only proposed as possible.",
+        "evidence_quote": "The presented use case describes the process for preliminary phases",
+        "location": "Conclusion",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Some outcomes are linked to the workflow but are supported mainly by assertions about ease, speed, smoothness, and potential extension rather than direct evidence.",
+        "evidence_quote": "any change on the mission can be studied almost instantly",
+        "location": "Section 2",
+        "confidence": "high"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "Standardized files and formats",
-      "Common database shared by subsystem experts",
-      "Plugins converting power budgets and ephemeris into simulation inputs",
-      "Non-compulsory tools relying on standards",
-      "Workflow transferable to later phases if the file standard is respected"
+    "emergent_limitations": [
+      {
+        "label": "formal-requirements-and-v-v-traceability-not-shown",
+        "rationale": "The paper validates energy feasibility through simulation but does not show formal requirements objects, verification matrices, or test-case traceability.",
+        "evidence_quote": "In that case, a satisfactory equilibrium for the aforementioned power subsystem would thus be defined as a battery cycling between 75% and a bit less than 100% of state of charge, meaning that the energy production is sufficient to power the satellite as well as charging the battery during low illumination time windows, while still ensuring a sufficient margin in the eventuality of a satellite malfunction.",
+        "location": "Section 3",
+        "confidence": "high"
+      },
+      {
+        "label": "exchange-standard-details-underspecified",
+        "rationale": "The paper emphasizes standardized and CCSDS-like files but does not specify schemas, semantic mappings, or version/configuration control needed for independent reproduction.",
+        "evidence_quote": "CCSDS-like standard files generated by Simu-CIC",
+        "location": "Section 2",
+        "confidence": "medium"
+      },
+      {
+        "label": "mbse-language-profile-not-specified",
+        "rationale": "The paper invokes MBSE and engineering models but does not report SysML, Arcadia, a profile, or formal modeling language semantics.",
+        "evidence_quote": "new digital solutions and methodologies such as Model-Based Systems Engineering",
+        "location": "Abstract",
+        "confidence": "high"
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Define subsystems and equipment in IDM-CIC.",
-        "inputs": "Mission needs, preliminary satellite configuration, subsystem/equipment list.",
-        "outputs": "System and subsystem description, basic geometry, initial common technical reference.",
-        "actors_roles": "System architects, subsystem experts, electrical architect within the concurrent engineering team.",
-        "prerequisites": "Preliminary mission concept and candidate satellite architecture.",
-        "completion_criteria": "Equipment and subsystem structure sufficiently defined for budgets and downstream analyses.",
-        "handoffs": "IDM-CIC data feed power-budget allocation and common-database use by experts."
-      },
-      {
-        "step": "Define orbital/mission scenario in Simu-CIC.",
-        "inputs": "Observation plan, selected orbit, attitude needs, ground datalink needs, geometry.",
-        "outputs": "Mission scenario, ephemeris, attitude-over-time information, CCSDS-like files.",
-        "actors_roles": "Mission/system architects and CNES flight dynamics experts.",
-        "prerequisites": "Orbit and observation-planning assumptions.",
-        "completion_criteria": "Scenario and ephemeris available, including worst-case illumination extraction when needed.",
-        "handoffs": "Simu-CIC files are passed to Flows Manager/Opalis for energy-flow generation."
-      },
-      {
-        "step": "Allocate power consumption to equipment and mission modes using IDM-Power.",
-        "inputs": "IDM-CIC equipment structure, subsystem power estimates, mission modes and margins.",
-        "outputs": "Global power budget and temporal satellite power-consumption profile.",
-        "actors_roles": "Electrical architect with subsystem experts providing equipment consumption values.",
-        "prerequisites": "Defined equipment list, mission modes, and preliminary power-consumption estimates.",
-        "completion_criteria": "Power budget with margins and power profile are available for simulation.",
-        "handoffs": "Power profile is imported into Opalis."
-      },
-      {
-        "step": "Convert ephemeris to energy flows using Flows Manager.",
-        "inputs": "Simu-CIC CCSDS-like orbital scenario files and solar-generator geometry/orientation.",
-        "outputs": "Solar flux, Earth albedo flux, and Earth infrared flux profiles for the solar generator.",
-        "actors_roles": "Electrical architect using Opalis/Flows Manager; mission/flight-dynamics experts supply scenario data.",
-        "prerequisites": "Valid ephemeris and geometric orientation data.",
-        "completion_criteria": "Energy-flow time series generated and ready for Opalis simulation.",
-        "handoffs": "Energy-flow inputs are combined with the power profile and EPS model in Opalis."
-      },
-      {
-        "step": "Define the preliminary EPS model in Opalis.",
-        "inputs": "Solar-cell and battery-cell choices, bus topology, charger/discharger and solar-regulator settings, power profile, energy flows, losses and temperature assumptions.",
-        "outputs": "Configurable EPS/electrical architecture model.",
-        "actors_roles": "Electrical architect.",
-        "prerequisites": "Candidate EPS technologies and architecture principles.",
-        "completion_criteria": "Battery, solar generator, regulators, bus topology, and load model parameters are set.",
-        "handoffs": "Model is used for simulation runs, sizing, and trade-off comparisons."
-      },
-      {
-        "step": "Run simulations, iterate sizing/trade-offs, and select preliminary architecture.",
-        "inputs": "Opalis EPS model, energy-flow profiles, power-consumption profile, SOC/DoD criteria, candidate configurations.",
-        "outputs": "Stable energy budget result, worst-case battery result, solar-generator and battery sizing, regulator/control choices, trade-off conclusions.",
-        "actors_roles": "Electrical architect, concurrent engineering authority, and subsystem experts reviewing impacts.",
-        "prerequisites": "Executable simulation model and acceptance criteria for energy balance and battery margin.",
-        "completion_criteria": "Satisfactory equilibrium between generation, storage, and usage, with SOC margins meeting preliminary criteria.",
-        "handoffs": "Results inform feasibility conclusions, observation-plan revision, architecture choices, and later-phase handover."
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The workflow supports needs analysis, system budget production, preliminary feasibility assessment, power-subsystem pre-sizing, architecture trade-offs, and potential handover to phases A/B/C/D if a manufacturer/provider joins while maintaining file standards.",
-    "approach_classification": "Integrated MBSE/digital engineering",
-    "approach_classification_rationale": "The paper frames the work in MBSE and concurrent engineering, but the implementation is a multi-tool digital-engineering workflow linking system description, mission scenario, power budgeting, data conversion, and executable power simulation rather than a single formal MBSE model/language.",
-    "tailoring_rationale": [
-      "The mission is highly agile, making solar-panel and battery sizing difficult and requiring coupled electrical, thermal, communication, mechanical, and AOCS trade-offs.",
-      "A 48-hour worst-case illumination scenario is used to keep preliminary sizing tractable while remaining representative of the mission.",
-      "A non-regulated battery-follower bus and DET boost regulators without MPPT are selected for simplicity and low added value of MPPT in the case.",
-      "Standardized files allow each subsystem expert to use specialized tools while preserving integration."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "Model-Based Systems Engineering as stated methodological context",
-      "Concurrent engineering at CNES PASO",
-      "IDM-CIC for system/subsystem description and basic geometry",
-      "Simu-CIC for mission scenario and ephemeris generation",
-      "IDM-Power plugin for power-budget allocation and power-profile generation",
-      "Flows Manager plugin for ephemeris-to-energy-flow conversion",
-      "Opalis for power-subsystem simulations",
-      "IDM-View and IDM-Plot for visualization",
-      "No formal MBSE language such as SysML is reported"
-    ],
-    "toolchain_architecture_data_flow": "IDM-CIC defines the satellite, subsystems, equipment, geometry, and power budget; Simu-CIC defines the mission scenario and ephemeris; IDM-Power converts equipment/mode power allocations into a temporal power profile; Flows Manager converts Simu-CIC CCSDS-like files into solar/albedo/infrared energy flows; Opalis combines the EPS architecture model, power profile, and flows to run energy-balance and worst-case simulations.",
-    "interoperability_mechanisms": [
-      "Common technical reference",
-      "Common database",
-      "Standardized file formats",
-      "CCSDS-like standard files from Simu-CIC",
-      "IDM-Power and Flows Manager plugins",
-      "Compatibility of inputs/outputs across specialized tools"
-    ],
-    "syntax_semantic_continuity_evidence": "The paper states that continuity and interoperability are made possible by standardization of formats/files, and that Simu-CIC files can be converted automatically into energy flows; it does not provide a formal syntax/semantic mapping or round-trip validation evidence.",
-    "software_hardware_system_integration_readiness": "Supports preliminary digital integration and architecture handoffs; no hardware integration, hardware-in-the-loop, or flight/operational readiness is reported.",
-    "toolchain_limitations": [
-      "Opalis is described as proprietary, though open within the reported context.",
-      "No model repository or executable files are supplied.",
-      "The exact file standards/schemas are not detailed.",
-      "Lifecycle continuity depends on respecting the file standard.",
-      "No formal MBSE language or requirements repository is reported."
-    ],
-    "availability_reproducibility": "Workflow steps and tool roles are described, but model assets, input files, libraries, and complete schemas are not available in the paper; reproducibility is therefore limited to conceptual replication within access to the CNES toolchain."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "Solar generator and solar-panel wings",
-      "Solar cells and strings/series-parallel assemblies",
-      "Battery and Li-ion accumulators",
-      "Battery charger/discharger",
-      "Solar regulators including DET, boost, and MPPT trade option",
-      "Power bus topology including non-regulated battery-follower architecture",
-      "Power loads represented through mode-based power profile",
-      "Solar, albedo, and Earth infrared energy flows",
-      "Losses and temperature impacts"
-    ],
-    "eps_requirements_representation": "Requirements are represented informally as a power budget with margins by mission mode, acceptable SOC/DoD thresholds, end-of-life and temperature constraints, worst-case illumination/survival scenarios, and sizing targets for solar generator and battery; no formal requirements model is reported.",
-    "verification_validation_artifacts": [
-      "Simplified power budget table by subsystem and mission mode",
-      "Power-consumption time profile",
-      "Energy-flow time profile",
-      "Opalis preliminary power-subsystem model",
-      "Stable energy-subsystem simulation result",
-      "Battery worst-case no-illumination simulation",
-      "SOC, battery voltage, battery current, and generated/consumed power plots",
-      "Architecture trade-off comparisons for solar-panel configuration, regulator type, cell type, and battery configuration"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "48-hour representative worst-case illumination scenario before hardware development",
-      "Executable Opalis energy-balance simulations using model-derived power profile and energy flows",
-      "Iterative adjustment of series/parallel solar and battery parameters until equilibrium",
-      "Worst-case survival scenario with no illumination for three orbits and minimum-SOC acceptance criterion",
-      "Trade-off simulations for technology and architecture choices"
-    ],
-    "evidence_verification_integrated_in_model": "The paper states that the power profile and energy flows are inputs to Opalis and that the ultimate goal is to refine EPS definition and sizing to reach energy balance between generation, storage, and usage.",
-    "integration_test_readiness": "The model supports preliminary feasibility and sizing decisions before physical development; integration-test procedures or results are not reported."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "The workflow creates an adaptable and interoperable model so mission or configuration changes can be assessed quickly.",
-      "outcome_category": "interoperability and change-impact analysis",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Common technical reference",
-        "Standardized files",
-        "Regeneration of ephemeris data",
-        "Toolchain linking IDM-CIC, Simu-CIC, IDM-Power, Flows Manager, and Opalis"
-      ],
-      "artifact_or_process_linked": "Common database, mission scenario files, ephemeris, satellite configuration, and Opalis simulation inputs.",
-      "lifecycle_stage": "Preliminary phases",
-      "evidence_type": "Author claim illustrated by workflow case",
-      "metric_or_value_indicator": "Qualitative: mission changes can be studied almost instantly; no timing metric reported.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Changes in mission or solar-panel configuration are described as easy to regenerate/compare.",
-      "evidence_source": "Section 2, Workflow Description",
-      "direct_quote": "The main added value of this process is that it allows to define an adaptable and interoperable model.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No measured change-analysis time, baseline process, or independent interoperability test is reported."
+      "field_path": "synthesis_consistency",
+      "label": "idm-cic",
+      "description": "CNES concurrent-engineering tool used for system and subsystem description, basic geometry, and power-budget data used by IDM-Power.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2: IDM-CIC: used for system description (at system and sub-systems level) and for system basic geometry definition.",
+      "confidence": "medium",
+      "original_label": "IDM-CIC",
+      "type": "tool"
     },
     {
-      "claim": "Model-based energy simulations support EPS sizing by iterating cell and accumulator assemblies until energy balance is reached.",
-      "outcome_category": "EPS sizing and energy feasibility",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "Opalis EPS architecture model",
-        "Power profile from IDM-Power",
-        "Energy-flow inputs from Flows Manager",
-        "Iterative series/parallel sizing runs"
-      ],
-      "artifact_or_process_linked": "Opalis stable energy simulation and final preliminary EPS architecture.",
-      "lifecycle_stage": "Preliminary phases",
-      "evidence_type": "Executable simulation case result without physical validation",
-      "metric_or_value_indicator": "Minimum SOC during nominal simulation reported as 85%; final solar generator approximately 44 W EOL; battery storage approximately 180 Wh EOL.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Final architecture selected: two wings of 20 3G30A cells and a 2S8P Li-ion INR 18650 battery assembly.",
-      "evidence_source": "Section 3, Design Analyses & Simulation Results",
-      "direct_quote": "The ultimate goal of the simulation process is to refine the power subsystem definition and to size elements",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Simulation model accuracy, environmental assumptions, and component models are not independently validated in the paper."
+      "field_path": "synthesis_consistency",
+      "label": "simu-cic",
+      "description": "CNES mission-scenario and ephemeris generation tool feeding energy-flow generation.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2: Simu-CIC: used for mission scenario definition and ephemeris generation.",
+      "confidence": "medium",
+      "original_label": "Simu-CIC",
+      "type": "tool"
     },
     {
-      "claim": "Worst-case battery simulation indicates energy margin for survival/no-illumination conditions.",
-      "outcome_category": "reliability and resilience margin",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "Worst-case scenario modeling",
-        "SOC threshold criteria",
-        "Opalis battery simulation"
-      ],
-      "artifact_or_process_linked": "Battery worst-case scenario plot and SOC acceptance criterion.",
-      "lifecycle_stage": "Preliminary phases",
-      "evidence_type": "Simulation metric without hardware or flight validation",
-      "metric_or_value_indicator": "Figure reports SOC min reached = 27.7% and SOC min acceptable = 20%.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Simulated minimum SOC remains above the stated survival threshold by about 7.7 percentage points.",
-      "evidence_source": "Section 3, Fig. 11 description",
-      "direct_quote": "SOC min reached = 27.7%",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "No physical battery test or uncertainty analysis is reported; the text and figure description differ on initial SOC value."
+      "field_path": "synthesis_consistency",
+      "label": "opalis",
+      "description": "CNES proprietary but open power-simulation software for electrical architectures including batteries, solar panels, regulators, bus topologies, losses, and temperature effects.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2: The model is defined in the Opalis software. It is a proprietary but open tool developed by CNES that allows performing power simulations.",
+      "confidence": "medium",
+      "original_label": "Opalis",
+      "type": "tool"
     },
     {
-      "claim": "The workflow enables several analyses, trade-off comparisons, and sizings in parallel across subsystem constraints.",
-      "outcome_category": "concurrent engineering and trade-space exploration",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Concurrent engineering process",
-        "Shared common database",
-        "Subsystem expert participation",
-        "Simulation methodology"
-      ],
-      "artifact_or_process_linked": "Power budgets, observation scenarios, simulation runs, and architecture trade-off outputs.",
-      "lifecycle_stage": "Preliminary phases",
-      "evidence_type": "Author conclusion supported by case examples",
-      "metric_or_value_indicator": "Examples include battery/solar cell trade-offs, MPPT/DET, bus voltages, solar-cell placement, temperature sensitivity, and 2S8P-to-2S7P impact.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Multiple electrical architecture decisions were explored in the preliminary workflow.",
-      "evidence_source": "Section 4, Conclusion",
-      "direct_quote": "enables to perform several analyses, trade-off studies comparisons and sizings in parallel by taking into account every constraint and design impact easily",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The paper lists explored analyses but does not provide trade-study matrices, decision criteria, or process-efficiency measurements."
+      "field_path": "synthesis_consistency",
+      "label": "flows-manager-plugin",
+      "description": "Opalis plugin converting Simu-CIC CCSDS-like ephemeris files into solar-generator energy flows.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2: The energy flows are generated by the Flows Manager plugin that is now included natively in Opalis.",
+      "confidence": "medium",
+      "original_label": "Flows Manager plugin",
+      "type": "tool/mechanism"
     },
     {
-      "claim": "Standardized files improve toolchain integration by allowing specialists to use dedicated tools while preserving compatibility.",
-      "outcome_category": "toolchain integrability",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "Standardization of file formats",
-        "Input/output compatibility across tools",
-        "Engineering models as communication media"
-      ],
-      "artifact_or_process_linked": "Standard files, common technical reference, and exchanges among IDM-CIC, Simu-CIC, plugins, and Opalis.",
-      "lifecycle_stage": "Preliminary phases with possible A/B/C/D extension",
-      "evidence_type": "Author conclusion",
-      "metric_or_value_indicator": "Qualitative smooth workflow; no integration defect or data-loss metric reported.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Experts can exchange data and communicate through engineering models while using specialized tools.",
-      "evidence_source": "Section 4, Conclusion",
-      "direct_quote": "It allows everyone to use their own dedicated and specialized tools by still ensuring compatibility with inputs/outputs of other tools, leading to a smooth workflow.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Compatibility is asserted and illustrated, but no schema conformance, round-trip, or integration-test evidence is provided."
+      "field_path": "synthesis_consistency",
+      "label": "idm-power-plugin",
+      "description": "IDM-CIC plugin allocating power consumption to system modes and generating a temporal power profile.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2: This plugin allows to allocate the power consumptions described in the IDM-CIC power budget to system modes.",
+      "confidence": "medium",
+      "original_label": "IDM-Power plugin",
+      "type": "tool/mechanism"
     },
     {
-      "claim": "Different observation plans can be tested before hardware development to validate energy stability and revise science needs.",
-      "outcome_category": "pre-physical mission/EPS feasibility verification",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "Observation-plan scenario modeling",
-        "Energy-flow generation from ephemeris",
-        "Power-profile simulation",
-        "SOC/energy-balance evaluation"
-      ],
-      "artifact_or_process_linked": "Observation plan, 48-hour worst-case scenario, energy flows, and Opalis energy-balance simulations.",
-      "lifecycle_stage": "Preliminary phases",
-      "evidence_type": "Case-study simulation workflow and author conclusion",
-      "metric_or_value_indicator": "Energy stability and SOC margins; detailed acceptance metric reported mainly through SOC thresholds.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Observation plans can be assessed for feasibility and potentially drive revision of scientific ambitions/needs.",
-      "evidence_source": "Section 4, Conclusion",
-      "direct_quote": "Test different stars observation plans in order to validate their feasibility in terms of energy stability and potentially revise scientific ambitions and needs accordingly.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The paper does not show multiple observation-plan result tables or document actual science-need changes."
+      "field_path": "synthesis_consistency",
+      "label": "ccsds-like-standard-files",
+      "description": "Named file-standard concept enabling ephemeris import/conversion; exact schema is not specified.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2: CCSDS-like standard files generated by Simu-CIC",
+      "confidence": "medium",
+      "original_label": "CCSDS-like standard files",
+      "type": "interoperability mechanism"
     },
     {
-      "claim": "The preliminary workflow can be reused in later lifecycle phases if the file standard is maintained and a manufacturer/provider joins the loop.",
-      "outcome_category": "lifecycle continuity and reuse",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "File-standard continuity",
-        "Engineering-model communication",
-        "Expanded stakeholder loop"
-      ],
-      "artifact_or_process_linked": "Standardized model/data files across the concurrent-engineering workflow.",
-      "lifecycle_stage": "Phases A/B/C/D mentioned as possible extension",
-      "evidence_type": "Author claim",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Potential lifecycle extension is conditional rather than demonstrated.",
-      "evidence_source": "Section 4, Conclusion",
-      "direct_quote": "it could also be implemented for phases A/B/C/D by adding a satellite manufacturer/provider in the loop as long as the files standard is still respected",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No later-phase deployment, reuse count, or manufacturer integration result is reported."
+      "field_path": "synthesis_consistency",
+      "label": "orbital-scenario-ephemeris-energy-flow-artifacts",
+      "description": "Non-controlled artifacts used in the workflow and coded as other under model_artifacts_used.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2: orbital scenario description; Section 2: energy flows (solar flux, earth infrared flux, earth albedo flux)",
+      "confidence": "medium",
+      "original_label": "orbital scenario / ephemeris / energy-flow artifacts",
+      "type": "other model artifact"
+    },
+    {
+      "field_path": "synthesis_consistency",
+      "label": "state-of-charge-and-energy-balance-indicators",
+      "description": "SOC thresholds and energy-balance stability are central quantitative indicators but are not named controlled metrics except as reliability proxy/other.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Figure 11 description: SOC min reached = 27.7%; Section 3: One last thing to mention is that the minimum SOC (State Of Charge) reached during the simulation is 85% which is different from the worst acceptable value for nominal operation which is 75% as mentioned previously.",
+      "confidence": "medium",
+      "original_label": "state-of-charge and energy-balance indicators",
+      "type": "other metric_or_value_indicator"
+    },
+    {
+      "field_path": "synthesis_consistency",
+      "label": "worst-case-48-hour-observation-scenario",
+      "description": "Flight-dynamics experts reduce a year-long observation plan to a representative worst-case sun-illumination scenario for EPS sizing.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 3: reducing it to a period of 48h only that could be used to size the power subsystem and still be representative of the whole mission",
+      "confidence": "medium",
+      "original_label": "worst-case 48-hour observation scenario",
+      "type": "method/theme"
+    },
+    {
+      "field_path": "synthesis_consistency",
+      "label": "concurrent-engineering-authority",
+      "description": "A process coordination role ensuring scientific and technical objectives, but not a formal model-governance strategy.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2: The whole process is organized by a concurrent engineering authority who ensures that scientific and technical objectives are met.",
+      "confidence": "medium",
+      "original_label": "concurrent engineering authority",
+      "type": "governance/process role"
+    },
+    {
+      "field_path": "synthesis_consistency",
+      "label": "standardized-file-formats-as-value-mechanism",
+      "description": "Controlled outcome mechanisms do not directly include standard file formats; coded as other where used to explain interoperability/lifecycle continuity claims.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Conclusion: standardization of files format",
+      "confidence": "medium",
+      "original_label": "standardized file formats as value mechanism",
+      "type": "other mbse_mechanism"
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "A concurrent engineering authority organizes the process and ensures scientific and technical objectives are met; governance also relies on a common technical reference, common database, and standardized files.",
-    "traceability_to_deliverables_decisions_reviews": "Informal traceability exists from mission/system description to power budget, power profile, energy-flow files, Opalis simulations, and decisions on solar-panel layout, cell selections, regulator strategy, bus topology, and battery configuration. Formal review artifacts are not reported.",
-    "evaluation_criteria_model_quality_usefulness": "Usefulness is assessed by ability to reach energy balance, satisfy SOC/DoD thresholds, size battery/solar generator under EOL, temperature, and orbital constraints, and compare architectures; no model-quality metrics are reported.",
-    "roi_value_realization_evidence": "No quantified ROI, cost, schedule, staffing, or productivity evidence is reported. Qualitative value is claimed through rapid change assessment, parallel trade-offs, and smooth workflow.",
-    "programmatic_gates_critical_design_events_supported": "Supports preliminary feasibility and pre-sizing; possible use in phases A/B/C/D is stated, but no formal gate such as PDR/CDR is named.",
-    "model_derived_performance_indicators_management_metrics": "Power budgets by mission mode, total power with margins, energy-flow profiles, power consumption profile, SOC minimum, battery voltage/current, solar-generator output, battery energy storage, series/parallel cell counts, and volume/accommodation impacts."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed with evidence",
-      "rationale": "The paper gives a numbered workflow from IDM-CIC/Simu-CIC setup through power-profile and energy-flow generation to Opalis simulation, then demonstrates it on a 16U nanosatellite case."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed with evidence",
-      "rationale": "Multiple tools and plugins are connected via standardized files and a common database, with case outputs shown; however, formal data-schema or round-trip validation evidence is absent."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed conceptually",
-      "rationale": "The study tailors modeling to preliminary nanosatellite feasibility, a 48-hour worst-case scenario, simple/no-MPPT regulator choice, and volume-sensitive battery options, but does not present a general lightweight MBSE method or resource metrics."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "mentioned only",
-      "rationale": "A concurrent engineering authority, feasibility/pre-sizing deliverables, and qualitative value are mentioned, but no ROI evidence, review governance, or deliverable traceability framework is provided."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper discusses an agile mission and rapid regeneration/comparison of mission and configuration changes in concurrent engineering, but not distributed NewSpace organization or measured rapid-iteration outcomes."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "A nanosatellite mission can be represented as a common technical reference combining system/subsystem description, geometry, mission scenario, ephemeris, attitude, and system budgets.",
-        "The EPS/electrical architecture is modeled at preliminary level with a power-subsystem model, mode-based power profile, and ephemeris-derived energy flows rather than detailed behavioral models for every subsystem.",
-        "Generality is pursued through standardized files, plugins, and common database handoffs, but the paper does not define a reusable formal reference model."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0053",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0053.json",
+      "tier_status": "supporting",
+      "tier_rationale": "Supporting paper for EPS/electrical architecture and concurrent engineering workflow; strong relevance to toolchain/interoperability and power-simulation outcomes, but not a formal general MBSE reference model or IVV model.",
+      "citation": "Boan, P. (2025). CONCURRENT ENGINEERING PROCESS FOR ELECTRICAL ARCHITECTURE OF NANOSATELLITES PRELIMINARY PHASES. DOI: 10.1117/12.3062667.",
+      "title": "CONCURRENT ENGINEERING PROCESS FOR ELECTRICAL ARCHITECTURE OF NANOSATELLITES PRELIMINARY PHASES",
+      "authors": [
+        "Pierre Boan"
       ],
-      "RQ2": [
-        "Claimed value centers on integrability/interoperability, adaptability, rapid change analysis, parallel trade-offs, and preliminary sizing.",
-        "Reliability-related value is indirect: SOC/DoD margins and survival/no-illumination simulation indicate energy margin, but no reliability metric or operational evidence is reported.",
-        "Reproducibility is limited: standard files and tool roles are described, but model files and complete schemas are not provided."
+      "year": 2025,
+      "venue": "not reported in supplied markdown/metadata",
+      "doi": "10.1117/12.3062667",
+      "url": "https://doi.org/10.1117/12.3062667",
+      "publisher": "not reported in supplied markdown/metadata",
+      "venue_type": "not reported in supplied markdown/metadata",
+      "source_database_query_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/data/merge_inputs_q25/scopus_q18_system_mbse_broad_full65.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+          "rank": 10,
+          "paperId": "105002217262"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/data/merge_inputs_q25/scopus_q4_power_architecture_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"power subsystem\" OR \"electrical architecture\" OR \"electrical power\" OR EPS OR power))",
+          "rank": 3,
+          "paperId": "105002217262"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/data/merge_inputs_q25/scopus_q5_reference_model_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"reference model\" OR template OR behavior OR behaviours OR behaviors OR architecture))",
+          "rank": 6,
+          "paperId": "105002217262"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0052_semantic_title.json",
+          "query": "\"CONCURRENT ENGINEERING PROCESS FOR ELECTRICAL ARCHITECTURE OF NANOSATELLITES PRELIMINARY PHASES\"",
+          "rank": 1,
+          "paperId": "105002217262",
+          "purpose": "abstract_enrichment"
+        }
       ],
-      "RQ3": [
-        "Verification before physical development is implemented through Opalis energy-balance simulations driven by model-generated power profiles and energy-flow inputs.",
-        "Worst-case illumination and survival scenarios use SOC thresholds to assess feasibility and battery margin.",
-        "The paper does not report formal requirements verification, hardware-in-the-loop, integration tests, or flight validation."
+      "research_questions_addressed": {
+        "rq1_relevance": "partial",
+        "rq1_rationale": "Concrete modeling workflow for mission/system/EPS electrical architecture, but not a general minimal-knowledge modeling framework.",
+        "rq2_relevance": "high",
+        "rq2_rationale": "Central claims concern interoperability, adaptable models, trade studies, feasibility, and integrability outcomes from EPS modeling.",
+        "rq3_relevance": "partial",
+        "rq3_rationale": "Contains pre-physical simulation/acceptance-threshold checks, but no formal IVV model or verification procedures."
+      },
+      "lineage_overlap_notes": "No recurring CubeSat reference-model lineage detected from supplied files; CNES PASO/IDM-CIC/Simu-CIC/Opalis workflow may be a CNES concurrent-engineering toolchain family."
+    },
+    "study_context_population": {
+      "mission_platform": "16U nanosatellite operating in low Earth orbit; first analyses selected low-altitude SSO between 500 and 600 km.",
+      "mission_name": "not reported; mission concept for 3D mapping of hot stars dynamic environment using ultraviolet spectropolarimetry.",
+      "mission_domain": "Space science/astrophysics; observation of more than 40 hot stars for 3D mapping through UV spectropolarimetry.",
+      "organization_type": "French laboratory LESIA developed the mission concept; CNES evaluates feasibility through PASO concurrent engineering.",
+      "project_maturity": "Preliminary feasibility/pre-sizing mission concept; not built, tested, or operational in the paper.",
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A"
+      ],
+      "development_context": [
+        "academic/student",
+        "agency",
+        "agile/concurrent design",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "power-budget/electrical-architecture",
+      "eps_relevance_rationale": "Electrical architect perspective with preliminary power budgets, solar panel/battery sizing, regulator/bus topology choices, and energy simulations.",
+      "model_maturity": [
+        "prototype demonstration",
+        "executable model",
+        "project-applied model"
+      ],
+      "context_evidence_quotes": [
+        {
+          "quote": "The selected use case to illustrate this paper is a 16U nanosatellite operating on low-earth orbit",
+          "location": "Section 1"
+        },
+        {
+          "quote": "The first system analyses concluded that the best orbit for the mission is an SSO orbit at low altitudes (between 500 and 600 km).",
+          "location": "Section 1"
+        }
       ]
     },
-    "author_stated_limitations_gaps": [
-      "The described process is for preliminary phases.",
-      "The use case is a single 16U nanosatellite mission concept evaluated for feasibility by CNES with LESIA.",
-      "The power-subsystem sizing scenario is reduced to a 48-hour worst-case illumination period considered representative of the whole mission.",
-      "Extension to phases A/B/C/D is conditional on adding a satellite manufacturer/provider and preserving the file standard."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "Venue and publisher are not reported in the paper markdown or supplied citation metadata.",
-      "No formal MBSE language, metamodel, requirements repository, or traceability matrix is reported.",
-      "No executable model files, data schemas, repositories, or open datasets are provided.",
-      "No baseline comparison, quantitative process-improvement metric, independent validation, integration test, or flight/operational evidence is reported.",
-      "Simulation conclusions depend on tool models and assumptions that are not independently validated in the paper."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Describe, from the electrical architect perspective, a CNES PASO concurrent-engineering/MBSE workflow for needs analysis, power budgets, power subsystem pre-sizing, technology trade-offs, and energy-balance simulations during nanosatellite preliminary phases. The pain points are mission/system complexity, highly agile observation planning, interlocked subsystem trade-offs, and tedious solar-panel/battery sizing.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "simulation"
+      ],
+      "system_boundary_and_abstraction": "Boundary covers satellite/mission common technical reference, orbital scenario/attitude over time, power budget by subsystem/mode, energy flows, and power subsystem model with solar generator, battery, regulators, bus topology, losses, temperature and end-of-life effects. It remains preliminary: manufacturer involvement, later lifecycle phases, formal requirements/V&V, and physical integration/testing are outside the demonstrated boundary.",
+      "required_prior_behavioral_domain_knowledge": "The workflow needs mission observation plan, orbital scenario/attitude, sun/earth angles, subsystem power consumption by mode, and EPS technology parameters. Limited behavioral knowledge is handled by reducing the global observation plan to a representative worst-case 48-hour scenario and by converting budgets/modes/ephemeris into executable power profiles and energy flows.",
+      "model_artifacts_used": [
+        "block definition/internal block diagrams",
+        "parametrics",
+        "trade-study models",
+        "interface control models",
+        "power budgets",
+        "executable simulations",
+        "other"
+      ],
+      "other_artifacts": [
+        "orbital scenario/ephemeris files",
+        "energy-flow files",
+        "temporal power profile",
+        "observation plan/worst-case scenario",
+        "common technical reference/common database"
+      ],
+      "generality_reuse_mechanism": [
+        "reusable workflow",
+        "method guidance"
+      ],
+      "key_evidence_quotes": [
+        {
+          "quote": "setting up a common technical reference (satellite description and mission), with the aim of producing system-level budgets",
+          "location": "Section 2"
+        },
+        {
+          "quote": "A model of the power sub-system: battery and solar generator assemblies, power bus topology, type of architecture, regulators",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The ultimate goal of the simulation process is to refine the power subsystem definition and to size elements",
+          "location": "Section 3"
+        }
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "implementation_steps_reported": [
+        {
+          "step": 0,
+          "description": "Preliminary setup of system/subsystem equipment and orbital scenario.",
+          "inputs": "Mission concept, satellite architecture, subsystem equipment list, observation/orbit needs.",
+          "outputs": "IDM-CIC satellite/system description and Simu-CIC orbital scenario/ephemeris.",
+          "actors_roles": "Systems architects, thematic experts, electrical architect, flight dynamics experts, concurrent engineering authority.",
+          "completion_criteria": "Satellite description, geometry, mission scenario and attitude over time available as common technical reference.",
+          "handoffs": "IDM-CIC and Simu-CIC files feed power budgeting, power profile, and energy-flow generation."
+        },
+        {
+          "step": 1,
+          "description": "Attribute consumed/dissipated power to each equipment item to obtain global power budget including margins.",
+          "inputs": "IDM-CIC equipment breakdown, subsystem/mode power consumptions.",
+          "outputs": "Power budget by subsystem and mission mode with margins.",
+          "actors_roles": "Electrical architect and subsystem experts.",
+          "completion_criteria": "Power budget table available for modes such as standby, mission, transmission and slew.",
+          "handoffs": "Budget is allocated to modes by IDM-Power plugin."
+        },
+        {
+          "step": 2,
+          "description": "Convert the power budget into a temporal power profile using IDM-Power.",
+          "inputs": "Power budget, mission modes and temporal scenario.",
+          "outputs": "System power consumption over time.",
+          "actors_roles": "Electrical architect using IDM-CIC/IDM-Power.",
+          "completion_criteria": "Power profile graph/data generated.",
+          "handoffs": "Power profile imported into Opalis."
+        },
+        {
+          "step": 3,
+          "description": "Import power profile into Opalis power simulation software.",
+          "inputs": "Generated temporal power profile.",
+          "outputs": "Load profile for Opalis EPS model.",
+          "actors_roles": "Electrical architect.",
+          "completion_criteria": "Power usage over time is available in simulation environment.",
+          "handoffs": "Used with energy flows and EPS model for energy-balance runs."
+        },
+        {
+          "step": 4,
+          "description": "Convert ephemeris into energy flows using Flows Manager plugin.",
+          "inputs": "Simu-CIC CCSDS-like orbital scenario/ephemeris and sun/earth angle data.",
+          "outputs": "Solar flux, earth infrared flux and earth albedo flux profiles for the solar generator.",
+          "actors_roles": "Electrical architect; flight dynamics experts supply worst-case scenarios.",
+          "completion_criteria": "Energy-flow profile generated for the selected scenario.",
+          "handoffs": "Energy flows feed Opalis simulations."
+        },
+        {
+          "step": 5,
+          "description": "Define the Opalis simulation model and run iterative energy-balance simulations.",
+          "inputs": "EPS architecture, solar-cell/battery/regulator parameters, power profile, energy-flow profile, SOC criteria.",
+          "outputs": "Stable energy budget, final preliminary electrical architecture, trade-study conclusions.",
+          "actors_roles": "Electrical architect, with inputs from subsystem/AOCS/flight dynamics experts.",
+          "completion_criteria": "Satisfactory equilibrium such as battery cycling between 75% and near 100% SOC for nominal operation and survival SOC above 20%.",
+          "handoffs": "Sizing and feasibility results can inform mission/science needs and later project phases."
+        }
+      ],
+      "mapping_to_se_activities_lifecycle_gates": "The workflow maps to preliminary feasibility formulation and pre-sizing rather than formal SRR/PDR/CDR gates. The conclusion states possible extension to phases A/B/C/D with a manufacturer/provider if file standards are preserved.",
+      "approach_classification": "Extended MBSE",
+      "tailoring_rationale": [
+        "available tools",
+        "organizational constraints"
+      ],
+      "adoption_guidance": "partial guidance",
+      "adoption_guidance_rationale": "Provides a numbered workflow and case evidence, but no complete adoption playbook, governance plan, model package, or training procedure."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "custom tools",
+        "other"
+      ],
+      "named_tools_methods": [
+        "PASO concurrent engineering",
+        "IDM-CIC",
+        "Simu-CIC",
+        "IDM-View",
+        "IDM-Plot",
+        "IDM-Power plugin",
+        "Opalis",
+        "Flows Manager plugin"
+      ],
+      "toolchain_architecture_and_data_flow": "IDM-CIC defines the satellite/system/subsystem description and basic geometry and stores power-budget data. Simu-CIC defines the mission scenario and generates ephemeris. IDM-Power allocates IDM-CIC power-budget consumptions to modes and outputs a temporal power profile. Flows Manager converts Simu-CIC CCSDS-like ephemeris data into energy flows. Opalis combines the EPS architecture model, power profile and energy flows to run energy-balance simulations. IDM-View/IDM-Plot can visualize aspects of the system.",
+      "interoperability_mechanisms": [
+        "plugin",
+        "import/export"
+      ],
+      "syntax_semantic_continuity": "Continuity is claimed through a common database and standard/CCSDS-like file formats. Semantic continuity is demonstrated for power-budget-to-mode-to-profile and ephemeris-to-energy-flow transformations, but exact schemas and model semantics are not reported.",
+      "software_hardware_system_integration_readiness": "Supports preliminary electrical architecture choices and component sizing; no direct hardware/software integration, flat-sat, manufacturing, or test readiness is demonstrated.",
+      "toolchain_limitations": [
+        "vendor lock-in"
+      ],
+      "availability_reproducibility": "Tools and data flow are named, but model files, scenario files, scripts, precise schemas, and public repositories are not reported. Opalis is described as proprietary but open and CNES-developed.",
+      "evidence_quotes": [
+        {
+          "quote": "The combination of these two tools allows for a complete and comprehensive definition of the satellite and its orbital scenario",
+          "location": "Section 2"
+        },
+        {
+          "quote": "standardization of formats and files",
+          "location": "Abstract"
+        },
+        {
+          "quote": "It is a proprietary but open tool developed by CNES",
+          "location": "Section 2"
+        }
+      ]
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "loads",
+        "modes",
+        "margins",
+        "power budgets",
+        "degradation",
+        "interfaces"
+      ],
+      "eps_requirements_represented_and_links": "Formal requirements are not represented. Design criteria and acceptance thresholds are represented operationally through power budgets with margins, mission modes, end-of-life/temperature assumptions, nominal SOC cycling target of 75% to near 100%, and survival-case SOC minimum of 20%. These are linked to Opalis simulations via generated power profiles and energy-flow inputs.",
+      "verification_validation_artifacts": {
+        "status": "coded",
+        "artifacts": [
+          "simulation scenarios",
+          "acceptance criteria",
+          "executable checks"
+        ],
+        "rationale": "Worst-case observation and no-illumination survival scenarios, SOC acceptance thresholds, and simulation outputs are used as pre-physical feasibility checks."
+      },
+      "pre_physical_development_verification_mechanism": {
+        "status": "coded",
+        "mechanisms": [
+          "simulation-in-the-loop",
+          "parametric checks",
+          "trade-study verification",
+          "virtual integration"
+        ],
+        "rationale": "Mission/ephemeris, power loads and EPS architecture are virtually integrated and checked through repeated simulations and parameter variations before physical development."
+      },
+      "evidence_verification_artifacts_integrated": "Simulation inputs are generated from system/mission model tools and imported into Opalis rather than being documented separately; however no formal requirements/V&V matrix is shown.",
+      "integration_test_readiness": {
+        "status": "not_reported",
+        "links": [
+          "not reported"
+        ],
+        "rationale": "No explicit links to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation are reported."
+      },
+      "evidence_quotes": [
+        {
+          "quote": "Flight dynamics experts from CNES thus extracted from the global observation plan provided by the LESIA the worst case scenarios in terms of sun illumination, reducing it to a period of 48h only that could be used to size the power subsystem and still be representative of the whole mission.",
+          "location": "Section 3"
+        },
+        {
+          "quote": "In that case, a satisfactory equilibrium for the aforementioned power subsystem would thus be defined as a battery cycling between 75% and a bit less than 100% of state of charge, meaning that the energy production is sufficient to power the satellite as well as charging the battery during low illumination time windows, while still ensuring a sufficient margin in the eventuality of a satellite malfunction.",
+          "location": "Section 3"
+        },
+        {
+          "quote": "SOC min acceptable = 20%",
+          "location": "Figure 11 description"
+        }
+      ]
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "Objective and electrical-architecture scope",
-        "quote": "The objective of this paper is to describe the approach through the prism of an electrical architect, that contributes to needs analysis, realization of power budgets, system sizing and energetic simulations through a specific use case.",
-        "location": "Abstract"
+        "claim_id": "C1",
+        "claim_text": "The concurrent-engineering toolchain produces an adaptable and interoperable model in which mission or satellite-configuration changes can be studied quickly/easily.",
+        "outcome_category": [
+          "integrability/interoperability",
+          "decision support",
+          "effort reduction"
+        ],
+        "specificity_of_claim": "EPS-specific",
+        "mbse_mechanism": [
+          "tool integration",
+          "automated generation",
+          "model transformation",
+          "other"
+        ],
+        "other_mechanism": "Standardized CNES/CCSDS-like files exchanged between mission/system-description tools and Opalis power simulation.",
+        "artifact_process_linked": "IDM-CIC system description, Simu-CIC ephemeris, IDM-Power profile, Flows Manager conversion, Opalis energy-balance model.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [
+          "time",
+          "other"
+        ],
+        "other_metric_or_value_indicator": "Qualitative instant/easy change-analysis claim; no measured time or effort.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Authors state mission changes can be studied almost instantly and solar-panel configuration changes can be compared easily, but no timing or effort metric is reported.",
+        "evidence_source": {
+          "quote": "The main added value of this process is that it allows to define an adaptable and interoperable model. For instance, any change on the mission can be studied almost instantly by regenerating the corresponding ephemeris data.",
+          "location": "Section 2"
+        },
+        "additional_evidence": [
+          {
+            "quote": "Another example would be that any change on the configuration or structure of the satellite (for instance amount and position of the solar panel wings) can also be compared easily.",
+            "location": "Section 2"
+          }
+        ],
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "Ease and speed are asserted without a baseline or measured iteration times; improvements could depend on CNES tool familiarity and data-preparation effort."
       },
       {
-        "topic": "Mission context",
-        "quote": "The selected use case to illustrate this paper is a 16U nanosatellite operating on low-earth orbit its mission being the 3D mapping of hot stars dynamic environment by using ultraviolet spectropolarimetry measurements from space for the first time.",
-        "location": "Section 1, Mission Context"
+        "claim_id": "C2",
+        "claim_text": "The simulation workflow enables EPS sizing and stable energy-budget assessment under worst-case mission and environmental conditions.",
+        "outcome_category": [
+          "decision support",
+          "mission assurance",
+          "risk reduction"
+        ],
+        "specificity_of_claim": "EPS-specific",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "tool integration"
+        ],
+        "artifact_process_linked": "Opalis power-subsystem model, energy flows from Simu-CIC/Flows Manager, power profile from IDM-Power, SOC thresholds and final architecture selections.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Executable model or simulation result",
+          "Quantitative metric without baseline"
+        ],
+        "metric_or_value_indicator": [
+          "power margin",
+          "reliability proxy",
+          "other"
+        ],
+        "other_metric_or_value_indicator": "State of charge, energy balance, cell/accumulator series-parallel sizing, end-of-life assumptions.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "The reported stable configuration has SOC minimum 85% for nominal energy balance and survival scenario SOC minimum 27.7% against a 20% acceptable minimum.",
+        "evidence_source": {
+          "quote": "One last thing to mention is that the minimum SOC (State Of Charge) reached during the simulation is 85%",
+          "location": "Section 3"
+        },
+        "additional_evidence": [
+          {
+            "quote": "SOC initial = 80%, SOC min reached = 27.7%, and SOC min acceptable = 20%.",
+            "location": "Figure 11 description"
+          },
+          {
+            "quote": "These various runs of simulations and tradeoffs finally led to the following final satellite electrical architecture",
+            "location": "Section 3"
+          }
+        ],
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "Simulation assumptions, tool fidelity, worst-case selection, and input power/thermal data are not independently validated; no physical or flight test confirms the modeled margins."
       },
       {
-        "topic": "Common technical reference",
-        "quote": "The overall concurrent engineering approach consists in setting up a common technical reference (satellite description and mission), with the aim of producing system-level budgets (mass, power, centering/inertias, data, etc.) produced by the various subsystems experts/architects.",
-        "location": "Section 2, Workflow Description"
+        "claim_id": "C3",
+        "claim_text": "The workflow enables trade studies of observation plans, technologies, regulator types, bus voltages, solar-cell placement, thermal sensitivity, and battery configurations.",
+        "outcome_category": [
+          "decision support",
+          "risk reduction",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "tool integration"
+        ],
+        "artifact_process_linked": "Observation planning, 48-hour worst-case scenario, power budget by mission modes, Opalis simulation runs and technology/configuration parameters.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Executable model or simulation result",
+          "Trade-study or requirements-checking result"
+        ],
+        "metric_or_value_indicator": [
+          "power margin",
+          "reliability proxy",
+          "other"
+        ],
+        "other_metric_or_value_indicator": "Energy stability/SOC, cell technology, regulator type, solar panel/battery architecture choices.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "The authors report the process supported final architecture choices and multiple what-if analyses, including revising scientific ambitions if energy feasibility fails.",
+        "evidence_source": {
+          "quote": "This step is also an opportunity to carry out various trade-offs between technologies and architecture principles (type of battery/solar cell, power bus topologies, control principles, etc.).",
+          "location": "Section 3"
+        },
+        "additional_evidence": [
+          {
+            "quote": "Test different stars observation plans in order to validate their feasibility in terms of energy stability and potentially revise scientific ambitions and needs accordingly.",
+            "location": "Conclusion"
+          },
+          {
+            "quote": "Study the impact of going from a 2S8P to a 2S7P battery configuration in order to meet the need for volume reduction",
+            "location": "Conclusion"
+          }
+        ],
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "The paper reports examples and final choices but does not provide a systematic trade-space exploration, uncertainty analysis, or baseline design process."
       },
       {
-        "topic": "Electrical architect objectives",
-        "quote": "To define preliminary power budgets,",
-        "location": "Section 2, Workflow Description"
+        "claim_id": "C4",
+        "claim_text": "Standardized files and interoperable tools enable subsystem experts to exchange data, communicate through engineering models, and keep dedicated specialized tools compatible.",
+        "outcome_category": [
+          "integrability/interoperability",
+          "communication/stakeholder alignment",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "shared repository",
+          "tool integration",
+          "automated generation",
+          "other"
+        ],
+        "other_mechanism": "Common database and standardized file formats across CNES concurrent-engineering tools.",
+        "artifact_process_linked": "Common technical reference, common database, standard files, IDM-CIC/Simu-CIC/Opalis plugins.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "other_metric_or_value_indicator": "Qualitative smooth-workflow and compatibility claims; no exchange-error, trace-link, or stakeholder metric.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Authors state interoperability makes data exchange and communication easy and leads to a smooth workflow.",
+        "evidence_source": {
+          "quote": "It allows everyone to use their own dedicated and specialized tools by still ensuring compatibility with inputs/outputs of other tools, leading to a smooth workflow.",
+          "location": "Conclusion"
+        },
+        "additional_evidence": [
+          {
+            "quote": "each architect therefore works in conjunction with each other thanks to a common database",
+            "location": "Section 2"
+          }
+        ],
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "No stakeholder evaluation, interoperability failure data, or independent assessment is provided; compatibility may be conditional on CNES standards and tool availability."
       },
       {
-        "topic": "Opalis EPS model",
-        "quote": "The model is defined in the Opalis software. It is a proprietary but open tool developed by CNES that allows performing power simulations.",
-        "location": "Section 2, Workflow Description"
-      },
-      {
-        "topic": "Interoperable model value",
-        "quote": "The main added value of this process is that it allows to define an adaptable and interoperable model.",
-        "location": "Section 2, Workflow Description"
-      },
-      {
-        "topic": "Worst-case scenario reduction",
-        "quote": "Flight dynamics experts from CNES thus extracted from the global observation plan provided by the LESIA the worst case scenarios in terms of sun illumination, reducing it to a period of 48h only that could be used to size the power subsystem and still be representative of the whole mission.",
-        "location": "Section 3, Design Analyses & Simulation Results"
-      },
-      {
-        "topic": "Simulation purpose",
-        "quote": "The ultimate goal of the simulation process is to refine the power subsystem definition and to size elements (in particular cells and accumulators assemblies for solar panels and battery) in order to reach an energy balance between generation, storage and usage.",
-        "location": "Section 3, Design Analyses & Simulation Results"
-      },
-      {
-        "topic": "Concurrent analysis outcome",
-        "quote": "enables to perform several analyses, trade-off studies comparisons and sizings in parallel by taking into account every constraint and design impact easily",
-        "location": "Section 4, Conclusion"
-      },
-      {
-        "topic": "Toolchain continuity",
-        "quote": "the interoperability of the different tools and methods, made possible by the standardization of files format, is a real enabler for the concurrent engineering process",
-        "location": "Section 4, Conclusion"
+        "claim_id": "C5",
+        "claim_text": "The preliminary-phase workflow could be extended to phases A/B/C/D by adding the satellite manufacturer/provider if file standards are respected.",
+        "outcome_category": [
+          "generality/reuse",
+          "lifecycle continuity",
+          "integrability/interoperability"
+        ],
+        "specificity_of_claim": "generic space-system",
+        "mbse_mechanism": [
+          "tool integration",
+          "other"
+        ],
+        "other_mechanism": "Conditional continuity through respected file standards and additional stakeholder participation.",
+        "artifact_process_linked": "Standard-file workflow and concurrent engineering process.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "PDR",
+          "CDR",
+          "implementation"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "other_metric_or_value_indicator": "Potential lifecycle extension; no measured reuse or continuity metric.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Future/conditional claim only.",
+        "evidence_source": {
+          "quote": "it could also be implemented for phases A/B/C/D by adding a satellite manufacturer/provider in the loop as long as the files standard is still respected",
+          "location": "Conclusion"
+        },
+        "additional_evidence": [],
+        "evidence_confidence_rating": "Unsupported",
+        "threats_or_alternative_explanations": "No later-phase case, manufacturer integration evidence, model-governance mechanism, or configuration-control process is reported."
       }
     ],
-    "notes_for_consistency_with_lineage": "Supporting tier is retained because the paper is directly relevant to EPS/electrical-architecture modeling and simulation but offers limited formal MBSE, reproducibility, and validation evidence. No lineage comparison was performed due to the silo rule.",
-    "extraction_confidence": "medium",
-    "extraction_confidence_reason": "The full markdown provides clear workflow, mission, toolchain, and simulation details. Confidence is limited by missing venue/publisher information, lack of formal MBSE artifacts/model files, and limited validation evidence."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": {
+        "status": "not_reported",
+        "values": [
+          "not reported"
+        ],
+        "rationale": "No model ownership, configuration/change control, model review process, quality criteria, or naming/versioning conventions are reported. A concurrent engineering authority coordinates objectives, but this is not described as model governance."
+      },
+      "traceability_to_project_deliverables_decisions": "Model-derived analyses support preliminary feasibility, power subsystem sizing, architecture choices, and potential revision of scientific ambitions/needs. Formal project deliverables, review-board decisions, assurance cases, or management reports are not shown.",
+      "evaluation_criteria_for_model_quality_usefulness": "Simulation criteria include stable energy balance, nominal SOC not dropping below 75%, survival SOC above 20%, and sufficient generation/storage/use margin. No criteria are given for model quality, completeness, maintainability, or user usefulness.",
+      "roi_value_realization_evidence": {
+        "status": "not_reported",
+        "values": [
+          "not reported"
+        ],
+        "rationale": "No adoption cost, training/tooling effort, saved effort, schedule effect, avoided rework, reuse value, or quantitative decision-quality evidence is reported."
+      },
+      "programmatic_gates_or_critical_design_events_supported": "Preliminary feasibility/pre-sizing only; possible later phase A/B/C/D use is asserted but not demonstrated. No SRR, PDR, CDR, integration, or test gates are directly supported.",
+      "model_derived_performance_indicators_or_management_metrics": "Electrical indicators include SOC minima, power consumption by mode, energy flows, solar-generator output, battery voltage/current, storage energy and selected cell/accumulator assemblies. No project management KPIs are reported."
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "value": "addressed with evidence",
+        "rationale": "Numbered workflow and 16U nanosatellite case with simulation outputs and final preliminary architecture."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "value": "addressed with evidence",
+        "rationale": "Central topic: common database, standardized/CCSDS-like files, plugins and imports/exports across IDM-CIC, Simu-CIC and Opalis."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "value": "addressed with evidence",
+        "rationale": "Applied to a 16U nanosatellite preliminary feasibility problem with power/volume constraints, although MBSE burden is not evaluated."
+      },
+      "governance_project_deliverables_roi": {
+        "value": "addressed conceptually",
+        "rationale": "Analyses support feasibility and design decisions, but formal deliverables, governance and ROI evidence are not provided."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "value": "addressed conceptually",
+        "rationale": "Concurrent engineering and rapid change/trade-off analysis align with agile/rapid iteration, but NewSpace/distributed practice is not explicitly evaluated."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "rq1": "Provides a concrete, tool-mediated workflow for modeling mission scenario, satellite/system description, power budgets, and EPS architecture for a 16U nanosatellite, but not a general reusable MBSE reference model or minimal-behavior method.",
+        "rq2": "Strongly relevant to integrability/interoperability and decision-support claims: common database, standardized files and plugins support parallel expert analyses, trade studies and electrical sizing. Evidence is mainly a single simulated use case.",
+        "rq3": "Offers pre-physical simulation-based feasibility checks for EPS sizing and SOC acceptance thresholds, but lacks formal verification procedures, requirements traceability, test artifacts, or IVV model integration."
+      },
+      "limitations_gaps_stated_by_authors": [
+        "Demonstrated use case is preliminary phases with laboratory and agency involvement.",
+        "Later phases A/B/C/D are only conditional on adding a manufacturer/provider and maintaining file standards."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No public model/data/tool package; no exact exchange schemas.",
+        "No formal MBSE language/profile, requirements model, verification matrix or test procedures.",
+        "No baseline or independent validation for process/outcome claims.",
+        "No physical/flight/integration evidence."
+      ],
+      "direct_evidence_quotes_supporting_classification": [
+        {
+          "quote": "common technical reference (satellite description and mission)",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The model is defined in the Opalis software. It is a proprietary but open tool developed by CNES that allows performing power simulations.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "interoperability of the different tools and methods, made possible by the standardization of files format",
+          "location": "Conclusion"
+        }
+      ],
+      "notes_for_consistency_with_other_papers": "Treat as a CNES concurrent-engineering/electrical-architecture workflow paper, not a SysML reference-model paper. Do not count interoperability/process claims as strong evidence without baseline; do count simulation-backed SOC/power sizing as moderate evidence for preliminary EPS decision support.",
+      "extraction_confidence": "medium",
+      "extraction_confidence_rationale": "Technical workflow and case details are clear, but MBSE formalism, venue metadata, model availability and outcome evidence are limited."
+    }
   },
-  "bibtex": "@inproceedings{paper-0053,\n  title = {CONCURRENT ENGINEERING PROCESS FOR ELECTRICAL ARCHITECTURE OF NANOSATELLITES PRELIMINARY PHASES},\n  author = {Pierre Boan},\n  year = {2025},\n  booktitle = {SPIE Proceedings},\n  doi = {10.1117/12.3062667},\n  url = {https://doi.org/10.1117/12.3062667}\n}"
+  "bibtex": "@inproceedings{Boan2025ConcurrentEngineeringNanosatellites,\n  author = {Boan, Pierre},\n  title = {{Concurrent Engineering Process for Electrical Architecture of Nanosatellites Preliminary Phases}},\n  year = {2025},\n  doi = {10.1117/12.3062667},\n  note = {Venue not reported in supplied markdown; Scopus-indexed corpus metadata}\n}"
 }

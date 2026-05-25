@@ -3,561 +3,1783 @@
   "tier": "supporting",
   "year": 2014,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The supplied corpus metadata identifies a DOI and an Acta Astronautica route; the paper has formal authorship and affiliation consistent with a peer-reviewed journal article.",
-        "evidence": [
-          "Corpus metadata DOI: 10.1016/j.actaastro.2014.10.002.",
-          "Paper front matter: Advanced Space Concepts Laboratory, Department of Mechanical and Aerospace Engineering University of Strathclyde."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper repeatedly states scope boundaries and simplifying assumptions for generality, orbit modeling, launch, cost, ground station contact, and case-study intent.",
-        "evidence": [
-          "Since each space mission is unique, the model architecture introduced here cannot be completely generalized, however a baseline structure can be maintained with modifications of the inputs and requirements made for each use case.",
-          "It should be noted that it is beyond the scope of this work to demonstrate complete novel mission solutions, but is instead aiming to introduce a design approach.",
-          "Because of this the cost metric defined here is not intended as a final price estimate, but as a measure with which to compare the relative cost of different designs."
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The mission context is explicitly CubeSat/LEO with two conceptual design case studies and stated design variables, objectives, and lifecycle stage.",
-        "evidence": [
-          "Two mission cases are studied; the first is an Earth observation satellite and presents a trade-off between ground sample distance and revisit time over a ground target, given altitude as the decision variable.",
-          "The second is a satellite with a generic scientific payload and shows a more involved trade-off, between data return to a ground station and cost of the mission, given variations in the orbit altitude, inclination and ground station latitude.",
-          "Once an acceptable mission design is identified during the conceptual/early design phase using this approach, design parameters tend to be held fixed throughout the remaining design life-cycle."
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The architecture, equations, MATLAB implementation style, optimizer, and case variables are described for comparison, but no executable model, detailed component database, or formal MBSE language artifacts are provided.",
-        "evidence": [
-          "As such, sequential programming is used to model the various disciplines, within the Matlab $ ^{\\textcircled{R}} $ environment.",
-          "A general multi-objective problem can be described as the problem of finding a vector of decision variables and optimizing objectives; the study employs a controlled elitist genetic algorithm.",
-          "Sub-system selection is made based on either mission requirements ... from a database of OTS components, taken from various on-line sources."
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Claims about speed, trade-space visibility, baseline designs, and non-intuitive solutions are tied to the model-based architecture, analytic relationships, and MOGA search process.",
-        "evidence": [
-          "Using the model-based architecture described in this work has additional benefits over identifying the trends shown in Figure 4, as it defines a baseline system design for each point in the solution space.",
-          "This work presents a rapid, model-based approach to the inter-disciplinary design of a CubeSat mission, through exploitation of analytical relationships at the inter- and intra-mission levels.",
-          "Global multi-objective optimization, in the form of a controlled elitist genetic algorithm, is applied to the architecture and is shown to find a Pareto set of near-optimal solutions from an arbitrary, user defined design space."
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper provides illustrative case-study results and a runtime metric, but lacks independent validation, flight/test evidence, stakeholder evaluation, and a controlled baseline comparison for several claims.",
-        "evidence": [
-          "These results were obtained in 10 minutes on a personal workstation with an Intel i7 quad-core 2.2GHz processor, with a GA population of 500 and solution convergence after 102 generations (i.e 51,000 iterations of the model architecture).",
-          "Results from two case studies are presented; in the first, optimal solutions from a trade-off between ground sample distance and revisit rate are shown, over a range of orbit altitude.",
-          "In the second, it was shown that non-intuitive, near optimal CubeSat mission design solutions could be identified for maximum data return rate and minimum mission life-cycle cost."
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "Requirements and decision variables feed discipline models and feasibility checks, but there is no formal requirements-verification traceability model or lifecycle gate evidence.",
-        "evidence": [
-          "A set of inputs, which includes the mission requirements, feeds each of the mission disciplines, from which one or more performance metrics are produced.",
-          "The approach to space system design is summarized by the process described in Figure 2, whereby the most suitable CubeSat platform is selected based on compliance with mission requirements and minimum cost.",
-          "A penalty function is applied in this case to remove the solution from the Pareto set."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "Equations, assumptions, data-source categories, optimizer settings, and runtime are reported, but model/code availability, exact datasets, and exchange mechanisms are not.",
-        "evidence": [
-          "Sub-system selection is made based on either mission requirements ... from a database of OTS components, taken from various on-line sources.",
-          "These results were obtained in 10 minutes on a personal workstation with an Intel i7 quad-core 2.2GHz processor, with a GA population of 500 and solution convergence after 102 generations (i.e 51,000 iterations of the model architecture).",
-          "As such, sequential programming is used to model the various disciplines, within the Matlab $ ^{\\textcircled{R}} $ environment."
-        ]
-      }
-    ],
-    "total_score": 6.0,
-    "max_score": 8,
-    "normalized_score": 0.75,
-    "overall_rationale": "The study is a credible, clearly scoped CubeSat model-based design paper with useful equations, case results, and runtime evidence. Quality is reduced by limited formal MBSE artifacts, no released model/data, no formal traceability or V&V, and only illustrative validation of claims."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0012.json",
-    "status_rationale": "Kept as supporting: the paper is directly about model-based CubeSat mission design and includes power-budget/EPS-adjacent modeling, but it is not an EPS-specific MBSE verification study.",
-    "citation": "Lowe, C. J., and Macdonald, M. (2014). Rapid Model-based Inter-disciplinary Design of a CubeSat Mission. Acta Astronautica. https://doi.org/10.1016/j.actaastro.2014.10.002",
-    "title": "Rapid Model-based Inter-disciplinary Design of a CubeSat Mission",
-    "authors": [
-      "C. J. Lowe",
-      "M. Macdonald"
-    ],
-    "venue": "Acta Astronautica",
-    "doi_or_url": "10.1016/j.actaastro.2014.10.002",
-    "publisher": "not reported",
-    "venue_type": "journal article",
-    "source_database_or_route": [
-      "scopus",
-      "semantic_scholar abstract_enrichment",
-      "corpus_accessible.json metadata"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The study provides a general mission-level CubeSat modeling architecture and includes power demand, battery sizing, and solar array sizing using analytic approximations; it does not develop a detailed reusable EPS behavioral model."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "The paper claims rapid trade-space exploration, mission robustness, inter-disciplinary integration, and discovery of non-intuitive near-optimal designs; reliability and reproducibility outcomes are not demonstrated, and EPS-specific outcome claims are limited."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "Pre-physical feasibility checks for power, volume, lifetime, de-orbit compliance, and constraint penalties are embedded in the design model, but no formal EPS verification procedure, test artifacts, or requirements traceability is reported."
-      }
+    "credible_venue": {
+      "label": "Was the research published in a credible venue?",
+      "numeric_score": 1,
+      "rationale": "Indexed corpus metadata supplies a DOI for a formal 2014 journal article; the DOI stem/suffix indicates Acta Astronautica/Elsevier and the paper has conventional academic authorship and references.",
+      "evidence": [
+        "Corpus metadata: DOI=10.1016/j.actaastro.2014.10.002; source provenance includes Scopus records.",
+        "Paper front matter: C. J. Lowe and M. Macdonald, Advanced Space Concepts Laboratory, University of Strathclyde."
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "The paper cites prior CubeSat MBSE work including RAX operational scenarios and INCOSE Space Systems Working Group CubeSat/enterprise modeling, but this extraction treats the study as an independent MATLAB-based mission trade-space architecture."
+    "limitations_discussed": {
+      "label": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+      "numeric_score": 1,
+      "rationale": "The paper repeatedly states scope boundaries and simplifying assumptions for generalization, case-study intent, trajectory/orbit modeling, communications, launch, cost, optimization, and downstream use.",
+      "evidence": [
+        "Section 1.1: \"Since each space mission is unique, the model architecture introduced here cannot be completely generalized, however a baseline structure can be maintained with modifications of the inputs and requirements made for each use case.\"",
+        "Section 1.2: \"it is beyond the scope of this work to demonstrate complete novel mission solutions, but is instead aiming to introduce a design approach.\"",
+        "Section 3.4.1: \"the cost metric defined here is not intended as a final price estimate, but as a measure with which to compare the relative cost of different designs.\""
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "label": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+      "numeric_score": 1,
+      "rationale": "The paper identifies CubeSat/nanosatellite LEO missions, two case domains, decision variables, and a conceptual/early design lifecycle context.",
+      "evidence": [
+        "Abstract: \"Two mission cases are studied; the first is an Earth observation satellite... The second is a satellite with a generic scientific payload...\"",
+        "Introduction: \"Once an acceptable mission design is identified during the conceptual/early design phase using this approach...\"",
+        "Section 2.2: \"The CubeSat is a specific class of Nano-satellite... Size of a CubeSat is defined in discrete intervals...\""
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "label": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+      "numeric_score": 0.5,
+      "rationale": "Architecture, equations, assumptions, optimizer, decision-variable bounds, and runtime are described, but no executable model, exact component database, formal SysML artifacts, or released toolchain are reported.",
+      "evidence": [
+        "Section 1.1: \"sequential programming is used to model the various disciplines, within the Matlab environment.\"",
+        "Section 3.1.1: subsystem selection uses \"a database of OTS components, taken from various on-line sources\" without publishing the database.",
+        "Section 4.2 reports GA population, convergence generations, iterations, processor, and runtime."
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "label": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+      "numeric_score": 1,
+      "rationale": "Main claims are tied to the model-based architecture, analytical discipline models, data flow among mission segments, and genetic-algorithm trade-space search.",
+      "evidence": [
+        "Abstract: \"The models within the architecture exploit analytic methods where possible... and achieve rapid convergence.\"",
+        "Section 4.1: \"Using the model-based architecture described in this work... defines a baseline system design for each point in the solution space.\"",
+        "Conclusion: \"Global multi-objective optimization... is applied to the architecture and is shown to find a Pareto set of near-optimal solutions...\""
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "label": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+      "numeric_score": 0.5,
+      "rationale": "The paper provides executable case-study results, Pareto plots, and a runtime metric, but lacks independent validation, controlled baseline comparison, stakeholder assessment, model reuse evidence, integration/test results, or flight data.",
+      "evidence": [
+        "Section 4.2: \"These results were obtained in 10 minutes... with a GA population of 500 and solution convergence after 102 generations (i.e 51,000 iterations of the model architecture).\"",
+        "Conclusion: \"Results from two case studies are presented...\"",
+        "No reported stakeholder evaluation, independent benchmark, physical test, or operational/flight evidence in the completed extraction."
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "label": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+      "numeric_score": 0.5,
+      "rationale": "Requirements and inputs feed discipline models and feasibility checks, but the paper does not provide formal requirements-to-architecture/verification traceability, matrices, or lifecycle gate traces.",
+      "evidence": [
+        "Section 1.1: \"A set of inputs, which includes the mission requirements, feeds each of the mission disciplines, from which one or more performance metrics are produced.\"",
+        "Section 3.1: the space segment process selects a platform \"based on compliance with mission requirements and minimum cost.\"",
+        "No verification matrix, requirements table, trace links, SRR/PDR/CDR gate mapping, or model repository is reported."
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "label": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+      "numeric_score": 0.5,
+      "rationale": "Equations, assumptions, decision bounds, data-source categories, and optimizer/runtime settings allow partial method-level reproduction, but model/code/data availability and toolchain exchange mechanisms are not reported.",
+      "evidence": [
+        "Section 1.1: model implemented in the Matlab environment.",
+        "Section 3.1.1: OTS components are drawn from online sources, but exact database contents are not published.",
+        "No open model, scripts, reusable package, XMI/ReqIF/API, or repository is reported."
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "LEO CubeSat mission architecture with two illustrative missions: Earth observation and a generic scientific payload data-return mission.",
-    "size_form_factor": "CubeSat units selected from 1U, 2U, 3U ... NU, with examples including 2U/3U transitions; exact platform size is optimization-dependent.",
-    "mission_name": "not reported; generic case studies only",
-    "mission_domain": "Earth observation, scientific data collection, communication to ground stations, and mission-level cost/performance trade-space analysis.",
-    "organization_type": "Academic research laboratory with industry-linked EPSRC iCASE studentship involving Clyde Space Ltd.; not a flight program report.",
-    "project_maturity": "Conceptual/early design methodology with analytical models and simulated optimization case studies.",
-    "lifecycle_stage_addressed": "Conceptual/early mission design and trade-space selection before detailed behavioral simulation, operations scheduling, or physical development.",
-    "development_context": "Rapid model-based architecture implemented in MATLAB with analytical discipline models, OTS component database assumptions, and multi-objective genetic optimization.",
-    "eps_relevance": "power-budget/electrical-architecture",
-    "model_maturity": "Research prototype demonstrated on two case studies; not reported as released, flight-validated, or integrated with downstream engineering tools."
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Formal DOI-bearing, Scopus-indexed article; best-effort venue is Acta Astronautica from DOI metadata.",
+      "evidence": [
+        {
+          "quote": "Corpus metadata: DOI=10.1016/j.actaastro.2014.10.002; source provenance includes Scopus records.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Paper front matter: C. J. Lowe and M. Macdonald, Advanced Space Concepts Laboratory, University of Strathclyde.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Assumptions and scope boundaries are extensive and directly affect interpretation.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: \"Since each space mission is unique, the model architecture introduced here cannot be completely generalized, however a baseline structure can be maintained with modifications of the inputs and requirements made for each use case.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 1.2: \"it is beyond the scope of this work to demonstrate complete novel mission solutions, but is instead aiming to introduce a design approach.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.4.1: \"the cost metric defined here is not intended as a final price estimate, but as a measure with which to compare the relative cost of different designs.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "CubeSat mission class, domains, variables, and conceptual/early design context are described.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"Two mission cases are studied; the first is an Earth observation satellite... The second is a satellite with a generic scientific payload...\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: \"Once an acceptable mission design is identified during the conceptual/early design phase using this approach...\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 2.2: \"The CubeSat is a specific class of Nano-satellite... Size of a CubeSat is defined in discrete intervals...\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Enough equations and architecture for comparison, not enough model/tool artifacts for full replication.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: \"sequential programming is used to model the various disciplines, within the Matlab environment.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.1: subsystem selection uses \"a database of OTS components, taken from various on-line sources\" without publishing the database.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.2 reports GA population, convergence generations, iterations, processor, and runtime.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims are tied to the model-based architecture and optimization process.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"The models within the architecture exploit analytic methods where possible... and achieve rapid convergence.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.1: \"Using the model-based architecture described in this work... defines a baseline system design for each point in the solution space.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: \"Global multi-objective optimization... is applied to the architecture and is shown to find a Pareto set of near-optimal solutions...\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Evidence is mainly illustrative case-study output and one runtime metric without independent validation or controlled baseline.",
+      "evidence": [
+        {
+          "quote": "Section 4.2: \"These results were obtained in 10 minutes... with a GA population of 500 and solution convergence after 102 generations (i.e 51,000 iterations of the model architecture).\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: \"Results from two case studies are presented...\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "No reported stakeholder evaluation, independent benchmark, physical test, or operational/flight evidence in the completed extraction.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Inputs/requirements flow into models, but formal trace links or verification matrices are absent.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: \"A set of inputs, which includes the mission requirements, feeds each of the mission disciplines, from which one or more performance metrics are produced.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1: the space segment process selects a platform \"based on compliance with mission requirements and minimum cost.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "No verification matrix, requirements table, trace links, SRR/PDR/CDR gate mapping, or model repository is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Implementation details are partial; model, code, datasets, and exchange mechanisms are absent.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: model implemented in the Matlab environment.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.1: OTS components are drawn from online sources, but exact database contents are not published.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No open model, scripts, reusable package, XMI/ReqIF/API, or repository is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "supporting"
+      ],
+      "status": "coded",
+      "rationale": "Corpus metadata classifies the paper as supporting; it is mission-level MBSE with EPS-adjacent power modeling, not a core EPS verification paper.",
+      "evidence": [
+        {
+          "quote": "Metadata prompt: screening_tier=supporting.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Paper focus: rapid model-based inter-disciplinary CubeSat mission design.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "Provides a general CubeSat mission modeling architecture and power-budget abstractions, but not a reusable EPS behavioral reference model.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: baseline structure can be maintained with mission-specific inputs/requirements.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.1-3.1.4: mass, volume, power, battery, and solar array sizing equations.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "Claims rapid exploration, inter-disciplinary integration, and decision support; reliability/reproducibility/integrability outcomes are not EPS-specific or independently demonstrated.",
+      "evidence": [
+        {
+          "quote": "Abstract: architecture identifies trends between cost/performance and decision variables.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.2: runtime and Pareto results for 51,000 iterations.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "Contains pre-physical parametric feasibility checks for power and platform selection, but no formal EPS verification procedure or IVV model.",
+      "evidence": [
+        {
+          "quote": "Figure 2 and Sections 3.1.3-3.1.4 model battery and solar-array sizing before physical development.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No test procedures, verification matrix, SIL/HIL, or automated verification artifacts are reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A"
+      ],
+      "status": "coded",
+      "rationale": "The method is framed as conceptual/early mission design and selection of candidates for further analysis.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"conceptual/early design phase\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.1: near-optimal missions can be carried through for detailed behavioral simulation, operations scheduling, or sensitivity analysis.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The study comes from an academic lab/iCASE studentship and targets small, modular, resource-limited CubeSats.",
+      "evidence": [
+        {
+          "quote": "Front matter: Advanced Space Concepts Laboratory, University of Strathclyde.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Acknowledgment: \"EPSRC iCASE studentship with Clyde Space Ltd.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: \"small, modular, resource-limited satellites\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "power-budget/electrical-architecture"
+      ],
+      "status": "coded",
+      "rationale": "Power demand, battery capacity, solar array sizing, and power-driven platform feasibility are modeled, but not a full EPS behavioral model.",
+      "evidence": [
+        {
+          "quote": "Section 3.1.1: platform mass, volume, power, and cost are sums over subsystems.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 2: power requirements feed total power demand, battery capacity, and solar panel area.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "conceptual framework",
+        "prototype demonstration",
+        "executable model"
+      ],
+      "status": "coded",
+      "rationale": "A conceptual architecture was implemented and run in MATLAB for two case studies with reported convergence/runtime.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: \"sequential programming... within the Matlab environment.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.2: 51,000 model-architecture iterations in 10 minutes.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "budgets",
+        "verification",
+        "simulation"
+      ],
+      "status": "coded",
+      "rationale": "Scope covers mission-level trajectory/space/launch/ground/performance architecture, requirements inputs, subsystem mass-volume-power-cost budgets, executable trade-space simulation, and feasibility/constraint checks.",
+      "evidence": [
+        {
+          "quote": "Figure 1 design structure matrix: trajectory, space segment, launch segment, ground segment, performance models.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.1: mass, volume, power and cost by subsystem.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.5: objectives and decision-variable bounds for both cases.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "parametrics",
+        "trade-study models",
+        "power budgets",
+        "executable simulations",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Explicit artifacts are analytical/parametric equations, trade-space/optimization models, power budget sizing, and executable MATLAB runs; other artifacts include DSM/process diagrams and Pareto plots.",
+      "evidence": [
+        {
+          "quote": "Section 1.1 and Fig. 1: design structure matrix with model blocks and data flow.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Sections 3.1.2-3.4.4: equations for communication duty cycle, battery, solar array, de-orbit, cost, data return, GSD, revisit gap.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Sections 4.1-4.2: solution-space/Pareto plots.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper says a baseline structure can be maintained and modified for each use case; equations and workflow provide method guidance but no released reference model/package.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: \"a baseline structure can be maintained with modifications of the inputs and requirements made for each use case.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 1.2: case studies illustrate capabilities and flexibility of the proposed methodology.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Extended MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The MATLAB model connects multiple mission disciplines and system/subsystem budgets in one data-flow/optimization architecture; it is not a fully integrated digital engineering environment.",
+      "evidence": [
+        {
+          "quote": "Figure 1: trajectory, space, launch, ground, and performance model blocks connected by data flow.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 1.1: \"each discipline is related to almost all of the others\" and links can be neglected depending on fidelity.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "cost",
+        "schedule"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring is justified by CubeSat modularity/limited capability, need to minimize cost/maximize performance, and reducing computation time for rapid trade-space search.",
+      "evidence": [
+        {
+          "quote": "Abstract: resource-limited satellites; lifecycle cost/performance trade.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: \"the computation time for calculation of performance and cost parameters must be reduced\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: CubeSat limited capability and modular design reduce variables.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "Provides architecture, equations, process flow, and case studies, but no complete adopter playbook or checklist.",
+      "evidence": [
+        {
+          "quote": "Section 2-3 introduce methods and calculations for each mission discipline.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 1.2: case studies are intended to illustrate methodology, not complete novel missions.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "MATLAB/Simulink",
+        "custom tools",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The implemented tool is a custom sequential MATLAB architecture; other methods/tools include DSM notation and a controlled elitist NSGA-II/MOGA optimizer. ParaMagic/MagicDraw and Solvea/Enterprise Architect are mentioned as alternatives, not used.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: \"sequential programming is used... within the Matlab environment.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 2.5: \"controlled elitist... Multi-Objective Genetic Algorithm (MOGA) is employed.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 1.1 mentions ParaMagic and Solvea for acausal closed-form systems but contrasts them with the present work.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "Internal parameter data flow is shown, but no cross-tool exchange mechanism, API, import/export, XMI, ReqIF, co-simulation, or model transformation is reported.",
+      "evidence": [
+        {
+          "quote": "Figure 1 describes data flow among internal model blocks.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 1.1 reports implementation in MATLAB; no external synchronization or exchange standard is described.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [
+        "missing interfaces"
+      ],
+      "status": "coded",
+      "rationale": "Extractor-identified: the paper lacks interfaces from the MATLAB mission model to formal MBSE, CAD, requirements, verification, or test tools; authors do state the architecture cannot be completely generalized.",
+      "evidence": [
+        {
+          "quote": "Section 1.1: \"the model architecture introduced here cannot be completely generalized\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Completed extraction: no model repository, data exchange standard, or downstream tool interface is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "loads",
+        "margins",
+        "power budgets",
+        "degradation"
+      ],
+      "status": "coded",
+      "rationale": "EPS-adjacent elements include subsystem power loads, battery sizing, solar array sizing, safety factors, and cell degradation, but not detailed power conditioning/distribution or fault protection.",
+      "evidence": [
+        {
+          "quote": "Figure 2: subsystem powers feed total power demand, battery capacity required, and solar panel area required.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.3: battery capacity uses power during eclipse, charging efficiency, depth of discharge, and safety factor for degradation.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.4: solar array sizing includes cell efficiency, packing efficiency, and degradation.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [
+        "simulation scenarios",
+        "executable checks"
+      ],
+      "status": "coded",
+      "rationale": "V&V-like artifacts are scenario/case-study runs and executable feasibility/constraint checks; no formal verification matrix/test artifacts are presented.",
+      "evidence": [
+        {
+          "quote": "Figure 2 ends with \"Design is feasible\" and \"Select min. cost feasible design\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.5: penalty functions remove unacceptable lifetime solutions from the Pareto set.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Sections 4.1-4.2 present two case-study scenarios and results.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "parametric checks",
+        "trade-study verification"
+      ],
+      "status": "coded",
+      "rationale": "Before physical development, candidate designs are screened through analytical/parametric checks and trade-space constraints for power, volume, lifetime, de-orbit compliance, cost, and performance.",
+      "evidence": [
+        {
+          "quote": "Section 3.1.3: battery capacity is calculated as a minimum required to satisfy platform demands.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.4: solar array area required to satisfy power and charging demands.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.1.5: de-orbit compliance is assessed and a de-orbit device can be added.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No links are reported from the model to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation.",
+      "evidence": [
+        {
+          "quote": "Section 4.1 only states that further analysis could include detailed behavioral simulation or operation scheduling; no integration/test artifact is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "integrability/interoperability",
+        "generality/reuse",
+        "completeness",
+        "schedule reduction",
+        "effort reduction",
+        "automation",
+        "decision support",
+        "risk reduction",
+        "mission assurance",
+        "lifecycle continuity"
+      ],
+      "status": "coded",
+      "rationale": "Aggregates categories used in individual claim-evidence records for rapid search, whole-mission integration, broad solution-space coverage, reusable baseline architecture, robustness/feasibility, and downstream carry-forward.",
+      "evidence": [
+        {
+          "quote": "Abstract and Conclusion: rapid convergence and Pareto-set identification.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.1: baseline system design per solution-space point and through-life development possibility.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.2: non-continuous/non-obvious trends.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "EPS-specific",
+        "nanosatellite system-level",
+        "generic MBSE"
+      ],
+      "status": "coded",
+      "rationale": "Most claims are nanosatellite/CubeSat system-level; one claim concerns EPS-adjacent power feasibility; lifecycle-carry-forward is a more generic model-based claim.",
+      "evidence": [
+        {
+          "quote": "Abstract: CubeSat mission cases.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Sections 3.1.3-3.1.4: battery and solar-array sizing.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.1: development of models through the lifecycle could support further analysis.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "executable simulation",
+        "parametric analysis",
+        "requirements linkage",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Value mechanisms include executable MATLAB case studies, parametric/analytical equations, requirements inputs, and other mechanisms (genetic optimization, DSM data flow, OTS database).",
+      "evidence": [
+        {
+          "quote": "Section 1.1: mission requirements feed each discipline.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 2.5: MOGA employed.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.2: 51,000 iterations of the model architecture.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims are mainly for conceptual/early mission design and selection of candidates for further analysis.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"conceptual/early design phase\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: informed assessment of which designs to take on for further analysis.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration",
+        "Executable model or simulation result",
+        "Trade-study or requirements-checking result",
+        "Quantitative metric without baseline"
+      ],
+      "status": "coded",
+      "rationale": "Claims range from unsupported robustness rationale to case-study Pareto results, executable optimization runs, feasibility checks, and a runtime metric without a controlled baseline.",
+      "evidence": [
+        {
+          "quote": "Section 4.2 runtime metric.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Sections 4.1-4.2 case-study results and Pareto plots.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction robustness statement is not empirically tested.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "time",
+        "cost",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Reported indicators include runtime, mission lifecycle cost, and other mission/performance metrics such as GSD, revisit gap, data return, altitude/inclination/GS latitude, iterations, battery capacity, and solar array area.",
+      "evidence": [
+        {
+          "quote": "Section 4.2: 10 minutes, GA population 500, 102 generations, 51,000 iterations.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3.4: mission cost, data return rate, GSD, and revisit gap metrics.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Sections 3.1.3-3.1.4: battery capacity and solar array area equations.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [
+        "manual analysis",
+        "alternative toolchain",
+        "not reported"
+      ],
+      "status": "coded",
+      "rationale": "The paper compares conceptually against engineering judgment/point-design and numerical propagation, but some EPS/power feasibility claims have no comparator.",
+      "evidence": [
+        {
+          "quote": "Introduction: traditional mission design uses expert judgment and point-design tools.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: analytical visibility assessments in fractions of a second versus minutes using numerical approaches.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No baseline comparator for EPS sizing feasibility is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Individual claim records are rated no higher than Moderate because evidence lacks independent validation, controlled baseline, repeated reuse, physical test, or flight evidence.",
+      "evidence": [
+        {
+          "quote": "Case-study runtime and Pareto results provide moderate evidence for speed/decision-support claims.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Robustness and lifecycle-continuity claims are conceptual or unsupported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No ownership, configuration/change control, review process, model quality criteria, naming, or versioning conventions are described.",
+      "evidence": [
+        {
+          "quote": "Completed extraction: the paper describes model assumptions and expert selection of Pareto points, but no model governance process.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper models mission cost and argues for rapid/informed assessment, but provides no adoption cost, training/tooling effort, saved effort, ROI, avoided rework, or realized project-decision evidence.",
+      "evidence": [
+        {
+          "quote": "Section 3.4.1: mission cost is a comparative metric, not final price estimate.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No quantified MBSE adoption ROI or project value realization evidence is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "Architecture, equations, process flow, optimizer, decision-variable bounds, and two executable case studies provide an evidence-backed partial pathway.",
+      "evidence": [
+        {
+          "quote": "Sections 2-3 provide discipline methods and calculations.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Sections 4.1-4.2 apply the pathway to two case studies.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "The paper mentions acausal parametric tools and reports MATLAB implementation but does not solve toolchain fragmentation or report exchange mechanisms.",
+      "evidence": [
+        {
+          "quote": "Section 1.1 mentions ParaMagic/MagicDraw and Solvea/Enterprise Architecture as possible acausal parametric tools.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No API/import-export/XMI/ReqIF/co-simulation mechanism is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The method is explicitly tailored to small, modular, resource-limited CubeSats and evidenced through simplified analytical modeling and case results.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"small, modular, resource-limited satellites\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: CubeSat limited capability and modular design reduce variables.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: avoiding costly numerical propagation enables many thousands of iterations.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "Cost and candidate-selection decision support are present, but governance, project deliverables, lifecycle gates, and ROI evidence are not substantively addressed.",
+      "evidence": [
+        {
+          "quote": "Abstract: architecture supports informed assessment of designs to take on for further analysis.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No review gates, model governance, or ROI evidence is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "Rapid-iteration needs for commercial/resource-limited CubeSats are addressed and supported by a runtime/iteration metric; agile/distributed practices are not discussed.",
+      "evidence": [
+        {
+          "quote": "Introduction: commercial organizations tend toward nano-satellites as cost-effective solutions.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4.2: 51,000 iterations in 10 minutes.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: many thousands of iterations in time typically expected for one numerical assessment.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "Full markdown was available and provided clear methods, assumptions, equations, case results, and limitations; interpretation is less certain only for formal venue metadata and MBSE-vs-MDO classification.",
+      "evidence": [
+        {
+          "quote": "Complete paper markdown read, including abstract through author bios.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Controlled coding grounded in direct section quotes and corpus metadata.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Manual point-design mission analysis and cost modeling are slow, isolated by discipline, and can miss near-optimal CubeSat designs; the paper proposes a rapid model-based architecture to relate cost/performance objectives to design variables.",
-    "modeling_scope": [
-      "orbit trajectory variables and long-term visibility",
-      "space segment mass, volume, power, cost, battery, solar arrays, lifetime, and de-orbit device selection",
-      "launch segment cost assumption",
-      "ground segment location, contact, setup, and operations cost",
-      "mission performance metrics including GSD, revisit gap, data return rate, and mission cost",
-      "multi-objective genetic optimization and Pareto-set generation"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "assumptions_or_data_quality_limits",
+      "interoperability_limitations",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage"
     ],
-    "system_boundary_level_of_abstraction": "Mission-level CubeSat architecture at conceptual design fidelity, representing disciplines as analytical/parametric modules rather than detailed hardware behavior or formal SysML blocks.",
-    "minimal_or_excluded_modeling": "The model omits detailed numerical orbit propagation, time-periodic orbit properties, non-circular orbits, detailed spacecraft behavior, final-price cost estimation, complete novel mission design, and formal hardware/software integration testing. Some discipline links may be neglected depending on fidelity.",
-    "required_prior_behavioral_domain_knowledge": "Requires mission requirements, payload and communication demands, decision-variable bounds, CubeSat subsystem options, analytical relationships for orbit/visibility/power/cost, and assumptions such as attitude scheme, battery/solar efficiencies, degradation, and safety factors.",
-    "handling_limited_behavioral_knowledge": "Uses long-term averaging, analytical approximations, conservative utility factors, safety factors, OTS component lookups, simple duty-cycle assumptions, and penalty functions so large design spaces can be explored without detailed behavior models.",
-    "model_artifacts_used": [
-      "design structure matrix for trajectory, space, launch, ground, and performance models",
-      "space segment design process flowchart",
-      "analytical equations for communication duty cycle, battery capacity, solar array area, de-orbit lifetime, cost, data return, GSD, and revisit gap",
-      "decision-variable tables for two cases",
-      "OTS subsystem database from online vendor sources",
-      "controlled elitist NSGA-II style multi-objective genetic algorithm",
-      "Pareto-set plots and solution-space projections"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The paper frames the work as an introduction to a design approach and suggests later detailed behavioral simulation/operation scheduling rather than reporting a completed mission development flow.",
+        "evidence_quote": "Section 1.2: \"it is beyond the scope of this work to demonstrate complete novel mission solutions, but is instead aiming to introduce a design approach.\"",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "author_stated",
+        "rationale": "Two illustrative CubeSat cases are presented under a specific set of analytical assumptions; the architecture is not completely general across all missions.",
+        "evidence_quote": "Section 1.1: \"Since each space mission is unique, the model architecture introduced here cannot be completely generalized...\"",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "The completed extraction found conceptual comparisons to point-design and numerical propagation, but no controlled baseline experiment, previous mission comparison, or counterfactual MBSE process evaluation.",
+        "evidence_quote": "Absence-based: claim records use baseline_comparator=manual analysis/alternative toolchain/not reported; no quantitative baseline comparison with a traditional process is presented.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "No independent validation, external replication, stakeholder evaluation, or comparison against high-fidelity/flight data is reported for the model outputs.",
+        "evidence_quote": "Absence-based: Sections 4.1-4.2 present author-generated case-study plots and runtime only; no external validation source is reported.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "The study remains at conceptual analytical modeling and optimization; it does not report hardware integration, environmental testing, operations, or flight results.",
+        "evidence_quote": "Absence-based: integration_test_readiness is not_reported; Section 4.1 only proposes later detailed behavioral simulation or operations scheduling.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "Power-budget, battery, and solar-array sizing are included, but no EPS-specific MBSE outcome, EPS reliability analysis, EPS test, or EPS verification model is evidenced.",
+        "evidence_quote": "Absence-based: EPS extraction contains only power-budget/electrical-architecture elements and no formal EPS verification matrix, test cases, fault protection, or hardware evidence.",
+        "confidence": "high"
+      },
+      {
+        "flag": "assumptions_or_data_quality_limits",
+        "source": "author_stated",
+        "rationale": "The method relies on simplified assumptions for orbit properties, launch, ground-station visibility, costs, battery/solar sizing, and OTS component data.",
+        "evidence_quote": "Section 3.4.1: \"the cost metric defined here is not intended as a final price estimate\"; Section 3.1.2: communication approximation assumes no GS mask overlap, constant orbit period, and operation whenever a GS is in view.",
+        "confidence": "high"
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "extractor_identified",
+        "rationale": "The paper reports internal MATLAB data flow but no data exchange standard or interface to other lifecycle tools.",
+        "evidence_quote": "Absence-based: interoperability_mechanisms is not_reported; no API, import/export, XMI, ReqIF, co-simulation, or model transformation is described.",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "The executable model, scripts, exact OTS component database, and generated data are not reported as available.",
+        "evidence_quote": "Absence-based: reproducibility_toolchain_reported is Insufficiently; Section 3.1.1 mentions an OTS component database from online sources but does not publish it.",
+        "confidence": "high"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "author_stated",
+        "rationale": "The paper focuses on conceptual/early design and suggests downstream analyses rather than demonstrating lifecycle continuity through implementation, test, or operations.",
+        "evidence_quote": "Section 4.1: further analysis \"could be detailed behavioral simulation, operation scheduling or sensitivity analysis\" after selecting near-optimal missions.",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Several outcome claims are linked to the model but supported mainly by illustrative examples or assertions; robustness and missed point-design solution claims are not directly tested.",
+        "evidence_quote": "Absence-based: evidence_confidence_rating aggregate includes Unsupported/Weak/Moderate and no Strong claim-evidence records.",
+        "confidence": "medium"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "baseline design structure matrix maintained across missions with modified inputs and requirements",
-      "discipline modules linked by data-flow outputs and inputs",
-      "parameterized analytical equations and decision-variable bounds",
-      "OTS component database for reusable CubeSat subsystem selection",
-      "optimizer-driven search over arbitrary user-defined design spaces"
+    "emergent_limitations": [
+      {
+        "label": "analytical-approximation-accuracy-not-validated",
+        "source": "extractor_identified",
+        "rationale": "The approach removes numerical propagation and detailed behavior for speed, but the paper does not quantify approximation error against high-fidelity simulations or observations.",
+        "evidence": "Conclusion claims fractions-of-a-second visibility assessments versus numerical approaches; no accuracy comparison is reported.",
+        "confidence": "medium",
+        "evidence_quote": "Conclusion claims fractions-of-a-second visibility assessments versus numerical approaches; no accuracy comparison is reported."
+      },
+      {
+        "label": "heuristic-optimizer-produces-near-optimal-rather-than-guaranteed-global-optimum",
+        "source": "author_stated",
+        "rationale": "The paper explicitly accepts the heuristic nature of the genetic algorithm, which limits claims about optimality.",
+        "evidence": "Section 2.5: \"The nature of heuristic approaches in terms of finding only near-optimal solutions is considered acceptable in this study...\"",
+        "confidence": "high",
+        "evidence_quote": "Section 2.5: \"The nature of heuristic approaches in terms of finding only near-optimal solutions is considered acceptable in this study...\""
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Define mission objectives, inputs, constants, requirements, and decision-variable bounds.",
-        "inputs": "Payload concept, target/ground-station context, orbit bounds, platform constraints, objectives such as GSD/revisit or cost/data return.",
-        "outputs": "User-defined design space, objective functions, and requirements feeding discipline models.",
-        "actors_roles": "Mission analyst or systems engineer with domain inputs from payload, communications, power, launch, and ground specialists.",
-        "prerequisites": "Conceptual mission goals and acceptable simplifying assumptions.",
-        "completion_criteria": "Decision variables, bounds, constants, and objectives are encoded for the optimizer.",
-        "handoffs": "Inputs are passed to trajectory, space, launch, ground, and performance modules."
-      },
-      {
-        "step": "Build or tailor analytical discipline models.",
-        "inputs": "Mission requirements, analytical visibility/power/cost equations, OTS subsystem database, safety factors, and assumptions.",
-        "outputs": "Executable MATLAB discipline modules for trajectory, space segment, launch segment, ground segment, and performance.",
-        "actors_roles": "Model developer/system analyst with discipline expertise.",
-        "prerequisites": "Availability of equations and representative subsystem data.",
-        "completion_criteria": "Modules compute dependent parameters and expose outputs to later modules.",
-        "handoffs": "Discipline outputs feed performance calculations and optimization."
-      },
-      {
-        "step": "Select feasible CubeSat platform configuration.",
-        "inputs": "Subsystem power, mass, volume, cost, eclipse conditions, solar and battery sizing equations, de-orbit requirement.",
-        "outputs": "Minimum-cost feasible CubeSat configuration with battery, solar-array, mass/volume/cost/lifetime estimates and optional de-orbit device.",
-        "actors_roles": "Space-segment analyst/model and optimizer.",
-        "prerequisites": "OTS component database and mission power/volume constraints.",
-        "completion_criteria": "Design satisfies volume, power, lifetime, and de-orbit checks or is penalized/rejected.",
-        "handoffs": "Feasible platform parameters feed mission cost and performance metrics."
-      },
-      {
-        "step": "Compute mission performance and cost metrics.",
-        "inputs": "Orbit/ground visibility, platform design, launch assumption, ground segment model, payload and communications parameters.",
-        "outputs": "GSD, revisit gap, data return rate, mission cost, and other candidate performance values.",
-        "actors_roles": "Performance analyst/model.",
-        "prerequisites": "Valid discipline-model outputs for the design point.",
-        "completion_criteria": "All objective-function values are available for optimizer ranking.",
-        "handoffs": "Objective values returned to MOGA."
-      },
-      {
-        "step": "Run multi-objective global optimization and inspect the Pareto set.",
-        "inputs": "Objective functions, constraints/penalties, design-variable ranges, GA population and convergence settings.",
-        "outputs": "Pareto set, solution-space plots, and candidate near-optimal designs.",
-        "actors_roles": "Optimizer and systems engineer interpreting results.",
-        "prerequisites": "Executable integrated architecture.",
-        "completion_criteria": "Solution convergence or sufficient Pareto-set stability.",
-        "handoffs": "Candidate designs are selected by expert judgment for further detailed analysis."
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "Maps to conceptual/early design trade studies, requirements-driven discipline modeling, feasibility screening, and selection of near-optimal concepts for further analysis; no formal PDR/CDR gate mapping is reported.",
-    "approach_classification": "Enhanced MBSE",
-    "approach_classification_rationale": "The work is model-based systems engineering enhanced by analytical mission models and global multi-objective optimization, implemented procedurally in MATLAB rather than as a purely descriptive SysML model.",
-    "tailoring_rationale": [
-      "CubeSat modularity and limited capability reduce the number of design variables.",
-      "Long-term averages are acceptable for many non-repeating CubeSat LEO applications.",
-      "Analytical approximations replace numerical propagation to enable rapid high-iteration search.",
-      "Mission-specific inputs and requirements modify a reusable baseline architecture."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "model-based mission architecture",
-      "design structure matrix notation",
-      "MATLAB sequential programming environment",
-      "controlled elitist NSGA-II style multi-objective genetic algorithm",
-      "analytical orbit visibility methods from Lo and Burk",
-      "OTS CubeSat component database from online sources",
-      "ParaMagic/MagicDraw and Solvea/Enterprise Architecture mentioned only as acausal alternatives, not used in this study"
-    ],
-    "toolchain_architecture_data_flow": "Inputs and mission requirements feed trajectory, space, launch, and ground segment models; discipline outputs feed performance metrics; a genetic algorithm manipulates inputs to improve objectives and generate Pareto sets.",
-    "interoperability_mechanisms": [
-      "internal data-flow links in the design structure matrix",
-      "parameterized inputs/outputs among MATLAB discipline modules",
-      "shared OTS component database",
-      "no formal data exchange standard, model repository, or SysML interoperability mechanism reported"
-    ],
-    "syntax_semantic_continuity_evidence": "Continuity is internal to the MATLAB model and DSM-style parameter flow; no evidence of semantic continuity across independent MBSE, CAD, simulation, or test tools is reported.",
-    "software_hardware_system_integration_readiness": "Conceptual analysis only; the authors state model outputs could be carried into detailed behavioral simulation, operations scheduling, or sensitivity analysis, but no hardware/software integration readiness is demonstrated.",
-    "toolchain_limitations": [
-      "not completely general because each mission is unique",
-      "some relationships are directional and require sequential programming rather than acausal symbolic solving",
-      "model/code and exact OTS database are not provided",
-      "numerous simplifying assumptions for orbit, launch, communications, cost, and power",
-      "no formal toolchain exchange or lifecycle repository reported"
-    ],
-    "availability_reproducibility": "Partially reproducible at method level from equations, assumptions, objectives, decision bounds, and GA settings, but executable models, data files, and exact subsystem database contents are not reported."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "subsystem power demand aggregation",
-      "communication transmit/receive power duty-cycle contribution",
-      "battery capacity sizing for eclipse",
-      "solar array projected and total cell area sizing",
-      "solar cell utility, degradation, packing efficiency, charge efficiency, depth of discharge, and safety factors",
-      "power-driven CubeSat platform feasibility and cost contribution"
-    ],
-    "eps_requirements_representation": "Power requirements from subsystems are summed into total power demand; eclipse duration and power demand drive battery capacity; sunlit power and charging demand drive solar array area. Requirements are represented as numeric inputs/constraints rather than formal requirements objects.",
-    "verification_validation_artifacts": [
-      "space segment feasibility flowchart with design-feasible outcome",
-      "analytical sizing equations for battery and solar arrays",
-      "constraint/penalty functions for infeasible designs",
-      "architecture verification claim from the simple EO case study",
-      "Pareto-set plots from optimization case studies"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "analytical battery sizing against eclipse power demand and depth-of-discharge limits",
-      "analytical solar array sizing against sunlit and battery recharge power demands",
-      "volume feasibility checks over candidate CubeSat unit sizes",
-      "de-orbit compliance assessment and de-orbit device addition when needed",
-      "optimization constraints and penalties to remove infeasible designs"
-    ],
-    "evidence_verification_integrated_in_model": "The model embeds feasibility checks for platform volume, power, battery, solar arrays, lifetime, and de-orbit compliance, but the paper does not present formal EPS requirements verification, test cases, or validation against hardware data.",
-    "integration_test_readiness": "Not reported; the outputs are conceptual design estimates that could support later detailed simulation or sensitivity analysis, not physical integration/test procedures."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "The architecture enables rapid exploration of large CubeSat mission design spaces by replacing repeated numerical orbit propagation with analytical relationships.",
-      "outcome_category": "speed and scalability",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "analytical discipline models",
-        "long-term visibility approximations",
-        "integrated model-based architecture",
-        "MOGA iteration"
-      ],
-      "artifact_or_process_linked": "trajectory/ground visibility models and integrated design structure matrix",
-      "lifecycle_stage": "conceptual/early design trade-space exploration",
-      "evidence_type": "case-study runtime metric and analytical comparison claim",
-      "metric_or_value_indicator": "51,000 iterations in 10 minutes; visibility assessments in fractions of a second claimed versus minutes for numerical approaches",
-      "baseline_comparator": "numerical orbit propagation and one-at-a-time point-design analysis",
-      "observed_effect_size_or_qualitative_effect": "many thousands of analysis iterations in the time typically expected for one numerical assessment",
-      "evidence_source": "Section 4.2 results and Section 5 conclusions",
-      "direct_quote": "These results were obtained in 10 minutes on a personal workstation with an Intel i7 quad-core 2.2GHz processor, with a GA population of 500 and solution convergence after 102 generations (i.e 51,000 iterations of the model architecture).",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Runtime is for illustrative models and a single workstation; no independent benchmark or accuracy validation versus high-fidelity propagation is reported."
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used",
+      "label": "design-structure-matrix-data-flow-artifact",
+      "description": "DSM-style architecture is central but not a SysML BDD/IBD or other controlled artifact label.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Figure 1: design structure matrix with Genetic Algorithm, Inputs & Constants, Trajectory, Space Segment, Launch Segment, Ground Segment, and Performance models.",
+      "confidence": "medium",
+      "original_label": "design_structure_matrix_data_flow_artifact",
+      "category": "model artifact/method"
     },
     {
-      "claim": "The model-based architecture identifies Pareto sets of near-optimal CubeSat mission designs from arbitrary user-defined design spaces.",
-      "outcome_category": "optimization and decision support",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "controlled elitist genetic algorithm",
-        "parameterized objectives and decision variables",
-        "integrated cost/performance models"
-      ],
-      "artifact_or_process_linked": "MOGA applied to architecture with Pareto plots for the two case studies",
-      "lifecycle_stage": "conceptual design candidate selection",
-      "evidence_type": "case-study optimization results",
-      "metric_or_value_indicator": "Pareto sets for GSD/revisit and data return/cost across altitude, inclination, and ground-station latitude variables",
-      "baseline_comparator": "engineering judgment and point-design methods discussed conceptually",
-      "observed_effect_size_or_qualitative_effect": "near-optimal candidate sets are generated and plotted for both trivial and non-trivial mission cases",
-      "evidence_source": "Abstract, Sections 4.1-4.2, Section 5",
-      "direct_quote": "Global multi-objective optimization, in the form of a controlled elitist genetic algorithm, is applied to the architecture and is shown to find a Pareto set of near-optimal solutions from an arbitrary, user defined design space.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The Pareto sets depend on simplified assumptions, analytical approximations, and synthetic case-study parameters; no external validation or repeated projects are shown."
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool; claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+      "label": "controlled-elitist-moga-nsga-ii-optimizer",
+      "description": "Global multi-objective genetic optimization is the main search mechanism and is coded under 'other' for MBSE mechanism/tool.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 2.5: \"a controlled elitist... Multi-Objective Genetic Algorithm (MOGA) is employed\".",
+      "confidence": "medium",
+      "original_label": "controlled_elitist_moga_nsga_ii_optimizer",
+      "category": "method/tool"
     },
     {
-      "claim": "The approach can reveal non-intuitive design trends that point-design methods could miss.",
-      "outcome_category": "design-space insight",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "global multi-objective search",
-        "interdisciplinary model coupling",
-        "projection of solution spaces"
-      ],
-      "artifact_or_process_linked": "Case II Pareto-set plots over cost, data return, altitude, inclination, and ground station latitude",
-      "lifecycle_stage": "conceptual design and trade study",
-      "evidence_type": "illustrative case-study result",
-      "metric_or_value_indicator": "Two optimal altitude regions near just below 600 km and around 740 km are identified",
-      "baseline_comparator": "traditional point-design approach asserted but not experimentally tested",
-      "observed_effect_size_or_qualitative_effect": "non-continuous trends and discrete platform-transition effects are exposed",
-      "evidence_source": "Section 4.2 and Section 5",
-      "direct_quote": "It is clear that there are no continuous trends which might have been immediately obvious to a system designer, highlighting perhaps the most important feature of this work.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The non-intuitive behavior may be an artifact of chosen cost, de-orbit, and platform-discretization assumptions."
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+      "label": "analytical-long-term-visibility-approximations",
+      "description": "Lo/Burk long-term visibility and passes-per-day formulas replace costly numerical propagation for CubeSat trade-space search.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 3.4.2: combining Lo and Burk methods estimates total time in view, average pass duration, and average visibility frequency.",
+      "confidence": "medium",
+      "original_label": "analytical_long_term_visibility_approximations",
+      "category": "method/mechanism"
     },
     {
-      "claim": "The architecture integrates mission disciplines so cost and performance can be traded at the whole-mission level.",
-      "outcome_category": "interdisciplinary integration",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "design structure matrix",
-        "data-flow between trajectory, space, launch, ground, and performance models",
-        "shared requirements inputs"
-      ],
-      "artifact_or_process_linked": "Figure 1 design structure matrix and discipline model modules",
-      "lifecycle_stage": "conceptual design",
-      "evidence_type": "architecture description plus case-study use",
-      "metric_or_value_indicator": "Cost, data return, GSD, revisit time, altitude, inclination, and ground station latitude evaluated together",
-      "baseline_comparator": "isolated inter-domain trade studies described in the introduction",
-      "observed_effect_size_or_qualitative_effect": "inter-domain trade-offs are evaluated in a single workflow rather than manually by isolated discipline studies",
-      "evidence_source": "Sections 1.1, 3, and 4",
-      "direct_quote": "A set of inputs, which includes the mission requirements, feeds each of the mission disciplines, from which one or more performance metrics are produced.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Integration is within a research MATLAB architecture; no multi-team deployment or tool interoperability evidence is provided."
+      "field_path": "mbse_objective_scope_artifacts.generality_reuse_mechanism; toolchain_interoperability_lifecycle_continuity.reproducibility",
+      "label": "ots-cubesat-component-database",
+      "description": "Subsystem selection uses a vendor-sourced OTS component database, relevant to reuse and reproducibility but not a released library/package.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 3.1.1: subsystem selection uses \"a database of OTS components, taken from various on-line sources\".",
+      "confidence": "medium",
+      "original_label": "ots_cubesat_component_database",
+      "category": "data source/reuse mechanism"
     },
     {
-      "claim": "Rapid model-based analysis could improve mission robustness by allowing design changes to be assessed and the design modified appropriately.",
-      "outcome_category": "robustness/resilience claim",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "rapid cost/performance recalculation",
-        "parameterized mission design model"
-      ],
-      "artifact_or_process_linked": "model architecture relating cost and performance to key mission design parameters",
-      "lifecycle_stage": "conceptual/early design and later design life-cycle change assessment",
-      "evidence_type": "author rationale/assertion",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "traditional fixed point-design process described conceptually",
-      "observed_effect_size_or_qualitative_effect": "potential to analyze changes rapidly; no measured reliability or robustness improvement",
-      "evidence_source": "Introduction",
-      "direct_quote": "A simple, dedicated method of directly relating cost and performance to key mission design parameters could significantly increase mission robustness, as resultant changes could be analyzed rapidly and the design modified appropriately.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "Robustness is hypothesized from process speed and not evaluated through reliability analysis, uncertainty propagation, or flight outcomes."
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator",
+      "label": "non-standard-mission-performance-metrics",
+      "description": "GSD, revisit gap, data return, Pareto-set regions, iteration count, battery capacity, and solar-array area are coded as 'other' metrics not covered by the controlled metric list.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Sections 3.4-4.2 report GSD, revisit gap, data return, mission cost, and 51,000 iterations.",
+      "confidence": "medium",
+      "original_label": "non_standard_mission_performance_metrics",
+      "category": "metric/value indicator"
     },
     {
-      "claim": "For each point in the solution space, the architecture can define a baseline system design that can be developed through the lifecycle for additional analyses.",
-      "outcome_category": "model continuity and downstream analysis",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "baseline system design per design point",
-        "incremental model development",
-        "carry-forward of calculated parameters"
-      ],
-      "artifact_or_process_linked": "model-based architecture and solution-space design points",
-      "lifecycle_stage": "from conceptual design toward detailed analysis",
-      "evidence_type": "author explanation following Case I",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "trend-only or point-design analysis implied",
-      "observed_effect_size_or_qualitative_effect": "additional parameters could support detailed behavioral simulation, operation scheduling, or sensitivity analysis",
-      "evidence_source": "Section 4.1",
-      "direct_quote": "Development of the models through the life-cycle, as information becomes available and experience grows, would allow additional parameters to be calculated, which can be carried through for additional analysis on a sub-set of near-optimal missions.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "This is a proposed continuity benefit; no downstream lifecycle use, model repository, or handoff demonstration is reported."
-    },
-    {
-      "claim": "Power-budget/EPS-adjacent sizing can be embedded in early CubeSat platform feasibility selection.",
-      "outcome_category": "power feasibility and platform selection",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "subsystem power aggregation",
-        "battery sizing equation",
-        "solar array sizing equation",
-        "volume and cost feasibility loop"
-      ],
-      "artifact_or_process_linked": "Figure 2 space segment design process and Sections 3.1.1-3.1.4 equations",
-      "lifecycle_stage": "conceptual space segment design",
-      "evidence_type": "model process and analytical equations",
-      "metric_or_value_indicator": "battery capacity, solar array area/number, total power demand, platform mass/volume/cost",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "candidate platforms are screened for power/volume feasibility and minimum cost before performance evaluation",
-      "evidence_source": "Sections 3.1.1-3.1.4 and Figure 2",
-      "direct_quote": "The battery capacity calculated in equation (5) is the minimum required to satisfy the demands from the platform, so the battery device would be a discrete size available that exceeds this.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The model is a sizing approximation with simplifying assumptions; no EPS dynamic behavior, hardware validation, or requirement-verification matrix is presented."
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+      "label": "acausal-parametric-mbse-tools-mentioned-not-used",
+      "description": "ParaMagic/MagicDraw and Solvea/Enterprise Architecture are discussed as acausal symbolic alternatives, but the actual implementation is sequential MATLAB because some relationships are directional/iterative.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 1.1 contrasts acausal tools with the present work: \"As such, sequential programming is used... within the Matlab environment.\"",
+      "confidence": "medium",
+      "original_label": "acausal_parametric_mbse_tools_mentioned_not_used",
+      "category": "unexpected toolchain observation"
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "not reported; assumptions, safety factors, and user-defined inputs are modifiable, and expert judgment is required to select Pareto points for further analysis.",
-    "traceability_to_deliverables_decisions_reviews": "Requirements and objectives feed the model and Pareto results support candidate selection, but no formal deliverables, reviews, baselines, change-control, or approval gates are described.",
-    "evaluation_criteria_model_quality_usefulness": "Usefulness is evaluated through two case studies, Pareto plots, runtime/convergence metric, and ability to expose non-intuitive trends; no stakeholder assessment or validation dataset is reported.",
-    "roi_value_realization_evidence": "The paper argues that rapid analysis and lifecycle cost/performance trade-offs are valuable, but provides no quantified ROI, budget outcome, or realized project decision evidence.",
-    "programmatic_gates_critical_design_events_supported": "Conceptual/early design selection for further analysis is supported; PDR, CDR, test readiness, or operational gates are not reported.",
-    "model_derived_performance_indicators_management_metrics": "GSD, revisit gap, data return rate, mission cost, altitude, inclination, ground station latitude, mass, volume, power, platform cost, mission lifetime, de-orbit lifetime, and runtime/convergence; no management KPI dashboard is reported."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed with evidence",
-      "rationale": "The paper supplies architecture, equations, decision variables, process flow, optimizer settings, and two implemented case studies with runtime results, though not a full user playbook."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "mentioned only",
-      "rationale": "The paper mentions acausal tools such as ParaMagic/MagicDraw and Solvea/Enterprise Architecture but uses MATLAB and does not address exchange standards or cross-tool continuity."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed with evidence",
-      "rationale": "The approach is explicitly tailored to modular, resource-limited CubeSats, avoids expensive numerical propagation, and embeds power/volume/cost constraints in case-study optimization."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "mentioned only",
-      "rationale": "Cost and candidate selection are modeled, but governance, deliverable traceability, review gates, and realized ROI are not substantively addressed."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "addressed with evidence",
-      "rationale": "Rapid iteration is evidenced by the 10-minute/51,000-iteration case, but agile, distributed collaboration, and NewSpace organizational practices are not discussed."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "A CubeSat mission can be modeled at conceptual level using a reusable baseline architecture of trajectory, space, launch, ground, and performance modules, tailored by mission requirements and inputs.",
-        "EPS-adjacent modeling is limited to analytical power budget, battery sizing, solar array sizing, and feasibility screening rather than detailed EPS behavior.",
-        "Limited behavioral knowledge is handled through long-term averages, analytical approximations, OTS component data, conservative factors, and simplified assumptions."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0012",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0012.json",
+      "tier_status_in_review": "supporting",
+      "tier_rationale": "Directly relevant to model-based CubeSat mission design and EPS-adjacent power-budget modeling, but not a core EPS MBSE verification study.",
+      "citation": "Lowe, C. J., and Macdonald, M. (2014). Rapid Model-based Inter-disciplinary Design of a CubeSat Mission. Acta Astronautica. DOI: 10.1016/j.actaastro.2014.10.002.",
+      "title": "Rapid model-based inter-disciplinary design of a CubeSat mission",
+      "authors": [
+        "C. Lowe",
+        "M. Macdonald"
       ],
-      "RQ2": [
-        "Claimed outcomes include rapid trade-space exploration, Pareto-set generation, non-intuitive design insight, whole-mission cost/performance integration, and possible mission robustness.",
-        "Reliability, reproducibility, and integrability are not demonstrated as EPS-specific outcomes; reproducibility is limited by absence of released models/data and exact component database contents.",
-        "The strongest evidence is the case-study runtime and generated Pareto solutions; claims about robustness and missed point-design solutions are less directly evidenced."
+      "year": 2014,
+      "venue": "Acta Astronautica (best-effort from DOI 10.1016/j.actaastro.2014.10.002)",
+      "doi_or_url": "10.1016/j.actaastro.2014.10.002",
+      "publisher": "Elsevier (best-effort from DOI prefix 10.1016)",
+      "venue_type": "journal article",
+      "source_database_query_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
+          "rank": 40,
+          "paperId": "84908284876",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"reference model\" OR template OR behavior OR behaviours OR behaviors OR architecture))"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "rank": 62,
+          "paperId": "84908284876",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0012_semantic_title.json",
+          "rank": 1,
+          "paperId": "56b1b88a8fd96525e9934164fefa661cf3014e15",
+          "purpose": "abstract_enrichment"
+        }
       ],
-      "RQ3": [
-        "Pre-physical model checks include power, battery, solar array, volume, lifetime, and de-orbit feasibility calculations plus penalty functions for constraint violation.",
-        "The paper does not report formal EPS verification procedures, requirements traceability, test cases, model checking, or hardware integration/test results.",
-        "Case I is said to verify the model architecture, but this is architectural sanity checking rather than EPS verification."
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "partial",
+          "rationale": "Provides a general CubeSat mission modeling architecture and power-budget abstractions, but not a reusable EPS behavioral reference model."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "Claims rapid exploration, inter-disciplinary integration, and decision support; reliability/reproducibility/integrability outcomes are not EPS-specific or independently demonstrated."
+        },
+        "RQ3": {
+          "relevance": "partial",
+          "rationale": "Contains pre-physical parametric feasibility checks for power and platform selection, but no formal EPS verification procedure or IVV model."
+        }
+      },
+      "lineage_overlap_notes": "Cites INCOSE Space Systems Working Group CubeSat/MBSE work and RAX CubeSat MBSE operational scenarios, but this paper's extracted contribution is an independent MATLAB-based mission trade-space architecture."
+    },
+    "study_context_population": {
+      "mission_platform": "LEO CubeSat/nanosatellite mission architecture with two illustrative mission cases.",
+      "size_form_factor": "CubeSat units selected discretely (1U, 2U, 3U, ... NU); case results note transitions such as 2U to 3U.",
+      "mission_name": "not reported; generic Earth-observation and scientific-payload case studies",
+      "mission_domain": [
+        "Earth observation",
+        "scientific data collection/data return",
+        "ground-station communications",
+        "mission cost/performance trade-space analysis"
+      ],
+      "organization_type": "Academic research laboratory with industry-linked EPSRC iCASE studentship involving Clyde Space Ltd.",
+      "project_maturity": "Conceptual/early design methodology and executable research prototype; not a flight program report.",
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A"
+      ],
+      "development_context": [
+        "academic/student",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "power-budget/electrical-architecture",
+      "model_maturity": [
+        "conceptual framework",
+        "prototype demonstration",
+        "executable model"
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Since each space mission is unique, the model architecture introduced here cannot be completely generalized, however a baseline structure can be maintained with modifications of the inputs and requirements made for each use case.",
-      "It should be noted that it is beyond the scope of this work to demonstrate complete novel mission solutions, but is instead aiming to introduce a design approach.",
-      "Depending on the level of fidelity and/or rigidity of the analysis, certain links between disciplines may be neglected.",
-      "The nature of heuristic approaches in terms of finding only near-optimal solutions is considered acceptable in this study.",
-      "Because of this the cost metric defined here is not intended as a final price estimate, but as a measure with which to compare the relative cost of different designs.",
-      "This approximation assumes no GS mask overlap, a constant orbit period over the lifetime and operation of the communication system every time a GS is in view."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "No formal SysML, requirements, verification, or traceability artifacts are provided despite MBSE terminology.",
-      "No model/code availability, exact OTS component database, or reusable package is reported.",
-      "EPS modeling is a power-budget sizing abstraction, not detailed dynamic EPS behavior or fault/reliability analysis.",
-      "No hardware test, integration test, operational flight evidence, or stakeholder evaluation validates the approach.",
-      "Runtime and non-intuitive solution claims are based on illustrative case studies under simplifying assumptions rather than controlled comparisons."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Manual point-design mission analysis and isolated discipline trades are slow and may miss near-optimal CubeSat mission designs; the paper proposes a rapid model-based architecture linking decision variables to cost/performance metrics.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "budgets",
+        "verification",
+        "simulation"
+      ],
+      "system_boundary_and_abstraction": "Mission-level CubeSat architecture with trajectory, space segment, launch segment, ground segment, and performance modules at conceptual analytical/parametric fidelity.",
+      "minimal_or_excluded_modeling": [
+        "No detailed numerical orbit propagation for most visibility calculations.",
+        "Only circular orbits and long-term averages are considered for trajectory variables.",
+        "No detailed EPS dynamic behavior, fault protection, software, hardware integration, or flight operations model.",
+        "Cost is comparative rather than final price estimate.",
+        "Complete novel mission design is out of scope."
+      ],
+      "required_prior_behavioral_domain_knowledge": "Mission requirements, objectives, decision-variable bounds, payload/communication demands, OTS CubeSat subsystem data, and analytical equations/assumptions for orbit visibility, power sizing, cost, lifetime, and de-orbit behavior.",
+      "limited_behavioral_knowledge_handling": "Uses analytical approximations, long-term averages, conservative/safety factors, OTS databases, simplified duty-cycle assumptions, and penalty functions to screen many designs without detailed behavior models.",
+      "model_artifacts_used": [
+        "parametrics",
+        "trade-study models",
+        "power budgets",
+        "executable simulations",
+        "design structure matrix",
+        "space segment feasibility flowchart",
+        "decision-variable tables",
+        "Pareto plots"
+      ],
+      "generality_reuse_mechanism": [
+        "template",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "direct_quotes": [
+        "Section 1.1: \"a baseline structure can be maintained with modifications of the inputs and requirements made for each use case.\"",
+        "Abstract: \"This work presents an architecture that identifies trends between conflicting objectives... and decision variables...\""
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "implementation_steps_or_phases": [
+        {
+          "step": "Define mission objectives, requirements, inputs, constants, and decision-variable bounds.",
+          "inputs": "Payload concept, target/GS context, orbit bounds, objectives such as GSD/revisit or cost/data return.",
+          "outputs": "User-defined design space and objective functions.",
+          "actors_roles": "Mission analyst/systems engineer with discipline inputs.",
+          "prerequisites": "Conceptual mission goals and acceptable assumptions.",
+          "completion_criteria": "Objectives, variables, bounds, constants, and constraints encoded.",
+          "handoffs": "Inputs feed trajectory, space, launch, ground, and performance models."
+        },
+        {
+          "step": "Tailor analytical discipline models.",
+          "inputs": "Visibility equations, power/cost/lifetime equations, subsystem database, safety factors.",
+          "outputs": "Executable MATLAB modules for mission disciplines.",
+          "actors_roles": "Model developer and discipline analysts.",
+          "prerequisites": "Representative component data and assumptions.",
+          "completion_criteria": "Modules compute dependent variables and expose outputs.",
+          "handoffs": "Module outputs feed performance calculations and optimization."
+        },
+        {
+          "step": "Select feasible CubeSat platform configuration.",
+          "inputs": "Subsystem power/mass/volume/cost, eclipse conditions, solar/battery sizing, de-orbit constraints.",
+          "outputs": "Minimum-cost feasible platform with power, battery, solar, mass, volume, lifetime, and de-orbit estimates.",
+          "actors_roles": "Space-segment model and optimizer.",
+          "prerequisites": "OTS component database and mission constraints.",
+          "completion_criteria": "Design is feasible or penalized/rejected.",
+          "handoffs": "Feasible platform parameters feed mission cost/performance metrics."
+        },
+        {
+          "step": "Compute mission performance and cost metrics.",
+          "inputs": "Orbit/ground visibility, platform design, launch assumption, ground segment, payload/communications parameters.",
+          "outputs": "GSD, revisit gap, data return rate, mission cost, and related parameters.",
+          "actors_roles": "Performance model/analyst.",
+          "prerequisites": "Valid discipline outputs.",
+          "completion_criteria": "Objective values computed for optimizer ranking.",
+          "handoffs": "Values returned to MOGA."
+        },
+        {
+          "step": "Run multi-objective genetic optimization and inspect Pareto set.",
+          "inputs": "Objective functions, design-variable ranges, constraints/penalties, GA settings.",
+          "outputs": "Pareto set, solution-space projections, candidate near-optimal designs.",
+          "actors_roles": "Optimizer and systems engineer applying expert judgment.",
+          "prerequisites": "Executable integrated architecture.",
+          "completion_criteria": "Convergence or adequate Pareto-set stability.",
+          "handoffs": "Selected candidates proceed to more detailed analysis."
+        }
+      ],
+      "mapping_to_se_activities_lifecycle_gates": "Maps to conceptual trade studies, requirements-driven feasibility screening, and selection of candidates for further analysis; no SRR/PDR/CDR/integration/test gate mapping is reported.",
+      "approach_classification": "Extended MBSE",
+      "tailoring_rationale": [
+        "mission scale",
+        "cost",
+        "schedule"
+      ],
+      "adoption_guidance_for_new_users": "partial guidance",
+      "tailoring_notes": "CubeSat modularity and limited capability reduce variables; analytical approximations and long-term averages support rapid high-iteration search."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "MATLAB/Simulink",
+        "custom tools",
+        "other"
+      ],
+      "toolchain_architecture_data_flow": "Genetic algorithm manipulates inputs/constants; trajectory, space, launch, and ground segment models exchange internal parameters; performance models compute objectives and return values for optimization.",
+      "interoperability_mechanisms": "not reported for cross-tool/lifecycle exchange; only internal model data flow is shown.",
+      "syntax_semantic_continuity_evidence": "Continuity is internal to the MATLAB architecture; no SysML/CAD/requirements/test semantic continuity is reported.",
+      "software_hardware_system_integration_readiness": "Not demonstrated; model outputs are conceptual estimates that could feed later behavioral simulation or operations scheduling.",
+      "toolchain_limitations": [
+        "missing interfaces",
+        "model/code/data not available",
+        "formal MBSE exchange mechanisms not reported"
+      ],
+      "availability_reproducibility": "Partial at method level from equations, assumptions, decision bounds, optimizer settings, and runtime; incomplete because exact database, scripts, and model files are absent."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "solar panels",
+        "battery",
+        "loads",
+        "margins",
+        "power budgets",
+        "degradation"
+      ],
+      "eps_requirements_represented_and_links": "Subsystem power requirements are numeric inputs summed to total power demand; eclipse duration and power drive battery sizing; sunlit and recharge demands drive solar-array sizing; these outputs link to platform feasibility/cost, not formal requirements objects.",
+      "verification_validation_artifacts": [
+        "simulation scenarios",
+        "executable checks"
+      ],
+      "pre_physical_development_verification_mechanism": [
+        "parametric checks",
+        "trade-study verification"
+      ],
+      "evidence_integrated_into_model": "Feasibility checks for power, volume, battery, solar arrays, lifetime, and de-orbit compliance are embedded in the space-segment model/optimization loop; formal EPS V&V artifacts are not reported.",
+      "integration_test_readiness": "not reported",
+      "direct_quotes": [
+        "Figure 2: subsystem power demands feed total power demand, battery capacity required, solar panel area required, and design feasibility.",
+        "Section 3.1.3: \"The battery capacity calculated in equation (5) is the minimum required to satisfy the demands from the platform...\""
+      ]
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "objective",
-        "quote": "This work presents an architecture that identifies trends between conflicting objectives (e.g. lifecycle cost and performance) and decision variables (e.g. orbit altitude and inclination) such that informed assessment can be made as to which design/s to take on for further analysis.",
-        "location": "Abstract"
+        "claim_id": "C1",
+        "claim_text_or_paraphrase": "Analytical, model-based architecture enables rapid exploration of large CubeSat mission design spaces by avoiding repeated numerical orbit propagation.",
+        "outcome_category": [
+          "schedule reduction",
+          "effort reduction",
+          "automation",
+          "decision support"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "other"
+        ],
+        "linked_artifact_or_process": "MATLAB discipline model architecture; analytical trajectory/visibility methods; MOGA search.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Executable model or simulation result",
+          "Quantitative metric without baseline"
+        ],
+        "metric_or_value_indicator": [
+          "time",
+          "other"
+        ],
+        "baseline_comparator": "alternative toolchain",
+        "observed_effect_or_qualitative_effect": "Two-case optimization ran 51,000 model iterations in 10 minutes; conclusion claims visibility assessments in fractions of a second instead of minutes for numerical approaches.",
+        "quote_location": "Section 4.2; Section 5 Conclusions",
+        "evidence_quote": "\"These results were obtained in 10 minutes on a personal workstation... solution convergence after 102 generations (i.e 51,000 iterations of the model architecture).\" / \"This allows rapid, long-term visibility assessments to be made in fractions of a second (as opposed to minutes... using numerical approaches)\".",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "No independent runtime benchmark or accuracy validation versus numerical propagation; speed may depend on simplified mission assumptions and hardware."
       },
       {
-        "topic": "analytic rapid modeling",
-        "quote": "The models within the architecture exploit analytic methods where possible, in order avoid computationally expensive numerical propagation, and achieve rapid convergence.",
-        "location": "Abstract"
+        "claim_id": "C2",
+        "claim_text_or_paraphrase": "The architecture finds Pareto sets of near-optimal CubeSat mission designs from user-defined design spaces.",
+        "outcome_category": [
+          "decision support",
+          "completeness"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "other"
+        ],
+        "linked_artifact_or_process": "Controlled elitist MOGA applied to trajectory, space, launch, ground, and performance modules; Pareto plots in Figures 4-7.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Executable model or simulation result",
+          "Trade-study or requirements-checking result"
+        ],
+        "metric_or_value_indicator": [
+          "cost",
+          "other"
+        ],
+        "baseline_comparator": "manual analysis",
+        "observed_effect_or_qualitative_effect": "Pareto sets are shown for GSD/revisit and data-return/cost trade studies; decision variables include altitude, inclination, and ground-station latitude.",
+        "quote_location": "Abstract; Section 5 Conclusions",
+        "evidence_quote": "\"Global multi-objective optimization... is applied to the architecture and is shown to find a Pareto set of near-optimal solutions from an arbitrary, user defined design space.\"",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Case studies are synthetic/illustrative and Pareto fronts depend on model assumptions, penalty functions, and OTS database values."
       },
       {
-        "topic": "scope/generalizability",
-        "quote": "Since each space mission is unique, the model architecture introduced here cannot be completely generalized, however a baseline structure can be maintained with modifications of the inputs and requirements made for each use case.",
-        "location": "Section 1.1"
+        "claim_id": "C3",
+        "claim_text_or_paraphrase": "The model exposes non-intuitive design trends that could be missed by point-design methods.",
+        "outcome_category": [
+          "decision support",
+          "completeness",
+          "risk reduction"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "other"
+        ],
+        "linked_artifact_or_process": "Case II solution-space projections over cost, data return, altitude, inclination, and GS latitude.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "cost",
+          "other"
+        ],
+        "baseline_comparator": "manual analysis",
+        "observed_effect_or_qualitative_effect": "Two major optimal altitude regions are identified, including discrete transitions associated with platform changes and de-orbit device inclusion.",
+        "quote_location": "Section 4.2; Section 5 Conclusions",
+        "evidence_quote": "\"It is clear that there are no continuous trends which might have been immediately obvious to a system designer, highlighting perhaps the most important feature of this work.\"",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Non-intuitive trends may arise from chosen cost, component, de-orbit, and platform-discretization assumptions; no user study compares against actual designers."
       },
       {
-        "topic": "mission discipline integration",
-        "quote": "A set of inputs, which includes the mission requirements, feeds each of the mission disciplines, from which one or more performance metrics are produced.",
-        "location": "Section 1.1"
+        "claim_id": "C4",
+        "claim_text_or_paraphrase": "The architecture integrates multiple mission disciplines so cost and performance can be traded at whole-mission level.",
+        "outcome_category": [
+          "integrability/interoperability",
+          "decision support"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "parametric analysis",
+          "other"
+        ],
+        "linked_artifact_or_process": "Figure 1 design structure matrix and discipline data flow among trajectory, space, launch, ground, and performance models.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "cost",
+          "other"
+        ],
+        "baseline_comparator": "manual analysis",
+        "observed_effect_or_qualitative_effect": "The workflow jointly computes cost/performance metrics instead of treating inter-domain trade studies in isolation.",
+        "quote_location": "Section 1.1; Section 3",
+        "evidence_quote": "\"A set of inputs, which includes the mission requirements, feeds each of the mission disciplines, from which one or more performance metrics are produced.\"",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Integration is internal to a research MATLAB model; no multi-team/tool deployment or semantic interoperability evidence is reported."
       },
       {
-        "topic": "power and platform sizing",
-        "quote": "The mass, volume, power and cost of the platform are calculated as a sum of these parameters for each sub-system.",
-        "location": "Section 3.1.1"
+        "claim_id": "C5",
+        "claim_text_or_paraphrase": "Rapidly relating cost and performance to key parameters could increase mission robustness by enabling changes to be analyzed and the design modified.",
+        "outcome_category": [
+          "risk reduction",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "parametric analysis",
+          "other"
+        ],
+        "linked_artifact_or_process": "Parameterized cost/performance mission model.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [],
+        "baseline_comparator": "manual analysis",
+        "observed_effect_or_qualitative_effect": "Potential robustness improvement is asserted; no reliability, uncertainty, or robustness metric is reported.",
+        "quote_location": "Introduction",
+        "evidence_quote": "\"A simple, dedicated method of directly relating cost and performance to key mission design parameters could significantly increase mission robustness...\"",
+        "evidence_confidence_rating": "Unsupported",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": "Robustness may require uncertainty analysis, margin tracking, or validation not included in the paper."
       },
       {
-        "topic": "battery sizing",
-        "quote": "The battery capacity calculated in equation (5) is the minimum required to satisfy the demands from the platform, so the battery device would be a discrete size available that exceeds this.",
-        "location": "Section 3.1.3"
+        "claim_id": "C6",
+        "claim_text_or_paraphrase": "For each solution-space point, the architecture defines a baseline system design that can be carried forward as knowledge grows.",
+        "outcome_category": [
+          "lifecycle continuity",
+          "generality/reuse",
+          "decision support"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mbse_mechanism": [
+          "other"
+        ],
+        "linked_artifact_or_process": "Baseline system design per solution-space point; evolving model across lifecycle.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "baseline_comparator": "not reported",
+        "observed_effect_or_qualitative_effect": "Authors propose carrying additional parameters into detailed behavioral simulation, operations scheduling, or sensitivity analysis.",
+        "quote_location": "Section 4.1",
+        "evidence_quote": "\"Development of the models through the life-cycle, as information becomes available and experience grows, would allow additional parameters to be calculated...\"",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": "No actual downstream lifecycle handoff, repository, or detailed simulation is demonstrated."
       },
       {
-        "topic": "model architecture verification claim",
-        "quote": "This result verifies the model architecture and shows its usefulness at conducting trade studies via a basic example.",
-        "location": "Section 4.1"
-      },
-      {
-        "topic": "runtime evidence",
-        "quote": "These results were obtained in 10 minutes on a personal workstation with an Intel i7 quad-core 2.2GHz processor, with a GA population of 500 and solution convergence after 102 generations (i.e 51,000 iterations of the model architecture).",
-        "location": "Section 4.2"
-      },
-      {
-        "topic": "conclusion",
-        "quote": "This work presents a rapid, model-based approach to the inter-disciplinary design of a CubeSat mission, through exploitation of analytical relationships at the inter- and intra-mission levels.",
-        "location": "Section 5"
-      },
-      {
-        "topic": "speed conclusion",
-        "quote": "This allows rapid, long-term visibility assessments to be made in fractions of a second (as opposed to minutes that is considered acceptable using numerical approaches), enabling many thousands of analysis iterations of the mission design space in the time typically expected for just one.",
-        "location": "Section 5"
+        "claim_id": "C7",
+        "claim_text_or_paraphrase": "EPS-adjacent power feasibility can be embedded in early CubeSat platform selection via power demand, battery, solar-array, and volume/cost checks.",
+        "outcome_category": [
+          "decision support",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "EPS-specific",
+        "mbse_mechanism": [
+          "parametric analysis",
+          "requirements linkage",
+          "other"
+        ],
+        "linked_artifact_or_process": "Figure 2 space segment design process; Sections 3.1.1-3.1.4 power, battery, and solar equations.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Trade-study or requirements-checking result",
+          "Executable model or simulation result"
+        ],
+        "metric_or_value_indicator": [
+          "cost",
+          "other"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect_or_qualitative_effect": "Candidate CubeSat units are screened for total power demand, battery capacity, solar panel area, volume feasibility, mass/cost, and lifetime/de-orbit compliance.",
+        "quote_location": "Figure 2; Sections 3.1.1-3.1.4",
+        "evidence_quote": "\"The battery capacity calculated in equation (5) is the minimum required to satisfy the demands from the platform, so the battery device would be a discrete size available that exceeds this.\"",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Sizing uses simplified assumptions and does not validate EPS dynamic behavior, margins, faults, or hardware performance."
       }
     ],
-    "notes_for_consistency_with_lineage": "Independent extraction based only on the supplied metadata and paper Markdown. Code as supporting, system-level MBSE with power-budget/EPS-adjacent content, not as a core EPS-specific verification paper.",
-    "extraction_confidence": "high",
-    "extraction_confidence_reason": "The full Markdown paper was read and contains clear method, assumptions, equations, case results, and conclusions. Confidence is lower only for venue details not visible in the Markdown and for interpreting EPS relevance because the study is mission-level rather than EPS-specific."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": "not reported",
+      "traceability_to_deliverables_decisions_reviews": "Requirements and objectives feed models and Pareto results support candidate selection, but no formal deliverables, review gates, baselines, change-control, or management reports are described.",
+      "evaluation_criteria_for_model_quality_or_usefulness": "Usefulness is judged by ability to produce Pareto sets, expose non-obvious trends, run rapidly, and define baseline designs; no stakeholder/user/expert evaluation is reported.",
+      "roi_value_realization_evidence": "not reported; mission lifecycle cost is an objective metric, not evidence of MBSE adoption ROI.",
+      "programmatic_gates_or_critical_design_events_supported": "Conceptual/early selection of candidate designs for further analysis; no PDR/CDR/test/operations gates.",
+      "model_derived_performance_indicators_or_management_metrics": [
+        "GSD",
+        "revisit gap",
+        "data return rate",
+        "mission cost",
+        "altitude",
+        "inclination",
+        "GS latitude",
+        "mass",
+        "volume",
+        "power",
+        "battery capacity",
+        "solar array area",
+        "mission lifetime",
+        "de-orbit lifetime",
+        "GA runtime/iterations"
+      ]
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "classification": "addressed with evidence",
+        "rationale": "Architecture, equations, process flow, optimizer, decision-variable bounds, and two executable case studies provide an evidence-backed partial pathway."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "classification": "mentioned only",
+        "rationale": "The paper mentions acausal parametric tools and reports MATLAB implementation but does not solve toolchain fragmentation or report exchange mechanisms."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "classification": "addressed with evidence",
+        "rationale": "The method is explicitly tailored to small, modular, resource-limited CubeSats and evidenced through simplified analytical modeling and case results."
+      },
+      "governance_project_deliverables_roi": {
+        "classification": "mentioned only",
+        "rationale": "Cost and candidate-selection decision support are present, but governance, project deliverables, lifecycle gates, and ROI evidence are not substantively addressed."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "classification": "addressed with evidence",
+        "rationale": "Rapid-iteration needs for commercial/resource-limited CubeSats are addressed and supported by a runtime/iteration metric; agile/distributed practices are not discussed."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_relevant_to_rqs": {
+        "RQ1": [
+          "A baseline CubeSat mission architecture can model trajectory, space, launch, ground, and performance disciplines with mission-specific inputs and requirements.",
+          "EPS relevance is power-budget/electrical-architecture only: subsystem loads, battery sizing, solar-array sizing, and feasibility/cost contributions.",
+          "Limited behavioral knowledge is handled through analytical approximations, long-term averages, OTS component data, conservative factors, and penalty functions."
+        ],
+        "RQ2": [
+          "Claimed outcomes include rapid trade-space exploration, Pareto-set decision support, broader solution-space coverage, inter-disciplinary integration, and possible robustness/lifecycle continuity.",
+          "Best evidence is executable case-study results and a runtime metric; reliability/reproducibility/integrability outcomes are not proven with independent validation, reuse, or flight/test evidence.",
+          "Reproducibility is partial because equations/settings are reported but model/data/code are not available."
+        ],
+        "RQ3": [
+          "Pre-physical checks include power, battery, solar-array, volume, lifetime, de-orbit, and constraint/penalty screening.",
+          "No formal EPS verification procedure, verification matrix, test cases/procedures, model checking, SIL/HIL, or hardware integration/test evidence is reported.",
+          "The paper's 'verifies the model architecture' statement is a simple case-study sanity check, not EPS IVV."
+        ]
+      },
+      "author_stated_limitations_gaps": [
+        "\"Since each space mission is unique, the model architecture introduced here cannot be completely generalized...\"",
+        "\"it is beyond the scope of this work to demonstrate complete novel mission solutions...\"",
+        "\"Depending on the level of fidelity and/or rigidity of the analysis, certain links between disciplines may be neglected.\"",
+        "\"The nature of heuristic approaches in terms of finding only near-optimal solutions is considered acceptable in this study...\"",
+        "\"the cost metric defined here is not intended as a final price estimate...\""
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No formal SysML, requirements, verification, or traceability artifacts are provided despite MBSE terminology.",
+        "No open model, scripts, exact OTS database, or reusable package is reported.",
+        "EPS modeling is an analytical sizing abstraction, not detailed dynamic EPS behavior, reliability, fault, or verification modeling.",
+        "No physical test, integration test, operational/flight evidence, stakeholder evaluation, or independent validation is reported.",
+        "Runtime and point-design comparison claims lack controlled baselines."
+      ],
+      "direct_evidence_quotes_supporting_classification": [
+        {
+          "topic": "objective",
+          "location": "Abstract",
+          "quote": "This work presents an architecture that identifies trends between conflicting objectives... and decision variables... such that informed assessment can be made as to which design/s to take on for further analysis."
+        },
+        {
+          "topic": "rapid analytic modeling",
+          "location": "Abstract",
+          "quote": "The models within the architecture exploit analytic methods where possible, in order avoid computationally expensive numerical propagation, and achieve rapid convergence."
+        },
+        {
+          "topic": "generality/scope",
+          "location": "Section 1.1",
+          "quote": "Since each space mission is unique, the model architecture introduced here cannot be completely generalized..."
+        },
+        {
+          "topic": "requirements/data flow",
+          "location": "Section 1.1",
+          "quote": "A set of inputs, which includes the mission requirements, feeds each of the mission disciplines, from which one or more performance metrics are produced."
+        },
+        {
+          "topic": "EPS-adjacent power",
+          "location": "Section 3.1.1",
+          "quote": "The mass, volume, power and cost of the platform are calculated as a sum of these parameters for each sub-system."
+        },
+        {
+          "topic": "battery sizing",
+          "location": "Section 3.1.3",
+          "quote": "The battery capacity calculated in equation (5) is the minimum required to satisfy the demands from the platform..."
+        },
+        {
+          "topic": "runtime evidence",
+          "location": "Section 4.2",
+          "quote": "These results were obtained in 10 minutes... 51,000 iterations of the model architecture."
+        },
+        {
+          "topic": "conclusion",
+          "location": "Section 5",
+          "quote": "This work presents a rapid, model-based approach to the inter-disciplinary design of a CubeSat mission..."
+        }
+      ],
+      "notes_for_consistency_with_other_papers": "Code as supporting system-level CubeSat model-based design with power-budget/EPS-adjacent content. Do not treat as core EPS verification, formal SysML reference-model, or operational MBSE evidence.",
+      "extraction_confidence": "high",
+      "confidence_reason": "Full markdown and metadata were available; method, assumptions, equations, and results are explicit. Residual uncertainty concerns venue details inferred from DOI and classification of a MATLAB MDO architecture as MBSE."
+    }
   },
-  "bibtex": "@article{paper-0012,\n  title = {Rapid Model-based Inter-disciplinary Design of a CubeSat Mission},\n  author = {C. J. Lowe and M. Macdonald},\n  year = {2014},\n  journal = {Acta Astronautica},\n  publisher = {Elsevier},\n  doi = {10.1016/j.actaastro.2014.10.002},\n  url = {https://doi.org/10.1016/j.actaastro.2014.10.002}\n}"
+  "bibtex": "@article{lowe2014rapid,\n  title = {Rapid model-based inter-disciplinary design of a CubeSat mission},\n  author = {Lowe, C. J. and Macdonald, M.},\n  year = {2014},\n  journal = {Acta Astronautica},\n  doi = {10.1016/j.actaastro.2014.10.002}\n}"
 }

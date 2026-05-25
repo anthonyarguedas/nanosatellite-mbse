@@ -3,634 +3,1938 @@
   "tier": "core",
   "year": 2018,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper is an AIAA-published conference-style paper with a DOI in the supplied corpus metadata.",
-        "evidence": [
-          "American Institute of Aeronautics and Astronautics",
-          "Corpus metadata DOI: 10.2514/6.2018-5328"
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper states scope boundaries for the CRM, distinguishes the CSM implementation from an OMG specification, and explicitly describes validation limitations and next steps.",
-        "evidence": [
-          "The CRM is systems engineering methodology-agnostic.",
-          "The CRM provides a library of model elements but does not dictate what model elements and relationships to use.",
-          "In the case of a model like the CRM, however, it is difficult for the validators to answer the questions without evaluating concrete examples of a mission-specific model developed using the CRM."
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "CubeSat/nanosatellite context, form factors, university-class motivation, and lifecycle coverage from conceptual design through development are described.",
-        "evidence": [
-          "CubeSat, a type of nanosatellite, is a low-cost standardized satellite with its origin in the CubeSat Project which was established in 1999 by California Polytechnic State University (Cal Poly), San Luis Obispo and Stanford University's Space and Systems Development Laboratory (SSDL).",
-          "The basic CubeSat unit is 10x10x10 centimeters with a mass of about 1.3 kilograms, and this cubic unit is referred to as 1U.",
-          "Model-based systems engineering (MBSE) is the formalized application of modeling to support system requirements, design, analysis, verification and validation activities beginning in the conceptual design phase and continuing throughout development and later life cycle phases."
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper identifies SysML, Cameo System Modeler, package hierarchies, tables, use cases, requirements, technical measures, and mission-specific population steps.",
-        "evidence": [
-          "Our application of MBSE uses Systems Modeling Language (SysML) and a graphical modeling tool from No Magic.",
-          "This paper describes CRM as implemented in No Magic's Cameo Systems Modeler (CSM).",
-          "The development of a mission-specific model includes the following steps:"
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Claims about reuse, traceability, table-based population, standardization, and performance analysis are tied to specific CRM/SysML artifacts and workflows.",
-        "evidence": [
-          "The CRM is intended for instruction and for designing and building a mission-specific CubeSat.",
-          "The requirement elements and tables can expose requirement properties including: id, name, text, traced to, derived from, refined by, verify method, verified by, and satisfied by.",
-          "This provides for traceability between MOPs and MOEs and supports performance analysis of the MOPs to predict if the MOEs will be met."
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper shows implemented model artifacts and a validation plan, but provides no quantified outcome metrics, completed alpha-test findings, baseline comparison, or flight/test evidence for the CRM outcomes.",
-        "evidence": [
-          "Develop metrics for determining whether or not the CRM meets its intended use.",
-          "The SSWG has already shared the current version of the CRM with trusted partners, with encouraging results; and it has arranged for the first $ \\alpha $ - test.",
-          "Part of that effort will include demonstrating that the CRM can be exported from CSM as an XMI file and imported into another modeling tool, such as Sparx System's Enterprise Architect, with no impact to the CRM."
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Trace, derive, refine, satisfy, verify, and technical-measure mapping relationships are central to the described CRM artifacts.",
-        "evidence": [
-          "The requirement elements and tables can expose requirement properties including: id, name, text, traced to, derived from, refined by, verify method, verified by, and satisfied by.",
-          "Proof that the assertion is true is accomplished by the verify relationship.",
-          "The MOEs are traced back to their originating source in the mission objectives."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "Reusable packages and XMI-based exchange are described, but public availability and cross-tool continuity are mostly anticipated or planned rather than demonstrated.",
-        "evidence": [
-          "A mission-specific CubeSat team will download the CRM Specification XMI file from OMG and import it into its own graphical modeling tool (e.g., CSM or Sparx Systems' Enterprise Architect).",
-          "The submission to OMG will include as non-normative material: 1) a CSM implementation of the CRM and 2) a CSM web published HTML file that can be imported into Internet Explorer.",
-          "Part of that effort will include demonstrating that the CRM can be exported from CSM as an XMI file and imported into another modeling tool, such as Sparx System's Enterprise Architect, with no impact to the CRM."
-        ]
-      }
-    ],
+    "credible_venue": {
+      "label": "Was the research published in a credible venue?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "AIAA-published conference-style paper with DOI and Scopus provenance in the supplied metadata.",
+      "evidence": [
+        "Corpus metadata: DOI=10.2514/6.2018-5328; Scopus provenance includes paperId 85056175808.",
+        "Markdown line 329 footer: 'American Institute of Aeronautics and Astronautics'."
+      ],
+      "confidence": "high"
+    },
+    "limitations_discussed": {
+      "label": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "The paper does not use a formal threats-to-validity heading, but it does state scope boundaries, validation challenges, future alpha testing, and planned work.",
+      "evidence": [
+        "Section III/line 79: 'The CRM is systems engineering methodology-agnostic.'",
+        "Figure 1 note/Section III: 'The CRM provides a library of model elements but does not dictate what model elements and relationships to use.'",
+        "Section VI/line 241: 'it is difficult for the validators to answer the questions without evaluating concrete examples of a mission-specific model developed using the CRM.'",
+        "Section VII/lines 259-261: 'The next steps include: 1) adding parametrics for power, weight, and cost, 2) validation of the CRM...'"
+      ],
+      "confidence": "medium"
+    },
+    "context_described": {
+      "label": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "The paper defines CubeSat/nanosatellite context, form factors, university-class motivation, RAX lineage, and the intended concept/design/development use of the CRM.",
+      "evidence": [
+        "Section II.A/line 57: 'CubeSat, a type of nanosatellite, is a low-cost standardized satellite...'",
+        "Section II.A: 'The basic CubeSat unit is 10x10x10 centimeters with a mass of about 1.3 kilograms... 1U.'",
+        "Section III/line 79: teams import the CRM 'to initiate its process for architecting, designing, and developing its mission-specific Cubesat model.'"
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "label": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "The paper identifies SysML/CSM, package hierarchies, requirement/use-case/technical-measure artifacts, table-based population workflows, XMI exchange, and mission-specific population steps; the actual model file is not supplied, so replication is partial rather than executable from the article alone.",
+      "evidence": [
+        "Section II.B/line 65: 'Our application of MBSE uses Systems Modeling Language (SysML) and a graphical modeling tool from No Magic.'",
+        "Section IV/line 167: 'This paper describes CRM as implemented in No Magic's Cameo Systems Modeler (CSM).'",
+        "Section V/line 195: 'The development of a mission-specific model includes the following steps:'"
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "label": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "Claims about reuse, traceability, table-based population, performance prediction, standardization, and validation are tied to named CRM/SysML artifacts or workflows.",
+      "evidence": [
+        "Abstract/line 25: 'The CRM is intended for instruction and for designing and building a mission-specific CubeSat.'",
+        "Section III.D/line 107: requirement tables expose 'traced to, derived from, refined by, verify method, verified by, and satisfied by'.",
+        "Section III.G/line 155: parametric diagrams provide 'traceability between MOPs and MOEs and supports performance analysis... to predict if the MOEs will be met.'"
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "label": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The paper contains detailed artifact descriptions, prior RAX trade-study background, and early/trusted-partner validation statements, but it reports no quantified CRM outcome metrics, completed alpha-test results, baseline comparison of MBSE adoption, or integration/flight evidence.",
+      "evidence": [
+        "Section VI: validation strategy includes 'Develop metrics for determining whether or not the CRM meets its intended use' as a future step.",
+        "Section VI/line 255: 'shared the current version of the CRM with trusted partners, with encouraging results; and it has arranged for the first α-test.'",
+        "Section VII/line 261: export/import demonstration 'with no impact to the CRM' is still part of future OMG-preparation work."
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "label": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "Trace, derive, refine, satisfy, verify, MOE/MOP/TPM mapping, and use-case refinement links are central to the described CRM.",
+      "evidence": [
+        "Section III.D/line 107: requirement properties include 'traced to, derived from, refined by, verify method, verified by, and satisfied by'.",
+        "Section III.D/line 109: 'Proof that the assertion is true is accomplished by the verify relationship.'",
+        "Section III.G/lines 153-157: MOEs, MOPs, and TPMs are traced to objectives, requirements, and each other."
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "label": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The paper describes reusable packages, CSM implementation, XMI exchange, spreadsheet export, and intended OMG availability, but public access and cross-tool import/export are anticipated or planned rather than demonstrated.",
+      "evidence": [
+        "Section IV/line 169: 'A mission-specific CubeSat team will download the CRM Specification XMI file from OMG and import it into its own graphical modeling tool...'",
+        "Section III.D/line 105: 'The requirement tables can be exported to spreadsheets.'",
+        "Section VII/line 261: demonstration that CSM XMI can be imported into another modeling tool 'with no impact to the CRM' is still future work."
+      ],
+      "confidence": "high"
+    },
     "total_score": 7.0,
     "max_score": 8,
     "normalized_score": 0.875,
-    "overall_rationale": "The paper gives a clear, artifact-level description of a SysML CubeSat reference model, its intended reuse, traceability mechanisms, and validation approach. Evidence for realized outcomes remains limited because validation, alpha-testing, cross-tool import/export, and power/weight/cost parametrics are still planned or only briefly reported."
+    "overall_rationale": "Strong artifact-level description of a reusable SysML CubeSat reference model and traceability mechanisms; outcome evidence, public reproducibility, EPS-specific verification, and completed validation remain limited."
   },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0013.json",
-    "status_rationale": "Retained as core because the full text directly addresses CubeSat MBSE reference modeling, reusable system architecture, technical measures, and verification/validation mechanisms. EPS relevance is adjacent through power subsystem and power-parametric discussion rather than EPS-specific behavior.",
-    "citation": "Kaslow, D., Ayres, B. J., Cahill, P. T., Croney, C., Hart, L., and Levi, A. G. (2018). Developing a CubeSat Model-Based System Engineering (MBSE) Reference Model - Interim Status #4. American Institute of Aeronautics and Astronautics. DOI: 10.2514/6.2018-5328.",
-    "title": "Developing a CubeSat Model-Based System Engineering (MBSE) Reference Model - Interim Status #4",
-    "authors": [
-      "David Kaslow",
-      "Bradley J. Ayres",
-      "Philip T Cahill",
-      "Chuck Croney",
-      "Laura Hart",
-      "Alejandro G. Levi"
-    ],
-    "venue": "not reported",
-    "doi_or_url": "10.2514/6.2018-5328",
-    "publisher": "American Institute of Aeronautics and Astronautics",
-    "venue_type": "conference proceedings paper",
-    "source_database_or_route": [
-      "scopus: searches/scopus_q5_reference_model_refined.json rank 28",
-      "scopus: searches/scopus_q6_vv_traceability_refined.json rank 25",
-      "scopus: searches/scopus_q18_system_mbse_broad_full65.json rank 49",
-      "semantic_scholar: searches/abstract_enrichment/paper-0013_semantic_title.json rank 1"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "high",
-        "rationale": "Directly describes a general CubeSat/nanosatellite mission reference model with reusable, loosely defined architectures, requirements, use cases, and technical measures; EPS is only adjacent via power subsystem/power parametrics."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "Discusses reliability motivation, reuse/reproducibility, traceability, and tool interoperability as system-level CRM outcomes, but provides little outcome evidence and no EPS-specific reliability or integrability results."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "Describes generic verification/validation fields, verify relationships, technical-measure traceability, and a CRM validation strategy before physical development, but not EPS-specific verification procedures."
-      }
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "AIAA conference-style publication with DOI and Scopus provenance.",
+      "evidence": [
+        {
+          "quote": "Metadata DOI=10.2514/6.2018-5328.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Markdown line 329: 'American Institute of Aeronautics and Astronautics'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "The paper is an interim status report continuing earlier RAX-centric and CRM papers and explicitly cites prior behavior, technical-measure, and validation work. Corpus metadata lists D. Kaslow, B. Ayres, P. T. Cahill, L. Hart, and Rose Yntema, while the visible paper header lists David Kaslow, Bradley J. Ayres, Philip T Cahill, Chuck Croney, Laura Hart, and Alejandro G. Levi; this extraction uses the visible full-text header."
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Scope boundaries, validation difficulty, alpha-testing, and future work are explicitly discussed, though not in a formal limitations section.",
+      "evidence": [
+        {
+          "quote": "Section VI/line 241: validators need concrete mission-specific examples.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VII/lines 259-261 list next steps: power/weight/cost parametrics, validation, OMG specification, and XMI import demonstration.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "CubeSat/nanosatellite context, university-class motivation, form factors, and intended mission-team use are described.",
+      "evidence": [
+        {
+          "quote": "Section II.A/line 57 defines CubeSat as a nanosatellite and low-cost standardized satellite.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III/line 79 states teams import CRM to architect, design, and develop a mission-specific CubeSat model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "SysML/CSM implementation, packages, tables, relationships, technical measures, XMI path, and population steps support comparison and partial replication.",
+      "evidence": [
+        {
+          "quote": "Section II.B/line 65: SysML and No Magic tool.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V provides table-based UI areas and mission-specific model development steps.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims are linked to CRM artifacts such as reusable packages, trace properties, parametric diagrams, and XMI exchange.",
+      "evidence": [
+        {
+          "quote": "Line 107 lists requirement relationship properties.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 155 links parametric diagrams to traceability and performance prediction.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Artifact examples and prior trade-study context are provided, but CRM outcome metrics, baselines, completed alpha-test results, and flight/test evidence are absent.",
+      "evidence": [
+        {
+          "quote": "Section VI: 'Develop metrics...' is a future validation step.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 255 reports only 'encouraging results' from trusted partners and an arranged first alpha-test.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Requirements, use cases, technical measures, satisfy/verify, and MOE/MOP/TPM mappings are traceability-centered.",
+      "evidence": [
+        {
+          "quote": "Line 107: 'traced to, derived from, refined by, verify method, verified by, and satisfied by'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 153-157 describe MOE/MOP/TPM tracing.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports intended XMI/OMG and CSM/HTML assets plus spreadsheet export, but not public model availability or demonstrated cross-tool continuity.",
+      "evidence": [
+        {
+          "quote": "Line 169: teams 'will download' an OMG XMI file.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 261: cross-tool import with no impact remains to be demonstrated.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "core"
+      ],
+      "status": "coded",
+      "rationale": "Corpus metadata assigns screening_tier=core; full text directly addresses CubeSat MBSE reference modeling and traceability.",
+      "evidence": [
+        {
+          "quote": "Prompt metadata: screening_tier=core.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract/line 25: INCOSE SSWG develops a CubeSat Reference Model using SysML.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper's central topic is a general CubeSat reference model with reusable mission/system/subsystem artifacts and minimal generic subsystem definitions.",
+      "evidence": [
+        {
+          "quote": "Line 45: 'Develop a CubeSat Reference Model (CRM) that a CubeSat team can use as a starting point for its mission'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 131: CubeSat and Ground subsystems are 'generically and loosely defined as a starting point'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims system-level reuse, traceability, reproducibility, and interoperability outcomes from MBSE, but does not provide EPS-specific reliability/reproducibility/integrability evidence.",
+      "evidence": [
+        {
+          "quote": "Line 25: CRM intended for instruction and mission-specific design/build.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 169: XMI import into graphical modeling tools is anticipated.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 41 reports prior power trade studies, but current CRM EPS evidence is only adjacent.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports generic model-integrated verification properties, technical-measure traceability, and CRM validation strategy, but not EPS-specific verification procedures.",
+      "evidence": [
+        {
+          "quote": "Line 107 includes 'verify method' and 'verified by'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 109: 'Proof... is accomplished by the verify relationship.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI describes CRM validation strategy rather than EPS verification.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation"
+      ],
+      "status": "coded",
+      "rationale": "The workflow starts from mission needs/objectives/constraints and proceeds through logical/physical architecture into design/development preparation; formal PDR/CDR or operations evidence is not reported.",
+      "evidence": [
+        {
+          "quote": "Line 79: import CRM to initiate 'architecting, designing, and developing'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 215: physical architecture is 'the foundation for the mission-specific design and development'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "Motivation is university-class CubeSat missions and low-cost standardized CubeSats; no agile/distributed project process is described.",
+      "evidence": [
+        {
+          "quote": "Line 29: university-class CubeSat missions and high failure rates.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 57: CubeSat is a 'low-cost standardized satellite'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "EPS-adjacent"
+      ],
+      "status": "coded",
+      "rationale": "The CRM is system-level; power appears as a generic Power Subsystem, prior power trade-study context, and future power parametrics, not as a detailed EPS model.",
+      "evidence": [
+        {
+          "quote": "Figure 9 description includes 'Power Subsystem' among CubeSat subsystems.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 41 reports prior solar panel/battery energy trade studies.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 259-261 state power parametrics are next steps.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "reference model/template",
+        "prototype demonstration"
+      ],
+      "status": "coded",
+      "rationale": "A CSM implementation of the CRM exists and is described as a template/reference model, but validation and public OMG specification are still in progress.",
+      "evidence": [
+        {
+          "quote": "Line 165: 'It is a template model that provides building blocks'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 167: 'This paper describes CRM as implemented in No Magic's Cameo Systems Modeler'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 255: current version shared with trusted partners and first alpha-test arranged.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "behavior",
+        "verification",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The CRM covers mission enterprise, system/segment/subsystem architecture, requirements, use cases/behavioral refinement, verify properties, validation strategy, and technical measures (other). EPS is only adjacent.",
+      "evidence": [
+        {
+          "quote": "Line 25 lists expansion of architecture/requirement packages, technical measures, use cases, and validation strategy.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 103-115 describe requirements and use cases.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 139-159 describe technical measures.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "parametrics",
+        "generated documents",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper shows requirement tables/properties, BDD-style architecture diagrams, parametric/constraint-block technical measures, documents/spreadsheets/HTML, and other artifacts such as use-case packages and mapping matrices.",
+      "evidence": [
+        {
+          "quote": "Line 105: requirement packages have tables and spreadsheet export.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figures 7-16 are package/BDD population diagrams.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 159: technical measure Word/Excel methods can be implemented in constraint blocks and parametric diagrams.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 167: CSM web-published HTML file.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "profile",
+        "library",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "Generality is supported by a CRM/template/reference model, SysML stereotypes/profiles, library of model elements, table-based population workflow, and mission-specific development steps.",
+      "evidence": [
+        {
+          "quote": "Line 165: 'template model' with building blocks.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 1 note: CRM provides a 'library of model elements'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figures 4 and 20 show requirement and technical-measure stereotypes/profiles.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V lists mission-specific model development steps.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Extended MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The paper extends a SysML system model across requirements, architecture, use cases, technical measures, validation, XMI exchange, and mission-specific tailoring; it does not demonstrate a fully integrated digital engineering environment for downstream hardware/software integration in the current CRM.",
+      "evidence": [
+        {
+          "quote": "Line 25 lists architecture/requirements, table UI, technical measures, use cases, and validation strategy.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 167-169 describes CSM implementation, XMI extraction, and import into other tools.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "team maturity",
+        "available tools"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring is motivated by CubeSat scale/low-cost context, team experience level, and use of a team's own graphical modeling tool.",
+      "evidence": [
+        {
+          "quote": "Line 57: CubeSat is low-cost standardized.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V: team selects Fundamental/Representative/Detailed based on experience with space-ground systems, MBSE, and SysML.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 169: teams import XMI into their own graphical modeling tool.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides package population instructions and a mission-specific step sequence, but not a complete adopter playbook with prerequisites, roles, completion criteria, governance, and validation evidence.",
+      "evidence": [
+        {
+          "quote": "Section V lists table-based UI areas and mission-specific development steps.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figures 11, 15, 16, 17-19 include population instructions.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "MATLAB/Simulink",
+        "STK",
+        "ModelCenter",
+        "Cameo/MagicDraw",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Current CRM uses SysML and No Magic CSM/Cameo; prior RAX lineage reports MagicDraw/Cameo Simulation Toolkit, ModelCenter/MBSE Analyzer, STK, and MATLAB; other tools/standards include Sparx Enterprise Architect, OMG XMI, Word/Excel, and CSM HTML.",
+      "evidence": [
+        {
+          "quote": "Line 65: SysML and No Magic graphical modeling tool.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 37-41: prior phase integrated MagicDraw/Cameo Simulation Toolkit, ModelCenter/MBSE Analyzer, STK, and MATLAB.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 169: import into CSM or Sparx Systems Enterprise Architect.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "import/export",
+        "XML/XMI",
+        "spreadsheets"
+      ],
+      "status": "coded",
+      "rationale": "The paper explicitly reports XMI extraction/import, requirements table spreadsheet export, and embedded spreadsheet/document methods; APIs/plugins/co-simulation for the current CRM are not reported.",
+      "evidence": [
+        {
+          "quote": "Line 105: requirements tables can be exported to spreadsheets.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 167: an XMI file can be extracted from CSM and submitted to OMG.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 169: teams download XMI and import it into a graphical modeling tool.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No codebook-listed toolchain limitation such as vendor lock-in, manual translation, broken traceability, licensing/cost, or scalability is explicitly reported; cross-tool import/export is planned and captured as an extractor-identified interoperability limitation.",
+      "evidence": [
+        {
+          "quote": "Line 167 says a CSM implementation cannot itself be an OMG specification, motivating XMI.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 261 says demonstrating CSM XMI import into another tool 'with no impact' is future work.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports solar-panel area and maximum battery-capacity trade studies in prior RAX lineage and includes only a generic Power Subsystem/planned power parametrics in the current CRM; it does not present a detailed EPS model.",
+      "evidence": [
+        {
+          "quote": "Line 41: 'different configurations of solar panel areas and maximum battery capacity were traded off to compare on-board energy levels'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 9 description lists 'Power Subsystem'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 259-261: power value properties and parametric roll-up are next steps.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No codebook-listed EPS V&V artifacts (verification matrix, test cases/procedures, simulation scenarios, acceptance criteria, executable checks, SIL/HIL, automated tests) are reported for EPS; only generic requirement verify properties and CRM validation strategy are described.",
+      "evidence": [
+        {
+          "quote": "Line 107 includes generic 'verify method' and 'verified by' properties.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI validates the CRM itself, not an EPS verification procedure.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "parametric checks",
+        "trade-study verification"
+      ],
+      "status": "coded",
+      "rationale": "Generic pre-physical analysis is reported via technical-measure parametric diagrams and prior RAX trade studies; EPS-specific verification procedures are not shown.",
+      "evidence": [
+        {
+          "quote": "Line 155: constraint blocks and parametric diagrams support performance analysis to predict if MOEs will be met.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 41: prior solar-panel/battery configurations were traded to compare on-board energy levels.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper does not report EPS hardware/software integration, flat-sat/testbed, environmental test, or operational validation links. It only describes generic physical architecture and future/early CRM validation.",
+      "evidence": [
+        {
+          "quote": "Line 215: physical architecture is foundation for design/development.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI discusses CRM alpha-testing, not EPS integration/test readiness.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "reproducibility",
+        "integrability/interoperability",
+        "generality/reuse",
+        "traceability",
+        "consistency",
+        "completeness",
+        "decision support",
+        "communication/stakeholder alignment",
+        "mission assurance",
+        "lifecycle continuity"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims include reusable CRM/template, XMI/tool interoperability, traceability, model quality/consistency/completeness validation, technical-measure decision support, stakeholder-understandable measures/use cases, and lifecycle continuity from needs to physical architecture.",
+      "evidence": [
+        {
+          "quote": "Line 25: intended for instruction and mission-specific CubeSat design/build.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 155: traceability and performance prediction.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 167-169: XMI/OMG import path.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI: validation questions include complete, well-formed, consistent, understandable, and integrates with other models.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level"
+      ],
+      "status": "coded",
+      "rationale": "Claims are about CubeSat/CRM system-level modeling; EPS claims are only adjacent and historical.",
+      "evidence": [
+        {
+          "quote": "Title/abstract: CubeSat MBSE Reference Model.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 131: generic CubeSat and Ground subsystems as starting points.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "executable simulation",
+        "parametric analysis",
+        "reference model reuse",
+        "model transformation",
+        "shared repository",
+        "requirements linkage",
+        "tool integration",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms are CRM reuse, model repository, trace/refine/derive/satisfy/verify links, parametrics/technical measures, XMI/tool exchange, prior executable integrated simulation, and other mechanisms such as table-based population and alpha-test validation.",
+      "evidence": [
+        {
+          "quote": "Line 79: model as repository for SE artifacts.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 107-109: requirement trace/satisfy/verify links.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 159: methods executed in constraint blocks/parametric diagrams.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 37-41: prior integrated tool simulation/trade studies.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 167-169: XMI import/export.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation"
+      ],
+      "status": "coded",
+      "rationale": "Claimed value occurs mainly during early mission definition, architecture/design, technical-measure analysis, and preparation for physical architecture/development.",
+      "evidence": [
+        {
+          "quote": "Line 79: architecting, designing, developing.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 215: physical architecture foundation for design/development.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration",
+        "Trade-study or requirements-checking result",
+        "Stakeholder/user/expert evaluation"
+      ],
+      "status": "coded",
+      "rationale": "Current CRM evidence is mostly illustrative/conceptual; prior RAX lineage reports a single case/trade-study demonstration; validation has only trusted-partner feedback/arranged alpha-test without data.",
+      "evidence": [
+        {
+          "quote": "Figures and Section V provide illustrative artifacts and steps.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 41 reports prior trade studies.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 255 reports trusted-partner encouraging results and first alpha-test arranged.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "trace links",
+        "model reuse",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Trace properties and model reuse are explicit value indicators; other indicators include MOE/MOP/TPM values, model-quality validation questions, on-board energy level, and downloaded-data quantities. No adoption-effect metric is reported.",
+      "evidence": [
+        {
+          "quote": "Line 107 lists trace/refine/derive/verify/satisfy properties.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 45 states CRM is a starting point for missions.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI lists validation questions.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 41 reports on-board energy and data-downloaded trade metrics.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [
+        "previous mission",
+        "not reported"
+      ],
+      "status": "coded",
+      "rationale": "The reuse motivation compares the CRM against an earlier RAX-centric model that was not suitable for reuse; most specific outcome claims lack a baseline/comparator.",
+      "evidence": [
+        {
+          "quote": "Lines 43-45: initial RAX-centric model 'not suitable for reuse', motivating a standard CRM starting point.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No baseline is reported for traceability, XMI exchange, validation, or technical-measure benefits.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Weak"
+      ],
+      "status": "coded",
+      "rationale": "Most outcome evidence is conceptual or illustrative without quantitative baselines; prior trade-study and trusted-partner statements are not detailed enough in this paper to upgrade confidence.",
+      "evidence": [
+        {
+          "quote": "Line 255 gives no data beyond 'encouraging results'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI says metrics still need to be developed.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [
+        "ownership",
+        "review process",
+        "model quality criteria",
+        "naming/versioning conventions"
+      ],
+      "status": "coded",
+      "rationale": "INCOSE SSWG/OMG specification process provides ownership/standardization context; validation strategy and ten questions provide review/model-quality criteria; requirement headers define prefix/numbering conventions.",
+      "evidence": [
+        {
+          "quote": "Line 25: INCOSE SSWG and OMG SDTF collaboration.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 105: requirement header establishes prefix and numbering scheme.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI lists ten validation/model-quality questions and alpha-test review process.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper does not quantify MBSE adoption cost, training/tooling effort, saved effort, schedule effect, avoided rework, reuse value, decision quality, or mission assurance benefit.",
+      "evidence": [
+        {
+          "quote": "Cost is mentioned only as a future technical parameter for CubeSat development, not as ROI/value-realization evidence for MBSE adoption (Section VII/lines 259-261).",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The CSM implementation, population tables/instructions, and mission-specific model-development steps provide a practical, artifact-backed implementation pathway, though not a complete playbook.",
+      "evidence": [
+        {
+          "quote": "Section V lists Fundamental/Representative/Detailed starting levels, table-based UIs, and mission-specific development steps.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figures 11, 15-19 show population instructions.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper proposes SysML-compliant OMG XMI exchange and CSM/Sparx import, but cross-tool continuity is planned rather than demonstrated.",
+      "evidence": [
+        {
+          "quote": "Lines 167-169 describe XMI extraction/import.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 261 states demonstrating import into another tool with no impact remains future work.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "CubeSat low-cost/university context and tiered model detail levels tailor MBSE conceptually to small teams, but no effort/cost data is provided.",
+      "evidence": [
+        {
+          "quote": "Line 57 defines CubeSat as low-cost standardized.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V lets teams start at Fundamental, Representative, or Detailed depending on experience.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper connects artifacts to OMG specification, requirement IDs, validation criteria, and technical-measure deliverables, but gives no ROI evidence or formal project-decision gate results.",
+      "evidence": [
+        {
+          "quote": "Line 165: OMG normative specification process.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Line 105: requirement prefix/numbering scheme.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI: validation criteria and alpha-test plan.",
+          "location": "not specified"
+        },
+        {
+          "quote": "ROI metrics not reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "not addressed"
+      ],
+      "status": "coded",
+      "rationale": "Although the paper motivates CubeSat growth and low-cost university missions, it does not address NewSpace, agile, distributed, or rapid-iteration process alignment.",
+      "evidence": [
+        {
+          "quote": "Line 29 mentions rapid growth of CubeSat missions but no agile/NewSpace/distributed workflow is described.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "medium"
+      ],
+      "status": "coded",
+      "rationale": "Markdown is clear and direct quotes are available, but evidence mixes current CRM status with prior RAX lineage, venue details are incomplete in the markdown, and corpus authors differ from the paper header.",
+      "evidence": [
+        {
+          "quote": "Paper header lists David Kaslow, Bradley J. Ayres, Philip T Cahill, Chuck Croney, Laura Hart, Alejandro G. Levi; prompt metadata lists Rose Yntema instead of Croney/Levi.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Lines 37-41 summarize prior work, while current CRM validation and XMI exchange remain future/early.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "CubeSat/nanosatellite mission reference model; previous RAX CubeSat work is background only.",
-    "size_form_factor": "1U defined as 10x10x10 centimeters and about 1.3 kilograms; larger 3U, 6U, and 12U form factors also noted.",
-    "mission_name": "CubeSat Reference Model (CRM); no single mission-specific case study is completed in this paper.",
-    "mission_domain": "General CubeSat mission enterprise including space segment, CubeSat subsystems, ground segment, stakeholders, requirements, use cases, and technical measures.",
-    "organization_type": "INCOSE Space Systems Working Group collaboration with OMG Space Domain Task Force; intended users include CubeSat mission teams, including university-class teams.",
-    "project_maturity": "Interim Status #4; CSM implementation exists, OMG specification effort is in progress, and validation/alpha-testing is planned or early.",
-    "lifecycle_stage_addressed": "Conceptual design, requirements, architecture, analysis, verification/validation planning, logical-to-physical architecture, and development preparation.",
-    "development_context": "Mission-specific CubeSat teams import/customize the CRM in a graphical SysML modeling tool using table-based population and traceability mechanisms.",
-    "eps_relevance": "EPS-adjacent",
-    "model_maturity": "SysML CRM implemented in No Magic Cameo System Modeler with architecture and requirements expanded to component level, technical measures and use cases incorporated, and validation strategy not yet completed."
-  },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "High CubeSat failure rates and intuition-based university CubeSat design motivate rigorous systems engineering and a reusable CubeSat Reference Model that can be used for instruction and mission-specific design/build activities.",
-    "modeling_scope": [
-      "CubeSat domain and mission enterprise",
-      "stakeholders and stakeholder concerns",
-      "mission needs, objectives, constraints, and requirements",
-      "space segment, ground segment, CubeSat subsystems, and ground subsystems",
-      "subsystem/component-level architecture and requirement packages",
-      "use cases at enterprise, CubeSat, and subsystem levels",
-      "technical measures including MOE, MOP, and TPM specifications",
-      "reference information and terminology repository",
-      "CRM validation strategy"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "no_pre_physical_verification_model",
+      "interoperability_limitations",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage",
+      "lineage_or_duplicate_reference_model_overlap"
     ],
-    "system_boundary_level_of_abstraction": "Generic CubeSat mission enterprise including external environment/constraints, provided services, space and ground segments, CubeSat subsystems, ground subsystems, and representative subsystem components; logical architecture precedes mission-specific physical architecture.",
-    "minimal_or_excluded_modeling": "The CRM is methodology-agnostic, implementation-free for the OMG specification, and does not dictate all model elements or relationships. Power, weight, and cost parametrics are identified as next steps rather than completed CRM content.",
-    "required_prior_behavioral_domain_knowledge": "Mission teams select a fundamental, representative, or detailed starting level based on experience with space-ground systems, MBSE, and SysML; detailed prior behavior knowledge is not specified as a prerequisite.",
-    "handling_limited_behavioral_knowledge": "The CRM supplies loosely defined logical subsystems, tables, use-case descriptions that may start as simple narratives, and representative component packages so teams can incrementally add mission-specific behavior, requirements, and physical components.",
-    "model_artifacts_used": [
-      "SysML packages",
-      "block definition diagrams",
-      "internal block diagrams mentioned as SysML structural views",
-      "requirements tables and stereotypes",
-      "trace, deriveReqt, refine, satisfy, and verify relationships",
-      "use case elements, use case tables, and use case description documents",
-      "architecture structures tables",
-      "technical measure specifications for MOE, MOP, and TPM",
-      "constraint blocks and parametric diagrams",
-      "mapping matrices such as MOP-to-MOE and TPM-to-MOP",
-      "Word and Excel method documents embedded in the model",
-      "XMI file for implementation-free exchange"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "Validation, alpha-testing, power/weight/cost parametrics, and cross-tool import demonstration are described as next steps rather than completed results.",
+        "evidence_quote": "Section VII: 'The next steps include: 1) adding parametrics for power, weight, and cost, 2) validation of the CRM, and 3) continue working with OMG...'",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "author_stated",
+        "rationale": "The validation plan recognizes that the CRM must be assessed through concrete mission-specific examples and several teams; current evidence is only trusted partners and one arranged alpha test.",
+        "evidence_quote": "Section VI: 'it is difficult for the validators to answer the questions without evaluating concrete examples of a mission-specific model developed using the CRM' and 'arranged for the first α-test'.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "The completed extraction found no quantitative CRM outcome metrics; metrics are a future validation step.",
+        "evidence_quote": "Section VI lists 'Develop metrics for determining whether or not the CRM meets its intended use' as part of the validation approach; claim records report no quantified effect sizes.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "Aside from the motivating comparison with a RAX-centric model not suitable for reuse, outcome claims lack process baselines or counterfactual comparisons.",
+        "evidence_quote": "Structured coding for claimed_outcomes.baseline_comparator includes 'previous mission' only for the reuse motivation and 'not reported' for most claims.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "author_stated",
+        "rationale": "The validation strategy is planned/early and depends on SSWG experts, trusted partners, and future alpha tests; independent validation results are not reported.",
+        "evidence_quote": "Section VI: 'Select a CubeSat team of four members of the SSWG...' and 'The SSWG has already shared the current version... with trusted partners... and it has arranged for the first α-test.'",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "The paper reports no hardware/software integration test, environmental test, operational validation, or flight evidence for CRM outcomes.",
+        "evidence_quote": "Completed EPS/integration extraction: integration_test_readiness status=not_reported; Section VI concerns CRM validation and alpha-testing, not physical test or flight results.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "Power is mentioned as a generic subsystem, prior trade-study context, and future parametric target; no detailed EPS requirements, architecture, verification, or outcome evidence is presented for the current CRM.",
+        "evidence_quote": "Section VII: 'adding parametrics for power, weight, and cost' is a next step; Figure 9 only lists 'Power Subsystem' among generic subsystems.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_pre_physical_verification_model",
+        "source": "extractor_identified",
+        "rationale": "The extraction found generic verify relationships and parametric analysis but no EPS-specific pre-physical verification procedure model or codebook-listed V&V artifact.",
+        "evidence_quote": "Structured code eps_verification_specific.verification_validation_artifacts status=not_reported; pre-physical mechanisms are generic parametric/trade-study checks, not EPS verification procedures.",
+        "confidence": "high"
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "author_stated",
+        "rationale": "Cross-tool continuity is an intended OMG/XMI mechanism, but the paper states that demonstrating CSM export and import into another tool with no impact is future work.",
+        "evidence_quote": "Section VII: 'Part of that effort will include demonstrating that the CRM can be exported from CSM as an XMI file and imported into another modeling tool... with no impact to the CRM.'",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "No public model URL or downloadable CRM file is given in the paper; availability is described in future/anticipated terms through OMG.",
+        "evidence_quote": "Section IV: 'A mission-specific CubeSat team will download the CRM Specification XMI file from OMG...' and Section VI says the current version has been shared with trusted partners.",
+        "confidence": "high"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "extractor_identified",
+        "rationale": "The CRM workflow covers needs, requirements, architecture, technical measures, and physical architecture preparation, but does not report PDR/CDR use, integration/test, operations, or closed-loop lifecycle evidence.",
+        "evidence_quote": "Lifecycle coding includes concept/pre-Phase A, Phase A/B, and implementation; integration/test and operations are not coded due absent evidence.",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Claims are linked to artifacts, but evidence is mostly conceptual/illustrative; completed metrics, baselines, and detailed user results are absent.",
+        "evidence_quote": "Structured outcome evidence confidence is coded 'Weak'; Section VI still needs metrics and reports only 'encouraging results' without data.",
+        "confidence": "high"
+      },
+      {
+        "flag": "lineage_or_duplicate_reference_model_overlap",
+        "source": "author_stated",
+        "rationale": "This paper is Interim Status #4 in a recurring CRM/RAX paper family and summarizes earlier phases and related papers, so synthesis should avoid double-counting prior trade-study outcomes as new current-CRM evidence.",
+        "evidence_quote": "Introduction lines 33-49 summarize first, second, and third RAX phases and list references [6]-[11] for interim CRM, behavior, technical-measure, and validation papers.",
+        "confidence": "high"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "CRM template model imported as a starting point",
-      "OMG normative XMI specification",
-      "non-normative CSM implementation and web-published HTML guidance",
-      "generic and loosely defined CubeSat and ground subsystem packages",
-      "representative component packages that mission teams replace or tailor",
-      "table-based add/delete/modify population workflow",
-      "reference information repository and terminology definitions",
-      "methodology-agnostic library of model elements"
+    "emergent_limitations": [
+      {
+        "label": "metadata-author-mismatch",
+        "source": "extractor_identified",
+        "rationale": "Corpus metadata authors differ from the visible paper header; the extraction uses full-text header authors and records the mismatch for citation consistency.",
+        "evidence": "Prompt metadata lists D. Kaslow, B. Ayres, P. T. Cahill, L. Hart, Rose Yntema; paper header lists David Kaslow, Bradley J. Ayres, Philip T Cahill, Chuck Croney, Laura Hart, Alejandro G. Levi.",
+        "confidence": "high",
+        "evidence_quote": "Prompt metadata lists D. Kaslow, B. Ayres, P. T. Cahill, L. Hart, Rose Yntema; paper header lists David Kaslow, Bradley J. Ayres, Philip T Cahill, Chuck Croney, Laura Hart, Alejandro G. Levi."
+      },
+      {
+        "label": "trusted-partner-validation-selection-bias",
+        "source": "extractor_identified",
+        "rationale": "Early feedback comes from trusted partners and planned SSWG-assisted alpha tests, which may not represent independent novice CubeSat teams.",
+        "evidence": "Section VI: current version shared with 'trusted partners' and first alpha-test arranged; SSWG experts provide substantive assistance.",
+        "confidence": "medium",
+        "evidence_quote": "Section VI: current version shared with 'trusted partners' and first alpha-test arranged; SSWG experts provide substantive assistance."
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Select and import the CRM starting level",
-        "inputs": "CRM Specification XMI or CSM CRM, non-normative guidance, team experience with space-ground systems/MBSE/SysML",
-        "outputs": "Mission-specific CubeSat model scaffold at fundamental, representative, or detailed level",
-        "actors_roles": "Mission-specific CubeSat team; modeler/systems engineer",
-        "prerequisites": "Access to a graphical SysML modeling tool and the CRM; starting level selected based on experience",
-        "completion_criteria": "CRM imported and initial architecture/package level selected",
-        "handoffs": "Scaffold handed to mission/stakeholder population activities"
-      },
-      {
-        "step": "Populate mission enterprise needs, objectives, constraints, and measures of effectiveness",
-        "inputs": "Stakeholder concerns, mission needs, objectives, constraints, and CRM enterprise tables/packages",
-        "outputs": "Mission-level needs, objectives, constraints, MOE specifications, and trace links",
-        "actors_roles": "Mission-specific team, stakeholders, systems engineer",
-        "prerequisites": "Stakeholder concerns and mission context available",
-        "completion_criteria": "Enterprise items are entered in model tables and traced as appropriate",
-        "handoffs": "Mission requirements and use-case development"
-      },
-      {
-        "step": "Create mission use cases and mission requirements",
-        "inputs": "Mission objectives, needs, constraints, MOEs, and use case package",
-        "outputs": "Mission use cases, use-case descriptions, and refined mission requirements",
-        "actors_roles": "Systems engineer/modeler with stakeholder input",
-        "prerequisites": "Mission-level elements populated",
-        "completion_criteria": "Use cases refine mission requirements and support MOEs/objectives/needs/constraints",
-        "handoffs": "Space and ground segment requirements derivation"
-      },
-      {
-        "step": "Derive space and ground segment requirements and segment use cases",
-        "inputs": "Mission requirements and mission use cases",
-        "outputs": "Space segment requirements, ground segment requirements, segment use cases, and traces to mission use cases",
-        "actors_roles": "Mission systems engineer, space segment and ground segment engineers",
-        "prerequisites": "Mission requirements/use cases established",
-        "completion_criteria": "Segment requirements are derived from mission requirements and segment use cases trace to mission use cases",
-        "handoffs": "Segment technical measures and subsystem requirement allocation"
-      },
-      {
-        "step": "Create segment measures of performance and supporting segment requirements",
-        "inputs": "Enterprise MOEs, segment requirements, technical-measure packages",
-        "outputs": "MOP specifications, MOP-to-MOE mapping, segment requirements supporting MOPs",
-        "actors_roles": "Systems engineer and segment leads",
-        "prerequisites": "MOEs and segment requirements available",
-        "completion_criteria": "MOPs are created in support of MOEs and linked to segment requirements",
-        "handoffs": "Subsystem requirements and technical performance measures"
-      },
-      {
-        "step": "Derive subsystem requirements, use cases, and technical performance measures",
-        "inputs": "Segment requirements, segment use cases, MOPs, subsystem packages",
-        "outputs": "CubeSat and ground subsystem requirements, subsystem use cases, TPM specifications, TPM-to-MOP traces",
-        "actors_roles": "Subsystem engineers, systems engineer/modeler",
-        "prerequisites": "Segment requirements and MOPs established",
-        "completion_criteria": "Subsystem requirements trace to segment use cases and TPMs support MOPs/MOEs",
-        "handoffs": "Logical architecture tailoring and physical architecture definition"
-      },
-      {
-        "step": "Tailor logical subsystems and create physical architecture",
-        "inputs": "Allocated requirements, generic logical subsystem definitions, representative component packages",
-        "outputs": "Mission-specific subsystem definitions and physical components including hardware, software, persistent data, and operational procedures",
-        "actors_roles": "Mission-specific team, subsystem leads, integrator",
-        "prerequisites": "Allocated subsystem requirements and selected subsystem capabilities",
-        "completion_criteria": "Physical components are identified as meeting functional and performance subsystem requirements",
-        "handoffs": "Mission-specific design and development"
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The CRM maps stakeholder concerns to needs/objectives/constraints, requirements, use cases, technical measures, logical and physical architecture, and verification/validation artifacts beginning in conceptual design and continuing through development. Formal lifecycle gates such as PDR/CDR are not reported.",
-    "approach_classification": "Enhanced MBSE",
-    "approach_classification_rationale": "The approach is fundamentally SysML MBSE, enhanced by a reusable reference model, OMG/XMI standardization path, table-based population interfaces, embedded method documents/spreadsheets, technical-measure mappings, and a validation strategy.",
-    "tailoring_rationale": [
-      "A mission-specific team selects fundamental, representative, or detailed packages depending on experience.",
-      "Subsystems may be eliminated, modified, or combined according to mission needs.",
-      "Generic and loosely defined subsystems avoid imposing implementation constraints.",
-      "The physical architecture is created after logical requirements allocation and uses mission-specific hardware, software, persistent data, and procedures.",
-      "The CRM is systems engineering methodology-agnostic."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "Model-Based Systems Engineering (MBSE)",
-      "Systems Modeling Language (SysML)",
-      "No Magic Cameo System Modeler (CSM)",
-      "No Magic graphical modeling tool",
-      "OMG CRM specification process",
-      "XML Metadata Interchange (XMI)",
-      "Sparx Systems Enterprise Architect as an anticipated import target",
-      "CSM web-published HTML",
-      "Word documents and Excel spreadsheets embedded in the model for technical-measure methods"
-    ],
-    "toolchain_architecture_data_flow": "The CRM is implemented in CSM, exported as an implementation-free XMI file for OMG specification submission, then intended to be downloaded/imported by mission teams into graphical modeling tools such as CSM or Enterprise Architect. Within CSM, table edits update containment tree elements; requirement tables may be exported to spreadsheets; technical-measure methods may be kept as documents/spreadsheets or implemented in SysML constraint blocks and parametric diagrams.",
-    "interoperability_mechanisms": [
-      "SysML compliance",
-      "OMG normative XMI specification",
-      "XMI export from CSM",
-      "XMI import into CSM or Sparx Systems Enterprise Architect",
-      "CSM web-published HTML as non-normative guidance",
-      "requirements table export to spreadsheets",
-      "embedded Word and Excel technical-measure method files"
-    ],
-    "syntax_semantic_continuity_evidence": "Continuity is planned through SysML compliance, reference terminology, stereotypes, and XMI exchange. The paper says demonstrating export/import with no impact to the CRM remains part of future OMG-preparation work.",
-    "software_hardware_system_integration_readiness": "The CRM supports transition from logical architecture to physical architecture including hardware, software, persistent data, and operational procedures, but the paper reports no software/hardware integration tests or flight integration evidence.",
-    "toolchain_limitations": [
-      "A CSM implementation cannot itself be an OMG specification.",
-      "Cross-tool XMI export/import with no impact is a next step, not completed evidence.",
-      "Public availability of the CRM files is described as intended/anticipated, not demonstrated.",
-      "Validation requires concrete mission-specific models and alpha-tests.",
-      "Technical-measure methods may reside in Word/Excel or model constraints, leaving implementation choices to teams."
-    ],
-    "availability_reproducibility": "The paper describes intended availability via an OMG XMI specification plus non-normative CSM implementation and HTML, but does not report that these assets are already publicly available; reproducibility is supported conceptually by detailed package/table descriptions and figures."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "Power Subsystem as a generic CubeSat subsystem",
-      "solar panel areas and maximum battery capacity in earlier trade-study background",
-      "on-board energy levels in earlier trade-study background",
-      "planned power value properties at CubeSat, subsystem, and component levels",
-      "planned parametric roll-up for power from component level to CubeSat"
-    ],
-    "eps_requirements_representation": "No dedicated EPS requirements are shown. Generic CubeSat subsystem and component requirement packages can expose id, text, traced to, derived from, refined by, verify method, verified by, and satisfied by properties, so a mission-specific power/EPS requirement could be represented using those mechanisms.",
-    "verification_validation_artifacts": [
-      "requirement table properties including verify method and verified by",
-      "satisfy and verify relationships",
-      "use cases refining requirements",
-      "MOE, MOP, and TPM specifications",
-      "MOP-to-MOE and TPM-to-MOP mapping matrices",
-      "constraint blocks and parametric diagrams for technical measures",
-      "CRM validation strategy using ten model-quality questions",
-      "planned alpha-tests with mission-specific CubeSat teams"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "generic model-based requirement verification fields before physical implementation",
-      "verify relationship used to support satisfaction assertions",
-      "technical-measure traceability and parametric analysis intended to predict whether MOEs will be met",
-      "CRM validation via expert review and alpha-testing of mission-specific models before broader adoption"
-    ],
-    "evidence_verification_integrated_in_model": "Verification is integrated generically, not EPS-specifically: requirement elements expose verify method and verified by properties, satisfy assertions are proven by verify relationships, and verification activities feed technical measurements.",
-    "integration_test_readiness": "No EPS integration tests, hardware-in-the-loop tests, or physical development test results are reported; model validation and the first alpha-test are planned/early."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "Rigorous MBSE/CRM is motivated as a way to address historically high CubeSat failure rates and intuition-based design.",
-      "outcome_category": "reliability / mission-success risk reduction",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "formalized MBSE application",
-        "CRM as repository for requirements, design, analysis, verification, and validation",
-        "generic CubeSat reference model"
+      "field_path": "other",
+      "label": "technical-measures-moe-mop-tpm",
+      "description": "MOE/MOP/TPM specification elements, mapping matrices, value properties, constraint blocks, and parametric diagrams used to connect objectives, requirements, and performance prediction.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Lines 139-159 define Technical Measures and describe MOE/MOP/TPM derivation, traceability, and parametric implementation.",
+      "confidence": "medium",
+      "original_label": "technical_measures_moe_mop_tpm",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.modeling_scope",
+        "mbse_objective_scope_artifacts.model_artifacts_used",
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator"
       ],
-      "artifact_or_process_linked": "CRM and MBSE lifecycle process; no EPS-specific artifact singled out",
-      "lifecycle_stage": "conceptual design through development",
-      "evidence_type": "problem motivation and rationale, not outcome evaluation",
-      "metric_or_value_indicator": "historical university mission failure rate approaches 50%; no post-CRM reliability metric",
-      "baseline_comparator": "intuition-based university CubeSat design",
-      "observed_effect_size_or_qualitative_effect": "Need for rigorous systems engineering asserted; realized reliability effect not reported",
-      "evidence_source": "Introduction",
-      "direct_quote": "The rapid growth of CubeSat missions combined with historically high failure rates indicates a need for rigorous systems engineering practices to be applied to university CubeSat missions.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "Historical failure rates motivate SE but do not demonstrate that the CRM improves reliability or isolate MBSE from other process changes."
+      "controlled_value_trigger": "other"
     },
     {
-      "claim": "The CRM provides a reusable starting point for instruction and mission-specific CubeSat design/build activities.",
-      "outcome_category": "reuse and reproducibility",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "template CRM",
-        "mission-specific import and tailoring",
-        "generic package hierarchy",
-        "reference information repository"
+      "field_path": "other",
+      "label": "use-case-packages-description-documents",
+      "description": "Use-case elements, tables, description documents, active hyperlinks, and population instructions used to refine requirements and communicate behavior.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Lines 115-121 describe use case packages, description documents, use case tables, and population instructions.",
+      "confidence": "medium",
+      "original_label": "use_case_packages_description_documents",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.model_artifacts_used",
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism"
       ],
-      "artifact_or_process_linked": "CubeSat Reference Model packages and import/customization workflow",
-      "lifecycle_stage": "early architecting through development preparation",
-      "evidence_type": "implemented artifact description and intended use",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "RAX-centric initial model not suitable for reuse",
-      "observed_effect_size_or_qualitative_effect": "Reusable starting point asserted; repeated reuse evidence not reported",
-      "evidence_source": "Abstract and Introduction",
-      "direct_quote": "The CRM is intended for instruction and for designing and building a mission-specific CubeSat.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No completed mission case, adoption count, or reuse metric is provided in this paper."
+      "controlled_value_trigger": "other"
     },
     {
-      "claim": "CRM requirement and technical-measure artifacts provide traceability from concerns/objectives to requirements, use cases, verification, and performance measures.",
-      "outcome_category": "traceability and consistency",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "SysML requirements tables",
-        "trace/derive/refine/satisfy/verify relationships",
-        "MOE/MOP/TPM mappings",
-        "use case refinement"
+      "field_path": "other",
+      "label": "table-based-population-interface",
+      "description": "Cameo/CSM table user interfaces for adding, deleting, modifying, refreshing, and tracing requirements, structures, use cases, and technical measures.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section V states: 'Table-based user interfaces exist for modifying, adding, deleting design information' and lists mission, specifications, requirements, structures, and use cases.",
+      "confidence": "medium",
+      "original_label": "table_based_population_interface",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+        "implementation_pathway_tailoring.adoption_guidance"
       ],
-      "artifact_or_process_linked": "Requirement properties, stakeholder concern diagram, use case packages, technical measure specifications",
-      "lifecycle_stage": "requirements, architecture, verification planning, and analysis",
-      "evidence_type": "model artifact description with figure-backed examples",
-      "metric_or_value_indicator": "trace links/properties present; no trace completeness metric",
-      "baseline_comparator": "independent engineering artifacts outside a model",
-      "observed_effect_size_or_qualitative_effect": "Traceability mechanisms are implemented in the model; completeness/effectiveness not measured",
-      "evidence_source": "Sections III.C, III.D, III.E, and III.G",
-      "direct_quote": "The requirement elements and tables can expose requirement properties including: id, name, text, traced to, derived from, refined by, verify method, verified by, and satisfied by.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Presence of trace fields does not prove that teams will populate complete or correct traces."
+      "controlled_value_trigger": "other"
     },
     {
-      "claim": "Table-based user interfaces simplify adding, deleting, and modifying design information across mission, requirements, structures, use cases, and technical measures.",
-      "outcome_category": "process efficiency and model population",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "Cameo table-based user interfaces",
-        "containment-tree propagation",
-        "population instruction packages"
+      "field_path": "other",
+      "label": "sparx-enterprise-architect-and-csm-html",
+      "description": "Sparx Systems Enterprise Architect is named as an anticipated import target; CSM web-published HTML is named as non-normative guidance material.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Lines 167-169 mention CSM web-published HTML and import into CSM or Sparx Systems Enterprise Architect.",
+      "confidence": "medium",
+      "original_label": "sparx_enterprise_architect_and_csm_html",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool"
       ],
-      "artifact_or_process_linked": "Requirements tables, structures tables, use cases tables, MOE/MOP/TPM tables",
-      "lifecycle_stage": "model population and maintenance",
-      "evidence_type": "tool implementation description and figure instructions",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "direct containment-tree editing or document-centric artifacts, not empirically compared",
-      "observed_effect_size_or_qualitative_effect": "Capabilities to add/delete/modify are described; time or error reduction not reported",
-      "evidence_source": "Sections III.D, III.F, III.G, and V",
-      "direct_quote": "Table-based user interfaces exist for modifying, adding, deleting design information:",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Usability and efficiency claims are not supported by user studies or measured editing effort."
+      "controlled_value_trigger": "other"
     },
     {
-      "claim": "Technical measures and parametrics support performance analysis to predict whether mission objectives will be met.",
-      "outcome_category": "analysis and verification support",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "MOE/MOP/TPM derivation",
-        "constraint blocks",
-        "parametric diagrams",
-        "technical-measure methods in documents/spreadsheets"
+      "field_path": "other",
+      "label": "generic-power-subsystem-placeholder",
+      "description": "The current CRM includes a generic Power Subsystem and planned power value-property roll-up, but not detailed solar-array, battery, PCDU, loads, modes, or fault-protection modeling.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Figure 9 description lists 'Power Subsystem'; Section VII says power parametrics are next steps.",
+      "confidence": "medium",
+      "original_label": "generic_power_subsystem_placeholder",
+      "applies_to": [
+        "eps_verification_specific.eps_elements_modeled"
       ],
-      "artifact_or_process_linked": "Technical Measures package and MOE/MOP/TPM mapping",
-      "lifecycle_stage": "analysis, requirements validation, and verification planning",
-      "evidence_type": "conceptual method and model artifact description",
-      "metric_or_value_indicator": "MOEs, MOPs, TPMs; no numeric case values in this paper",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Predictive analysis capability asserted; no executed results shown",
-      "evidence_source": "Section III.G",
-      "direct_quote": "This provides for traceability between MOPs and MOEs and supports performance analysis of the MOPs to predict if the MOEs will be met.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The existence of parametric structures does not demonstrate validated models, correct equations, or decision impact."
+      "controlled_value_trigger": "other"
     },
     {
-      "claim": "OMG/XMI standardization is intended to improve integrability and toolchain continuity across modeling tools.",
-      "outcome_category": "interoperability and standardization",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "OMG normative specification",
-        "implementation-free XMI file",
-        "CSM non-normative implementation",
-        "import into CSM or Sparx Systems Enterprise Architect"
+      "field_path": "other",
+      "label": "alpha-test-crm-validation-mechanism",
+      "description": "A staged validation strategy using SSWG expert review, alpha testing by CubeSat teams, debriefs, metrics development, and continuation/re-evaluation criteria.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section VI lists the multi-step CRM validation approach and says the first alpha-test has been arranged.",
+      "confidence": "medium",
+      "original_label": "alpha_test_crm_validation_mechanism",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+        "governance_roi_project_decision_linkage.model_governance_strategy"
       ],
-      "artifact_or_process_linked": "CRM as OMG specification and XMI exchange process",
-      "lifecycle_stage": "model adoption and lifecycle continuity",
-      "evidence_type": "planned standardization and exchange workflow",
-      "metric_or_value_indicator": "no cross-tool transfer success metric reported",
-      "baseline_comparator": "tool-specific CSM implementation",
-      "observed_effect_size_or_qualitative_effect": "Future cross-tool continuity intended; no completed import/export result reported",
-      "evidence_source": "Sections IV and VII",
-      "direct_quote": "A mission-specific CubeSat team will download the CRM Specification XMI file from OMG and import it into its own graphical modeling tool (e.g., CSM or Sparx Systems' Enterprise Architect).",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "XMI exchange can lose semantics across tools; the paper says demonstrating no-impact import/export remains future work."
+      "controlled_value_trigger": "other"
     },
     {
-      "claim": "Validation through expert review and alpha-testing with CubeSat teams is intended to establish confidence that the CRM meets its intended use.",
-      "outcome_category": "model quality and validation",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "ten model validation questions",
-        "expert CubeSat/MBSE/SysML validator team",
-        "alpha-testing by mission-specific CubeSat teams",
-        "metrics to be developed"
+      "field_path": "other",
+      "label": "model-quality-attributes",
+      "description": "Validation criteria such as purpose definition, scope sufficiency, completeness, well-formedness, consistency, understandability, documented conventions, self-documentation, domain accuracy, and integration with other models.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section VI lists ten validation questions from the SysML guide.",
+      "confidence": "medium",
+      "original_label": "model_quality_attributes",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator",
+        "governance_roi_project_decision_linkage.model_governance_strategy"
       ],
-      "artifact_or_process_linked": "CRM validation strategy",
-      "lifecycle_stage": "reference model validation before wider adoption",
-      "evidence_type": "validation plan plus preliminary sharing with partners",
-      "metric_or_value_indicator": "appropriate degree of confidence; metrics not yet defined",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Encouraging partner feedback and first alpha-test arranged; no detailed results",
-      "evidence_source": "Section VI",
-      "direct_quote": "The SSWG has already shared the current version of the CRM with trusted partners, with encouraging results; and it has arranged for the first $ \\alpha $ - test.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Partner feedback is not documented, independent, or quantified; alpha-test results are not reported."
+      "controlled_value_trigger": "other"
     },
     {
-      "claim": "Future power, weight, and cost parametrics will enable roll-up from component level to CubeSat level, including power-related analysis.",
-      "outcome_category": "planned power-budget and management indicators",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "value properties for power, weight, and cost",
-        "constraints and constraint parameters",
-        "parametric roll-up from components to CubeSat"
+      "field_path": "other",
+      "label": "on-board-energy-and-data-downlink-trade-metrics",
+      "description": "Prior RAX-lineage trade-study value indicators: on-board energy level and quantity of data downloaded.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Line 41 reports solar-panel/battery trades to compare on-board energy levels and altitude/ground-station trades to compare quantity of data downloaded.",
+      "confidence": "medium",
+      "original_label": "on_board_energy_and_data_downlink_trade_metrics",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator"
       ],
-      "artifact_or_process_linked": "planned parametric elements at CubeSat, subsystem, and component levels",
-      "lifecycle_stage": "future design analysis and management",
-      "evidence_type": "planned next step",
-      "metric_or_value_indicator": "power, weight, cost",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Capability planned; no implementation or results reported in this paper",
-      "evidence_source": "Section VII",
-      "direct_quote": "Three important parameters for any CubeSat development effort are power, weight, and cost.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "The paper does not show completed power/EPS parametrics, equations, verification, or comparison to physical measurements."
+      "controlled_value_trigger": "other"
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "Governance is pursued through INCOSE SSWG development, OMG SDTF standardization, SysML-compliant implementation-free XMI, non-normative CSM/HTML guidance, reference information definitions, stereotypes, and a CRM validation strategy using expert review and alpha-tests.",
-    "traceability_to_deliverables_decisions_reviews": "The model traces stakeholder concerns to needs/objectives/constraints, requirements, use cases, MOE/MOP/TPM specifications, satisfy/verify relationships, and physical architecture decisions. Formal review gates or deliverable approvals are not reported.",
-    "evaluation_criteria_model_quality_usefulness": "The validation strategy uses ten questions: purpose, scope, completeness, well-formedness, consistency, understandability, documented conventions, self-documenting quality, domain accuracy, and integration with other models; metrics for intended use are still to be developed.",
-    "roi_value_realization_evidence": "No quantitative ROI, cost/schedule savings, reliability improvement, or operational value-realization evidence is reported. Reuse, traceability, and interoperability benefits are asserted or planned.",
-    "programmatic_gates_critical_design_events_supported": "not reported",
-    "model_derived_performance_indicators_management_metrics": "MOEs, MOPs, and TPMs are represented and traced; planned power, weight, and cost value properties and parametric roll-ups are identified as next steps."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper lists mission-specific model development steps and provides table/population instructions, but no completed mission adoption case or measured implementation outcome is reported."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed conceptually",
-      "rationale": "SysML compliance, OMG XMI, and import into CSM/Enterprise Architect are described, but cross-tool no-impact transfer remains a future demonstration."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed conceptually",
-      "rationale": "Teams can start at fundamental, representative, or detailed levels and tailor loosely defined subsystems, but resource-constrained lightweight adoption is not evaluated."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "addressed conceptually",
-      "rationale": "Governance via OMG standardization and validation criteria is substantial, but ROI and project deliverable/gate evidence are not reported."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "not addressed",
-      "rationale": "The paper discusses CubeSat growth and university teams but does not address agile, distributed, or rapid-iteration NewSpace workflows."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "The CRM provides a general SysML template for CubeSat mission enterprises, space/ground segments, subsystems, requirements, use cases, and technical measures.",
-        "Generality is achieved by methodology-agnostic packages, loose subsystem definitions, representative components, table-based population, and OMG/XMI reuse mechanisms.",
-        "Limited behavioral knowledge is handled by starting from logical abstractions, selectable detail levels, and use-case narratives before detailed model elaboration.",
-        "EPS is not modeled specifically; relevance is limited to a Power Subsystem, previous power trade-study background, and planned power parametrics."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0013",
+      "extraction_file_path": "/Users/antho/nanosatellite-mbse/SLR/SLR1/extractions/paper-0013.json",
+      "tier_status": "core",
+      "tier_status_rationale": "Retained as core because it directly addresses CubeSat MBSE reference modeling, reuse, system-level traceability, technical measures, XMI/toolchain continuity, and validation strategy; EPS relevance is adjacent rather than EPS-specific.",
+      "citation": "Kaslow, D., Ayres, B. J., Cahill, P. T., Croney, C., Hart, L., and Levi, A. G. (2018). Developing a CubeSat Model-Based System Engineering (MBSE) Reference Model - Interim Status #4. American Institute of Aeronautics and Astronautics. DOI: 10.2514/6.2018-5328.",
+      "title": "Developing a CubeSat Model-Based System Engineering (MBSE) Reference Model - Interim Status #4",
+      "corpus_metadata_title": "Developing a cubesat model-based system engineering (MBSE) reference model – Interim status #4",
+      "authors_from_paper_header": [
+        "David Kaslow",
+        "Bradley J. Ayres",
+        "Philip T Cahill",
+        "Chuck Croney",
+        "Laura Hart",
+        "Alejandro G. Levi"
       ],
-      "RQ2": [
-        "Reliability improvement is a motivation rather than a measured outcome; the paper cites high CubeSat failure rates and intuition-based design but provides no CRM reliability data.",
-        "Reproducibility/reuse are claimed through the CRM template, OMG XMI specification path, reference information, and non-normative implementation guidance.",
-        "Integrability is planned through SysML compliance and XMI cross-tool exchange, but no completed no-impact import/export demonstration is reported.",
-        "Traceability, table-based consistency, and technical-measure analysis are the strongest model-linked outcome mechanisms, though evidence remains mostly artifact-level."
+      "authors_from_corpus_metadata": [
+        "D. Kaslow",
+        "B. Ayres",
+        "P. T. Cahill",
+        "L. Hart",
+        "Rose Yntema"
       ],
-      "RQ3": [
-        "Verification is integrated generically through requirement properties such as verify method and verified by, plus satisfy/verify relationships.",
-        "Technical measures tie verification activities to MOE/MOP/TPM assessment and parametric prediction, but no EPS-specific verification examples are shown.",
-        "The CRM itself has a validation strategy with expert review, alpha-tests, and future metrics; detailed alpha-test results are not included.",
-        "No hardware integration, physical EPS test, or flight/operational verification evidence is reported."
+      "author_metadata_note": "Visible paper header differs from supplied corpus metadata; extraction uses the paper header for citation and records the mismatch as an emergent limitation.",
+      "year": 2018,
+      "venue": "AIAA-published conference paper; exact conference name not reported in markdown",
+      "doi_or_url": "10.2514/6.2018-5328",
+      "publisher": "American Institute of Aeronautics and Astronautics",
+      "venue_type": "conference proceedings paper",
+      "markdown_path": "/Users/antho/nanosatellite-mbse/SLR/SLR1/markdown/paper-0013_2018_developing-a-cubesat-model-based-system-engineering-mbse-reference-model-interim-status-4.md",
+      "source_database_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"reference model\" OR template OR behavior OR behaviours OR behaviors OR architecture))",
+          "rank": 28,
+          "paperId": "85056175808"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q6_vv_traceability_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (verification OR validation OR test OR testing OR IVV OR V\\&V OR \"requirements-in-loop\" OR traceability))",
+          "rank": 25,
+          "paperId": "85056175808"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+          "rank": 49,
+          "paperId": "85056175808"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0013_semantic_title.json",
+          "query": "\"Developing a cubesat model-based system engineering (MBSE) reference model – Interim status #4\"",
+          "rank": 1,
+          "paperId": "42867e01e4aff724a1e24a0c306ed0290e241522",
+          "purpose": "abstract_enrichment"
+        }
+      ],
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "high",
+          "rationale": "Directly describes a general CubeSat/nanosatellite system reference model with reusable and loosely defined mission, architecture, requirement, use-case, and technical-measure packages."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "Provides system-level reuse, traceability, reproducibility, and interoperability claims attributed to MBSE/CRM; EPS-specific reliability/reproducibility/integrability outcomes are not demonstrated."
+        },
+        "RQ3": {
+          "relevance": "partial",
+          "rationale": "Generic verify properties, technical-measure parametrics, prior trade studies, and CRM validation are reported, but no EPS-specific verification procedures are integrated into an EPS model."
+        }
+      },
+      "lineage_overlap_notes": "Interim Status #4 in a recurring INCOSE SSWG CubeSat/RAX/CRM paper family. The introduction summarizes prior RAX phases and references earlier interim CRM, behavior, technical measurement, and validation papers; synthesis should avoid double-counting prior RAX trade studies as new evidence for the current CRM."
+    },
+    "study_context_population": {
+      "mission_platform": "CubeSat/nanosatellite mission reference model; previous RAX CubeSat work is lineage/background.",
+      "size_form_factor": "Defines 1U as 10x10x10 cm and about 1.3 kg; notes larger 3U, 6U, and 12U CubeSats.",
+      "mission_name": "CubeSat Reference Model (CRM); prior Radio Aurora Explorer (RAX) CubeSat is a background case.",
+      "mission_domain": "General CubeSat mission enterprise spanning external environment/constraints, stakeholders, space segment, ground segment, CubeSat subsystems, ground subsystems, use cases, and technical measures.",
+      "organization_type": "INCOSE Space Systems Working Group effort in collaboration with OMG Space Domain Task Force; intended users include mission-specific CubeSat teams and university-class teams.",
+      "project_maturity": "Interim Status #4; CSM implementation exists; OMG specification and validation/alpha-testing are in progress.",
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation"
+      ],
+      "development_context": [
+        "academic/student",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "EPS-adjacent",
+      "eps_relevance_notes": "Power appears as a generic subsystem, prior solar-panel/battery trade-study background, and future power parametrics; no dedicated EPS reference model is presented.",
+      "model_maturity": [
+        "reference model/template",
+        "prototype demonstration"
+      ],
+      "project_maturity_evidence": [
+        "Line 167: CRM implemented in CSM.",
+        "Line 255: current version shared with trusted partners and first alpha-test arranged.",
+        "Line 261: applying CRM to one CubeSat team and seeking others."
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Because the initial model was RAX-centric and not suitable for reuse, two additional objectives were added to catalyze the use of a standard model by the CubeSat community:",
-      "But an implementation of the CRM cannot be an OMG specification.",
-      "In the case of a model like the CRM, however, it is difficult for the validators to answer the questions without evaluating concrete examples of a mission-specific model developed using the CRM.",
-      "Develop metrics for determining whether or not the CRM meets its intended use.",
-      "The next steps include: 1) adding parametrics for power, weight, and cost, 2) validation of the CRM, and 3) continue working with OMG on making the CRM an OMG specification.",
-      "Part of that effort will include demonstrating that the CRM can be exported from CSM as an XMI file and imported into another modeling tool, such as Sparx System's Enterprise Architect, with no impact to the CRM."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "No EPS-specific requirements, behavior model, verification procedure, or physical test results are presented.",
-      "No completed mission-specific CRM application results, alpha-test data, stakeholder evaluation details, or reuse metrics are reported.",
-      "Reliability and ROI claims are motivation-level or conceptual, with no measured effect size or baseline comparison.",
-      "Public model availability and cross-tool semantic continuity are anticipated rather than demonstrated.",
-      "Power, weight, and cost parametrics are future work, not completed model evidence in this paper."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "High failure rates and intuition-based design in university-class CubeSats motivate rigorous systems engineering and a reusable CRM for instruction and mission-specific design/build.",
+      "modeling_scope": [
+        "CubeSat domain and mission enterprise",
+        "stakeholders, stakeholder concerns, needs, objectives, constraints, and requirements",
+        "space segment, ground segment, CubeSat subsystems, ground subsystems, and representative components",
+        "requirements hierarchy and requirement properties",
+        "use cases and use-case descriptions",
+        "logical architecture and physical architecture transition",
+        "technical measures (MOE/MOP/TPM) and parametric performance analysis",
+        "generic verification properties and CRM validation strategy",
+        "OMG/XMI standardization path"
+      ],
+      "system_boundary_level_of_abstraction": "Generic CubeSat mission enterprise with space and ground segments, generic/loose subsystem definitions, representative subsystem components, external environment/constraints, provided services, and mission-specific tailoring to physical architecture. The CRM deliberately avoids imposing implementation constraints.",
+      "minimal_or_excluded_modeling": "The CRM is methodology-agnostic and provides a library rather than prescribing all model elements/relationships. Power, weight, and cost parametrics are next steps, and the current paper does not provide EPS-specific verification artifacts, full model files, or complete validation results.",
+      "required_prior_behavioral_domain_knowledge": "The mission team chooses Fundamental, Representative, or Detailed package levels depending on experience with space-ground systems, MBSE, and SysML; the paper assumes access to a graphical SysML tool and some systems engineering/modeling competence.",
+      "handling_limited_behavioral_knowledge": "Generic and loosely defined subsystems, use-case narratives, representative components, table-based population, and reference information allow teams to incrementally add mission-specific behavior and physical components.",
+      "model_artifacts_used": [
+        "SysML packages and package hierarchy diagrams",
+        "block definition diagrams and structure tables",
+        "requirements tables, requirement properties, and requirement stereotypes",
+        "trace/derive/refine/satisfy/verify relationships",
+        "use case packages, use case tables, description documents, active hyperlinks, and population instructions",
+        "logical and physical architecture packages",
+        "technical measure specifications for MOE/MOP/TPM, mapping matrices, value properties, constraint blocks, and parametric diagrams",
+        "Word/Excel methods embedded in the model; spreadsheet export; CSM web-published HTML; XMI file"
+      ],
+      "generality_reuse_mechanism": [
+        "CRM template/reference model",
+        "OMG normative XMI specification path",
+        "non-normative CSM implementation and HTML guidance",
+        "reference information/terminology repository",
+        "methodology-agnostic library of model elements",
+        "generic logical architecture and representative components",
+        "requirements and technical-measure profiles/stereotypes",
+        "table-based reusable population workflow"
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "implementation_steps_or_phases": [
+        {
+          "step": "Choose starting level and import CRM",
+          "inputs": "CRM XMI/CSM implementation, non-normative guidance, team experience assessment",
+          "outputs": "Mission-specific model scaffold at Fundamental, Representative, or Detailed level",
+          "actors_roles": "Mission-specific CubeSat team, modeler/systems engineer",
+          "prerequisites": "Graphical SysML modeling tool and access to CRM",
+          "completion_criteria": "CRM imported and starting architecture/package level selected",
+          "handoffs": "Mission/stakeholder population"
+        },
+        {
+          "step": "Populate mission enterprise needs, objectives, constraints, requirements, and MOEs",
+          "inputs": "Stakeholder concerns, mission objectives/constraints, CRM mission/specification tables",
+          "outputs": "Mission-level needs, objectives, constraints, requirements, and MOE specifications in the model",
+          "actors_roles": "Stakeholders, mission engineer, systems engineer/modeler",
+          "prerequisites": "Mission concept and stakeholder concerns available",
+          "completion_criteria": "Mission elements entered and traceable to concerns/technical measures where appropriate",
+          "handoffs": "Mission use-case and segment-requirement development"
+        },
+        {
+          "step": "Create mission and segment use cases and derive requirements",
+          "inputs": "Mission requirements and use-case packages",
+          "outputs": "Mission use cases, segment requirements, segment use cases, and refine/derive/trace links",
+          "actors_roles": "Systems engineer, mission/segment leads",
+          "prerequisites": "Mission requirements and objectives populated",
+          "completion_criteria": "Use cases refine requirements and segment use cases trace to mission use cases",
+          "handoffs": "Segment technical measures and subsystem allocation"
+        },
+        {
+          "step": "Create segment MOPs and supporting requirements",
+          "inputs": "Enterprise MOEs, segment requirements, technical-measure packages",
+          "outputs": "MOP specifications, MOP-to-MOE mapping, segment requirements supporting MOPs",
+          "actors_roles": "Systems engineer and segment leads",
+          "prerequisites": "MOEs and segment requirements available",
+          "completion_criteria": "MOPs linked to MOEs and system requirements",
+          "handoffs": "Subsystem requirement and TPM development"
+        },
+        {
+          "step": "Derive subsystem requirements and TPMs",
+          "inputs": "Segment requirements, segment use cases, MOPs, subsystem packages",
+          "outputs": "Subsystem requirements, subsystem use cases, TPM specifications, and TPM-to-MOP traces",
+          "actors_roles": "Subsystem engineers and modeler",
+          "prerequisites": "Segment-level requirements/use cases/MOPs established",
+          "completion_criteria": "Subsystem requirements trace to segment use cases and TPMs support MOPs/MOEs",
+          "handoffs": "Logical architecture tailoring"
+        },
+        {
+          "step": "Tailor logical subsystems and create physical architecture",
+          "inputs": "Allocated requirements, generic subsystem definitions, representative components",
+          "outputs": "Mission-specific logical subsystem set and physical hardware/software/data/procedure components",
+          "actors_roles": "Mission-specific team, subsystem leads, integrator/tester as stakeholders",
+          "prerequisites": "Allocated subsystem functional/performance requirements",
+          "completion_criteria": "Physical components identified to meet functional and performance requirements",
+          "handoffs": "Mission-specific design and development"
+        },
+        {
+          "step": "Validate CRM through expert review and alpha tests",
+          "inputs": "As-built CRM, model-quality attributes/questions, SSWG experts, CubeSat teams",
+          "outputs": "Preliminary validation, team alpha-test feedback, debrief comments, future metrics",
+          "actors_roles": "SSWG validators, trusted partners, CubeSat teams",
+          "prerequisites": "Concrete mission-specific models developed using CRM",
+          "completion_criteria": "CRM exhibits appropriate confidence or approach is re-evaluated after unsatisfactory alpha tests",
+          "handoffs": "CRM updates and OMG specification preparation"
+        }
+      ],
+      "mapping_to_se_activities_lifecycle_gates": "The workflow maps stakeholder concerns to needs/objectives/constraints, requirements, use cases, technical measures, logical/physical architecture, and generic verification/validation. Formal SRR/PDR/CDR gates are not reported.",
+      "approach_classification": "Extended MBSE",
+      "approach_classification_rationale": "SysML model is extended with reusable reference-model packages, technical-measure parametrics, traceability chains, table-based population, XMI standardization, and validation strategy, but not with demonstrated downstream hardware/software integration in this paper.",
+      "tailoring_rationale": [
+        "CubeSat scale and low-cost university-class context",
+        "Team maturity/experience with space-ground systems, MBSE, and SysML determines starting package depth",
+        "Available graphical modeling tool determines import environment",
+        "Generic/loose subsystem definitions allow mission-specific elimination, modification, or combination"
+      ],
+      "adoption_guidance_for_new_users": "partial guidance",
+      "adoption_guidance_notes": "Section V and several figure notes give step sequences and table operations; no complete training plan, model governance manual, or adoption effort estimate is given."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "MBSE",
+        "SysML",
+        "No Magic Cameo Systems Modeler (CSM) / Cameo-MagicDraw family",
+        "OMG Space Domain Task Force specification process",
+        "XML Metadata Interchange (XMI)",
+        "Sparx Systems Enterprise Architect (anticipated import target)",
+        "CSM web-published HTML",
+        "Word documents and Excel spreadsheets embedded in the model",
+        "Prior RAX lineage: MagicDraw/Cameo Simulation Toolkit, Phoenix Integration ModelCenter and MBSE Analyzer, STK, MATLAB"
+      ],
+      "toolchain_architecture_data_flow": "CRM is authored/implemented in CSM; an implementation-free XMI file can be extracted and submitted as an OMG normative specification; teams are intended to download/import the XMI into tools such as CSM or Sparx Enterprise Architect. Within CSM, table edits propagate to the containment tree; requirements tables can export spreadsheets; technical-measure methods can reside in Word/Excel or be implemented in constraint blocks/parametric diagrams.",
+      "interoperability_mechanisms": [
+        "SysML compliance",
+        "XMI export/import",
+        "spreadsheet export",
+        "embedded Word/Excel method files",
+        "CSM web HTML guidance"
+      ],
+      "syntax_semantic_continuity_evidence": "SysML compliance, stereotypes/profiles, reference terminology, and XMI are intended to preserve model semantics; the paper states import/export with no impact remains to be demonstrated.",
+      "software_hardware_system_integration_readiness": "The physical architecture includes hardware, software, persistent data, and operational procedures as design/development foundations, but no software/hardware integration readiness evidence, flat-sat/testbed, or flight evidence is reported.",
+      "toolchain_limitations": [
+        "CSM implementation cannot itself be the OMG specification; XMI is required.",
+        "Cross-tool import with no impact is future work.",
+        "No public model download is provided in the paper.",
+        "Prior integrated toolchain evidence belongs to earlier RAX work, not the current CRM status paper."
+      ],
+      "availability_reproducibility": "Intended future availability via OMG XMI plus non-normative CSM implementation and HTML; current version shared with trusted partners but not linked publicly in the paper."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "Current CRM: generic Power Subsystem placeholder in CubeSat subsystem architecture",
+        "Prior RAX-lineage background: solar panel area, maximum battery capacity, on-board energy level",
+        "Future CRM work: power value properties at CubeSat/subsystem/component levels and parametric roll-up"
+      ],
+      "eps_requirements_representation": "No dedicated EPS requirements are shown. Generic CubeSat subsystem/component requirement packages could represent EPS requirements with id, text, traced-to, derived-from, refined-by, verify-method, verified-by, and satisfied-by properties.",
+      "verification_validation_artifacts": "No EPS-specific verification matrix, test cases, test procedures, simulation scenarios, acceptance criteria, executable checks, SIL/HIL links, or automated tests are reported. Generic requirement verify fields and CRM validation strategy are described.",
+      "pre_physical_development_verification_mechanism": [
+        "Generic parametric checks via technical-measure constraint blocks/parametric diagrams",
+        "Prior RAX trade-study verification/analysis of solar panel area and battery capacity against on-board energy levels",
+        "Generic satisfy/verify relationships for requirements"
+      ],
+      "evidence_verification_integrated_in_model": "Generic verification integration is present through requirement properties and technical-measure traceability; EPS-specific integrated verification artifacts are absent.",
+      "integration_test_readiness": "No EPS hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation links are reported.",
+      "applicability_to_rq3": "Partial/generic only: useful for understanding system-level verification hooks and technical-measure parametrics, not for extracting an EPS verification-procedure model."
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "CubeSat reliability motivation",
-        "quote": "When launch failures are factored out, the failure rate of university missions approaches 50% [2]. The design effort for university CubeSats has largely been based on intuition [3].",
-        "location": "Section I. Introduction"
+        "claim_id": "C1_reusable_crm_starting_point",
+        "claim_text": "The CRM is a reusable instructional and mission-specific starting point for designing and building CubeSats, replacing an earlier RAX-centric model that was not suitable for reuse.",
+        "outcome_category": [
+          "generality/reuse",
+          "reproducibility",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "shared repository"
+        ],
+        "linked_artifact_or_process": "CubeSat Reference Model imported into a graphical modeling tool; CRM as repository for systems-engineering artifacts.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "implementation"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "baseline_comparator": "previous mission",
+        "observed_effect": "Intended reusable starting point; no measured reuse rate or adoption outcome is reported.",
+        "quote_location": "Abstract line 25; Introduction lines 43-45; Section III line 79",
+        "evidence_quote": "'Because the initial model was RAX-centric and not suitable for reuse... Develop a CubeSat Reference Model (CRM) that a CubeSat team can use as a starting point for its mission' and 'This model will be a repository for the systems engineering artifacts created by the mission-specific team.'",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_alternative_explanations": "Reuse is asserted from structure and intended availability; no public model, adoption metrics, or independent reuse results are provided."
       },
       {
-        "topic": "CRM objective",
-        "quote": "The CRM is intended for instruction and for designing and building a mission-specific CubeSat.",
-        "location": "Abstract"
+        "claim_id": "C2_requirements_traceability_and_verification_properties",
+        "claim_text": "CRM requirement tables/properties support traceability, requirement refinement/derivation, satisfaction, and verification relationships.",
+        "outcome_category": [
+          "traceability",
+          "consistency",
+          "completeness"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage"
+        ],
+        "linked_artifact_or_process": "Requirement packages, tables, stereotypes, and satisfy/verify relationships.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "trace links"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Traceability capability is shown at artifact/property level; actual trace completeness or defect reduction is not measured.",
+        "quote_location": "Section III.D lines 105-109; Fig. 3 Requirements Properties",
+        "evidence_quote": "'The requirement elements and tables can expose requirement properties including: id, name, text, traced to, derived from, refined by, verify method, verified by, and satisfied by' and 'Proof that the assertion is true is accomplished by the verify relationship.'",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_alternative_explanations": "Having relationship properties does not demonstrate that mission teams populated complete/accurate traces or used them to improve outcomes."
       },
       {
-        "topic": "MBSE lifecycle scope",
-        "quote": "Model-based systems engineering (MBSE) is the formalized application of modeling to support system requirements, design, analysis, verification and validation activities beginning in the conceptual design phase and continuing throughout development and later life cycle phases.",
-        "location": "Section II.B. MBSE"
+        "claim_id": "C3_use_cases_refine_requirements",
+        "claim_text": "Use-case packages and description documents refine requirements at enterprise, CubeSat, and subsystem levels and provide stakeholder-understandable behavior descriptions.",
+        "outcome_category": [
+          "traceability",
+          "completeness",
+          "communication/stakeholder alignment"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "artifact traceability",
+          "other"
+        ],
+        "other_mechanism_label": "use case packages and narrative description documents",
+        "linked_artifact_or_process": "Enterprise/CubeSat/subsystem use-case packages, use-case tables, description documents, active hyperlinks, and refine links.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "trace links"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Refinement mechanism is described; no requirement quality, stakeholder alignment, or completeness metric is reported.",
+        "quote_location": "Section III.E lines 115-121; Figures 5-6",
+        "evidence_quote": "'Use cases are used to refine requirements. The CRM has use case packages at the Enterprise, CubeSat, and CubeSat subsystems hierarchy level.'",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_alternative_explanations": "Use-case structure may aid communication, but the paper gives no user evaluation or before/after comparison."
       },
       {
-        "topic": "Methodology-agnostic scope",
-        "quote": "The CRM is systems engineering methodology-agnostic.",
-        "location": "Section III. CubeSat Reference Model"
+        "claim_id": "C4_technical_measures_parametric_decision_support",
+        "claim_text": "Technical measures (MOEs/MOPs/TPMs) traced through objectives, requirements, and parametric diagrams support performance analysis and prediction of whether mission objectives will be met.",
+        "outcome_category": [
+          "decision support",
+          "traceability",
+          "mission assurance",
+          "consistency"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "parametric analysis",
+          "artifact traceability",
+          "requirements linkage"
+        ],
+        "linked_artifact_or_process": "MOE/MOP/TPM specifications, value properties, constraint blocks, parametric diagrams, and mapping matrices.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "other_metric_label": "MOE/MOP/TPM values and model-quality/performance indicators",
+        "baseline_comparator": "not reported",
+        "observed_effect": "Performance prediction capability is described; no executed CRM technical-measure result or quantified decision impact is provided.",
+        "quote_location": "Section III.G lines 141-159; Figures 17-20",
+        "evidence_quote": "'This provides for traceability between MOPs and MOEs and supports performance analysis of the MOPs to predict if the MOEs will be met.'",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_alternative_explanations": "Technical-measure methods may remain in Word/Excel or future constraint blocks; prediction accuracy and decision utility are not validated."
       },
       {
-        "topic": "Generic subsystem modeling",
-        "quote": "The CubeSat and Ground subsystems are generically and loosely defined as a starting point for the mission-specific CubeSat team.",
-        "location": "Section III.F. Architecure Packages"
+        "claim_id": "C5_generic_architecture_tailoring",
+        "claim_text": "Generic logical architecture, subsystem, and component packages let mission teams tailor the CRM without imposing implementation constraints and progress toward a mission-specific physical architecture.",
+        "outcome_category": [
+          "generality/reuse",
+          "lifecycle continuity",
+          "decision support"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "other"
+        ],
+        "other_mechanism_label": "generic logical-to-physical architecture tailoring",
+        "linked_artifact_or_process": "CubeSat/Ground subsystem packages, representative component packages, logical architecture, and physical architecture creation process.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "implementation"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Tailoring capability is explained with examples (e.g., eliminate/combine subsystems); no case result quantifies tailoring effort or effectiveness.",
+        "quote_location": "Section III.F lines 125-135; Section V line 215",
+        "evidence_quote": "'The logical components are a starting point for a mission-specific CubeSat logical architecture, followed by the physical architecture and the CubeSat development' and 'The CubeSat team determines what subsystem capabilities are needed...'.",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_alternative_explanations": "A generic architecture can reduce or increase work depending on mission complexity, team skill, and tool familiarity; no effort data are reported."
       },
       {
-        "topic": "No dictated relationships",
-        "quote": "The CRM provides a library of model elements but does not dictate what model elements and relationships to use.",
-        "location": "Section III.C. Stakeholder Concerns / Fig. 1 note"
+        "claim_id": "C6_omg_xmi_tool_interoperability",
+        "claim_text": "Submitting an implementation-free XMI CRM as an OMG specification is intended to support tool-neutral reuse/import across graphical modeling tools.",
+        "outcome_category": [
+          "integrability/interoperability",
+          "reproducibility",
+          "generality/reuse"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "tool integration",
+          "model transformation",
+          "reference model reuse"
+        ],
+        "linked_artifact_or_process": "CSM CRM, XMI file, OMG normative specification, non-normative CSM implementation and web HTML, CSM/Sparx import path.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse",
+          "other"
+        ],
+        "other_metric_label": "cross-tool import/export continuity",
+        "baseline_comparator": "not reported",
+        "observed_effect": "Interoperability path is proposed; export/import with no impact is stated as future work.",
+        "quote_location": "Section IV lines 165-169; Section VII line 261",
+        "evidence_quote": "'an XML Metadata Interchange file (XMI) file, which is implementation free, can be extracted from the CSM CRM' and a team 'will download the CRM Specification XMI file from OMG and import it into its own graphical modeling tool'.",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_alternative_explanations": "SysML/XMI import may lose semantics or layout across tools; the paper says demonstrating import with no impact remains future work."
       },
       {
-        "topic": "Requirements verification traceability",
-        "quote": "The requirement elements and tables can expose requirement properties including: id, name, text, traced to, derived from, refined by, verify method, verified by, and satisfied by.",
-        "location": "Section III.D. Requirement Packages"
+        "claim_id": "C7_crm_validation_strategy_model_quality",
+        "claim_text": "A staged validation strategy using model-quality questions, SSWG experts, alpha tests, debriefs, and metrics is intended to establish confidence that the CRM accurately represents the CubeSat domain and supports intended use.",
+        "outcome_category": [
+          "mission assurance",
+          "consistency",
+          "completeness",
+          "communication/stakeholder alignment"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "other"
+        ],
+        "other_mechanism_label": "expert and user alpha-test validation of the reference model",
+        "linked_artifact_or_process": "CRM validation strategy; ten SysML model validation questions; alpha-test mission-specific model development and debrief.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Stakeholder/user/expert evaluation"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "other_metric_label": "model quality criteria and future validation metrics",
+        "baseline_comparator": "not reported",
+        "observed_effect": "Trusted-partner feedback is described as encouraging and first alpha-test arranged; no validation results or metrics are reported.",
+        "quote_location": "Section VI lines 217-255",
+        "evidence_quote": "'The SSWG has already shared the current version of the CRM with trusted partners, with encouraging results; and it has arranged for the first α-test.'",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "medium",
+        "threats_alternative_explanations": "Validation is not independent and is early; trusted partners and SSWG-assisted alpha testers may not represent ordinary adopters."
       },
       {
-        "topic": "Technical measure analysis",
-        "quote": "This provides for traceability between MOPs and MOEs and supports performance analysis of the MOPs to predict if the MOEs will be met.",
-        "location": "Section III.G. Technical Measures"
-      },
-      {
-        "topic": "Interoperability mechanism",
-        "quote": "A mission-specific CubeSat team will download the CRM Specification XMI file from OMG and import it into its own graphical modeling tool (e.g., CSM or Sparx Systems' Enterprise Architect).",
-        "location": "Section IV. CRM as an OMG Specification"
-      },
-      {
-        "topic": "Validation limitation",
-        "quote": "In the case of a model like the CRM, however, it is difficult for the validators to answer the questions without evaluating concrete examples of a mission-specific model developed using the CRM.",
-        "location": "Section VI. Validation Strategy"
-      },
-      {
-        "topic": "Power parametrics next step",
-        "quote": "Three important parameters for any CubeSat development effort are power, weight, and cost.",
-        "location": "Section VII. Next Steps"
+        "claim_id": "C8_prior_rax_integrated_trade_studies",
+        "claim_text": "Earlier RAX-lineage MBSE work integrated behavioral, parametric, and external analysis/simulation tools to conduct power and data-downlink trade studies.",
+        "outcome_category": [
+          "decision support",
+          "integrability/interoperability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "tool integration"
+        ],
+        "linked_artifact_or_process": "Prior RAX CubeSat SysML model with MagicDraw/Cameo Simulation Toolkit, ModelCenter/MBSE Analyzer, STK, and MATLAB.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Trade-study or requirements-checking result"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "other_metric_label": "on-board energy levels and quantity of data downloaded",
+        "baseline_comparator": "not reported",
+        "observed_effect": "The paper states that trade studies were carried out; detailed results/effects are not reproduced in this #4 status paper.",
+        "quote_location": "Introduction lines 35-41",
+        "evidence_quote": "'Behavioral models were implemented and tightly integrated with parametrics modeling and analysis to demonstrate trade studies...' and 'different configurations of solar panel areas and maximum battery capacity were traded off to compare on-board energy levels'.",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "medium",
+        "threats_alternative_explanations": "This is lineage/background evidence from earlier papers, not new evidence for the current CRM implementation; no numeric trade-study results are given here."
       }
     ],
-    "notes_for_consistency_with_lineage": "Treat this paper as an interim CRM status paper. Prior RAX behavior and integrated simulation work are summarized in the introduction but not re-extracted as primary evidence unless this paper explicitly uses them to motivate the CRM. Evidence for current outcomes should be limited to the CRM artifacts, CSM implementation, OMG/XMI plan, and validation strategy described here.",
-    "extraction_confidence": "medium",
-    "extraction_confidence_reason": "Full markdown was read and the CRM content is explicit, but EPS-specific details are sparse, venue is not fully visible in the markdown, and the visible author list differs from supplied corpus metadata."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": {
+        "ownership": "INCOSE Space Systems Working Group develops CRM; OMG SDTF specification process is intended for normative standardization.",
+        "configuration_change_control": "Not reported beyond OMG specification process and future CRM updates from validation feedback.",
+        "review_process": "Validation strategy: SSWG expert review, alpha tests by CubeSat teams, debriefs, metrics development, continuation/re-evaluation criteria.",
+        "model_quality_criteria": "Ten validation questions: purpose, scope, completeness, well-formedness, consistency, understandability, documented conventions, self-documentation, domain accuracy, integration with other models.",
+        "naming_versioning_conventions": "Requirement package tables use a header requirement element to establish prefix and numbering scheme; prefixes/numbers can be changed easily."
+      },
+      "traceability_to_project_deliverables_decisions": "Model artifacts trace stakeholder concerns to needs/objectives/constraints, requirements, use cases, MOE/MOP/TPM technical measures, logical/physical architecture, and verify/satisfy properties. Formal decision gates/management reports are not reported.",
+      "evaluation_criteria_for_model_quality_or_usefulness": "The ten validation questions from the SysML guide and future metrics for intended use; trusted partner feedback and alpha tests are planned/early.",
+      "roi_value_realization_evidence": "not reported",
+      "programmatic_gates_or_critical_design_events": "not reported; no SRR/PDR/CDR or formal management gates are linked to CRM use.",
+      "model_derived_performance_indicators_or_management_metrics": "MOE/MOP/TPM technical measures; planned power/weight/cost value properties and roll-ups; no management ROI metrics."
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "mapping": "addressed with evidence",
+        "rationale": "Section V gives starting levels, table-based UI areas, mission-specific development steps, and physical architecture transition; figures provide population instructions.",
+        "evidence": [
+          "Section V line 195: 'The development of a mission-specific model includes the following steps:'",
+          "Figures 11, 15-19 population instructions."
+        ]
+      },
+      "toolchain_fragmentation_interoperability": {
+        "mapping": "addressed conceptually",
+        "rationale": "XMI/OMG and CSM/Sparx import are proposed, but cross-tool import with no impact is still future work.",
+        "evidence": [
+          "Lines 167-169: XMI extraction/import.",
+          "Line 261: import with no impact remains to be demonstrated."
+        ]
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "mapping": "addressed conceptually",
+        "rationale": "Targets low-cost CubeSat/university context and lets teams choose package depth based on maturity; no measured resource savings.",
+        "evidence": [
+          "Line 57: CubeSat is low-cost standardized.",
+          "Section V: Fundamental/Representative/Detailed levels based on team experience."
+        ]
+      },
+      "governance_project_deliverables_roi": {
+        "mapping": "addressed conceptually",
+        "rationale": "OMG standardization, requirement numbering, validation criteria, and technical-measure deliverables are described; ROI/value realization is not measured.",
+        "evidence": [
+          "Line 165: normative OMG specification process.",
+          "Line 105: requirement prefix/numbering.",
+          "Section VI validation criteria."
+        ]
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "mapping": "not addressed",
+        "rationale": "The paper mentions rapid CubeSat growth and university teams, but no NewSpace, agile, distributed, or rapid-iteration MBSE process alignment.",
+        "evidence": [
+          "Line 29 mentions rapid growth; no agile/NewSpace/distributed workflow is described."
+        ]
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": [
+          "Provides a reusable SysML CubeSat Reference Model with generic mission/system/subsystem/ground packages, requirements, use cases, technical measures, and validation strategy.",
+          "Explicitly addresses minimal/generic modeling by using loosely defined subsystems and allowing mission-specific tailoring rather than dictating relationships."
+        ],
+        "RQ2": [
+          "Claims system-level reuse, traceability, reproducibility, interoperability, stakeholder communication, and decision support, but evidence is mainly artifact description and plans.",
+          "No EPS-specific reliability/reproducibility/integrability outcomes are demonstrated; prior RAX power trade studies are lineage evidence only."
+        ],
+        "RQ3": [
+          "Reports generic verify/satisfy properties and parametric technical-measure analysis that could support pre-physical checks.",
+          "Does not present an EPS verification-procedure model, EPS test cases/procedures, or SIL/HIL/automated verification artifacts."
+        ]
+      },
+      "author_stated_limitations_gaps": [
+        "Validation requires concrete mission-specific models; difficult for validators without examples.",
+        "Metrics for intended use still need to be developed.",
+        "Power, weight, and cost parametrics are future work.",
+        "Cross-tool XMI import into another tool with no impact remains to be demonstrated.",
+        "OMG specification process is still ongoing."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No quantitative CRM outcome evaluation, no adoption baseline, and no independent validation results.",
+        "No public CRM model/file URL in the paper.",
+        "EPS relevance is adjacent, not specific; no EPS verification procedure model.",
+        "Prior RAX trade-study evidence is background and should not be double-counted as current CRM validation.",
+        "Corpus metadata author list conflicts with visible paper header."
+      ],
+      "direct_evidence_quotes_supporting_classification": [
+        "'The CRM is intended for instruction and for designing and building a mission-specific CubeSat.'",
+        "'The mission-specific team can import the CRM into its graphical modeling tool...'",
+        "'The requirement elements and tables can expose requirement properties including... verify method, verified by, and satisfied by.'",
+        "'This provides for traceability between MOPs and MOEs and supports performance analysis...'",
+        "'it is difficult for the validators to answer the questions without evaluating concrete examples...'",
+        "'Part of that effort will include demonstrating that the CRM can be exported from CSM as an XMI file and imported into another modeling tool...'"
+      ],
+      "notes_for_consistency_with_lineage": "Treat this as an interim status/reference-model paper. Use prior RAX simulation/trade-study claims only as lineage/background unless synthesizing the paper family; avoid counting them as new validation evidence for the 2018 CRM status.",
+      "extraction_confidence": "medium",
+      "extraction_confidence_reason": "The paper text is clear and detailed for CRM artifacts, but outcome evidence is weak, some claims refer to prior phases, and metadata authors conflict with the visible header."
+    }
   },
-  "bibtex": "@inproceedings{paper-0013,\n  title = {Developing a CubeSat Model-Based System Engineering (MBSE) Reference Model - Interim Status \\#4},\n  author = {David Kaslow and Bradley J. Ayres and Philip T Cahill and Chuck Croney and Laura Hart and Alejandro G. Levi},\n  year = {2018},\n  booktitle = {AIAA SPACE Forum},\n  publisher = {American Institute of Aeronautics and Astronautics},\n  doi = {10.2514/6.2018-5328},\n  url = {https://doi.org/10.2514/6.2018-5328}\n}"
+  "bibtex": "@inproceedings{Kaslow2018CubeSatCRMInterim4,\n  title = {Developing a {CubeSat} Model-Based System Engineering ({MBSE}) Reference Model -- Interim Status \\#4},\n  author = {Kaslow, David and Ayres, Bradley J. and Cahill, Philip T. and Croney, Chuck and Hart, Laura and Levi, Alejandro G.},\n  year = {2018},\n  doi = {10.2514/6.2018-5328},\n  publisher = {American Institute of Aeronautics and Astronautics}\n}"
 }

@@ -3,646 +3,2318 @@
   "tier": "core",
   "year": 2014,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper is an IEEE Aerospace Conference paper, a credible peer-reviewed aerospace systems venue.",
-        "evidence": [
-          "978-1-4799-1622-1/14/$31.00 ©2014 IEEE"
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper identifies challenges and future work, but it does not provide a structured limitations or validity discussion.",
-        "evidence": [
-          "This phase of the project was successful, but the modeling lacked the ability to time-step through a behavioral scenario to determine if requirements would be satisfied across the entire scenario.",
-          "Capabilities to compare and synchronize the structures (SysML block structure and PLM part structure) using SLIM are maturing now and will be demonstrated in the next iteration of this work."
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The study explains the RAX 3U CubeSat mission, generic CubeSat constraints, and lifecycle use from conceptual design through operations.",
-        "evidence": [
-          "RAX is a three Unit (3U) CubeSat developed by the University of Michigan Exploration Lab (MXL) and SRI International.",
-          "MBSE is the formalized application of modeling to support system requirements, design analysis, optimization, verification, and validation. It begins in the conceptual design phase, continuing throughout development and into later life cycle phases including operations."
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper describes SysML/UML MBSE, the CubeSat architecture framework, logical/physical packages, behavior/parametric artifacts, and a named toolchain; a manual is reported for installation and execution.",
-        "evidence": [
-          "The COTS modeling and simulation tools included MagicDraw and Cameo Simulation Tool Kit from No Magic; ModelCenter, Analysis Server, and MBSE Analyzer $ ^{\\bullet} $ from Phoenix Integration; Systems Tool Kit (STK) from Analytical Graphics, and MATLAB.",
-          "The manual contains sections on:"
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Claims about verification, trades, cost estimation, reuse, PLM synchronization, and integration are explicitly tied to the SysML framework, integrated model, SLIM links, and model artifacts.",
-        "evidence": [
-          "The integrated model enabled the execution of trade studies to evaluate mission performance and verify that mission requirements would be satisfied.",
-          "In both the use cases, SLIM creates a connection between the SysML model elements and PLM elements which can be used for comparison and bi-directional synchronization."
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper reports case demonstrations, executed trade studies, and PLM use cases, but gives no quantitative baseline, stakeholder evaluation, physical integration result, or flight/operational validation for the claimed value.",
-        "evidence": [
-          "Energy state trade studies varied the solar panel area and battery capacity. Data collection trade studies varied the orbital altitude and ground station network.",
-          "Use Case 1: The systems engineer begins to design the CubeSat system architecture in SysML. Once the general components have been mapped out, the block structure is used to generate a part structure in a PLM system Windchill (Figure 12)."
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Traceability is central: requirements flow down to components/interfaces/tasks; requirements verification is performed through integrated model scenarios; SysML blocks are linked to PLM parts.",
-        "evidence": [
-          "A CubeSat architecture framework [10], such as the one shown in Figure 9, can provide a traceability map for translating the mission objectives and mission requirements into basic building blocks of CubeSat system components, interfaces and tasks.",
-          "Connections are saved between the corresponding parts and blocks so that changes on either side can be synchronized as desired."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The RAX model and manual are said to be available and reusable, and data exchange mechanisms are described, but no archive URL, complete model contents, or full executable configuration is provided in the paper.",
-        "evidence": [
-          "Our RAX CubeSat model and its manual are being made available to the academic community.",
-          "The intent is to provide:",
-          "SLIM manages these fine-grained connections to various versions of the models and can sync data or generate/sync complete model structures."
-        ]
-      }
-    ],
-    "total_score": 6.5,
-    "max_score": 8,
-    "normalized_score": 0.812,
-    "overall_rationale": "The paper is a credible, detailed MBSE/enterprise-modeling case with clear CubeSat context, toolchain, artifacts, traceability, and model-linked claims. Its main weaknesses are limited quantitative evidence, incomplete reproducibility details, and limited EPS-specific depth beyond power-budget and system-level analysis."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0008.json",
-    "status_rationale": "Retained as core because it directly presents MBSE/enterprise modeling for CubeSats, including power/EPS-related analysis, requirements verification, cost modeling, PLM continuity, and reusable SysML framework concepts.",
-    "citation": "Anderson, L., Cole, B., Yntema, R., Bajaj, M., Spangelo, S. C., Kaslow, D., Lowe, C., Sudano, E. V., Boghosian, M., Reil, R., Asundi, S., & Friedenthal, S. A. (2014). Enterprise Modeling for CubeSats. 2014 IEEE Aerospace Conference.",
-    "title": "Enterprise Modeling for CubeSats",
-    "authors": [
-      "L. Anderson",
-      "B. Cole",
-      "Rose Yntema",
-      "Manas Bajaj",
-      "Sara C. Spangelo",
-      "D. Kaslow",
-      "C. Lowe",
-      "Eric V. Sudano",
-      "M. Boghosian",
-      "R. Reil",
-      "S. Asundi",
-      "Sanford A. Friedenthal"
-    ],
-    "venue": "2014 IEEE Aerospace Conference",
-    "doi_or_url": "10.1109/aero.2014.6836343",
-    "publisher": "IEEE",
-    "venue_type": "conference paper",
-    "source_database_or_route": [
-      "scopus: TITLE-ABS-KEY(\"Enterprise modeling for CubeSats\")",
-      "scopus: TITLE-ABS-KEY((cubesat OR CubeSat OR nanosatellite) AND (\"enterprise modeling\" OR \"enterprise model*\" OR \"enterprise architecture\") AND (\"model-based\" OR modeling OR architecture))",
-      "google_scholar abstract_enrichment: \"Enterprise modeling for CubeSats\"",
-      "semantic_scholar abstract_enrichment: \"Enterprise modeling for CubeSats\""
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "high",
-        "rationale": "The paper directly describes a general CubeSat SysML architecture framework with requirements flow-down, subsystem libraries, logical/physical architecture, CONOPS, and reusable packages; EPS is included as a subsystem and power collection/management is modeled at budget/architecture level."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims reliability, reuse/reproducibility, and integration benefits from the framework and toolchain, but evidence is mostly qualitative and system-level rather than EPS-specific."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "It reports pre-physical requirements verification through integrated simulations and trade studies involving battery capacity, solar panel area, and power management, but gives limited procedural detail and no physical test or EPS-specific verification workflow."
-      }
+    "credible_venue": {
+      "label": "Was the research published in a credible venue?",
+      "numeric_score": 1,
+      "rationale": "IEEE Aerospace Conference paper with DOI and IEEE copyright metadata.",
+      "evidence": [
+        "Metadata DOI: 10.1109/aero.2014.6836343.",
+        "Paper front matter: '978-1-4799-1622-1/14/$31.00 ©2014 IEEE'."
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "The paper explicitly builds on prior INCOSE SSWG CubeSat phases and RAX MBSE work cited as references [4]-[6]. This extraction only uses the current paper text and treats those earlier works as lineage context rather than imported evidence."
+    "limitations_discussed": {
+      "label": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+      "numeric_score": 0.5,
+      "rationale": "The paper discusses challenges, maturing capabilities, and future work, but not a structured limitations/threats section.",
+      "evidence": [
+        "'This phase of the project was successful, but the modeling lacked the ability to time-step through a behavioral scenario...'.",
+        "'Capabilities to compare and synchronize the structures ... are maturing now and will be demonstrated in the next iteration of this work.'"
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "label": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+      "numeric_score": 1,
+      "rationale": "RAX 3U CubeSat, general CubeSat constraints, involved organizations, and lifecycle stages are described.",
+      "evidence": [
+        "'RAX is a three Unit (3U) CubeSat developed by the University of Michigan Exploration Lab (MXL) and SRI International.'",
+        "'CubeSat missions ... typically deal with low costs, limited resources, low mass, low volume, and low power.'"
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "label": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+      "numeric_score": 1,
+      "rationale": "SysML framework, logical/physical architecture, behavior/parametric/simulation artifacts, toolchain, boundary, and manual contents are reported.",
+      "evidence": [
+        "'The model included the spacecraft, ground network, external environment, experimental target, and control software...'.",
+        "'The COTS modeling and simulation tools included MagicDraw and Cameo Simulation Tool Kit... ModelCenter... STK... and MATLAB.'",
+        "Manual sections include 'Software installation' and 'Evaluating and executing the behavioral models'."
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "label": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+      "numeric_score": 1,
+      "rationale": "Key outcomes are tied to the SysML framework, integrated model, requirements verification, trade studies, and SLIM SysML-PLM connections.",
+      "evidence": [
+        "'The integrated model enabled the execution of trade studies to evaluate mission performance and verify that mission requirements would be satisfied.'",
+        "'SLIM creates a connection between the SysML model elements and PLM elements...'"
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "label": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+      "numeric_score": 0.5,
+      "rationale": "Evidence is limited to case demonstrations, executable simulation/trade-study capability statements, and PLM use cases; quantitative baselines and independent validation are absent.",
+      "evidence": [
+        "'Energy state trade studies varied the solar panel area and battery capacity.'",
+        "'Use Case 1... the block structure is used to generate a part structure in a PLM system Windchill.'"
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "label": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+      "numeric_score": 1,
+      "rationale": "Requirements flow-down, requirements verification, and SysML-to-PLM part links are all reported.",
+      "evidence": [
+        "'A CubeSat architecture framework ... can provide a traceability map...'",
+        "'Connections are saved between the corresponding parts and blocks so that changes on either side can be synchronized as desired.'"
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "label": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+      "numeric_score": 0.5,
+      "rationale": "The model/manual and data-flow mechanisms are reported, but no repository URL, license, complete model, or executable configuration is provided in the paper.",
+      "evidence": [
+        "'Our RAX CubeSat model and its manual are being made available to the academic community.'",
+        "Manual includes 'Software installation', 'Evaluating and executing the behavioral models', and 'Modifying the SysML model'."
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "CubeSat/nanosatellite architecture framework, with RAX used as the main model instance and generic CubeSat missions as the target population.",
-    "size_form_factor": "RAX is a 3U CubeSat; CubeSats are described as standardized 10-centimeter cubes, typically one to three cubes.",
-    "mission_name": "Radio Aurora Explorer (RAX); SwampSat appears as a CONOPS example in Figure 5.",
-    "mission_domain": "Space systems/CubeSat mission design; RAX studies magnetic field-aligned plasma irregularities that disrupt tracking and communication.",
-    "organization_type": "Mixed government, academia, industry, and standards/working-group collaboration including JPL, NASA Ames, Aerospace Corporation, InterCAX, Analytical Graphics, universities, OMG, and INCOSE SSWG.",
-    "project_maturity": "INCOSE SSWG CubeSat Challenge third phase; framework expanded from earlier RAX work, with model/manual release underway and some PLM synchronization capabilities planned for the next iteration.",
-    "lifecycle_stage_addressed": "Conceptual design through development, manufacturing/PLM, operations, and lifecycle cost/mission operations considerations; emphasis on early conceptual design and trade studies.",
-    "development_context": "Low-cost, resource-constrained CubeSat development with COTS components, small multidisciplinary teams, dynamic requirements, and need for rapid reusable analysis.",
-    "eps_relevance": "power-budget/electrical-architecture",
-    "model_maturity": "Prototype reusable SysML framework with demonstrated RAX and integrated-analysis use cases; model and manual reported as available to the academic community, while some SLIM comparison/synchronization work remains future work."
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Published as an IEEE Aerospace Conference paper with DOI metadata; IEEE copyright line appears in the paper.",
+      "evidence": [
+        {
+          "quote": "Metadata: DOI=10.1109/aero.2014.6836343; venue inferred from DOI/source as 2014 IEEE Aerospace Conference.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Paper front matter: '978-1-4799-1622-1/14/$31.00 ©2014 IEEE'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The authors discuss scope boundaries, challenges, and future work, but not a formal threats-to-validity or limitations section.",
+      "evidence": [
+        {
+          "quote": "Introduction/second phase: 'This phase of the project was successful, but the modeling lacked the ability to time-step through a behavioral scenario to determine if requirements would be satisfied across the entire scenario.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'Capabilities to compare and synchronize the structures ... using SLIM are maturing now and will be demonstrated in the next iteration of this work.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'Many requirements and challenges exist with respect to estimating the cost of development, launch and operation of CubeSats.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The paper clearly identifies CubeSat/picosatellite context, the RAX 3U CubeSat case, CubeSat constraints, and lifecycle intent.",
+      "evidence": [
+        {
+          "quote": "Radio Aurora Explorer: 'RAX is a three Unit (3U) CubeSat developed by the University of Michigan Exploration Lab (MXL) and SRI International.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: 'CubeSat missions ... typically deal with low costs, limited resources, low mass, low volume, and low power.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: MBSE 'begins in the conceptual design phase, continuing throughout development and into later life cycle phases including operations.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The paper names the language, framework, tools, artifacts, model boundary, use cases, and reports a manual with installation/execution guidance; not every model detail is printed but comparison/partial replication is supported.",
+      "evidence": [
+        {
+          "quote": "First phase: 'The first phase ... consisted of developing a SysML framework model of a CubeSat and then applying that framework to model RAX.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'The model included the spacecraft, ground network, external environment, experimental target, and control software...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'The COTS modeling and simulation tools included MagicDraw and Cameo Simulation Tool Kit ... ModelCenter, Analysis Server, and MBSE Analyzer ... STK ... and MATLAB.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Model Availability: 'The manual contains sections on ... Software installation ... Evaluating and executing the behavioral models ... Modifying the SysML model.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Claims about trade studies, requirements verification, reuse, PLM/BOM generation, and communication are explicitly tied to the SysML framework, integrated model, and SLIM toolchain.",
+      "evidence": [
+        {
+          "quote": "Section 6: 'The integrated model enabled the execution of trade studies to evaluate mission performance and verify that mission requirements would be satisfied.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'SLIM creates a connection between the SysML model elements and PLM elements which can be used for comparison and bi-directional synchronization.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: 'By using MBSE and SysML and the top down approach ... an engineering team can more effectively communicate and integrate the system...'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Evidence consists mainly of conceptual arguments, RAX/model demonstrations, trade-study capability statements, and PLM use cases; it lacks quantitative baselines, independent validation, or flight/test outcome evidence.",
+      "evidence": [
+        {
+          "quote": "Section 4: 'This enabled requirements verification for mission scenarios and the ability to perform trades on parameters such as orbit latitude, ground network size and distribution, and solar panel and battery sizes.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5 Use Case 1: 'the block structure is used to generate a part structure in a PLM system Windchill.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "No reported quantitative effect size, comparator, stakeholder evaluation, integration-test result, or flight outcome was found in the extraction.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Traceability is central: mission requirements flow to components/interfaces/tasks; requirements verification is linked to simulation scenarios; SysML blocks are connected to PLM parts.",
+      "evidence": [
+        {
+          "quote": "Section 2: 'A CubeSat architecture framework ... can provide a traceability map for translating the mission objectives and mission requirements into basic building blocks of CubeSat system components, interfaces and tasks.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Requirements were defined for data collection, storage, download and for battery capacity and margin.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'Connections are saved between the corresponding parts and blocks so that changes on either side can be synchronized as desired.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Model/manual availability and toolchain/data-flow details are reported, but the paper does not provide a persistent repository, complete executable model, license, or full configuration.",
+      "evidence": [
+        {
+          "quote": "Model Availability: 'Our RAX CubeSat model and its manual are being made available to the academic community.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Model Availability: manual sections include 'Software installation' and 'Evaluating and executing the behavioral models'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'SLIM manages these fine-grained connections to various versions of the models and can sync data or generate/sync complete model structures.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "core"
+      ],
+      "status": "coded",
+      "rationale": "Corpus metadata marks the paper as core; full text confirms direct relevance to CubeSat MBSE/enterprise modeling.",
+      "evidence": [
+        {
+          "quote": "Prompt metadata: screening_tier=core.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Title/front matter: 'Enterprise Modeling For CubeSats'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper centrally describes a reusable SysML/enterprise architecture framework for CubeSat missions, including requirements flow-down, common elements, operations, analyses, and EPS/power budget aspects.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'The framework developed is a SysML representation of common CubeSat elements that can be used as a library to build a domain-specific CubeSat.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 2: 'A CubeSat architecture framework ... can provide a traceability map...'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims system-level reliability, reuse/reproducibility, and integration benefits and includes power/battery trade studies, but outcomes are not primarily EPS-specific and are weakly quantified.",
+      "evidence": [
+        {
+          "quote": "Section 6: 'Requirements were defined for data collection, storage, download and for battery capacity and margin.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract/Section 6: framework 'will allow for more robust and reusable designs.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SysML-PLM connections support comparison and bi-directional synchronization.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The integrated model supports pre-physical mission-scenario requirements verification with power/battery parameters, but the paper does not present EPS-specific verification procedures, test cases, or verification matrices.",
+      "evidence": [
+        {
+          "quote": "Section 4: 'This enabled requirements verification for mission scenarios and the ability to perform trades on parameters such as ... solar panel and battery sizes.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'The integrated model enabled the execution of trade studies ... verify that mission requirements would be satisfied.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation",
+        "integration and test",
+        "operations"
+      ],
+      "status": "coded",
+      "rationale": "The paper emphasizes conceptual/early design and lifecycle continuity; PLM/BOM use cases support implementation/manufacturing; cost model includes integration and test cost; CONOPS and operations analyses are addressed.",
+      "evidence": [
+        {
+          "quote": "Abstract: cost estimate has 'emphasis on assessment at the conceptual design phase' and can be 'developed and refined throughout the mission lifecycle.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: MBSE 'begins in the conceptual design phase, continuing throughout development and into later life cycle phases including operations.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: unique model evolves through 'formulation, design, manufacturing, and operations.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: space segment contributors include 'assembly, integration and test and ground support equipment'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student",
+        "agency",
+        "industry/NewSpace",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The case/model comes from the INCOSE CubeSat Challenge with university, agency, and industry participants; the paper explicitly describes CubeSats as low-cost/resource-constrained and notes university, government, and commercial involvement.",
+      "evidence": [
+        {
+          "quote": "RAX context: 'RAX is a three Unit (3U) CubeSat developed by the University of Michigan Exploration Lab (MXL) and SRI International.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'More and more commercial institutions, government agencies, and universities are becoming involved in developing and launching picosatellites especially CubeSats.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: CubeSat missions 'deal with low costs, limited resources, low mass, low volume, and low power.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "power-budget/electrical-architecture"
+      ],
+      "status": "coded",
+      "rationale": "EPS is not the main paper focus, but power/EPS architecture and budget/trade elements are substantively modeled as part of the system framework.",
+      "evidence": [
+        {
+          "quote": "Figure 3 description: 'The EPS branch is divided into Generation ... Storage ... and Distribution.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'power collection, power management ... subsystems' were captured.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Requirements were defined ... for battery capacity and margin... Energy state trade studies varied the solar panel area and battery capacity.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "conceptual framework",
+        "reference model/template",
+        "prototype demonstration",
+        "executable model",
+        "project-applied model"
+      ],
+      "status": "coded",
+      "rationale": "The work combines a CubeSat reference framework, RAX-applied model, executable simulation/trade studies, and prototype SLIM/PLM use cases; no validated/operational model outcome is reported.",
+      "evidence": [
+        {
+          "quote": "First phase: developed a 'SysML framework model of a CubeSat' and applied it to RAX.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4: the framework was 'extended and applied to model a variety of model instances.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4: Cameo Simulation Toolkit enabled 'end-to-end simulation of realistic mission scenarios.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'we exercised the following use cases with SLIM'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "operations",
+        "simulation",
+        "manufacturing/test",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The model covers mission/system/subsystem architecture, requirements, CONOPS/operations, behavior, interfaces, power/cost/mass/telemetry budgets, simulation-based verification, PLM/BOM manufacturing continuity, and enterprise/cost-management concerns.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'analysis of cost, business processes, and requirements for the mission's spacecraft and problem domain.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "First phase: framework defined 'logical and physical architecture of the flight system and ground system.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 2: requirements are broken into 'components, interfaces, and tasks' and operating modes per CONOPS.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: model included 'spacecraft, ground network, external environment, experimental target, and control software'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SysML connected to 'Bills of Materials (BOMs)' and CAD/CAE/PLM artifacts.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "state/activity/sequence diagrams",
+        "parametrics",
+        "trade-study models",
+        "interface control models",
+        "power budgets",
+        "executable simulations",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper shows requirements flow-down/package diagrams, SysML block diagrams, activity/state behavior execution, parametric solvers/CERs, trade studies, interfaces, power budgets, simulations, and PLM/BOM artifacts. It does not report FMEA, test procedures, or verification matrices.",
+      "evidence": [
+        {
+          "quote": "Figure 2 is a 'Requirements Flow-down'; Figure 6 is a 'SysML Block Definition Diagram'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: 'Activity and state behavior modeling ... Cameo Simulation Toolkit enabled execution of the activity models and state machines.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: 'The trades were carried out using the ParaMagic parametric solver.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Energy state trade studies varied the solar panel area and battery capacity.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 13: 'Part structure (BOM) generated in Windchill for the CubeSat block structure using SLIM'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "library",
+        "reusable workflow",
+        "open package",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "The framework is positioned as a reusable CubeSat library/kit/reference model, with a manual/instructions and community release. 'Open package' is coded because the abstract describes an open-source framework idea, though access details are incomplete.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'The framework developed is a SysML representation of common CubeSat elements that can be used as a library to build a domain-specific CubeSat.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: Challenge team hopes to bring together a 'Systems Engineering kit' for the full lifecycle.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Model Availability: intent includes 'A starting point for a CubeSat team to develop their own model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: 'Currently our architectural framework model and instructions for using the different tools to do analysis with the model are available.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Integrated MBSE/digital engineering"
+      ],
+      "status": "coded",
+      "rationale": "The approach connects SysML models, simulations, parametric analyses, cost models, PLM/BOM structures, and lifecycle synchronization rather than remaining within a single MBSE model.",
+      "evidence": [
+        {
+          "quote": "Section 4: behavioral modeling was supported by 'integration of analytic models (Systems Tool Kit, MATLAB, Java) into a systems-level model (captured in SysML)'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SLIM connects SysML to BOM/CAD/CAE/MATLAB/Simulink/Mathematica documents managed in PLM systems.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SLIM can 'sync data or generate/sync complete model structures'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "available tools",
+        "open-source preference",
+        "organizational constraints"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring is motivated by CubeSat size/resource constraints, cost/schedule concerns, small/volunteer teams, COTS/tool availability, and interest in an open/proprietary-free framework.",
+      "evidence": [
+        {
+          "quote": "Abstract: CubeSats have 'low costs, limited resources, low mass, low volume, and low power.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'Most CubeSats are developed by small, multidisciplinary teams of engineers and students, (many of whom are volunteers)...'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction/third phase: external drivers include 'Cost, Schedule, Constraints (SWaP, Pico/Nano/Micro), and Lessons Learned'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: 'The idea of an open source framework available for modeling CubeSats ... is appealing for rapid development of CubeSats.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Special attention and interest was paid to develop the model in a proprietary-free environment'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives framework steps, packages, use cases, and a manual, but not a complete adopter playbook with roles, criteria, and templates in the paper.",
+      "evidence": [
+        {
+          "quote": "Model Availability: manual contains 'Software installation', 'Evaluating and executing the behavioral models', and 'Modifying the SysML model'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5 elaborates Use Case 1 and Use Case 2 for SysML/PLM integration.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 2 explains requirements flow-down into components, interfaces, tasks, and operating modes.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "MATLAB/Simulink",
+        "STK",
+        "ModelCenter",
+        "Cameo/MagicDraw",
+        "PLM/ALM tools",
+        "custom tools",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses SysML with MagicDraw/Cameo, ModelCenter/Analysis Server/MBSE Analyzer, STK, MATLAB, SLIM, Windchill/Teamcenter PLM, ParaMagic, Java, MySQL, and A-PICOMO/CER cost modeling.",
+      "evidence": [
+        {
+          "quote": "Introduction: tools included 'MagicDraw and Cameo Simulation Toolkit ... ModelCenter ... ParaMagic ... Systems Tool Kit ... and MATLAB'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SLIM connects SysML to 'Teamcenter ... and Windchill'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5 future work: repositories include 'requirements and parts from Teamcenter, parts from Windchill, and data from MySQL databases'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: A-PICOMO is used as a parametric cost model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "model transformation",
+        "co-simulation"
+      ],
+      "status": "coded",
+      "rationale": "Interoperability is described through integrated simulation execution and SLIM transformations/synchronization between SysML and PLM structures; API/file exchange details are not reported.",
+      "evidence": [
+        {
+          "quote": "Section 4: analytic models are integrated into a SysML systems-level model and 'executed by the Cameo Simulation Toolkit'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5 Use Case 1: SysML block structure is used to 'generate a part structure in a PLM system Windchill'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5 Use Case 2: 'Generate a SysML block structure from the payload model in Windchill'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 14 description lists connection types including 'Reference', 'Function Wrap', 'Data Map', 'Model Transform', and 'Composite'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [
+        "missing interfaces"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports maturing compare/synchronize capability and future work to connect requirements, parts, and data repositories; this is coded as missing/incomplete interfaces rather than a completed mechanism.",
+      "evidence": [
+        {
+          "quote": "Section 5: 'Capabilities to compare and synchronize the structures ... using SLIM are maturing now and will be demonstrated in the next iteration of this work.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'The ability to bring different types of model elements ... from different repositories—requirements and parts from Teamcenter, parts from Windchill, and data from MySQL databases—and have them connected and synchronized will also be demonstrated in the next iteration.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "modes",
+        "margins",
+        "power budgets",
+        "interfaces",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "EPS/power elements are represented as part of the system architecture and power analyses: solar cells/panels, battery/storage, EPS distribution, operating modes, battery margin, power budgets/overhead, interfaces, and energy state.",
+      "evidence": [
+        {
+          "quote": "Figure 3 description: EPS includes 'Generation (leading to Solar Cells...), Storage (leading to Batteries...) and Distribution'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Requirements were defined ... for battery capacity and margin.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Energy state trade studies varied the solar panel area and battery capacity.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction/third phase: 'power budgets, mass budgets, telemetry budgets' are accommodated.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Spacecraft states, such as on-board energy...' were modeled.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [
+        "simulation scenarios",
+        "executable checks"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports mission-scenario simulations and requirements verification enabled by executable models; it does not report EPS test cases/procedures or a verification matrix.",
+      "evidence": [
+        {
+          "quote": "Section 4: Cameo Simulation Toolkit 'enabled end-to-end simulation of realistic mission scenarios. This enabled requirements verification for mission scenarios'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'verify that mission requirements would be satisfied' using the integrated model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "requirements-in-the-loop",
+        "simulation-in-the-loop",
+        "parametric checks",
+        "trade-study verification",
+        "virtual integration"
+      ],
+      "status": "coded",
+      "rationale": "Before hardware/test evidence, the model executes mission scenarios, requirements checks, and parameter trades within an integrated virtual model including power/battery variables.",
+      "evidence": [
+        {
+          "quote": "Section 4: integrated analytic models into SysML and executed simulations; enabled requirements verification and trades on 'solar panel and battery sizes'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Energy state trade studies varied the solar panel area and battery capacity.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No explicit EPS/system model link to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation is reported; I&T appears mainly as a cost contributor.",
+      "evidence": [
+        {
+          "quote": "Section 3 discusses 'assembly, integration and test' as cost contributors, but no model-derived integration/test readiness artifact is described.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Completed extraction found no flat-sat/testbed, environmental test, or hardware-in-the-loop linkage.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "reliability",
+        "reproducibility",
+        "integrability/interoperability",
+        "generality/reuse",
+        "traceability",
+        "consistency",
+        "completeness",
+        "schedule reduction",
+        "effort reduction",
+        "automation",
+        "decision support",
+        "communication/stakeholder alignment",
+        "risk reduction",
+        "lifecycle continuity",
+        "governance/ROI"
+      ],
+      "status": "coded",
+      "rationale": "Across claims, the paper emphasizes reusable/robust CubeSat designs, requirements traceability/verification, integrated simulation and PLM toolchains, automated BOM/block generation, cost/risk trade support, and improved communication; cost/schedule/effort reduction are claimed as quicker/out-of-box analysis rather than measured reductions.",
+      "evidence": [
+        {
+          "quote": "Abstract/Section 6: framework 'will allow for more robust and reusable designs.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: integrated model enabled trade studies and requirements verification.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SLIM creates SysML-PLM connections for comparison and synchronization.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction/third phase: team aims 'to make it quicker to have out of the box analysis for CubeSats.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level",
+        "generic space-system",
+        "generic MBSE"
+      ],
+      "status": "coded",
+      "rationale": "Most claims are CubeSat system-level, but some communication/MBSE claims are generic and the novelty claim is generic space-system-level.",
+      "evidence": [
+        {
+          "quote": "Title: 'Enterprise Modeling For CubeSats'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: MBSE/SysML 'allow for stronger more integrated communication between engineering teams' (generic MBSE).",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'first known integration of a space system SysML model...' (generic space-system).",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "executable simulation",
+        "parametric analysis",
+        "reference model reuse",
+        "automated generation",
+        "model transformation",
+        "shared repository",
+        "requirements linkage",
+        "tool integration",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The value mechanisms include requirements/trace links, executable mission simulations, parametric cost/power/trade analysis, reusable framework/model/manual, SLIM-generated SysML/PLM structures, shared PLM/model repositories, tool integration, and CER enterprise cost modeling.",
+      "evidence": [
+        {
+          "quote": "Section 2: traceability map translates mission objectives/requirements into components/interfaces/tasks.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4: Cameo execution enabled requirements verification and parameter trades.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SLIM can 'sync data or generate/sync complete model structures'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract/Section 3: CER cost model integrated with system model architecture.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation",
+        "operations"
+      ],
+      "status": "coded",
+      "rationale": "Claimed value is concentrated in conceptual/early design, development/design maturation, PLM handoff to detailed designers, and operations/CONOPS analyses.",
+      "evidence": [
+        {
+          "quote": "Abstract: cost assessment emphasized at 'conceptual design phase'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: framework supports analyses in 'the early phases ... as well as throughout the lifecycle as the design matures.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: Windchill BOM becomes a starting point for mechanical/electrical designers.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 2: CONOPS captures mission life cycle and operations modes.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration",
+        "Executable model or simulation result",
+        "Trade-study or requirements-checking result"
+      ],
+      "status": "coded",
+      "rationale": "The strongest evidence consists of RAX/integrated model demonstrations, executable mission simulations, and trade-study/requirements-verification statements; many broader value claims remain conceptual or asserted.",
+      "evidence": [
+        {
+          "quote": "Section 4: 'This enabled requirements verification for mission scenarios and the ability to perform trades...'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'we exercised the following use cases with SLIM'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No quantitative comparison, stakeholder evaluation, reuse across independent projects, or flight/operational outcome evidence was found.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "time",
+        "effort",
+        "requirement coverage",
+        "trace links",
+        "model reuse",
+        "cost",
+        "schedule",
+        "power margin",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses/mentions cost, schedule, risk, performance, requirement satisfaction, traceability, model reuse, battery margin, and data/SNR/orbit parameters as value indicators; it does not report measured effects for most indicators.",
+      "evidence": [
+        {
+          "quote": "Introduction/third phase: external drivers include 'Cost, Schedule, Constraints...' and the team aims to make analysis 'quicker'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 6: 'Requirements were defined ... for battery capacity and margin.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4: trades over 'orbit latitude, ground network size and distribution, and solar panel and battery sizes.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Model Availability: model/manual provide 'A starting point for a CubeSat team to develop their own model'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No explicit baseline or comparator is reported for MBSE outcome claims; previous-mission payload reuse is a source of reused structure, not an evaluated comparator.",
+      "evidence": [
+        {
+          "quote": "Completed claim extraction: all outcome records except a reuse scenario lack a baseline, and none compare measured MBSE outcomes to document-centric/manual/alternative processes.",
+          "location": "not specified"
+        },
+        {
+          "quote": "The paper cites document-centric MBSE roadmap context but does not report a before/after study for this CubeSat framework.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Simulation/trade and SysML-PLM demonstration claims reach Moderate evidence; broader communication, reliability, ROI, and reuse claims are weak or unsupported by measured data.",
+      "evidence": [
+        {
+          "quote": "Section 6 reports integrated model trade studies/requirements verification, but no quantitative results.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion claims more effective communication/integration without stakeholder/user evaluation.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5 demonstrates PLM use cases but says compare/sync capabilities are still maturing.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [
+        "configuration/change control"
+      ],
+      "status": "coded",
+      "rationale": "Formal model ownership/review/quality criteria are not described, but SLIM version management and synchronized connections provide a configuration/change-control mechanism for SysML-PLM artifacts.",
+      "evidence": [
+        {
+          "quote": "Abstract: PLM linking includes 'version management'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'SLIM manages these fine-grained connections to various versions of the models and can sync data or generate/sync complete model structures.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'Connections are saved between the corresponding parts and blocks so that changes on either side can be synchronized as desired.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper mentions ROI and value expectations, but provides no measured cost of adoption, saved effort, avoided rework, schedule effect, or quantified mission-assurance benefit for this work.",
+      "evidence": [
+        {
+          "quote": "Introduction/third phase mentions 'successful Return on Investment (ROI) seen from some other modeling projects', not a measured ROI for this CubeSat work.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Completed outcome extraction found no quantified ROI/value-realization evidence.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives an applied framework pathway (requirements flow-down, subsystem blocks, CONOPS, simulations, PLM use cases) plus a model/manual release, though not a full playbook.",
+      "evidence": [
+        {
+          "quote": "Section 2: requirements flow through subsystem block into components/interfaces/tasks and operating modes.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: Use Case 1 and Use Case 2 elaborate SysML-PLM workflows.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Model Availability: manual includes installation, executing behavioral models, and modifying the SysML model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "Interoperability is a major focus, with multi-tool simulation integration and SLIM SysML-PLM connections/generation, though some synchronization remains future work.",
+      "evidence": [
+        {
+          "quote": "Section 4: integrated STK/MATLAB/Java analytic models into SysML/Cameo execution.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SLIM connects SysML to BOM/CAD/CAE/MATLAB/Simulink/Mathematica and PLM systems.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: 'Capabilities to compare and synchronize ... are maturing now'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The approach is explicitly motivated by CubeSat low cost/resources/SWaP constraints and small teams, and is applied to the RAX CubeSat/picosatellite context.",
+      "evidence": [
+        {
+          "quote": "Abstract: CubeSat missions have 'low costs, limited resources, low mass, low volume, and low power.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: small multidisciplinary/student teams and OTS/COTS components affect cost modeling.",
+          "location": "not specified"
+        },
+        {
+          "quote": "RAX is identified as a 3U CubeSat case.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides evidence of deliverable links (BOM/PLM part structures, cost-model inputs, versioned connections) and conceptual ROI/project decision links, but no quantified ROI evidence.",
+      "evidence": [
+        {
+          "quote": "Section 5: SysML block structure generates a Windchill part structure for mechanical/electrical designers.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: A-PICOMO supports 'strategic planning, tradeoffs, investment decisions, budget planning and risk management'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: SLIM manages versions and synchronization.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper aligns conceptually with rapid, low-cost CubeSat development and concurrent design, but it does not present an agile/NewSpace process evaluation.",
+      "evidence": [
+        {
+          "quote": "Abstract: open-source framework is 'appealing for rapid development of CubeSats'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction/third phase: Team Xc will use 'a concurrent design approach specifically designed for CubeSats'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: commercial institutions, government agencies, and universities are increasingly developing picosatellites.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The markdown is readable and the paper provides rich context, direct tool/artifact descriptions, and clear quotes; uncertainty remains mainly around exact implementation maturity and absence of quantitative outcomes.",
+      "evidence": [
+        {
+          "quote": "Extraction based on complete protocol, codebook, metadata, and full paper markdown.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Most key claims have direct section quotes; status values were used for absent baselines/ROI/integration-test evidence.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Introduce enterprise modeling concepts to CubeSat missions so cost, business processes, requirements, lifecycle information, COTS tooling, and reusable system architecture can be integrated with CubeSat design and analysis.",
-    "modeling_scope": [
-      "CubeSat flight-system logical and physical architecture",
-      "Ground-system packages, subsystems, use cases, and operations analysis",
-      "Mission objectives, CONOPS, requirements flow-down, operating modes, components, interfaces, and tasks",
-      "Subsystem taxonomy including GNC, CDH, TT&C, EPS, structural/thermal, payload, and propulsion",
-      "Power, communications, data, mission activity/state analyses",
-      "Parametric cost modeling for space, ground, launch, and operations segments",
-      "PLM/BOM linkage, reuse, versioning, and synchronization using SLIM and Windchill/Teamcenter concepts"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "assumptions_or_data_quality_limits",
+      "tool_dependency_or_vendor_lockin",
+      "interoperability_limitations",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage",
+      "lineage_or_duplicate_reference_model_overlap"
     ],
-    "system_boundary_level_of_abstraction": "System-of-interest is a CubeSat mission enterprise spanning spacecraft, ground system, external environment, experimental target, control software, PLM repositories, cost models, and lifecycle artifacts; abstraction ranges from high-level mission architecture to component/interface/task blocks and BOM part structures.",
-    "minimal_or_excluded_modeling": "Fine-grained CAD/electrical design, full physical integration/test, detailed EPS component behavior, complete cost database, and mature PLM compare/sync are not fully reported; payload and propulsion details are partly placeholders/TBD in framework figures.",
-    "required_prior_behavioral_domain_knowledge": "The approach can begin from mission definition, objectives, requirements, CONOPS, and standard CubeSat elements; detailed behavior is added later as required through activity/state models, parametrics, and analysis tools.",
-    "handling_limited_behavioral_knowledge": "The framework uses top-down requirements flow-down and subsystem blocks to identify general components, interfaces, tasks, and operating modes, then uses placeholders and parametric/behavioral analysis packages as design knowledge matures.",
-    "model_artifacts_used": [
-      "SysML/UML architecture model",
-      "Logical and physical block structures",
-      "Requirements flow-down diagrams",
-      "Subsystem block taxonomy",
-      "Mission CONOPS flowchart and operating modes",
-      "Activity models and state machines",
-      "Parametric relations/CER cost models",
-      "Power, communications, and mission simulation models",
-      "Ground-system packages and use cases",
-      "SLIM connections between SysML and PLM artifacts",
-      "Windchill BOM/part structures",
-      "RAX model manual"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "Several capabilities are explicitly planned or maturing rather than fully demonstrated in this paper, including cost-model integration, ground-system SysML transformation, and SLIM synchronization.",
+        "confidence": "high",
+        "evidence_quote": "Abstract: cost model 'is planned to be integrated with the system model architecture'. Section 5: 'Capabilities to compare and synchronize the structures ... are maturing now and will be demonstrated in the next iteration of this work.' Section 2: 'Current work is focused transforming the functional flow diagram ... into the SysML model'."
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "extractor_identified",
+        "rationale": "The applied evidence centers on the RAX CubeSat/framework lineage and illustrative SLIM use cases; generalization beyond this context is asserted but not independently demonstrated.",
+        "confidence": "high",
+        "evidence_quote": "The paper states the first phase applied the SysML framework 'to model RAX' and Section 5 says 'we exercised the following use cases with SLIM'; no multi-project outcome evaluation is reported in the completed extraction."
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "No numeric outcome metrics are reported for MBSE value claims such as speed, cost savings, reuse, reliability, defect reduction, or integration success.",
+        "confidence": "high",
+        "evidence_quote": "Claim extraction found qualitative statements such as 'enabled the execution of trade studies' and 'will allow for more robust and reusable designs', but no effect sizes, before/after metrics, or measured ROI."
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "The paper does not compare MBSE outcomes against a document-centric, manual, alternative-toolchain, or previous-mission baseline.",
+        "confidence": "high",
+        "evidence_quote": "structured_code_summary['claimed_outcomes_value_mechanisms_evidence[].baseline_comparator'] is status=not_reported; previous-mission payload reuse is a source for a structure, not an evaluated comparator."
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "No independent stakeholder/user/expert evaluation or external validation of the framework's claimed benefits is reported.",
+        "confidence": "high",
+        "evidence_quote": "The model is being released to solicit suggestions, but the extraction found no reported feedback results: Model Availability includes 'A mechanism for soliciting suggestions for improvements to the model'."
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "Although RAX is a real CubeSat mission, the paper does not connect the MBSE/enterprise model to hardware test, environmental test, integration-test, operational, or flight outcome evidence.",
+        "confidence": "high",
+        "evidence_quote": "eps_verification_specific.integration_test_readiness is status=not_reported; reported evidence is simulation/trade-study and PLM use-case based."
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "EPS/power is modeled within a system-level framework, but the paper does not present a dedicated EPS model evaluation or EPS-specific reliability/reproducibility outcome.",
+        "confidence": "medium",
+        "evidence_quote": "The paper reports 'power collection, power management' and trades on 'solar panel area and battery capacity', but claimed outcomes are framed for the CubeSat system/framework rather than an EPS-specific verification model."
+      },
+      {
+        "flag": "assumptions_or_data_quality_limits",
+        "source": "author_stated",
+        "rationale": "CubeSat cost modeling depends on difficult-to-measure labor, dynamic requirements, lack of standards, small-mass cost databases, and proprietary/unknown launch cost data.",
+        "confidence": "high",
+        "evidence_quote": "Section 3: 'generally no accurate labor cost can be tracked'; 'system requirements and architecture are often undefined and dynamic'; 'Lack of standards during development, Integration & Test, and operation makes it difficult to apply detailed parametric cost models'; 'There is an inherent inability to utilize traditional massbased cost databases'. Section Launch Cost: 'The detailed nature of these costs is proprietary and not disclosed'."
+      },
+      {
+        "flag": "tool_dependency_or_vendor_lockin",
+        "source": "extractor_identified",
+        "rationale": "The reported executable/reproducible workflow depends on multiple named COTS/proprietary tools, which may limit independent reuse even though the authors also express interest in a proprietary-free/open framework.",
+        "confidence": "medium",
+        "evidence_quote": "Section 6: 'The COTS modeling and simulation tools included MagicDraw and Cameo Simulation Tool Kit ... ModelCenter ... STK ... and MATLAB.' Section 5 uses Windchill/Teamcenter through SLIM."
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "author_stated",
+        "rationale": "Cross-repository comparison/synchronization is described as maturing/future rather than complete.",
+        "confidence": "high",
+        "evidence_quote": "Section 5: 'Capabilities to compare and synchronize the structures ... using SLIM are maturing now and will be demonstrated in the next iteration of this work.'"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "extractor_identified",
+        "rationale": "The paper aspires to full lifecycle coverage but provides strongest detail for conceptual/early design, simulation trades, and PLM handoff; physical I&T and operations evidence are not reported.",
+        "confidence": "medium",
+        "evidence_quote": "Lifecycle continuity is asserted ('throughout the lifecycle'), but integration/test readiness and operational validation fields are not reported in the completed extraction."
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Some broader claims such as robust/reliable designs, improved communication, ROI, and quicker analysis are not supported by quantified or independently validated evidence.",
+        "confidence": "high",
+        "evidence_quote": "Claim records C7 and C8 have evidence_confidence_rating Unsupported; quality_checklist.evidence_for_outcomes is scored Insufficiently."
+      },
+      {
+        "flag": "lineage_or_duplicate_reference_model_overlap",
+        "source": "extractor_identified",
+        "rationale": "This paper builds directly on prior INCOSE SSWG/RAX CubeSat MBSE Challenge papers and reuses the same framework/model lineage, creating potential overlap with other corpus papers.",
+        "confidence": "high",
+        "evidence_quote": "References [4], [5], and [6] are prior CubeSat/RAX MBSE papers; Section 4 states 'The initial CubeSat framework developed in [4] has been extended...' and the first/second phases cite [4] and [5]."
+      }
     ],
-    "generality_reuse_mechanism": [
-      "SysML representation of common CubeSat elements used as a library",
-      "Subsystem block functioning as a toolkit for standard CubeSat components and interfaces",
-      "Adaptable architecture framework instantiated for mission-specific designs",
-      "Reuse of PLM part structures, such as payload structures from previous missions",
-      "Model/manual release to academic community",
-      "Framework management and community feedback for improvements",
-      "Parametric relations for mass, cost, power, telemetry, and other budgets"
+    "emergent_limitations": [
+      {
+        "label": "cost-model-integration-not-completed-in-this-paper",
+        "rationale": "The abstract says CER cost modeling is planned to integrate with the system model, while Section 3 describes the approach and rationale rather than reporting implemented results.",
+        "evidence": "'A cost model ... is described here and is planned to be integrated with the system model architecture...'",
+        "confidence": "high",
+        "evidence_quote": "'A cost model ... is described here and is planned to be integrated with the system model architecture...'"
+      },
+      {
+        "label": "model-access-conditions-unclear",
+        "rationale": "The model/manual are said to be available or being made available to the academic/CubeSat community, but no URL, license, or access procedure is given in the paper.",
+        "evidence": "'Our RAX CubeSat model and its manual are being made available to the academic community.'",
+        "confidence": "medium",
+        "evidence_quote": "'Our RAX CubeSat model and its manual are being made available to the academic community.'"
+      },
+      {
+        "label": "detailed-numerical-trade-study-outputs-omitted",
+        "rationale": "The paper identifies parameters varied in energy/data trade studies but does not include the resulting plots/tables or requirement margins.",
+        "evidence": "'Energy state trade studies varied the solar panel area and battery capacity. Data collection trade studies varied the orbital altitude and ground station network.'",
+        "confidence": "high",
+        "evidence_quote": "'Energy state trade studies varied the solar panel area and battery capacity. Data collection trade studies varied the orbital altitude and ground station network.'"
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Define mission and requirements",
-        "inputs": "Mission definition, mission objectives, external drivers, constraints, lessons learned, and CONOPS concepts.",
-        "outputs": "Mission requirements, system functional/performance requirements, allocated and derived requirements.",
-        "actors_roles": "Systems engineers and mission stakeholders; detailed role allocation not reported.",
-        "prerequisites": "Basic CubeSat mission concept and enterprise drivers.",
-        "completion_criteria": "Requirements are sufficiently decomposed to identify subsystem needs and operating modes.",
-        "handoffs": "Requirements and CONOPS feed the subsystem block and architecture framework."
-      },
-      {
-        "step": "Map requirements through CubeSat subsystem block",
-        "inputs": "System requirements and mission CONOPS.",
-        "outputs": "Components, interfaces, tasks, and operating modes for subsystems including EPS.",
-        "actors_roles": "Systems engineering team using the CubeSat framework/toolkit.",
-        "prerequisites": "Access to the SysML framework and standard CubeSat subsystem taxonomy.",
-        "completion_criteria": "Components and interfaces are grouped into operating modes consistent with CONOPS.",
-        "handoffs": "Architecture elements feed logical/physical model packages and budget analyses."
-      },
-      {
-        "step": "Instantiate logical/physical flight and ground models",
-        "inputs": "Framework packages, RAX or mission-specific components, ground-system functions, and use cases.",
-        "outputs": "SysML logical and physical architecture, ground-system packages, subsystem/component structures.",
-        "actors_roles": "Systems engineers; ground-system and subsystem engineers.",
-        "prerequisites": "Initial architecture and subsystem/component selections.",
-        "completion_criteria": "Flight and ground architecture captures required elements and interactions for analysis.",
-        "handoffs": "Model elements feed simulation, cost, and PLM/BOM workflows."
-      },
-      {
-        "step": "Connect behavior, parametric, and external analysis models",
-        "inputs": "SysML architecture, states, activities, parameters, analysis constraints, STK/MATLAB/ModelCenter models, CERs.",
-        "outputs": "Executable mission scenarios, power/data/communication analyses, and cost/performance trade studies.",
-        "actors_roles": "MBSE practitioners, analysts, subsystem engineers.",
-        "prerequisites": "Defined parameters and tool interfaces; COTS analysis tools available.",
-        "completion_criteria": "Model can execute scenarios or solve parametric relationships for trade variables.",
-        "handoffs": "Trade and verification results inform design decisions and requirement satisfaction."
-      },
-      {
-        "step": "Verify requirements and perform trades before physical build",
-        "inputs": "Executable integrated model, requirements for data collection/storage/download and battery capacity/margin, design variables.",
-        "outputs": "Requirement-verification evidence and trade-study results for orbit, ground network, solar panel area, and battery capacity.",
-        "actors_roles": "Systems engineers and analysts; decision makers use results.",
-        "prerequisites": "Executable model and defined mission scenarios.",
-        "completion_criteria": "Mission performance is evaluated and requirement satisfaction assessed for scenarios.",
-        "handoffs": "Validated/traded architecture feeds design refinement, cost estimation, and PLM structures."
-      },
-      {
-        "step": "Manage lifecycle continuity with PLM and release framework",
-        "inputs": "SysML block structures, PLM repositories, BOMs, previous-mission payload parts, manual, and model packages.",
-        "outputs": "Windchill/Teamcenter part structures, SysML-PLM connections, reusable payload/block structures, model/manual for academic users.",
-        "actors_roles": "Systems engineers, mechanical/electrical designers, project managers, and community users.",
-        "prerequisites": "SLIM/PLM tooling and model/package governance.",
-        "completion_criteria": "Connections are saved for synchronization/reuse and the model/manual can support new CubeSat teams.",
-        "handoffs": "BOM and synchronized structures support detailed design, mass/cost calculation, and later refinements."
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The paper maps the approach to NASA-style systems engineering activities: mission objectives and external drivers feed CONOPS and requirements; requirements flow to subsystem functional/performance requirements, components, interfaces, and tasks; integrated analyses support conceptual design trades, feasibility assessments, point designs, requirement verification, PLM/BOM creation, and operations planning.",
-    "approach_classification": "Integrated MBSE/digital engineering",
-    "approach_classification_rationale": "The approach goes beyond a standalone SysML architecture by integrating simulation/analysis tools, cost estimation, PLM repositories, BOM generation, version management, and lifecycle model continuity.",
-    "tailoring_rationale": [
-      "CubeSat missions typically have low cost, limited resources, low mass, low volume, and low power.",
-      "CubeSats use a high proportion of COTS hardware and software, changing cost and verification assumptions.",
-      "Small multidisciplinary student/engineer teams and volunteer labor make conventional labor-cost tracking difficult.",
-      "Requirements and architecture are often undefined and dynamic during CubeSat lifecycles.",
-      "Lack of development, integration/test, and operations standards makes detailed traditional cost models difficult.",
-      "A reusable toolkit/framework can accelerate out-of-the-box analysis for CubeSat teams."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "SysML",
-      "UML",
-      "No Magic MagicDraw",
-      "No Magic Cameo Systems Modeler",
-      "Cameo Simulation Toolkit",
-      "ParaMagic",
-      "Phoenix Integration ModelCenter",
-      "Phoenix Integration Analysis Server",
-      "Phoenix Integration MBSE Analyzer",
-      "Analytical Graphics Systems Tool Kit (STK)",
-      "MATLAB",
-      "InterCAX SLIM",
-      "PTC Windchill 10",
-      "Siemens Teamcenter",
-      "MySQL databases"
-    ],
-    "toolchain_architecture_data_flow": "SysML architecture captures requirements, logical/physical structures, activities, states, and parameters; external analytic models and simulation engines execute mission scenarios and trade studies; cost models consume system/mission parameters; SLIM links SysML elements with PLM artifacts, can generate or sync part/BOM structures, and supports reuse of previous-mission parts into the SysML model.",
-    "interoperability_mechanisms": [
-      "SLIM fine-grained connections to versions of domain-specific models",
-      "Data sync and generation/synchronization of complete model structures",
-      "Drag-and-drop SysML block structure to generate Windchill part structure",
-      "Drag-and-drop PLM part structure to generate SysML block structure",
-      "Comparison and bi-directional synchronization between SysML and PLM elements",
-      "Function wrap, data map, model transform, reference, and composite connection types shown in SLIM dashboard",
-      "Integration of STK, MATLAB, Java, ModelCenter, ParaMagic, and Cameo Simulation Toolkit with the SysML model"
-    ],
-    "syntax_semantic_continuity_evidence": "The paper provides PLM use cases and screenshots showing SysML-to-Windchill generation and PLM-to-SysML reuse, and states that connections are saved for synchronization; however, comparison/synchronization capabilities are still maturing and not fully demonstrated.",
-    "software_hardware_system_integration_readiness": "The approach supports early software/analysis integration, mission operations modeling, and BOM handoff to mechanical/electrical designers, but physical hardware integration/test readiness is not demonstrated.",
-    "toolchain_limitations": [
-      "Some PLM compare/synchronize capabilities are maturing and deferred to the next iteration.",
-      "The paper lists COTS/proprietary tools but does not provide complete versions, model files, or executable configuration in the text.",
-      "Ground-system functional flows are described as current/future SysML transformation work.",
-      "CubeSat labor, standards, and cost data limitations constrain detailed cost-model accuracy."
-    ],
-    "availability_reproducibility": "The RAX CubeSat model and manual are reported as being made available to the academic community, with manual sections on SysML diagrams, trade studies, software installation, executing behavioral models, and modifying the model; no stable archive URL is provided in the paper."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "Electrical Power System (EPS) subsystem",
-      "Power collection subsystem",
-      "Power management subsystem",
-      "Solar cells/body-mounted solar cells/deployables",
-      "Solar panel area",
-      "Batteries/lithium-ion battery board",
-      "Battery capacity and margin",
-      "Super capacitors",
-      "Fuel cells",
-      "Power distribution",
-      "On-board energy state and available power"
-    ],
-    "eps_requirements_representation": "EPS-related requirements are represented at system level through requirements flow-down and defined requirements for battery capacity and margin; exact SysML requirement tables or textual EPS requirement IDs are not reported.",
-    "verification_validation_artifacts": [
-      "Integrated executable SysML mission scenarios",
-      "Power modeling of on-board energy/data/downlinked data",
-      "Energy-state trade studies varying solar panel area and battery capacity",
-      "Requirements verification for mission scenarios",
-      "Parametric power-budget relations",
-      "CONOPS/activity/state behavior models"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "Cameo Simulation Toolkit execution of activity models and state machines",
-      "MagicDraw/Cameo with ModelCenter, STK, MATLAB, ParaMagic, and analytic models",
-      "End-to-end simulation of realistic mission scenarios",
-      "Trade studies on solar panel area, battery capacity, orbit, and ground network",
-      "Verification that mission requirements, including battery capacity/margin, would be satisfied"
-    ],
-    "evidence_verification_integrated_in_model": "The paper states that integrated SysML plus analytic/simulation models enabled end-to-end mission simulation, trade studies, and requirements verification, including power-management and battery requirements. The evidence is system-level and does not show detailed EPS component verification procedures.",
-    "integration_test_readiness": "Supports pre-build design analysis and requirements verification for power budgets and mission scenarios; no physical EPS integration test, environmental test, or flight verification evidence is reported."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "The CubeSat modeling framework supports more robust and reusable designs throughout the mission lifecycle.",
-      "outcome_category": "reuse/reproducibility/design robustness",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Reusable SysML framework",
-        "Common CubeSat element library",
-        "Lifecycle analysis and costing"
-      ],
-      "artifact_or_process_linked": "SysML CubeSat architecture framework and model management/release process.",
-      "lifecycle_stage": "full lifecycle, with emphasis on early design through operations",
-      "evidence_type": "author assertion supported by framework description",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Qualitative claim of robustness and reuse; no measured effect size.",
-      "evidence_source": "Abstract and Section 6 Framework Management and Release",
-      "direct_quote": "a modeling framework that allows for analyzing and costing the technical design of the spacecraft throughout the lifecycle of the mission will allow for more robust and reusable designs.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Reuse benefits are plausible but not evaluated with multiple missions, metrics, or independent users in this paper."
-    },
-    {
-      "claim": "The top-down architecture framework and bottom-up development process can address CubeSat reliability and stakeholder concerns.",
-      "outcome_category": "reliability/stakeholder alignment",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Requirements flow-down",
-        "Top-down architecture",
-        "Bottom-up component/interface/task development",
-        "Budget overhead estimation"
-      ],
-      "artifact_or_process_linked": "Requirements flow-down diagram, subsystem block, component/interface/task structure.",
-      "lifecycle_stage": "conceptual design and development",
-      "evidence_type": "conceptual rationale",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Reliability addressed conceptually; no reliability metric or anomaly data.",
-      "evidence_source": "Section 1/2 CubeSat Project-Third Phase and CubeSat Architecture Framework",
-      "direct_quote": "This top-down design approach gives the framework extensibility to build on enterprise concerns like cost and schedule. It also gives greater flexibility in the detailed design of the subsystems for the integrated behavioral type analysis shown in our top-down design approach and a bottom-up development process to address the reliability of CubeSats and stakeholder concerns.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "No reliability modeling, failure analysis, test result, or comparator is shown; reliability may depend on subsystem design/test outside the model."
-    },
-    {
-      "claim": "Integrated MBSE simulation enables requirements verification and trade studies before physical development.",
-      "outcome_category": "verification/trade-space analysis",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "SysML model integrated with analytic models",
-        "Cameo Simulation Toolkit",
-        "STK",
-        "MATLAB",
-        "ModelCenter",
-        "Executable mission scenarios"
-      ],
-      "artifact_or_process_linked": "Integrated RAX/CubeSat SysML model with activity/state and external analysis models.",
-      "lifecycle_stage": "conceptual and early design",
-      "evidence_type": "case demonstration with executed simulations/trade studies",
-      "metric_or_value_indicator": "Orbit latitude, ground network size/distribution, solar panel area, battery capacity, data storage/download, battery margin.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Enabled scenario-based verification and parameter trades; quantitative results are not provided in this paper.",
-      "evidence_source": "Section 4 Integrated Analysis Architecture and Section 6 Framework Management and Release",
-      "direct_quote": "This enabled requirements verification for mission scenarios and the ability to perform trades on parameters such as orbit latitude, ground network size and distribution, and solar panel and battery sizes.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The paper summarizes results without tables/metrics and relies on referenced prior work for detailed execution evidence."
-    },
-    {
-      "claim": "Power/EPS-related modeling supports analysis of on-board energy, battery sizing, solar panel sizing, and downlinked data.",
-      "outcome_category": "EPS/power-budget analysis",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "Power collection and management subsystem models",
-        "Energy-state trade studies",
-        "Integrated simulation",
-        "Parametric analysis"
-      ],
-      "artifact_or_process_linked": "Power modeling integrated with MagicDraw, ModelCenter, STK, and MATLAB; requirements for battery capacity and margin.",
-      "lifecycle_stage": "early design and mission analysis",
-      "evidence_type": "case demonstration summarized qualitatively",
-      "metric_or_value_indicator": "Solar panel area, battery capacity, on-board energy, available power, downlinked data.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Allowed investigation of power/data time histories and energy-state trades; no numeric results reported.",
-      "evidence_source": "Introduction CubeSat Project-Second Phase; Section 6 Framework Management and Release",
-      "direct_quote": "Power modeling was used to investigate the time history of on-board energy and data, and the quantity of downlinked data. The modeling incorporated MagicDraw, ModelCenter, Systems Tool Kit, and MATLAB.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Detailed power model equations, validation, and EPS hardware assumptions are not included in this paper."
-    },
-    {
-      "claim": "Enterprise cost modeling can provide continuously updated project cost estimates and cost/performance/schedule/risk trades.",
-      "outcome_category": "cost/ROI/decision support",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Parametric cost estimating relationships",
-        "A-PICOMO/CER approach",
-        "System parameters from enterprise model"
-      ],
-      "artifact_or_process_linked": "Cost model planned for integration with system model architecture; system features and test requirements as inputs.",
-      "lifecycle_stage": "conceptual design through lifecycle refinement",
-      "evidence_type": "planned/proposed integration with conceptual rationale",
-      "metric_or_value_indicator": "Total project cost, mission cost, space/ground/launch/operations costs, cost-performance-schedule-risk trades.",
-      "baseline_comparator": "Traditional large-satellite mass-based cost models are described as inaccurate for CubeSats, but no quantitative comparison is given.",
-      "observed_effect_size_or_qualitative_effect": "No observed effect; cost-model integration is described as planned and suitable for trade studies.",
-      "evidence_source": "Abstract and Section 3 Cost Modeling Analysis",
-      "direct_quote": "A cost model in the form of parametric, cost estimating relationships (CERs) is described here and is planned to be integrated with the system model architecture to provide an \"up to the minute\" total project cost estimate, with emphasis on assessment at the conceptual design phase.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Cost models depend on data quality, CubeSat labor accounting, standards, and COTS assumptions; integration is not shown as completed."
-    },
-    {
-      "claim": "SLIM/PLM integration improves lifecycle continuity by linking SysML architecture to BOMs and domain artifacts.",
-      "outcome_category": "toolchain continuity/integrability",
-      "specificity": "generic space-system",
-      "mbse_mechanism": [
-        "SLIM connections",
-        "SysML-to-PLM generation",
-        "PLM-to-SysML reuse",
-        "Versioned links",
-        "Bidirectional synchronization"
-      ],
-      "artifact_or_process_linked": "SysML block structures, Windchill part structures, Teamcenter/Windchill repositories, BOMs, CAD/CAE/Simulink/Mathematica artifacts.",
-      "lifecycle_stage": "design, manufacturing, and lifecycle management",
-      "evidence_type": "demonstrated use cases with screenshots; synchronization partly future",
-      "metric_or_value_indicator": "Generated Windchill part structure; reused payload part structure; sync capability described but not quantified.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Shows generation and reuse of structures; no measured continuity benefit.",
-      "evidence_source": "Section 5 Product Lifecycle Management",
-      "direct_quote": "In both the use cases, SLIM creates a connection between the SysML model elements and PLM elements which can be used for comparison and bi-directional synchronization.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Comparison/sync maturity is deferred to future work and tool-specific integration may not generalize without SLIM/PLM licenses."
-    },
-    {
-      "claim": "The framework accelerates CubeSat teams by providing out-of-the-box analysis and an entry point for new missions.",
-      "outcome_category": "schedule/efficiency/adoption",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Reusable framework",
-        "Standard subsystem library",
-        "RAX model/manual",
-        "Predefined analyses"
-      ],
-      "artifact_or_process_linked": "CubeSat architecture framework, RAX model, manual, trade-study packages.",
-      "lifecycle_stage": "conceptual design and early mission development",
-      "evidence_type": "author assertion plus planned/model availability",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Qualitative claim of quicker setup; no cycle-time metric.",
-      "evidence_source": "CubeSat Project-Third Phase and Conclusion",
-      "direct_quote": "the Challenge team aims to make it quicker to have out of the box analysis for CubeSats.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Actual speedup depends on model usability, tool access, training, and mission similarity; no user study reported."
-    },
-    {
-      "claim": "Model/manual release improves reproducibility and reuse for academic CubeSat teams.",
-      "outcome_category": "reproducibility/education/reuse",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Model availability",
-        "Manual with installation and execution sections",
-        "Community feedback loop"
-      ],
-      "artifact_or_process_linked": "RAX CubeSat model and manual.",
-      "lifecycle_stage": "adoption, education, and new mission concept development",
-      "evidence_type": "availability statement",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Provides an introduction and starting point; actual reuse evidence not reported.",
-      "evidence_source": "Section 6 Model Availability and Conclusion",
-      "direct_quote": "Our RAX CubeSat model and its manual are being made available to the academic community.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The paper does not provide a download link, license, adoption count, or independent replication result."
-    },
-    {
-      "claim": "The integrated CubeSat model brings spacecraft, ground, environment, target, control software, and subsystem interactions into one analysis context.",
-      "outcome_category": "system integration/consistency",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Integrated SysML model",
-        "ModelCenter/STK/MATLAB/Cameo integration",
-        "Shared system states and interactions"
-      ],
-      "artifact_or_process_linked": "Integrated CubeSat/RAX model with spacecraft states and subsystem functions.",
-      "lifecycle_stage": "analysis and design refinement",
-      "evidence_type": "case description",
-      "metric_or_value_indicator": "On-board energy, onboard data, downloaded data, subsystem interactions.",
-      "baseline_comparator": "Authors state it is the first known integration of this type; no formal baseline.",
-      "observed_effect_size_or_qualitative_effect": "Qualitative integration of multiple analysis domains; no measured integration defect reduction.",
-      "evidence_source": "Section 6 Framework Management and Release",
-      "direct_quote": "The model included the spacecraft, ground network, external environment, experimental target, and control software, as well as the interactions between these elements.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The claim is based on authors' demonstration and does not include independent validation or sustained operational evidence."
-    }
-  ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "Framework management and release are addressed through a CubeSat model/manual for academic users, community feedback solicitation, proprietary-free modeling interest, and SLIM/PLM versioned connections; formal governance roles, configuration-control process, and change board are not reported.",
-    "traceability_to_deliverables_decisions_reviews": "Requirements flow down to components/interfaces/tasks and mission CONOPS; analyses support trades, requirements verification, cost estimation, BOM/part structures, and model-to-PLM handoff; formal review-gate evidence is not reported.",
-    "evaluation_criteria_model_quality_usefulness": "Usefulness is framed through ability to execute trade studies, verify mission requirements, estimate cost/mass/power/telemetry budgets, support reuse, and provide a starting point for CubeSat teams; no formal model-quality metric is reported.",
-    "roi_value_realization_evidence": "ROI is mentioned as motivation based on other modeling projects and value is argued through reuse, trades, and cost estimates; no quantified ROI or value-realization measurement is provided for this framework.",
-    "programmatic_gates_critical_design_events_supported": "Conceptual design, pre-Phase A mission formulation, Team Xc feasibility assessments, point designs, trade-space exploration, and PLM/BOM handoff are supported conceptually; CDR/PDR/test readiness gates are not explicitly evidenced.",
-    "model_derived_performance_indicators_management_metrics": "Potential indicators include total project cost, system cost, mass budget, power budget, telemetry budget, battery capacity/margin, solar panel area, on-board energy, onboard/downlinked data, data rate, SNR, ground network size/distribution, orbit altitude/latitude, schedule, and risk."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper describes phases, artifacts, toolchain, use cases, and manual contents, but not a fully reproducible step-by-step playbook with complete configuration and acceptance criteria."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed with evidence",
-      "rationale": "It provides concrete toolchain architecture, integration examples, SLIM/PLM use cases, and screenshots for SysML-Windchill links, though mature sync is future work."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed conceptually",
-      "rationale": "The motivation and cost-model discussion are tailored to CubeSat constraints, COTS use, small teams, dynamic requirements, low power/mass/volume, and lack of standards, but no lightweight method evaluation is reported."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper discusses lifecycle management, model/manual release, PLM/BOM deliverables, cost estimates, and ROI motivation, but provides no quantified ROI or formal governance process."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "mentioned only",
-      "rationale": "Rapid out-of-the-box analysis, small teams, COTS, and community reuse are mentioned, but agile or distributed development practices are not analyzed."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "A general CubeSat mission can be modeled using a SysML architecture framework that starts with mission objectives/requirements and flows them to CONOPS, operating modes, components, interfaces, and tasks.",
-        "EPS is included at architecture/power-budget level through subsystem taxonomy, power collection/management models, solar panel area, battery capacity, and on-board energy state; detailed EPS behavior is not fully specified.",
-        "The framework handles limited early knowledge by using standard CubeSat building blocks, placeholders, and parametric/behavioral models added as the design matures."
-      ],
-      "RQ2": [
-        "Reliability is claimed as an objective of top-down/bottom-up architecture and budget-overhead modeling, but no reliability metric or validation is provided.",
-        "Reproducibility/reuse is supported by a common SysML framework, RAX model/manual availability, and academic-community release, but with no stable archive or reuse metrics in the paper.",
-        "Integrability is the strongest outcome: the paper demonstrates/claims integration of SysML with simulation, analysis, cost, and PLM/BOM artifacts using named tools and SLIM connections."
-      ],
-      "RQ3": [
-        "Verification is integrated before physical development through executable SysML-linked mission scenarios and trade studies that evaluate requirement satisfaction.",
-        "Power/EPS-adjacent verification includes battery capacity/margin and solar panel/battery sizing trades in the context of mission scenarios, but not detailed EPS hardware verification procedures.",
-        "Evidence is moderate for system-level simulation/trade verification and weak for EPS-specific procedural verification."
+      "field_path": "mbse_objective_scope_artifacts.modeling_scope",
+      "label": "enterprise-cer-a-picomo-cost-modeling-integrated-with-cube-sat-mbse",
+      "description": "The controlled vocabulary has 'other' for enterprise/business/cost-model scope and mechanism beyond generic parametrics.",
+      "rationale": "The controlled vocabulary has 'other' for enterprise/business/cost-model scope and mechanism beyond generic parametrics.",
+      "evidence_quote": "Section 3: 'A-PICOMO is a parametric cost model...'; Abstract: CERs planned to be integrated with the system model for an 'up to the minute' cost estimate.",
+      "confidence": "high",
+      "original_label": "Enterprise/CER/A-PICOMO cost modeling integrated with CubeSat MBSE",
+      "type": "method_mechanism",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.modeling_scope",
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism"
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Earlier behavior modeling lacked the ability to time-step through a behavioral scenario to determine requirement satisfaction across the entire scenario.",
-      "SLIM comparison and synchronization of SysML and PLM structures are maturing and planned for the next iteration.",
-      "Ground-system functional flow transformation into SysML is current work.",
-      "CubeSat cost estimation is challenged by COTS components, volunteer labor, dynamic requirements, lack of standards, and inability to use traditional mass-based cost databases.",
-      "Some launch and operations cost information is unknown, proprietary, or not defined."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "The paper is broad and enterprise-focused; EPS details are mostly power-budget and battery/solar sizing rather than detailed EPS architecture or verification.",
-      "Many outcomes are asserted or summarized without numeric results, baselines, effect sizes, or independent validation.",
-      "Detailed model files, equations, tool versions, integration scripts, and archive links are not included in the paper.",
-      "Several technical demonstrations are attributed to prior or future work, limiting standalone reproducibility from this paper alone.",
-      "No physical integration, environmental test, flight, or operational evidence is reported for the modeled EPS or system."
-    ],
-    "direct_evidence_quotes": [
+    {
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+      "label": "slim-systems-lifecycle-management-for-sys-ml-to-plm-synchronization",
+      "description": "SLIM is a named tool not enumerated in the controlled tool list and is central to the paper's interoperability claims.",
+      "rationale": "SLIM is a named tool not enumerated in the controlled tool list and is central to the paper's interoperability claims.",
+      "evidence_quote": "Section 5: 'This challenge is addressed by SLIM (Systems LIfecycle Management)...'; Section 5: 'SLIM manages these fine-grained connections to various versions of the models and can sync data or generate/sync complete model structures.'",
+      "confidence": "high",
+      "original_label": "SLIM Systems Lifecycle Management for SysML-to-PLM synchronization",
+      "type": "tool_interoperability",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+        "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms"
+      ]
+    },
+    {
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used",
+      "label": "plm-bom-part-structure-generated-from-sys-ml-block-structure",
+      "description": "Generated PLM part structures/BOMs are not directly represented by the controlled model-artifact labels; 'other' was coded.",
+      "rationale": "Generated PLM part structures/BOMs are not directly represented by the controlled model-artifact labels; 'other' was coded.",
+      "evidence_quote": "Figure 13: 'Part structure (BOM) generated in Windchill for the CubeSat block structure using SLIM'.; Section 5 Use Case 1: 'the block structure is used to generate a part structure in a PLM system Windchill'.",
+      "confidence": "high",
+      "original_label": "PLM/BOM part structure generated from SysML block structure",
+      "type": "artifact_mechanism",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.model_artifacts_used",
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism"
+      ]
+    },
+    {
+      "field_path": "mbse_objective_scope_artifacts.generality_reuse_mechanism",
+      "label": "cube-sat-systems-engineering-kit-analogous-to-hardware-cube-sat-kits",
+      "description": "The paper frames the framework as a reusable kit/manual for community adoption.",
+      "rationale": "The paper frames the framework as a reusable kit/manual for community adoption.",
+      "evidence_quote": "Introduction/third phase: 'The Challenge team hopes to bring together a Systems Engineering kit that is useful for the full lifecycle of a CubeSat mission.'; Abstract/Section 6 compares the modeling framework to 'current CubeSat Pumpkin Kits'.",
+      "confidence": "high",
+      "original_label": "CubeSat systems-engineering kit analogous to hardware CubeSat kits",
+      "type": "reuse_adoption_theme",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.generality_reuse_mechanism",
+        "implementation_pathway_tailoring.adoption_guidance"
+      ]
+    },
+    {
+      "field_path": "mbse_objective_scope_artifacts.modeling_scope",
+      "label": "ground-system-enterprise-modeling-extension",
+      "description": "Ground-system package/use-case expansion is a distinctive scope element not singled out in the controlled list.",
+      "rationale": "Ground-system package/use-case expansion is a distinctive scope element not singled out in the controlled list.",
+      "evidence_quote": "Section 2: 'Expanding the current CubeSat framework [4] to include a more complete Ground System (GS) model is an essential step...'",
+      "confidence": "high",
+      "original_label": "Ground-system enterprise modeling extension",
+      "type": "scope_theme",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.modeling_scope"
+      ]
+    },
+    {
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+      "label": "management-packaging-of-cots-modeling-simulation-plm-and-analysis-tools",
+      "description": "The paper explicitly discusses managing and packaging COTS tools/models/libraries, creating a reproducibility and dependency theme beyond controlled labels.",
+      "rationale": "The paper explicitly discusses managing and packaging COTS tools/models/libraries, creating a reproducibility and dependency theme beyond controlled labels.",
+      "evidence_quote": "Abstract: 'A design for managing and packaging the commercial off the shelf (COTS) tooling, models, and analysis libraries is discussed.'; Section 6 lists MagicDraw/Cameo, ModelCenter, Analysis Server, MBSE Analyzer, STK, and MATLAB.",
+      "confidence": "high",
+      "original_label": "Management/packaging of COTS modeling, simulation, PLM, and analysis tools",
+      "type": "toolchain_governance_theme",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+        "structured_limitations"
+      ]
+    },
+    {
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator",
+      "label": "mission-performance-indicators-data-downlink-snr-orbit-ground-network-parameters",
+      "description": "The controlled metric list does not include data volume, SNR, orbit latitude, or ground-station network metrics, so 'other' was coded.",
+      "rationale": "The controlled metric list does not include data volume, SNR, orbit latitude, or ground-station network metrics, so 'other' was coded.",
+      "evidence_quote": "Introduction: communication downlink trades used 'data download rate, available power, and signal to noise ratio'.; Section 4: trades on 'orbit latitude, ground network size and distribution'.",
+      "confidence": "high",
+      "original_label": "Mission-performance indicators: data downlink, SNR, orbit/ground-network parameters",
+      "type": "metric_indicator",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator"
+      ]
+    },
+    {
+      "field_path": "governance_roi_project_decision_linkage.model_governance_strategy",
+      "label": "community-feedback-loop-for-improving-cube-sat-model-framework",
+      "description": "The model release is intended to solicit improvements and build a larger user base; this is a governance/reuse mechanism outside the controlled model-governance labels.",
+      "rationale": "The model release is intended to solicit improvements and build a larger user base; this is a governance/reuse mechanism outside the controlled model-governance labels.",
+      "evidence_quote": "Model Availability: intent includes 'A mechanism for soliciting suggestions for improvements to the model'.; Conclusion: 'continue adding knowledge from the CubeSat community and build a larger user base that can provide feedback to the modeling approach.'",
+      "confidence": "high",
+      "original_label": "Community feedback loop for improving CubeSat model framework",
+      "type": "governance_adoption_theme",
+      "applies_to": [
+        "governance_roi_project_decision_linkage.model_governance_strategy",
+        "synthesis_consistency"
+      ]
+    }
+  ],
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0008",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0008.json",
+      "tier_status": "core",
+      "tier_status_rationale": "Retained as core because it directly presents MBSE/enterprise modeling for CubeSats with power/EPS-related analysis, requirements verification, cost modeling, PLM continuity, and reusable SysML framework concepts.",
+      "citation": "Anderson, L., Cole, B., Yntema, R., Bajaj, M., Spangelo, S. C., Kaslow, D., Lowe, C., Sudano, E. V., Boghosian, M., Reil, R., Asundi, S., & Friedenthal, S. A. (2014). Enterprise Modeling for CubeSats. 2014 IEEE Aerospace Conference.",
+      "title": "Enterprise modeling for CubeSats",
+      "authors": [
+        "L. Anderson",
+        "B. Cole",
+        "Rose Yntema",
+        "Manas Bajaj",
+        "Sara C. Spangelo",
+        "D. Kaslow",
+        "C. Lowe",
+        "Eric V. Sudano",
+        "M. Boghosian",
+        "R. Reil",
+        "S. Asundi",
+        "Sanford A. Friedenthal"
+      ],
+      "year": 2014,
+      "venue": "2014 IEEE Aerospace Conference",
+      "doi_or_url": "10.1109/aero.2014.6836343",
+      "publisher": "IEEE",
+      "venue_type": "conference paper",
+      "source_database_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q10_exact_enterprise_modeling_title.json",
+          "query": "TITLE-ABS-KEY(\"Enterprise modeling for CubeSats\")",
+          "rank": 1,
+          "paperId": "84903973780"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q13_enterprise_modeling_concept.json",
+          "query": "TITLE-ABS-KEY((cubesat OR CubeSat OR nanosatellite) AND (\"enterprise modeling\" OR \"enterprise model*\" OR \"enterprise architecture\") AND (\"model-based\" OR modeling OR architecture))",
+          "rank": 2,
+          "paperId": "84903973780"
+        },
+        {
+          "source": "google_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0008_google_scholar_title.json",
+          "query": "\"Enterprise modeling for CubeSats\"",
+          "rank": 1,
+          "paperId": "https://ieeexplore.ieee.org/abstract/document/6836343/",
+          "purpose": "abstract_enrichment"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0008_semantic_title.json",
+          "query": "\"Enterprise modeling for CubeSats\"",
+          "rank": 1,
+          "paperId": "e9605241e09df0c13e70dbb5e2ff95e342a1678f",
+          "purpose": "abstract_enrichment"
+        }
+      ],
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "high",
+          "rationale": "Directly describes a general/reusable SysML architecture framework and enterprise model for CubeSat missions, including requirements flow-down, subsystem libraries, CONOPS, behavior, analyses, PLM, and cost modeling; EPS/power is included at budget/architecture level."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "Claims reliability/reuse/reproducibility/integration benefits and includes power/battery trade-study evidence, but outcomes are mostly system-level and not EPS-specific or quantitatively validated."
+        },
+        "RQ3": {
+          "relevance": "partial",
+          "rationale": "Reports simulation-based mission-scenario requirements verification with solar-panel/battery parameters before hardware, but does not present EPS-specific verification procedures, test cases, or matrices."
+        }
+      },
+      "lineage_overlap_notes": "Part of the INCOSE Space Systems Working Group CubeSat MBSE Challenge/RAX lineage. Builds on Spangelo et al. 2012 standard CubeSat MBSE framework, Spangelo et al. 2013 RAX operational scenarios, and 2014 integrated MBSE simulation work; potential overlap with other papers using the same RAX CubeSat reference model/toolchain.",
+      "metadata_from_prompt": {
+        "corpus_id": "paper-0008",
+        "screening_tier": "core",
+        "markdown_path": "markdown/paper-0008_2014_enterprise-modeling-for-cubesats.md",
+        "doi": "10.1109/aero.2014.6836343"
+      }
+    },
+    "study_context_population": {
+      "mission_platform": {
+        "class": "CubeSat/picosatellite/nanosatellite-class spacecraft",
+        "form_factor": "RAX is reported as a three Unit (3U) CubeSat; the paper defines CubeSats as standardized cubes 10 cm on a side and typically one to three cubes.",
+        "mission_name": "Radio Aurora Explorer (RAX) as primary reference case; SwampSat CONOPS appears as an illustrative operational-flow figure.",
+        "mission_domain": "RAX studies magnetic field-aligned plasma irregularities using radar signal reception/processing/downlink; the framework is generic for CubeSat missions.",
+        "organization_type": [
+          "INCOSE SSWG Challenge team",
+          "university",
+          "agency",
+          "industry/tool vendors"
+        ],
+        "project_maturity": "Framework previously developed/applied to RAX; this paper expands enterprise/cost/PLM management and release concepts."
+      },
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation",
+        "integration and test",
+        "operations"
+      ],
+      "development_context": [
+        "academic/student",
+        "agency",
+        "industry/NewSpace",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "power-budget/electrical-architecture",
+      "model_maturity": [
+        "conceptual framework",
+        "reference model/template",
+        "prototype demonstration",
+        "executable model",
+        "project-applied model"
+      ],
+      "context_quotes": [
+        "'RAX is a three Unit (3U) CubeSat developed by the University of Michigan Exploration Lab (MXL) and SRI International.'",
+        "'CubeSat missions ... typically deal with low costs, limited resources, low mass, low volume, and low power.'",
+        "'The model included the spacecraft, ground network, external environment, experimental target, and control software...'"
+      ]
+    },
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": [
+        "Incorporate enterprise concerns (cost, business processes, workforce/hardware/production, requirements, stakeholders) into CubeSat systems engineering.",
+        "Provide a reusable SysML CubeSat framework/library and systems-engineering kit for rapid CubeSat analysis and full-lifecycle development.",
+        "Integrate analytic/simulation/cost/PLM tools so CubeSat teams can perform trades, verify requirements, and connect system architecture to detailed product information."
+      ],
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "operations",
+        "simulation",
+        "manufacturing/test",
+        "other: enterprise/cost/PLM management"
+      ],
+      "system_boundary_and_abstraction": "The system model includes spacecraft, ground network, external environment, experimental target, control software, and interactions. It represents logical/physical architecture, subsystems, components, interfaces, tasks, operating modes, states, and selected parametric analyses. Detailed CAD/CAE/product structures are linked through PLM rather than fully modeled inside SysML.",
+      "minimal_behavioral_or_domain_knowledge_handling": "The paper does not explicitly present a minimal-behavioral-knowledge method. It reduces startup burden through a reusable framework/library of common CubeSat elements and a requirements/CONOPS-driven decomposition; behavior is added via RAX operational scenarios, state/activity models, and integrated analysis tools once mission parameters are available.",
+      "model_artifacts_used": [
+        "requirements flow-down and requirements packages",
+        "SysML block definition/package diagrams for flight and ground systems",
+        "logical and physical architecture models",
+        "activity/state behavior models and operational CONOPS flowcharts",
+        "parametric relations/ParaMagic solver/CERs",
+        "trade-study models for communication, power, mission activities, data collection, and energy state",
+        "interfaces/components/tasks and operating modes",
+        "power, mass, telemetry, and cost budgets/overhead estimates",
+        "executable simulations using Cameo Simulation Toolkit and analysis tools",
+        "PLM/BOM part structures generated/synchronized with SysML",
+        "model manual and release package"
+      ],
+      "generality_reuse_mechanism": [
+        "template",
+        "reference model",
+        "library",
+        "reusable workflow",
+        "open package",
+        "method guidance"
+      ],
+      "evidence_quotes": [
+        "'The framework developed is a SysML representation of common CubeSat elements that can be used as a library to build a domain-specific CubeSat.'",
+        "'The model gives a CubeSat Engineering team an entry point to any mission.'",
+        "'Each mission and its relevant set of system information adapts the architecture framework and then is capable of performing sophisticated analysis in the early phases...'"
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "reported_steps_or_phases": [
+        {
+          "step": 1,
+          "name": "Mission definition and requirements/CONOPS capture",
+          "inputs": [
+            "mission objectives",
+            "primary/secondary mission objectives",
+            "external drivers such as cost, schedule, SWaP constraints, lessons learned"
+          ],
+          "outputs": [
+            "mission CONOPS",
+            "mission requirements",
+            "system functional/performance requirements"
+          ],
+          "actors_roles": [
+            "systems engineers",
+            "mission stakeholders"
+          ],
+          "evidence": "Figure 2 requirements flow-down; Section 2 describes Mission CONOPS as critical for organizing operations."
+        },
+        {
+          "step": 2,
+          "name": "Flow requirements through CubeSat subsystem block",
+          "inputs": [
+            "mission/system requirements"
+          ],
+          "outputs": [
+            "components",
+            "interfaces",
+            "tasks",
+            "operating modes",
+            "allocated/derived requirements"
+          ],
+          "actors_roles": [
+            "systems engineers",
+            "subsystem engineers"
+          ],
+          "evidence": "Section 2: system requirements flowed through subsystem block are broken down into components, interfaces, and tasks."
+        },
+        {
+          "step": 3,
+          "name": "Instantiate logical/physical flight and ground architectures",
+          "inputs": [
+            "framework/library elements",
+            "RAX or mission-specific parameters"
+          ],
+          "outputs": [
+            "logical/physical architecture",
+            "ground-system packages",
+            "use cases"
+          ],
+          "actors_roles": [
+            "systems engineers",
+            "ground-system engineers"
+          ],
+          "evidence": "First phase defined logical and physical architecture of flight and ground systems; Section 2 expands ground system packages."
+        },
+        {
+          "step": 4,
+          "name": "Add behavior and parametrics; integrate analysis tools",
+          "inputs": [
+            "operational scenarios",
+            "subsystem functions/states",
+            "parameters",
+            "analytic models"
+          ],
+          "outputs": [
+            "executable behavior models",
+            "parametric/trade models",
+            "mission simulation scenarios"
+          ],
+          "actors_roles": [
+            "MBSE modelers",
+            "analysis engineers"
+          ],
+          "evidence": "Second phase integrated MagicDraw/Cameo, ModelCenter, ParaMagic, STK, and MATLAB; Section 4 integrates STK/MATLAB/Java into SysML."
+        },
+        {
+          "step": 5,
+          "name": "Run trade studies and requirements verification",
+          "inputs": [
+            "requirements",
+            "mission scenarios",
+            "solar panel area",
+            "battery capacity",
+            "orbit/ground network parameters"
+          ],
+          "outputs": [
+            "mission performance evaluations",
+            "requirements-satisfaction checks",
+            "trade-study insight"
+          ],
+          "actors_roles": [
+            "systems engineers",
+            "analysis engineers",
+            "decision makers"
+          ],
+          "evidence": "Section 6: integrated model enabled trade studies and verification that mission requirements would be satisfied."
+        },
+        {
+          "step": 6,
+          "name": "Connect system architecture to PLM/BOM and reuse existing parts",
+          "inputs": [
+            "SysML block structures",
+            "PLM part structures",
+            "previous-mission payload structures"
+          ],
+          "outputs": [
+            "Windchill/Teamcenter part structures",
+            "SysML block structures generated from PLM",
+            "saved connections for synchronization"
+          ],
+          "actors_roles": [
+            "systems engineer",
+            "mechanical/electrical designers",
+            "project team"
+          ],
+          "evidence": "Section 5 Use Cases 1 and 2."
+        },
+        {
+          "step": 7,
+          "name": "Manage, package, release, and improve framework",
+          "inputs": [
+            "RAX model",
+            "manual",
+            "community feedback",
+            "tool installation/execution instructions"
+          ],
+          "outputs": [
+            "available architecture framework model",
+            "manual",
+            "feedback mechanism"
+          ],
+          "actors_roles": [
+            "CubeSat Challenge team",
+            "academic/CubeSat community"
+          ],
+          "evidence": "Model Availability and conclusion sections."
+        }
+      ],
+      "mapping_to_systems_engineering_lifecycle_gates": "Explicit PDR/CDR gates are not reported. The paper maps activities to conceptual design/early phases, design maturation, manufacturing/implementation through PLM/BOM, and operations/CONOPS. Cost model supports early-phase concept decisions and throughout-lifecycle refinement.",
+      "approach_classification": "Integrated MBSE/digital engineering",
+      "tailoring_rationale": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "available tools",
+        "open-source preference",
+        "organizational constraints"
+      ],
+      "adoption_guidance": "partial guidance",
+      "adoption_guidance_notes": "The paper gives a method narrative, framework/library concept, model/manual contents, and two detailed SLIM use cases, but does not provide a full step-by-step adopter playbook with completion criteria."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML",
+        "UML",
+        "MagicDraw",
+        "Cameo Systems Modeler",
+        "Cameo Simulation Toolkit",
+        "ModelCenter",
+        "Analysis Server",
+        "MBSE Analyzer",
+        "ParaMagic",
+        "STK",
+        "MATLAB",
+        "Java",
+        "SLIM",
+        "Windchill",
+        "Teamcenter",
+        "MySQL",
+        "A-PICOMO/CER cost modeling",
+        "PLM/ALM tools"
+      ],
+      "toolchain_architecture_and_data_flow": "SysML is the high-level system model in MagicDraw/Cameo. Behavioral models and mission scenarios are executed by Cameo Simulation Toolkit while analytical models in STK, MATLAB, Java/ModelCenter/ParaMagic support communication, power, mission activity, and cost/parametric trades. SLIM connects SysML elements to PLM artifacts in Windchill/Teamcenter, generates PLM part structures from SysML and SysML block structures from PLM payload parts, saves connections, manages versions, and is intended to synchronize requirements/parts/MySQL data across repositories.",
+      "interoperability_mechanisms": [
+        "model transformation",
+        "co-simulation",
+        "SLIM saved connections",
+        "bi-directional synchronization",
+        "generate/sync structures",
+        "function wrap/data map/reference connection types"
+      ],
+      "syntax_semantic_lifecycle_continuity": "The paper's continuity mechanism is a 'unique model' or blueprint linking systems-level SysML to domain-specific PLM/BOM/CAD/CAE/analysis artifacts and versions across formulation, design, manufacturing, and operations.",
+      "software_hardware_system_integration_readiness": "SysML-generated Windchill BOMs provide a starting point for mechanical/electrical designers and part decomposition; no hardware integration/test readiness evidence is reported.",
+      "toolchain_limitations": [
+        "missing interfaces",
+        "maturing compare/synchronization capabilities",
+        "COTS/proprietary tool dependencies",
+        "repository connection future work"
+      ],
+      "availability_reproducibility": {
+        "models_or_data_available": "RAX CubeSat model and manual are reported as being made available to the academic community; conclusion says framework model and tool instructions are available to the CubeSat community.",
+        "repository_or_license_reported": "not reported",
+        "manual_contents_reported": [
+          "role of SysML diagrams",
+          "RAX trade studies",
+          "software installation",
+          "evaluating/executing behavioral models",
+          "modifying the SysML model"
+        ],
+        "reproducibility_assessment": "partial; named COTS toolchain and manual sections support assessment, but complete model package, versions, licenses, and access URL are not in the paper."
+      }
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "modes",
+        "margins",
+        "power budgets",
+        "interfaces",
+        "other: on-board energy state"
+      ],
+      "eps_requirements_represented": "The paper reports requirements for battery capacity and margin alongside data collection, storage, and download. Power collection and management subsystems are modeled to demonstrate interdependencies among requirements. The architecture includes EPS generation/storage/distribution and power overhead per component/interface/task.",
+      "requirements_linkage": "Power/data requirements are linked to mission scenarios and trade studies in the integrated model; detailed requirement IDs/tables/matrices are not shown.",
+      "verification_validation_artifacts": [
+        "simulation scenarios",
+        "executable checks"
+      ],
+      "pre_physical_development_verification_mechanism": [
+        "requirements-in-the-loop",
+        "simulation-in-the-loop",
+        "parametric checks",
+        "trade-study verification",
+        "virtual integration"
+      ],
+      "evidence_integrated_into_model": "The verification mechanism is integrated into the system-level SysML/analysis model rather than described as a separate test procedure: Cameo executes mission scenarios with analysis models, enabling requirements verification and trades on solar panel/battery sizes.",
+      "integration_test_readiness": "not reported",
+      "eps_scope_caution": "EPS is covered as a power-budget/electrical-architecture aspect within a system-level CubeSat enterprise model, not as a dedicated EPS MBSE verification-method paper."
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "CubeSat/RAX context",
-        "quote": "RAX is a three Unit (3U) CubeSat developed by the University of Michigan Exploration Lab (MXL) and SRI International.",
-        "location": "Introduction, Radio Aurora Explorer"
+        "claim_id": "C1",
+        "claim_text_or_paraphrase": "Integrating enterprise/cost concerns into the CubeSat SysML framework is intended to provide an up-to-date mission cost estimate and enable cost/performance/schedule/risk trades from conceptual design through the lifecycle.",
+        "outcome_category": [
+          "decision support",
+          "governance/ROI",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "parametric analysis",
+          "requirements linkage",
+          "other"
+        ],
+        "linked_artifact_or_process": "Parametric cost estimating relationships (CERs/A-PICOMO) using enterprise-model parameters, requirements, system features, and test requirements.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "implementation",
+          "operations"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "cost",
+          "schedule",
+          "other"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Planned/argued ability to refine cost estimates and support trades; no quantitative outcome or completed cost-model integration result is reported.",
+        "quote_or_location": "Abstract: 'A cost model in the form of parametric, cost estimating relationships (CERs) is described here and is planned to be integrated with the system model architecture to provide an \"up to the minute\" total project cost estimate, with emphasis on assessment at the conceptual design phase.' Section 3: 'it is critical to have cost estimation capabilities throughout the mission lifecycle allowing trades to be conducted between cost, system performance, schedule and risk.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": [
+          "The integration is described partly as planned, not as a completed evaluated capability.",
+          "No numeric cost-estimation accuracy, saved cost, or baseline comparison is reported."
+        ]
       },
       {
-        "topic": "MBSE lifecycle scope",
-        "quote": "MBSE is the formalized application of modeling to support system requirements, design analysis, optimization, verification, and validation. It begins in the conceptual design phase, continuing throughout development and into later life cycle phases including operations.",
-        "location": "Introduction, Overview"
+        "claim_id": "C2",
+        "claim_text_or_paraphrase": "The CubeSat architecture framework provides traceability from mission objectives and mission requirements to system components, interfaces, tasks, and operating modes.",
+        "outcome_category": [
+          "traceability",
+          "completeness",
+          "communication/stakeholder alignment"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage",
+          "reference model reuse"
+        ],
+        "linked_artifact_or_process": "Requirements flow-down, subsystem block, Mission CONOPS, components/interfaces/tasks grouping.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "trace links",
+          "requirement coverage"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "The paper shows/argues the traceability map but does not quantify link coverage or defect reduction.",
+        "quote_or_location": "Section 2: 'A CubeSat architecture framework ... can provide a traceability map for translating the mission objectives and mission requirements into basic building blocks of CubeSat system components, interfaces and tasks.' Section 2: 'The system requirements when flowed through this block get broken down into components, interfaces, and tasks as basic building blocks.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": [
+          "Traceability is illustrated rather than measured; completeness of links is not reported.",
+          "Detailed requirements tables/matrices are not reproduced in the paper."
+        ]
       },
       {
-        "topic": "Framework traceability",
-        "quote": "A CubeSat architecture framework [10], such as the one shown in Figure 9, can provide a traceability map for translating the mission objectives and mission requirements into basic building blocks of CubeSat system components, interfaces and tasks.",
-        "location": "Section 2, CubeSat Architecture Framework"
+        "claim_id": "C3",
+        "claim_text_or_paraphrase": "An integrated SysML, analysis, and simulation toolchain enabled end-to-end mission-scenario simulation, trade studies, and requirements verification involving power/data interdependencies and battery/solar-panel parameters.",
+        "outcome_category": [
+          "decision support",
+          "reliability",
+          "integrability/interoperability",
+          "consistency",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "tool integration",
+          "requirements linkage"
+        ],
+        "linked_artifact_or_process": "RAX CubeSat integrated model using MagicDraw/Cameo Simulation Toolkit, ModelCenter, STK, MATLAB, and related analyses.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "operations"
+        ],
+        "evidence_type": [
+          "Executable model or simulation result",
+          "Trade-study or requirements-checking result",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "power margin",
+          "requirement coverage",
+          "other"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Qualitatively enabled mission performance evaluation, requirements verification, and trades over orbit latitude, ground network size/distribution, solar panel area, and battery capacity; no numerical results are provided in this paper.",
+        "quote_or_location": "Section 4: 'This was executed by the Cameo Simulation Toolkit ... which enabled end-to-end simulation of realistic mission scenarios. This enabled requirements verification for mission scenarios and the ability to perform trades on parameters such as orbit latitude, ground network size and distribution, and solar panel and battery sizes.' Section 6: 'The integrated model enabled the execution of trade studies to evaluate mission performance and verify that mission requirements would be satisfied.'",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": [
+          "The paper reports capability and varied parameters but not the actual simulation outputs or requirements pass/fail tables.",
+          "No independent validation against hardware, operations, or a non-MBSE process is reported."
+        ]
       },
       {
-        "topic": "EPS subsystem taxonomy",
-        "quote": "The EPS branch is divided into Generation (leading to Solar Cells, which branch into Body Mounted and Deployables, and Fuel Cells), Storage (leading to Batteries and Super Capacitors), and Distribution.",
-        "location": "Figure 3 description"
+        "claim_id": "C4",
+        "claim_text_or_paraphrase": "The CubeSat SysML framework/model and manual provide a reusable starting point and learning resource for other CubeSat teams.",
+        "outcome_category": [
+          "generality/reuse",
+          "reproducibility",
+          "effort reduction",
+          "schedule reduction"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "shared repository",
+          "other"
+        ],
+        "linked_artifact_or_process": "RAX CubeSat model, manual, reusable SysML representation of common CubeSat elements, instructions for analysis tools.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse",
+          "time",
+          "effort"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Model and manual are reported as available/being made available; no external reuse case, access URL, or adoption metric is reported.",
+        "quote_or_location": "Abstract: 'The framework developed is a SysML representation of common CubeSat elements that can be used as a library to build a domain-specific CubeSat.' Model Availability: 'Our RAX CubeSat model and its manual are being made available to the academic community' and intent includes 'A starting point for a CubeSat team to develop their own model.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": [
+          "Availability appears community-scoped; a persistent repository or license is not provided in the paper.",
+          "Reuse value is claimed but not measured across independent projects."
+        ]
       },
       {
-        "topic": "Power modeling",
-        "quote": "Power modeling was used to investigate the time history of on-board energy and data, and the quantity of downlinked data. The modeling incorporated MagicDraw, ModelCenter, Systems Tool Kit, and MATLAB.",
-        "location": "Introduction, CubeSat Project-Second Phase"
+        "claim_id": "C5",
+        "claim_text_or_paraphrase": "SLIM links SysML blocks to PLM parts/BOMs, enabling generation/synchronization of part structures and continuity from systems architecture to mechanical/electrical design.",
+        "outcome_category": [
+          "integrability/interoperability",
+          "automation",
+          "traceability",
+          "lifecycle continuity",
+          "consistency"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "model transformation",
+          "automated generation",
+          "tool integration",
+          "artifact traceability"
+        ],
+        "linked_artifact_or_process": "SLIM use cases connecting SysML model elements with Windchill/Teamcenter PLM elements; generated Windchill BOM/part structure.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "implementation"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "trace links",
+          "other"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Demonstrates generation of a Windchill part structure from a SysML block structure and saved connections for synchronization; compare/sync maturity is future work.",
+        "quote_or_location": "Section 5: 'SLIM enables systems engineers to develop a high-level system model in SysML and connect it to domain-specific models, such as Bills of Materials (BOMs) and Computer Aided Design (CAD)... managed in various enterprise product lifecycle management systems.' Section 5 Use Case 1: 'the block structure is used to generate a part structure in a PLM system Windchill ... Connections are saved between the corresponding parts and blocks so that changes on either side can be synchronized as desired.'",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": [
+          "Demonstration screenshots/use cases do not quantify synchronization accuracy or downstream design effectiveness.",
+          "The paper states comparison/synchronization capabilities are still maturing."
+        ]
       },
       {
-        "topic": "Pre-physical verification",
-        "quote": "This enabled requirements verification for mission scenarios and the ability to perform trades on parameters such as orbit latitude, ground network size and distribution, and solar panel and battery sizes.",
-        "location": "Section 4, Integrated Analysis Architecture"
+        "claim_id": "C6",
+        "claim_text_or_paraphrase": "A payload part structure from a previous mission can be reused from PLM to generate a SysML block structure for a new CubeSat design, replacing placeholders and supporting mass/cost calculations.",
+        "outcome_category": [
+          "generality/reuse",
+          "automation",
+          "consistency",
+          "decision support"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "model transformation",
+          "reference model reuse",
+          "tool integration"
+        ],
+        "linked_artifact_or_process": "SLIM Use Case 2; Windchill/Teamcenter payload part structure transformed into SysML block structure.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse",
+          "cost",
+          "other"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Illustrated reuse of previous mission payload structure in a new CubeSat context; the previous mission is a source of reused structure rather than an evaluated comparator, and no reuse effort or error reduction metric is reported.",
+        "quote_or_location": "Section 5 Use Case 2: 'The payload for the mission may be reused from a previous mission enterprise that exists in a PLM system ... Generate a SysML block structure from the payload model in Windchill and use it in the context of a new CubeSat design.' Section 5: 'This may be a preliminary design, perhaps submitted for purposes of mass and/or cost calculation.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": [
+          "The wording 'may be reused' indicates a use-case scenario rather than validated repeat adoption.",
+          "No evidence is provided that reuse preserved semantics or reduced effort."
+        ]
       },
       {
-        "topic": "Power requirement/trade evidence",
-        "quote": "Requirements were defined for data collection, storage, download and for battery capacity and margin.",
-        "location": "Section 6, Framework Management and Release"
+        "claim_id": "C7",
+        "claim_text_or_paraphrase": "MBSE/SysML and a top-down framework improve team communication and integration of components, interfaces, processes, and tasks into early CONOPS and design choices.",
+        "outcome_category": [
+          "communication/stakeholder alignment",
+          "integrability/interoperability",
+          "decision support"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage",
+          "shared repository",
+          "tool integration"
+        ],
+        "linked_artifact_or_process": "SysML framework, top-down approach, components/interfaces/processes/tasks feeding Mission Operations Concept.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Communication and integration benefits are asserted/argued; no stakeholder assessment or team metric is reported.",
+        "quote_or_location": "Introduction: 'MBSE and the use of standard languages such as Systems Modeling Language (SysML) and Unified Modeling Language (UML) allow for stronger more integrated communication between engineering teams.' Conclusion: 'an engineering team can more effectively communicate and integrate the system such as the component, interfaces, processes and tasks.'",
+        "evidence_confidence_rating": "Unsupported",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": [
+          "Benefit may follow from general systems-engineering discipline rather than the specific MBSE artifacts in this paper.",
+          "No stakeholder/user evaluation is reported."
+        ]
       },
       {
-        "topic": "Power trade variables",
-        "quote": "Energy state trade studies varied the solar panel area and battery capacity. Data collection trade studies varied the orbital altitude and ground station network.",
-        "location": "Section 6, Framework Management and Release"
+        "claim_id": "C8",
+        "claim_text_or_paraphrase": "The modeling framework should lead to more robust and reusable CubeSat designs and address reliability/stakeholder concerns by combining top-down architecture with bottom-up component/interface/task overhead estimation.",
+        "outcome_category": [
+          "reliability",
+          "generality/reuse",
+          "risk reduction"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "parametric analysis",
+          "artifact traceability"
+        ],
+        "linked_artifact_or_process": "CubeSat architecture framework, overhead estimation model, component/interface/task decomposition.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "power margin",
+          "cost",
+          "other"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Robustness/reliability is an intended design benefit; the paper does not report reliability analysis, failure-rate improvement, or flight evidence.",
+        "quote_or_location": "Abstract/Section 6: 'a modeling framework that allows for analyzing and costing the technical design of the spacecraft throughout the lifecycle of the mission will allow for more robust and reusable designs.' Introduction/third phase: 'a bottom-up development process to address the reliability of CubeSats and stakeholder concerns.'",
+        "evidence_confidence_rating": "Unsupported",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": [
+          "Reliability is not measured; design robustness may depend on engineering quality, component choices, and testing rather than MBSE alone.",
+          "EPS-specific reliability outcomes are not separated from system-level claims."
+        ]
       },
       {
-        "topic": "PLM continuity",
-        "quote": "SLIM manages these fine-grained connections to various versions of the models and can sync data or generate/sync complete model structures.",
-        "location": "Section 5, Product Lifecycle Management"
-      },
-      {
-        "topic": "Model availability",
-        "quote": "Our RAX CubeSat model and its manual are being made available to the academic community.",
-        "location": "Section 6, Model Availability"
+        "claim_id": "C9",
+        "claim_text_or_paraphrase": "The work is claimed to be the first known integration of a space-system SysML model with analytical models, simulation engines, and a special-purpose high-fidelity space-system model.",
+        "outcome_category": [
+          "integrability/interoperability",
+          "lifecycle continuity",
+          "automation"
+        ],
+        "specificity_of_claim": "generic space-system",
+        "mbse_mechanism": [
+          "tool integration",
+          "executable simulation",
+          "model transformation"
+        ],
+        "linked_artifact_or_process": "Integrated RAX/CubeSat model and analysis architecture.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "operations"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect": "Novel integration is asserted based on the authors' knowledge; no systematic comparison to other toolchains is provided.",
+        "quote_or_location": "Section 6: 'To the best of our knowledge this is the first known integration of a space system SysML model with a set of analytical models, simulation engines, and special purpose high fidelity space system model.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": [
+          "The novelty claim is not independently established and is partly a self-assessment.",
+          "The cited prior papers may contain the detailed demonstration rather than this paper."
+        ]
       }
     ],
-    "notes_for_consistency_with_lineage": "Classify this study as a broad enterprise-modeling and lifecycle-continuity CubeSat MBSE paper. Do not over-code it as an EPS-specific detailed design paper; EPS evidence is mainly power-budget, battery/solar sizing, and system-level requirement verification. It overlaps with earlier RAX/INCOSE MBSE papers but adds cost modeling, PLM, framework management, and release concerns.",
-    "extraction_confidence": "medium",
-    "extraction_confidence_reason": "Full text was available and the paper directly describes the framework and toolchain, but many claims are qualitative, some implementation details are delegated to prior/future work, and EPS-specific evidence is limited."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": {
+        "reported": [
+          "configuration/change control through SLIM versioned connections and sync",
+          "community release/feedback mechanism"
+        ],
+        "not_reported": [
+          "formal model owner",
+          "review board/process",
+          "model quality criteria",
+          "naming/versioning conventions beyond version management"
+        ]
+      },
+      "traceability_to_project_deliverables_or_decisions": [
+        "Requirements flow-down to components/interfaces/tasks and operating modes.",
+        "Requirements verification and trade studies used to evaluate mission performance.",
+        "SysML block structures generate Windchill BOM/part structures for mechanical/electrical designers.",
+        "Cost model/CER parameters support strategic planning, investment decisions, budget planning, and risk management."
+      ],
+      "evaluation_criteria_for_model_usefulness": [
+        "mission performance",
+        "requirements satisfaction",
+        "cost",
+        "schedule",
+        "risk",
+        "battery capacity/margin",
+        "data collection/storage/download",
+        "SNR",
+        "model reuse/community feedback"
+      ],
+      "roi_value_realization_evidence": "not reported; ROI is mentioned from other modeling projects and as a motivation, not measured for this CubeSat framework.",
+      "programmatic_gates_or_design_events_supported": [
+        "conceptual design/early-phase feasibility",
+        "design maturation",
+        "mechanical/electrical detailed design handoff through PLM/BOM",
+        "operations/CONOPS planning"
+      ],
+      "model_derived_performance_indicators_or_management_metrics": [
+        "cost estimate",
+        "system performance",
+        "schedule",
+        "risk",
+        "mass/power/telemetry overhead",
+        "battery margin",
+        "data downlink/storage",
+        "ground network/orbit parameters"
+      ],
+      "quotes": [
+        "'A key MBSE challenge is to develop and maintain a unique model of the system, from the earliest stages of system development. This model can then continuously evolve through the lifecycle...'",
+        "'The other members of the project team can then use the Windchill BOM structure ... as a starting point for the decomposition and design of the parts.'"
+      ]
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "rating": "addressed with evidence",
+        "rationale": "Framework steps and use cases are described and tied to RAX/model demonstrations and manual availability."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "rating": "addressed with evidence",
+        "rationale": "Multi-tool analysis integration and SLIM SysML-PLM generation/synchronization are core contributions, though complete synchronization is future work."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "rating": "addressed with evidence",
+        "rationale": "Tailoring is explicitly motivated by CubeSat low cost, low mass/volume/power, COTS usage, and small/student teams; RAX 3U CubeSat context is provided."
+      },
+      "governance_project_deliverables_roi": {
+        "rating": "addressed with evidence",
+        "rationale": "The paper connects models to BOM/PLM deliverables, versioned connections, cost/trade decision support, and lifecycle management, but not quantified ROI."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "rating": "addressed conceptually",
+        "rationale": "Rapid development/out-of-box analysis and concurrent design are discussed, but no agile/NewSpace process case or metric is evaluated."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": [
+          "A reusable SysML CubeSat architecture framework can represent mission definition, requirements flow-down, logical/physical flight and ground systems, subsystems, components, interfaces, tasks, operating modes, CONOPS, and enterprise concerns.",
+          "The framework functions as a CubeSat systems-engineering kit/library and model/manual starting point, but it does not explicitly solve modeling with minimal behavioral knowledge beyond reuse of common elements and CONOPS-driven decomposition."
+        ],
+        "RQ2": [
+          "Claimed outcomes include traceability, reuse/reproducibility, communication, lifecycle continuity, automation, decision support, and some reliability/robustness/risk-reduction expectations.",
+          "Power/EPS-related evidence consists of system-level power collection/management, battery margin, solar-panel/battery trade studies, and power budgets; outcomes are not EPS-specific and lack quantitative reliability/reproducibility/integration metrics."
+        ],
+        "RQ3": [
+          "The paper reports pre-physical simulation-in-the-loop/requirements-in-the-loop verification for mission scenarios, including solar-panel/battery parameters and battery-capacity/margin requirements.",
+          "It does not present formal EPS verification procedures, test cases, verification matrices, SIL/HIL/flat-sat links, or physical test/flight validation."
+        ]
+      },
+      "author_stated_limitations_or_future_work": [
+        "Earlier phase lacked time-stepping through behavioral scenarios to determine requirement satisfaction across entire scenarios.",
+        "Ground-system functional-flow transformation into SysML is current/future work.",
+        "SLIM compare/synchronize capabilities and cross-repository connections are maturing and planned for next iteration.",
+        "CubeSat cost estimation is challenged by unpaid/volunteer labor, dynamic requirements/architecture, lack of standards, small-mass database issues, and proprietary/unknown launch costs."
+      ],
+      "extractor_identified_limitations_or_gaps": [
+        "No quantitative baseline/comparator for claimed MBSE value.",
+        "No independent validation, stakeholder/user evaluation, physical integration/test, or flight evidence for MBSE outcomes.",
+        "EPS coverage is power-budget/electrical-architecture within a system-level model, not a dedicated EPS MBSE study.",
+        "Reproducibility is partial because no repository URL/license/complete model configuration is provided and the workflow depends on multiple COTS tools.",
+        "Potential lineage overlap with prior RAX/CubeSat MBSE Challenge papers."
+      ],
+      "direct_evidence_quotes_supporting_classification": [
+        "'The framework developed is a SysML representation of common CubeSat elements that can be used as a library to build a domain-specific CubeSat.'",
+        "'A CubeSat architecture framework ... can provide a traceability map for translating the mission objectives and mission requirements into basic building blocks...'",
+        "'This enabled requirements verification for mission scenarios and the ability to perform trades on parameters such as orbit latitude, ground network size and distribution, and solar panel and battery sizes.'",
+        "'The integrated model enabled the execution of trade studies to evaluate mission performance and verify that mission requirements would be satisfied.'",
+        "'Our RAX CubeSat model and its manual are being made available to the academic community.'",
+        "'Capabilities to compare and synchronize the structures ... using SLIM are maturing now and will be demonstrated in the next iteration of this work.'"
+      ],
+      "lineage_notes": "Same RAX/CubeSat framework lineage as papers cited as [4] 2012 standard CubeSat MBSE, [5] 2013 RAX operational scenarios, and [6] 2014 integrated MBSE simulation; extraction should avoid double-counting outcome evidence across lineage papers.",
+      "extraction_confidence": "high",
+      "confidence_rationale": "The paper is detailed and the markdown is readable; direct quotes support most codes. Remaining uncertainty is limited to exact implementation maturity and whether some use cases are fully executed versus planned."
+    }
   },
-  "bibtex": "@inproceedings{paper-0008,\n  title = {Enterprise Modeling for CubeSats},\n  author = {L. Anderson and B. Cole and Rose Yntema and Manas Bajaj and Sara C. Spangelo and D. Kaslow and C. Lowe and Eric V. Sudano and M. Boghosian and R. Reil and S. Asundi and Sanford A. Friedenthal},\n  year = {2014},\n  booktitle = {IEEE Aerospace Conference},\n  publisher = {IEEE},\n  doi = {10.1109/aero.2014.6836343},\n  url = {https://doi.org/10.1109/aero.2014.6836343}\n}"
+  "bibtex": "@inproceedings{anderson2014enterprise,\n  title={Enterprise Modeling for CubeSats},\n  author={Anderson, L. and Cole, B. and Yntema, Rose and Bajaj, Manas and Spangelo, Sara C. and Kaslow, D. and Lowe, C. and Sudano, Eric V. and Boghosian, M. and Reil, R. and Asundi, S. and Friedenthal, Sanford A.},\n  booktitle={2014 IEEE Aerospace Conference},\n  year={2014},\n  publisher={IEEE},\n  doi={10.1109/AERO.2014.6836343}\n}"
 }

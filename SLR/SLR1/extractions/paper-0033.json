@@ -3,571 +3,1576 @@
   "tier": "core",
   "year": 2021,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The corpus metadata reports Scopus provenance and a DOI, but the accessible markdown does not name the conference venue or publisher, so credibility is only partially assessable from the permitted sources.",
-        "evidence": [
-          "Corpus metadata DOI: 10.1109/ladc53747.2021.9672594.",
-          "Corpus metadata provenance includes Scopus records.",
-          "The markdown has a proceedings-style structure with Abstract, Index Terms, numbered sections, and References."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper states scope boundaries for simulator portability and operation-function expressiveness, and identifies future work for user-defined functions.",
-        "evidence": [
-          "In order to apply this workflow for other satellite simulators, the user would have to first change the MAM to fit the required inputs for the new simulator, and then change the C2F tool to meet the way the new simulator should be configured.",
-          "The current version of ForPlan considers four predefined functions",
-          "For future work, we plan to define a process to model userdefined Equipment Operation Functions"
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper situates the approach in academic CubeSat mission concept analysis, Phase-0/Pre-Phase A, and gives a concrete NanosatC-Br2 2U CubeSat application.",
-        "evidence": [
-          "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements and drive further design implementations.",
-          "The ForPlan simulation tool was designed for the verification of space mission concept of operations (ConOps) during studies carried out mainly in Phase-0/Pre-Phase A at CPRIME",
-          "NanosatC-Br2 (NCBR2) is a 2U CubeSat mission developed at INPE in partnership with the Federal University of Santa Maria (UFSM)"
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The workflow, main artifacts, tools, and transformed script structure are described clearly enough for comparison, but full well-formed constraints, source code, complete model instances, versions, and executable assets are not provided.",
-        "evidence": [
-          "architectural models based on SysML Class Diagrams and automatic model transformation",
-          "we have created a workflow for creating Mission Architecture Models, using a SysML-based Class Diagram in Capella, along with a model transformation and automatic code generation plugin",
-          "The rules build on the following model elements and associated general ideas: Data Packages, Class Instances, Typed Properties",
-          "C2F traverses the model elements of the MAM in accordance with the predefined rules overviewed in Section II and generates Julia code"
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Claimed benefits are tied to the MAM, C2F model transformation, generated Julia configuration, ForPlan simulations, and model-parameter iteration.",
-        "evidence": [
-          "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works",
-          "The resulting feasible operations scenario was used to drive further implementations in the on-board software development.",
-          "the Cyber-Physical system abstraction of CubeSat mission operations scenarios, and the use of MBSE tools, allow for the visual configuration as well as the verification and validation of operations scenarios by the means of modeling and simulation"
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper provides a case application, a generated script excerpt, and simulation-result graphs for battery charge and memory usage, though it lacks baseline comparisons, quantitative effort metrics, or flight validation.",
-        "evidence": [
-          "This workflow was applied for the NanosatC-Br2 mission",
-          "The resulting graphs for battery charge and memory usage for the final iteration simulation results can be seen in Figure 6.",
-          "From these graphs, we can infer that the power and data balances are stable",
-          "Fig. 4. Julia script excerpt generated from a Mission Architecture Model."
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The workflow connects model-derived simulations to a requirements-met decision and downstream implementation, but it does not show formal requirement elements, trace links, or a traceability matrix.",
-        "evidence": [
-          "If the answer is \"Yes,\" a solid arrow leads to a final process block labeled \"Use Results to Drive Design Implementations\"",
-          "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements",
-          "When the requirements are met, the user may use these results to drive further design implementations."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper identifies an open-source modeling tool, the plugin architecture, and the generated Julia-script exchange mechanism, but does not report public availability of the MAMs, C2F source, ForPlan package, complete parameters, or versions.",
-        "evidence": [
-          "an open-source modeling tool called Capella",
-          "C2F is integrated into Capella via a context menu item",
-          "outputting the Julia script into the destination src-gen folder inside the project directory",
-          "ForPlan is a tool developed at Brazil's National Institute for Space Research (INPE)"
-        ]
-      }
-    ],
-    "total_score": 6.0,
-    "max_score": 8,
-    "normalized_score": 0.75,
-    "overall_rationale": "The study is relevant and presents a concrete MBSE-to-simulation workflow with a CubeSat case and executable simulation outputs. Quality is limited by incomplete venue reporting in the markdown, partial replication detail, informal traceability, and no public assets or baseline/flight validation."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0033.json",
-    "status_rationale": "Retained as core because the paper directly addresses CubeSat MBSE modeling, model transformation to simulation, and pre-implementation verification of power/data operation scenarios with EPS-relevant battery, solar-panel, and equipment-power elements.",
-    "citation": "de Almeida, D. P., Graics, B., Chagas, R. A. J., de Sousa, F. L., and Mattiello-Francisco, F. (2021). Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View. DOI: 10.1109/ladc53747.2021.9672594.",
-    "title": "Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View",
-    "authors": [
-      "Danilo Pallamin de Almeida",
-      "Bence Graics",
-      "Ronan Arraes Jardim Chagas",
-      "Fabiano Luis de Sousa",
-      "Fátima Mattiello-Francisco"
-    ],
-    "venue": "not reported in accessible markdown",
-    "doi_or_url": "10.1109/ladc53747.2021.9672594",
-    "publisher": "not reported in accessible markdown",
-    "venue_type": "conference paper/proceedings style; exact venue not reported in accessible markdown",
-    "source_database_or_route": [
-      "scopus",
-      "semantic_scholar abstract_enrichment"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "high",
-        "rationale": "The paper defines a general CubeSat mission architecture model using a Cyber-Physical abstraction, high-level class-diagram parameters, and predefined equipment operation functions; EPS-relevant battery, solar, and equipment-power parameters are included, while users need not understand the simulator source code."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "The paper claims usability, faster iteration, requirements verification, and model-to-simulator integration, but does not quantify reliability or reproducibility outcomes and provides only limited evidence beyond one case simulation."
-      },
-      "RQ3": {
-        "relevance": "high",
-        "rationale": "The workflow explicitly integrates pre-physical Phase-0/Pre-Phase A verification by transforming the MAM into a ForPlan simulation and checking operation requirements using battery charge and memory/data results before driving flight-software implementation."
-      }
+    "credible_venue": {
+      "rating": "Yes",
+      "score": 1,
+      "rationale": "Supplied corpus metadata lists a DOI and Scopus records for this conference-style paper; the supplied markdown itself does not name the venue.",
+      "evidence": [
+        {
+          "quote": "DOI=10.1109/ladc53747.2021.9672594; source provenance includes Scopus records.",
+          "location": "metadata prompt"
+        }
+      ],
+      "confidence": "medium"
     },
-    "lineage_overlap_notes": "No other papers, previous extractions, extraction databases, sources.bib, or external sources were consulted. Within the permitted paper, the approach builds on prior INPE ForPlan work cited as reference [4]."
+    "limitations_discussed": {
+      "rating": "Insufficiently",
+      "score": 0.5,
+      "rationale": "The paper states scope boundaries and future work, but does not provide a formal threats-to-validity or evaluation-limitation discussion.",
+      "evidence": [
+        {
+          "quote": "In order to apply this workflow for other satellite simulators, the user would have to first change the MAM to fit the required inputs for the new simulator, and then change the C2F tool to meet the way the new simulator should be configured.",
+          "location": "Conclusion"
+        },
+        {
+          "quote": "For future work, we plan to define a process to model userdefined Equipment Operation Functions and have a method in C2F to automatically generate the ForPlan function for that, in order to extend the current four pre-defined functions.",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "rating": "Yes",
+      "score": 1,
+      "rationale": "The paper identifies the CubeSat mission, size, organizations, lifecycle analysis stage, and operational-scenario focus.",
+      "evidence": [
+        {
+          "quote": "NanosatC-Br2 (NCBR2) is a 2U CubeSat mission developed at INPE in partnership with the Federal University of Santa Maria (UFSM), as the second CubeSat of the NanosatC-Br program.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "The ForPlan simulation tool was designed for the verification of space mission concept of operations (ConOps) during studies carried out mainly in Phase-0/Pre-Phase A at CPRIME",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "rating": "Yes",
+      "score": 1,
+      "rationale": "The workflow, model elements, Capella class-diagram rules, C2F transformation plugin, generated Julia script structure, and ForPlan simulation inputs are described sufficiently for comparison and partial replication.",
+      "evidence": [
+        {
+          "quote": "The general workflow for the described approach for operations scenario simulation can be seen in Figure 1.",
+          "location": "Section II"
+        },
+        {
+          "quote": "C2F traverses the model elements of the MAM in accordance with the predefined rules overviewed in Section II and generates Julia code based on the retrieved attributes.",
+          "location": "Section III"
+        }
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "rating": "Yes",
+      "score": 1,
+      "rationale": "The claimed benefits are tied to the Mission Architecture Model, model transformation, generated simulator script, and executable simulation results.",
+      "evidence": [
+        {
+          "quote": "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works, and does not have to manually code the configurations for each scenario",
+          "location": "Conclusion"
+        },
+        {
+          "quote": "the Cyber-Physical system abstraction of CubeSat mission operations scenarios, and the use of MBSE tools, allow for the visual configuration as well as the verification and validation of operations scenarios by the means of modeling and simulation.",
+          "location": "Introduction"
+        }
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "rating": "Insufficiently",
+      "score": 0.5,
+      "rationale": "A single project application and simulation graphs support the operations-scenario claim, but effort, speed, and usability claims lack metrics, baselines, or independent validation.",
+      "evidence": [
+        {
+          "quote": "The resulting graphs for battery charge and memory usage for the final iteration simulation results can be seen in Figure 6.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "it is much more practical and faster to change scenario parameters in the model than manually in the configuration script",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "rating": "Insufficiently",
+      "score": 0.5,
+      "rationale": "Requirements satisfaction is checked through scenario iteration, but no formal requirements traceability matrix, trace links, or lifecycle gate trace model is reported.",
+      "evidence": [
+        {
+          "quote": "The user then analyses the results of the simulation outputs, such as battery capacity and data usage graphs, to see if the operations requirements are met",
+          "location": "Section II / Fig. 1 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "rating": "Insufficiently",
+      "score": 0.5,
+      "rationale": "The toolchain and generated-script structure are described and Capella is identified as open source, but the paper does not report availability of the MAM, C2F source, scripts, or data for reproduction.",
+      "evidence": [
+        {
+          "quote": "using architectural models based on SysML Class Diagrams in an open-source modeling tool called Capella",
+          "location": "Introduction"
+        },
+        {
+          "quote": "C2F is integrated into Capella via a context menu item that appears when right-clicking on a Capella model file with a Class Diagram and executes the model transformation, outputting the Julia script into the destination src-gen folder inside the project directory.",
+          "location": "Section III"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "CubeSat-based space mission; case application on NanosatC-Br2 spacecraft plus associated ground segment",
-    "size_form_factor": "2U CubeSat",
-    "mission_name": "NanosatC-Br2 (NCBR2)",
-    "mission_domain": "academic CubeSat operations scenario analysis for payloads SLP, SMDH, and SDATF; detailed science domain not reported",
-    "organization_type": "research institute and university partnership; INPE with Federal University of Santa Maria (UFSM)",
-    "project_maturity": "Phase-0/Pre-Phase A concept-analysis workflow; NCBR2 case mature enough that a feasible scenario was used to drive on-board flight software implementation",
-    "lifecycle_stage_addressed": "mission concept analysis, operations requirements verification, early design iteration, and pre-implementation handoff to flight software",
-    "development_context": "academic CubeSat development under time and cost constraints, with mission concept analyses supported by CPRIME/INPE ForPlan simulation",
-    "eps_relevance": "power-budget/electrical-architecture",
-    "model_maturity": "MAM schema, instance model, C2F code-generation plugin, and final NCBR2 simulation demonstrated; public release, complete parameters, and flight validation not reported"
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Scopus provenance and IEEE DOI metadata support treating the paper as a credible peer-reviewed publication, though the markdown omits venue details.",
+      "evidence": [
+        {
+          "quote": "DOI=10.1109/ladc53747.2021.9672594; source provenance includes Scopus records.",
+          "location": "metadata prompt"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Some scope and future-work limits are stated, but no systematic limitations/threats section is provided.",
+      "evidence": [
+        {
+          "quote": "In order to apply this workflow for other satellite simulators, the user would have to first change the MAM to fit the required inputs for the new simulator, and then change the C2F tool to meet the way the new simulator should be configured.",
+          "location": "Conclusion"
+        },
+        {
+          "quote": "For future work, we plan to define a process to model userdefined Equipment Operation Functions",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The CubeSat mission, institutional setting, payloads, ground stations, and Phase-0/Pre-Phase A context are described.",
+      "evidence": [
+        {
+          "quote": "NanosatC-Br2 (NCBR2) is a 2U CubeSat mission developed at INPE in partnership with the Federal University of Santa Maria (UFSM)",
+          "location": "Section IV"
+        },
+        {
+          "quote": "during studies carried out mainly in Phase-0/Pre-Phase A at CPRIME",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives workflow steps, model structure, toolchain elements, transformation approach, and generated-script structure.",
+      "evidence": [
+        {
+          "quote": "The users then can create an \"instance\" class diagram MAM based on this abstract class diagram and define their own mission by creating class instances",
+          "location": "Section II.B"
+        },
+        {
+          "quote": "The resulting Julia script ... is based on the following structure required for the configuration of ForPlan",
+          "location": "Section III"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims are explicitly attributed to MAM, C2F automatic transformation, and simulation.",
+      "evidence": [
+        {
+          "quote": "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works",
+          "location": "Conclusion"
+        },
+        {
+          "quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements and drive further design implementations.",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The NCBR2 application provides a simulation result, but no baseline or quantitative evaluation of MBSE process benefits is reported.",
+      "evidence": [
+        {
+          "quote": "From these graphs, we can infer that the power and data balances are stable",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The workflow includes a requirements-met decision, but traceability is implicit rather than represented as formal trace links.",
+      "evidence": [
+        {
+          "quote": "When the requirements are met, the user may use these results to drive further design implementations.",
+          "location": "Section II"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Tool names and transformation flow are reported, but no reusable model/plugin/data availability is stated.",
+      "evidence": [
+        {
+          "quote": "C2F is integrated into Capella via a context menu item ... outputting the Julia script into the destination src-gen folder inside the project directory.",
+          "location": "Section III"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "core"
+      ],
+      "status": "coded",
+      "rationale": "The metadata screening tier is core and the full text directly concerns CubeSat MBSE modeling/simulation with power and data budget analysis.",
+      "evidence": [
+        {
+          "quote": "screening_tier=core",
+          "location": "metadata prompt"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper's central contribution is a general workflow and mission architecture model for CubeSat operational-scenario simulation.",
+      "evidence": [
+        {
+          "quote": "this article introduces a CyberPhysical abstraction of CubeSat mission operations scenarios, using architectural models based on SysML Class Diagrams",
+          "location": "Introduction"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims verification, automation, and power/data-budget decision support, but the work is system-level/EPS-adjacent rather than a dedicated EPS MBSE outcome study.",
+      "evidence": [
+        {
+          "quote": "One of the most important analyses in the initial design phase of the satellite mission involves the balance of power and data budget.",
+          "location": "Introduction"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "Pre-physical simulation is used to verify operations requirements and budgets, but no EPS-specific verification procedure model is presented.",
+      "evidence": [
+        {
+          "quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "implementation"
+      ],
+      "status": "coded",
+      "rationale": "The method targets Phase-0/Pre-Phase A concept analyses and the case result is reported as driving flight software implementation.",
+      "evidence": [
+        {
+          "quote": "designed for the verification of space mission concept of operations (ConOps) during studies carried out mainly in Phase-0/Pre-Phase A",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "The scenario was then used to drive the implementations for the flight software.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student",
+        "agency",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The motivation is academic CubeSat missions constrained by time/cost; the case involves INPE and UFSM.",
+      "evidence": [
+        {
+          "quote": "In the development of academic CubeSat-based space missions, it is common to skip or rush many practices of the Systems Engineering Process due to time and cost constraints",
+          "location": "Abstract"
+        },
+        {
+          "quote": "developed at INPE in partnership with the Federal University of Santa Maria (UFSM)",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "power-budget/electrical-architecture"
+      ],
+      "status": "coded",
+      "rationale": "The paper models power generation/consumption, battery charge, solar panels, equipment loads, and power budgets, but it is not a full EPS architecture paper.",
+      "evidence": [
+        {
+          "quote": "taking into account the operation of each individual equipment in terms of electrical power consumption and data volume generation, and the interaction of the satellite with the Sun (electrical power generation)",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "prototype demonstration",
+        "executable model",
+        "project-applied model"
+      ],
+      "status": "coded",
+      "rationale": "A plugin and executable simulator workflow were demonstrated on the NCBR2 project.",
+      "evidence": [
+        {
+          "quote": "This workflow was applied for the NanosatC-Br2 mission",
+          "location": "Section IV"
+        },
+        {
+          "quote": "generate simulations for operations scenarios to be used in discussions among the stakeholders",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "EPS",
+        "architecture",
+        "behavior",
+        "budgets",
+        "verification",
+        "operations",
+        "simulation"
+      ],
+      "status": "coded",
+      "rationale": "The MAM captures mission/system architecture and operational behavior for power/data budget simulation and requirements verification; EPS-related elements are modeled as power-budget components.",
+      "evidence": [
+        {
+          "quote": "structured mission architecture model defining operations scenarios",
+          "location": "Introduction"
+        },
+        {
+          "quote": "the balance of power and data budget",
+          "location": "Introduction"
+        },
+        {
+          "quote": "verify initial operations requirements",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "state/activity/sequence diagrams",
+        "power budgets",
+        "executable simulations",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper shows a SysML activity-diagram workflow, SysML/Capella class-diagram MAMs, generated Julia scripts, and ForPlan simulation outputs. Class diagrams and generated code require emergent coding because they are not controlled labels.",
+      "evidence": [
+        {
+          "quote": "General workflow ... modeled using a SysML Activity Diagram.",
+          "location": "Figure 1 caption"
+        },
+        {
+          "quote": "The resulting MAM for the NCBR2 mission can be seen in Figure 5. All the input parameters for the ForPlan simulation are described",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "transformation",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "The abstract MAM acts as a reusable template, while C2F implements a model transformation and the paper describes a repeatable workflow.",
+      "evidence": [
+        {
+          "quote": "The users then can create an \"instance\" class diagram MAM based on this abstract class diagram and define their own mission",
+          "location": "Section II.B"
+        },
+        {
+          "quote": "C2F traverses the model elements of the MAM ... and generates Julia code",
+          "location": "Section III"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Enhanced MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The work uses a system architecture model plus selected model transformation, code generation, and executable simulation support, without a fully integrated digital engineering environment.",
+      "evidence": [
+        {
+          "quote": "automatically generate code used as an input for a satellite simulator called ForPlan",
+          "location": "Introduction"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "available tools"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring responds to CubeSat/academic mission scale and time/cost constraints, and leverages Capella/EMF to simplify plugin integration.",
+      "evidence": [
+        {
+          "quote": "academic CubeSat-based space missions ... time and cost constraints",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Capella builds on Eclipse Modeling Framework ... greatly facilitating the integration of such a plugin.",
+          "location": "Section II.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides a workflow and model rules, but not a complete adopter playbook with roles, entry/exit criteria, and governance.",
+      "evidence": [
+        {
+          "quote": "The general workflow for the described approach for operations scenario simulation can be seen in Figure 1.",
+          "location": "Section II"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "Capella/Arcadia",
+        "custom tools",
+        "open-source packages",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The toolchain uses SysML-based class diagrams in Capella, the custom C2F plugin and ForPlan simulator, Eclipse/Xtend, and Julia scripts; ForPlan/C2F/Xtend/Julia are captured as emergent other tools.",
+      "evidence": [
+        {
+          "quote": "architectural models based on SysML Class Diagrams in an open-source modeling tool called Capella",
+          "location": "Introduction"
+        },
+        {
+          "quote": "a tool was developed, called C2F, to automatically generate code used as an input for a satellite simulator called ForPlan",
+          "location": "Introduction"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "model transformation",
+        "plugin",
+        "generated code",
+        "scripts"
+      ],
+      "status": "coded",
+      "rationale": "C2F is a Capella plugin that transforms MAM elements into a generated Julia configuration script for ForPlan.",
+      "evidence": [
+        {
+          "quote": "automatically transform the Mission Architecture Model into the input formalism of the ForPlan Simulator",
+          "location": "Section III"
+        },
+        {
+          "quote": "outputting the Julia script into the destination src-gen folder inside the project directory",
+          "location": "Section III"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [
+        "missing interfaces"
+      ],
+      "status": "coded",
+      "rationale": "The authors state that using other simulators requires changing both the MAM and C2F, indicating no generic simulator interface.",
+      "evidence": [
+        {
+          "quote": "the user would have to first change the MAM ... and then change the C2F tool",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "loads",
+        "modes",
+        "power budgets",
+        "degradation"
+      ],
+      "status": "coded",
+      "rationale": "The ForPlan/MAM input includes solar panels, equipment power loads and operation functions/modes, battery pack attributes including degradation factors, and power-budget outputs.",
+      "evidence": [
+        {
+          "quote": "Solar Panels, including surface area, efficiency and orientation",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "Battery pack, including nominal capacity and number of cells in parallel and series",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "each individual equipment in terms of electrical power consumption",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [
+        "simulation scenarios"
+      ],
+      "status": "coded",
+      "rationale": "The V&V artifact is the modeled and simulated operational scenario; no verification matrix, test procedure, or automated test artifact is reported.",
+      "evidence": [
+        {
+          "quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "simulation-in-the-loop",
+        "trade-study verification",
+        "virtual integration"
+      ],
+      "status": "coded",
+      "rationale": "Before implementation, the model is transformed to a simulator, scenario parameters are iterated, and combined spacecraft/ground segment operations are simulated to check budgets.",
+      "evidence": [
+        {
+          "quote": "The user then analyses the results of the simulation outputs ... to see if the operations requirements are met, or if they should proceed to another iteration changing the model parameters",
+          "location": "Section II"
+        },
+        {
+          "quote": "ForPlan performs functional simulations of satellites and associated ground segments to reflect operations scenarios",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [
+        "software integration"
+      ],
+      "status": "coded",
+      "rationale": "The final feasible scenario is reported as driving flight/on-board software implementation, but hardware/testbed readiness is not shown.",
+      "evidence": [
+        {
+          "quote": "The scenario was then used to drive the implementations for the flight software.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "automation",
+        "decision support",
+        "effort reduction",
+        "schedule reduction",
+        "integrability/interoperability",
+        "consistency",
+        "risk reduction",
+        "mission assurance",
+        "lifecycle continuity",
+        "communication/stakeholder alignment"
+      ],
+      "status": "coded",
+      "rationale": "Claims include automated script generation, easier/faster scenario changes, simulator/model integration, requirements/budget consistency checking, stakeholder discussion support, and using results to drive software implementation.",
+      "evidence": [
+        {
+          "quote": "does not have to manually code the configurations for each scenario",
+          "location": "Conclusion"
+        },
+        {
+          "quote": "used in discussions among the stakeholders to reach a viable operation scenario",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level"
+      ],
+      "status": "coded",
+      "rationale": "Claims are made for CubeSat mission operations scenarios and the NCBR2 CubeSat case rather than for EPS-only or generic MBSE.",
+      "evidence": [
+        {
+          "quote": "CubeSat mission operations scenarios",
+          "location": "Introduction"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "executable simulation",
+        "parametric analysis",
+        "automated generation",
+        "model transformation",
+        "tool integration",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Value mechanisms are the cyber-physical/MAM abstraction, parameterized class diagrams, C2F transformation/code generation, and executable ForPlan simulation.",
+      "evidence": [
+        {
+          "quote": "Input Model Parameters ... Convert Model Into Simulator Input (C2F) ... Simulate Scenario (ForPlan)",
+          "location": "Figure 1 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "implementation"
+      ],
+      "status": "coded",
+      "rationale": "Claims concern Phase-0/Pre-Phase A concept analysis and downstream software implementation guidance.",
+      "evidence": [
+        {
+          "quote": "Phase-0 studies to verify initial operations requirements and drive further design implementations",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration",
+        "Executable model or simulation result",
+        "Quantitative metric without baseline"
+      ],
+      "status": "coded",
+      "rationale": "The paper includes conceptual rationale, one mission application, generated script/model examples, and battery/memory graphs, but no baseline.",
+      "evidence": [
+        {
+          "quote": "The resulting graphs for battery charge and memory usage for the final iteration simulation results can be seen in Figure 6.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The reported indicators are battery charge percentage and mass-memory usage/data balance, which do not exactly match a controlled metric label.",
+      "evidence": [
+        {
+          "quote": "battery charge levels and mass memory",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No previous process, manual baseline, alternative toolchain, or previous mission comparator is reported for the claimed outcomes.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Simulation-supported mission feasibility claims are Moderate; usability/effort/speed claims are Weak because they are not measured.",
+      "evidence": [
+        {
+          "quote": "From these graphs, we can infer that the power and data balances are stable",
+          "location": "Section IV"
+        },
+        {
+          "quote": "it is much more practical and faster to change scenario parameters in the model than manually in the configuration script",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper does not report model ownership, configuration control, review process, quality criteria, or naming/versioning conventions.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No adoption cost, saved effort, schedule effect, avoided rework, ROI, or quantified value-realization evidence is reported.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "A concrete workflow, model structure, transformation plugin, and NCBR2 application are provided.",
+      "evidence": [
+        {
+          "quote": "Define Mission Elements ... Convert Model Into Simulator Input (C2F) ... Simulate Scenario (ForPlan) ... Analyze Results",
+          "location": "Figure 1 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The paper implements and demonstrates a model-to-simulator transformation path, while also noting simulator-specific adaptation limits.",
+      "evidence": [
+        {
+          "quote": "automatically transform the Mission Architecture Model into the input formalism of the ForPlan Simulator",
+          "location": "Section III"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The approach is motivated by academic CubeSat time/cost constraints and demonstrated on a 2U CubeSat mission.",
+      "evidence": [
+        {
+          "quote": "academic CubeSat-based space missions ... time and cost constraints",
+          "location": "Abstract"
+        },
+        {
+          "quote": "NanosatC-Br2 (NCBR2) is a 2U CubeSat mission",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "The model result is said to drive software implementation, but governance, deliverable traceability, and ROI are not developed.",
+      "evidence": [
+        {
+          "quote": "The resulting feasible operations scenario was used to drive further implementations in the on-board software development.",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper addresses constrained academic CubeSat work and iterative parameter changes, but does not explicitly discuss NewSpace, agile, or distributed-team practices.",
+      "evidence": [
+        {
+          "quote": "proceed to another iteration changing the model parameters for another operations scenario simulation",
+          "location": "Section II"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper text is clear and directly describes the workflow, case, tools, and claims; confidence is lower only for venue metadata and unstated absences.",
+      "evidence": [
+        {
+          "quote": "In this paper, we presented a workflow for operations scenario modeling and simulation of CubeSat-based space missions",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Support academic CubeSat mission concept analyses that are often skipped or rushed, especially in-orbit operational behavior, power consumption, and data generation, through MBSE-based MAM modeling and automatic simulation input generation.",
-    "modeling_scope": [
-      "CubeSat mission operations scenarios",
-      "spacecraft equipment list split into platform and payloads",
-      "equipment operation functions",
-      "orbit parameters",
-      "solar panel array parameters",
-      "battery pack parameters",
-      "mass memory and data generation",
-      "ground stations and downlink rates",
-      "regions of interest for payload operations",
-      "power and data budget behavior over an operational scenario"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "interoperability_limitations",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage"
     ],
-    "system_boundary_level_of_abstraction": "Functional/architectural operation-scenario model spanning space and ground segments; equipment-level power/data behavior and environmental interactions with Sun and ground stations are modeled, while detailed electrical circuits, control algorithms, and hardware design are outside scope.",
-    "minimal_or_excluded_modeling": "The approach uses four predefined Equipment Operation Functions and parameter values rather than detailed behavioral code; user-defined operation functions, detailed EPS design, and portability to other simulators are outside the demonstrated scope.",
-    "required_prior_behavioral_domain_knowledge": "Users must know mission elements, equipment operation conditions/timing/ROI or ground-station triggers, power consumption, data generation, orbit, solar-panel, battery, memory, and ground-station parameters, but need not understand the ForPlan source code or manually write Julia configuration scripts.",
-    "handling_limited_behavioral_knowledge": "Behavior is abstracted into predefined operations such as AlwaysOn, OnGroundStation, TimedOp, and RoiOP, with values captured as typed class properties in a Capella MAM and transformed automatically to a simulator script.",
-    "model_artifacts_used": [
-      "SysML Activity Diagram workflow",
-      "abstract Mission Architecture Model Class Diagram",
-      "parameterized/instance Mission Architecture Model Class Diagram",
-      "Class Diagram elements: Data Packages, Class Instances, Typed Properties",
-      "C2F-generated Julia configuration script",
-      "ForPlan simulation outputs: battery charge and memory usage graphs"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The method is extensible but current operation functions are limited and further process/tool work is planned.",
+        "evidence_quote": "For future work, we plan to define a process to model userdefined Equipment Operation Functions and have a method in C2F to automatically generate the ForPlan function for that, in order to extend the current four pre-defined functions.",
+        "location": "Conclusion",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "extractor_identified",
+        "rationale": "Only one application case, NanosatC-Br2, is demonstrated and the workflow is scoped to operations scenarios for ForPlan.",
+        "evidence_quote": "This workflow was applied for the NanosatC-Br2 mission",
+        "location": "Section IV",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "Although simulation outputs are quantitative, the paper does not quantitatively evaluate MBSE benefits such as effort, speed, defects, or reuse.",
+        "absence_based_explanation": "No metric is reported for the claims that model changes are faster or that users avoid manual coding/source-code understanding.",
+        "confidence": "high",
+        "evidence_quote": "No metric is reported for the claims that model changes are faster or that users avoid manual coding/source-code understanding."
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "Claims are not compared with a previous document-centric process, manual analysis baseline, alternative toolchain, or previous mission.",
+        "absence_based_explanation": "The supplied full text contains no baseline/comparator section or comparative result for the MBSE workflow.",
+        "confidence": "high",
+        "evidence_quote": "The supplied full text contains no baseline/comparator section or comparative result for the MBSE workflow."
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "The paper reports stakeholder discussions but not an independent user/expert evaluation or validation of the workflow/toolchain.",
+        "evidence_quote": "generate simulations for operations scenarios to be used in discussions among the stakeholders to reach a viable operation scenario",
+        "location": "Section IV",
+        "confidence": "medium"
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "The evidence is a simulated operations scenario and software-implementation guidance; no hardware test, environmental test, operational, or flight result is reported.",
+        "absence_based_explanation": "The paper ends with the scenario driving on-board software development and does not report subsequent physical or flight validation.",
+        "confidence": "high",
+        "evidence_quote": "The paper ends with the scenario driving on-board software development and does not report subsequent physical or flight validation."
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "The work is power-budget/EPS-adjacent and includes solar panels/battery/load modeling, but it does not evaluate an EPS-specific MBSE model or EPS verification process.",
+        "evidence_quote": "focusing on the dynamics of data and power usage, and data exchanged between the satellite and the ground stations",
+        "location": "Section II.A",
+        "confidence": "medium"
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "author_stated",
+        "rationale": "The authors state that applying the workflow to a different simulator would require changing both the MAM and the C2F tool.",
+        "evidence_quote": "the user would have to first change the MAM to fit the required inputs for the new simulator, and then change the C2F tool",
+        "location": "Conclusion",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "The paper names tools and shows diagrams, but does not state that the MAM, C2F plugin source, generated scripts, or case data are available.",
+        "absence_based_explanation": "No repository, package, supplemental model file, or data availability statement is reported in the supplied markdown.",
+        "confidence": "high",
+        "evidence_quote": "No repository, package, supplemental model file, or data availability statement is reported in the supplied markdown."
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "extractor_identified",
+        "rationale": "The approach focuses on Phase-0/Pre-Phase A concept analysis and downstream software guidance, without full lifecycle traceability through integration/test/flight.",
+        "evidence_quote": "for Phase-0 analyses and operations requirements verification",
+        "location": "Conclusion",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "The ease/faster/manual-coding claims are logically linked to automatic generation but are asserted without measured effect size or baseline.",
+        "evidence_quote": "it is much more practical and faster to change scenario parameters in the model than manually in the configuration script",
+        "location": "Conclusion",
+        "confidence": "high"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "abstract MAM schema reusable across CubeSat operation scenarios",
-      "Data Packages separate model elements into transformation categories",
-      "Class Instances encapsulate mission-specific parameter sets",
-      "Typed Properties standardize units and attributes",
-      "predefined Equipment Operation Functions encode recurring behavior patterns",
-      "C2F model-to-code generation reuses transformation rules",
-      "workflow can be adapted to other simulators by changing the MAM and C2F configuration logic"
+    "emergent_limitations": [
+      {
+        "label": "for-plan-specific-transformation",
+        "description": "The current MAM/C2F transformation is tailored to ForPlan's input formalism, limiting portability without model and tool changes.",
+        "evidence_quote": "change the MAM to fit the required inputs for the new simulator, and then change the C2F tool",
+        "location": "Conclusion",
+        "confidence": "high",
+        "rationale": "The current MAM/C2F transformation is tailored to ForPlan's input formalism, limiting portability without model and tool changes."
+      },
+      {
+        "label": "limited-operation-function-expressiveness",
+        "description": "ForPlan currently supports four predefined equipment operation functions; user-defined functions are future work.",
+        "evidence_quote": "extend the current four pre-defined functions",
+        "location": "Conclusion",
+        "confidence": "high",
+        "rationale": "ForPlan currently supports four predefined equipment operation functions; user-defined functions are future work."
+      },
+      {
+        "label": "capella-class-diagram-metamodel-constraint-workaround",
+        "description": "The authors note that Capella's Class Diagram language supports only one metalevel, requiring well-formedness rules to simulate type/instance behavior.",
+        "evidence_quote": "This modeling language supports only one metalevel ... In order to overcome this problem, we have defined a set of rules",
+        "location": "Section II.B",
+        "confidence": "high",
+        "rationale": "The authors note that Capella's Class Diagram language supports only one metalevel, requiring well-formedness rules to simulate type/instance behavior."
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Define mission elements",
-        "inputs": "initial mission concept and design-process information",
-        "outputs": "initial list of spacecraft, payload, ground, orbit, power, and data elements",
-        "actors_roles": "user, mission analyst, systems engineer",
-        "prerequisites": "preliminary CubeSat mission concept and known candidate equipment",
-        "completion_criteria": "major mission elements needed for the scenario are identified",
-        "handoffs": "element list is used to describe when and where each equipment operates"
-      },
-      {
-        "step": "Describe equipment operations",
-        "inputs": "mission element list and intended operations scenario",
-        "outputs": "operation-function choices and operation parameters for each equipment",
-        "actors_roles": "user, payload/platform engineers, mission analyst",
-        "prerequisites": "knowledge of power consumption, data generation, and operational triggers or timing",
-        "completion_criteria": "each modeled equipment has on/off, power, and data-generation behavior represented at scenario level",
-        "handoffs": "operation descriptions are encoded into the MAM"
-      },
-      {
-        "step": "Create Mission Architecture Model in Capella",
-        "inputs": "abstract MAM schema, mission elements, and operation descriptions",
-        "outputs": "Class Diagram artifact containing packages, class instances, and typed properties",
-        "actors_roles": "modeling user or MBSE engineer",
-        "prerequisites": "Capella project and knowledge of the predefined MAM rules",
-        "completion_criteria": "MAM conforms to the predefined class-diagram organization for ForPlan inputs",
-        "handoffs": "model is parameterized for a specific simulation scenario"
-      },
-      {
-        "step": "Input model parameters",
-        "inputs": "MAM and mission-specific values for orbit, batteries, solar panels, equipment, ground stations, ROIs, and memory",
-        "outputs": "parameterized class diagram / instance MAM",
-        "actors_roles": "user, subsystem engineers, mission analyst",
-        "prerequisites": "available numerical parameters and selected operation functions",
-        "completion_criteria": "all simulation-required values are entered as typed properties",
-        "handoffs": "parameterized model is passed to C2F"
-      },
-      {
-        "step": "Convert model into simulator input using C2F",
-        "inputs": "parameterized MAM in Capella",
-        "outputs": "Julia configuration script in the src-gen destination folder",
-        "actors_roles": "user invokes plugin; C2F performs transformation",
-        "prerequisites": "C2F plugin installed and MAM follows predefined rules",
-        "completion_criteria": "Julia script containing imports, functions, instantiated objects, equipment list, orbit, and simulation configuration is generated",
-        "handoffs": "script is executed in ForPlan"
-      },
-      {
-        "step": "Simulate operation scenario in ForPlan",
-        "inputs": "generated Julia configuration script",
-        "outputs": "simulation results such as battery capacity/charge and data or memory usage graphs",
-        "actors_roles": "mission analyst or user running ForPlan",
-        "prerequisites": "ForPlan simulator available and configuration script executable",
-        "completion_criteria": "scenario simulation completes and outputs are available for analysis",
-        "handoffs": "results are analyzed against operations requirements"
-      },
-      {
-        "step": "Analyze results and iterate until requirements are met",
-        "inputs": "simulation outputs and operations requirements",
-        "outputs": "accepted feasible operation scenario or revised MAM parameters for another iteration",
-        "actors_roles": "mission stakeholders, mission analyst, subsystem engineers",
-        "prerequisites": "defined acceptance criteria for power/data budgets and operations requirements",
-        "completion_criteria": "requirements are judged met; otherwise parameters or expected behavior are changed",
-        "handoffs": "accepted results drive further design and flight-software implementation"
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The workflow maps to mission concept analysis in Phase-0/Pre-Phase A, especially ConOps verification, power/data budget assessment, operations requirements checking, stakeholder scenario selection, and early design/flight-software implementation inputs.",
-    "approach_classification": "Integrated MBSE/digital engineering",
-    "approach_classification_rationale": "The work connects an MBSE architecture model in Capella to automated code generation and an executable simulator, creating a model-to-simulation data flow rather than a standalone descriptive model.",
-    "tailoring_rationale": [
-      "academic CubeSat teams may skip or rush systems engineering practices due to time and cost constraints",
-      "mission concept analyses are often performed with modeling and simulation and are needed early for power/data budgets",
-      "ForPlan configuration otherwise requires Julia scripting and knowledge of simulator source-code conventions",
-      "predefined high-level operation functions reduce the behavioral modeling burden for early scenarios"
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "Capella",
-      "SysML-based Class Diagram",
-      "SysML Activity Diagram for workflow illustration",
-      "Eclipse Modeling Framework (EMF)",
-      "CapellaToForplan (C2F) plugin",
-      "Xtend model transformation/code generation",
-      "Julia configuration script",
-      "ForPlan satellite simulator"
-    ],
-    "toolchain_architecture_data_flow": "Mission elements and operations are modeled in a Capella MAM; C2F traverses packages, class instances, and typed properties according to predefined rules; C2F generates a Julia configuration script in src-gen; ForPlan executes the script; battery and memory/data results are analyzed and may trigger another model-parameter iteration.",
-    "interoperability_mechanisms": [
-      "EMF metamodel and instance model management inside Capella",
-      "well-formed constraints over Capella Class Diagram elements",
-      "C2F plugin invoked from a Capella context menu",
-      "Xtend-based model transformation and code generation",
-      "Julia script exchange format consumed by ForPlan",
-      "predefined ForPlan equipment operation functions mapped from model parameters"
-    ],
-    "syntax_semantic_continuity_evidence": "The generated Julia script instantiates simulator objects from MAM parameters and includes functions, equipment, solar panels, batteries, ground stations, orbit, and simulation configuration; however, no independent semantic-equivalence check or round-trip validation is reported.",
-    "software_hardware_system_integration_readiness": "The accepted simulation scenario was reported as input to on-board flight software implementation, but no hardware integration, hardware-in-the-loop, system test, or flight data are reported.",
-    "toolchain_limitations": [
-      "Capella Class Diagram supports only one metalevel, so the approach relies on well-formed constraints to emulate instances",
-      "current workflow uses only four predefined Equipment Operation Functions",
-      "adapting the workflow to other satellite simulators requires changing both the MAM and C2F tool",
-      "public availability of C2F source, complete model files, simulator setup, and versions is not reported"
-    ],
-    "availability_reproducibility": "Capella is identified as open-source and ForPlan/C2F are described, but the paper does not report public repositories, complete NCBR2 input data, executable examples, or versioned tool configurations; reproducibility is therefore partial."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "battery pack nominal cell capacity",
-      "number of cells in parallel and series",
-      "battery charge/discharge efficiency and degradation factors in the abstract model",
-      "solar panel surface area, efficiency, orientation/normal vector, type, transient efficiency, and transient times",
-      "equipment power consumption in on and idle states",
-      "platform EPS equipment as an AlwaysOn component in the NCBR2 MAM",
-      "satellite interaction with the Sun for electrical power generation",
-      "battery charge level over time"
-    ],
-    "eps_requirements_representation": "Power and data budget/operations requirements are represented implicitly through MAM parameters and the workflow decision 'Reqs met?'; no formal requirement elements or EPS requirement trace links are shown.",
-    "verification_validation_artifacts": [
-      "Mission Architecture Model",
-      "C2F-generated Julia configuration script",
-      "ForPlan scenario simulations",
-      "battery charge graph",
-      "mass memory usage graph",
-      "final feasible operation scenario for NCBR2"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "Phase-0/Pre-Phase A ForPlan simulation of ConOps before further design implementation",
-      "automatic transformation from MAM to executable simulator configuration",
-      "iteration over scenario parameters and expected equipment behavior",
-      "evaluation of power use, battery charging, data generation, and downlink/memory usage",
-      "acceptance of scenario when operations requirements and power/data budgets are met"
-    ],
-    "evidence_verification_integrated_in_model": "The MAM is the source artifact for generated ForPlan scripts, and simulation results from each model iteration are used to evaluate power and data budgets; the paper states that simulations verify initial operations requirements and drive design implementations.",
-    "integration_test_readiness": "The final feasible scenario was used to drive flight software implementation, but readiness for EPS integration tests, hardware tests, or operational validation is not reported."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "Model-generated simulations can verify initial CubeSat operations requirements during Phase-0 studies and inform further design.",
-      "outcome_category": "requirements verification and early V&V",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Cyber-Physical abstraction",
-        "SysML-based Mission Architecture Model",
-        "automatic model transformation",
-        "ForPlan executable simulation"
-      ],
-      "artifact_or_process_linked": "MAM to C2F-generated Julia script to ForPlan simulation and requirements-met decision",
-      "lifecycle_stage": "Phase-0 / Pre-Phase A mission concept analysis",
-      "evidence_type": "workflow description plus NCBR2 case simulation outputs",
-      "metric_or_value_indicator": "battery charge percentage, memory usage percentage, stable power/data balance, requirements-met decision",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "A final operation scenario was judged valid from stable battery and data/memory behavior.",
-      "evidence_source": "Abstract; Fig. 1; Section IV; Fig. 6",
-      "direct_quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements and drive further design implementations.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "No formal requirement model, independent validation, baseline comparison, or quantified simulation uncertainty is provided."
-    },
-    {
-      "claim": "For the NanosatC-Br2 case, the final simulated operation scenario had stable power and data balances and was therefore considered valid from that perspective.",
-      "outcome_category": "power/data budget feasibility",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "parameterized equipment power/data attributes",
-        "battery and solar-panel modeling",
-        "iterative MAM parameter changes",
-        "ForPlan battery and memory simulations"
-      ],
-      "artifact_or_process_linked": "NCBR2 MAM, generated ForPlan script, battery charge and memory usage graphs",
-      "lifecycle_stage": "mission concept analysis before flight software implementation",
-      "evidence_type": "case-study simulation results",
-      "metric_or_value_indicator": "battery charge remained in a high oscillating range in the graph; memory usage stayed below capacity and downlinked periodically",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "The authors infer the satellite can recharge batteries each orbit and download generated mission data.",
-      "evidence_source": "Section IV and Fig. 6",
-      "direct_quote": "From these graphs, we can infer that the power and data balances are stable, i.e. the satellite is capable of charging the batteries for the amount used each orbit, and download the generated mission data.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The conclusion depends on ForPlan model assumptions and scenario inputs; no hardware, flight, or independent simulation cross-check is reported."
-    },
-    {
-      "claim": "C2F improves toolchain integrability by transforming Capella MAM elements automatically into ForPlan Julia configuration scripts.",
-      "outcome_category": "toolchain integration and automation",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "Capella plugin",
-        "EMF model traversal",
-        "Xtend code generation",
-        "Julia script as simulator input"
-      ],
-      "artifact_or_process_linked": "Capella MAM, C2F plugin, generated Julia script excerpt",
-      "lifecycle_stage": "model preparation and simulation execution",
-      "evidence_type": "implementation description and generated code excerpt",
-      "metric_or_value_indicator": "script generated into src-gen; generated code includes imports, functions, objects, equipment list, orbit, and simulation configuration",
-      "baseline_comparator": "manual Julia configuration script writing",
-      "observed_effect_size_or_qualitative_effect": "The model artifact becomes executable simulator input through code generation.",
-      "evidence_source": "Section III and Fig. 4",
-      "direct_quote": "C2F traverses the model elements of the MAM in accordance with the predefined rules overviewed in Section II and generates Julia code based on the retrieved attributes.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The paper does not provide source code, transformation tests, or evidence that generated scripts are robust across multiple missions."
-    },
-    {
-      "claim": "Using MAM and automatic generation makes ForPlan more usable because users do not need to understand simulator source code or manually code every scenario.",
-      "outcome_category": "usability and reproducibility enabler",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "graphical class-diagram configuration",
-        "typed mission parameters",
-        "automatic generation of Julia configuration scripts"
-      ],
-      "artifact_or_process_linked": "MAM and generated input configuration script",
-      "lifecycle_stage": "scenario configuration and analysis iteration",
-      "evidence_type": "mechanistic explanation and author assertion",
-      "metric_or_value_indicator": "need for source-code knowledge and manual coding removed; no measured usability metric",
-      "baseline_comparator": "users manually writing Julia scripts and operation functions",
-      "observed_effect_size_or_qualitative_effect": "Straightforward use of the simulator is claimed.",
-      "evidence_source": "Section II.B and Conclusion",
-      "direct_quote": "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works, and does not have to manually code the configurations for each scenario, permitting a straightforward use of the simulator.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No user study, time measurement, error-rate comparison, or independent reproducibility attempt is reported."
-    },
-    {
-      "claim": "Changing operation-scenario parameters in the model is more practical and faster than manually editing simulator configuration scripts.",
-      "outcome_category": "iteration efficiency",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "model-parameter editing",
-        "automatic regeneration of simulator configuration",
-        "iteration loop based on simulation results"
-      ],
-      "artifact_or_process_linked": "parameterized MAM, C2F-generated script, repeated ForPlan simulations",
-      "lifecycle_stage": "early scenario trade and iteration",
-      "evidence_type": "author assertion with plausible workflow mechanism",
-      "metric_or_value_indicator": "faster/practical change claimed; no time, effort, or defect metric",
-      "baseline_comparator": "manual changes in configuration script",
-      "observed_effect_size_or_qualitative_effect": "Model-based parameter iteration is claimed to facilitate work.",
-      "evidence_source": "Conclusion",
-      "direct_quote": "Also, it is much more practical and faster to change scenario parameters in the model than manually in the configuration script, facilitating the work involved.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The effect may depend on modeler expertise, plugin maturity, model completeness, and mission complexity; no empirical comparison is provided."
-    },
-    {
-      "claim": "The modeled and simulated feasible scenario supported stakeholder convergence and downstream on-board software development.",
-      "outcome_category": "decision support and lifecycle continuity",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "iterative MAM-to-simulation cycle",
-        "simulation result analysis",
-        "stakeholder discussion using operation scenarios"
-      ],
-      "artifact_or_process_linked": "NCBR2 final MAM and final simulation graphs",
-      "lifecycle_stage": "transition from concept analysis to flight software implementation",
-      "evidence_type": "reported case-study use",
-      "metric_or_value_indicator": "viable operation scenario selected; used to drive flight software",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "A feasible scenario was reached after iterations and handed off to implementation.",
-      "evidence_source": "Section IV and Conclusion",
-      "direct_quote": "This workflow was applied for the NanosatC-Br2 mission, where the resulting model was used to generate simulations for operations scenarios to be used in discussions among the stakeholders to reach a viable operation scenario.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The paper does not report stakeholder evaluation details, decision logs, or later software/integration outcomes."
-    }
-  ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "Implicit governance through predefined MAM rules, C2F transformation constraints, and iterative requirements-met decision loop; no version control, ownership, review board, or configuration-management process is reported.",
-    "traceability_to_deliverables_decisions_reviews": "Simulation outputs are linked to stakeholder discussion and on-board software implementation, but formal traceability to deliverables, reviews, requirements IDs, or design decisions is not shown.",
-    "evaluation_criteria_model_quality_usefulness": "Usefulness is judged by whether operations requirements are met, especially stable battery charging, manageable memory/data generation, and ability to download mission data; model quality criteria are otherwise not formalized.",
-    "roi_value_realization_evidence": "The authors claim straightforward simulator use and faster parameter changes, but provide no quantified ROI, cost, schedule, effort, defect, or reuse metrics.",
-    "programmatic_gates_critical_design_events_supported": "Supports Phase-0/Pre-Phase A mission concept analysis and operations requirements verification; critical design reviews or formal lifecycle gates beyond early analysis are not reported.",
-    "model_derived_performance_indicators_management_metrics": "battery charge percentage, used memory percentage, equipment power consumption, equipment data rate, generated mission data, downlink/data transfer rates, and requirements-met status"
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed with evidence",
-      "rationale": "The paper provides a stepwise workflow from mission element definition through MAM, C2F script generation, ForPlan simulation, analysis, and iteration, and demonstrates it on NCBR2."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed with evidence",
-      "rationale": "Capella, EMF, C2F, Xtend, Julia, and ForPlan are connected through a model-to-code workflow with a generated script excerpt; portability limitations remain for other simulators."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed conceptually",
-      "rationale": "The motivation is academic CubeSat time/cost constraints and the solution reduces manual simulator scripting, but resource savings are not measured and tailoring guidance is partial."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "mentioned only",
-      "rationale": "The paper mentions stakeholder discussions, requirements checking, and driving flight-software implementation, but does not present governance procedures, deliverable traceability, or ROI evidence."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "not addressed",
-      "rationale": "Although the workflow supports iteration, the paper does not discuss NewSpace, agile methods, distributed teams, rapid release cycles, or collaboration practices."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "CubeSat missions are modeled through a Cyber-Physical operation-scenario abstraction implemented as a Capella SysML-based Class Diagram MAM.",
-        "A reusable abstract MAM covers equipment, orbit, solar panels, battery pack, mass memory, ground stations, ROIs, and predefined equipment operation functions.",
-        "Limited behavioral knowledge is handled by parameterized high-level operations such as AlwaysOn, OnGroundStation, TimedOp, and RoiOP, hiding ForPlan source-code and Julia scripting details from users."
-      ],
-      "RQ2": [
-        "Claimed value centers on requirements verification, visual configuration, simulator usability, faster scenario iteration, integration of model artifacts with simulation, and stakeholder decision support.",
-        "Reliability is only indirectly motivated through avoiding issues/failures from skipped systems engineering; no reliability metric, fault analysis, or operational evidence is provided.",
-        "Reproducibility and integrability are partially supported by the Capella-to-Julia-to-ForPlan transformation, but no open assets or independent reuse evidence are reported."
-      ],
-      "RQ3": [
-        "Verification is integrated before physical implementation by generating ForPlan inputs from the MAM and simulating power/data operation scenarios in Phase-0/Pre-Phase A.",
-        "NCBR2 verification evidence includes battery charge and memory usage simulations used to infer stable power and data balances.",
-        "The final feasible scenario was reported as an input to on-board flight software development, but no physical EPS integration test is reported."
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used",
+      "label": "mission-architecture-model-mam",
+      "description": "A SysML-based Capella Class Diagram model used as the mission architecture/parameter model for operational-scenario simulation.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "The resulting MAM for the NCBR2 mission can be seen in Figure 5. All the input parameters for the ForPlan simulation are described",
+      "confidence": "medium",
+      "original_label": "Mission Architecture Model (MAM)",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.model_artifacts_used",
+        "mbse_objective_scope_artifacts.generality_reuse_mechanism"
       ]
     },
-    "author_stated_limitations_gaps": [
-      "The current version of ForPlan considers four predefined Equipment Operation Functions.",
-      "Applying the workflow to other satellite simulators would require changing the MAM to fit new inputs and changing C2F to the new simulator configuration approach.",
-      "Future work is needed to model user-defined Equipment Operation Functions and automatically generate the corresponding ForPlan functions.",
-      "Capella Class Diagram supports only one metalevel, so the authors had to define well-formed constraints to make the models interpretable."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "No public C2F source, MAM files, full NCBR2 parameter set, tool versions, or executable replication package are reported.",
-      "The EPS representation is limited to power-budget-relevant battery, solar, and equipment power parameters, not detailed EPS electrical architecture, control, fault behavior, or reliability modeling.",
-      "Requirements are checked through simulation outputs but are not modeled as formal requirement artifacts with explicit traceability links.",
-      "Claims about faster, more practical, and easier simulation use lack user studies, effort metrics, or baseline comparisons.",
-      "No hardware-in-the-loop, integration-test, operational, or flight validation data are reported.",
-      "The specific publication venue and publisher are not visible in the accessible markdown."
-    ],
-    "direct_evidence_quotes": [
+    {
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+      "label": "capella-to-forplan-c2f-plugin",
+      "description": "Custom Capella plugin that transforms MAM model elements into a Julia configuration script for ForPlan.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "a plugin for the Capella tool, called CapellaToForplan (C2F)",
+      "confidence": "medium",
+      "original_label": "CapellaToForplan (C2F) plugin",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+        "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms"
+      ]
+    },
+    {
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+      "label": "for-plan-simulator",
+      "description": "Satellite operations simulator developed at INPE/CPRIME for Phase-0/Pre-Phase A ConOps verification, power/data dynamics, and ground-station exchange.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "The ForPlan simulation tool was designed for the verification of space mission concept of operations (ConOps)",
+      "confidence": "medium",
+      "original_label": "ForPlan simulator",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool"
+      ]
+    },
+    {
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used",
+      "label": "julia-configuration-script-generation",
+      "description": "Generated simulator input is a Julia script containing simulation environment setup, functions, objects, equipment lists, orbit, and configuration options.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "generates Julia code based on the retrieved attributes",
+      "confidence": "medium",
+      "original_label": "Julia configuration script generation",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.model_artifacts_used",
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism"
+      ]
+    },
+    {
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+      "label": "cyber-physical-abstraction-of-operations-scenarios",
+      "description": "The modeling abstraction represents physical and logical elements in ground and space segments to support operational scenario simulation.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Based on physical and logical models, which represent the major cyberphysical elements involved in both ground and space segments",
+      "confidence": "medium",
+      "original_label": "Cyber-Physical abstraction of operations scenarios",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+        "mbse_objective_scope_artifacts.modeling_scope"
+      ]
+    },
+    {
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator",
+      "label": "battery-charge-and-mass-memory-usage-indicators",
+      "description": "Simulation indicators used to judge a viable operation scenario: battery charge stability and memory/data balance.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "battery charge levels and mass memory for an operation scenario of NanosatC-Br2",
+      "confidence": "medium",
+      "original_label": "battery charge and mass memory usage indicators",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator"
+      ]
+    },
+    {
+      "field_path": "mbse_objective_scope_artifacts.modeling_scope",
+      "label": "predefined-equipment-operation-functions",
+      "description": "ForPlan's behavior abstraction relies on AlwaysOn, OnGroundStation, TimedOp, and RoiOP equipment operation functions.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "The current version of ForPlan considers four predefined functions: 1) AlwaysOn ... 2) OnGroundStation ... 3) TimedOp ... 4) RoiOP",
+      "confidence": "medium",
+      "original_label": "predefined equipment operation functions",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.modeling_scope",
+        "eps_verification_specific.eps_elements_modeled"
+      ]
+    }
+  ],
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0033",
+      "extraction_file_path": "/Users/antho/nanosatellite-mbse/SLR/SLR1/extractions/paper-0033.json",
+      "tier_status": "core",
+      "tier_rationale": "Metadata screening_tier=core; the full text directly addresses CubeSat MBSE modeling/simulation with power and data budget verification.",
+      "citation": "de Almeida, Graics, Chagas, Sousa, and Mattiello-Francisco (2021), Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View.",
+      "title": "Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View",
+      "authors": [
+        "Danilo Pallamin de Almeida",
+        "Bence Graics",
+        "Ronan Arraes Jardim Chagas",
+        "Fabiano Luis de Sousa",
+        "Fatima Mattiello-Francisco"
+      ],
+      "year": 2021,
+      "venue": "not reported in supplied markdown",
+      "doi": "10.1109/ladc53747.2021.9672594",
+      "publisher": "IEEE DOI prefix present in metadata; publisher not stated in supplied markdown",
+      "venue_type": "conference paper, best effort from corpus metadata and IEEE DOI",
+      "source_database_query_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q4_power_architecture_refined.json",
+          "rank": 7,
+          "paperId": "85125300847",
+          "query_summary": "nanosatellite/CubeSat AND MBSE/SysML AND power subsystem/electrical architecture/EPS/power"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
+          "rank": 18,
+          "paperId": "85125300847",
+          "query_summary": "nanosatellite/CubeSat AND MBSE/SysML AND reference model/template/behavior/architecture"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "rank": 35,
+          "paperId": "85125300847",
+          "query_summary": "nanosatellite/CubeSat AND MBSE/SysML AND mission/architecture/design"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0033_semantic_title.json",
+          "rank": 1,
+          "paperId": "c7b9f8af04773df88f08eec6b2b474b9b217ec34",
+          "purpose": "abstract_enrichment"
+        }
+      ],
+      "research_questions_addressed": [
+        {
+          "rq": "RQ1",
+          "relevance": "high",
+          "rationale": "Central workflow for modeling CubeSat mission operations scenarios with a reusable MAM/template and model-to-simulation transformation."
+        },
+        {
+          "rq": "RQ2",
+          "relevance": "partial",
+          "rationale": "Claims power/data budget decision support, automation, and implementation guidance, but not EPS-specific reliability/reproducibility/integrability evidence."
+        },
+        {
+          "rq": "RQ3",
+          "relevance": "partial",
+          "rationale": "Uses pre-physical operational-scenario simulation for requirements/budget verification, but lacks a dedicated EPS verification procedure model."
+        }
+      ],
+      "lineage_overlap_notes": "Part of an INPE/CPRIME/ForPlan toolchain lineage for Phase-0 mission ConOps simulation; no duplicate CubeSat reference-model lineage identified from supplied files."
+    },
+    "study_context_population": {
+      "mission_platform": {
+        "class": "CubeSat/nanosatellite",
+        "form_factor": "2U CubeSat",
+        "mission_name": "NanosatC-Br2 (NCBR2)",
+        "mission_domain": "space geophysics/CubeSat operations scenario with SLP, SMDH, and SDATF payloads; exact science domain not elaborated in this paper",
+        "organization_type": [
+          "agency",
+          "academic/university partnership"
+        ],
+        "organizations": [
+          "National Institute for Space Research (INPE)",
+          "Federal University of Santa Maria (UFSM)",
+          "Budapest University of Technology and Economics via ADVANCE partnership for C2F"
+        ],
+        "project_maturity": "applied to an actual mission scenario and used to drive flight/on-board software implementation; no flight evidence reported"
+      },
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A",
+        "implementation"
+      ],
+      "development_context": [
+        "academic/student",
+        "agency",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "power-budget/electrical-architecture",
+      "model_maturity": [
+        "prototype demonstration",
+        "executable model",
+        "project-applied model"
+      ],
+      "context_notes": "The problem is framed as academic CubeSat projects skipping or rushing systems engineering due to time/cost constraints, particularly mission concept analysis of power and data budgets."
+    },
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Support Phase-0/Pre-Phase A mission concept analyses for CubeSat operations, especially in-orbit power consumption and data generation, by replacing direct ForPlan script/source-code knowledge with a visual MBSE Mission Architecture Model and automatic transformation.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "EPS",
+        "architecture",
+        "behavior",
+        "budgets",
+        "verification",
+        "operations",
+        "simulation"
+      ],
+      "system_boundary_and_abstraction": "Boundary spans the satellite/platform/payload equipment, solar panels, battery pack, mass memory, orbit, regions of interest, and ground stations. Behavior is represented at an operational/functional level through predefined equipment operation functions and parameter values, not through detailed hardware physics or flight-software logic.",
+      "required_prior_behavioral_domain_knowledge": "Users define mission elements and where/when equipment should operate, plus parameters such as power, data rate, solar panel, battery, orbit, and ground-station values. The workflow reduces the need to know ForPlan source code or write Julia configuration scripts, but assumes knowledge of mission operations and parameter values.",
+      "limited_behavioral_knowledge_handling": "The approach constrains behavior to interpretable MAM class instances and predefined functions (AlwaysOn, OnGroundStation, TimedOp, RoiOP), enabling scenario simulation with relatively simple operational rules; user-defined operation functions remain future work.",
+      "model_artifacts_used": [
+        "SysML Activity Diagram workflow",
+        "SysML/Capella Class Diagram MAM",
+        "abstract MAM/metamodel-style class diagram",
+        "parameterized instance class diagram",
+        "generated Julia configuration script",
+        "ForPlan executable simulation outputs",
+        "battery charge graph",
+        "mass memory usage graph"
+      ],
+      "generality_reuse_mechanism": [
+        "template",
+        "transformation",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "evidence_quotes": [
+        {
+          "quote": "The users then can create an \"instance\" class diagram MAM based on this abstract class diagram and define their own mission",
+          "location": "Section II.B"
+        },
+        {
+          "quote": "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works",
+          "location": "Conclusion"
+        }
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "reported_steps": [
+        {
+          "step": "Define mission elements",
+          "inputs": "Initial mission design/process knowledge",
+          "outputs": "Initial list of mission elements",
+          "actors_roles": "User/mission designer",
+          "prerequisites": "Initial mission concept and equipment/payload knowledge",
+          "completion_criteria": "Mission elements identified for scenario modeling",
+          "handoffs": "Equipment operations description"
+        },
+        {
+          "step": "Describe equipment operations",
+          "inputs": "Mission elements, expected when/where equipment operates",
+          "outputs": "Operational behavior assumptions/functions for equipment",
+          "actors_roles": "User/mission designer",
+          "prerequisites": "Knowledge of operations scenario and equipment power/data behavior",
+          "completion_criteria": "Operation functions/parameters available",
+          "handoffs": "Mission Architecture Model creation"
+        },
+        {
+          "step": "Create Mission Architecture Model",
+          "inputs": "Abstract MAM class diagram and mission-specific parameters",
+          "outputs": "Parameterized Capella Class Diagram/instance MAM",
+          "actors_roles": "User/modeler",
+          "prerequisites": "Capella model and well-formedness rules",
+          "completion_criteria": "All required simulator inputs encoded in MAM",
+          "handoffs": "C2F transformation"
+        },
+        {
+          "step": "Convert model into simulator input using C2F",
+          "inputs": "Parameterized MAM",
+          "outputs": "Simulator configuration script in Julia",
+          "actors_roles": "User executing C2F plugin",
+          "prerequisites": "C2F installed/integrated in Capella",
+          "completion_criteria": "Julia script generated in src-gen folder",
+          "handoffs": "ForPlan simulation"
+        },
+        {
+          "step": "Simulate scenario in ForPlan and analyze results",
+          "inputs": "Julia configuration script",
+          "outputs": "Battery capacity/charge and data/memory usage simulation outputs",
+          "actors_roles": "User/analyst/stakeholders",
+          "prerequisites": "ForPlan simulator available",
+          "completion_criteria": "Operations requirements and power/data budgets judged met or not met",
+          "handoffs": "Iterate parameters if not met; use results to drive design implementation if met"
+        }
+      ],
+      "mapping_to_systems_engineering_lifecycle": "Mapped mainly to mission concept analysis in Phase-0/Pre-Phase A; the workflow includes a requirements-met decision and downstream design/software implementation guidance. No formal SRR/PDR/CDR mapping is reported.",
+      "approach_classification": "Enhanced MBSE",
+      "tailoring_rationale": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "available tools"
+      ],
+      "adoption_guidance": "partial guidance",
+      "tailoring_notes": "The lightweight visual MAM and automatic script generation are motivated by academic CubeSat constraints and by making ForPlan easier to use without simulator-source expertise."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML",
+        "Capella/Arcadia",
+        "custom tools",
+        "open-source packages",
+        "other"
+      ],
+      "named_tools_and_technologies": [
+        "Capella",
+        "Eclipse Modeling Framework (EMF)",
+        "C2F / CapellaToForplan",
+        "Xtend",
+        "ForPlan",
+        "Julia",
+        "ForplanSimulatorCore"
+      ],
+      "toolchain_architecture_data_flow": "Capella SysML-based Class Diagram MAM -> C2F model traversal/transformation -> generated Julia ForPlan configuration script -> ForPlan execution -> battery/memory/data results -> model-parameter iteration or design implementation.",
+      "interoperability_mechanisms": [
+        "model transformation",
+        "plugin",
+        "generated code",
+        "scripts"
+      ],
+      "syntax_semantic_continuity": "Continuity is maintained for selected simulation parameters because C2F maps model class instances/properties into simulator objects/functions; no broader semantic traceability or round-trip synchronization is reported.",
+      "software_hardware_system_integration_readiness": "Software integration readiness is suggested because the feasible operations scenario was used to drive flight/on-board software implementation; hardware/system integration readiness is not evidenced.",
+      "toolchain_limitations": [
+        "missing interfaces"
+      ],
+      "availability_reproducibility": "Capella is identified as open source and tool workflow details are described. The paper does not state availability of the C2F plugin, MAM files, generated scripts, model data, or reproducible package."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "solar panels",
+        "battery",
+        "loads",
+        "modes",
+        "power budgets",
+        "degradation"
+      ],
+      "eps_requirements_represented": "No formal EPS requirements artifact is reported. Operations requirements and power/data budget requirements are checked by analyzing simulation outputs such as battery capacity/charge and data/memory usage.",
+      "verification_validation_artifacts": [
+        "simulation scenarios"
+      ],
+      "pre_physical_development_verification_mechanism": [
+        "simulation-in-the-loop",
+        "trade-study verification",
+        "virtual integration"
+      ],
+      "evidence_integrated_into_model": "Simulation inputs are generated from the MAM, so the scenario used for verification is model-integrated. However, acceptance criteria and requirements trace links are not represented as explicit model artifacts.",
+      "integration_test_readiness": [
+        "software integration"
+      ],
+      "eps_notes": "The EPS relevance is primarily power-budget simulation, not detailed EPS architecture or EPS verification procedure modeling."
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "Objective and mechanism",
-        "quote": "this article introduces a workflow based on a Cyber-Physical abstraction of CubeSat mission operation scenarios, which uses architectural models based on SysML Class Diagrams and automatic model transformation",
-        "location": "Abstract"
+        "claim_id": "C1",
+        "claim_text": "The cyber-physical MAM plus MBSE toolchain enables visual configuration and verification/validation of CubeSat operations scenarios by modeling and simulation.",
+        "outcome_category": [
+          "decision support",
+          "consistency",
+          "risk reduction",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "model transformation",
+          "tool integration",
+          "other"
+        ],
+        "artifact_process_linked": "Cyber-Physical abstraction, Mission Architecture Model, C2F transformation, ForPlan simulation",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration",
+          "Executable model or simulation result"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "metric_or_value_indicator_details": "Battery charge stability and mass-memory/data usage in final scenario.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Final NCBR2 simulation was judged a valid operation scenario because power and data balances were stable.",
+        "evidence_source": {
+          "quote": "From these graphs, we can infer that the power and data balances are stable, i.e. the satellite is capable of charging the batteries for the amount used each orbit, and download the generated mission data. This means, for this perspective, that this is a valid operation scenario.",
+          "location": "Section IV"
+        },
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "Simulation validity depends on accuracy of model parameters and ForPlan abstractions; no physical/flight validation or independent verification is reported."
       },
       {
-        "topic": "Phase-0 verification use",
-        "quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements and drive further design implementations.",
-        "location": "Abstract"
+        "claim_id": "C2",
+        "claim_text": "Automatically generating the ForPlan configuration script from the MAM removes the need for users to understand simulator source code or manually code each scenario, making scenario changes more practical and faster.",
+        "outcome_category": [
+          "automation",
+          "effort reduction",
+          "schedule reduction",
+          "integrability/interoperability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "automated generation",
+          "model transformation",
+          "tool integration"
+        ],
+        "artifact_process_linked": "C2F Capella plugin and generated Julia configuration script",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_or_value_indicator_details": "No effort/time metric reported.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Qualitatively asserted easier and faster scenario parameter changes; generated script excerpt demonstrates feasibility.",
+        "evidence_source": {
+          "quote": "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works, and does not have to manually code the configurations for each scenario, permitting a straightforward use of the simulator. Also, it is much more practical and faster to change scenario parameters in the model than manually in the configuration script",
+          "location": "Conclusion"
+        },
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "No time/effort baseline or user study; the claim may depend on users' familiarity with Capella and correctness of C2F."
       },
       {
-        "topic": "ForPlan scope",
-        "quote": "ForPlan creates a Low-Earth Orbit space environment, simulating the behavior of a spacecraft from an operational perspective along the orbit, taking into account the operation of each individual equipment in terms of electrical power consumption and data volume generation",
-        "location": "Section II.A"
+        "claim_id": "C3",
+        "claim_text": "Iterative simulation results can drive changes in expected behavior or operation parameters until power and data budget requirements are met.",
+        "outcome_category": [
+          "decision support",
+          "consistency",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis"
+        ],
+        "artifact_process_linked": "Model-parameter iteration, ForPlan battery/data outputs, requirements-met decision",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Executable model or simulation result",
+          "Quantitative metric without baseline"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "metric_or_value_indicator_details": "Battery charge percentage and mass memory usage percentage over the simulated interval.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "The final iteration showed stable power/data balances and the scenario was accepted as viable.",
+        "evidence_source": {
+          "quote": "The simulation results from each iteration are used to evaluate the amount of power used and data generated by each equipment, which are then used to drive changes in either expected behavior or operation parameters of each equipment",
+          "location": "Section IV"
+        },
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "No formal acceptance thresholds or independent validation are reported; iterative convergence may reflect assumed parameters rather than validated mission behavior."
       },
       {
-        "topic": "Need for automation",
-        "quote": "users must have a working knowledge of this part of the source code, and be able to write the functions themselves",
-        "location": "Section II.B"
-      },
-      {
-        "topic": "Transformation implementation",
-        "quote": "C2F traverses the model elements of the MAM in accordance with the predefined rules overviewed in Section II and generates Julia code based on the retrieved attributes.",
-        "location": "Section III"
-      },
-      {
-        "topic": "Case context",
-        "quote": "NanosatC-Br2 (NCBR2) is a 2U CubeSat mission developed at INPE in partnership with the Federal University of Santa Maria (UFSM)",
-        "location": "Section IV"
-      },
-      {
-        "topic": "Power/data feasibility result",
-        "quote": "From these graphs, we can infer that the power and data balances are stable",
-        "location": "Section IV"
-      },
-      {
-        "topic": "Usability claim",
-        "quote": "the user is no longer required to understand how the simulator source code works, and does not have to manually code the configurations for each scenario",
-        "location": "Conclusion"
-      },
-      {
-        "topic": "Portability limitation",
-        "quote": "In order to apply this workflow for other satellite simulators, the user would have to first change the MAM to fit the required inputs for the new simulator, and then change the C2F tool",
-        "location": "Conclusion"
+        "claim_id": "C4",
+        "claim_text": "The generated simulations supported stakeholder discussions to reach a viable NCBR2 operation scenario and then guided flight software implementation.",
+        "outcome_category": [
+          "communication/stakeholder alignment",
+          "decision support",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "tool integration"
+        ],
+        "artifact_process_linked": "NCBR2 MAM, ForPlan simulation outputs, stakeholder discussion, flight software implementation guidance",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "implementation"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Executable model or simulation result"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_or_value_indicator_details": "No stakeholder or implementation metric reported.",
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Stakeholders reportedly reached a viable scenario; scenario used for flight software implementation.",
+        "evidence_source": {
+          "quote": "the resulting model was used to generate simulations for operations scenarios to be used in discussions among the stakeholders to reach a viable operation scenario",
+          "location": "Section IV"
+        },
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "No stakeholder evaluation, minutes, decision records, or software integration/test result is provided."
       }
     ],
-    "notes_for_consistency_with_lineage": "Treat this study as an early-phase CubeSat operations MBSE/simulation workflow with EPS relevance through power-budget elements, not as a detailed EPS design or reliability-assurance paper. The ForPlan lineage is internal to the paper's cited background and was not cross-checked externally.",
-    "extraction_confidence": "high",
-    "extraction_confidence_reason": "The permitted markdown contained the full article text, workflow descriptions, case application, figures summarized in text, conclusions, and references; uncertainty remains for exact venue/publisher and unavailable implementation artifacts."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": [
+        "not reported"
+      ],
+      "traceability_to_project_deliverables_or_decisions": "Informal linkage only: simulation results feed a requirements-met decision and drive further design/on-board software implementation. No formal deliverable traceability, management report, assurance case, or lifecycle gate record is reported.",
+      "evaluation_criteria_model_quality_usefulness": "Operational scenario considered viable if power and data balances are stable and operations requirements are met; model quality criteria are not otherwise stated.",
+      "roi_value_realization_evidence": [
+        "not reported"
+      ],
+      "programmatic_gates_or_critical_design_events": "Phase-0/Pre-Phase A concept analysis is supported; SRR/PDR/CDR/CDR-like gates are not reported.",
+      "model_derived_performance_indicators_or_management_metrics": [
+        "battery charge level",
+        "mass memory usage",
+        "power used by equipment",
+        "data generated by equipment"
+      ]
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "classification": "addressed with evidence",
+        "rationale": "Workflow, model elements, C2F transformation, generated script, and NCBR2 application are shown."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "classification": "addressed with evidence",
+        "rationale": "C2F provides Capella-to-ForPlan transformation, but portability to other simulators is limited."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "classification": "addressed with evidence",
+        "rationale": "Motivated by academic CubeSat time/cost constraints and demonstrated on a 2U mission."
+      },
+      "governance_project_deliverables_roi": {
+        "classification": "mentioned only",
+        "rationale": "The scenario drives software implementation, but governance, formal deliverables, and ROI evidence are not developed."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "classification": "addressed conceptually",
+        "rationale": "Iterative parameter changes and resource-constrained CubeSat development are addressed, but NewSpace/agile/distributed work practices are not explicit."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": "A SysML/Capella class-diagram Mission Architecture Model can parameterize CubeSat operational scenarios and transform them to executable ForPlan simulations, supporting general mission-level modeling of operations, power, and data budgets with simplified equipment behavior functions.",
+        "RQ2": "Claimed outcomes include automation, easier/faster scenario changes, stakeholder decision support, and lifecycle continuity to software implementation. Evidence is strongest for the NCBR2 simulation feasibility result and weak for effort/speed claims.",
+        "RQ3": "The approach provides pre-physical simulation-based verification of operations requirements and power/data budgets, but not a formal EPS verification model, verification matrix, or EPS-specific test procedure."
+      },
+      "author_stated_limitations_gaps": [
+        "Other simulator use requires changing the MAM and C2F tool.",
+        "User-defined equipment operation functions and their automatic ForPlan generation are future work.",
+        "The approach is scoped to Phase-0 analyses and operations requirements verification."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "Single NCBR2 case without baseline/comparator.",
+        "No quantitative evaluation of MBSE effort, speed, or defect reduction claims.",
+        "No independent validation, physical test, operational, or flight evidence.",
+        "No formal requirements traceability or model governance.",
+        "Tool/model artifacts are not reported as available."
+      ],
+      "direct_evidence_quotes_supporting_classification": [
+        {
+          "quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements and drive further design implementations.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "This workflow was applied for the NanosatC-Br2 mission",
+          "location": "Section IV"
+        },
+        {
+          "quote": "From these graphs, we can infer that the power and data balances are stable",
+          "location": "Section IV"
+        },
+        {
+          "quote": "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works",
+          "location": "Conclusion"
+        }
+      ],
+      "notes_for_consistency_with_lineage": "Treat this paper as an INPE/CPRIME ForPlan/Capella transformation paper for CubeSat operations scenario simulation, not as a standalone EPS architecture or EPS verification-matrix paper.",
+      "extraction_confidence": "high",
+      "extraction_confidence_reason": "The supplied markdown clearly describes the workflow, artifacts, tools, and NCBR2 application; absences such as governance, baseline, and model availability are also clear. Venue details are less certain because the markdown omits the venue name."
+    }
   },
-  "bibtex": "@inproceedings{paper-0033,\n  title = {Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View},\n  author = {Danilo Pallamin de Almeida and Bence Graics and Ronan Arraes Jardim Chagas and Fabiano Luis de Sousa and Fátima Mattiello-Francisco},\n  year = {2021},\n  booktitle = {IEEE Latin-American Conference on Dependable Computing (LADC)},\n  publisher = {IEEE},\n  doi = {10.1109/ladc53747.2021.9672594},\n  url = {https://doi.org/10.1109/ladc53747.2021.9672594}\n}"
+  "bibtex": "@inproceedings{almeida2021towards,\n  title={Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View},\n  author={de Almeida, Danilo Pallamin and Graics, Bence and Chagas, Ronan Arraes Jardim and de Sousa, Fabiano Luis and Mattiello-Francisco, Fatima},\n  year={2021},\n  doi={10.1109/LADC53747.2021.9672594},\n  note={Venue not reported in supplied markdown}\n}"
 }

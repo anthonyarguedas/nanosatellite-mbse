@@ -3,585 +3,1855 @@
   "tier": "supporting",
   "year": 2014,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The corpus metadata identifies an IEEE DOI and IEEE paper id for a conference paper; this is sufficient to treat the venue as credible.",
-        "evidence": [
-          "Corpus metadata DOI: 10.1109/syscon.2014.6819305; paperId: ieee:6819305.",
-          "Paper front matter lists the title and authors: \"Small Satellite Systems Design Methodology: A Formal and Agile Design Process\"."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper gives scope boundaries for pico-/nano-class satellites and identifies limitations/assumptions of formal methods and future work for traceability implementation.",
-        "evidence": [
-          "\"small satellite systems in the pico-/nano-class, i.e. $ < 50kg $ .\"",
-          "\"Though formal methods cannot fix incorrect assumptions made in the design phase, it can help illuminate and identify errors in reasoning\".",
-          "\"It is clear that formal methods are not a panacea; there are areas in system design where formal methods are highly applicable, and yield great benefit, such as the specification of complex interfaces or high quality subcomponents, and other areas where the costs are prohibitive [15].\"",
-          "\"As a follow-on to this research will be to develop the implementation of traceability check that is to be integrated with the RFD process.\""
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The applicable platform class, constraints, and design lifecycle stages are described, but no concrete satellite mission, CubeSat form factor, orbit, payload, or EPS context is provided.",
-        "evidence": [
-          "\"This class of satellites are constrained by size, mass, power, and cost (SMAP-C), and is designed using a small, multi-disciplinary design team.\"",
-          "The mission design flow is shown as \"Mission Objectives\", \"Mission Characteristics\", \"Mission Concept Evaluation & Selection\", and \"Domain Specific Design\".",
-          "\"Due to the size and cost of PNSats, they are being designed to operate as a suite of heterogenous systems that behave as a sensing network.\""
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "RFD, SysML, PVS/HOL, abstraction levels, and a PVS-style example are described, but the paper does not provide an implemented SysML profile, transformation, satellite model, repository, or end-to-end toolchain details sufficient for replication.",
-        "evidence": [
-          "\"We have chosen the graphical modeling language of SysML to be used as the basis of our design process development for small satellites\".",
-          "\"We have chosen to use PVS [2] for its level of logical expressiveness and language flexibility.\"",
-          "\"each level of abstraction, $ \\mathcal{A}_{i}\\in \\left\\{\\mathcal{L}_{n},\\mathcal{L}_{l},\\mathcal{M}_{i},\\mathcal{S}_{p},\\mathcal{S}_{b}\\right\\} $ represents a set of requirements or specifications, its associated models, and simulations.\"",
-          "\"Finally, we illustrate a proof obligation to ensure consistency and traceability within the PVS environment between these two specification.\""
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Claims about high confidence, change responsiveness, integration risk, consistency, traceability, and virtual testing are explicitly tied to MBSE, formal methods, requirements, models, simulations, and refinement levels.",
-        "evidence": [
-          "\"This paper develops an intelligent framework that ties requirements, models, and simulations in a cogent manner.\"",
-          "\"This proposed RFD process [1] for small satellites must utilize a risk-tolerant philosophy that notionally should lead to a correct design with minimal-to-no redesign through the use of an agile and formal design process based on models.\"",
-          "\"By integrating formal methods into the proposed design process at the appropriate levels, many design failures and integration challenges can be eliminated.\""
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper provides conceptual argumentation and a non-satellite PVS railroad-crossing illustration, but no nanosatellite/EPS case-study metrics, baseline comparison, integration/test data, or flight evidence.",
-        "evidence": [
-          "\"We next illustrate what a specification and refinement would resemble in PVS, whereby consistency and traceability could be formally checked between these two layers.\"",
-          "\"We consider a simple railway crossing example for the purposes of exposition.\"",
-          "\"In order to ensure consistency, this type checking condition (TCC) would have to be discharged successfully.\""
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Traceability is central and is formalized across abstraction levels using logical requirements, transition systems, refinement relations, and PVS proof obligations.",
-        "evidence": [
-          "\"Traceability occurs between $ \\mathcal{A}_{i} $ 's\"",
-          "\"Consistency occurs across each $ \\mathcal{A}_{i} $\"",
-          "\"Traceability can be enforced through a formal proof of correctness of the implementation with respect to the specification, via simulation.\"",
-          "\"Through traceability, each project engineer has access to contextual information that can assist in determining where a requirement came from, its importance, how it was implemented, and how it was tested.\""
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper names SysML and PVS and gives fragments of PVS specifications, but does not report available models, profiles, reusable packages, data exchange files, or a working SysML-to-PVS toolchain.",
-        "evidence": [
-          "\"Customization of SysML for the RFD process can be accomplished through the SysML extensions of stereotypes, which are grouped through packages defined as profiles.\"",
-          "The example includes PVS snippets labeled \"Level1:THEORY\" and \"Level2:THEORY\".",
-          "\"As a follow-on to this research will be to develop the implementation of traceability check that is to be integrated with the RFD process.\""
-        ]
-      }
-    ],
-    "total_score": 6.0,
-    "max_score": 8,
-    "normalized_score": 0.75,
-    "overall_rationale": "This is a credible, relevant supporting methodology paper for small-satellite MBSE/formal verification. It clearly frames an RFD process, abstraction levels, and verification concepts, but it remains mostly conceptual, uses a non-satellite example, and provides no EPS-specific model, reusable artifacts, metrics, or physical integration evidence."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0010.json",
-    "status_rationale": "Retained as supporting because the full text proposes a model-based/formal design process for pico-/nano-class satellites and pre-physical verification, but it does not model EPS explicitly.",
-    "citation": "Edmonson, W., Chenou, J., Neogi, N., and Herencia-Zapana, H. (2014). Small satellite systems design methodology: A formal and agile design process. IEEE SysCon. doi:10.1109/syscon.2014.6819305.",
-    "title": "Small Satellite Systems Design Methodology: A Formal and Agile Design Process",
-    "authors": [
-      "William Edmonson",
-      "Jules Chenou",
-      "Natasha Neogi",
-      "Heber Herencia-Zapana"
-    ],
-    "venue": "IEEE Systems Conference (SysCon)",
-    "doi_or_url": "10.1109/syscon.2014.6819305",
-    "publisher": "IEEE",
-    "venue_type": "conference",
-    "source_database_or_route": [
-      "IEEE Xplore manual promoted record from corpus metadata",
-      "Semantic Scholar title-match abstract enrichment from corpus metadata"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The paper describes generic pico-/nano-satellite system modeling via abstraction levels, requirements, SysML models, simulations, and PVS logic, but it does not address EPS-specific modeling."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims high-confidence, reliability, traceability, reduced ambiguity, and integration benefits from MBSE/formal methods at system level; no EPS-specific outcomes, quantitative evidence, or reproducibility evidence are provided."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "It describes pre-physical verification through PVS consistency checks and traceability/refinement proofs, but the only example is a railway crossing and not EPS."
-      }
+    "credible_venue": {
+      "label": "Was the research published in a credible venue?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "Corpus metadata identifies an IEEE DOI and IEEE Xplore provenance for a conference paper; this is sufficient for a credible venue judgment.",
+      "evidence": [
+        "Corpus metadata: DOI=10.1109/syscon.2014.6819305; source provenance includes paperId=ieee:6819305 from IEEE Xplore manual promotions.",
+        "Paper front matter gives the full title and author affiliations: NC A&T State University and National Institute of Aerospace."
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "The paper states it continues and clarifies earlier RFD process work cited as [1]; no other papers or previous extractions were consulted. Treat it as system-level methodological support rather than direct EPS evidence."
+    "limitations_discussed": {
+      "label": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "The paper states scope boundaries, assumptions, methodological caveats, and future work, although not in a separate threats-to-validity section.",
+      "evidence": [
+        "Abstract: \"small satellite systems in the pico-/nano-class, i.e. $ < 50kg $ .\"",
+        "Section II.C: \"Though formal methods cannot fix incorrect assumptions made in the design phase, it can help illuminate and identify errors in reasoning\".",
+        "Section II.C: \"It is clear that formal methods are not a panacea... other areas where the costs are prohibitive\".",
+        "Section VI: \"As a follow-on to this research will be to develop the implementation of traceability check that is to be integrated with the RFD process.\""
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "label": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The applicable pico-/nano-satellite class, constraints, team style, and early lifecycle flow are described, but there is no concrete CubeSat mission, orbit, payload, form factor, EPS context, or project maturity evidence.",
+      "evidence": [
+        "Section III.A: \"This class of satellites are constrained by size, mass, power, and cost (SMAP-C), and is designed using a small, multi-disciplinary design team.\"",
+        "Figure 2/Section III.B uses stages \"Mission Objectives\", \"Mission Characteristics\", \"Mission Concept Evaluation & Selection\", and \"Domain Specific Design\".",
+        "Section II.A: \"PNSats can easily be described as a cyber-physical system\" and may operate as \"a suite of heterogenous systems that behave as a sensing network.\""
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "label": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "RFD, SysML, PVS/HOL, abstraction levels, consistency/traceability definitions, and PVS snippets are described, but no implemented small-satellite SysML model, profile, transformation, repository, or reproducible end-to-end toolchain is provided.",
+      "evidence": [
+        "Section II.B: \"We have chosen the graphical modeling language of SysML to be used as the basis of our design process development for small satellites\".",
+        "Section III.C: \"each level of abstraction... represents a set of requirements or specifications, its associated models, and simulations.\"",
+        "Section V: \"We next illustrate what a specification and refinement would resemble in PVS\" using a railway-crossing example."
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "label": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "Outcome claims are explicitly tied to MBSE/formal-methods process elements: requirements, models, simulations, SysML common semantics, PVS checks, and refinement traceability.",
+      "evidence": [
+        "Abstract: \"This paper develops an intelligent framework that ties requirements, models, and simulations in a cogent manner.\"",
+        "Introduction: \"correct design with minimal-to-no redesign through the use of an agile and formal design process based on models.\"",
+        "Introduction: \"By integrating formal methods into the proposed design process at the appropriate levels, many design failures and integration challenges can be eliminated.\""
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "label": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The evidence is mainly conceptual plus a non-satellite PVS illustration; the paper lacks PNSat/EPS case results, metrics, baseline comparison, stakeholder evaluation, physical test, or flight evidence.",
+      "evidence": [
+        "Section V: \"We consider a simple railway crossing example for the purposes of exposition.\"",
+        "Section V: \"In order to ensure consistency, this type checking condition (TCC) would have to be discharged successfully.\"",
+        "No quantitative outcome metric, comparator, satellite case-study result, EPS result, integration test, or flight evidence is reported in the completed extraction."
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "label": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "Traceability is central and formally defined as refinement/abstraction between levels of abstraction, linked to requirement origin, implementation, and testing; implementation is future work but the traceability formulation is reported in detail.",
+      "evidence": [
+        "Section IV: \"Traceability occurs between $ \\mathcal{A}_{i} $ 's\" and \"Consistency occurs across each $ \\mathcal{A}_{i} $\".",
+        "Section IV.B: \"Through traceability, each project engineer has access to contextual information that can assist in determining where a requirement came from, its importance, how it was implemented, and how it was tested.\"",
+        "Section IV.B: \"Traceability can be enforced through a formal proof of correctness of the implementation with respect to the specification, via simulation.\""
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "label": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The paper names SysML and PVS and prints illustrative PVS fragments, but does not report available models, profiles, proof scripts, simulation files, exchange formats, or a working SysML-to-PVS toolchain.",
+      "evidence": [
+        "Section II.B: \"Customization of SysML for the RFD process can be accomplished through the SysML extensions of stereotypes, which are grouped through packages defined as profiles.\"",
+        "Section V includes PVS fragments labeled \"Level1:THEORY\" and \"Level2:THEORY\" plus a TCC obligation.",
+        "Section VI says implementation of the traceability check remains follow-on work."
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "Pico-/nano-class small satellite systems (PNSats).",
-    "size_form_factor": "Reported as pico-/nano-class, less than 50 kg; CubeSat unit form factor not reported.",
-    "mission_name": "not reported",
-    "mission_domain": "Generic space-based scientific investigations/Earth sensing using small, highly integrated sensory platforms and possible sensing networks.",
-    "organization_type": "Academic/research organizations; intended for small multidisciplinary satellite design teams.",
-    "project_maturity": "Conceptual methodology with illustrative formal-methods example; no implemented satellite project maturity reported.",
-    "lifecycle_stage_addressed": "Conceptual design through mission characteristics, mission concept evaluation/selection, domain-specific design, and pre-physical verification/validation planning.",
-    "development_context": "Short-lifecycle, low-cost, resource-constrained SMAP-C small-satellite development with multidisciplinary teams and cyber-physical system concerns.",
-    "eps_relevance": "system-level only",
-    "model_maturity": "Framework-level RFD model with formal abstraction definitions and PVS proof-obligation example; no EPS model or complete SysML/PVS toolchain demonstrated."
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "IEEE DOI and IEEE Xplore provenance indicate a credible peer-reviewed conference venue.",
+      "evidence": [
+        {
+          "quote": "Corpus metadata: DOI=10.1109/syscon.2014.6819305; source provenance includes paperId=ieee:6819305 from IEEE Xplore manual promotions.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Paper front matter gives the full title and author affiliations: NC A&T State University and National Institute of Aerospace.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The paper states assumptions/scope, caveats about formal methods, cost/readability limits, and future work for traceability-check implementation.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"small satellite systems in the pico-/nano-class, i.e. $ < 50kg $ .\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.C: \"Though formal methods cannot fix incorrect assumptions made in the design phase, it can help illuminate and identify errors in reasoning\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.C: \"It is clear that formal methods are not a panacea... other areas where the costs are prohibitive\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI: \"As a follow-on to this research will be to develop the implementation of traceability check that is to be integrated with the RFD process.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "PNSat class, SMAP-C constraints, small teams, and abstract lifecycle phases are given, but no concrete nanosatellite mission or EPS context is described.",
+      "evidence": [
+        {
+          "quote": "Section III.A: \"This class of satellites are constrained by size, mass, power, and cost (SMAP-C), and is designed using a small, multi-disciplinary design team.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 2/Section III.B uses stages \"Mission Objectives\", \"Mission Characteristics\", \"Mission Concept Evaluation & Selection\", and \"Domain Specific Design\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.A: \"PNSats can easily be described as a cyber-physical system\" and may operate as \"a suite of heterogenous systems that behave as a sensing network.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Method concepts and PVS snippets support comparison, but not replication of a small-satellite MBSE implementation.",
+      "evidence": [
+        {
+          "quote": "Section II.B: \"We have chosen the graphical modeling language of SysML to be used as the basis of our design process development for small satellites\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: \"each level of abstraction... represents a set of requirements or specifications, its associated models, and simulations.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V: \"We next illustrate what a specification and refinement would resemble in PVS\" using a railway-crossing example.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Claims are linked to model-based process artifacts and formal verification activities.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"This paper develops an intelligent framework that ties requirements, models, and simulations in a cogent manner.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: \"correct design with minimal-to-no redesign through the use of an agile and formal design process based on models.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: \"By integrating formal methods into the proposed design process at the appropriate levels, many design failures and integration challenges can be eliminated.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Only conceptual argument and a railway-crossing formal-methods illustration support outcomes.",
+      "evidence": [
+        {
+          "quote": "Section V: \"We consider a simple railway crossing example for the purposes of exposition.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V: \"In order to ensure consistency, this type checking condition (TCC) would have to be discharged successfully.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "No quantitative outcome metric, comparator, satellite case-study result, EPS result, integration test, or flight evidence is reported in the completed extraction.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Traceability formulation across abstraction levels is a central contribution.",
+      "evidence": [
+        {
+          "quote": "Section IV: \"Traceability occurs between $ \\mathcal{A}_{i} $ 's\" and \"Consistency occurs across each $ \\mathcal{A}_{i} $\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV.B: \"Through traceability, each project engineer has access to contextual information that can assist in determining where a requirement came from, its importance, how it was implemented, and how it was tested.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV.B: \"Traceability can be enforced through a formal proof of correctness of the implementation with respect to the specification, via simulation.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Named tools and code snippets are reported, but no models/profiles/proof scripts or exchange implementation are available.",
+      "evidence": [
+        {
+          "quote": "Section II.B: \"Customization of SysML for the RFD process can be accomplished through the SysML extensions of stereotypes, which are grouped through packages defined as profiles.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V includes PVS fragments labeled \"Level1:THEORY\" and \"Level2:THEORY\" plus a TCC obligation.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI says implementation of the traceability check remains follow-on work.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "supporting"
+      ],
+      "status": "coded",
+      "rationale": "Corpus metadata marks the paper as supporting; full text supports this because it is system-level PNSat MBSE/formal-methods methodology without EPS-specific modeling.",
+      "evidence": [
+        {
+          "quote": "Metadata: screening_tier=supporting.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: proposes MBSE for pico-/nano-class small satellite systems, not an EPS model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper addresses general PNSat system modeling through abstraction levels and limited early requirements knowledge, but not EPS-specific general modeling.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"small satellite systems in the pico-/nano-class\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C defines natural-language requirements, logical requirements, interconnected models, parametric simulations, and behavior simulations.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "It claims reliability, integrability, traceability, and reproducibility/reviewability benefits from MBSE/formal methods at system level, but not EPS-specific and without strong empirical evidence.",
+      "evidence": [
+        {
+          "quote": "Abstract: RFD results are \"correct by construction, formally verified, and responsive to system requirement changes.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: \"many design failures and integration challenges can be eliminated.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "Pre-physical verification is addressed through formal requirements, PVS checks, consistency, and traceability/refinement, but not for EPS and not with a satellite case.",
+      "evidence": [
+        {
+          "quote": "Section IV: \"PVS will be used from mission objective to mission concept phase\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V: \"simple railway crossing example for the purposes of exposition.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B"
+      ],
+      "status": "coded",
+      "rationale": "The method focuses on mission objectives, mission characteristics, mission concept evaluation/selection, and domain-specific design before physical implementation; PDR/CDR/operations are not explicitly addressed.",
+      "evidence": [
+        {
+          "quote": "Figure 2 lists \"Mission Objectives\", \"Mission Characteristics\", \"Mission Concept Evaluation & Selection\", and \"Domain Specific Design\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV: \"PVS will be used from mission objective to mission concept phase\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "agile/concurrent design",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The paper explicitly targets agile/responsive small-satellite design under SMAP-C resource constraints and short life cycles.",
+      "evidence": [
+        {
+          "quote": "Abstract title/subtitle: \"A Formal and Agile Design Process\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section I: \"Extreme resource constraints of size, mass, power and cost (SMAP-C)\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.A: \"the system design life cycle is short\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "system-level only"
+      ],
+      "status": "coded",
+      "rationale": "The paper frames PNSats as whole cyber-physical systems and never models EPS elements, power budgets, batteries, solar arrays, or EPS verification artifacts.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"small satellite systems in the pico-/nano-class\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.A describes sensors, processors, actuators, communications, and algorithms; no EPS model is described.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "conceptual framework"
+      ],
+      "status": "coded",
+      "rationale": "RFD is presented as a conceptual/formal design-process framework with an illustrative PVS example rather than an implemented or validated satellite model.",
+      "evidence": [
+        {
+          "quote": "Section III title: \"Responsive and Formal Design Process for Small Satellites\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V: \"We consider a simple railway crossing example for the purposes of exposition.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI: implementation of traceability check is future work.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "verification",
+        "simulation"
+      ],
+      "status": "coded",
+      "rationale": "The RFD scope spans mission-design levels, system/subsystem refinement, requirements, models, behavior/parametric simulations, interfaces/discipline communication, and formal verification.",
+      "evidence": [
+        {
+          "quote": "Section III.B: framework is based on space systems mission design flow.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: abstraction levels include requirements/specifications, interconnected models, and simulations.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.B: MBSE supports \"system requirements, design, analysis, verification and validation\" and common semantics at subsystem interfaces.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "state/activity/sequence diagrams",
+        "parametrics",
+        "executable simulations",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports behavior simulations as state/activity diagrams, parametric simulations with constraints, and PVS/HOL requirements/proof artifacts. \"Other\" captures PVS theories, axioms, type-correctness conditions, transition systems, and abstraction/refinement relations.",
+      "evidence": [
+        {
+          "quote": "Section III.C: \"$S_p$\" are \"simulations based on the parameters of $\\mathcal{M}$\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: \"$S_b$ represents the behaviour model simulation... as state diagrams, activity diagrams, etc.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V prints PVS \"Level1:THEORY\", \"Level2:THEORY\", and a TCC obligation.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "profile",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "Generality comes from a reusable RFD workflow based on a SMAD mission-design flow, SysML profile/stereotype customization, and method guidance for formal consistency/traceability.",
+      "evidence": [
+        {
+          "quote": "Section II.B: \"Customization of SysML for the RFD process can be accomplished through the SysML extensions of stereotypes... profiles.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.B: \"framework... based on the space systems mission design flow\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV defines consistency and traceability methodology across abstraction levels.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Enhanced MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The approach is MBSE/SysML enhanced with formal methods, PVS/HOL, and simulations, but it is not a demonstrated integrated digital-engineering environment.",
+      "evidence": [
+        {
+          "quote": "Section II.B: SysML chosen as the basis for design analysis, simulation, and V&V.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: integration of formal methods and MBSE.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V: PVS proof-obligation illustration.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "risk tolerance"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring is explicitly motivated by pico-/nano-satellite scale, SMAP-C/cost constraints, short schedules, and a low-cost risk-tolerant design philosophy.",
+      "evidence": [
+        {
+          "quote": "Abstract: pico-/nano-class, \"< 50kg\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section I: \"Extreme resource constraints of size, mass, power and cost (SMAP-C)\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.A: \"low cost\" systems and \"short\" life cycle; Section I: risk-tolerant philosophy.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides phases, abstractions, formulas, and a PVS example, but not a full adopter playbook with inputs/outputs, tool commands, roles, and completion criteria for a satellite project.",
+      "evidence": [
+        {
+          "quote": "Section III.B and Figure 2 give the mission design flow.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C defines abstraction relations.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V illustrates PVS specification/refinement.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "SysML is the selected MBSE language. \"Other\" captures Reliable/Responsive and Formal Design (RFD), PVS, higher-order logic, formal methods, and category-theoretic refinement.",
+      "evidence": [
+        {
+          "quote": "Section II.B: \"We have chosen the graphical modeling language of SysML\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: \"We have chosen to use PVS\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV.B: category-theoretic refinement/dualization is used for traceability.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper describes conceptual information flows and translations between requirements, models, simulations, and PVS logic, but does not report a concrete tool-to-tool exchange mechanism such as API, XMI, import/export, plugin, scripts, or automated model transformation.",
+      "evidence": [
+        {
+          "quote": "Section III.C shows conceptual arrows among $L_n$, $L_l$, $M$, $S_p$, and $S_b$; no exchange format or automation is specified.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI states traceability-check implementation is future work.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [
+        "missing interfaces",
+        "scalability issues"
+      ],
+      "status": "coded",
+      "rationale": "Extractor-coded limitations: no implemented SysML-to-PVS/traceability interface is reported, and the authors note traceability links grow exponentially with project size.",
+      "evidence": [
+        {
+          "quote": "Section IV.B: \"The number of traceability links that need to be captured grows exponentially with the size and complexity of the software system.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section VI: \"follow-on... develop the implementation of traceability check\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "This is a system-level PNSat methodology paper; no EPS subsystem or power elements are modeled.",
+      "evidence": [
+        {
+          "quote": "No EPS/power subsystem elements are described in the completed extraction.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V example is a railway crossing, not a satellite EPS.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [
+        "executable checks"
+      ],
+      "status": "coded",
+      "rationale": "System-level formal V&V artifacts include PVS type-correctness/proof obligations; no EPS verification matrix, test cases, or test procedures are reported.",
+      "evidence": [
+        {
+          "quote": "Section V: \"Finally, we illustrate a proof obligation to ensure consistency and traceability within the PVS environment\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V shows \"IMP_Level0_No_Incid_TCC1: OBLIGATION\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "requirements-in-the-loop",
+        "simulation-in-the-loop",
+        "parametric checks",
+        "virtual integration"
+      ],
+      "status": "coded",
+      "rationale": "Before physical development, the method proposes formalizing requirements, using PVS consistency/traceability checks, and running parametric/behavior simulations as virtual tests across abstraction levels. This is system-level, not EPS-specific.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"This leads to testing virtually at each level of refinement.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: requirements move from natural language to logical functions; $S_p$ and $S_b$ are simulations.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV: \"PVS will be used from mission objective to mission concept phase\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper claims virtual testing may reduce later integration testing, but reports no links to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation.",
+      "evidence": [
+        {
+          "quote": "Introduction: formal methods \"can reduce the need for a significant amount testing during the system integration phase\"; no integration-test artifact or result follows.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No flat-sat, hardware, software integration, environmental test, operational validation, or EPS readiness evidence is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "reliability",
+        "reproducibility",
+        "integrability/interoperability",
+        "traceability",
+        "consistency",
+        "defect/error reduction",
+        "cost reduction",
+        "schedule reduction",
+        "effort reduction",
+        "automation",
+        "communication/stakeholder alignment",
+        "mission assurance",
+        "lifecycle continuity"
+      ],
+      "status": "coded",
+      "rationale": "These categories are directly claimed or reasonably mapped from explicit claims about high confidence, formal verification, correct-by-construction design, reduced ambiguity, reduced failures/integration challenges, minimal redesign, automatic verification, peer-review/archive value, and lifecycle traceability.",
+      "evidence": [
+        {
+          "quote": "Abstract and Introduction claim correct-by-construction, formal verification, requirement-change responsiveness, and an intelligent requirements-models-simulations framework.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.B claims common SysML semantics reduce ambiguity.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV defines traceability and consistency.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level",
+        "generic space-system",
+        "generic MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The main RFD claims target PNSat/small-satellite systems, while some SysML/formal-methods claims are generic MBSE or generic complex/space-system rationale.",
+      "evidence": [
+        {
+          "quote": "Abstract: PNSat/small satellite scope.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.B quotes the generic MBSE definition.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.C discusses formal methods for complex systems generally.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "executable simulation",
+        "parametric analysis",
+        "requirements linkage",
+        "lifecycle gate support",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms include requirements-model-simulation linkage, formal traceability/refinement, parametric/behavior simulation, mission-design-flow support, and other formal-methods/PVS theorem proving not captured by the controlled labels.",
+      "evidence": [
+        {
+          "quote": "Abstract: framework ties \"requirements, models, and simulations\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C defines $S_p$ parametric and $S_b$ behavior simulations.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV.B: traceability enforced through formal proof/refinement.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "integration and test"
+      ],
+      "status": "coded",
+      "rationale": "Claims target early mission objectives through concept/domain-specific design and claim downstream reduction of integration testing.",
+      "evidence": [
+        {
+          "quote": "Figure 2 mission design flow.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV: PVS from mission objective to mission concept phase.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: reduce testing during system integration phase.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument"
+      ],
+      "status": "coded",
+      "rationale": "Outcome support is mostly asserted or conceptually argued, with a railway-crossing PVS illustration; no satellite case-study, metric, test, or flight evidence is provided.",
+      "evidence": [
+        {
+          "quote": "Section V: \"simple railway crossing example for the purposes of exposition.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Claims such as \"many design failures and integration challenges can be eliminated\" are not followed by empirical evidence.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No outcome metric such as time, effort, defects, requirement coverage, trace-link count, test coverage, cost, schedule, power margin, or reliability proxy is measured or reported.",
+      "evidence": [
+        {
+          "quote": "The completed extraction found no quantitative outcome metrics or value indicators; the PVS TCC is a proof obligation form, not a reported outcome metric.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [
+        "previous document-centric process"
+      ],
+      "status": "coded",
+      "rationale": "The paper qualitatively contrasts MBSE/RFD with document-centric and physical-centric approaches, but does not use a measured comparator.",
+      "evidence": [
+        {
+          "quote": "Section II.B: \"Historically the design methodology has been somewhat ad-hoc and is based on a document-centric approach.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section I: \"Present design processes for small satellite systems are based on a physical-centric philosophy\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak"
+      ],
+      "status": "coded",
+      "rationale": "Evidence strength for claims is unsupported or weak because claims are asserted or illustrated conceptually without empirical satellite/EPS validation.",
+      "evidence": [
+        {
+          "quote": "Section V railway-crossing illustration provides weak analogical support.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No quantitative baseline, PNSat case-study result, independent validation, integration-test, or flight evidence is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No explicit model ownership, configuration/change control, review process, model quality governance, or naming/versioning convention is reported.",
+      "evidence": [
+        {
+          "quote": "The paper defines consistency and traceability criteria but does not describe project governance of model artifacts.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "Cost/schedule/rework/testing benefits are claimed, but no ROI evidence, adoption cost, saved effort, schedule effect, avoided-rework data, or decision-quality evidence is reported.",
+      "evidence": [
+        {
+          "quote": "Introduction mentions cost/life-cycle overruns and minimal-to-no redesign, but no measured ROI data or comparator is provided.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "A mission-design-flow pathway, abstraction relations, and verification process are presented conceptually with a PVS illustration, but not applied to a PNSat/EPS project.",
+      "evidence": [
+        {
+          "quote": "Figure 2 and Section III.B-III.C define flow and abstraction levels.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section V gives a railway-crossing example rather than a satellite implementation.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper diagnoses document-centric/common-semantics problems and proposes SysML plus formal requirements/PVS, but reports no concrete data-exchange mechanism.",
+      "evidence": [
+        {
+          "quote": "Section II.B: document-centric methodology can cause interface misinterpretation and data loss.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.B: SysML provides common language/semantics; Section III.C provides conceptual data-flow relations.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The RFD process is explicitly tailored to PNSat SMAP-C constraints, low cost, risk tolerance, and short life cycles, but without empirical resource/effort evidence.",
+      "evidence": [
+        {
+          "quote": "Section I: \"Extreme resource constraints of size, mass, power and cost (SMAP-C)\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.A: \"low cost\" and \"short\" design life cycle.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "Traceability, reduced testing, reduced redesign, and cost/schedule motives are mentioned, but no project deliverable mapping, governance workflow, review artifacts, or ROI evidence is provided.",
+      "evidence": [
+        {
+          "quote": "Section IV.B explains what traceability should reveal about requirement origin/implementation/testing.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No PDR/CDR deliverables, management metrics, model governance, or ROI calculations are reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper aligns RFD with agile/responsive/rapid small-satellite design but does not evaluate distributed teams or rapid-iteration practice.",
+      "evidence": [
+        {
+          "quote": "Title: \"A Formal and Agile Design Process\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section I: small satellites offer \"highly responsive programs\" and need \"Rapid development schedules\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.A: process should be responsive to changes in specifications.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper text is complete enough to extract scope, process, tools, and evidence limits. The main uncertainty is interpretive mapping of conceptual formal-methods artifacts to controlled MBSE categories.",
+      "evidence": [
+        {
+          "quote": "Full markdown includes abstract through references and sectioned descriptions of RFD, MBSE, formal methods, verification, example, and conclusion.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Develop a formal and agile MBSE process for high-confidence pico-/nano-satellite designs that manages SMAP-C constraints, short schedules, heterogeneous cyber-physical behavior, requirements ambiguity, consistency, and traceability.",
-    "modeling_scope": [
-      "PNSats as cyber-physical systems with sensors, processor elements, actuators, environment, communications, and algorithms",
-      "Mission design flow from objectives to characteristics, concept selection, and domain-specific design",
-      "Requirements in natural language and formal logic",
-      "System models and parametric/behavior simulations",
-      "Formal verification of consistency within abstraction levels and traceability between abstraction levels"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "assumptions_or_data_quality_limits",
+      "interoperability_limitations",
+      "learning_curve_or_training_burden",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage"
     ],
-    "system_boundary_level_of_abstraction": "System-level small-satellite design process; abstraction levels include natural-language requirements, logical requirements, interconnected models, parametric simulations, and behavior simulations. Subsystem domain design is a later step; EPS is not modeled.",
-    "minimal_or_excluded_modeling": "The paper emphasizes abstracted concepts with only relevant information at early lifecycle stages and excludes detailed subsystem/EPS behavior, actual satellite implementation, and physical test models. The example hides some components and is not a satellite example.",
-    "required_prior_behavioral_domain_knowledge": "Not explicitly stated. Early phases require broad mission objectives and stakeholder/system requirements; detailed behavioral/domain knowledge is deferred to domain-specific design and behavior simulations. Formal-methods expertise is required for PVS/HOL use.",
-    "handling_limited_behavioral_knowledge": "Limited early knowledge is handled by moving from natural-language requirements to logical functions, abstract mission concepts, SysML-style models, behavior simulations, and iterative refinement across abstraction levels; no EPS-specific strategy is reported.",
-    "model_artifacts_used": [
-      "Natural-language requirements (L_n)",
-      "Logical requirements/functions in higher-order logic (L_l)",
-      "System of interconnected models (M)",
-      "Parametric simulations based on model parameters (S_p)",
-      "Behavior simulations based on logical descriptions (S_b)",
-      "SysML diagrams/profiles/stereotypes proposed for process customization",
-      "PVS theories, axioms, type correctness conditions, and proof obligations",
-      "Transition systems and refinement relations for traceability"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The traceability-check implementation is explicitly left as follow-on work; the RFD process is proposed rather than deployed on a satellite.",
+        "evidence_quote": "Section VI: \"As a follow-on to this research will be to develop the implementation of traceability check that is to be integrated with the RFD process.\"",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "extractor_identified",
+        "rationale": "The only worked example is a simple railway crossing used for exposition, not a PNSat or EPS case.",
+        "evidence_quote": "Section V: \"We consider a simple railway crossing example for the purposes of exposition.\"",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "No quantitative outcome metrics are reported for reliability, integration, effort, cost, schedule, traceability coverage, or verification effectiveness.",
+        "evidence_quote": "Absence-based: structured_code_summary.claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator has status not_reported and values [].",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "The paper discusses document-centric/physical-centric practice qualitatively, but provides no measured baseline or counterfactual evaluation.",
+        "evidence_quote": "Section II.B: \"Historically the design methodology has been somewhat ad-hoc and is based on a document-centric approach\"; no quantitative comparator is reported in the extraction.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "No independent user, expert, project, or third-party validation of the RFD process is reported.",
+        "evidence_quote": "Absence-based: outcome evidence types are only assertion/conceptual illustration; no stakeholder/user/expert evaluation or independent validation appears in the completed extraction.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "No hardware integration, flat-sat, environmental test, operational, or flight evidence is presented.",
+        "evidence_quote": "Absence-based: eps_verification_specific.integration_test_readiness has status not_reported; no physical-test or flight section/result is reported.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "The paper is system-level and does not model or evaluate EPS elements, requirements, or verification procedures.",
+        "evidence_quote": "Absence-based: structured_code_summary.study_context_population.eps_relevance is \"system-level only\" and eps_verification_specific.eps_elements_modeled is not_applicable.",
+        "confidence": "high"
+      },
+      {
+        "flag": "assumptions_or_data_quality_limits",
+        "source": "author_stated",
+        "rationale": "The authors state that formal methods do not repair incorrect design assumptions and define consistency under completeness/observability conditions.",
+        "evidence_quote": "Section II.C: \"Though formal methods cannot fix incorrect assumptions made in the design phase\"; Section IV.A: \"if the logical formulation of the natural language specification is complete and the system state is fully observable\".",
+        "confidence": "high"
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "extractor_identified",
+        "rationale": "The paper gives conceptual relationships among SysML, requirements, simulations, and PVS but no implemented exchange mechanism or traceability-check integration.",
+        "evidence_quote": "Section VI leaves \"implementation of traceability check\" to follow-on work; structured_code_summary.toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms is not_reported.",
+        "confidence": "high"
+      },
+      {
+        "flag": "learning_curve_or_training_burden",
+        "source": "author_stated",
+        "rationale": "The authors explicitly note formal modeling languages can be difficult for practicing engineers because their mathematics may be outside common backgrounds.",
+        "evidence_quote": "Section II.C: \"this flexibility makes the formal model difficult to comprehend and use properly, as the mathematical bases for such modeling languages ranges outside the common background of practicing engineers\".",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "No small-satellite model, SysML profile, PVS theory files, proof scripts, or simulation assets are reported as available.",
+        "evidence_quote": "Absence-based: quality_checklist.reproducibility_toolchain_reported is Insufficiently; only printed PVS snippets are provided.",
+        "confidence": "high"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "extractor_identified",
+        "rationale": "The formal process focuses on mission objective through mission concept/domain design; implementation, physical integration/test, and operations are not demonstrated.",
+        "evidence_quote": "Section IV: \"PVS will be used from mission objective to mission concept phase\"; no implementation/operations evidence is reported.",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Many strong outcome claims are linked to MBSE mechanisms, but evidence is assertion or conceptual illustration rather than empirical satellite evidence.",
+        "evidence_quote": "Structured outcome evidence confidence ratings are only \"Unsupported\" or \"Weak\"; Section V example is explicitly for exposition.",
+        "confidence": "high"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "Generic SMAD-derived mission design flow",
-      "Abstraction-layer formulation connecting requirements, models, and simulations",
-      "SysML common modeling language and proposed profiles/stereotypes",
-      "Higher-order logic/PVS representation of requirements",
-      "Category-theoretic refinement and dual abstraction for traceability",
-      "Cyber-physical system framing for PNSats"
+    "emergent_limitations": [
+      {
+        "label": "refinement-constraints-may-limit-design-space",
+        "source": "author_stated",
+        "rationale": "The formal traceability formulation may constrain design decisions at refinement layers and thus limit explored design alternatives.",
+        "evidence_quote": "Section IV.B: \"It should be noted that this is a strict relationship, which constraints the design decisions being made at any refinement layer\" and \"Constraining the refinements to be expressed as a right adjoint morphism may limit the design space of the system.\"",
+        "confidence": "high"
+      },
+      {
+        "label": "formal-methods-not-universally-cost-effective",
+        "source": "author_stated",
+        "rationale": "The paper cautions that formal methods are not a panacea and may be cost-prohibitive outside suitable areas.",
+        "evidence_quote": "Section II.C: \"It is clear that formal methods are not a panacea... other areas where the costs are prohibitive\".",
+        "confidence": "high"
+      },
+      {
+        "label": "terminology-inconsistency-reliable-vs-responsive-formal-design",
+        "source": "extractor_identified",
+        "rationale": "The abstract names Reliable and Formal Design while Section III names Responsive and Formal Design; both use RFD, which may complicate lineage tracking.",
+        "evidence_quote": "Abstract: \"Reliable and Formal Design (RFD)\"; Section III heading: \"RESPONSIVE AND FORMAL DESIGN PROCESS FOR SMALL SATELLITES\".",
+        "confidence": "medium"
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Mission objectives (A1)",
-        "inputs": "Broad mission goals, stakeholder needs, natural-language requirements.",
-        "outputs": "Natural-language requirements linked to logical-function requirements.",
-        "actors_roles": "Systems engineers, stakeholders, formal-methods support.",
-        "prerequisites": "Mission need and broad system goals.",
-        "completion_criteria": "Requirements translated sufficiently to formal logical functions for consistency checking; explicit criterion not operationalized.",
-        "handoffs": "Logical requirements and mission objectives feed mission-characteristics modeling."
-      },
-      {
-        "step": "Mission characteristics (A2)",
-        "inputs": "Mission objectives and logical/natural-language requirements.",
-        "outputs": "Abstracted mission concepts, interconnected models, parametric simulations, and behavior simulations.",
-        "actors_roles": "Systems engineers and multidisciplinary design team.",
-        "prerequisites": "Initial requirement set and formal/logical representation.",
-        "completion_criteria": "Constraints associated with model attributes are met in parametric simulations; exact review gate not reported.",
-        "handoffs": "Candidate mission concepts pass to mission concept evaluation and selection."
-      },
-      {
-        "step": "Mission concept evaluation and selection (A3)",
-        "inputs": "Candidate concepts, models, requirements, simulations.",
-        "outputs": "Selected concept and execution description.",
-        "actors_roles": "Systems engineers, stakeholders, multidisciplinary design team.",
-        "prerequisites": "Mission-characteristic models and simulations.",
-        "completion_criteria": "Mission concept selected; formal completion criteria not reported.",
-        "handoffs": "Selected concept is handed to domain-specific design."
-      },
-      {
-        "step": "Domain-specific design (A4)",
-        "inputs": "Selected concept and higher-level models.",
-        "outputs": "Subsystem/domain detailed models and parametric simulations.",
-        "actors_roles": "Subsystem domain experts with global system perspective.",
-        "prerequisites": "Selected mission concept and model/refinement context.",
-        "completion_criteria": "Domain model constraints satisfied in parametric simulations; no EPS-specific criteria reported.",
-        "handoffs": "Detailed design information supports later implementation/integration; physical handoff not demonstrated."
-      },
-      {
-        "step": "Verification across abstraction levels",
-        "inputs": "Logical requirements, PVS theories, model/refinement relations, transition systems, simulations.",
-        "outputs": "Consistency checks within abstraction levels, traceability/refinement evidence between levels, proof obligations/type correctness conditions.",
-        "actors_roles": "Formal-methods engineers and systems engineers.",
-        "prerequisites": "Formalized requirements and abstraction/refinement mappings.",
-        "completion_criteria": "PVS type correctness conditions/proof obligations discharged and refinement relation established; paper demonstrates form but not completed satellite checks.",
-        "handoffs": "Verified/refined requirements and design artifacts inform subsequent lifecycle levels."
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "Maps to a SMAD-style mission design flow: mission objectives, mission characteristics, mission concept evaluation and selection, and domain-specific design. Verification overlays these levels with consistency checks across each level and traceability between levels.",
-    "approach_classification": "Enhanced MBSE",
-    "approach_classification_rationale": "The base is MBSE/SysML, enhanced by higher-order logic, PVS theorem proving, formal consistency checks, and formal traceability/refinement mechanisms. It is not a pure SysML-only approach and not a fully demonstrated integrated digital-engineering toolchain.",
-    "tailoring_rationale": [
-      "PNSats face restrictive size, mass, power, and cost constraints.",
-      "PNSats need short, agile development lifecycles and responsiveness to changes.",
-      "Low cost to build and replace motivates a risk-tolerant rather than risk-averse design philosophy.",
-      "Highly integrated designs make subsystem behavior hard to isolate from algorithms, other subsystems, and environment.",
-      "Small multidisciplinary teams need a common language and global system perspective."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "Reliable/Responsive and Formal Design (RFD) process",
-      "SysML as graphical modeling language",
-      "SysML stereotypes/profiles proposed for customization",
-      "Higher-order logic for formal requirements",
-      "PVS theorem prover and type checking",
-      "Formal methods; B method mentioned as a theorem-prover/method family",
-      "Parametric and behavior simulations"
-    ],
-    "toolchain_architecture_data_flow": "Natural-language requirements are translated into logical functions in higher-order logic/PVS; logical requirements connect to SysML-style system models; models feed parametric simulations, while logical descriptions feed behavior simulations; consistency is checked within abstraction levels and traceability/refinement between levels.",
-    "interoperability_mechanisms": [
-      "SysML common language across disciplines",
-      "Proposed SysML stereotypes/profiles to codify the RFD process",
-      "Translation of natural-language requirements to logical functions",
-      "PVS theories, type correctness conditions, and proof obligations",
-      "Category-theoretic refinement/abstraction relations between levels",
-      "Shared abstraction variables linking requirements, models, and simulations"
-    ],
-    "syntax_semantic_continuity_evidence": "Semantic continuity is argued conceptually through SysML's common semantics and formal HOL/PVS specifications. The paper provides Level1/Level2 PVS snippets and a type correctness condition, but no automated SysML-PVS transformation or data exchange implementation.",
-    "software_hardware_system_integration_readiness": "The paper frames PNSats as cyber-physical systems where algorithms, hardware/software components, sensors, actuators, and environment should be modeled early. Integration readiness is only conceptual; no hardware/software integration test or EPS integration result is reported.",
-    "toolchain_limitations": [
-      "No available SysML models, profiles, or PVS files are reported.",
-      "No implemented SysML-to-PVS transformation is demonstrated.",
-      "The verification example is a railway crossing, not a satellite or EPS model.",
-      "The traceability check is future work.",
-      "Formal methods are acknowledged as potentially expensive and not universally applicable."
-    ],
-    "availability_reproducibility": "PVS is identified and PVS-like snippets are printed, but model artifacts, executable proofs, repositories, profiles, and simulation files are not made available in the paper. Reproducibility is therefore limited to conceptual reimplementation."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [],
-    "eps_requirements_representation": "not reported; no EPS requirements are represented. The paper represents generic requirements as natural language and higher-order logic and uses a railway-crossing safety invariant as the example.",
-    "verification_validation_artifacts": [
-      "Natural-language requirements",
-      "Logical functions/formal requirements",
-      "PVS theories and axioms",
-      "Type correctness conditions/proof obligations",
-      "Consistency checks across abstraction levels",
-      "Traceability/refinement relations between abstraction levels",
-      "Parametric simulations",
-      "Behavior simulations"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "Translate requirements to higher-order logic",
-      "Use PVS for type checking and theorem proving",
-      "Check consistency within each abstraction level",
-      "Establish traceability/refinement relations between abstraction levels",
-      "Use parametric and behavior simulations for virtual testing before physical integration"
-    ],
-    "evidence_verification_integrated_in_model": "Verification is integrated at the system-process level, not EPS level: \"PVS will be used from mission objective to mission concept phase\" and \"Traceability occurs between $ \\mathcal{A}_{i} $ 's\" / \"Consistency occurs across each $ \\mathcal{A}_{i} $\". The worked example is non-EPS.",
-    "integration_test_readiness": "The paper claims virtual testing at refinement levels and potential reduction of integration testing, but reports no EPS integration tests, readiness criteria, or hardware results."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "RFD can produce high-confidence small-satellite designs that are correct by construction, formally verified, and responsive to requirement changes.",
-      "outcome_category": "reliability / change responsiveness",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "MBSE process",
-        "Formal methods",
-        "Requirements-model-simulation linkage",
-        "PVS logical requirement formulation"
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool=other",
+      "label": "reliable-responsive-and-formal-design-process",
+      "description": "Named design methodology integrating MBSE, formal methods, requirements, models, simulations, consistency, and traceability for PNSats.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Abstract names \"Reliable and Formal Design (RFD)\"; Section III uses \"Responsive and Formal Design (RFD) process\".",
+      "confidence": "medium",
+      "original_label": "Reliable/Responsive and Formal Design process",
+      "applies_to": [
+        "mbse_objective_scope_artifacts",
+        "implementation_pathway_tailoring",
+        "claimed_outcomes_value_mechanisms_evidence"
       ],
-      "artifact_or_process_linked": "RFD framework tying requirements, models, and simulations with formal verification.",
-      "lifecycle_stage": "Conceptual design through development lifecycle.",
-      "evidence_type": "Conceptual claim with illustrative formal example, no satellite case metrics.",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "Document-centric/physical-centric satellite design is described as problematic, but no measured baseline is used.",
-      "observed_effect_size_or_qualitative_effect": "Claimed high confidence, correctness, formal verification, and responsiveness; not observed empirically.",
-      "evidence_source": "Abstract and Introduction.",
-      "direct_quote": "Reliable and Formal Design (RFD) process whose results are correct by construction, formally verified, and responsive to system requirement changes.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No PNSat/EPS implementation or metrics; correctness depends on validity and completeness of formalized assumptions."
+      "controlled_field_trigger": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool=other"
     },
     {
-      "claim": "Formal methods integrated at appropriate design levels can eliminate many design failures and integration challenges.",
-      "outcome_category": "integrability / defect prevention",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Formal verification within RFD",
-        "Consistency checks",
-        "Traceability across abstraction levels"
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool=other",
+      "label": "pvs-hol-theorem-proving-formalization",
+      "description": "Natural-language requirements are translated into higher-order logic and checked using PVS theories, type correctness conditions, and proof obligations.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.C: \"We have chosen to use PVS\"; Section V prints Level1/Level2 PVS theories and a TCC obligation.",
+      "confidence": "medium",
+      "original_label": "PVS/HOL theorem-proving formalization",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+        "eps_verification_specific.pre_physical_development_verification_mechanism"
       ],
-      "artifact_or_process_linked": "Integration of formal methods into model-based design process levels.",
-      "lifecycle_stage": "Design and system integration preparation.",
-      "evidence_type": "Conceptual assertion.",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "Traditional design/integration challenges are discussed qualitatively; no comparison data.",
-      "observed_effect_size_or_qualitative_effect": "Claimed elimination of many failures/challenges; not demonstrated.",
-      "evidence_source": "Introduction.",
-      "direct_quote": "By integrating formal methods into the proposed design process at the appropriate levels, many design failures and integration challenges can be eliminated.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "Elimination depends on correct formalization and coverage; physical integration issues may remain outside the formal model."
+      "controlled_field_trigger": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool=other"
     },
     {
-      "claim": "The process can reduce system-integration testing burden by enabling virtual testing at each refinement level.",
-      "outcome_category": "verification efficiency / integration testing",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Correct-by-construction formal process",
-        "Virtual testing at levels of refinement",
-        "Parametric and behavior simulations"
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used=other",
+      "label": "formal-requirement-and-proof-artifacts",
+      "description": "Artifacts not covered by SysML diagram labels: natural-language requirements $L_n$, logical functions $L_l$, PVS axioms/theories, type correctness conditions, and proof obligations.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.C defines $L_n$ and $L_l$; Section V provides PVS specification/refinement snippets.",
+      "confidence": "medium",
+      "original_label": "Formal requirement and proof artifacts",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.model_artifacts_used"
       ],
-      "artifact_or_process_linked": "RFD refinement levels and simulations S_p/S_b.",
-      "lifecycle_stage": "Refinement and system integration phase.",
-      "evidence_type": "Conceptual argument; no test data.",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "Implicit comparison to significant physical system-integration testing; no quantified baseline.",
-      "observed_effect_size_or_qualitative_effect": "Claimed reduction in testing; not measured.",
-      "evidence_source": "Introduction.",
-      "direct_quote": "The integration of formal methods into the design process of a complex system can reduce the need for a significant amount testing during the system integration phase because of the \"correct by construction\" nature of the process.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The paper does not show physical integration, model fidelity validation, or residual tests required after formal checks."
+      "controlled_field_trigger": "mbse_objective_scope_artifacts.model_artifacts_used=other"
     },
     {
-      "claim": "SysML as a common MBSE language can improve cross-disciplinary communication and reduce ambiguity.",
-      "outcome_category": "communication / consistency",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "SysML common modeling language",
-        "MBSE replacing document-centric approach",
-        "Common design semantics"
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism=other",
+      "label": "category-theoretic-refinement-dual-traceability",
+      "description": "Traceability is formalized as refinement between abstraction levels with a dual abstraction/adjoint relation.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Abstract: traceability requires the function refining abstraction layers to have a dual; Section IV.B defines refinement relations and adjoint functors.",
+      "confidence": "medium",
+      "original_label": "Category-theoretic refinement/dual traceability",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+        "governance_roi_project_decision_linkage"
       ],
-      "artifact_or_process_linked": "SysML models and proposed SysML profiles/stereotypes for RFD.",
-      "lifecycle_stage": "Requirements, design analysis, simulation, V&V.",
-      "evidence_type": "Literature-backed conceptual rationale, no stakeholder evaluation.",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "Document-centric approach using discipline-specific documents is described qualitatively.",
-      "observed_effect_size_or_qualitative_effect": "Claimed reduction of ambiguity; not measured.",
-      "evidence_source": "Section II.B Model Base Systems Engineering Design Process.",
-      "direct_quote": "Another important aspect of SysML is that it facilitates communication by being a common language across organizational disciplines, thereby reducing ambiguity caused by a lack of a common formal design semantics.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Communication benefits depend on team adoption, model quality, training, and tool integration, none evaluated."
+      "controlled_field_trigger": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism=other"
     },
     {
-      "claim": "Formal requirements and PVS consistency checks improve reliability/correctness by exposing contradictions and proof obligations before implementation.",
-      "outcome_category": "reliability / formal verification",
-      "specificity": "generic space-system",
-      "mbse_mechanism": [
-        "Natural-language to logical-requirement translation",
-        "Higher-order logic",
-        "PVS type correctness conditions",
-        "Consistency proofs"
+      "field_path": "study_context_population",
+      "label": "pnsats-framed-as-cyber-physical-systems",
+      "description": "The paper treats PNSats as heterogeneous sensor/processor/actuator systems coupled to the space environment, algorithms, software, and ground/satellite communications.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section II.A: \"PNSats can easily be described as a cyber-physical system\".",
+      "confidence": "medium",
+      "original_label": "PNSats framed as cyber-physical systems",
+      "applies_to": [
+        "study_context_population",
+        "mbse_objective_scope_artifacts"
       ],
-      "artifact_or_process_linked": "Logical requirement set L_l, PVS theories, and type correctness conditions.",
-      "lifecycle_stage": "Mission objective to mission concept phase; pre-physical development.",
-      "evidence_type": "Formal-methods rationale plus non-satellite PVS example.",
-      "metric_or_value_indicator": "TCC/proof obligation discharge proposed; no actual discharge result reported.",
-      "baseline_comparator": "Natural-language requirements with ambiguity are the conceptual baseline.",
-      "observed_effect_size_or_qualitative_effect": "Potential to identify contradictions and improve reliability; no measured effect.",
-      "evidence_source": "Section II.C Formal Methods and Section IV.A Consistency.",
-      "direct_quote": "By specifying a complex system in a mathematically rigorous format, it is possible to improve system reliability by employing this property throughout the design life cycle.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Formal verification cannot correct wrong assumptions; incomplete requirements or unmodeled physical behavior can invalidate results."
+      "controlled_field_trigger": null
     },
     {
-      "claim": "Traceability lets engineers understand requirement origin, importance, implementation, and testing status across refinement levels.",
-      "outcome_category": "traceability / governance",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "Refinement relations",
-        "Category-theoretic dual refinement/abstraction",
-        "PVS proof of correctness",
-        "Documented requirement links"
+      "field_path": "implementation_pathway_tailoring.tailoring_rationale",
+      "label": "size-mass-power-and-cost-smap-c-tailoring",
+      "description": "Resource constraints motivate risk-tolerant, agile, formal model-based design for pico-/nano-satellites.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section I: \"Extreme resource constraints of size, mass, power and cost (SMAP-C)\".",
+      "confidence": "medium",
+      "original_label": "Size, mass, power, and cost (SMAP-C) tailoring",
+      "applies_to": [
+        "implementation_pathway_tailoring.tailoring_rationale",
+        "gap_mapping.lightweight_resource_constrained_tailoring"
       ],
-      "artifact_or_process_linked": "Abstraction levels A_i, transition systems, refinement relation, and PVS proof obligations.",
-      "lifecycle_stage": "Requirements through design refinement and testing.",
-      "evidence_type": "Formal definition and illustrative example, no implemented traceability tool.",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "Manual traceability is described as time-consuming for large projects.",
-      "observed_effect_size_or_qualitative_effect": "Claimed formal traceability; implementation deferred.",
-      "evidence_source": "Section IV.B Traceability.",
-      "direct_quote": "Through traceability, each project engineer has access to contextual information that can assist in determining where a requirement came from, its importance, how it was implemented, and how it was tested.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Traceability implementation is future work and may restrict design space or require substantial modeling effort."
+      "controlled_field_trigger": null
     },
     {
-      "claim": "Formal methods support reproducibility/reviewability through rigorous specification for peer review and archival purposes.",
-      "outcome_category": "reproducibility / archival reviewability",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "Formal specification",
-        "Mathematically rigorous requirements",
-        "Archival logical artifacts"
+      "field_path": "claimed_outcomes_value_mechanisms_evidence",
+      "label": "non-satellite-railway-crossing-verification-illustration",
+      "description": "The only worked PVS example is a railway crossing rather than a PNSat or EPS, limiting direct domain evidence.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section V: \"We consider a simple railway crossing example for the purposes of exposition.\"",
+      "confidence": "medium",
+      "original_label": "Non-satellite railway-crossing verification illustration",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence",
+        "structured_limitations"
       ],
-      "artifact_or_process_linked": "Formal requirements and PVS theory artifacts.",
-      "lifecycle_stage": "Requirements and lifecycle documentation.",
-      "evidence_type": "Conceptual claim from formal-methods discussion.",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "Document-centric approach is criticized for loss of historical data; no empirical comparison.",
-      "observed_effect_size_or_qualitative_effect": "Claimed peer-review and archival benefit; no repository or reuse evidence.",
-      "evidence_source": "Section II.C Formal Methods.",
-      "direct_quote": "the use of formal methods in design also offers the benefits to the involved engineering disciplines by rigorously specify systems goals and requirements for both peer review and archival purposes [16].",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "No formal artifacts are made available; reviewability may be limited by theorem-prover expertise."
-    },
-    {
-      "claim": "A risk-tolerant agile model-based process should lead to correct designs with minimal-to-no redesign for low-cost small satellites.",
-      "outcome_category": "cost/schedule / redesign avoidance",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Agile formal design process based on models",
-        "Early formal verification",
-        "Responsive requirement handling"
-      ],
-      "artifact_or_process_linked": "RFD process for small satellites under risk-tolerant philosophy.",
-      "lifecycle_stage": "Overall design lifecycle.",
-      "evidence_type": "Notional claim.",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "Large-spacecraft risk-averse design with many reviews and high cost is described qualitatively.",
-      "observed_effect_size_or_qualitative_effect": "Minimal-to-no redesign is asserted as notional, not measured.",
-      "evidence_source": "Introduction.",
-      "direct_quote": "This proposed RFD process [1] for small satellites must utilize a risk-tolerant philosophy that notionally should lead to a correct design with minimal-to-no redesign through the use of an agile and formal design process based on models.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "The authors themselves qualify the effect as notional; no project data demonstrate redesign reduction."
+      "controlled_field_trigger": null
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "Governance is implied through RFD abstraction levels, formalized requirements, PVS theories, consistency checks across levels, traceability/refinement between levels, and possible SysML profiles/stereotypes. No organizational governance policy or model management workflow is reported.",
-    "traceability_to_deliverables_decisions_reviews": "Requirements are intended to trace from mission objectives through mission characteristics, concept selection, and domain-specific design. The paper states traceability should show where a requirement came from, its importance, implementation, and testing, but does not map to PDR/CDR deliverables or actual review artifacts.",
-    "evaluation_criteria_model_quality_usefulness": "Criteria include logical consistency/no contradictions, TCC discharge in PVS, satisfaction of model-attribute constraints in parametric simulations, behavior simulation equivalence to requirements, and existence of refinement relations.",
-    "roi_value_realization_evidence": "The paper claims lower redesign, reduced integration testing, short lifecycle, and suitability for low-cost satellites, but provides no ROI metrics, schedule/cost data, or comparator study.",
-    "programmatic_gates_critical_design_events_supported": "Mission concept evaluation and selection is explicitly part of the flow; no critical design review, preliminary design review, flight readiness, or EPS-specific gate support is reported.",
-    "model_derived_performance_indicators_management_metrics": "not reported"
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper gives a phased mission design flow and verification overlay, plus a PVS illustration, but no complete PNSat/EPS implementation playbook or case."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed conceptually",
-      "rationale": "It proposes SysML as common language and PVS/HOL formalization to connect requirements, models, and simulations, but does not demonstrate automated data exchange or toolchain integration."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed conceptually",
-      "rationale": "The methodology is motivated by SMAP-C constraints, small teams, short lifecycles, and risk-tolerant small-satellite development, but no effort/complexity data are reported."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "mentioned only",
-      "rationale": "Traceability and reduced cost/rework/testing are discussed, but there are no concrete deliverables, management metrics, ROI evidence, or review-gate outcomes."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper emphasizes agile, responsive, short-life-cycle small-satellite design, but does not evaluate distributed collaboration or rapid iteration in a project setting."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "The paper supports general nanosatellite/PNSat modeling by framing PNSats as cyber-physical systems and using abstraction levels that link natural-language requirements, logical requirements, models, parametric simulations, and behavior simulations.",
-        "Modeling can begin with broad mission objectives and abstract mission concepts, deferring detailed subsystem/domain behavior to later domain-specific design; however, EPS is not modeled.",
-        "Generality is achieved through a SMAD-style mission design flow, SysML as a common language, and formal refinement between abstraction levels."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0010",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0010.json",
+      "tier_status": "supporting",
+      "tier_status_rationale": "System-level PNSat MBSE/formal-methods paper with relevance to general modeling and pre-physical verification, but no EPS model or EPS outcome evidence.",
+      "citation": "Edmonson, W., Chenou, J., Neogi, N., and Herencia-Zapana, H. (2014). Small satellite systems design methodology: A formal and agile design process. IEEE SysCon. doi:10.1109/syscon.2014.6819305.",
+      "title": "Small Satellite Systems Design Methodology: A Formal and Agile Design Process",
+      "authors": [
+        "William Edmonson",
+        "Jules Chenou",
+        "Natasha Neogi",
+        "Heber Herencia-Zapana"
       ],
-      "RQ2": [
-        "Reliability/high confidence is claimed through formal specification, PVS theorem proving, consistency checking, and correct-by-construction design.",
-        "Integrability is claimed through early formal methods, virtual testing at refinement levels, and reduced ambiguity across multidisciplinary interfaces.",
-        "Reproducibility/reviewability is only weakly supported through claims about rigorous requirements for peer review and archival purposes; no EPS-specific reproducibility assets or evidence are reported."
+      "year": 2014,
+      "venue": "IEEE Systems Conference / SysCon (inferred from DOI metadata)",
+      "doi_or_url": "10.1109/syscon.2014.6819305",
+      "publisher": "IEEE",
+      "venue_type": "conference",
+      "source_database_or_route": [
+        {
+          "source": "unknown",
+          "input_file": "SLR/SLR1/searches/ieee_manual_promoted_records.json",
+          "query": "Manual IEEE Xplore CSV promotions retained after Stage-1 audit",
+          "rank": 1,
+          "paperId": "ieee:6819305"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0010_semantic_title.json",
+          "query": "\"Small satellite systems design methodology: A formal and agile design process\"",
+          "rank": 1,
+          "paperId": "5712d578e7d48912fbbcfa4680e59ca24c0f6e0a",
+          "purpose": "abstract_enrichment"
+        }
       ],
-      "RQ3": [
-        "Verification is integrated before physical development by translating requirements into higher-order logic, using PVS for type checking/proof obligations, checking consistency within abstraction levels, and enforcing traceability/refinement between levels.",
-        "The paper's verification demonstration uses a railway-crossing example, not EPS or a satellite subsystem, so it is only analogical support for EPS pre-physical verification."
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "partial",
+          "rationale": "General PNSat system modeling via RFD abstraction levels, SysML, requirements, and simulations; not EPS-specific."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "Reliability/integrability/traceability/reproducibility claims are linked to MBSE/formal methods but weakly evidenced and non-EPS."
+        },
+        "RQ3": {
+          "relevance": "partial",
+          "rationale": "Pre-physical verification is formulated through PVS consistency and traceability/refinement, but no EPS verification model is provided."
+        }
+      },
+      "lineage_overlap_notes": "The paper explicitly continues earlier RFD work cited as Edmonson et al. 2012. Treat as an RFD methodology clarification, not as a separate empirical PNSat/EPS implementation."
+    },
+    "study_context_population": {
+      "mission_platform": "Pico-/nano-class small satellite systems (PNSats).",
+      "size_form_factor": "Less than 50 kg; CubeSat units/form factor not reported.",
+      "mission_name": "not reported",
+      "mission_domain": "Generic space-based Earth/science sensing platforms and possible heterogeneous sensing networks; no specific mission reported.",
+      "organization_type": "Research/academic affiliations in the paper front matter; target users are small multidisciplinary design teams.",
+      "project_maturity": "Conceptual methodology with a non-satellite formal-methods illustration; no project-applied PNSat maturity.",
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A",
+        "Phase A/B"
+      ],
+      "development_context": [
+        "agile/concurrent design",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "system-level only",
+      "model_maturity": [
+        "conceptual framework"
+      ],
+      "context_evidence_quotes": [
+        "\"small satellite systems in the pico-/nano-class, i.e. $ < 50kg $\"",
+        "\"Extreme resource constraints of size, mass, power and cost (SMAP-C) drive highly integrated designs\"",
+        "\"This class of satellites are constrained by size, mass, power, and cost (SMAP-C), and is designed using a small, multi-disciplinary design team.\""
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Formal methods cannot fix incorrect assumptions made in design.",
-      "Formal methods are not a panacea and may be cost prohibitive outside suitable areas such as complex interfaces or high-quality subcomponents.",
-      "The implementation of the traceability check is future work.",
-      "Manual traceability data capture for large software projects can require extreme time and effort.",
-      "Constraining refinements may limit the design space."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "No EPS elements, power architecture, power budget, battery, solar array, or regulator models are described.",
-      "No concrete PNSat/CubeSat case study, mission, orbit, payload, or flight/operational evidence is provided.",
-      "No quantitative reliability, integration, reproducibility, cost, schedule, or ROI metrics are reported.",
-      "No executable SysML/PVS artifacts, profiles, model repository, or transformation tooling are made available.",
-      "The worked example is a railway crossing, limiting direct applicability to nanosatellite/EPS verification."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Develop an agile/formal MBSE process for high-confidence PNSat designs that handles SMAP-C constraints, short life cycles, multidisciplinary coupling, requirements ambiguity, consistency, traceability, and changing specifications.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "verification",
+        "simulation"
+      ],
+      "system_boundary_level_of_abstraction": "System-level PNSat/cyber-physical design process. Abstraction levels include natural-language requirements $L_n$, logical requirements $L_l$, interconnected models $M$, parametric simulations $S_p$, and behavior simulations $S_b$; detailed subsystem design is deferred to domain-specific design.",
+      "minimal_or_excluded_modeling": "No detailed satellite model, EPS subsystem, power budget, flight software, hardware, operations scenario, or physical integration environment is modeled. The worked example is a railway crossing.",
+      "required_prior_behavioral_domain_knowledge": "Not operationalized. The method assumes mission objectives/requirements can be formulated and translated to logic; formal-methods expertise is needed. Detailed domain behavior is expected later in domain-specific design.",
+      "handling_limited_behavioral_knowledge": "Early knowledge is organized as broad mission objectives and natural-language requirements, then refined into logical functions, abstract models, simulations, and domain-specific models as information matures.",
+      "model_artifacts_used": [
+        "Natural-language requirements $L_n$",
+        "Logical requirement/functions $L_l$ in higher-order logic",
+        "System of interconnected models $M$",
+        "Parametric simulations $S_p$",
+        "Behavior simulations $S_b$ including state/activity diagrams",
+        "SysML language with possible stereotypes/profiles",
+        "PVS theories, axioms, type correctness conditions, and proof obligations",
+        "Transition systems and refinement relations"
+      ],
+      "generality_reuse_mechanism": [
+        "profile",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "key_quotes": [
+        "\"This paper develops an intelligent framework that ties requirements, models, and simulations in a cogent manner.\"",
+        "\"We have chosen the graphical modeling language of SysML to be used as the basis of our design process development for small satellites\".",
+        "\"each level of abstraction... represents a set of requirements or specifications, its associated models, and simulations.\""
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "implementation_steps_or_phases": [
+        {
+          "step": "Mission objectives ($A_1$)",
+          "inputs": "Broad mission goals and natural-language requirements.",
+          "outputs": "Natural-language requirements linked to logical functions.",
+          "actors_roles": "Systems engineers, stakeholders, formal-methods support (roles implied, not fully specified).",
+          "prerequisites": "Mission goals and requirement statements.",
+          "completion_criteria": "Not fully specified; implied sufficient formalization for consistency checking.",
+          "handoffs": "Logical/natural requirement set feeds mission-characteristics modeling."
+        },
+        {
+          "step": "Mission characteristics ($A_2$)",
+          "inputs": "Mission objectives and formalized requirements.",
+          "outputs": "Abstract models, parametric simulations, and behavior simulations.",
+          "actors_roles": "Systems engineers and multidisciplinary design team.",
+          "prerequisites": "Initial requirement set and model abstraction.",
+          "completion_criteria": "Simulations successful if constraints associated with system attributes are met; detailed criteria not specified.",
+          "handoffs": "Candidate concepts feed mission concept evaluation and selection."
+        },
+        {
+          "step": "Mission concept evaluation and selection ($A_3$)",
+          "inputs": "Mission-characteristic models, simulations, and requirements.",
+          "outputs": "Selected mission concept and execution description.",
+          "actors_roles": "Systems engineers/stakeholders (not fully specified).",
+          "prerequisites": "Candidate mission concepts.",
+          "completion_criteria": "Concept selected; no formal review gate reported.",
+          "handoffs": "Selected concept handed to domain-specific design."
+        },
+        {
+          "step": "Domain-specific design ($A_4$)",
+          "inputs": "Selected concept and higher-level models.",
+          "outputs": "Subsystem/domain-specific detailed models and parametric simulations.",
+          "actors_roles": "Subsystem domain experts with global system perspective.",
+          "prerequisites": "Selected mission concept and refinement context.",
+          "completion_criteria": "Parametric constraints satisfied; no EPS-specific or review-gate criteria reported.",
+          "handoffs": "Detailed designs support later implementation/integration conceptually."
+        },
+        {
+          "step": "Verification across abstraction levels",
+          "inputs": "Logical requirements, PVS theories, transition systems, refinement relations, simulations.",
+          "outputs": "Consistency checks within levels, traceability/refinement evidence between levels, proof obligations/TCCs.",
+          "actors_roles": "Formal-methods and systems engineers.",
+          "prerequisites": "Formalized requirements and abstraction/refinement mappings.",
+          "completion_criteria": "TCCs/proof obligations discharged and refinement relation established; only illustrated, not demonstrated for PNSats.",
+          "handoffs": "Verified/refined requirements and design information to lower abstraction levels."
+        }
+      ],
+      "mapping_to_systems_engineering_activities_lifecycle_gates": "Maps to a SMAD-style mission-design flow: mission objectives, mission characteristics, mission concept evaluation/selection, and domain-specific design. No SRR/PDR/CDR artifacts are reported.",
+      "approach_classification": "Enhanced MBSE",
+      "approach_classification_rationale": "System model/process is enhanced with PVS/HOL formal verification and simulation concepts but lacks a demonstrated multi-tool digital thread.",
+      "tailoring_rationale": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "risk tolerance"
+      ],
+      "adoption_guidance_for_new_users": "partial guidance"
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML",
+        "PVS",
+        "higher-order logic",
+        "formal methods",
+        "RFD process",
+        "category-theoretic refinement"
+      ],
+      "toolchain_architecture_data_flow": "Conceptual flow: $L_n$ natural-language requirements <-> $L_l$ logical requirements <-> $M$ interconnected models -> $S_p$ parametric simulations, with $L_l$ also feeding $S_b$ behavior simulations. PVS is used for logical requirements/type checking from mission objective to mission concept phase.",
+      "interoperability_mechanisms": "not reported as concrete tool mechanisms; only conceptual translations/refinements are described.",
+      "syntax_semantic_continuity_evidence": "Argued through SysML common semantics and PVS/HOL mathematical semantics; not shown as an automated SysML-PVS transformation.",
+      "software_hardware_system_integration_readiness_supported": "Conceptual only. The paper frames PNSats as cyber-physical systems involving software, algorithms, hardware components, sensors, actuators, environment, and communications, but reports no integration-ready artifacts.",
+      "toolchain_limitations": [
+        "missing interfaces",
+        "scalability issues"
+      ],
+      "availability_reproducibility": "PVS snippets are printed, but no model/proof assets, SysML profile, scripts, data, or repository are reported."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [],
+      "eps_requirements_represented_and_links": "No EPS requirements are reported. Generic requirements are represented as natural language $L_n$ and logical functions $L_l$ and are linked to models/simulations conceptually.",
+      "verification_validation_artifacts": [
+        "PVS theories/axioms",
+        "type correctness conditions/proof obligations",
+        "consistency definitions",
+        "traceability/refinement relations",
+        "parametric simulations",
+        "behavior simulations"
+      ],
+      "pre_physical_development_verification_mechanism": [
+        "requirements-in-the-loop",
+        "simulation-in-the-loop",
+        "parametric checks",
+        "virtual integration"
+      ],
+      "evidence_verification_integrated_in_model": "System-level integration only: consistency occurs across abstraction levels, traceability occurs between them, and PVS checks are intended from mission objective to mission concept phase. No EPS model integration is shown.",
+      "integration_test_readiness": "not reported; no hardware/software integration, flat-sat, environmental test, operational validation, or EPS test readiness evidence."
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "PNSat scope and objective",
-        "quote": "We propose to develop a model-based systems engineering process that results in high-confidence designs for small satellite systems in the pico-/nano-class, i.e. $ < 50kg $ .",
-        "location": "Abstract"
+        "claim_id": "C1",
+        "claim_text_or_paraphrase": "RFD can produce high-confidence pico-/nano-satellite designs that are correct by construction, formally verified, and responsive to requirement changes.",
+        "outcome_category": [
+          "reliability",
+          "mission assurance",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "artifact traceability",
+          "executable simulation",
+          "other"
+        ],
+        "other_mechanism_label": "formal methods/PVS theorem proving integrated with MBSE",
+        "linked_artifact_process": "RFD framework tying natural-language requirements, logical requirements, SysML-style models, and simulations.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "previous document-centric process",
+        "observed_effect": "Claimed high-confidence, correct-by-construction, formally verified, change-responsive design; not empirically observed.",
+        "quote_location": "Abstract",
+        "direct_quote": "\"Reliable and Formal Design (RFD) process whose results are correct by construction, formally verified, and responsive to system requirement changes.\"",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_or_alternative_explanations": "No PNSat/EPS case or outcome metric; correctness depends on complete and valid formalization of requirements and assumptions."
       },
       {
-        "topic": "Correct-by-construction RFD claim",
-        "quote": "Reliable and Formal Design (RFD) process whose results are correct by construction, formally verified, and responsive to system requirement changes.",
-        "location": "Abstract"
+        "claim_id": "C2",
+        "claim_text_or_paraphrase": "Integrating formal methods at appropriate design levels can eliminate many design failures and integration challenges.",
+        "outcome_category": [
+          "defect/error reduction",
+          "integrability/interoperability",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "artifact traceability",
+          "other"
+        ],
+        "other_mechanism_label": "formal consistency and traceability proofs",
+        "linked_artifact_process": "Formal methods embedded in RFD abstraction levels.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "integration and test"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "not reported",
+        "observed_effect": "Claimed elimination of many failures/challenges; no observed effect reported.",
+        "quote_location": "Section I Introduction",
+        "direct_quote": "\"By integrating formal methods into the proposed design process at the appropriate levels, many design failures and integration challenges can be eliminated.\"",
+        "evidence_confidence_rating": "Unsupported",
+        "extractor_confidence": "high",
+        "threats_or_alternative_explanations": "Physical interfaces, environmental effects, and incorrect assumptions may remain outside the formal model; no integration-test evidence is reported."
       },
       {
-        "topic": "Requirements-models-simulations linkage",
-        "quote": "This paper develops an intelligent framework that ties requirements, models, and simulations in a cogent manner.",
-        "location": "Abstract"
+        "claim_id": "C3",
+        "claim_text_or_paraphrase": "Correct-by-construction formal design enables virtual testing at each refinement level and may reduce system-integration testing burden.",
+        "outcome_category": [
+          "effort reduction",
+          "schedule reduction",
+          "integrability/interoperability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "artifact traceability",
+          "other"
+        ],
+        "other_mechanism_label": "virtual testing through formal refinement levels",
+        "linked_artifact_process": "RFD abstraction levels $A_i$, parametric simulations $S_p$, behavior simulations $S_b$, and formal checks.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "integration and test"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "not reported",
+        "observed_effect": "Claimed reduction in physical integration testing; not measured.",
+        "quote_location": "Section I Introduction",
+        "direct_quote": "\"The integration of formal methods into the design process of a complex system can reduce the need for a significant amount testing during the system integration phase because of the \"correct by construction\" nature of the process. This leads to testing virtually at each level of refinement.\"",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_or_alternative_explanations": "Virtual tests are not shown for a satellite; no evidence of model fidelity, integration readiness, or residual physical-test needs."
       },
       {
-        "topic": "Resource constraints",
-        "quote": "Extreme resource constraints of size, mass, power and cost (SMAP-C) drive highly integrated designs in which the behavior of the satellite subsystems cannot be isolated from each other or from the operational algorithms or from the operating environment.",
-        "location": "Section I Introduction"
+        "claim_id": "C4",
+        "claim_text_or_paraphrase": "SysML as a common MBSE language can improve cross-disciplinary communication and reduce ambiguity at interfaces and abstraction levels compared with document-centric practice.",
+        "outcome_category": [
+          "communication/stakeholder alignment",
+          "consistency",
+          "integrability/interoperability"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "other"
+        ],
+        "other_mechanism_label": "common graphical modeling language and shared formal design semantics",
+        "linked_artifact_process": "SysML models/profiles/stereotypes used as the basis for small-satellite design process development.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "previous document-centric process",
+        "observed_effect": "Claimed ambiguity reduction and communication support; no stakeholder evaluation.",
+        "quote_location": "Section II.B Model Base Systems Engineering Design Process",
+        "direct_quote": "\"Another important aspect of SysML is that it facilitates communication by being a common language across organizational disciplines, thereby reducing ambiguity caused by a lack of a common formal design semantics.\"",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_or_alternative_explanations": "Benefits depend on team adoption, modeling skill, profile quality, and governance; none are evaluated."
       },
       {
-        "topic": "SysML selection",
-        "quote": "We have chosen the graphical modeling language of SysML to be used as the basis of our design process development for small satellites and will be used for the design analysis, simulation, and verification and validation of systems.",
-        "location": "Section II.B Model Base Systems Engineering Design Process"
+        "claim_id": "C5",
+        "claim_text_or_paraphrase": "Formalizing requirements in higher-order logic and checking them in PVS can improve reliability/correctness by exposing contradictions and type-correctness proof obligations early.",
+        "outcome_category": [
+          "reliability",
+          "consistency",
+          "automation",
+          "defect/error reduction"
+        ],
+        "specificity_of_claim": "generic space-system",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "other"
+        ],
+        "other_mechanism_label": "PVS/HOL type checking and theorem proving",
+        "linked_artifact_process": "Logical requirement set $L_l$, PVS theories/axioms, and type-correctness conditions.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "previous document-centric process",
+        "observed_effect": "Potential contradiction detection and reliability improvement; paper shows the form of a TCC but no completed satellite proof result.",
+        "quote_location": "Sections II.C, IV.A, and V",
+        "direct_quote": "\"By specifying a complex system in a mathematically rigorous format, it is possible to improve system reliability\"; Section V: \"this type checking condition (TCC) would have to be discharged successfully.\"",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_or_alternative_explanations": "Formal methods cannot correct wrong assumptions; PVS example is a railway crossing and the TCC is not reported as a satellite result."
       },
       {
-        "topic": "Abstraction artifacts",
-        "quote": "In general for MBSE, each level of abstraction, $ \\mathcal{A}_{i}\\in \\left\\{\\mathcal{L}_{n},\\mathcal{L}_{l},\\mathcal{M}_{i},\\mathcal{S}_{p},\\mathcal{S}_{b}\\right\\} $ represents a set of requirements or specifications, its associated models, and simulations.",
-        "location": "Section III.C Level of Abstraction Relations"
+        "claim_id": "C6",
+        "claim_text_or_paraphrase": "Formal traceability across refinement levels lets engineers track requirement origin, importance, implementation, and testing status.",
+        "outcome_category": [
+          "traceability",
+          "lifecycle continuity",
+          "consistency"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage",
+          "other"
+        ],
+        "other_mechanism_label": "category-theoretic refinement relation with dual abstraction",
+        "linked_artifact_process": "Abstraction levels $A_i$, transition-system refinements, refinement relation $\\Delta$, and PVS proof obligations.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "not reported",
+        "observed_effect": "A formal traceability mechanism is formulated; implementation of the traceability check is future work.",
+        "quote_location": "Section IV.B Traceability and Section VI Conclusion",
+        "direct_quote": "\"Through traceability, each project engineer has access to contextual information that can assist in determining where a requirement came from, its importance, how it was implemented, and how it was tested.\"",
+        "evidence_confidence_rating": "Weak",
+        "extractor_confidence": "high",
+        "threats_or_alternative_explanations": "No traceability tool implementation or trace-link dataset; authors note constraining refinements may limit design space."
       },
       {
-        "topic": "Verification overlay",
-        "quote": "Traceability occurs between $ \\mathcal{A}_{i} $ 's",
-        "location": "Section IV Verification Process"
+        "claim_id": "C7",
+        "claim_text_or_paraphrase": "Formal specifications support peer review and archival purposes, improving reviewability/reproducibility of requirements compared with informal documents.",
+        "outcome_category": [
+          "reproducibility",
+          "communication/stakeholder alignment"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "other"
+        ],
+        "other_mechanism_label": "mathematically rigorous formal specification",
+        "linked_artifact_process": "Formal requirements/specifications and PVS/HOL artifacts.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "previous document-centric process",
+        "observed_effect": "Claimed peer-review and archival value; no model repository or reuse evidence.",
+        "quote_location": "Section II.C Formal Methods",
+        "direct_quote": "\"the use of formal methods in design also offers the benefits to the involved engineering disciplines by rigorously specify systems goals and requirements for both peer review and archival purposes\".",
+        "evidence_confidence_rating": "Unsupported",
+        "extractor_confidence": "high",
+        "threats_or_alternative_explanations": "Formal notations may reduce readability for practicing engineers; no artifacts are made available for independent review."
       },
       {
-        "topic": "Verification overlay",
-        "quote": "Consistency occurs across each $ \\mathcal{A}_{i} $",
-        "location": "Section IV Verification Process"
-      },
-      {
-        "topic": "Traceability formalization",
-        "quote": "Traceability can be enforced through a formal proof of correctness of the implementation with respect to the specification, via simulation.",
-        "location": "Section IV.B Traceability"
-      },
-      {
-        "topic": "Future work",
-        "quote": "As a follow-on to this research will be to develop the implementation of traceability check that is to be integrated with the RFD process.",
-        "location": "Section VI Conclusion"
+        "claim_id": "C8",
+        "claim_text_or_paraphrase": "A risk-tolerant agile formal model-based process should lead to correct low-cost small-satellite designs with minimal-to-no redesign.",
+        "outcome_category": [
+          "cost reduction",
+          "schedule reduction",
+          "effort reduction",
+          "defect/error reduction"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "artifact traceability",
+          "lifecycle gate support",
+          "other"
+        ],
+        "other_mechanism_label": "risk-tolerant RFD process and early formal verification",
+        "linked_artifact_process": "RFD process for low-cost PNSats and SMAD-derived mission-design flow.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "previous document-centric process",
+        "observed_effect": "Minimal-to-no redesign is stated as notional; no redesign, cost, or schedule measurements are reported.",
+        "quote_location": "Section I Introduction",
+        "direct_quote": "\"This proposed RFD process... notionally should lead to a correct design with minimal-to-no redesign through the use of an agile and formal design process based on models.\"",
+        "evidence_confidence_rating": "Unsupported",
+        "extractor_confidence": "high",
+        "threats_or_alternative_explanations": "The authors qualify the effect as notional; no project adoption data or baseline comparison is provided."
       }
     ],
-    "notes_for_consistency_with_lineage": "Code as a supporting system-level MBSE/formal-methods paper. It provides useful concepts for general nanosatellite modeling and pre-physical verification, but should not be synthesized as direct evidence for EPS modeling, EPS reliability, EPS reproducibility, or EPS integration test outcomes.",
-    "extraction_confidence": "high",
-    "extraction_confidence_reason": "The full Markdown was read and the main constructs are explicit. Confidence is high for the finding that the paper is system-level and non-EPS; evidence strength for outcomes remains low because the paper is conceptual and lacks empirical data."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": "not reported",
+      "traceability_from_model_artifacts_to_project_deliverables_decisions_reviews": "Conceptual traceability from requirements through abstraction/refinement levels is described, but no project deliverables, PDR/CDR packets, management reports, or review decisions are traced.",
+      "evaluation_criteria_model_quality_usefulness": [
+        "Logical consistency/no contradiction",
+        "PVS type correctness condition discharge",
+        "Behavior simulation equivalence to requirements (proposed)",
+        "Satisfaction of model-attribute constraints in parametric simulation",
+        "Existence of refinement/dual abstraction relations for traceability"
+      ],
+      "roi_value_realization_evidence": "not reported; claims about low cost, minimal redesign, short lifecycle, and reduced testing are not quantified.",
+      "programmatic_gates_or_critical_design_events_supported": "Mission concept evaluation and selection is included in the flow; no SRR/PDR/CDR/integration readiness gate support is reported.",
+      "model_derived_performance_indicators_or_management_metrics": "not reported"
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "classification": "addressed conceptually",
+        "rationale": "Phases and verification overlay are described, but not applied to a PNSat/EPS case."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "classification": "addressed conceptually",
+        "rationale": "Document-centric/interface ambiguity problems are discussed and SysML/PVS formalization is proposed, but no tool exchange mechanism is implemented."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "classification": "addressed conceptually",
+        "rationale": "SMAP-C constraints, low cost, short life cycles, and risk tolerance motivate the method."
+      },
+      "governance_project_deliverables_roi": {
+        "classification": "mentioned only",
+        "rationale": "Traceability and value claims are mentioned, but no governance workflow, deliverable mapping, or ROI evidence is shown."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "classification": "addressed conceptually",
+        "rationale": "Agile/responsive/rapid small-satellite design is central; distributed-team practice is not evaluated."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": [
+          "Provides a general PNSat system-level modeling concept using abstraction levels linking natural-language requirements, logical requirements, models, parametric simulations, and behavior simulations.",
+          "Supports the idea of starting with broad mission objectives and refining through mission characteristics/concept selection to domain design, but no EPS general model is provided.",
+          "Generality is methodological: SysML common language, proposed profiles/stereotypes, SMAD-derived workflow, and formal refinement/traceability."
+        ],
+        "RQ2": [
+          "Claims reliability/mission-assurance value through formal specifications, PVS checking, consistency, traceability, and correct-by-construction design.",
+          "Claims integrability and communication benefits through common SysML semantics, formal methods, and virtual testing.",
+          "Reproducibility is weakly supported through claims about peer-review/archival formal specifications; no available artifacts or EPS-specific evidence."
+        ],
+        "RQ3": [
+          "Pre-physical verification is described at system level via requirements-in-the-loop formalization, PVS type checking/proof obligations, parametric/behavior simulations, and refinement traceability.",
+          "The verification example is a railway crossing, not EPS, so it is only analogical support for EPS verification integration."
+        ]
+      },
+      "author_stated_limitations_gaps": [
+        "Formal methods cannot fix incorrect design assumptions.",
+        "Formal methods can be difficult to comprehend/use and are not a panacea; costs can be prohibitive in some areas.",
+        "Implementation of the traceability check integrated with RFD is future work.",
+        "Manual traceability link capture grows exponentially with software system size/complexity.",
+        "Strict refinement constraints may limit design space."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No EPS elements, power budgets, battery/solar/power-conditioning models, or EPS verification artifacts.",
+        "No concrete PNSat/CubeSat case study, orbit, payload, project maturity, integration test, operation, or flight evidence.",
+        "No quantitative metrics or baseline comparison for reliability, integration, effort, schedule, cost, or redesign claims.",
+        "No available SysML profile, model repository, PVS proof files, proof scripts, or automated SysML-PVS integration.",
+        "Only worked example is a railway crossing, limiting direct nanosatellite/EPS evidence."
+      ],
+      "direct_evidence_quotes": [
+        {
+          "topic": "PNSat scope",
+          "quote": "\"small satellite systems in the pico-/nano-class, i.e. $ < 50kg $\"",
+          "location": "Abstract"
+        },
+        {
+          "topic": "RFD claim",
+          "quote": "\"correct by construction, formally verified, and responsive to system requirement changes\"",
+          "location": "Abstract"
+        },
+        {
+          "topic": "Requirements/models/simulations linkage",
+          "quote": "\"ties requirements, models, and simulations in a cogent manner\"",
+          "location": "Abstract"
+        },
+        {
+          "topic": "Resource constraints",
+          "quote": "\"Extreme resource constraints of size, mass, power and cost (SMAP-C) drive highly integrated designs\"",
+          "location": "Section I"
+        },
+        {
+          "topic": "SysML selection",
+          "quote": "\"We have chosen the graphical modeling language of SysML to be used as the basis of our design process development for small satellites\"",
+          "location": "Section II.B"
+        },
+        {
+          "topic": "Abstraction artifacts",
+          "quote": "\"each level of abstraction... represents a set of requirements or specifications, its associated models, and simulations\"",
+          "location": "Section III.C"
+        },
+        {
+          "topic": "Verification overlay",
+          "quote": "\"Traceability occurs between $ \\mathcal{A}_{i} $ 's\" and \"Consistency occurs across each $ \\mathcal{A}_{i} $\"",
+          "location": "Section IV"
+        },
+        {
+          "topic": "Traceability value",
+          "quote": "\"where a requirement came from, its importance, how it was implemented, and how it was tested\"",
+          "location": "Section IV.B"
+        },
+        {
+          "topic": "Future work",
+          "quote": "\"develop the implementation of traceability check that is to be integrated with the RFD process\"",
+          "location": "Section VI"
+        }
+      ],
+      "notes_for_consistency_with_other_papers": "Code as supporting system-level formal-methods/MBSE methodology. Do not synthesize as direct evidence for EPS modeling, EPS reliability, EPS reproducibility, or EPS physical verification outcomes.",
+      "extraction_confidence": "high",
+      "extraction_confidence_reason": "The paper is fully available in markdown and the main methodological constructs are explicit; outcome evidence remains weak but classification is clear."
+    }
   },
-  "bibtex": "@inproceedings{paper-0010,\n  title = {Small Satellite Systems Design Methodology: A Formal and Agile Design Process},\n  author = {William Edmonson and Jules Chenou and Natasha Neogi and Heber Herencia-Zapana},\n  year = {2014},\n  booktitle = {IEEE Systems Conference},\n  publisher = {IEEE},\n  doi = {10.1109/syscon.2014.6819305},\n  url = {https://doi.org/10.1109/syscon.2014.6819305}\n}"
+  "bibtex": "@inproceedings{edmonson2014smallSatelliteSystemsDesignMethodology,\n  title = {Small Satellite Systems Design Methodology: A Formal and Agile Design Process},\n  author = {Edmonson, William and Chenou, Jules and Neogi, Natasha and Herencia-Zapana, Heber},\n  year = {2014},\n  booktitle = {IEEE Systems Conference},\n  publisher = {IEEE},\n  doi = {10.1109/syscon.2014.6819305},\n  url = {https://doi.org/10.1109/syscon.2014.6819305}\n}"
 }

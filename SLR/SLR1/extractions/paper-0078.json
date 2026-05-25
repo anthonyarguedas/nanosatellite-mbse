@@ -3,666 +3,1980 @@
   "tier": "supporting",
   "year": 2024,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper is a peer-reviewed journal article in MDPI Aerospace with DOI, publication dates, editor, and publisher/license information visible.",
-        "evidence": [
-          "Citation: Buitrago-Leiva, J.N.; ... Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the $ ^{3} $ ColStar Mission. Aerospace 2024, 11, 758. https://doi.org/10.3390/ aerospace11090758",
-          "Published: 14 September 2024",
-          "Copyright: 2024 by the authors. Licensee MDPI, Basel, Switzerland."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper states scope boundaries for preliminary design, notes manufacturing has not started, and explicitly discusses limitations and future work including the absence of a comparative study.",
-        "evidence": [
-          "Although actual manufacturing of the subsystems has not yet started, comprehensive design activities were undertaken to lay a solid foundation for future development and integration.",
-          "It is worth noting that we did not conduct a comparative study of the presented approach versus a traditional one because of budget constraints and the burden of having two different teams working with different approaches.",
-          "A comprehensive comparison with the Spiral Model and other iterative approaches was beyond the scope of this paper but is a valuable area for future research."
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The mission is clearly identified as a 1U CubeSat KiboCUBE/ISS deployment candidate, with mission goals, stakeholders, ConOps, operating modes, and preliminary design lifecycle stage described.",
-        "evidence": [
-          "The $ ^{3} $ColStar KiboCUBE Colombia\" CubeSat (1U) mission emerged from the ambitious initiative to design a satellite manufactured up to 70% in Colombia.",
-          "The mission is structured into four distinct stages to ensure systematic execution",
-          "This paper presents a case study on integrating Agile Systems Engineering methodologies in the preliminary design phase of satellite systems"
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The authors identify Arcadia, Capella version 6.1, SysML/Arcadia/Capella frameworks, operational/logical/physical architecture artifacts, requirements viewpoints, matrices, and satellite/ground segment boundaries.",
-        "evidence": [
-          "The MBSE approach utilized SysML and Arcadia/Capella frameworks, which provided structured methods for modeling system requirements, architecture, and interactions.",
-          "Capella, an open-source MBSE software (version 6.1), facilitated the transition from a traditional document-based approach to a dynamic model analysis and traceability of functionalities throughout the mission.",
-          "The satellite's logical architecture is depicted in Figure 19.",
-          "The physical architecture of specific satellite subsystems is depicted in the following (Figure A5a-d)."
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Claims about consistency, traceability, rework avoidance, integration, and design validation are explicitly tied to the Capella unified model, Arcadia method, requirement links, and model governance process.",
-        "evidence": [
-          "Using MBSE allows for the systematic integration of various technical, operational, and design aspects, resulting in a more comprehensive conception of the $ ^{3} $ ColStar mission.",
-          "The application of the Capella tool and Arcadia method enabled us to ensure that all subsystem designs were integrated and traceable back to the mission's high-level requirements.",
-          "Changes in one subsystem's design were reflected in the overall model, allowing for continuous verification and validation of the system's coherence."
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper provides case-study artifacts, simulations, budgets, traceability examples, and a 4-month schedule claim, but most MBSE outcome evidence is descriptive without independent baseline comparison, physical integration/test results, or flight data.",
-        "evidence": [
-          "The application of the Arcadia method for the Preliminary Design of the $ ^{3} $ ColStar mission enabled the completion of this process within a remarkable timeframe of just 4 months, facilitated by weekly general sprints.",
-          "It is worth noting that we did not conduct a comparative study of the presented approach versus a traditional one because of budget constraints",
-          "To validate the mission, multiple orbital simulations were conducted based on possible future launch dates.",
-          "The thermal analysis results, shown in the accompanying graph, demonstrate the satellite's temperature behavior under both the WHC and WCC scenarios"
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Requirement-to-function/component/test-case traceability, allocation matrices, traceability diagrams, and model governance are central elements of the case study.",
-        "evidence": [
-          "Requirements were imported and hierarchically structured within Capella's Requirement Viewpoint, assigning them to relevant logical and physical components to ensure traceability throughout the model.",
-          "Bidirectional Traceability: Capella facilitated bidirectional traceability, allowing backtracking from physical components to high-level requirements and forward tracking from requirements to detailed physical designs.",
-          "Requirement Allocation Matrix: Visual tools within Capella, such as the Requirement Allocation Matrix, illustrated relationships between requirements, logical components, and physical components."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "Capella is open source and versioned, and many diagrams and budgets are provided, but the model repository/data are not openly supplied; access requires permission and no new data are shared.",
-        "evidence": [
-          "Capella, an open-source MBSE software (version 6.1)",
-          "For more information, please visit the following web page: $ ^{3} $ColStar KiboCUBE Colombia mission ... For any permission or access to the information contained in this repository, please send an email to cemos@e3t.uis.edu.co.",
-          "Data Availability Statement: No new data were created or analyzed in this study. Data sharing is not applicable to this article."
-        ]
-      }
-    ],
-    "total_score": 7.0,
-    "max_score": 8,
-    "normalized_score": 0.875,
-    "overall_rationale": "Strong contextual, methodological, traceability, and governance reporting for a preliminary-design CubeSat MBSE/agile case study; evidence for claimed benefits and reproducibility is weaker because outcomes are mostly qualitative and the model/data are not openly available."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0078.json",
-    "status_rationale": "Retained as supporting because it provides a detailed nanosatellite MBSE/agile preliminary-design case with EPS power-budget/electrical-architecture content, but it is not primarily an EPS-specific MBSE verification paper.",
-    "citation": "Buitrago-Leiva, J.N.; Mejia, J.J.; Puerta-Ibarra, J.F.; Acero-Niño, I.F.; Guarnizo-Saavedra, A.F.; Rodriguez Ferreira, J.; Rojas-Rodriguez, L.; Hernandez-Torres, F.L.; Arango-Cotacio, C.E.; Salazar-Morales, J.E.; et al. Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission. Aerospace 2024, 11, 758. https://doi.org/10.3390/aerospace11090758",
-    "title": "Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission",
-    "authors": [
-      "Jeimmy Nataly Buitrago-Leiva",
-      "Juan José Mejía",
-      "Juan Francisco Puerta-Ibarra",
-      "Ignacio Francisco Acero-Niño",
-      "Andrés Felipe Guarnizo-Saavedra",
-      "Julian Rodriguez-Ferreira",
-      "Leandro Rojas-Rodriguez",
-      "Francisco Luis Hernández-Torres",
-      "Cristian Esteban Arango-Cotacio",
-      "Jorge Enrique Salazar-Morales",
-      "Miguel Angel Herrera-Cruz",
-      "Mario Linares-Vásquez",
-      "Jose Fernando Jiménez-Vargas",
-      "Jorge Enríque Espíndola-Díaz",
-      "Óscar Javier Montañez-Sogamoso",
-      "Adriano Camps"
-    ],
-    "venue": "Aerospace",
-    "doi_or_url": "10.3390/aerospace11090758",
-    "publisher": "MDPI, Basel, Switzerland",
-    "venue_type": "journal article",
-    "source_database_or_route": [
-      "scopus",
-      "local_pdf"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The paper shows how a 1U CubeSat mission, including EPS functions and physical components, can be modeled through Arcadia/Capella abstraction levels, but it does not focus on minimal behavioral knowledge as a research problem."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims reliability, consistency, traceability, integration, communication, and schedule benefits from MBSE/agile workflows, but these are mostly system-level rather than EPS-specific and evidence is qualitative."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "It describes pre-physical-development validation through Capella traceability, requirements/test-case links, power-budget analysis, thermal/orbital/link analyses, and simulations, but EPS model verification is not the central focus."
-      }
+    "credible_venue": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Published as a 2024 article in the journal Aerospace with DOI and article metadata.",
+      "evidence": [
+        {
+          "quote": "Citation: Buitrago-Leiva, J.N.; ... Preliminary Design of Satellite Systems ... Aerospace 2024, 11, 758. https://doi.org/10.3390/aerospace11090758",
+          "location": "front matter"
+        }
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "Not assessed under the silo rule; this extraction is based only on the supplied metadata and specified paper Markdown."
+    "limitations_discussed": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "The authors explicitly discuss limitations, budget constraints, and future work comparing with other methodologies.",
+      "evidence": [
+        {
+          "quote": "It is worth noting that we did not conduct a comparative study of the presented approach versus a traditional one because of budget constraints and the burden of having two different teams working with different approaches.",
+          "location": "Section 6 Conclusions"
+        },
+        {
+          "quote": "Limitations and Future Work: We acknowledge that our study primarily focused on the integration of Agile methodologies with the V-Model framework.",
+          "location": "Section 6 Conclusions"
+        }
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Mission, 1U CubeSat platform, KiboCUBE deployment context, organizations, lifecycle stage, ConOps, operational modes, and subsystems are described in detail.",
+      "evidence": [
+        {
+          "quote": "The 3ColStar KiboCUBE Colombia CubeSat (1U) mission emerged from the ambitious initiative to design a satellite manufactured up to 70% in Colombia.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "Although actual manufacturing of the subsystems has not yet started, comprehensive design activities were undertaken to lay a solid foundation for future development and integration.",
+          "location": "Section 2.3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "The paper names the method/tool/version and shows the Arcadia levels, Capella requirement integration, logical/physical architectures, traceability mechanisms, governance, and several subsystem architecture examples, though the model itself is not openly provided.",
+      "evidence": [
+        {
+          "quote": "the preliminary design was developed, with the implementation of the Arcadia Method, supported by the Capella modeling tool",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Capella, an open-source MBSE software (version 6.1), facilitated the transition from a traditional document-based approach to a dynamic model analysis and traceability",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "The physical architecture of specific satellite subsystems is depicted in the following (Figure A5a-d).",
+          "location": "Appendix D"
+        }
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Claims about consistency, traceability, avoiding rework, design time, communication, and reliability are explicitly tied to MBSE/Capella/Arcadia and the shared model.",
+      "evidence": [
+        {
+          "quote": "Through Model-Based Systems Engineering (MBSE), technical consistency was rigorously managed across various architectural documents, ensuring coherency and minimizing errors.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Using MBSE allows for the systematic integration of various technical, operational, and design aspects, resulting in a more comprehensive conception of the 3ColStar mission.",
+          "location": "Section 5"
+        }
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The paper provides a detailed single case and a 4-month schedule indicator, plus technical simulations, but no controlled comparison, independent validation, defect counts, stakeholder evaluation, or flight/integration-test evidence for most MBSE outcome claims.",
+      "evidence": [
+        {
+          "quote": "The application of the Arcadia method ... enabled the completion of this process within a remarkable timeframe of just 4 months",
+          "location": "Section 5"
+        },
+        {
+          "quote": "we did not conduct a comparative study of the presented approach versus a traditional one",
+          "location": "Section 6 Conclusions"
+        }
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Requirements, functions, logical components, physical components, test cases, and validation criteria are reported as linked in Capella with traceability matrices/diagrams.",
+      "evidence": [
+        {
+          "quote": "Bidirectional traceability was established to ensure that each requirement could be traced forward to its corresponding design elements and backward to its source.",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "Physical components were traced back to logical functions and requirements, maintaining continuity.",
+          "location": "Section 3.3.2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "Tool names and some versions are reported, and Capella is open-source, but the model/data are not openly available and detailed tool data exchange artifacts are limited.",
+      "evidence": [
+        {
+          "quote": "Capella, an open-source MBSE software (version 6.1)",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "For any permission or access to the information contained in this repository, please send an email to cemos@e3t.uis.edu.co.",
+          "location": "after Figure 19"
+        },
+        {
+          "quote": "Data Availability Statement: No new data were created or analyzed in this study. Data sharing is not applicable to this article.",
+          "location": "Data Availability Statement"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "3ColStar KiboCUBE Colombia 1U CubeSat planned for deployment from the ISS Japanese Experiment Module Kibo.",
-    "size_form_factor": "1U CubeSat, approximately 10 x 10 x 10 cm; J-SSOD mass limit reported as 1.33 kg or less.",
-    "mission_name": "3ColStar KiboCUBE Colombia",
-    "mission_domain": "dual-purpose solar weather/radiation particle monitoring and IoT connectivity/technology demonstration for remote areas and education.",
-    "organization_type": "multi-institution academic-government-industry collaboration involving Colombian universities, Colombian Aerospace Force, international institutions, and industry/start-up participants.",
-    "project_maturity": "preliminary design completed; proposal pre-selected as an 8th KiboCUBE finalist; manufacturing not yet started.",
-    "lifecycle_stage_addressed": "proposal structuring and preliminary design, aligned with concept studies, concept/technology development, and Phase B preliminary design/technology completion.",
-    "development_context": "distributed, resource-constrained CubeSat project with subsystem teams assigned to universities/organizations, weekly sprints, centralized systems engineering oversight, and Capella model governance.",
-    "eps_relevance": "power-budget/electrical-architecture",
-    "model_maturity": "Capella/Arcadia preliminary architecture with operational, logical, and physical views, requirements traceability, state/mode diagrams, and subsystem physical diagrams; not yet supported by physical integration or flight data."
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Published as a 2024 article in the journal Aerospace with DOI and article metadata.",
+      "evidence": [
+        {
+          "quote": "Citation: Buitrago-Leiva, J.N.; ... Preliminary Design of Satellite Systems ... Aerospace 2024, 11, 758. https://doi.org/10.3390/aerospace11090758",
+          "location": "front matter"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The authors explicitly discuss limitations, budget constraints, and future work comparing with other methodologies.",
+      "evidence": [
+        {
+          "quote": "It is worth noting that we did not conduct a comparative study of the presented approach versus a traditional one because of budget constraints and the burden of having two different teams working with different approaches.",
+          "location": "Section 6 Conclusions"
+        },
+        {
+          "quote": "Limitations and Future Work: We acknowledge that our study primarily focused on the integration of Agile methodologies with the V-Model framework.",
+          "location": "Section 6 Conclusions"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Mission, 1U CubeSat platform, KiboCUBE deployment context, organizations, lifecycle stage, ConOps, operational modes, and subsystems are described in detail.",
+      "evidence": [
+        {
+          "quote": "The 3ColStar KiboCUBE Colombia CubeSat (1U) mission emerged from the ambitious initiative to design a satellite manufactured up to 70% in Colombia.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "Although actual manufacturing of the subsystems has not yet started, comprehensive design activities were undertaken to lay a solid foundation for future development and integration.",
+          "location": "Section 2.3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The paper names the method/tool/version and shows the Arcadia levels, Capella requirement integration, logical/physical architectures, traceability mechanisms, governance, and several subsystem architecture examples, though the model itself is not openly provided.",
+      "evidence": [
+        {
+          "quote": "the preliminary design was developed, with the implementation of the Arcadia Method, supported by the Capella modeling tool",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Capella, an open-source MBSE software (version 6.1), facilitated the transition from a traditional document-based approach to a dynamic model analysis and traceability",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "The physical architecture of specific satellite subsystems is depicted in the following (Figure A5a-d).",
+          "location": "Appendix D"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Claims about consistency, traceability, avoiding rework, design time, communication, and reliability are explicitly tied to MBSE/Capella/Arcadia and the shared model.",
+      "evidence": [
+        {
+          "quote": "Through Model-Based Systems Engineering (MBSE), technical consistency was rigorously managed across various architectural documents, ensuring coherency and minimizing errors.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Using MBSE allows for the systematic integration of various technical, operational, and design aspects, resulting in a more comprehensive conception of the 3ColStar mission.",
+          "location": "Section 5"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides a detailed single case and a 4-month schedule indicator, plus technical simulations, but no controlled comparison, independent validation, defect counts, stakeholder evaluation, or flight/integration-test evidence for most MBSE outcome claims.",
+      "evidence": [
+        {
+          "quote": "The application of the Arcadia method ... enabled the completion of this process within a remarkable timeframe of just 4 months",
+          "location": "Section 5"
+        },
+        {
+          "quote": "we did not conduct a comparative study of the presented approach versus a traditional one",
+          "location": "Section 6 Conclusions"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Requirements, functions, logical components, physical components, test cases, and validation criteria are reported as linked in Capella with traceability matrices/diagrams.",
+      "evidence": [
+        {
+          "quote": "Bidirectional traceability was established to ensure that each requirement could be traced forward to its corresponding design elements and backward to its source.",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "Physical components were traced back to logical functions and requirements, maintaining continuity.",
+          "location": "Section 3.3.2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Tool names and some versions are reported, and Capella is open-source, but the model/data are not openly available and detailed tool data exchange artifacts are limited.",
+      "evidence": [
+        {
+          "quote": "Capella, an open-source MBSE software (version 6.1)",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "For any permission or access to the information contained in this repository, please send an email to cemos@e3t.uis.edu.co.",
+          "location": "after Figure 19"
+        },
+        {
+          "quote": "Data Availability Statement: No new data were created or analyzed in this study. Data sharing is not applicable to this article.",
+          "location": "Data Availability Statement"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "supporting"
+      ],
+      "status": "coded",
+      "rationale": "Tier is taken from the supplied corpus metadata; the paper is relevant but not a core EPS verification-method paper.",
+      "evidence": [
+        {
+          "quote": "screening_tier=supporting",
+          "location": "prompt metadata"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper presents a project-applied system-level MBSE architecture for a 1U nanosatellite and includes EPS architecture/power budget, but it is a mission case rather than a general minimal-knowledge modeling method.",
+      "evidence": [
+        {
+          "quote": "This paper presents a case study ... focusing on the 3ColStar satellite mission.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Each subsystem of the satellite was designed and integrated into the Capella model",
+          "location": "Section 3.3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims reliability, traceability, communication, efficiency, consistency, and integration outcomes from MBSE/agile system modeling, but does not isolate EPS-specific reliability/reproducibility/integrability outcomes.",
+      "evidence": [
+        {
+          "quote": "By adopting this methodology, we ensured that the 3ColStar mission's technical and operational feasibility was thoroughly assessed and optimized from the early stages of development, leading to a more reliable satellite design.",
+          "location": "Section 5"
+        },
+        {
+          "quote": "This case study highlights the effectiveness ... to improve the team communication accuracy, communication, and efficiency",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "Verification and validation links, test cases, validation criteria, simulations, and requirements traceability are described before physical implementation, but no detailed EPS-specific verification procedure model is provided.",
+      "evidence": [
+        {
+          "quote": "From the component to system level, each part was linked to test cases and validation criteria",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "Although actual manufacturing of the subsystems has not yet started",
+          "location": "Section 2.3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "PDR",
+        "operations"
+      ],
+      "status": "coded",
+      "rationale": "The paper covers proposal/concept and preliminary design of a 1U CubeSat, maps NASA design phases, and models ConOps/operations modes; no implementation, I&T, or flight results are reported.",
+      "evidence": [
+        {
+          "quote": "Agile practices during two critical phases of the 3ColStar project: the proposal structuring and preliminary design stages.",
+          "location": "Section 4.1"
+        },
+        {
+          "quote": "Phase B. Preliminary Design and Technology Completion",
+          "location": "Table 8"
+        },
+        {
+          "quote": "The 3ColStar mission encompasses several key elements ... Concept of Operations",
+          "location": "Section 2.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student",
+        "agency",
+        "industry/NewSpace",
+        "distributed team",
+        "agile/concurrent design",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The project involves Colombian universities, the Colombian Aerospace Force, companies/start-ups, and many institutions; it uses Agile/Scrum and is motivated by small-satellite resource constraints and distributed collaboration.",
+      "evidence": [
+        {
+          "quote": "developed collaboratively by the Colombian Aerospace Force (COLAF), Colombian universities, and other international institutions",
+          "location": "Section 1"
+        },
+        {
+          "quote": "Collaboration among 13 institutions, including professors, researchers, and students",
+          "location": "Section 5"
+        },
+        {
+          "quote": "small satellite projects are often limited in terms of funding, personnel resources, and timescale",
+          "location": "Section 1"
+        },
+        {
+          "quote": "Sprints will be conducted on a weekly basis, with each team maintaining its own product backlog.",
+          "location": "Section 4.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "power-budget/electrical-architecture"
+      ],
+      "status": "coded",
+      "rationale": "EPS is not the sole focus, but the paper includes EPS physical architecture, power generation/storage/distribution functions, solar panels, batteries, modes, and detailed power budgets.",
+      "evidence": [
+        {
+          "quote": "Electric Power Systems-Power Budget",
+          "location": "Section 2.3.1 heading"
+        },
+        {
+          "quote": "The power budget computes the power and energy demand; energy generation; storage; distribution, monitoring and control.",
+          "location": "Section 2.3.1"
+        },
+        {
+          "quote": "The physical architecture of specific satellite subsystems is depicted ... (a) EPS.",
+          "location": "Appendix D/Figure A5"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "project-applied model"
+      ],
+      "status": "coded",
+      "rationale": "The Arcadia/Capella model is applied to the 3ColStar mission preliminary design; the satellite has not been manufactured or flown.",
+      "evidence": [
+        {
+          "quote": "Each subsystem of the satellite was designed and integrated into the Capella model",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "Although actual manufacturing of the subsystems has not yet started",
+          "location": "Section 2.3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "operations",
+        "simulation",
+        "manufacturing/test",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The Capella/Arcadia model covers mission needs, system/subsystem architecture, EPS power budgets, operational behavior, interfaces, V&V/test cases, simulation-supported analyses, and project-management/governance aspects.",
+      "evidence": [
+        {
+          "quote": "models that contain requirements, architecture, and interfaces between the different parts of the system",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The logical decomposition of the system will be clearly articulated",
+          "location": "Section 3"
+        },
+        {
+          "quote": "Power Subsystem (EPS): ... Logical Functions: power generation, storage, and distribution.",
+          "location": "Section 3.3.1"
+        },
+        {
+          "quote": "Validation and Verification: From the system architecture based on the Capella model, the validation and verification were established by using additional tools",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "Figure 18. Main operational entities of 3ColStar KiboCUBE Project.",
+          "location": "Figure 18 caption"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "state/activity/sequence diagrams",
+        "parametrics",
+        "interface control models",
+        "power budgets",
+        "test cases/procedures",
+        "executable simulations",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports requirements tables/viewpoints, logical/physical architecture block diagrams, state-machine-style operational modes, analyses/parametric tables, interface/physical link diagrams, power budgets, linked test cases, orbital/thermal simulations, and Capella traceability/coverage matrices.",
+      "evidence": [
+        {
+          "quote": "Table A1. 3ColStar requirements.",
+          "location": "Appendix A"
+        },
+        {
+          "quote": "Figure 19. 3ColStar logical architecture diagram.",
+          "location": "Figure 19 caption"
+        },
+        {
+          "quote": "Figure A3. Example of connectivity diagrams and matrices for linking subsystems to satellite operating modes.",
+          "location": "Appendix D"
+        },
+        {
+          "quote": "Tables 2-4 ... show the minimum, nominal and maximum power consumption",
+          "location": "Section 2.3.1"
+        },
+        {
+          "quote": "multiple orbital simulations were conducted",
+          "location": "Section 2"
+        },
+        {
+          "quote": "test cases and validation criteria",
+          "location": "Section 3.3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper presents the Arcadia/Capella plus Agile workflow as a case-based process for future CubeSat missions, but not an open reusable model package or reference model.",
+      "evidence": [
+        {
+          "quote": "This case study highlights the effectiveness ... providing valuable insights for future missions.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "With the presented approach, we were able to expedite the design process ... setting a precedent for future CubeSat missions",
+          "location": "Section 6 Conclusions"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Extended MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The central Capella/Arcadia system model is extended across requirements, logical/physical architecture, subsystem analyses, test/validation links, governance, and operations, but automated cross-tool digital-thread integration is not demonstrated.",
+      "evidence": [
+        {
+          "quote": "Requirements were established initially from mission concept, translated into Capella, and linked to various model elements",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "validation and verification were established by using additional tools, such as Ansys STK, NASA GMAT, Matlab and Simulink",
+          "location": "Section 3.3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "risk tolerance",
+        "organizational constraints"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring is justified by small-satellite constraints, limited resources, accelerated design timing, risk mitigation, dynamic requirements, and the need to coordinate universities/organizations with different capabilities.",
+      "evidence": [
+        {
+          "quote": "small satellite projects are often limited in terms of funding, personnel resources, and timescale",
+          "location": "Section 1"
+        },
+        {
+          "quote": "The sequential approach provided a controlled environment for identifying and addressing potential problems early in the design phase.",
+          "location": "Section 2.3"
+        },
+        {
+          "quote": "using Arcadia and MBSE allowed us to have a way to centralize the design decisions and progress",
+          "location": "Section 5"
+        },
+        {
+          "quote": "weekly sprints driving progress based on the scrum methodology",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives Arcadia stages, Capella integration steps, traceability mechanisms, Agile/Scrum tailoring, and governance roles, but not a complete adopter playbook with prerequisites and completion criteria for every step.",
+      "evidence": [
+        {
+          "quote": "Arcadia is built around the following statements",
+          "location": "Section 3.2"
+        },
+        {
+          "quote": "Requirement Integration: Import and Structuring",
+          "location": "Section 3.3.2"
+        },
+        {
+          "quote": "Sprints will be conducted on a weekly basis, with each team maintaining its own product backlog.",
+          "location": "Section 4.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "Capella/Arcadia",
+        "MATLAB/Simulink",
+        "STK",
+        "open-source packages",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports SysML and Arcadia/Capella for MBSE, Capella 6.1 as open-source, and STK/GMAT/MATLAB/Simulink/DRAMA plus other domain tools for validation and analysis.",
+      "evidence": [
+        {
+          "quote": "The MBSE approach utilized SysML and Arcadia/Capella frameworks",
+          "location": "Section 2.3"
+        },
+        {
+          "quote": "Capella, an open-source MBSE software (version 6.1)",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "additional tools, such as Ansys STK, NASA GMAT, Matlab and Simulink",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "we used the DRAMA ... ESA software (version 3.1.0)",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "import/export",
+        "manual synchronization"
+      ],
+      "status": "coded",
+      "rationale": "Requirements are imported/structured in Capella, and model updates are manually governed by system engineers based on weekly meetings; no API, co-simulation, XMI/ReqIF, or automated transformation is described.",
+      "evidence": [
+        {
+          "quote": "Requirements were imported and hierarchically structured within Capella's Requirement Viewpoint",
+          "location": "Section 3.3.2"
+        },
+        {
+          "quote": "the management team ... is in charge of updating the designs and models based on the discussions during the weekly meetings",
+          "location": "Section 4.1"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The authors do not explicitly report toolchain limitations such as vendor lock-in, missing interfaces, broken traceability, scalability, licensing/cost, or manual translation burdens.",
+      "evidence": [],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "loads",
+        "modes",
+        "power budgets",
+        "interfaces"
+      ],
+      "status": "coded",
+      "rationale": "The EPS representation includes solar arrays, battery pack, power controller/distribution, subsystem loads by operating mode, power budgets, and EPS links to other subsystems.",
+      "evidence": [
+        {
+          "quote": "Physical Components: solar panels, batteries, and power management units (PMUs).",
+          "location": "Section 3.3.1"
+        },
+        {
+          "quote": "Tables 2-4 ... show the minimum, nominal and maximum power consumption of each satellite subsystem for each mode.",
+          "location": "Section 2.3.1"
+        },
+        {
+          "quote": "The Power Distribution Unit block acts as the central hub for external connections",
+          "location": "Figure A5(a) description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [
+        "test cases",
+        "simulation scenarios",
+        "acceptance criteria"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports test cases and validation criteria linked to design elements and uses orbital, thermal, and link-budget simulations; it does not provide full executable test procedures.",
+      "evidence": [
+        {
+          "quote": "each part was linked to test cases and validation criteria",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "To validate the mission, multiple orbital simulations were conducted",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The thermal analysis results ... demonstrate the satellite's temperature behavior",
+          "location": "Section 2.3.2"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "requirements-in-the-loop",
+        "simulation-in-the-loop",
+        "parametric checks",
+        "virtual integration"
+      ],
+      "status": "coded",
+      "rationale": "Before physical manufacturing, requirements and physical/logical elements are linked in the model; orbital, link-budget, thermal, and power-budget analyses act as simulation/parametric checks; the unified Capella model supports virtual subsystem integration.",
+      "evidence": [
+        {
+          "quote": "Although actual manufacturing of the subsystems has not yet started",
+          "location": "Section 2.3"
+        },
+        {
+          "quote": "Iterative design processes supported by MBSE facilitated simulations and validations, helping to refine subsystem designs and manage risks before physical implementation.",
+          "location": "Section 2.3"
+        },
+        {
+          "quote": "Changes in one subsystem's design were reflected in the overall model, allowing for continuous verification and validation of the system's coherence.",
+          "location": "Section 4.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [
+        "links to hardware integration",
+        "operational validation"
+      ],
+      "status": "coded",
+      "rationale": "The physical architecture and linked validation criteria are intended to support future subsystem manufacturing/integration, and operational modes/ConOps are modeled; no flat-sat, environmental-test, or flight validation is reported.",
+      "evidence": [
+        {
+          "quote": "comprehensive design activities were undertaken to lay a solid foundation for future development and integration",
+          "location": "Section 2.3"
+        },
+        {
+          "quote": "System verification and validation of the architecture in nominal operation mode involves verifying the correct functioning of subsystems and actors",
+          "location": "Figure A4 caption"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "reliability",
+        "integrability/interoperability",
+        "generality/reuse",
+        "traceability",
+        "consistency",
+        "defect/error reduction",
+        "schedule reduction",
+        "effort reduction",
+        "decision support",
+        "communication/stakeholder alignment",
+        "risk reduction",
+        "mission assurance",
+        "lifecycle continuity"
+      ],
+      "status": "coded",
+      "rationale": "Extracted MBSE/agile outcome claims span consistency/error reduction, traceability, communication/integration, schedule/effort, risk/reliability/mission assurance, and reusable guidance for future CubeSats.",
+      "evidence": [
+        {
+          "quote": "ensuring coherency and minimizing errors",
+          "location": "Abstract"
+        },
+        {
+          "quote": "completion ... within ... 4 months",
+          "location": "Section 5"
+        },
+        {
+          "quote": "leading to a more reliable satellite design",
+          "location": "Section 5"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level"
+      ],
+      "status": "coded",
+      "rationale": "The extracted outcome claims are made for the 3ColStar 1U CubeSat preliminary design, not for an EPS-only model.",
+      "evidence": [
+        {
+          "quote": "focusing on the 3ColStar satellite mission",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The 3ColStar KiboCUBE Colombia CubeSat (1U) mission",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "executable simulation",
+        "parametric analysis",
+        "shared repository",
+        "requirements linkage",
+        "tool integration",
+        "lifecycle gate support",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Claims are linked to Capella/Arcadia traceability and requirements links, unified/shared model/repository, external simulations and analyses, and Agile weekly sprints/governance as an additional mechanism.",
+      "evidence": [
+        {
+          "quote": "Requirements were ... linked to various model elements",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "using additional tools, such as Ansys STK, NASA GMAT, Matlab and Simulink",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "Detailed development information for each subsystem was meticulously recorded and updated in a common online repository",
+          "location": "Section 2.3"
+        },
+        {
+          "quote": "weekly general sprints",
+          "location": "Section 5"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "PDR",
+        "operations"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims are primarily about proposal/concept and preliminary design/PDR-like activities, with operations modeled through ConOps and modes.",
+      "evidence": [
+        {
+          "quote": "proposal structuring and preliminary design stages",
+          "location": "Section 4.1"
+        },
+        {
+          "quote": "Concept of Operations",
+          "location": "Section 2.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration",
+        "Executable model or simulation result",
+        "Trade-study or requirements-checking result",
+        "Quantitative metric without baseline"
+      ],
+      "status": "coded",
+      "rationale": "Evidence ranges from assertions to a single case study, model diagrams/requirement checks, orbital/thermal/link simulations, and a 4-month schedule metric without a true baseline.",
+      "evidence": [
+        {
+          "quote": "This paper presents a case study",
+          "location": "Abstract"
+        },
+        {
+          "quote": "To validate the mission, multiple orbital simulations were conducted",
+          "location": "Section 2"
+        },
+        {
+          "quote": "within ... 4 months",
+          "location": "Section 5"
+        },
+        {
+          "quote": "we did not conduct a comparative study",
+          "location": "Section 6 Conclusions"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "time",
+        "schedule",
+        "reliability proxy",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The explicit process metric is the 4-month preliminary design duration; technical simulation indicators such as contact counts, thermal ranges, and orbital lifetime act only as indirect feasibility/reliability proxies.",
+      "evidence": [
+        {
+          "quote": "completed within an accelerated time frame of 4 months",
+          "location": "Abstract"
+        },
+        {
+          "quote": "the number of contacts with the satellite is 572; the average contact time with the satellite is 284.745 [s]",
+          "location": "Section 2"
+        },
+        {
+          "quote": "the satellite's temperature remains within the acceptable operating limits",
+          "location": "Section 2.3.2"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [
+        "none"
+      ],
+      "status": "coded",
+      "rationale": "The authors explicitly state that they did not conduct a comparative study; standards ranges are discussed but not a controlled baseline or counterfactual.",
+      "evidence": [
+        {
+          "quote": "we did not conduct a comparative study of the presented approach versus a traditional one",
+          "location": "Section 6 Conclusions"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Some claims are asserted, several are weak single-case/illustrative claims, and schedule plus simulation/checking claims are moderate due to lack of baseline or independent validation.",
+      "evidence": [
+        {
+          "quote": "we did not conduct a comparative study",
+          "location": "Section 6 Conclusions"
+        },
+        {
+          "quote": "single case study",
+          "location": "Abstract/overall paper"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [
+        "ownership",
+        "configuration/change control",
+        "review process",
+        "model quality criteria"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports lead/secondary system engineers, subsystem representatives, permissions, project-manager authorization of critical changes, weekly meetings, and integrity/traceability/consistency as governance aims.",
+      "evidence": [
+        {
+          "quote": "Two designated System Engineers were assigned critical roles in model governance.",
+          "location": "Section 5.1"
+        },
+        {
+          "quote": "Each subsystem ... was managed by specific representatives who were granted permissions to modify their respective areas.",
+          "location": "Section 5.1"
+        },
+        {
+          "quote": "View-only permissions were implemented",
+          "location": "Section 5.1"
+        },
+        {
+          "quote": "Weekly meetings were held to provide updates",
+          "location": "Section 5.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [
+        "schedule effect",
+        "avoided rework"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims a 4-month preliminary design schedule and avoided design rework, but provides no cost-benefit calculation or adoption-cost data.",
+      "evidence": [
+        {
+          "quote": "enabled the completion of this process within a remarkable timeframe of just 4 months",
+          "location": "Section 5"
+        },
+        {
+          "quote": "the integration of Capella revealed that we could avoid design rework",
+          "location": "Section 5"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The paper applies a practical Arcadia/Capella plus Agile workflow to a concrete 1U CubeSat, including requirements import, traceability, architecture levels, subsystem models, and governance.",
+      "evidence": [
+        {
+          "quote": "Requirement Integration: Import and Structuring",
+          "location": "Section 3.3.2"
+        },
+        {
+          "quote": "Sprints will be conducted on a weekly basis",
+          "location": "Section 4.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses a central Capella model and names external analysis tools, but gives limited evidence of automated data exchange or semantic continuity across tools.",
+      "evidence": [
+        {
+          "quote": "a unified model where all subsystem designs are integrated and traceable",
+          "location": "Section 4.1"
+        },
+        {
+          "quote": "additional tools, such as Ansys STK, NASA GMAT, Matlab and Simulink",
+          "location": "Section 3.3"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The method is explicitly tailored to a small-satellite, multi-university, resource-limited, accelerated preliminary-design context.",
+      "evidence": [
+        {
+          "quote": "small satellite projects are often limited in terms of funding, personnel resources, and timescale",
+          "location": "Section 1"
+        },
+        {
+          "quote": "weekly sprints",
+          "location": "Abstract/Section 4.1"
+        },
+        {
+          "quote": "completed ... within ... 4 months",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "A dedicated model governance section details roles/permissions/change authorization, and the paper reports schedule and avoided-rework value claims.",
+      "evidence": [
+        {
+          "quote": "Model Governance and Permissions in Capella",
+          "location": "Section 5.1 heading"
+        },
+        {
+          "quote": "A team of five Project Managers was responsible for authorizing changes that had financial implications or were critical to the project.",
+          "location": "Section 5.1"
+        },
+        {
+          "quote": "avoid design rework",
+          "location": "Section 5"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The central contribution is Agile/Scrum plus MBSE for distributed small-satellite design with weekly sprints and subsystem backlogs.",
+      "evidence": [
+        {
+          "quote": "The development team incorporated several general practices from Agile methodologies, including the use of weekly sprints.",
+          "location": "Section 4.1"
+        },
+        {
+          "quote": "each sub-team or subsystem should operate with its own independent backlog and follow a distinct scrum process",
+          "location": "Section 4.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The markdown is complete, the paper reports extensive context and method details, and the controlled coding is supported by direct quotes; confidence is limited only by some broad claims lacking evidence.",
+      "evidence": [
+        {
+          "quote": "Sections 2-6 and Appendices A-D provide mission, method, architecture, governance, and requirements details.",
+          "location": "extractor assessment based on specified paper markdown"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Address dynamic requirements, interdisciplinary collaboration, traceability/integration issues, documentation overhead, and resource/time constraints in small satellite preliminary design through integrated Agile Systems Engineering and MBSE.",
-    "modeling_scope": [
-      "mission ConOps and operational stages/modes",
-      "stakeholder needs and high-level mission requirements",
-      "system functional analysis and lifecycle",
-      "logical architecture of CubeSat, ground segment, actors, and data flows",
-      "physical architecture of EPS, OBC, ADCS, communications, payload-related interfaces, thermal and structure connections",
-      "requirements allocation and traceability from mission objectives to subsystem components",
-      "power, thermal, communications, and orbit analyses supporting preliminary design"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "assumptions_or_data_quality_limits",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage"
     ],
-    "system_boundary_level_of_abstraction": "Whole 3ColStar mission system including CubeSat, ground segment, mission operations, operations support, IoT ground stations, and space environment; decomposed from operational analysis to system analysis, logical components/functions, and physical components/interfaces.",
-    "minimal_or_excluded_modeling": "Detailed manufacturing, assembly, physical integration/testing, flight operations, formal comparison with traditional or spiral approaches, and open executable model release are outside scope; thermal analysis is explicitly preliminary and uses a lumped single-node model.",
-    "required_prior_behavioral_domain_knowledge": "Mission objectives, stakeholder needs, operational modes, orbit/contact assumptions, subsystem power consumption, interfaces, and requirements are needed; the paper does not claim fully behavior-free modeling.",
-    "handling_limited_behavioral_knowledge": "Arcadia separates problem-space needs from solution architectures, defines logical functions before technology choices, uses iterative sprints and stakeholder feedback to refine requirements, and validates assumptions through power budgets and external simulations before physical implementation.",
-    "model_artifacts_used": [
-      "Capella Requirement Viewpoint",
-      "Operational capabilities and operational entity diagrams",
-      "mission state/mode diagrams",
-      "logical architecture diagram",
-      "physical architecture diagrams for EPS, OBC, ADCS, and communications",
-      "requirements allocation matrix",
-      "requirement coverage/traceability diagrams",
-      "functional exchanges and data-flow diagrams",
-      "power budget tables by operating mode",
-      "thermal model and WHC/WCC temperature profiles",
-      "orbital/contact simulations and link-budget-related validation"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The work is at preliminary design/proposal stage, with future implementation/testing and future comparative work planned.",
+        "evidence_quote": "Concerning the implementation and testing stages of the 3ColStar project, the development team will adopt a Scrum-inspired methodology",
+        "location": "Section 4.1",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "author_stated",
+        "rationale": "The study is a case study of one 1U CubeSat mission and a specific Agile/Arcadia/Capella preliminary design context.",
+        "evidence_quote": "This paper presents a case study on integrating Agile Systems Engineering methodologies in the preliminary design phase of satellite systems, focusing on the 3ColStar satellite mission.",
+        "location": "Abstract",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "author_stated",
+        "rationale": "The authors explicitly state no comparative study against a traditional approach was conducted.",
+        "evidence_quote": "we did not conduct a comparative study of the presented approach versus a traditional one because of budget constraints and the burden of having two different teams working with different approaches.",
+        "location": "Section 6 Conclusions",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "Outcome claims are made by the project team in a single case; the paper reports no external audit, independent stakeholder evaluation, repeated replication, or independently validated MBSE outcome assessment.",
+        "evidence_quote": "Completed outcome extraction found only author-reported single-case evidence, simulations, and schedule statements; no independent evaluator or external validation of MBSE outcomes is reported.",
+        "absence_based_explanation": "Completed outcome extraction found only author-reported single-case evidence, simulations, and schedule statements; no independent evaluator or external validation of MBSE outcomes is reported.",
+        "confidence": "medium"
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "author_stated",
+        "rationale": "The mission design has not proceeded to subsystem manufacturing, physical tests, launch, or operations in the paper.",
+        "evidence_quote": "Although actual manufacturing of the subsystems has not yet started, comprehensive design activities were undertaken to lay a solid foundation for future development and integration.",
+        "location": "Section 2.3",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "EPS is modeled through power budgets and architecture, but the paper's MBSE outcome claims are system-level/agile-process claims; no EPS-specific MBSE outcome evaluation is isolated.",
+        "evidence_quote": "The EPS section reports power budgets and components, while outcome sections discuss overall mission design consistency, communication, schedule, and reliability without EPS-only effect measures.",
+        "absence_based_explanation": "The EPS section reports power budgets and components, while outcome sections discuss overall mission design consistency, communication, schedule, and reliability without EPS-only effect measures.",
+        "confidence": "medium"
+      },
+      {
+        "flag": "assumptions_or_data_quality_limits",
+        "source": "author_stated",
+        "rationale": "Some technical analyses are preliminary and simulation assumptions are explicitly described; further design analysis is needed.",
+        "evidence_quote": "this analysis is preliminary and further detailed design analysis is crucial to refine the thermal control system and ensure long-term reliable performance.",
+        "location": "Section 2.3.2",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "author_stated",
+        "rationale": "The paper does not provide an openly available model/data package; access to repository information requires permission/email and the data availability statement says no data sharing is applicable.",
+        "evidence_quote": "For any permission or access to the information contained in this repository, please send an email to cemos@e3t.uis.edu.co.",
+        "location": "after Figure 19",
+        "confidence": "high"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "author_stated",
+        "rationale": "The paper focuses on proposal/preliminary design and planned future implementation/testing rather than the full lifecycle through I&T, launch, and operations.",
+        "evidence_quote": "Although actual manufacturing of the subsystems has not yet started",
+        "location": "Section 2.3",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Claims of minimized errors, improved communication accuracy, and avoided rework are linked to MBSE/Agile but lack measured error counts, communication metrics, or baseline comparison.",
+        "evidence_quote": "Through Model-Based Systems Engineering (MBSE), technical consistency was rigorously managed across various architectural documents, ensuring coherency and minimizing errors.",
+        "location": "Abstract",
+        "absence_based_explanation": "No defect, rework, or stakeholder communication metrics were reported for this claim.",
+        "confidence": "high"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "Arcadia progression from operational analysis to system analysis, logical architecture, physical architecture, and EPBS",
-      "technology-independent logical architecture before physical choices",
-      "open-source Capella tool with version reported",
-      "shared unified model with multiple views",
-      "requirements-to-functions-to-components traceability",
-      "centralized model governance with subsystem-specific permissions",
-      "weekly sprint cadence and subsystem backlogs adaptable to other CubeSat teams"
+    "emergent_limitations": [
+      {
+        "label": "no-comparison-with-spiral-model-or-other-iterative-systems-engineering-approache",
+        "source": "author_stated",
+        "rationale": "The authors explicitly state that comprehensive comparison with Spiral Model and other iterative approaches was outside scope and future work.",
+        "evidence_quote": "A comprehensive comparison with the Spiral Model and other iterative approaches was beyond the scope of this paper but is a valuable area for future research.",
+        "location": "Section 6 Conclusions, Limitations and Future Work",
+        "confidence": "high"
+      },
+      {
+        "label": "repository-access-is-permission-mediated-rather-than-openly-reproducible",
+        "source": "author_stated",
+        "rationale": "The paper points readers to a web page/repository but says access requires email permission, limiting open replication.",
+        "evidence_quote": "For any permission or access to the information contained in this repository, please send an email to cemos@e3t.uis.edu.co.",
+        "location": "after Figure 19",
+        "confidence": "high"
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Operational analysis and stakeholder capture",
-        "inputs": "mission sponsors, end users, technical experts, structured interviews/workshops, existing documentation, KiboCUBE constraints",
-        "outputs": "stakeholder expectations, operational entities, operational capabilities, ConOps, mission stages and modes",
-        "actors_roles": "systems engineering team, project managers, subsystem teams, external institutions and users",
-        "prerequisites": "mission opportunity and participating institutions identified",
-        "completion_criteria": "operational needs and actors captured sufficiently to define what users and the mission must accomplish",
-        "handoffs": "high-level needs passed to system requirements and Capella model initialization"
-      },
-      {
-        "step": "System analysis and requirements integration in Capella",
-        "inputs": "mission concept, Table A1 requirements, stakeholder needs, standards and constraints",
-        "outputs": "hierarchical requirements in Capella Requirement Viewpoint, system boundary, functional needs, initial traceability links",
-        "actors_roles": "lead and secondary system engineers with subsystem representatives",
-        "prerequisites": "Capella model set up and requirements agreed",
-        "completion_criteria": "requirements allocated to relevant logical and physical components and traceable to sources",
-        "handoffs": "formalized requirements used to drive logical architecture"
-      },
-      {
-        "step": "Logical architecture development",
-        "inputs": "system requirements, ConOps, operational modes, functions and data-flow needs",
-        "outputs": "logical components, functions, actors, functional exchanges, logical architecture of CubeSat and ground segment",
-        "actors_roles": "systems engineering team with subsystem R&D teams",
-        "prerequisites": "system boundary and stakeholder needs consolidated",
-        "completion_criteria": "logical components interact coherently and satisfy pre-established needs without premature technology choices",
-        "handoffs": "logical functions transitioned/refined into physical architecture"
-      },
-      {
-        "step": "Physical architecture and subsystem design integration",
-        "inputs": "logical architecture, subsystem designs, interface choices, component data, power/thermal/communication assumptions",
-        "outputs": "physical architecture diagrams for EPS, OBC, ADCS, communications and interfaces; physical components and ports; subsystem budgets",
-        "actors_roles": "subsystem teams for EPS/OBC/ADCS/COMMS/Thermal/Payload with systems engineering oversight",
-        "prerequisites": "logical functions and interfaces established",
-        "completion_criteria": "physical components allocated to functions and linked to requirements with interfaces defined",
-        "handoffs": "design artifacts passed to validation, verification planning, and later manufacturing/integration"
-      },
-      {
-        "step": "Agile sprint coordination and model governance",
-        "inputs": "general product backlog, subsystem backlogs, weekly progress, cross-subsystem issues",
-        "outputs": "updated Capella model, sprint increments, design decisions, resolved cross-functional issues",
-        "actors_roles": "subsystem teams, two system engineers, five project managers, team members with view-only or edit permissions",
-        "prerequisites": "subteam responsibilities and model permissions assigned",
-        "completion_criteria": "weekly status/review meetings completed and authorized model changes incorporated",
-        "handoffs": "centralized model updates and decisions inform subsequent sprint work"
-      },
-      {
-        "step": "Pre-physical-development verification and validation planning",
-        "inputs": "Capella architecture, requirements, test criteria, power budgets, link budgets, orbital and thermal models",
-        "outputs": "validation criteria, traceability matrices, verification test-case links, simulation results, design-risk findings",
-        "actors_roles": "systems engineering team, subsystem analysis teams, validation contributors",
-        "prerequisites": "requirements and architecture linked in the model",
-        "completion_criteria": "requirements can be traced to design elements and planned tests/analyses before hardware build",
-        "handoffs": "validated preliminary design baseline supports future implementation, integration and testing"
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The approach maps Arcadia operational/system/logical/physical architecture work to systems engineering design processes in Pre-Phase A, Phase A, and Phase B; it uses ECSS, NASA NPRs/handbook, JAXA JPAH/J-SSOD constraints, and V-model validation/verification concepts to support preliminary design and later IVVQ.",
-    "approach_classification": "Enhanced MBSE",
-    "approach_classification_rationale": "The core is Arcadia/Capella MBSE, enhanced by Agile/Scrum-inspired weekly sprints, subsystem backlogs, centralized governance, and external analysis tools; it is not presented as a complete automated digital thread.",
-    "tailoring_rationale": [
-      "small satellite projects face changing requirements, limited funding/personnel/timescale, and distributed teams",
-      "hardware development requires more upfront architecture and validation than software because hardware changes are costly",
-      "sequential preliminary design was chosen for validation, risk management, documentation, and configuration management",
-      "independent subsystem backlogs were used because each university/organization owned different subsystem expertise",
-      "Capella/Arcadia was selected to centralize design decisions and maintain consistency across independently progressing teams"
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "Arcadia method",
-      "Capella modeling tool version 6.1",
-      "SysML referenced as part of MBSE frameworks",
-      "Scrum-inspired Agile methodology with weekly sprints",
-      "NASA GMAT for orbit/contact/lifetime simulation",
-      "ESA DRAMA for space-debris/re-entry assessment",
-      "MATLAB scripts and Simulink mentioned for validation/analysis",
-      "Ansys STK mentioned as validation tool",
-      "HiLeS Designer 2.0 for ADCS engineering model"
-    ],
-    "toolchain_architecture_data_flow": "Requirements are captured from mission concept/stakeholders and translated into Capella, then linked to operational scenarios, system functions, logical components, physical components, and verification test cases. Subsystem analyses such as power budget, thermal analysis, orbit simulation, and link budget inform the model and validation criteria through weekly coordination and a common repository.",
-    "interoperability_mechanisms": [
-      "Capella requirement links",
-      "bidirectional traceability from requirements to physical designs and back",
-      "Requirement Allocation Matrix",
-      "Requirement Coverage/traceability diagrams",
-      "functional exchanges and physical links/interfaces",
-      "common online repository for subsystem documentation",
-      "weekly cross-functional meetings",
-      "centralized model-change authority and permissions",
-      "standardized interface labels such as I2C, UART, SPI, 3.3 V, 5 V, VBATT"
-    ],
-    "syntax_semantic_continuity_evidence": "Semantic continuity is evidenced by requirement-to-function-to-component traceability and statements that changes in one subsystem are reflected in the unified model; no formal syntax-level exchange mechanism among Capella, GMAT, MATLAB, STK, and DRAMA is reported.",
-    "software_hardware_system_integration_readiness": "Preliminary readiness: physical interface diagrams, subsystem component allocations, operating modes, power budgets, and planned test cases are defined, but implementation/testing stages are future work and actual manufacturing has not started.",
-    "toolchain_limitations": [
-      "no open Capella model file or executable toolchain release reported",
-      "external analysis tools appear loosely coupled rather than automatically integrated",
-      "no formal data exchange standard or model transformation workflow described",
-      "no physical subsystem integration or flight validation yet",
-      "comparative study against traditional or spiral methods not performed"
-    ],
-    "availability_reproducibility": "Capella is open source and version 6.1 is reported; the paper provides many diagrams and tables, but repository access requires permission by email and the data availability statement says no new data were created or analyzed."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "EPS mainboard",
-      "battery pack",
-      "deployable solar panels +X and -X",
-      "fixed solar panels +Y, -Y, +Z and -Z",
-      "solar array and solar cells",
-      "power controller with MPPT and charger controller",
-      "battery power storage and power level sensor",
-      "power distribution unit",
-      "regulators",
-      "converters, MCU, batteries, heater",
-      "3.3 V, 5.0 V and VBATT power interfaces to subsystems"
-    ],
-    "eps_requirements_representation": "EPS requirements are represented as continuous availability of power, efficient solar power generation/distribution, and resistance to space conditions; these are linked to logical functions for power generation, storage, and distribution and to physical components such as solar panels, batteries, and PMUs.",
-    "verification_validation_artifacts": [
-      "EPS power-budget tables for standby, operative, LEOP, nominal and other modes",
-      "maximum power demand and energy per mode",
-      "solar panel configuration energy and Pmax table",
-      "battery capacity assumption of 1300 mAh at 7.4 V",
-      "operating-mode state diagrams and matrices",
-      "Capella requirement allocation and coverage/traceability diagrams",
-      "physical EPS architecture diagram",
-      "thermal requirements and WHC/WCC analysis including EPS temperature limits",
-      "planned verification test cases and validation criteria linked to model elements"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "power and energy budget analysis using subsystem manufacturer data",
-      "mode-by-mode power demand calculation before build",
-      "Capella bidirectional traceability from EPS-related requirements to logical/physical components",
-      "thermal analysis of subsystem survivability limits",
-      "linking requirements to verification test cases and validation criteria in the system model",
-      "weekly reviews to update and check cross-subsystem effects"
-    ],
-    "evidence_verification_integrated_in_model": "The paper states that Capella linked requirements to system functions, logical components, physical designs and verification test cases; specifically for EPS, continuous power requirements were traced to solar panels and batteries and EPS physical architecture is shown in Figure A5(a).",
-    "integration_test_readiness": "EPS is at preliminary design readiness with power interfaces and budgets defined; physical integration and testing readiness is planned but not demonstrated because subsystem manufacturing has not started."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "MBSE managed technical consistency across architectural documents, ensuring coherency and minimizing errors.",
-      "outcome_category": "consistency/error reduction",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "model-centric documentation",
-        "Capella unified model",
-        "requirements, architecture, and interface representation"
-      ],
-      "artifact_or_process_linked": "Arcadia/Capella preliminary design model containing requirements, architecture and interfaces.",
-      "lifecycle_stage": "preliminary design",
-      "evidence_type": "case-study narrative and model artifacts",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "traditional document-oriented practices discussed generally, but no controlled comparator",
-      "observed_effect_size_or_qualitative_effect": "coherency and minimized errors asserted",
-      "evidence_source": "Abstract",
-      "direct_quote": "Through Model-Based Systems Engineering (MBSE), technical consistency was rigorously managed across various architectural documents, ensuring coherency and minimizing errors.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No error-count metric, independent audit, or baseline design process comparison is provided."
+      "field_path": "synthesis_consistency",
+      "label": "agile-scrum-subsystem-specific-weekly-sprints",
+      "description": "The paper's key tailoring mechanism is an Agile/Scrum process with independent subsystem backlogs and weekly sprint meetings, outside the MBSE-specific controlled mechanism labels.",
+      "rationale": "The paper's key tailoring mechanism is an Agile/Scrum process with independent subsystem backlogs and weekly sprint meetings, outside the MBSE-specific controlled mechanism labels.",
+      "evidence_quote": "Section 4.1: Sprints will be conducted on a weekly basis, with each team maintaining its own product backlog.; Section 4.1: each sub-team or subsystem should operate with its own independent backlog and follow a distinct scrum process",
+      "confidence": "medium",
+      "original_label": "Agile/Scrum subsystem-specific weekly sprints",
+      "type": "method/theme"
     },
     {
-      "claim": "The approach accelerated preliminary design to 4 months using Arcadia and weekly sprints.",
-      "outcome_category": "schedule/cycle time",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Arcadia framework",
-        "weekly sprint cadence",
-        "centralized design decisions",
-        "integrated model views"
-      ],
-      "artifact_or_process_linked": "Arcadia/Capella model plus weekly general sprints and subsystem backlogs.",
-      "lifecycle_stage": "preliminary design",
-      "evidence_type": "reported case-study schedule metric",
-      "metric_or_value_indicator": "4 months; compared qualitatively with ECSS/NASA suggested 1 to 6 months for similar processes",
-      "baseline_comparator": "ECSS/NASA process duration guidance, not a direct project baseline",
-      "observed_effect_size_or_qualitative_effect": "completed within the upper bound of guidance and described as shorter than anticipated",
-      "evidence_source": "Discussion",
-      "direct_quote": "The application of the Arcadia method for the Preliminary Design of the $ ^{3} $ ColStar mission enabled the completion of this process within a remarkable timeframe of just 4 months, facilitated by weekly general sprints.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Schedule may reflect team size, mission scope, prior artifacts, or KiboCUBE proposal pressure rather than MBSE alone."
+      "field_path": "synthesis_consistency",
+      "label": "role-based-capella-model-governance-and-permissions",
+      "description": "The paper provides unusually explicit model governance details: lead and secondary system engineers, subsystem representatives, view-only permissions, and project manager approval for critical/financial changes.",
+      "rationale": "The paper provides unusually explicit model governance details: lead and secondary system engineers, subsystem representatives, view-only permissions, and project manager approval for critical/financial changes.",
+      "evidence_quote": "Section 5.1: The governance structure assigned specific roles and permissions to manage modifications effectively within the unified model.",
+      "confidence": "medium",
+      "original_label": "Role-based Capella model governance and permissions",
+      "type": "governance mechanism"
     },
     {
-      "claim": "Capella/Arcadia integrated subsystem designs and maintained traceability to high-level requirements.",
-      "outcome_category": "traceability/integration",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "requirements links",
-        "logical and physical architecture allocation",
-        "bidirectional traceability",
-        "traceability matrices"
-      ],
-      "artifact_or_process_linked": "Capella Requirement Viewpoint, Requirement Allocation Matrix, traceability diagrams, logical and physical architectures.",
-      "lifecycle_stage": "preliminary design",
-      "evidence_type": "model artifact description and examples",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "subsystem designs reported as integrated and traceable to mission requirements",
-      "evidence_source": "Sections 3.3 and 5",
-      "direct_quote": "The application of the Capella tool and Arcadia method enabled us to ensure that all subsystem designs were integrated and traceable back to the mission's high-level requirements.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Traceability coverage is illustrated but not quantified, and model files are not provided for inspection."
+      "field_path": "synthesis_consistency",
+      "label": "capella-requirement-viewpoint-requirement-allocation-matrix-and-requirement-cove",
+      "description": "These Capella-specific traceability/coverage artifacts are central but not named directly in the controlled artifact vocabulary; they motivated use of controlled value other.",
+      "rationale": "These Capella-specific traceability/coverage artifacts are central but not named directly in the controlled artifact vocabulary; they motivated use of controlled value other.",
+      "evidence_quote": "Section 3.3.2: Requirements were imported and hierarchically structured within Capella's Requirement Viewpoint; Section 3.3.2: Requirement Allocation Matrix ... Traceability Diagrams ... Requirement Coverage Diagrams",
+      "confidence": "medium",
+      "original_label": "Capella Requirement Viewpoint, Requirement Allocation Matrix, and Requirement Coverage Diagrams",
+      "type": "model artifact outside controlled labels"
     },
     {
-      "claim": "Unified MBSE model enabled continuous verification and validation of system coherence when subsystem designs changed.",
-      "outcome_category": "verification/validation and change impact",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "shared system model",
-        "change propagation awareness",
-        "weekly cross-functional coordination",
-        "model governance"
-      ],
-      "artifact_or_process_linked": "Capella unified model and weekly update meetings managed by systems engineers.",
-      "lifecycle_stage": "preliminary design",
-      "evidence_type": "case-process description",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "coherence and alignment maintained across subsystems",
-      "evidence_source": "Section 4.1 and Discussion",
-      "direct_quote": "Changes in one subsystem's design are reflected in the overall model, allowing for continuous verification and validation of the system's coherence.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No model-check reports, defect logs, or change-impact examples are shown."
+      "field_path": "synthesis_consistency",
+      "label": "nasa-gmat-and-esa-drama-orbital-debris-simulation-tools",
+      "description": "GMAT and DRAMA are used for orbit/contact/lifetime/debris-related analysis but are not controlled tool labels.",
+      "rationale": "GMAT and DRAMA are used for orbit/contact/lifetime/debris-related analysis but are not controlled tool labels.",
+      "evidence_quote": "Section 2: an orbital simulation of the mission profile was executed by using an astrodynamics propagator (NASA GMAT); Section 2: we used the DRAMA ... ESA software (version 3.1.0)",
+      "confidence": "medium",
+      "original_label": "NASA GMAT and ESA DRAMA orbital/debris simulation tools",
+      "type": "tool outside controlled labels"
     },
     {
-      "claim": "The integration of Capella helped avoid design rework and streamline the process.",
-      "outcome_category": "rework reduction/process efficiency",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "digitalized process",
-        "shared model",
-        "technical consistency management",
-        "requirements traceability"
-      ],
-      "artifact_or_process_linked": "Capella integrated model and architectural documents.",
-      "lifecycle_stage": "preliminary design",
-      "evidence_type": "author assertion within case discussion",
-      "metric_or_value_indicator": "shorter timeframe than anticipated, but no rework count",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "design rework reportedly avoided",
-      "evidence_source": "Discussion",
-      "direct_quote": "Additionally, the integration of Capella revealed that we could avoid design rework, streamlining the process and completing this initial phase in a shorter timeframe than anticipated.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Rework avoidance is not measured and could be influenced by sequential process, team experience, or scope control."
+      "field_path": "synthesis_consistency",
+      "label": "hi-le-s-designer-2-0-for-adcs-fpga-engineering-model",
+      "description": "The ADCS engineering model/tool is relevant to subsystem model maturity but outside the controlled tool labels.",
+      "rationale": "The ADCS engineering model/tool is relevant to subsystem model maturity but outside the controlled tool labels.",
+      "evidence_quote": "Section 2.3.4: An engineering model of the ADCS is currently being constructed using an FPGA controller under the platform HiLeS Designer 2.0",
+      "confidence": "medium",
+      "original_label": "HiLeS Designer 2.0 for ADCS FPGA engineering model",
+      "type": "tool outside controlled labels"
     },
     {
-      "claim": "MBSE supported early identification of requirements, risk management, and optimization of system performance, contributing to a more reliable satellite design.",
-      "outcome_category": "reliability/risk management",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "requirements capture",
-        "functional/logical/physical decomposition",
-        "preliminary analyses and validation",
-        "traceability"
-      ],
-      "artifact_or_process_linked": "requirements model, power budget, thermal analysis, orbital simulation, and Capella architecture.",
-      "lifecycle_stage": "early/preliminary design",
-      "evidence_type": "case-study analyses plus author interpretation",
-      "metric_or_value_indicator": "thermal profiles within limits; power/energy tables; contact and lifetime simulations; no reliability probability metric",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "technical and operational feasibility assessed early; satellite design described as more reliable",
-      "evidence_source": "Discussion and subsystem analyses",
-      "direct_quote": "MBSE facilitated the early identification of key requirements, efficient risk management, and the optimization of system performance.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Analyses support feasibility but not reliability as quantified dependability; no environmental or flight testing is reported."
+      "field_path": "synthesis_consistency",
+      "label": "technical-feasibility-indicators-as-indirect-reliability-proxies",
+      "description": "The paper reports contact counts, orbital lifetime, power/energy, and thermal limit checks; these are not direct MBSE outcome metrics but support claims about feasible/reliable design.",
+      "rationale": "The paper reports contact counts, orbital lifetime, power/energy, and thermal limit checks; these are not direct MBSE outcome metrics but support claims about feasible/reliable design.",
+      "evidence_quote": "Section 2: the number of contacts with the satellite is 572; the average contact time with the satellite is 284.745 [s]; Section 2.3.2: the satellite's temperature remains within the acceptable operating limits",
+      "confidence": "medium",
+      "original_label": "Technical feasibility indicators as indirect reliability proxies",
+      "type": "metric/theme outside controlled labels"
     },
     {
-      "claim": "EPS continuous-power requirements were aligned with physical EPS components through traceability.",
-      "outcome_category": "EPS requirement-design alignment",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "requirement allocation",
-        "logical EPS functions",
-        "physical component mapping"
-      ],
-      "artifact_or_process_linked": "EPS requirements, logical functions for generation/storage/distribution, physical solar panels and batteries in Capella.",
-      "lifecycle_stage": "preliminary design",
-      "evidence_type": "traceability example in subsystem design integration",
-      "metric_or_value_indicator": "not reported for traceability coverage; power and energy budgets reported separately",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "direct alignment from requirement to implementation claimed",
-      "evidence_source": "Section 3.3.1 Power Subsystem (EPS)",
-      "direct_quote": "Traceability: the requirements for continuous power were linked to specific physical components, such as solar panels and batteries, ensuring direct alignment from requirement to implementation.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The claim is an example and does not provide the underlying traceability matrix or test results."
+      "field_path": "synthesis_consistency",
+      "label": "kibo-cube-jaxa-unoosa-deployment-constraints-drive-requirements",
+      "description": "The mission's launch/deployment opportunity provides specific constraints (1U size, testing, ISS/Kibo deployment) shaping requirements and design.",
+      "rationale": "The mission's launch/deployment opportunity provides specific constraints (1U size, testing, ISS/Kibo deployment) shaping requirements and design.",
+      "evidence_quote": "Section 2: Based on the KiboCUBE opportunity, the constraints for the mission are; Section 2: The size of the CubeSat must not exceed the 1U standard",
+      "confidence": "medium",
+      "original_label": "KiboCUBE/JAXA-UNOOSA deployment constraints drive requirements",
+      "type": "context/theme"
     },
     {
-      "claim": "Power-budget modeling provided mode-by-mode EPS feasibility inputs before physical implementation.",
-      "outcome_category": "EPS feasibility/verification support",
-      "specificity": "power-budget/electrical-architecture",
-      "mbse_mechanism": [
-        "mode-based power analysis",
-        "subsystem consumption tables",
-        "energy generation/storage/distribution computation"
-      ],
-      "artifact_or_process_linked": "Tables 2-4 and Appendix B power budgets for operating modes; EPS physical architecture.",
-      "lifecycle_stage": "preliminary design",
-      "evidence_type": "quantitative engineering analysis tables",
-      "metric_or_value_indicator": "Power and energy per operating mode, e.g., Decommissioning 9.52 W and 9.60 Wh in Table 4; battery capacity 1300 mAh, 7.4 V",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "identifies demanded power/energy for modes and bus/protection needs before manufacturing",
-      "evidence_source": "Section 2.3.1 and Appendix B",
-      "direct_quote": "The power budget computes the power and energy demand; energy generation; storage; distribution, monitoring and control.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Power budget uses manufacturer data and assumptions; no hardware measurements or battery cycling tests are reported."
-    },
-    {
-      "claim": "Agile/MBSE improved collaboration and communication among distributed interdisciplinary teams.",
-      "outcome_category": "collaboration/communication",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "shared model",
-        "weekly sprints and meetings",
-        "subsystem team backlogs",
-        "common language/views"
-      ],
-      "artifact_or_process_linked": "weekly sprint process, subsystem teams, Capella model updates, model governance roles.",
-      "lifecycle_stage": "proposal and preliminary design",
-      "evidence_type": "process description and author assertion",
-      "metric_or_value_indicator": "weekly sprint cadence; 13 participating institutions reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "communication accuracy and efficiency reportedly improved",
-      "evidence_source": "Abstract and Section 4.1",
-      "direct_quote": "This case study highlights the effectiveness of Agile Systems Engineering principles to improve the team communication accuracy, communication, and efficiency of satellite systems preliminary design",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No stakeholder survey, communication metric, or conflict-resolution log is provided."
-    },
-    {
-      "claim": "Arcadia framework helped subsystem teams progress individually and integrate results easily.",
-      "outcome_category": "integrability/reuse of subsystem work",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "common Arcadia framework",
-        "centralized design decisions",
-        "shared logical/physical architecture",
-        "subsystem-specific responsibilities"
-      ],
-      "artifact_or_process_linked": "Arcadia/Capella model and subsystem allocation to universities based on capabilities.",
-      "lifecycle_stage": "preliminary design",
-      "evidence_type": "author reflection from case study",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "individual progress and integration reported as easier",
-      "evidence_source": "Discussion",
-      "direct_quote": "It is worth noting that having a framework process as Arcadia allowed each subsystem team to make progress individually and integrate each team result easily.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Ease of integration is not validated by integration tests or measured integration effort."
+      "field_path": "synthesis_consistency",
+      "label": "centralized-manual-model-update-from-weekly-cross-functional-meetings",
+      "description": "The paper's synchronization mechanism depends on human coordination and centralized updates rather than an automated tool integration mechanism.",
+      "rationale": "The paper's synchronization mechanism depends on human coordination and centralized updates rather than an automated tool integration mechanism.",
+      "evidence_quote": "Section 4.1: the management team ... is in charge of updating the designs and models based on the discussions during the weekly meetings",
+      "confidence": "medium",
+      "original_label": "Centralized manual model update from weekly cross-functional meetings",
+      "type": "interoperability/governance mechanism"
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "Lead and secondary System Engineers can implement changes across the system model; subsystem representatives can modify their respective areas; view-only permissions are used for other members; five Project Managers authorize financial or critical changes; weekly status and cross-functional meetings coordinate changes.",
-    "traceability_to_deliverables_decisions_reviews": "Requirements are linked to operational scenarios, functions, logical components, physical designs, and verification test cases; design decisions are centralized in Capella through systems engineering oversight and weekly reviews; financial/critical changes require project-manager authorization.",
-    "evaluation_criteria_model_quality_usefulness": "Alignment with high-level mission requirements, requirement coverage, bidirectional traceability, consistency/coherence of subsystem designs, validation criteria and test-case links, and cross-subsystem issue resolution; no formal model-quality metric is reported.",
-    "roi_value_realization_evidence": "Value is claimed through 4-month preliminary design, avoided design rework, shorter-than-anticipated initial phase, and improved communication/consistency; no cost-benefit calculation, labor metric, or independent ROI baseline is reported.",
-    "programmatic_gates_critical_design_events_supported": "KiboCUBE proposal structuring, preliminary design baseline, ECSS/NASA/JAXA planning and safety/integration constraints, future implementation/testing stages, and later IVVQ; no completed CDR/flight gate is reported.",
-    "model_derived_performance_indicators_management_metrics": "Power/energy per operating mode, Pmax and solar-panel configuration energy, battery capacity assumptions, thermal temperature profiles for WHC/WCC, orbit lifetime and ground-contact metrics, data volumes for payload/IoT, and weekly sprint progress are reported, but not consolidated as management KPIs."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed with evidence",
-      "rationale": "The paper gives a concrete case workflow from requirements and operational analysis to logical/physical architecture, sprint governance, subsystem diagrams, and analysis tables, though implementation/testing remains future work."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed conceptually",
-      "rationale": "Capella is positioned as a unified model with links to external tools and analyses, but formal automated interoperability or data exchange among tools is not demonstrated."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed with evidence",
-      "rationale": "The case explicitly targets a 1U university/government CubeSat with limited resources, distributed institutions, weekly sprints, subsystem backlogs, and preliminary analyses tailored to early design."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "addressed with evidence",
-      "rationale": "Section 5.1 details permissions, roles, change authorization, and weekly status meetings; value claims include 4-month design and rework avoidance, although ROI metrics are limited."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "addressed with evidence",
-      "rationale": "The study centers on Agile Systems Engineering for a distributed small-satellite team using weekly sprints, subsystem teams/backlogs, and rapid preliminary design completion."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "A nanosatellite mission can be modeled from stakeholder needs through Arcadia operational, system, logical, and physical architecture layers in Capella.",
-        "EPS can be represented through requirements for continuous power, logical functions for generation/storage/distribution, and physical components such as solar panels, batteries, controllers, and PDU.",
-        "The method reduces dependence on early technology choices by defining logical functions before physical architecture, but it still requires mission modes, interface assumptions, and subsystem data."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0078",
+      "extraction_file_path": "/Users/antho/nanosatellite-mbse/SLR/SLR1/extractions/paper-0078.json",
+      "tier_status": {
+        "value": "supporting",
+        "rationale": "Supplied screening tier is supporting; the paper is useful for nanosatellite system-level MBSE/agile and includes EPS power-budget architecture, but it is not primarily an EPS verification procedure paper."
+      },
+      "citation": "Buitrago-Leiva et al. (2024)",
+      "title": "Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission",
+      "authors": [
+        "Jeimmy Nataly Buitrago-Leiva",
+        "Juan José Mejía",
+        "Juan Francisco Puerta-Ibarra",
+        "Ignacio Francisco Acero-Niño",
+        "Andrés Felipe Guarnizo-Saavedra",
+        "Julian Rodriguez-Ferreira",
+        "Leandro Rojas-Rodriguez",
+        "Francisco Luis Hernández-Torres",
+        "Cristian Esteban Arango-Cotacio",
+        "Jorge Enrique Salazar-Morales",
+        "Miguel Angel Herrera-Cruz",
+        "Mario Linares-Vásquez",
+        "Jose Fernando Jiménez-Vargas",
+        "Jorge Enrique Espíndola-Díaz",
+        "Óscar Javier Montañez-Sogamoso",
+        "Adriano Camps"
       ],
-      "RQ2": [
-        "Claimed outcomes include technical consistency, coherency, minimized errors, improved communication, traceability, easier integration, avoided rework, shorter preliminary design time, and a more reliable design.",
-        "Reliability and integrability claims are linked to unified modeling, traceability, early validation, and change governance, but are mostly qualitative rather than EPS-specific.",
-        "Reproducibility is supported by open-source Capella and detailed figures/tables, but limited by unavailable model assets and permission-controlled repository access."
+      "year": 2024,
+      "venue": "Aerospace",
+      "venue_type": "journal article",
+      "volume": "11",
+      "article_number": "758",
+      "publisher": "MDPI",
+      "doi": "10.3390/aerospace11090758",
+      "url": "https://doi.org/10.3390/aerospace11090758",
+      "source_database_query_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q27_exact_3colstar_title.json",
+          "query": "TITLE-ABS-KEY(\"Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission\")",
+          "rank": 1,
+          "paperId": "85205101620"
+        },
+        {
+          "source": "local_pdf",
+          "input_file": "SLR/SLR1/pdfs/Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologiespdf",
+          "query": "Existing local full-text PDF reused to complete Stage-1 metadata",
+          "rank": 1,
+          "paperId": "85205101620",
+          "purpose": "metadata_completion"
+        }
       ],
-      "RQ3": [
-        "Verification procedures are represented through Capella requirement/test-case links, traceability matrices, requirement coverage diagrams, and validation criteria from component to system level.",
-        "EPS-related pre-physical verification is mainly power-budget analysis by mode, requirement allocation to EPS components, and cross-subsystem model consistency checks.",
-        "The paper reports orbital, thermal, communications/link-budget and power analyses before manufacturing, but no EPS hardware integration or flight validation."
+      "research_questions": [
+        {
+          "rq": "RQ1",
+          "relevance": "partial",
+          "rationale": "Project-applied system-level Arcadia/Capella model for a 1U CubeSat with EPS architecture/power budget; not a general minimal-behavior modeling method."
+        },
+        {
+          "rq": "RQ2",
+          "relevance": "partial",
+          "rationale": "Reports MBSE/agile outcomes for consistency, traceability, communication, schedule, risk, and reliability at system level; EPS-specific outcomes are not isolated."
+        },
+        {
+          "rq": "RQ3",
+          "relevance": "partial",
+          "rationale": "Describes pre-physical requirements/test-case links and simulations in the system model context; no detailed EPS IVV procedure model."
+        }
+      ],
+      "lineage_overlap_notes": "3ColStar/KiboCUBE Colombia mission case; uses Arcadia/Capella small-satellite workflow and cites prior 3ColStar internal KiboCUBE application and related 3Cat-4 thermal work. No duplicate extraction lineage identified from the provided files."
+    },
+    "study_context_population": {
+      "mission_platform": {
+        "mission_name": "3ColStar KiboCUBE Colombia",
+        "platform_class": "1U CubeSat/nanosatellite",
+        "mission_domain": "dual space-weather particle sensing and IoT connectivity/education/social applications",
+        "deployment_context": "KiboCUBE opportunity; planned ISS Kibo deployment constraints",
+        "organization_type": "multi-institution collaboration among Colombian universities, Colombian Aerospace Force, international institutions, and companies/start-ups",
+        "project_maturity": "pre-selected/finalist proposal and preliminary design; manufacturing not yet started"
+      },
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "PDR",
+        "operations"
+      ],
+      "development_context": [
+        "academic/student",
+        "agency",
+        "industry/NewSpace",
+        "distributed team",
+        "agile/concurrent design",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "power-budget/electrical-architecture",
+      "model_maturity": [
+        "project-applied model"
+      ],
+      "key_context_quotes": [
+        {
+          "quote": "The 3ColStar KiboCUBE Colombia CubeSat (1U) mission emerged from the ambitious initiative to design a satellite manufactured up to 70% in Colombia.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "Although actual manufacturing of the subsystems has not yet started",
+          "location": "Section 2.3"
+        },
+        {
+          "quote": "Collaboration among 13 institutions",
+          "location": "Section 5"
+        }
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Actual manufacturing of subsystems has not yet started.",
-      "Thermal analysis is preliminary and further detailed design analysis is crucial.",
-      "No comparative study against a traditional approach was conducted because of budget constraints and burden of parallel teams.",
-      "Comparison with the Spiral Model and other iterative approaches was beyond scope and left for future work.",
-      "Data availability statement says no new data were created or analyzed and data sharing is not applicable."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "EPS modeling is described in power-budget and architecture terms, but the paper is system-level and not primarily EPS MBSE verification research.",
-      "Claimed MBSE benefits lack defect metrics, rework counts, model-check reports, integration-test evidence, or flight/operational data.",
-      "Model artifacts are shown as figures but the underlying Capella model/repository is not openly available in the paper.",
-      "Interoperability between Capella and external analysis tools is process-based rather than described as an automated digital thread.",
-      "Reliability claims are qualitative and not quantified through reliability models or EPS dependability analysis."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Use MBSE/Arcadia/Capella with Agile methods to manage dynamic requirements, interdisciplinary/distributed collaboration, traceability, documentation overhead, subsystem integration, and accelerated preliminary design for a 1U CubeSat.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "operations",
+        "simulation",
+        "manufacturing/test",
+        "other"
+      ],
+      "system_boundary_abstraction": "System-level satellite plus ground/user/mission operations context. Capella operational, system, logical, and physical architectures model major satellite subsystems and actors. The logical layer deliberately abstracts away technology choices; the physical layer maps functions to hardware/software components and interfaces.",
+      "required_prior_behavioral_domain_knowledge": "The paper does not present a minimal-knowledge modeling theory. It derives requirements from stakeholder needs, mission concept, KiboCUBE/JAXA constraints, manufacturer technical data, and subsystem team expertise. Behavior is represented with ConOps, operational modes, logical functions, functional exchanges, and subsystem analyses.",
+      "model_artifacts_used": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "state/activity/sequence diagrams",
+        "parametrics",
+        "interface control models",
+        "power budgets",
+        "test cases/procedures",
+        "executable simulations",
+        "other"
+      ],
+      "additional_artifacts_not_in_controlled_vocabulary": [
+        "Capella Requirement Viewpoint",
+        "Requirement Allocation Matrix",
+        "Requirement Coverage Diagrams",
+        "operational entity diagrams",
+        "physical link/component exchange diagrams"
+      ],
+      "generality_reuse_mechanism": [
+        "reusable workflow",
+        "method guidance"
+      ],
+      "key_evidence": [
+        {
+          "quote": "models that contain requirements, architecture, and interfaces between the different parts of the system",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The two main analyses in the mission are the logical and physical architectures",
+          "location": "Section 3.2"
+        },
+        {
+          "quote": "Requirements were established initially from mission concept, translated into Capella, and linked to various model elements",
+          "location": "Section 3.3"
+        }
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "reported_steps_or_phases": [
+        {
+          "step": "Stakeholder needs and mission requirements capture",
+          "inputs": "Mission concept, KiboCUBE constraints, stakeholder interviews/workshops/questionnaires, existing documentation.",
+          "outputs": "High-level mission objectives and technical requirements; requirements table; Capella requirements.",
+          "actors_roles": "Mission sponsors, end-users, technical experts, systems engineering team, subsystem teams.",
+          "handoffs_completion_criteria": "Requirements linked into Capella; no formal completion criteria reported."
+        },
+        {
+          "step": "Arcadia Operational Analysis and System Analysis",
+          "inputs": "Stakeholder needs, operational actors/entities, ConOps.",
+          "outputs": "Operational entities/capabilities, system functions, boundary and requirements.",
+          "actors_roles": "Systems engineering team and subsystem representatives.",
+          "handoffs_completion_criteria": "Transition to logical architecture; no formal gate evidence reported."
+        },
+        {
+          "step": "Logical Architecture",
+          "inputs": "System functions and requirements.",
+          "outputs": "Logical components/functions, functional exchanges, logical actors, behavior/operations.",
+          "actors_roles": "Systems engineering team and subsystem teams.",
+          "handoffs_completion_criteria": "Logical-to-physical transition and consistency review via weekly meetings."
+        },
+        {
+          "step": "Physical Architecture and subsystem design integration",
+          "inputs": "Logical architecture, subsystem technical data and analyses.",
+          "outputs": "Physical components, ports/links, subsystem architectures for EPS, OBC, ADCS, COMMS, etc.; links to requirements/functions.",
+          "actors_roles": "Subsystem teams with system engineer oversight.",
+          "handoffs_completion_criteria": "Physical diagrams and traceability to logical functions/requirements."
+        },
+        {
+          "step": "Validation, verification, and analysis support",
+          "inputs": "Capella architecture, requirements, subsystem analyses.",
+          "outputs": "Test cases, validation criteria, link-budget validation, orbital/thermal/power analyses, traceability matrices/diagrams.",
+          "actors_roles": "Systems engineering, communications, thermal, EPS and other subsystem teams.",
+          "handoffs_completion_criteria": "Compliance/feasibility checks; no physical test completion reported."
+        },
+        {
+          "step": "Agile/Scrum project execution and governance",
+          "inputs": "General product backlog, subsystem backlogs, weekly sprint goals, model change requests.",
+          "outputs": "Updated model, sprint reviews, design decisions, centralized model updates.",
+          "actors_roles": "Subsystem teams, Lead/secondary System Engineers, five Project Managers, view-only team members.",
+          "handoffs_completion_criteria": "Weekly status/sprint meetings; change authorization for critical/financial impacts."
+        }
+      ],
+      "mapping_to_systems_engineering_and_lifecycle_gates": "The paper maps conceptual design and preliminary design to NASA Pre-Phase A/Phase A/Phase B and draws on V-model, ECSS, NASA NPRs, and JAXA JPAH. It does not report formal SRR/PDR/CDR review outcomes, but the case is PDR-like preliminary design.",
+      "approach_classification": "Extended MBSE",
+      "tailoring_rationale": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "risk tolerance",
+        "organizational constraints"
+      ],
+      "adoption_guidance": "partial guidance",
+      "tailoring_notes": "Sequential development was chosen for preliminary design validation/risk mitigation; Agile sprints/backlogs were added to handle dynamic requirements and distributed subsystem work."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML",
+        "Capella/Arcadia",
+        "MATLAB/Simulink",
+        "STK",
+        "open-source packages",
+        "other"
+      ],
+      "named_tools_and_versions": {
+        "Capella": "version 6.1, open-source MBSE tool",
+        "Arcadia": "architecture engineering method used in Capella",
+        "SysML": "reported as part of MBSE frameworks used",
+        "Ansys STK": "validation/analysis tool named; version not reported",
+        "NASA GMAT": "orbital simulation/astrodynamics propagator",
+        "ESA DRAMA": "version 3.1.0 for debris/lifetime analysis",
+        "MATLAB/Simulink": "validation/thermal analysis support; in-house MATLAB scripts used for thermal loads",
+        "HiLeS Designer 2.0": "ADCS FPGA engineering model platform",
+        "Orbitron/Gpredict": "ground-station prediction/tracking tools mentioned for communications"
+      },
+      "toolchain_architecture_and_data_flow": "Capella is the central system model for requirements, logical/physical architecture, interfaces, traceability and governance. Requirements are imported/structured in Capella and linked to functions/components/test cases. External analysis tools (STK, GMAT, MATLAB/Simulink, DRAMA) are used for validation/simulation, but automated data exchange is not described. Weekly meetings and system engineers synchronize model changes manually.",
+      "interoperability_mechanisms": [
+        "import/export",
+        "manual synchronization"
+      ],
+      "syntax_semantic_continuity_evidence": "Strong within Capella through bidirectional traceability and logical-to-physical links; limited evidence across external analysis tools.",
+      "software_hardware_system_integration_readiness": "Physical architecture links hardware/software subsystem components and interfaces, and test/validation criteria are linked before manufacturing; no flat-sat/HIL or implementation integration evidence.",
+      "toolchain_limitations": "not reported",
+      "availability_reproducibility": "Tool names and Capella version are reported; Capella is open-source. Model/data repository is not openly provided and requires permission/email; data availability statement says no new data were created/analyzed."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "loads",
+        "modes",
+        "power budgets",
+        "interfaces"
+      ],
+      "eps_requirements_representation": "EPS requirements/functions include continuous power availability, efficient solar power generation/distribution, and resistance to space environmental conditions. Requirements are linked to logical functions (power generation, storage, distribution) and physical components (solar panels, batteries, PMUs/power controller/distribution).",
+      "verification_validation_artifacts": [
+        "test cases",
+        "simulation scenarios",
+        "acceptance criteria"
+      ],
+      "pre_physical_development_verification_mechanism": [
+        "requirements-in-the-loop",
+        "simulation-in-the-loop",
+        "parametric checks",
+        "virtual integration"
+      ],
+      "evidence_verification_integrated_in_model": "Requirements/test cases/validation criteria are reported as linked in Capella at component-to-system level, but detailed EPS-specific verification procedures are not shown. EPS physical architecture and power budgets are integrated as part of the system model and appendices.",
+      "integration_test_readiness": [
+        "links to hardware integration",
+        "operational validation"
+      ],
+      "absences": {
+        "fault_protection": "not reported as EPS model element",
+        "degradation": "not reported",
+        "SIL_HIL_or_automated_tests": "not reported",
+        "physical_or_flight_evidence": "none reported"
+      },
+      "key_evidence": [
+        {
+          "quote": "Power Subsystem (EPS): ... Requirements: Continuous availability of power. Efficient solar power generation and distribution. Resistance to space environmental conditions.",
+          "location": "Section 3.3.1"
+        },
+        {
+          "quote": "Physical Components: solar panels, batteries, and power management units (PMUs).",
+          "location": "Section 3.3.1"
+        },
+        {
+          "quote": "The power budget computes the power and energy demand; energy generation; storage; distribution, monitoring and control.",
+          "location": "Section 2.3.1"
+        }
+      ]
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "MBSE objective and artifacts",
-        "quote": "This allowed the digitalization of the system, which was represented by models that contain requirements, architecture, and interfaces between the different parts of the system.",
-        "location": "Abstract"
+        "claim_id": "C1",
+        "claim_text": "MBSE managed technical consistency across architectural documents, ensuring coherency and minimizing errors.",
+        "outcome_category": [
+          "consistency",
+          "defect/error reduction"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage",
+          "shared repository"
+        ],
+        "artifact_process_linked": "Capella/Arcadia model containing requirements, architecture, interfaces, and architectural documents.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "PDR"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "none",
+        "baseline_comparator": "none",
+        "observed_effect_size_or_qualitative_effect": "Authors report coherency/minimized errors qualitatively; no defect counts are provided.",
+        "evidence_source": [
+          {
+            "quote": "Through Model-Based Systems Engineering (MBSE), technical consistency was rigorously managed across various architectural documents, ensuring coherency and minimizing errors.",
+            "location": "Abstract"
+          }
+        ],
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "No defect baseline or independent check; Agile meetings and centralized governance may also explain consistency improvements."
       },
       {
-        "topic": "Capella version and traceability",
-        "quote": "Capella, an open-source MBSE software (version 6.1), facilitated the transition from a traditional document-based approach to a dynamic model analysis and traceability of functionalities throughout the mission.",
-        "location": "Section 3.3"
+        "claim_id": "C2",
+        "claim_text": "Capella/Arcadia established bidirectional traceability from needs/requirements to functions, logical/physical components, and test cases, supporting continuous verification and validation.",
+        "outcome_category": [
+          "traceability",
+          "lifecycle continuity",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage",
+          "lifecycle gate support"
+        ],
+        "artifact_process_linked": "Capella Requirement Viewpoint, traceability links, requirement allocation matrix, logical/physical architecture, test cases and validation criteria.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "PDR"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Trade-study or requirements-checking result"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "none",
+        "baseline_comparator": "none",
+        "observed_effect_size_or_qualitative_effect": "Detailed traceability mechanisms and examples are reported, but no quantitative coverage percentage is given.",
+        "evidence_source": [
+          {
+            "quote": "Bidirectional traceability was established to ensure that each requirement could be traced forward to its corresponding design elements and backward to its source.",
+            "location": "Section 3.3"
+          },
+          {
+            "quote": "each part was linked to test cases and validation criteria",
+            "location": "Section 3.3"
+          }
+        ],
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "Traceability is author-reported; no model export or independent verification of link completeness is provided."
       },
       {
-        "topic": "Requirement integration",
-        "quote": "Requirements were established initially from mission concept, translated into Capella, and linked to various model elements, including operational scenarios, system functions, logical components, and physical designs.",
-        "location": "Section 3.3"
+        "claim_id": "C3",
+        "claim_text": "The integrated Agile/Arcadia/Capella approach streamlined preliminary design and completed it in about four months.",
+        "outcome_category": [
+          "schedule reduction",
+          "effort reduction"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "shared repository",
+          "lifecycle gate support",
+          "other"
+        ],
+        "artifact_process_linked": "Weekly general sprints, subsystem backlogs, Arcadia process framework, centralized Capella model.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "PDR"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Quantitative metric without baseline"
+        ],
+        "metric_or_value_indicator": [
+          "time",
+          "schedule"
+        ],
+        "baseline_comparator": "none",
+        "observed_effect_size_or_qualitative_effect": "Reported preliminary-design duration of 4 months; authors state this is within/favorable to ECSS/NASA recommended 1-6 month ranges, but no counterfactual team/process was used.",
+        "evidence_source": [
+          {
+            "quote": "the preliminary design process was streamlined and completed within an accelerated time frame of 4 months, with weekly sprints driving progress based on the scrum methodology",
+            "location": "Abstract"
+          },
+          {
+            "quote": "enabled the completion of this process within a remarkable timeframe of just 4 months",
+            "location": "Section 5"
+          }
+        ],
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "No traditional-process comparator; schedule may reflect project scope, team size, proposal deadlines, or prior internal documents."
       },
       {
-        "topic": "Verification and validation",
-        "quote": "From the component to system level, each part was linked to test cases and validation criteria, enabling systematic verification of compliance with mission objectives.",
-        "location": "Section 3.3"
+        "claim_id": "C4",
+        "claim_text": "The shared Capella model and Agile coordination improved communication, alignment, and integration among distributed subsystem teams.",
+        "outcome_category": [
+          "communication/stakeholder alignment",
+          "integrability/interoperability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "shared repository",
+          "requirements linkage",
+          "artifact traceability",
+          "other"
+        ],
+        "artifact_process_linked": "Unified Capella model, weekly cross-functional meetings, subsystem-specific backlogs, centralized model updates.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "PDR"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "none",
+        "baseline_comparator": "none",
+        "observed_effect_size_or_qualitative_effect": "Authors report improved communication and easier integration qualitatively; no stakeholder survey or communication metric is given.",
+        "evidence_source": [
+          {
+            "quote": "This case study highlights the effectiveness of Agile Systems Engineering principles to improve the team communication accuracy, communication, and efficiency",
+            "location": "Abstract"
+          },
+          {
+            "quote": "having a framework process as Arcadia allowed each subsystem team to make progress individually and integrate each team result easily",
+            "location": "Section 5"
+          }
+        ],
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "Collaboration gains may be due to weekly meetings, management effort, or institutional roles rather than MBSE artifacts alone."
       },
       {
-        "topic": "EPS traceability",
-        "quote": "Traceability: the requirements for continuous power were linked to specific physical components, such as solar panels and batteries, ensuring direct alignment from requirement to implementation.",
-        "location": "Section 3.3.1"
+        "claim_id": "C5",
+        "claim_text": "MBSE supported early requirement identification, risk management, performance optimization, avoidance of rework, and a more reliable design.",
+        "outcome_category": [
+          "risk reduction",
+          "reliability",
+          "decision support",
+          "mission assurance",
+          "defect/error reduction"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "requirements linkage",
+          "artifact traceability",
+          "executable simulation",
+          "parametric analysis"
+        ],
+        "artifact_process_linked": "Capella model, power budget, thermal analysis, orbital/link-budget simulations, validation checks.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "PDR",
+          "operations"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Executable model or simulation result",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "reliability proxy",
+          "other"
+        ],
+        "baseline_comparator": "none",
+        "observed_effect_size_or_qualitative_effect": "Technical feasibility indicators include simulated contacts/lifetime, power/energy budgets, and thermal limits; no direct reliability metric or flight evidence is provided.",
+        "evidence_source": [
+          {
+            "quote": "MBSE facilitated the early identification of key requirements, efficient risk management, and the optimization of system performance.",
+            "location": "Section 5"
+          },
+          {
+            "quote": "The thermal analysis results ... the satellite's temperature remains within the acceptable operating limits",
+            "location": "Section 2.3.2"
+          },
+          {
+            "quote": "the number of contacts with the satellite is 572; the average contact time with the satellite is 284.745 [s]",
+            "location": "Section 2"
+          }
+        ],
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "Technical analyses support feasibility but do not prove MBSE caused reliability improvement; physical tests and flight evidence are absent."
       },
       {
-        "topic": "EPS power budget",
-        "quote": "The power budget computes the power and energy demand; energy generation; storage; distribution, monitoring and control.",
-        "location": "Section 2.3.1"
-      },
-      {
-        "topic": "Model governance",
-        "quote": "The governance structure assigned specific roles and permissions to manage modifications effectively within the unified model.",
-        "location": "Section 5.1"
-      },
-      {
-        "topic": "Outcome limitation",
-        "quote": "It is worth noting that we did not conduct a comparative study of the presented approach versus a traditional one because of budget constraints and the burden of having two different teams working with different approaches.",
-        "location": "Section 6"
+        "claim_id": "C6",
+        "claim_text": "The presented Agile/MBSE workflow provides reusable guidance and a precedent for future CubeSat missions.",
+        "outcome_category": [
+          "generality/reuse"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "lifecycle gate support",
+          "other"
+        ],
+        "artifact_process_linked": "Arcadia method stages, Capella model architecture, Agile sprint framework, model governance roles.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "PDR"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "none",
+        "baseline_comparator": "none",
+        "observed_effect_size_or_qualitative_effect": "The paper offers case-based process knowledge but no reuse across multiple missions.",
+        "evidence_source": [
+          {
+            "quote": "providing valuable insights for future missions",
+            "location": "Abstract"
+          },
+          {
+            "quote": "setting a precedent for future CubeSat missions and beyond",
+            "location": "Section 6 Conclusions"
+          }
+        ],
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "Generality is asserted from one mission case; no replication or downloadable template/model is provided."
       }
     ],
-    "notes_for_consistency_with_lineage": "No previous extraction or lineage file was consulted due to the silo rule; supporting tier is retained from supplied metadata.",
-    "extraction_confidence": "medium",
-    "extraction_confidence_reason": "The paper gives detailed mission, MBSE, EPS-budget, and governance information, but many outcome claims are qualitative and some figures are represented only through converted descriptions rather than native model files."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": [
+        "ownership",
+        "configuration/change control",
+        "review process",
+        "model quality criteria"
+      ],
+      "governance_details": "Lead and secondary System Engineers can implement model changes across the system; subsystem representatives can modify their areas; view-only permissions protect integrity; project managers authorize financially critical changes; weekly status/cross-functional meetings review updates.",
+      "traceability_to_project_deliverables_decisions": "Traceability matrices/diagrams link requirements to functions, logical/physical components and test cases. The model supports preliminary design deliverables, subsystem architecture diagrams, design decisions, and weekly status/management updates. Formal SRR/PDR/CDR decisions are not reported.",
+      "evaluation_criteria_for_model_quality_or_usefulness": "Integrity, traceability, consistency/coherence, alignment with high-level requirements, and ability to reflect cross-subsystem changes.",
+      "roi_value_realization_evidence": [
+        "schedule effect",
+        "avoided rework"
+      ],
+      "programmatic_gates_or_events_supported": "Proposal structuring, preliminary design/Phase B-like design, future implementation/testing planning; ECSS/NASA/JAXA standards used as reference context.",
+      "model_derived_performance_management_metrics": "4-month preliminary design duration is reported as a process metric. Technical analyses report contact counts, average contact time, orbit lifetime, power/energy per mode, and thermal ranges, but these are not management ROI metrics."
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "value": "addressed with evidence",
+        "rationale": "The paper walks through Arcadia/Capella levels, requirements integration, traceability, subsystem architecture, Agile sprints and governance in a real mission case."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "value": "addressed conceptually",
+        "rationale": "Central Capella model and external tools are named, with import/manual update mechanisms; automated interoperability across analysis tools is not evidenced."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "value": "addressed with evidence",
+        "rationale": "Tailored for a 1U CubeSat, resource-limited distributed university/agency/industry project, weekly sprints, and accelerated 4-month preliminary design."
+      },
+      "governance_project_deliverables_roi": {
+        "value": "addressed with evidence",
+        "rationale": "Dedicated model governance/permissions section and reported schedule/avoided-rework claims."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "value": "addressed with evidence",
+        "rationale": "Agile/Scrum subsystem backlogs, weekly sprints, distributed teams and centralized model updates are central."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": "The paper demonstrates a project-applied system-level Arcadia/Capella model for a 1U CubeSat, with requirements, logical/physical architectures, operational modes, interfaces, and EPS power-budget/electrical architecture. It does not provide a reusable minimal-behavior reference model.",
+        "RQ2": "Claimed outcomes include traceability, consistency, reduced errors/rework, improved communication/integration, 4-month preliminary-design schedule, risk management, and more reliable design. Evidence is mainly single-case and author-reported, with one schedule metric and technical simulations but no comparator.",
+        "RQ3": "The paper describes pre-physical validation through linked test cases/validation criteria, requirements traceability, power/thermal/orbit/link analyses and virtual integration; however, EPS-specific verification procedures and physical/flight validation are absent."
+      },
+      "author_stated_limitations_gaps": [
+        "No comparative study versus a traditional approach due to budget constraints and burden of two teams.",
+        "Scope focused on Agile plus V-model integration; comprehensive Spiral Model/other iterative comparisons left for future work.",
+        "Thermal analysis is preliminary and needs further detailed design analysis.",
+        "Implementation/testing stages are planned rather than reported."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No EPS-specific MBSE outcome evaluation despite substantial EPS power-budget content.",
+        "No model package or open repository access for independent replication.",
+        "No baseline/counterfactual, independent validation, stakeholder survey, defect/rework counts, or physical/flight evidence for most outcome claims.",
+        "Cross-tool interoperability is mostly manual/import-based; automated tool data flow is not reported."
+      ],
+      "direct_evidence_quotes": [
+        {
+          "quote": "Through Model-Based Systems Engineering (MBSE), technical consistency was rigorously managed across various architectural documents, ensuring coherency and minimizing errors.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Requirements were established initially from mission concept, translated into Capella, and linked to various model elements",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "The application of the Arcadia method ... enabled the completion of this process within a remarkable timeframe of just 4 months",
+          "location": "Section 5"
+        },
+        {
+          "quote": "we did not conduct a comparative study",
+          "location": "Section 6 Conclusions"
+        },
+        {
+          "quote": "Although actual manufacturing of the subsystems has not yet started",
+          "location": "Section 2.3"
+        }
+      ],
+      "lineage_notes": "Mission case is specific to 3ColStar KiboCUBE Colombia and references an internal 2023 KiboCUBE mission application. It follows broader Arcadia/Capella small-satellite MBSE lineage but is not a general CubeSat reference model.",
+      "extraction_confidence": "high",
+      "confidence_reason": "Complete full-text markdown, clear method/tool/context details and explicit limitations. Main uncertainty is evidentiary strength of broad outcome claims, not extraction coverage."
+    }
   },
-  "bibtex": "@article{paper-0078,\n  title = {Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission},\n  author = {Jeimmy Nataly Buitrago-Leiva and Juan José Mejía and Juan Francisco Puerta-Ibarra and Ignacio Francisco Acero-Niño and Andrés Felipe Guarnizo-Saavedra and Julian Rodriguez-Ferreira and Leandro Rojas-Rodriguez and Francisco Luis Hernández-Torres and Cristian Esteban Arango-Cotacio and Jorge Enrique Salazar-Morales and Miguel Angel Herrera-Cruz and Mario Linares-Vásquez and Jose Fernando Jiménez-Vargas and Jorge Enríque Espíndola-Díaz and Óscar Javier Montañez-Sogamoso and Adriano Camps},\n  year = {2024},\n  journal = {Aerospace},\n  volume = {11},\n  number = {9},\n  pages = {758},\n  publisher = {MDPI},\n  doi = {10.3390/aerospace11090758},\n  url = {https://doi.org/10.3390/aerospace11090758}\n}"
+  "bibtex": "@article{buitragoLeiva2024PreliminaryDesign3ColStar,\n  author = {Buitrago-Leiva, Jeimmy Nataly and Mejía, Juan José and Puerta-Ibarra, Juan Francisco and Acero-Niño, Ignacio Francisco and Guarnizo-Saavedra, Andrés Felipe and Rodriguez-Ferreira, Julian and Rojas-Rodriguez, Leandro and Hernández-Torres, Francisco Luis and Arango-Cotacio, Cristian Esteban and Salazar-Morales, Jorge Enrique and Herrera-Cruz, Miguel Angel and Linares-Vásquez, Mario and Jiménez-Vargas, Jose Fernando and Espíndola-Díaz, Jorge Enrique and Montañez-Sogamoso, Óscar Javier and Camps, Adriano},\n  title = {Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission},\n  journal = {Aerospace},\n  year = {2024},\n  volume = {11},\n  number = {9},\n  pages = {758},\n  doi = {10.3390/aerospace11090758},\n  publisher = {MDPI}\n}"
 }

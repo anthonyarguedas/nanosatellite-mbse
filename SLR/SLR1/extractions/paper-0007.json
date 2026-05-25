@@ -3,548 +3,1701 @@
   "tier": "supporting",
   "year": 2018,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The supplied corpus metadata gives a DOI with IEEE AERO pattern and multiple Scopus records; the paper has a formal references section and conference-paper structure.",
-        "evidence": [
-          "Corpus metadata DOI: 10.1109/aero.2018.8396443.",
-          "Corpus metadata provenance includes Scopus search records."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper identifies future work and scope boundaries for verification/validation model elements, but it does not discuss threats to validity or empirical limitations.",
-        "evidence": [
-          "Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.",
-          "This paper presented an approach for incorporating technical measures into a system model that began with the identification of stakeholder concerns and ended with the derivation of TPMs."
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The context is a generic CubeSat Reference Model and mission enterprise, but no concrete mission, form-factor details, operational domain, or development status is reported.",
-        "evidence": [
-          "The SSWG's recent effort has been focused on the development of a CubeSat Reference Model that can be used by any CubeSat development team.",
-          "For the purposes of this example, the mission enterprise is comprised of a ground system, launch system, and CubeSat."
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The SysML modeling pattern, stereotypes, traces, constraints, and mission boundary are described, but no specific tool, model files, complete equations, or reusable package is provided.",
-        "evidence": [
-          "This approach to incorporating technical measures requires the creation of unique model elements that are not part of SysML.",
-          "In SysML, constraint blocks and parametric diagrams are used to perform this type of analysis.",
-          "This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies."
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The main outcomes are directly tied to model artifacts such as traces, textual measure specifications, value properties, constraint blocks, and parametric diagrams.",
-        "evidence": [
-          "There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed.",
-          "This method allows for different solutions to be assessed as to their ability to meet MOEs."
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper provides illustrative CubeSat model diagrams, but no quantitative results, baseline comparison, executed simulation values, stakeholder assessment, integration/test result, or flight evidence.",
-        "evidence": [
-          "Examples are provided throughout the paper which illustrate the application of this approach to a CubeSat.",
-          "A parametric diagram is created to bind the values of these parameters to the technical measures."
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Traceability is a central contribution, spanning stakeholder concerns, mission objectives, MOE specifications, value properties, MOPs, TPMs, and requirements in the system model.",
-        "evidence": [
-          "The mission objectives are related to the stakeholder concerns through the use of the trace relationship.",
-          "The MOEs are traced back to their originating source in the mission objectives.",
-          "MOPs are also traced to system requirements captured in the system model."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The method is described in SysML terms and claimed tool-independent, but the model, profile files, tool version, data exchange mechanism, and calculation implementation are not supplied.",
-        "evidence": [
-          "Figure 1 shows the model elements created as part of the technical measures profile used in this approach.",
-          "Reference [13] provides a detailed discussion of how these values are calculated in the model and the types of trade studies that can be accomplished using them."
-        ]
-      }
-    ],
-    "total_score": 5.5,
-    "max_score": 8,
-    "normalized_score": 0.688,
-    "overall_rationale": "The paper is credible and strong on conceptual traceability of technical measures in a CubeSat SysML reference model. Its limitations are lack of EPS-specific modeling, absent empirical outcome evidence, limited toolchain/reproducibility detail, and only future-work treatment of verification/validation artifacts."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0007.json",
-    "status_rationale": "Kept as supporting because the paper directly addresses MBSE for a CubeSat reference model and technical measures, but it is not EPS-specific and does not integrate a concrete verification procedure or physical test evidence.",
-    "citation": "Kaslow, D., Ayres, B., Cahill, P. T., and Hart, L. (2018). A Model-Based Systems Engineering Approach for Technical Measurement with Application to a CubeSat.",
-    "title": "A Model-Based Systems Engineering Approach for Technical Measurement with Application to a CubeSat",
-    "authors": [
-      "D. Kaslow",
-      "B. Ayres",
-      "P. T. Cahill",
-      "L. Hart"
-    ],
-    "venue": "IEEE Aerospace Conference, inferred from DOI/corpus metadata; not explicitly stated in the markdown",
-    "doi_or_url": "10.1109/aero.2018.8396443",
-    "publisher": "IEEE, inferred from DOI prefix; not explicitly stated in the markdown",
-    "venue_type": "conference proceedings paper",
-    "source_database_or_route": [
-      "scopus: scopus_q6_vv_traceability_refined rank 24",
-      "scopus: scopus_q7_outcomes_refined rank 19",
-      "scopus: scopus_q18_system_mbse_broad_full65 rank 48",
-      "google_scholar title enrichment rank 1",
-      "semantic_scholar title enrichment rank 1"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The study offers a general CubeSat reference-model pattern for technical measures and qualitative-to-quantitative modeling, but it is not an EPS model and does not claim minimal behavioral knowledge as a primary objective."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims system-level benefits such as traceability, trade analysis, generalizability, reduced risk, and possible CubeSat success improvement; EPS-specific reliability, reproducibility, and integrability outcomes are not reported."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "Technical measures are tied conceptually to verification and validation and can be analyzed before implementation, but the paper states that V&V model elements remain future work and provides no EPS verification procedure."
-      }
+    "credible_venue": {
+      "label": "Was the research published in a credible venue?",
+      "numeric_score": 1,
+      "rationale": "Metadata provides an IEEE DOI and IEEE Xplore provenance for a conference paper; IEEE Aerospace Conference is a credible peer-reviewed aerospace systems venue.",
+      "evidence": [
+        "Metadata DOI: 10.1109/aero.2018.8396443",
+        "Source provenance includes IEEE Xplore abstract URL for document 8396443."
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "The paper is part of the INCOSE Space Systems Working Group CubeSat Reference Model lineage and cites an interim status paper, but no prior extraction or related paper was consulted for this extraction."
+    "limitations_discussed": {
+      "label": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+      "numeric_score": 0.5,
+      "rationale": "The paper gives a future-work boundary for verification/validation model elements and contrasts incomplete prior work, but it does not provide a systematic limitations or threats-to-validity discussion.",
+      "evidence": [
+        "Conclusion/Future Work: \"Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.\"",
+        "Related Work: \"However, this approach is not complete and provides no traceability to stakeholder expectations, connections between technical measures, and connections with requirements.\""
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "label": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+      "numeric_score": 0.5,
+      "rationale": "The CubeSat Reference Model and example enterprise boundary are described, including stakeholder examples and generic service-life/cost measures, but no concrete mission, form factor, organization, project phase, or flight maturity is reported.",
+      "evidence": [
+        "Introduction: \"the development of a CubeSat Reference Model that can be used by any CubeSat development team\"",
+        "Section 5: \"For the purposes of this example, the mission enterprise is comprised of a ground system, launch system, and CubeSat.\""
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "label": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+      "numeric_score": 1,
+      "rationale": "The SysML language, custom profile elements, trace relations, block/parametric diagrams, and stepwise derivation from stakeholder concerns to TPMs are described sufficiently for comparison and partial reconstruction, although no named modeling tool or model file is provided.",
+      "evidence": [
+        "Section 5: \"This approach to incorporating technical measures requires the creation of unique model elements that are not part of SysML.\"",
+        "Abstract: \"The derivation of the MOPs is captured through the development of constraint blocks and parametric diagrams.\"",
+        "Figure descriptions identify BDD and parametric diagrams for mission enterprise, technical measures, service life, total cost, and DeltaV."
+      ],
+      "confidence": "medium"
+    },
+    "outcomes_linked_to_mbse": {
+      "label": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+      "numeric_score": 1,
+      "rationale": "The main outcome claims are directly tied to trace relationships, specialized model elements, value properties, constraints, and parametric diagrams.",
+      "evidence": [
+        "Conclusion: \"There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed.\"",
+        "Conclusion: \"This method allows for different solutions to be assessed as to their ability to meet MOEs.\""
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "label": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+      "numeric_score": 0.5,
+      "rationale": "Evidence consists mainly of illustrative SysML examples from the CubeSat Reference Model and conceptual argument. No quantitative metrics, executed analyses, baseline comparison, stakeholder evaluation, independent validation, or flight/integration evidence is reported.",
+      "evidence": [
+        "Introduction: \"Examples are provided throughout this section which illustrates the application of this approach. These examples are taken from the CubeSat Reference Model.\"",
+        "Section 5: \"This allows different solutions to be evaluated against the MOEs.\""
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "label": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+      "numeric_score": 1,
+      "rationale": "Traceability is central and is represented from stakeholder concerns to objectives, MOE specifications/value properties, MOPs, TPMs, and requirements; figures show trace links.",
+      "evidence": [
+        "Abstract: \"The MOEs are traced back to their originating source in the mission objectives.\"",
+        "Section 5: \"This allows for complete traceability from the quantified value properties of the mission enterprise block back to the originating stakeholder concern.\"",
+        "Conclusion: \"There is clear traceability from stakeholder concerns to TPMs\""
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "label": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+      "numeric_score": 0.5,
+      "rationale": "The paper gives SysML/profile implementation details and says the approach is tool-independent, but it does not report model availability, a named tool, open-source assets, exchange formats, scripts, or reusable packages.",
+      "evidence": [
+        "Conclusion: \"This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.\"",
+        "No model repository, exchange format, script, or package availability statement is present in the extracted paper."
+      ],
+      "confidence": "medium"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "Generic CubeSat mission enterprise in the INCOSE SSWG CubeSat Reference Model.",
-    "size_form_factor": "CubeSat; exact unit size not reported.",
-    "mission_name": "CubeSat Reference Model; no specific flight mission name reported.",
-    "mission_domain": "Generic CubeSat mission with example objectives for service life and affordability; mission enterprise includes ground system, launch system, and CubeSat.",
-    "organization_type": "Professional/industry systems-engineering working group context; authors affiliated with consulting, The Aerospace Corp., and MITRE.",
-    "project_maturity": "Reference model and illustrative modeling approach, not a reported flight project or tested implementation.",
-    "lifecycle_stage_addressed": "Conceptual design and development technical measurement; MBSE definition extends through later lifecycle phases, but examples are pre-implementation model artifacts.",
-    "development_context": "INCOSE Space Systems Working Group effort to incorporate technical measures into a CubeSat Reference Model for use by CubeSat development teams.",
-    "eps_relevance": "EPS-adjacent",
-    "model_maturity": "Conceptual SysML reference-model extension with example diagrams and parametric relationships; no executable model results or model repository reported."
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Metadata provides an IEEE DOI and IEEE Xplore provenance for a conference paper; IEEE Aerospace Conference is a credible peer-reviewed aerospace systems venue.",
+      "evidence": [
+        {
+          "quote": "Metadata DOI: 10.1109/aero.2018.8396443",
+          "location": "not specified"
+        },
+        {
+          "quote": "Source provenance includes IEEE Xplore abstract URL for document 8396443.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives a future-work boundary for verification/validation model elements and contrasts incomplete prior work, but it does not provide a systematic limitations or threats-to-validity discussion.",
+      "evidence": [
+        {
+          "quote": "Conclusion/Future Work: \"Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Related Work: \"However, this approach is not complete and provides no traceability to stakeholder expectations, connections between technical measures, and connections with requirements.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The CubeSat Reference Model and example enterprise boundary are described, including stakeholder examples and generic service-life/cost measures, but no concrete mission, form factor, organization, project phase, or flight maturity is reported.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"the development of a CubeSat Reference Model that can be used by any CubeSat development team\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"For the purposes of this example, the mission enterprise is comprised of a ground system, launch system, and CubeSat.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The SysML language, custom profile elements, trace relations, block/parametric diagrams, and stepwise derivation from stakeholder concerns to TPMs are described sufficiently for comparison and partial reconstruction, although no named modeling tool or model file is provided.",
+      "evidence": [
+        {
+          "quote": "Section 5: \"This approach to incorporating technical measures requires the creation of unique model elements that are not part of SysML.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: \"The derivation of the MOPs is captured through the development of constraint blocks and parametric diagrams.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure descriptions identify BDD and parametric diagrams for mission enterprise, technical measures, service life, total cost, and DeltaV.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The main outcome claims are directly tied to trace relationships, specialized model elements, value properties, constraints, and parametric diagrams.",
+      "evidence": [
+        {
+          "quote": "Conclusion: \"There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: \"This method allows for different solutions to be assessed as to their ability to meet MOEs.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Evidence consists mainly of illustrative SysML examples from the CubeSat Reference Model and conceptual argument. No quantitative metrics, executed analyses, baseline comparison, stakeholder evaluation, independent validation, or flight/integration evidence is reported.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"Examples are provided throughout this section which illustrates the application of this approach. These examples are taken from the CubeSat Reference Model.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"This allows different solutions to be evaluated against the MOEs.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Traceability is central and is represented from stakeholder concerns to objectives, MOE specifications/value properties, MOPs, TPMs, and requirements; figures show trace links.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"The MOEs are traced back to their originating source in the mission objectives.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"This allows for complete traceability from the quantified value properties of the mission enterprise block back to the originating stakeholder concern.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: \"There is clear traceability from stakeholder concerns to TPMs\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives SysML/profile implementation details and says the approach is tool-independent, but it does not report model availability, a named tool, open-source assets, exchange formats, scripts, or reusable packages.",
+      "evidence": [
+        {
+          "quote": "Conclusion: \"This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "No model repository, exchange format, script, or package availability statement is present in the extracted paper.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "supporting"
+      ],
+      "status": "coded",
+      "rationale": "Uses the corpus screening tier supplied in the prompt; the paper supports synthesis through a CubeSat MBSE reference-model technical-measurement approach but is not EPS-specific.",
+      "evidence": [
+        {
+          "quote": "Prompt metadata: screening_tier=supporting.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper addresses general CubeSat/system-level MBSE modeling through a reusable technical-measurement approach, but not a full nanosatellite/EPS behavioral model.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"an approach was developed to incorporate technical measures into a CubeSat Reference Model\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: \"This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims MBSE-enabled traceability, decision support, generality, and risk/success benefits, but provides no EPS-specific reliability/reproducibility/integrability evidence or quantitative outcome evaluation.",
+      "evidence": [
+        {
+          "quote": "Conclusion: \"There is clear traceability from stakeholder concerns to TPMs\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: \"Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions and the role technical measurement could play in increasing their success.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The technical measures are presented as a basis for V&V and include parametric pre-physical evaluation, but the paper explicitly leaves V&V model elements for future work and does not present an EPS verification procedure model.",
+      "evidence": [
+        {
+          "quote": "Conclusion/Future Work: \"technical measures form a basis for which verification and validation can occur. Future work is needed to incorporate model elements associated with those activities\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"constraint blocks and parametric diagrams are used to calculate MOP values based on the TPM values\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A"
+      ],
+      "status": "coded",
+      "rationale": "The approach starts from stakeholder concerns and mission objectives and the background definition locates MBSE beginning in conceptual design; no later concrete stage/gate is demonstrated.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"begins with a set of mission objectives derived from stakeholder concerns\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: MBSE supports activities \"beginning in the conceptual design phase and continuing throughout development and later life cycle phases\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The CubeSat example is framed around low cost and sponsor affordability; no academic/agency/industry project context is specified.",
+      "evidence": [
+        {
+          "quote": "Section 5: \"Since an advantage of a CubeSat is its relatively low cost, ensuring the project does not go over budget is a logical concern for the sponsor.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 2 description includes a sponsor concern: \"Will the cost of the CubeSat mission be affordable?\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "EPS-adjacent"
+      ],
+      "status": "coded",
+      "rationale": "The paper is system-level technical measurement, but includes power-related CubeSat MOPs (battery cycles and solar cell life) as contributors to service life; it does not model an EPS architecture or EPS verification.",
+      "evidence": [
+        {
+          "quote": "Section 5: \"service life of the CubeSat is a function of the delta V required to maintain the orbit for the duration of the mission, battery cycles, and solar cell life.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 4 description lists CubeSat values \"BatteryCycle\" and \"SolarCellLife\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "conceptual framework",
+        "reference model/template",
+        "prototype demonstration"
+      ],
+      "status": "coded",
+      "rationale": "The contribution is an approach with SysML examples from the CubeSat Reference Model; no operational/validated model or executed project evidence is reported.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"CubeSat Reference Model that can be used by any CubeSat development team\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: \"Examples are provided throughout this section which illustrates the application of this approach. These examples are taken from the CubeSat Reference Model.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "budgets",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Scope covers mission objectives/stakeholders, mission enterprise and CubeSat system/subsystem technical measures, requirements traceability, structural architecture/value properties, cost budgets, and technical measurement as an additional scope not otherwise enumerated.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"begins with a set of mission objectives derived from stakeholder concerns\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"the mission enterprise is comprised of a ground system, launch system, and CubeSat\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: \"MOPs are also traced to system requirements captured in the system model.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"For the total cost MOE, total cost consists of the sum of the individual costs of the elements comprising the mission enterprise.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "parametrics",
+        "trade-study models",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports SysML requirement-like stereotypes/specifications, BDDs, parametric diagrams/constraint blocks, and trade-study-capable technical-measure models; the custom Technical Measures Profile is an additional artifact.",
+      "evidence": [
+        {
+          "quote": "Figure 1 description: classes inherit from the «stereotype» Requirement [Class] and include StakeholderConcern, MissionObjective, MOE/MOP/TPM specifications.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 4 description: \"SysML block definition diagram (bdd) ... hierarchical system structure with associated constraints and values.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 5 description: \"SysML parametric diagram ... constraint block used to calculate the service life of a CubeSat.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: Reference [13] gives \"the types of trade studies that can be accomplished using them.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reference model",
+        "profile",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "Generality/reuse is supported by the CubeSat Reference Model, a SysML technical measures profile, and a repeatable derivation method from stakeholder concerns to TPMs.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"CubeSat Reference Model that can be used by any CubeSat development team\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"Figure 1 shows the model elements created as part of the technical measures profile used in this approach.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: \"general enough to be easily incorporated into many systems engineering methodologies.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Enhanced MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The approach is system-model-centered but adds parametric/constraint-based technical-measure analysis and trade evaluation beyond static requirements/architecture modeling; no multi-tool digital thread is shown.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"The derivation of the MOPs is captured through the development of constraint blocks and parametric diagrams.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"This allows different solutions to be evaluated against the MOEs.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "cost"
+      ],
+      "status": "coded",
+      "rationale": "The paper justifies CubeSat application through CubeSat growth/failure context and low-cost/affordability concerns; other tailoring rationales are not explicit.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"Since an advantage of a CubeSat is its relatively low cost\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives a concrete sequence and illustrative artifacts, but not a full playbook with roles, entry/exit criteria, governance, or downloadable assets.",
+      "evidence": [
+        {
+          "quote": "Abstract outlines steps from mission objectives to MOEs, MOPs, and TPMs.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5 headings: Technical Measures Profile; Deriving Mission Objectives; Capturing Critical Objectives as MOE Specifications; Relating MOPs to MOEs; Deriving TPMs; Relating TPMs to MOPs.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML"
+      ],
+      "status": "coded",
+      "rationale": "SysML is the explicit modeling language used for profiles, BDDs, constraint blocks, and parametric diagrams; no named modeling tool is reported.",
+      "evidence": [
+        {
+          "quote": "Section 3: \"SysML is commonly used in MBSE\" and is \"well-suited for specifying requirements, structure, behavior, allocations, and constraints on system properties\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"In SysML, constraint blocks and parametric diagrams are used to perform this type of analysis.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No API, import/export, XMI, ReqIF, scripts, co-simulation, or other synchronization mechanism is described; the paper only claims tool independence/general method portability.",
+      "evidence": [
+        {
+          "quote": "Conclusion states tool independence, but no explicit data exchange mechanism is reported: \"not dependent on any specific tool\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper does not state toolchain limitations such as vendor lock-in, manual translation, missing interfaces, scalability, or licensing; it asserts tool independence instead.",
+      "evidence": [
+        {
+          "quote": "Conclusion: \"This approach is not dependent on any specific tool\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "No toolchain limitation section or exchange mechanism limitation is present in the extracted paper.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "battery",
+        "solar panels"
+      ],
+      "status": "coded",
+      "rationale": "Power-related CubeSat MOPs include battery cycles and solar cell life, treated as service-life factors; this is EPS-adjacent rather than a full EPS model.",
+      "evidence": [
+        {
+          "quote": "Section 5: \"service life of the CubeSat is a function of the delta V required to maintain the orbit for the duration of the mission, battery cycles, and solar cell life.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 4 description lists \"BatteryCycle\" and \"SolarCellLife\" as CubeSat MOP value properties.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [],
+      "status": "none",
+      "rationale": "No verification matrix, test cases, test procedures, acceptance criteria, executable checks, generated test artifacts, SIL/HIL, or automated tests are integrated; V&V model elements are explicitly future work.",
+      "evidence": [
+        {
+          "quote": "Conclusion/Future Work: \"Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "parametric checks",
+        "trade-study verification"
+      ],
+      "status": "coded",
+      "rationale": "The paper supports pre-physical analytical evaluation through SysML constraint/parametric relationships and trade assessment, but not formal EPS verification procedures.",
+      "evidence": [
+        {
+          "quote": "Section 5: \"constraint blocks and parametric diagrams are used to perform this type of analysis\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"This allows different solutions to be evaluated against the MOEs.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"This allows for evaluation of different subsystem solutions based on their impact to the MOP.\"",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No links from the model to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation are reported.",
+      "evidence": [
+        {
+          "quote": "Conclusion/Future Work indicates V&V model elements are not yet incorporated; no integration/test readiness mechanism is described.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "traceability",
+        "generality/reuse",
+        "consistency",
+        "completeness",
+        "decision support",
+        "communication/stakeholder alignment",
+        "risk reduction",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Claimed outcomes include traceability/impact assessment, qualitative measure completeness/stakeholder communication, trade/decision support, generality/reuse, and conceptual risk/mission-success benefits for CubeSats.",
+      "evidence": [
+        {
+          "quote": "Conclusion lists benefits: \"Traceability\", \"Qualitative measures\", \"Trade analyses\", and \"Generalizability\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract links CubeSat use to \"historically high failure rate\" and technical measurement's role in \"increasing their success\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level",
+        "generic MBSE"
+      ],
+      "status": "coded",
+      "rationale": "Core examples are at CubeSat system/reference-model level; some background benefits are generic MBSE rather than CubeSat- or EPS-specific.",
+      "evidence": [
+        {
+          "quote": "Introduction: examples are from the \"CubeSat Reference Model\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: general MBSE benefits over a document-based approach are cited from Reference [2].",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "parametric analysis",
+        "reference model reuse",
+        "requirements linkage",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms are trace relationships, requirements linkage, SysML parametric analysis, reusable CubeSat reference model/profile method, and qualitative technical-measure specifications not directly named in the controlled list.",
+      "evidence": [
+        {
+          "quote": "Abstract: \"The MOEs are traced back to their originating source\" and \"MOPs are also traced to system requirements\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: \"A parametric diagram is created to bind the values of these parameters to the technical measures.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: MOE/MOP/TPM Specifications capture qualitative descriptions that can be translated into properties.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B"
+      ],
+      "status": "coded",
+      "rationale": "Claims primarily concern early mission-objective definition and design analysis; development progress is mentioned but no concrete PDR/CDR/integration/operations claim is evidenced.",
+      "evidence": [
+        {
+          "quote": "Abstract: approach \"begins with a set of mission objectives derived from stakeholder concerns\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Technical measurement definition: measures give insight into \"definition and development of the technical solution\" and \"key milestones\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration"
+      ],
+      "status": "coded",
+      "rationale": "The strongest direct evidence is illustrated SysML model fragments from a CubeSat Reference Model; many benefit statements are conceptual or asserted without quantitative validation.",
+      "evidence": [
+        {
+          "quote": "Introduction: \"Examples are provided throughout this section which illustrates the application of this approach. These examples are taken from the CubeSat Reference Model.\"",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion lists benefits without reporting metrics, baseline comparisons, or executed results.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "trace links",
+        "model reuse",
+        "cost",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses trace links and reusable reference-model/profile claims; cost is modeled as an MOE/MOP value; other technical-measure values include service life, DeltaV, battery cycles, solar cell life, and propulsion TPMs.",
+      "evidence": [
+        {
+          "quote": "Figure 2 and Figure 3 descriptions show dashed «trace» links.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: \"CubeSat Reference Model that can be used by any CubeSat development team\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 6 description: \"Total Cost = Sum(GS Cost, L Cost, C Cost)\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 5 description: \"Service Life = f(DeltaV, BatteryCycle, SolarCellLife)\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No empirical baseline/comparator is reported for outcome effects; related-work comparisons identify conceptual incompleteness of prior approaches but do not provide measured baseline performance.",
+      "evidence": [
+        {
+          "quote": "Related Work: prior approaches are described as incomplete/no traceability, but no quantitative comparator is provided.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No previous mission, manual analysis, document-centric-process measurement, or alternative-toolchain evaluation is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Traceability claims have moderate support from explicit model artifacts and diagrams; trade/generality/mission-assurance claims are weak or unsupported because they lack execution, metrics, baseline, or validation.",
+      "evidence": [
+        {
+          "quote": "Figure 2/3/5/7 descriptions substantiate model links and parametric relationships.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion benefit bullets provide asserted effects but no measured outcomes.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No model ownership, configuration/change control, review process, model quality criteria, naming/versioning conventions, or governance workflow is reported.",
+      "evidence": [
+        {
+          "quote": "The extraction found no governance/change-control discussion in Sections 1-6 or conclusion.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "Cost and affordability are modeled as technical measures, but the paper provides no evidence on MBSE adoption cost, tooling/training effort, saved effort, schedule effect, avoided rework, reuse value measurement, decision-quality evaluation, or mission-assurance benefit.",
+      "evidence": [
+        {
+          "quote": "Section 5 models total mission cost, but no MBSE ROI/value-realization measurement is reported.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion benefit bullets lack cost/schedule/effect-size evidence for adopting the approach.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives an applied, stepwise SysML path with profile elements and CubeSat Reference Model diagrams, even though it is not a full adoption playbook.",
+      "evidence": [
+        {
+          "quote": "Section 5 headings and figures show the sequence from profile creation to stakeholder concerns, MOE specs, MOP/MOE parametrics, and TPM/MOP parametrics.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "Tool independence is asserted, but no interoperability mechanism, data flow, or fragmented-toolchain solution is provided.",
+      "evidence": [
+        {
+          "quote": "Conclusion: \"not dependent on any specific tool\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The method is applied to CubeSats and includes low-cost/affordability concerns, but does not detail lightweight process tailoring, staffing, or resource-burden tradeoffs.",
+      "evidence": [
+        {
+          "quote": "Section 5: \"Since an advantage of a CubeSat is its relatively low cost\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: CubeSat Reference Model \"can be used by any CubeSat development team\".",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "Technical measures are linked to stakeholder concerns, requirements, and milestone/risk monitoring concepts, but no governance workflow, project deliverable generation, or ROI evidence is shown.",
+      "evidence": [
+        {
+          "quote": "Technical measurement definition: measures \"provide early indications if the development effort is not progressing as needed to meet key milestones\".",
+          "location": "not specified"
+        },
+        {
+          "quote": "No adoption-cost/saved-effort or management-report artifact is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "not addressed"
+      ],
+      "status": "coded",
+      "rationale": "The paper mentions rapid CubeSat growth but does not address NewSpace, agile, distributed teams, concurrent design, or rapid-iteration practices.",
+      "evidence": [
+        {
+          "quote": "Abstract: CubeSats have \"rapid growth\", but no agile/NewSpace/distributed/rapid-iteration process is described.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The markdown is readable and the paper has clear sections/figures for the reported approach; confidence in extraction is high, while confidence in outcome effectiveness remains limited by weak evidence.",
+      "evidence": [
+        {
+          "quote": "Clear Section 5 method subsections and conclusion benefit/future-work bullets are available in the markdown.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "The paper addresses the lack of detailed literature connecting technical measurement with MBSE and proposes a way to implement MOEs, MOPs, and TPMs in a CubeSat system model.",
-    "modeling_scope": [
-      "stakeholder concerns",
-      "mission objectives",
-      "MOE, MOP, and TPM specifications",
-      "MOE, MOP, and TPM value properties",
-      "mission enterprise structure with ground, launch, and CubeSat elements",
-      "constraint blocks and parametric diagrams for technical measure relationships",
-      "traceability to requirements and stakeholder concerns"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "no_pre_physical_verification_model",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage",
+      "lineage_or_duplicate_reference_model_overlap"
     ],
-    "system_boundary_level_of_abstraction": "Mission enterprise level, system level, and selected subsystem level; the example boundary is ground system, launch system, CubeSat, and a propulsion subsystem example, not a full spacecraft behavior model.",
-    "minimal_or_excluded_modeling": "Detailed CubeSat behavior, full operational scenarios, EPS architecture, software/hardware implementation, executable numerical results, and V&V model elements are not included; some calculations are only shown as functions such as Service Life = f(DeltaV, BatteryCycle, SolarCellLife).",
-    "required_prior_behavioral_domain_knowledge": "Not framed as minimal-knowledge modeling; users need stakeholder concerns, mission objectives, technical measures, and enough empirical or analytical relationships to define constraints, while early qualitative specifications reduce the need for immediate quantitative knowledge.",
-    "handling_limited_behavioral_knowledge": "The approach introduces MOE/MOP/TPM Specification elements to capture qualitative natural-language descriptions before translating them to value properties and parametric relationships.",
-    "model_artifacts_used": [
-      "SysML technical measures profile",
-      "StakeholderConcern stereotype",
-      "MissionObjective stereotype",
-      "MOE_specification, MOP_specification, and TPM_specification",
-      "moe, mop, and tpm value properties",
-      "blocks for Mission Enterprise, Ground System, Launch System, CubeSat, and Propulsion Subsystem",
-      "trace relationships",
-      "constraint blocks",
-      "parametric diagrams",
-      "system requirements mentioned as trace targets"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "V&V model elements are explicitly deferred to future work; the contribution is an approach with examples rather than a completed V&V-integrated implementation.",
+        "evidence_quote": "Conclusion/Future Work: \"Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.\"",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "extractor_identified",
+        "rationale": "All examples are from a CubeSat Reference Model and concern technical measures; no multiple missions, projects, or subsystems are evaluated.",
+        "evidence_quote": "Introduction: \"Examples are provided throughout this section which illustrates the application of this approach. These examples are taken from the CubeSat Reference Model.\"",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "The paper shows value properties and equations but reports no numerical analysis results, outcome metrics, effect sizes, or validation statistics.",
+        "evidence_quote": "Absence-based: claimed benefits are listed in the conclusion, while extracted outcome records contain illustrative/conceptual evidence only and no quantitative metric for MBSE effect.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "The paper contrasts prior conceptual approaches but does not compare results against a document-centric process, manual analysis, previous mission, or alternative toolchain.",
+        "evidence_quote": "Absence-based: structured field claimed_outcomes_value_mechanisms_evidence[].baseline_comparator is not_reported; related-work comparison is conceptual only.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "No stakeholder/user/expert evaluation, independent replication, or external validation is reported.",
+        "evidence_quote": "Absence-based: evidence_for_outcomes is scored Insufficiently and no validation/evaluation section appears in the extracted paper.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "No physical integration, testbed, environmental test, operational, or flight evidence is reported for the technical-measurement model.",
+        "evidence_quote": "Absence-based: integration_test_readiness is not_reported and outcome evidence types exclude integration/test/operational/flight evidence.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "Only battery cycles and solar cell life appear as service-life MOPs; the paper does not model an EPS subsystem, EPS requirements, EPS interfaces, or EPS verification artifacts.",
+        "evidence_quote": "Section 5: \"service life of the CubeSat is a function of ... battery cycles, and solar cell life\"; no EPS subsystem model is reported.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_pre_physical_verification_model",
+        "source": "author_stated",
+        "rationale": "Although parametric analyses are shown, formal verification/validation model elements are absent and identified as future work.",
+        "evidence_quote": "Conclusion/Future Work: \"technical measures form a basis for which verification and validation can occur. Future work is needed to incorporate model elements associated with those activities\".",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "The markdown reports figures and model-element descriptions but no repository, model files, package, or availability statement.",
+        "evidence_quote": "Absence-based: reproducibility_toolchain_reported is scored Insufficiently; no model availability statement is present in the extracted paper.",
+        "confidence": "high"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "extractor_identified",
+        "rationale": "The method begins at stakeholder concerns and design analysis; verification/validation, integration/test, and operations are not implemented in the model.",
+        "evidence_quote": "Conclusion/Future Work defers V&V model elements; no integration/test or operations linkage is reported.",
+        "confidence": "medium"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Most claimed benefits are plausible and linked to artifacts, but outcome effects are not demonstrated with metrics, baselines, executed checks, or user evaluation.",
+        "evidence_quote": "Conclusion lists benefits (traceability, qualitative measures, trade analyses, generalizability) without reporting quantitative or independent evidence.",
+        "confidence": "high"
+      },
+      {
+        "flag": "lineage_or_duplicate_reference_model_overlap",
+        "source": "author_stated",
+        "rationale": "The paper is part of the INCOSE SSWG CubeSat Reference Model lineage and references an interim-status paper; synthesis should avoid treating it as an independent mission case if overlapping reference-model papers are included.",
+        "evidence_quote": "Introduction: \"Reference [3] provides a history and interim status of that effort.\" Reference [3] is \"Developing a CubeSat Model-Based Systems Engineering (MBSE) Reference Model - Interim Status #3.\"",
+        "confidence": "high"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "CubeSat Reference Model intended for use by any CubeSat development team",
-      "tool-independent SysML modeling pattern",
-      "technical-measure derivation repeated from enterprise to system to subsystem levels",
-      "qualitative measure specifications support different stakeholder formulations",
-      "parametric-diagram pattern supports reusable trade-analysis relationships"
+    "emergent_limitations": [
+      {
+        "label": "no-executed-parametric-results-in-paper",
+        "rationale": "The paper defines equations/parametric diagrams but does not report calculated service life, total cost, DeltaV, or trade-study outputs in the extracted text.",
+        "evidence": "Section 5 says parametric diagrams allow evaluation; figures show formulas, but no numeric result tables or executed model outputs are reported.",
+        "confidence": "high",
+        "evidence_quote": "Section 5 says parametric diagrams allow evaluation; figures show formulas, but no numeric result tables or executed model outputs are reported."
+      },
+      {
+        "label": "simplified-illustrative-measures",
+        "rationale": "Service life, total cost, and DeltaV examples are illustrative and omit detailed assumptions, uncertainty treatment, and detailed subsystem physics.",
+        "evidence": "Examples are stated as functions such as Service Life = f(DeltaV, BatteryCycle, SolarCellLife) without detailed parameter definitions or data.",
+        "confidence": "medium",
+        "evidence_quote": "Examples are stated as functions such as Service Life = f(DeltaV, BatteryCycle, SolarCellLife) without detailed parameter definitions or data."
+      },
+      {
+        "label": "no-named-modeling-tool-despite-tool-independent-claim",
+        "rationale": "Tool independence may aid portability, but absence of a named tool/model availability limits reproducibility of the exact diagrams and stereotypes.",
+        "evidence": "The paper names SysML but not a modeling environment or repository.",
+        "confidence": "high",
+        "evidence_quote": "The paper names SysML but not a modeling environment or repository."
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Identify stakeholders and capture concerns.",
-        "inputs": "Stakeholder concerns such as operational lifetime and affordability.",
-        "outputs": "StakeholderConcern model elements linked to stakeholder elements.",
-        "actors_roles": "End user, sponsor, systems engineer/modeler.",
-        "prerequisites": "Stakeholders and their concerns are elicited.",
-        "completion_criteria": "Concerns are represented in the system model.",
-        "handoffs": "Concerns feed mission objective derivation."
-      },
-      {
-        "step": "Derive mission objectives from stakeholder concerns.",
-        "inputs": "StakeholderConcern elements.",
-        "outputs": "MissionObjective elements with trace relationships from concerns.",
-        "actors_roles": "Systems engineer/modeler with stakeholder input.",
-        "prerequisites": "Concerns have been captured.",
-        "completion_criteria": "Mission objectives state broad goals needed to satisfy mission needs.",
-        "handoffs": "Critical objectives feed MOE specification creation."
-      },
-      {
-        "step": "Capture critical objectives as MOE specifications.",
-        "inputs": "Mission objectives judged critical for mission success.",
-        "outputs": "MOE_specification elements in natural language.",
-        "actors_roles": "Stakeholders and systems engineer/modeler.",
-        "prerequisites": "Mission objectives are available.",
-        "completion_criteria": "Qualitative or unquantified measure statements are represented in the model.",
-        "handoffs": "MOE specifications are translated to quantitative value properties."
-      },
-      {
-        "step": "Translate MOE specifications into enterprise value properties.",
-        "inputs": "MOE specifications and mission enterprise structure.",
-        "outputs": "MOE value properties such as Service Life and Total Cost on the Mission Enterprise block, with trace links.",
-        "actors_roles": "Systems engineer/modeler.",
-        "prerequisites": "Mission enterprise boundary is defined.",
-        "completion_criteria": "MOEs are quantified or typed as value properties and trace back to originating specifications.",
-        "handoffs": "MOEs feed MOP derivation and constraint modeling."
-      },
-      {
-        "step": "Derive MOPs from MOEs and system requirements.",
-        "inputs": "Enterprise MOEs, system requirements, and system architecture elements.",
-        "outputs": "MOP value properties on CubeSat, ground system, and launch system blocks.",
-        "actors_roles": "Systems engineer/modeler and domain specialists as needed.",
-        "prerequisites": "System-level architecture and requirements are represented.",
-        "completion_criteria": "MOPs are represented and traced to system requirements and higher-level MOEs.",
-        "handoffs": "MOPs feed parametric relationships to MOEs and TPM derivation."
-      },
-      {
-        "step": "Relate MOPs to MOEs with constraint blocks and parametric diagrams.",
-        "inputs": "MOE properties, MOP properties, and empirical or analytical relationships.",
-        "outputs": "Constraint blocks and parametric diagrams such as ServiceLife and TotalCost.",
-        "actors_roles": "Systems engineer/modeler and analysts.",
-        "prerequisites": "MOPs and MOEs are typed as model properties.",
-        "completion_criteria": "Parameters are bound so alternatives can be evaluated against MOEs.",
-        "handoffs": "Analysis results inform trade studies and lower-level derivation."
-      },
-      {
-        "step": "Derive TPMs and relate them to MOPs.",
-        "inputs": "MOPs, subsystem architecture, and technical requirements.",
-        "outputs": "TPM value properties, constraint blocks, and parametric diagrams such as DeltaV from propulsion subsystem TPMs.",
-        "actors_roles": "Subsystem engineers, systems engineer/modeler, analysts.",
-        "prerequisites": "Subsystem boundary and relevant technical requirements are known.",
-        "completion_criteria": "TPMs are traced to MOPs and requirements and can support progress assessment.",
-        "handoffs": "TPMs support lower-level design monitoring and future V&V planning."
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The approach maps technical measures to requirements, design, analysis, verification, and validation support: MOEs validate stakeholder intent, MOPs verify system requirements, and TPMs monitor technical progress. It does not define explicit lifecycle gates or review-entry criteria.",
-    "approach_classification": "Enhanced MBSE",
-    "approach_classification_rationale": "It uses standard MBSE/SysML as the base and enhances it with a custom technical-measures profile, trace pattern, and parametric analysis workflow; it is not integrated with external digital-engineering tools or test systems.",
-    "tailoring_rationale": [
-      "CubeSat missions have historically high failure rates and rapid growth.",
-      "A CubeSat Reference Model can be reused by CubeSat development teams.",
-      "Stakeholders may express needs verbally before quantitative value properties are available.",
-      "Technical measurement can provide early insight into risks, issues, and progress."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "MBSE",
-      "SysML",
-      "custom SysML technical measures profile",
-      "CubeSat Reference Model",
-      "trace relationships",
-      "constraint blocks",
-      "parametric diagrams",
-      "specific modeling software tool not reported"
-    ],
-    "toolchain_architecture_data_flow": "A single system model holds stakeholder concerns, mission objectives, measure specifications, value properties, requirements, structure, and parametric constraints. Information flows from stakeholder concerns to mission objectives to MOE specifications and MOE properties, then to MOPs and TPMs, with parametric diagrams binding values for analysis.",
-    "interoperability_mechanisms": [
-      "SysML profiles and stereotypes",
-      "SysML trace relationships",
-      "value properties on blocks",
-      "constraint blocks and parametric diagrams",
-      "tool-independence claim"
-    ],
-    "syntax_semantic_continuity_evidence": "The paper states that MBSE uses a coherent system model as the single source of truth and claims the technical-measures approach is tool-independent, but it does not demonstrate exchange, synchronization, or semantic round-trip continuity across tools.",
-    "software_hardware_system_integration_readiness": "not reported; the approach supports pre-implementation analysis and traceability but provides no software, hardware, integration, or test-readiness evidence.",
-    "toolchain_limitations": [
-      "specific modeling tool not reported",
-      "model files and profile implementation not made available",
-      "data exchange mechanisms not reported",
-      "full equations and calculation implementation not provided in this paper",
-      "verification and validation model elements deferred to future work"
-    ],
-    "availability_reproducibility": "The paper provides diagrams, stereotypes, and procedural guidance, but no reusable model package, repository, tool version, or execution data; reproducibility is partial and conceptual."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "BatteryCycle as a CubeSat MOP",
-      "SolarCellLife as a CubeSat MOP"
-    ],
-    "eps_requirements_representation": "No EPS-specific requirements are represented. The paper states that MOPs are traced to system requirements, but the battery-cycle and solar-cell-life examples are not shown as EPS requirements.",
-    "verification_validation_artifacts": [
-      "MOEs as validation-related measures of stakeholder intent",
-      "MOPs as verification-related measures against system requirements",
-      "TPMs as progress measures against technical requirements",
-      "trace relationships among concerns, objectives, measures, and requirements",
-      "constraint blocks and parametric diagrams for model-based assessment",
-      "future V&V model elements not yet incorporated"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "Parametric analysis predicts whether MOP values can satisfy MOEs before physical implementation.",
-      "MOP-to-requirement and TPM-to-requirement traces support pre-test verification planning.",
-      "No EPS-specific test case, verification matrix, or physical-test linkage is provided."
-    ],
-    "evidence_verification_integrated_in_model": "Conceptual and incomplete: the model integrates technical measures and traces relevant to verification/validation, but the authors explicitly identify V&V model elements as future work.",
-    "integration_test_readiness": "not reported; no EPS integration, hardware test, or verification campaign readiness is described."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "The approach provides traceability from stakeholder concerns to TPMs and supports impact assessment for changes.",
-      "outcome_category": "traceability and change-impact analysis",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "trace relationships",
-        "StakeholderConcern and MissionObjective elements",
-        "MOE/MOP/TPM specifications and value properties"
-      ],
-      "artifact_or_process_linked": "SysML technical-measures profile and trace relationships in Figures 2-4.",
-      "lifecycle_stage": "requirements definition, technical measurement, design analysis",
-      "evidence_type": "illustrative model artifacts and author claim",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Impact of stakeholder concern changes can be assessed through model traces.",
-      "evidence_source": "Conclusion, Summary; Section 5",
-      "direct_quote": "There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The traceability is demonstrated structurally in diagrams but not evaluated on a real project change scenario."
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used",
+      "label": "technical-measures-profile",
+      "description": "Custom SysML profile adding StakeholderConcern, MissionObjective, MOP/MOE/TPM specifications, and tpm/mop property stereotypes to represent technical measures.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 5: \"This approach to incorporating technical measures requires the creation of unique model elements that are not part of SysML.\"; Figure 1 description lists StakeholderConcern, MissionObjective, MOE_specification, MOP_specification, TPM_specification, tpm, and mop.",
+      "confidence": "medium",
+      "original_label": "Technical Measures Profile",
+      "type": "modeling_artifact"
     },
     {
-      "claim": "Textual specifications allow qualitative technical measures to be included in the system model.",
-      "outcome_category": "model coverage and stakeholder communication",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "MOE_specification, MOP_specification, and TPM_specification elements",
-        "natural-language capture before value-property translation"
-      ],
-      "artifact_or_process_linked": "Technical Measures Profile and MOE specification examples.",
-      "lifecycle_stage": "early requirements and measure definition",
-      "evidence_type": "illustrative model artifacts and rationale",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Broader inclusion of qualitative and quantitative technical measures in the model is claimed.",
-      "evidence_source": "Section 5, Technical Measures Profile; Conclusion, Summary",
-      "direct_quote": "The use of textual specifications for defining technical measures broadens the scope to include all types of technical measures within the system model.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The benefit is plausible from the profile structure but not validated with stakeholder use or comparative modeling effort."
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+      "label": "stakeholder-to-tpm-technical-measure-chain",
+      "description": "The approach creates a traceable chain from stakeholder concerns to mission objectives, MOE specifications/value properties, MOPs, and subsystem TPMs.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Conclusion: \"began with the identification of stakeholder concerns and ended with the derivation of TPMs.\"",
+      "confidence": "medium",
+      "original_label": "stakeholder-to-TPM technical-measure chain",
+      "type": "method/mechanism"
     },
     {
-      "claim": "Parametric relationships allow different solutions to be assessed against MOEs.",
-      "outcome_category": "trade analysis and design decision support",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "constraint blocks",
-        "parametric diagrams",
-        "binding MOPs and TPMs to MOEs"
-      ],
-      "artifact_or_process_linked": "ServiceLife, TotalCost, and DeltaV parametric diagrams.",
-      "lifecycle_stage": "conceptual design and design analysis",
-      "evidence_type": "illustrative parametric model; no numerical results",
-      "metric_or_value_indicator": "Service Life, Total Cost, DeltaV; no calculated values reported except example target of 3 years and $500,000.",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Alternative solutions can be evaluated for ability to meet MOEs, but no alternatives are actually compared in the paper.",
-      "evidence_source": "Section 5, Relating MOPs to MOEs; Conclusion, Summary",
-      "direct_quote": "This method allows for different solutions to be assessed as to their ability to meet MOEs.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The paper shows model structure only; executable analysis values and decision outcomes are absent."
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+      "label": "qualitative-technical-measure-specification-before-quantification",
+      "description": "MOE/MOP/TPM Specification elements capture natural-language measures from users/stakeholders and later translate them into quantitative value properties.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 5: \"The MOE Specification is a model element created for capturing a user's description of the MOE\" and \"This element allows for the capture of qualitative MOEs.\"",
+      "confidence": "medium",
+      "original_label": "qualitative technical-measure specification before quantification",
+      "type": "method/mechanism"
     },
     {
-      "claim": "The approach is generalizable and not tied to a specific tool or systems-engineering methodology.",
-      "outcome_category": "reproducibility, reuse, and method portability",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "SysML language constructs",
-        "custom profile stereotypes",
-        "tool-independent modeling pattern"
-      ],
-      "artifact_or_process_linked": "Technical Measures Profile and repeated MOE-MOP-TPM derivation pattern.",
-      "lifecycle_stage": "method adoption and model reuse",
-      "evidence_type": "author assertion with conceptual pattern",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Claimed portability to many methodologies.",
-      "evidence_source": "Conclusion, Summary",
-      "direct_quote": "This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No implementation in multiple tools or methods is demonstrated; absence of tool-specific details can also reduce reproducibility."
+      "field_path": "mbse_objective_scope_artifacts.modeling_scope",
+      "label": "technical-measurement-scope",
+      "description": "Controlled value other in modeling_scope denotes explicit modeling of technical measurement/MOE-MOP-TPM structures, which is not a separate controlled scope label.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Abstract: \"This paper defines a MBSE approach for technical measurement\".",
+      "confidence": "medium",
+      "original_label": "technical measurement scope",
+      "type": "controlled-other-explanation"
     },
     {
-      "claim": "Technical measurement could help increase CubeSat mission success in the context of high CubeSat failure rates.",
-      "outcome_category": "mission success and reliability/risk reduction",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "technical measures in a system model",
-        "early progress/risk insight",
-        "performance prediction against MOEs"
-      ],
-      "artifact_or_process_linked": "Overall MBSE approach for technical measures applied to a CubeSat example.",
-      "lifecycle_stage": "definition and development",
-      "evidence_type": "motivation and author assertion",
-      "metric_or_value_indicator": "historically high CubeSat failure rate mentioned but not quantified in the paper",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Potential success improvement is suggested, not demonstrated.",
-      "evidence_source": "Abstract",
-      "direct_quote": "Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions and the role technical measurement could play in increasing their success.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "No failure-rate data, project comparison, or operational evidence links this modeling approach to mission success."
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used",
+      "label": "custom-profile-stereotype-artifacts",
+      "description": "Controlled value other in model_artifacts_used denotes the SysML profile and stereotypes for technical measures, beyond the listed diagram/artifact types.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Figure 1: Technical Measures Profile.",
+      "confidence": "medium",
+      "original_label": "custom profile/stereotype artifacts",
+      "type": "controlled-other-explanation"
     },
     {
-      "claim": "MBSE can enhance communications, reduce development risk, improve quality, and enhance knowledge transfer compared with document-based engineering.",
-      "outcome_category": "generic MBSE process benefit",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "coherent system model",
-        "model-centric single source of truth",
-        "model-generated documentation"
-      ],
-      "artifact_or_process_linked": "System model containing requirements, design, analysis, and verification information.",
-      "lifecycle_stage": "conceptual design through later lifecycle phases",
-      "evidence_type": "background claim attributed to MBSE reference, not evaluated in this case study",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "traditional document-based systems engineering mentioned conceptually",
-      "observed_effect_size_or_qualitative_effect": "Generic process benefits are asserted.",
-      "evidence_source": "Section 3, Model-Based Systems Engineering",
-      "direct_quote": "The benefits of using this model-centric approach include: enhanced communications, reduced development risk improved quality, and enhanced knowledge transfer [2].",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "The claim is imported from general MBSE literature and not tested for the CubeSat technical-measures approach."
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+      "label": "qualitative-specification-mechanism",
+      "description": "Controlled value other in MBSE mechanism denotes qualitative MOE/MOP/TPM specification elements and profile-based model extension, not just traceability or parametrics.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 5: MOE/MOP/TPM Specification elements are used to capture qualitative descriptions that can be translated into properties.",
+      "confidence": "medium",
+      "original_label": "qualitative specification mechanism",
+      "type": "controlled-other-explanation"
+    },
+    {
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator",
+      "label": "technical-measure-values-as-outcome-indicators",
+      "description": "Controlled value other in metric_or_value_indicator denotes service life, DeltaV, battery cycles, solar cell life, and propulsion TPM values used for evaluating technical solutions, not measured MBSE adoption outcomes.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Figure 5: Service Life = f(DeltaV, BatteryCycle, SolarCellLife).; Figure 7: DeltaV = f(Propellant Capacity, ThrusterEfficiency, Propellant EperV).",
+      "confidence": "medium",
+      "original_label": "technical-measure values as outcome indicators",
+      "type": "controlled-other-explanation"
+    },
+    {
+      "field_path": "study_context_population.model_maturity",
+      "label": "mission-enterprise-boundary",
+      "description": "The example system boundary is a mission enterprise composed of ground system, launch system, and CubeSat, enabling cost and service-life MOEs at enterprise level.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 5: \"the mission enterprise is comprised of a ground system, launch system, and CubeSat.\"",
+      "confidence": "medium",
+      "original_label": "mission enterprise boundary",
+      "type": "context/artifact"
+    },
+    {
+      "field_path": "eps_verification_specific.verification_validation_artifacts",
+      "label": "v-v-integration-explicitly-future-work",
+      "description": "The paper positions technical measures as a basis for verification and validation but does not yet integrate V&V model elements.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Conclusion/Future Work: \"Future work is needed to incorporate model elements associated with those activities\".",
+      "confidence": "medium",
+      "original_label": "V&V integration explicitly future work",
+      "type": "limitation/theme"
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "No explicit governance strategy is reported. The paper describes the MBSE model as a single source of truth and uses trace relationships to manage consistency.",
-    "traceability_to_deliverables_decisions_reviews": "Traceability connects stakeholder concerns, mission objectives, MOE specifications, MOE/MOP/TPM properties, and requirements, supporting change-impact assessment and trade analysis; no formal deliverables, reviews, or decision boards are specified.",
-    "evaluation_criteria_model_quality_usefulness": "Usefulness is framed as clear traceability, ability to capture qualitative measures, ability to assess alternatives against MOEs, and generalizability; no formal model-quality metrics are provided.",
-    "roi_value_realization_evidence": "No ROI evidence is reported. Cost is modeled as an MOE/MOP example, including a $500,000 total mission cost statement and element-level cost MOPs, but no realized savings or economic comparison is shown.",
-    "programmatic_gates_critical_design_events_supported": "Technical measurement is described as providing early indications for key milestones, but no specific programmatic gate, PDR/CDR event, or review checklist is supported in the paper.",
-    "model_derived_performance_indicators_management_metrics": "Example indicators include MOEs for Service Life and Total Cost; MOPs for CubeSat Cost, DeltaV, BatteryCycle, SolarCellLife, Ground System Cost, and Launch Cost; and TPMs for PropellantCapacity, ThrusterEfficiency, and Propellant Energy per Volume."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper gives a stepwise conceptual pattern from stakeholder concerns to MOEs, MOPs, TPMs, and parametric diagrams, but no full implementation playbook, schedule, or empirical use report."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed conceptually",
-      "rationale": "It uses SysML profiles and claims tool independence, but does not report tool integration, exchange formats, synchronization, or toolchain continuity evidence."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "mentioned only",
-      "rationale": "The paper notes CubeSat affordability and the value of a reference model for CubeSat teams, but does not tailor the method for resource-constrained teams or quantify modeling effort."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "mentioned only",
-      "rationale": "Cost and change-impact assessment are modeled conceptually, but governance, project deliverables, review artifacts, ROI, and management metrics are not developed."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "mentioned only",
-      "rationale": "The paper mentions rapid CubeSat mission growth but not agile, distributed, rapid-iteration, or NewSpace development practices."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "The paper proposes a general SysML pattern for CubeSat technical measures: stakeholder concerns -> mission objectives -> MOE specifications/value properties -> MOPs -> TPMs.",
-        "Limited early behavioral knowledge is handled indirectly through qualitative MOE/MOP/TPM specification elements, but quantitative analysis still requires empirical or analytical relationships.",
-        "The study is not EPS-specific; battery cycles and solar cell life are only power-adjacent MOP examples for service life."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0007",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0007.json",
+      "tier_status": "supporting",
+      "tier_rationale": "Supports RQ1/RQ2 through a CubeSat system-level MBSE technical-measurement approach and traceability mechanisms; not EPS-specific and no completed verification model.",
+      "citation": "Kaslow, D., Ayres, B., Cahill, P. T., & Hart, L. (2018). A model-based systems engineering approach for technical measurement with application to a CubeSat. DOI: 10.1109/aero.2018.8396443.",
+      "title": "A model-based systems engineering approach for technical measurement with application to a CubeSat",
+      "authors": [
+        "D. Kaslow",
+        "B. Ayres",
+        "P. T. Cahill",
+        "L. Hart"
       ],
-      "RQ2": [
-        "Claimed outcomes include traceability, qualitative-measure capture, trade analysis, generalizability, and possible mission-success/risk benefits.",
-        "No EPS-specific reliability, reproducibility, or integrability outcome is demonstrated.",
-        "Evidence is mainly diagrams and author reasoning, without metrics, comparison, integration/test evidence, or flight data."
+      "year": 2018,
+      "venue": "IEEE Aerospace Conference (venue inferred from DOI/source provenance; venue name not explicit in markdown body)",
+      "doi_or_url": "10.1109/aero.2018.8396443",
+      "publisher": "IEEE",
+      "venue_type": "conference paper",
+      "source_database_query_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q6_vv_traceability_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (verification OR validation OR test OR testing OR IVV OR V\\&V OR \"requirements-in-loop\" OR traceability))",
+          "rank": 24,
+          "paperId": "85049870083"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q7_outcomes_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (reliability OR reproducibility OR integrability OR integration OR traceability))",
+          "rank": 19,
+          "paperId": "85049870083"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+          "rank": 48,
+          "paperId": "85049870083"
+        },
+        {
+          "source": "google_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0007_google_scholar_title.json",
+          "query": "\"A model-based systems engineering approach for technical measurement with application to a CubeSat\"",
+          "rank": 1,
+          "paperId": "https://ieeexplore.ieee.org/abstract/document/8396443/",
+          "purpose": "abstract_enrichment"
+        }
       ],
-      "RQ3": [
-        "Technical measures are positioned as a basis for validation and verification: MOEs validate user needs, MOPs verify requirements, and TPMs monitor technical requirements.",
-        "Parametric diagrams can support pre-physical assessment of whether lower-level measures satisfy higher-level objectives.",
-        "The authors state that actual V&V model elements remain future work, so verification procedures are not fully integrated, and no EPS verification procedure is reported."
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "partial",
+          "rationale": "Provides a general CubeSat Reference Model technical-measurement pattern, not a complete mission/EPS behavioral model."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "Claims traceability, generality, decision support, and conceptual risk/success benefits, but no EPS outcome evidence."
+        },
+        "RQ3": {
+          "relevance": "partial",
+          "rationale": "Technical measures and parametric checks are verification-adjacent; formal V&V elements are future work and no EPS verification procedure is integrated."
+        }
+      },
+      "lineage_overlap_notes": "Part of the INCOSE Space Systems Working Group CubeSat Reference Model lineage; cites Kaslow et al. 2017 interim status #3. Treat as overlapping reference-model family rather than independent flight case if other SSWG CubeSat Reference Model papers are synthesized."
+    },
+    "study_context_population": {
+      "mission_platform": "CubeSat/nanosatellite-class reference model example; no specific flight mission named.",
+      "size_form_factor": "CubeSat; exact unit size/form factor not reported.",
+      "mission_name": "CubeSat Reference Model, not an operational mission name.",
+      "mission_domain": "Generic CubeSat mission enterprise; examples use service life and mission cost, no payload domain reported.",
+      "organization_type": "INCOSE Space Systems Working Group reference-model effort; target user is any CubeSat development team. Author affiliations include consultants, The Aerospace Corp., and MITRE, but no development organization for a specific mission is described.",
+      "project_maturity": "Reference-model/method demonstration, not flight project or operational system.",
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A"
+      ],
+      "development_context": [
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "EPS-adjacent: battery-cycle and solar-cell-life MOPs appear, but no EPS subsystem architecture, power budget, or EPS verification procedure is presented.",
+      "model_maturity": [
+        "conceptual framework",
+        "reference model/template",
+        "prototype demonstration"
+      ],
+      "context_evidence": [
+        "Introduction: CubeSat Reference Model \"can be used by any CubeSat development team\".",
+        "Section 5: mission enterprise includes ground system, launch system, and CubeSat.",
+        "Section 5: CubeSat low cost motivates sponsor affordability concern."
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.",
-      "However, this approach is not complete and provides no traceability to stakeholder expectations, connections between technical measures, and connections with requirements."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "No EPS architecture or EPS-specific verification model is provided.",
-      "No actual CubeSat mission, form factor, flight result, or integration/test result is reported.",
-      "No model repository, tool version, profile file, or exchange mechanism is provided.",
-      "No quantitative analysis results, baseline comparison, or evidence of reliability/reproducibility/integrability improvement is included.",
-      "Verification and validation are discussed conceptually, while V&V model elements are deferred to future work."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Define how technical measurement should be implemented as part of an MBSE approach, because prior literature tying technical measurement to MBSE is general and lacks detail.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "budgets",
+        "technical measurement (other)"
+      ],
+      "system_boundary_and_abstraction": "Mission enterprise level aggregates ground system, launch system, and CubeSat; CubeSat system has MOP value properties; propulsion subsystem has TPMs. The model abstracts technical measures as SysML stereotypes/value properties and parametric relationships rather than detailed physical behavior.",
+      "deliberately_minimal_or_excluded": "Detailed V&V elements, executable results, specific CubeSat payload, operations, and full EPS architecture are not included; V&V model elements are future work.",
+      "required_prior_behavioral_domain_knowledge": "Limited behavioral knowledge is required initially: qualitative stakeholder concerns and MOE/MOP/TPM specifications can be captured in natural language before quantification. Quantitative relations still require domain functions such as Service Life = f(DeltaV, BatteryCycle, SolarCellLife) and DeltaV = f(propulsion TPMs).",
+      "model_artifacts_used": [
+        "Technical Measures Profile with custom stereotypes/model elements",
+        "StakeholderConcern and MissionObjective requirement-like elements",
+        "MOE/MOP/TPM Specification elements",
+        "MOE/MOP/TPM value properties",
+        "SysML block definition diagrams",
+        "constraint blocks and parametric diagrams",
+        "trace relationships",
+        "trade-study-capable parametric models"
+      ],
+      "generality_reuse_mechanism": [
+        "reference model",
+        "profile",
+        "method guidance"
+      ],
+      "evidence_quotes": [
+        "Abstract: \"The purpose of this paper is to address that need.\"",
+        "Section 5: \"This approach to incorporating technical measures requires the creation of unique model elements that are not part of SysML.\"",
+        "Section 5: \"The qualitative descriptions captured in the MOE specifications are now translated into value properties of the mission enterprise.\""
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "reported_steps": [
+        {
+          "step": 1,
+          "name": "Create Technical Measures Profile",
+          "inputs": [
+            "SysML profile mechanism",
+            "need to represent stakeholder concerns, mission objectives, MOEs, MOPs, TPMs, and specifications"
+          ],
+          "outputs": [
+            "StakeholderConcern",
+            "MissionObjective",
+            "MOE/MOP/TPM Specification elements",
+            "mop/tpm property stereotypes"
+          ],
+          "actors_roles": [
+            "systems modeler/MBSE practitioner"
+          ],
+          "prerequisites": [
+            "SysML modeling capability",
+            "technical-measurement concepts"
+          ],
+          "completion_criteria": "Profile elements available for use in the system model.",
+          "handoffs": "Profile elements are used to capture stakeholder concerns and technical measures.",
+          "evidence": "Section 5 Technical Measures Profile lists required model elements."
+        },
+        {
+          "step": 2,
+          "name": "Derive mission objectives from stakeholder concerns",
+          "inputs": [
+            "stakeholder concerns from end user and sponsor"
+          ],
+          "outputs": [
+            "mission objectives linked with «trace» relationships"
+          ],
+          "actors_roles": [
+            "stakeholders",
+            "systems engineer/modeler"
+          ],
+          "prerequisites": [
+            "identified stakeholders and concerns"
+          ],
+          "completion_criteria": "Each critical concern has a corresponding mission objective in the model.",
+          "handoffs": "Mission objectives are used to derive MOE specifications.",
+          "evidence": "Section 5: \"The approach starts with developing mission objectives derived from the concerns of stakeholders.\""
+        },
+        {
+          "step": 3,
+          "name": "Capture critical objectives as MOE specifications",
+          "inputs": [
+            "mission objectives deemed critical for mission success"
+          ],
+          "outputs": [
+            "natural-language MOE specifications, e.g., service life and total cost"
+          ],
+          "actors_roles": [
+            "stakeholders",
+            "systems engineer/modeler"
+          ],
+          "prerequisites": [
+            "mission objectives and stakeholder concerns"
+          ],
+          "completion_criteria": "Qualitative/unquantified statements are captured in MOE Specification elements.",
+          "handoffs": "MOE specifications are translated to quantitative value properties.",
+          "evidence": "Section 5: unquantified statements are captured as MOE specifications."
+        },
+        {
+          "step": 4,
+          "name": "Translate MOE specifications into mission-enterprise value properties",
+          "inputs": [
+            "MOE specifications",
+            "mission enterprise boundary"
+          ],
+          "outputs": [
+            "MOE value properties such as Service Life and Cost",
+            "trace links to MOE specifications"
+          ],
+          "actors_roles": [
+            "systems engineer/modeler"
+          ],
+          "prerequisites": [
+            "defined mission enterprise and MOE specifications"
+          ],
+          "completion_criteria": "MOE value properties are stereotyped and traced to specifications/stakeholder concerns.",
+          "handoffs": "MOE value properties drive MOP derivation and parametric analysis.",
+          "evidence": "Section 5: \"Traceability back to the MOE specifications is accomplished using the trace relationship.\""
+        },
+        {
+          "step": 5,
+          "name": "Define MOPs and parametric relationships to MOEs",
+          "inputs": [
+            "enterprise-level MOEs",
+            "system requirements",
+            "technical relationships"
+          ],
+          "outputs": [
+            "system-level MOP value properties",
+            "constraint blocks",
+            "parametric diagrams"
+          ],
+          "actors_roles": [
+            "systems engineer/modeler",
+            "domain analyst"
+          ],
+          "prerequisites": [
+            "MOEs and system requirements"
+          ],
+          "completion_criteria": "MOPs are traced to requirements and bound to MOE constraints.",
+          "handoffs": "MOPs provide basis for subsystem TPM derivation and trade evaluation.",
+          "evidence": "Abstract and Section 5 describe MOP derivation and parametric diagrams."
+        },
+        {
+          "step": 6,
+          "name": "Derive TPMs at subsystem level and relate them to MOPs",
+          "inputs": [
+            "MOPs",
+            "subsystem technical requirements",
+            "subsystem parameters"
+          ],
+          "outputs": [
+            "subsystem TPM value properties",
+            "constraint/parametric relationships to MOPs"
+          ],
+          "actors_roles": [
+            "subsystem engineer/modeler"
+          ],
+          "prerequisites": [
+            "system-level MOPs and subsystem architecture"
+          ],
+          "completion_criteria": "TPMs are represented as value properties and linked to MOPs/subsystem requirements.",
+          "handoffs": "TPM values support evaluation of subsystem solution impacts.",
+          "evidence": "Section 5: DeltaV is a function of propellant capacity, thruster efficiency, and propellant energy per volume."
+        },
+        {
+          "step": 7,
+          "name": "Evaluate solutions/trades using parametric relationships",
+          "inputs": [
+            "candidate system/subsystem solutions",
+            "MOP/TPM values",
+            "MOE constraints"
+          ],
+          "outputs": [
+            "assessment of ability to meet MOEs/MOPs"
+          ],
+          "actors_roles": [
+            "systems engineer",
+            "analyst",
+            "decision maker"
+          ],
+          "prerequisites": [
+            "bound parametric diagrams and value properties"
+          ],
+          "completion_criteria": "Candidate solutions can be compared against technical measures.",
+          "handoffs": "Results can inform design decisions; actual gate/deliverable handoff is not specified.",
+          "evidence": "Section 5: \"This allows different solutions to be evaluated against the MOEs.\""
+        }
+      ],
+      "mapping_to_se_activities_and_gates": "Maps to requirements capture, design/architecture definition, analysis, and verification/validation basis in concept/design phases. No explicit SRR/PDR/CDR gate mapping is provided; key milestones are mentioned only in the general technical-measurement definition.",
+      "approach_classification": "Enhanced MBSE",
+      "tailoring_rationale": [
+        "mission scale",
+        "cost"
+      ],
+      "adoption_guidance": "partial guidance",
+      "adoption_guidance_notes": "The method sequence is clear, but roles, governance, tool setup, acceptance criteria, and downloadable assets are not provided."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML"
+      ],
+      "toolchain_architecture": "Single SysML-centered system model with a Technical Measures Profile, requirement-like elements, value properties, BDDs, constraint blocks, and parametric diagrams. No external analysis or repository architecture is described.",
+      "data_flow_between_tools": "Not reported. Internal model flow is stakeholder concern -> mission objective -> MOE specification/value property -> MOP -> TPM -> parametric evaluation.",
+      "interoperability_mechanisms": [],
+      "syntax_semantic_continuity_evidence": "Within the model, semantic continuity is provided by SysML trace relationships and shared value properties/constraints. Cross-tool syntax/semantic continuity is not reported.",
+      "software_hardware_system_integration_readiness": "Not reported beyond technical measures as a future basis for V&V.",
+      "toolchain_limitations": "Not reported; paper asserts tool independence.",
+      "availability_reproducibility": "No model files, open-source assets, reusable packages, exchange formats, scripts, or named tools reported; implementation details are limited to diagrams and textual profile definitions.",
+      "evidence_quotes": [
+        "Section 3: SysML is \"well-suited for specifying requirements, structure, behavior, allocations, and constraints on system properties to support engineering analyses.\"",
+        "Conclusion: \"This approach is not dependent on any specific tool\"."
+      ]
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "battery cycles as a CubeSat MOP",
+        "solar cell life as a CubeSat MOP"
+      ],
+      "eps_requirements_represented_and_links": "No EPS requirements are reported. Battery-cycle and solar-cell-life MOPs contribute to the service-life MOE; MOPs generally are traced to system requirements, but no EPS-specific requirement trace is shown.",
+      "verification_validation_artifacts": [],
+      "pre_physical_development_verification_mechanism": [
+        "parametric checks",
+        "trade-study verification"
+      ],
+      "evidence_integrated_vs_documented_separately": "Technical measures and parametric relationships are integrated in the SysML model; formal V&V artifacts are absent and future work.",
+      "integration_test_readiness": "Not reported.",
+      "evidence_quotes": [
+        "Section 5: \"service life of the CubeSat is a function of ... battery cycles, and solar cell life. These factors are captured as MOPs of the CubeSat in the form of value properties.\"",
+        "Conclusion/Future Work: \"Future work is needed to incorporate model elements associated with those activities\"."
+      ]
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "objective",
-        "quote": "The purpose of this paper is to address that need.",
-        "location": "Abstract"
+        "claim_id": "C1_traceability_impact_assessment",
+        "claim_text_or_paraphrase": "The approach provides clear traceability from stakeholder concerns through mission objectives, MOEs, MOPs, and TPMs, enabling assessment of impacts when stakeholder concerns change.",
+        "category": [
+          "traceability",
+          "decision support",
+          "consistency"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mechanism": [
+          "artifact traceability",
+          "requirements linkage"
+        ],
+        "linked_artifact_process": "StakeholderConcern, MissionObjective, MOE_specification, MOE value properties, MOPs, TPMs, and SysML «trace» relationships in the CubeSat Reference Model.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "trace links"
+        ],
+        "baseline_comparator": "Prior literature is described as incomplete/lacking traceability, but no empirical baseline comparator is reported.",
+        "observed_effect_size_or_qualitative_effect": "Qualitative effect only: authors claim impact of changes can be easily assessed; figures illustrate trace links but no count or effort reduction is measured.",
+        "quote_location": "Section 5: \"This allows for complete traceability from the quantified value properties of the mission enterprise block back to the originating stakeholder concern. This enables quickly assessing the impact of any changes to stakeholder concerns.\" Conclusion: \"There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed.\"",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Traceability is shown in illustrative model diagrams, but ease of impact assessment is not evaluated with user tasks, change scenarios, baseline process data, or project outcomes."
       },
       {
-        "topic": "CubeSat reference model context",
-        "quote": "The SSWG's recent effort has been focused on the development of a CubeSat Reference Model that can be used by any CubeSat development team.",
-        "location": "Section 1, Introduction"
+        "claim_id": "C2_parametric_trade_decision_support",
+        "claim_text_or_paraphrase": "Constraint blocks and parametric diagrams allow MOPs/TPMs to be analyzed so different system or subsystem solutions can be assessed against MOEs.",
+        "category": [
+          "decision support",
+          "consistency"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mechanism": [
+          "parametric analysis"
+        ],
+        "linked_artifact_process": "SysML constraint blocks and parametric diagrams for service life, total cost, and DeltaV relationships.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "cost",
+          "other"
+        ],
+        "baseline_comparator": "No manual-analysis or alternative-toolchain comparator reported.",
+        "observed_effect_size_or_qualitative_effect": "Qualitative capability claim; no executed trade study results or numerical outputs are reported in this paper.",
+        "quote_location": "Section 5: \"In SysML, constraint blocks and parametric diagrams are used to perform this type of analysis... This allows different solutions to be evaluated against the MOEs.\" Section 5: \"This allows for evaluation of different subsystem solutions based on their impact to the MOP.\"",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": "The diagrams may be sufficient for representing relationships, but the paper does not show solver execution, numeric values, sensitivity studies, or decision outcomes."
       },
       {
-        "topic": "MBSE single source of truth",
-        "quote": "In MBSE, the model serves as a single source of truth for the development team and is the primary artifact produced by systems engineering activities.",
-        "location": "Section 3, Model-Based Systems Engineering"
+        "claim_id": "C3_qualitative_measure_completeness_stakeholder_alignment",
+        "claim_text_or_paraphrase": "Textual MOE/MOP/TPM specifications let stakeholders express qualitative technical measures before they are translated into quantitative model properties, broadening the set of measures captured in the system model.",
+        "category": [
+          "communication/stakeholder alignment",
+          "completeness",
+          "traceability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mechanism": [
+          "artifact traceability",
+          "other"
+        ],
+        "linked_artifact_process": "MOE Specification, MOP Specification, and TPM Specification model elements in the Technical Measures Profile.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "baseline_comparator": "No empirical comparator; related work and SysML comment limitations motivate the new elements.",
+        "observed_effect_size_or_qualitative_effect": "Qualitative effect only: natural-language measures such as service life and total cost are captured and traced to value properties.",
+        "quote_location": "Section 5: \"Users may be well versed at stating the need verbally, but not at capturing value properties. The MOE Specification is a model element created for capturing a user's description of the MOE.\" Conclusion: \"The use of textual specifications for defining technical measures broadens the scope to include all types of technical measures within the system model.\"",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": "The claim is structurally plausible from the profile and examples, but no stakeholder evaluation demonstrates improved communication or completeness."
       },
       {
-        "topic": "technical measures profile",
-        "quote": "This approach to incorporating technical measures requires the creation of unique model elements that are not part of SysML.",
-        "location": "Section 5, Technical Measures Profile"
+        "claim_id": "C4_generality_reuse_tool_independence",
+        "claim_text_or_paraphrase": "The approach is general, tool-independent, and reusable across systems engineering methodologies and CubeSat teams via the CubeSat Reference Model and Technical Measures Profile.",
+        "category": [
+          "generality/reuse"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mechanism": [
+          "reference model reuse",
+          "other"
+        ],
+        "linked_artifact_process": "CubeSat Reference Model, SysML Technical Measures Profile, and method guidance for deriving technical measures.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "baseline_comparator": "No reuse across projects or independent replication is reported.",
+        "observed_effect_size_or_qualitative_effect": "Asserted generality; no measured reuse or adoption evidence.",
+        "quote_location": "Introduction: \"CubeSat Reference Model that can be used by any CubeSat development team.\" Conclusion: \"This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.\"",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": "Tool independence is asserted from use of SysML/profile concepts but no implementation in multiple tools, exchange format, package, or replicated adoption is shown."
       },
       {
-        "topic": "qualitative measures",
-        "quote": "This element allows for the capture of qualitative MOEs.",
-        "location": "Section 5, Technical Measures Profile"
-      },
-      {
-        "topic": "traceability",
-        "quote": "This allows for complete traceability from the quantified value properties of the mission enterprise block back to the originating stakeholder concern.",
-        "location": "Section 5, Capturing Critical Objectives as MOE Specifications"
-      },
-      {
-        "topic": "parametric analysis",
-        "quote": "A parametric diagram is created to bind the values of these parameters to the technical measures.",
-        "location": "Section 5, Relating MOPs to MOEs"
-      },
-      {
-        "topic": "claimed benefits",
-        "quote": "This approach has the following benefits:",
-        "location": "Section 6, Summary"
-      },
-      {
-        "topic": "future V&V work",
-        "quote": "Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.",
-        "location": "Section 6, Future Work"
+        "claim_id": "C5_risk_mission_success_context",
+        "claim_text_or_paraphrase": "Applying technical measurement in a CubeSat MBSE model could improve mission success by addressing high failure rates and providing insight into development progress and risks.",
+        "category": [
+          "risk reduction",
+          "mission assurance",
+          "decision support"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mechanism": [
+          "requirements linkage",
+          "artifact traceability",
+          "parametric analysis"
+        ],
+        "linked_artifact_process": "Technical measures (MOEs, MOPs, TPMs) represented and traced within the CubeSat system model.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "baseline_comparator": "No prior mission, failure-rate, reliability, or risk baseline comparison reported.",
+        "observed_effect_size_or_qualitative_effect": "Potential success/risk benefit is asserted conceptually; no reliability proxy results or mission outcome evidence.",
+        "quote_location": "Abstract: \"Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions and the role technical measurement could play in increasing their success.\" Technical measurement definition: measures \"provide insight into the progress... and the associated risks and issues\".",
+        "evidence_confidence_rating": "Unsupported",
+        "confidence": "low",
+        "threats_or_alternative_explanations": "High CubeSat failure rates may be driven by factors outside technical measurement; the paper provides no causal evidence that this MBSE approach improves reliability or mission assurance."
       }
     ],
-    "notes_for_consistency_with_lineage": "Classify as supporting evidence for CubeSat MBSE traceability/technical-measure modeling, not as an EPS-specific or verification-implemented study. The paper belongs to the CubeSat Reference Model lineage but was extracted only from the supplied markdown and metadata.",
-    "extraction_confidence": "high",
-    "extraction_confidence_reason": "The supplied markdown contains the full abstract, body, figures as descriptions, conclusion, and references. Confidence is lower only for venue details, which are inferred from corpus DOI metadata, and for EPS/V&V relevance, which is sparse and mostly negative."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": "not reported",
+      "traceability_to_deliverables_decisions_reviews_reports": "Traceability to stakeholder concerns, mission objectives, technical measures, and requirements is shown; explicit project deliverables, design-review packages, assurance cases, or management reports are not reported.",
+      "evaluation_criteria_for_model_quality_or_usefulness": "Implicit: ability to trace concerns to TPMs, capture qualitative and quantitative technical measures, and evaluate candidate solutions against MOEs/MOPs. No formal model quality criteria are reported.",
+      "roi_value_realization_evidence": "not reported; cost is modeled as a mission MOE/MOP but not as MBSE adoption ROI.",
+      "programmatic_gates_or_critical_design_events_supported": "General key milestones and future V&V are mentioned; SRR/PDR/CDR/integration gates are not mapped.",
+      "model_derived_performance_indicators_or_management_metrics": [
+        "Service Life MOE",
+        "Total Cost MOE",
+        "DeltaV MOP",
+        "BatteryCycle MOP",
+        "SolarCellLife MOP",
+        "propellant capacity/efficiency/energy per volume TPMs",
+        "ground/launch/CubeSat cost MOPs"
+      ],
+      "evidence_quotes": [
+        "Technical measurement definition: measures \"provide early indications if the development effort is not progressing as needed to meet key milestones\".",
+        "Figure 6: Total Cost = Sum(GS Cost, L Cost, C Cost)."
+      ]
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "status": "addressed with evidence",
+        "rationale": "Stepwise SysML method and reference-model diagrams provide an implementation pathway for technical measures."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "status": "mentioned only",
+        "rationale": "Tool independence is asserted, but no data exchange/interoperability mechanism is provided."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "status": "addressed conceptually",
+        "rationale": "CubeSat low cost/affordability and high failure rate motivate the example, but lightweight tailoring details are absent."
+      },
+      "governance_project_deliverables_roi": {
+        "status": "addressed conceptually",
+        "rationale": "Technical measures relate to stakeholder concerns, requirements, risk, and milestones conceptually; no deliverable/ROI evidence."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "status": "not addressed",
+        "rationale": "No NewSpace, agile, distributed, concurrent, or rapid-iteration practices are discussed."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": "Useful supporting evidence for a generic CubeSat system-level MBSE technical-measurement pattern using a SysML profile/reference model and minimal initial qualitative stakeholder knowledge; not a full mission/EPS behavioral model.",
+        "RQ2": "Claims traceability, trade/decision support, qualitative measure completeness, generality/reuse, and conceptual risk/mission-success benefits, but outcome evidence is illustrative and lacks metrics/baseline/validation.",
+        "RQ3": "Verification integration is not implemented. Technical measures and parametric checks are verification-adjacent, and V&V model elements are explicitly future work."
+      },
+      "author_stated_limitations_gaps": [
+        "Future work needed to incorporate V&V model elements and relate them to technical measures.",
+        "Prior approaches are described as incomplete because they lack traceability to stakeholder expectations, connections between measures, and requirements."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No EPS-specific model or verification artifact.",
+        "No quantitative evaluation, baseline, independent validation, or physical/flight evidence.",
+        "No model/tool availability or interoperability mechanism.",
+        "Reference-model lineage may overlap with other Kaslow/SSWG CubeSat MBSE papers."
+      ],
+      "direct_evidence_quotes_supporting_classifications": [
+        "\"The SSWG's latest work has been on incorporating technical measures into the model.\"",
+        "\"This allows for complete traceability from the quantified value properties of the mission enterprise block back to the originating stakeholder concern.\"",
+        "\"This method allows for different solutions to be assessed as to their ability to meet MOEs.\"",
+        "\"Future work is needed to incorporate model elements associated with those activities\"."
+      ],
+      "lineage_notes": "SSWG CubeSat Reference Model family; compare carefully with 2017 interim status and RAX/CubeSat MBSE lineage cited in references.",
+      "extraction_confidence": "high",
+      "extraction_confidence_reason": "Paper text and figure descriptions clearly expose the method and claims. Confidence in factual extraction is high; confidence in effectiveness claims is lower due to limited evidence."
+    }
   },
-  "bibtex": "@inproceedings{paper-0007,\n  title = {A Model-Based Systems Engineering Approach for Technical Measurement with Application to a CubeSat},\n  author = {D. Kaslow and B. Ayres and P. T. Cahill and L. Hart},\n  year = {2018},\n  booktitle = {IEEE Aerospace Conference},\n  publisher = {IEEE},\n  doi = {10.1109/aero.2018.8396443},\n  url = {https://doi.org/10.1109/aero.2018.8396443}\n}"
+  "bibtex": "@inproceedings{Kaslow2018TechnicalMeasurementCubeSat,\n  author = {Kaslow, David and Ayres, Bradley and Cahill, Philip T. and Hart, Laura},\n  title = {A Model-Based Systems Engineering Approach for Technical Measurement with Application to a CubeSat},\n  booktitle = {2018 IEEE Aerospace Conference},\n  year = {2018},\n  publisher = {IEEE},\n  doi = {10.1109/AERO.2018.8396443}\n}"
 }

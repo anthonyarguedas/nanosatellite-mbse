@@ -3,583 +3,1946 @@
   "tier": "supporting",
   "year": 2015,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The supplied corpus metadata reports a DOI and Scopus provenance, and the paper is formatted as a formal conference-style technical paper with institutional authorship.",
-        "evidence": [
-          "Corpus metadata DOI: 10.2514/6.2015-4474.",
-          "Corpus metadata includes Scopus provenance for two searches.",
-          "Paper author line includes The Aerospace Corporation, University of Florida, and consultant affiliations."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper gives scope boundaries and future work, but it does not provide a formal limitations or threats-to-validity discussion.",
-        "evidence": [
-          "The effort to date has been focused on establishing standard nomenclature and definitions; incorporating the stakeholders and their needs, objectives, and measures of effectiveness; and defining the generic CubeSat architecture down to the logical subsystems.",
-          "The next step is to create an example-mission specific model and to validate the MOEs and MOPs.",
-          "Providing a fully-formed CubeSat Reference Model could be a bit overwhelming for a mission specific CubeSat team, especially a team that is just becoming familiar with MBSE and SysML."
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The CubeSat context, form factors, typical organizations, mission types, concept phase use, lifecycle stages, and operations phases are explicitly described.",
-        "evidence": [
-          "A CubeSat, a type of nanosatellite, is a low-cost standardized satellite with its origin in the CubeSat Project established in 1999 by California Polytechnic State University (Cal Poly), San Luis Obispo and Stanford University's Space Systems Development Laboratory (SSDL).",
-          "The basic CubeSat unit is 10x10x10 centimeters with a mass of about 1.3 kilograms, and this cubic unit is referred to as 1U.",
-          "The reference model supports all life cycle stages employed by the organization utilizing the model. For example, for an academic CubeSat project, the likely stages would be concept, development, production, operational, and retirement. The model supports all phases of operations: launch, early operation, and normal operations."
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "SysML, OOSEM, artifact classes, lifecycle scope, and candidate tools are named, but detailed model contents, executable interfaces, and reproducible implementation instructions are not provided.",
-        "evidence": [
-          "Our application of MBSE uses System Modeling Language (SysML), a graphical modeling language, to model all aspects of a system either directly or through an interface with another model.",
-          "The team is using the Object-Oriented System Engineering Method (OOSEM) $ ^{7} $ as presented in the INCOSE Systems Engineering Handbook $ ^{8} $ and the Practical Guide to SysML. $ ^{9} $",
-          "Distribution Mechanisms (listing MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter)"
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Most claimed benefits are tied to the SysML reference model, single authoritative repository, lifecycle model population, diagrams, and model-enabled trade studies.",
-        "evidence": [
-          "MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management.",
-          "Using the CubeSat Reference Model as a starting point, a user can populate a mission-specific model with the concept lifecycle stakeholders and stakeholder needs, objectives, constraints, and measures of effectiveness (MOEs) and carry out concept life-cycle studies.",
-          "The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data to meet the established measures."
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper gives conceptual mechanisms and mentions earlier trade-study demonstrations, but it does not report quantitative results, validation results, model checks, reuse evidence, or operational data for the current reference model.",
-        "evidence": [
-          "The third phase was comprised of two activities. The first was the development of a CubeSat Enterprise Model to capture cost and product lifecycle aspects for the mission spacecraft and problem domain.",
-          "The following two trade studies were demonstrated: 1) On board energy level as a function of solar panel area and maximum battery capacity, and 2) quantity of data downloaded as function of orbital altitude and ground station network.",
-          "The next step is to create an example-mission specific model and to validate the MOEs and MOPs."
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper describes stakeholder needs, MOE/MOP/TPM decomposition, requirements diagrams, and verification/validation strategies in the model, but it does not present a trace matrix or concrete traced requirements.",
-        "evidence": [
-          "First, the MOEs are decomposed into measures of performances (MOPs) and technical performance measures (TPMs).",
-          "This central box is connected by arrows to several external inputs and outputs: ... Validation and Verification Strategies ... Trade Studies Requirements Verification",
-          "Structure behavior, requirement, and parametric diagrams provide views into the model."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper identifies planned distribution mechanisms and interoperability routes, but states that public release and licensing are still being considered and does not provide the model files.",
-        "evidence": [
-          "The SSWG team is developing a model distribution process to share to external entities, and this is illustrated in Figure 9 and Ref. 4.",
-          "Distribution Mechanisms (listing MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter)",
-          "Several avenues of distribution along with licensing and copyright options are being considered, and the team hopes to release the models publicly in the near future."
-        ]
-      }
-    ],
-    "total_score": 5.5,
-    "max_score": 8,
-    "normalized_score": 0.688,
-    "overall_rationale": "The study is a credible and relevant CubeSat MBSE reference-model paper with clear lifecycle context and model-artifact framing, but its evidence is primarily conceptual and it lacks released models, detailed implementation, formal validation, and EPS-specific verification results."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0022.json",
-    "status_rationale": "Retained as supporting because the full text directly addresses CubeSat MBSE reference modeling and concept-phase power/trade modeling, but it does not provide detailed EPS-specific behavioral verification or empirical outcome evidence.",
-    "citation": "Kaslow, D., Ayres, B. J., Iwata, C., and Shiotani, B. (2015). CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase. doi:10.2514/6.2015-4474.",
-    "title": "CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase",
-    "authors": [
-      "David Kaslow",
-      "Bradley J. Ayres",
-      "Curtis Iwata",
-      "Bungo Shiotani"
-    ],
-    "venue": "not reported",
-    "doi_or_url": "10.2514/6.2015-4474",
-    "publisher": "not reported",
-    "venue_type": "conference paper",
-    "source_database_or_route": [
-      "scopus: SLR/SLR1/searches/scopus_q5_reference_model_refined.json rank 37",
-      "scopus: SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json rank 59",
-      "google_scholar abstract_enrichment rank 1",
-      "semantic_scholar abstract_enrichment rank 1"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The paper substantially addresses general CubeSat mission modeling through a reusable SysML/OOSEM reference model, but EPS is only represented at power-subsystem and trade-space level and minimal behavioral domain knowledge is not explicitly analyzed."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims MBSE-enabled consistency, reuse, reduced systems-engineering burden, and integration with other models/simulations, but reliability is not explicitly claimed and outcomes are not EPS-specific or empirically supported."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "The model context includes validation/verification strategies, requirements verification, and pre-development trade studies, but the paper does not detail or evidence EPS-specific verification procedures."
-      }
+    "credible_venue": {
+      "label": "Was the research published in a credible venue?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "A formal AIAA conference paper/proceedings item is indicated by the DOI and AIAA source provenance, with Scopus indexing in the supplied corpus metadata.",
+      "evidence": [
+        "Corpus metadata: DOI=10.2514/6.2015-4474; source provenance includes Scopus records and an AIAA DOI PDF URL.",
+        "Paper title page: 'CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase' with named institutional authors."
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "The paper summarizes earlier INCOSE SSWG/RAX MBSE phases and prior trade studies; those lineage references were treated only as context from this paper, with no other papers or prior extractions read."
+    "limitations_discussed": {
+      "label": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The paper states scope boundaries and future work, but does not provide a formal limitations/threats-to-validity section.",
+      "evidence": [
+        "Section IV, Next Steps: 'The effort to date has been focused on establishing standard nomenclature and definitions... and defining the generic CubeSat architecture down to the logical subsystems.'",
+        "Section IV: 'The next step is to create an example-mission specific model and to validate the MOEs and MOPs.'",
+        "Section III: 'Providing a fully-formed CubeSat Reference Model could be a bit overwhelming for a mission specific CubeSat team...'"
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "label": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "CubeSat/nanosatellite context, form factors, intended users, concept lifecycle emphasis, and broader lifecycle/operations scope are described.",
+      "evidence": [
+        "Introduction: 'A CubeSat, a type of nanosatellite, is a low-cost standardized satellite...'",
+        "Introduction: 'The basic CubeSat unit is 10x10x10 centimeters with a mass of about 1.3 kilograms... referred to as 1U.'",
+        "Section III: 'The reference model supports all life cycle stages... concept, development, production, operational, and retirement. The model supports all phases of operations: launch, early operation, and normal operations.'"
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "label": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "SysML, OOSEM, artifact classes, logical architecture, concept-trade workflow, and candidate distribution mechanisms are reported, but executable interfaces, model files, detailed diagrams, and validation data are not sufficient for full replication.",
+      "evidence": [
+        "Abstract: 'Our application of MBSE uses System Modeling Language (SysML)... to model all aspects of a system either directly or through an interface with another model.'",
+        "Section II.C: 'The team is using the Object-Oriented System Engineering Method (OOSEM)...'",
+        "Section III.C: 'Next, an interface between the mission model and a space system model (e.g., AGI's System Tool Kit) are established.'",
+        "Section III.B/Figure 9 description lists distribution mechanisms: 'MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter.'"
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "label": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "Claimed benefits are linked to the SysML system model, CubeSat Reference Model reuse, model-enabled trade studies, generated views/documents, and reference-model guidance.",
+      "evidence": [
+        "Abstract: 'MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management.'",
+        "Abstract: 'Using the CubeSat Reference Model as a starting point, a user can populate a mission-specific model...'",
+        "Conclusion: 'a properly designed reference model can serve as a checklist... and promote uniformity and consistency across future CubeSat models.'"
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "label": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "Evidence is mostly conceptual, with earlier lineage trade-study examples mentioned but no current quantitative results, baseline comparison, stakeholder evaluation, integration/test evidence, or flight evidence.",
+      "evidence": [
+        "Section III: 'The following two trade studies were demonstrated: 1) On board energy level as a function of solar panel area and maximum battery capacity, and 2) quantity of data downloaded...'",
+        "Section III.C describes the concept-trade workflow but gives no numerical trade-study outputs.",
+        "Section IV: 'The next step is to create an example-mission specific model and to validate the MOEs and MOPs.'"
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "label": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The paper describes requirements diagrams, MOE/MOP/TPM decomposition, model views, and requirements verification context, but does not present concrete traced requirements, verification matrices, or trace-link counts.",
+      "evidence": [
+        "Section II.B: 'Structure behavior, requirement, and parametric diagrams provide views into the model.'",
+        "Section III.C: 'First, the MOEs are decomposed into measures of performances (MOPs) and technical performance measures (TPMs).'",
+        "Figure 8 description: the mission-specific model is connected to 'Validation and Verification Strategies' and 'Trade Studies Requirements Verification.'"
+      ],
+      "confidence": "medium"
+    },
+    "reproducibility_toolchain_reported": {
+      "label": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The paper reports candidate distribution mechanisms and a parameter interface to STK, but public release, licensing, model files, and implementation details remain incomplete.",
+      "evidence": [
+        "Section III.B: 'The SSWG team is developing a model distribution process to share to external entities...'",
+        "Section III.B/Figure 9 description lists 'MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter.'",
+        "Conclusion: 'Several avenues of distribution along with licensing and copyright options are being considered, and the team hopes to release the models publicly in the near future.'"
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "Generic CubeSat/nanosatellite mission reference model covering space and ground systems.",
-    "size_form_factor": "CubeSat unit described as 1U, 10x10x10 cm, about 1.3 kg; 1U, 2U, and 3U common, with 6U, 12U, and 27U newer configurations.",
-    "mission_name": "Generic CubeSat Reference Model; RAX is mentioned as a prior phase, not the main case study.",
-    "mission_domain": "General CubeSat missions including scientific observation, surveillance, and technology demonstration.",
-    "organization_type": "INCOSE Space System Working Group challenge team with academics, aerospace students/professors, NASA/industry practitioners, software developers, and commercial tool vendors; intended for classroom use and CubeSat teams.",
-    "project_maturity": "Phase 4/current effort developing the CubeSat Reference Model; public distribution and example mission validation are future work.",
-    "lifecycle_stage_addressed": "Concept lifecycle phase is emphasized; model is stated to support concept, development, production, operational, and retirement stages plus launch, early operation, and normal operations.",
-    "development_context": "Low-cost, short-lifecycle CubeSat projects, often by first-time teams with limited systems-engineering staffing; model intended as a guide and starting point.",
-    "eps_relevance": "power-budget/electrical-architecture",
-    "model_maturity": "Logical-architecture reference model under development, with standard nomenclature, stakeholder/MOE content, and generic subsystems; not yet publicly released or validated through an example mission in this paper."
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "AIAA DOI/source provenance and Scopus indexing support credible conference/proceedings status.",
+      "evidence": [
+        {
+          "quote": "Corpus metadata: DOI=10.2514/6.2015-4474; source provenance includes Scopus records and an AIAA DOI PDF URL.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Paper title page: 'CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase' with named institutional authors.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Scope/future-work limits are stated, but no systematic limitations or validity threats are discussed.",
+      "evidence": [
+        {
+          "quote": "Section IV, Next Steps: 'The effort to date has been focused on establishing standard nomenclature and definitions... and defining the generic CubeSat architecture down to the logical subsystems.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV: 'The next step is to create an example-mission specific model and to validate the MOEs and MOPs.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III: 'Providing a fully-formed CubeSat Reference Model could be a bit overwhelming for a mission specific CubeSat team...'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "CubeSat form factor, mission/user context, lifecycle phase, and operations stages are described enough to interpret applicability.",
+      "evidence": [
+        {
+          "quote": "Introduction: 'A CubeSat, a type of nanosatellite, is a low-cost standardized satellite...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: 'The basic CubeSat unit is 10x10x10 centimeters with a mass of about 1.3 kilograms... referred to as 1U.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III: 'The reference model supports all life cycle stages... concept, development, production, operational, and retirement. The model supports all phases of operations: launch, early operation, and normal operations.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Core MBSE method/artifacts are named, but the model, interface implementations, and validation data are not provided.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'Our application of MBSE uses System Modeling Language (SysML)... to model all aspects of a system either directly or through an interface with another model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.C: 'The team is using the Object-Oriented System Engineering Method (OOSEM)...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'Next, an interface between the mission model and a space system model (e.g., AGI's System Tool Kit) are established.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.B/Figure 9 description lists distribution mechanisms: 'MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Outcomes are tied to the reference model, single-source SysML repository, diagrams, and concept-trade process.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: 'Using the CubeSat Reference Model as a starting point, a user can populate a mission-specific model...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: 'a properly designed reference model can serve as a checklist... and promote uniformity and consistency across future CubeSat models.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Outcome support is conceptual/illustrative and relies partly on prior-phase examples; no current metrics or baseline are reported.",
+      "evidence": [
+        {
+          "quote": "Section III: 'The following two trade studies were demonstrated: 1) On board energy level as a function of solar panel area and maximum battery capacity, and 2) quantity of data downloaded...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C describes the concept-trade workflow but gives no numerical trade-study outputs.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV: 'The next step is to create an example-mission specific model and to validate the MOEs and MOPs.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Requirements/MOE decomposition and verification context are described, but actual trace links or matrices are not shown.",
+      "evidence": [
+        {
+          "quote": "Section II.B: 'Structure behavior, requirement, and parametric diagrams provide views into the model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'First, the MOEs are decomposed into measures of performances (MOPs) and technical performance measures (TPMs).'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 8 description: the mission-specific model is connected to 'Validation and Verification Strategies' and 'Trade Studies Requirements Verification.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Distribution and exchange paths are listed, but model availability and detailed reproducible toolchain instructions are absent.",
+      "evidence": [
+        {
+          "quote": "Section III.B: 'The SSWG team is developing a model distribution process to share to external entities...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.B/Figure 9 description lists 'MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: 'Several avenues of distribution along with licensing and copyright options are being considered, and the team hopes to release the models publicly in the near future.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "supporting"
+      ],
+      "status": "coded",
+      "rationale": "The supplied corpus metadata marks this item as supporting; the full text supports CubeSat system/reference-model synthesis but lacks detailed EPS verification evidence.",
+      "evidence": [
+        {
+          "quote": "Corpus metadata: screening_tier=supporting.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Title and abstract focus on a CubeSat MBSE reference model and concept lifecycle application.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper centrally addresses a general CubeSat/nanosatellite mission reference model and logical architecture; EPS/power is included only at high-level power-subsystem/trade level.",
+      "evidence": [
+        {
+          "quote": "Goal: 'Provide a CubeSat Reference Model that CubeSat teams can use as starting point for their mission-specific CubeSat model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.A: 'provide a logical architecture... the building blocks for any kind of CubeSat mission.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "It claims reuse, consistency, reduced systems-engineering burden, interface integration, and power-trade support, but not EPS reliability/reproducibility/integrability with empirical evidence.",
+      "evidence": [
+        {
+          "quote": "Conclusion: 'MBSE holds the promise of reducing the burden of systems engineering tasks...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: reference model can 'promote uniformity and consistency across future CubeSat models.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'evaluate a second-order trade space that provides sufficient power...'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "Verification is present only conceptually at mission/reference-model level; no EPS-specific verification procedure model or test artifact is detailed.",
+      "evidence": [
+        {
+          "quote": "Figure 8 description connects the mission-specific model to 'Validation and Verification Strategies' and 'Trade Studies Requirements Verification.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C describes concept-phase trade studies before physical architecture is finalized.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "implementation",
+        "operations"
+      ],
+      "status": "coded",
+      "rationale": "Concept lifecycle is the application focus; the reference model is also stated to support development/production and operations, but those later stages are not demonstrated.",
+      "evidence": [
+        {
+          "quote": "Title: 'Application in the Concept Lifecycle Phase.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: users can 'carry out concept life-cycle studies.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III: 'The reference model supports all life cycle stages... concept, development, production, operational, and retirement. The model supports all phases of operations...'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student",
+        "agency",
+        "industry/NewSpace",
+        "distributed team",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The project targets students/classroom and CubeSat teams, involves NASA/industry/vendor participants, uses distributed meetings/materials, and is motivated by low-cost/small-team CubeSat constraints.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'intended for use by aerospace students in their classroom or by a CubeSat team building a mission-specific CubeSat.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II: 'academics... engineers and software developers from NASA centers and industry, and representatives from commercial software tool vendors.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II: 'The team meets weekly via teleconferencing... Meeting materials and links... are in Google docs.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: CubeSat groups often lack full-time systems engineering 'due to the smaller budgets of CubeSat missions.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "power-budget/electrical-architecture"
+      ],
+      "status": "coded",
+      "rationale": "The paper is not EPS-specific, but includes the Power logical subsystem, subsystem power/weight parametrics, power-related trade-space evaluation, and prior solar-panel/battery trade examples.",
+      "evidence": [
+        {
+          "quote": "Section III.A: 'Power - Generate, regulate, store, and distribute power to the spacecraft.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.B: minimum structure includes 'Properties and parametrics at subsystem level for power and weight.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: candidate models include 'Power' and evaluate 'sufficient power for collect and downlink mission data.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "conceptual framework",
+        "reference model/template"
+      ],
+      "status": "coded",
+      "rationale": "The current paper reports a developing logical-architecture reference model/template; example mission validation and public distribution are future work.",
+      "evidence": [
+        {
+          "quote": "Section III: 'The fourth and current phase is focused on developing a CubeSat Reference Model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV: 'The effort to date has been focused on... defining the generic CubeSat architecture down to the logical subsystems.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV: 'The next step is to create an example-mission specific model and to validate the MOEs and MOPs.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "operations",
+        "simulation",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Scope spans CubeSat mission/system, logical space/ground subsystems including Power, requirements and V&V context, architecture/behavior/parametrics, interfaces to external simulation, operations phases, power/weight budgets, and stakeholder/MOE modeling captured as other.",
+      "evidence": [
+        {
+          "quote": "Abstract: SysML diagrams describe 'requirements, structures, behaviors, and parametrics from the system down to the component level.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.A lists logical space and ground subsystems including 'Power.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 8 description includes 'Validation and Verification Strategies', operations stages, 'Trade Studies Requirements Verification', and 'Interface with COTS Modeling and Simulation Tools.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C discusses stakeholders, MOEs/MOPs/TPMs, STK interface, and state/parametric/activity diagrams.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "state/activity/sequence diagrams",
+        "parametrics",
+        "trade-study models",
+        "power budgets",
+        "generated documents",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Reported artifacts include requirements/structure/behavior/parametric views, SysML blocks, state and activity diagrams, trade-study models, power/weight parametrics, model-generated documents, plus package diagrams and stakeholder/MOE elements as other.",
+      "evidence": [
+        {
+          "quote": "Section II.B/Figure 5: SysML model elements include 'Blocks, Actors, Flow, Signals, Ports' and views include 'Structures', 'Requirements', 'Behaviors', and 'Parametrics.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 5 description: 'Traditional documents can be generated as needed from the model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 8 description lists 'Structure Diagrams, Model Elements, Requirements Diagrams, Behavior Diagrams, Package Diagrams, and Parametric Diagrams.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'the state, parametric, and activity diagrams for the trade studies are devleoped.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "library",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "The CubeSat Reference Model is a reusable starting point/template with logical building blocks, swappable component library, and a described workflow for concept trade studies.",
+      "evidence": [
+        {
+          "quote": "Goal: 'Provide a CubeSat Reference Model that CubeSat teams can use as starting point...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.A: 'provide a logical architecture... building blocks for any kind of CubeSat mission.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 8 description includes 'Space and Ground System Components (Library of components to swap in and out of the model).'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C gives a sequence from MOE decomposition to STK interface and trade-space evaluation.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Extended MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The approach centers on SysML/OOSEM but explicitly connects the system model to external simulations, trade studies, requirements/V&V context, reusable libraries, and multiple lifecycle stages; downstream hardware/software integration is not demonstrated, so it is not coded as Integrated MBSE/digital engineering.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'The system model also integrates other discipline specific engineering models and simulations.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 8 description includes 'Interface with COTS Modeling and Simulation Tools' and lifecycle stages from concept to retirement.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'an interface between the mission model and a space system model (e.g., AGI's System Tool Kit) are established.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "team maturity",
+        "cost",
+        "schedule",
+        "organizational constraints"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring is motivated by CubeSat low cost/short lifecycle, first-time teams, non-full-time systems engineering roles, and the need to avoid overwhelming new MBSE/SysML users.",
+      "evidence": [
+        {
+          "quote": "Introduction: CubeSats can be developed with 'lower cost... and within a shorter timeframe.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: 'most groups that develop CubeSats are doing it for the first time' and systems engineering is not full-time 'due to the smaller budgets.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III: phase-specific models are 'a more gradual way to get up to speed' for teams becoming familiar with MBSE and SysML.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides a concept-trade workflow and model-development guidance, but not a complete step-by-step adopter playbook with entry/exit criteria and implementation details.",
+      "evidence": [
+        {
+          "quote": "Section III.C: 'First, the MOEs are decomposed...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'Next, the model elements... are identified...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'Next, an interface between the mission model and a space system model... are established.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "STK",
+        "Cameo/MagicDraw",
+        "OpenMBEE",
+        "PLM/ALM tools",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "SysML and OOSEM are central; STK is the named external space-system model; MagicDraw, OpenMBEE, and Teamcenter are listed as candidate distribution mechanisms. 'other' covers OOSEM, generic graphical modeling tools, and COTS simulation tools.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'Our application of MBSE uses System Modeling Language (SysML)...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.C: 'The team is using the Object-Oriented System Engineering Method (OOSEM)...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'space system model (e.g., AGI's System Tool Kit).'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 9 description lists 'MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "import/export",
+        "XML/XMI"
+      ],
+      "status": "coded",
+      "rationale": "The paper describes parameter input/output between SysML mission model and STK at a high level and lists XMI/ZIP/tool-file distribution paths; no API/plugin/co-simulation implementation is reported.",
+      "evidence": [
+        {
+          "quote": "Section III.C: 'The interface supports the input (driving parameters) into the space system model and the output (quantifying parameters) from the space system model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 9 description lists distribution mechanisms including 'ZIP File' and 'XMI File.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No explicit toolchain limitations such as vendor lock-in, manual translation, broken traceability, missing interfaces, scalability, or licensing/cost are evaluated; unresolved distribution/licensing and missing interface details are captured in structured limitations rather than as author-coded toolchain limits.",
+      "evidence": [
+        {
+          "quote": "Conclusion only states that 'licensing and copyright options are being considered'; no toolchain limitation analysis is provided.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "loads",
+        "power budgets"
+      ],
+      "status": "coded",
+      "rationale": "Power is represented at logical/subsystem and trade-parameter level: generating/regulating/storing/distributing power, subsystem power/weight parametrics, loads from data collection/downlink, and prior solar-panel/battery trade examples. This is not a detailed EPS behavior model.",
+      "evidence": [
+        {
+          "quote": "Section III.A: 'Power - Generate, regulate, store, and distribute power to the spacecraft.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.B: minimum structure includes 'Properties and parametrics at subsystem level for power and weight.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: second-order trade space provides 'sufficient power for collect and downlink mission data.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III: prior trade study: 'On board energy level as a function of solar panel area and maximum battery capacity.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper mentions V&V strategies and requirements verification context, but does not report controlled EPS V&V artifacts such as verification matrices, test cases/procedures, acceptance criteria, executable checks, SIL/HIL links, or automated tests.",
+      "evidence": [
+        {
+          "quote": "Figure 8 description includes 'Validation and Verification Strategies' and 'Trade Studies Requirements Verification', but no EPS verification matrix/test artifact is detailed.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "simulation-in-the-loop",
+        "trade-study verification"
+      ],
+      "status": "coded",
+      "rationale": "Concept-phase trade studies use state/parametric/activity diagrams and an STK interface before physical architecture is finalized; the mechanism is system/power trade verification, not an EPS verification procedure model.",
+      "evidence": [
+        {
+          "quote": "Section III.C: 'an interface between the mission model and a space system model (e.g., AGI's System Tool Kit) are established.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'parametric diagrams... capture characteristic parameters to enable quantification of mission performance.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'The model is used to establish and evaluate a second-order trade space that provides sufficient power...'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No links are reported from the model to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation for EPS/system integration.",
+      "evidence": [
+        {
+          "quote": "No hardware/software integration, testbed, environmental-test, or operational-validation evidence appears in Sections III.C-IV; validation is future work.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "reproducibility",
+        "integrability/interoperability",
+        "generality/reuse",
+        "traceability",
+        "consistency",
+        "completeness",
+        "effort reduction",
+        "automation",
+        "decision support",
+        "communication/stakeholder alignment",
+        "lifecycle continuity"
+      ],
+      "status": "coded",
+      "rationale": "Claims cover model reuse/start-up, single-source traceability and interface integration, automatic view/document updates, stakeholder/MOE alignment, concept trade decision support, lifecycle support, and reduced systems-engineering burden/uniformity.",
+      "evidence": [
+        {
+          "quote": "Abstract: system model is a 'single source' and 'integrates other discipline specific engineering models and simulations.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 5 description: 'Model updates are automatically populated into the system views.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C describes MOE/MOP/TPM trade-space evaluation.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion: reference model can reduce 'burden', serve as 'checklist', and promote 'uniformity and consistency.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level",
+        "generic MBSE"
+      ],
+      "status": "coded",
+      "rationale": "Most outcome claims apply to CubeSat/nanosatellite system-level reference modeling; some single-source MBSE statements are generic MBSE background.",
+      "evidence": [
+        {
+          "quote": "Abstract and conclusion frame benefits for CubeSat missions and CubeSat teams.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II.A gives generic MBSE contrast with document-centric systems engineering.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "executable simulation",
+        "parametric analysis",
+        "reference model reuse",
+        "automated generation",
+        "shared repository",
+        "requirements linkage",
+        "tool integration"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms include the SysML repository/views, reference-model reuse, requirements/MOE linkage, parametric trade analysis, STK tool interface, model-generated documents/views, and conceptual simulation support.",
+      "evidence": [
+        {
+          "quote": "Figure 5: 'The model' is an 'Authoritative, integrated repository...' and documents/views can be generated from it.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: STK interface, state/parametric/activity diagrams, and trade-space evaluation.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: users can populate a mission-specific model from the reference model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "implementation",
+        "operations"
+      ],
+      "status": "coded",
+      "rationale": "Claims are strongest for concept studies; lifecycle-continuity claims mention development/production and operations, but evidence is not demonstrated beyond concept workflow.",
+      "evidence": [
+        {
+          "quote": "Title and abstract emphasize concept lifecycle studies.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III: model supports 'concept, development, production, operational, and retirement' and 'launch, early operation, and normal operations.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration"
+      ],
+      "status": "coded",
+      "rationale": "Current-paper claims are mostly asserted or conceptually argued; a prior RAX single-case/trade-study lineage is mentioned but not reproduced with results in this paper.",
+      "evidence": [
+        {
+          "quote": "Conclusion: 'MBSE holds the promise of reducing the burden...'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C provides a conceptual sequence for concept trade studies.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III: previous phases 'were demonstrated' for RAX/trade studies.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "effort",
+        "model reuse",
+        "power margin",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Value indicators include reduced systems-engineering burden (effort), reuse/starting-point use, sufficient power/power-related trade evaluation, and MOE/MOP/TPM measures captured as other. No quantitative adoption metric is reported.",
+      "evidence": [
+        {
+          "quote": "Conclusion: 'reducing the burden of systems engineering tasks.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Goal: reference model as 'starting point' for mission-specific models.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: 'sufficient power for collect and downlink mission data.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C: MOEs are decomposed into 'MOPs' and 'TPMs.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [
+        "previous document-centric process",
+        "not reported"
+      ],
+      "status": "coded",
+      "rationale": "The MBSE background contrasts document-centric/ad hoc modeling with a model repository; most CubeSat-reference-model outcome claims lack a stated baseline/comparator.",
+      "evidence": [
+        {
+          "quote": "Section II.A: 'Documents are used to record, store, and convey...' and ad hoc models 'are not integrated into an overarching system model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "No quantitative comparator is reported for the concept reference-model claims.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak"
+      ],
+      "status": "coded",
+      "rationale": "Broad burden/uniformity/public-release claims are unsupported or future-facing; trade-study and integration claims have weak conceptual or lineage support without current results, metrics, baselines, or validation.",
+      "evidence": [
+        {
+          "quote": "Section IV: validation of MOEs/MOPs is future work.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion uses future/promise language: 'holds the promise' and 'hopes to release'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [
+        "ownership",
+        "model quality criteria",
+        "naming/versioning conventions"
+      ],
+      "status": "coded",
+      "rationale": "Governance is described conceptually through SSWG ownership/licensing, standards/conventions guidance, management/sharing, and planned validation; concrete configuration/change control or review procedures are not detailed.",
+      "evidence": [
+        {
+          "quote": "Figure 7 description lists model development items: 'Plan', 'Tool Set', 'Standards and Conventions Guidance', 'Management and Sharing', and 'Validation.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.B: SSWG must 'protect the investment of time and knowledge of each team member' and establish a licensing environment.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 9 description includes 'Copyright and License' and 'User Feedback Mechanisms.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No evidence is reported for MBSE adoption cost, training/tooling effort, saved effort, schedule effect, avoided rework, realized reuse value, decision quality, or mission assurance benefit; only expected/potential value is claimed.",
+      "evidence": [
+        {
+          "quote": "Conclusion claims MBSE 'holds the promise of reducing the burden' but provides no measured ROI/value-realization result.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper outlines concept-trade steps and model-development elements, but does not demonstrate them with a current mission-specific example or results.",
+      "evidence": [
+        {
+          "quote": "Section III.C lays out MOE decomposition, model-element/parameter identification, STK interface, diagram development, and trade-space evaluation.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section IV says the next step is to create an example mission-specific model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper describes interfaces to external models and lists distribution/exchange mechanisms, but lacks implemented data-flow details or interoperability evaluation.",
+      "evidence": [
+        {
+          "quote": "Abstract: model can represent systems 'directly or through an interface with another model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III.C describes input/output parameter exchange with STK.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 9 lists XMI/OpenMBEE/Teamcenter distribution paths.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The motivation and tailoring are explicitly for low-cost, short-lifecycle, small/first-time CubeSat teams and gradual lifecycle-phase models, but effectiveness is not evaluated.",
+      "evidence": [
+        {
+          "quote": "Introduction: CubeSat teams have low cost/short life cycle and smaller budgets; many are first-time developers.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section III: lifecycle-phase models are proposed to avoid overwhelming new MBSE/SysML users.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper discusses standards/conventions, management/sharing, licensing, distribution, generated documents, and model-derived trade measures, but provides no ROI evidence or design-review gate outcomes.",
+      "evidence": [
+        {
+          "quote": "Figure 7 includes 'Standards and Conventions Guidance', 'Management and Sharing', and 'Validation.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 5 says traditional documents can be generated as needed from the model.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Conclusion says licensing/copyright options are under consideration.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "The paper mentions short lifecycles, low cost, technology maturation, and distributed teleconferencing/Google Docs, but does not explicitly adopt NewSpace/agile/concurrent/rapid-iteration practices.",
+      "evidence": [
+        {
+          "quote": "Introduction: CubeSats have 'shorter turnaround time and reduced cost.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section II: team meets weekly by teleconference and materials are in Google docs.",
+          "location": "not specified"
+        },
+        {
+          "quote": "No explicit NewSpace or agile process is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The markdown is complete and the main context/method claims are clear. Confidence in extraction is high, while confidence in outcome effects is limited because claims are mostly conceptual/future-facing.",
+      "evidence": [
+        {
+          "quote": "Complete paper sections I-V and references are available in the markdown.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Ambiguities are mainly about current reference-model evidence versus prior SSWG/RAX lineage.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Many CubeSat teams are first-time developers with limited systems-engineering capacity; the project aims to demonstrate MBSE/OOSEM and provide a reusable CubeSat Reference Model for mission-specific models and concept lifecycle studies.",
-    "modeling_scope": [
-      "CubeSat mission stakeholders, needs, objectives, constraints, and measures of effectiveness",
-      "Lifecycle stages from conception through retirement and operations phases of launch, early operations, and normal operations",
-      "Logical architecture for space and ground subsystems",
-      "Power and weight properties and parametrics at subsystem level",
-      "Data and information flows for plans, schedules, commands, telemetry, and mission data",
-      "Mission trade-space exploration using MOEs, MOPs, TPMs, state diagrams, parametric diagrams, activity diagrams, and simulation interfaces",
-      "Foundation for physical, mechanical, electrical, testing, and operational requirements through a SysML model of the Cal Poly CubeSat Design Specification"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "no_pre_physical_verification_model",
+      "interoperability_limitations",
+      "learning_curve_or_training_burden",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage",
+      "lineage_or_duplicate_reference_model_overlap"
     ],
-    "system_boundary_level_of_abstraction": "System-of-interest is a CubeSat mission including space and ground systems; abstraction is mainly logical subsystem architecture and concept-phase measures/trades, with physical architecture intended to be created by mission teams.",
-    "minimal_or_excluded_modeling": "The paper does not provide detailed physical architecture, component implementation, detailed EPS behavior, executable model files, or validation results; example mission validation is future work.",
-    "required_prior_behavioral_domain_knowledge": "not reported; users are expected to populate mission-specific objectives, model elements, driving/quantifying parameters, and simulation interfaces, while the reference model supplies logical elements and guidance.",
-    "handling_limited_behavioral_knowledge": "The reference model supplies reusable logical building blocks, standard nomenclature, stakeholder/MOE structure, and lifecycle-specific models so teams can start gradually rather than building behavior models from scratch.",
-    "model_artifacts_used": [
-      "SysML blocks",
-      "actors",
-      "flows",
-      "signals",
-      "ports",
-      "block properties including parts, values, and operations",
-      "structure diagrams",
-      "requirements diagrams",
-      "behavior diagrams",
-      "package diagrams",
-      "parametric diagrams",
-      "state diagrams",
-      "activity diagrams",
-      "logical space and ground subsystem blocks",
-      "stakeholder needs, objectives, constraints, MOEs, MOPs, and TPMs",
-      "mission-specific model derived from the CubeSat Reference Model"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The current reference model is still under development and validation/public release are future steps.",
+        "confidence": "high",
+        "evidence_quote": "Section IV: 'The next step is to create an example-mission specific model and to validate the MOEs and MOPs.' Conclusion: the team 'hopes to release the models publicly in the near future.'"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "author_stated",
+        "rationale": "The current paper focuses on concept lifecycle/reference-model architecture and prior evidence comes from the RAX lineage rather than multiple independent cases.",
+        "confidence": "high",
+        "evidence_quote": "Section III describes Phase 1 application to 'Radio Aurora Explorer (RAX), a 3U CubeSat' and Section IV says current effort is generic architecture down to logical subsystems."
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "No quantitative evaluation of MBSE benefits or current concept-model outputs is reported in this paper.",
+        "confidence": "high",
+        "evidence_quote": "Completed extraction: evidence_for_outcomes is Insufficiently; claimed outcome metrics are mostly MOE/MOP/TPM concepts, not reported numerical results or adoption metrics."
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "The paper conceptually contrasts document-centric practice but does not compare outcomes against a baseline process, mission, or toolchain.",
+        "confidence": "high",
+        "evidence_quote": "Structured outcome baseline_comparator includes previous document-centric process only as background; most claims are not compared and no quantitative comparator is present."
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "author_stated",
+        "rationale": "Validation has not yet been performed for the current concept model measures.",
+        "confidence": "high",
+        "evidence_quote": "Section IV: 'The next step is to create an example-mission specific model and to validate the MOEs and MOPs.'"
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "No flat-sat, hardware integration, environmental test, operational, or flight evidence is reported for the reference-model claims.",
+        "confidence": "high",
+        "evidence_quote": "Completed extraction: eps_verification_specific.integration_test_readiness is not_reported; Sections III.C-IV discuss concept trade studies and future validation, not tests or flight operations."
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "Power/EPS appears as a logical subsystem and trade concern, but no detailed EPS model, EPS requirements, or EPS outcome evidence is provided.",
+        "confidence": "high",
+        "evidence_quote": "EPS extraction: Power subsystem and power/weight parametrics are reported, while EPS requirements representation and V&V artifacts are not_reported or only conceptual."
+      },
+      {
+        "flag": "no_pre_physical_verification_model",
+        "source": "extractor_identified",
+        "rationale": "The paper describes concept trade-study verification but not an explicit EPS verification procedure model integrated before hardware development.",
+        "confidence": "high",
+        "evidence_quote": "Figure 8 mentions 'Validation and Verification Strategies' and 'Trade Studies Requirements Verification', but no verification matrix, test procedure, acceptance criteria, SIL/HIL, or automated check is reported."
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "extractor_identified",
+        "rationale": "The STK/external-model interface is described only as parameter input/output, and distribution/exchange mechanisms are listed without implementation details or semantic-continuity evidence.",
+        "confidence": "medium",
+        "evidence_quote": "Section III.C: the interface supports input/output parameters; no API, plugin, schema, synchronization procedure, or exchange validation is described."
+      },
+      {
+        "flag": "learning_curve_or_training_burden",
+        "source": "author_stated",
+        "rationale": "The authors note that a fully formed reference model can overwhelm teams new to MBSE/SysML and propose lifecycle-phase models to ease adoption.",
+        "confidence": "high",
+        "evidence_quote": "Section III: 'Providing a fully-formed CubeSat Reference Model could be a bit overwhelming... especially a team that is just becoming familiar with MBSE and SysML.'"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "author_stated",
+        "rationale": "The model distribution process and public release are future-facing; the paper does not make model files available.",
+        "confidence": "high",
+        "evidence_quote": "Section III.B: 'The SSWG team is developing a model distribution process...' Conclusion: 'hopes to release the models publicly in the near future.'"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "extractor_identified",
+        "rationale": "Although full lifecycle support is claimed, detailed workflow and evidence are limited to concept studies and planned validation.",
+        "confidence": "high",
+        "evidence_quote": "Completed extraction: lifecycle_stage_addressed includes concept with claimed later stages; integration_test_readiness is not_reported and no implementation/operations case results are present."
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Major benefits such as burden reduction, checklist value, uniformity, consistency, and future public release are asserted or argued conceptually without direct evaluation.",
+        "confidence": "high",
+        "evidence_quote": "Conclusion: 'MBSE holds the promise of reducing the burden...' and 'can serve as a checklist... promote uniformity and consistency'; no measured effect follows."
+      },
+      {
+        "flag": "lineage_or_duplicate_reference_model_overlap",
+        "source": "author_stated",
+        "rationale": "The paper is part of the INCOSE SSWG CubeSat MBSE Challenge lineage and overlaps with prior RAX/reference-model papers that should not be counted as independent studies.",
+        "confidence": "high",
+        "evidence_quote": "Section III lists phases: Phase 1 RAX model, Phase 2 behavior/COTS simulations, Phase 3 enterprise/trade studies, and Phase 4 current CubeSat Reference Model; references include prior SSWG papers."
+      }
     ],
-    "generality_reuse_mechanism": [
-      "Object-oriented logical architecture with reusable subsystem objects",
-      "Reference model used as a starting point for mission-specific CubeSat models",
-      "Teams can add or remove subsystems based on mission requirements and objectives",
-      "Lifecycle-phase models make adoption more gradual for new users",
-      "Planned distribution through MagicDraw, ZIP file, XMI file, OpenMBEE, and Teamcenter",
-      "Library of space and ground system components to swap in and out of mission-specific models"
+    "emergent_limitations": [
+      {
+        "label": "distribution-licensing-unresolved",
+        "source": "author_stated",
+        "rationale": "Beyond model non-availability, copyright/licensing choices remain unsettled and may affect reuse.",
+        "evidence": "Conclusion: 'Several avenues of distribution along with licensing and copyright options are being considered...'",
+        "confidence": "high",
+        "evidence_quote": "Conclusion: 'Several avenues of distribution along with licensing and copyright options are being considered...'"
+      },
+      {
+        "label": "primary-evidence-mixed-with-lineage-summary",
+        "source": "extractor_identified",
+        "rationale": "The paper summarizes earlier SSWG/RAX phases and trade studies, making it important to separate current reference-model claims from prior-paper evidence.",
+        "evidence": "Section III summarizes Phases 1-3 before describing the current Phase 4 reference model.",
+        "confidence": "high",
+        "evidence_quote": "Section III summarizes Phases 1-3 before describing the current Phase 4 reference model."
+      },
+      {
+        "label": "regulatory-modeling-depth-not-developed",
+        "source": "extractor_identified",
+        "rationale": "Regulatory stakeholders and approval timelines are highlighted, but the paper does not show modeled regulatory requirements, compliance workflows, or evidence outputs.",
+        "evidence": "Section III notes FCC/NOAA/orbital-debris approvals and says timelines 'must be well understood at project start', but no regulatory model artifact is detailed.",
+        "confidence": "medium",
+        "evidence_quote": "Section III notes FCC/NOAA/orbital-debris approvals and says timelines 'must be well understood at project start', but no regulatory model artifact is detailed."
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Start from the CubeSat Reference Model and identify concept-phase stakeholders.",
-        "inputs": "CubeSat Reference Model, mission context, potential stakeholder list.",
-        "outputs": "Mission-specific stakeholder set with needs, objectives, constraints, and MOEs.",
-        "actors_roles": "CubeSat team, systems engineer/modeler, mission stakeholders.",
-        "prerequisites": "Access to the reference model and basic SysML/MBSE capability.",
-        "completion_criteria": "Stakeholder needs, objectives, constraints, and MOEs are represented in the mission-specific model.",
-        "handoffs": "Provides measures and constraints for MOE decomposition and trade-space definition."
-      },
-      {
-        "step": "Decompose MOEs into MOPs and TPMs and define the trade space.",
-        "inputs": "Stakeholder MOEs, objectives, constraints, and possible decompositions.",
-        "outputs": "MOPs, TPMs, and alternative decompositions included in the trade space.",
-        "actors_roles": "Systems engineer/modeler with stakeholder review.",
-        "prerequisites": "Agreed concept-phase objectives and constraints.",
-        "completion_criteria": "Measures and technical parameters are identified for candidate trades.",
-        "handoffs": "Feeds selection of model elements and driving/quantifying parameters."
-      },
-      {
-        "step": "Identify model elements and parameters involved in initial trade studies.",
-        "inputs": "Mission objectives, candidate satellites/orbits/sensors/ground stations, MOE/MOP/TPM definitions.",
-        "outputs": "Relevant model elements plus driving parameters and quantifying parameters.",
-        "actors_roles": "Systems engineer, subsystem leads, mission analyst.",
-        "prerequisites": "Reference-model logical architecture and preliminary mission objectives.",
-        "completion_criteria": "Parameters that drive and quantify measures are linked to model elements.",
-        "handoffs": "Defines interface needs for external space-system or simulation models."
-      },
-      {
-        "step": "Establish interface between the mission model and a space-system model such as AGI's System Tool Kit.",
-        "inputs": "Driving parameters from SysML mission model and target simulation/modeling tool.",
-        "outputs": "Input/output mapping between SysML model and external analysis model.",
-        "actors_roles": "MBSE modeler and simulation/tool specialist.",
-        "prerequisites": "Identified parameters and access to chosen simulation/modeling tool.",
-        "completion_criteria": "The interface supports input of driving parameters and output of quantifying parameters.",
-        "handoffs": "Supports construction of state, parametric, and activity diagrams for trades."
-      },
-      {
-        "step": "Develop state, parametric, and activity diagrams for concept trade studies.",
-        "inputs": "Model elements, parameter mappings, internal/external events, and scenario control logic.",
-        "outputs": "State diagrams for behavior changes, parametric diagrams for performance quantification, and activity diagrams for scenario actions and flows.",
-        "actors_roles": "Systems engineer/modeler, mission analyst, subsystem leads.",
-        "prerequisites": "Mission/simulation interface and measure definitions.",
-        "completion_criteria": "Trade-study behavior, constraints, parameters, and flows are represented in SysML diagrams.",
-        "handoffs": "Enables first-order and second-order trade-space evaluation."
-      },
-      {
-        "step": "Explore mission trade space and create candidate subsystem models for data acquisition/handling, power, and communication.",
-        "inputs": "First-order trade space, model parameters, candidate subsystem concepts, simulation outputs.",
-        "outputs": "Candidate models and second-order trade-space evaluation for sufficient power to collect and downlink mission data.",
-        "actors_roles": "CubeSat team, subsystem leads, systems engineer.",
-        "prerequisites": "Executable or analyzable trade-study model structure.",
-        "completion_criteria": "Candidate concepts meet established measures for data collection/downlink and sufficient power at concept level.",
-        "handoffs": "Informs mission-specific physical architecture and later lifecycle development."
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The paper maps MBSE to requirements, design, analysis, verification, and validation beginning in conceptual design, and maps OOSEM to stakeholder-needs analysis, system requirements, logical architecture, and candidate physical architecture synthesis. It names lifecycle stages but does not map to formal PDR/CDR gates.",
-    "approach_classification": "Integrated MBSE/digital engineering",
-    "approach_classification_rationale": "The core is SysML/OOSEM MBSE, but the paper explicitly integrates discipline-specific models and simulations, COTS simulation tools, and data exchange/distribution mechanisms such as XMI, OpenMBEE, and Teamcenter.",
-    "tailoring_rationale": [
-      "CubeSat teams often have low budgets, short lifecycles, and limited systems-engineering staffing.",
-      "Many groups develop CubeSats for the first time and need a guide/tool.",
-      "Lifecycle-phase models are proposed as a more gradual way for new SysML/MBSE users to get up to speed.",
-      "A logical reference architecture lets teams create their own physical architecture and add/remove subsystems according to mission requirements."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "SysML",
-      "OOSEM",
-      "graphical modeling tools",
-      "MagicDraw",
-      "XMI file exchange",
-      "OpenMBEE",
-      "Teamcenter",
-      "AGI System Tool Kit",
-      "COTS modeling and simulation tools"
-    ],
-    "toolchain_architecture_data_flow": "SysML model is positioned as the single authoritative repository; diagrams are views of underlying model elements. Mission-model parameters are passed to external space-system models such as STK, and quantifying parameters return to support trade studies. Planned distribution uses model/tool files and repositories.",
-    "interoperability_mechanisms": [
-      "Interfaces with other models",
-      "Interface with COTS modeling and simulation tools",
-      "Input of driving parameters to space-system model",
-      "Output of quantifying parameters from space-system model",
-      "XMI file distribution/exchange",
-      "MagicDraw model files or ZIP files",
-      "OpenMBEE and Teamcenter distribution paths",
-      "Traditional documents generated as needed from the model"
-    ],
-    "syntax_semantic_continuity_evidence": "The paper states that the model is a single authoritative integrated repository, uses SysML/OOSEM and standard nomenclature/definitions, and that model updates automatically populate views; however, no round-trip exchange test or semantic consistency evaluation is reported.",
-    "software_hardware_system_integration_readiness": "Conceptual readiness only: the model is intended to integrate hardware, software, data, procedures, and external simulations, but no software/hardware integration test or flight-system implementation is reported.",
-    "toolchain_limitations": [
-      "Model distribution process is still being developed.",
-      "Licensing and copyright options are still under consideration.",
-      "Public model release is future work.",
-      "Interfaces to COTS simulations are described at a high level without implementation details.",
-      "Validation of MOEs and MOPs is a next step."
-    ],
-    "availability_reproducibility": "The reference model is not provided in the paper. Reproducibility is partially supported by named methods, artifacts, and planned distribution mechanisms, but model files, interface specifications, and validation data are not available in the text."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "Power logical subsystem: generate, regulate, store, and distribute power to the spacecraft",
-      "Subsystem-level properties and parametrics for power and weight",
-      "Candidate Power subsystem models in second-order trade-space evaluation",
-      "Power sufficiency for collecting and downlinking mission data",
-      "Prior-phase examples mentioned in this paper: onboard energy level as a function of solar panel area and maximum battery capacity"
-    ],
-    "eps_requirements_representation": "EPS-specific requirements are not detailed. The paper states that requirements diagrams exist in the SysML model and that a SysML model of the Cal Poly CubeSat Design Specification will support physical, mechanical, electrical, testing, and operational requirements.",
-    "verification_validation_artifacts": [
-      "Validation and Verification Strategies input to mission-specific model",
-      "Trade Studies Requirements Verification output/context in mission-specific model",
-      "Requirements diagrams",
-      "MOE, MOP, and TPM decomposition",
-      "State diagrams",
-      "Parametric diagrams",
-      "Activity diagrams",
-      "Planned validation of MOEs and MOPs"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "Concept-phase trade-space exploration before physical architecture is finalized",
-      "MOE/MOP/TPM decomposition to connect stakeholder measures to technical parameters",
-      "State/parametric/activity diagrams to model events, constraints, and scenario flows",
-      "Interface from mission model to STK or other space-system models for performance quantification",
-      "Requirements verification represented as part of the mission-specific model context"
-    ],
-    "evidence_verification_integrated_in_model": "Model-level integration is indicated by Figure 8 descriptions of Validation and Verification Strategies and Trade Studies Requirements Verification connected to the mission-specific model, plus the MBSE definition including verification and validation. No EPS-specific verification procedure or result is reported.",
-    "integration_test_readiness": "Concept-phase only; the paper provides no EPS hardware integration, electrical test, environmental test, or flight/operational verification results."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "A SysML system model provides a single source for architecture development and interface management and integrates discipline-specific models/simulations.",
-      "outcome_category": "architecture and interface integration",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "SysML system model",
-        "single authoritative repository",
-        "interfaces with discipline-specific models and simulations",
-        "structure, behavior, requirement, and parametric views"
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool=other",
+      "label": "oosem-methodology",
+      "description": "Object-Oriented Systems Engineering Method is the systems-engineering methodology paired with SysML to define stakeholder needs, requirements, logical architecture, and candidate physical architectures.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section II.C: 'The team is using the Object-Oriented System Engineering Method (OOSEM)...'",
+      "confidence": "medium",
+      "original_label": "OOSEM methodology",
+      "type": "method",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+        "implementation_pathway_tailoring"
       ],
-      "artifact_or_process_linked": "CubeSat Reference Model and mission-specific SysML model.",
-      "lifecycle_stage": "concept through later lifecycle phases",
-      "evidence_type": "conceptual mechanism described in abstract and MBSE background",
-      "metric_or_value_indicator": "No metric reported; value indicator is single-source architecture/interface management.",
-      "baseline_comparator": "Document-based design and ad hoc modeling are contrasted conceptually, without quantitative comparison.",
-      "observed_effect_size_or_qualitative_effect": "not measured",
-      "evidence_source": "Abstract; Section II.A; Figure 5 description",
-      "direct_quote": "MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management. The system model also integrates other discipline specific engineering models and simulations.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The benefit is plausible from the architecture but no integration test, stakeholder evaluation, or defect-reduction evidence is reported."
+      "controlled_other_trigger": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool=other"
     },
     {
-      "claim": "The CubeSat Reference Model can serve as a reusable starting point and building-block framework for mission-specific CubeSat models.",
-      "outcome_category": "reuse and generality",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "logical architecture",
-        "object-oriented subsystem elements",
-        "mission-specific model population",
-        "add/remove subsystem tailoring"
+      "field_path": "mbse_objective_scope_artifacts.modeling_scope=other; claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator=other",
+      "label": "moe-mop-tpm-trade-space-modeling",
+      "description": "Concept lifecycle use decomposes stakeholder measures of effectiveness into measures of performance and technical performance measures for trade-space evaluation.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.C: 'First, the MOEs are decomposed into measures of performances (MOPs) and technical performance measures (TPMs).'",
+      "confidence": "medium",
+      "original_label": "MOE/MOP/TPM trade-space modeling",
+      "type": "method_mechanism_metric",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.modeling_scope",
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator"
       ],
-      "artifact_or_process_linked": "CubeSat Reference Model logical architecture and mission-specific model derivation.",
-      "lifecycle_stage": "concept lifecycle phase and future lifecycle phases",
-      "evidence_type": "reference-model architecture description",
-      "metric_or_value_indicator": "No reuse metric reported.",
-      "baseline_comparator": "No baseline model-development effort reported.",
-      "observed_effect_size_or_qualitative_effect": "not measured",
-      "evidence_source": "Abstract; Section III.A",
-      "direct_quote": "The purpose of the CubeSat Reference Model is to provide a logical architecture, which serves as a guide and provide the building blocks for any kind of CubeSat mission.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Generality is asserted from logical decomposition; no independent reuse across multiple missions is shown in this paper."
+      "controlled_other_trigger": "mbse_objective_scope_artifacts.modeling_scope=other; claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator=other"
     },
     {
-      "claim": "The reference model can reduce systems-engineering burden for small CubeSat teams and promote uniformity and consistency across future models.",
-      "outcome_category": "efficiency and consistency",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "properly designed reference model",
-        "checklist for teams",
-        "standard nomenclature and definitions",
-        "common logical subsystem architecture"
+      "field_path": "mbse_objective_scope_artifacts.modeling_scope=other",
+      "label": "stakeholder-and-regulatory-agency-modeling",
+      "description": "The reference model explicitly includes stakeholder needs, objectives, constraints, MOEs, and regulatory agencies/timelines as concept-phase modeling content.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III: 'Each stakeholder's needs, objectives, constraints, and measures of effectiveness are incorporated in the reference model.'",
+      "confidence": "medium",
+      "original_label": "Stakeholder and regulatory-agency modeling",
+      "type": "artifact_theme",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.modeling_scope",
+        "study_context_population"
       ],
-      "artifact_or_process_linked": "CubeSat Reference Model used by small teams.",
-      "lifecycle_stage": "future CubeSat development lifecycle",
-      "evidence_type": "conclusion assertion",
-      "metric_or_value_indicator": "No cost, schedule, error, or consistency metric reported.",
-      "baseline_comparator": "Traditional small-team systems engineering is discussed qualitatively, but no measured baseline is provided.",
-      "observed_effect_size_or_qualitative_effect": "not measured",
-      "evidence_source": "Section V Conclusion",
-      "direct_quote": "MBSE holds the promise of reducing the burden of systems engineering tasks, which is beneficial to small CubeSat teams, and a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "The claim is forward-looking and depends on model usability, team adoption, and project governance that are not evaluated."
+      "controlled_other_trigger": "mbse_objective_scope_artifacts.modeling_scope=other"
     },
     {
-      "claim": "Concept-phase trade studies can evaluate mission measures and power sufficiency for collecting and downlinking mission data.",
-      "outcome_category": "early performance and power-budget assessment",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "MOE/MOP/TPM decomposition",
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used=other",
+      "label": "package-diagrams",
+      "description": "Package diagrams are listed in the mission-specific model but are not a controlled artifact label in the codebook.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Figure 8 description lists 'Package Diagrams' inside the Mission Specific Model.",
+      "confidence": "medium",
+      "original_label": "Package diagrams",
+      "type": "model_artifact",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.model_artifacts_used"
+      ],
+      "controlled_other_trigger": "mbse_objective_scope_artifacts.model_artifacts_used=other"
+    },
+    {
+      "field_path": "implementation_pathway_tailoring.tailoring_rationale",
+      "label": "mission-specific-lifecycle-model-subsets",
+      "description": "The authors propose models for each lifecycle phase as a gradual adoption path for teams new to MBSE/SysML.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III: 'Having models for each life-cycle phase is a more gradual way to get up to speed.'",
+      "confidence": "medium",
+      "original_label": "Mission-specific lifecycle model subsets",
+      "type": "tailoring_mechanism",
+      "applies_to": [
+        "implementation_pathway_tailoring.tailoring_rationale",
+        "gap_mapping.lightweight_resource_constrained_tailoring"
+      ]
+    },
+    {
+      "field_path": "governance_roi_project_decision_linkage.model_governance_strategy",
+      "label": "reference-model-distribution-and-licensing-governance",
+      "description": "Distribution options, copyright/license, SSWG ownership concerns, and user feedback mechanisms are part of the model-governance story but are only conceptual/planned.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.B and Figure 9 describe distribution mechanisms, 'Copyright and License', and 'User Feedback Mechanisms'.",
+      "confidence": "medium",
+      "original_label": "Reference-model distribution and licensing governance",
+      "type": "governance_theme",
+      "applies_to": [
+        "governance_roi_project_decision_linkage.model_governance_strategy",
+        "toolchain_interoperability_lifecycle_continuity"
+      ]
+    },
+    {
+      "field_path": "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms",
+      "label": "agi-stk-parameter-coupled-concept-trades",
+      "description": "The mission SysML model is proposed to pass driving parameters to STK and receive quantifying parameters for performance trade studies.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.C: 'The interface supports the input (driving parameters)... and the output (quantifying parameters)...'",
+      "confidence": "medium",
+      "original_label": "AGI STK parameter-coupled concept trades",
+      "type": "toolchain_mechanism",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms",
+        "claimed_outcomes_value_mechanisms_evidence"
+      ]
+    },
+    {
+      "field_path": "study_context_population.development_context",
+      "label": "classroom-and-team-onboarding-use-case",
+      "description": "The reference model is intended both for aerospace classroom instruction and for CubeSat teams building mission-specific models.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Abstract: 'intended for use by aerospace students in their classroom or by a CubeSat team building a mission-specific CubeSat.'",
+      "confidence": "medium",
+      "original_label": "Classroom and team onboarding use case",
+      "type": "adoption_context",
+      "applies_to": [
+        "study_context_population.development_context",
+        "mbse_objective_scope_artifacts.generality_reuse_mechanism"
+      ]
+    }
+  ],
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0022",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0022.json",
+      "tier_status": "supporting",
+      "tier_rationale": "Directly relevant to CubeSat system-level MBSE reference modeling and concept-phase power/trade modeling, but supporting rather than core because it lacks detailed EPS-specific model evidence, quantitative outcomes, and integrated EPS verification procedures.",
+      "citation": "Kaslow, D., Ayres, B. J., Iwata, C., and Shiotani, B. (2015). CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase. DOI:10.2514/6.2015-4474.",
+      "title": "CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase",
+      "authors": [
+        "David Kaslow",
+        "Bradley J. Ayres",
+        "Curtis Iwata",
+        "Bungo Shiotani"
+      ],
+      "year": 2015,
+      "venue": "AIAA SPACE 2015 Conference and Exposition (best-effort from AIAA DOI 10.2514/6.2015-4474)",
+      "doi_or_url": "10.2514/6.2015-4474; https://arc.aiaa.org/doi/10.2514/6.2015-4474",
+      "publisher": "American Institute of Aeronautics and Astronautics (AIAA; best-effort from DOI/source provenance)",
+      "venue_type": "conference paper",
+      "source_database_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"reference model\" OR template OR behavior OR behaviours OR behaviors OR architecture))",
+          "rank": 37,
+          "paperId": "84960427939"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+          "rank": 59,
+          "paperId": "84960427939"
+        },
+        {
+          "source": "google_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0022_google_scholar_title.json",
+          "query": "\"CubeSat Model-Based System Engineering (MBSE) reference model - Application in the concept lifecycle phase\"",
+          "rank": 1,
+          "paperId": "https://arc.aiaa.org/doi/pdf/10.2514/6.2015-4474",
+          "purpose": "abstract_enrichment"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0022_semantic_title.json",
+          "query": "\"CubeSat Model-Based System Engineering (MBSE) reference model - Application in the concept lifecycle phase\"",
+          "rank": 1,
+          "paperId": "d0ead3b6cc45700c563f1b0130429f903bcce55e",
+          "purpose": "abstract_enrichment"
+        }
+      ],
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "high",
+          "rationale": "Central system-level CubeSat reference-model paper; handles generality through logical architecture, reference-model reuse, and concept lifecycle workflow, with only limited power/EPS specificity."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "Claims MBSE-enabled reuse, consistency, interface integration, and reduced burden; power trade is present, but no EPS reliability/reproducibility/integrability outcome evidence is measured."
+        },
+        "RQ3": {
+          "relevance": "partial",
+          "rationale": "Contains conceptual V&V/trade-study verification and pre-physical concept studies, but no detailed EPS verification procedure integrated in the model."
+        }
+      },
+      "lineage_overlap_notes": "Part of the INCOSE SSWG CubeSat MBSE Challenge lineage. Summarizes Phase 1 RAX model, Phase 2 RAX behavior/COTS simulations, Phase 3 enterprise/trade studies, and current Phase 4 CubeSat Reference Model; treat prior trade-study evidence as lineage context, not independent current-paper validation."
+    },
+    "study_context_population": {
+      "mission_platform": "Generic CubeSat/nanosatellite mission reference model spanning space and ground systems.",
+      "size_form_factor": "CubeSat unit is described as 1U, 10x10x10 cm, about 1.3 kg; 1U/2U/3U common with 6U/12U/27U newer configurations.",
+      "mission_name": "Generic CubeSat Reference Model; Radio Aurora Explorer (RAX) 3U CubeSat is lineage/prior-phase example, not the current main case.",
+      "mission_domain": "General CubeSat missions including scientific, surveillance, and technology demonstration missions; examples include observation of scientific phenomena and technology demonstration.",
+      "organization_type": "INCOSE Space System Working Group challenge team involving academics, aerospace students/professors, NASA centers, industry practitioners/software developers, and commercial tool vendors; intended users include classrooms and CubeSat teams.",
+      "project_maturity": "Phase 4/current effort developing a logical-architecture CubeSat Reference Model; example mission-specific validation and public release are future work.",
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A",
+        "implementation",
+        "operations"
+      ],
+      "lifecycle_stage_notes": "Application emphasis is concept lifecycle; broader development/production/operational/retirement support is claimed but not demonstrated.",
+      "development_context": [
+        "academic/student",
+        "agency",
+        "industry/NewSpace",
+        "distributed team",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "power-budget/electrical-architecture",
+      "eps_relevance_notes": "Power is a logical subsystem and trade dimension; the paper is not an EPS-specific modeling or verification study.",
+      "model_maturity": [
+        "conceptual framework",
+        "reference model/template"
+      ]
+    },
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Many CubeSat teams are first-time developers with small budgets and limited systems-engineering capacity. The project aims to demonstrate MBSE/OOSEM and provide a reusable CubeSat Reference Model for mission-specific models and concept lifecycle studies.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "operations",
+        "simulation",
+        "stakeholders/MOEs"
+      ],
+      "system_boundary_level_of_abstraction": "System boundary is a CubeSat mission including space and ground systems. Abstraction is primarily logical architecture, stakeholder/MOE structure, operations phases, subsystem-level power/weight parameters, and concept trade-study behavior; mission teams create the physical architecture.",
+      "minimal_or_excluded_modeling": "Detailed physical architecture, component implementation, detailed EPS behavior, executable model files, concrete trace matrices, and validation results are not included. Example mission-specific model validation is future work.",
+      "required_prior_behavioral_domain_knowledge": "Not explicitly characterized. Users must supply mission-specific stakeholders, objectives, model elements, parameters, and simulation interfaces; the reference model reduces start-up burden by supplying logical elements, nomenclature, and workflow.",
+      "handling_limited_behavioral_knowledge": "The model supplies reusable logical building blocks and lifecycle-phase subsets, so teams can gradually populate mission-specific stakeholders, measures, parameters, and behavior diagrams rather than starting from a blank model.",
+      "model_artifacts_used": [
+        "SysML blocks, actors, flows, signals, ports, and block properties",
+        "structure diagrams",
+        "requirements diagrams",
+        "behavior diagrams",
+        "package diagrams",
         "parametric diagrams",
         "state diagrams",
         "activity diagrams",
-        "candidate Power subsystem model",
-        "interface to space-system model"
+        "logical space and ground subsystem elements",
+        "stakeholder needs/objectives/constraints/MOEs/MOPs/TPMs",
+        "model-generated views/documents",
+        "mission-specific model derived from the reference model"
       ],
-      "artifact_or_process_linked": "Mission-specific SysML model with Data Acquisition and Handling, Power, and Communication candidate subsystem models.",
-      "lifecycle_stage": "concept lifecycle phase",
-      "evidence_type": "conceptual trade-study workflow",
-      "metric_or_value_indicator": "Measures include MOEs, MOPs, TPMs, and sufficient power for collect/downlink mission data; no numeric values reported.",
-      "baseline_comparator": "No baseline comparator reported.",
-      "observed_effect_size_or_qualitative_effect": "not measured",
-      "evidence_source": "Section III.C Concept Life Cycle Trade Studies",
-      "direct_quote": "Then, candidate models for the Data Acquisition and Handing, Power, and Communication subsystems are created. The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data to meet the established measures.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The workflow is described, but the paper does not show executable results, power-balance margins, or verification that candidate EPS models meet requirements."
-    },
-    {
-      "claim": "MBSE supports requirements, design, analysis, verification, and validation from conceptual design through later phases.",
-      "outcome_category": "verification and validation integration",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "formalized modeling",
-        "requirements diagrams",
-        "validation and verification strategies",
-        "trade studies requirements verification"
-      ],
-      "artifact_or_process_linked": "SysML mission-specific model and model context inputs/outputs.",
-      "lifecycle_stage": "conceptual design through later lifecycle phases",
-      "evidence_type": "definition and model-context depiction",
-      "metric_or_value_indicator": "No verification coverage or pass/fail metric reported.",
-      "baseline_comparator": "No baseline reported.",
-      "observed_effect_size_or_qualitative_effect": "not measured",
-      "evidence_source": "Section II.A; Figure 8 description",
-      "direct_quote": "MBSE is the formalized application of modeling to support system requirements, design, analysis, verification, and validation activities beginning in the conceptual design phase and continuing throughout development and later life cycle phases.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The paper establishes intended V&V integration but does not demonstrate verification execution, model checking, or test-result traceability."
-    },
-    {
-      "claim": "Planned distribution mechanisms and public release could support model reuse and reproducibility.",
-      "outcome_category": "reproducibility and distribution",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "model distribution process",
-        "MagicDraw/ZIP/XMI/OpenMBEE/Teamcenter routes",
-        "licensing and copyright planning",
-        "user feedback mechanisms"
-      ],
-      "artifact_or_process_linked": "SSWG CubeSat Reference Model distribution process.",
-      "lifecycle_stage": "model adoption and reuse outside SSWG",
-      "evidence_type": "planned distribution process",
-      "metric_or_value_indicator": "No download, reuse, fork, or reproduction metric reported.",
-      "baseline_comparator": "No comparator reported.",
-      "observed_effect_size_or_qualitative_effect": "not measured",
-      "evidence_source": "Section III.B; Section V Conclusion; Figure 9 description",
-      "direct_quote": "Several avenues of distribution along with licensing and copyright options are being considered, and the team hopes to release the models publicly in the near future.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "Distribution was not complete at publication, and licensing/tool access may limit reproducibility."
-    }
-  ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "SSWG team development with plan, tool set, standards and conventions guidance, management and sharing, validation, copyright/license planning, and user feedback mechanisms; weekly teleconferences and shared materials are mentioned as project coordination mechanisms.",
-    "traceability_to_deliverables_decisions_reviews": "Traceability is conceptual: stakeholder needs/objectives/constraints map to MOEs, MOPs, TPMs, model parameters, trade studies, requirements diagrams, validation/verification strategies, and generated documents. Formal review gates or deliverable trace matrices are not reported.",
-    "evaluation_criteria_model_quality_usefulness": "Representative stakeholder needs/objectives/MOEs/constraints, subsystem-level power and weight parametrics, and data/information flows are listed as minimum structure before external distribution; validating MOEs and MOPs is a next step.",
-    "roi_value_realization_evidence": "No ROI evidence is reported. The paper claims MBSE may reduce systems-engineering burden and help low-cost CubeSat teams, but no cost, schedule, productivity, or defect metrics are provided.",
-    "programmatic_gates_critical_design_events_supported": "Concept life-cycle studies are supported; no explicit PDR, CDR, test readiness review, launch readiness review, or acceptance gate support is reported.",
-    "model_derived_performance_indicators_management_metrics": "MOEs, MOPs, TPMs, subsystem power and weight, data-flow quantities, and prior examples such as onboard energy and quantity of data downloaded are discussed; management metrics beyond constraints such as budget and schedule are not quantified."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper outlines steps for populating a mission-specific model and running concept trade studies, but does not provide a complete executable playbook or case results for the current reference model."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed conceptually",
-      "rationale": "It names SysML, COTS simulation interfaces, STK, MagicDraw, XMI, OpenMBEE, and Teamcenter, but does not show implemented exchange tests or toolchain-continuity evidence."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper explicitly targets small, often first-time CubeSat teams and proposes lifecycle-phase models and reusable logical building blocks to reduce overwhelm."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "addressed conceptually",
-      "rationale": "Governance through SSWG processes, licensing, management/sharing, and generated documents is described, but ROI and decision-gate evidence are absent."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "mentioned only",
-      "rationale": "The text notes low cost, shorter lifecycles, and distributed SSWG teleconferences, but does not address agile methods, rapid iteration practices, or NewSpace organizational models."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "General nanosatellite mission modeling is addressed through a SysML/OOSEM CubeSat Reference Model containing stakeholder concerns, lifecycle stages, operations phases, logical space/ground subsystems, and concept trade-study artifacts.",
-        "EPS is represented at the Power subsystem and power-budget trade level, not as a detailed electrical-power-system behavioral model.",
-        "The model reduces the need to start from blank behavioral knowledge by supplying logical elements, standard definitions, and lifecycle-specific starting points, but required prior behavioral/domain knowledge is not explicitly characterized."
-      ],
-      "RQ2": [
-        "Claimed value includes single-source architecture/interface management, integration with discipline models/simulations, reuse as a mission-specific starting point, reduced systems-engineering burden, and uniformity/consistency.",
-        "Reliability outcomes are not explicitly claimed, and reproducibility is only planned through future public release/distribution mechanisms.",
-        "Evidence for outcomes is weak or unsupported because the paper reports no metrics, baselines, stakeholder evaluation, integration/test results, or flight data for the current model."
-      ],
-      "RQ3": [
-        "Verification is integrated conceptually through MBSE support for requirements, verification, validation, requirements diagrams, validation/verification strategies, and trade studies requirements verification.",
-        "Pre-physical power-related verification is limited to concept trade-space mechanisms using MOE/MOP/TPM decomposition, parametric/state/activity diagrams, and potential simulation interfaces.",
-        "No EPS-specific verification procedure, test readiness evidence, model-checking result, or hardware integration result is reported."
+      "generality_reuse_mechanism": [
+        "CubeSat Reference Model used as starting point/template",
+        "Object-oriented logical architecture and reusable subsystem building blocks",
+        "Library of space/ground components to swap in/out",
+        "Lifecycle-phase models for gradual adoption",
+        "Concept-trade workflow using MOE/MOP/TPM decomposition and model/simulation interface",
+        "Planned distribution via MagicDraw, ZIP/XMI, OpenMBEE, Teamcenter, and user feedback mechanisms"
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Providing a fully-formed CubeSat Reference Model could be overwhelming for new MBSE/SysML users, so lifecycle-phase models are suggested for gradual adoption.",
-      "The minimum model structure needed before external distribution still includes representative stakeholders, subsystem-level power/weight parametrics, and data/information flows.",
-      "Licensing and copyright options for distribution are still being considered.",
-      "The next step is to create an example-mission specific model and validate the MOEs and MOPs."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "Venue and publisher are not visible in the supplied markdown, although the supplied metadata gives a DOI and Scopus provenance.",
-      "The study is concept/framework oriented and lacks empirical validation for claimed outcomes.",
-      "No detailed EPS architecture, battery/solar/regulator component model, or EPS requirements/verification trace is provided.",
-      "No released model file or precise STK/COTS interface specification is included.",
-      "No reliability outcome evidence and only planned reproducibility evidence are present."
-    ],
-    "direct_evidence_quotes": [
+    "implementation_pathway_tailoring": {
+      "implementation_steps_or_phases": [
+        {
+          "step": "Start from CubeSat Reference Model and identify concept-phase stakeholders.",
+          "inputs": "Reference model, mission context, potential stakeholder list.",
+          "outputs": "Stakeholder set with needs, objectives, constraints, and MOEs.",
+          "actors_roles": "CubeSat team, systems engineer/modeler, stakeholders.",
+          "prerequisites": "Access to reference model and basic SysML/MBSE capability.",
+          "completion_criteria": "Stakeholder content represented in mission-specific model.",
+          "handoffs": "Feeds measure decomposition and trade-space definition."
+        },
+        {
+          "step": "Decompose MOEs into MOPs and TPMs.",
+          "inputs": "Stakeholder MOEs/objectives/constraints.",
+          "outputs": "Alternative MOP/TPM decompositions and trade-space measures.",
+          "actors_roles": "Systems engineer/modeler with stakeholder input.",
+          "prerequisites": "Concept objectives and constraints.",
+          "completion_criteria": "Technical measures identified.",
+          "handoffs": "Feeds model element/parameter identification."
+        },
+        {
+          "step": "Identify model elements and parameters for initial trade studies.",
+          "inputs": "Mission objectives, satellites/orbits/sensors/ground stations, MOE/MOP/TPM definitions.",
+          "outputs": "Driving and quantifying parameters linked to model elements.",
+          "actors_roles": "Systems engineer, subsystem leads, mission analyst.",
+          "prerequisites": "Logical architecture and trade objectives.",
+          "completion_criteria": "Parameters are selected for model/simulation interface.",
+          "handoffs": "Feeds external model interface setup."
+        },
+        {
+          "step": "Establish interface with a space-system model such as AGI STK.",
+          "inputs": "Driving parameters from mission model; external simulation/model.",
+          "outputs": "Input/output parameter mapping to return quantifying parameters.",
+          "actors_roles": "MBSE modeler and simulation/tool specialist.",
+          "prerequisites": "Chosen external model/tool and parameter definitions.",
+          "completion_criteria": "Interface supports input of driving parameters and output of quantifying parameters.",
+          "handoffs": "Enables state/parametric/activity diagrams for trades."
+        },
+        {
+          "step": "Develop state, parametric, and activity diagrams for trades.",
+          "inputs": "Events, parameters, scenario flow, external model outputs.",
+          "outputs": "State diagrams for behavior changes; parametric diagrams for performance quantification; activity diagrams for scenario actions/flows.",
+          "actors_roles": "Systems engineer/modeler, mission analyst, subsystem leads.",
+          "prerequisites": "Interface and measures defined.",
+          "completion_criteria": "Trade-study behavior and quantification represented in SysML.",
+          "handoffs": "Supports trade-space evaluation."
+        },
+        {
+          "step": "Explore first-order and second-order trade spaces with Data Acquisition/Handling, Power, and Communication candidate models.",
+          "inputs": "Candidate subsystem models, performance measures, simulation outputs.",
+          "outputs": "Assessment of sufficient power for data collection/downlink against established measures.",
+          "actors_roles": "CubeSat team, subsystem leads, systems engineer.",
+          "prerequisites": "Analyzable trade-study model structure.",
+          "completion_criteria": "Candidate concepts evaluated at concept level.",
+          "handoffs": "Informs mission-specific architecture and later design work."
+        }
+      ],
+      "mapping_to_se_activities_lifecycle_gates": "Maps MBSE to requirements, design, analysis, verification, and validation beginning in conceptual design; maps OOSEM to stakeholder-needs analysis, requirements analysis, logical architecture definition, and candidate physical architecture synthesis. No SRR/PDR/CDR gate mapping is reported.",
+      "approach_classification": "Extended MBSE",
+      "approach_classification_rationale": "SysML/OOSEM model-centered approach extended with external simulations, trade-study analysis, lifecycle scope, reusable libraries, V&V context, and distribution mechanisms; no downstream hardware/software integration evidence.",
+      "tailoring_rationale": [
+        "mission scale",
+        "team maturity",
+        "cost",
+        "schedule",
+        "organizational constraints"
+      ],
+      "tailoring_rationale_notes": "Low-cost/short-lifecycle CubeSat projects, first-time teams, limited SE staffing, and MBSE/SysML learning burden motivate a reusable and phase-specific reference model.",
+      "adoption_guidance_for_new_users": "partial guidance"
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML",
+        "OOSEM",
+        "graphical modeling tools",
+        "AGI System Tool Kit (STK)",
+        "MagicDraw",
+        "XMI files",
+        "OpenMBEE",
+        "Teamcenter",
+        "COTS modeling and simulation tools",
+        "Google Docs/WebEx collaboration"
+      ],
+      "toolchain_architecture_data_flow": "SysML model is the authoritative integrated repository; diagrams are views of model elements. For concept trades, mission-model driving parameters are input to an external space-system model such as STK and quantifying parameters return to the mission model. Distribution paths are planned through model files/repositories and walk-through/user feedback mechanisms.",
+      "interoperability_mechanisms": [
+        "parameter input/output interface",
+        "XMI exchange",
+        "ZIP/model-file distribution",
+        "tool/repository distribution via MagicDraw/OpenMBEE/Teamcenter",
+        "generated documents/views"
+      ],
+      "syntax_semantic_continuity_evidence": "Claimed through standard SysML/OOSEM nomenclature, authoritative repository, and automatic view updates; not evaluated with exchange tests or semantic-continuity evidence.",
+      "software_hardware_system_integration_readiness": "Conceptual only. The model is intended to represent hardware/software/data/procedures and interface with simulations, but no software/hardware/system integration test readiness is shown.",
+      "toolchain_limitations": "Author-stated limitations are not formalized; extractor notes unresolved distribution/licensing, unavailable model files, and high-level/unspecified simulation-interface mechanics.",
+      "availability_reproducibility": "Model not provided in the paper. Planned distribution mechanisms and minimum structure are reported, but public release, license, model files, scripts, and interface details are absent."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "Power logical subsystem",
+        "generate/regulate/store/distribute power",
+        "subsystem power/weight parametrics",
+        "power sufficiency for data collection/downlink",
+        "prior solar-panel area and maximum battery capacity trade example"
+      ],
+      "eps_requirements_represented": "No EPS-specific requirements are detailed. The paper reports generic requirements diagrams and a future SysML model of the Cal Poly CubeSat Design Specification for physical, mechanical, electrical, testing, and operational requirements.",
+      "verification_validation_artifacts": "Conceptual V&V strategies and trade-study requirements verification appear in Figure 8, but no EPS verification matrix, test cases, test procedures, acceptance criteria, executable checks, SIL/HIL links, or automated tests are reported.",
+      "pre_physical_development_verification_mechanism": [
+        "concept-phase trade-study verification",
+        "simulation-in-the-loop via STK parameter interface",
+        "MOE/MOP/TPM decomposition",
+        "state/parametric/activity diagrams"
+      ],
+      "evidence_verification_integrated_in_model": "Figure 8 connects Validation and Verification Strategies and Trade Studies Requirements Verification to the mission-specific model, and Section III.C uses model-linked measures/trades. Evidence is system-level/conceptual, not EPS-procedure-specific.",
+      "integration_test_readiness": "not reported; no EPS hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation link is provided."
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "MBSE single source and integration",
-        "quote": "MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management. The system model also integrates other discipline specific engineering models and simulations.",
-        "location": "Abstract"
+        "claim_id": "C1",
+        "claim_text_or_paraphrase": "A SysML system model provides a single source for architecture development and interface management and integrates discipline-specific models/simulations.",
+        "outcome_category": [
+          "traceability",
+          "integrability/interoperability",
+          "consistency",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "shared repository",
+          "artifact traceability",
+          "tool integration",
+          "automated generation"
+        ],
+        "linked_artifact_process": "SysML CubeSat system model with structure, requirements, behavior, and parametric views; generated system views/documents.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "implementation",
+          "operations"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "metric_status": "not_reported",
+        "baseline_comparator": "previous document-centric process",
+        "effect": "Qualitative asserted effect: single authoritative repository and automatic view updates instead of separate documents/ad hoc models.",
+        "quote_location": "Abstract; Section II.A; Figure 5 description.",
+        "evidence_quote": "Abstract: 'MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management. The system model also integrates other discipline specific engineering models and simulations.' Figure 5: 'Model updates are automatically populated into the system views.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_alternative_explanations": "This is a generic MBSE mechanism statement; no trace-link audit, interoperability test, or document-control comparison is reported."
       },
       {
-        "topic": "Intended users and concept lifecycle use",
-        "quote": "The model is intended for use by aerospace students in their classroom or by a CubeSat team building a mission-specific CubeSat.",
-        "location": "Abstract"
+        "claim_id": "C2",
+        "claim_text_or_paraphrase": "The CubeSat Reference Model can serve as a reusable starting point/logical architecture for mission-specific CubeSat models.",
+        "outcome_category": [
+          "generality/reuse",
+          "reproducibility",
+          "completeness",
+          "effort reduction"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "requirements linkage",
+          "artifact traceability"
+        ],
+        "linked_artifact_process": "CubeSat Reference Model logical architecture and mission-specific model population workflow.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "metric_status": "coded",
+        "baseline_comparator": "not reported",
+        "effect": "Qualitative asserted effect: teams can compose mission-specific models from reference-model elements and add/remove subsystems.",
+        "quote_location": "Abstract; project goals; Section III.A.",
+        "evidence_quote": "Goal: 'Provide a CubeSat Reference Model that CubeSat teams can use as starting point for their mission-specific CubeSat model.' Section III.A: 'provide a logical architecture... the building blocks for any kind of CubeSat mission.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_alternative_explanations": "No released model, user replication, or reuse across independent missions is reported in this paper."
       },
       {
-        "topic": "CubeSat team pain point",
-        "quote": "The cheaper cost and shorter life cycle has lowered the barrier to entry for many organizations, and consequently, most groups that develop CubeSats are doing it for the first time.",
-        "location": "Section I Introduction"
+        "claim_id": "C3",
+        "claim_text_or_paraphrase": "Concept lifecycle trade studies can be structured by decomposing MOEs to MOPs/TPMs, identifying model elements/parameters, and interfacing the mission model with STK to quantify performance.",
+        "outcome_category": [
+          "decision support",
+          "integrability/interoperability",
+          "traceability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "parametric analysis",
+          "tool integration",
+          "requirements linkage",
+          "executable simulation"
+        ],
+        "linked_artifact_process": "MOE/MOP/TPM decomposition, model-element parameter mappings, STK interface, state/parametric/activity diagrams.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "metric_status": "coded",
+        "metric_other_label": "MOE/MOP/TPM and quantifying parameters",
+        "baseline_comparator": "not reported",
+        "effect": "Qualitative asserted effect: establishes and explores a mission trade space using model-linked measures and simulation outputs.",
+        "quote_location": "Section III.C Concept Life Cycle Trade Studies.",
+        "evidence_quote": "Section III.C: 'First, the MOEs are decomposed into measures of performances (MOPs) and technical performance measures (TPMs).' 'The interface supports the input (driving parameters) into the space system model and the output (quantifying parameters) from the space system model.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_alternative_explanations": "Workflow is described but no current example mission, numerical outputs, sensitivity analysis, or comparison to manual trade studies is shown."
       },
       {
-        "topic": "Lifecycle support",
-        "quote": "The reference model supports all life cycle stages employed by the organization utilizing the model.",
-        "location": "Section III CubeSat Reference Model Development"
+        "claim_id": "C4",
+        "claim_text_or_paraphrase": "Power/data/communications concept trades can evaluate whether candidate subsystem models provide sufficient power to collect and downlink mission data.",
+        "outcome_category": [
+          "decision support",
+          "integrability/interoperability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "parametric analysis",
+          "tool integration",
+          "reference model reuse"
+        ],
+        "linked_artifact_process": "Candidate Data Acquisition and Handling, Power, and Communication subsystem models; second-order trade space.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "power margin",
+          "other"
+        ],
+        "metric_status": "coded",
+        "metric_other_label": "quantity of data downloaded / sufficient power indicator",
+        "baseline_comparator": "not reported",
+        "effect": "Qualitative asserted effect: evaluates sufficient power for mission data collection/downlink; earlier RAX lineage demonstrated onboard-energy and downloaded-data trade studies.",
+        "quote_location": "Section III background on prior phases; Section III.C.",
+        "evidence_quote": "Section III: 'The following two trade studies were demonstrated: 1) On board energy level as a function of solar panel area and maximum battery capacity, and 2) quantity of data downloaded...' Section III.C: 'The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data...'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_alternative_explanations": "The demonstrated trade studies are referenced from earlier papers rather than reported with methods/results here; 'sufficient power' is not quantified as an EPS verification result."
       },
       {
-        "topic": "Logical architecture generality",
-        "quote": "The purpose of the CubeSat Reference Model is to provide a logical architecture, which serves as a guide and provide the building blocks for any kind of CubeSat mission.",
-        "location": "Section III.A Logical Architecture"
+        "claim_id": "C5",
+        "claim_text_or_paraphrase": "Phase-specific reference models can make MBSE adoption more gradual for CubeSat teams new to SysML/MBSE and ease model modification.",
+        "outcome_category": [
+          "effort reduction",
+          "communication/stakeholder alignment",
+          "generality/reuse"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse"
+        ],
+        "linked_artifact_process": "Lifecycle-phase model subsets derived from the CubeSat Reference Model.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "implementation",
+          "operations"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "effort"
+        ],
+        "metric_status": "coded",
+        "baseline_comparator": "not reported",
+        "effect": "Qualitative asserted effect: less overwhelming adoption and easier add/remove/modify of SysML elements.",
+        "quote_location": "Section III, after lifecycle-stage discussion.",
+        "evidence_quote": "'Providing a fully-formed CubeSat Reference Model could be a bit overwhelming... Having models for each life-cycle phase is a more gradual way to get up to speed. That should also make it easier for a team to modify, add, and remove SysML elements...'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_alternative_explanations": "No user study, training-time metric, or onboarding comparison is reported."
       },
       {
-        "topic": "Power subsystem scope",
-        "quote": "Generate, regulate, store, and distribute power to the spacecraft.",
-        "location": "Section III.A Logical Architecture, Power subsystem bullet"
+        "claim_id": "C6",
+        "claim_text_or_paraphrase": "A properly designed reference model can reduce systems-engineering burden, serve as a checklist, and promote uniformity and consistency across future CubeSat models.",
+        "outcome_category": [
+          "effort reduction",
+          "completeness",
+          "consistency",
+          "reproducibility",
+          "generality/reuse"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "requirements linkage",
+          "artifact traceability"
+        ],
+        "linked_artifact_process": "CubeSat Reference Model as framework/checklist for future CubeSat developers.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [
+          "effort",
+          "model reuse"
+        ],
+        "metric_status": "coded",
+        "baseline_comparator": "not reported",
+        "effect": "Not measured; framed as promise/anticipated effect.",
+        "quote_location": "Conclusion.",
+        "evidence_quote": "'MBSE holds the promise of reducing the burden of systems engineering tasks... a properly designed reference model can serve as a checklist... and promote uniformity and consistency across future CubeSat models.'",
+        "evidence_confidence_rating": "Unsupported",
+        "confidence": "high",
+        "threats_alternative_explanations": "No empirical evidence shows burden reduction, checklist completeness, or consistency gains; effect depends on future model release and user adoption."
       },
       {
-        "topic": "Distribution mechanisms",
-        "quote": "The SSWG team is developing a model distribution process to share to external entities, and this is illustrated in Figure 9 and Ref. 4.",
-        "location": "Section III.B Model Use and Distribution"
-      },
-      {
-        "topic": "Simulation interface",
-        "quote": "Next, an interface between the mission model and a space system model (e.g., AGI's System Tool Kit) are established.",
-        "location": "Section III.C Concept Life Cycle Trade Studies"
-      },
-      {
-        "topic": "Power trade-space evaluation",
-        "quote": "The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data to meet the established measures.",
-        "location": "Section III.C Concept Life Cycle Trade Studies"
-      },
-      {
-        "topic": "Future validation",
-        "quote": "The next step is to create an example-mission specific model and to validate the MOEs and MOPs.",
-        "location": "Section IV Next Steps"
-      },
-      {
-        "topic": "Claimed burden and consistency benefit",
-        "quote": "MBSE holds the promise of reducing the burden of systems engineering tasks, which is beneficial to small CubeSat teams, and a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models.",
-        "location": "Section V Conclusion"
+        "claim_id": "C7",
+        "claim_text_or_paraphrase": "Distribution mechanisms such as MagicDraw, ZIP/XMI, OpenMBEE, Teamcenter, walk-throughs, and user feedback could support model sharing and reuse.",
+        "outcome_category": [
+          "reproducibility",
+          "generality/reuse",
+          "communication/stakeholder alignment",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "shared repository",
+          "reference model reuse"
+        ],
+        "linked_artifact_process": "SSWG model distribution and use process for classroom examples and mission-specific CubeSat teams.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "metric_status": "coded",
+        "baseline_comparator": "not reported",
+        "effect": "Future/planned effect: external entities can receive and adapt the reference model after distribution/licensing are resolved.",
+        "quote_location": "Section III.B Model Use and Distribution; Figure 9; Conclusion.",
+        "evidence_quote": "Section III.B: 'The SSWG team is developing a model distribution process to share to external entities...' Figure 9 lists 'MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter.' Conclusion: team 'hopes to release the models publicly in the near future.'",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_alternative_explanations": "Distribution is not yet completed; licensing/copyright choices and actual external reuse are not reported."
       }
     ],
-    "notes_for_consistency_with_lineage": "Code this paper as a supporting, concept-phase CubeSat reference-model contribution. Do not treat the prior RAX trade-study references as evidence from this paper beyond the summaries quoted here, and do not count it as detailed EPS verification evidence.",
-    "extraction_confidence": "medium",
-    "extraction_confidence_reason": "The full supplied markdown clearly supports the conceptual extraction, but venue/publisher details, model files, empirical outcomes, and EPS-specific verification details are absent or only described at high level."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": [
+        "ownership",
+        "model quality criteria",
+        "naming/versioning conventions"
+      ],
+      "model_governance_strategy_notes": "SSWG develops and owns the reference model, lists standards/conventions guidance, management/sharing, validation, copyright/license, distribution mechanisms, and user feedback, but no detailed configuration-control or review process is reported.",
+      "traceability_to_project_deliverables_decisions": "Conceptually linked to model-generated traditional documents, trade-study requirements verification, MOE/MOP/TPM decision measures, and mission-specific model development; no design-review gates or management reports are shown.",
+      "evaluation_criteria_for_model_quality_usefulness": "Planned validation of MOEs/MOPs; standards/nomenclature; ability to populate mission-specific stakeholder needs/objectives/constraints/MOEs and trade spaces. No formal model-quality metrics.",
+      "roi_value_realization_evidence": "not reported; expected reduced systems-engineering burden and reuse/checklist value are asserted but not measured.",
+      "programmatic_gates_or_critical_events_supported": "No SRR/PDR/CDR or formal lifecycle gates reported; concept lifecycle trade studies and regulatory approval timeline awareness are discussed.",
+      "model_derived_performance_indicators_or_management_metrics": [
+        "MOEs",
+        "MOPs",
+        "TPMs",
+        "power and weight parametrics",
+        "onboard energy level in prior phase",
+        "quantity of data downloaded in prior phase",
+        "sufficient power for data collection/downlink"
+      ]
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": "addressed conceptually",
+      "practical_implementation_pathway_rationale": "Concept workflow is described; current example mission and validation are future work.",
+      "toolchain_fragmentation_interoperability": "addressed conceptually",
+      "toolchain_fragmentation_interoperability_rationale": "Interfaces to other models/STK and XMI/OpenMBEE/Teamcenter distribution are described but not implemented/evaluated in detail.",
+      "lightweight_resource_constrained_tailoring": "addressed conceptually",
+      "lightweight_resource_constrained_tailoring_rationale": "Paper is explicitly motivated by small budgets, short lifecycle, first-time teams, and gradual phase-specific models.",
+      "governance_project_deliverables_roi": "addressed conceptually",
+      "governance_project_deliverables_roi_rationale": "Governance/distribution/licensing/generated documents are discussed; ROI evidence is not reported.",
+      "newspace_agile_distributed_rapid_iteration_alignment": "mentioned only",
+      "newspace_agile_distributed_rapid_iteration_alignment_rationale": "Short turnaround and distributed collaboration are mentioned; no NewSpace/agile method is defined."
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": [
+          "Strong system-level evidence for a general CubeSat SysML/OOSEM reference model with logical architecture, stakeholders, lifecycle stages, operations phases, and reusable subsystem building blocks.",
+          "Limited EPS-specific generality: Power subsystem and power/weight parametrics are present, but detailed EPS behavior/requirements are not developed."
+        ],
+        "RQ2": [
+          "Claimed outcomes include reuse, reduced systems-engineering burden, checklist completeness, uniformity/consistency, single-source repository, and concept trade decision support.",
+          "Outcome evidence is weak: no measured reliability/reproducibility/integrability effects, no baseline, and no current quantitative results."
+        ],
+        "RQ3": [
+          "Pre-physical verification appears only as conceptual trade-study requirements verification and simulation-in-the-loop parameter exchange with STK.",
+          "No EPS-specific verification procedure, test cases/procedures, verification matrix, SIL/HIL, or automated checks are provided."
+        ]
+      },
+      "author_stated_limitations_gaps": [
+        "Current effort focused on nomenclature, stakeholder needs/objectives/MOEs, and generic logical architecture.",
+        "Next step is an example mission-specific model and validation of MOEs/MOPs.",
+        "Fully formed model may overwhelm teams new to MBSE/SysML; phase-specific models are proposed.",
+        "Distribution/licensing/copyright options are still being considered; public release is future."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No detailed EPS behavior or EPS verification artifacts.",
+        "No current quantitative outcome evidence, baseline comparison, independent validation, physical test, or flight evidence.",
+        "Tool interoperability mechanisms are high-level and not reproducible from the paper alone.",
+        "Prior SSWG/RAX trade-study examples should not be counted as independent current-paper empirical evidence."
+      ],
+      "direct_evidence_quotes": [
+        "'MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management.'",
+        "'Using the CubeSat Reference Model as a starting point, a user can populate a mission-specific model...'",
+        "'The purpose of the CubeSat Reference Model is to provide a logical architecture... the building blocks for any kind of CubeSat mission.'",
+        "'The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data...'",
+        "'The next step is to create an example-mission specific model and to validate the MOEs and MOPs.'",
+        "'MBSE holds the promise of reducing the burden of systems engineering tasks...'"
+      ],
+      "lineage_consistency_notes": "Align with other INCOSE SSWG/RAX extractions by treating this as Phase 4/reference-model/concept-lifecycle paper. Do not double-count Phase 1-3 RAX simulation/trade-study evidence as new empirical evidence here.",
+      "extraction_confidence": "high",
+      "extraction_confidence_rationale": "Full markdown is available and central claims are clear; classification uncertainty mainly concerns whether broad lifecycle/toolchain statements are planned versus implemented."
+    }
   },
-  "bibtex": "@inproceedings{paper-0022,\n  title = {CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase},\n  author = {David Kaslow and Bradley J. Ayres and Curtis Iwata and Bungo Shiotani},\n  year = {2015},\n  booktitle = {AIAA Conference Proceedings},\n  publisher = {American Institute of Aeronautics and Astronautics},\n  doi = {10.2514/6.2015-4474},\n  url = {https://doi.org/10.2514/6.2015-4474}\n}"
+  "bibtex": "@inproceedings{Kaslow2015CubeSatMBSEReferenceModelConcept,\n  author = {Kaslow, David and Ayres, Bradley J. and Iwata, Curtis and Shiotani, Bungo},\n  title = {CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase},\n  booktitle = {AIAA SPACE 2015 Conference and Exposition},\n  year = {2015},\n  publisher = {American Institute of Aeronautics and Astronautics},\n  doi = {10.2514/6.2015-4474},\n  url = {https://arc.aiaa.org/doi/10.2514/6.2015-4474}\n}"
 }

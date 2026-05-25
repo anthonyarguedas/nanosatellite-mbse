@@ -3,599 +3,2035 @@
   "tier": "core",
   "year": 2020,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The supplied corpus metadata reports a DOI and Scopus provenance, and the paper is formatted as a formal conference-style paper with references.",
-        "evidence": [
-          "Corpus metadata DOI: 10.1109/aero47225.2020.9172714.",
-          "Corpus provenance includes Scopus records for two MBSE/CubeSat search routes."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper states scope boundaries and future work but does not provide a formal threats-to-validity or limitations discussion.",
-        "evidence": [
-          "Though not limited to any single CubeSat community, it is targeted at the community of University Teams developing CubeSat mission architectures",
-          "The CSRM is not methodology-specific, and is intended to support whatever methodology a CubeSat development team is using.",
-          "Processes for dissemination and control of the CSRM once it becomes an OMG specification, maintaining updates to it, and what formats will be available have yet to be worked out."
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The target CubeSat mission context, space and ground segments, intended users, and lifecycle flow from stakeholders to verification and validation are described.",
-        "evidence": [
-          "intended to be used by system architects and engineers as a starting point as they develop the logical architecture of the Space and Ground components of the CubeSat mission of interest to them",
-          "The following subsections provide a notional outline of how the CSRM could be applied to a specific mission following a traditional top-down approach starting with identifying stakeholders and ending with verification and validation."
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "SysML artifacts, hierarchy, and relationships are well described for comparison, but the current model file, exact CSRM tool implementation, and complete reproducible workflow are not provided.",
-        "evidence": [
-          "The CSRM is a SysML compliant and platform-independent model that provides building blocks that can be specialized to support CubeSat mission design.",
-          "The CSRM landing page, shown in Figure 1, provides for an overview and navigation of the CSRM including the requirements and architecture hierarchies.",
-          "is hosted in a graphical modeling tool"
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Most claimed outcomes are tied to the CSRM as a reusable SysML reference model, its traceability relationships, and conformance/common-baseline mechanisms.",
-        "evidence": [
-          "is intended to introduce quality enhancements and economies associated with reusability",
-          "Retention of these logical elements provides a common baseline for comparing and evaluating different mission-specific implementations and for the sharing and reuse of design elements.",
-          "The CSRM provides for defining these elements; and for tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities."
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper reports professional vetting, university use, and earlier trade studies, but gives no metrics, baselines, detailed case results, integration-test results, or flight evidence for the current CSRM outcomes.",
-        "evidence": [
-          "The CSRM has been formally reviewed and recommended by 1) a Certified Architect Program engineering fellow and 2) by a team lead by Director level system engineer.",
-          "The CSRM is currently in use by CubeSat development teams from several universities",
-          "Trade studies were carried out in the third phase"
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Traceability among stakeholders, requirements, behaviors, technical measures, architecture, and V&V activities is a central feature of the CSRM and is shown through model element properties and figures.",
-        "evidence": [
-          "A Mission Requirement has a Refined By property that can point to a either Enterprise Behavior or a Enterprise Use Case.",
-          "The requirement elements and tables can expose requirement properties including: Id, Name, Text, Traced To, Derived From, Refined By, Verify Method, Verified By, and Satisfied By.",
-          "A blue dashed arrow originates from the Verification Activities Table and points to the L2.1.1 CubeSat Requirements Table."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper describes reusable packages, spreadsheets, linked Word/Excel artifacts, and OMG submission, but does not provide the model, availability terms, update process, or complete exchange mechanisms.",
-        "evidence": [
-          "The CSRM provides a library of model elements but does not dictate what model elements and relationships to use.",
-          "The requirements tables can be exported to spreadsheets.",
-          "The document or spreadsheet is part of the model and can be edited within the model.",
-          "what formats will be available have yet to be worked out"
-        ]
-      }
-    ],
-    "total_score": 6.0,
-    "max_score": 8,
-    "normalized_score": 0.75,
-    "overall_rationale": "The study is strong for describing a reusable SysML CubeSat reference-model structure, traceability, and notional application, but outcome evidence and reproducible implementation details are limited and EPS is only represented at generic system/subsystem level."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0011.json",
-    "status_rationale": "Retained as core because the full text directly addresses CubeSat MBSE reference modeling, reuse, system-level traceability, and model-integrated V&V; EPS relevance is indirect through the generic Power Subsystem and historical power-usage trade studies.",
-    "citation": "Kaslow, D., Cahill, P. T., and Ayres, B. (2020). Development and Application of the CubeSat System Reference Model. DOI: 10.1109/aero47225.2020.9172714.",
-    "title": "Development and Application of the CubeSat System Reference Model",
-    "authors": [
-      "D. Kaslow",
-      "P. T. Cahill",
-      "B. Ayres"
-    ],
-    "venue": "not reported",
-    "doi_or_url": "10.1109/aero47225.2020.9172714",
-    "publisher": "not reported",
-    "venue_type": "conference paper",
-    "source_database_or_route": [
-      "scopus",
-      "semantic_scholar abstract_enrichment"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The paper substantially describes general CubeSat mission modeling with a reusable SysML reference model and generic subsystem abstractions, but does not provide a dedicated EPS behavior model."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims system-level quality, reuse, common-baseline, and integrability benefits, but not EPS-specific reliability or measured EPS reproducibility outcomes."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "It describes model-integrated verification and validation activities linked to requirements and technical measures before physical realization, but not EPS-specific verification procedures."
-      }
+    "credible_venue": {
+      "label": "Was the research published in a credible venue?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "The corpus metadata supplies an IEEE DOI and Scopus provenance, and the paper is a formal conference-style publication in the IEEE Aerospace Conference corpus.",
+      "evidence": [
+        "Prompt metadata: DOI=10.1109/aero47225.2020.9172714; source provenance includes two Scopus records.",
+        "Reference list repeatedly identifies the paper family as 'Proceedings of IEEE Aerospace Conference, Big Sky, MT'."
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "The paper explicitly builds on prior CSRM/RAX, behavior, technical-measure, and integrated-simulation work in its references, but no other papers or prior extractions were read for this extraction."
+    "limitations_discussed": {
+      "label": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The authors state scope boundaries and future work, but they do not provide a formal threats-to-validity or limitations section and do not quantify unresolved risks.",
+      "evidence": [
+        "Introduction: 'Though not limited to any single CubeSat community, it is targeted at the community of University Teams developing CubeSat mission architectures'.",
+        "Section 3: 'The CSRM is not methodology-specific, and is intended to support whatever methodology a CubeSat development team is using.'",
+        "Section 4: 'Processes for dissemination and control of the CSRM once it becomes an OMG specification, maintaining updates to it, and what formats will be available have yet to be worked out.'"
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "label": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "The paper clearly describes a CubeSat reference-model context, the target user community, space/ground system boundary, and a top-down application flow from stakeholders through V&V.",
+      "evidence": [
+        "Abstract: CSRM is 'a representation of the logical architecture of a CubeSat system' for 'the Space and Ground components of the CubeSat mission'.",
+        "Section 3: 'a notional outline of how the CSRM could be applied to a specific mission following a traditional top-down approach starting with identifying stakeholders and ending with verification and validation.'"
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "label": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "SysML model elements, hierarchies, relationships, and population guidance are described for comparison, but the current model file, exact tool implementation, release format, and detailed reproducible workflow are not provided.",
+      "evidence": [
+        "Introduction: 'The CSRM is a SysML compliant and platform-independent model that provides building blocks that can be specialized to support CubeSat mission design.'",
+        "Section 3: 'The CSRM landing page... provides for an overview and navigation of the CSRM including the requirements and architecture hierarchies.'",
+        "Abstract: the model 'is hosted in a graphical modeling tool' but the current tool instance and model file are not supplied."
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "label": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "Most outcome claims are tied to the CSRM as a reusable SysML reference model, its trace relationships, conformance criteria, and model-based specification pathway.",
+      "evidence": [
+        "Abstract: CSRM 'is intended to introduce quality enhancements and economies associated with reusability.'",
+        "Section 3: 'The CSRM provides for defining these elements; and for tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities.'",
+        "Background/OMG: 'Retention of these logical elements provides a common baseline for comparing and evaluating different mission-specific implementations and for the sharing and reuse of design elements.'"
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "label": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "The paper reports professional review, university use, and prior trade-study history, but gives no metrics, baselines, detailed case results, independent validation, integration-test results, or flight evidence for the current CSRM claims.",
+      "evidence": [
+        "Background/Vetting: 'The CSRM has been formally reviewed and recommended by 1) a Certified Architect Program engineering fellow and 2) by a team lead by Director level system engineer.'",
+        "Background/Vetting: 'The CSRM is currently in use by CubeSat development teams from several universities'.",
+        "Background/Project History: 'Trade studies were carried out in the third phase...' but this paper does not report their numerical results."
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "label": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+      "coded_label": "Yes",
+      "numeric_score": 1,
+      "rationale": "Traceability among stakeholders, requirements, behaviors, technical measures, architecture, and V&V activities is central and is shown through model element properties and figures.",
+      "evidence": [
+        "Section 3/Requirements: requirement properties include 'Traced To, Derived From, Refined By, Verify Method, Verified By, and Satisfied By.'",
+        "Section 3/Behaviors: 'A Mission Requirement has a Refined By property that can point to a either Enterprise Behavior or a Enterprise Use Case.'",
+        "Figure 15 description: a dashed arrow 'originates from the Verification Activities Table and points to the L2.1.1 CubeSat Requirements Table.'"
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "label": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+      "coded_label": "Insufficiently",
+      "numeric_score": 0.5,
+      "rationale": "Reusable model packages, tables, spreadsheet export, and model-embedded Word/Excel artifacts are described, but the model, repository/license, formal exchange format, update process, and complete interfaces are not reported.",
+      "evidence": [
+        "Section 3: 'The CSRM provides a library of model elements but does not dictate what model elements and relationships to use.'",
+        "Section 3/Requirements: 'The requirements tables can be exported to spreadsheets.'",
+        "Section 3/Technical Measures: 'The document or spreadsheet is part of the model and can be edited within the model.'",
+        "Section 4/OMG Specification Efforts: 'what formats will be available have yet to be worked out.'"
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "CubeSat mission system reference model covering space and ground components.",
-    "size_form_factor": "CubeSat form factor; specific U size not reported; conformance includes accommodation of a CubeSat deployment system.",
-    "mission_name": "not reported; RAX is mentioned only as prior-phase application history.",
-    "mission_domain": "General CubeSat and potentially broader satellite mission design, including space segment, ground segment, deployment services, and regulatory/deployer stakeholders.",
-    "organization_type": "INCOSE Space Systems Working Group with consultants and Air Force Institute of Technology; target adopters include university teams plus research, government, and commercial teams.",
-    "project_maturity": "CSRM development ongoing since 2012; current phase submitted to OMG as a candidate CubeSat specification and reportedly in use by several university CubeSat teams.",
-    "lifecycle_stage_addressed": "Early architecture and mission-specific design through requirements, behavior definition, technical measures, logical architecture, and verification/validation planning before or alongside physical architecture development.",
-    "development_context": "Notional application of a methodology-agnostic reference model to a mission-specific CubeSat using a traditional top-down flow from stakeholders to V&V.",
-    "eps_relevance": "system-level only",
-    "model_maturity": "SysML-compliant platform-independent reference model with package hierarchy, tables, relationships, and review/adoption claims; public model availability and specification control process not settled."
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "IEEE DOI and Scopus provenance identify a credible conference publication.",
+      "evidence": [
+        {
+          "quote": "Prompt metadata: DOI=10.1109/aero47225.2020.9172714; source provenance includes two Scopus records.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Reference list repeatedly identifies the paper family as 'Proceedings of IEEE Aerospace Conference, Big Sky, MT'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Scope and future-work boundaries are present, but no formal limitations/threats discussion is provided.",
+      "evidence": [
+        {
+          "quote": "Introduction: 'Though not limited to any single CubeSat community, it is targeted at the community of University Teams developing CubeSat mission architectures'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'The CSRM is not methodology-specific, and is intended to support whatever methodology a CubeSat development team is using.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4: 'Processes for dissemination and control of the CSRM once it becomes an OMG specification, maintaining updates to it, and what formats will be available have yet to be worked out.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "CubeSat space/ground context, target users, and top-down lifecycle flow are described.",
+      "evidence": [
+        {
+          "quote": "Abstract: CSRM is 'a representation of the logical architecture of a CubeSat system' for 'the Space and Ground components of the CubeSat mission'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'a notional outline of how the CSRM could be applied to a specific mission following a traditional top-down approach starting with identifying stakeholders and ending with verification and validation.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "SysML artifacts and relationships are described, but exact model/tool release and full reproducible procedure are missing.",
+      "evidence": [
+        {
+          "quote": "Introduction: 'The CSRM is a SysML compliant and platform-independent model that provides building blocks that can be specialized to support CubeSat mission design.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'The CSRM landing page... provides for an overview and navigation of the CSRM including the requirements and architecture hierarchies.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: the model 'is hosted in a graphical modeling tool' but the current tool instance and model file are not supplied.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims are tied to reusable CSRM artifacts, trace links, and common-baseline/conformance mechanisms.",
+      "evidence": [
+        {
+          "quote": "Abstract: CSRM 'is intended to introduce quality enhancements and economies associated with reusability.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'The CSRM provides for defining these elements; and for tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/OMG: 'Retention of these logical elements provides a common baseline for comparing and evaluating different mission-specific implementations and for the sharing and reuse of design elements.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Evidence is mainly expert review, reported university use, and historical trade-study mention; no quantitative or operational evidence is given.",
+      "evidence": [
+        {
+          "quote": "Background/Vetting: 'The CSRM has been formally reviewed and recommended by 1) a Certified Architect Program engineering fellow and 2) by a team lead by Director level system engineer.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Vetting: 'The CSRM is currently in use by CubeSat development teams from several universities'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History: 'Trade studies were carried out in the third phase...' but this paper does not report their numerical results.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Trace, derive, refine, verify, satisfy, and validates/verifies relationships are central to the CSRM.",
+      "evidence": [
+        {
+          "quote": "Section 3/Requirements: requirement properties include 'Traced To, Derived From, Refined By, Verify Method, Verified By, and Satisfied By.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Behaviors: 'A Mission Requirement has a Refined By property that can point to a either Enterprise Behavior or a Enterprise Use Case.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 15 description: a dashed arrow 'originates from the Verification Activities Table and points to the L2.1.1 CubeSat Requirements Table.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Some reusable packages and data exchange details are described, but model availability and formats are unresolved.",
+      "evidence": [
+        {
+          "quote": "Section 3: 'The CSRM provides a library of model elements but does not dictate what model elements and relationships to use.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Requirements: 'The requirements tables can be exported to spreadsheets.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Technical Measures: 'The document or spreadsheet is part of the model and can be edited within the model.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4/OMG Specification Efforts: 'what formats will be available have yet to be worked out.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "core"
+      ],
+      "status": "coded",
+      "rationale": "Corpus metadata marks screening_tier as core, and the paper directly addresses CubeSat MBSE reference modeling and model-integrated V&V structure.",
+      "evidence": [
+        {
+          "quote": "Prompt metadata: screening_tier=core.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: CSRM is 'based on Model-Based System Engineering (MBSE) principles' and is a CubeSat logical architecture reference model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "General CubeSat mission/system modeling with a reusable SysML reference model is the central contribution, although detailed EPS behavior is not provided.",
+      "evidence": [
+        {
+          "quote": "Abstract: CSRM is 'a representation of the logical architecture of a CubeSat system'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: CSRM provides 'building blocks that can be specialized to support CubeSat mission design.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims system-level reuse, quality, traceability, common-baseline, and university-use outcomes, but not measured EPS reliability/reproducibility outcomes.",
+      "evidence": [
+        {
+          "quote": "Introduction: 'This reusable model supports reducing development times and increasing the quality of CubeSat spacecraft and ground system design'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History reports power-related trade studies, but current paper provides no EPS outcome results.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The CSRM includes model-linked verification/validation activities and properties, but not EPS-specific verification procedures or physical test links.",
+      "evidence": [
+        {
+          "quote": "Section 3/V&V: 'The Verification Activity element describes the process for verifying an element, e.g. a requirement.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 15 links Verification Activities Table to CubeSat Requirements Table; no EPS-specific V&V artifact is shown.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B"
+      ],
+      "status": "coded",
+      "rationale": "The CSRM is a starting point for mission-specific logical architecture, stakeholder/requirements development, and V&V planning; no actual PDR/CDR/I&T/operations use is reported.",
+      "evidence": [
+        {
+          "quote": "Abstract: CSRM is used 'as a starting point' for logical architecture development.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: notional top-down approach starts with stakeholders and ends with verification and validation.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Architecture: logical architecture is 'followed by the physical architecture and development of the CubeSat.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student"
+      ],
+      "status": "coded",
+      "rationale": "The target community and initial teaching use are university/CubeSat teams; other organization types are mentioned as potential adopters but not evidenced as a development context.",
+      "evidence": [
+        {
+          "quote": "Introduction: CSRM is 'targeted at the community of University Teams developing CubeSat mission architectures'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: 'initially developed in support of teaching space system engineering in the class room and then using that knowledge and the CSRM to develop and launch a mission-specific CubeSat.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "EPS-adjacent"
+      ],
+      "status": "coded",
+      "rationale": "Power appears as one generic CubeSat subsystem and in historical power-usage/solar/battery trade-study context, but the paper is not an EPS-focused MBSE study.",
+      "evidence": [
+        {
+          "quote": "Figure 11 description lists 'Power Subsystem' among CubeSat subsystems.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History: phase two included 'power usage behaviors' and phase three traded 'solar panel areas and maximum battery capacity'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "reference model/template",
+        "project-applied model"
+      ],
+      "status": "coded",
+      "rationale": "The CSRM is an existing reference model submitted to OMG and reportedly used by university CubeSat development teams, but it is not shown as flight-validated.",
+      "evidence": [
+        {
+          "quote": "Abstract: 'The International Council on Systems Engineering (INCOSE) Space System Working Group (SSWG) has created the CubeSat System Reference Model (CSRM)'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Vetting: 'The CSRM is currently in use by CubeSat development teams from several universities'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: 'It has been submitted to the Object Management Group (OMG) as a CubeSat specification'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "verification",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The model covers mission/system logical architecture, space/ground and subsystem hierarchy, requirements, behaviors, deployer/regulatory interfaces, V&V, and stakeholder/technical-measure concepts coded as other.",
+      "evidence": [
+        {
+          "quote": "Figure 1 packages include Stakeholder, Technical Measures, Behaviors, Requirements, Architecture, Data Models, and Validation Verification.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: hierarchies are 'enterprise, space and ground systems, subsystems, and subsystem components.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Stakeholders includes regulatory stakeholders and CubeSat deployer systems.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "state/activity/sequence diagrams",
+        "parametrics",
+        "test cases/procedures",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper shows requirements tables, BDD/package architecture, activity/use-case behavior artifacts, technical-measure constraint/parameter constructs, verification/validation procedures, and other tables/documents.",
+      "evidence": [
+        {
+          "quote": "Section 3/Requirements: 'Each requirements package has a table... The requirements tables can be exported to spreadsheets.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figures 9-13 are described as SysML block definition diagrams for domain, enterprise, segments, subsystems, and components.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Behaviors: behavior can be specified by 'a Use Case Description document, a Use Case diagram, or an Activity diagram.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/V&V: verification process could include 'verification plans, procedures execution notes, results, and status.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "library",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "CSRM is a reusable reference-model starting point, a library of model elements, and contains instructions/notes for mission-specific population.",
+      "evidence": [
+        {
+          "quote": "Abstract: CSRM is 'intended to be used... as a starting point'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'The CSRM provides a library of model elements'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: stakeholder packages 'contain instructions for adding additional stakeholders and their concerns'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Pure MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The current paper primarily presents a SysML reference model, element hierarchy, and traceability/population approach; external simulation and analysis tools are historical context rather than the main CSRM application demonstration.",
+      "evidence": [
+        {
+          "quote": "Abstract: CSRM is 'SysML compliant' and 'hosted in a graphical modeling tool'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3 describes model elements and relationships rather than a connected simulation/toolchain execution workflow.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History names an earlier third-phase modeling environment separately from the current fourth-phase CSRM.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "organizational constraints"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring is motivated by CubeSat mission scale, reusable economies and reduced development times, and methodology/organizational flexibility for different teams.",
+      "evidence": [
+        {
+          "quote": "Introduction: CSRM 'specifically addresses the needs of the CubeSat community'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: intended to introduce 'quality enhancements and economies associated with reusability'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: 'supports reducing development times'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'The CSRM is not methodology-specific' and teams can modify the containment tree to fit their methodology.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides a notional top-down outline and model population notes, but not a complete playbook with prerequisites, roles, completion criteria, or worked mission case outputs.",
+      "evidence": [
+        {
+          "quote": "Purpose: paper provides 'A notional outline of how the CSRM could be applied to a specific mission development effort'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'The CSRM is well-documented and explains to the team how to populate it... with notes which CSRM users have found easy to understand and to follow.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "MATLAB/Simulink",
+        "STK",
+        "ModelCenter",
+        "Cameo/MagicDraw",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "SysML and an unspecified graphical modeling tool are central to the CSRM; MagicDraw/Cameo, ModelCenter/MBSE Analyzer, STK, and MATLAB are explicitly reported as the prior project modeling environment; other covers the graphical modeling tool and model-embedded Word/Excel artifacts.",
+      "evidence": [
+        {
+          "quote": "Abstract: CSRM 'is System Modeling Language (SysML) compliant' and 'is hosted in a graphical modeling tool'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History: phase three environment consisted of 'No Magic's MagicDraw/Cameo Simulation Toolkit', 'Phoenix Integration's ModelCenter and MBSE Analyzer', 'Analytical Graphics Inc.'s Systems Tool Kit', and 'MathWorks' MATLAB'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Technical Measures: Word/Excel method files are part of the model.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "import/export",
+        "spreadsheets"
+      ],
+      "status": "coded",
+      "rationale": "The current paper explicitly reports spreadsheet export and model-embedded Word/Excel artifacts; it does not specify APIs, plugins, XMI, or round-trip model transformations for the current CSRM.",
+      "evidence": [
+        {
+          "quote": "Section 3/Requirements: 'The requirements tables can be exported to spreadsheets.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Technical Measures: 'The document or spreadsheet is part of the model and can be edited within the model.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The authors do not explicitly frame vendor lock-in, manual translation, broken traceability, missing interfaces, scalability, or licensing/cost as toolchain limitations; unresolved formats and model availability are captured as structured limitations.",
+      "evidence": [
+        {
+          "quote": "Completed extraction found future-work statements on dissemination/control/formats, but no explicit toolchain limitation statement such as vendor lock-in or broken traceability.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "EPS evidence is indirect: current CSRM includes a generic Power Subsystem placeholder, and project history reports solar-panel and battery-capacity trades in an earlier phase.",
+      "evidence": [
+        {
+          "quote": "Figure 11 description lists 'Power Subsystem' among CubeSat subsystems.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History: 'Different configurations of solar panel areas and maximum battery capacity were traded off to compare on-board energy levels'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [
+        "test procedures"
+      ],
+      "status": "coded",
+      "rationale": "The model can capture verification and validation plans/procedures/execution/results/status; no formal verification matrix, generated test artifacts, SIL/HIL, or automated tests are reported.",
+      "evidence": [
+        {
+          "quote": "Section 3/V&V: the verification process could include 'verification plans, procedures execution notes, results, and status.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/V&V: the validation process could include 'validation plans, procedures, execution, results, and status.'",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [
+        "requirements-in-the-loop",
+        "parametric checks",
+        "trade-study verification"
+      ],
+      "status": "coded",
+      "rationale": "The system model links requirements to verification activities and technical measures; technical-measure methods can be represented as constraints/parameters; earlier project history reports power trade studies. These are generic/system-level rather than EPS-procedure evidence.",
+      "evidence": [
+        {
+          "quote": "Section 3/Landing Page: CSRM traces requirements down to 'validation and verification activities'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Technical Measures: methods 'can be incorporated into the Constraint block Constraints and Parameters compartments'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History reports solar/battery trade studies comparing on-board energy levels.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No explicit links from the CSRM to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation are reported.",
+      "evidence": [
+        {
+          "quote": "Completed extraction found model-level V&V planning artifacts, but no hardware/software integration, flat-sat/testbed, environmental test, or operational validation evidence.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "reproducibility",
+        "integrability/interoperability",
+        "generality/reuse",
+        "traceability",
+        "consistency",
+        "cost reduction",
+        "schedule reduction",
+        "decision support",
+        "mission assurance",
+        "lifecycle continuity",
+        "communication/stakeholder alignment",
+        "governance/ROI",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Aggregated from claim records: CSRM claims reuse, common baseline, traceability, quality/economy/time benefits, standards/governance potential, stakeholder/team alignment evidence, V&V support, and historical trade-study decision support; quality enhancement is coded as other.",
+      "evidence": [
+        {
+          "quote": "See extraction.claimed_outcomes_value_mechanisms_evidence records C1-C8.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: 'quality enhancements and economies associated with reusability'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/OMG: common baseline for 'comparing and evaluating' and 'sharing and reuse'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "EPS-specific",
+        "nanosatellite system-level",
+        "generic space-system"
+      ],
+      "status": "coded",
+      "rationale": "Most claims are CubeSat system-level; broader satellite applicability and OMG reference-architecture claims are generic space-system; the historical solar/battery trade-study claim is EPS-specific but weakly evidenced in this paper.",
+      "evidence": [
+        {
+          "quote": "Introduction: CSRM 'specifically addresses the needs of the CubeSat community'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Introduction: CSRM can be applied 'for satellite missions in general'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History: solar panel area and maximum battery capacity trade studies.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "parametric analysis",
+        "reference model reuse",
+        "requirements linkage",
+        "tool integration",
+        "lifecycle gate support",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms include trace/refine/verify relationships, reusable reference model/library, technical-measure constraints, spreadsheet/document integration, design-review/buy-off artifacts, and common-baseline/conformance mechanisms coded as other.",
+      "evidence": [
+        {
+          "quote": "Section 3: tracing requirements from stakeholders/behaviors/technical measures to V&V.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Technical Measures: methods can be incorporated into constraint blocks.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Figure 2 note: identify model artifacts such as 'buy-offs, design reviews, and specifications'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/OMG: conformance criteria and common baseline.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "not reported"
+      ],
+      "status": "coded",
+      "rationale": "Most value is claimed for early mission-specific design and architecture/requirements work; standards-precedent claims do not map to a mission lifecycle stage.",
+      "evidence": [
+        {
+          "quote": "Abstract: CSRM is a 'starting point' for logical architecture development.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3 covers stakeholders through V&V in a top-down application outline.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/OMG specification-precedent claim is conditional and not tied to a mission lifecycle stage.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Trade-study or requirements-checking result",
+        "Stakeholder/user/expert evaluation",
+        "Reuse/replication across projects"
+      ],
+      "status": "coded",
+      "rationale": "Claims are supported by model-structure illustrations, reported expert review, reported university use, and historical trade-study mention; broad benefit claims remain assertions without metrics.",
+      "evidence": [
+        {
+          "quote": "Background/Vetting reports formal review/recommendation and current university use.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3 provides model-structure figures and notional application outline.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History reports trade studies but current paper gives no trade-study results.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "time",
+        "cost",
+        "model reuse",
+        "trace links",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper names development time, economies, reuse/knowledge transfer, trace relationships, and qualitative indicators such as review/adoption and on-board energy/data trade variables; no measured effect sizes are reported.",
+      "evidence": [
+        {
+          "quote": "Introduction: 'reducing development times and increasing the quality'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Abstract: 'economies associated with reusability'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: trace relationships down to V&V activities.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History: energy levels and data downloaded are trade-study indicators.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [
+        "previous document-centric process",
+        "none",
+        "not reported"
+      ],
+      "status": "coded",
+      "rationale": "Most claims lack an explicit comparator; the OMG specification claim contrasts a potential model-based specification with past document-based OMG specifications; some model-structure claims have no baseline.",
+      "evidence": [
+        {
+          "quote": "Background/OMG: 'In the past, OMG specifications have all been documentbased.'",
+          "location": "not specified"
+        },
+        {
+          "quote": "No quantitative baseline comparison for development time, quality, or reuse outcomes is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Traceability and vetting claims have moderate support; reuse/time/quality/common-baseline claims are weak; conditional future standards-precedent claims are unsupported as realized outcomes.",
+      "evidence": [
+        {
+          "quote": "See extraction claim records C1-C8 for per-claim confidence ratings and threats.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [
+        "review process",
+        "model quality criteria"
+      ],
+      "status": "coded",
+      "rationale": "OMG review/approval and conformance criteria provide a prospective governance mechanism, although dissemination/control/update processes are unresolved.",
+      "evidence": [
+        {
+          "quote": "Background/OMG: OMG process includes 'submission of candidate models for formal review and approval'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/OMG conformance criteria include retaining five fundamental elements, architecture levels, CubeSat form factor, and deployer accommodation.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4: dissemination, control, updates, and formats 'have yet to be worked out'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No adoption cost, training/tooling effort, saved effort, schedule effect, avoided rework, reuse-value metric, decision-quality evaluation, or mission-assurance benefit evidence is reported.",
+      "evidence": [
+        {
+          "quote": "Completed extraction found claims of economies/reduced development time/reuse, but no ROI or value-realization metric, baseline, or observed effect size.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "Section 3 gives a notional application path and population guidance, but no worked mission case with outputs or measured adopter process.",
+      "evidence": [
+        {
+          "quote": "Purpose: paper provides 'A notional outline of how the CSRM could be applied to a specific mission development effort'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: 'notional outline' following a top-down approach from stakeholders to V&V.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper addresses common baseline, SysML compliance, spreadsheet/document links, and historical multi-tool environment, but no detailed interoperability implementation or round-trip evidence for the current CSRM.",
+      "evidence": [
+        {
+          "quote": "Background/OMG: common baseline for comparing/evaluating implementations and sharing/reuse.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: requirements tables export to spreadsheets and Word/Excel artifacts are part of the model.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/Project History lists MagicDraw/Cameo, ModelCenter/MBSE Analyzer, STK, and MATLAB as prior environment.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The CSRM is tailored to CubeSat/university-team use and loosely defined subsystems, but it does not quantify resource-constrained adoption effort or lightweight process performance.",
+      "evidence": [
+        {
+          "quote": "Introduction: targeted at 'University Teams developing CubeSat mission architectures'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3/Architecture: CubeSat subsystems are 'generically and loosely defined as a starting point'.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "OMG conformance/review, model artifacts such as buy-offs/design reviews/specifications, and future control are discussed, but ROI evidence and concrete deliverable/gate workflow are absent.",
+      "evidence": [
+        {
+          "quote": "Figure 2 note references 'buy-offs, design reviews, and specifications'.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Background/OMG reports candidate specification formal review and conformance criteria.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4 states dissemination/control/update/formats remain unresolved.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "not addressed"
+      ],
+      "status": "coded",
+      "rationale": "The paper mentions university, research, government, and commercial teams, but does not discuss NewSpace, agile, distributed-team, or rapid-iteration workflows.",
+      "evidence": [
+        {
+          "quote": "No explicit NewSpace, agile, distributed-team process, concurrent design, or rapid-iteration method was found in the completed extraction.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The markdown is complete enough for extraction, direct quotes support the main classifications, and missing outcome/EPS/tool availability details are clear.",
+      "evidence": [
+        {
+          "quote": "Paper sections include abstract, introduction, background, application outline, figures, future work, references, and biographies.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Provide CubeSat teams, especially university teams, with a reusable MBSE/SysML starting point for mission-specific logical architecture, requirements, behavior, technical measures, and V&V, reducing repeated setup and improving quality/reuse.",
-    "modeling_scope": [
-      "stakeholders and stakeholder concerns",
-      "mission, CubeSat, ground-segment, subsystem, component, and deployer-interface requirements",
-      "behaviors via use case descriptions, use case diagrams, and activity diagrams",
-      "logical architecture from domain and enterprise to space/ground segments, subsystems, and components",
-      "technical measures including MOEs, MOPs, and TPMs",
-      "validation and verification activities",
-      "population packages and tables for adding, deleting, modifying, and relating elements"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "tool_dependency_or_vendor_lockin",
+      "interoperability_limitations",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage",
+      "lineage_or_duplicate_reference_model_overlap"
     ],
-    "system_boundary_level_of_abstraction": "Logical architecture of the CubeSat mission enterprise, including external constraints/environment, space segment, ground segment, support services, CubeSat, subsystems, and components; logical components are abstractions before physical hardware/software/procedure implementation.",
-    "minimal_or_excluded_modeling": "The CSRM does not impose a mission methodology, exact element set, physical implementation constraints, or detailed mission-specific subsystem behavior; teams populate and tailor the library and replace notional logical components with physical components later.",
-    "required_prior_behavioral_domain_knowledge": "Mission teams must supply mission-specific stakeholder concerns, requirements, use cases, activities, technical measures, and subsystem capability decisions; the CSRM provides structure and representative elements rather than complete behavior knowledge.",
-    "handling_limited_behavioral_knowledge": "The model supports starting with generic, loosely defined subsystems and representative packages, then progressively populating maturing elements, relationships, use cases, and activities according to the team's method.",
-    "model_artifacts_used": [
-      "SysML package diagrams",
-      "SysML block definition diagrams",
-      "stakeholder and concern tables",
-      "requirements hierarchy and requirements tables",
-      "use case descriptions",
-      "use case diagrams",
-      "activity diagrams",
-      "technical-measure specification tables",
-      "Word and Excel documents/spreadsheets embedded or linked in the model",
-      "constraint blocks and value properties for technical measures",
-      "validation and verification activity elements, diagrams, Word documents, and tables",
-      "trace, deriveReqt, refine, satisfy, verify, and hyperlink relationships"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The CSRM is ongoing, submitted/evaluated for an OMG specification role, with multiple future efforts planned for vetting, dissemination/control, and broader satellite expansion.",
+        "confidence": "high",
+        "evidence_quote": "Section 4: 'Feedback from university teams currently using the CSRM will be evaluated...' and 'Processes for dissemination and control... have yet to be worked out.'"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "author_stated",
+        "rationale": "The current model scope is a CubeSat logical reference model, targeted especially at university teams, not a demonstrated complete lifecycle/physical mission case.",
+        "confidence": "high",
+        "evidence_quote": "Introduction: 'targeted at the community of University Teams developing CubeSat mission architectures'; Section 3: logical components are a starting point 'followed by the physical architecture and development of the CubeSat.'"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "The paper claims reduced development time, quality, economies, and reuse, but provides no quantitative metrics for these MBSE value outcomes.",
+        "confidence": "high",
+        "evidence_quote": "Completed extraction: quality_checklist.evidence_for_outcomes=Insufficiently and ROI evidence is not_reported; no time, cost, defect, coverage, or reuse-count metric is reported for CSRM adoption."
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "Except for the document-based OMG specification context, outcome claims have no controlled comparison against previous document-centric processes, prior missions, or alternative toolchains.",
+        "confidence": "high",
+        "evidence_quote": "The paper states 'In the past, OMG specifications have all been documentbased' but does not compare CSRM outcomes quantitatively or empirically against that or any mission-development baseline."
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "Formal review and university use are reported, but the paper gives no independent validation protocol, criteria, data, or replication results for the claimed benefits.",
+        "confidence": "medium",
+        "evidence_quote": "Background/Vetting reports review/recommendation and university use but does not state review criteria, independent evaluation data, or outcomes of the university applications."
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "The CSRM includes V&V activity elements and prior trade-study context, but no flat-sat, hardware/software integration, environmental test, operations, or flight evidence for current CSRM outcomes.",
+        "confidence": "high",
+        "evidence_quote": "Completed extraction: eps_verification_specific.integration_test_readiness is not_reported; V&V evidence consists of model-level plans/procedures/results/status fields, not physical execution evidence."
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "EPS/power evidence is limited to a generic Power Subsystem block and brief historical power trade-study mentions; no EPS requirements, behavior model, verification procedure, or result is presented for the CSRM.",
+        "confidence": "high",
+        "evidence_quote": "Figure 11 lists 'Power Subsystem'; Background mentions 'power usage behaviors' and solar/battery trade studies, but no current EPS model artifacts or EPS V&V results are shown."
+      },
+      {
+        "flag": "tool_dependency_or_vendor_lockin",
+        "source": "extractor_identified",
+        "rationale": "The lineage uses named proprietary COTS tools and the current CSRM is hosted in an unspecified graphical modeling tool; open alternatives and license/access implications are not discussed.",
+        "confidence": "medium",
+        "evidence_quote": "Background/Project History names MagicDraw/Cameo Simulation Toolkit, ModelCenter/MBSE Analyzer, STK, and MATLAB; Abstract says current CSRM is hosted in a graphical modeling tool, but no open release/access model is given."
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "author_stated",
+        "rationale": "The authors explicitly state that specification dissemination/control/update processes and available formats are unresolved; detailed current CSRM exchange mechanisms are not reported.",
+        "confidence": "high",
+        "evidence_quote": "Section 4/OMG Specification Efforts: 'Processes for dissemination and control of the CSRM once it becomes an OMG specification, maintaining updates to it, and what formats will be available have yet to be worked out.'"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "The paper reports submission to OMG and university use, but provides no downloadable model, repository, license, or specification format for reproduction.",
+        "confidence": "high",
+        "evidence_quote": "Completed extraction: reproducibility_toolchain_reported=Insufficiently; the paper states future formats have not been worked out and does not include a model URL or repository."
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "extractor_identified",
+        "rationale": "Coverage emphasizes early logical architecture, requirements, behaviors, technical measures, and V&V planning; implementation, integration/test execution, and operations are not evidenced.",
+        "confidence": "high",
+        "evidence_quote": "Section 3/Architecture states logical architecture is followed by physical architecture and development; completed extraction has lifecycle_stage_addressed coded only as concept/pre-Phase A and Phase A/B."
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Many benefit claims are plausible and mechanism-linked but not backed by metrics, baselines, detailed case outcomes, or operational evidence.",
+        "confidence": "high",
+        "evidence_quote": "Claim records rate broad quality/economy/reduced-time/common-baseline claims as Weak or Unsupported; evidence_for_outcomes is Insufficiently."
+      },
+      {
+        "flag": "lineage_or_duplicate_reference_model_overlap",
+        "source": "author_stated",
+        "rationale": "The paper is part of a long INCOSE SSWG CubeSat/RAX MBSE reference-model lineage, so synthesis should avoid treating all cited phase outputs as independent evidence.",
+        "confidence": "high",
+        "evidence_quote": "Background/Project History: CSRM development has been underway since 2012 and prior phases included a CubeSat model applied to RAX, power/downlink behavior expansion, and integrated simulation trade studies."
+      }
     ],
-    "generality_reuse_mechanism": [
-      "platform-independent SysML reference model",
-      "library of reusable model elements",
-      "five fundamental elements: stakeholders, requirements, behaviors, architecture, and technical measures",
-      "architecture levels from enterprise to space/ground segments, subsystems, and components",
-      "generic and loosely defined subsystem packages for mission-specific specialization",
-      "conformance criteria for common baseline comparison and sharing",
-      "candidate OMG CubeSat specification",
-      "organizational component libraries and institutional-knowledge reuse"
+    "emergent_limitations": [
+      {
+        "label": "vetting-evidence-lacks-criteria-and-results",
+        "source": "extractor_identified",
+        "rationale": "The paper says vetting was favorable and the model is used by universities, but does not provide evaluation forms, issues found, before/after changes, user counts, or learning outcomes.",
+        "evidence": "Background/Vetting summarizes review and use in two sentences without detailed methods or results.",
+        "confidence": "high",
+        "evidence_quote": "Background/Vetting summarizes review and use in two sentences without detailed methods or results."
+      },
+      {
+        "label": "methodology-agnostic-model-leaves-tailoring-burden-to-teams",
+        "source": "author_stated",
+        "rationale": "Flexibility is a strength, but the paper also states teams determine which elements/relationships to use and may modify the containment tree, which can limit uniform adoption without additional guidance.",
+        "evidence": "Section 3: 'The CSRM provides a library of model elements but does not dictate what model elements and relationships to use. This is determined by the development team.'",
+        "confidence": "high",
+        "evidence_quote": "Section 3: 'The CSRM provides a library of model elements but does not dictate what model elements and relationships to use. This is determined by the development team.'"
+      },
+      {
+        "label": "model-based-specification-governance-unresolved",
+        "source": "author_stated",
+        "rationale": "The paper proposes a model-based OMG specification precedent but states dissemination, control, update, and format details are not yet decided.",
+        "evidence": "Section 4/OMG Specification Efforts: 'what formats will be available have yet to be worked out.'",
+        "confidence": "high",
+        "evidence_quote": "Section 4/OMG Specification Efforts: 'what formats will be available have yet to be worked out.'"
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Orient and tailor the CSRM landing/navigation structure.",
-        "inputs": "CSRM package hierarchy, mission development methodology, team needs.",
-        "outputs": "Selected or modified containment tree and mission-specific model setup.",
-        "actors_roles": "System architects, systems engineers, CubeSat development team.",
-        "prerequisites": "Access to the SysML CSRM in a graphical modeling tool.",
-        "completion_criteria": "Fundamental elements and hierarchy judged necessary and sufficient or tailored for the mission method.",
-        "handoffs": "Provides structure for stakeholder and requirement population."
-      },
-      {
-        "step": "Identify stakeholders and concerns, needs, objectives, constraints, and regulatory/deployer interfaces.",
-        "inputs": "Representative stakeholder packages, mission context, regulatory/deployer obligations.",
-        "outputs": "Mission stakeholder, concern, need, objective, constraint, and glossary entries with trace links.",
-        "actors_roles": "Systems engineers with stakeholders and regulatory/deployer interface owners.",
-        "prerequisites": "Mission concept and initial stakeholder set.",
-        "completion_criteria": "Stakeholder packages and concern tables populated sufficiently to derive mission requirements.",
-        "handoffs": "Feeds mission requirements and technical measures."
-      },
-      {
-        "step": "Populate and manage requirements hierarchy.",
-        "inputs": "Stakeholder concerns, mission objectives, constraints, needs, deployer interfaces.",
-        "outputs": "Enterprise, segment, CubeSat, ground, subsystem, component, and deployer-interface requirements with IDs and trace/refine/verify/satisfy properties.",
-        "actors_roles": "Systems engineers and subsystem leads.",
-        "prerequisites": "Agreement on requirement numbering/prefix scheme and relevant architecture levels.",
-        "completion_criteria": "Requirements tables populated and trace/derivation relationships established as needed.",
-        "handoffs": "Feeds behavior modeling, architecture allocation, technical measures, and verification activities."
-      },
-      {
-        "step": "Define behaviors using use cases and activities.",
-        "inputs": "Requirements, actors, operational concepts, mission method.",
-        "outputs": "Behavior packages, use case descriptions, use case diagrams, activity diagrams, and refines/realizing-element links.",
-        "actors_roles": "Systems engineers, operators/domain experts, subsystem teams.",
-        "prerequisites": "Initial requirements and actors.",
-        "completion_criteria": "Behaviors at enterprise, CubeSat, ground, subsystem, or component levels populated to support requirements refinement.",
-        "handoffs": "Feeds logical architecture and V&V definition."
-      },
-      {
-        "step": "Populate logical architecture across domain, enterprise, segment, subsystem, and component levels.",
-        "inputs": "CSRM logical architecture packages, mission requirements, behavior needs.",
-        "outputs": "Mission-specific logical architecture for space and ground segments, CubeSat subsystems, ground subsystems, and components.",
-        "actors_roles": "System architects and subsystem leads.",
-        "prerequisites": "Mission-specific subsystem capability decisions.",
-        "completion_criteria": "Generic/notional subsystems and components tailored, added, deleted, or modified for the mission.",
-        "handoffs": "Feeds physical architecture and development of the CubeSat."
-      },
-      {
-        "step": "Define technical measures and calculation methods.",
-        "inputs": "Stakeholder expectations, requirements, architecture levels, measure descriptions.",
-        "outputs": "MOE, MOP, and TPM specifications, mappings, method documents/spreadsheets, and constraint/value properties.",
-        "actors_roles": "Systems engineers, analysts, stakeholders, subsystem leads.",
-        "prerequisites": "Agreement on stakeholder and performance measures to track.",
-        "completion_criteria": "Technical measures allocated and traceable, with methods captured in model-linked artifacts.",
-        "handoffs": "Feeds assessment, validation, and verification evidence planning."
-      },
-      {
-        "step": "Plan and capture validation and verification activities.",
-        "inputs": "Requirements, mission objectives, technical measures, model artifacts.",
-        "outputs": "Validation and verification activity elements, plans, procedures, execution notes, results, status, diagrams or Word documents.",
-        "actors_roles": "Systems engineers, verification leads, validation stakeholders, test/analysis owners.",
-        "prerequisites": "Requirements and technical measures with candidate verification/validation methods.",
-        "completion_criteria": "Activities linked to the requirements, objectives, and technical measures they verify or validate.",
-        "handoffs": "Supports model-based V&V planning and later implementation/test execution."
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The paper maps CSRM use to top-down systems engineering from stakeholder identification through requirements, behaviors, logical architecture, technical measures, and V&V. Figure 2 notes identifying necessary model artifacts such as buy-offs, design reviews, and specifications, but no named review gate workflow is specified.",
-    "approach_classification": "Pure MBSE",
-    "approach_classification_rationale": "The current CSRM contribution is a SysML-compliant reference model hosted in a graphical modeling tool; prior integrated simulation tools are mentioned historically, but the application pathway in this paper is primarily model-structure, traceability, and model-artifact population.",
-    "tailoring_rationale": [
-      "Targeted to university CubeSat teams but usable by research, government, and commercial teams.",
-      "Methodology-agnostic so teams can modify containment tree and choose relationships according to their method.",
-      "Generic and loosely defined subsystem packages allow mission-specific capability decisions.",
-      "Platform-independent and candidate OMG specification to support reuse and comparison across teams.",
-      "Basic architecture partitioning and functional allocation of most satellites are similar, allowing broader satellite adaptation."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "Model-Based Systems Engineering principles",
-      "SysML-compliant model",
-      "graphical modeling tool, not named for the CSRM instance in the paper",
-      "No Magic MagicDraw/Cameo Simulation Toolkit, mentioned for third-phase environment",
-      "Phoenix Integration ModelCenter and MBSE Analyzer, mentioned for third-phase environment",
-      "Analytical Graphics Inc. Systems Tool Kit, mentioned for third-phase environment",
-      "MathWorks MATLAB, mentioned for third-phase environment",
-      "Word documents and Excel spreadsheets embedded or linked for technical measures and V&V",
-      "requirements tables exportable to spreadsheets"
-    ],
-    "toolchain_architecture_data_flow": "The CSRM is hosted in a graphical modeling tool with package/table navigation, trace relationships, and hyperlinks. Requirements tables can be exported to spreadsheets. Technical-measure Word or Excel artifacts are part of the model and can be edited within it, with methods incorporable into constraint blocks and parameters. A separate third-phase environment linked MagicDraw/Cameo, ModelCenter/MBSE Analyzer, STK, and MATLAB for trade studies, but current round-trip data exchange is not detailed.",
-    "interoperability_mechanisms": [
-      "SysML relationships such as trace, deriveReqt, refine, satisfy, verify, and realizing element",
-      "active hyperlinks to documents and websites",
-      "requirements-table spreadsheet export",
-      "Word and Excel artifacts stored as part of the model",
-      "constraint blocks and value properties for measure methods",
-      "conformance criteria for OMG candidate specification",
-      "common baseline for comparison and reuse"
-    ],
-    "syntax_semantic_continuity_evidence": "The paper claims SysML compliance and platform independence, and the OMG conformance criteria require retention of the five fundamental elements, architecture levels, CubeSat form factor, and deployer accommodation; no semantic validation, exchange schema, or round-trip continuity test is reported.",
-    "software_hardware_system_integration_readiness": "Logical components are abstractions without implementation constraints and are intended to be followed by physical architecture and CubeSat development; no hardware/software integration results, test readiness levels, or flight readiness evidence are reported.",
-    "toolchain_limitations": [
-      "Current CSRM graphical modeling tool is not named beyond being a graphical modeling tool.",
-      "Model file or open-source repository is not provided in the paper.",
-      "Dissemination, control, update process, and available formats for an OMG specification are not yet worked out.",
-      "Detailed interfaces among modeling, spreadsheet, document, and simulation tools are not specified.",
-      "Methodology choices and model-element relationships are left to the development team."
-    ],
-    "availability_reproducibility": "The paper reports that the CSRM has been submitted to OMG and is in use by several university teams, but it does not provide a downloadable model, repository, license, detailed import/export format, or enough implementation detail for exact reproduction."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "Power Subsystem as a generic CubeSat subsystem in the Space Segment and Subsystems architecture",
-      "communication downlink and power usage behaviors mentioned as a second development phase",
-      "solar panel areas and maximum battery capacity mentioned in prior third-phase trade studies",
-      "no dedicated EPS components, EPS requirements, power modes, battery/solar models, or EPS verification procedures reported for the CSRM application"
-    ],
-    "eps_requirements_representation": "No EPS-specific requirements are shown. The generic requirements hierarchy supports subsystem and component requirements with properties such as Id, Text, Traced To, Derived From, Refined By, Verify Method, Verified By, and Satisfied By, which could represent Power Subsystem requirements in a mission-specific model.",
-    "verification_validation_artifacts": [
-      "Validation Activity elements with Plan, Procedure, Conduct, Result, Status, Active Hyperlink, and Validates properties",
-      "Verification Activity elements with Plan, Procedure, Conduct, Result, Status, Active Hyperlink, and Verifies properties",
-      "Validation and Verification package and activity tables",
-      "Validation Activity Diagrams or Word documents",
-      "Verification Activity Diagrams or Word documents",
-      "requirements properties Verify Method and Verified By",
-      "technical-measure specifications and methods that receive verification data"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "generic model-based V&V activities linked to requirements, objectives, and technical measures before or during mission-specific model development",
-      "technical-measure methods captured in model-linked Word/Excel artifacts and constraint blocks for analysis/assessment",
-      "mission-specific model inspection, demonstration, test, and analysis as V&V categories",
-      "historical power-related trade studies comparing solar panel area and battery capacity against on-board energy levels, but details are not provided in this paper"
-    ],
-    "evidence_verification_integrated_in_model": "The paper states that the CSRM traces requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities; Figure 15 shows validation and verification activity tables linked to mission objectives, MOEs, and CubeSat requirements.",
-    "integration_test_readiness": "Conceptual only. The model can capture V&V plans, procedures, execution notes, results, and status, but no EPS integration tests, physical test results, or readiness metrics are reported."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "The CSRM is intended to improve quality and create economies through reuse.",
-      "outcome_category": "quality and reusability",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "reusable SysML reference model",
-        "logical architecture starting point",
-        "library of model elements"
+      "field_path": "mbse_objective_scope_artifacts.modeling_scope=other",
+      "label": "stakeholder-and-technical-measure-scope",
+      "description": "The CSRM explicitly models stakeholder concerns and technical measures (MOEs, MOPs, TPMs), which are not separate controlled modeling-scope labels.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Figure 1 packages include Stakeholder and Technical Measures; Figure 2 lists five fundamental elements: stakeholders, requirements, behaviors, architecture, and technical measures.",
+      "confidence": "medium",
+      "original_label": "Stakeholder and technical-measure scope",
+      "type": "modeling_scope",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.modeling_scope"
       ],
-      "artifact_or_process_linked": "CSRM as a SysML-compliant reference model for CubeSat space and ground components.",
-      "lifecycle_stage": "early logical architecture and mission-specific design",
-      "evidence_type": "author claim with reference-model description",
-      "metric_or_value_indicator": "quality enhancements and economies associated with reusability; no quantitative metric",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "not measured",
-      "evidence_source": "Abstract and Introduction",
-      "direct_quote": "is intended to introduce quality enhancements and economies associated with reusability",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "Outcome is plausible from reuse but not measured; benefits could depend on team skill, model fit, and tool access."
+      "controlled_other_trigger": "mbse_objective_scope_artifacts.modeling_scope=other"
     },
     {
-      "claim": "The reusable model can reduce development time and increase spacecraft/ground-system design quality.",
-      "outcome_category": "cost/schedule and quality",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "platform-independent building blocks",
-        "mission-specific specialization",
-        "reuse of prior subsystem experience"
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used=other",
+      "label": "population-tables-and-embedded-document-artifacts",
+      "description": "The model uses stakeholder/concern/behavior/technical-measure/V&V population tables plus Word and Excel documents linked or stored inside the model.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section 3/CSRM Elements and Population: tables are used 'to add, delete, and modify the individual elements and to establish relationships'; Section 3/Technical Measures: 'The document or spreadsheet is part of the model'.",
+      "confidence": "medium",
+      "original_label": "Population tables and embedded document artifacts",
+      "type": "model_artifact",
+      "applies_to": [
+        "mbse_objective_scope_artifacts.model_artifacts_used"
       ],
-      "artifact_or_process_linked": "CSRM building blocks and organizational component libraries.",
-      "lifecycle_stage": "mission design and architecture development",
-      "evidence_type": "author assertion with mechanism, no metrics",
-      "metric_or_value_indicator": "reduced development times; increased quality; internal reuse; institutional knowledge transfer",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "not measured",
-      "evidence_source": "Introduction / CubeSat System Reference Model",
-      "direct_quote": "This reusable model supports reducing development times and increasing the quality of CubeSat spacecraft and ground system design, whether embraced by research, government, or commercial engineering teams.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No time or defect data are provided; increased quality may arise from experienced teams or independent process improvements."
+      "controlled_other_trigger": "mbse_objective_scope_artifacts.model_artifacts_used=other"
     },
     {
-      "claim": "The CSRM supports traceability from stakeholders, behaviors, and technical measures through requirements, architecture, and V&V.",
-      "outcome_category": "traceability and verification readiness",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "trace relationships",
-        "requirements properties",
-        "validation and verification activity elements",
-        "tables and package hierarchy"
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool=other",
+      "label": "unspecified-graphical-modeling-tool-with-word-excel-integration",
+      "description": "The current CSRM is hosted in a graphical modeling tool that the paper does not name, and uses Word/Excel artifacts as part of the model.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Abstract: CSRM 'is hosted in a graphical modeling tool'; Section 3/Technical Measures: Word/Excel method files are part of the model.",
+      "confidence": "medium",
+      "original_label": "Unspecified graphical modeling tool with Word/Excel integration",
+      "type": "tool",
+      "applies_to": [
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool"
       ],
-      "artifact_or_process_linked": "CSRM elements overview, requirements tables, behavior relationships, and V&V package.",
-      "lifecycle_stage": "requirements engineering through V&V planning",
-      "evidence_type": "model-structure evidence shown in text and figure descriptions",
-      "metric_or_value_indicator": "presence of trace/refine/derive/verify/satisfy properties; no coverage metric",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "model is structured to maintain end-to-end trace links",
-      "evidence_source": "Section 3 / CSRM Landing Page, Requirements, Behaviors, and Verification and Validation",
-      "direct_quote": "The CSRM provides for defining these elements; and for tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The paper shows structural capability, not evidence that teams maintained complete or correct traces in practice."
+      "controlled_other_trigger": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool=other"
     },
     {
-      "claim": "OMG conformance criteria and retained logical elements can provide a common baseline for comparison, evaluation, sharing, and reuse.",
-      "outcome_category": "integrability, standardization, and reuse",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "conformance criteria",
-        "retention of fundamental elements",
-        "retention of architecture levels",
-        "CubeSat form factor and deployer accommodation"
+      "field_path": "eps_verification_specific.eps_elements_modeled=other",
+      "label": "generic-power-subsystem-placeholder",
+      "description": "The current CSRM shows a generic Power Subsystem block rather than detailed EPS elements such as regulators, buses, loads, or modes.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Figure 11 description lists 'Power Subsystem' among CubeSat subsystem blocks.",
+      "confidence": "medium",
+      "original_label": "Generic Power Subsystem placeholder",
+      "type": "eps_element",
+      "applies_to": [
+        "eps_verification_specific.eps_elements_modeled"
       ],
-      "artifact_or_process_linked": "Candidate OMG CubeSat specification based on CSRM.",
-      "lifecycle_stage": "cross-project architecture comparison and specification use",
-      "evidence_type": "author claim tied to proposed specification mechanism",
-      "metric_or_value_indicator": "common baseline for comparing/evaluating/sharing/reuse; no adoption metric",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "not measured; specification evaluation is in progress",
-      "evidence_source": "Background / Current Effort with the Object Management Group",
-      "direct_quote": "Retention of these logical elements provides a common baseline for comparing and evaluating different mission-specific implementations and for the sharing and reuse of design elements.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "OMG approval and actual cross-project interoperability are not reported; common baseline may not ensure semantic alignment."
+      "controlled_other_trigger": "eps_verification_specific.eps_elements_modeled=other"
     },
     {
-      "claim": "The CSRM has received favorable professional and university-team vetting.",
-      "outcome_category": "stakeholder evaluation and adoption",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "formal review of the reference model",
-        "use by CubeSat development teams",
-        "consideration for MBSE curriculum"
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].outcome_category=other",
+      "label": "design-quality-enhancement-outcome",
+      "description": "The paper repeatedly claims improved design quality, but 'quality enhancement' is broader than the controlled outcome labels and is not measured as defects, reliability, or completeness.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Abstract: CSRM is intended to introduce 'quality enhancements'; Introduction: reusable model supports 'increasing the quality of CubeSat spacecraft and ground system design'.",
+      "confidence": "medium",
+      "original_label": "Design quality enhancement outcome",
+      "type": "outcome_theme",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].outcome_category"
       ],
-      "artifact_or_process_linked": "CSRM reviewed by systems engineering professionals and introduced to CubeSat mission development teams.",
-      "lifecycle_stage": "model vetting and educational/mission-development adoption",
-      "evidence_type": "reported stakeholder review and adoption statement",
-      "metric_or_value_indicator": "review recommendations; several universities using; favorable results not quantified",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "formal recommendation and reported use; details absent",
-      "evidence_source": "Abstract and Background / Vetting",
-      "direct_quote": "The CSRM has been formally reviewed and recommended by 1) a Certified Architect Program engineering fellow and 2) by a team lead by Director level system engineer.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Review criteria, independence, number of teams, and outcomes of university use are not detailed."
+      "controlled_other_trigger": "claimed_outcomes_value_mechanisms_evidence[].outcome_category=other"
     },
     {
-      "claim": "Earlier integrated MBSE phases enabled power and communications trade studies.",
-      "outcome_category": "analysis automation and trade-space exploration",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "integrated MBSE simulation environment",
-        "solar-panel and battery-capacity trade variables",
-        "orbit and ground-station trade variables"
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism=other",
+      "label": "common-baseline-standards-conformance-mechanism",
+      "description": "OMG conformance criteria and retained logical elements are proposed to provide a common baseline for comparison, evaluation, sharing, and reuse.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Background/OMG: 'Retention of these logical elements provides a common baseline for comparing and evaluating different mission-specific implementations and for the sharing and reuse of design elements.'",
+      "confidence": "medium",
+      "original_label": "Common-baseline standards/conformance mechanism",
+      "type": "mechanism",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism"
       ],
-      "artifact_or_process_linked": "Phase-three modeling environment involving MagicDraw/Cameo, ModelCenter/MBSE Analyzer, STK, and MATLAB.",
-      "lifecycle_stage": "pre-physical design analysis and trade study",
-      "evidence_type": "reported prior-phase trade studies without results in this paper",
-      "metric_or_value_indicator": "on-board energy levels and quantity of data downloaded compared; values not reported",
-      "baseline_comparator": "different configurations compared, but no conventional baseline reported",
-      "observed_effect_size_or_qualitative_effect": "not reported",
-      "evidence_source": "Background / Project History",
-      "direct_quote": "Different configurations of solar panel areas and maximum battery capacity were traded off to compare on-board energy levels",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The current paper does not present models, assumptions, parameter values, or trade-study outputs; evidence relies on cited prior work."
+      "controlled_other_trigger": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism=other"
     },
     {
-      "claim": "If approved, a model-based OMG CSRM specification would set a precedent for future reference architectures and reusable libraries.",
-      "outcome_category": "reproducibility and standards governance",
-      "specificity": "generic space-system",
-      "mbse_mechanism": [
-        "model-based specification",
-        "reference architecture",
-        "reusable libraries",
-        "OMG review and approval process"
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator=other",
+      "label": "favorable-vetting-and-university-use-indicator",
+      "description": "Qualitative uptake/review indicators include formal recommendation and reported use by several universities, but no controlled metric such as reuse count or score is reported.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Background/Vetting: CSRM 'has been formally reviewed and recommended' and 'is currently in use by CubeSat development teams from several universities'.",
+      "confidence": "medium",
+      "original_label": "Favorable vetting and university-use indicator",
+      "type": "metric_or_indicator",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator"
       ],
-      "artifact_or_process_linked": "CSRM submitted to OMG as a CubeSat specification candidate.",
-      "lifecycle_stage": "standards development and dissemination",
-      "evidence_type": "forward-looking author claim",
-      "metric_or_value_indicator": "precedent and reusable library potential; no realized standard or reuse counts",
-      "baseline_comparator": "past OMG specifications described as document-based",
-      "observed_effect_size_or_qualitative_effect": "not yet realized; approval pending",
-      "evidence_source": "Background / Current Effort with the Object Management Group",
-      "direct_quote": "If approved, since the CSRM is model-based, it would serve as a precedent for future reference architectures and reusable libraries.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The claim is conditional on OMG approval and does not demonstrate adoption, maintenance, or reuse continuity."
-    }
-  ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "Candidate governance is through OMG specification submission, conformance criteria, future dissemination/control/update processes, and feedback from university teams; the final control process and available formats remain unresolved.",
-    "traceability_to_deliverables_decisions_reviews": "The CSRM traces stakeholders, requirements, behaviors, technical measures, architecture, and V&V activities; Figure 2 notes identifying model artifacts such as buy-offs, design reviews, and specifications, but no detailed decision log or gate workflow is reported.",
-    "evaluation_criteria_model_quality_usefulness": "Reported criteria include retaining five fundamental elements, architecture levels, CubeSat form factor, and deployer accommodation; vetting by systems engineering professionals and feedback from university teams are used qualitatively.",
-    "roi_value_realization_evidence": "The paper claims economies, reduced development times, increased quality, reuse, and knowledge transfer, but provides no ROI calculation, cost/schedule metrics, defect data, or baseline comparison.",
-    "programmatic_gates_critical_design_events_supported": "Buy-offs, design reviews, and specifications are mentioned as model artifacts to identify; no specific SRR/PDR/CDR or CubeSat program gate evidence is provided.",
-    "model_derived_performance_indicators_management_metrics": "Technical measures include MOEs, MOPs, and TPMs that are tracked and assessed; no management dashboard, KPI values, or project-control metrics are reported."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed conceptually",
-      "rationale": "Section 3 provides a notional top-down application outline from stakeholders to V&V, but not a detailed playbook with measured case execution."
+      "controlled_other_trigger": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator=other"
     },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper mentions a graphical modeling tool, exports, Word/Excel links, historical integrated tools, hyperlinks, and OMG conformance, but not detailed interoperability interfaces or round-trip evidence."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed conceptually",
-      "rationale": "The CSRM targets university CubeSat teams and uses generic, loosely defined, methodology-agnostic building blocks, but resource constraints and effort reductions are not measured."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "addressed conceptually",
-      "rationale": "OMG conformance, feedback, buy-offs/design reviews/specifications, and reuse/economy claims are discussed, but governance processes and ROI evidence are incomplete."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "not addressed",
-      "rationale": "The paper mentions university, research, government, and commercial teams but does not discuss agile methods, distributed teams, rapid iteration, or NewSpace-specific workflows."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "A CubeSat mission can be modeled generally through a SysML-compliant, platform-independent reference model covering stakeholders, requirements, behaviors, architecture, technical measures, and V&V.",
-        "The model handles limited mission-specific knowledge by providing generic, loosely defined subsystem packages and a library of elements that teams progressively populate and tailor.",
-        "EPS is not modeled in detail; the Power Subsystem appears only as a generic subsystem, with historical mention of power-usage behavior and solar/battery trade studies."
+    {
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator=other",
+      "label": "historical-on-board-energy-and-data-downlink-trade-study-indicators",
+      "description": "The paper reports earlier trade studies using on-board energy levels and quantity of data downloaded, which are not controlled synthesis metrics except indirectly.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Background/Project History: solar/battery configurations compared 'on-board energy levels' and orbit/ground station configurations compared 'quantity of data downloaded'.",
+      "confidence": "medium",
+      "original_label": "Historical on-board energy and data-downlink trade-study indicators",
+      "type": "metric_or_indicator",
+      "applies_to": [
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator"
       ],
-      "RQ2": [
-        "Claimed outcomes include quality enhancements, reuse economies, reduced development time, increased design quality, institutional knowledge transfer, common baseline comparison, and standards/reusable-library potential.",
-        "No explicit EPS reliability claim or measured reliability outcome is reported.",
-        "Evidence for reproducibility and integrability is mainly structural and qualitative: traceable model elements, conformance criteria, professional review, university use, and pending OMG specification activity."
-      ],
-      "RQ3": [
-        "Verification and validation are integrated as model packages and activity elements with plans, procedures, execution notes, results, status, hyperlinks, and verifies/validates relationships.",
-        "Verification is linked to requirements and validation to mission objectives or technical measures, supporting pre-physical-development planning within the mission-specific model.",
-        "No EPS-specific verification activity, test procedure, executable check, integration test, or physical result is presented."
+      "controlled_other_trigger": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator=other"
+    },
+    {
+      "field_path": "governance_roi_project_decision_linkage",
+      "label": "omg-model-based-specification-pathway",
+      "description": "The paper positions CSRM as a candidate model-based OMG CubeSat specification, with conformance criteria and formal review but unresolved control/update/formats.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Background/OMG: CSRM 'has been submitted to OMG for consideration as a CubeSat specification'; Section 4: control/update/formats have yet to be worked out.",
+      "confidence": "medium",
+      "original_label": "OMG model-based specification pathway",
+      "type": "governance_theme",
+      "applies_to": [
+        "governance_roi_project_decision_linkage",
+        "gap_mapping.governance_project_deliverables_roi"
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Feedback from university teams currently using the CSRM will be evaluated for inclusion in the model in order to provide a better quality product.",
-      "Lessons learned may identify value-added model elements not currently in the CSRM, portions of the model that do not function as intended, and new capabilities to increase usefulness and applicability.",
-      "Processes for dissemination and control of the CSRM after possible OMG specification approval, update maintenance, and available formats have yet to be worked out.",
-      "Efforts to assess expansion from CubeSats to a broader class of satellites are future work.",
-      "The CSRM is methodology-agnostic and teams may need to modify the containment tree if the five fundamental elements are inconsistent with their methodology."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "No dedicated EPS model, EPS requirement set, power-mode model, EPS verification procedure, or EPS test evidence is provided.",
-      "Claims about development time, quality, reuse, and economies are not supported by metrics or baseline comparisons.",
-      "The current CSRM model file, repository, license, exact tool implementation, and version/update process are not provided.",
-      "Vetting and university-use evidence is summarized without detailed evaluation criteria, data, or outcomes.",
-      "Toolchain interoperability is described at a high level; no round-trip exchange, semantic consistency checks, or integration-test evidence is reported."
-    ],
-    "direct_evidence_quotes": [
+    {
+      "field_path": "bibliographic_review_management",
+      "label": "csrm-rax-incose-sswg-lineage",
+      "description": "This paper is the fourth-phase CSRM contribution in a sequence of INCOSE SSWG CubeSat/RAX MBSE publications, including prior RAX application, power/downlink behavior, and integrated simulation trade studies.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Background/Project History lists four phases beginning in 2012 and references prior RAX and CSRM publications.",
+      "confidence": "medium",
+      "original_label": "CSRM/RAX/INCOSE SSWG lineage",
+      "type": "lineage",
+      "applies_to": [
+        "bibliographic_review_management",
+        "synthesis_consistency"
+      ]
+    }
+  ],
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0011",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0011.json",
+      "tier_status": "core",
+      "tier_rationale": "Retained as core because it directly presents a CubeSat MBSE/SysML reference model, reuse/generalization mechanism, traceability, and model-integrated V&V structure. EPS relevance is adjacent through the generic Power Subsystem and prior power trade-study lineage.",
+      "citation": {
+        "title": "Development and Application of the CubeSat System Reference Model",
+        "authors": [
+          "D. Kaslow",
+          "P. T. Cahill",
+          "B. Ayres"
+        ],
+        "year": 2020,
+        "venue": "2020 IEEE Aerospace Conference",
+        "venue_type": "conference paper",
+        "doi": "10.1109/aero47225.2020.9172714",
+        "publisher": "IEEE",
+        "url": "https://doi.org/10.1109/aero47225.2020.9172714"
+      },
+      "source_database_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"reference model\" OR template OR behavior OR behaviours OR behaviors OR architecture))",
+          "rank": 22,
+          "paperId": "85092546935"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+          "rank": 39,
+          "paperId": "85092546935"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0011_semantic_title.json",
+          "query": "\"Development and Application of the CubeSat System Reference Model\"",
+          "rank": 1,
+          "paperId": "33e4af38b9547b9ce87dd14b7f3ca1d7fc6f5690",
+          "purpose": "abstract_enrichment"
+        }
+      ],
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "high",
+          "rationale": "The paper centrally addresses general CubeSat mission/system modeling via a reusable SysML reference model, though not a detailed EPS behavior model."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "It claims system-level reuse, quality, traceability, common-baseline, and adoption outcomes attributed to MBSE/CSRM, but not measured EPS reliability or reproducibility outcomes."
+        },
+        "RQ3": {
+          "relevance": "partial",
+          "rationale": "The CSRM includes generic model-linked V&V activities and technical measures before physical development, but no EPS-specific verification procedures, SIL/HIL, or test results."
+        }
+      },
+      "lineage_overlap_notes": "Part of the INCOSE SSWG CubeSat/RAX MBSE lineage: earlier phases developed a SysML CubeSat/RAX model, added downlink and power-usage behaviors, and integrated MagicDraw/Cameo, ModelCenter/MBSE Analyzer, STK, and MATLAB for trade studies. Treat lineage evidence as related, not independent replication.",
+      "screening_metadata": {
+        "corpus_id": "paper-0011",
+        "screening_tier": "core",
+        "markdown_path": "markdown/paper-0011_2020_development-and-application-of-the-cubesat-system-reference-model.md"
+      }
+    },
+    "study_context_population": {
+      "mission_platform": {
+        "class": "CubeSat/nanosatellite",
+        "size_form_factor": "CubeSat form factor; specific U size not reported; conformance criteria include accommodation of a CubeSat deployment system.",
+        "mission_name": "No current mission case; RAX is mentioned as prior-phase application history.",
+        "mission_domain": "Generic CubeSat mission enterprise covering space segment, ground segment, support services, regulatory/deployer stakeholders, technical measures, and V&V.",
+        "organization_type": "INCOSE Space Systems Working Group with consultant and Air Force Institute of Technology authors; target adopters are university CubeSat teams, with research/government/commercial teams also mentioned.",
+        "project_maturity": "CSRM development underway since 2012; current fourth phase developed the reference model, submitted it to OMG, and reports use by several university CubeSat teams."
+      },
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A",
+        "Phase A/B"
+      ],
+      "development_context": [
+        "academic/student"
+      ],
+      "eps_relevance": "EPS-adjacent",
+      "model_maturity": [
+        "reference model/template",
+        "project-applied model"
+      ],
+      "context_notes": "The paper is not a mission-specific flight report; it presents a reusable logical model and notional application path for mission-specific population from stakeholders to V&V."
+    },
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Provide CubeSat teams, especially university teams, with a reusable SysML/MBSE starting point and exo-structure for mission-specific logical architecture, requirements, behaviors, technical measures, and V&V, to improve quality and reuse.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "verification",
+        "other"
+      ],
+      "system_boundary_and_level_of_abstraction": {
+        "included": "Logical CubeSat mission enterprise with external constraints/environment, space segment, ground segment, support services, CubeSat, subsystems, components, stakeholders, requirements, behaviors, technical measures, and V&V activities.",
+        "level_of_abstraction": "Logical architecture; components are abstractions of physical components and avoid implementation constraints until later physical architecture/development.",
+        "excluded_or_minimal": "Detailed physical architecture, implementation constraints, mission-specific subsystem behavior, actual EPS design, and actual test/flight execution are not included in the current paper."
+      },
+      "required_prior_behavioral_domain_knowledge": "Mission teams must provide mission-specific stakeholder concerns, requirements, use cases/activities, technical measures, subsystem capabilities, and methodology-specific relationships. The CSRM supplies representative elements and guidance rather than complete behavior knowledge.",
+      "handling_limited_behavioral_knowledge": "Teams can begin with generic, loosely defined subsystem packages and representative stakeholders/requirements/architecture, then progressively populate, tailor, add/delete/modify elements, and establish relationships as mission knowledge matures.",
+      "model_artifacts_used": [
+        "SysML package diagrams and landing/navigation page",
+        "requirements hierarchies and requirements tables with trace/derive/refine/verify/satisfy properties",
+        "use case descriptions, use case diagrams, activity diagrams, and behavior tables",
+        "block definition diagrams for domain, enterprise, segments, subsystems, and components",
+        "stakeholder, concern, glossary, technical-measure, and population tables",
+        "MOE/MOP/TPM specifications, method Word/Excel files, constraint blocks, and value properties",
+        "validation/verification activity elements, tables, diagrams, plans, procedures, execution notes, results, status, and hyperlinks"
+      ],
+      "generality_reuse_mechanism": [
+        "template",
+        "reference model",
+        "library",
+        "method guidance"
+      ],
+      "reuse_availability_notes": "The paper reports OMG submission and university use, but does not provide a downloadable CSRM model, repository, license, or final distribution format."
+    },
+    "implementation_pathway_tailoring": {
+      "reported_steps": [
+        {
+          "step": 1,
+          "name": "Orient to CSRM landing/navigation and tailor containment tree if needed",
+          "inputs": "CSRM package hierarchy, team methodology, mission development context.",
+          "outputs": "Selected or modified mission-specific model structure.",
+          "actors_roles": "Systems architects, systems engineers, CubeSat development team.",
+          "prerequisites": "Access to CSRM in a graphical modeling tool.",
+          "completion_criteria_or_handoff": "Team decides whether CSRM elements are necessary/sufficient and proceeds to population."
+        },
+        {
+          "step": 2,
+          "name": "Identify stakeholders, concerns, needs, objectives, constraints, and regulatory/deployer interfaces",
+          "inputs": "Representative stakeholder packages, mission context, regulatory and deployer obligations.",
+          "outputs": "Stakeholder/concern/need/objective/constraint entries and trace links.",
+          "actors_roles": "Systems engineers with stakeholder, regulatory, and deployer-interface owners.",
+          "prerequisites": "Initial mission concept and stakeholder set.",
+          "completion_criteria_or_handoff": "Stakeholder concerns are ready to feed mission requirements and technical measures."
+        },
+        {
+          "step": 3,
+          "name": "Populate requirements hierarchy",
+          "inputs": "Stakeholder concerns, mission objectives/constraints, deployer interface requirements.",
+          "outputs": "Enterprise, segment, CubeSat, ground, subsystem, component, and deployer-interface requirements with IDs and trace/refine/verify/satisfy properties.",
+          "actors_roles": "Systems engineers and subsystem leads.",
+          "prerequisites": "Requirement prefix/numbering scheme and architecture levels selected.",
+          "completion_criteria_or_handoff": "Requirements tables populated and linked to behaviors, architecture, technical measures, and verification."
+        },
+        {
+          "step": 4,
+          "name": "Define behaviors using use cases, use-case descriptions, and activities",
+          "inputs": "Requirements, actors, mission functions, operational concepts.",
+          "outputs": "Behavior packages/tables, use cases, use-case diagrams, activity diagrams, and refine/realizing-element links.",
+          "actors_roles": "Systems engineers, operators/domain experts, subsystem teams.",
+          "prerequisites": "Initial requirements and actors.",
+          "completion_criteria_or_handoff": "Behaviors at enterprise, CubeSat, ground, subsystem, or component levels are linked to requirements/use cases."
+        },
+        {
+          "step": 5,
+          "name": "Populate logical architecture across domain, enterprise, segments, subsystems, and components",
+          "inputs": "CSRM architecture packages, requirements, behavior needs, subsystem capability decisions.",
+          "outputs": "Mission-specific logical architecture for space/ground segments, CubeSat subsystems, ground subsystems, and notional/actual components.",
+          "actors_roles": "System architects and subsystem leads.",
+          "prerequisites": "Mission-specific capability decisions and chosen architecture levels.",
+          "completion_criteria_or_handoff": "Generic/notional elements tailored, added, deleted, or modified; logical architecture ready to inform physical architecture."
+        },
+        {
+          "step": 6,
+          "name": "Define technical measures and calculation/assessment methods",
+          "inputs": "Stakeholder expectations, requirements, MOE/MOP/TPM definitions, method descriptions.",
+          "outputs": "Technical measure specifications, mappings, Word/Excel method artifacts, constraints/parameters, and allocation/trace links.",
+          "actors_roles": "Systems engineers, analysts, stakeholders, subsystem leads.",
+          "prerequisites": "Agreement on measures to track and assess.",
+          "completion_criteria_or_handoff": "Technical measures are allocated/traceable and can supply data for assessment and V&V."
+        },
+        {
+          "step": 7,
+          "name": "Plan and capture validation and verification activities",
+          "inputs": "Requirements, mission objectives, technical measures, candidate verification/validation methods.",
+          "outputs": "Validation/verification activities, plans, procedures, execution notes, results, status, diagrams or Word documents, and verifies/validates links.",
+          "actors_roles": "Verification leads, systems engineers, validation stakeholders, test/analysis owners.",
+          "prerequisites": "Requirements/objectives/technical measures linked to candidate V&V methods.",
+          "completion_criteria_or_handoff": "V&V activities linked to artifacts they verify or validate; actual execution is not shown in this paper."
+        }
+      ],
+      "mapping_to_se_activities_and_gates": "Maps to top-down systems engineering from stakeholder analysis through requirements, behaviors, logical architecture, technical measures, and V&V. Figure 2 mentions buy-offs, design reviews, and specifications, but no named SRR/PDR/CDR workflow is provided.",
+      "approach_classification": "Pure MBSE",
+      "approach_classification_rationale": "The current contribution is a SysML reference model and model-population/traceability structure. Prior integrated simulation tools are historical lineage context, not the demonstrated workflow in this paper.",
+      "tailoring_rationale": [
+        "mission scale",
+        "cost",
+        "schedule",
+        "organizational constraints"
+      ],
+      "tailoring_notes": "Tailored to CubeSat scale and university teams; methodology-agnostic and platform-independent; generic subsystem definitions allow mission-specific specialization.",
+      "adoption_guidance": "partial guidance",
+      "adoption_guidance_notes": "The paper provides a notional outline and instructions/notes within model packages, but not a complete adopter handbook or worked case with outcomes."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML",
+        "unspecified graphical modeling tool for current CSRM",
+        "No Magic MagicDraw/Cameo Simulation Toolkit (project history, phase three)",
+        "Phoenix Integration ModelCenter and MBSE Analyzer (project history, phase three)",
+        "Analytical Graphics Inc. Systems Tool Kit/STK (project history, phase three)",
+        "MathWorks MATLAB (project history, phase three)",
+        "Word documents and Excel spreadsheets embedded/linked for technical measures and V&V",
+        "requirements tables exportable to spreadsheets"
+      ],
+      "toolchain_architecture_and_data_flow": "Current CSRM is a SysML model in a graphical modeling tool with package navigation, tables, hyperlinks, and trace relationships. Requirements tables can export to spreadsheets; technical-measure Word/Excel artifacts are part of the model and can be edited within it; technical-measure methods can be represented in constraint blocks/parameters. Earlier project history reports a multi-tool simulation environment but this paper does not describe current round-trip data flow.",
+      "interoperability_mechanisms": [
+        "import/export",
+        "spreadsheets"
+      ],
+      "syntax_semantic_continuity": "SysML compliance and OMG conformance criteria are intended to preserve common logical elements and architecture levels. No XMI/ReqIF/API exchange, semantic validation, or round-trip continuity test is reported.",
+      "software_hardware_system_integration_readiness": "Logical architecture can precede physical architecture and development, and V&V activities can store procedures/results/status, but the paper reports no software/hardware integration readiness, generated code, flat-sat/testbed, or flight integration evidence.",
+      "toolchain_limitations": "No explicit toolchain limitation section; unresolved dissemination/control/update/formats and absent model release limit reproducibility.",
+      "availability_reproducibility": "Partially reproducible at conceptual/model-structure level from the paper's figures and descriptions; not reproducible as an executable/model asset because the CSRM file, repository, version, license, and final distribution format are not reported."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "Generic Power Subsystem block in the CSRM Space Segment/CubeSat subsystem architecture",
+        "Historical power-usage behaviors in phase two of the lineage",
+        "Historical solar-panel area and maximum battery-capacity trade variables in phase three"
+      ],
+      "eps_requirements_represented": "No EPS-specific requirements are shown. The generic requirements hierarchy and properties (Id, Text, Traced To, Derived From, Refined By, Verify Method, Verified By, Satisfied By) could represent Power Subsystem requirements in a mission-specific CSRM instance.",
+      "verification_validation_artifacts": [
+        "Verification Activity elements/tables with plan, procedure, conduct/execution notes, result, status, active hyperlink, and verifies properties",
+        "Validation Activity elements/tables with plan, procedure, conduct/execution, result, status, active hyperlink, and validates properties",
+        "Validation/Verification package and activity diagrams or Word documents",
+        "requirements Verify Method and Verified By properties",
+        "technical-measure specifications and methods that receive verification data"
+      ],
+      "pre_physical_development_verification_mechanism": [
+        "requirements-in-the-loop",
+        "parametric checks",
+        "trade-study verification"
+      ],
+      "evidence_integrated_not_separate": "The CSRM explicitly links requirements and technical measures to validation/verification activities; Figure 15 shows validation/verification activity tables linked to mission objectives, MOEs, and CubeSat requirements. EPS-specific integration is not shown.",
+      "integration_test_readiness": "not reported",
+      "notes": "No EPS verification matrix, EPS test cases, detailed power modes, loads, margins, fault protection, SIL/HIL, or physical integration/test evidence is presented."
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "CSRM purpose",
-        "quote": "The CubeSat System Reference Model (CSRM) is a representation of the logical architecture of a CubeSat System, intended to be used by system architects and engineers as a starting point",
-        "location": "Introduction / CubeSat System Reference Model"
+        "claim_id": "C1",
+        "claim_text_or_paraphrase": "The CSRM provides a reusable SysML reference-model starting point for CubeSat space and ground logical architecture and is intended to introduce quality enhancements and economies through reuse.",
+        "outcome_category": [
+          "generality/reuse",
+          "cost reduction",
+          "other"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "artifact traceability"
+        ],
+        "linked_artifact_or_process": "CSRM SysML-compliant logical architecture reference model for CubeSat space and ground components.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse",
+          "cost",
+          "other"
+        ],
+        "metric_detail": "No measured quality or economy metric; reuse and design quality are claimed qualitatively.",
+        "baseline_comparator": "not reported",
+        "observed_effect_or_qualitative_effect": "Intended quality/economy benefit; not measured in the paper.",
+        "evidence_source": {
+          "location": "Abstract; Introduction / CubeSat System Reference Model",
+          "quote": "The CSRM... is intended to introduce quality enhancements and economies associated with reusability."
+        },
+        "evidence_confidence_rating": "Weak",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Benefits may depend on team modeling skill, tool access, CSRM fit to mission method, and actual reuse practice; no baseline or metric is reported."
       },
       {
-        "topic": "SysML and platform independence",
-        "quote": "The CSRM is a SysML compliant and platform-independent model that provides building blocks that can be specialized to support CubeSat mission design.",
-        "location": "Introduction / CubeSat System Reference Model"
+        "claim_id": "C2",
+        "claim_text_or_paraphrase": "The reusable CSRM can reduce development time, increase CubeSat spacecraft/ground-system design quality, and transfer institutional knowledge to successive programs.",
+        "outcome_category": [
+          "schedule reduction",
+          "generality/reuse",
+          "reproducibility",
+          "other"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "other"
+        ],
+        "linked_artifact_or_process": "Reusable building blocks and organizational component libraries derived from mission-unique subsystems and experience.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "time",
+          "model reuse",
+          "other"
+        ],
+        "metric_detail": "Development time and quality are named as value indicators but not measured.",
+        "baseline_comparator": "not reported",
+        "observed_effect_or_qualitative_effect": "Claimed support for reduced development time and increased quality; no effect size.",
+        "evidence_source": {
+          "location": "Introduction / CubeSat System Reference Model",
+          "quote": "This reusable model supports reducing development times and increasing the quality of CubeSat spacecraft and ground system design... enhancing internal reuse and transfer of institutional knowledge to successive programs."
+        },
+        "evidence_confidence_rating": "Weak",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "No time, defect, quality, or reuse-count data are provided; knowledge transfer may come from organizational process rather than the model alone."
       },
       {
-        "topic": "Reuse outcome",
-        "quote": "This reusable model supports reducing development times and increasing the quality of CubeSat spacecraft and ground system design",
-        "location": "Introduction / CubeSat System Reference Model"
+        "claim_id": "C3",
+        "claim_text_or_paraphrase": "The CSRM supports end-to-end traceability from stakeholders, behaviors, and technical measures through requirements, architecture, and V&V activities.",
+        "outcome_category": [
+          "traceability",
+          "lifecycle continuity",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage"
+        ],
+        "linked_artifact_or_process": "CSRM Elements Overview, requirements tables, behavior relationships, and Validation/Verification package.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "trace links"
+        ],
+        "metric_detail": "Presence of trace/refine/derive/verify/satisfy properties; no trace coverage metric.",
+        "baseline_comparator": "none",
+        "observed_effect_or_qualitative_effect": "The model is structured to maintain trace links from stakeholder concerns to V&V planning artifacts.",
+        "evidence_source": {
+          "location": "Section 3 / CSRM Landing Page; Requirements; Behaviors; Verification and Validation",
+          "quote": "The CSRM provides for defining these elements; and for tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities."
+        },
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "The paper demonstrates structural capability, not evidence that mission teams maintained complete or correct traces in practice."
       },
       {
-        "topic": "Application flow",
-        "quote": "a notional outline of how the CSRM could be applied to a specific mission following a traditional top-down approach starting with identifying stakeholders and ending with verification and validation",
-        "location": "Section 3 / Application of the CSRM to a CubeSat Mission"
+        "claim_id": "C4",
+        "claim_text_or_paraphrase": "OMG conformance criteria and retention of core CSRM logical elements can provide a common baseline for comparing, evaluating, sharing, and reusing mission-specific CubeSat implementations.",
+        "outcome_category": [
+          "integrability/interoperability",
+          "generality/reuse",
+          "consistency",
+          "governance/ROI"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "other"
+        ],
+        "linked_artifact_or_process": "Candidate OMG CubeSat specification and conformance criteria: five fundamental elements, architecture levels, form factor, and deployer accommodation.",
+        "lifecycle_stage": [
+          "not reported"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse",
+          "other"
+        ],
+        "metric_detail": "Common-baseline value is asserted; no comparison/reuse metric.",
+        "baseline_comparator": "not reported",
+        "observed_effect_or_qualitative_effect": "Potential common baseline; OMG approval and cross-project use are not demonstrated.",
+        "evidence_source": {
+          "location": "Background / Current Effort with the Object Management Group",
+          "quote": "Retention of these logical elements provides a common baseline for comparing and evaluating different mission-specific implementations and for the sharing and reuse of design elements."
+        },
+        "evidence_confidence_rating": "Weak",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Conformance to common elements may not ensure semantic consistency, tool interoperability, or sustained reuse; OMG evaluation was still in progress."
       },
       {
-        "topic": "Traceability",
-        "quote": "tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities",
-        "location": "Section 3 / CSRM Landing Page"
+        "claim_id": "C5",
+        "claim_text_or_paraphrase": "The CSRM has been vetted by systems-engineering professionals and introduced to CubeSat development teams with favorable results; it is in use by several university teams.",
+        "outcome_category": [
+          "generality/reuse",
+          "communication/stakeholder alignment",
+          "governance/ROI",
+          "other"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "other"
+        ],
+        "linked_artifact_or_process": "Formal review/recommendation of the CSRM and use by university CubeSat development teams.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Stakeholder/user/expert evaluation",
+          "Reuse/replication across projects"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse",
+          "other"
+        ],
+        "metric_detail": "Qualitative indicators: recommendation by reviewers, several universities using it, favorable results; no numeric count beyond 'several'.",
+        "baseline_comparator": "none",
+        "observed_effect_or_qualitative_effect": "Reported favorable vetting and use; detailed results not provided.",
+        "evidence_source": {
+          "location": "Abstract; Background / Vetting",
+          "quote": "The CSRM has been formally reviewed and recommended by 1) a Certified Architect Program engineering fellow and 2) by a team lead by Director level system engineer."
+        },
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": "Review criteria, independence, adoption depth, mission outcomes, and user feedback details are not reported."
       },
       {
-        "topic": "Generic subsystem abstraction",
-        "quote": "The CubeSat subsystems are generically and loosely defined as a starting point for the mission specific CubeSat team.",
-        "location": "Section 3 / Architecture"
+        "claim_id": "C6",
+        "claim_text_or_paraphrase": "The CSRM can be adapted to different mission methods because it is methodology-agnostic, provides instructions, and lets teams populate or modify model elements and containment trees.",
+        "outcome_category": [
+          "generality/reuse",
+          "reproducibility"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "other"
+        ],
+        "linked_artifact_or_process": "CSRM library, population packages, notes, instructions, and modifiable containment tree.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "metric_detail": "Usability is supported by author report that users found notes easy to follow, but no formal usability metric.",
+        "baseline_comparator": "not reported",
+        "observed_effect_or_qualitative_effect": "Partial adoption guidance and tailoring flexibility; no measured adoption effort.",
+        "evidence_source": {
+          "location": "Section 3 / CSRM Landing Page and CSRM Elements and Population",
+          "quote": "The CSRM provides a library of model elements but does not dictate what model elements and relationships to use... The CSRM is well-documented and explains to the team how to populate it..."
+        },
+        "evidence_confidence_rating": "Weak",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Flexibility may shift tailoring decisions to teams; easy-to-follow notes are reported without evaluation data."
       },
       {
-        "topic": "Power-related historical trade study",
-        "quote": "Different configurations of solar panel areas and maximum battery capacity were traded off to compare on-board energy levels",
-        "location": "Background / Project History"
+        "claim_id": "C7",
+        "claim_text_or_paraphrase": "Earlier phases of the CSRM/RAX lineage enabled model-based trade studies of solar-panel area, battery capacity, orbit altitude, and ground-station networks to compare energy and data-downlink outcomes.",
+        "outcome_category": [
+          "decision support",
+          "mission assurance",
+          "integrability/interoperability"
+        ],
+        "specificity_of_claim": "EPS-specific",
+        "mbse_mechanism": [
+          "parametric analysis",
+          "tool integration"
+        ],
+        "linked_artifact_or_process": "Third-phase modeling development environment with MagicDraw/Cameo Simulation Toolkit, ModelCenter/MBSE Analyzer, STK, and MATLAB; trade-study variables for power and communications.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A"
+        ],
+        "evidence_type": [
+          "Trade-study or requirements-checking result"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "metric_detail": "On-board energy levels and quantity of data downloaded are named, but no values/results appear in this paper.",
+        "baseline_comparator": "none",
+        "observed_effect_or_qualitative_effect": "Trade studies are reported as having been carried out; this paper does not present effect sizes or trade results.",
+        "evidence_source": {
+          "location": "Background / Project History",
+          "quote": "Different configurations of solar panel areas and maximum battery capacity were traded off to compare on-board energy levels and... orbital altitudes and ground station network configurations were traded off to compare quantity of data downloaded."
+        },
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_or_alternative_explanations": "Evidence relies on summarized prior work; the current paper omits model assumptions, configurations, numerical outputs, and validation."
       },
       {
-        "topic": "Verification process representation",
-        "quote": "The Verification Activity element describes the process for verifying an element, e.g. a requirement.",
-        "location": "Section 3 / Verification and Validation"
+        "claim_id": "C8",
+        "claim_text_or_paraphrase": "Model-integrated technical measures and V&V activity elements support assessment, verification, and validation of requirements, mission objectives, and technical measures.",
+        "outcome_category": [
+          "traceability",
+          "decision support",
+          "mission assurance",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage",
+          "parametric analysis",
+          "lifecycle gate support"
+        ],
+        "linked_artifact_or_process": "MOE/MOP/TPM specifications, methods documents/spreadsheets, constraint blocks, Verification Activity and Validation Activity elements/tables. Also relates to generic buy-offs/design reviews/specifications noted in Figure 2.",
+        "lifecycle_stage": [
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "trace links",
+          "other"
+        ],
+        "metric_detail": "Technical measures are described as values and methods; no measured coverage or pass/fail result is reported.",
+        "baseline_comparator": "none",
+        "observed_effect_or_qualitative_effect": "The CSRM can capture V&V plans/procedures/results/status and link them to requirements/objectives/technical measures.",
+        "evidence_source": {
+          "location": "Section 3 / Technical Measures; Verification and Validation; Figure 15",
+          "quote": "Verification activities provide data to the technical measurement process... The Verification Activity element describes the process for verifying an element, e.g. a requirement."
+        },
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "V&V is described structurally; no actual verification execution, acceptance results, or EPS-specific test procedures are shown."
       },
       {
-        "topic": "Validation process representation",
-        "quote": "The Validation Activity element describes the process for validating an element, e.g. a Technical Measure or a Mission Objective.",
-        "location": "Section 3 / Verification and Validation"
-      },
-      {
-        "topic": "Tool/document integration",
-        "quote": "The document or spreadsheet is part of the model and can be edited within the model.",
-        "location": "Section 3 / Technical Measures"
-      },
-      {
-        "topic": "Availability/governance gap",
-        "quote": "what formats will be available have yet to be worked out",
-        "location": "Section 4 / OMG Specification Efforts"
+        "claim_id": "C9",
+        "claim_text_or_paraphrase": "If approved by OMG, the model-based CSRM specification would set a precedent for future reference architectures and reusable libraries.",
+        "outcome_category": [
+          "generality/reuse",
+          "reproducibility",
+          "governance/ROI"
+        ],
+        "specificity_of_claim": "generic space-system",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "other"
+        ],
+        "linked_artifact_or_process": "CSRM submitted to OMG as a model-based CubeSat specification candidate.",
+        "lifecycle_stage": [
+          "not reported"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "metric_detail": "No realized specification, reuse count, or library adoption evidence.",
+        "baseline_comparator": "previous document-centric process",
+        "observed_effect_or_qualitative_effect": "Conditional future standards/reuse effect; not realized in the paper.",
+        "evidence_source": {
+          "location": "Background / Current Effort with the Object Management Group",
+          "quote": "If approved, since the CSRM is model-based, it would serve as a precedent for future reference architectures and reusable libraries."
+        },
+        "evidence_confidence_rating": "Unsupported",
+        "confidence": "high",
+        "threats_or_alternative_explanations": "Approval, dissemination, format, control, and actual adoption were unresolved at publication."
       }
     ],
-    "notes_for_consistency_with_lineage": "Treat this as a system-level CSRM/reference-model paper rather than an EPS-specific paper. Power/EPS evidence should be coded as indirect because the paper only lists a generic Power Subsystem and summarizes prior power-usage/energy trade-study work without details.",
-    "extraction_confidence": "medium",
-    "extraction_confidence_reason": "The paper text is complete enough to extract CSRM structure and claims, but venue details, exact model availability/tooling, quantitative outcomes, and EPS-specific verification details are absent."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": [
+        "review process",
+        "model quality criteria"
+      ],
+      "governance_details": "Prospective governance is through OMG specification submission, formal review/approval, and conformance criteria. The paper also reports professional review/recommendation and future incorporation of university-team feedback. Dissemination/control/update/formats remain unresolved.",
+      "traceability_to_project_deliverables_milestones": "Model traceability connects stakeholders, requirements, behaviors, technical measures, architecture, and V&V activities. Figure 2 mentions buy-offs, design reviews, and specifications as model artifacts to identify, but no specific project gate workflow is reported.",
+      "evaluation_criteria_for_model_quality_or_usefulness": "OMG conformance criteria: retention of five fundamental elements, architecture levels, CubeSat form factor, and deployer accommodation. Qualitative vetting by systems engineering professionals and university-team feedback are reported; formal scoring is absent.",
+      "roi_value_realization_evidence": "not reported",
+      "programmatic_gates_or_critical_design_events_supported": "Buy-offs, design reviews, and specifications are mentioned generically; no SRR/PDR/CDR or mission decision event is demonstrated.",
+      "model_derived_performance_indicators_or_management_metrics": [
+        "MOEs",
+        "MOPs",
+        "TPMs",
+        "verification status",
+        "validation status"
+      ],
+      "roi_notes": "Claims of economies, reduced development time, reuse value, and increased design quality are not supported by ROI metrics or baselines."
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "classification": "addressed conceptually",
+        "rationale": "Notional top-down path and package-by-package population guidance are provided, without a full worked adopter case or measured execution."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "classification": "addressed conceptually",
+        "rationale": "SysML compliance, common-baseline conformance, spreadsheet export, model-embedded Word/Excel artifacts, and historical multi-tool environment are described, but detailed interfaces and evidence are missing."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "classification": "addressed conceptually",
+        "rationale": "The model targets university CubeSat teams and generic/loosely defined CubeSat subsystems, but does not measure lightweight adoption effort."
+      },
+      "governance_project_deliverables_roi": {
+        "classification": "addressed conceptually",
+        "rationale": "OMG process/conformance and generic buy-offs/design reviews/specifications are discussed; ROI and concrete project-deliverable evidence are not reported."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "classification": "not addressed",
+        "rationale": "No NewSpace, agile, distributed-team, concurrent-design, or rapid-iteration process is discussed."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": [
+          "The paper provides a CubeSat mission/system reference model in SysML organized around stakeholders, requirements, behaviors, architecture, technical measures, and V&V.",
+          "Generalization is achieved through a platform-independent reference model, reusable library of elements, generic/loosely defined subsystems, and methodology-agnostic population guidance.",
+          "EPS is not modeled in detail; power appears as a generic subsystem and in lineage-level power trade-study history."
+        ],
+        "RQ2": [
+          "Claimed outcomes include reuse, quality enhancement, development-time reduction, common baseline comparison, institutional knowledge transfer, traceability, and standards/reusable-library potential.",
+          "Evidence is mostly qualitative: formal review, university use, model-structure figures, and historical trade-study mentions; no quantitative EPS reliability/reproducibility/integrability evidence is reported.",
+          "The strongest synthesis-relevant evidence is structural traceability and reported vetting/use, not measured project performance."
+        ],
+        "RQ3": [
+          "The CSRM includes validation and verification packages and activity elements that can capture plans, procedures, execution notes/results/status and link to requirements, objectives, and technical measures.",
+          "Pre-physical verification is conceptual/model-structural and generic rather than an EPS-specific procedure or executable check in this paper.",
+          "No EPS test procedures, verification matrix, SIL/HIL, hardware integration, or flight evidence are presented."
+        ]
+      },
+      "author_stated_limitations_gaps": [
+        "The CSRM is targeted especially at university CubeSat mission architecture teams and is not methodology-specific.",
+        "Teams determine which model elements and relationships to use and may modify the containment tree to fit their methodology.",
+        "Feedback from university teams will be evaluated for inclusion, including value-added elements not currently in the CSRM, portions that do not function as intended, and new capabilities.",
+        "Dissemination/control/update processes and formats for a possible OMG specification have yet to be worked out.",
+        "Expansion from CubeSats to broader satellite classes is future work."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No dedicated EPS model, EPS requirement set, power modes/loads, EPS verification procedure, or EPS test evidence.",
+        "Claims about development time, quality, economies, reuse, and common baseline lack metrics, baselines, and effect sizes.",
+        "Model file, version, license, repository, current tool instance, and exchange formats are not provided.",
+        "Vetting and university-use claims lack evaluation criteria, detailed feedback, and outcome data.",
+        "No hardware/software integration, operational, or flight evidence for CSRM benefits.",
+        "Lineage overlap with prior RAX/CSRM publications should be accounted for in synthesis."
+      ],
+      "direct_evidence_quotes_for_classification": [
+        {
+          "topic": "CSRM purpose",
+          "quote": "The CubeSat System Reference Model (CSRM) is a representation of the logical architecture of a CubeSat System, intended to be used by system architects and engineers as a starting point",
+          "location": "Introduction / CubeSat System Reference Model"
+        },
+        {
+          "topic": "SysML and platform independence",
+          "quote": "The CSRM is a SysML compliant and platform-independent model that provides building blocks that can be specialized to support CubeSat mission design.",
+          "location": "Introduction / CubeSat System Reference Model"
+        },
+        {
+          "topic": "Reuse/time/quality claim",
+          "quote": "This reusable model supports reducing development times and increasing the quality of CubeSat spacecraft and ground system design",
+          "location": "Introduction / CubeSat System Reference Model"
+        },
+        {
+          "topic": "Traceability",
+          "quote": "tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities",
+          "location": "Section 3 / CSRM Landing Page"
+        },
+        {
+          "topic": "Generic subsystem abstraction",
+          "quote": "The CubeSat subsystems are generically and loosely defined as a starting point for the mission specific CubeSat team.",
+          "location": "Section 3 / Architecture"
+        },
+        {
+          "topic": "Verification representation",
+          "quote": "The Verification Activity element describes the process for verifying an element, e.g. a requirement.",
+          "location": "Section 3 / Verification and Validation"
+        },
+        {
+          "topic": "Availability/governance gap",
+          "quote": "what formats will be available have yet to be worked out",
+          "location": "Section 4 / OMG Specification Efforts"
+        }
+      ],
+      "notes_for_consistency_with_lineage": "Treat this as the 2020 CSRM/reference-model paper, not as independent evidence of the RAX executable simulation trade-study results reported in earlier lineage papers. EPS coding should remain adjacent/weak unless the synthesis specifically uses lineage-level power trade-study mentions.",
+      "extraction_confidence": "high",
+      "extraction_confidence_reason": "The paper text and figure descriptions are sufficiently complete for system-level CSRM extraction; most classifications are directly quote-supported and absent EPS/outcome evidence is explicit."
+    }
   },
-  "bibtex": "@inproceedings{paper-0011,\n  title = {Development and Application of the CubeSat System Reference Model},\n  author = {D. Kaslow and P. T. Cahill and B. Ayres},\n  year = {2020},\n  booktitle = {2020 IEEE Aerospace Conference},\n  publisher = {IEEE},\n  doi = {10.1109/aero47225.2020.9172714},\n  url = {https://doi.org/10.1109/aero47225.2020.9172714}\n}"
+  "bibtex": "@inproceedings{Kaslow2020CubeSatSystemReferenceModel,\n  title = {Development and Application of the CubeSat System Reference Model},\n  author = {Kaslow, D. and Cahill, P. T. and Ayres, B.},\n  booktitle = {2020 IEEE Aerospace Conference},\n  year = {2020},\n  publisher = {IEEE},\n  doi = {10.1109/AERO47225.2020.9172714},\n  url = {https://doi.org/10.1109/AERO47225.2020.9172714}\n}"
 }

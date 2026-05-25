@@ -3,580 +3,1591 @@
   "tier": "core",
   "year": 2020,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The corpus metadata identifies an IEEE DOI for a 2020 conference paper; the paper itself has IEEE-style conference formatting.",
-        "evidence": [
-          "Corpus metadata DOI: 10.1109/aero47225.2020.9172748",
-          "Markdown title page: \"U. S. Government work not protected by U. S. copyright\""
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper states scope boundaries for classroom use and an intentionally undefined payload/mission, but it does not provide a formal limitations or threats-to-validity discussion.",
-        "evidence": [
-          "Section 5.3: \"It is beyond the scope of this course to teach these students all there is to know about MBSE and how to utilize its tools.\"",
-          "Section 6: \"The PSAT1U model described is itself a template without payload or mission definition\""
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper clearly describes the USNA educational CubeSat context, the PSAT1U 1U platform, subsystem design, and intended senior capstone/design-use lifecycle.",
-        "evidence": [
-          "Section 2: \"The mission of the PSAT1U project is to develop a 1U CubeSat educational satellite\"",
-          "Section 5.3: \"The standardized MBSE template for PSAT1U is intended to be utilized by undergraduate engineering students in their year-long senior capstone class at USNA.\""
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper names the CSRM, SysML, Cameo Systems Modeler V19.0, and several model artifacts, but it provides only high-level construction steps and no model files or complete replication procedure.",
-        "evidence": [
-          "Section 4: \"The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.\"",
-          "Section 4: \"Each predefined package or template in the CSRM was reviewed and the architecture was appended to include specific information describing PSAT1U.\""
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Claims about reduced cycle time, design-space understanding, reuse, and change propagation are explicitly linked to the standardized MBSE template and model relationships.",
-        "evidence": [
-          "Abstract: \"The aim of this model is to aid in the education of undergraduate engineering students in their capstone design course as well as to reduce design and development times for future CubeSat systems.\"",
-          "Section 6: \"The model aids in the design process by ensuring the design space is easily understood and by propagating system changes automatically and seamlessly.\""
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper illustrates model artifacts and a change-propagation example, but provides no quantitative before/after metrics, stakeholder evaluation, integration/test results, or flight evidence for the MBSE outcomes.",
-        "evidence": [
-          "Section 5.1: \"any changes made to the Watchdog Timer specification are automatically propagated to the Power subsystem\"",
-          "Section 5.1: \"this procedure can add efficiency to the design cycle time\""
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The model demonstrates component/subsystem relationships and stored design specifications, especially for the watchdog timer and power subsystem, but formal requirements, verification cases, validation artifacts, and lifecycle gates are not traced.",
-        "evidence": [
-          "Section 5.1: \"a relationship has been defined that ties this circuit to the overall power subsystem\"",
-          "Section 5.1: \"The model stores design specifics of the PSAT1U as text data within the documentation tab of the appropriate subsystem or component specification.\""
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "Reusable CSRM-based packages and the Cameo version are reported, but PSAT1U model availability, open assets, exchange formats, and continuity across tools are not reported.",
-        "evidence": [
-          "Section 3: \"users can combine their own requirements, mission specific stakeholder use cases and viewpoints with the existing CSRM model elements and diagram templates as well as the library of system components\"",
-          "Section 4: \"The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.\""
-        ]
-      }
-    ],
-    "total_score": 5.5,
-    "max_score": 8,
-    "normalized_score": 0.688,
-    "overall_rationale": "The study gives a credible, well-contextualized CubeSat MBSE template case with clear links between model artifacts and claimed benefits. Quality is limited by lack of formal limitations, public model artifacts, quantitative outcome evidence, and model-integrated verification/validation evidence."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0039.json",
-    "status_rationale": "Retained as core because it directly addresses CubeSat MBSE reference/template modeling and includes EPS/power-budget representation in the model, although evidence for EPS verification and measured outcomes is limited.",
-    "citation": "Gregory, J. M., Kang, J. S., Bruninga, R., Sega, R., Borky, J., Kaslow, D., & Downey, G. H. (2020). Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites. 2020 IEEE Aerospace Conference.",
-    "title": "Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites",
-    "authors": [
-      "John M. Gregory",
-      "Jin S. Kang",
-      "R. Bruninga",
-      "R. Sega",
-      "J. Borky",
-      "D. Kaslow",
-      "George H. Downey"
-    ],
-    "venue": "2020 IEEE Aerospace Conference",
-    "doi_or_url": "10.1109/aero47225.2020.9172748",
-    "publisher": "IEEE",
-    "venue_type": "conference proceedings",
-    "source_database_or_route": [
-      "scopus",
-      "semantic_scholar abstract_enrichment"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "high",
-        "rationale": "The paper's main contribution is a reusable CubeSat MBSE baseline/template built from CSRM, with mission and payload left undefined so users with limited MBSE expertise can tailor it."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "The paper claims design efficiency, reuse, change propagation, and integrability/design-space clarity; EPS reliability is discussed mainly as a physical battery/watchdog design property, not as an MBSE-derived outcome."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "The EPS model stores an as-designed power budget and component relationships, but formal verification procedures, test cases, and pre-hardware model checks are not described."
-      }
+    "credible_venue": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "The supplied corpus metadata gives a Scopus-indexed IEEE DOI for a conference-style paper; no evidence in the paper suggests a non-credible venue.",
+      "evidence": [
+        {
+          "quote": "DOI=10.1109/aero47225.2020.9172748; source provenance includes Scopus records",
+          "location": "metadata supplied in prompt"
+        }
+      ],
+      "confidence": "medium"
     },
-    "lineage_overlap_notes": "The paper explicitly builds on the INCOSE Space Systems Working Group CubeSat System Reference Model and cites earlier CSRM interim-status conference papers [3]-[5]; no previous extractions or lineage files were read."
+    "limitations_discussed": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The paper states some scope/adoption boundaries, especially that students are not expected to learn full MBSE tool use, but it does not present a formal limitations or threats-to-validity discussion.",
+      "evidence": [
+        {
+          "quote": "It is beyond the scope of this course to teach these students all there is to know about MBSE and how to utilize its tools.",
+          "location": "paper markdown line 521"
+        }
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "The paper clearly identifies PSAT1U as a 1U CubeSat in the USNA undergraduate/student satellite context and describes its mission, subsystem layout, EPS, ADCS, communications, and payload envelope.",
+      "evidence": [
+        {
+          "quote": "The mission of the PSAT1U project is to develop a 1U CubeSat educational satellite",
+          "location": "paper markdown line 84"
+        },
+        {
+          "quote": "At the U.S. Naval Academy (USNA), the Small Satellite Program has been developing, testing and launching studentbuilt project satellites since 2001 with the first CubeSat class satellite launched in 2012.",
+          "location": "paper markdown line 57"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "The method, reference model, SysML/Cameo tool, system boundary, package hierarchy, subsystem BDDs, EPS package, and payload-tailoring examples are described sufficiently for comparison or partial replication, although the model itself is not made available.",
+      "evidence": [
+        {
+          "quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0. Each predefined package or template in the CSRM was reviewed and the architecture was appended to include specific information describing PSAT1U.",
+          "location": "paper markdown line 334"
+        },
+        {
+          "quote": "Figure 15 is the package diagram describing the EPS for the spacecraft. In it, each of the main component parts are described and further details and specifications of those parts are also available.",
+          "location": "paper markdown line 374"
+        }
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Claimed benefits are explicitly tied to the standardized MBSE template, CSRM-based baseline model, and model relationships/change propagation.",
+      "evidence": [
+        {
+          "quote": "One solution to this is to apply Model-Based Systems Engineering (MBSE) methodology to CubeSats, providing a standardized template that the developers can use to make the design cycle more efficient.",
+          "location": "paper markdown line 29"
+        },
+        {
+          "quote": "As a result, any changes made to the Watchdog Timer specification are automatically propagated to the Power subsystem and to any other subsystems or components with a relationship to the Watchdog Timer.",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The paper provides illustrative model screenshots and an example of change propagation, but no quantitative metrics, baseline comparison, independent evaluation, reuse evidence, or integration/flight evidence for the MBSE outcomes.",
+      "evidence": [
+        {
+          "quote": "Finally, the propagation of system changes through the model will be demonstrated to illustrate the utility of describing a CubeSat system this way.",
+          "location": "paper markdown line 35"
+        }
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "The paper reports explicit model relationships among subsystem/component artifacts and uses them to demonstrate cross-subsystem change propagation, although requirements/V&V traceability is not developed.",
+      "evidence": [
+        {
+          "quote": "a relationship has been defined that ties this circuit to the overall power subsystem",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The tool and CSRM starting point are named and several artifacts are shown, but the PSAT1U model, data exchange mechanisms, reusable package, or open assets are not reported as available.",
+      "evidence": [
+        {
+          "quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.",
+          "location": "paper markdown line 334"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "PSAT1U CubeSat educational satellite and reusable baseline/template for future CubeSat-class satellites",
-    "size_form_factor": "1U CubeSat; maximum mass 1500 g; payload envelope specified in mass, volume, power, and dimensions",
-    "mission_name": "PSAT1U / Parkinson Sat 1U",
-    "mission_domain": "undergraduate education, research access to space, and modular mission-payload hosting",
-    "organization_type": "academic/university small-satellite program with INCOSE/consultant and university collaborators",
-    "project_maturity": "physical design and engineering model/baseline MBSE template described; intended for future student builds and mission-specific tailoring; flight status not reported",
-    "lifecycle_stage_addressed": "conceptual/design and development preparation for senior capstone CubeSat projects; no operational lifecycle evidence reported",
-    "development_context": "USNA Small Satellite Program under undergraduate time and funding constraints; faculty constrain well-understood subsystems so students focus on payload, analysis, testing, and mission decisions",
-    "eps_relevance": "power-budget/electrical-architecture",
-    "model_maturity": "Cameo/CSRM-derived baseline model with architecture hierarchy, subsystem/component packages, BDDs, documentation specifications, relationships, generic payload specification, and EPS power budget; no public release or executable maturity reported"
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The supplied corpus metadata gives a Scopus-indexed IEEE DOI for a conference-style paper; no evidence in the paper suggests a non-credible venue.",
+      "evidence": [
+        {
+          "quote": "DOI=10.1109/aero47225.2020.9172748; source provenance includes Scopus records",
+          "location": "metadata supplied in prompt"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper states some scope/adoption boundaries, especially that students are not expected to learn full MBSE tool use, but it does not present a formal limitations or threats-to-validity discussion.",
+      "evidence": [
+        {
+          "quote": "It is beyond the scope of this course to teach these students all there is to know about MBSE and how to utilize its tools.",
+          "location": "paper markdown line 521"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The paper clearly identifies PSAT1U as a 1U CubeSat in the USNA undergraduate/student satellite context and describes its mission, subsystem layout, EPS, ADCS, communications, and payload envelope.",
+      "evidence": [
+        {
+          "quote": "The mission of the PSAT1U project is to develop a 1U CubeSat educational satellite",
+          "location": "paper markdown line 84"
+        },
+        {
+          "quote": "At the U.S. Naval Academy (USNA), the Small Satellite Program has been developing, testing and launching studentbuilt project satellites since 2001 with the first CubeSat class satellite launched in 2012.",
+          "location": "paper markdown line 57"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The method, reference model, SysML/Cameo tool, system boundary, package hierarchy, subsystem BDDs, EPS package, and payload-tailoring examples are described sufficiently for comparison or partial replication, although the model itself is not made available.",
+      "evidence": [
+        {
+          "quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0. Each predefined package or template in the CSRM was reviewed and the architecture was appended to include specific information describing PSAT1U.",
+          "location": "paper markdown line 334"
+        },
+        {
+          "quote": "Figure 15 is the package diagram describing the EPS for the spacecraft. In it, each of the main component parts are described and further details and specifications of those parts are also available.",
+          "location": "paper markdown line 374"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Claimed benefits are explicitly tied to the standardized MBSE template, CSRM-based baseline model, and model relationships/change propagation.",
+      "evidence": [
+        {
+          "quote": "One solution to this is to apply Model-Based Systems Engineering (MBSE) methodology to CubeSats, providing a standardized template that the developers can use to make the design cycle more efficient.",
+          "location": "paper markdown line 29"
+        },
+        {
+          "quote": "As a result, any changes made to the Watchdog Timer specification are automatically propagated to the Power subsystem and to any other subsystems or components with a relationship to the Watchdog Timer.",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper provides illustrative model screenshots and an example of change propagation, but no quantitative metrics, baseline comparison, independent evaluation, reuse evidence, or integration/flight evidence for the MBSE outcomes.",
+      "evidence": [
+        {
+          "quote": "Finally, the propagation of system changes through the model will be demonstrated to illustrate the utility of describing a CubeSat system this way.",
+          "location": "paper markdown line 35"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports explicit model relationships among subsystem/component artifacts and uses them to demonstrate cross-subsystem change propagation, although requirements/V&V traceability is not developed.",
+      "evidence": [
+        {
+          "quote": "a relationship has been defined that ties this circuit to the overall power subsystem",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The tool and CSRM starting point are named and several artifacts are shown, but the PSAT1U model, data exchange mechanisms, reusable package, or open assets are not reported as available.",
+      "evidence": [
+        {
+          "quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.",
+          "location": "paper markdown line 334"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "core"
+      ],
+      "status": "coded",
+      "rationale": "The supplied corpus metadata screens this paper as core.",
+      "evidence": [
+        {
+          "quote": "screening_tier=core",
+          "location": "metadata supplied in prompt"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper centrally develops a reusable CSRM-derived MBSE template/baseline for a CubeSat-class system and intentionally leaves payload/mission details undefined for reuse.",
+      "evidence": [
+        {
+          "quote": "The PSAT1U Baseline Model is an MBSE representation of the satellite developed using the CSRM as a starting point.",
+          "location": "paper markdown line 332"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims MBSE-enabled reuse, change propagation, design-cycle efficiency, and interface/design-space understanding, but provides little evidence and does not substantively evaluate reliability/reproducibility/integrability outcomes for EPS.",
+      "evidence": [
+        {
+          "quote": "The model aids in the design process by ensuring the design space is easily understood and by propagating system changes automatically and seamlessly.",
+          "location": "paper markdown line 533"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "none"
+      ],
+      "status": "coded",
+      "rationale": "No EPS verification procedure model, test procedure, verification matrix, or pre-physical verification workflow is presented, despite generic MBSE/V&V language.",
+      "evidence": [
+        {
+          "quote": "No direct quote captured in subagent output; classification is based on the extractor rationale and full-paper reading.",
+          "location": "extractor rationale"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation"
+      ],
+      "status": "coded",
+      "rationale": "The model is positioned for mission-specific design/development and classroom implementation, with generic MBSE beginning in conceptual design; no formal PDR/CDR/operations gate use is shown.",
+      "evidence": [
+        {
+          "quote": "CubeSat Mission Model Logical Architectural Elements",
+          "location": "paper markdown Figure 12 description, lines 318-320"
+        },
+        {
+          "quote": "the present effort is aimed at utilizing the CSRM to describe the PSAT1U Mission Specific model",
+          "location": "paper markdown line 313"
+        },
+        {
+          "quote": "The standardized MBSE template for PSAT1U is intended to be utilized by undergraduate engineering students in their year-long senior capstone class at USNA.",
+          "location": "paper markdown line 521"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student",
+        "resource-constrained mission"
+      ],
+      "status": "coded",
+      "rationale": "The context is an undergraduate USNA student CubeSat program with explicit time and funding constraints.",
+      "evidence": [
+        {
+          "quote": "Given the time constraints and minimal funding of an undergraduate education program, the need for a simple build template for CubeSats was recognized",
+          "location": "paper markdown line 31"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "power-budget/electrical-architecture"
+      ],
+      "status": "coded",
+      "rationale": "The paper is system-template focused but explicitly describes the EPS physical/electrical architecture and embeds the as-designed power budget in the model.",
+      "evidence": [
+        {
+          "quote": "Figure 15 is the package diagram describing the EPS for the spacecraft... pertinent information such as the as-designed power budget (Figure 16) is also available.",
+          "location": "paper markdown line 374"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "reference model/template",
+        "prototype demonstration",
+        "project-applied model"
+      ],
+      "status": "coded",
+      "rationale": "A PSAT1U baseline/template model was built from CSRM and PSAT1U documentation and demonstrated with subsystem, EPS, payload, and change-propagation examples, but not validated operationally.",
+      "evidence": [
+        {
+          "quote": "The USNA has used the CSRM along with documentation from the development of PSAT1U to create a Model-Based representation of the PSAT1U system.",
+          "location": "paper markdown line 31"
+        },
+        {
+          "quote": "the propagation of system changes through the model will be demonstrated",
+          "location": "paper markdown line 35"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "requirements",
+        "architecture",
+        "interfaces",
+        "budgets"
+      ],
+      "status": "coded",
+      "rationale": "The CSRM-derived model covers mission-specific needs/requirements, CubeSat system/subsystem architecture, interfaces/relationships, and EPS/power budget information; verification and simulation are not implemented in the paper.",
+      "evidence": [
+        {
+          "quote": "users can combine their own requirements, mission specific stakeholder use cases and viewpoints with the existing CSRM model elements and diagram templates as well as the library of system components",
+          "location": "paper markdown line 313"
+        },
+        {
+          "quote": "The baseline model is unique in that it defines all of the important subsystems, components, and interfaces of the PSAT1U",
+          "location": "paper markdown line 332"
+        },
+        {
+          "quote": "Within the specification for the EPS, pertinent information such as the as-designed power budget (Figure 16) is also available.",
+          "location": "paper markdown line 374"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "power budgets",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The paper explicitly reports requirements/use-case elements in the CSRM process, multiple SysML BDD/package views, and power-budget information; 'other' captures package diagrams, architecture hierarchy views, and documentation/specification tabs used as model artifacts.",
+      "evidence": [
+        {
+          "quote": "mission use cases and requirements... Segment use cases and requirements... Subsystem requirements",
+          "location": "paper markdown Figure 12 description, lines 318-320"
+        },
+        {
+          "quote": "Figure 14, for example, represents the ADCS Subsystem Block Definition Diagram",
+          "location": "paper markdown line 355"
+        },
+        {
+          "quote": "The Power Budget data is presented as follows",
+          "location": "paper markdown line 400"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "library",
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "Generality is provided by the CSRM reference model, diagram templates, component library, and a repeatable process for adding mission-specific requirements/components to a PSAT1U baseline template.",
+      "evidence": [
+        {
+          "quote": "the CSRM is itself a modular architecture enabling the design of a mission-oriented CubeSat",
+          "location": "paper markdown line 80"
+        },
+        {
+          "quote": "existing CSRM model elements and diagram templates as well as the library of system components",
+          "location": "paper markdown line 313"
+        },
+        {
+          "quote": "The PSAT1U model described is itself a template without payload or mission definition and can be designed for any mission as long as the payload is operated within the envelope defined by the model.",
+          "location": "paper markdown line 533"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Pure MBSE"
+      ],
+      "status": "coded",
+      "rationale": "The approach is centered in a Cameo/SysML system model with internal relationships, package/BDD artifacts, and documentation tabs; no connected analysis, simulation, code, PLM/ALM, or downstream integration environment is reported.",
+      "evidence": [
+        {
+          "quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.",
+          "location": "paper markdown line 334"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "team maturity",
+        "cost",
+        "schedule",
+        "organizational constraints"
+      ],
+      "status": "coded",
+      "rationale": "Tailoring is motivated by 1U CubeSat scale, undergraduate course constraints, minimal funding, short cycle time, and the need to avoid requiring students/discipline experts to become MBSE experts.",
+      "evidence": [
+        {
+          "quote": "Given the time constraints and minimal funding of an undergraduate education program",
+          "location": "paper markdown line 31"
+        },
+        {
+          "quote": "It is beyond the scope of this course to teach these students all there is to know about MBSE and how to utilize its tools.",
+          "location": "paper markdown line 521"
+        },
+        {
+          "quote": "Given the short cycle time, this allows students to remain focused on the analysis, testing and making decisions",
+          "location": "paper markdown lines 523-525"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports an implementation process and concrete tailoring examples but not a complete adopter playbook with roles, entry/exit criteria, or handoff criteria.",
+      "evidence": [
+        {
+          "quote": "Each predefined package or template in the CSRM was reviewed and the architecture was appended to include specific information describing PSAT1U.",
+          "location": "paper markdown line 334"
+        },
+        {
+          "quote": "Ultimately, by adding the appropriate payload and mission details and making any other appropriate changes to the standardized MBSE template, the user will create a model of their mission specific instance of the PSAT1U.",
+          "location": "paper markdown line 483"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "Cameo/MagicDraw"
+      ],
+      "status": "coded",
+      "rationale": "The paper identifies SysML as the modeling language context and Cameo Systems Modeler V19.0 as the tool used to access and adapt the CSRM.",
+      "evidence": [
+        {
+          "quote": "Systems Modeling Language (SysML)",
+          "location": "paper markdown line 309"
+        },
+        {
+          "quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.",
+          "location": "paper markdown line 334"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No tool-to-tool exchange, API, XMI/ReqIF, import/export, co-simulation, generated code, or scripts are described; change propagation is within the same model/tool, not cross-tool interoperability.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [
+        "vendor lock-in"
+      ],
+      "status": "coded",
+      "rationale": "Extractor-identified best-match limitation: all described MBSE work depends on CAMEO Systems Modeler V19.0 and no neutral export/open model path is reported. The paper does not itself call this vendor lock-in.",
+      "evidence": [
+        {
+          "quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.",
+          "location": "paper markdown line 334"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "loads",
+        "modes",
+        "margins",
+        "power budgets",
+        "fault protection",
+        "interfaces",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The EPS package/model includes solar arrays, NiCd batteries, regulators/converters, buses/switches, loads and duty cycles, standby/normal/all-on states, current/capacity margins, watchdog/secure-bus fault protection, interfaces to ADCS/payload/communications, and processor/software components ('other').",
+      "evidence": [
+        {
+          "quote": "the EPS design is based on only two Sol Aero ZTJ solar cells per side",
+          "location": "paper markdown line 120"
+        },
+        {
+          "quote": "Nickel Cadmium (NiCd) batteries have over 50 years of space heritage",
+          "location": "paper markdown line 143"
+        },
+        {
+          "quote": "The Power Budget data is presented as follows: Load, Voltage, Ipk, Duty Cycle, Normal (mA), Stdby (mA), ALL ON (mA).",
+          "location": "paper markdown line 400"
+        },
+        {
+          "quote": "The main power bus for critical optional payload boards is the 5 V secure line... can cycle power off and back on if there is a payload processor failure.",
+          "location": "paper markdown line 147"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No verification matrix, test cases, test procedures, acceptance criteria, executable checks, generated test artifacts, SIL/HIL links, or automated tests are integrated with the EPS/system model in the paper.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "Although EPS budgets/margins are included, the paper does not present them as model-executed pre-physical verification checks or verification procedures.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper mentions students focusing on analysis/testing but does not link the model to hardware integration, software integration, flat-sat/testbed, environmental tests, or operational validation.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "reproducibility",
+        "integrability/interoperability",
+        "generality/reuse",
+        "traceability",
+        "consistency",
+        "completeness",
+        "schedule reduction",
+        "effort reduction",
+        "decision support",
+        "communication/stakeholder alignment",
+        "lifecycle continuity"
+      ],
+      "status": "coded",
+      "rationale": "Claimed MBSE outcomes concern reuse/replication of a standardized template, interface/design-space understanding, automatic cross-subsystem propagation, reduced manual effort/time, and educational/stakeholder understanding; reliability claims in the EPS section are tied to battery technology, not MBSE, and are not coded as MBSE outcomes.",
+      "evidence": [
+        {
+          "quote": "providing a standardized template that the developers can use to make the design cycle more efficient",
+          "location": "paper markdown line 29"
+        },
+        {
+          "quote": "defines all of the important subsystems, components, and interfaces",
+          "location": "paper markdown line 332"
+        },
+        {
+          "quote": "automatically propagated to the Power subsystem and to any other subsystems or components with a relationship to the Watchdog Timer",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level",
+        "generic MBSE"
+      ],
+      "status": "coded",
+      "rationale": "Most claims are PSAT1U/CubeSat system-level; the claim that discipline-specific experts can benefit without becoming MBSE experts is broader/generic MBSE.",
+      "evidence": [
+        {
+          "quote": "CubeSats... standardized Model Based Systems Engineering template for the PSAT1U CubeSat was developed",
+          "location": "paper markdown line 531"
+        },
+        {
+          "quote": "discipline specific engineering experts to benefit from advanced system tools without themselves becoming systems engineering experts",
+          "location": "paper markdown line 535"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "reference model reuse",
+        "requirements linkage",
+        "shared repository",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms include CSRM/reference-model reuse, requirements/use-case incorporation, model relationships/traceability for change propagation, use of the model as a shared place for design specifics, and other design-space constraint/documentation mechanisms.",
+      "evidence": [
+        {
+          "quote": "users can combine their own requirements... with the existing CSRM model elements and diagram templates",
+          "location": "paper markdown line 313"
+        },
+        {
+          "quote": "The model stores design specifics of the PSAT1U as text data within the documentation tab",
+          "location": "paper markdown line 454"
+        },
+        {
+          "quote": "a relationship has been defined that ties this circuit to the overall power subsystem",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation"
+      ],
+      "status": "coded",
+      "rationale": "Claimed value occurs during early mission-specific design/development and capstone implementation/tailoring, not during operations or formal integration/test.",
+      "evidence": [
+        {
+          "quote": "CubeSat Mission Design and Development",
+          "location": "paper markdown Figure 12 description, line 320"
+        },
+        {
+          "quote": "year-long senior capstone class at USNA",
+          "location": "paper markdown line 521"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration"
+      ],
+      "status": "coded",
+      "rationale": "Outcome support consists of author assertions, conceptual rationale, and one PSAT1U/change-propagation demonstration; there are no metrics, baseline comparisons, repeated reuse, stakeholder evaluation, or flight/integration results for the MBSE outcomes.",
+      "evidence": [
+        {
+          "quote": "the propagation of system changes through the model will be demonstrated to illustrate the utility",
+          "location": "paper markdown line 35"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "time",
+        "effort",
+        "trace links",
+        "model reuse"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses qualitative indicators: design/development time, manual effort, existence of model relationships/trace links, and reuse of the CSRM/PSAT1U template; none are quantitatively measured.",
+      "evidence": [
+        {
+          "quote": "reduce design and development times for future CubeSat systems",
+          "location": "paper markdown lines 31-35"
+        },
+        {
+          "quote": "The user does not need to manually propagate this change.",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [
+        "manual analysis"
+      ],
+      "status": "coded",
+      "rationale": "Some claims compare implicitly/qualitatively against manual trade studies or manual change propagation; no formal baseline/comparator is evaluated.",
+      "evidence": [
+        {
+          "quote": "without spending more time carrying out trade studies on well understood subsystems and components",
+          "location": "paper markdown line 31"
+        },
+        {
+          "quote": "The user does not need to manually propagate this change.",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Most outcome claims are weak or unsupported; the automatic-change-propagation claim receives moderate confidence because it is tied to a concrete model relationship demonstration, but efficiency/educational benefits lack measurement.",
+      "evidence": [
+        {
+          "quote": "Figure 18. The Relationship between the Watchdog Timer and the Power Subsystem",
+          "location": "paper markdown line 452"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No explicit ownership, configuration/change control, review process, model quality criteria, or naming/versioning conventions for the model are described.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper claims reduced time/effort but provides no cost of adoption, saved effort, schedule, avoided rework, decision quality, or mission-assurance evidence.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The paper gives a concrete PSAT1U implementation pathway using CSRM/Cameo and shows applied architecture, EPS, payload, and change-propagation artifacts.",
+      "evidence": [
+        {
+          "quote": "Each predefined package or template in the CSRM was reviewed and the architecture was appended to include specific information describing PSAT1U.",
+          "location": "paper markdown line 334"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "not addressed"
+      ],
+      "status": "coded",
+      "rationale": "No fragmentation or cross-tool interoperability problem or mechanism is addressed; work remains in Cameo/CSRM.",
+      "evidence": [
+        {
+          "quote": "No direct quote captured in subagent output; classification is based on the extractor rationale and full-paper reading.",
+          "location": "extractor rationale"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The template is explicitly tailored to undergraduate, short-cycle, minimally funded 1U CubeSat development and is demonstrated on PSAT1U.",
+      "evidence": [
+        {
+          "quote": "Given the time constraints and minimal funding of an undergraduate education program",
+          "location": "paper markdown line 31"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "The paper connects the model to classroom use and future CubeSat design but does not provide governance practices, deliverable traceability, or ROI/value evidence.",
+      "evidence": [
+        {
+          "quote": "intended to be utilized by undergraduate engineering students in their year-long senior capstone class at USNA",
+          "location": "paper markdown line 521"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "The paper mentions short cycle time and design-cycle efficiency, but not NewSpace, agile, distributed teams, or rapid-iteration processes.",
+      "evidence": [
+        {
+          "quote": "Given the short cycle time",
+          "location": "paper markdown line 523"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper markdown is readable and contains clear context, model artifacts, and claims; confidence is lower only for inferred venue/stage boundaries and outcome strength, not for descriptive extraction.",
+      "evidence": [
+        {
+          "quote": "No direct quote captured in subagent output; classification is based on the extractor rationale and full-paper reading.",
+          "location": "extractor rationale"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "Increasing CubeSat complexity makes design-change propagation obscure, increases design-cycle time, and distracts students from educational design work; the objective is a standardized MBSE template for PSAT1U/future CubeSats.",
-    "modeling_scope": [
-      "CubeSat system reference/template modeling",
-      "PSAT1U space segment and ground segment architecture hierarchy",
-      "subsystems and component packages including ADCS, communications, structures, EPS, thermal, propulsion, payload, and ground subsystems",
-      "EPS component structure and power-budget documentation",
-      "mission-payload envelope and mission-specific tailoring"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "no_pre_physical_verification_model",
+      "tool_dependency_or_vendor_lockin",
+      "learning_curve_or_training_burden",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage",
+      "lineage_or_duplicate_reference_model_overlap"
     ],
-    "system_boundary_level_of_abstraction": "System-of-interest is a CubeSat mission model derived from CSRM, spanning domain/enterprise/segment levels down to subsystem and component structures; PSAT1U-specific baseline leaves payload and mission details undefined.",
-    "minimal_or_excluded_modeling": "Payload and mission-specific modules are intentionally undefined in the baseline; behavior modeling, formal requirements-verification matrices, executable simulation, and test procedures are not reported.",
-    "required_prior_behavioral_domain_knowledge": "For students/users, limited MBSE expertise is intended; faculty and subject-matter experts predefine well-understood subsystem design decisions and users add mission/payload details within the envelope.",
-    "handling_limited_behavioral_knowledge": "The template constrains the design space with reusable CSRM logical elements, predefined subsystem/component structures, documentation tabs, generic payload envelope, and model relationships that propagate design changes.",
-    "model_artifacts_used": [
-      "CubeSat System Reference Model (CSRM)",
-      "SysML/Cameo Systems Modeler model",
-      "architecture hierarchy package diagram",
-      "block definition diagrams for ADCS and mission payload",
-      "EPS package diagram / Power Components population",
-      "subsystem and part-property specification documentation tabs",
-      "EPS power budget embedded in the model",
-      "watchdog timer-to-power subsystem relationship view",
-      "generic and defined mission payload specifications"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The model is presented as intended for classroom and future CubeSat development rather than evaluated as a completed deployed workflow.",
+        "evidence_quote": "discuss its implementation in a classroom setting as well its potential role in the development of future systems",
+        "location": "paper markdown line 35",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "extractor_identified",
+        "rationale": "The application is limited to the PSAT1U/USNA 1U CubeSat baseline and payload-template use case.",
+        "evidence_quote": "The PSAT1U Baseline Model is an MBSE representation of the satellite developed using the CSRM as a starting point.",
+        "location": "paper markdown line 332",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "Outcome claims about efficiency, time reduction, design-space understanding, and educational benefit are not accompanied by measured time, effort, defect, reuse, or learning metrics.",
+        "absence_based_explanation": "Completed extraction found only qualitative/illustrative evidence for MBSE outcomes; no quantitative results tables or metrics are reported for MBSE effects.",
+        "confidence": "high",
+        "evidence_quote": "Completed extraction found only qualitative/illustrative evidence for MBSE outcomes; no quantitative results tables or metrics are reported for MBSE effects."
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "The paper mentions avoiding manual trade studies/manual propagation but does not evaluate against a baseline project, previous document-centric process, or counterfactual toolchain.",
+        "evidence_quote": "The user does not need to manually propagate this change.",
+        "location": "paper markdown line 429",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "No independent review, stakeholder evaluation, student evaluation, or external replication of the PSAT1U model/template is reported.",
+        "absence_based_explanation": "The paper describes intended classroom use and examples, but reports no evaluation by users or independent validators.",
+        "confidence": "high",
+        "evidence_quote": "The paper describes intended classroom use and examples, but reports no evaluation by users or independent validators."
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "Although USNA has prior satellites and PSAT1U physical hardware/design are described, the claimed MBSE template outcomes are not supported by integration, test, operational, or flight evidence.",
+        "absence_based_explanation": "No MBSE outcome record includes integration/test/operational/flight evidence; the paper's demonstrations are model screenshots and conceptual examples.",
+        "confidence": "high",
+        "evidence_quote": "No MBSE outcome record includes integration/test/operational/flight evidence; the paper's demonstrations are model screenshots and conceptual examples."
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "The EPS architecture and budget are modeled, but no MBSE outcome is evaluated specifically for EPS reliability, reproducibility, integrability, or verification.",
+        "evidence_quote": "Within the specification for the EPS, pertinent information such as the as-designed power budget (Figure 16) is also available.",
+        "location": "paper markdown line 374",
+        "confidence": "medium"
+      },
+      {
+        "flag": "no_pre_physical_verification_model",
+        "source": "extractor_identified",
+        "rationale": "The paper does not present EPS/system verification procedures, executable checks, verification matrices, or simulation/model-checking prior to physical development.",
+        "absence_based_explanation": "EPS verification fields were extracted as not_reported; budgets are documented but not used as explicit verification mechanisms.",
+        "confidence": "high",
+        "evidence_quote": "EPS verification fields were extracted as not_reported; budgets are documented but not used as explicit verification mechanisms."
+      },
+      {
+        "flag": "tool_dependency_or_vendor_lockin",
+        "source": "extractor_identified",
+        "rationale": "The only reported MBSE implementation environment is CAMEO Systems Modeler V19.0; no neutral exchange or open-model path is provided.",
+        "evidence_quote": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0.",
+        "location": "paper markdown line 334",
+        "confidence": "medium"
+      },
+      {
+        "flag": "learning_curve_or_training_burden",
+        "source": "author_stated",
+        "rationale": "The authors explicitly state that teaching students complete MBSE/tool use is outside course scope, motivating a faculty-prepared template.",
+        "evidence_quote": "It is beyond the scope of this course to teach these students all there is to know about MBSE and how to utilize its tools.",
+        "location": "paper markdown line 521",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "The paper names the tool and CSRM starting point but does not report availability of the PSAT1U model, scripts, data, or reusable package.",
+        "absence_based_explanation": "No model URL, repository, package distribution, or export mechanism is reported in the paper markdown.",
+        "confidence": "high",
+        "evidence_quote": "No model URL, repository, package distribution, or export mechanism is reported in the paper markdown."
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "extractor_identified",
+        "rationale": "The model focuses on early design/template tailoring and classroom use; no formal lifecycle gates, operations, verification, or integration/test continuity are shown.",
+        "evidence_quote": "The standardized MBSE template for PSAT1U is intended to be utilized by undergraduate engineering students in their year-long senior capstone class at USNA.",
+        "location": "paper markdown line 521",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Benefits are linked to model features but primarily via assertions and illustrative examples, not evaluated outcomes.",
+        "evidence_quote": "the propagation of system changes through the model will be demonstrated to illustrate the utility of describing a CubeSat system this way",
+        "location": "paper markdown line 35",
+        "confidence": "high"
+      },
+      {
+        "flag": "lineage_or_duplicate_reference_model_overlap",
+        "source": "author_stated",
+        "rationale": "The paper is explicitly in the INCOSE SSWG CubeSat System Reference Model lineage and cites earlier CSRM interim-status papers.",
+        "evidence_quote": "This template in turn was built from the CubeSat System Reference Model developed by the INCOSE Space Systems Working Group.",
+        "location": "paper markdown line 531",
+        "confidence": "high"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "CSRM logical elements reused as the starting point for mission-specific CubeSat architecture",
-      "standardized PSAT1U baseline leaves mission and payload undefined",
-      "payload envelope and interface constraints enable mission-specific payload insertion",
-      "component library, packages, and diagram templates reused from CSRM",
-      "model relationships propagate changes across subsystem/component views"
+    "emergent_limitations": [
+      {
+        "label": "documentation-as-text-limits-formal-analysis",
+        "source": "extractor_identified",
+        "rationale": "Several key design data items are stored in documentation tabs/text tables rather than reported as executable parametrics or formal constraints, which may limit automated checking.",
+        "evidence_quote": "The model stores design specifics of the PSAT1U as text data within the documentation tab",
+        "location": "paper markdown line 454",
+        "confidence": "medium"
+      },
+      {
+        "label": "possible-payload-envelope-inconsistency",
+        "source": "extractor_identified",
+        "rationale": "The narrative gives a maximum payload volume of 247 cm^3, while the generic payload specification screenshot reports 273.6 cm^3; the paper does not reconcile the difference.",
+        "evidence_quote": "Payloads must have a maximum volume of 247 cm^3... Volume: 273.6 cm^3",
+        "location": "paper markdown lines 305 and 490",
+        "confidence": "medium"
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Select and load CubeSat reference model",
-        "inputs": "INCOSE SSWG CSRM and Cameo Systems Modeler V19.0",
-        "outputs": "CSRM model elements, diagram templates, and component libraries available as the starting architecture",
-        "actors_roles": "model developers / faculty / systems engineers",
-        "prerequisites": "access to CSRM and Cameo; CubeSat system engineering knowledge",
-        "completion_criteria": "not reported; implied by CSRM being available for review and extension",
-        "handoffs": "CSRM baseline handed to PSAT1U model developers for tailoring"
-      },
-      {
-        "step": "Append PSAT1U-specific architecture and component information",
-        "inputs": "PSAT1U physical design documentation, subsystem/component information, and CSRM predefined packages/templates",
-        "outputs": "PSAT1U Baseline Model architecture hierarchy and subsystem/component packages",
-        "actors_roles": "USNA/Colorado State/consultant model developers",
-        "prerequisites": "PSAT1U design information and understanding of CSRM package structure",
-        "completion_criteria": "not formally reported; paper states the baseline defines important subsystems, components, and interfaces",
-        "handoffs": "baseline model provided to capstone teams and future CubeSat practitioners"
-      },
-      {
-        "step": "Populate subsystem specifications and relationships",
-        "inputs": "design specifics such as EPS components, power budget, watchdog timer circuit, ADCS, communications, and payload constraints",
-        "outputs": "BDDs, EPS package/specification, documentation entries, and relationships such as watchdog timer to power subsystem",
-        "actors_roles": "model developers and subject-matter experts",
-        "prerequisites": "component definitions and subsystem interface knowledge",
-        "completion_criteria": "not reported; implied by ability to review subsystem structures and edit specifications",
-        "handoffs": "model artifacts made available for design review, classroom use, and mission-specific tailoring"
-      },
-      {
-        "step": "Preserve mission/payload blank space for tailoring",
-        "inputs": "generic payload mass, volume, dimension, and power envelope",
-        "outputs": "generic mission payload specification and undefined mission-specific modules",
-        "actors_roles": "faculty/model developers define envelope; student/user teams supply mission payload details",
-        "prerequisites": "known PSAT1U payload accommodation limits",
-        "completion_criteria": "payload remains within defined envelope; formal criteria not reported",
-        "handoffs": "generic template handed to a mission-specific team"
-      },
-      {
-        "step": "Create a mission-specific PSAT1U model",
-        "inputs": "mission objectives, stakeholder use cases/viewpoints, requirements, and payload details",
-        "outputs": "mission-specific instance of the PSAT1U model",
-        "actors_roles": "undergraduate teams, practitioners, mission engineers, developers, testers",
-        "prerequisites": "mission/payload concept sufficiently known to add to the template",
-        "completion_criteria": "not reported; implied by completing appropriate payload/mission details and changes",
-        "handoffs": "mission-specific model supports continued design and development"
-      },
-      {
-        "step": "Use relationships for change propagation",
-        "inputs": "changed component/subsystem specification, such as watchdog timer redesign",
-        "outputs": "associated subsystem views reflect the related element without manual propagation",
-        "actors_roles": "model users / designers",
-        "prerequisites": "relationships defined among relevant model elements",
-        "completion_criteria": "changed element is visible through related subsystem/component views; formal verification not reported",
-        "handoffs": "updated design information available to dependent subsystem designers"
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "Mapped generally to requirements, design, analysis, verification, and validation through the cited MBSE definition, but the PSAT1U case mainly supports early design/development, payload definition, subsystem documentation, and change management; no formal lifecycle gates are reported.",
-    "approach_classification": "Pure MBSE",
-    "approach_classification_rationale": "The approach centers on SysML/CSRM/Cameo model artifacts and model-based documentation/relationships, without reported co-simulation, executable digital thread, PLM/requirements-tool integration, or hardware-in-the-loop integration.",
-    "tailoring_rationale": [
-      "undergraduate capstone time constraints and minimal funding",
-      "need to avoid repeated trade studies on well-understood subsystems/components",
-      "students should focus on payload, analysis, testing, and mission decisions",
-      "discipline experts should benefit from MBSE without becoming expert MBSE users",
-      "PSAT1U is a modular 1U physical template with an undefined mission/payload"
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "Model-Based Systems Engineering (MBSE)",
-      "Systems Modeling Language (SysML)",
-      "INCOSE Space Systems Working Group CubeSat System Reference Model (CSRM)",
-      "CAMEO Systems Modeler MBSE Software V19.0"
-    ],
-    "toolchain_architecture_data_flow": "CSRM is opened in Cameo, predefined packages/templates are reviewed, PSAT1U-specific architecture and documentation are appended, mission-specific requirements/use cases/viewpoints can be combined with CSRM elements, and model relationships expose changes across subsystem/component views. Data entry appears manual and internal to Cameo.",
-    "interoperability_mechanisms": [
-      "SysML package and block relationships",
-      "CSRM reusable logical architecture elements and diagram templates",
-      "component library reuse",
-      "Cameo containment tree and specification/documentation views",
-      "defined associations among subsystem/component model elements"
-    ],
-    "syntax_semantic_continuity_evidence": "The paper shows consistent named subsystem/component packages and an association from Watchdog Timer Reset Circuit to the Power Subsystem; it claims changes propagate through model relationships. No exchange-format or semantic validation evidence is reported.",
-    "software_hardware_system_integration_readiness": "The model captures physical subsystem/component information, payload interface constraints, EPS power budget, and communication/power architecture useful for integration planning, but no software/hardware integration tests or readiness assessments are reported.",
-    "toolchain_limitations": [
-      "PSAT1U model file availability not reported",
-      "no open-source assets or export/exchange mechanisms reported",
-      "no integration with requirements management, CAD, simulation, PLM, or test tools reported",
-      "important design specifics are stored as text documentation rather than shown as executable or formally checked model elements",
-      "students are not expected to learn how to create their own model from scratch"
-    ],
-    "availability_reproducibility": "CSRM reuse and Cameo version are reported; PSAT1U model availability, data files, and reproducible build instructions are not reported."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "8 ZTJ solar cells / solar arrays",
-      "6 or 8 AA NiCd batteries as reported in figures/specifications",
-      "regulators and converters",
-      "power circuits and switches / custom battery board",
-      "processor and memory",
-      "software",
-      "watchdog timer reset circuit",
-      "secure and unsecure power buses",
-      "payload secure bus",
-      "4 V bus and 5 V bus",
-      "EPS power budget with load currents, duty cycles, margins, capacity per orbit, and eclipse/daylight times"
-    ],
-    "eps_requirements_representation": "Formal EPS requirements are not shown. EPS constraints and requirements-like information are represented as design diagrams, subsystem/component lists, payload power limits, and power-budget documentation embedded in the subsystem specification.",
-    "verification_validation_artifacts": [
-      "as-designed EPS power budget in the model specification",
-      "current margin and capacity margin calculations",
-      "EPS package diagram / Power Components population",
-      "watchdog timer circuit diagram and relationship to Power Subsystem",
-      "payload power envelope for mission-specific payload checks"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "reviewing the embedded EPS power budget and margins before mission-specific tailoring",
-      "checking mission payload power against the generic payload envelope",
-      "using model relationships to expose effects of changes to EPS-related components such as the watchdog timer"
-    ],
-    "evidence_verification_integrated_in_model": "Section 4 states that \"Within the specification for the EPS, pertinent information such as the as-designed power budget (Figure 16) is also available.\" This is evidence of power-budget information in the model, but not a formal model-integrated verification procedure.",
-    "integration_test_readiness": "EPS interfaces, buses, components, and budgets are documented for design/integration planning; no EPS integration tests, test procedures, model checks, or hardware results are reported."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "The standardized MBSE template can reduce CubeSat design and development times.",
-      "outcome_category": "cost/schedule and design-cycle efficiency",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "standardized CubeSat MBSE template",
-        "reuse of CSRM logical elements and packages",
-        "predefined PSAT1U subsystem/component architecture"
-      ],
-      "artifact_or_process_linked": "PSAT1U Baseline Model built from the CubeSat System Reference Model",
-      "lifecycle_stage": "conceptual design and development",
-      "evidence_type": "author assertion with illustrative model artifacts",
-      "metric_or_value_indicator": "reduced design/development time claimed; no quantitative metric reported",
-      "baseline_comparator": "traditional or less standardized CubeSat development implied, not measured",
-      "observed_effect_size_or_qualitative_effect": "asserted reduction in design and development time",
-      "evidence_source": "Abstract and Introduction",
-      "direct_quote": "The aim of this model is to aid in the education of undergraduate engineering students in their capstone design course as well as to reduce design and development times for future CubeSat systems.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No before/after schedule data or repeated reuse evidence; benefits may arise from the physical standardized design or faculty decisions rather than the model alone."
+      "field_path": "mbse_objective_scope_artifacts.generality_reuse_mechanism",
+      "label": "psat1u-baseline-template-derived-from-incose-csrm",
+      "description": "A concrete 1U CubeSat baseline model created by adapting the INCOSE CubeSat System Reference Model with PSAT1U documentation.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "paper markdown line 332: The PSAT1U Baseline Model is an MBSE representation of the satellite developed using the CSRM as a starting point.",
+      "confidence": "high",
+      "original_label": "PSAT1U baseline template derived from INCOSE CSRM"
     },
     {
-      "claim": "Model relationships allow design changes to propagate automatically and reduce manual update effort.",
-      "outcome_category": "change management and traceability",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Cameo/SysML relationships among subsystem and component elements",
-        "watchdog timer association to the Power Subsystem",
-        "shared model specifications"
-      ],
-      "artifact_or_process_linked": "Watchdog Timer specification and Power Subsystem relationship shown in Figures 17-18",
-      "lifecycle_stage": "design iteration",
-      "evidence_type": "illustrative model example",
-      "metric_or_value_indicator": "manual propagation avoided; no time/error metric reported",
-      "baseline_comparator": "manual propagation implied, not measured",
-      "observed_effect_size_or_qualitative_effect": "qualitative automatic propagation of related design information",
-      "evidence_source": "Section 5.1 Propagating Changes",
-      "direct_quote": "any changes made to the Watchdog Timer specification are automatically propagated to the Power subsystem and to any other subsystems or components with a relationship to the Watchdog Timer. The user does not need to manually propagate this change.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The example demonstrates a relation view but not correctness, completeness, impact analysis quality, or measured error reduction."
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+      "label": "cameo-systems-modeler-v19-0",
+      "description": "Named implementation tool; captured under controlled value Cameo/MagicDraw.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "paper markdown line 334: CAMEO Systems Modeler MBSE Software V19.0",
+      "confidence": "high",
+      "original_label": "CAMEO Systems Modeler V19.0"
     },
     {
-      "claim": "The template helps users understand the payload design space and focus effort on mission-specific payload design rather than well-understood subsystems.",
-      "outcome_category": "design-space clarity and educational focus",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "generic mission payload specification",
-        "predefined subsystem/component constraints",
-        "documented payload envelope in model specification"
-      ],
-      "artifact_or_process_linked": "Mission Payload BDD and generic/defined payload specifications in Figures 19-21",
-      "lifecycle_stage": "mission-specific payload design and capstone development",
-      "evidence_type": "author rationale with model screenshots",
-      "metric_or_value_indicator": "payload power 1.92 W and mass/volume/dimension envelope shown; no learning or time metric reported",
-      "baseline_comparator": "students otherwise spending time on well-understood subsystems implied, not measured",
-      "observed_effect_size_or_qualitative_effect": "qualitative improved understanding of payload constraints",
-      "evidence_source": "Sections 2.4 and 5.2",
-      "direct_quote": "it allows the user to quickly survey and understand the payload design space without wasting precious time on well understood or defined subsystems and components.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No user study or classroom evaluation; design-space clarity may depend on instructor support and prior domain knowledge."
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used=other",
+      "label": "package-diagrams-and-architecture-hierarchy-views",
+      "description": "Model artifacts outside the controlled artifact labels, used to organize domain, enterprise, segment, subsystem, component, and ground-system packages.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "paper markdown line 336: The Architecture Hierarchy encompasses all of the subsystems, subsystem components and ground system components along with the domain, enterprise and segment packages.",
+      "confidence": "high",
+      "original_label": "package diagrams and architecture hierarchy views"
     },
     {
-      "claim": "The model supports reuse by serving as a mission-agnostic template that can be tailored for different payloads/missions.",
-      "outcome_category": "reuse and reproducibility",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "payload and mission modules intentionally left undefined",
-        "generic payload envelope",
-        "CSRM-derived reusable packages and components"
-      ],
-      "artifact_or_process_linked": "PSAT1U Baseline Model and Mission Payload specification",
-      "lifecycle_stage": "new mission initiation and early design",
-      "evidence_type": "template design description",
-      "metric_or_value_indicator": "reuse claimed; no count of reused missions or downloadable model reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "qualitative support for creating mission-specific instances",
-      "evidence_source": "Sections 3, 4, 5.2, and 6",
-      "direct_quote": "Ultimately, by adding the appropriate payload and mission details and making any other appropriate changes to the standardized MBSE template, the user will create a model of their mission specific instance of the PSAT1U.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No demonstrated repeated reuse, model distribution, or external replication evidence."
+      "field_path": "mbse_objective_scope_artifacts.model_artifacts_used=other",
+      "label": "documentation-specification-tabs-as-model-artifacts",
+      "description": "Key design data such as EPS power budget and payload envelope are embedded as text in subsystem/component specification documentation tabs.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "paper markdown line 454: The model stores design specifics of the PSAT1U as text data within the documentation tab",
+      "confidence": "high",
+      "original_label": "documentation/specification tabs as model artifacts"
     },
     {
-      "claim": "The model improves integrability by documenting physical/electrical payload constraints and well-understood interfaces.",
-      "outcome_category": "integrability and interface management",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "mission payload subsystem model",
-        "payload envelope in specification documentation",
-        "subsystem/component interfaces captured in architecture hierarchy"
-      ],
-      "artifact_or_process_linked": "Payload board constraints and Mission Payload specification; PSAT1U baseline interfaces",
-      "lifecycle_stage": "payload integration planning",
-      "evidence_type": "design constraints embedded in model and paper text",
-      "metric_or_value_indicator": "payload mass less than 567 g, maximum volume 247 cm^3, and 1.92 W on-orbit average power in paper; figure specification also provides envelope values",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "qualitative ability to assess payload fit within physical/electrical envelope",
-      "evidence_source": "Section 2.4 and Section 5.2",
-      "direct_quote": "the CubeSat was specifically designed to be a modular architecture with well understood interfaces to allow practitioners to concentrate on payload design for their particular application.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Interface documentation is shown, but no integration test or payload-integration success evidence is reported."
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism=other",
+      "label": "relationship-based-change-propagation",
+      "description": "Cameo/SysML relationships between elements are used to propagate specification changes across subsystem views.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "paper markdown line 429: any changes made to the Watchdog Timer specification are automatically propagated to the Power subsystem",
+      "confidence": "high",
+      "original_label": "relationship-based change propagation"
     },
     {
-      "claim": "The EPS model makes the as-designed power budget and margins accessible inside the MBSE environment.",
-      "outcome_category": "analysis visibility and power-budget continuity",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "EPS package diagram",
-        "subsystem specification documentation tab",
-        "power-budget data stored in model"
-      ],
-      "artifact_or_process_linked": "Electrical Power System Package Diagram and Figure 16 EPS specification",
-      "lifecycle_stage": "design analysis and mission-specific payload assessment",
-      "evidence_type": "model artifact screenshot containing budget values",
-      "metric_or_value_indicator": "Solar Current per Panel 503.085 mA; Average Current from geometry 712.55 mA; Current Margin Normal 390.085 mA; Capacity Margin 543.05 mAh in Figure 16 description",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "power budget information is viewable in the model; verification effect not demonstrated",
-      "evidence_source": "Section 4 and Figure 16",
-      "direct_quote": "Within the specification for the EPS, pertinent information such as the as-designed power budget (Figure 16) is also available.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The budget appears as documentation text; no automated consistency checks, simulation, validation, or hardware measurements are reported."
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism=other",
+      "label": "payload-design-space-envelope",
+      "description": "Payload mass, volume, power, and dimensional limits are deliberately left as generic constraints for mission-specific tailoring.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "paper markdown line 479: all they will see is some generic information defining the design space and the envelope with which the payload can be housed",
+      "confidence": "high",
+      "original_label": "payload design-space envelope"
     },
     {
-      "claim": "The approach allows students and discipline-specific experts to benefit from MBSE without becoming expert MBSE users.",
-      "outcome_category": "adoption and workforce usability",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "faculty-created constrained design template",
-        "standardized MBSE model rather than from-scratch modeling",
-        "predefined subsystem/component decisions"
-      ],
-      "artifact_or_process_linked": "Classroom implementation process and PSAT1U template",
-      "lifecycle_stage": "education and early development",
-      "evidence_type": "author implementation rationale",
-      "metric_or_value_indicator": "no adoption metric or classroom outcome reported",
-      "baseline_comparator": "students learning full MBSE toolchain from scratch implied, not evaluated",
-      "observed_effect_size_or_qualitative_effect": "asserted lower MBSE expertise burden",
-      "evidence_source": "Section 5.3 Classroom Implementation and Conclusion",
-      "direct_quote": "subject matter experts in aerospace engineering and other specific disciplines [can] gain the benefit of these powerful systems engineering tools without becoming expert MBSE users.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No actual classroom deployment results, learning assessment, or expert evaluation are reported."
+      "field_path": "eps_verification_specific.eps_elements_modeled=other",
+      "label": "eps-processor-software-components",
+      "description": "The EPS package includes processor and memory plus software in addition to conventional power hardware.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "paper markdown Figure 15 description, lines 379-381: processor and Memory : Processor and Memory, and software : Software",
+      "confidence": "medium",
+      "original_label": "EPS processor/software components"
     },
     {
-      "claim": "The PSAT1U EPS physical design choices improve reliability and survivability, but this is not shown as an MBSE-derived outcome.",
-      "outcome_category": "reliability",
-      "specificity": "EPS-specific",
-      "mbse_mechanism": [
-        "not reported as MBSE-derived",
-        "physical design decision documented alongside EPS description"
-      ],
-      "artifact_or_process_linked": "EPS design description and battery board design; no explicit model-enabled reliability analysis",
-      "lifecycle_stage": "EPS component design",
-      "evidence_type": "author assertion based on component heritage",
-      "metric_or_value_indicator": "over 50 years of space heritage claimed for NiCd batteries; no reliability metric reported",
-      "baseline_comparator": "qualitative comparison to Lithium-ion batteries",
-      "observed_effect_size_or_qualitative_effect": "NiCd described as more survivable/reliable and tolerant of abuse",
-      "evidence_source": "Section 2.1 Electrical Power System",
-      "direct_quote": "Nickel Cadmium (NiCd) batteries have over 50 years of space heritage and survivability and offer the best lifetime survivability and reliability compared to Lithium-ion batteries.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "This reliability claim is about hardware selection and heritage, not a demonstrated outcome of EPS modeling; no test or operational reliability data are provided."
+      "field_path": "implementation_pathway_tailoring.tailoring_rationale",
+      "label": "faculty-prepared-template-for-low-mbse-expertise-users",
+      "description": "Faculty constrain and prepopulate the model so students and discipline experts can tailor rather than create a model from scratch.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "paper markdown line 525: will not be expected to learn how to create their own model from scratch",
+      "confidence": "high",
+      "original_label": "faculty-prepared template for low-MBSE-expertise users"
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "No formal governance strategy reported. Faculty/subject-matter experts create and constrain the template; users add mission/payload details within the defined envelope.",
-    "traceability_to_deliverables_decisions_reviews": "Subsystem/component relationships and documentation tabs trace design information to model artifacts; no formal deliverables, requirements baselines, decision records, reviews, or approval gates are reported.",
-    "evaluation_criteria_model_quality_usefulness": "Usefulness is framed as design-space clarity, automatic change propagation, reduced design/development time, classroom usability, and support for mission-specific payload tailoring; no formal evaluation criteria or user assessment are reported.",
-    "roi_value_realization_evidence": "Cost/schedule value is asserted through reduced design cycle time and avoiding repeated trade studies; no quantified ROI, cost comparison, schedule data, or realized classroom/mission outcomes are reported.",
-    "programmatic_gates_critical_design_events_supported": "not reported; intended to support year-long senior capstone design and future CubeSat development rather than named programmatic gates.",
-    "model_derived_performance_indicators_management_metrics": "Power-budget margins, capacity margin, link margins, payload mass/volume/power envelope, and design specifications are documented; no management KPIs are reported."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper describes using CSRM in Cameo, appending PSAT1U-specific information, leaving payload blank, and tailoring the template, but lacks a step-by-step playbook or empirical implementation results."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "mentioned only",
-      "rationale": "Cameo, SysML, and CSRM are named, but cross-tool interoperability, data exchange, fragmentation, and continuity beyond the MBSE tool are not analyzed."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "addressed conceptually",
-      "rationale": "The approach is tailored to undergraduate time/funding constraints and non-expert MBSE users through a constrained template, but no measured resource savings are provided."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "mentioned only",
-      "rationale": "Design time and educational value are claimed, and faculty constrain the model, but governance, deliverables, reviews, ROI, and value realization are not systematically addressed."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "not addressed",
-      "rationale": "The paper discusses frequent design changes and undergraduate development, but does not address NewSpace, agile processes, distributed teams, or rapid-iteration governance."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "A CubeSat can be modeled generically by starting from the CSRM and adding PSAT1U-specific architecture while keeping payload and mission modules undefined.",
-        "Minimal user MBSE knowledge is supported by faculty/SME predefinition of well-understood subsystems, reusable packages, documented design envelopes, and a mission payload template.",
-        "The PSAT1U model uses system/component hierarchies, BDDs, specifications, and relationships rather than detailed behavior or executable simulation."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0039",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0039.json",
+      "tier_status": "core",
+      "tier_rationale": "Supplied corpus metadata lists screening_tier=core; full text is directly relevant to CubeSat MBSE reference/template modeling.",
+      "citation": "Gregory, J. M., Kang, J. S., Bruninga, R., Sega, R., Borky, J., Kaslow, D., and Downey, G. H. (2020). Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites.",
+      "title": "Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites",
+      "authors": [
+        "John M. Gregory",
+        "Jin S. Kang",
+        "R. Bruninga",
+        "R. Sega",
+        "J. Borky",
+        "D. Kaslow",
+        "George H. Downey"
       ],
-      "RQ2": [
-        "Claimed MBSE outcomes include reduced design/development time, easier design-space understanding, automatic change propagation, reuse, and lower MBSE expertise burden.",
-        "Integrability is supported conceptually by documented payload mass/volume/power envelopes and well-understood interfaces, but no integration-test results are reported.",
-        "Reliability is claimed for EPS hardware choices such as NiCd batteries and watchdog timers, but the paper does not demonstrate reliability as an MBSE-derived modeling outcome."
+      "year": 2020,
+      "venue": "IEEE Aerospace Conference (best-effort inference from DOI stem AERO/10.1109; venue name not explicit in markdown text)",
+      "doi": "10.1109/aero47225.2020.9172748",
+      "publisher": "IEEE (best-effort from DOI metadata)",
+      "venue_type": "conference paper",
+      "source_database_query_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"reference model\" OR template OR behavior OR behaviours OR behaviors OR architecture))",
+          "rank": 23,
+          "paperId": "85092579795"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+          "rank": 40,
+          "paperId": "85092579795"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0039_semantic_title.json",
+          "query": "\"Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites\"",
+          "rank": 1,
+          "paperId": "9c8a68ca9659685a6e65c2421d9efd1793132a03",
+          "purpose": "abstract_enrichment"
+        }
       ],
-      "RQ3": [
-        "The EPS model includes an as-designed power budget and margins in the subsystem specification, supporting pre-build design review.",
-        "Mission payloads can be checked conceptually against power and physical-envelope constraints before a mission-specific instance is finalized.",
-        "Formal verification procedures, requirements-to-test traceability, model checking, simulation, or hardware verification integration are not reported."
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "high",
+          "rationale": "Central CSRM-derived reusable CubeSat template/baseline with intentionally undefined payload/mission modules."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "Claims reuse, change propagation, design-space understanding, time/effort efficiency; evidence is weak and mostly not EPS-specific."
+        },
+        "RQ3": {
+          "relevance": "none",
+          "rationale": "No verification procedure modeling for EPS/system before physical development."
+        }
+      },
+      "lineage_overlap_notes": "Part of the recurring INCOSE SSWG CubeSat System Reference Model lineage; this paper applies CSRM to USNA PSAT1U and cites CSRM interim status papers from 2015-2017."
+    },
+    "study_context_population": {
+      "mission_platform": "PSAT1U, a 1U CubeSat educational satellite; maximum mass cited as 1500 g in PSAT1U specs; designed to host modular payloads.",
+      "size_form_factor": "1.0 U CubeSat",
+      "mission_name": "PSAT1U / Parkinson Sat 1U",
+      "mission_domain": "Undergraduate education, research payload hosting, VHF/APRS communications capability.",
+      "organization_type": "Academic/student program at the United States Naval Academy with Colorado State/consultant collaborators.",
+      "project_maturity": "Physical design/prototype and documentation exist; MBSE baseline/template developed and demonstrated, intended for classroom/future systems.",
+      "lifecycle_stage_addressed": [
+        "concept/pre-Phase A",
+        "Phase A/B",
+        "implementation"
+      ],
+      "development_context": [
+        "academic/student",
+        "resource-constrained mission"
+      ],
+      "eps_relevance": "power-budget/electrical-architecture",
+      "model_maturity": [
+        "reference model/template",
+        "prototype demonstration",
+        "project-applied model"
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Section 5.3: \"It is beyond the scope of this course to teach these students all there is to know about MBSE and how to utilize its tools.\"",
-      "Section 6: \"The PSAT1U model described is itself a template without payload or mission definition\"",
-      "Section 5.3: students \"will not be expected to learn how to create their own model from scratch.\""
-    ],
-    "extractor_identified_limitations_gaps": [
-      "No public PSAT1U model files or reproducible model package are reported.",
-      "No quantitative evidence is provided for reduced design time, improved reliability, improved integration, or classroom learning outcomes.",
-      "EPS verification is limited to documented budgets/margins; formal model-integrated verification procedures are absent.",
-      "No cross-tool interoperability, digital-thread continuity, or exchange mechanism is described.",
-      "No flight, operational, integration-test, or stakeholder evaluation evidence for the MBSE template is reported."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Manage increasing CubeSat complexity, make change impacts less obscure, preserve student educational value, reduce design-cycle time, and provide a simple standardized build/model template.",
+      "modeling_scope": [
+        "mission",
+        "system",
+        "subsystem",
+        "EPS",
+        "requirements",
+        "architecture",
+        "interfaces",
+        "budgets"
+      ],
+      "system_boundary_level_of_abstraction": "CSRM-derived PSAT1U baseline covers domain/enterprise/segment, space and ground segment packages, subsystem/component packages, interfaces and relationships; mission-specific payload and mission modules are intentionally left undefined and constrained by an envelope.",
+      "required_prior_behavioral_domain_knowledge": "Users need mission objectives and payload-specific information to tailor the template; well-understood subsystems/components are pre-modeled by faculty/experts, reducing the need for novice students to understand full MBSE creation or repeat subsystem trades.",
+      "model_artifacts_used": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "power budgets",
+        "other"
+      ],
+      "artifact_notes": "Other artifacts include CSRM/model package templates, architecture hierarchy/package diagrams, subsystem/component specification dialogs, documentation tabs, and relations views.",
+      "generality_reuse_mechanism": [
+        "template",
+        "reference model",
+        "library",
+        "reusable workflow",
+        "method guidance"
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "implementation_steps_or_phases": [
+        {
+          "step": 1,
+          "description": "Select CSRM as the CubeSat-specific MBSE starting point/template.",
+          "inputs": [
+            "INCOSE SSWG CSRM",
+            "PSAT1U design documentation"
+          ],
+          "actors_roles": [
+            "USNA/CSU faculty and model developers"
+          ],
+          "outputs": [
+            "Chosen modeling baseline"
+          ],
+          "evidence": "CSRM was chosen as a CubeSat specific template (line 80)."
+        },
+        {
+          "step": 2,
+          "description": "Open CSRM in Cameo Systems Modeler V19.0; review predefined packages/templates.",
+          "inputs": [
+            "CSRM model",
+            "Cameo Systems Modeler V19.0"
+          ],
+          "actors_roles": [
+            "model developers"
+          ],
+          "outputs": [
+            "Reviewed CSRM package/template structure"
+          ],
+          "evidence": "The CSRM was obtained and accessed using CAMEO Systems Modeler MBSE Software V19.0 (line 334)."
+        },
+        {
+          "step": 3,
+          "description": "Append/adapt the CSRM architecture with PSAT1U-specific information and define architecture hierarchy/subsystem packages.",
+          "inputs": [
+            "PSAT1U subsystem/component/interface information"
+          ],
+          "actors_roles": [
+            "faculty/model developers"
+          ],
+          "outputs": [
+            "PSAT1U Baseline Model architecture hierarchy"
+          ],
+          "evidence": "architecture was appended to include specific information describing PSAT1U (line 334)."
+        },
+        {
+          "step": 4,
+          "description": "Populate subsystem/component artifacts, including ADCS BDD, EPS package, power budget documentation, and relationships among components/subsystems.",
+          "inputs": [
+            "subsystem designs",
+            "power budget",
+            "component relationships"
+          ],
+          "actors_roles": [
+            "model developers"
+          ],
+          "outputs": [
+            "subsystem BDDs/packages/specifications and relations"
+          ],
+          "evidence": "Figure 15 is the package diagram describing the EPS... as-designed power budget (line 374)."
+        },
+        {
+          "step": 5,
+          "description": "Demonstrate use: edit specifications, rely on model relationships for change propagation, and tailor generic payload/mission specification to create mission-specific PSAT1U instances.",
+          "inputs": [
+            "mission objectives",
+            "payload details",
+            "template model"
+          ],
+          "actors_roles": [
+            "students/practitioners",
+            "faculty mentors"
+          ],
+          "outputs": [
+            "mission-specific PSAT1U model instance"
+          ],
+          "evidence": "by adding the appropriate payload and mission details... the user will create a model of their mission specific instance (line 483)."
+        }
+      ],
+      "mapping_to_se_activities_lifecycle_gates": "Maps to requirements/stakeholder needs, logical and physical architecture, mission design/development, subsystem design information, and classroom capstone implementation; no explicit SRR/PDR/CDR gate mapping.",
+      "approach_classification": "Pure MBSE",
+      "tailoring_rationale": [
+        "mission scale",
+        "team maturity",
+        "cost",
+        "schedule",
+        "organizational constraints"
+      ],
+      "adoption_guidance": "partial guidance"
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML",
+        "Cameo/MagicDraw"
+      ],
+      "named_tool_versions": [
+        "CAMEO Systems Modeler MBSE Software V19.0"
+      ],
+      "toolchain_architecture_data_flow": "Single-tool CSRM/Cameo workflow: CSRM packages/templates are reviewed and appended with PSAT1U information; mission-specific users add requirements/payload details to the baseline. Physical CAD/EZNEC/engineering diagrams appear in the paper but are not reported as integrated with the MBSE model.",
+      "interoperability_mechanisms": {
+        "status": "not_reported",
+        "values": []
+      },
+      "syntax_semantic_continuity_across_lifecycle": "Continuity is shown within the model through package hierarchy and relationships/change propagation; no cross-lifecycle toolchain continuity or downstream engineering synchronization is reported.",
+      "software_hardware_system_integration_readiness": "No direct toolchain support for software/hardware integration is reported; the model helps expose subsystem/component interfaces and payload constraints.",
+      "toolchain_limitations": [
+        "vendor lock-in"
+      ],
+      "availability_reproducibility": "CSRM starting point and Cameo tool are named; PSAT1U model, data, scripts, and open reusable packages are not reported as available."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [
+        "solar panels",
+        "battery",
+        "power conditioning/distribution",
+        "loads",
+        "modes",
+        "margins",
+        "power budgets",
+        "fault protection",
+        "interfaces",
+        "other"
+      ],
+      "eps_requirements_representation_and_links": "EPS architecture and power budget are included in the EPS package/specification; payload envelope requires operating within available daylight power. The paper does not show formal requirements-to-EPS trace tables or verification links.",
+      "verification_validation_artifacts": {
+        "status": "not_reported",
+        "values": []
+      },
+      "pre_physical_development_verification_mechanism": {
+        "status": "not_reported",
+        "values": []
+      },
+      "evidence_verification_integrated_in_model": "not_reported",
+      "integration_test_readiness": {
+        "status": "not_reported",
+        "values": []
+      }
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "motivation for MBSE template",
-        "quote": "One drawback of increased complexity is the increase in obscurity of how a change in one area of the design propagates through the rest of the system.",
-        "location": "Abstract"
+        "claim_id": "C1",
+        "claim_text_or_paraphrase": "A CSRM-derived standardized MBSE template can make CubeSat design cycles more efficient and reduce future design/development time by preventing repeated trade studies on well-understood subsystems/components.",
+        "outcome_category": [
+          "generality/reuse",
+          "schedule reduction",
+          "effort reduction",
+          "decision support"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "requirements linkage"
+        ],
+        "artifact_or_process_linked_to_claim": "CSRM-based PSAT1U standardized template/baseline model used as a starting point for mission-specific CubeSats.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "time",
+          "effort",
+          "model reuse"
+        ],
+        "baseline_comparator": "manual analysis",
+        "observed_effect_size_or_qualitative_effect": "Qualitative expected reduction in design/development time; no measured effect size.",
+        "evidence_source": {
+          "quote": "The aim of this model is to aid in the education of undergraduate engineering students in their capstone design course as well as to reduce design and development times for future CubeSat systems.",
+          "location": "paper markdown lines 31-35"
+        },
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "No time/effort metrics, baseline project, or student/team evaluation; the physical PSAT1U standard design itself may also reduce trade-study effort independent of MBSE."
       },
       {
-        "topic": "model aim",
-        "quote": "The aim of this model is to aid in the education of undergraduate engineering students in their capstone design course as well as to reduce design and development times for future CubeSat systems.",
-        "location": "Abstract"
+        "claim_id": "C2",
+        "claim_text_or_paraphrase": "The baseline model defines PSAT1U subsystems/components/interfaces while leaving payload and mission modules undefined, helping users understand the payload design space and create mission-specific instances.",
+        "outcome_category": [
+          "generality/reuse",
+          "integrability/interoperability",
+          "completeness",
+          "decision support"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "requirements linkage",
+          "other"
+        ],
+        "artifact_or_process_linked_to_claim": "PSAT1U Baseline Model, mission payload BDD, generic payload specification, and editable payload documentation/specification.",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "Phase A/B",
+          "implementation"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Qualitatively claimed clearer payload design space and model tailoring; no reuse count or validation.",
+        "evidence_source": {
+          "quote": "The baseline model is unique in that it defines all of the important subsystems, components, and interfaces of the PSAT1U, but leaves the payload and mission specific modules undefined.",
+          "location": "paper markdown line 332"
+        },
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "The paper demonstrates editing payload documentation but does not show successful independent reuse by other teams or missions."
       },
       {
-        "topic": "CSRM reuse",
-        "quote": "the CSRM aims to be a starting point for any mission-specific CubeSat development",
-        "location": "Section 3"
+        "claim_id": "C3",
+        "claim_text_or_paraphrase": "Model relationships automatically propagate a Watchdog Timer specification change from ADCS to the Power subsystem and other related elements, avoiding manual propagation and improving consistency/traceability.",
+        "outcome_category": [
+          "traceability",
+          "consistency",
+          "effort reduction",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "other"
+        ],
+        "artifact_or_process_linked_to_claim": "Cameo model relationship between Watchdog Timer Reset Circuit, ADCS subsystem, and Power subsystem.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "implementation"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "trace links",
+          "effort"
+        ],
+        "baseline_comparator": "manual analysis",
+        "observed_effect_size_or_qualitative_effect": "Concrete model relationship shown; authors claim no manual propagation is needed. No metric for avoided errors or time saved.",
+        "evidence_source": {
+          "quote": "As a result, any changes made to the Watchdog Timer specification are automatically propagated to the Power subsystem and to any other subsystems or components with a relationship to the Watchdog Timer. The user does not need to manually propagate this change.",
+          "location": "paper markdown line 429"
+        },
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "The demonstration is a single illustrative trace; it does not verify semantic correctness, requirements impact, or effects in a changing project over time."
       },
       {
-        "topic": "baseline abstraction",
-        "quote": "The baseline model is unique in that it defines all of the important subsystems, components, and interfaces of the PSAT1U, but leaves the payload and mission specific modules undefined.",
-        "location": "Section 4"
+        "claim_id": "C4",
+        "claim_text_or_paraphrase": "Storing critical PSAT1U design information inside model documentation tabs makes it viewable/editable by practitioners and supports shared understanding.",
+        "outcome_category": [
+          "communication/stakeholder alignment",
+          "decision support",
+          "traceability",
+          "reproducibility"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "shared repository",
+          "other"
+        ],
+        "artifact_or_process_linked_to_claim": "Subsystem/component specification documentation tabs, including EPS power budget and payload envelope information.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "implementation"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Qualitative claim that critical design information is stored, viewable, and editable in the model.",
+        "evidence_source": {
+          "quote": "The model stores design specifics of the PSAT1U as text data within the documentation tab of the appropriate subsystem or component specification. In this way, critical design information is stored in the model and can be viewed or edited as needed by practitioners.",
+          "location": "paper markdown line 454"
+        },
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "Storing information as text documentation may not provide formal analyzability or consistency checking; no user evidence is reported."
       },
       {
-        "topic": "EPS model artifact",
-        "quote": "Within the specification for the EPS, pertinent information such as the as-designed power budget (Figure 16) is also available.",
-        "location": "Section 4"
-      },
-      {
-        "topic": "change propagation",
-        "quote": "The user does not need to manually propagate this change.",
-        "location": "Section 5.1"
-      },
-      {
-        "topic": "payload design space",
-        "quote": "it allows the user to quickly survey and understand the payload design space without wasting precious time on well understood or defined subsystems and components.",
-        "location": "Section 5.2"
-      },
-      {
-        "topic": "non-expert MBSE adoption",
-        "quote": "will also allow subject matter experts in aerospace engineering and other specific disciplines to gain the benefit of these powerful systems engineering tools without becoming expert MBSE users.",
-        "location": "Section 5.3"
-      },
-      {
-        "topic": "conclusion on model benefit",
-        "quote": "The model aids in the design process by ensuring the design space is easily understood and by propagating system changes automatically and seamlessly.",
-        "location": "Section 6"
+        "claim_id": "C5",
+        "claim_text_or_paraphrase": "The faculty-prepared template lets students and discipline experts benefit from MBSE tools without becoming MBSE experts, allowing them to focus on analysis, testing, and mission-critical decisions.",
+        "outcome_category": [
+          "effort reduction",
+          "communication/stakeholder alignment",
+          "decision support"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mbse_mechanism": [
+          "reference model reuse",
+          "other"
+        ],
+        "artifact_or_process_linked_to_claim": "Classroom deployment of a constrained PSAT1U standardized MBSE template prepared by faculty.",
+        "lifecycle_stage": [
+          "implementation"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [],
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Expected educational/adoption benefit only; no classroom outcome data.",
+        "evidence_source": {
+          "quote": "This approach... will also allow subject matter experts in aerospace engineering and other specific disciplines to gain the benefit of these powerful systems engineering tools without becoming expert MBSE users.",
+          "location": "paper markdown line 527"
+        },
+        "evidence_confidence_rating": "Unsupported",
+        "threats_or_alternative_explanations": "The paper does not report actual student use, surveys, learning outcomes, design decisions, or comparison to a non-template course."
       }
     ],
-    "notes_for_consistency_with_lineage": "This extraction treats the study as a CSRM-lineage CubeSat MBSE template paper, not as a primary EPS verification paper. Prior CSRM papers are cited in the paper, but no previous extraction, extraction.json, sources.bib, or other papers were read.",
-    "extraction_confidence": "high",
-    "extraction_confidence_reason": "The full markdown text and figure descriptions were available and directly cover the MBSE template and EPS artifacts. Confidence is reduced only for venue details inferred from corpus metadata and for figures where text is available through converted descriptions rather than original images."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": {
+        "status": "not_reported",
+        "values": []
+      },
+      "traceability_to_project_deliverables_or_decisions": "Relations among model elements are shown for change propagation; no explicit deliverable, milestone, assurance-case, or management-report traceability is reported.",
+      "evaluation_criteria_model_quality_usefulness": "Implicit usefulness criteria are design-space clarity, ability to tailor payload/mission details, and automatic propagation of changes; no formal model-quality criteria or user evaluation.",
+      "roi_value_realization_evidence": {
+        "status": "not_reported",
+        "values": []
+      },
+      "programmatic_gates_supported": "not_reported",
+      "model_derived_performance_indicators_management_metrics": "Power budget/margins and payload envelope are captured, but no management metrics are reported."
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": "addressed with evidence",
+      "toolchain_fragmentation_interoperability": "not addressed",
+      "lightweight_resource_constrained_tailoring": "addressed with evidence",
+      "governance_project_deliverables_roi": "mentioned only",
+      "newspace_agile_distributed_rapid_iteration_alignment": "mentioned only"
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": "Strongly relevant: demonstrates a CSRM-derived reusable 1U CubeSat baseline/template with system/subsystem architecture, interfaces, EPS budget, and intentionally undefined payload/mission envelope for tailoring.",
+        "RQ2": "Partially relevant: claims MBSE improves reuse, design-space understanding, change propagation, consistency, and time/effort, but evidence is illustrative and not EPS-specific; reliability statements concern hardware choices rather than MBSE.",
+        "RQ3": "Not relevant: no EPS verification procedure model, V&V artifact integration, executable checks, or pre-physical verification mechanism is reported."
+      },
+      "author_stated_limitations_gaps": [
+        "Students cannot be expected to learn full MBSE/tools within the capstone course; faculty pre-constrain the model.",
+        "Payload and mission definitions are intentionally left blank and must remain within the template envelope."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No quantitative MBSE outcome evaluation or baseline comparator.",
+        "No independent classroom/user validation or repeated reuse evidence.",
+        "No integrated EPS verification procedures or executable checks.",
+        "No PSAT1U model availability or neutral exchange mechanism reported.",
+        "Single PSAT1U/USNA case within CSRM lineage."
+      ],
+      "direct_evidence_quotes_supporting_classification": [
+        {
+          "quote": "The PSAT1U Baseline Model is an MBSE representation of the satellite developed using the CSRM as a starting point.",
+          "location": "paper markdown line 332"
+        },
+        {
+          "quote": "Within the specification for the EPS, pertinent information such as the as-designed power budget (Figure 16) is also available.",
+          "location": "paper markdown line 374"
+        },
+        {
+          "quote": "The user does not need to manually propagate this change.",
+          "location": "paper markdown line 429"
+        },
+        {
+          "quote": "It is beyond the scope of this course to teach these students all there is to know about MBSE and how to utilize its tools.",
+          "location": "paper markdown line 521"
+        }
+      ],
+      "notes_for_lineage_consistency": "Treat as an application/instantiation of the CSRM family rather than an independent reference-model origin paper. Outcome claims overlap with CSRM reuse/template rationale but are specific to PSAT1U classroom/future-use context.",
+      "extraction_confidence": "high",
+      "extraction_confidence_reason": "Full markdown is readable and detailed for context and model artifacts; confidence is high for coding but outcome-evidence strength remains low/medium because the paper itself is mostly illustrative."
+    }
   },
-  "bibtex": "@inproceedings{paper-0039,\n  title = {Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites},\n  author = {John M. Gregory and Jin S. Kang and R. Bruninga and R. Sega and J. Borky and D. Kaslow and George H. Downey},\n  year = {2020},\n  booktitle = {IEEE Aerospace Conference},\n  publisher = {IEEE},\n  doi = {10.1109/aero47225.2020.9172748},\n  url = {https://doi.org/10.1109/aero47225.2020.9172748}\n}"
+  "bibtex": "@inproceedings{Gregory2020CubeSatTemplate,\n  title = {Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites},\n  author = {Gregory, John M. and Kang, Jin S. and Bruninga, R. and Sega, R. and Borky, J. and Kaslow, D. and Downey, George H.},\n  booktitle = {IEEE Aerospace Conference},\n  year = {2020},\n  doi = {10.1109/AERO47225.2020.9172748}\n}"
 }

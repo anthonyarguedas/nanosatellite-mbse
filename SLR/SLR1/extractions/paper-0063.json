@@ -3,555 +3,1986 @@
   "tier": "core",
   "year": 2023,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The record has an IEEE DOI in the supplied corpus metadata and the paper is formatted as a conference/proceedings paper; the exact venue name is not visible in the markdown.",
-        "evidence": [
-          "Corpus metadata DOI: 10.1109/smc-it56444.2023.00022.",
-          "Paper front matter includes IEEE-style \"Index Terms—MBSE, CubeSats, Systems Engineering, Verification and Validation, Satellite Communications\"."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper gives scope boundaries and practical constraints, but it does not include a dedicated limitations or threats-to-validity discussion.",
-        "evidence": [
-          "\"due to time constraints, only IBM's Harmony and OOSEM have been reviewed.\"",
-          "\"The work described here is focused on the implementation of MBSE during Phase C-D of EIRSAT-1, using the testing and verification of the communications subsystem as the exemplar.\"",
-          "\"This work is a first step in demonstrating the preliminary objectives of the NSM project to implement an MBSE approach for requirements verification using the communications subsystem of EIRSAT-1 as the demonstrator.\""
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The mission, platform size, organization, ESA programme context, maturity, and lifecycle phase are explicitly described.",
-        "evidence": [
-          "\"EIRSAT-1, a 2U CubeSat that has been developed by students of UCD through the ESA 'Fly Your Satellite! programme [1], passed its flight acceptance review and is now ready for launch.\"",
-          "\"Nanosatellite System Modeling (NSM) project is an initiative from University College Dublin (UCD), which aims to implement an MBSE approach throughout the lifecycle development of CubeSat,\"",
-          "\"starting from Phase-A/B (Conceptualization) $ \\rightarrow $ Phase-C/D (Testing & Verification) $ \\rightarrow $ Phase-E (Launch & Operations).\""
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "Language, tool, method, high-level model packages, diagrams, and data-flow architecture are identified, but detailed model content, plugins, scripts, and test procedures are not provided.",
-        "evidence": [
-          "\"The language used here for modeling is SysML.\"",
-          "\"CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted based on its wide range of features for 3D modeling, simulation and visualization, seamless data exchange between design and Engineering domains.\"",
-          "\"As a starting point, we have adopted INCOSE OOSEM.\"",
-          "\"The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan used in traditional testing phases.\""
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Claims are tied to the MBSE verification model, CATIA Magic requirements table, parametric diagrams, and integrated test workflow.",
-        "evidence": [
-          "\"The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.\"",
-          "\"The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.\"",
-          "\"The requirements are verified simultaneously with the test runs and the models can be reused several times in similar verification scenarios.\""
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper reports a case demonstrator integrated with an end-to-end communications test setup and automatic requirements updates, but provides no quantitative metrics, baseline comparison, detailed results, or operational evidence.",
-        "evidence": [
-          "\"The verification model is integrated with the actual end-to-end test setup to command the input test parameters through the model diagram.\"",
-          "\"The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.\"",
-          "\"This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance.\""
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "Requirements verification and compliance are central and are explicitly linked to SysML verification models, parametric diagrams, test outcomes, and requirements-table/compliance-matrix updates.",
-        "evidence": [
-          "\"A single integrated environment ensures that system verification is planned and executed in the correct sequence with full traceability based on requirements.\"",
-          "\"The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.\"",
-          "\"Test Reqs verified\" and \"Updating Requirements Compliance Matrix\" are shown in the Fig. 3 description."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The toolchain and data exchange concept are partially described, including Python/TCP integration and possible external tools, but model files, code, plugins, test data, and open assets are not reported.",
-        "evidence": [
-          "\"create interface plugins to exchange information between the MBSE environment and the external test scripts.\"",
-          "\"The MBSE verification model allows the required technical parameters to flow from the system models to the Python client which in turn commands the ground station hardware like radio and antenna controller for signal transmission and reception.\"",
-          "\"The requirements are verified simultaneously with the test runs and the models can be reused several times in similar verification scenarios.\""
-        ]
-      }
-    ],
-    "total_score": 6.0,
-    "max_score": 8,
-    "normalized_score": 0.75,
-    "overall_rationale": "The paper is a relevant core MBSE/CubeSat verification case with clear mission context, tool/method identification, and model-linked verification claims. Its main weaknesses are the narrow communications-only scope, absence of EPS content, limited reproducibility assets, and largely unquantified outcome evidence."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0063.json",
-    "status_rationale": "Retained as core because it directly addresses MBSE architecture and model-enabled verification for a CubeSat mission, though its EPS relevance is indirect because the demonstrator is the communications subsystem.",
-    "citation": "Akarapu et al. (2023), Development of a Nanosatellite System Modeling Architecture for EIRSAT-1, doi:10.1109/smc-it56444.2023.00022.",
-    "title": "Development of a Nanosatellite System Modeling Architecture for EIRSAT-1",
-    "authors": [
-      "Sai Krishna Reddy Akarapu",
-      "Bas Stijnen",
-      "Caimin McKenna",
-      "David J. McKeown",
-      "D. Murphy",
-      "Jack Reilly",
-      "Joseph W. Thompson",
-      "M. Doyle",
-      "R. Wall",
-      "S. McBreen",
-      "L. Hanlon"
-    ],
-    "venue": "not reported",
-    "doi_or_url": "10.1109/smc-it56444.2023.00022",
-    "publisher": "not reported",
-    "venue_type": "conference/proceedings paper; exact venue name not reported in the markdown",
-    "source_database_or_route": [
-      "scopus: SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
-      "scopus: SLR/SLR1/searches/scopus_q6_vv_traceability_refined.json",
-      "scopus: SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
-      "scopus: SLR/SLR1/searches/scopus_q24_test_evaluation_stage1_recall.json",
-      "semantic_scholar abstract_enrichment: SLR/SLR1/searches/abstract_enrichment/paper-0063_semantic_title.json"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The study describes a general SysML/OOSEM nanosatellite system-modeling architecture and communications verification workflow, but it does not address EPS and relies on existing requirements/design/test documents rather than minimal behavioral knowledge."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims model reliability checking, traceability, reuse, automated compliance updates, and reduced reporting time at CubeSat system/subsystem level, but not EPS-specific reliability, reproducibility, or integrability outcomes."
-      },
-      "RQ3": {
-        "relevance": "partial",
-        "rationale": "Verification procedures are integrated into SysML models for the communications subsystem using test-plan-derived verification models and external test setup integration; no EPS model or EPS pre-physical verification is reported."
-      }
+    "credible_venue": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "The corpus metadata identifies a Scopus-indexed paper with an IEEE DOI; the markdown is formatted as a conference paper.",
+      "evidence": [
+        {
+          "quote": "DOI=10.1109/smc-it56444.2023.00022; source provenance includes Scopus records.",
+          "location": "corpus metadata prompt"
+        }
+      ],
+      "confidence": "medium"
     },
-    "lineage_overlap_notes": "The supplied corpus metadata shows retrieval through multiple Scopus query routes and semantic-scholar title enrichment. No previous extraction, sources.bib, or other papers were used."
+    "limitations_discussed": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The authors state scope boundaries and future-work limits, but there is no systematic limitations or threats-to-validity discussion.",
+      "evidence": [
+        {
+          "quote": "This work is a first step in demonstrating the preliminary objectives of the NSM project",
+          "location": "Section IV"
+        },
+        {
+          "quote": "The work described here is focused on the implementation of MBSE during Phase C-D of EIRSAT-1, using the testing and verification of the communications subsystem as the exemplar.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "due to time constraints, only IBM's Harmony and OOSEM have been reviewed",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Mission, platform size, organization, maturity, and lifecycle focus are stated clearly enough to interpret applicability.",
+      "evidence": [
+        {
+          "quote": "EIRSAT-1, a 2U CubeSat that has been developed by students of UCD through the ESA 'Fly Your Satellite! programme [1], passed its flight acceptance review and is now ready for launch.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The work described here is focused on the implementation of MBSE during Phase C-D of EIRSAT-1",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_details_replicable": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The paper identifies SysML, CATIA Magic, Magic Model Analyst, OOSEM, model packages, and data-flow concepts, but not enough model content, scripts, or configuration detail for full replication.",
+      "evidence": [
+        {
+          "quote": "The language used here for modeling is SysML.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "As a starting point, we have adopted INCOSE OOSEM.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "The MBSE verification model allows the required technical parameters to flow from the system models to the Python client",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "outcomes_linked_to_mbse": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Claimed time savings, automated requirements verification, traceability, and reuse are explicitly attributed to the MBSE verification model and CATIA Magic artifacts.",
+      "evidence": [
+        {
+          "quote": "With the MBSE approach, the system models are integrated with other programmatic tools to enable exchange of data and allow automated verification of requirements.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "The paper reports an EIRSAT-1 communications-subsystem demonstration and automatic table update, but provides no quantitative values, detailed results, independent validation, or baseline comparison beyond a qualitative traditional-process contrast.",
+      "evidence": [
+        {
+          "quote": "This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "Generally, this end-to-end test is associated with a set of test specification and test procedures (TSTP), and the recorded data from the test is then manually verified later to confirm the requirement compliance.",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "traceability_reported": {
+      "value": "Yes",
+      "score": 1,
+      "status": "coded",
+      "rationale": "Traceability is central to the stated MBSE environment and the verification workflow updates a requirements-compliance matrix/table.",
+      "evidence": [
+        {
+          "quote": "A single integrated environment ensures that system verification is planned and executed in the correct sequence with full traceability based on requirements.",
+          "location": "Section II"
+        },
+        {
+          "quote": "Updating Requirements Compliance Matrix",
+          "location": "Figure 3 description"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "reproducibility_toolchain_reported": {
+      "value": "Insufficiently",
+      "score": 0.5,
+      "status": "coded",
+      "rationale": "Tool names, language, method, and data-flow mechanisms are reported, but model files, scripts, repositories, and detailed exchange specifications are not reported.",
+      "evidence": [
+        {
+          "quote": "CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "create interface plugins to exchange information between the MBSE environment and the external test scripts",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "EIRSAT-1 CubeSat nanosatellite",
-    "size_form_factor": "2U CubeSat; paper also defines CubeSat units as 10 x 10 x 10 cm3",
-    "mission_name": "EIRSAT-1",
-    "mission_domain": "educational/research CubeSat; communications subsystem verification exemplar",
-    "organization_type": "university project at University College Dublin with ESA Fly Your Satellite! programme involvement",
-    "project_maturity": "passed flight acceptance review and ready for launch at the time described",
-    "lifecycle_stage_addressed": "NSM targets Phase A/B through Phase E; the reported implementation focuses on Phase C-D testing and verification",
-    "development_context": "Pilot project using available EIRSAT-1 requirements, design, and test documents to demonstrate MBSE for CubeSat design, development, and testing.",
-    "eps_relevance": "not EPS-relevant",
-    "model_maturity": "preliminary NSM implementation; project packages and a communications verification model were developed, with expansion to remaining subsystems planned"
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "The corpus metadata identifies a Scopus-indexed paper with an IEEE DOI; the markdown is formatted as a conference paper.",
+      "evidence": [
+        {
+          "quote": "DOI=10.1109/smc-it56444.2023.00022; source provenance includes Scopus records.",
+          "location": "corpus metadata prompt"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The authors state scope boundaries and future-work limits, but there is no systematic limitations or threats-to-validity discussion.",
+      "evidence": [
+        {
+          "quote": "This work is a first step in demonstrating the preliminary objectives of the NSM project",
+          "location": "Section IV"
+        },
+        {
+          "quote": "The work described here is focused on the implementation of MBSE during Phase C-D of EIRSAT-1, using the testing and verification of the communications subsystem as the exemplar.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "due to time constraints, only IBM's Harmony and OOSEM have been reviewed",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Mission, platform size, organization, maturity, and lifecycle focus are stated clearly enough to interpret applicability.",
+      "evidence": [
+        {
+          "quote": "EIRSAT-1, a 2U CubeSat that has been developed by students of UCD through the ESA 'Fly Your Satellite! programme [1], passed its flight acceptance review and is now ready for launch.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The work described here is focused on the implementation of MBSE during Phase C-D of EIRSAT-1",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper identifies SysML, CATIA Magic, Magic Model Analyst, OOSEM, model packages, and data-flow concepts, but not enough model content, scripts, or configuration detail for full replication.",
+      "evidence": [
+        {
+          "quote": "The language used here for modeling is SysML.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "As a starting point, we have adopted INCOSE OOSEM.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "The MBSE verification model allows the required technical parameters to flow from the system models to the Python client",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Claimed time savings, automated requirements verification, traceability, and reuse are explicitly attributed to the MBSE verification model and CATIA Magic artifacts.",
+      "evidence": [
+        {
+          "quote": "With the MBSE approach, the system models are integrated with other programmatic tools to enable exchange of data and allow automated verification of requirements.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports an EIRSAT-1 communications-subsystem demonstration and automatic table update, but provides no quantitative values, detailed results, independent validation, or baseline comparison beyond a qualitative traditional-process contrast.",
+      "evidence": [
+        {
+          "quote": "This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "Generally, this end-to-end test is associated with a set of test specification and test procedures (TSTP), and the recorded data from the test is then manually verified later to confirm the requirement compliance.",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Traceability is central to the stated MBSE environment and the verification workflow updates a requirements-compliance matrix/table.",
+      "evidence": [
+        {
+          "quote": "A single integrated environment ensures that system verification is planned and executed in the correct sequence with full traceability based on requirements.",
+          "location": "Section II"
+        },
+        {
+          "quote": "Updating Requirements Compliance Matrix",
+          "location": "Figure 3 description"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Tool names, language, method, and data-flow mechanisms are reported, but model files, scripts, repositories, and detailed exchange specifications are not reported.",
+      "evidence": [
+        {
+          "quote": "CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "create interface plugins to exchange information between the MBSE environment and the external test scripts",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "core"
+      ],
+      "status": "coded",
+      "rationale": "Screening tier supplied in the corpus metadata is core.",
+      "evidence": [
+        {
+          "quote": "screening_tier=core",
+          "location": "corpus metadata prompt"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper develops a nanosatellite/CubeSat system model architecture and verification model, but it is an EIRSAT-1 communications-subsystem case rather than a general minimal-behavior reference model or EPS model.",
+      "evidence": [
+        {
+          "quote": "Nanosatellite System Modeling (NSM) project is an initiative from University College Dublin (UCD), which aims to implement an MBSE approach throughout the lifecycle development of CubeSat",
+          "location": "Section II"
+        },
+        {
+          "quote": "The work described here is focused on the implementation of MBSE during Phase C-D of EIRSAT-1, using the testing and verification of the communications subsystem as the exemplar.",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims MBSE-related traceability, automation, reuse, and effort/time savings, but not EPS-specific reliability/reproducibility/integrability outcomes and not with strong evidence.",
+      "evidence": [
+        {
+          "quote": "This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "the models can be reused several times in similar verification scenarios",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "The paper integrates verification artifacts with a system/communications model and actual test setup, but it is not EPS-specific and not pre-physical-development verification.",
+      "evidence": [
+        {
+          "quote": "The verification model is integrated with the actual end-to-end test setup to command the input test parameters through the model diagram.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "using the testing and verification of the communications subsystem as the exemplar",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "integration and test"
+      ],
+      "status": "coded",
+      "rationale": "The reported case focuses on Phase C-D testing and verification of the communications subsystem.",
+      "evidence": [
+        {
+          "quote": "starting from Phase-A/B (Conceptualization) $ \\rightarrow $ Phase-C/D (Testing & Verification) $ \\rightarrow $ Phase-E (Launch & Operations)",
+          "location": "Section II"
+        },
+        {
+          "quote": "focused on the implementation of MBSE during Phase C-D of EIRSAT-1, using the testing and verification of the communications subsystem as the exemplar",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.development_context": {
+      "values": [
+        "academic/student"
+      ],
+      "status": "coded",
+      "rationale": "EIRSAT-1 is described as a UCD student-developed CubeSat in an ESA educational programme.",
+      "evidence": [
+        {
+          "quote": "developed by students of UCD through the ESA 'Fly Your Satellite! programme",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "system-level only"
+      ],
+      "status": "coded",
+      "rationale": "The paper is about an EIRSAT-1 system model and communications-subsystem verification exemplar; no EPS elements are modeled.",
+      "evidence": [
+        {
+          "quote": "EIRSAT-1 System Model",
+          "location": "Figure 1 description"
+        },
+        {
+          "quote": "communications subsystem as the exemplar",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "prototype demonstration",
+        "executable model",
+        "project-applied model"
+      ],
+      "status": "coded",
+      "rationale": "The model is applied to the real EIRSAT-1 project as a pilot demonstrator; it is executable/connected enough to run verification models and update a requirements table.",
+      "evidence": [
+        {
+          "quote": "it has been a pilot project to demonstrate the viability of implementing an MBSE approach for the design, development and testing of a CubeSat",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "verified for their reliability using the Magic Model Analyst tool",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "simulation"
+      ],
+      "status": "coded",
+      "rationale": "The package structure and communications verification model cover system structure, behavior/use cases/analysis, interfaces, requirements, verification, and link-budget-type communication parameters, with model execution/analysis through Magic Model Analyst.",
+      "evidence": [
+        {
+          "quote": "contains ten primary packages... '1 - Requirements', '2-Structure', '3 - Use Cases', '4 - Behavior', and '5 - Analysis'",
+          "location": "Figure 1 description"
+        },
+        {
+          "quote": "The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan used in traditional testing phases.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "lists 'Uplink/Downlink Freq,' 'BER,' 'Data rates,' and 'Link Budget etc.'",
+          "location": "Figure 3 description"
+        },
+        {
+          "quote": "verified for their reliability using the Magic Model Analyst tool",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "state/activity/sequence diagrams",
+        "parametrics",
+        "interface control models",
+        "test cases/procedures",
+        "verification matrices",
+        "executable simulations"
+      ],
+      "status": "coded",
+      "rationale": "The paper shows package and internal block diagrams, refers to activity models and parametric diagrams, builds from test plans/procedures, and updates requirements/compliance artifacts during executable verification runs.",
+      "evidence": [
+        {
+          "quote": "Fig. 1 shows a SysML Package diagram with a view of the model packages",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "An SysML diagram showing the functional flow of Ground Segment during end-to-end communications.",
+          "location": "Figure 2 caption"
+        },
+        {
+          "quote": "Input Commands from Activity Models",
+          "location": "Figure 3 description"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "a set of test specification and test procedures (TSTP)",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "Updating Requirements Compliance Matrix",
+          "location": "Figure 3 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reusable workflow",
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "Reuse is claimed for similar verification scenarios, and the approach is guided by OOSEM and a repeatable verification-model workflow.",
+      "evidence": [
+        {
+          "quote": "the models can be reused several times in similar verification scenarios",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "As a starting point, we have adopted INCOSE OOSEM.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "A similar approach will be applied to the remaining subsystems, creating a automated framework.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Integrated MBSE/digital engineering"
+      ],
+      "status": "coded",
+      "rationale": "The approach connects SysML requirements/behavior/verification models to external scripts, mission-control/ground-station software, hardware, and an automatically updated compliance matrix, although only as a narrow prototype.",
+      "evidence": [
+        {
+          "quote": "system models are integrated with other programmatic tools to enable exchange of data and allow automated verification of requirements",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "the Python client which in turn commands the ground station hardware like radio and antenna controller",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "Updating Requirements Compliance Matrix",
+          "location": "Figure 3 description"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "mission scale",
+        "schedule",
+        "available tools"
+      ],
+      "status": "coded",
+      "rationale": "The paper motivates CubeSat/nanosatellite-specific MBSE, notes limited methodology review due to time, and selects CATIA Magic after a tool review.",
+      "evidence": [
+        {
+          "quote": "few standards exist regarding Systems Engineering (SE) for designing and developing nanosatellites",
+          "location": "Section I"
+        },
+        {
+          "quote": "After an extensive review of the three popular tools: Valispace, CATIA Magic and Capella",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "due to time constraints, only IBM's Harmony and OOSEM have been reviewed",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports tool/method choices and a verification workflow, but not a complete adopter playbook with roles, prerequisites, and completion criteria.",
+      "evidence": [
+        {
+          "quote": "As a starting point, we have adopted INCOSE OOSEM.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "The aim is to construct the verification models in MBSE similar to the verification plans in traditional SE and create interface plugins",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "SysML",
+        "Cameo/MagicDraw",
+        "Python",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "The MBSE language is SysML; CATIA Magic is the Cameo/MagicDraw-lineage tool family; Python is used as the client bridge; other named methods/tools include OOSEM, Magic Model Analyst, GNU Radio, and mission-control/ground-station hardware/software.",
+      "evidence": [
+        {
+          "quote": "The language used here for modeling is SysML.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "the required technical parameters to flow from the system models to the Python client",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "As a starting point, we have adopted INCOSE OOSEM.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "GNU Radio",
+          "location": "Figure 2 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "plugin",
+        "scripts"
+      ],
+      "status": "coded",
+      "rationale": "Interoperation is through interface plugins and external scripts/programmatic tools; the figure also shows TCP communication but TCP is not a controlled codebook value.",
+      "evidence": [
+        {
+          "quote": "create interface plugins to exchange information between the MBSE environment and the external test scripts",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "a piece of Python or MATLAB program or PLC code or an excel sheet",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "connects via a blue 'TCP Communication' line to an 'MCS' block",
+          "location": "Figure 3 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [
+        "missing interfaces"
+      ],
+      "status": "coded",
+      "rationale": "The authors state that no single tool meets all MBSE requirements and that plugins are needed for MBSE-to-test-script exchange, indicating interface/integration gaps.",
+      "evidence": [
+        {
+          "quote": "no single tool can fully meet all the requirements for complete realisation of MBSE",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "create interface plugins to exchange information between the MBSE environment and the external test scripts",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "The study is a system/communications verification paper; it does not model EPS elements.",
+      "evidence": [
+        {
+          "quote": "using the testing and verification of the communications subsystem as the exemplar",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [
+        "verification matrix",
+        "test procedures",
+        "executable checks",
+        "SIL/HIL links",
+        "automated tests"
+      ],
+      "status": "coded",
+      "rationale": "The verification model is derived from end-to-end test plans/procedures, connected to actual software/hardware test setup, performs parametric checks, and updates a compliance matrix/table automatically.",
+      "evidence": [
+        {
+          "quote": "end-to-end test is associated with a set of test specification and test procedures (TSTP)",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The verification model is integrated with the actual end-to-end test setup",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "Updating Requirements Compliance Matrix",
+          "location": "Figure 3 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [],
+      "status": "none",
+      "rationale": "No pre-physical-development EPS/system verification mechanism is reported; the demonstrator is Phase C-D and integrated with the actual end-to-end test setup after EIRSAT-1 development/flight acceptance.",
+      "evidence": [
+        {
+          "quote": "passed its flight acceptance review and is now ready for launch",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The verification model is integrated with the actual end-to-end test setup",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [
+        "links to hardware integration",
+        "software integration"
+      ],
+      "status": "coded",
+      "rationale": "The verification model commands ground-station hardware via a Python client and is connected to MCS/GNU Radio/software components.",
+      "evidence": [
+        {
+          "quote": "the Python client which in turn commands the ground station hardware like radio and antenna controller for signal transmission and reception",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The MCS block has a bidirectional connection to a GNU Radio block",
+          "location": "Figure 3 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "traceability",
+        "lifecycle continuity",
+        "automation",
+        "integrability/interoperability",
+        "effort reduction",
+        "generality/reuse",
+        "reliability",
+        "consistency",
+        "mission assurance",
+        "decision support",
+        "communication/stakeholder alignment",
+        "reproducibility"
+      ],
+      "status": "coded",
+      "rationale": "Outcome claims center on requirements traceability, lifecycle continuity, automated verification/compliance updates, integration with external tools/test hardware, reduced documentation/reporting effort, reuse of verification models, and model-flow/requirements-compliance assurance.",
+      "evidence": [
+        {
+          "quote": "full traceability based on requirements",
+          "location": "Section II"
+        },
+        {
+          "quote": "allow automated verification of requirements",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "This reduced huge amount of time spent on documenting and reporting",
+          "location": "Section IV"
+        },
+        {
+          "quote": "the models can be reused several times in similar verification scenarios",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "verified for their reliability using the Magic Model Analyst tool",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level",
+        "generic MBSE"
+      ],
+      "status": "coded",
+      "rationale": "Most claims are tied to the EIRSAT-1 nanosatellite system/communications verification case; the introductory cross-domain-relationship benefit is generic MBSE.",
+      "evidence": [
+        {
+          "quote": "CubeSat",
+          "location": "Section II"
+        },
+        {
+          "quote": "communications subsystem as the exemplar",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "MBSE is becoming critical in today's multi domain systems; with it, engineers have the ability to see cross domain relationships early",
+          "location": "Section II"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "executable simulation",
+        "parametric analysis",
+        "automated generation",
+        "requirements linkage",
+        "tool integration",
+        "lifecycle gate support",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms include requirements linkage/traceability, model execution/analysis, parametric validation, automatic compliance-table updates, external-tool integration, lifecycle V-model support, and verification-model reuse as an emergent mechanism.",
+      "evidence": [
+        {
+          "quote": "full traceability based on requirements",
+          "location": "Section II"
+        },
+        {
+          "quote": "verified for their reliability using the Magic Model Analyst tool",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "Requirements Table in CATIA Magic tool gets updated automatically",
+          "location": "Section IV"
+        },
+        {
+          "quote": "integrated with other programmatic tools",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "the models can be reused several times in similar verification scenarios",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "Phase A/B",
+        "integration and test",
+        "operations"
+      ],
+      "status": "coded",
+      "rationale": "The claimed NSM lifecycle vision spans Phase A/B to Phase E, while demonstrated value occurs in Phase C-D integration/test.",
+      "evidence": [
+        {
+          "quote": "starting from Phase-A/B (Conceptualization) $ \\rightarrow $ Phase-C/D (Testing & Verification) $ \\rightarrow $ Phase-E (Launch & Operations)",
+          "location": "Section II"
+        },
+        {
+          "quote": "focused on the implementation of MBSE during Phase C-D",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration",
+        "Trade-study or requirements-checking result",
+        "Integration/test/operational/flight evidence"
+      ],
+      "status": "coded",
+      "rationale": "Some benefits are asserted conceptually; the strongest support is a single EIRSAT-1 communications verification case with requirements-compliance checking integrated into end-to-end test runs, but without detailed measurements.",
+      "evidence": [
+        {
+          "quote": "This work is a first step in demonstrating the preliminary objectives",
+          "location": "Section IV"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "time",
+        "effort",
+        "requirement coverage",
+        "trace links",
+        "model reuse",
+        "reliability proxy"
+      ],
+      "status": "coded",
+      "rationale": "The paper uses qualitative time/effort savings, requirements compliance/traceability, reuse, and model-flow reliability as value indicators; no numeric metric is reported.",
+      "evidence": [
+        {
+          "quote": "reduced huge amount of time spent on documenting and reporting",
+          "location": "Section IV"
+        },
+        {
+          "quote": "full traceability based on requirements",
+          "location": "Section II"
+        },
+        {
+          "quote": "confirm the requirements compliance",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "reused several times",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "verified for their reliability using the Magic Model Analyst tool",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [
+        "previous document-centric process",
+        "manual analysis",
+        "not reported"
+      ],
+      "status": "coded",
+      "rationale": "For the documentation/reporting claim, the paper contrasts traditional test procedures and manual post-test verification; other claims do not report a comparator.",
+      "evidence": [
+        {
+          "quote": "In a traditional SE approach... recorded data from the test is then manually verified later to confirm the requirement compliance.",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Outcome support ranges from unsupported conceptual claims to weak qualitative assertions and moderate single-case requirements-checking/integration evidence without metrics or independent validation.",
+      "evidence": [
+        {
+          "quote": "This reduced huge amount of time spent",
+          "location": "Section IV"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper does not report ownership, configuration/change control, model review process, model quality criteria, or naming/versioning conventions.",
+      "evidence": [],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [
+        "saved effort"
+      ],
+      "status": "coded",
+      "rationale": "The only value-realization evidence is a qualitative claim that automatic requirements-table updating reduced documentation/reporting effort; no cost/schedule ROI metric is supplied.",
+      "evidence": [
+        {
+          "quote": "This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "A concrete EIRSAT-1 workflow is described and demonstrated at high level: choose SysML/CATIA/OOSEM, model the system/test flow, connect to Python/test setup, validate parameters, and update compliance artifacts.",
+      "evidence": [
+        {
+          "quote": "The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The paper explicitly discusses tool limitations and demonstrates an interface-plugin/script bridge from CATIA Magic/SysML to external test software and hardware.",
+      "evidence": [
+        {
+          "quote": "no single tool can fully meet all the requirements for complete realisation of MBSE",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "create interface plugins to exchange information between the MBSE environment and the external test scripts",
+          "location": "Section III.A"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "The paper frames the work around CubeSat/nanosatellite needs and cost/time-sensitive missions, but does not provide a lightweight tailoring method or resource analysis.",
+      "evidence": [
+        {
+          "quote": "The use of Commercial-Off-TheShelf (COTS) components reduces development cost and time, making CubeSats an accessible and cost effective route to space.",
+          "location": "Section I"
+        },
+        {
+          "quote": "few standards exist regarding Systems Engineering (SE) for designing and developing nanosatellites",
+          "location": "Section I"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "The model is connected to requirements tables/compliance matrices and a qualitative saved-effort claim, though formal governance and ROI are absent.",
+      "evidence": [
+        {
+          "quote": "Updating Requirements Compliance Matrix",
+          "location": "Figure 3 description"
+        },
+        {
+          "quote": "Requirements Table in CATIA Magic tool gets updated automatically",
+          "location": "Section IV"
+        },
+        {
+          "quote": "This reduced huge amount of time spent",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "not addressed"
+      ],
+      "status": "coded",
+      "rationale": "The paper discusses CubeSat cost/time context but does not address NewSpace, agile development, distributed teams, or rapid-iteration practices as an MBSE alignment target.",
+      "evidence": [
+        {
+          "quote": "No direct quote captured in subagent output; classification is based on the extractor rationale and full-paper reading.",
+          "location": "extractor rationale"
+        }
+      ],
+      "confidence": "high"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "high"
+      ],
+      "status": "coded",
+      "rationale": "The paper is short and the relevant MBSE, context, and outcome claims are clear; confidence in extraction is high even though the paper's evidence for outcomes is limited.",
+      "evidence": [
+        {
+          "quote": "This work is a first step in demonstrating the preliminary objectives",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "The paper responds to limited CubeSat SE standards and aims to demonstrate the viability of an MBSE approach for CubeSat requirements verification, beginning with EIRSAT-1 communications testing.",
-    "modeling_scope": [
-      "EIRSAT-1 project packages for requirements, structure, use cases, behavior, analysis, EIRSAT-1, ground segment, launch segment, launch and ground operations, and auxiliary elements",
-      "communications subsystem and ground segment functional flow for end-to-end communications",
-      "requirements verification models derived from traditional end-to-end test plans",
-      "external setup integration including Python client, mission control software, GNU Radio, SDR, transmitter, and antennas"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_independent_validation",
+      "no_eps_specific_evidence",
+      "no_pre_physical_verification_model",
+      "interoperability_limitations",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage"
     ],
-    "system_boundary_level_of_abstraction": "Logical/functional CubeSat-plus-ground-segment architecture for the EIRSAT-1 communications verification scenario; model includes system, subsystem, ground-segment, and test-interface abstractions.",
-    "minimal_or_excluded_modeling": "Reported work excludes EPS and most remaining subsystems; broader engineering, project management, supply chain, and production integration is a future goal; detailed plugin code, test scripts, and model files are not provided.",
-    "required_prior_behavioral_domain_knowledge": "The approach uses existing EIRSAT-1 requirements, design documents, test documents, traditional end-to-end test plans, and communications-link parameters such as uplink/downlink frequency, BER, data rates, and link budget.",
-    "handling_limited_behavioral_knowledge": "Not explicitly addressed as a minimal-knowledge method. The paper reduces full behavioral modeling by basing verification models on established test plans and using external programs/hardware to execute behavior while SysML parametric diagrams validate exchanged data.",
-    "model_artifacts_used": [
-      "SysML package diagram for EIRSAT-1 project packages",
-      "SysML internal block diagram for ground segment functional flow",
-      "logical interpretation of end-to-end test model for requirements verification",
-      "activity-model input commands",
-      "parametric diagrams",
-      "requirements table",
-      "requirements compliance matrix",
-      "verification model based on end-to-end test plan"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "The authors characterize the work as a first step and state that applying the approach to other subsystems is future/planned work.",
+        "evidence_quote": "This work is a first step in demonstrating the preliminary objectives of the NSM project",
+        "location": "Section IV",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "author_stated",
+        "rationale": "The demonstration is limited to EIRSAT-1 and specifically the communications subsystem during Phase C-D.",
+        "evidence_quote": "focused on the implementation of MBSE during Phase C-D of EIRSAT-1, using the testing and verification of the communications subsystem as the exemplar",
+        "location": "Section III.A",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "The paper claims a large reduction in documentation/reporting time but reports no measured time, effort, defect, coverage, or schedule metric.",
+        "evidence_quote": "This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance.",
+        "location": "Section IV",
+        "absence_based_explanation": "No numerical effect size or quantitative evaluation table/result is reported in the paper text.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "The evidence is reported by the authors as an internal case demonstration; there is no independent stakeholder/user/expert evaluation or external validation.",
+        "evidence_quote": "The paper contains no reported independent review, stakeholder evaluation, repeated replication, or external validation of the MBSE outcomes.",
+        "absence_based_explanation": "The paper contains no reported independent review, stakeholder evaluation, repeated replication, or external validation of the MBSE outcomes.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "The model and verification exemplar concern the communications subsystem and ground segment rather than EPS components, requirements, or verification.",
+        "evidence_quote": "using the testing and verification of the communications subsystem as the exemplar",
+        "location": "Section III.A",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_pre_physical_verification_model",
+        "source": "extractor_identified",
+        "rationale": "The demonstrator is integrated with an actual end-to-end test setup after EIRSAT-1 had passed flight acceptance review, so it is not evidence of pre-physical-development verification.",
+        "evidence_quote": "The verification model is integrated with the actual end-to-end test setup",
+        "location": "Section III.B",
+        "confidence": "high"
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "author_stated",
+        "rationale": "The authors state that no single tool fully realizes MBSE needs and use interface plugins to bridge MBSE and test scripts.",
+        "evidence_quote": "no single tool can fully meet all the requirements for complete realisation of MBSE",
+        "location": "Section II.A",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "The paper reports tool names and diagrams but does not report public availability of the CATIA model, plugins, scripts, or test data.",
+        "evidence_quote": "No repository, model download, script package, or data availability statement appears in the provided markdown.",
+        "absence_based_explanation": "No repository, model download, script package, or data availability statement appears in the provided markdown.",
+        "confidence": "high"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "author_stated",
+        "rationale": "The project vision spans the CubeSat lifecycle, but the reported work is Phase C-D only and broader lifecycle integration is a future goal.",
+        "evidence_quote": "Beyond requirements verification, the future goal of NSM is to incorporate engineering, project management, supply chain and production into a single cohesive MBSE ecosystem.",
+        "location": "Section II",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Claims are linked to MBSE mechanisms but supported primarily by assertion or a single high-level case description, without detailed outcome data or baseline measurement.",
+        "evidence_quote": "This reduced huge amount of time spent on documenting and reporting the test outcomes",
+        "location": "Section IV",
+        "absence_based_explanation": "The traditional manual process is described qualitatively, but no measured before/after baseline or detailed test result is reported.",
+        "confidence": "high"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "OOSEM applied recursively and iteratively through a V-model-like process",
-      "verification models are constructed similarly to traditional verification plans",
-      "interface plugins exchange information between MBSE environment and external scripts",
-      "models are claimed reusable in similar verification scenarios",
-      "planned application of the approach to remaining subsystems"
+    "emergent_limitations": [
+      {
+        "label": "methodology-review-constrained-by-time",
+        "source": "author_stated",
+        "rationale": "Only IBM Harmony and OOSEM were reviewed before selecting OOSEM, limiting the breadth of methodological comparison.",
+        "evidence_quote": "due to time constraints, only IBM's Harmony and OOSEM have been reviewed",
+        "location": "Section II.A",
+        "confidence": "high"
+      },
+      {
+        "label": "reliability-framed-as-model-flow-thoroughness",
+        "source": "extractor_identified",
+        "rationale": "The paper's 'reliability' language concerns assessment of model flow in Magic Model Analyst rather than measured spacecraft or EPS reliability.",
+        "evidence_quote": "verified for their reliability using the Magic Model Analyst tool, which allows an assessment of whether the model flow is thorough",
+        "location": "Section III.B",
+        "confidence": "high"
+      },
+      {
+        "label": "commercial-mbse-tool-dependence-without-availability-details",
+        "source": "extractor_identified",
+        "rationale": "The approach depends on CATIA Magic/Magic Model Analyst, but the model and plugins are not reported as available, which may limit reproducibility for teams without the toolchain.",
+        "evidence_quote": "CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted",
+        "location": "Section II.A",
+        "confidence": "medium"
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Select MBSE language, method, and tool",
-        "inputs": "Review of SysML tools and methods; project needs; time constraints",
-        "outputs": "SysML as language, CATIA Magic System of Systems Architect as tool, INCOSE OOSEM as starting method",
-        "actors_roles": "NSM/UCD modeling team",
-        "prerequisites": "Awareness of CubeSat lifecycle and MBSE adoption needs",
-        "completion_criteria": "Chosen language/tool/method baseline for the project model",
-        "handoffs": "Tool and method baseline handed to model-build activities"
-      },
-      {
-        "step": "Create EIRSAT-1 project model package structure",
-        "inputs": "EIRSAT-1 requirements, design, test documents, and mission/system breakdown",
-        "outputs": "Project packages for requirements, structure, use cases, behavior, analysis, EIRSAT-1, ground segment, launch segment, operations, and auxiliary elements",
-        "actors_roles": "Systems/modeling engineers",
-        "prerequisites": "Access to project documentation and CATIA Magic environment",
-        "completion_criteria": "SysML package architecture established",
-        "handoffs": "Package structure supports subsystem and verification modeling"
-      },
-      {
-        "step": "Model communications functional flow",
-        "inputs": "Satellite TT&C, ground segment components, communication protocol, and end-to-end communication scenario",
-        "outputs": "SysML internal block diagram showing ground segment functional flow",
-        "actors_roles": "Modelers with communications subsystem knowledge",
-        "prerequisites": "Known communications components and interfaces",
-        "completion_criteria": "Functional flow captures links among TT&C, antennas, SDR, transmitter, GNU Radio, MCS, and data handling",
-        "handoffs": "Functional architecture informs verification model integration"
-      },
-      {
-        "step": "Construct MBSE verification model from traditional test plan",
-        "inputs": "End-to-end test plan, test specifications/procedures, requirements, and input test parameters",
-        "outputs": "Verification model, activity input commands, parametric validation diagrams, requirements-compliance links",
-        "actors_roles": "Systems engineers and test engineers",
-        "prerequisites": "Available traditional verification plan and requirements table",
-        "completion_criteria": "Model flow can be assessed and technical parameters can be sent to external execution setup",
-        "handoffs": "Verification model hands commands and expected checks to external client and test setup"
-      },
-      {
-        "step": "Integrate model with external test setup and update compliance artifacts",
-        "inputs": "Model commands, Python client, TCP communication, MCS, GNU Radio, ground-station hardware, test outcomes",
-        "outputs": "Automated CATIA Magic requirements-table updates and requirements compliance confirmation",
-        "actors_roles": "Test engineers, MBSE modelers, ground-station/software operators",
-        "prerequisites": "Operational end-to-end test setup and interface between SysML and external scripts",
-        "completion_criteria": "Requirements are verified simultaneously with test runs and outcomes update compliance artifacts",
-        "handoffs": "Test results and compliance state return to the model for reporting and reuse"
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The authors map OOSEM to traditional V-model activities including needs analysis, system requirements, logical architecture, and iterative verification/validation. NSM spans Phase A/B through Phase E, while the reported case supports Phase C-D testing and verification after EIRSAT-1 flight acceptance review.",
-    "approach_classification": "Integrated MBSE/digital engineering",
-    "approach_classification_rationale": "The work combines SysML/CATIA Magic models with Magic Model Analyst, Python/TCP interfaces, mission-control and GNU Radio software, and ground-station hardware to automate requirements verification and compliance updates.",
-    "tailoring_rationale": [
-      "CubeSat SE standards are limited and prior SSWG approaches were not applied to actual CubeSat missions.",
-      "No single methodology fulfils all requirements for modeling CubeSat systems, so OOSEM is adopted as a starting point.",
-      "Time constraints limited the method review to IBM Harmony and OOSEM.",
-      "EIRSAT-1 was selected because its requirements, design, and test documents were readily available.",
-      "The communications subsystem was selected as the Phase C-D verification exemplar."
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "SysML",
-      "INCOSE OOSEM",
-      "CATIA Magic System of Systems Architect",
-      "Magic Model Analyst",
-      "Python client",
-      "MATLAB, PLC code, or Excel sheet as possible external programmatic tools",
-      "Mission Control Software",
-      "GNU Radio",
-      "Pluto SDR",
-      "ICOM transmitter",
-      "VHF/UHF antennas"
-    ],
-    "toolchain_architecture_data_flow": "Activity-model input commands in the SysML verification model send required technical parameters to a Python client; the client communicates by TCP with MCS and GNU Radio and commands ground-station hardware such as radio and antenna controllers; returned test outcomes drive CATIA Magic requirements-table and compliance-matrix updates.",
-    "interoperability_mechanisms": [
-      "interface plugins between MBSE environment and external test scripts",
-      "Python client",
-      "TCP communication",
-      "serial and packet links in the ground segment",
-      "data exchange between design and engineering domains",
-      "parametric-diagram validation of exchanged data",
-      "automatic requirements-table update"
-    ],
-    "syntax_semantic_continuity_evidence": "Continuity is shown at a workflow level: model parameters flow to external scripts/hardware and test outcomes update requirement compliance. The paper does not report formal exchange standards, schema mappings, or semantic consistency checks beyond parametric validation and Magic Model Analyst flow assessment.",
-    "software_hardware_system_integration_readiness": "The verification model is reported as integrated with the actual end-to-end communications test setup and able to command ground-station hardware; readiness for other subsystems is planned, not demonstrated.",
-    "toolchain_limitations": [
-      "No single tool can fully meet all requirements for complete realisation of MBSE.",
-      "Only IBM Harmony and OOSEM were reviewed due to time constraints.",
-      "The reported implementation focuses on the communications subsystem rather than all spacecraft subsystems.",
-      "Model files, plugins, scripts, and test data are not reported as available.",
-      "Future incorporation of engineering, project management, supply chain, and production remains aspirational."
-    ],
-    "availability_reproducibility": "No public model repository, scripts, data, or reusable package download is reported. Reproducibility can only be assessed from the high-level toolchain and diagram descriptions."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [],
-    "eps_requirements_representation": "not reported for EPS; the paper represents communications test requirements such as uplink/downlink frequency, BER, data rates, and link budget in the verification/compliance workflow.",
-    "verification_validation_artifacts": [
-      "not reported for EPS",
-      "traditional end-to-end communications test plan",
-      "test specification and test procedures (TSTP)",
-      "SysML verification model",
-      "Magic Model Analyst reliability/model-flow check",
-      "parametric diagrams",
-      "requirements table",
-      "requirements compliance matrix"
-    ],
-    "pre_physical_development_verification_mechanism": [
-      "not reported for EPS",
-      "communications verification model is checked using Magic Model Analyst and then integrated with the actual end-to-end test setup",
-      "parametric diagrams validate exchanged data and confirm requirements compliance during test execution"
-    ],
-    "evidence_verification_integrated_in_model": "For the communications exemplar, \"The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan used in traditional testing phases\" and \"The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.\" No EPS verification integration is reported.",
-    "integration_test_readiness": "Communications integration-test readiness is demonstrated conceptually through the actual end-to-end setup and ground-station hardware interface; EPS integration-test readiness is not reported."
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "A single integrated MBSE environment supports correctly sequenced verification with requirements traceability.",
-      "outcome_category": "traceability and verification planning",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "integrated SysML/CATIA Magic environment",
-        "requirements-based verification planning",
-        "OOSEM/V-model alignment"
-      ],
-      "artifact_or_process_linked": "requirements package, verification model, lifecycle verification planning",
-      "lifecycle_stage": "Phase A/B through Phase E target; especially Phase C-D testing and verification",
-      "evidence_type": "author-stated process claim",
-      "metric_or_value_indicator": "full traceability and correct sequence claimed; no metric",
-      "baseline_comparator": "traditional document-centric verification implied but not measured",
-      "observed_effect_size_or_qualitative_effect": "verification planned and executed in correct sequence with full traceability",
-      "evidence_source": "Section II, Adopting MBSE into the Organization",
-      "direct_quote": "\"A single integrated environment ensures that system verification is planned and executed in the correct sequence with full traceability based on requirements.\"",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The paper does not show a trace matrix, audit results, or comparison against document-centric process performance."
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+      "label": "catia-magic-system-of-systems-architect",
+      "description": "Primary commercial SysML modeling environment adopted for the EIRSAT-1 system model.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section II.A: CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted",
+      "confidence": "high",
+      "original_label": "CATIA Magic System of Systems Architect",
+      "applies_to": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool"
     },
     {
-      "claim": "Magic Model Analyst can verify the verification-model flow for reliability/thoroughness.",
-      "outcome_category": "model reliability and model checking",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "Magic Model Analyst assessment",
-        "SysML verification model flow"
-      ],
-      "artifact_or_process_linked": "verification models in Magic System of Systems Architect",
-      "lifecycle_stage": "Phase C-D testing and verification",
-      "evidence_type": "tool-use description without reported results",
-      "metric_or_value_indicator": "model flow thoroughness/reliability; no numerical result",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "model flow is said to be assessed before or as part of verification execution",
-      "evidence_source": "Section III.B, MBSE Approach to Requirement Verification",
-      "direct_quote": "\"The models are then verified for their reliability using the Magic Model Analyst tool, which allows an assessment of whether the model flow is thorough.\"",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No details of checks, pass/fail outcomes, defects found, or independent validation are given."
+      "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+      "label": "magic-model-analyst",
+      "description": "Tool used to assess whether verification-model flow is thorough/reliable.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.B: verified for their reliability using the Magic Model Analyst tool",
+      "confidence": "high",
+      "original_label": "Magic Model Analyst",
+      "applies_to": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool"
     },
     {
-      "claim": "The MBSE verification model integrates with external test software and ground-station hardware to exchange parameters and automate requirements verification.",
-      "outcome_category": "toolchain integration and automated verification",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "SysML verification model",
-        "Python client",
-        "TCP connection to external setup",
-        "parametric diagrams",
-        "requirements table/compliance matrix update"
-      ],
-      "artifact_or_process_linked": "logical end-to-end test model, external blocks to SysML, CATIA Magic requirements table",
-      "lifecycle_stage": "Phase C-D testing and verification",
-      "evidence_type": "case demonstrator architecture and reported automatic update",
-      "metric_or_value_indicator": "automatic requirements-table update based on test outcomes; no count or timing metric",
-      "baseline_comparator": "manual verification of recorded end-to-end test data in traditional SE is described but not quantitatively compared",
-      "observed_effect_size_or_qualitative_effect": "technical parameters flow from model to Python client and test outcomes update compliance artifacts",
-      "evidence_source": "Section III.B and Section IV",
-      "direct_quote": "\"The MBSE verification model allows the required technical parameters to flow from the system models to the Python client which in turn commands the ground station hardware like radio and antenna controller for signal transmission and reception.\"",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Architecture and automatic update are reported, but implementation details, logs, and independent integration-test evidence are absent."
+      "field_path": "implementation_pathway_tailoring.adoption_guidance",
+      "label": "oosem-for-cube-sat-verification-modeling",
+      "description": "The authors adopt INCOSE OOSEM as a starting methodology for SysML-based CubeSat modeling.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section II.A: As a starting point, we have adopted INCOSE OOSEM.",
+      "confidence": "high",
+      "original_label": "OOSEM for CubeSat verification modeling",
+      "applies_to": "implementation_pathway_tailoring.adoption_guidance"
     },
     {
-      "claim": "Parametric diagrams validate exchanged data and confirm requirements compliance during test runs.",
-      "outcome_category": "requirements verification and validation automation",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "parametric diagrams",
-        "simultaneous test-run verification",
-        "requirements compliance matrix"
-      ],
-      "artifact_or_process_linked": "parametric diagrams and requirements compliance artifacts",
-      "lifecycle_stage": "Phase C-D testing and verification",
-      "evidence_type": "reported case workflow without detailed test results",
-      "metric_or_value_indicator": "requirements compliance status; specific parameters include uplink/downlink frequency, BER, data rates, and link budget",
-      "baseline_comparator": "traditional manual verification after test is described",
-      "observed_effect_size_or_qualitative_effect": "requirements are verified simultaneously with test runs",
-      "evidence_source": "Section III.B, MBSE Approach to Requirement Verification",
-      "direct_quote": "\"The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.\"",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "No sample requirement, parametric equation, pass/fail output, or error-handling evidence is shown."
+      "field_path": "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms",
+      "label": "python-tcp-bridge-to-ground-station-hardware",
+      "description": "SysML model parameters flow to a Python client, which commands MCS/GNU Radio/radio/antenna hardware via communication links.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.B: required technical parameters to flow from the system models to the Python client which in turn commands the ground station hardware; Figure 3 description: TCP Communication",
+      "confidence": "high",
+      "original_label": "Python TCP bridge to ground-station hardware",
+      "applies_to": "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms"
     },
     {
-      "claim": "Automatic model-based requirements-table updates reduce documentation and reporting time.",
-      "outcome_category": "cost/schedule/process efficiency",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "CATIA Magic requirements table",
-        "verification model execution",
-        "automated test-outcome reporting"
-      ],
-      "artifact_or_process_linked": "CATIA Magic Requirements Table updated from verification-model test outcomes",
-      "lifecycle_stage": "Phase C-D testing and verification",
-      "evidence_type": "author-stated qualitative case outcome",
-      "metric_or_value_indicator": "\"huge amount of time\" reduced; no quantified time saving",
-      "baseline_comparator": "traditional manual documenting and reporting of test outcomes",
-      "observed_effect_size_or_qualitative_effect": "large time reduction claimed for documenting/reporting test outcomes",
-      "evidence_source": "Section IV, Results and Discussion",
-      "direct_quote": "\"This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance.\"",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "No baseline duration, measured effort saving, user evaluation, or repeated trial evidence is provided."
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+      "label": "automated-catia-magic-requirements-table-and-compliance-matrix-update",
+      "description": "Test outcomes from verification-model runs update the CATIA Magic requirements table/compliance matrix automatically.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section IV: The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes; Figure 3 description: Updating Requirements Compliance Matrix",
+      "confidence": "high",
+      "original_label": "automated CATIA Magic Requirements Table and compliance-matrix update",
+      "applies_to": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism"
     },
     {
-      "claim": "Verification models can be reused in similar verification scenarios and extended to remaining subsystems.",
-      "outcome_category": "reuse and scalability",
-      "specificity": "nanosatellite system-level",
-      "mbse_mechanism": [
-        "reusable verification models",
-        "repeatable interface pattern",
-        "automated framework planned for remaining subsystems"
-      ],
-      "artifact_or_process_linked": "communications verification model and planned subsystem-level automated framework",
-      "lifecycle_stage": "Phase C-D verification, with future extension across subsystems",
-      "evidence_type": "author-stated reuse/extension claim",
-      "metric_or_value_indicator": "reuse several times claimed; no reuse count or demonstrated second application",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "reusability in similar scenarios and planned application to remaining subsystems",
-      "evidence_source": "Section III.B and Section IV",
-      "direct_quote": "\"The requirements are verified simultaneously with the test runs and the models can be reused several times in similar verification scenarios.\"",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The paper does not report a second reuse instance, required adaptation effort, or cross-subsystem validation."
+      "field_path": "study_context_population.eps_relevance",
+      "label": "communications-subsystem-end-to-end-verification-exemplar",
+      "description": "The concrete exemplar is EIRSAT-1 TT&C/ground-segment communication, including MCS, GNU Radio, Pluto SDR, ICOM transmitter, and antennas.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.A: Telemetry, Tracking & Command Subsystem (TT&C) on the EIRSAT-1 side, and Radio and VHF/UHF Antennas on the Ground Segment side",
+      "confidence": "high",
+      "original_label": "communications subsystem end-to-end verification exemplar",
+      "applies_to": "study_context_population.eps_relevance"
+    },
+    {
+      "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+      "label": "verification-model-reuse-rather-than-reference-model-reuse",
+      "description": "The paper claims the communications verification models can be reused in similar verification scenarios and extended to remaining subsystems.",
+      "rationale": "Open extraction observation not fully represented by the controlled vocabulary.",
+      "evidence_quote": "Section III.B: the models can be reused several times in similar verification scenarios; Section IV: A similar approach will be applied to the remaining subsystems",
+      "confidence": "high",
+      "original_label": "verification-model reuse rather than reference-model reuse",
+      "applies_to": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism"
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "A single integrated environment and organized EIRSAT-1 project packages are used; no formal model governance, versioning, ownership, or review strategy is reported.",
-    "traceability_to_deliverables_decisions_reviews": "Requirements, test outcomes, and compliance matrix/table updates are linked to verification deliverables. The paper mentions EIRSAT-1 passed flight acceptance review, but does not show model evidence used in that review.",
-    "evaluation_criteria_model_quality_usefulness": "Model flow thoroughness/reliability via Magic Model Analyst; requirements compliance via parametric diagrams and test outcomes; communications parameters include uplink/downlink frequency, BER, data rates, and link budget.",
-    "roi_value_realization_evidence": "Qualitative time-saving claim for documentation/reporting is reported, but no quantified ROI, cost, schedule, or staffing evidence is provided.",
-    "programmatic_gates_critical_design_events_supported": "NSM lifecycle coverage includes Phase A/B, Phase C/D, and Phase E; the demonstrated case supports Phase C-D testing and verification. Flight acceptance review is contextual, not directly shown as model-supported.",
-    "model_derived_performance_indicators_management_metrics": "Technical indicators include uplink/downlink frequency, BER, data rates, link budget, and requirements compliance status; management metrics are not reported."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed with evidence",
-      "rationale": "The paper describes language/tool/method selection, package organization, test-plan-derived verification models, Python/TCP integration, and automatic requirements-table updates for a real CubeSat communications demonstrator."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed with evidence",
-      "rationale": "It explicitly notes that no single tool fully satisfies MBSE needs and reports an interoperability pattern linking CATIA Magic, Python, MCS, GNU Radio, and ground-station hardware."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "mentioned only",
-      "rationale": "The CubeSat low-cost/COTS context and time constraints are mentioned, but the paper does not provide a lightweight tailoring method, resource budget, or guidance for constrained teams."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "addressed conceptually",
-      "rationale": "Requirements compliance and reporting-time reduction are linked to model artifacts, but formal governance, project-decision evidence, and quantified ROI are not supplied."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "mentioned only",
-      "rationale": "The paper notes OOSEM should be recursive and iterative and frames CubeSats as low-cost/rapid access platforms, but it does not discuss agile, distributed, NewSpace, or rapid-iteration practices in detail."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "The study provides a general EIRSAT-1 CubeSat system-modeling architecture using SysML, CATIA Magic, and OOSEM, organized into reusable project packages.",
-        "Modeling is not based on minimal prior behavioral knowledge; it depends on existing requirements, design documents, test documents, communication components, and traditional end-to-end test plans.",
-        "The exemplar is communications subsystem verification, not EPS, so transfer to EPS is only indirect."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0063",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0063.json",
+      "tier_status": "core",
+      "tier_rationale": "Corpus metadata marks the record as core; full text is a nanosatellite/CubeSat MBSE verification case.",
+      "citation": "Akarapu et al. (2023), Development of a Nanosatellite System Modeling Architecture for EIRSAT-1.",
+      "title": "Development of a Nanosatellite System Modeling Architecture for EIRSAT-1",
+      "authors": [
+        "Sai Krishna Reddy Akarapu",
+        "Bas Stijnen",
+        "Caimin McKenna",
+        "David J. McKeown",
+        "D. Murphy",
+        "Jack Reilly",
+        "Joseph W. Thompson",
+        "M. Doyle",
+        "R. Wall",
+        "S. McBreen",
+        "L. Hanlon"
       ],
-      "RQ2": [
-        "Claimed outcomes include full requirements traceability, model-flow reliability assessment, automatic requirements-table updates, reduced documentation/reporting effort, and reuse in similar verification scenarios.",
-        "Outcome evidence is mostly qualitative and case-workflow based; only automatic update and integration with the actual test setup are directly reported, with no metrics or baseline comparison.",
-        "No EPS-specific reliability, reproducibility, integrability, or flight/operational outcomes are reported."
+      "year": 2023,
+      "venue": "IEEE SMC-IT conference proceedings inferred from DOI string; venue name not stated in markdown",
+      "venue_type": "conference paper",
+      "doi": "10.1109/smc-it56444.2023.00022",
+      "publisher": "IEEE inferred from DOI prefix 10.1109",
+      "source_database_query_or_route": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"reference model\" OR template OR behavior OR behaviours OR behaviors OR architecture))",
+          "rank": 11,
+          "paperId": "85169442803"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q6_vv_traceability_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (verification OR validation OR test OR testing OR IVV OR V\\&V OR \"requirements-in-loop\" OR traceability))",
+          "rank": 17,
+          "paperId": "85169442803"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+          "rank": 26,
+          "paperId": "85169442803"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q24_test_evaluation_stage1_recall.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"test and evaluation\" OR \"automated testing\" OR testing) AND (\"model-based systems engineering\" OR MBSE OR SysML OR \"requirements modeling language\" OR traceability))",
+          "rank": 10,
+          "paperId": "85169442803"
+        }
       ],
-      "RQ3": [
-        "Verification procedures are integrated into the model by creating CATIA Magic verification models from traditional end-to-end test plans.",
-        "The communications model exchanges parameters with a Python client and ground-station test setup, while parametric diagrams validate data and update requirements compliance artifacts.",
-        "This is model-integrated communications verification during Phase C-D, not EPS verification and not clearly prior to all physical development."
+      "research_questions_addressed": {
+        "RQ1": {
+          "relevance": "partial",
+          "rationale": "The paper develops a nanosatellite/CubeSat system model architecture and verification model, but it is an EIRSAT-1 communications-subsystem case rather than a general minimal-behavior reference model or EPS model."
+        },
+        "RQ2": {
+          "relevance": "partial",
+          "rationale": "The paper claims MBSE-related traceability, automation, reuse, and effort/time savings, but not EPS-specific reliability/reproducibility/integrability outcomes and not with strong evidence."
+        },
+        "RQ3": {
+          "relevance": "partial",
+          "rationale": "The paper integrates verification artifacts with a system/communications model and actual test setup, but it is not EPS-specific and not pre-physical-development verification."
+        }
+      },
+      "lineage_overlap_notes": "Contrasts with INCOSE/OMG SSWG CubeSat MBSE articles that the authors say had not been applied to actual CubeSat missions; this paper is an EIRSAT-1 project-applied NSM pilot rather than a reusable SSWG reference model."
+    },
+    "study_context_population": {
+      "mission_platform": {
+        "mission_name": "EIRSAT-1",
+        "class": "CubeSat/nanosatellite",
+        "size_form_factor": "2U CubeSat",
+        "mission_domain": "not reported in detail; communications subsystem used as verification exemplar",
+        "organization_type": "University College Dublin academic/student mission with ESA Fly Your Satellite! programme context",
+        "project_maturity": "Passed flight acceptance review and ready for launch at time of described pilot."
+      },
+      "lifecycle_stage_addressed": [
+        "integration and test"
+      ],
+      "development_context": [
+        "academic/student"
+      ],
+      "eps_relevance": "system-level only",
+      "eps_relevance_rationale": "The paper addresses a system model and communications-subsystem verification; no EPS-specific model is described.",
+      "model_maturity": [
+        "prototype demonstration",
+        "executable model",
+        "project-applied model"
+      ],
+      "context_evidence": [
+        {
+          "quote": "EIRSAT-1, a 2U CubeSat",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "developed by students of UCD through the ESA 'Fly Your Satellite! programme",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "passed its flight acceptance review and is now ready for launch",
+          "location": "Section III.A"
+        }
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Few standards exist regarding systems engineering for nanosatellite design and development.",
-      "Several SSWG articles existed but were not applied to actual CubeSat missions.",
-      "No single tool can fully meet all requirements for complete realisation of MBSE.",
-      "Only IBM Harmony and OOSEM were reviewed due to time constraints.",
-      "No single methodology fulfils all requirements for modeling CubeSat systems.",
-      "The reported work is a first step and focuses on the communications subsystem; remaining subsystems and a broader automated framework are future work."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "No EPS, power-budget, or electrical-power architecture content is reported.",
-      "No model repository, scripts, plugin implementation, test data, or reusable package is provided.",
-      "No quantitative metrics, effort baseline, measured time saving, or independent validation supports the outcome claims.",
-      "The exact venue name and publisher are not visible in the markdown.",
-      "The approach depends on existing project documents and test plans, so it is not a minimal-knowledge modeling method.",
-      "The paper gives limited details on requirement IDs, parametric equations, and compliance-matrix semantics."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Implement the UCD Nanosatellite System Modeling project's MBSE approach across CubeSat lifecycle development and demonstrate requirements verification for EIRSAT-1 communications testing; motivation includes limited nanosatellite SE standards and need for traceable, automated verification.",
+      "modeling_scope": [
+        "system",
+        "subsystem",
+        "requirements",
+        "architecture",
+        "behavior",
+        "interfaces",
+        "budgets",
+        "verification",
+        "simulation"
+      ],
+      "system_boundary_and_abstraction": "System model organized into packages for requirements, structure, use cases, behavior, analysis, EIRSAT-1 physical structure and V&V, ground segment, launch segment, launch/ground operations, and auxiliary value/signal types. The implemented exemplar focuses on TT&C and ground-segment communications rather than the whole spacecraft or EPS.",
+      "required_prior_behavioral_domain_knowledge": "The verification model is built from existing EIRSAT-1 requirements, design, test documents, and the traditional end-to-end communications test plan; it does not present a method for modeling with minimal behavioral knowledge.",
+      "handling_limited_behavioral_knowledge": "not reported; the case uses available project documents and test plans.",
+      "model_artifacts_used": [
+        "requirements diagrams/tables",
+        "block definition/internal block diagrams",
+        "state/activity/sequence diagrams",
+        "parametrics",
+        "interface control models",
+        "test cases/procedures",
+        "verification matrices",
+        "executable simulations"
+      ],
+      "generality_reuse_mechanism": [
+        "reusable workflow",
+        "method guidance"
+      ],
+      "key_evidence": [
+        {
+          "quote": "As its requirements, design and test documents are readily available for reference; it has been a pilot project",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "the models can be reused several times in similar verification scenarios",
+          "location": "Section III.B"
+        }
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "reported_steps": [
+        {
+          "step": 1,
+          "name": "Select MBSE language, tool, and method",
+          "inputs": "Review of SysML tools and MBSE methodologies; CubeSat modeling needs.",
+          "outputs": "SysML language, CATIA Magic System of Systems Architect, INCOSE OOSEM starting method.",
+          "actors_roles": "UCD NSM/EIRSAT-1 team; specific roles not reported.",
+          "prerequisites": "Access to EIRSAT-1 requirements/design/test documents and MBSE tooling.",
+          "completion_criteria": "not reported beyond adoption decisions.",
+          "handoffs": "Tool/method selection feeds system model package construction.",
+          "evidence": [
+            {
+              "quote": "The language used here for modeling is SysML.",
+              "location": "Section II.A"
+            },
+            {
+              "quote": "CATIA Magic System of Systems Architect tool... has been adopted",
+              "location": "Section II.A"
+            },
+            {
+              "quote": "we have adopted INCOSE OOSEM",
+              "location": "Section II.A"
+            }
+          ]
+        },
+        {
+          "step": 2,
+          "name": "Organize EIRSAT-1 project model packages",
+          "inputs": "EIRSAT-1 project requirements, structure, behavior/use cases, analysis and segment information.",
+          "outputs": "SysML package structure including Requirements, Structure, Use Cases, Behavior, Analysis, EIRSAT-1 V&V, Ground Segment, Launch Segment, Operations, Auxiliary Elements.",
+          "actors_roles": "not reported.",
+          "prerequisites": "Project documentation and modeling conventions.",
+          "completion_criteria": "not reported.",
+          "handoffs": "Packages support communications verification model.",
+          "evidence": [
+            {
+              "quote": "Fig. 1 shows a SysML Package diagram with a view of the model packages organised in the EIRSAT-1 project.",
+              "location": "Section III.A"
+            }
+          ]
+        },
+        {
+          "step": 3,
+          "name": "Build communications verification model from traditional end-to-end test plan",
+          "inputs": "Traditional end-to-end communications TSTP and requirements such as uplink/downlink frequency, BER, data rates, and link budget.",
+          "outputs": "Magic verification model, activity inputs, parametric checks, compliance matrix/table links.",
+          "actors_roles": "not reported.",
+          "prerequisites": "Available communications test plan and system model elements.",
+          "completion_criteria": "Model flow assessed as thorough/reliable using Magic Model Analyst; exact criteria not reported.",
+          "handoffs": "Verification model provides commands/parameters to Python client and external test setup.",
+          "evidence": [
+            {
+              "quote": "The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan",
+              "location": "Section III.B"
+            },
+            {
+              "quote": "verified for their reliability using the Magic Model Analyst tool",
+              "location": "Section III.B"
+            }
+          ]
+        },
+        {
+          "step": 4,
+          "name": "Integrate model with external scripts and ground-station hardware/software",
+          "inputs": "SysML model parameters and external Python/MATLAB/PLC/excel-style scripts; ground-station hardware/software.",
+          "outputs": "Model-driven command flow to MCS/GNU Radio/radio/antenna setup and returned test outcomes.",
+          "actors_roles": "not reported.",
+          "prerequisites": "Interface plugins and external test scripts.",
+          "completion_criteria": "Data exchange and command flow during test runs; details not reported.",
+          "handoffs": "Test outcomes return to the requirements table/compliance matrix.",
+          "evidence": [
+            {
+              "quote": "create interface plugins to exchange information between the MBSE environment and the external test scripts",
+              "location": "Section III.A"
+            },
+            {
+              "quote": "Python client which in turn commands the ground station hardware",
+              "location": "Section III.B"
+            }
+          ]
+        },
+        {
+          "step": 5,
+          "name": "Run verification and update requirements compliance artifacts",
+          "inputs": "Test outcomes from verification-model execution.",
+          "outputs": "Automatically updated CATIA Magic Requirements Table and requirements compliance matrix.",
+          "actors_roles": "not reported.",
+          "prerequisites": "Executable verification model and connected test setup.",
+          "completion_criteria": "Requirements compliance confirmed; detailed pass/fail criteria not reported.",
+          "handoffs": "Reporting/documentation of test outcomes; future subsystem automation.",
+          "evidence": [
+            {
+              "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes",
+              "location": "Section IV"
+            }
+          ]
+        }
+      ],
+      "mapping_to_systems_engineering_and_lifecycle_gates": "The method follows a V-model-like OOSEM framing and is applied to Phase C-D testing and verification; EIRSAT-1 passed flight acceptance review, but the model's direct support to FAR/PDR/CDR decisions is not reported.",
+      "approach_classification": "Integrated MBSE/digital engineering",
+      "tailoring_rationale": [
+        "mission scale",
+        "schedule",
+        "available tools"
+      ],
+      "adoption_guidance": "partial guidance",
+      "tailoring_notes": "Tailoring is described mainly through tool/method choice for CubeSat MBSE and a communications verification case, not through a formal lightweight process."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "SysML",
+        "Cameo/MagicDraw",
+        "Python",
+        "other"
+      ],
+      "named_tools_methods_outside_controlled_list": [
+        "CATIA Magic System of Systems Architect",
+        "Magic Model Analyst",
+        "INCOSE OOSEM",
+        "GNU Radio",
+        "Mission Control Software",
+        "Pluto SDR",
+        "ICOM transmitter/transceiver",
+        "antenna controller"
+      ],
+      "toolchain_architecture_data_flow": "SysML/CATIA Magic model supplies technical parameters through activity/verification diagrams to a Python client; the client communicates with MCS/GNU Radio and ground-station radio/antenna hardware; returned test outcomes update requirements compliance artifacts in CATIA Magic.",
+      "interoperability_mechanisms": [
+        "plugin",
+        "scripts"
+      ],
+      "interoperability_notes": "External programmatic tools are described as Python/MATLAB/PLC/excel examples; the figure shows TCP communication to MCS. Exact APIs/protocol schemas are not reported.",
+      "syntax_semantic_continuity_evidence": "Requirements, test parameters, parametric validation, and compliance matrix/table updates are connected in the model/test workflow, but details of semantic mapping are limited.",
+      "software_hardware_system_integration_readiness": "The verification model is connected to MCS, GNU Radio, Pluto SDR, ICOM transmitter, UHF/VHF antennas, and antenna controller for end-to-end communication testing.",
+      "toolchain_limitations": [
+        "missing interfaces"
+      ],
+      "availability_reproducibility": "Named commercial and external tools are reported; model files, plugins, scripts, and data are not reported as available."
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [],
+      "eps_elements_status": "not_applicable",
+      "eps_requirements_represented": "not applicable; communications requirements such as uplink/downlink frequency, BER, data rates, and link budget are shown, but EPS requirements are not reported.",
+      "verification_validation_artifacts": [
+        "verification matrix",
+        "test procedures",
+        "executable checks",
+        "SIL/HIL links",
+        "automated tests"
+      ],
+      "pre_physical_development_verification_mechanism": [],
+      "pre_physical_development_verification_status": "none",
+      "evidence_integrated_into_model": "Verification models are built in CATIA Magic from end-to-end test plans, use parametric diagrams to validate exchanged data, and automatically update requirements/compliance artifacts.",
+      "integration_test_readiness": [
+        "links to hardware integration",
+        "software integration"
+      ],
+      "eps_synthesis_note": "Useful for system-level/communications verification integration, but not direct evidence for EPS modeling or EPS pre-physical verification."
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "CubeSat context and lifecycle maturity",
-        "quote": "\"EIRSAT-1, a 2U CubeSat that has been developed by students of UCD through the ESA 'Fly Your Satellite! programme [1], passed its flight acceptance review and is now ready for launch.\"",
-        "location": "Section III.A, System Of Interest"
+        "claim_id": "C1",
+        "claim_text": "A single integrated MBSE environment ensures verification is planned and executed in the correct sequence with full requirements traceability across the CubeSat lifecycle.",
+        "outcome_category": [
+          "traceability",
+          "lifecycle continuity",
+          "mission assurance"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "artifact traceability",
+          "requirements linkage",
+          "lifecycle gate support"
+        ],
+        "artifact_process_linked": "NSM lifecycle model and requirements-based verification planning/execution environment.",
+        "lifecycle_stage": [
+          "Phase A/B",
+          "integration and test",
+          "operations"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "trace links",
+          "requirement coverage"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Asserted full traceability and correct verification sequence; no measured effect reported.",
+        "evidence_source": {
+          "location": "Section II",
+          "quote": "A single integrated environment ensures that system verification is planned and executed in the correct sequence with full traceability based on requirements."
+        },
+        "evidence_confidence_rating": "Unsupported",
+        "threats_or_alternative_explanations": "Lifecycle-wide traceability is presented as a project aim; only a Phase C-D communications exemplar is described."
       },
       {
-        "topic": "Lifecycle scope",
-        "quote": "\"starting from Phase-A/B (Conceptualization) $ \\rightarrow $ Phase-C/D (Testing & Verification) $ \\rightarrow $ Phase-E (Launch & Operations).\"",
-        "location": "Section II, Adopting MBSE into the Organization"
+        "claim_id": "C2",
+        "claim_text": "Integrating system models with programmatic tools enables data exchange and automated verification of requirements.",
+        "outcome_category": [
+          "automation",
+          "integrability/interoperability",
+          "traceability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "tool integration",
+          "requirements linkage",
+          "artifact traceability"
+        ],
+        "artifact_process_linked": "SysML verification model, interface plugins, external Python/test scripts, requirements compliance artifacts.",
+        "lifecycle_stage": [
+          "integration and test"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Integration/test/operational/flight evidence"
+        ],
+        "metric_or_value_indicator": [
+          "requirement coverage",
+          "trace links"
+        ],
+        "baseline_comparator": "manual analysis",
+        "observed_effect_size_or_qualitative_effect": "Automated requirements verification is demonstrated conceptually through an EIRSAT-1 communications end-to-end test workflow; no numeric coverage reported.",
+        "evidence_source": {
+          "location": "Section III.A",
+          "quote": "With the MBSE approach, the system models are integrated with other programmatic tools to enable exchange of data and allow automated verification of requirements."
+        },
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "Automation could depend on custom plugin/script implementation not provided; no independent test-result data are shown."
       },
       {
-        "topic": "Reported case scope",
-        "quote": "\"The work described here is focused on the implementation of MBSE during Phase C-D of EIRSAT-1, using the testing and verification of the communications subsystem as the exemplar.\"",
-        "location": "Section III.A, System Of Interest"
+        "claim_id": "C3",
+        "claim_text": "The MBSE verification model can command the test setup and use parametric diagrams to validate exchanged data and confirm requirements compliance during test runs.",
+        "outcome_category": [
+          "automation",
+          "consistency",
+          "mission assurance",
+          "reliability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "executable simulation",
+          "parametric analysis",
+          "tool integration",
+          "requirements linkage"
+        ],
+        "artifact_process_linked": "Magic System of Systems Architect verification model, Magic Model Analyst, Python client, parametric diagrams, requirements compliance matrix.",
+        "lifecycle_stage": [
+          "integration and test"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Trade-study or requirements-checking result",
+          "Integration/test/operational/flight evidence"
+        ],
+        "metric_or_value_indicator": [
+          "requirement coverage",
+          "reliability proxy"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Qualitatively reports simultaneous requirements verification with test runs and model-flow assessment; no pass/fail results reported.",
+        "evidence_source": {
+          "location": "Section III.B",
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance. The requirements are verified simultaneously with the test runs"
+        },
+        "evidence_confidence_rating": "Moderate",
+        "threats_or_alternative_explanations": "The paper does not report actual parameter values, compliance outcomes, or error cases; 'reliability' is model-flow thoroughness, not spacecraft reliability."
       },
       {
-        "topic": "Tool and method",
-        "quote": "\"The language used here for modeling is SysML.\"",
-        "location": "Section II.A, MBSE:Language, Tool and Method"
+        "claim_id": "C4",
+        "claim_text": "Automatic updating of the CATIA Magic Requirements Table from verification-model test outcomes reduced time spent documenting and reporting test outcomes.",
+        "outcome_category": [
+          "effort reduction",
+          "automation",
+          "traceability"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "automated generation",
+          "requirements linkage",
+          "tool integration",
+          "artifact traceability"
+        ],
+        "artifact_process_linked": "CATIA Magic Requirements Table and requirements compliance reporting.",
+        "lifecycle_stage": [
+          "integration and test"
+        ],
+        "evidence_type": [
+          "Single case-study demonstration",
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [
+          "time",
+          "effort",
+          "requirement coverage"
+        ],
+        "baseline_comparator": "previous document-centric process",
+        "observed_effect_size_or_qualitative_effect": "Authors state a 'huge' reduction in documentation/reporting time; no quantitative effect size.",
+        "evidence_source": {
+          "location": "Section IV",
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time. This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance."
+        },
+        "evidence_confidence_rating": "Weak",
+        "threats_or_alternative_explanations": "No measured before/after baseline, effort log, or independent validation is provided; improvement may depend on case-specific test-script integration."
       },
       {
-        "topic": "Tool choice",
-        "quote": "\"CATIA Magic System of Systems Architect tool from Dassault Systemes has been adopted based on its wide range of features for 3D modeling, simulation and visualization, seamless data exchange between design and Engineering domains.\"",
-        "location": "Section II.A, MBSE:Language, Tool and Method"
+        "claim_id": "C5",
+        "claim_text": "The verification models can be reused in similar verification scenarios and applied to remaining subsystems to create an automated framework.",
+        "outcome_category": [
+          "generality/reuse",
+          "automation",
+          "reproducibility"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mbse_mechanism": [
+          "other",
+          "tool integration",
+          "requirements linkage"
+        ],
+        "artifact_process_linked": "Reusable verification-model workflow for subsystem test scenarios.",
+        "lifecycle_stage": [
+          "integration and test"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence",
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [
+          "model reuse"
+        ],
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Reuse is proposed/claimed; no replication across subsystems or projects is reported.",
+        "evidence_source": {
+          "location": "Section III.B and Section IV",
+          "quote": "the models can be reused several times in similar verification scenarios"
+        },
+        "evidence_confidence_rating": "Unsupported",
+        "threats_or_alternative_explanations": "Future application to remaining subsystems may reveal subsystem-specific integration effort not captured by the communications example."
       },
       {
-        "topic": "Verification model basis",
-        "quote": "\"The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan used in traditional testing phases.\"",
-        "location": "Section III.B, MBSE Approach to Requirement Verification"
-      },
-      {
-        "topic": "External integration",
-        "quote": "\"The verification model is integrated with the actual end-to-end test setup to command the input test parameters through the model diagram.\"",
-        "location": "Section III.B, MBSE Approach to Requirement Verification"
-      },
-      {
-        "topic": "Model-to-test data flow",
-        "quote": "\"The MBSE verification model allows the required technical parameters to flow from the system models to the Python client which in turn commands the ground station hardware like radio and antenna controller for signal transmission and reception.\"",
-        "location": "Section III.B, MBSE Approach to Requirement Verification"
-      },
-      {
-        "topic": "Automated compliance update",
-        "quote": "\"The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.\"",
-        "location": "Section IV, Results and Discussion"
-      },
-      {
-        "topic": "Time-saving claim",
-        "quote": "\"This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance.\"",
-        "location": "Section IV, Results and Discussion"
+        "claim_id": "C6",
+        "claim_text": "MBSE helps engineers see cross-domain relationships early in design decisions.",
+        "outcome_category": [
+          "decision support",
+          "communication/stakeholder alignment"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mbse_mechanism": [
+          "artifact traceability"
+        ],
+        "artifact_process_linked": "Generic MBSE model visibility across domains.",
+        "lifecycle_stage": [
+          "Phase A/B"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [],
+        "baseline_comparator": "not reported",
+        "observed_effect_size_or_qualitative_effect": "Generic rationale for adopting MBSE; no EIRSAT-specific evaluation.",
+        "evidence_source": {
+          "location": "Section II",
+          "quote": "MBSE is becoming critical in today's multi domain systems; with it, engineers have the ability to see cross domain relationships early in the design process"
+        },
+        "evidence_confidence_rating": "Unsupported",
+        "threats_or_alternative_explanations": "This is a generic MBSE benefit statement and not substantiated by the case results."
       }
     ],
-    "notes_for_consistency_with_lineage": "Treat this as a core CubeSat MBSE verification case but code EPS relevance as absent; do not conflate the communications verification exemplar with EPS verification.",
-    "extraction_confidence": "high",
-    "extraction_confidence_reason": "The markdown is short and explicit about mission context, tools, method, scope, and verification workflow. Confidence is reduced only for bibliographic venue details and absent outcome metrics/model artifacts."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": [
+        "not reported"
+      ],
+      "traceability_to_project_deliverables_decisions": "Requirements Table and Requirements Compliance Matrix are linked to test outcomes; direct model-to-design-review or management-report linkage is not reported.",
+      "evaluation_criteria_model_quality_usefulness": "Model flow thoroughness/reliability assessed with Magic Model Analyst; requirements compliance confirmed through parametric diagrams. Criteria details are not reported.",
+      "roi_value_realization_evidence": [
+        "saved effort"
+      ],
+      "roi_notes": "Qualitative saved documentation/reporting effort is claimed; no adoption cost, training effort, schedule, or avoided-rework metric is reported.",
+      "programmatic_gates_supported": "EIRSAT-1 had passed flight acceptance review; explicit support to FAR or other gates by the model is not reported.",
+      "model_derived_performance_indicators": [
+        "requirements compliance",
+        "uplink/downlink frequency",
+        "BER",
+        "data rates",
+        "link budget"
+      ],
+      "evidence": [
+        {
+          "quote": "Updating Requirements Compliance Matrix",
+          "location": "Figure 3 description"
+        },
+        {
+          "quote": "This reduced huge amount of time spent",
+          "location": "Section IV"
+        }
+      ]
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "value": "addressed with evidence",
+        "rationale": "A concrete EIRSAT-1 workflow is described and demonstrated at high level: choose SysML/CATIA/OOSEM, model the system/test flow, connect to Python/test setup, validate parameters, and update compliance artifacts.",
+        "evidence": [
+          {
+            "quote": "The verification models created in the Magic System of Systems Architect tool are based on the end-to-end test plan",
+            "location": "Section III.B"
+          },
+          {
+            "quote": "The Requirements Table in CATIA Magic tool gets updated automatically",
+            "location": "Section IV"
+          }
+        ]
+      },
+      "toolchain_fragmentation_interoperability": {
+        "value": "addressed with evidence",
+        "rationale": "The paper explicitly discusses tool limitations and demonstrates an interface-plugin/script bridge from CATIA Magic/SysML to external test software and hardware.",
+        "evidence": [
+          {
+            "quote": "no single tool can fully meet all the requirements for complete realisation of MBSE",
+            "location": "Section II.A"
+          },
+          {
+            "quote": "create interface plugins to exchange information between the MBSE environment and the external test scripts",
+            "location": "Section III.A"
+          }
+        ]
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "value": "addressed conceptually",
+        "rationale": "The paper frames the work around CubeSat/nanosatellite needs and cost/time-sensitive missions, but does not provide a lightweight tailoring method or resource analysis.",
+        "evidence": [
+          {
+            "quote": "The use of Commercial-Off-TheShelf (COTS) components reduces development cost and time, making CubeSats an accessible and cost effective route to space.",
+            "location": "Section I"
+          },
+          {
+            "quote": "few standards exist regarding Systems Engineering (SE) for designing and developing nanosatellites",
+            "location": "Section I"
+          }
+        ]
+      },
+      "governance_project_deliverables_roi": {
+        "value": "addressed with evidence",
+        "rationale": "The model is connected to requirements tables/compliance matrices and a qualitative saved-effort claim, though formal governance and ROI are absent.",
+        "evidence": [
+          {
+            "quote": "Updating Requirements Compliance Matrix",
+            "location": "Figure 3 description"
+          },
+          {
+            "quote": "Requirements Table in CATIA Magic tool gets updated automatically",
+            "location": "Section IV"
+          },
+          {
+            "quote": "This reduced huge amount of time spent",
+            "location": "Section IV"
+          }
+        ]
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "value": "not addressed",
+        "rationale": "The paper discusses CubeSat cost/time context but does not address NewSpace, agile development, distributed teams, or rapid-iteration practices as an MBSE alignment target.",
+        "evidence": []
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": "Partial evidence for nanosatellite system-level MBSE architecture: EIRSAT-1 packages and OOSEM/SysML/CATIA Magic workflow are described, but not a general minimal-behavior or EPS reference model.",
+        "RQ2": "Partial outcome evidence: claims include traceability, automated requirements verification, time/effort saving, reuse, and integration, but evidence is mostly qualitative single-case demonstration without quantitative baseline or EPS specificity.",
+        "RQ3": "Partial verification relevance: verification procedures are integrated into system/communications models and actual test setup; not EPS-specific and not pre-physical-development verification."
+      },
+      "author_stated_limitations_gaps": [
+        "No single tool can fully meet all requirements for complete MBSE realization.",
+        "Only IBM Harmony and OOSEM were reviewed due to time constraints.",
+        "The reported work is a first step/preliminary NSM objective.",
+        "The actual implementation is focused on Phase C-D communications-subsystem testing and verification.",
+        "Broader lifecycle ecosystem integration and remaining subsystems are future work."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No EPS-specific model or verification evidence.",
+        "No pre-physical-development verification evidence; work uses actual end-to-end test setup after flight acceptance review.",
+        "No quantitative outcome metrics or measured baseline for claimed time/effort reduction.",
+        "No independent validation or repeated reuse across subsystems/projects.",
+        "No public model/script/plugin availability reported."
+      ],
+      "direct_evidence_quotes_supporting_classifications": [
+        {
+          "quote": "EIRSAT-1, a 2U CubeSat",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The verification model is integrated with the actual end-to-end test setup",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically",
+          "location": "Section IV"
+        },
+        {
+          "quote": "A similar approach will be applied to the remaining subsystems, creating a automated framework.",
+          "location": "Section IV"
+        }
+      ],
+      "open_researcher_observations": [
+        "The paper is more valuable for MBSE-enabled V&V/toolchain continuity than for EPS modeling.",
+        "The system model appears to be retrofitted to a mature mission with existing documents rather than used from early design inception.",
+        "The strongest concrete mechanism is automated compliance-table updating from test outcomes; the strongest gap is lack of quantitative evaluation."
+      ],
+      "lineage_consistency_notes": "This should be compared with SSWG CubeSat MBSE/reference-model papers as a project-applied follow-on/contrast, but it is not itself a reusable reference model.",
+      "extraction_confidence": "high",
+      "extraction_confidence_reason": "The paper is short and the relevant MBSE, context, and outcome claims are clear; confidence in extraction is high even though the paper's evidence for outcomes is limited."
+    }
   },
-  "bibtex": "@inproceedings{paper-0063,\n  title = {Development of a Nanosatellite System Modeling Architecture for EIRSAT-1},\n  author = {Sai Krishna Reddy Akarapu and Bas Stijnen and Caimin McKenna and David J. McKeown and D. Murphy and Jack Reilly and Joseph W. Thompson and M. Doyle and R. Wall and S. McBreen and L. Hanlon},\n  year = {2023},\n  booktitle = {IEEE Space Mission Challenges for Information Technology (SMC-IT)},\n  publisher = {IEEE},\n  doi = {10.1109/smc-it56444.2023.00022},\n  url = {https://doi.org/10.1109/smc-it56444.2023.00022}\n}"
+  "bibtex": "@inproceedings{akarapu2023development,\n  title = {Development of a Nanosatellite System Modeling Architecture for EIRSAT-1},\n  author = {Akarapu, Sai Krishna Reddy and Stijnen, Bas and McKenna, Caimin and McKeown, David J. and Murphy, D. and Reilly, Jack and Thompson, Joseph W. and Doyle, M. and Wall, R. and McBreen, S. and Hanlon, L.},\n  booktitle = {Proceedings of the IEEE SMC-IT Conference},\n  year = {2023},\n  doi = {10.1109/SMC-IT56444.2023.00022}\n}"
 }

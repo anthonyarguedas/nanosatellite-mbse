@@ -53,8 +53,8 @@ BURUSO_GAPS: List[Tuple[str, str]] = [
     ("practical_implementation_pathway", "Practical implementation pathway"),
     ("toolchain_fragmentation_interoperability", "Toolchain fragmentation/interoperability"),
     ("lightweight_resource_constrained_tailoring", "Lightweight/resource-constrained tailoring"),
-    ("governance_project_deliverables_roi_value", "Governance/project deliverables/ROI/value"),
-    ("newspace_agile_distributed_rapid_iteration", "NewSpace/agile/distributed/rapid iteration"),
+    ("governance_project_deliverables_roi", "Governance/project deliverables/ROI/value"),
+    ("newspace_agile_distributed_rapid_iteration_alignment", "NewSpace/agile/distributed/rapid iteration"),
 ]
 
 # Outcome domains emphasize the SLR results focus. Rules are multi-label: one
@@ -229,6 +229,60 @@ SPECIFICITY_SCORE = {
     "unclear": 0.5,
 }
 
+# Controlled mappings from extraction_codebook.json labels to synthesis domains.
+# These replace the earlier loose keyword mapping: a claim contributes to a
+# domain only when its controlled outcome_category code supports that domain.
+OUTCOME_DOMAINS = [domain for domain, _patterns in OUTCOME_DOMAIN_RULES] + ["Other / uncategorized value claim"]
+CONTROLLED_OUTCOME_DOMAIN_MAP = {
+    "reliability": ["Reliability / mission assurance / risk"],
+    "mission assurance": ["Reliability / mission assurance / risk"],
+    "risk reduction": ["Reliability / mission assurance / risk"],
+    "defect/error reduction": ["Reliability / mission assurance / risk"],
+    "reproducibility": ["Reproducibility / reuse / openness"],
+    "generality/reuse": ["Reproducibility / reuse / openness", "Generality / scalability / tailoring"],
+    "integrability/interoperability": ["Integrability / interoperability / lifecycle continuity"],
+    "lifecycle continuity": ["Integrability / interoperability / lifecycle continuity"],
+    "traceability": ["Traceability / consistency / requirements quality"],
+    "consistency": ["Traceability / consistency / requirements quality"],
+    "completeness": ["Traceability / consistency / requirements quality"],
+    "cost reduction": ["Cost / schedule / effort / efficiency / automation"],
+    "schedule reduction": ["Cost / schedule / effort / efficiency / automation"],
+    "effort reduction": ["Cost / schedule / effort / efficiency / automation"],
+    "automation": ["Cost / schedule / effort / efficiency / automation"],
+    "governance/ROI": ["Governance / ROI / project decisions"],
+    "decision support": ["Decision support / analysis / trade-space / feasibility"],
+    "communication/stakeholder alignment": ["Communication / collaboration / knowledge"],
+    "other": ["Other / uncategorized value claim"],
+}
+
+CONTROLLED_VV_CATEGORY_MAP = {
+    "verification matrix": ["Requirements-to-model traceability or verification matrix"],
+    "test cases": ["Test cases/procedures/V&V activity packages"],
+    "test procedures": ["Test cases/procedures/V&V activity packages"],
+    "simulation scenarios": ["Executable simulation or scenario analysis before build"],
+    "acceptance criteria": ["Test cases/procedures/V&V activity packages"],
+    "executable checks": ["Test cases/procedures/V&V activity packages", "Parametric/budget/constraint checks"],
+    "generated test artifacts": ["Test cases/procedures/V&V activity packages", "External tool or data-flow coupling for V&V"],
+    "SIL/HIL links": ["Physical/SIL/HIL/integration-test readiness link"],
+    "automated tests": ["Test cases/procedures/V&V activity packages", "External tool or data-flow coupling for V&V"],
+    "requirements-in-the-loop": ["Requirements-to-model traceability or verification matrix"],
+    "simulation-in-the-loop": ["Executable simulation or scenario analysis before build"],
+    "parametric checks": ["Parametric/budget/constraint checks"],
+    "model checking": ["Requirements-to-model traceability or verification matrix", "Test cases/procedures/V&V activity packages"],
+    "trade-study verification": ["Parametric/budget/constraint checks", "Executable simulation or scenario analysis before build"],
+    "virtual integration": ["External tool or data-flow coupling for V&V"],
+    "links to hardware integration": ["Physical/SIL/HIL/integration-test readiness link"],
+    "software integration": ["Physical/SIL/HIL/integration-test readiness link"],
+    "flat-sat/testbed": ["Physical/SIL/HIL/integration-test readiness link"],
+    "environmental test": ["Physical/SIL/HIL/integration-test readiness link"],
+    "operational validation": ["Physical/SIL/HIL/integration-test readiness link"],
+}
+
+GAP_KEY_ALIASES = {
+    "governance_project_deliverables_roi_value": "governance_project_deliverables_roi",
+    "newspace_agile_distributed_rapid_iteration": "newspace_agile_distributed_rapid_iteration_alignment",
+}
+
 # ---------------------------------------------------------------------------
 # File and field utilities
 
@@ -238,12 +292,165 @@ def read_json(path: Path) -> dict:
         return json.load(f)
 
 
+def as_list(value: object) -> List[str]:
+    """Return a clean list of scalar labels without splitting controlled labels."""
+    if value is None:
+        return []
+    if isinstance(value, dict):
+        if "values" in value:
+            return as_list(value.get("values"))
+        text = value.get("value") or value.get("label") or value.get("classification") or value.get("rating") or ""
+        text = normalize_whitespace(text)
+        return [text] if text else []
+    if isinstance(value, list):
+        out: List[str] = []
+        for item in value:
+            if isinstance(item, dict):
+                out.extend(as_list(item))
+            else:
+                text = normalize_whitespace(item)
+                if text:
+                    out.append(text)
+        return out
+    text = normalize_whitespace(value)
+    return [text] if text else []
+
+
+def controlled_values(study: dict, field_path: str) -> List[str]:
+    """Read exact controlled-code values from structured_code_summary."""
+    entry = study.get("structured_code_summary", {}).get(field_path, {})
+    if entry.get("status") != "coded":
+        return []
+    return as_list(entry.get("values"))
+
+
+def first_controlled_value(study: dict, field_path: str, default: str = "") -> str:
+    values = controlled_values(study, field_path)
+    return values[0] if values else default
+
+
+def evidence_to_text(value: object) -> str:
+    if isinstance(value, list):
+        return "; ".join(evidence_to_text(v) for v in value if evidence_to_text(v))
+    if isinstance(value, dict):
+        quote = value.get("quote") or value.get("evidence_quote") or value.get("text") or ""
+        location = value.get("location") or value.get("source") or ""
+        if quote and location:
+            return f"{location}: {quote}"
+        return normalize_whitespace(quote or location or value)
+    return normalize_whitespace(value)
+
+
+def quality_item_score(item: object) -> float:
+    """Score protocol quality items across old and refactored extraction shapes."""
+    if not isinstance(item, dict):
+        return 0.0
+    if item.get("numeric_score") is not None:
+        return float(item.get("numeric_score") or 0)
+    if item.get("score") is not None:
+        return float(item.get("score") or 0)
+    values = as_list(item.get("values") or item.get("value") or item.get("label"))
+    label = values[0] if values else ""
+    return {"Yes": 1.0, "Insufficiently": 0.5, "No": 0.0}.get(label, 0.0)
+
+
+def normalize_claim_record(claim: dict) -> dict:
+    """Normalize heterogeneous subagent claim records to the generator schema."""
+    normalized = dict(claim)
+    normalized["claim"] = normalize_whitespace(
+        claim.get("claim")
+        or claim.get("claim_text")
+        or claim.get("claim_text_or_paraphrase")
+        or claim.get("claim_paraphrase")
+        or ""
+    )
+    outcome_values = as_list(claim.get("outcome_category"))
+    normalized["outcome_category_values"] = outcome_values
+    normalized["outcome_category"] = "; ".join(outcome_values)
+    normalized["specificity"] = normalize_whitespace(claim.get("specificity") or claim.get("specificity_of_claim") or "unclear")
+    normalized["mbse_mechanism"] = as_list(claim.get("mbse_mechanism"))
+    normalized["artifact_or_process_linked"] = normalize_whitespace(
+        claim.get("artifact_or_process_linked")
+        or claim.get("artifact_process_linked_to_claim")
+        or claim.get("artifact_or_process_linked_to_claim")
+        or ""
+    )
+    normalized["evidence_type"] = "; ".join(as_list(claim.get("evidence_type")))
+    confidence_values = as_list(claim.get("evidence_confidence") or claim.get("evidence_confidence_rating"))
+    normalized["evidence_confidence"] = confidence_values[0] if confidence_values else "Unsupported"
+    normalized["evidence_source"] = evidence_to_text(claim.get("evidence_source"))
+    normalized["direct_quote"] = normalize_whitespace(claim.get("direct_quote") or claim.get("evidence_quote") or evidence_to_text(claim.get("evidence_source")))
+    return normalized
+
+
+def normalize_refactored_study(raw: dict) -> dict:
+    """Flatten the refactored extraction schema while preserving controlled summaries.
+
+    The new extraction files keep protocol fields under ``extraction`` and the
+    controlled coding under ``structured_code_summary``. The report generator was
+    originally written for a flat schema, so this adapter gives downstream code a
+    controlled-code-backed view instead of making it rediscover categories with
+    regexes.
+    """
+    extraction = raw.get("extraction") or {}
+    if not extraction:
+        return raw
+
+    study = dict(extraction)
+    for key in [
+        "corpus_id",
+        "tier",
+        "year",
+        "quality_checklist",
+        "structured_code_summary",
+        "structured_limitations",
+        "emergent_codes",
+        "bibtex",
+    ]:
+        if key in raw:
+            study[key] = raw[key]
+
+    # Ensure protocol sections exist even when a subagent omitted an optional section.
+    for section in [
+        "bibliographic_review_management",
+        "study_context_population",
+        "mbse_objective_scope_artifacts",
+        "implementation_pathway_tailoring",
+        "toolchain_interoperability_lifecycle_continuity",
+        "eps_verification_specific",
+        "claimed_outcomes_value_mechanisms_evidence",
+        "governance_roi_project_decision_linkage",
+        "gap_mapping",
+        "synthesis_consistency",
+    ]:
+        study.setdefault(section, extraction.get(section, {} if section != "claimed_outcomes_value_mechanisms_evidence" else []))
+
+    # Normalize quality total for tables/figures.
+    total = 0.0
+    for item in study.get("quality_checklist", {}).values():
+        total += quality_item_score(item)
+    if study.get("quality_checklist") is not None:
+        study["quality_checklist"] = dict(study.get("quality_checklist", {}))
+        study["quality_checklist"].setdefault("total_score", total)
+        study["quality_checklist"].setdefault("normalized_score", round(total / 8.0, 3) if total else "")
+
+    study["claimed_outcomes_value_mechanisms_evidence"] = [
+        normalize_claim_record(claim)
+        for claim in study.get("claimed_outcomes_value_mechanisms_evidence", [])
+        if isinstance(claim, dict)
+    ]
+    return study
+
+
 def load_studies() -> List[dict]:
-    studies = [read_json(p) for p in sorted(EXTRACTIONS_DIR.glob("paper-*.json"))]
+    studies = [normalize_refactored_study(read_json(p)) for p in sorted(EXTRACTIONS_DIR.glob("paper-*.json"))]
     return sorted(studies, key=lambda d: (int(d.get("year", 9999)), d.get("corpus_id", "")))
 
 
 def get_rq_relevance(study: dict, rq: str) -> str:
+    controlled = first_controlled_value(study, f"bibliographic_review_management.{rq.lower()}_relevance")
+    if controlled:
+        return controlled
     value = study.get("bibliographic_review_management", {}).get("research_questions_addressed", {}).get(rq, "")
     if isinstance(value, dict):
         return value.get("relevance", "")
@@ -251,20 +458,35 @@ def get_rq_relevance(study: dict, rq: str) -> str:
 
 
 def get_title(study: dict) -> str:
-    return study.get("bibliographic_review_management", {}).get("title") or study.get("corpus_id", "")
+    bib = study.get("bibliographic_review_management", {})
+    citation = bib.get("citation") if isinstance(bib.get("citation"), dict) else {}
+    return bib.get("title") or citation.get("title") or study.get("title") or study.get("corpus_id", "")
 
 
 def get_authors(study: dict) -> List[str]:
-    return study.get("bibliographic_review_management", {}).get("authors") or []
+    bib = study.get("bibliographic_review_management", {})
+    citation = bib.get("citation") if isinstance(bib.get("citation"), dict) else {}
+    return bib.get("authors") or citation.get("authors") or study.get("authors") or []
 
 
 def get_quality(study: dict) -> Tuple[float | str, float | str]:
     q = study.get("quality_checklist", {})
-    return q.get("total_score", ""), q.get("normalized_score", "")
+    if "total_score" in q or "normalized_score" in q:
+        return q.get("total_score", ""), q.get("normalized_score", "")
+    total = 0.0
+    for item in q.values():
+        total += quality_item_score(item)
+    return total, round(total / 8.0, 3) if total else ""
 
 
 def get_extraction_confidence(study: dict) -> str:
-    return study.get("synthesis_consistency", {}).get("extraction_confidence", "")
+    controlled = first_controlled_value(study, "synthesis_consistency.extraction_confidence")
+    if controlled:
+        return controlled
+    value = study.get("synthesis_consistency", {}).get("extraction_confidence", "")
+    if isinstance(value, dict):
+        return value.get("value") or value.get("confidence") or ""
+    return value
 
 
 def get_claims(study: dict) -> List[dict]:
@@ -390,98 +612,79 @@ def claim_text_for_mapping(claim: dict) -> str:
 
 
 def outcome_domains_for_claim(claim: dict) -> List[str]:
-    text = claim_text_for_mapping(claim)
-    domains = [domain for domain, patterns in OUTCOME_DOMAIN_RULES if has_any(text, patterns)]
-    if not domains:
-        domains = ["Other / uncategorized value claim"]
-    return domains
+    """Map claims to synthesis domains using controlled outcome_category codes.
+
+    No keyword matching is used here; uncoded or unrecognized categories remain
+    in the explicit Other bucket so emergent findings are not hidden by loose
+    text classification.
+    """
+    domains: List[str] = []
+    for category in claim.get("outcome_category_values") or as_list(claim.get("outcome_category")):
+        for domain in CONTROLLED_OUTCOME_DOMAIN_MAP.get(category, ["Other / uncategorized value claim"]):
+            if domain not in domains:
+                domains.append(domain)
+    return domains or ["Other / uncategorized value claim"]
 
 
 def evidence_confidence(claim: dict) -> str:
-    value = normalize_whitespace(claim.get("evidence_confidence", ""))
+    values = as_list(claim.get("evidence_confidence") or claim.get("evidence_confidence_rating"))
+    value = values[0] if values else ""
     return value if value in CONFIDENCE_ORDER else "Unsupported"
 
 
-def vv_text(study: dict) -> str:
-    eps = study.get("eps_verification_specific", {})
-    parts: List[str] = []
-    for key in [
-        "verification_validation_artifacts",
-        "pre_physical_development_verification_mechanism",
-        "evidence_verification_integrated_in_model",
-        "integration_test_readiness",
-    ]:
-        parts.append(join_list(eps.get(key, "")))
-    return " ".join(parts)
-
-
-def positive_vv_text(study: dict) -> str:
-    """Return V&V text with explicit negated/no-evidence clauses removed.
-
-    The extraction fields often include readiness caveats such as "no physical
-    EPS integration test is reported". Those sentences should support absence
-    categories, not positive V&V-linkage counts.
-    """
-    eps = study.get("eps_verification_specific", {})
-    raw_parts: List[str] = []
-    for key in [
-        "verification_validation_artifacts",
-        "pre_physical_development_verification_mechanism",
-        "evidence_verification_integrated_in_model",
-        "integration_test_readiness",
-    ]:
-        value = eps.get(key, "")
-        if isinstance(value, list):
-            raw_parts.extend(normalize_whitespace(v) for v in value)
-        else:
-            raw_parts.extend(re.split(r"(?<=[.;])\s+", normalize_whitespace(value)))
-    segments = []
-    for segment in raw_parts:
-        segment = normalize_whitespace(segment)
-        if not segment:
-            continue
-        if has_any(segment, NEGATIVE_VV_SEGMENT_PATTERNS):
-            continue
-        segments.append(segment)
-    return " ".join(segments)
-
-
 def vv_linkages_for_study(study: dict) -> List[str]:
-    all_text = vv_text(study)
-    positive_text = positive_vv_text(study)
-    categories = [category for category, patterns in VV_RULES if has_any(positive_text, patterns)]
+    """Classify V&V linkages from controlled extraction codes, not regexes."""
+    prephysical_values: List[str] = []
+    readiness_values: List[str] = []
+    for field_path in [
+        "eps_verification_specific.verification_validation_artifacts",
+        "eps_verification_specific.pre_physical_development_verification_mechanism",
+    ]:
+        prephysical_values.extend(controlled_values(study, field_path))
+    readiness_values.extend(controlled_values(study, "eps_verification_specific.integration_test_readiness"))
 
-    eps = study.get("eps_verification_specific", {})
-    artifacts_empty = not eps.get("verification_validation_artifacts")
-    prephys_empty = not eps.get("pre_physical_development_verification_mechanism")
-    integrated = normalize_whitespace(eps.get("evidence_verification_integrated_in_model", ""))
-    readiness = normalize_whitespace(eps.get("integration_test_readiness", ""))
-    no_positive = (not positive_text) or (artifacts_empty and prephys_empty and has_any(f"{integrated} {readiness}", NEGATIVE_VV_PATTERNS))
-    if no_positive:
-        categories.append("No explicit EPS-focused pre-physical V&V")
+    # Fallback to normalized extraction fields if a legacy extraction is used.
+    if not prephysical_values and not readiness_values:
+        eps = study.get("eps_verification_specific", {})
+        for key in ["verification_validation_artifacts", "pre_physical_development_verification_mechanism"]:
+            prephysical_values.extend(v for v in as_list(eps.get(key)) if v != "not reported")
+        readiness_values.extend(v for v in as_list(eps.get("integration_test_readiness")) if v != "not reported")
 
-    # Separate studies that explicitly stop at a general/conceptual V&V statement
-    # from studies with concrete checks/simulations/test artifacts.
-    lower = all_text.lower()
-    concrete = any(
-        cat in categories
-        for cat in [
-            "Executable simulation or scenario analysis before build",
-            "Parametric/budget/constraint checks",
-            "External tool or data-flow coupling for V&V",
-            "Physical/SIL/HIL/integration-test readiness link",
-        ]
+    categories: List[str] = []
+    prephysical_categories: List[str] = []
+    for value in prephysical_values:
+        for category in CONTROLLED_VV_CATEGORY_MAP.get(value, []):
+            if category not in categories:
+                categories.append(category)
+            if category not in prephysical_categories:
+                prephysical_categories.append(category)
+    for value in readiness_values:
+        for category in CONTROLLED_VV_CATEGORY_MAP.get(value, []):
+            if category not in categories:
+                categories.append(category)
+
+    eps_relevance = first_controlled_value(study, "study_context_population.eps_relevance") or normalize_whitespace(
+        study.get("study_context_population", {}).get("eps_relevance", "")
     )
-    if not concrete and has_any(lower, [r"generic", r"conceptual", r"planned", r"future", r"not reported", r"no eps-specific"]):
-        categories.append("Generic/planned V&V linkage only")
+    if prephysical_categories and eps_relevance in {"EPS-specific", "power-budget/electrical-architecture", "EPS-adjacent"}:
+        categories.append("EPS/power-specific pre-physical verification")
+
+    if not prephysical_categories:
+        categories.append("No explicit EPS-focused pre-physical V&V")
+        if first_controlled_value(study, "bibliographic_review_management.rq3_relevance") in {"partial", "high"}:
+            categories.append("Generic/planned V&V linkage only")
 
     return sorted(set(categories))
 
 
 def gap_classification(study: dict, gap_key: str) -> str:
-    value = study.get("gap_mapping", {}).get(gap_key, "")
+    key = GAP_KEY_ALIASES.get(gap_key, gap_key)
+    controlled = first_controlled_value(study, f"gap_mapping.{key}")
+    if controlled:
+        return controlled
+    value = study.get("gap_mapping", {}).get(key, study.get("gap_mapping", {}).get(gap_key, ""))
     if isinstance(value, dict):
-        return normalize_whitespace(value.get("classification", ""))
+        return normalize_whitespace(value.get("classification") or value.get("rating") or "")
     return normalize_whitespace(value)
 
 
@@ -492,6 +695,7 @@ def study_characteristics_rows(studies: Sequence[dict]) -> List[dict]:
         confidence_counts = Counter(evidence_confidence(claim) for claim in claims)
         q_total, q_norm = get_quality(study)
         bib = study.get("bibliographic_review_management", {})
+        citation = bib.get("citation") if isinstance(bib.get("citation"), dict) else {}
         context = study.get("study_context_population", {})
         impl = study.get("implementation_pathway_tailoring", {})
         rows.append(
@@ -501,19 +705,19 @@ def study_characteristics_rows(studies: Sequence[dict]) -> List[dict]:
                 "year": study.get("year", ""),
                 "title": get_title(study),
                 "authors": "; ".join(get_authors(study)),
-                "venue": bib.get("venue", ""),
-                "venue_type": bib.get("venue_type", ""),
-                "doi_or_url": bib.get("doi_or_url", ""),
+                "venue": bib.get("venue") or citation.get("venue", ""),
+                "venue_type": bib.get("venue_type") or citation.get("venue_type", ""),
+                "doi_or_url": bib.get("doi_or_url") or bib.get("doi") or bib.get("url") or citation.get("doi") or citation.get("url", ""),
                 "quality_total_score": q_total,
                 "quality_normalized_score": q_norm,
                 "RQ1_relevance": get_rq_relevance(study, "RQ1"),
                 "RQ2_relevance": get_rq_relevance(study, "RQ2"),
                 "RQ3_relevance": get_rq_relevance(study, "RQ3"),
-                "eps_relevance": context.get("eps_relevance", ""),
-                "approach_classification": impl.get("approach_classification", ""),
-                "model_maturity": context.get("model_maturity", ""),
-                "lifecycle_stage": context.get("lifecycle_stage_addressed", ""),
-                "development_context": context.get("development_context", ""),
+                "eps_relevance": first_controlled_value(study, "study_context_population.eps_relevance") or context.get("eps_relevance", ""),
+                "approach_classification": first_controlled_value(study, "implementation_pathway_tailoring.approach_classification") or impl.get("approach_classification", ""),
+                "model_maturity": join_list(controlled_values(study, "study_context_population.model_maturity") or context.get("model_maturity", "")),
+                "lifecycle_stage": join_list(controlled_values(study, "study_context_population.lifecycle_stage_addressed") or context.get("lifecycle_stage_addressed", "")),
+                "development_context": join_list(controlled_values(study, "study_context_population.development_context") or context.get("development_context", "")),
                 "claim_count": len(claims),
                 "unsupported_claims": confidence_counts.get("Unsupported", 0),
                 "weak_claims": confidence_counts.get("Weak", 0),
@@ -537,8 +741,7 @@ def count_by_study_field(studies: Sequence[dict], getter) -> List[dict]:
 
 
 def claim_evidence_rows(studies: Sequence[dict]) -> Tuple[List[dict], List[dict], int, int]:
-    domain_counts: Dict[str, Counter] = {domain: Counter() for domain, _ in OUTCOME_DOMAIN_RULES}
-    domain_counts["Other / uncategorized value claim"] = Counter()
+    domain_counts: Dict[str, Counter] = {domain: Counter() for domain in OUTCOME_DOMAINS}
     domain_studies: Dict[str, set] = defaultdict(set)
     domain_eps_or_power: Dict[str, int] = Counter()
     top_claims: List[dict] = []
@@ -546,6 +749,7 @@ def claim_evidence_rows(studies: Sequence[dict]) -> Tuple[List[dict], List[dict]
     total_domain_memberships = 0
 
     for study in studies:
+        study_eps_relevance = first_controlled_value(study, "study_context_population.eps_relevance")
         for idx, claim in enumerate(get_claims(study), start=1):
             total_claims += 1
             confidence = evidence_confidence(claim)
@@ -555,7 +759,7 @@ def claim_evidence_rows(studies: Sequence[dict]) -> Tuple[List[dict], List[dict]
             for domain in domains:
                 domain_counts[domain][confidence] += 1
                 domain_studies[domain].add(study["corpus_id"])
-                if specificity in {"EPS-specific", "power-budget/electrical-architecture"}:
+                if specificity == "EPS-specific" or study_eps_relevance in {"EPS-specific", "power-budget/electrical-architecture"}:
                     domain_eps_or_power[domain] += 1
 
             score = (
@@ -584,7 +788,7 @@ def claim_evidence_rows(studies: Sequence[dict]) -> Tuple[List[dict], List[dict]
                 )
 
     rows: List[dict] = []
-    for domain in list(dict(OUTCOME_DOMAIN_RULES).keys()) + ["Other / uncategorized value claim"]:
+    for domain in OUTCOME_DOMAINS:
         counts = domain_counts[domain]
         total = sum(counts.values())
         if not total:
@@ -1080,9 +1284,9 @@ def write_data_summary(
     lines.append("")
     lines.append("## Assumptions")
     lines.append("")
-    lines.append("- `claim_evidence_by_outcome.csv` uses deterministic multi-label keyword mapping from each claim's `outcome_category`, claim text, mechanism, and linked artifact/process. Therefore claim-domain memberships exceed the 294 unique claim records.")
-    lines.append("- Evidence strength is taken from the standardized `evidence_confidence` field. No claim was coded as `Strong`; `top_value_claims.csv` therefore contains all `Moderate` claims (plus any future `Strong` claims if extractions change).")
-    lines.append("- `vv_linkage_counts.csv` is multi-label at the study level and is derived from `eps_verification_specific` artifacts, pre-physical mechanisms, integration evidence, and integration/test-readiness text.")
+    lines.append(f"- `claim_evidence_by_outcome.csv` uses deterministic multi-label mapping from controlled `outcome_category` codes only; no loose keyword categorization is applied. Claim-domain memberships can exceed the {total_claims} unique claim records because some controlled outcome codes map to more than one synthesis domain.")
+    lines.append("- Evidence strength is taken from the standardized `evidence_confidence`/`evidence_confidence_rating` field. `top_value_claims.csv` contains all Moderate and Strong claims.")
+    lines.append("- `vv_linkage_counts.csv` is multi-label at the study level and is derived from controlled `eps_verification_specific` artifact, pre-physical mechanism, and integration/test-readiness codes.")
     lines.append("- Gap labels and order follow the five Buruso Table 5-inspired gap fields already coded in the per-study extraction JSON files.")
     lines.append("- PRISMA counts and the base PRISMA graphic are reused from the scoping review without modifying scoping-review source/output files.")
     lines.append("")
@@ -1109,8 +1313,16 @@ def main() -> None:
     scoping_info = read_scoping_inputs()
 
     study_rows = study_characteristics_rows(studies)
-    eps_rows = count_by_study_field(studies, lambda study: study.get("study_context_population", {}).get("eps_relevance", ""))
-    approach_rows = count_by_study_field(studies, lambda study: study.get("implementation_pathway_tailoring", {}).get("approach_classification", ""))
+    eps_rows = count_by_study_field(
+        studies,
+        lambda study: first_controlled_value(study, "study_context_population.eps_relevance")
+        or study.get("study_context_population", {}).get("eps_relevance", ""),
+    )
+    approach_rows = count_by_study_field(
+        studies,
+        lambda study: first_controlled_value(study, "implementation_pathway_tailoring.approach_classification")
+        or study.get("implementation_pathway_tailoring", {}).get("approach_classification", ""),
+    )
     claim_rows, top_claim_rows, total_claims, total_domain_memberships = claim_evidence_rows(studies)
     vv_rows = vv_linkage_rows(studies)
     gap_rows = gap_mapping_rows(studies)

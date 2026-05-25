@@ -8,7 +8,7 @@ The final synthesis included the 40 accessible studies that underwent standardiz
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.78\linewidth]{figures/prisma_flow.pdf}
+\includegraphics[width=0.78\linewidth]{prisma_flow}
 \caption{Flow of record identification, screening, retrieval, and inclusion for the review synthesis.}
 \label{fig:results-prisma-flow}
 \end{figure}
@@ -18,7 +18,7 @@ The extracted set comprised 21 core studies and 19 supporting studies published 
 \subsection{Study characteristics and quality}
 \label{sec:results-characteristics-quality}
 
-The quality checklist scores ranged from 5.0 to 7.5 on the eight-item scale, with a mean of 6.29.  The score distribution was 5.0 ($n=2$), 5.5 ($n=7$), 6.0 ($n=8$), 6.5 ($n=14$), 7.0 ($n=7$), and 7.5 ($n=2$).  Extraction confidence was coded as high for 26 studies and medium for 14 studies.  RQ relevance was uneven: RQ1 was high for 11 studies and partial for 29; RQ2 was partial for all 40 studies; and RQ3 was high for 4, partial for 28, and not relevant for 8.  The all-partial RQ2 pattern reflects that most papers stated MBSE value claims but did not directly measure EPS reliability, reproducibility, or integrability outcomes.
+The quality checklist scores ranged from 5.0 to 7.5 on the eight-item scale, with a mean of 6.21.  The score distribution was 5.0 ($n=3$), 5.5 ($n=6$), 6.0 ($n=13$), 6.5 ($n=9$), 7.0 ($n=7$), and 7.5 ($n=2$).  Extraction confidence was coded as high for 29 studies and medium for 11 studies.  RQ relevance was uneven: RQ1 was high for 24 studies and partial for 16; RQ2 was high for 3 and partial for 37; and RQ3 was high for 2, partial for 29, and not relevant for 9.  The mostly partial RQ2 pattern reflects that most papers stated MBSE value claims but did not directly measure EPS reliability, reproducibility, or integrability outcomes.
 
 \begin{table}[htbp]
 \centering
@@ -32,27 +32,27 @@ Extracted studies & 40 \\
 Core studies & 21 \\
 Supporting studies & 19 \\
 Publication year range & 2013--2025 \\
-Claim records & 294 \\
-Unsupported claims & 45 \\
-Weak claims & 152 \\
-Moderate claims & 97 \\
-Strong claims & 0 \\
-High-confidence extractions & 26 \\
-Medium-confidence extractions & 14 \\
+Claim records & 270 \\
+Unsupported claims & 52 \\
+Weak claims & 139 \\
+Moderate claims & 77 \\
+Strong claims & 2 \\
+High-confidence extractions & 29 \\
+Medium-confidence extractions & 11 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Limitations reported by authors or identified during extraction further contextualize quality: 31 studies were coded as prototype, incomplete maturity, or future work; 24 as limited-scope, single-case, or partial subsystem/mode coverage; 24 as lacking quantitative evaluation, having weak validation, or having no threats discussion; 18 with data/model-quality/source/assumption limitations; and 16 with tool dependency, interoperability, licensing, or learning-curve limitations.  These limitations were treated as evidence-strength constraints rather than as exclusion criteria.
+Structured limitation flags further contextualize quality.  The dominant limitations were incomplete lifecycle coverage ($n=40$), weak claim--evidence linkage ($n=40$), single-case or limited-scope evidence ($n=40$), no independent validation ($n=40$), prototype or future-work maturity ($n=40$), no physical-test or flight evidence ($n=39$), no baseline or comparator ($n=38$), no quantitative evaluation ($n=35$), unavailable model assets ($n=34$), no EPS-specific evidence ($n=33$), interoperability limitations ($n=29$), and no pre-physical verification model ($n=20$).  These flags were treated as evidence-strength constraints rather than as exclusion criteria, and open limitation text was retained separately from the aggregation flags.
 
 \subsection{Modeling focus and EPS relevance}
 \label{sec:results-modeling-focus-eps}
 
-Modeling focus and EPS relevance were synthesized as a single mutually exclusive classification.  Thirty-two studies contained some EPS or power relevance: 23 reported concrete power-budget or electrical-architecture artifacts, 8 were EPS-adjacent, and 1 treated the EPS itself as the primary model scope.  The remaining 8 studies did not model EPS explicitly: 7 were system-level nanosatellite or CubeSat MBSE studies without power-specific artifacts, and 1 contributed nanosatellite V\&V evidence outside the EPS domain.
+Modeling focus and EPS relevance were synthesized as a single mutually exclusive classification.  Thirty-four studies contained some EPS or power relevance: 19 reported concrete power-budget or electrical-architecture artifacts, 13 were EPS-adjacent, and 2 treated the EPS itself as the primary model scope.  The remaining 6 studies did not model EPS explicitly: 4 were system-level nanosatellite or CubeSat MBSE studies without power-specific artifacts, and 2 contributed nanosatellite MBSE or V\&V evidence outside the EPS domain.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.78\linewidth]{figures/eps_relevance_counts.pdf}
+\includegraphics[width=0.78\linewidth]{eps_relevance_counts}
 \caption{Mutually exclusive EPS relevance categories in the included studies.}
 \label{fig:results-eps-relevance}
 \end{figure}
@@ -65,23 +65,23 @@ Modeling focus and EPS relevance were synthesized as a single mutually exclusive
 \toprule
 EPS relevance category & n \\
 \midrule
-Power-budget/electrical-architecture & 23 \\
-EPS-adjacent & 8 \\
-System-level only & 7 \\
-EPS-specific & 1 \\
-Not EPS-relevant & 1 \\
+Power-budget/electrical-architecture & 19 \\
+EPS-adjacent & 13 \\
+System-level only & 4 \\
+EPS-specific & 2 \\
+Not EPS-relevant & 2 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The 23 power-budget/electrical-architecture studies should therefore be read as studies with concrete power-related evidence, not as 23 EPS-centered MBSE studies.  Most of this evidence was embedded in system-level models or preliminary design studies.  Examples include RAX/CubeSat energy and data simulations \cite{paper-0001,paper-0003,paper-0008}, SysML parametric mass and power-margin checks \cite{paper-0080}, Capella/Arcadia preliminary EPS allocation for 3ColStar \cite{paper-0078}, CNES concurrent electrical-architecture simulations \cite{paper-0053}, and PLM/Dymola requirements-in-the-loop power simulations \cite{paper-0059}.  By contrast, only one study made the EPS itself the model system of interest: the open-source Papyrus/SysML power-subsystem model with Java-based parameter and requirement-traceability extraction \cite{paper-0026}.  The not-EPS-relevant study, EIRSAT-1, still contributed V\&V evidence through a communications-subsystem verification demonstrator rather than an EPS model \cite{paper-0063}.
+The 19 power-budget/electrical-architecture studies should therefore be read as studies with concrete power-related evidence, not as 19 EPS-centered MBSE studies.  Most of this evidence was embedded in system-level models or preliminary design studies.  Examples include RAX/CubeSat energy and data simulations \cite{paper-0001,paper-0003,paper-0008}, SysML parametric mass and power-margin checks \cite{paper-0080}, Capella/Arcadia preliminary EPS allocation for 3ColStar \cite{paper-0078}, CNES concurrent electrical-architecture simulations \cite{paper-0053}, and PLM/Dymola requirements-in-the-loop power simulations \cite{paper-0059}.  The two EPS-specific studies were the open-source Papyrus/SysML power-subsystem model with Java-based parameter and requirement-traceability extraction \cite{paper-0026} and the requirements-in-the-loop PLM/Dymola CubeSat case in which EPS behavior and state-of-charge simulation were central \cite{paper-0059}.  Not-EPS-relevant studies still contributed general nanosatellite MBSE or V\&V evidence, such as the EIRSAT-1 communications-subsystem verification demonstrator \cite{paper-0063}.
 
-This synthesis is intentionally stricter than simply counting any paper that mentioned power or included a generic EPS block.  EPS appeared frequently as a system concern, but direct EPS-first MBSE evidence remained sparse.
+This synthesis is intentionally stricter than simply counting any paper that mentioned power or included a generic EPS block.  EPS appeared frequently as a system concern, but direct EPS-first MBSE evidence remained sparse even after the refactored extraction separated EPS-specific, EPS-adjacent, and power-budget evidence.
 
 \subsection{MBSE approaches, languages, and toolchains}
 \label{sec:results-approaches-tools}
 
-Approach classification was dominated by integrated or enhanced MBSE.  Nineteen studies were coded as Integrated MBSE/digital engineering, 13 as Enhanced MBSE, 6 as Pure MBSE, and 2 as Extended MBSE.  This distribution situates the evidence base but does not by itself establish value or V\&V effectiveness.
+Approach classification was dominated by extended and enhanced MBSE rather than fully integrated digital-engineering environments.  Seventeen studies were coded as Extended MBSE, 11 as Enhanced MBSE, 6 as Integrated MBSE/digital engineering, and 6 as Pure MBSE.  This distribution situates the evidence base but does not by itself establish value or V\&V effectiveness.
 
 \begin{table}[htbp]
 \centering
@@ -91,26 +91,26 @@ Approach classification was dominated by integrated or enhanced MBSE.  Nineteen 
 \toprule
 Approach classification & n \\
 \midrule
-Integrated MBSE/digital engineering & 19 \\
-Enhanced MBSE & 13 \\
+Extended MBSE & 17 \\
+Enhanced MBSE & 11 \\
+Integrated MBSE/digital engineering & 6 \\
 Pure MBSE & 6 \\
-Extended MBSE & 2 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Tool and language classification showed a SysML-centered set of studies: SysML appeared in 28 studies, Cameo/MagicDraw/CATIA Magic in 16, MATLAB/Simulink in 12, STK/GMAT/DRAMA orbit tools in 9, PLM/Teamcenter/Windchill/3DExperience in 9, OOSEM in 7, ModelCenter/MBSE Analyzer in 6, spreadsheets in 5, ParaMagic/ParaSolver/acausal parametrics in 5, and Capella/Arcadia in 4.  Less frequent but results-relevant toolchains included Papyrus/Eclipse for the EPS-specific open-source case \cite{paper-0026}, Gaphor/UML stereotypes for open-source preliminary-design formalization \cite{paper-0029}, docs-as-code/M30ML for SeaLion documentation and traceability \cite{paper-0037}, Dymola/Modelica in 3DExperience \cite{paper-0059}, and IDM-CIC/Simu-CIC/Opalis for electrical-architecture concurrent engineering \cite{paper-0053}.
+Tool and language classification showed a SysML-centered set of studies: SysML appeared in 28 studies, custom tools in 17, Cameo/MagicDraw/CATIA Magic in 14, MATLAB/Simulink and STK in 10 each, open-source packages in 9, ModelCenter and PLM/ALM tools in 6 each, Python in 5, Capella/Arcadia in 4, requirements tools in 4, and OpenMBEE in 3.  The high count for ``other'' tools in the controlled summary reflects named toolchains that were preserved as emergent codes rather than forced into loose categories.  Results-relevant toolchains included Papyrus/Eclipse for the EPS-specific open-source case \cite{paper-0026}, Gaphor/UML stereotypes for open-source preliminary-design formalization \cite{paper-0029}, docs-as-code/M30ML for SeaLion documentation and traceability \cite{paper-0037}, Dymola/Modelica in 3DExperience \cite{paper-0059}, and IDM-CIC/Simu-CIC/Opalis for electrical-architecture concurrent engineering \cite{paper-0053}.
 
 Toolchain use was usually reported as a means to connect requirements, architecture, analysis, and verification artifacts.  The strongest toolchain evidence came from executable or data-flow demonstrations, such as MagicDraw/Cameo--ModelCenter--STK--MATLAB integrations for RAX-style CubeSat analysis \cite{paper-0001,paper-0003}, Capella/ForPlan or Capella/open-source simulation coupling \cite{paper-0033,paper-0043}, and SysML/PLM/Dymola requirements-in-the-loop simulation \cite{paper-0059}.  Pure reference-model studies reported reusable structures and V\&V packages, but generally provided less executed analysis evidence \cite{paper-0015,paper-0077}.
 
 \subsection{Claimed outcomes and value-evidence strength}
 \label{sec:results-claims-evidence}
 
-We extracted 294 claim records.  Evidence confidence for those claims was classified as Unsupported ($n=45$), Weak ($n=152$), Moderate ($n=97$), and Strong ($n=0$); no claim met the criteria for strong evidence.  Outcome domains are multi-label; the 294 claims produced 907 claim-domain memberships.
+We extracted 270 claim records.  Evidence confidence for those claims was classified as Unsupported ($n=52$), Weak ($n=139$), Moderate ($n=77$), and Strong ($n=2$).  The two strong claims both came from a single concurrent-model-based CubeSat mission-design study that reported a quantitative comparison with a traditional feasibility-study process \cite{paper-0061}.  Outcome domains are multi-label and are now derived from controlled outcome codes only; the 270 claims produced 727 claim-domain memberships.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\linewidth]{figures/claim_evidence_by_outcome.pdf}
+\includegraphics[width=0.92\linewidth]{claim_evidence_by_outcome}
 \caption{Claim evidence by value-outcome domain.  Domains are multi-label, so counts exceed the number of unique claim records.}
 \label{fig:results-claim-evidence}
 \end{figure}
@@ -124,35 +124,34 @@ We extracted 294 claim records.  Evidence confidence for those claims was classi
 \toprule
 Outcome domain & Total & Unsup. & Weak & Mod. & Strong & Studies \\
 \midrule
-Decision support / analysis / trade-space / feasibility & 137 & 20 & 53 & 64 & 0 & 38 \\
-Traceability / consistency / requirements quality & 135 & 20 & 69 & 46 & 0 & 40 \\
-Reproducibility / reuse / openness & 109 & 22 & 70 & 17 & 0 & 36 \\
-Integrability / interoperability / lifecycle continuity & 96 & 12 & 53 & 31 & 0 & 38 \\
-Pre-physical V\&V / verification / validation / test & 93 & 19 & 39 & 35 & 0 & 36 \\
-Cost / schedule / effort / efficiency / automation & 85 & 19 & 33 & 33 & 0 & 37 \\
-Governance / ROI / project decisions & 84 & 15 & 42 & 27 & 0 & 35 \\
-Communication / collaboration / knowledge & 72 & 12 & 40 & 20 & 0 & 34 \\
-Reliability / mission assurance / risk & 56 & 21 & 29 & 6 & 0 & 28 \\
-Generality / scalability / tailoring & 39 & 6 & 29 & 4 & 0 & 29 \\
-Other / uncategorized value claim & 1 & 0 & 1 & 0 & 0 & 1 \\
+Traceability / consistency / requirements quality & 115 & 12 & 62 & 41 & 0 & 37 \\
+Integrability / interoperability / lifecycle continuity & 110 & 13 & 70 & 27 & 0 & 35 \\
+Reproducibility / reuse / openness & 86 & 22 & 56 & 8 & 0 & 35 \\
+Cost / schedule / effort / efficiency / automation & 85 & 23 & 35 & 25 & 2 & 33 \\
+Reliability / mission assurance / risk & 85 & 20 & 29 & 36 & 0 & 33 \\
+Decision support / analysis / trade-space / feasibility & 78 & 10 & 28 & 40 & 0 & 33 \\
+Generality / scalability / tailoring & 78 & 20 & 51 & 7 & 0 & 34 \\
+Communication / collaboration / knowledge & 58 & 14 & 38 & 6 & 0 & 34 \\
+Other / uncategorized value claim & 22 & 3 & 9 & 10 & 0 & 9 \\
+Governance / ROI / project decisions & 10 & 2 & 6 & 1 & 1 & 6 \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-The most frequent domains were decision support/analysis/trade-space/feasibility (137 memberships across 38 studies), traceability/consistency/requirements quality (135 across all 40 studies), reproducibility/reuse/openness (109 across 36), integrability/interoperability/lifecycle continuity (96 across 38), and pre-physical V\&V/test (93 across 36).  EPS-specific or power-relevant claims were concentrated in decision support (29 memberships), traceability/requirements quality (13), pre-physical V\&V (12), and governance/project decisions (10), while reliability/mission-assurance/risk had only 3 EPS-specific or power-relevant claim memberships.
+The most frequent domains were traceability/consistency/requirements quality (115 memberships across 37 studies), integrability/interoperability/lifecycle continuity (110 across 35), reproducibility/reuse/openness (86 across 35), and cost/schedule/effort/automation and reliability/mission-assurance/risk (85 each across 33 studies).  EPS-specific or power-relevant claims were concentrated in integrability/interoperability (62 memberships), traceability/requirements quality (61), decision support (58), cost/schedule/effort/automation (53), reproducibility/reuse (47), and reliability/mission assurance/risk (46).  The explicit ``other'' category reflects the open-coding policy: observations that did not fit controlled outcome labels were preserved rather than reclassified through keywords.
 
 Moderate evidence typically came from executed simulations, model-derived calculations, traceability artifacts, or case-study outputs.  Examples include the RAX model's energy/data interaction and solar-panel/battery sizing analyses \cite{paper-0001,paper-0003}, Papyrus/Java power-subsystem parameter-impact and requirement-fulfillment tables \cite{paper-0026}, power and SoC simulation against requirements in a PLM/Dymola workflow \cite{paper-0059}, worst-case battery survival simulation with a reported minimum state of charge in an electrical-architecture process \cite{paper-0053}, and positive mass/power margins from SysML parametrics \cite{paper-0080}.  Project-value metrics were rarer and case-specific, such as a one-month versus three-month feasibility-study comparison and lower estimated mission cost in one concurrent-design case \cite{paper-0061}, or the reported four-month preliminary-design cycle using Arcadia and weekly sprints \cite{paper-0078}.
 
-Unsupported and weak claims were common where papers asserted reduced cost, reduced schedule, improved reliability, improved learning, or greater reuse without a baseline, metric, reuse trial, stakeholder evaluation, integration test, or flight/operational evidence.  For example, the EPS-specific Papyrus study provided moderate evidence for traceability and requirement-constraint checking, but its cost/time savings remained a future quantitative-benefit study rather than an observed outcome \cite{paper-0026}.  Reliability claims were the least supported among the major outcome domains: 56 reliability/mission-assurance/risk memberships were coded, but only 6 were moderate and none were strong.
+Unsupported and weak claims were common where papers asserted reduced cost, reduced schedule, improved reliability, improved learning, or greater reuse without a baseline, metric, reuse trial, stakeholder evaluation, integration test, or flight/operational evidence.  For example, the EPS-specific Papyrus study provided moderate evidence for traceability and requirement-constraint checking, but its cost/time savings remained a future quantitative-benefit study rather than an observed outcome \cite{paper-0026}.  Reliability/mission-assurance/risk claims were more visible after controlled recoding than in the previous synthesis: 85 memberships were coded, with 36 moderate and none strong.  The two strong claims were not EPS-specific reliability claims; both concerned cost/schedule effects in a single concurrent-design feasibility comparison \cite{paper-0061}.
 
 \subsection{Verification and validation linkage}
 \label{sec:results-vv-linkage}
 
-For V\&V, each study could receive multiple linkage categories based on EPS-specific content, pre-physical verification mechanisms, integration evidence, and test-readiness evidence.  Requirements-to-model traceability or verification matrices appeared in 33 studies; parametric, budget, or constraint checks in 29; test cases, procedures, or V\&V activity packages in 29; EPS/power-specific pre-physical verification in 23; executable simulation or scenario analysis before build in 22; and external tool or data-flow coupling for V\&V in 19.  Seven studies had only generic or planned V\&V linkage, six had no explicit EPS-focused pre-physical V\&V, and four linked the model to physical, SIL/HIL, or integration-test readiness.
+For V\&V, each study could receive multiple linkage categories based on controlled EPS/V\&V artifact, pre-physical verification, and integration/test-readiness codes.  EPS/power-specific pre-physical verification appeared in 25 studies; parametric, budget, or constraint checks in 23; executable simulation or scenario analysis before build in 22; test cases, procedures, or V\&V activity packages in 21; requirements-to-model traceability or verification matrices in 19; and external tool or data-flow coupling for V\&V in 11.  Twelve studies had no explicit EPS-focused pre-physical V\&V, 10 linked the model to physical, SIL/HIL, or integration-test readiness, and 3 had only generic or planned V\&V linkage.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\linewidth]{figures/vv_linkage_counts.pdf}
+\includegraphics[width=0.92\linewidth]{vv_linkage_counts}
 \caption{Pre-physical V\&V linkage categories.  Categories are multi-label by study.}
 \label{fig:results-vv-linkage}
 \end{figure}
@@ -166,24 +165,24 @@ For V\&V, each study could receive multiple linkage categories based on EPS-spec
 \toprule
 V\&V linkage category & n \\
 \midrule
-Requirements-to-model traceability or verification matrix & 33 \\
-Parametric/budget/constraint checks & 29 \\
-Test cases/procedures/V\&V activity packages & 29 \\
-EPS/power-specific pre-physical verification & 23 \\
+EPS/power-specific pre-physical verification & 25 \\
+Parametric/budget/constraint checks & 23 \\
 Executable simulation or scenario analysis before build & 22 \\
-External tool or data-flow coupling for V\&V & 19 \\
-Generic/planned V\&V linkage only & 7 \\
-No explicit EPS-focused pre-physical V\&V & 6 \\
-Physical/SIL/HIL/integration-test readiness link & 4 \\
+Test cases/procedures/V\&V activity packages & 21 \\
+Requirements-to-model traceability or verification matrix & 19 \\
+No explicit EPS-focused pre-physical V\&V & 12 \\
+External tool or data-flow coupling for V\&V & 11 \\
+Physical/SIL/HIL/integration-test readiness link & 10 \\
+Generic/planned V\&V linkage only & 3 \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-Together, these categories show that V\&V was usually represented through planned verification packages, requirements traceability, parametric checks, and simulation.  Explicit links from the model to test execution or integration evidence were uncommon.
+Together, these categories show that V\&V was usually represented through EPS/power analysis, parametric checks, simulation, and planned or modeled test artifacts.  Explicit links from the model to test execution or integration evidence were still less common than pre-physical analysis, but the controlled recoding separated actual readiness links from generic V\&V language.
 
 Requirements traceability was usually represented through SysML satisfy/verify relations, verification matrices, or tool-generated traceability views.  In the EPS-specific case, requirement constraints and power-budget equations were extracted from Papyrus and evaluated by Java, producing respected/not-respected flags \cite{paper-0026}.  In academic nanosatellite project modeling, requirements were linked to ``Verified By'' test cases and behavior diagrams such as Bus System Activation and LEOP flow \cite{paper-0023}.  In the 3ColStar preliminary design, EPS continuous-power requirements were traced to physical components such as solar panels and batteries \cite{paper-0078}.  In the NSS-1 SysML case, verify relationships connected mass and power requirements to constraint blocks, and positive margins were used as verification evidence \cite{paper-0080}.
 
-Parametric and executable V\&V evidence was strongest when requirement checks were tied to simulation or budget outputs.  RAX/CubeSat studies executed mission scenarios and trade studies involving energy collection, battery capacity, solar-panel sizing, data storage, and downlink \cite{paper-0001,paper-0003,paper-0008}.  Later studies linked pre-physical V\&V to open-source model-to-analysis pipelines \cite{paper-0027,paper-0029,paper-0043}, PLM/Dymola requirements-in-the-loop simulation \cite{paper-0059}, and electrical-architecture energy-balance simulations before hardware development \cite{paper-0053}.  Test-case or automated-test evidence was more limited and often not EPS-specific, as in the requirements modeling/mapping matrix for CubeSat tests \cite{paper-0034} and the EIRSAT-1 communications verification model coupled to Python and ground-station hardware \cite{paper-0063}.  The small count for physical/SIL/HIL/integration-test readiness ($n=4$) shows that most V\&V linkage stopped at pre-physical analysis, simulated verification, or planned test artifacts rather than demonstrated hardware or integration testing.
+Parametric and executable V\&V evidence was strongest when requirement checks were tied to simulation or budget outputs.  RAX/CubeSat studies executed mission scenarios and trade studies involving energy collection, battery capacity, solar-panel sizing, data storage, and downlink \cite{paper-0001,paper-0003,paper-0008}.  Later studies linked pre-physical V\&V to open-source model-to-analysis pipelines \cite{paper-0027,paper-0029,paper-0043}, PLM/Dymola requirements-in-the-loop simulation \cite{paper-0059}, and electrical-architecture energy-balance simulations before hardware development \cite{paper-0053}.  Test-case or automated-test evidence was more limited and often not EPS-specific, as in the requirements modeling/mapping matrix for CubeSat tests \cite{paper-0034} and the EIRSAT-1 communications verification model coupled to Python and ground-station hardware \cite{paper-0063}.  The physical/SIL/HIL/integration-test readiness category ($n=10$) was broader than completed hardware testing: most linkage still stopped at readiness, planned integration, or partial software/hardware interfaces rather than closed-loop EPS acceptance evidence.
 
 \subsection{Gap mapping}
 \label{sec:results-gap-mapping}
@@ -192,7 +191,7 @@ Each study was mapped to five gap categories adapted from the broader space-MBSE
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\linewidth]{figures/gap_mapping_counts.pdf}
+\includegraphics[width=0.92\linewidth]{gap_mapping_counts}
 \caption{Gap-mapping counts for the extracted studies.}
 \label{fig:results-gap-mapping}
 \end{figure}
@@ -206,17 +205,18 @@ Each study was mapped to five gap categories adapted from the broader space-MBSE
 \toprule
 Gap & Evidence & Conceptual & Mentioned & Not addressed \\
 \midrule
-Practical implementation pathway & 20 & 20 & 0 & 0 \\
-Toolchain fragmentation/interoperability & 17 & 18 & 5 & 0 \\
-Lightweight/resource-constrained tailoring & 7 & 26 & 6 & 1 \\
-Governance/project deliverables/ROI/value & 1 & 20 & 19 & 0 \\
-NewSpace/agile/distributed/rapid iteration & 2 & 11 & 17 & 10 \\
+Practical implementation pathway & 29 & 11 & 0 & 0 \\
+Toolchain fragmentation/interoperability & 19 & 13 & 6 & 2 \\
+Lightweight/resource-constrained tailoring & 15 & 21 & 3 & 1 \\
+Governance/project deliverables/ROI/value & 7 & 20 & 13 & 0 \\
+NewSpace/agile/distributed/rapid iteration & 6 & 11 & 15 & 8 \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-Implementation pathways were the most consistently addressed gap: all 40 studies addressed the pathway at least conceptually, split evenly between evidence-backed and conceptual classifications.  Evidence-backed examples included concrete modeling/data-flow steps for EPS traceability \cite{paper-0026}, concurrent electrical-architecture simulation workflow \cite{paper-0053}, and Capella/Arcadia plus agile preliminary-design execution \cite{paper-0078}.  Toolchain fragmentation/interoperability was also frequently addressed, with 17 evidence-backed cases and 18 conceptual cases.  Evidence-backed toolchain examples included executable RAX integrations \cite{paper-0001,paper-0003}, Papyrus-to-Java EPS analysis \cite{paper-0026}, open-source model-to-simulation coupling \cite{paper-0043}, and model-to-test/tool integration in EIRSAT-1 \cite{paper-0063}.
+Implementation pathways were the most consistently addressed gap: all 40 studies addressed the pathway at least conceptually, with 29 evidence-backed and 11 conceptual classifications.  Evidence-backed examples included concrete modeling/data-flow steps for EPS traceability \cite{paper-0026}, concurrent electrical-architecture simulation workflow \cite{paper-0053}, and Capella/Arcadia plus agile preliminary-design execution \cite{paper-0078}.  Toolchain fragmentation/interoperability was also frequently addressed, with 19 evidence-backed cases, 13 conceptual cases, 6 mentioned-only cases, and 2 not-addressed cases.  Evidence-backed toolchain examples included executable RAX integrations \cite{paper-0001,paper-0003}, Papyrus-to-Java EPS analysis \cite{paper-0026}, open-source model-to-simulation coupling \cite{paper-0043}, and model-to-test/tool integration in EIRSAT-1 \cite{paper-0063}.
 
-Lightweight/resource-constrained tailoring was addressed with evidence in 7 studies, addressed conceptually in 26, mentioned only in 6, and not addressed in 1.  Evidence-backed tailoring appeared in studies with rapid analytical design-space exploration \cite{paper-0012}, academic project-management and design tailoring \cite{paper-0023}, open/concurrent preliminary-design tooling \cite{paper-0027}, docs-as-code for a university CubeSat \cite{paper-0037}, causal MBSE user evaluation \cite{paper-0046}, low-cost tradespace modeling \cite{paper-0054}, and agile distributed preliminary design \cite{paper-0078}.
+Lightweight/resource-constrained tailoring was addressed with evidence in 15 studies, addressed conceptually in 21, mentioned only in 3, and not addressed in 1.  Evidence-backed tailoring appeared in studies with rapid analytical design-space exploration \cite{paper-0012}, academic project-management and design tailoring \cite{paper-0023}, open/concurrent preliminary-design tooling \cite{paper-0027}, docs-as-code for a university CubeSat \cite{paper-0037}, causal MBSE user evaluation \cite{paper-0046}, low-cost tradespace modeling \cite{paper-0054}, and agile distributed preliminary design \cite{paper-0078}.
 
-Governance, project deliverables, ROI, and value linkage was the weakest gap category in the included studies: only one study was coded as addressed with evidence, 20 were conceptual, and 19 mentioned the issue only.  The evidence-backed case was the 3ColStar study, which reported Capella/Arcadia governance, weekly sprints, requirement/design traceability, and a four-month preliminary design cycle \cite{paper-0078}.  Other studies often reported potentially relevant artifacts, such as PBS/WBS/CBS derivation \cite{paper-0023} or cost/schedule estimates in concurrent design \cite{paper-0061}, but the coded gap evidence did not rise to a broader governance/ROI demonstration.  NewSpace/agile/distributed/rapid-iteration evidence was also limited, with 2 evidence-backed studies, 11 conceptual, 17 mentioned-only, and 10 not addressed.
+Governance, project deliverables, ROI, and value linkage remained weaker than implementation-pathway and toolchain evidence, but the controlled recoding identified 7 evidence-backed studies, 20 conceptual studies, and 13 mentioned-only studies.  Evidence-backed examples included the 3ColStar study, which reported Capella/Arcadia governance, weekly sprints, requirement/design traceability, and a four-month preliminary design cycle \cite{paper-0078}, as well as studies linking models to project deliverables, cost/schedule comparisons, or requirements-in-loop decision artifacts \cite{paper-0023,paper-0059,paper-0061}.  NewSpace/agile/distributed/rapid-iteration evidence was also limited, with 6 evidence-backed studies, 11 conceptual, 15 mentioned-only, and 8 not addressed.
+

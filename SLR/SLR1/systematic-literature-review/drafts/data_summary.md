@@ -18,15 +18,15 @@ Protocol RQs read from `protocol.md`: RQ1: How can nanosatellite missions and EP
 | Core studies | 21 |
 | Supporting studies | 19 |
 | Publication year range | 2013--2025 |
-| Claim records | 294 |
-| Claim-domain memberships | 907 |
-| Top value claims (Moderate/Strong) | 97 |
-| Extraction confidence: high | 26 |
-| Extraction confidence: medium | 14 |
+| Claim records | 270 |
+| Claim-domain memberships | 727 |
+| Top value claims (Moderate/Strong) | 79 |
+| Extraction confidence: high | 29 |
+| Extraction confidence: medium | 11 |
 
-Claim evidence confidence counts: Unsupported=45, Weak=152, Moderate=97, Strong=0.
-Quality score counts: 5.0=2, 5.5=7, 6.0=8, 6.5=14, 7.0=7, 7.5=2.
-RQ relevance counts: RQ1: partial=29, high=11; RQ2: partial=40; RQ3: partial=28, none=8, high=4.
+Claim evidence confidence counts: Unsupported=52, Weak=139, Moderate=77, Strong=2.
+Quality score counts: 5.0=3, 5.5=6, 6.0=13, 6.5=9, 7.0=7, 7.5=2.
+RQ relevance counts: RQ1: partial=16, high=24; RQ2: partial=37, high=3; RQ3: partial=29, none=9, high=2.
 
 ## PRISMA/scoping-review reuse
 
@@ -37,65 +37,64 @@ Scoping CSV inputs read: scoping-review/data/category_counts.csv, scoping-review
 
 | EPS relevance | Count |
 |---|---|
-| power-budget/electrical-architecture | 23 |
-| EPS-adjacent | 8 |
-| system-level only | 7 |
-| EPS-specific | 1 |
-| not EPS-relevant | 1 |
+| power-budget/electrical-architecture | 19 |
+| EPS-adjacent | 13 |
+| system-level only | 4 |
+| EPS-specific | 2 |
+| not EPS-relevant | 2 |
 
 ## Approach-classification counts
 
 | Approach classification | Count |
 |---|---|
-| Integrated MBSE/digital engineering | 19 |
-| Enhanced MBSE | 13 |
+| Extended MBSE | 17 |
+| Enhanced MBSE | 11 |
+| Integrated MBSE/digital engineering | 6 |
 | Pure MBSE | 6 |
-| Extended MBSE | 2 |
 
 ## Claim evidence by value-outcome domain
 
 | Outcome domain | Total | Unsupported | Weak | Moderate | Strong | Studies | EPS/power claims |
 |---|---|---|---|---|---|---|---|
-| Decision support / analysis / trade-space / feasibility | 137 | 20 | 53 | 64 | 0 | 38 | 29 |
-| Traceability / consistency / requirements quality | 135 | 20 | 69 | 46 | 0 | 40 | 13 |
-| Reproducibility / reuse / openness | 109 | 22 | 70 | 17 | 0 | 36 | 7 |
-| Integrability / interoperability / lifecycle continuity | 96 | 12 | 53 | 31 | 0 | 38 | 4 |
-| Pre-physical V&V / verification / validation / test | 93 | 19 | 39 | 35 | 0 | 36 | 12 |
-| Cost / schedule / effort / efficiency / automation | 85 | 19 | 33 | 33 | 0 | 37 | 6 |
-| Governance / ROI / project decisions | 84 | 15 | 42 | 27 | 0 | 35 | 10 |
-| Communication / collaboration / knowledge | 72 | 12 | 40 | 20 | 0 | 34 | 6 |
-| Reliability / mission assurance / risk | 56 | 21 | 29 | 6 | 0 | 28 | 3 |
-| Generality / scalability / tailoring | 39 | 6 | 29 | 4 | 0 | 29 | 2 |
-| Other / uncategorized value claim | 1 | 0 | 1 | 0 | 0 | 1 | 0 |
+| Traceability / consistency / requirements quality | 115 | 12 | 62 | 41 | 0 | 37 | 61 |
+| Integrability / interoperability / lifecycle continuity | 110 | 13 | 70 | 27 | 0 | 35 | 62 |
+| Reproducibility / reuse / openness | 86 | 22 | 56 | 8 | 0 | 35 | 47 |
+| Cost / schedule / effort / efficiency / automation | 85 | 23 | 35 | 25 | 2 | 33 | 53 |
+| Reliability / mission assurance / risk | 85 | 20 | 29 | 36 | 0 | 33 | 46 |
+| Decision support / analysis / trade-space / feasibility | 78 | 10 | 28 | 40 | 0 | 33 | 58 |
+| Generality / scalability / tailoring | 78 | 20 | 51 | 7 | 0 | 34 | 43 |
+| Communication / collaboration / knowledge | 58 | 14 | 38 | 6 | 0 | 34 | 31 |
+| Other / uncategorized value claim | 22 | 3 | 9 | 10 | 0 | 9 | 3 |
+| Governance / ROI / project decisions | 10 | 2 | 6 | 1 | 1 | 6 | 5 |
 
 ## Pre-physical V&V linkage counts
 
 | V&V linkage category | Count |
 |---|---|
-| Requirements-to-model traceability or verification matrix | 33 |
-| Parametric/budget/constraint checks | 29 |
-| Test cases/procedures/V&V activity packages | 29 |
-| EPS/power-specific pre-physical verification | 23 |
+| EPS/power-specific pre-physical verification | 25 |
+| Parametric/budget/constraint checks | 23 |
 | Executable simulation or scenario analysis before build | 22 |
-| External tool or data-flow coupling for V&V | 19 |
-| Generic/planned V&V linkage only | 7 |
-| No explicit EPS-focused pre-physical V&V | 6 |
-| Physical/SIL/HIL/integration-test readiness link | 4 |
+| Test cases/procedures/V&V activity packages | 21 |
+| Requirements-to-model traceability or verification matrix | 19 |
+| No explicit EPS-focused pre-physical V&V | 12 |
+| External tool or data-flow coupling for V&V | 11 |
+| Physical/SIL/HIL/integration-test readiness link | 10 |
+| Generic/planned V&V linkage only | 3 |
 
 ## Gap mapping counts
 
 | Gap | Evidence | Conceptual | Mentioned | Not addressed |
 |---|---|---|---|---|
-| Practical implementation pathway | 20 | 20 | 0 | 0 |
-| Toolchain fragmentation/interoperability | 17 | 18 | 5 | 0 |
-| Lightweight/resource-constrained tailoring | 7 | 26 | 6 | 1 |
-| Governance/project deliverables/ROI/value | 1 | 20 | 19 | 0 |
-| NewSpace/agile/distributed/rapid iteration | 2 | 11 | 17 | 10 |
+| Practical implementation pathway | 29 | 11 | 0 | 0 |
+| Toolchain fragmentation/interoperability | 19 | 13 | 6 | 2 |
+| Lightweight/resource-constrained tailoring | 15 | 21 | 3 | 1 |
+| Governance/project deliverables/ROI/value | 7 | 20 | 13 | 0 |
+| NewSpace/agile/distributed/rapid iteration | 6 | 11 | 15 | 8 |
 
 ## Assumptions
 
-- `claim_evidence_by_outcome.csv` uses deterministic multi-label keyword mapping from each claim's `outcome_category`, claim text, mechanism, and linked artifact/process. Therefore claim-domain memberships exceed the 294 unique claim records.
-- Evidence strength is taken from the standardized `evidence_confidence` field. No claim was coded as `Strong`; `top_value_claims.csv` therefore contains all `Moderate` claims (plus any future `Strong` claims if extractions change).
-- `vv_linkage_counts.csv` is multi-label at the study level and is derived from `eps_verification_specific` artifacts, pre-physical mechanisms, integration evidence, and integration/test-readiness text.
+- `claim_evidence_by_outcome.csv` uses deterministic multi-label mapping from controlled `outcome_category` codes only; no loose keyword categorization is applied. Claim-domain memberships can exceed the 270 unique claim records because some controlled outcome codes map to more than one synthesis domain.
+- Evidence strength is taken from the standardized `evidence_confidence`/`evidence_confidence_rating` field. `top_value_claims.csv` contains all Moderate and Strong claims.
+- `vv_linkage_counts.csv` is multi-label at the study level and is derived from controlled `eps_verification_specific` artifact, pre-physical mechanism, and integration/test-readiness codes.
 - Gap labels and order follow the five Buruso Table 5-inspired gap fields already coded in the per-study extraction JSON files.
 - PRISMA counts and the base PRISMA graphic are reused from the scoping review without modifying scoping-review source/output files.

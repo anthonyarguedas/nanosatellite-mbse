@@ -3,521 +3,1389 @@
   "tier": "supporting",
   "year": 2020,
   "quality_checklist": {
-    "scale": "No=0; Insufficiently=0.5; Yes=1",
-    "items": [
-      {
-        "id": "credible_venue",
-        "question": "Was the research published in a credible venue?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The paper is presented as an IFIP International Conference on Product Lifecycle Management contribution with Springer Nature proceedings context.",
-        "evidence": [
-          "To cite this version: \"17th IFIP International Conference on Product Lifecycle Management (PLM), Jul 2020, Rapperswil, Switzerland. pp.593-603\".",
-          "Front matter: \"submitted to an IFIP conference proceedings or other IFIP publication by Springer Nature\"."
-        ]
-      },
-      {
-        "id": "limitations_scope",
-        "question": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
-        "score": 1,
-        "rating": "yes",
-        "rationale": "The authors explicitly bound the analysis to unidirectional conceptual-to-detailed design transfer and describe the analysis as an initial step with future extensions.",
-        "evidence": [
-          "Section 3: \"we only consider the transfer from conceptual design to detailed design\".",
-          "Section 5: \"The limited but revealing analysis is only a first step\".",
-          "Section 5: \"For future work, we see the extension to other product development and lifecycle phases\"."
-        ]
-      },
-      {
-        "id": "mission_context_lifecycle",
-        "question": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The lifecycle stage and illustrative CubeSat Earth-observation mission are clear, but the mission is simplified and lacks form factor, operational, project, and EPS details.",
-        "evidence": [
-          "Section 4: \"we chose a small satellite\" and \"observe the earth surface and transmit the recorded images to the ground\".",
-          "Section 4/Fig. 3: \"The satellite consists of a number of subsystems, namely an Optical Instrument, a Power System, a Structure, a Communications System, a Thermal Control System, and an Attitude Determination and Control System (ADCS).\"",
-          "Section 5: \"unidirectional data flow from conceptual design to detailed design\"."
-        ]
-      },
-      {
-        "id": "mbse_replication_clarity",
-        "question": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper names OPM, CPM, STEP AP242, DSM, and SFA and shows illustrative artifacts, but it does not provide the full DSM rationale, source model files, or a procedural recipe sufficient for full replication.",
-        "evidence": [
-          "Section 2.1: \"OPM provides both graphical (Object-Process Diagram) and linguistic (Object-Process Language) representations\".",
-          "Section 3: \"In total, 23 entities have been chosen: 3 for the OPM model, 10 for the CPM model, and 10 for the STEP model.\"",
-          "Section 4: \"a spreadsheet of all entity and attribute information was created in the STEP analyzer and viewer (SFA) tool\"."
-        ]
-      },
-      {
-        "id": "outcomes_linked_to_mbse",
-        "question": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "Data-flow, heritage, and integration claims are linked to an MBSE/PLM digital chain and entity mappings, but many value claims are expressed conceptually rather than demonstrated in project use.",
-        "evidence": [
-          "Section 2: \"A well-integrated chain between MBSE and PLM is essential to facilitate the data flow from the conceptual design to the detailed design.\"",
-          "Section 2: \"Such a chain would allow a product design team to store the design heritage and keep track of how the systems architecture transforms through the design process.\"",
-          "Section 3: \"we use DSM to map the core entities from conceptual to detail design. Doing this, we identify the overlaps and gaps in the digital engineering information exchange\"."
-        ]
-      },
-      {
-        "id": "evidence_for_claimed_outcomes",
-        "question": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper provides DSM mapping, appearance-frequency analysis, and STEP entity counts as analytical evidence for interoperability gaps, but no baseline comparison, stakeholder evaluation, executable simulation, integration test, or flight/operational evidence.",
-        "evidence": [
-          "Section 3/Fig. 2: \"The first category contains the physical and informational entities. The entities of this category are the most frequently appearing ones\".",
-          "Section 3/Fig. 2: \"We have not found any correspondence of this entity with other entities in Fig. 1.\"",
-          "Table 1: \"Product/part\" count 69, \"Geometry\" count 86229, and \"Action\"/\"Process plan\" count 0."
-        ]
-      },
-      {
-        "id": "traceability_to_model_artifacts",
-        "question": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The central traceability is entity correspondence among OPM, CPM, and STEP artifacts, including a CPM specification relationship, but requirements, verification, validation, and lifecycle gates are not traced through the models.",
-        "evidence": [
-          "Section 3: \"The cells at the intersection of different rows and columns indicate that two entities are corresponding fully (denoted by F) or partially (denoted by P).\"",
-          "Fig. 5 description: \"Artifact: Thermal Control System,\" linked to \"Specification: Thermal Control System Specification\" via a \"satisfies\" relationship.",
-          "Section 4: \"CPM does not allow the description of \"states\"\"."
-        ]
-      },
-      {
-        "id": "reproducibility_toolchain_continuity",
-        "question": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
-        "score": 0.5,
-        "rating": "insufficiently",
-        "rationale": "The paper reports standards and a STEP analyzer/viewer tool and includes counts, but it does not make the CubeSat models, STEP file, or DSM data package available.",
-        "evidence": [
-          "Section 2.1: OPM is \"standardized in ISO 19450\".",
-          "Section 2.3: STEP aims \"to exchange and interoperate product data\".",
-          "Reference 18 lists \"https://www.nist.gov/services-resources/software/step-file-analyzer-and-viewer\"."
-        ]
-      }
-    ],
-    "total_score": 5.0,
-    "max_score": 8,
-    "normalized_score": 0.625,
-    "overall_rationale": "Credible venue and clear scope support quality, and the OPM/CPM/STEP comparison gives useful analytical evidence. However, the CubeSat case is illustrative, not EPS-specific, and lacks model availability, empirical validation, verification integration, or project outcome evidence."
-  },
-  "bibliographic_review_management": {
-    "extraction_file_path": "extractions/paper-0024.json",
-    "status_rationale": "Retained as supporting because it analyzes MBSE/PLM integration and illustrates the data flow with a CubeSat mission, but it is not EPS-specific and does not address nanosatellite EPS verification.",
-    "citation": "Menshenin, Y., Knoll, D., Brovar, Y., and Fortin, C. (2020). Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design. 17th IFIP International Conference on Product Lifecycle Management (PLM), Rapperswil, Switzerland, pp. 593-603. DOI: 10.1007/978-3-030-62807-9_47.",
-    "title": "Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design",
-    "authors": [
-      "Yaroslav Menshenin",
-      "Dominik Knoll",
-      "Yana Brovar",
-      "Clement Fortin"
-    ],
-    "venue": "17th IFIP International Conference on Product Lifecycle Management (PLM), Rapperswil, Switzerland",
-    "doi_or_url": "10.1007/978-3-030-62807-9_47; https://inria.hal.science/hal-03753120v1",
-    "publisher": "Springer Nature / IFIP",
-    "venue_type": "conference proceedings",
-    "source_database_or_route": [
-      "scopus",
-      "semantic_scholar abstract_enrichment",
-      "HAL open-access manuscript"
-    ],
-    "research_questions_addressed": {
-      "RQ1": {
-        "relevance": "partial",
-        "rationale": "The paper shows general conceptual modeling of a CubeSat mission using OPM objects, processes, and states, but it does not model EPS behavior beyond naming a Power System subsystem."
-      },
-      "RQ2": {
-        "relevance": "partial",
-        "rationale": "It claims MBSE/PLM integrability outcomes such as data-flow continuity and design-heritage tracking, but provides no EPS-specific reliability or reproducibility outcomes."
-      },
-      "RQ3": {
-        "relevance": "none",
-        "rationale": "No EPS verification procedure or model-integrated verification artifact is presented; verification is only mentioned generically in a SysML background sentence."
-      }
+    "credible_venue": {
+      "label": "Was the research published in a credible venue?",
+      "numeric_score": 1,
+      "rationale": "IFIP PLM conference proceedings paper with Springer DOI/proceedings provenance.",
+      "evidence": [
+        "Front matter: 17th IFIP International Conference on Product Lifecycle Management (PLM), Jul 2020, Rapperswil, Switzerland. pp.593-603.",
+        "Front matter: submitted to an IFIP conference proceedings or other IFIP publication by Springer Nature."
+      ],
+      "confidence": "high"
     },
-    "lineage_overlap_notes": "The paper cites prior CubeSat MBSE work as background, but no other papers or previous extractions were consulted for this extraction."
+    "limitations_discussed": {
+      "label": "Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?",
+      "numeric_score": 1,
+      "rationale": "Authors explicitly state scope boundaries and future work.",
+      "evidence": [
+        "Section 3: we only consider the transfer from conceptual design to detailed design.",
+        "Section 5: The limited but revealing analysis is only a first step.",
+        "Section 5: Future work will extend to other product development and lifecycle phases, other entities, and relationships."
+      ],
+      "confidence": "high"
+    },
+    "context_described": {
+      "label": "Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?",
+      "numeric_score": 0.5,
+      "rationale": "The paper gives a generic CubeSat/small-satellite Earth-observation example and conceptual-to-detailed lifecycle focus, but not mission form factor, real mission name, project maturity, or organizational constraints.",
+      "evidence": [
+        "Section 4: As an example of a technical system, we chose a small satellite.",
+        "Section 4: The mission ... is to observe the earth surface and transmit the recorded images to the ground.",
+        "Figure 3 caption: OPM representation of CubeSat mission."
+      ],
+      "confidence": "medium"
+    },
+    "mbse_details_replicable": {
+      "label": "Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?",
+      "numeric_score": 0.5,
+      "rationale": "OPM/CPM/STEP, DSM mapping, SFA, figures, and entity counts support comparison, but model files, scripts, and detailed mapping criteria are absent.",
+      "evidence": [
+        "Section 3: In total, 23 entities have been chosen.",
+        "Section 4: a spreadsheet of all entity and attribute information was created in the STEP analyzer and viewer (SFA) tool.",
+        "Table 1 reports CubeSat entity information of STEP 242 file."
+      ],
+      "confidence": "medium"
+    },
+    "outcomes_linked_to_mbse": {
+      "label": "Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?",
+      "numeric_score": 1,
+      "rationale": "Claims are tied to MBSE/PLM integration, OPM/CPM/STEP constructs, and DSM entity correspondences.",
+      "evidence": [
+        "Abstract: full-scale integration into PLM would allow better data flow from conceptual design to detailed design.",
+        "Section 2: an integrated chain would store design heritage and keep track of architecture transformations.",
+        "Section 3: DSM maps core entities from conceptual to detail design."
+      ],
+      "confidence": "high"
+    },
+    "evidence_for_outcomes": {
+      "label": "Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?",
+      "numeric_score": 0.5,
+      "rationale": "Evidence is conceptual/illustrative, with frequency percentages and STEP entity counts, but no baseline, outcome metric, stakeholder evaluation, integration test, or flight evidence.",
+      "evidence": [
+        "Figure 2 description: Object 80%, Process 25%, State 0%, Geometry 60%.",
+        "Table 1: Geometry count 86229; Feature definition, Material, Product specification, Action, and Process plan are 0."
+      ],
+      "confidence": "medium"
+    },
+    "traceability_reported": {
+      "label": "Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?",
+      "numeric_score": 0.5,
+      "rationale": "Cross-model correspondences and a CPM satisfies relation are shown, but no formal requirements/V&V/gate traceability artifact is reported.",
+      "evidence": [
+        "Section 2: store the design heritage and keep track of how the systems architecture transforms.",
+        "Figure 5 description: Thermal Control System linked to Specification via a satisfies relationship.",
+        "No verification matrix, requirements trace table, or lifecycle gate trace is reported."
+      ],
+      "confidence": "medium"
+    },
+    "reproducibility_toolchain_reported": {
+      "label": "Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?",
+      "numeric_score": 0.5,
+      "rationale": "Standards/tools and SFA URL are named, but the actual OPM/CPM/STEP models and DSM data are unavailable.",
+      "evidence": [
+        "Section 2.3 describes STEP as a product data exchange/interoperability standard.",
+        "Section 4 reports SFA use.",
+        "Reference 18 gives the NIST SFA URL; no model-data availability statement is reported."
+      ],
+      "confidence": "medium"
+    }
   },
-  "study_context_population": {
-    "mission_platform": "Small satellite / CubeSat used as an illustrative Earth-observation mission example",
-    "size_form_factor": "CubeSat; exact unit size or physical form factor not reported",
-    "mission_name": "not reported",
-    "mission_domain": "Earth observation, image recording, image downlink, and ground processing",
-    "organization_type": "Academic/research institute authors; project ownership not reported",
-    "project_maturity": "Illustrative simplified modeling example, not reported as a flight or development project",
-    "lifecycle_stage_addressed": "Conceptual design to detailed design, with unidirectional downstream data flow",
-    "development_context": "Analysis of MBSE/PLM integration using OPM, CPM, STEP AP242, and DSM; CubeSat mission and thermal control system serve as examples",
-    "eps_relevance": "system-level only",
-    "model_maturity": "Conceptual OPM diagrams, CPM representation, and simplified STEP AP242 entity-count analysis; no validated or operational model reported"
+  "structured_code_summary": {
+    "quality_checklist.credible_venue": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Credible IFIP/Springer conference proceedings metadata is present.",
+      "evidence": [
+        {
+          "quote": "17th IFIP International Conference on Product Lifecycle Management; DOI 10.1007/978-3-030-62807-9_47.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.limitations_discussed": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Scope and future-work limitations are explicit.",
+      "evidence": [
+        {
+          "quote": "Section 3: only transfer from conceptual design to detailed design.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 5: limited but revealing analysis is only a first step.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.context_described": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Generic small-satellite/CubeSat EO context and lifecycle are given, but project details are sparse.",
+      "evidence": [
+        {
+          "quote": "Section 4 small satellite Earth-observation example; Figure 3 CubeSat mission.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.mbse_details_replicable": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Methods/artifacts are named, but full model assets and precise mapping data are absent.",
+      "evidence": [
+        {
+          "quote": "23 OPM/CPM/STEP entities; SFA spreadsheet; Table 1 STEP counts.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.outcomes_linked_to_mbse": {
+      "values": [
+        "Yes"
+      ],
+      "status": "coded",
+      "rationale": "Benefits and gaps are linked to MBSE/PLM artifacts and data-flow mapping.",
+      "evidence": [
+        {
+          "quote": "Abstract better data flow via MBSE/PLM integration; Section 3 DSM entity mapping.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "quality_checklist.evidence_for_outcomes": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Evidence is illustrative and non-comparative.",
+      "evidence": [
+        {
+          "quote": "Figure 2 entity frequencies; Table 1 STEP entity counts; no baseline/evaluation.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.traceability_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Design heritage/correspondences are discussed, but no formal traceability chain is reported.",
+      "evidence": [
+        {
+          "quote": "Section 2 design heritage quote; Figure 5 satisfies relation; no trace matrix.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "quality_checklist.reproducibility_toolchain_reported": {
+      "values": [
+        "Insufficiently"
+      ],
+      "status": "coded",
+      "rationale": "Tool/standard names are reported but not model files/scripts.",
+      "evidence": [
+        {
+          "quote": "SFA tool URL reported; no OPM/CPM/STEP model file availability statement.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "bibliographic_review_management.tier_status": {
+      "values": [
+        "supporting"
+      ],
+      "status": "coded",
+      "rationale": "Corpus metadata lists supporting; paper is relevant to CubeSat MBSE/PLM integration but not core EPS verification.",
+      "evidence": [
+        {
+          "quote": "Prompt metadata screening_tier=supporting; Section 4 CubeSat example.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "bibliographic_review_management.rq1_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "General CubeSat mission/subsystem modeling and reuse of data-flow method are relevant, but no EPS/reference model with minimal behavior.",
+      "evidence": [
+        {
+          "quote": "Figures 3-5 OPM/CPM CubeSat/thermal representations.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "bibliographic_review_management.rq2_relevance": {
+      "values": [
+        "partial"
+      ],
+      "status": "coded",
+      "rationale": "Integrability/lifecycle-continuity claims are relevant, but not EPS-specific reliability/reproducibility/integrability outcomes.",
+      "evidence": [
+        {
+          "quote": "Abstract better data flow; Section 5 integration difficulty due to time/space representation.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "bibliographic_review_management.rq3_relevance": {
+      "values": [
+        "none"
+      ],
+      "status": "coded",
+      "rationale": "No EPS verification model or verification procedure integration is presented.",
+      "evidence": [
+        {
+          "quote": "No verification matrix, test cases, simulation checks, or EPS model are reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.lifecycle_stage_addressed": {
+      "values": [
+        "concept/pre-Phase A",
+        "CDR"
+      ],
+      "status": "coded",
+      "rationale": "The paper explicitly spans conceptual design to detailed design; formal gates are not named, so CDR mapping is approximate.",
+      "evidence": [
+        {
+          "quote": "Title/abstract: From Conceptual Design to Detailed Design.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "study_context_population.development_context": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No mission development team or process context is described.",
+      "evidence": [
+        {
+          "quote": "Completed extraction found no academic/student, agency, industry, agile, distributed, or resource-constrained mission context for the case.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.eps_relevance": {
+      "values": [
+        "not EPS-relevant"
+      ],
+      "status": "coded",
+      "rationale": "Power System is only a top-level box; detailed model is thermal-control and no EPS elements are modeled.",
+      "evidence": [
+        {
+          "quote": "Figure 3 lists Power System; Section 4 zooms in on Thermal Control System; Figures 4-5 are thermal.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "study_context_population.model_maturity": {
+      "values": [
+        "conceptual framework",
+        "prototype demonstration"
+      ],
+      "status": "coded",
+      "rationale": "Conceptual data-model analysis with an illustrative CubeSat demonstration; not project-applied or validated.",
+      "evidence": [
+        {
+          "quote": "Section 3 DSM approach; Section 4 illustrative CubeSat representations.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.modeling_scope": {
+      "values": [
+        "mission",
+        "system",
+        "subsystem",
+        "architecture",
+        "behavior",
+        "requirements",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mission/system/subsystem structure, behavior/function/state, and specification/requirement entities are discussed within an MBSE/PLM data-model integration scope.",
+      "evidence": [
+        {
+          "quote": "Figure 3 CubeSat mission/subsystems; Figure 4 thermal states/processes; Figure 5 specification/function/behavior; OPM-CPM-STEP data flow.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "mbse_objective_scope_artifacts.model_artifacts_used": {
+      "values": [
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Artifacts are OPM diagrams, CPM representation, DSM matrix/frequency chart, and STEP AP242 entity-count table, which are not enumerated labels.",
+      "evidence": [
+        {
+          "quote": "Figures 1, 3, 4, 5 and Table 1.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "method guidance"
+      ],
+      "status": "coded",
+      "rationale": "Reusable contribution is a DSM-based entity-mapping method, not a reusable package/template.",
+      "evidence": [
+        {
+          "quote": "Section 3: extracting entities and mapping them through DSM-based methods.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.approach_classification": {
+      "values": [
+        "Extended MBSE"
+      ],
+      "status": "coded",
+      "rationale": "Connects MBSE conceptual models to PLM/detailed design across lifecycle domains, without a fully integrated environment.",
+      "evidence": [
+        {
+          "quote": "OPM, CPM, and STEP chain from conceptual to detailed design.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.tailoring_rationale": {
+      "values": [
+        "available tools"
+      ],
+      "status": "coded",
+      "rationale": "Model choices are justified by standards/wide use such as ISO 19450 OPM and STEP/AP242 in PLM.",
+      "evidence": [
+        {
+          "quote": "Section 2: OPM standardized in ISO 19450; STEP used extensively in current PLM systems.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "implementation_pathway_tailoring.adoption_guidance": {
+      "values": [
+        "partial guidance"
+      ],
+      "status": "coded",
+      "rationale": "Provides analysis steps but no complete adoption playbook.",
+      "evidence": [
+        {
+          "quote": "Section 3 lists extract entities, build DSM, map correspondences, analyze frequencies.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+      "values": [
+        "PLM/ALM tools",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Central tools/methods are PLM plus non-enumerated OPM, CPM, STEP/AP242, SFA, and DSM.",
+      "evidence": [
+        {
+          "quote": "Abstract lists OPM, CPM, STEP; Section 4 uses SFA.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+      "values": [
+        "import/export",
+        "spreadsheets"
+      ],
+      "status": "coded",
+      "rationale": "STEP is described as a product-data exchange mechanism and SFA exports entity/attribute information to a spreadsheet; DSM mapping is an analytical correspondence method rather than an automated interoperability mechanism.",
+      "evidence": [
+        {
+          "quote": "Section 2.3: STEP aims to exchange and interoperate product data.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 4: a spreadsheet of all entity and attribute information was created in the STEP analyzer and viewer (SFA) tool.",
+          "location": "not specified"
+        },
+        {
+          "quote": "Section 3: DSM-based mapping identifies correspondences but no API/plugin/transformation is reported.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+      "values": [
+        "missing interfaces"
+      ],
+      "status": "coded",
+      "rationale": "Authors identify semantic representation gaps, especially missing state/time support in PLM.",
+      "evidence": [
+        {
+          "quote": "Major barriers remain between MBSE and PLM digital chain; no state correspondence; PLM leaves time implicit.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.eps_elements_modeled": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "Not EPS-focused; no EPS elements are modeled.",
+      "evidence": [
+        {
+          "quote": "Power System only appears as a high-level subsystem; detailed example is thermal-control.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.verification_validation_artifacts": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "No model-integrated verification or validation artifacts are reported.",
+      "evidence": [
+        {
+          "quote": "No verification matrix, test case/procedure, acceptance criteria, checks, SIL/HIL, or automated tests.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.pre_physical_development_verification_mechanism": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "No pre-physical verification mechanism is reported.",
+      "evidence": [
+        {
+          "quote": "No requirements-in-the-loop, simulation-in-the-loop, parametric checks, model checking, trade-study verification, or virtual integration.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.integration_test_readiness": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "No links to integration/test/operations are reported.",
+      "evidence": [
+        {
+          "quote": "Section 4 only reports representations and STEP counts.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+      "values": [
+        "integrability/interoperability",
+        "traceability",
+        "consistency",
+        "completeness",
+        "decision support",
+        "lifecycle continuity"
+      ],
+      "status": "coded",
+      "rationale": "Claims concern data-flow integration, design heritage, cross-model gap diagnosis, and lifecycle continuity.",
+      "evidence": [
+        {
+          "quote": "Abstract better data flow; Section 2 design heritage; Section 5 representation gap.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+      "values": [
+        "nanosatellite system-level",
+        "generic MBSE"
+      ],
+      "status": "coded",
+      "rationale": "Claims are mostly generic MBSE/PLM, with CubeSat illustration giving system-level nanosatellite relevance.",
+      "evidence": [
+        {
+          "quote": "Section 4 CubeSat example; introduction/abstract generic MBSE/PLM framing.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+      "values": [
+        "artifact traceability",
+        "tool integration",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "Mechanisms include artifact/design-heritage traceability, MBSE/PLM tool/data integration, and DSM/semantic entity mapping as other.",
+      "evidence": [
+        {
+          "quote": "Section 2 design heritage; Section 3 DSM maps core entities.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+      "values": [
+        "concept/pre-Phase A",
+        "CDR"
+      ],
+      "status": "coded",
+      "rationale": "Claims apply to conceptual-to-detailed design; formal gates are not named.",
+      "evidence": [
+        {
+          "quote": "Title/abstract: conceptual design to detailed design.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+      "values": [
+        "Assertion only / no evidence",
+        "Illustrative example or conceptual argument",
+        "Single case-study demonstration",
+        "Quantitative metric without baseline"
+      ],
+      "status": "coded",
+      "rationale": "Evidence includes asserted benefits, conceptual argument, one illustrative CubeSat case, and entity frequencies/counts without comparator.",
+      "evidence": [
+        {
+          "quote": "Section 4 CubeSat illustration; Figure 2 percentages; Table 1 counts.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+      "values": [
+        "trace links",
+        "other"
+      ],
+      "status": "coded",
+      "rationale": "DSM correspondence cells are trace/correspondence links; entity appearance percentages and STEP counts are other metrics.",
+      "evidence": [
+        {
+          "quote": "DSM cells denote full/partial correspondence; Figure 2 and Table 1 report counts/percentages.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No comparator/baseline is reported for outcomes.",
+      "evidence": [
+        {
+          "quote": "No document-centric, manual-analysis, previous-mission, or alternative-toolchain comparison found.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+      "values": [
+        "Unsupported",
+        "Weak",
+        "Moderate"
+      ],
+      "status": "coded",
+      "rationale": "Asserted benefits are unsupported/weak; representation-gap claims are moderately supported by mapping and counts but not independently validated.",
+      "evidence": [
+        {
+          "quote": "Figure 2/Table 1 support gap claims; benefits lack outcome evaluation.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "governance_roi_project_decision_linkage.model_governance_strategy": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No model ownership, change control, review, quality criteria, or naming/versioning conventions are reported.",
+      "evidence": [
+        {
+          "quote": "Completed extraction found no model governance strategy.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "No ROI/value evidence is reported.",
+      "evidence": [
+        {
+          "quote": "No adoption cost, training effort, saved effort, schedule, avoided rework, reuse value, decision quality, or mission-assurance benefit metric.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.practical_implementation_pathway": {
+      "values": [
+        "addressed conceptually"
+      ],
+      "status": "coded",
+      "rationale": "Conceptual steps are given, but not a validated adopter workflow.",
+      "evidence": [
+        {
+          "quote": "Section 3 entity extraction and DSM mapping approach.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.toolchain_fragmentation_interoperability": {
+      "values": [
+        "addressed with evidence"
+      ],
+      "status": "coded",
+      "rationale": "Core topic supported by OPM/CPM/STEP mapping, CubeSat example, and AP242 counts.",
+      "evidence": [
+        {
+          "quote": "Introduction barriers; Figures 1-2; Table 1; Section 5 time/state gap.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.lightweight_resource_constrained_tailoring": {
+      "values": [
+        "not addressed"
+      ],
+      "status": "coded",
+      "rationale": "CubeSat is illustrative; no lightweight/resource-constrained tailoring.",
+      "evidence": [
+        {
+          "quote": "No cost/schedule/team-size/resource constraints discussed.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "gap_mapping.governance_project_deliverables_roi": {
+      "values": [
+        "mentioned only"
+      ],
+      "status": "coded",
+      "rationale": "Design heritage is mentioned, but governance/deliverables/ROI are absent.",
+      "evidence": [
+        {
+          "quote": "Section 2 design heritage claim; no gates/ROI.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+      "values": [
+        "not addressed"
+      ],
+      "status": "coded",
+      "rationale": "No NewSpace/agile/distributed/rapid-iteration content.",
+      "evidence": [
+        {
+          "quote": "Completed extraction found none.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "synthesis_consistency.extraction_confidence": {
+      "values": [
+        "medium"
+      ],
+      "status": "coded",
+      "rationale": "Paper is clear for MBSE/PLM integration but not EPS-focused; full mapping artifacts/models are absent.",
+      "evidence": [
+        {
+          "quote": "Clear narrative, figures, and table; no EPS/V&V/model availability.",
+          "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    }
   },
-  "mbse_objective_scope_artifacts": {
-    "stated_objective_pain_point": "The paper seeks to identify misfits that prevent proper integration between MBSE conceptual-design information and PLM detailed-design data, especially the mismatch between explicit time/behavior representation and geometry-centric PLM data structures.",
-    "modeling_scope": [
-      "OPM conceptual-design entities: object, process, and state",
-      "CPM product lifecycle entities including artifact, feature, function, form, behavior, geometry, material, specification, requirement, and flow",
-      "STEP AP242 detailed-design/product-data entities including product, assembly, shape, feature, material, product specification, geometry, action, and process plan",
-      "DSM mapping of entity correspondences from conceptual design to detailed design",
-      "CubeSat mission, thermal control system, and simplified AP242 STEP representation"
+  "structured_limitations": {
+    "limitation_flags": [
+      "prototype_or_future_work",
+      "single_case_or_limited_scope",
+      "no_quantitative_evaluation",
+      "no_baseline_or_comparator",
+      "no_independent_validation",
+      "no_physical_test_or_flight_evidence",
+      "no_eps_specific_evidence",
+      "no_pre_physical_verification_model",
+      "assumptions_or_data_quality_limits",
+      "interoperability_limitations",
+      "model_not_available",
+      "incomplete_lifecycle_coverage",
+      "weak_claim_evidence_linkage"
     ],
-    "system_boundary_level_of_abstraction": "From CubeSat mission and subsystem functional decomposition to a thermal control subsystem and detailed STEP assembly/entity counts; the focus is lifecycle information entities rather than full mission engineering analysis.",
-    "minimal_or_excluded_modeling": "The authors exclude upstream or bidirectional lifecycle phases, do not map relationships within each model, use a simplified assembly, and do not model EPS details, mission operations, verification workflows, or physical test data.",
-    "required_prior_behavioral_domain_knowledge": "Modelers need to identify objects, processes, states, functions, and basic subsystem behavior; detailed dynamic equations or domain-specific EPS behavior are not required or reported.",
-    "handling_limited_behavioral_knowledge": "Not stated as a method; the paper implies that OPM state/process modeling and generic entity correspondences can capture conceptual behavior qualitatively before detailed PLM representation.",
-    "model_artifacts_used": [
-      "Object-Process Diagrams for CubeSat mission and thermal control system",
-      "OPM object/process/state entities",
-      "CPM artifact/function/specification/behavior/form/flow/geometry/material representation",
-      "STEP AP242 file/entity spreadsheet",
-      "Design Structure Matrix of entity correspondences",
-      "Frequency chart of entity appearances",
-      "STEP File Analyzer and Viewer output counts"
+    "limitation_assessments": [
+      {
+        "flag": "prototype_or_future_work",
+        "source": "author_stated",
+        "rationale": "Authors describe the analysis as an initial step and identify future work.",
+        "evidence_quote": "Section 5: The limited but revealing analysis is only a first step; future work will extend to other product development and lifecycle phases.",
+        "confidence": "high"
+      },
+      {
+        "flag": "single_case_or_limited_scope",
+        "source": "author_stated",
+        "rationale": "Only selected entities and one illustrative small-satellite/CubeSat example are used.",
+        "evidence_quote": "Section 3: In total, 23 entities have been chosen. Section 4: As an example ... we chose a small satellite.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_quantitative_evaluation",
+        "source": "extractor_identified",
+        "rationale": "Counts/percentages describe entities, not evaluated outcomes such as time, defects, reuse, or integration failures.",
+        "evidence_quote": "Completed extraction: no outcome metric beyond Figure 2 entity percentages and Table 1 entity counts.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_baseline_or_comparator",
+        "source": "extractor_identified",
+        "rationale": "No baseline or counterfactual process/toolchain is reported.",
+        "evidence_quote": "All extracted claim records have baseline_comparator of not reported or none.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_independent_validation",
+        "source": "extractor_identified",
+        "rationale": "No external replication, stakeholder evaluation, or independent validation is reported.",
+        "evidence_quote": "Completed extraction found no user/expert evaluation or reuse across projects.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_physical_test_or_flight_evidence",
+        "source": "extractor_identified",
+        "rationale": "CubeSat example is representational and not linked to hardware integration, testing, operations, or flight.",
+        "evidence_quote": "Section 4 reports OPM/CPM/STEP representations only.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_eps_specific_evidence",
+        "source": "extractor_identified",
+        "rationale": "Detailed model is thermal-control; no solar panels, batteries, power distribution, loads, margins, or power budgets.",
+        "evidence_quote": "Figure 3 lists Power System only at top level; Section 4 zooms in on Thermal Control System.",
+        "confidence": "high"
+      },
+      {
+        "flag": "no_pre_physical_verification_model",
+        "source": "extractor_identified",
+        "rationale": "No verification artifacts or mechanisms are integrated into the model.",
+        "evidence_quote": "Completed extraction found no verification matrix, tests, executable checks, simulation-in-the-loop, or virtual integration.",
+        "confidence": "high"
+      },
+      {
+        "flag": "assumptions_or_data_quality_limits",
+        "source": "author_stated",
+        "rationale": "AP242 counts depend on a simplified assembly and model construction choices.",
+        "evidence_quote": "Section 4: specification, features, and materials are absent in this simplified assembly; their presence depends on the chosen 3D model construction.",
+        "confidence": "high"
+      },
+      {
+        "flag": "interoperability_limitations",
+        "source": "author_stated",
+        "rationale": "Central finding is semantic/representation misfit between MBSE and PLM, especially implicit time and absent state.",
+        "evidence_quote": "Section 5: PLM systems explicitly represent space in great detail but leave time mostly implicit, making it difficult to integrate the digital chain; state is essentially not present in PLM systems.",
+        "confidence": "high"
+      },
+      {
+        "flag": "model_not_available",
+        "source": "extractor_identified",
+        "rationale": "No OPM/CPM/STEP model files, DSM data, or scripts are provided.",
+        "evidence_quote": "Completed extraction: only SFA tool URL is referenced; no model/data availability statement found.",
+        "confidence": "high"
+      },
+      {
+        "flag": "incomplete_lifecycle_coverage",
+        "source": "author_stated",
+        "rationale": "Only conceptual-to-detailed transfer is considered; other phases are future work.",
+        "evidence_quote": "Section 3: only transfer from conceptual design to detailed design. Section 5: future work will extend to other lifecycle phases.",
+        "confidence": "high"
+      },
+      {
+        "flag": "weak_claim_evidence_linkage",
+        "source": "extractor_identified",
+        "rationale": "Benefits such as better data flow and design-heritage tracking are linked to MBSE/PLM but not empirically demonstrated.",
+        "evidence_quote": "Strongest evidence types are conceptual/illustrative and quantitative metrics without baseline; no evaluated outcome effect is reported.",
+        "confidence": "medium"
+      }
     ],
-    "generality_reuse_mechanism": [
-      "Use of standardized OPM (ISO 19450)",
-      "Use of generic CPM semantics for lifecycle design information",
-      "Use of STEP ISO 10303/AP242 product-data exchange mechanisms",
-      "DSM mapping of reusable core entities and full/partial correspondences",
-      "Abstract object-process-state representation intended for systems of any nature"
+    "emergent_limitations": [
+      {
+        "label": "dsm-correspondence-criteria-not-validated",
+        "source": "extractor_identified",
+        "rationale": "Full/partial correspondence labels are not supported by explicit coding rules or validation against actual exchange behavior.",
+        "evidence": "Section 3 says cells denote full or partial correspondence, but no validation procedure is described.",
+        "confidence": "medium",
+        "evidence_quote": "Section 3 says cells denote full or partial correspondence, but no validation procedure is described."
+      },
+      {
+        "label": "thermal-subsystem-example-limits-transfer-to-eps-synthesis",
+        "source": "extractor_identified",
+        "rationale": "The detailed CubeSat subsystem is thermal control, not EPS, so EPS behavior and verification mechanisms cannot be inferred.",
+        "evidence": "Figures 4-5 are Thermal Control System representations; EPS fields are not_applicable.",
+        "confidence": "high",
+        "evidence_quote": "Figures 4-5 are Thermal Control System representations; EPS fields are not_applicable."
+      }
     ]
   },
-  "implementation_pathway_tailoring": {
-    "implementation_steps_or_phases": [
-      {
-        "step": "Select lifecycle models for comparison",
-        "inputs": "Conceptual-design MBSE and PLM data-model descriptions from OPM, CPM, and STEP literature",
-        "outputs": "OPM, CPM, and STEP chosen as representative models for conceptual, product-lifecycle, and detailed-design data",
-        "actors_roles": "Authors/systems designers; specific project roles not reported",
-        "prerequisites": "Knowledge of OPM, CPM, STEP, and lifecycle information needs",
-        "completion_criteria": "Representative models selected for the MBSE-to-PLM chain",
-        "handoffs": "Selected model semantics feed entity extraction"
-      },
-      {
-        "step": "Extract key entities",
-        "inputs": "OPM, CPM, and STEP model descriptions",
-        "outputs": "23 selected entities: 3 OPM, 10 CPM, and 10 STEP",
-        "actors_roles": "Authors/research analysts",
-        "prerequisites": "Access to model descriptions and standards",
-        "completion_criteria": "Entity list sufficient to populate the DSM",
-        "handoffs": "Entity list feeds correspondence mapping"
-      },
-      {
-        "step": "Map entity correspondences using DSM",
-        "inputs": "Selected entities and direction from conceptual to detailed design",
-        "outputs": "DSM with full and partial correspondences and identified overlaps/gaps",
-        "actors_roles": "Authors/research analysts",
-        "prerequisites": "Defined reading direction and correspondence coding",
-        "completion_criteria": "Cells marked full or partial where correspondences exist",
-        "handoffs": "Mapping feeds frequency analysis and integration-gap discussion"
-      },
-      {
-        "step": "Model CubeSat mission concept in OPM",
-        "inputs": "Illustrative Earth-observation mission and subsystem/functions",
-        "outputs": "OPM representations of CubeSat mission and thermal control system behavior",
-        "actors_roles": "Authors/modelers",
-        "prerequisites": "Basic mission and subsystem decomposition",
-        "completion_criteria": "Objects, processes, and states represented in OPM diagrams",
-        "handoffs": "OPM examples feed CPM comparison"
-      },
-      {
-        "step": "Represent the thermal control system in CPM",
-        "inputs": "OPM thermal control subsystem and CPM entity semantics",
-        "outputs": "CPM artifact/function/specification/behavior/form/flow/geometry/material representation",
-        "actors_roles": "Authors/modelers",
-        "prerequisites": "CPM class/entity knowledge",
-        "completion_criteria": "Thermal control artifacts and associated functions/forms represented",
-        "handoffs": "CPM example feeds OPM/CPM conformity discussion"
-      },
-      {
-        "step": "Analyze AP242 representation",
-        "inputs": "Simplified CubeSat STEP AP242 file and SFA tool",
-        "outputs": "Entity and attribute spreadsheet summarized as Table 1 counts",
-        "actors_roles": "Authors/modelers",
-        "prerequisites": "STEP AP242 file and STEP File Analyzer and Viewer",
-        "completion_criteria": "Key AP242 entity counts obtained",
-        "handoffs": "Counts support detailed-design representation discussion"
-      }
-    ],
-    "mapping_to_se_activities_lifecycle_gates": "The work maps conceptual MBSE data to detailed-design PLM data and supports the conceptual-to-detailed design handoff; formal SE lifecycle gates, reviews, or acceptance criteria are not reported.",
-    "approach_classification": "Integrated MBSE/digital engineering",
-    "approach_classification_rationale": "The approach explicitly integrates conceptual MBSE representations with PLM/detailed-design data structures using standards and DSM-based digital information mapping.",
-    "tailoring_rationale": [
-      "Focus on conceptual-to-detailed transfer to analyze downstream digital-chain integration",
-      "Use OPM because it represents objects, processes, states, and explicit time/space aspects and is standardized",
-      "Use CPM and STEP because they represent PLM and detailed-design product data; AP242 is widely used for product information interoperability",
-      "Use a CubeSat mission to illustrate data correspondences between models"
-    ],
-    "adoption_guidance_for_new_users": "partial guidance"
-  },
-  "toolchain_interoperability_lifecycle_continuity": {
-    "mbse_language_method_tool": [
-      "Object-Process Methodology (OPM)",
-      "Object-Process Diagrams (OPD) and Object-Process Language (OPL) as OPM representations",
-      "Core Product Model (CPM)",
-      "STEP ISO 10303 AP242",
-      "Design Structure Matrix (DSM)",
-      "NIST STEP File Analyzer and Viewer (SFA)"
-    ],
-    "toolchain_architecture_data_flow": "Unidirectional data-flow analysis from conceptual design to detailed design: OPM entities are mapped to CPM and STEP AP242 entities through a DSM; the CubeSat example compares OPM and CPM representations with AP242 STEP entity counts.",
-    "interoperability_mechanisms": [
-      "DSM full/partial entity correspondence mapping",
-      "Shared concepts such as object/artifact/product, function/process/behavior, geometry/form/material, and requirements/specifications",
-      "OPM ISO 19450 standardization",
-      "STEP ISO 10303/AP242 exchange format",
-      "CPM generic design-information semantics"
-    ],
-    "syntax_semantic_continuity_evidence": "The DSM and frequency analysis show uneven semantic continuity: physical/space entities correspond frequently, time-related entities correspond less frequently, and OPM state has no identified correspondence in CPM/STEP.",
-    "software_hardware_system_integration_readiness": "not reported; the work addresses model/data interoperability rather than software-hardware integration, physical assembly, or test readiness.",
-    "toolchain_limitations": [
-      "MBSE/PLM integration is described as still very limited in practice",
-      "CPM and STEP are characterized as geometry-centric compared with OPM",
-      "Current PLM systems represent time mostly implicitly",
-      "The OPM state entity had no identified correspondence in CPM/STEP",
-      "The simplified AP242 assembly lacks feature, material, product specification, action, and process-plan information",
-      "The analysis considers only conceptual-to-detailed transfer and not other lifecycle phases"
-    ],
-    "availability_reproducibility": "The manuscript is openly available via HAL and names standards and SFA, but the underlying OPM/CPM/STEP model files and complete DSM data are not reported as available."
-  },
-  "eps_verification_specific": {
-    "eps_elements_modeled": [
-      "Power System named only as a CubeSat subsystem providing energy; no EPS architecture or components modeled"
-    ],
-    "eps_requirements_representation": "not reported",
-    "verification_validation_artifacts": [],
-    "pre_physical_development_verification_mechanism": [],
-    "evidence_verification_integrated_in_model": "not reported; the paper states generically that SysML supports verification and validation, but the case study uses OPM/CPM/STEP and does not integrate EPS verification artifacts.",
-    "integration_test_readiness": "not reported"
-  },
-  "claimed_outcomes_value_mechanisms_evidence": [
+  "emergent_codes": [
     {
-      "claim": "A well-integrated MBSE/PLM chain can facilitate data flow from conceptual design to detailed design.",
-      "outcome_category": "integrability / lifecycle continuity",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "MBSE-to-PLM digital chain",
-        "OPM/CPM/STEP entity correspondence",
-        "DSM mapping"
-      ],
-      "artifact_or_process_linked": "OPM, CPM, STEP, and DSM-based mapping of conceptual-to-detailed design information",
-      "lifecycle_stage": "conceptual design to detailed design",
-      "evidence_type": "Conceptual argument supported by entity-mapping analysis",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Facilitated information flow is asserted; no measured effect",
-      "evidence_source": "Section 2 and DSM analysis in Section 3",
-      "direct_quote": "A well-integrated chain between MBSE and PLM is essential to facilitate the data flow from the conceptual design to the detailed design.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The result is an analytical mapping, not an implemented PLM integration or project comparison."
+      "field_path": "synthesis_consistency",
+      "label": "object-process-methodology-opm",
+      "description": "Non-enumerated MBSE conceptual modeling language used for objects, processes, and states.",
+      "rationale": "Non-enumerated MBSE conceptual modeling language used for objects, processes, and states.",
+      "evidence_quote": "Abstract/Section 2.1 and Figures 3-4.",
+      "confidence": "high",
+      "original_label": "Object-Process Methodology (OPM)",
+      "category": "tool_method"
     },
     {
-      "claim": "The MBSE/PLM chain would help store design heritage and track architecture transformation through the design process.",
-      "outcome_category": "traceability / reproducibility support",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "Lifecycle data chain",
-        "model-centric architecture representation",
-        "conceptual-to-detailed data correspondence"
-      ],
-      "artifact_or_process_linked": "Product design team use of an integrated MBSE/PLM chain",
-      "lifecycle_stage": "design process from early conceptual design to later detailed design",
-      "evidence_type": "Conceptual claim",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "document-centric or non-integrated process implied but not measured",
-      "observed_effect_size_or_qualitative_effect": "Would allow design heritage storage and tracking; no observed effect reported",
-      "evidence_source": "Section 2",
-      "direct_quote": "Such a chain would allow a product design team to store the design heritage and keep track of how the systems architecture transforms through the design process.",
-      "evidence_confidence": "Unsupported",
-      "threats_or_alternative_explanations": "No repository, project deployment, trace audit, or reuse case is reported."
+      "field_path": "synthesis_consistency",
+      "label": "core-product-model-cpm",
+      "description": "Non-enumerated product model used for PLM-side artifact/function/form/behavior representation.",
+      "rationale": "Non-enumerated product model used for PLM-side artifact/function/form/behavior representation.",
+      "evidence_quote": "Abstract/Section 2.2 and Figure 5.",
+      "confidence": "high",
+      "original_label": "Core Product Model (CPM)",
+      "category": "tool_method"
     },
     {
-      "claim": "DSM-based mapping identifies overlaps, gaps, and misfits in digital engineering information exchange between MBSE and PLM models.",
-      "outcome_category": "interoperability diagnosis",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "Extraction of core entities",
-        "DSM full/partial correspondence coding",
-        "frequency analysis"
-      ],
-      "artifact_or_process_linked": "Fig. 1 DSM matrix and Fig. 2 entity-frequency analysis",
-      "lifecycle_stage": "conceptual to detailed design",
-      "evidence_type": "Analytical model comparison with figures and counts",
-      "metric_or_value_indicator": "Entity appearance percentages; full/partial correspondence cells",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Physical/space entities appear frequently; time-related entities less frequently; state has no correspondence",
-      "evidence_source": "Section 3, Fig. 1, Fig. 2",
-      "direct_quote": "Doing this, we identify the overlaps and gaps in the digital engineering information exchange.",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "Entity selection and correspondence coding are author-defined; the complete underlying DSM dataset is not provided."
+      "field_path": "synthesis_consistency",
+      "label": "step-ap242-and-nist-step-file-analyzer-and-viewer",
+      "description": "Detailed-design exchange standard/tool central to analysis but not an enumerated tool label.",
+      "rationale": "Detailed-design exchange standard/tool central to analysis but not an enumerated tool label.",
+      "evidence_quote": "Section 2.3, Section 4, Table 1, Reference 18.",
+      "confidence": "high",
+      "original_label": "STEP AP242 and NIST STEP File Analyzer and Viewer",
+      "category": "tool_standard"
     },
     {
-      "claim": "The fundamental MBSE/PLM integration problem arises because complete system representation needs explicit time and space, while PLM mainly represents space and leaves time implicit.",
-      "outcome_category": "semantic integration gap",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "OPM explicit object/process/state representation",
-        "comparison with CPM and STEP geometry-centric entities",
-        "frequency analysis of time and space entities"
-      ],
-      "artifact_or_process_linked": "OPM object/process/state, CPM function/behavior, STEP geometry/Product Data Management entities",
-      "lifecycle_stage": "product/system lifecycle, especially conceptual to detailed design",
-      "evidence_type": "Analytical comparison and illustrative CubeSat case",
-      "metric_or_value_indicator": "Fig. 2 reports object 80%, process 25%, state 0%, geometry 60% appearance; Table 1 reports geometry count 86229 and action/process plan 0",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Major gap in representation between domains is identified",
-      "evidence_source": "Sections 3 and 5, Fig. 2, Table 1",
-      "direct_quote": "Current PLM systems explicitly represent space in great detail but leave the time domain mostly as an implicit dimension",
-      "evidence_confidence": "Moderate",
-      "threats_or_alternative_explanations": "The conclusion depends on the selected OPM, CPM, and STEP entities and a simplified CubeSat AP242 model."
+      "field_path": "synthesis_consistency",
+      "label": "dsm-based-semantic-entity-correspondence-mapping",
+      "description": "Integration/gap mechanism is manual DSM correspondence mapping of OPM/CPM/STEP entities.",
+      "rationale": "Integration/gap mechanism is manual DSM correspondence mapping of OPM/CPM/STEP entities.",
+      "evidence_quote": "Section 3: DSM maps core entities and identifies overlaps/gaps.",
+      "confidence": "high",
+      "original_label": "DSM-based semantic/entity correspondence mapping",
+      "category": "method_mechanism"
     },
     {
-      "claim": "OPM can represent complex system function and behavior at the conceptual design level using objects, processes, states, and relationships.",
-      "outcome_category": "generality / conceptual behavior modeling",
-      "specificity": "generic MBSE",
-      "mbse_mechanism": [
-        "Object-process-state modeling",
-        "graphical OPD and linguistic OPL",
-        "stateful objects linking space and time"
-      ],
-      "artifact_or_process_linked": "OPM representations of CubeSat mission and thermal control system",
-      "lifecycle_stage": "conceptual design",
-      "evidence_type": "Method description plus illustrative CubeSat OPM diagrams",
-      "metric_or_value_indicator": "not reported",
-      "baseline_comparator": "not reported",
-      "observed_effect_size_or_qualitative_effect": "Qualitative function and behavior representation is illustrated for a CubeSat mission and thermal subsystem",
-      "evidence_source": "Sections 2.1, 3, and 4; Figs. 3 and 4",
-      "direct_quote": "the combination of these entities and relationships allow a systems designer to effectively represent a complex system of any nature, its function and behavior particularly at the conceptual design level.",
-      "evidence_confidence": "Weak",
-      "threats_or_alternative_explanations": "The example is simplified and does not demonstrate scalability, correctness, or EPS-specific behavioral coverage."
+      "field_path": "synthesis_consistency",
+      "label": "plm-data-model-ontology-integration-scope",
+      "description": "Central scope is semantic alignment across MBSE and PLM data models/ontologies.",
+      "rationale": "Central scope is semantic alignment across MBSE and PLM data models/ontologies.",
+      "evidence_quote": "Introduction: different terminologies/formalisms and MBSE-PLM digital-chain barriers.",
+      "confidence": "high",
+      "original_label": "PLM data-model/ontology integration scope",
+      "category": "modeling_scope"
+    },
+    {
+      "field_path": "synthesis_consistency",
+      "label": "explicit-space-time-state-representation-alignment",
+      "description": "Authors argue integration requires aligning explicit space/time/state representations.",
+      "rationale": "Authors argue integration requires aligning explicit space/time/state representations.",
+      "evidence_quote": "Section 5: integration difficulty arises from need to explicitly represent time and space; state absent in PLM.",
+      "confidence": "high",
+      "original_label": "Explicit space-time-state representation alignment",
+      "category": "mechanism_finding"
+    },
+    {
+      "field_path": "synthesis_consistency",
+      "label": "entity-correspondence-frequency-and-step-entity-counts",
+      "description": "Numeric evidence is entity percentage/count data, not standard project metrics.",
+      "rationale": "Numeric evidence is entity percentage/count data, not standard project metrics.",
+      "evidence_quote": "Figure 2 frequencies; Table 1 STEP counts.",
+      "confidence": "high",
+      "original_label": "Entity correspondence frequency and STEP entity counts",
+      "category": "metric_indicator"
     }
   ],
-  "governance_roi_project_decision_linkage": {
-    "model_governance_strategy": "not reported; implicit governance relies on standards-based representations and entity correspondence mapping",
-    "traceability_to_deliverables_decisions_reviews": "The paper claims the chain can store design heritage and track architecture transformation and uses DSM entity mapping, but it does not link models to formal deliverables, decisions, reviews, or approvals.",
-    "evaluation_criteria_model_quality_usefulness": "Full/partial correspondence in the DSM, frequency of entity appearances, and STEP AP242 entity counts are used to evaluate information-continuity gaps.",
-    "roi_value_realization_evidence": "not reported; no cost, schedule, defect, reuse, or ROI metrics are provided.",
-    "programmatic_gates_critical_design_events_supported": "Conceptual-to-detailed design handoff is addressed; formal PDR, CDR, qualification, or acceptance gates are not reported.",
-    "model_derived_performance_indicators_management_metrics": "Entity appearance percentages and AP242 entity counts are reported; no management metrics or model-derived project KPIs are reported."
-  },
-  "gap_mapping": {
-    "practical_implementation_pathway": {
-      "classification": "addressed conceptually",
-      "rationale": "The paper describes a sequence of entity extraction, DSM mapping, and CubeSat illustration, but not a deployed workflow, adoption playbook, or project implementation."
-    },
-    "toolchain_fragmentation_interoperability": {
-      "classification": "addressed with evidence",
-      "rationale": "This is the core topic, supported by OPM/CPM/STEP entity mapping, frequency analysis, and AP242 entity counts."
-    },
-    "lightweight_resource_constrained_tailoring": {
-      "classification": "not addressed",
-      "rationale": "Although a CubeSat is used, the paper does not discuss resource constraints, lightweight MBSE tailoring, staffing, budget, computational limitations, or small-team adoption."
-    },
-    "governance_project_deliverables_roi_value": {
-      "classification": "mentioned only",
-      "rationale": "Design heritage and architecture tracking are mentioned, but deliverable governance, decision rights, review gates, and ROI evidence are absent."
-    },
-    "newspace_agile_distributed_rapid_iteration": {
-      "classification": "not addressed",
-      "rationale": "The paper does not discuss NewSpace development cadence, agile iteration, distributed collaboration, or rapid prototyping workflows."
-    }
-  },
-  "synthesis_consistency": {
-    "key_findings_by_rq": {
-      "RQ1": [
-        "The paper demonstrates general CubeSat mission modeling with OPM objects, processes, and states, and argues that these entities can represent function and behavior conceptually.",
-        "The example is not EPS-specific; the Power System is only named as a subsystem associated with providing energy, while detailed behavior is shown for a thermal control system."
+  "extraction": {
+    "bibliographic_review_management": {
+      "corpus_id": "paper-0024",
+      "extraction_file_path": "SLR/SLR1/extractions/paper-0024.json",
+      "tier_status": "supporting",
+      "tier_rationale": "Supporting because it is about CubeSat/space MBSE-PLM interoperability, not a core EPS modeling or verification study.",
+      "citation": "Menshenin, Y., Knoll, D., Brovar, Y., & Fortin, C. (2020). Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design. 17th IFIP International Conference on Product Lifecycle Management, pp. 593-603.",
+      "title": "Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design",
+      "authors": [
+        "Yaroslav Menshenin",
+        "Dominik Knoll",
+        "Yana Brovar",
+        "Clement Fortin"
       ],
-      "RQ2": [
-        "Integrability is the main outcome: the authors claim MBSE/PLM integration can facilitate conceptual-to-detailed data flow and design-heritage tracking.",
-        "No EPS-specific reliability, reproducibility, or operational outcome evidence is provided; reproducibility is limited to standards/tool descriptions rather than reusable model assets."
+      "year": 2020,
+      "venue": "17th IFIP International Conference on Product Lifecycle Management (PLM)",
+      "venue_type": "conference proceedings",
+      "publisher": "Springer Nature / IFIP",
+      "doi": "10.1007/978-3-030-62807-9_47",
+      "url": "https://inria.hal.science/hal-03753120v1",
+      "source_database_query": [
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q5_reference_model_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (\"reference model\" OR template OR behavior OR behaviours OR behaviors OR architecture))",
+          "rank": 25,
+          "paperId": "85097107924"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q7_outcomes_refined.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (reliability OR reproducibility OR integrability OR integration OR traceability))",
+          "rank": 16,
+          "paperId": "85097107924"
+        },
+        {
+          "source": "scopus",
+          "input_file": "SLR/SLR1/searches/scopus_q18_system_mbse_broad_full65.json",
+          "query": "TITLE-ABS-KEY((nanosatellite OR cubesat OR CubeSat) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design))",
+          "rank": 44,
+          "paperId": "85097107924"
+        },
+        {
+          "source": "semantic_scholar",
+          "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0024_semantic_title.json",
+          "query": "\"Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design\"",
+          "rank": 1,
+          "paperId": "0c9ea167ce3bb1a547937349f6c7b30bfed3d564",
+          "purpose": "abstract_enrichment"
+        }
       ],
-      "RQ3": [
-        "No EPS verification procedure is integrated into the model before physical development.",
-        "Verification and validation appear only as generic SysML capabilities in background, not as artifacts or processes in the CubeSat example."
+      "research_question_relevance": {
+        "RQ1": {
+          "level": "partial",
+          "rationale": "System/subsystem CubeSat modeling and data-flow mapping, but not EPS/minimal-behavior reference model."
+        },
+        "RQ2": {
+          "level": "partial",
+          "rationale": "Integrability outcomes are claimed generically, not EPS-specific."
+        },
+        "RQ3": {
+          "level": "none",
+          "rationale": "No EPS verification model."
+        }
+      },
+      "lineage_overlap_notes": "Cites Spangelo et al. standard CubeSat MBSE work but does not reuse its model; better treated as OPM/CPM/STEP MBSE-PLM interoperability lineage."
+    },
+    "study_context_population": {
+      "mission_platform": "Generic small satellite/CubeSat Earth-observation example",
+      "size_form_factor": "not reported",
+      "mission_name": "not reported",
+      "mission_domain": "Earth observation; record images and transmit to ground",
+      "organization_type": "academic research paper; mission organization not reported",
+      "project_maturity": "illustrative representation only",
+      "lifecycle_stage_addressed": [
+        "conceptual design",
+        "detailed design"
+      ],
+      "development_context": "not reported for mission/project",
+      "eps_relevance": "not EPS-relevant; Power System only appears as high-level subsystem",
+      "model_maturity": [
+        "conceptual framework",
+        "prototype demonstration"
+      ],
+      "key_context_quotes": [
+        "Section 4: As an example of a technical system, we chose a small satellite.",
+        "Section 4: mission is to observe the earth surface and transmit recorded images to the ground.",
+        "Section 4: satellite subsystems include Optical Instrument, Power System, Structure, Communications System, Thermal Control System, and ADCS."
       ]
     },
-    "author_stated_limitations_gaps": [
-      "Only downstream transfer from conceptual design to detailed design is considered.",
-      "Entities within each model are not mapped in the DSM.",
-      "The state entity has no identified correspondence in CPM/STEP, revealing a time-space representation gap.",
-      "Current PLM systems leave the time domain mostly implicit except in particular modules.",
-      "The analysis is described as a first step; future work should include other lifecycle phases, additional models, and relationships between entities.",
-      "In the simplified AP242 assembly, specification, features, materials, action, and process-plan entities are absent."
-    ],
-    "extractor_identified_limitations_gaps": [
-      "The CubeSat case is illustrative and lacks mission performance, physical form factor, flight status, and operational data.",
-      "No EPS architecture, power budget, electrical interfaces, battery/solar/regulator components, or EPS requirements are modeled.",
-      "No verification, validation, simulation, model checking, hardware integration, or testing procedure is presented for EPS or other subsystems.",
-      "The full OPM/CPM models, STEP file, and complete DSM data are not reported as available.",
-      "Claims about design heritage and lifecycle continuity are not evaluated with users, projects, baselines, or quantitative metrics."
-    ],
-    "direct_evidence_quotes": [
+    "mbse_objective_scope_artifacts": {
+      "stated_objective_pain_point": "Analyze MBSE-to-PLM data flow from conceptual to detailed design and identify misfits preventing integration.",
+      "scope": {
+        "included": [
+          "OPM conceptual representation",
+          "CPM product model representation",
+          "STEP/AP242 detailed-design entity counts",
+          "DSM mapping of OPM/CPM/STEP entities"
+        ],
+        "excluded_or_limited": [
+          "only downstream conceptual-to-detailed correspondences",
+          "no within-model mapping",
+          "no EPS-specific model",
+          "no verification/test model",
+          "no flight/operations evidence"
+        ]
+      },
+      "system_boundary_level_of_abstraction": "Generic CubeSat mission system with thermal-control subsystem zoom-in; semantic entity-level integration rather than performance analysis.",
+      "required_prior_behavioral_domain_knowledge": "Not framed as minimal-knowledge modeling; OPM is presented as representing complex systems through objects, processes, states, functions, and behavior.",
+      "model_artifacts_used": [
+        "OPM object-process diagrams",
+        "CPM entity representation",
+        "DSM matrix",
+        "entity-frequency chart",
+        "STEP/AP242 SFA entity-count table"
+      ],
+      "generality_reuse_mechanism": "Reusable method guidance for DSM-based entity mapping; no package/template available.",
+      "direct_quotes": [
+        "Introduction: analyze three important components of the digital chain to identify misfits preventing integration.",
+        "Section 2.1: OPM entities and relationships allow representation of complex systems, function and behavior.",
+        "Section 3: 23 entities chosen: 3 OPM, 10 CPM, 10 STEP."
+      ]
+    },
+    "implementation_pathway_tailoring": {
+      "reported_steps": [
+        {
+          "step": 1,
+          "description": "Extract key entities from OPM, CPM, STEP literature.",
+          "inputs": [
+            "model descriptions/literature"
+          ],
+          "outputs": [
+            "23 selected entities"
+          ],
+          "actors_roles": "researchers/system designers implied",
+          "completion_criteria": "not reported"
+        },
+        {
+          "step": 2,
+          "description": "Map downstream full/partial correspondences in a DSM.",
+          "inputs": [
+            "selected entities"
+          ],
+          "outputs": [
+            "DSM correspondence matrix"
+          ],
+          "actors_roles": "researchers implied",
+          "completion_criteria": "not reported"
+        },
+        {
+          "step": 3,
+          "description": "Analyze frequency of entity appearance across models.",
+          "inputs": [
+            "DSM"
+          ],
+          "outputs": [
+            "frequency chart"
+          ],
+          "actors_roles": "researchers implied",
+          "completion_criteria": "not reported"
+        },
+        {
+          "step": 4,
+          "description": "Illustrate with CubeSat OPM, CPM, and STEP/AP242/SFA representations.",
+          "inputs": [
+            "generic CubeSat mission",
+            "thermal subsystem",
+            "STEP file"
+          ],
+          "outputs": [
+            "figures and entity-count table"
+          ],
+          "actors_roles": "researchers implied",
+          "completion_criteria": "not reported"
+        }
+      ],
+      "mapping_to_se_activities_lifecycle_gates": "Conceptual design is represented in OPM; detailed/product design in CPM and STEP/AP242. No SRR/PDR/CDR gate mapping is provided.",
+      "approach_classification": "Extended MBSE",
+      "tailoring_rationale": [
+        "available tools/standards"
+      ],
+      "adoption_guidance": "partial guidance",
+      "handoffs": "Manual conceptual-to-detailed entity correspondences; no automated handoff demonstrated."
+    },
+    "toolchain_interoperability_lifecycle_continuity": {
+      "mbse_language_method_tool": [
+        "OPM",
+        "CPM",
+        "STEP/AP242",
+        "DSM",
+        "SFA",
+        "PLM systems"
+      ],
+      "toolchain_architecture_data_flow": "Unidirectional OPM conceptual entities to CPM product entities to STEP/AP242 detailed product-data entities, mapped manually in DSM and illustrated by CubeSat SFA counts.",
+      "interoperability_mechanisms": [
+        "STEP import/export standard",
+        "manual DSM mapping",
+        "SFA-generated spreadsheet/entity counts"
+      ],
+      "syntax_semantic_continuity": "Partial for space/physical entities; weak or absent for time/state/behavior entities.",
+      "software_hardware_system_integration_readiness": "not reported",
+      "toolchain_limitations": [
+        "major MBSE/PLM barriers",
+        "time implicit in PLM",
+        "state absent from PLM",
+        "simplified AP242 file lacks several entity types"
+      ],
+      "availability_reproducibility": "SFA URL reported; OPM/CPM/STEP models, DSM data, and scripts not available.",
+      "direct_quotes": [
+        "Introduction: MBSE with PLM integration is still very limited in practice and major barriers remain.",
+        "Section 3: no correspondence found for state.",
+        "Section 5: PLM systems represent space in detail but leave time mostly implicit."
+      ]
+    },
+    "eps_verification_specific": {
+      "eps_elements_modeled": [],
+      "eps_requirements_represented": "not applicable",
+      "verification_validation_artifacts": [],
+      "pre_physical_development_verification_mechanism": "not applicable/not reported",
+      "evidence_verification_integrated_in_eps_model": "none",
+      "integration_test_readiness": "not reported",
+      "notes": "Power System appears only at high level; detailed subsystem is thermal control."
+    },
+    "claimed_outcomes_value_mechanisms_evidence": [
       {
-        "topic": "Paper objective",
-        "quote": "In this paper we analyze three important components of the digital chain from conceptual to detail design in order to clearly identify the misfits which prevent a proper integration between MBSE and PLM.",
-        "location": "Section 1"
+        "claim_id": "C1",
+        "claim_text": "Full-scale MBSE integration into PLM would facilitate better data flow from conceptual design to detailed design.",
+        "category": [
+          "integrability/interoperability",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mechanism": [
+          "tool integration",
+          "other"
+        ],
+        "emergent_mechanism": "semantic/entity alignment across OPM, CPM, and STEP",
+        "linked_artifact_process": "OPM conceptual model, CPM product model, STEP/AP242 representation, MBSE-to-PLM data-flow chain",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "CDR"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument"
+        ],
+        "metric_or_value_indicator": [],
+        "metric": "none reported for data-flow improvement",
+        "baseline_comparator": "not reported",
+        "effect": "Expected/potential improvement; no measured effect size.",
+        "quote_location": "Abstract: full-scale integration into PLM would allow better data flow from conceptual design to detailed design.",
+        "evidence_confidence_rating": "Weak",
+        "confidence": "medium",
+        "threats_alternative_explanations": [
+          "No actual integrated toolchain evaluated.",
+          "No baseline or project outcome metric.",
+          "Tool-specific exchange feasibility not demonstrated."
+        ]
       },
       {
-        "topic": "MBSE model-centric rationale",
-        "quote": "MBSE core idea is to shift a paradigm of system/product design from a document-centric to a model-centric approach.",
-        "location": "Section 1"
+        "claim_id": "C2",
+        "claim_text": "An integrated MBSE/PLM chain would store design heritage and track architecture transformations.",
+        "category": [
+          "traceability",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mechanism": [
+          "artifact traceability",
+          "tool integration"
+        ],
+        "emergent_mechanism": null,
+        "linked_artifact_process": "MBSE/PLM digital chain and architecture artifacts",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "CDR"
+        ],
+        "evidence_type": [
+          "Assertion only / no evidence"
+        ],
+        "metric_or_value_indicator": [],
+        "metric": "none reported",
+        "baseline_comparator": "not reported",
+        "effect": "Claimed traceability/design-heritage capability; not demonstrated.",
+        "quote_location": "Section 2: Such a chain would allow a product design team to store the design heritage and keep track of how the systems architecture transforms through the design process.",
+        "evidence_confidence_rating": "Unsupported",
+        "confidence": "low",
+        "threats_alternative_explanations": [
+          "No repository/change-control/trace matrix is shown.",
+          "Statement functions as motivation rather than result."
+        ]
       },
       {
-        "topic": "OPM generality",
-        "quote": "the combination of these entities and relationships allow a systems designer to effectively represent a complex system of any nature, its function and behavior particularly at the conceptual design level.",
-        "location": "Section 2.1"
+        "claim_id": "C3",
+        "claim_text": "DSM-based mapping of OPM, CPM, and STEP entities identifies overlaps, gaps, and misfits in MBSE-to-PLM information exchange.",
+        "category": [
+          "integrability/interoperability",
+          "consistency",
+          "completeness",
+          "decision support"
+        ],
+        "specificity_of_claim": "generic MBSE",
+        "mechanism": [
+          "other"
+        ],
+        "emergent_mechanism": "DSM-based semantic/entity correspondence mapping",
+        "linked_artifact_process": "23-entity DSM with full/partial correspondences and frequency analysis",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "CDR"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Quantitative metric without baseline"
+        ],
+        "metric_or_value_indicator": [
+          "trace links",
+          "other"
+        ],
+        "metric": "Full/partial correspondences and entity appearance percentages: Object 80%, Process 25%, State 0%, Geometry 60%.",
+        "baseline_comparator": "none",
+        "effect": "Reveals strong space/geometry representation and weak/absent time/state representation.",
+        "quote_location": "Section 3: DSM maps core entities from conceptual to detail design and identifies overlaps and gaps; Figure 2 reports percentages.",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "medium",
+        "threats_alternative_explanations": [
+          "Entity selection and F/P judgments are not independently validated.",
+          "Mapping is conceptual rather than tested automated exchange."
+        ]
       },
       {
-        "topic": "Lifecycle scope boundary",
-        "quote": "we only consider the transfer from conceptual design to detailed design",
-        "location": "Section 3"
-      },
-      {
-        "topic": "CubeSat mission context",
-        "quote": "As an example of a technical system, we chose a small satellite.",
-        "location": "Section 4"
-      },
-      {
-        "topic": "CubeSat mission function",
-        "quote": "The mission to be fulfilled by the satellite is to observe the earth surface and transmit the recorded images to the ground",
-        "location": "Section 4"
-      },
-      {
-        "topic": "Power system only named",
-        "quote": "The satellite consists of a number of subsystems, namely an Optical Instrument, a Power System, a Structure, a Communications System, a Thermal Control System, and an Attitude Determination and Control System (ADCS).",
-        "location": "Section 4"
-      },
-      {
-        "topic": "No state in CPM",
-        "quote": "CPM does not allow the description of \"states\", due to the fact that this approach was created from the purpose of geometry representation and is less focused on the representation of artifacts throughout their life cycle.",
-        "location": "Section 4"
-      },
-      {
-        "topic": "STEP entity-count evidence",
-        "quote": "The \"product\" count represents the number of components of the simple CubeSat 3D model.",
-        "location": "Section 4/Table 1"
-      },
-      {
-        "topic": "Core integration conclusion",
-        "quote": "Current PLM systems explicitly represent space in great detail but leave the time domain mostly as an implicit dimension",
-        "location": "Section 5"
-      },
-      {
-        "topic": "Future work limitation",
-        "quote": "For future work, we see the extension to other product development and lifecycle phases, the inclusion of other types of entities and also an analysis of the relationships between the entities of each domain.",
-        "location": "Section 5"
-      },
-      {
-        "topic": "Generic V&V mention",
-        "quote": "The system modeling language (SysML) has a grammar of 9 types of diagrams that support specification, analysis, design, verification, and validation of systems [10].",
-        "location": "Section 2"
+        "claim_id": "C4",
+        "claim_text": "OPM's object-process-state model exposes a core integration problem: PLM is geometry/space-centric and lacks explicit time/state representation needed for behavior/functions.",
+        "category": [
+          "integrability/interoperability",
+          "consistency",
+          "completeness",
+          "lifecycle continuity"
+        ],
+        "specificity_of_claim": "nanosatellite system-level",
+        "mechanism": [
+          "other"
+        ],
+        "emergent_mechanism": "explicit space-time-state representation alignment",
+        "linked_artifact_process": "OPM CubeSat/thermal diagrams, CPM thermal representation, STEP/AP242 counts",
+        "lifecycle_stage": [
+          "concept/pre-Phase A",
+          "CDR"
+        ],
+        "evidence_type": [
+          "Illustrative example or conceptual argument",
+          "Single case-study demonstration",
+          "Quantitative metric without baseline"
+        ],
+        "metric_or_value_indicator": [
+          "other"
+        ],
+        "metric": "Figure 2 State 0% and Geometry 60%; Table 1 Geometry 86229 and zero counts for feature/material/specification/action/process plan in simplified STEP file.",
+        "baseline_comparator": "none",
+        "effect": "Demonstrates representation gap; not a measured project improvement.",
+        "quote_location": "Section 5: PLM systems represent space in detail but leave time implicit, making it difficult to integrate the digital chain; state is essentially not present in PLM systems.",
+        "evidence_confidence_rating": "Moderate",
+        "confidence": "medium",
+        "threats_alternative_explanations": [
+          "Simplified assembly may not represent all PLM/AP242 implementations.",
+          "Absence of entities may depend on 3D model construction.",
+          "Detailed example is thermal, not EPS."
+        ]
       }
     ],
-    "notes_for_consistency_with_lineage": "This extraction treats the paper as supporting: it is useful for MBSE/PLM integration and CubeSat system-level modeling, but it should not be synthesized as EPS-specific evidence for reliability or pre-physical EPS verification.",
-    "extraction_confidence": "medium",
-    "extraction_confidence_reason": "The full manuscript text was available, but some figure/table detail is embedded as converted descriptions, the underlying models are unavailable, and the paper only indirectly relates to EPS-focused review questions."
+    "governance_roi_project_decision_linkage": {
+      "model_governance_strategy": "not reported",
+      "traceability_from_model_to_deliverables_decisions": "Design heritage and architecture tracking are claimed conceptually; Figure 5 includes satisfies relation to specification; no deliverable/gate/decision trace is shown.",
+      "evaluation_criteria_used": [
+        "DSM full/partial correspondence",
+        "entity appearance frequency",
+        "STEP entity counts"
+      ],
+      "roi_value_realization_evidence": "not reported",
+      "programmatic_gates_supported": "not reported",
+      "model_derived_performance_indicators_management_metrics": "Entity counts/percentages only; no management KPI/ROI metric."
+    },
+    "gap_mapping": {
+      "practical_implementation_pathway": {
+        "rating": "addressed conceptually",
+        "rationale": "Entity extraction/DSM/frequency/example steps, but no validated playbook.",
+        "evidence": "Section 3."
+      },
+      "toolchain_fragmentation_interoperability": {
+        "rating": "addressed with evidence",
+        "rationale": "Central topic with DSM, CubeSat representations, AP242 counts, and time/state gap analysis.",
+        "evidence": "Sections 3-5, Figures 1-2, Table 1."
+      },
+      "lightweight_resource_constrained_tailoring": {
+        "rating": "not addressed",
+        "rationale": "No tailoring to resource-constrained CubeSat teams/projects.",
+        "evidence": "No cost/schedule/team-size context."
+      },
+      "governance_project_deliverables_roi": {
+        "rating": "mentioned only",
+        "rationale": "Design heritage mentioned; no governance, deliverables, gates, or ROI evidence.",
+        "evidence": "Section 2 only."
+      },
+      "newspace_agile_distributed_rapid_iteration_alignment": {
+        "rating": "not addressed",
+        "rationale": "No NewSpace/agile/distributed/rapid-iteration discussion.",
+        "evidence": "Completed extraction found none."
+      }
+    },
+    "synthesis_consistency": {
+      "key_findings_by_rq": {
+        "RQ1": [
+          "Partial: CubeSat mission/subsystem OPM/CPM/STEP representations support general system-level lifecycle data modeling, not EPS/minimal-behavior templates."
+        ],
+        "RQ2": [
+          "Partial: MBSE/PLM integrability and lifecycle-continuity claims are made, but with illustrative evidence and no EPS-specific outcomes."
+        ],
+        "RQ3": [
+          "None: no EPS verification model or pre-physical verification artifacts."
+        ]
+      },
+      "author_limitations_gaps": [
+        "Only conceptual-to-detailed downstream transfer considered.",
+        "Limited first step; future phases/entities/relationships remain.",
+        "AP242 absences depend on simplified assembly/model construction."
+      ],
+      "extractor_identified_limitations_gaps": [
+        "No EPS-specific content beyond top-level Power System box.",
+        "No verification/test integration.",
+        "No model files/scripts.",
+        "No baseline, independent validation, stakeholder evaluation, integration-test, or flight evidence."
+      ],
+      "direct_evidence_quotes": [
+        "Abstract: data flow focusing on OPM, CPM, and STEP.",
+        "Section 2: integrated chain facilitates data flow and design heritage.",
+        "Section 3: cells indicate corresponding fully or partially.",
+        "Section 4: CubeSat subsystems include Power System and Thermal Control System.",
+        "Section 5: fundamental problem is explicit representation of time and space.",
+        "Section 5: state is essentially not present in PLM systems."
+      ],
+      "lineage_notes": "Use as supporting MBSE/PLM interoperability paper, not CubeSat EPS reference-model evidence.",
+      "extraction_confidence": "medium",
+      "extraction_confidence_reason": "Clear for integration-gap coding, but not EPS/V&V-focused and lacks full model assets."
+    }
   },
-  "bibtex": "@incollection{paper-0024,\n  title = {Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design},\n  author = {Yaroslav Menshenin and Dominik Knoll and Yana Brovar and Clement Fortin},\n  year = {2020},\n  booktitle = {IFIP International Conference on Product Lifecycle Management},\n  publisher = {Springer},\n  doi = {10.1007/978-3-030-62807-9_47; https://inria.hal.science/hal-03753120v1},\n  url = {https://doi.org/10.1007/978-3-030-62807-9_47; https://inria.hal.science/hal-03753120v1}\n}"
+  "bibtex": "@inproceedings{Menshenin2020MBSEPLM,\n  author = {Menshenin, Yaroslav and Knoll, Dominik and Brovar, Yana and Fortin, Clement},\n  title = {Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design},\n  booktitle = {17th IFIP International Conference on Product Lifecycle Management (PLM)},\n  year = {2020},\n  pages = {593--603},\n  publisher = {Springer},\n  doi = {10.1007/978-3-030-62807-9_47},\n  url = {https://inria.hal.science/hal-03753120v1}\n}"
 }
