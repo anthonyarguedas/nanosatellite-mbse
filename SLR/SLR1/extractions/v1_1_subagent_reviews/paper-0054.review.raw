@@ -1,0 +1,112 @@
+{
+  "corpus_id": "paper-0054",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction",
+        "specific-mission model with reusable method only"
+      ],
+      "status": "coded",
+      "rationale": "The reusable contribution is a high-level architectural-decision and MAU/cost trade-study workflow with adaptation guidance for similar CubeSat missions. The actual model is BOREALIS-specific and requires retuning of ADs, weights, utility/cost functions, and performance parameters; it is not a mission-agnostic architecture, template, open package, interface-focused model, or detailed reusable behavior model.",
+      "evidence": [
+        {
+          "quote": "Emphasis will be given to the model built for the tradeoff analysis, explaining how it was built and used and providing the reader with all the elements to possibly reuse it for another mission design of the same satellite class.",
+          "location": "Section 1, Introduction"
+        },
+        {
+          "quote": "It is a systematic approach that can be reused on other missions with the same or similar CubeSat class by adapting the tools that will be presented.",
+          "location": "Section 3, System Engineering Process and Model-Based Systems Engineering"
+        },
+        {
+          "quote": "The developed model may also be used for other CubeSat missions like BOREALIS after some readaptation of the utility and cost functions",
+          "location": "Section 3.3, Model-Based Systems Engineering"
+        },
+        {
+          "quote": "When reusing this framework for other missions, adjustments will be necessary not only in terms of different architectures (ADs) but also in weight assignments and, if needed, modifications to performance parameters",
+          "location": "Section 4.3, Development of the BOREALIS System Model"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "separate document only"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports development and verification plans as strategic documents. The MAU/cost model, Monte Carlo, and sensitivity analyses are architecture trade/robustness analyses, not shown as trace-linked, model-contained, executable IVV artifacts or EPS verification procedures.",
+      "evidence": [
+        {
+          "quote": "Development and Verification Plans: Strategic documents that outline the procedures for system validation against the mission requirements and operational readiness checks.",
+          "location": "Section 3.2, System Engineering Outputs"
+        },
+        {
+          "quote": "It is worth mentioning that the model under development on Valispace to manage the actual CubeSat data is not the purpose of this article.",
+          "location": "Section 3.3, Model-Based Systems Engineering"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related claims concern architecture/configuration robustness, model-result reliability, mission-assurance-oriented decision support, and generic MBSE process risk reduction. No claim directly supports EPS reliability.",
+      "evidence": [
+        {
+          "quote": "Monte Carlo simulation that incorporated stochastic elements into the input data, enhancing the model reliability by capturing the inherent variability and ensuring robust mission planning.",
+          "location": "Section 3.2, System Engineering Outputs"
+        },
+        {
+          "quote": "This approach provides a more robust understanding of the relative performance of each mission concept under varying conditions and evaluates the reliability of each configuration.",
+          "location": "Section 5.2, Enhancing Analysis with Monte Carlo Simulations"
+        },
+        {
+          "quote": "This confirms that the model is robust against potential biases in weight assignment, ensuring that the results provide reliable guidance for decision making.",
+          "location": "Section 5.4, Results Discussion"
+        },
+        {
+          "quote": "This centralized model enables engineers to perform early-stage simulations, identify potential issues, and make informed trade-offs, ultimately reducing development time and mitigating risks associated with late-stage design changes.",
+          "location": "Section 3.3, Model-Based Systems Engineering"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "Architecture selection supports mission-assurance-oriented decision quality, but the claim does not itself demonstrate model reliability or EPS reliability."
+    },
+    {
+      "claim_id": "C2",
+      "reliability_subtype": [
+        "system/mission reliability",
+        "model consistency/reliability"
+      ],
+      "rationale": "Monte Carlo and sensitivity analyses are explicitly tied to configuration reliability and stable model rankings under uncertainty; this remains system/model-level, not EPS-specific reliability."
+    },
+    {
+      "claim_id": "C6",
+      "reliability_subtype": [
+        "process reliability"
+      ],
+      "rationale": "The generic MBSE claim concerns early issue identification and mitigation of late-stage design-change risks, so it is process-reliability adjacent rather than not applicable or EPS reliability."
+    }
+  ],
+  "repair_notes": [
+    "Keep generality values but replace migration-note evidence with paper evidence.",
+    "Repair IVV integration level from executable/model-based checks to separate document only.",
+    "Do not code EPS reliability for this paper.",
+    "Claims C3-C5 should remain not applicable for reliability_subtype."
+  ]
+}

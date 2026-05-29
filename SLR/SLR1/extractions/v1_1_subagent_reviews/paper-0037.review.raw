@@ -1,0 +1,143 @@
+{
+  "corpus_id": "paper-0037",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reusable workflow",
+        "open package",
+        "method guidance",
+        "specific-mission model with reusable method only"
+      ],
+      "status": "coded",
+      "rationale": "The paper supports a reusable docs-as-code method/workflow, templates, public repository, and partial method guidance. The SeaLion architecture itself is mission-specific; broader reuse is claimed for the method/data-model approach, not demonstrated as a mission-agnostic architecture. Do not code high-level abstraction, mission-agnostic architecture, interface-focused model, or low-dynamics / non-detailed-behavior model as realized generality mechanisms.",
+      "evidence": [
+        {
+          "quote": "YAML files are automatically processed using templates language (e.g., Jinja2) via a build shell script.",
+          "location": "Section 5.5 Document Generation"
+        },
+        {
+          "quote": "The SeaLion mission architecture and methodology is available in a publicly accessible repository.",
+          "location": "Data Availability Statement"
+        },
+        {
+          "quote": "This extended data model would serve as a self-describing specification that new CubeSat projects could adopt for their own CubeSat missions, whereby the SeaLion mission would serve as the first reference implementation.",
+          "location": "Section 7 Future Work and Observations"
+        },
+        {
+          "quote": "The content presented in this article is based on the prior mission profile from the launch at WFF into VLEO.",
+          "location": "Section 1.2 SeaLion Mission"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "not_reported",
+      "rationale": "The paper mentions verification/validation generically and includes operational verify/validate user stories, but does not report EPS/system verification matrices, model-contained verification artifacts, executable checks, simulation-in-the-loop, SIL/HIL, or trace-linked test/procedure artifacts.",
+      "evidence": [
+        {
+          "quote": "These models were used to conduct activities such as design, specification, analysis, verification, and validation of the system.",
+          "location": "Section 1 Introduction"
+        },
+        {
+          "quote": "These user stories detail the ground station operator's tasks to view the satellite beacon data and to request the satellite health data packet so that the operator can verify that AODS sensors and GPS data are within nominal parameters.",
+          "location": "Section 5.4 Data Structures"
+        },
+        {
+          "quote": "The initial goal is to list the components of the SeaLion CubeSat and to generate assembly steps for them.",
+          "location": "Section 6.2 Component Data Structure and File Implementation"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction",
+        "not applicable"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims are mission/system assurance, process/method assurance, model/document consistency, and potential defect/interface-conflict reduction. No claim directly supports EPS reliability.",
+      "evidence": [
+        {
+          "quote": "assist improving CubeSat success rates",
+          "location": "Abstract"
+        },
+        {
+          "quote": "lack the resources, training, experience, or methodology to reliably give assurance to their missions",
+          "location": "Section 2.2 Ensuring CubeSat Success"
+        },
+        {
+          "quote": "continuous updating is ensured that any changes affecting dependencies within the mission architecture are kept in sync",
+          "location": "Section 5.5 Document Generation"
+        },
+        {
+          "quote": "This would allow for a team to identify \"areas where conflicts could arise in interfaces, and highlights input and output dependency assumptions and requirements\"",
+          "location": "Section 6.2 Component Data Structure and File Implementation"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1",
+      "reliability_subtype": [
+        "model consistency/reliability",
+        "defect/error reduction"
+      ],
+      "rationale": "Unambiguous data structures, traceability, and reduced ambiguity support model consistency/reliability and potential defect/error reduction, not EPS reliability."
+    },
+    {
+      "claim_id": "C2",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "The synchronized docs-as-code generation claim concerns keeping model-derived documents consistent."
+    },
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Learning ease, non-proprietary tooling, and reproducibility are not reliability claims."
+    },
+    {
+      "claim_id": "C4",
+      "reliability_subtype": [
+        "system/mission reliability",
+        "process reliability",
+        "mission assurance"
+      ],
+      "rationale": "Improving CubeSat success rates and giving assurance to missions is system/mission reliability and mission assurance; the mechanism is process/method support. Do not code as EPS reliability or model consistency/reliability."
+    },
+    {
+      "claim_id": "C5",
+      "reliability_subtype": [
+        "defect/error reduction"
+      ],
+      "rationale": "The interface/N2 claim is about identifying possible interface conflicts, a defect/error-reduction subtype."
+    },
+    {
+      "claim_id": "C6",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Future reuse/reference-implementation potential is not a reliability claim."
+    }
+  ],
+  "repair_notes": [
+    "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism; the paper does not frame limited behavior detail as a reuse mechanism.",
+    "Remove interface-focused model from generality_reuse_mechanism unless coding future/under-development DOF/N2 work separately; it is not a completed general reusable model mechanism.",
+    "Do not add high-level abstraction or mission-agnostic architecture; the implemented architecture is SeaLion-specific.",
+    "IVV integration should remain none/not_reported; operational verify/validate user stories are not model-integrated IVV artifacts.",
+    "No EPS reliability subtype is supported. C4 should use process reliability plus system/mission reliability and mission assurance, not model consistency/reliability."
+  ]
+}

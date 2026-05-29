@@ -536,26 +536,32 @@
         "template",
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "status": "coded",
-      "rationale": "The CRM is a reusable reference model and starting point for mission-specific models, with Figure 5 giving a workflow from CRM population to logical/physical architecture and design/development.",
+      "rationale": "The CRM is a generic, high-abstraction CubeSat reference model intended to be populated and tailored for mission-specific models. Do not code interface-focused model or specific-mission model with reusable method only. Also remove low-dynamics / non-detailed-behavior model: the paper abstracts implementation and physical instantiation, but it does not claim low dynamics or deliberately non-detailed behavior as the reuse mechanism.",
       "evidence": [
         {
-          "quote": "Abstract: The CRM is being developed with sufficient flexibility to support customization for specific CubeSat missions by mission-specific CubeSat teams.",
-          "location": "not specified"
+          "quote": "The CRM is being developed with sufficient flexibility to support customization for specific CubeSat missions by mission-specific CubeSat teams.",
+          "location": "Abstract"
         },
         {
-          "quote": "Section 1: Provide a CubeSat Reference Model (CRM) for CubeSat teams to use as the starting point for developing mission-specific CubeSat models.",
-          "location": "not specified"
+          "quote": "Provide a CubeSat Reference Model (CRM) for CubeSat teams to use as the starting point for developing mission-specific CubeSat models;",
+          "location": "Section 1"
         },
         {
-          "quote": "Section 3: The steps for developing a mission-specific CubeSat model are illustrated in Figure 5.",
-          "location": "not specified"
+          "quote": "It offers a high-level view of the problem domain (space). The key characteristics of a reference model are: abstractions, relationships, and entities.",
+          "location": "Section 1"
         },
         {
-          "quote": "Section 3: Starting with this list, teams may add or remove subsystems based on the mission requirements and objectives.",
-          "location": "not specified"
+          "quote": "Since we are interested in modeling a generic CubeSat mission domain, and not a specific mission",
+          "location": "Section 1"
+        },
+        {
+          "quote": "The steps for developing a mission-specific CubeSat model are illustrated in Figure 5.",
+          "location": "Section 3"
         }
       ],
       "confidence": "high"
@@ -767,6 +773,28 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "Simulation-in-the-loop is supportable for the system/reference-model V&V workflow because model-contained V&V packages, viewpoints, V&V scenarios, mission modeling, executable mission scenario configuration, and COTS tool interfacing are described. This must be qualified as system-level, not EPS-specific; the paper reports no EPS-specific IVV procedure, SIL/HIL, or physical-test evidence.",
+      "evidence": [
+        {
+          "quote": "The enterprise, segment, and subsystems packages contain behaviors, structures, validation, and verification packages.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The CRM will be populated with a representative mission, and then the viewpoints will provide the objective evidence for verification.",
+          "location": "Section 4"
+        },
+        {
+          "quote": "The CubeSat SysML model and the modeling tool can be configured to execute a mission scenario. This includes interfacing with commercial off-the-shelf (COTS) modeling tools [7].",
+          "location": "Section 4"
+        }
+      ],
+      "confidence": "medium"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -824,6 +852,30 @@
         }
       ],
       "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related support is system/model/mission-assurance level only. The paper has no direct EPS reliability outcome. Mission reliability appears only as a requirements-decomposition example; traceability/consistency supports model consistency/reliability; V&V facilitation supports mission assurance. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "The intent of the model is to facilitate the design, verification and validation of CubeSat design.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Segment requirements are derived from mission requirements and trace to mission use cases.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "For example, a top-level mission reliability requirement may lead to lower level requirements that identify where redundancy would be needed.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1504,9 +1556,38 @@
         "template",
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
-      "generality_reuse_notes": "The CRM is described as methodology-neutral and technology-agnostic at the reference-model level, while the implemented model is MBSE/SysML-oriented. Teams populate mission-specific statements, objectives, measures, stakeholders, concerns, use cases, requirements, V&V approach, and physical architecture."
+      "generality_reuse_notes": "The CRM is described as methodology-neutral and technology-agnostic at the reference-model level, while the implemented model is MBSE/SysML-oriented. Teams populate mission-specific statements, objectives, measures, stakeholders, concerns, use cases, requirements, V&V approach, and physical architecture.",
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The CRM is a generic, high-abstraction CubeSat reference model intended to be populated and tailored for mission-specific models. Do not code interface-focused model or specific-mission model with reusable method only. Also remove low-dynamics / non-detailed-behavior model: the paper abstracts implementation and physical instantiation, but it does not claim low dynamics or deliberately non-detailed behavior as the reuse mechanism.",
+        "evidence": [
+          {
+            "quote": "The CRM is being developed with sufficient flexibility to support customization for specific CubeSat missions by mission-specific CubeSat teams.",
+            "location": "Abstract"
+          },
+          {
+            "quote": "Provide a CubeSat Reference Model (CRM) for CubeSat teams to use as the starting point for developing mission-specific CubeSat models;",
+            "location": "Section 1"
+          },
+          {
+            "quote": "It offers a high-level view of the problem domain (space). The key characteristics of a reference model are: abstractions, relationships, and entities.",
+            "location": "Section 1"
+          },
+          {
+            "quote": "Since we are interested in modeling a generic CubeSat mission domain, and not a specific mission",
+            "location": "Section 1"
+          },
+          {
+            "quote": "The steps for developing a mission-specific CubeSat model are illustrated in Figure 5.",
+            "location": "Section 3"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_or_phases": [
@@ -1616,7 +1697,29 @@
       "integration_test_readiness": [
         "not reported"
       ],
-      "integration_test_notes": "The paper leaves augmentation for CubeSat test and evaluation as future research and reports no EPS-specific pre-physical verification procedure, test procedure, flat-sat link, HIL/SIL link, environmental test, or operational validation result."
+      "integration_test_notes": "The paper leaves augmentation for CubeSat test and evaluation as future research and reports no EPS-specific pre-physical verification procedure, test procedure, flat-sat link, HIL/SIL link, environmental test, or operational validation result.",
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "Simulation-in-the-loop is supportable for the system/reference-model V&V workflow because model-contained V&V packages, viewpoints, V&V scenarios, mission modeling, executable mission scenario configuration, and COTS tool interfacing are described. This must be qualified as system-level, not EPS-specific; the paper reports no EPS-specific IVV procedure, SIL/HIL, or physical-test evidence.",
+        "evidence": [
+          {
+            "quote": "The enterprise, segment, and subsystems packages contain behaviors, structures, validation, and verification packages.",
+            "location": "Section 2"
+          },
+          {
+            "quote": "The CRM will be populated with a representative mission, and then the viewpoints will provide the objective evidence for verification.",
+            "location": "Section 4"
+          },
+          {
+            "quote": "The CubeSat SysML model and the modeling tool can be configured to execute a mission scenario. This includes interfacing with commercial off-the-shelf (COTS) modeling tools [7].",
+            "location": "Section 4"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1649,7 +1752,11 @@
         "quote_location": "Abstract: The intent of the model is to facilitate the design, verification and validation of CubeSat design.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "The paper does not show a completed mission application, quantified V&V improvement, or test/flight evidence; benefits may depend on team skill and tool support."
+        "threats_alternative_explanations": "The paper does not show a completed mission application, quantified V&V improvement, or test/flight evidence; benefits may depend on team skill and tool support.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Design, verification, and validation facilitation is mission-assurance adjacent, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1680,7 +1787,11 @@
         "quote_location": "Abstract: The CRM is being developed with sufficient flexibility to support customization for specific CubeSat missions by mission-specific CubeSat teams. Section 1: Provide a CubeSat Reference Model (CRM) for CubeSat teams to use as the starting point for developing mission-specific CubeSat models.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Flexibility is not demonstrated across independent teams in this paper; reuse could be limited by missing model availability and expertise requirements."
+        "threats_alternative_explanations": "Flexibility is not demonstrated across independent teams in this paper; reuse could be limited by missing model availability and expertise requirements.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/reproducibility claim without reliability content."
       },
       {
         "claim_id": "C3",
@@ -1709,7 +1820,11 @@
         "quote_location": "Section 1: Encouraging the various Mission-specific CubeSat development teams to adopt MBSE, Object Oriented System Engineering Methodology (OOSEM), and SysML and providing them a standard Reference Model for their development will boost the efficiency and productivity of less experienced teams without any negative impacts.",
         "evidence_confidence_rating": "Unsupported",
         "confidence": "low",
-        "threats_alternative_explanations": "MBSE adoption could add training, modeling, tool, and governance overhead; no baseline or user evaluation is reported."
+        "threats_alternative_explanations": "MBSE adoption could add training, modeling, tool, and governance overhead; no baseline or user evaluation is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Efficiency/productivity claim; no reliability outcome is evidenced."
       },
       {
         "claim_id": "C4",
@@ -1742,7 +1857,11 @@
         "quote_location": "Section 2: Segment requirements are derived from mission requirements and trace to mission use cases. Segment requirements trace to measures of performance which trace to measures of effectiveness. Section 2: Subsystem requirements are derived from segment requirements and trace to segment use cases.",
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_alternative_explanations": "The diagram is illustrative not prescriptive and does not establish trace correctness, maintenance effort, or completeness in a real project."
+        "threats_alternative_explanations": "The diagram is illustrative not prescriptive and does not establish trace correctness, maintenance effort, or completeness in a real project.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Traceability and consistency are model-reliability adjacent, not system or EPS reliability."
       },
       {
         "claim_id": "C5",
@@ -1773,7 +1892,11 @@
         "quote_location": "Section 4: Figure 6 illustrates that viewpoints into the CRM will provide the objective evidence needed for validation. Section 4: The CRM will be populated with a representative mission, and then the viewpoints will provide the objective evidence for verification.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Viewpoints may document stakeholder concerns without verifying model semantics or system performance; representative mission results are not shown."
+        "threats_alternative_explanations": "Viewpoints may document stakeholder concerns without verifying model semantics or system performance; representative mission results are not shown.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Viewpoints as objective V&V evidence support mission assurance at system/model level."
       },
       {
         "claim_id": "C6",
@@ -1804,7 +1927,11 @@
         "quote_location": "Section 4: The CubeSat SysML model and the modeling tool can be configured to execute a mission scenario. This includes interfacing with commercial off-the-shelf (COTS) modeling tools [7].",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Capability may rely on prior work or unspecified tool configurations; absent interface details limit reproducibility and synthesis confidence."
+        "threats_alternative_explanations": "Capability may rely on prior work or unspecified tool configurations; absent interface details limit reproducibility and synthesis confidence.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Tool-interface/executable-scenario capability is coded as integrability/automation, not a reliability outcome."
       },
       {
         "claim_id": "C7",
@@ -1832,7 +1959,11 @@
         "quote_location": "Section 2: For example, a top-level mission reliability requirement may lead to lower level requirements that identify where redundancy would be needed.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Not EPS-specific; reliability improvement depends on later architecture, analysis, and verification not shown in this paper."
+        "threats_alternative_explanations": "Not EPS-specific; reliability improvement depends on later architecture, analysis, and verification not shown in this paper.",
+        "reliability_subtype": [
+          "system/mission reliability"
+        ],
+        "reliability_subtype_rationale": "Direct example is a mission reliability requirement decomposed into redundancy-related requirements; do not add model consistency/reliability or EPS reliability."
       },
       {
         "claim_id": "C8",
@@ -1860,7 +1991,11 @@
         "quote_location": "Section 1: It consists of an interlinked set of concepts produced by a body of subject matter experts with the express purpose of fostering clear communications within collaborative teams of stakeholders.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Generic reference-model rationale may not translate to actual communication gains for CubeSat teams without adoption evidence."
+        "threats_alternative_explanations": "Generic reference-model rationale may not translate to actual communication gains for CubeSat teams without adoption evidence.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Communication/stakeholder-alignment claim without reliability content."
       },
       {
         "claim_id": "C9",
@@ -1890,7 +2025,11 @@
         "quote_location": "Conclusion: Future advances include the development of a library of reference models (for different domains and missions) that are metadata-tagged for easy retrieval.",
         "evidence_confidence_rating": "Unsupported",
         "confidence": "low",
-        "threats_alternative_explanations": "Future library availability, metadata quality, repository governance, and adoption are not demonstrated."
+        "threats_alternative_explanations": "Future library availability, metadata quality, repository governance, and adoption are not demonstrated.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Future reference-model library/reuse claim without reliability content."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2036,5 +2175,17 @@
       "extraction_confidence_reason": "The markdown is complete enough for paper-level extraction and contains clear statements on scope, assumptions, artifacts, traceability, and V&V. Confidence is high for coded absences because missing EPS/toolchain/outcome evidence is consistent across abstract, sections, figures, and conclusion."
     }
   },
-  "bibtex": "@incollection{KaslowMadni2017CRMValidationVerification,\n  title = {Validation and Verification of MBSE-compliant CubeSat Reference Model},\n  author = {Kaslow, David and Madni, Azad M.},\n  year = {2017},\n  booktitle = {Proceedings of the 15th Annual Conference on Systems Engineering Research},\n  doi = {10.1007/978-3-319-62217-0_27}\n}"
+  "bibtex": "@incollection{KaslowMadni2017CRMValidationVerification,\n  title = {Validation and Verification of MBSE-compliant CubeSat Reference Model},\n  author = {Kaslow, David and Madni, Azad M.},\n  year = {2017},\n  booktitle = {Proceedings of the 15th Annual Conference on Systems Engineering Research},\n  doi = {10.1007/978-3-319-62217-0_27}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0015.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism.",
+      "Retain simulation-in-the-loop only with a system/reference-model qualifier; do not represent it as EPS-specific IVV.",
+      "No EPS reliability subtype is supported.",
+      "Repair C7 by removing model consistency/reliability; keep only system/mission reliability."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

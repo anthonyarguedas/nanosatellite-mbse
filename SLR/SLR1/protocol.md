@@ -33,7 +33,7 @@
 | System-level or EPS MBSE model, not other subsystem-level or non-MBSE model | 1 |
 | MBSE models only | 2 |
 | The outcomes must be attributed to MBSE, not to the EPS technology choices | 2 |
-| Must present an IVV model using MBSE | 3 |
+| Must present an integration, verification, and validation (IVV) model using MBSE | 3 |
 
 ## Quality checklist
 
@@ -79,7 +79,7 @@ Quality scores are used for sensitivity and confidence in synthesis, not as auto
 - System boundary and level of abstraction, including what is deliberately modeled minimally or excluded.
 - Required prior behavioral/domain knowledge and how the method handles limited behavioral knowledge.
 - Model artifacts used: requirements diagrams/tables, block definition/internal block diagrams, state/activity/sequence diagrams, parametrics, trade-study models, interface control models, power budgets, FMEA/risk models, test cases/procedures, verification matrices, executable simulations, generated documents, or other.
-- Generality/reuse mechanism: template, reference model, profile, library, pattern, transformation, reusable workflow, open package, or method guidance.
+- Generality/reuse mechanism: template, reference model, profile, library, pattern, transformation, reusable workflow, open package, method guidance, high-level abstraction, mission-agnostic architecture, interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.
 
 ### Implementation pathway and tailoring
 
@@ -108,8 +108,9 @@ Quality scores are used for sensitivity and confidence in synthesis, not as auto
 
 - EPS elements modeled: solar panels, battery, power conditioning/distribution, loads, modes, margins, power budgets, degradation, fault protection, interfaces, or other.
 - EPS requirements represented and how they are linked to architecture, behavior, analysis, or verification artifacts.
-- Verification/validation artifacts: verification matrix, test cases, test procedures, simulation scenarios, acceptance criteria, executable checks, generated test artifacts, SIL/HIL links, or automated tests.
+- Integration, verification, and validation (IVV) artifacts: verification matrix, test cases, test procedures, simulation scenarios, acceptance criteria, executable checks, generated test artifacts, SIL/HIL links, or automated tests.
 - Pre-physical-development verification mechanism: requirements-in-the-loop, simulation-in-the-loop, parametric checks, model checking, trade-study verification, virtual integration, or not reported.
+- IVV integration level: none/not reported, separate document only, verification matrix adjacent to model, trace-linked verification artifacts, model-contained verification artifacts, executable/model-based checks, simulation-in-the-loop, software/hardware-in-the-loop, or physical integration/test only.
 - Evidence that verification artifacts are integrated into the EPS/system model rather than documented separately.
 - Integration/test readiness: links to hardware integration, software integration, flat-sat/testbed, environmental test, operational validation, or not reported.
 
@@ -119,6 +120,7 @@ For every claimed MBSE outcome, extract a separate claim-evidence record:
 
 - Claim text or concise paraphrase.
 - Outcome category: reliability, reproducibility, integrability/interoperability, generality/reuse, traceability, consistency, completeness, defect/error reduction, cost reduction, schedule reduction, effort reduction, automation, decision support, communication/stakeholder alignment, risk reduction, mission assurance, lifecycle continuity, governance/ROI, or other.
+- Reliability subtype, when the outcome category includes reliability or a reliability-adjacent claim: EPS reliability, system/mission reliability, process reliability, model consistency/reliability, mission assurance, defect/error reduction, generic reliability claim, or not applicable.
 - Specificity of claim: EPS-specific, nanosatellite system-level, generic space-system, generic MBSE, or unclear.
 - MBSE mechanism proposed to create the value: artifact traceability, executable simulation, parametric analysis, reference model reuse, automated generation, model transformation, shared repository, requirements linkage, tool integration, lifecycle gate support, or other.
 - Artifact/process linked to the claim.

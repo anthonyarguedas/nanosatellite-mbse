@@ -598,26 +598,27 @@
         "template",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "The paper defines a SysML template/guidelines, repeated workflows, and reusable MATLAB/Simulink model libraries for future solutions.",
+      "rationale": "The paper supports reusable templates/guidelines, step workflows, and MATLAB/Simulink model libraries, but the demonstrated SysML/executable case remains DelFFi/ADCS-specific. Do not retain interface-focused model: interfaces/tool links are present, but the reuse mechanism is not an interface-focused architecture. Do not add high-level abstraction, mission-agnostic architecture, or low-dynamics / non-detailed-behavior model; detailed ADCS dynamics and mission-specific parameters are central.",
       "evidence": [
         {
           "quote": "The definition of guidelines associated to a welldefined template is observed to be of vital importa in order to apply the MBSE approach, and to actual make the model reusable.",
           "location": "Conclusions"
         },
         {
-          "quote": "Derive mission requirements from Mission Statement. Derive mission requirements from Study Objectives. Model mission requirements in the 'Customer Need, Mission Statement and Mission Requirements' diagram. Provide title, text, rationale and status to the requirements.",
+          "quote": "Derive mission requirements from Mission Statement. Derive mission requirements from Study Objectives. Model mission requirements in the 'Customer Need, Mission Statement and Mission Requirements' diagram.",
           "location": "Section III.II.I Mission Requirements"
-        },
-        {
-          "quote": "System requirements are derived by means of the following sequence of suggested activities ... Derive system requirements from mission requirements, Use Cases, system context diagram mission phases diagram and functional analysis ... Model 'derived', 'trace', or 'Refine' relations when applicable in new requirements diagrams.",
-          "location": "Section III.II.II System Requirement"
         },
         {
           "quote": "This is basically a set of libraries which collect the MATLAB/Simulink models, including the spacecraft hardware (sensors/actuators), kinematics dynamics, the space environment, as well as some generic functions and algorithms.",
           "location": "Section IV.I Stage 1 - Models & Blocks"
+        },
+        {
+          "quote": "Stereotypes do not benefit of universality though, but they need to be reconsidered case by case.",
+          "location": "Conclusions"
         }
       ],
       "confidence": "high"
@@ -828,6 +829,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The highest demonstrated integration level is SysML-driven MATLAB/Simulink simulation-in-the-loop for ADCS/system verification: a requirement is refined to a constraint, tool-connected simulation runs, and results update SysML requirement status. The HIL/flight-model path is described as a downstream/foreseen workflow and should not be the coded highest level. No EPS-specific IVV is demonstrated.",
+      "evidence": [
+        {
+          "quote": "ADCSF.34 is connected to a constraint block by means of 'refine' relationship. This is the way SysML adopts indicate that a requirement can be analyzed executi parametric models.",
+          "location": "Section III.II.III Low Level Requirement"
+        },
+        {
+          "quote": "ParaSolver ... is used to create intermediate input and output files to communicate SysML instance values from the SysML tool Artisan Studio, and to transfer MATLAB results to SysML instance values (targets).",
+          "location": "Section III.III.III SysML Driven ADCS Simulations"
+        },
+        {
+          "quote": "In SysML, this verification is actually implemented automatically by transferring MATLAB results to SysML instance values after the simulation and changing the \"Requirement Status\" of ADCS-F.34 from \"TBC\" to \"Satisfied\".",
+          "location": "Section III.III.III SysML Driven ADCS Simulations"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "links to hardware integration",
@@ -885,6 +908,35 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "generic reliability claim"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims concern model consistency, ADCS/system requirement assurance, and broad/unsupported AOCS-GNC reliability wording. No claim directly supports EPS reliability or defect/error reduction. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Requirements traceability appeared to be very much improved. Cross-check examinations between the Requirements Table and requirement diagrams assured an overall consistency of the model",
+          "location": "Conclusions"
+        },
+        {
+          "quote": "ADCS-F.34 is satisfied ... changing the \"Requirement Status\" of ADCS-F.34 from \"TBC\" to \"Satisfied\".",
+          "location": "Section III.III.III SysML Driven ADCS Simulations"
+        },
+        {
+          "quote": "a more reliable AOCS/GNC system can be expected because of the consistency structure and functionality through different development stages.",
+          "location": "Section IV.I Stage 3 - Onboard Software"
+        },
+        {
+          "quote": "With a more straightforward structure i Simulink, these changes can be made quickly and a reliable new solution can be created efficiently",
+          "location": "Section IV.I MDE and Onboard Software"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1745,29 +1797,31 @@
           "template",
           "library",
           "reusable workflow",
-          "method guidance"
+          "method guidance",
+          "specific-mission model with reusable method only"
         ],
         "status": "coded",
-        "rationale": "The paper defines a SysML template/guidelines, repeated workflows, and reusable MATLAB/Simulink model libraries for future solutions.",
+        "rationale": "The paper supports reusable templates/guidelines, step workflows, and MATLAB/Simulink model libraries, but the demonstrated SysML/executable case remains DelFFi/ADCS-specific. Do not retain interface-focused model: interfaces/tool links are present, but the reuse mechanism is not an interface-focused architecture. Do not add high-level abstraction, mission-agnostic architecture, or low-dynamics / non-detailed-behavior model; detailed ADCS dynamics and mission-specific parameters are central.",
         "evidence": [
           {
             "quote": "The definition of guidelines associated to a welldefined template is observed to be of vital importa in order to apply the MBSE approach, and to actual make the model reusable.",
             "location": "Conclusions"
           },
           {
-            "quote": "Derive mission requirements from Mission Statement. Derive mission requirements from Study Objectives. Model mission requirements in the 'Customer Need, Mission Statement and Mission Requirements' diagram. Provide title, text, rationale and status to the requirements.",
+            "quote": "Derive mission requirements from Mission Statement. Derive mission requirements from Study Objectives. Model mission requirements in the 'Customer Need, Mission Statement and Mission Requirements' diagram.",
             "location": "Section III.II.I Mission Requirements"
-          },
-          {
-            "quote": "System requirements are derived by means of the following sequence of suggested activities ... Derive system requirements from mission requirements, Use Cases, system context diagram mission phases diagram and functional analysis ... Model 'derived', 'trace', or 'Refine' relations when applicable in new requirements diagrams.",
-            "location": "Section III.II.II System Requirement"
           },
           {
             "quote": "This is basically a set of libraries which collect the MATLAB/Simulink models, including the spacecraft hardware (sensors/actuators), kinematics dynamics, the space environment, as well as some generic functions and algorithms.",
             "location": "Section IV.I Stage 1 - Models & Blocks"
+          },
+          {
+            "quote": "Stereotypes do not benefit of universality though, but they need to be reconsidered case by case.",
+            "location": "Conclusions"
           }
         ],
-        "confidence": "high"
+        "confidence": "high",
+        "v1_1_repair_note": "v1.1 repair added controlled generality/reuse label(s) where supported by the completed extraction: interface-focused model: the extraction identifies interfaces, exchanges, tool/data-flow mappings, or integration links as a reusable organizing mechanism; specific-mission model with reusable method only: the extraction is primarily a single mission/case model whose reusable contribution is the method/workflow rather than a mission-agnostic model asset."
       }
     },
     "implementation_pathway_tailoring": {
@@ -2043,6 +2097,28 @@
           }
         ],
         "confidence": "medium"
+      },
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "The highest demonstrated integration level is SysML-driven MATLAB/Simulink simulation-in-the-loop for ADCS/system verification: a requirement is refined to a constraint, tool-connected simulation runs, and results update SysML requirement status. The HIL/flight-model path is described as a downstream/foreseen workflow and should not be the coded highest level. No EPS-specific IVV is demonstrated.",
+        "evidence": [
+          {
+            "quote": "ADCSF.34 is connected to a constraint block by means of 'refine' relationship. This is the way SysML adopts indicate that a requirement can be analyzed executi parametric models.",
+            "location": "Section III.II.III Low Level Requirement"
+          },
+          {
+            "quote": "ParaSolver ... is used to create intermediate input and output files to communicate SysML instance values from the SysML tool Artisan Studio, and to transfer MATLAB results to SysML instance values (targets).",
+            "location": "Section III.III.III SysML Driven ADCS Simulations"
+          },
+          {
+            "quote": "In SysML, this verification is actually implemented automatically by transferring MATLAB results to SysML instance values after the simulation and changing the \"Requirement Status\" of ADCS-F.34 from \"TBC\" to \"Satisfied\".",
+            "location": "Section III.III.III SysML Driven ADCS Simulations"
+          }
+        ],
+        "confidence": "high"
       }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
@@ -2109,7 +2185,11 @@
           "value": "Moderate",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "Improvement is asserted from one case without a measured comparison to the prior document-centric process; relation semantics were noted as ambiguous."
+        "threats_or_alternative_explanations": "Improvement is asserted from one case without a measured comparison to the prior document-centric process; relation semantics were noted as ambiguous.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Traceability and cross-checking support model consistency/reliability, not EPS or mission reliability."
       },
       {
         "claim_id": "C2",
@@ -2180,7 +2260,11 @@
           "value": "Moderate",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "Only the detumble mode is presented; simulation correctness and model fidelity are not independently validated; result concerns ADCS, not EPS."
+        "threats_or_alternative_explanations": "Only the detumble mode is presented; simulation correctness and model fidelity are not independently validated; result concerns ADCS, not EPS.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Executable SysML verifies an ADCS requirement and updates requirement status before hardware; this is mission-assurance adjacent, not EPS reliability."
       },
       {
         "claim_id": "C3",
@@ -2254,7 +2338,11 @@
           "value": "Weak",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "The bridge to code/HIL/FM is described as an approach and 'foreseen' steps, with no completed HIL or flight evidence in the paper."
+        "threats_or_alternative_explanations": "The bridge to code/HIL/FM is described as an approach and 'foreseen' steps, with no completed HIL or flight evidence in the paper.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/effort/integration claim without reliability-adjacent content."
       },
       {
         "claim_id": "C4",
@@ -2325,7 +2413,12 @@
           "value": "Weak",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "Reliability/quality is expected rather than demonstrated; generated code still requires integration with low-level software and verification."
+        "threats_or_alternative_explanations": "Reliability/quality is expected rather than demonstrated; generated code still requires integration with low-level software and verification.",
+        "reliability_subtype": [
+          "system/mission reliability",
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "The paper directly expects a more reliable AOCS/GNC system, attributed to consistency between simulation models and onboard software; evidence remains unsupported/weak."
       },
       {
         "claim_id": "C5",
@@ -2397,7 +2490,11 @@
           "value": "Unsupported",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "The schedule benefit may depend on model library maturity, tool expertise, and mission similarity; no measured before/after data."
+        "threats_or_alternative_explanations": "The schedule benefit may depend on model library maturity, tool expertise, and mission similarity; no measured before/after data.",
+        "reliability_subtype": [
+          "generic reliability claim"
+        ],
+        "reliability_subtype_rationale": "The section uses broad wording about a reliable new solution/reliable outcome from reusable Simulink configurations, but gives no EPS-specific or measured reliability evidence."
       },
       {
         "claim_id": "C6",
@@ -2470,7 +2567,11 @@
           "value": "Weak",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "Workspace integration is not evaluated against manual processes or alternative toolchains; proprietary tool dependencies may affect generalization."
+        "threats_or_alternative_explanations": "Workspace integration is not evaluated against manual processes or alternative toolchains; proprietary tool dependencies may affect generalization.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Seamless integration, efficiency, and quality claim; no direct reliability subtype beyond generic quality wording."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2667,5 +2768,17 @@
       }
     }
   },
-  "bibtex": "@inproceedings{guo2014modelBasedSystemsEngineeringNanosatellites,\n  title = {Model-Based Systems Engineering to Support the Development of Nano-Satellites},\n  author = {Guo, Jian and Gill, Eberhard and Figari, Stefano},\n  booktitle = {Proceedings of the International Astronautical Congress},\n  year = {2014},\n  note = {IAC-14-D1.6.3}\n}"
+  "bibtex": "@inproceedings{guo2014modelBasedSystemsEngineeringNanosatellites,\n  title = {Model-Based Systems Engineering to Support the Development of Nano-Satellites},\n  author = {Guo, Jian and Gill, Eberhard and Figari, Stefano},\n  booktitle = {Proceedings of the International Astronautical Congress},\n  year = {2014},\n  note = {IAC-14-D1.6.3}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0079.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove interface-focused model from generality_reuse_mechanism.",
+      "Do not add high-level abstraction, mission-agnostic architecture, or low-dynamics / non-detailed-behavior model.",
+      "Downgrade IVV integration from software/hardware-in-the-loop to simulation-in-the-loop; HIL/FM is not demonstrated.",
+      "Do not code EPS reliability for any claim."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

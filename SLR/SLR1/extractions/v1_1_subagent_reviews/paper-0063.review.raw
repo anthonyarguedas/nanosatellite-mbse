@@ -1,0 +1,113 @@
+{
+  "corpus_id": "paper-0063",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reusable workflow",
+        "method guidance",
+        "interface-focused model",
+        "specific-mission model with reusable method only"
+      ],
+      "status": "coded",
+      "rationale": "The EIRSAT-1 model is specific to one mission and the demonstrated exemplar is the communications subsystem, not a mission-agnostic architecture. Reuse is supported at the workflow/method level: OOSEM/SysML/CATIA Magic are used to construct verification models from test plans, interface them with scripts/hardware, and reuse/apply a similar approach in comparable verification scenarios and remaining subsystems. The interface-focused label is supported by the model-to-script/test-setup exchange and ground-segment interface modeling. Do not add high-level abstraction, mission-agnostic architecture, or low-dynamics / non-detailed-behavior model.",
+      "evidence": [
+        {
+          "quote": "As a starting point, we have adopted INCOSE OOSEM.",
+          "location": "Section II.A"
+        },
+        {
+          "quote": "The aim is to construct the verification models in MBSE similar to the verification plans in traditional SE and create interface plugins to exchange information between the MBSE environment and the external test scripts.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The MBSE verification model allows the required technical parameters to flow from the system models to the Python client which in turn commands the ground station hardware",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "the models can be reused several times in similar verification scenarios",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "A similar approach will be applied to the remaining subsystems, creating a automated framework.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "software/hardware-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "Although not EPS-specific, the system/communications verification model is model-integrated with external software and ground-station hardware, including parameter flow to a Python client, command of radio/antenna hardware, parametric validation, and automatic requirements-table/compliance-matrix updates. This exceeds separate-document or adjacent-matrix evidence.",
+      "evidence": [
+        {
+          "quote": "With the MBSE approach, the system models are integrated with other programmatic tools to enable exchange of data and allow automated verification of requirements.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The verification model is integrated with the actual end-to-end test setup to command the input test parameters through the model diagram.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related evidence concerns reliable verification process sequencing/traceability, model-flow thoroughness, and requirements-compliance assurance. There is no direct EPS reliability or spacecraft system reliability evidence, so EPS reliability and system/mission reliability should not be coded.",
+      "evidence": [
+        {
+          "quote": "A single integrated environment ensures that system verification is planned and executed in the correct sequence with full traceability based on requirements.",
+          "location": "Section II"
+        },
+        {
+          "quote": "The models are then verified for their reliability using the Magic Model Analyst tool, which allows an assessment of whether the model flow is thorough.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1",
+      "reliability_subtype": [
+        "process reliability",
+        "mission assurance"
+      ],
+      "rationale": "The claim is about verification being planned/executed in the correct sequence with requirements traceability, supporting process reliability and mission assurance, not EPS reliability."
+    },
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "rationale": "The paper's explicit reliability language concerns Magic Model Analyst assessment of model-flow thoroughness, while parametric validation and requirements compliance support mission assurance."
+    }
+  ],
+  "repair_notes": [
+    "Keep generality/reuse coded as reusable workflow, method guidance, interface-focused model, and specific-mission model with reusable method only; do not add mission-agnostic architecture or high-level abstraction.",
+    "Current IVV integration level of software/hardware-in-the-loop is supported for the system/communications model, but note it is not EPS-specific.",
+    "Add process reliability to the reliability subtype summary and C1; do not code EPS reliability or system/mission reliability.",
+    "Remove non-paper migration-audit text from evidence if repairing the extraction file."
+  ]
+}

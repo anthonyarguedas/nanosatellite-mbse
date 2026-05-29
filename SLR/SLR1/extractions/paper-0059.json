@@ -441,14 +441,23 @@
     "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
       "values": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "RFLP stages and model-structuring/viewpoint guidance are presented as a repeatable method rather than a released template or library.",
+      "rationale": "The paper presents RFLP-in-PLM as a transferable workflow/method and demonstrates it on one CubeSat electrical-power viewpoint. It discusses abstraction and interfaces, but does not provide or demonstrate a reusable mission-agnostic architecture, template, library, open package, or interface-focused reusable model asset.",
       "evidence": [
         {
           "quote": "The RFLP approach consists of four methodological stages, represented by its acronym: requirement specification, functional, logical, and physical. These stages are followed sequentially",
-          "location": "Section 2, line 45"
+          "location": "Section 2 / markdown line 45"
+        },
+        {
+          "quote": "The RFLP approach is implemented using Dassault Systemes 3DExperience platform to simulate a single viewpoint of a Cubesat, focusing on the electrical power view.",
+          "location": "Section 1 / markdown line 33"
+        },
+        {
+          "quote": "the benefits of the RFLP approach, such as improved requirements traceability, can be fully realized in multiple engineering domains.",
+          "location": "Conclusion / markdown line 268"
         }
       ],
       "confidence": "medium"
@@ -619,6 +628,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV integration level is simulation-in-the-loop: numerical requirements are linked into the PLM/CATIA/Dymola workflow and simulation outputs are compared against requirement parameters. No SIL/HIL or physical integration/test evidence is reported.",
+      "evidence": [
+        {
+          "quote": "A simulation scenario is created to assess the system's performance against these criteria.",
+          "location": "Section 2 / markdown line 45"
+        },
+        {
+          "quote": "The model compares its computational results against the numerical parameters of the specified requirements to determine if the current configuration satisfies the requirements.",
+          "location": "Section 3.2 / markdown line 111"
+        },
+        {
+          "quote": "Following a simulation, the parameters obtained are compared to the required parameters to determine if they meet the necessary requirements.",
+          "location": "Section 3.2 / markdown line 136"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -653,6 +684,30 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "EPS reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Only the EPS power/SoC result directly supports EPS reliability-adjacent coding. Traceability/requirements-loop claims may support model consistency/reliability or mission assurance when they explicitly concern meeting requirements, but generic decision-support/interoperability claims should remain not applicable rather than being upgraded to EPS reliability. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "It also verifies that the battery capacity is sufficient and power management unit is working as intended.",
+          "location": "Results / markdown line 216"
+        },
+        {
+          "quote": "the SoC of the battery remained above 90% for a period of 300 minutes, which indicates that the margin is well-suited to satisfy the SoC requirement",
+          "location": "Results / markdown line 218"
+        },
+        {
+          "quote": "It aims to provide the ability to link requirements with functional and logical architectures to provide consistency.",
+          "location": "Section 2 / markdown line 68"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1293,7 +1348,8 @@
       },
       "generality_reuse_mechanism": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "specific-mission model with reusable method only"
       ],
       "key_evidence": [
         {
@@ -1308,7 +1364,26 @@
           "quote": "The requirements are associated with parameters that measure whether the current system configuration satisfies them.",
           "location": "Section 2, line 45"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper presents RFLP-in-PLM as a transferable workflow/method and demonstrates it on one CubeSat electrical-power viewpoint. It discusses abstraction and interfaces, but does not provide or demonstrate a reusable mission-agnostic architecture, template, library, open package, or interface-focused reusable model asset.",
+        "evidence": [
+          {
+            "quote": "The RFLP approach consists of four methodological stages, represented by its acronym: requirement specification, functional, logical, and physical. These stages are followed sequentially",
+            "location": "Section 2 / markdown line 45"
+          },
+          {
+            "quote": "The RFLP approach is implemented using Dassault Systemes 3DExperience platform to simulate a single viewpoint of a Cubesat, focusing on the electrical power view.",
+            "location": "Section 1 / markdown line 33"
+          },
+          {
+            "quote": "the benefits of the RFLP approach, such as improved requirements traceability, can be fully realized in multiple engineering domains.",
+            "location": "Conclusion / markdown line 268"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps_or_phases": [
@@ -1513,7 +1588,29 @@
           "quote": "The model compares its computational results against the numerical parameters of the specified requirements",
           "location": "Section 3.2, line 111"
         }
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "The highest supported IVV integration level is simulation-in-the-loop: numerical requirements are linked into the PLM/CATIA/Dymola workflow and simulation outputs are compared against requirement parameters. No SIL/HIL or physical integration/test evidence is reported.",
+        "evidence": [
+          {
+            "quote": "A simulation scenario is created to assess the system's performance against these criteria.",
+            "location": "Section 2 / markdown line 45"
+          },
+          {
+            "quote": "The model compares its computational results against the numerical parameters of the specified requirements to determine if the current configuration satisfies the requirements.",
+            "location": "Section 3.2 / markdown line 111"
+          },
+          {
+            "quote": "Following a simulation, the parameters obtained are compared to the required parameters to determine if they meet the necessary requirements.",
+            "location": "Section 3.2 / markdown line 136"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1556,7 +1653,11 @@
         "evidence_confidence_rating": "Weak",
         "threats_or_alternative_explanations": "Traceability may be a capability of the proprietary PLM environment rather than the RFLP method alone; no quantitative trace coverage or independent assessment is provided.",
         "status": "coded",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Requirements-in-loop and traceability are tied to linking requirements with architectures to provide consistency; this is model/process consistency, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1601,7 +1702,11 @@
         "evidence_confidence_rating": "Weak",
         "threats_or_alternative_explanations": "The decision-support value is plausible but not measured; the number of configurations is not tied to decision quality, schedule, or avoided rework.",
         "status": "coded",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Decision support, DOE, automation, and configuration-management complexity are not direct reliability claims."
       },
       {
         "claim_id": "C3",
@@ -1646,7 +1751,12 @@
         "evidence_confidence_rating": "Moderate",
         "threats_or_alternative_explanations": "Simulation duration is short and no degradation, physical test, or flight validation is reported; results depend on assumed power profile and model fidelity.",
         "status": "coded",
-        "confidence": "high"
+        "confidence": "high",
+        "reliability_subtype": [
+          "EPS reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The claim is EPS-specific: simulated battery SoC margin and PMDU behavior are used to argue sufficient operation over the simulated period."
       },
       {
         "claim_id": "C4",
@@ -1685,7 +1795,11 @@
         "evidence_confidence_rating": "Moderate",
         "threats_or_alternative_explanations": "The comprehensiveness of behavior evaluation is limited by the electrical-power viewpoint, omitted launch segment, and lack of model-fidelity validation.",
         "status": "coded",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The integration claim says CubeSat behavior evaluation helps ensure requirements are met; it is system assurance, not EPS-specific reliability."
       },
       {
         "claim_id": "C5",
@@ -1722,7 +1836,11 @@
         "evidence_confidence_rating": "Weak",
         "threats_or_alternative_explanations": "Figure/text demonstrate a concept of connections but not semantic correctness, maintenance effort, or interoperability robustness.",
         "status": "coded",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The web-of-connections claim concerns traceability, data sharing, validation, and verification support, without a reliability outcome."
       },
       {
         "claim_id": "C6",
@@ -1760,7 +1878,12 @@
         "evidence_confidence_rating": "Unsupported",
         "threats_or_alternative_explanations": "The paper only demonstrates selected power requirements, not all system requirements or final product behavior.",
         "status": "coded",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The broad conclusion claims requirements are captured/addressed and the product functions as intended; this is generic model consistency and assurance only, not EPS reliability."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1873,5 +1996,17 @@
       "confidence_reason": "The paper text clearly reports the method, toolchain, and EPS simulation result, but exact venue, mission context, model availability, interface standards, and process-outcome evidence are limited."
     }
   },
-  "bibtex": "@incollection{RehmanFortin2024RequirementsInLoopCubeSat,\n  author = {Rehman, Mubeen Ur and Fortin, Clement},\n  title = {An Implementation of Integrated Approach in Product Life-Cycle Management Tool to Ensure Requirements-In-Loop During Complex Product Development: A Cubesat Case Study},\n  year = {2024},\n  publisher = {Springer},\n  doi = {10.1007/978-3-031-62578-7_21},\n  note = {Venue/book title not reported in supplied paper markdown or metadata; publisher is best-effort from DOI prefix}\n}"
+  "bibtex": "@incollection{RehmanFortin2024RequirementsInLoopCubeSat,\n  author = {Rehman, Mubeen Ur and Fortin, Clement},\n  title = {An Implementation of Integrated Approach in Product Life-Cycle Management Tool to Ensure Requirements-In-Loop During Complex Product Development: A Cubesat Case Study},\n  year = {2024},\n  publisher = {Springer},\n  doi = {10.1007/978-3-031-62578-7_21},\n  note = {Venue/book title not reported in supplied paper markdown or metadata; publisher is best-effort from DOI prefix}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0059.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove over-broad generality coding of interface-focused model unless the main extraction separately justifies it as a reuse mechanism; interfaces are used for simulation/data flow, not shown as reusable model architecture.",
+      "Do not add high-level abstraction, mission-agnostic architecture, or low-dynamics / non-detailed-behavior model for this paper.",
+      "Keep IVV integration level as simulation-in-the-loop.",
+      "Keep EPS reliability limited to the EPS SoC/battery/PMDU claim, not generic requirements traceability or process claims."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

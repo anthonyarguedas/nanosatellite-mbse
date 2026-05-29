@@ -1,0 +1,148 @@
+{
+  "corpus_id": "paper-0061",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "library",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction"
+      ],
+      "status": "coded",
+      "rationale": "The paper supports reusable early-phase CubeSat design templates/tools and workflow across multiple missions. High-level abstraction is justified because the approach is explicitly preliminary/conceptual-to-subsystem sizing and reused across several CubeSat projects. It does not directly support low-dynamics / non-detailed-behavior model, mission-agnostic architecture, interface-focused model, or specific-mission model with reusable method only.",
+      "evidence": [
+        {
+          "quote": "standardized calculation sheets linked to a CubeSat Technologies Database",
+          "location": "Abstract"
+        },
+        {
+          "quote": "from conceptual design up to subsystem sizing",
+          "location": "Abstract"
+        },
+        {
+          "quote": "This approach has been implemented and tested during several CubeSats projects",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Each spreadsheet is described in detail in a user manual, from the assumptions used to the mathematical formulas employed to a step-by-step guide to compiling the different sheets.",
+          "location": "Section 2.1"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "executable/model-based checks"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported level is automated/linked spreadsheet consistency and validation checks in the central repository, including the EPS sheet as one discipline. No formal EPS verification matrix, trace-linked V&V artifacts, simulation-in-the-loop, SIL/HIL, or physical test integration is shown.",
+      "evidence": [
+        {
+          "quote": "an alert system consisting of a Check column for the input values in common between two or more disciplines has been implemented in the central repository",
+          "location": "Section 2.1"
+        },
+        {
+          "quote": "The ADCS, CommSys, EPS, Propulsion, Thermal, and Payload sheets are linked to the corresponding spreadsheet, allowing an automatic filling of the 'Inputs' and 'Outputs' tables and ensuring a consistency check on the inputs.",
+          "location": "Section 2.1"
+        },
+        {
+          "quote": "It allows automated data transfer from the other spreadsheets of the S3D Tool and enables faster validation of the sizing, budgets and design",
+          "location": "Section 3.1"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "defect/error reduction",
+        "mission assurance",
+        "not applicable"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent coding is limited to model/data consistency, error reduction, and generic early risk/verification mission-assurance claims. The paper does not support EPS reliability or system/mission reliability outcomes.",
+      "evidence": [
+        {
+          "quote": "ensuring a consistency check on the inputs",
+          "location": "Section 2.1"
+        },
+        {
+          "quote": "reducing manual effort and minimizing errors",
+          "location": "Section 3.1"
+        },
+        {
+          "quote": "Parallel system development and early identification of potential issues and risks",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1_schedule_reduction",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Schedule/effort outcome only; no reliability-adjacent claim."
+    },
+    {
+      "claim_id": "C2_cost_reduction",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Cost/ROI outcome only; no reliability-adjacent claim."
+    },
+    {
+      "claim_id": "C3_design_performance_figures_of_merit",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Decision-support/design-metric outcome; no reliability claim."
+    },
+    {
+      "claim_id": "C4_consistency_error_reduction",
+      "reliability_subtype": [
+        "model consistency/reliability",
+        "defect/error reduction"
+      ],
+      "rationale": "Central repository consistency checks and automated data transfer are claimed to validate sizing/budgets/design and minimize errors; this is not EPS reliability."
+    },
+    {
+      "claim_id": "C5_communication_alignment",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Communication/alignment outcome only."
+    },
+    {
+      "claim_id": "C6_component_selection_decision_support",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Component-selection and reuse/decision-support outcome; no reliability-adjacent claim."
+    },
+    {
+      "claim_id": "C7_reuse_across_case_studies",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Reuse/reproducibility outcome; no reliability-adjacent claim."
+    },
+    {
+      "claim_id": "C8_risk_early_verification",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "Early issue/risk identification and earlier verification are generic mission-assurance/process claims; no EPS or system reliability evidence."
+    }
+  ],
+  "repair_notes": [
+    "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism as unsupported by direct reuse rationale.",
+    "Do not add mission-agnostic architecture, interface-focused model, or specific-mission model with reusable method only.",
+    "Keep IVV only as narrowly interpreted executable/model-based checks; no formal EPS IVV artifacts are reported.",
+    "Do not code EPS reliability or system/mission reliability for any claim."
+  ]
+}

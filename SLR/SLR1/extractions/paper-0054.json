@@ -658,26 +658,28 @@
     "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
       "values": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "The authors provide equations, AD/concept generation steps, and guidance for adapting weights and performance parameters to similar missions, but no open package/template model.",
+      "rationale": "The reusable contribution is a high-level architectural-decision and MAU/cost trade-study workflow with adaptation guidance for similar CubeSat missions. The actual model is BOREALIS-specific and requires retuning of ADs, weights, utility/cost functions, and performance parameters; it is not a mission-agnostic architecture, template, open package, interface-focused model, or detailed reusable behavior model.",
       "evidence": [
         {
           "quote": "Emphasis will be given to the model built for the tradeoff analysis, explaining how it was built and used and providing the reader with all the elements to possibly reuse it for another mission design of the same satellite class.",
           "location": "Section 1, Introduction"
         },
         {
-          "quote": "In this paragraph, the system engineering (SE) process used to develop the BOREALIS 6U bus is presented. It is a systematic approach that can be reused on other missions with the same or similar CubeSat class by adapting the tools that will be presented.",
+          "quote": "It is a systematic approach that can be reused on other missions with the same or similar CubeSat class by adapting the tools that will be presented.",
           "location": "Section 3, System Engineering Process and Model-Based Systems Engineering"
         },
         {
-          "quote": "Regarding the design process, starting from the scientific objectives of the mission, the mission requirements and constraints have been identified to understand the possible choice on each satellite subsystem for the CubeSat configuration.",
-          "location": "Section 3, System Engineering Process and Model-Based Systems Engineering"
+          "quote": "The developed model may also be used for other CubeSat missions like BOREALIS after some readaptation of the utility and cost functions",
+          "location": "Section 3.3, Model-Based Systems Engineering"
         },
         {
-          "quote": "The structured workflow we present, from defining architectural decisions (ADs) based on mission constraints, brainstorming viable subsystem options, generating feasible mission concepts, to finally evaluating them through a quantitative framework, ensures traceability and repeatability, making the methodology reusable for future CubeSat missions.",
-          "location": "Section 5.4, Results Discussion"
+          "quote": "When reusing this framework for other missions, adjustments will be necessary not only in terms of different architectures (ADs) but also in weight assignments and, if needed, modifications to performance parameters",
+          "location": "Section 4.3, Development of the BOREALIS System Model"
         }
       ],
       "confidence": "high"
@@ -900,6 +902,24 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "separate document only"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports development and verification plans as strategic documents. The MAU/cost model, Monte Carlo, and sensitivity analyses are architecture trade/robustness analyses, not shown as trace-linked, model-contained, executable IVV artifacts or EPS verification procedures.",
+      "evidence": [
+        {
+          "quote": "Development and Verification Plans: Strategic documents that outline the procedures for system validation against the mission requirements and operational readiness checks.",
+          "location": "Section 3.2, System Engineering Outputs"
+        },
+        {
+          "quote": "It is worth mentioning that the model under development on Valispace to manage the actual CubeSat data is not the purpose of this article.",
+          "location": "Section 3.3, Model-Based Systems Engineering"
+        }
+      ],
+      "confidence": "medium"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "links to hardware integration",
@@ -956,6 +976,35 @@
         {
           "quote": "In this paragraph, the system engineering (SE) process used to develop the BOREALIS 6U bus is presented. It is a systematic approach that can be reused on other missions with the same or similar CubeSat class by adapting the tools that will be presented.",
           "location": "Section 3, System Engineering Process and Model-Based Systems Engineering"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related claims concern architecture/configuration robustness, model-result reliability, mission-assurance-oriented decision support, and generic MBSE process risk reduction. No claim directly supports EPS reliability. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Monte Carlo simulation that incorporated stochastic elements into the input data, enhancing the model reliability by capturing the inherent variability and ensuring robust mission planning.",
+          "location": "Section 3.2, System Engineering Outputs"
+        },
+        {
+          "quote": "This approach provides a more robust understanding of the relative performance of each mission concept under varying conditions and evaluates the reliability of each configuration.",
+          "location": "Section 5.2, Enhancing Analysis with Monte Carlo Simulations"
+        },
+        {
+          "quote": "This confirms that the model is robust against potential biases in weight assignment, ensuring that the results provide reliable guidance for decision making.",
+          "location": "Section 5.4, Results Discussion"
+        },
+        {
+          "quote": "This centralized model enables engineers to perform early-stage simulations, identify potential issues, and make informed trade-offs, ultimately reducing development time and mitigating risks associated with late-stage design changes.",
+          "location": "Section 3.3, Model-Based Systems Engineering"
         }
       ],
       "confidence": "medium"
@@ -1696,7 +1745,9 @@
       ],
       "generality_reuse_mechanism": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "specific-mission model with reusable method only"
       ],
       "key_evidence": [
         {
@@ -1727,7 +1778,30 @@
           "quote": "In this paragraph, the system engineering (SE) process used to develop the BOREALIS 6U bus is presented. It is a systematic approach that can be reused on other missions with the same or similar CubeSat class by adapting the tools that will be presented.",
           "location": "Section 3, System Engineering Process and Model-Based Systems Engineering"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The reusable contribution is a high-level architectural-decision and MAU/cost trade-study workflow with adaptation guidance for similar CubeSat missions. The actual model is BOREALIS-specific and requires retuning of ADs, weights, utility/cost functions, and performance parameters; it is not a mission-agnostic architecture, template, open package, interface-focused model, or detailed reusable behavior model.",
+        "evidence": [
+          {
+            "quote": "Emphasis will be given to the model built for the tradeoff analysis, explaining how it was built and used and providing the reader with all the elements to possibly reuse it for another mission design of the same satellite class.",
+            "location": "Section 1, Introduction"
+          },
+          {
+            "quote": "It is a systematic approach that can be reused on other missions with the same or similar CubeSat class by adapting the tools that will be presented.",
+            "location": "Section 3, System Engineering Process and Model-Based Systems Engineering"
+          },
+          {
+            "quote": "The developed model may also be used for other CubeSat missions like BOREALIS after some readaptation of the utility and cost functions",
+            "location": "Section 3.3, Model-Based Systems Engineering"
+          },
+          {
+            "quote": "When reusing this framework for other missions, adjustments will be necessary not only in terms of different architectures (ADs) but also in weight assignments and, if needed, modifications to performance parameters",
+            "location": "Section 4.3, Development of the BOREALIS System Model"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1857,7 +1931,25 @@
         "links to hardware integration",
         "operational validation"
       ],
-      "rq3_assessment": "Only partial RQ3 relevance: pre-physical model-based trade verification is present at system level, but not an integrated EPS IVV model."
+      "rq3_assessment": "Only partial RQ3 relevance: pre-physical model-based trade verification is present at system level, but not an integrated EPS IVV model.",
+      "ivv_integration_level": {
+        "values": [
+          "separate document only"
+        ],
+        "status": "coded",
+        "rationale": "The paper reports development and verification plans as strategic documents. The MAU/cost model, Monte Carlo, and sensitivity analyses are architecture trade/robustness analyses, not shown as trace-linked, model-contained, executable IVV artifacts or EPS verification procedures.",
+        "evidence": [
+          {
+            "quote": "Development and Verification Plans: Strategic documents that outline the procedures for system validation against the mission requirements and operational readiness checks.",
+            "location": "Section 3.2, System Engineering Outputs"
+          },
+          {
+            "quote": "It is worth mentioning that the model under development on Valispace to manage the actual CubeSat data is not the purpose of this article.",
+            "location": "Section 3.3, Model-Based Systems Engineering"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1914,7 +2006,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Weights are subjective; reference missions benchmark architectures but do not validate MBSE process value; no independent review or physical test is reported."
+        "threats_or_alternative_explanations": "Weights are subjective; reference missions benchmark architectures but do not validate MBSE process value; no independent review or physical test is reported.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Architecture selection supports mission-assurance-oriented decision quality, but the claim does not itself demonstrate model reliability or EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1965,7 +2061,12 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Robustness is internal to the model assumptions and distributions; it does not demonstrate hardware reliability or mission reliability."
+        "threats_or_alternative_explanations": "Robustness is internal to the model assumptions and distributions; it does not demonstrate hardware reliability or mission reliability.",
+        "reliability_subtype": [
+          "system/mission reliability",
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Monte Carlo and sensitivity analyses are explicitly tied to configuration reliability and stable model rankings under uncertainty; this remains system/model-level, not EPS-specific reliability."
       },
       {
         "claim_id": "C3",
@@ -2019,7 +2120,10 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Reuse is prospective and would require retuning ADs, weights, and performance variables for other missions."
+        "threats_or_alternative_explanations": "Reuse is prospective and would require retuning ADs, weights, and performance variables for other missions.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C4",
@@ -2068,7 +2172,10 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Traceability is not directly observable in a model repository or trace matrix; document relationships may remain manual."
+        "threats_or_alternative_explanations": "Traceability is not directly observable in a model repository or trace matrix; document relationships may remain manual.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C5",
@@ -2114,7 +2221,10 @@
           }
         ],
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "The IDM is under development and outside article scope; no interoperability or user-evaluation evidence is provided."
+        "threats_or_alternative_explanations": "The IDM is under development and outside article scope; no interoperability or user-evaluation evidence is provided.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C6",
@@ -2156,7 +2266,11 @@
           }
         ],
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "This is a background rationale for MBSE rather than evaluated evidence from the case study."
+        "threats_or_alternative_explanations": "This is a background rationale for MBSE rather than evaluated evidence from the case study.",
+        "reliability_subtype": [
+          "process reliability"
+        ],
+        "reliability_subtype_rationale": "The generic MBSE claim concerns early issue identification and mitigation of late-stage design-change risks, so it is process-reliability adjacent rather than not applicable or EPS reliability."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2273,5 +2387,17 @@
       "extraction_confidence_reason": "Paper is clear and rich for mission/tradespace details. Confidence is medium for V&V/EPS coding because the paper's MBSE focus is architecture trade analysis rather than EPS-specific verification."
     }
   },
-  "bibtex": "@article{Nardi2025BorealisMBSE,\n  title = {Integrating Model-Based Systems Engineering into CubeSat Development: A Case Study of the BOREALIS Mission},\n  author = {Nardi, Lorenzo and Carletta, Stefano and Abbasrezaee, Parsa and Palmerini, Giovanni and Lovecchio, Nicola and Burgio, Nunzio and Santagata, Alfonso and Frullini, Massimo and Calabria, Donato and Guardigli, Massimo and Michelini, Elisa and Calbretta, Maria Maddalena and Zangheri, Martina and Lazzarini, Elisa and Pace, Andrea and Montalti, Marco and Mordini, Dario and Popova, Liyana and Citraro, Saverio and Billi, Daniela and Lorenzini, Fabio and Donati, Alessandro and Mirasoli, Mara and Nascetti, Augusto},\n  journal = {Aerospace},\n  year = {2025},\n  volume = {12},\n  number = {3},\n  pages = {256},\n  doi = {10.3390/aerospace12030256},\n  publisher = {MDPI}\n}"
+  "bibtex": "@article{Nardi2025BorealisMBSE,\n  title = {Integrating Model-Based Systems Engineering into CubeSat Development: A Case Study of the BOREALIS Mission},\n  author = {Nardi, Lorenzo and Carletta, Stefano and Abbasrezaee, Parsa and Palmerini, Giovanni and Lovecchio, Nicola and Burgio, Nunzio and Santagata, Alfonso and Frullini, Massimo and Calabria, Donato and Guardigli, Massimo and Michelini, Elisa and Calbretta, Maria Maddalena and Zangheri, Martina and Lazzarini, Elisa and Pace, Andrea and Montalti, Marco and Mordini, Dario and Popova, Liyana and Citraro, Saverio and Billi, Daniela and Lorenzini, Fabio and Donati, Alessandro and Mirasoli, Mara and Nascetti, Augusto},\n  journal = {Aerospace},\n  year = {2025},\n  volume = {12},\n  number = {3},\n  pages = {256},\n  doi = {10.3390/aerospace12030256},\n  publisher = {MDPI}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0054.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Keep generality values but replace migration-note evidence with paper evidence.",
+      "Repair IVV integration level from executable/model-based checks to separate document only.",
+      "Do not code EPS reliability for this paper.",
+      "Claims C3-C5 should remain not applicable for reliability_subtype."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

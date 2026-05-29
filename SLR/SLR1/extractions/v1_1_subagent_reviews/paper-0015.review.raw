@@ -1,0 +1,158 @@
+{
+  "corpus_id": "paper-0015",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
+      ],
+      "status": "coded",
+      "rationale": "The CRM is a generic, high-abstraction CubeSat reference model intended to be populated and tailored for mission-specific models. Do not code interface-focused model or specific-mission model with reusable method only. Also remove low-dynamics / non-detailed-behavior model: the paper abstracts implementation and physical instantiation, but it does not claim low dynamics or deliberately non-detailed behavior as the reuse mechanism.",
+      "evidence": [
+        {
+          "quote": "The CRM is being developed with sufficient flexibility to support customization for specific CubeSat missions by mission-specific CubeSat teams.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Provide a CubeSat Reference Model (CRM) for CubeSat teams to use as the starting point for developing mission-specific CubeSat models;",
+          "location": "Section 1"
+        },
+        {
+          "quote": "It offers a high-level view of the problem domain (space). The key characteristics of a reference model are: abstractions, relationships, and entities.",
+          "location": "Section 1"
+        },
+        {
+          "quote": "Since we are interested in modeling a generic CubeSat mission domain, and not a specific mission",
+          "location": "Section 1"
+        },
+        {
+          "quote": "The steps for developing a mission-specific CubeSat model are illustrated in Figure 5.",
+          "location": "Section 3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "Simulation-in-the-loop is supportable for the system/reference-model V&V workflow because model-contained V&V packages, viewpoints, V&V scenarios, mission modeling, executable mission scenario configuration, and COTS tool interfacing are described. This must be qualified as system-level, not EPS-specific; the paper reports no EPS-specific IVV procedure, SIL/HIL, or physical-test evidence.",
+      "evidence": [
+        {
+          "quote": "The enterprise, segment, and subsystems packages contain behaviors, structures, validation, and verification packages.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "The CRM will be populated with a representative mission, and then the viewpoints will provide the objective evidence for verification.",
+          "location": "Section 4"
+        },
+        {
+          "quote": "The CubeSat SysML model and the modeling tool can be configured to execute a mission scenario. This includes interfacing with commercial off-the-shelf (COTS) modeling tools [7].",
+          "location": "Section 4"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related support is system/model/mission-assurance level only. The paper has no direct EPS reliability outcome. Mission reliability appears only as a requirements-decomposition example; traceability/consistency supports model consistency/reliability; V&V facilitation supports mission assurance.",
+      "evidence": [
+        {
+          "quote": "The intent of the model is to facilitate the design, verification and validation of CubeSat design.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Segment requirements are derived from mission requirements and trace to mission use cases.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "For example, a top-level mission reliability requirement may lead to lower level requirements that identify where redundancy would be needed.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "Design, verification, and validation facilitation is mission-assurance adjacent, not EPS reliability."
+    },
+    {
+      "claim_id": "C2",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Reuse/reproducibility claim without reliability content."
+    },
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Efficiency/productivity claim; no reliability outcome is evidenced."
+    },
+    {
+      "claim_id": "C4",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "Traceability and consistency are model-reliability adjacent, not system or EPS reliability."
+    },
+    {
+      "claim_id": "C5",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "Viewpoints as objective V&V evidence support mission assurance at system/model level."
+    },
+    {
+      "claim_id": "C6",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Tool-interface/executable-scenario capability is coded as integrability/automation, not a reliability outcome."
+    },
+    {
+      "claim_id": "C7",
+      "reliability_subtype": [
+        "system/mission reliability"
+      ],
+      "rationale": "Direct example is a mission reliability requirement decomposed into redundancy-related requirements; do not add model consistency/reliability or EPS reliability."
+    },
+    {
+      "claim_id": "C8",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Communication/stakeholder-alignment claim without reliability content."
+    },
+    {
+      "claim_id": "C9",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Future reference-model library/reuse claim without reliability content."
+    }
+  ],
+  "repair_notes": [
+    "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism.",
+    "Retain simulation-in-the-loop only with a system/reference-model qualifier; do not represent it as EPS-specific IVV.",
+    "No EPS reliability subtype is supported.",
+    "Repair C7 by removing model consistency/reliability; keep only system/mission reliability."
+  ]
+}

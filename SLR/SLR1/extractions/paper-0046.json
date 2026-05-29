@@ -471,18 +471,25 @@
       "values": [
         "template",
         "pattern",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "interface-focused model",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "Each subsystem is represented using the original SAPPhIRE element structure, producing a consistent causal pattern that users could apply across subsystems; the paper gives case-derived method guidance rather than a reusable package.",
+      "rationale": "SAPPhIRE supplies a repeated element structure/template and causal pattern applied across subsystem views, with case-derived method guidance. OPAL also uses a high-level system abstraction and explicit subsystem-interface navigation. However, the implemented model is SpudNik-1-specific and not a demonstrated mission-agnostic architecture, library, open package, or reusable reference model.",
       "evidence": [
         {
           "quote": "OPAL-1 Each subsystem representation shall incorporate the original SAPPhIRE Model with all its elements accounted for",
           "location": "Table 3"
         },
         {
-          "quote": "The consistency of the SAPPhIRE Model was taken advantage of by the users; overall there was little sense of increased difficulties between subsystems.",
-          "location": "Section 6.1"
+          "quote": "The system model is a high-level view of the system architecture and allows a user to navigate and view the interfaces between the subsystems.",
+          "location": "Section 4"
+        },
+        {
+          "quote": "At the very least, the concept of a simplified representation of an entire system has been shown to be feasible using SAPPhIRE.",
+          "location": "Conclusion"
         }
       ],
       "confidence": "high"
@@ -649,6 +656,20 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "none",
+      "rationale": "The paper reports conceptual-design data links and trace/navigation features, but no verification matrix, trace-linked V&V artifacts, executable checks, simulation-in-the-loop, SIL/HIL, or physical integration/test evidence. It explicitly states OPAL is not an effective requirements-verification tool in its current state.",
+      "evidence": [
+        {
+          "quote": "OPAL has very limited representation of the extensive requirements found in the CubeSat project. It cannot be used as an effective requirements verification tool in this state.",
+          "location": "Section 6.2"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -687,6 +708,24 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability"
+      ],
+      "status": "coded",
+      "rationale": "Only the change-propagation/change-management claim is reliability-adjacent, and only at the model/data-consistency level. The paper does not support EPS reliability, system/mission reliability, mission assurance, or measured defect/error reduction. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Does OPAL clearly show how changes propagate? 6.00",
+          "location": "Table 4"
+        },
+        {
+          "quote": "Outdated design data being mistakenly used by other engineers can be detrimental to the product.",
+          "location": "Section 6.1"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1308,7 +1347,10 @@
       "generality_reuse_mechanism": [
         "template",
         "pattern",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "interface-focused model",
+        "specific-mission model with reusable method only"
       ],
       "key_evidence_quotes": [
         {
@@ -1323,7 +1365,26 @@
           "quote": "OPAL-1 Each subsystem representation shall incorporate the original SAPPhIRE Model with all its elements accounted for",
           "location": "Table 3"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "SAPPhIRE supplies a repeated element structure/template and causal pattern applied across subsystem views, with case-derived method guidance. OPAL also uses a high-level system abstraction and explicit subsystem-interface navigation. However, the implemented model is SpudNik-1-specific and not a demonstrated mission-agnostic architecture, library, open package, or reusable reference model.",
+        "evidence": [
+          {
+            "quote": "OPAL-1 Each subsystem representation shall incorporate the original SAPPhIRE Model with all its elements accounted for",
+            "location": "Table 3"
+          },
+          {
+            "quote": "The system model is a high-level view of the system architecture and allows a user to navigate and view the interfaces between the subsystems.",
+            "location": "Section 4"
+          },
+          {
+            "quote": "At the very least, the concept of a simplified representation of an entire system has been shown to be feasible using SAPPhIRE.",
+            "location": "Conclusion"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_reported": [
@@ -1457,7 +1518,21 @@
           "quote": "It cannot be used as an effective requirements verification tool in this state.",
           "location": "Section 6.2"
         }
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "none/not reported"
+        ],
+        "status": "none",
+        "rationale": "The paper reports conceptual-design data links and trace/navigation features, but no verification matrix, trace-linked V&V artifacts, executable checks, simulation-in-the-loop, SIL/HIL, or physical integration/test evidence. It explicitly states OPAL is not an effective requirements-verification tool in its current state.",
+        "evidence": [
+          {
+            "quote": "OPAL has very limited representation of the extensive requirements found in the CubeSat project. It cannot be used as an effective requirements verification tool in this state.",
+            "location": "Section 6.2"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1502,7 +1577,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Student participants, short lab tasks, no objective baseline, and novelty/GUI effects may explain high ratings."
+        "threats_or_alternative_explanations": "Student participants, short lab tasks, no objective baseline, and novelty/GUI effects may explain high ratings.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Ease of learning/use and training effort are not reliability or reliability-adjacent outcomes."
       },
       {
         "claim_id": "C2",
@@ -1551,7 +1630,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Comparator is qualitative rather than experimentally controlled; participants had varying CubeSat familiarity but sample remains small."
+        "threats_or_alternative_explanations": "Comparator is qualitative rather than experimentally controlled; participants had varying CubeSat familiarity but sample remains small.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Tracking/finding data supports traceability and interoperability, but the claim does not directly address reliability."
       },
       {
         "claim_id": "C3",
@@ -1598,7 +1681,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Manual proof-of-concept links, no independent assessment of model completeness, and no public model/data availability limit confidence."
+        "threats_or_alternative_explanations": "Manual proof-of-concept links, no independent assessment of model completeness, and no public model/data availability limit confidence.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "File integration and model completeness are not framed as reliability outcomes."
       },
       {
         "claim_id": "C4",
@@ -1647,7 +1734,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Task was idealized; no objective change-management outcomes, defect rates, or integration failures were measured."
+        "threats_or_alternative_explanations": "Task was idealized; no objective change-management outcomes, defect rates, or integration failures were measured.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Change-propagation support and avoiding outdated design data are reliability-adjacent only as model/data consistency, not EPS or mission reliability."
       },
       {
         "claim_id": "C5",
@@ -1687,7 +1778,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Generic MBSE/SysML-domain claim is extrapolated from one proof-of-concept CubeSat case and participant study."
+        "threats_or_alternative_explanations": "Generic MBSE/SysML-domain claim is extrapolated from one proof-of-concept CubeSat case and participant study.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The simplified SAPPhIRE representation claim concerns generality/reuse and communication, not reliability."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1770,5 +1865,17 @@
       "extraction_confidence_reason": "The paper is detailed and markdown quality is good; controlled coding is clear for context, scope, limitations, and outcomes. Uncertainty remains for exact venue details and availability because those are not reported."
     }
   },
-  "bibtex": "@inproceedings{Peters2022OPALCubeSat,\n  title = {Investigating the Effectiveness of a Causal MBSE Software Tool in Modelling CubeSat Conceptual Design Data},\n  author = {Peters, Stephen and Fortin, Clément and McSorley, Grant},\n  year = {2022},\n  doi = {10.1007/978-3-030-94399-8_10},\n  note = {Venue not reported in supplied markdown; corpus metadata reports Scopus provenance}\n}"
+  "bibtex": "@inproceedings{Peters2022OPALCubeSat,\n  title = {Investigating the Effectiveness of a Causal MBSE Software Tool in Modelling CubeSat Conceptual Design Data},\n  author = {Peters, Stephen and Fortin, Clément and McSorley, Grant},\n  year = {2022},\n  doi = {10.1007/978-3-030-94399-8_10},\n  note = {Venue not reported in supplied markdown; corpus metadata reports Scopus provenance}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0046.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add high-level abstraction and interface-focused model to generality/reuse mechanisms.",
+      "Do not code mission-agnostic architecture or low-dynamics / non-detailed-behavior model for this paper.",
+      "IVV integration should remain none/not reported with status none.",
+      "Reliability subtype should remain limited to model consistency/reliability for C4; no EPS reliability upgrade is supported."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

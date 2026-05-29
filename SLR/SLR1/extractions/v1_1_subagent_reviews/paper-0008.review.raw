@@ -1,0 +1,127 @@
+{
+  "corpus_id": "paper-0008",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "library",
+        "transformation",
+        "reusable workflow",
+        "open package",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
+      ],
+      "status": "coded",
+      "rationale": "The paper supports a reusable CubeSat architecture/framework beyond RAX: common CubeSat elements form a library/starting point, each mission adapts the framework, model/manual/instructions are reported as available, interfaces/components/tasks are reusable organizing elements, and PLM-to-SysML transformations support reuse of previous-mission structures. Do not code low-dynamics/non-detailed behavior or specific-mission-model-with-reusable-method-only.",
+      "evidence": [
+        {
+          "quote": "The framework developed is a SysML representation of common CubeSat elements that can be used as a library to build a domain-specific CubeSat",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The model gives a CubeSat Engineering team an entry point to any mission. Each mission and its relevant set of system information adapts the architecture framework",
+          "location": "Conclusion"
+        },
+        {
+          "quote": "Our RAX CubeSat model and its manual are being made available to the academic community",
+          "location": "Model Availability"
+        },
+        {
+          "quote": "Generate a SysML block structure from the payload model in Windchill and use it in the context of a new CubeSat design",
+          "location": "Section 5, Use Case 2"
+        },
+        {
+          "quote": "The system requirements when flowed through this block get broken down into components, interfaces, and tasks as basic building blocks.",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV integration level is simulation-in-the-loop: SysML is connected with analytical/simulation tools and executed for mission-scenario requirements verification, including battery capacity/margin and solar-panel/battery trades. The paper does not support SIL/HIL, physical integration/test, or model-contained EPS test procedures.",
+      "evidence": [
+        {
+          "quote": "This was executed by the Cameo Simulation Toolkit ... which enabled end-to-end simulation of realistic mission scenarios. This enabled requirements verification for mission scenarios",
+          "location": "Section 4"
+        },
+        {
+          "quote": "The integrated model enabled the execution of trade studies to evaluate mission performance and verify that mission requirements would be satisfied.",
+          "location": "Section 6"
+        },
+        {
+          "quote": "Requirements were defined for data collection, storage, download and for battery capacity and margin ... Energy state trade studies varied the solar panel area and battery capacity.",
+          "location": "Section 6"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "mission assurance",
+        "model consistency/reliability",
+        "system/mission reliability"
+      ],
+      "status": "coded",
+      "rationale": "Reliability coding should remain system/model/assurance-level only. The paper has no direct EPS reliability outcome. Requirements verification via simulation is best treated as mission assurance, SysML-PLM synchronization/reuse as model consistency/reliability, and the explicit CubeSat reliability/robustness claim as system/mission reliability.",
+      "evidence": [
+        {
+          "quote": "verify that mission requirements would be satisfied",
+          "location": "Section 6 / C3"
+        },
+        {
+          "quote": "Connections are saved between the corresponding parts and blocks so that changes on either side can be synchronized as desired.",
+          "location": "Section 5 / C5"
+        },
+        {
+          "quote": "a bottom-up development process to address the reliability of CubeSats and stakeholder concerns",
+          "location": "Section 1, CubeSat Project-Third Phase / C8"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "Simulation-based requirements verification supports mission assurance, not EPS reliability and not directly system reliability."
+    },
+    {
+      "claim_id": "C5",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "SLIM connections and synchronization concern consistency between SysML and PLM/BOM model structures."
+    },
+    {
+      "claim_id": "C6",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "Reuse/generation of PLM payload structure into SysML is a model-structure consistency claim, not EPS or mission reliability."
+    },
+    {
+      "claim_id": "C8",
+      "reliability_subtype": [
+        "system/mission reliability"
+      ],
+      "rationale": "The paper explicitly says the approach addresses reliability of CubeSats, but gives no EPS-specific reliability evidence and no model-consistency reliability claim here."
+    }
+  ],
+  "repair_notes": [
+    "Add transformation to generality/reuse mechanism for PLM-to-SysML reuse.",
+    "Do not code low-dynamics / non-detailed-behavior model or specific-mission model with reusable method only.",
+    "Keep IVV at simulation-in-the-loop; do not upgrade to SIL/HIL or physical test.",
+    "Do not code EPS reliability. C3 should be mission assurance; C8 should not include model consistency/reliability."
+  ]
+}

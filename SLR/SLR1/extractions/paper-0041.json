@@ -471,18 +471,29 @@
     "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
       "values": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
       "status": "coded",
-      "rationale": "The paper gives a reusable OPM workflow for decomposing the budget process and applying computational attributes/code; OPM templates/stereotypes are mentioned as available features but not used as the demonstrated mechanism.",
+      "rationale": "The model is a generic CubeSat budget-calculation workflow/tool, not a specific mission model. It uses high-level subsystem/attribute abstractions and limited behavior focused on budget checks, and the author claims applicability to CubeSat builders and global CubeSat processes. Do not code template because OPM templates/stereotypes are only mentioned as general OPM features, not used in the demonstrated model.",
       "evidence": [
         {
-          "quote": "The Budget Calculating main process ... can be decomposed ... using inzooming or unfolding mechanisms",
-          "location": "Section 4"
+          "quote": "for automating the process of budget calculation - mass, volume, power, and energy - for CubeSat nanosatellites based on user input which can be iteratively finetuned to fit the CubeSat limitations",
+          "location": "Abstract"
         },
         {
-          "quote": "OPM has recently provided new features that allow for better reuse of model elements. These features include stereotypes and templates.",
-          "location": "Section 2, Object Process Methodology"
+          "quote": "To help a Nanosatellite Builder find the most suitable components to build a nanosatellite",
+          "location": "Section 4, Automating the Budget Calculating Process"
+        },
+        {
+          "quote": "this work is not meant to be comprehensive in this regard, but rather to use some of the budget calculations to demonstrate a tool",
+          "location": "Section 2, CubeSat Budget Calculation"
+        },
+        {
+          "quote": "standardizing and formulating global CubeSats processes and systems",
+          "location": "Section 6, Conclusion"
         }
       ],
       "confidence": "medium"
@@ -658,6 +669,28 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "executable/model-based checks"
+      ],
+      "status": "coded",
+      "rationale": "The strongest defensible IVV integration level is executable model-based budget/threshold checking inside the OPM/OPCloud model. The paper shows model execution, threshold checks, and accept/error state changes, but not formal EPS verification artifacts, trace-linked test procedures, SIL/HIL, or a separate simulation-in-the-loop verification environment.",
+      "evidence": [
+        {
+          "quote": "returns the calculated value if it is less or equal to the predefined threshold or \"Error\" message otherwise",
+          "location": "Section 5"
+        },
+        {
+          "quote": "Decision Making subprocess ... considers all output objects to decide whether to accept the current configuration or not",
+          "location": "Section 5"
+        },
+        {
+          "quote": "There are cases where the proposed components do not comply with the system limitations ... yielded an \"Error\" value in the Volume Budget object",
+          "location": "Section 5"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -694,6 +727,25 @@
         {
           "quote": "automates and significantly shortens the tedious process",
           "location": "Section 6"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability"
+      ],
+      "status": "coded",
+      "rationale": "Only the component-screening claim supports a CubeSat system-level reliability subtype, and the coherence/consistency claim supports model consistency/reliability. Non-reliability claims should be marked not applicable. There is no direct EPS reliability evidence. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "increase one's chances of selecting reliable, compatible components from which to build the nanosatellite",
+          "location": "Section 1, Introduction"
+        },
+        {
+          "quote": "This facilitates maintaining the system coherent, consistent, and synchronized.",
+          "location": "Section 6, Conclusion"
         }
       ],
       "confidence": "medium"
@@ -1320,7 +1372,10 @@
       ],
       "generality_reuse_mechanism": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
       "key_artifact_quotes": [
         {
@@ -1335,7 +1390,30 @@
           "quote": "OPCloud has an animated execution feature",
           "location": "Section 5"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The model is a generic CubeSat budget-calculation workflow/tool, not a specific mission model. It uses high-level subsystem/attribute abstractions and limited behavior focused on budget checks, and the author claims applicability to CubeSat builders and global CubeSat processes. Do not code template because OPM templates/stereotypes are only mentioned as general OPM features, not used in the demonstrated model.",
+        "evidence": [
+          {
+            "quote": "for automating the process of budget calculation - mass, volume, power, and energy - for CubeSat nanosatellites based on user input which can be iteratively finetuned to fit the CubeSat limitations",
+            "location": "Abstract"
+          },
+          {
+            "quote": "To help a Nanosatellite Builder find the most suitable components to build a nanosatellite",
+            "location": "Section 4, Automating the Budget Calculating Process"
+          },
+          {
+            "quote": "this work is not meant to be comprehensive in this regard, but rather to use some of the budget calculations to demonstrate a tool",
+            "location": "Section 2, CubeSat Budget Calculation"
+          },
+          {
+            "quote": "standardizing and formulating global CubeSats processes and systems",
+            "location": "Section 6, Conclusion"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "implementation_pathway_tailoring": {
       "approach_classification": "Enhanced MBSE",
@@ -1434,7 +1512,29 @@
       "integration_test_readiness": [
         "not reported"
       ],
-      "eps_relevance_caveat": "The mechanism is system-budget verification and includes EPS as one input; it is not a dedicated EPS verification procedure model."
+      "eps_relevance_caveat": "The mechanism is system-budget verification and includes EPS as one input; it is not a dedicated EPS verification procedure model.",
+      "ivv_integration_level": {
+        "values": [
+          "executable/model-based checks"
+        ],
+        "status": "coded",
+        "rationale": "The strongest defensible IVV integration level is executable model-based budget/threshold checking inside the OPM/OPCloud model. The paper shows model execution, threshold checks, and accept/error state changes, but not formal EPS verification artifacts, trace-linked test procedures, SIL/HIL, or a separate simulation-in-the-loop verification environment.",
+        "evidence": [
+          {
+            "quote": "returns the calculated value if it is less or equal to the predefined threshold or \"Error\" message otherwise",
+            "location": "Section 5"
+          },
+          {
+            "quote": "Decision Making subprocess ... considers all output objects to decide whether to accept the current configuration or not",
+            "location": "Section 5"
+          },
+          {
+            "quote": "There are cases where the proposed components do not comply with the system limitations ... yielded an \"Error\" value in the Volume Budget object",
+            "location": "Section 5"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1469,7 +1569,11 @@
           "location": "Section 5"
         },
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Demonstration uses one data set and partial code; automation may reflect a prototype implementation rather than general MBSE effectiveness."
+        "threats_or_alternative_explanations": "Demonstration uses one data set and partial code; automation may reflect a prototype implementation rather than general MBSE effectiveness.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Automation/decision-support claim, not a reliability claim."
       },
       {
         "claim_id": "C2",
@@ -1507,7 +1611,11 @@
           "location": "Section 1, Introduction"
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Reliability is inferred from budget compliance only; no failure-rate, integration, testing, or flight data is presented."
+        "threats_or_alternative_explanations": "Reliability is inferred from budget compliance only; no failure-rate, integration, testing, or flight data is presented.",
+        "reliability_subtype": [
+          "system/mission reliability"
+        ],
+        "reliability_subtype_rationale": "The paper claims increased chance of selecting reliable, compatible components for the nanosatellite, but not EPS-specific reliability."
       },
       {
         "claim_id": "C3",
@@ -1537,7 +1645,11 @@
           "location": "Section 1, Introduction"
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Understandability is argued from OPM/OPL features but not tested with users."
+        "threats_or_alternative_explanations": "Understandability is argued from OPM/OPL features but not tested with users.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Communication/understandability claim, not reliability-adjacent."
       },
       {
         "claim_id": "C4",
@@ -1568,7 +1680,11 @@
           "location": "Section 6, Conclusion"
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Only one code snippet is shown; it is not clear how broader model changes avoid code changes in all cases."
+        "threats_or_alternative_explanations": "Only one code snippet is shown; it is not clear how broader model changes avoid code changes in all cases.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "The claim concerns keeping the model/system coherent, consistent, and synchronized."
       },
       {
         "claim_id": "C5",
@@ -1598,7 +1714,11 @@
           "location": "Section 6, Conclusion"
         },
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "The paper does not compare elapsed time or labor against manual or previous-tool workflows."
+        "threats_or_alternative_explanations": "The paper does not compare elapsed time or labor against manual or previous-tool workflows.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Effort/schedule reduction claim, not reliability-adjacent."
       },
       {
         "claim_id": "C6",
@@ -1628,7 +1748,11 @@
           "location": "Section 6, Conclusion"
         },
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "A single prototype demonstration cannot establish general standardization or reuse."
+        "threats_or_alternative_explanations": "A single prototype demonstration cannot establish general standardization or reuse.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Standardization/reuse and decision-support claim, not a reliability claim."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1701,5 +1825,16 @@
       "confidence_reason": "Method and artifacts are clear, but outcome evidence, full code/model availability, venue details, and some figure-derived numbers are limited."
     }
   },
-  "bibtex": "@inproceedings{Jbara2025CubeSatBudgetMBSE,\n  author = {Jbara, Ahmad},\n  title = {Applying Model-Based Systems Engineering on CubeSat Budget Calculating},\n  booktitle = {2025 IEEE Aerospace Conference},\n  year = {2025},\n  doi = {10.1109/aero63441.2025.11068482},\n  url = {https://doi.org/10.1109/aero63441.2025.11068482}\n}"
+  "bibtex": "@inproceedings{Jbara2025CubeSatBudgetMBSE,\n  author = {Jbara, Ahmad},\n  title = {Applying Model-Based Systems Engineering on CubeSat Budget Calculating},\n  booktitle = {2025 IEEE Aerospace Conference},\n  year = {2025},\n  doi = {10.1109/aero63441.2025.11068482},\n  url = {https://doi.org/10.1109/aero63441.2025.11068482}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0041.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add mission-agnostic architecture to generality/reuse mechanism; do not add template despite background mention of OPM templates.",
+      "Downgrade IVV integration level from simulation-in-the-loop to executable/model-based checks for a more conservative v1.1 coding.",
+      "Do not code EPS reliability; reliability support is system-level/component-selection and model-consistency only."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

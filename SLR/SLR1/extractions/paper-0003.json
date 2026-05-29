@@ -506,21 +506,32 @@
         "template",
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
       "status": "coded",
-      "rationale": "The paper describes a CubeSat framework/meta-model/template, reusable workflow components, and lessons/method steps; it mentions a domain-specific SysML extension but does not explicitly report a released profile or open package.",
+      "rationale": "The paper is RAX-applied, but it explicitly frames the work as a CubeSat community framework/model-development-kit and template, not merely a one-off RAX model. High-level/logical abstraction is supported by the emphasis on logical operations models and minimizing model complexity. Do not add low-dynamics / non-detailed-behavior model because executable dynamics, power scenarios, and state/activity behavior are central. Do not add specific-mission model with reusable method only because the paper claims a reusable CubeSat framework/template beyond RAX.",
       "evidence": [
         {
-          "quote": "domain specific extension of SysML made especially for CubeSat modeling",
-          "location": "Section 1"
+          "quote": "Our overall plan is to develop a CubeSat model development kit for the CubeSat community",
+          "location": "Section 3, MBSE Approach to CubeSat Design"
         },
         {
-          "quote": "An example CubeSat model that existing and future teams can use as a template",
-          "location": "Section 3"
+          "quote": "An example CubeSat model that existing and future teams can use as a template for describing and modeling their own satellites, optimizing satellite design, and evaluating mission operations.",
+          "location": "Section 3, MBSE Approach to CubeSat Design"
         },
         {
-          "quote": "dragging and dropping reusable components",
+          "quote": "The focus of this paper is on the operations of the RAX system, thus we focus on the logical models.",
+          "location": "Section 5, RAX SysML Model"
+        },
+        {
+          "quote": "The SysML BDD and IBD diagram structures are the foundations that establish the fundamental relationships and interfaces between the system components.",
+          "location": "Section 7, Conclusion"
+        },
+        {
+          "quote": "The simulation is a workflow that is created graphically by dragging and dropping reusable components",
           "location": "Section 6, Power Analysis"
         }
       ],
@@ -754,6 +765,32 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The power/system verification evidence is model-connected and executable through SysML, PHX ModelCenter, STK, and MATLAB, with requirements-compliance checks and violation metrics. This supports simulation-in-the-loop, but not software/hardware-in-the-loop or physical integration/test.",
+      "evidence": [
+        {
+          "quote": "vehicle and network parameters and schedules can be verified prior to being implemented",
+          "location": "Abstract"
+        },
+        {
+          "quote": "We implement the RAX-specific scenario by combing the MagicDraw parametric model in Figure 14 with an orbital scenario from STK ... and custom analysis MATLAB scripts using PHX ModelCenter",
+          "location": "Section 6, Power Analysis"
+        },
+        {
+          "quote": "This simulation environment enables us to evaluate design configurations, perform trade studies, and check requirements compliance.",
+          "location": "Section 6, Power Analysis"
+        },
+        {
+          "quote": "computeDynamics ... outputs four violation metrics",
+          "location": "Figure 14 description"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "software integration",
@@ -809,6 +846,33 @@
         {
           "quote": "framework for integrating the design model with the analytical models",
           "location": "Section 7"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims support mission assurance for robustness, requirements compliance, pre-implementation verification, and software/interface V&V, plus model consistency/reliability for the SysML integration/consistency claim. No claim directly supports EPS reliability, process reliability, generic reliability, or defect/error reduction; non-reliability claims should be not applicable at claim level. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "The integrated modeling environment enables users to extract feasibility, performance, and robustness metrics.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "perform trade studies, and check requirements compliance",
+          "location": "Section 6, Power Analysis"
+        },
+        {
+          "quote": "verification and validation of the mission software and interfaces throughout the development lifecycle",
+          "location": "Section 6, Flight System Behavior Analysis"
+        },
+        {
+          "quote": "Block representation, parameterization, and state definition all serve as the glue that ties the system together",
+          "location": "Section 7, Conclusion"
         }
       ],
       "confidence": "medium"
@@ -1526,14 +1590,41 @@
         "Generic requirements text/traceability constructs"
       ],
       "generality_reuse_mechanism": [
-        "CubeSat meta-model/framework and domain-specific SysML extension",
-        "Example CubeSat model/template for future teams",
-        "Reusable components in PHX workflows",
-        "Acausal parametric model reuse across different causalities",
-        "Modular subsystem/state/interaction framework",
-        "Model repository/collaboration infrastructure",
-        "Method/lessons learned guidance"
-      ]
+        "template",
+        "reference model",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper is RAX-applied, but it explicitly frames the work as a CubeSat community framework/model-development-kit and template, not merely a one-off RAX model. High-level/logical abstraction is supported by the emphasis on logical operations models and minimizing model complexity. Do not add low-dynamics / non-detailed-behavior model because executable dynamics, power scenarios, and state/activity behavior are central. Do not add specific-mission model with reusable method only because the paper claims a reusable CubeSat framework/template beyond RAX.",
+        "evidence": [
+          {
+            "quote": "Our overall plan is to develop a CubeSat model development kit for the CubeSat community",
+            "location": "Section 3, MBSE Approach to CubeSat Design"
+          },
+          {
+            "quote": "An example CubeSat model that existing and future teams can use as a template for describing and modeling their own satellites, optimizing satellite design, and evaluating mission operations.",
+            "location": "Section 3, MBSE Approach to CubeSat Design"
+          },
+          {
+            "quote": "The focus of this paper is on the operations of the RAX system, thus we focus on the logical models.",
+            "location": "Section 5, RAX SysML Model"
+          },
+          {
+            "quote": "The SysML BDD and IBD diagram structures are the foundations that establish the fundamental relationships and interfaces between the system components.",
+            "location": "Section 7, Conclusion"
+          },
+          {
+            "quote": "The simulation is a workflow that is created graphically by dragging and dropping reusable components",
+            "location": "Section 6, Power Analysis"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_or_phases": [
@@ -1662,7 +1753,33 @@
         "virtual integration"
       ],
       "evidence_verification_integrated_in_model": "The power scenario is defined by a SysML parametric diagram and executed through PHX ModelCenter with STK/MATLAB; the paper states it can perform trade studies and check requirements compliance. Abstract claims parameters/schedules can be verified before implementation.",
-      "integration_test_readiness": "Software/interface V&V readiness is supported through CST execution of state/activity models and potential expected-versus-on-flight behavior comparison. No EPS hardware integration/testbed/environmental test evidence is reported."
+      "integration_test_readiness": "Software/interface V&V readiness is supported through CST execution of state/activity models and potential expected-versus-on-flight behavior comparison. No EPS hardware integration/testbed/environmental test evidence is reported.",
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "The power/system verification evidence is model-connected and executable through SysML, PHX ModelCenter, STK, and MATLAB, with requirements-compliance checks and violation metrics. This supports simulation-in-the-loop, but not software/hardware-in-the-loop or physical integration/test.",
+        "evidence": [
+          {
+            "quote": "vehicle and network parameters and schedules can be verified prior to being implemented",
+            "location": "Abstract"
+          },
+          {
+            "quote": "We implement the RAX-specific scenario by combing the MagicDraw parametric model in Figure 14 with an orbital scenario from STK ... and custom analysis MATLAB scripts using PHX ModelCenter",
+            "location": "Section 6, Power Analysis"
+          },
+          {
+            "quote": "This simulation environment enables us to evaluate design configurations, perform trade studies, and check requirements compliance.",
+            "location": "Section 6, Power Analysis"
+          },
+          {
+            "quote": "computeDynamics ... outputs four violation metrics",
+            "location": "Figure 14 description"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1699,7 +1816,11 @@
         "direct_quote": "The integrated modeling environment enables users to extract feasibility, performance, and robustness metrics. This enables visualization of both the physical states ... and functional states ... of the satellite for representative mission scenarios.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "The metrics are named but not tabulated for the main power workflow; robustness is not separately evaluated; no baseline or independent validation."
+        "threats_alternative_explanations": "The metrics are named but not tabulated for the main power workflow; robustness is not separately evaluated; no baseline or independent validation.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Robustness/feasibility metrics are mission-assurance adjacent, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1732,7 +1853,11 @@
         "direct_quote": "Unlike these approaches, our simulation environment supports the automated flow of information between simulators, enabling users to easily evaluate different design configurations or reconfigure the analysis for different mission scenarios in a rapid and convenient way.",
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_alternative_explanations": "The lessons-learned section also reports wrapper setup and debugging as time-consuming, tempering the automation/effort claim."
+        "threats_alternative_explanations": "The lessons-learned section also reports wrapper setup and debugging as time-consuming, tempering the automation/effort claim.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Automation/interoperability/effort claim without reliability-adjacent outcome."
       },
       {
         "claim_id": "C3",
@@ -1767,7 +1892,11 @@
         "direct_quote": "ParaMagic can be used to execute a given parametric model for different causalities, such that input and output variables can be switched on-the-fly.",
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_alternative_explanations": "The communications example assumes a single ground station and does not compare model outputs to a separate link tool or flight downlink data."
+        "threats_alternative_explanations": "The communications example assumes a single ground station and does not compare model outputs to a separate link tool or flight downlink data.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Parametric reuse and decision-support claim, not reliability."
       },
       {
         "claim_id": "C4",
@@ -1807,7 +1936,11 @@
         "direct_quote": "This simulation environment enables us to evaluate design configurations, perform trade studies, and check requirements compliance. Analysis can also be automatically re-run with updated the parameter values.",
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_alternative_explanations": "Evidence is mainly architectural/workflow and figure-based; no physical EPS test, flight-data correlation, or comparator process is reported."
+        "threats_alternative_explanations": "Evidence is mainly architectural/workflow and figure-based; no physical EPS test, flight-data correlation, or comparator process is reported.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Power scenario checks requirements/violations, supporting mission assurance only; no direct EPS reliability result."
       },
       {
         "claim_id": "C5",
@@ -1841,7 +1974,11 @@
         "direct_quote": "vehicle and network parameters and schedules can be verified prior to being implemented, during mission operations, and can also be updated in near real-time with operational performance feedback.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "RAX had already launched and was operating at paper time; claim is largely prospective for future missions and lacks a reported operational-feedback loop."
+        "threats_alternative_explanations": "RAX had already launched and was operating at paper time; claim is largely prospective for future missions and lacks a reported operational-feedback loop.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Pre-implementation verification and operational feedback are mission-assurance adjacent."
       },
       {
         "claim_id": "C6",
@@ -1875,7 +2012,11 @@
         "direct_quote": "Using CST for this analysis allows for the interfaces to the different systems of the RAX Mission System to be analyzed and the actual information exchange between systems to be depicted and tested.",
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_alternative_explanations": "No software-interface defect data, formal test procedure, or actual on-flight comparison result is provided."
+        "threats_alternative_explanations": "No software-interface defect data, formal test procedure, or actual on-flight comparison result is provided.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Mission software/interface V&V supports mission assurance, not EPS reliability."
       },
       {
         "claim_id": "C7",
@@ -1910,7 +2051,11 @@
         "direct_quote": "Block representation, parameterization, and state definition all serve as the glue that ties the system together, and provides the framework for integrating the design model with the analytical models.",
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_alternative_explanations": "Semantic continuity is argued and illustrated, but no formal consistency checks or lifecycle gate evidence are reported."
+        "threats_alternative_explanations": "Semantic continuity is argued and illustrated, but no formal consistency checks or lifecycle gate evidence are reported.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Claim concerns consistency/integration of model and analysis views."
       },
       {
         "claim_id": "C8",
@@ -1943,7 +2088,11 @@
         "direct_quote": "We developed the MBSE simulation environment presented in this paper using a modular approach, which enabled easy growth of the model and multiple modelers to simultaneously contribute to the model.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Observation is author-reported with no baseline, productivity metrics, or independent user evaluation."
+        "threats_alternative_explanations": "Observation is author-reported with no baseline, productivity metrics, or independent user evaluation.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Modularity, growth, collaboration, and learning-curve claim is not reliability-adjacent."
       },
       {
         "claim_id": "C9",
@@ -1979,7 +2128,11 @@
         "direct_quote": "An example CubeSat model that existing and future teams can use as a template for describing and modeling their own satellites, optimizing satellite design, and evaluating mission operations.",
         "evidence_confidence_rating": "Unsupported",
         "confidence": "medium",
-        "threats_alternative_explanations": "The development kit is described as an overall plan; no public model package or independent reuse is reported."
+        "threats_alternative_explanations": "The development kit is described as an overall plan; no public model package or independent reuse is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Template/reuse claim is not reliability-adjacent."
       },
       {
         "claim_id": "C10",
@@ -2012,7 +2165,11 @@
         "direct_quote": "The model will enable verification that design updates comply with mission requirements. The model also helps effectively communicate design updates to all engineers working on the mission.",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Traceability is asserted as model capability; no concrete requirement-to-update trace record or stakeholder evaluation is shown."
+        "threats_alternative_explanations": "Traceability is asserted as model capability; no concrete requirement-to-update trace record or stakeholder evaluation is shown.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Verification of design updates against mission requirements is mission-assurance adjacent."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2157,5 +2314,17 @@
       "extraction_confidence_reason": "Full markdown with methods, figures, scenario descriptions, conclusions, lessons learned, and references was available. Confidence is medium for claims based mainly on figure descriptions or prospective future use."
     }
   },
-  "bibtex": "@inproceedings{Spangelo2013RAXMBSE,\n  title = {Model based systems engineering (MBSE) applied to Radio Aurora Explorer (RAX) CubeSat mission operational scenarios},\n  author = {Spangelo, Sara C. and Cutler, James and Anderson, Louise and Fosse, Elyse and Cheng, Leo Y. and Yntema, Rose and Bajaj, Manas and Delp, Chris and Cole, Bjorn and Soremekum, Grant and Kaslow, David},\n  booktitle = {2013 IEEE Aerospace Conference},\n  year = {2013},\n  publisher = {IEEE},\n  doi = {10.1109/aero.2013.6496894},\n  url = {https://doi.org/10.1109/aero.2013.6496894}\n}"
+  "bibtex": "@inproceedings{Spangelo2013RAXMBSE,\n  title = {Model based systems engineering (MBSE) applied to Radio Aurora Explorer (RAX) CubeSat mission operational scenarios},\n  author = {Spangelo, Sara C. and Cutler, James and Anderson, Louise and Fosse, Elyse and Cheng, Leo Y. and Yntema, Rose and Bajaj, Manas and Delp, Chris and Cole, Bjorn and Soremekum, Grant and Kaslow, David},\n  booktitle = {2013 IEEE Aerospace Conference},\n  year = {2013},\n  publisher = {IEEE},\n  doi = {10.1109/aero.2013.6496894},\n  url = {https://doi.org/10.1109/aero.2013.6496894}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0003.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add high-level abstraction to generality_reuse_mechanism; current v1.1 labels mission-agnostic architecture and interface-focused model are supported.",
+      "Do not add low-dynamics / non-detailed-behavior model or specific-mission model with reusable method only.",
+      "Keep IVV integration level as simulation-in-the-loop; do not upgrade to SIL/HIL or physical integration/test.",
+      "Do not code EPS reliability; PHX ModelCenter reliability analysis is mentioned as a tool capability, not demonstrated as a RAX/EPS outcome."
+    ],
+    "applied_at": "2026-05-28T15:59:43-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

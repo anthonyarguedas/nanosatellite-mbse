@@ -1,0 +1,160 @@
+{
+  "corpus_id": "paper-0080",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reference model",
+        "pattern",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction"
+      ],
+      "status": "coded",
+      "rationale": "The paper supports reuse through FireSat model-element reuse, common nanosatellite design patterns, OOSEM/PNSSP method guidance, and high-level/generic mission-scenario abstraction. It should not be coded as mission-agnostic architecture, interface-focused model, or low-dynamics / non-detailed-behavior model. The implemented case is NSS-1, but the paper claims model/pattern reuse beyond NSS-1, so 'specific-mission model with reusable method only' is too restrictive.",
+      "evidence": [
+        {
+          "quote": "We have used SysML to develop a scalable model repository for RS satellites. A parametric model-based approach has been used that allows generic models of various mission scenarios to be characterized for the study being performed.",
+          "location": "INTRODUCTION"
+        },
+        {
+          "quote": "we devised a two-step modeling approach for current and future projects in the Pakistan National Student Satellite Program (PNSSP)",
+          "location": "MODELING APPROACH"
+        },
+        {
+          "quote": "We reused some model elements from the FireSat SysML model",
+          "location": "MODEL REPOSITORY FOR NSS-1"
+        },
+        {
+          "quote": "The modeling repository uses SysML to capture common design patterns of the typical nanosatellite class",
+          "location": "MODEL REPOSITORY FOR NSS-1"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "executable/model-based checks"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV integration level is executable/model-based checks: SysML requirements are linked by verify relationships to constraint blocks, and ParaMagic/MATLAB SMT solves the mass/power margins. This is not simulation-in-the-loop, SIL/HIL, or detailed EPS test integration.",
+      "evidence": [
+        {
+          "quote": "The requirement diagram defines requirements, traceability, and the test cases that verify each requirement.",
+          "location": "Requirement Diagram"
+        },
+        {
+          "quote": "constraint blocks have been created to calculate the mass and power margins in the budgets, keeping in view the mass and power requirement by the user. This scenario is depicted in the SysML requirement diagram with the verify relationship.",
+          "location": "SysML Parametrics"
+        },
+        {
+          "quote": "After connecting the parameter ports to respective inputs and outputs, we validated the model using ParaMagic.",
+          "location": "SysML Parametrics"
+        },
+        {
+          "quote": "mass_MOS=0.082 and power_MOS=0.47), which verify the mass and power requirements",
+          "location": "SysML Parametrics"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction",
+        "not applicable"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims concern process/model consistency, reduced manual mismatch/error risk, requirements verification, and broad development-risk/quality assertions. The paper does not directly support EPS reliability or system/mission reliability, even though it mentions EPS power budgets and a reliability budget artifact.",
+      "evidence": [
+        {
+          "quote": "This approach inherently involves a lot of manual procedures, which are error prone because of parametric mismatch.",
+          "location": "SYSML MODEL OF THE NSS-1 SATELLITE"
+        },
+        {
+          "quote": "MBSE provides a consistent and automatically traceable system design",
+          "location": "INTRODUCTION"
+        },
+        {
+          "quote": "which verify the mass and power requirements",
+          "location": "SysML Parametrics"
+        },
+        {
+          "quote": "The SysML model and diagrams can point out missing design information",
+          "location": "CONCLUSION"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1",
+      "reliability_subtype": [
+        "process reliability",
+        "model consistency/reliability",
+        "defect/error reduction"
+      ],
+      "rationale": "Consistency, traceability, change-impact assessment, and reduced manual mismatch/errors are process/model reliability-adjacent, not EPS reliability."
+    },
+    {
+      "claim_id": "C2",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "Executable mass/power requirement checks support assurance of requirements satisfaction, but not EPS reliability."
+    },
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "The claim is about interoperability and parameter tuning, not reliability."
+    },
+    {
+      "claim_id": "C4",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "The claim is about reuse, knowledge transfer, and reproducibility."
+    },
+    {
+      "claim_id": "C5",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "The claim is about automation and downstream continuity, without a reliability claim."
+    },
+    {
+      "claim_id": "C6",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "The claim is about time, cost, and reuse."
+    },
+    {
+      "claim_id": "C7",
+      "reliability_subtype": [
+        "process reliability",
+        "mission assurance"
+      ],
+      "rationale": "Reduced development risk and improved quality are broad process/assurance claims; evidence is assertion-only and not EPS-specific."
+    },
+    {
+      "claim_id": "C8",
+      "reliability_subtype": [
+        "model consistency/reliability",
+        "defect/error reduction"
+      ],
+      "rationale": "Finding missing design information and improving consistency are model-reliability and defect/missing-information reduction claims."
+    }
+  ],
+  "repair_notes": [
+    "Add 'pattern' to generality/reuse; remove stale v1.1 migration wording and do not code mission-agnostic architecture, interface-focused model, or low-dynamics / non-detailed-behavior model.",
+    "Consider removing 'specific-mission model with reusable method only' because the paper claims model-element/pattern reuse, not only method reuse, although evidence remains single-case/prospective.",
+    "Keep IVV as 'executable/model-based checks' but limit the rationale to mass/power budget requirement checks; do not upgrade to SIL/HIL or full EPS verification.",
+    "Do not code EPS reliability; reliability-adjacent outcomes are process/model/mission-assurance only."
+  ]
+}

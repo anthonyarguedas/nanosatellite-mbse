@@ -438,18 +438,29 @@
         "template",
         "transformation",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
       "status": "coded",
-      "rationale": "The abstract MAM acts as a reusable template, while C2F implements a model transformation and the paper describes a repeatable workflow.",
+      "rationale": "The paper presents a reusable abstract Mission Architecture Model and workflow that users can instantiate for their own missions, plus a C2F model transformation to ForPlan. The model is high-level and behavior is simplified through predefined equipment operation functions. Do not retain 'specific-mission model with reusable method only' because the contribution is not only a NCBR2 case model; the paper also provides an abstract reusable structure and transformation workflow.",
       "evidence": [
+        {
+          "quote": "this article introduces a workflow based on a Cyber-Physical abstraction of CubeSat mission operation scenarios",
+          "location": "Abstract"
+        },
         {
           "quote": "The users then can create an \"instance\" class diagram MAM based on this abstract class diagram and define their own mission",
           "location": "Section II.B"
         },
         {
-          "quote": "C2F traverses the model elements of the MAM ... and generates Julia code",
+          "quote": "C2F traverses the model elements of the MAM in accordance with the predefined rules overviewed in Section II and generates Julia code based on the retrieved attributes.",
           "location": "Section III"
+        },
+        {
+          "quote": "The current version of ForPlan considers four predefined functions: 1) AlwaysOn ... 2) OnGroundStation ... 3) TimedOp ... 4) RoiOP",
+          "location": "Section II.A"
         }
       ],
       "confidence": "high"
@@ -621,6 +632,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The model is transformed into simulator input and used in pre-physical Phase-0/Pre-Phase A operational-scenario simulations to check requirements and power/data budgets. No SIL/HIL, verification matrix, formal trace links, or physical integration/test evidence is reported.",
+      "evidence": [
+        {
+          "quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements and drive further design implementations.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The user then analyses the results of the simulation outputs, such as battery capacity and data usage graphs, to see if the operations requirements are met",
+          "location": "Section II"
+        },
+        {
+          "quote": "ForPlan performs functional simulations of satellites and associated ground segments to reflect operations scenarios of the mission under analysis.",
+          "location": "Section II.A"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "software integration"
@@ -661,6 +694,28 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims are mission/system scenario assurance claims about verifying operations requirements and reaching a valid operation scenario, not EPS reliability. Non-reliability claims about automation, effort, interoperability, stakeholder communication, and lifecycle continuity are not applicable. 'model consistency/reliability' should not be used unless the claim is specifically about reliability or consistency of the model itself. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Simulating the operations scenarios that express the power consumption and data generation of the CubeSat platform itself and on board payloads allows for the verification of mission requirements, evidencing inconsistencies",
+          "location": "Introduction"
+        },
+        {
+          "quote": "From these graphs, we can infer that the power and data balances are stable, i.e. the satellite is capable of charging the batteries for the amount used each orbit, and download the generated mission data. This means, for this perspective, that this is a valid operation scenario.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1225,7 +1280,10 @@
         "template",
         "transformation",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
       "evidence_quotes": [
         {
@@ -1236,7 +1294,30 @@
           "quote": "By using the MAM and automatically generating the input configuration script, the user is no longer required to understand how the simulator source code works",
           "location": "Conclusion"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper presents a reusable abstract Mission Architecture Model and workflow that users can instantiate for their own missions, plus a C2F model transformation to ForPlan. The model is high-level and behavior is simplified through predefined equipment operation functions. Do not retain 'specific-mission model with reusable method only' because the contribution is not only a NCBR2 case model; the paper also provides an abstract reusable structure and transformation workflow.",
+        "evidence": [
+          {
+            "quote": "this article introduces a workflow based on a Cyber-Physical abstraction of CubeSat mission operation scenarios",
+            "location": "Abstract"
+          },
+          {
+            "quote": "The users then can create an \"instance\" class diagram MAM based on this abstract class diagram and define their own mission",
+            "location": "Section II.B"
+          },
+          {
+            "quote": "C2F traverses the model elements of the MAM in accordance with the predefined rules overviewed in Section II and generates Julia code based on the retrieved attributes.",
+            "location": "Section III"
+          },
+          {
+            "quote": "The current version of ForPlan considers four predefined functions: 1) AlwaysOn ... 2) OnGroundStation ... 3) TimedOp ... 4) RoiOP",
+            "location": "Section II.A"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1350,7 +1431,29 @@
       "integration_test_readiness": [
         "software integration"
       ],
-      "eps_notes": "The EPS relevance is primarily power-budget simulation, not detailed EPS architecture or EPS verification procedure modeling."
+      "eps_notes": "The EPS relevance is primarily power-budget simulation, not detailed EPS architecture or EPS verification procedure modeling.",
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "The model is transformed into simulator input and used in pre-physical Phase-0/Pre-Phase A operational-scenario simulations to check requirements and power/data budgets. No SIL/HIL, verification matrix, formal trace links, or physical integration/test evidence is reported.",
+        "evidence": [
+          {
+            "quote": "These simulations can be used in mission concept analyses in Phase-0 studies to verify initial operations requirements and drive further design implementations.",
+            "location": "Abstract"
+          },
+          {
+            "quote": "The user then analyses the results of the simulation outputs, such as battery capacity and data usage graphs, to see if the operations requirements are met",
+            "location": "Section II"
+          },
+          {
+            "quote": "ForPlan performs functional simulations of satellites and associated ground segments to reflect operations scenarios of the mission under analysis.",
+            "location": "Section II.A"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1389,7 +1492,11 @@
           "location": "Section IV"
         },
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Simulation validity depends on accuracy of model parameters and ForPlan abstractions; no physical/flight validation or independent verification is reported."
+        "threats_or_alternative_explanations": "Simulation validity depends on accuracy of model parameters and ForPlan abstractions; no physical/flight validation or independent verification is reported.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The claim concerns V&V of CubeSat operations scenarios and valid power/data balance, supporting mission assurance only; it is not EPS reliability and not model consistency/reliability."
       },
       {
         "claim_id": "C2",
@@ -1423,7 +1530,11 @@
           "location": "Conclusion"
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "No time/effort baseline or user study; the claim may depend on users' familiarity with Capella and correctness of C2F."
+        "threats_or_alternative_explanations": "No time/effort baseline or user study; the claim may depend on users' familiarity with Capella and correctness of C2F.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim is about automation, effort/schedule reduction, and tool integration, without a reliability-adjacent outcome."
       },
       {
         "claim_id": "C3",
@@ -1458,7 +1569,11 @@
           "location": "Section IV"
         },
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "No formal acceptance thresholds or independent validation are reported; iterative convergence may reflect assumed parameters rather than validated mission behavior."
+        "threats_or_alternative_explanations": "No formal acceptance thresholds or independent validation are reported; iterative convergence may reflect assumed parameters rather than validated mission behavior.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Iterating simulations until power/data requirements are met supports mission assurance; no direct EPS reliability or model reliability claim is made."
       },
       {
         "claim_id": "C4",
@@ -1491,7 +1606,11 @@
           "location": "Section IV"
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "No stakeholder evaluation, minutes, decision records, or software integration/test result is provided."
+        "threats_or_alternative_explanations": "No stakeholder evaluation, minutes, decision records, or software integration/test result is provided.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim is about stakeholder alignment, decision support, and implementation guidance, without direct reliability evidence."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1574,5 +1693,18 @@
       "extraction_confidence_reason": "The supplied markdown clearly describes the workflow, artifacts, tools, and NCBR2 application; absences such as governance, baseline, and model availability are also clear. Venue details are less certain because the markdown omits the venue name."
     }
   },
-  "bibtex": "@inproceedings{almeida2021towards,\n  title={Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View},\n  author={de Almeida, Danilo Pallamin and Graics, Bence and Chagas, Ronan Arraes Jardim and de Sousa, Fabiano Luis and Mattiello-Francisco, Fatima},\n  year={2021},\n  doi={10.1109/LADC53747.2021.9672594},\n  note={Venue not reported in supplied markdown}\n}"
+  "bibtex": "@inproceedings{almeida2021towards,\n  title={Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View},\n  author={de Almeida, Danilo Pallamin and Graics, Bence and Chagas, Ronan Arraes Jardim and de Sousa, Fabiano Luis and Mattiello-Francisco, Fatima},\n  year={2021},\n  doi={10.1109/LADC53747.2021.9672594},\n  note={Venue not reported in supplied markdown}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0033.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add 'mission-agnostic architecture' and 'low-dynamics / non-detailed-behavior model' to generality_reuse_mechanism.",
+      "Remove 'specific-mission model with reusable method only' because the paper provides a reusable abstract MAM/workflow, not only a mission-specific case model.",
+      "Keep IVV integration level as 'simulation-in-the-loop'.",
+      "Remove 'model consistency/reliability' from reliability_subtype; use 'mission assurance' only for reliability-adjacent claims and 'not applicable' for non-reliability claims.",
+      "Do not code EPS reliability for this paper."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

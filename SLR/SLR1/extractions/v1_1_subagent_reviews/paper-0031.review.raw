@@ -1,0 +1,99 @@
+{
+  "corpus_id": "paper-0031",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "high-level abstraction",
+        "mission-agnostic architecture"
+      ],
+      "status": "coded",
+      "rationale": "The paper presents a generic CubeSat Reference Model/logical architecture to be distributed and tailored into mission-specific CubeSat models. High-level abstraction and mission-agnostic architecture are supported by the logical, generic subsystem architecture. Interface mentions are not enough to code interface-focused model, and the paper does not claim limited/non-detailed behavior as the reuse mechanism.",
+      "evidence": [
+        {
+          "quote": "The CubeSat Reference Model will provide the logical architecture. These logical elements can be reused for specifying a mission specific CubeSat.",
+          "location": "Object-Oriented Systems Engineering Method section"
+        },
+        {
+          "quote": "The CubeSat Reference Model includes a general system decomposition that users can tailor to suit their particular project needs.",
+          "location": "Space and Ground Subsystems section"
+        },
+        {
+          "quote": "a SysML model that will serve as a framework for future CubeSat developers",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "not_reported",
+      "rationale": "The paper reports generic V&V support, testing requirements, lifecycle I&T coverage, and prior simulations/trade studies, but no EPS verification artifacts integrated into the model. The power/energy trade studies are decision-support analyses, not model-integrated IVV.",
+      "evidence": [
+        {
+          "quote": "This model provides the foundation for specifying a CubeSat's physical, mechanical, electrical, testing, and operational requirements.",
+          "location": "Development of the CubeSat Reference Model section"
+        },
+        {
+          "quote": "Two trade studies were demonstrated: 1) On-board energy level as a function of solar panel area and maximum battery capacity",
+          "location": "SSWG MBSE Challenge Project Early Phases section"
+        },
+        {
+          "quote": "The future plans include... verifying the correctness of the model",
+          "location": "Next Steps"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability"
+      ],
+      "status": "coded",
+      "rationale": "No EPS reliability or system/mission reliability outcome is directly claimed. Reliability-adjacent coding should be limited to model consistency/uniformity claims; other outcome claims remain not applicable.",
+      "evidence": [
+        {
+          "quote": "changes are automatically propagated and reflected in every view of the system",
+          "location": "Model-Based Systems Engineering section"
+        },
+        {
+          "quote": "a properly designed reference model can serve as a checklist... and promote uniformity and consistency across future CubeSat models",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "high"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "index 1",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "Claim is about model/view consistency from integrating requirements and interfaces in one model; not EPS or mission reliability."
+    },
+    {
+      "claim_id": "index 5",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Traceability/stakeholder-linkage alone should not be treated as a reliability subtype unless the claim explicitly asserts model consistency or reliability."
+    },
+    {
+      "claim_id": "index 9",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "Claim explicitly concerns checklist support, uniformity, and consistency across future CubeSat models."
+    }
+  ],
+  "repair_notes": [
+    "Remove overbroad generality labels: interface-focused model and low-dynamics / non-detailed-behavior model.",
+    "Do not upgrade prior power simulations/trade studies to simulation-in-the-loop IVV.",
+    "No EPS reliability subtype is supported; only model consistency/reliability is supported for explicit consistency/uniformity claims."
+  ]
+}

@@ -554,26 +554,28 @@
         "reference model",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "status": "coded",
-      "rationale": "Reuse is enabled through the CubeSat Reference Model as a starting point, a component library to swap in/out, lifecycle-structured phase models, and a Project Model repository for methods/processes/tools.",
+      "rationale": "The paper directly claims a reusable CubeSat reference/project model for mission-specific tailoring, with a component library and process/method guidance. High-level abstraction and mission-agnostic architecture are supported by the logical, typical space-ground architecture intended for customization. Do not code specific-mission model with reusable method only. Do not code low-dynamics / non-detailed-behavior model because limited detail is mainly interim maturity, not a stated reuse mechanism.",
       "evidence": [
         {
-          "quote": "Abstract: \"Develop a CubeSat Reference Model that other projects can use as a starting point...\"",
-          "location": "not specified"
+          "quote": "Develop a CubeSat Reference Model that other projects can use as a starting point for their mission specific CubeSat model.",
+          "location": "Abstract"
         },
         {
-          "quote": "Figure 6: \"Space and Ground System Components\" described as \"Library of components to swap in and out of model\".",
-          "location": "not specified"
+          "quote": "Space and Ground System Components: Library of components to swap in and out of model.",
+          "location": "Figure 6 description"
         },
         {
-          "quote": "Section 3: CubeSat Project Model \"will be a repository for these processes, methods, and tools\".",
-          "location": "not specified"
+          "quote": "The CubeSat Project Model called out in Figure 4 will be a repository for these processes, methods, and tools.",
+          "location": "Section 3, CubeSat Reference Model and CubeSat Project Model"
         },
         {
-          "quote": "Section 4: phase models are described as a gradual way for teams to modify/add/remove SysML elements.",
-          "location": "not specified"
+          "quote": "The logical architecture decomposes the system into logical components, which are abstractions of components that implement the system.",
+          "location": "Section 6, CubeSat Mission Enterprise"
         }
       ],
       "confidence": "high"
@@ -781,6 +783,26 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [],
+      "status": "not_reported",
+      "rationale": "The paper mentions verification/validation and future testing/signoff content, but does not show EPS or system IVV artifacts integrated by trace links, containment, executable checks, simulation-in-loop, SIL/HIL, or tool connections. The current extraction should not remain uncertain or be upgraded to a model-integrated level.",
+      "evidence": [
+        {
+          "quote": "The reference model contains SysML elements for the requirements, design, analysis, verification, and validation activities.",
+          "location": "Section 3, CubeSat Reference Model"
+        },
+        {
+          "quote": "It also includes requirements covering communication licenses, remote sensing licenses, debris mitigation, testing, and verification reporting/signoff, which will be populated into the Project Model as Activity diagrams or Sequence diagrams.",
+          "location": "Section 3, Cal Poly CubeSat Design Specification"
+        },
+        {
+          "quote": "The next step is to determine the level of model definition at each of the lifecycle stages and to create models for the concept and development phases.",
+          "location": "Abstract / Next Steps"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -833,6 +855,29 @@
         {
           "quote": "Section 2: trade studies were demonstrated.",
           "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims support only model consistency/reliability and mission assurance. There is no direct EPS reliability claim, no reliability metric, and no EPS-specific reliability evidence. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "It provides a cohesive and consistent source of system requirements, design analysis, and verification.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Systems engineering artifacts can be extracted from the model, which can be used to demonstrate mission assurance to the stakeholders.",
+          "location": "Section 3, CubeSat Reference Model"
+        },
+        {
+          "quote": "determine whether requirements were satisfied throughout the entire RAX mission",
+          "location": "Section 2, Phase 2"
         }
       ],
       "confidence": "high"
@@ -1602,13 +1647,38 @@
         "reference model",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "key_artifact_quotes": [
         "\"SysML diagrams are used to describe requirements, structures, behaviors, and parametrics from the system down to the component level.\"",
         "\"The model will have space system and ground system model components, package diagrams, and structure diagrams... requirement, parametric, and behavior diagrams...\"",
         "Figure 6 includes a \"Library of components to swap in and out of model\" and output to \"Mission Specific CubeSat Model\"."
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper directly claims a reusable CubeSat reference/project model for mission-specific tailoring, with a component library and process/method guidance. High-level abstraction and mission-agnostic architecture are supported by the logical, typical space-ground architecture intended for customization. Do not code specific-mission model with reusable method only. Do not code low-dynamics / non-detailed-behavior model because limited detail is mainly interim maturity, not a stated reuse mechanism.",
+        "evidence": [
+          {
+            "quote": "Develop a CubeSat Reference Model that other projects can use as a starting point for their mission specific CubeSat model.",
+            "location": "Abstract"
+          },
+          {
+            "quote": "Space and Ground System Components: Library of components to swap in and out of model.",
+            "location": "Figure 6 description"
+          },
+          {
+            "quote": "The CubeSat Project Model called out in Figure 4 will be a repository for these processes, methods, and tools.",
+            "location": "Section 3, CubeSat Reference Model and CubeSat Project Model"
+          },
+          {
+            "quote": "The logical architecture decomposes the system into logical components, which are abstractions of components that implement the system.",
+            "location": "Section 6, CubeSat Mission Enterprise"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps_or_phases": [
@@ -1794,7 +1864,27 @@
         "\"On-board energy level as a function of solar panel area and maximum battery capacity.\"",
         "\"The power components for CubeSats include solar panels, batteries, regulators, and wiring harnesses.\"",
         "Table 3: Power: \"Monitor, collect, store, distribute, and control spacecraft power.\""
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [],
+        "status": "not_reported",
+        "rationale": "The paper mentions verification/validation and future testing/signoff content, but does not show EPS or system IVV artifacts integrated by trace links, containment, executable checks, simulation-in-loop, SIL/HIL, or tool connections. The current extraction should not remain uncertain or be upgraded to a model-integrated level.",
+        "evidence": [
+          {
+            "quote": "The reference model contains SysML elements for the requirements, design, analysis, verification, and validation activities.",
+            "location": "Section 3, CubeSat Reference Model"
+          },
+          {
+            "quote": "It also includes requirements covering communication licenses, remote sensing licenses, debris mitigation, testing, and verification reporting/signoff, which will be populated into the Project Model as Activity diagrams or Sequence diagrams.",
+            "location": "Section 3, Cal Poly CubeSat Design Specification"
+          },
+          {
+            "quote": "The next step is to determine the level of model definition at each of the lifecycle stages and to create models for the concept and development phases.",
+            "location": "Abstract / Next Steps"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1833,6 +1923,9 @@
           "Current model is interim and future validation/roll-out are planned.",
           "No evidence of reuse across independent CubeSat projects in this paper.",
           "Potential overlap with earlier SSWG reference-model papers."
+        ],
+        "reliability_subtype": [
+          "not applicable"
         ]
       },
       {
@@ -1871,6 +1964,9 @@
           "Interoperability mechanism not reported.",
           "Tools are COTS and may require vendor-specific features.",
           "Evidence is summarized from prior phases rather than detailed in this interim paper."
+        ],
+        "reliability_subtype": [
+          "not applicable"
         ]
       },
       {
@@ -1906,7 +2002,11 @@
         "threats_or_alternative_explanations": [
           "Requirements traceability figure is illustrative and not evaluated for completeness or correctness.",
           "No baseline document-centric comparison."
-        ]
+        ],
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "The claim is about a cohesive and consistent model source for requirements, analysis, and verification; it is model consistency, not EPS reliability."
       },
       {
         "claim_id": "C4_time_step_simulation_and_trade_studies",
@@ -1945,7 +2045,11 @@
           "The RAX Phase 1 model was not intended to be an accurate satellite model.",
           "The paper summarizes prior demonstrations rather than presenting detailed results.",
           "No physical/flight validation of the simulation outputs is reported."
-        ]
+        ],
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Time-stepping and checking requirement satisfaction across the mission is mission-assurance adjacent, but not EPS reliability."
       },
       {
         "claim_id": "C5_model_artifacts_for_mission_assurance_stakeholders",
@@ -1979,7 +2083,11 @@
         "threats_or_alternative_explanations": [
           "No extracted artifact examples or stakeholder assessment are provided.",
           "Mission assurance benefit may depend on organizational review practice outside the model."
-        ]
+        ],
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The paper directly says extracted systems-engineering artifacts can demonstrate mission assurance to stakeholders."
       },
       {
         "claim_id": "C6_lifecycle_phase_models_reduce_adoption_burden",
@@ -2017,6 +2125,9 @@
         "threats_or_alternative_explanations": [
           "Adoption ease is an author rationale, not measured user feedback.",
           "Model complexity and tool learning curve may still be substantial."
+        ],
+        "reliability_subtype": [
+          "not applicable"
         ]
       },
       {
@@ -2050,6 +2161,9 @@
         "threats_or_alternative_explanations": [
           "Project Model is described in future tense.",
           "No completed process repository or decision-gate use is demonstrated."
+        ],
+        "reliability_subtype": [
+          "not applicable"
         ]
       }
     ],
@@ -2164,5 +2278,17 @@
       "extraction_confidence_rationale": "The full converted paper is available and provides clear claims/artifacts, but it is interim, mostly conceptual, lacks detailed outcome evidence, and has corpus-vs-markdown author discrepancy."
     }
   },
-  "bibtex": "@inproceedings{Kaslow2015CubeSatMBSEReferenceModel,\n  title = {Developing a CubeSat Model-Based System Engineering (MBSE) Reference Model - Interim Status},\n  author = {Kaslow, D. and Ayres, B. and Chonoles, Michael J. and Gasster, S. and Hart, L. and Massa, Chris and Yntema, Rose and Shiotani, B.},\n  booktitle = {2015 IEEE Aerospace Conference},\n  year = {2015},\n  publisher = {IEEE},\n  doi = {10.1109/aero.2015.7118965}\n}"
+  "bibtex": "@inproceedings{Kaslow2015CubeSatMBSEReferenceModel,\n  title = {Developing a CubeSat Model-Based System Engineering (MBSE) Reference Model - Interim Status},\n  author = {Kaslow, D. and Ayres, B. and Chonoles, Michael J. and Gasster, S. and Hart, L. and Massa, Chris and Yntema, Rose and Shiotani, B.},\n  booktitle = {2015 IEEE Aerospace Conference},\n  year = {2015},\n  publisher = {IEEE},\n  doi = {10.1109/aero.2015.7118965}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0004.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism; the paper is interim but does not state low-detailed behavior as the reuse mechanism.",
+      "Do not add specific-mission model with reusable method only; the current phase is a generic CubeSat reference/project model, not only a mission-specific case.",
+      "Set IVV integration to not_reported rather than uncertain/model-integrated; V&V is only conceptual/future and no integrated IVV artifact is shown.",
+      "Do not code EPS reliability for any claim."
+    ],
+    "applied_at": "2026-05-28T15:59:43-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

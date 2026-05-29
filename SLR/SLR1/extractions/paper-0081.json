@@ -590,25 +590,28 @@
         "library",
         "pattern",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
       "status": "coded",
-      "rationale": "Reuse is enabled through standard baselines/reference structures, functional libraries, model patterns, object-oriented grouping, and a described automated workflow/method; no open package of the authors' model is reported.",
+      "rationale": "The paper supports cross-mission reuse through reusable baselines/templates, reference/model patterns, functional libraries, and an automated Capella/Python4Capella workflow. The reusable architecture is high-level and mission-agnostic enough to be imported and extended for mission-specific elements, and interfaces/exchanges are a central organizing mechanism. Do not retain low-dynamics / non-detailed-behavior model: the paper uses functional abstraction, but does not explicitly make low-dynamics or non-detailed behavior a reuse mechanism.",
       "evidence": [
         {
-          "quote": "leveraging model patterns and reference models",
-          "location": "Sec. I.C System as Code"
+          "quote": "An automated framework was developed to support fast, consistent deployment of satellite digital models across missions, leveraging standard solutions and use cases.",
+          "location": "Abstract"
         },
         {
-          "quote": "multiple baselines are often available, each representing a pre-validated logical architecture reused from previous missions",
+          "quote": "multiple baselines are often available, each representing a pre-validated logical architecture reused from previous missions. Based on the best alignment with customer requirements, the most appropriate baseline can be imported into the current model and extended to accommodate mission-specific elements.",
           "location": "Sec. III.B Functional Analysis"
         },
         {
-          "quote": "Use Case Functional Libraries serve as structured repositories that store functional analysis data",
-          "location": "Sec. III.C Automating"
+          "quote": "enabling different functional implementations to share a common interface while adapting to specific mission contexts.",
+          "location": "Sec. III.B Functional Analysis"
         },
         {
-          "quote": "the model... can be automatically generated and validated",
+          "quote": "Use Case Functional Libraries serve as structured repositories that store functional analysis data, representing reusable functional elements at both the System and Logical levels.",
           "location": "Sec. III.C Automating"
         }
       ],
@@ -823,6 +826,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "none",
+      "rationale": "No EPS or system IVV artifacts are integrated into the model. The reported checks are manual inspection and Capella structural/semantic validation of generated model elements, while automated functional verification is explicitly future work.",
+      "evidence": [
+        {
+          "quote": "The validation process focused iteratively on four main areas: satellite platform modeling, functional library development, digital thread, and automation.",
+          "location": "Sec. IV Validation"
+        },
+        {
+          "quote": "The validation of the automating architecture was performed through manual inspection of the resulting model... and through Capella's built-in model validation tools.",
+          "location": "Sec. IV Validation"
+        },
+        {
+          "quote": "Further work may explore the integration of automated functional verification mechanisms to complement the structural and semantic validation demonstrated in this study.",
+          "location": "Sec. IV Validation"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -877,6 +902,33 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims are limited to model consistency/correctness and implementation-error reduction. There is no direct EPS reliability, system/mission reliability, or mission-assurance outcome evidence. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "fast, consistent deployment of satellite digital models across missions",
+          "location": "Abstract"
+        },
+        {
+          "quote": "ensuring that automation produced the correct elements without omissions or unintended artifacts",
+          "location": "Sec. IV Validation"
+        },
+        {
+          "quote": "This dual approach confirmed both the semantic correctness and structural consistency of the automated workflow",
+          "location": "Sec. IV Validation"
+        },
+        {
+          "quote": "ensure robustness and reduce both implementation time and error",
+          "location": "Sec. V Conclusions"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1620,7 +1672,10 @@
         "library",
         "pattern",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
       "key_evidence": [
         {
@@ -1635,7 +1690,30 @@
           "quote": "functional libraries are imported via their associated Python classes",
           "location": "Sec. III.C Automating"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper supports cross-mission reuse through reusable baselines/templates, reference/model patterns, functional libraries, and an automated Capella/Python4Capella workflow. The reusable architecture is high-level and mission-agnostic enough to be imported and extended for mission-specific elements, and interfaces/exchanges are a central organizing mechanism. Do not retain low-dynamics / non-detailed-behavior model: the paper uses functional abstraction, but does not explicitly make low-dynamics or non-detailed behavior a reuse mechanism.",
+        "evidence": [
+          {
+            "quote": "An automated framework was developed to support fast, consistent deployment of satellite digital models across missions, leveraging standard solutions and use cases.",
+            "location": "Abstract"
+          },
+          {
+            "quote": "multiple baselines are often available, each representing a pre-validated logical architecture reused from previous missions. Based on the best alignment with customer requirements, the most appropriate baseline can be imported into the current model and extended to accommodate mission-specific elements.",
+            "location": "Sec. III.B Functional Analysis"
+          },
+          {
+            "quote": "enabling different functional implementations to share a common interface while adapting to specific mission contexts.",
+            "location": "Sec. III.B Functional Analysis"
+          },
+          {
+            "quote": "Use Case Functional Libraries serve as structured repositories that store functional analysis data, representing reusable functional elements at both the System and Logical levels.",
+            "location": "Sec. III.C Automating"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_reported": [
@@ -1793,7 +1871,29 @@
       "evidence_integrated_into_model": "No evidence that EPS verification artifacts are integrated into the model; Capella validation checks concern generated model structure/semantics, not EPS verification procedure artifacts.",
       "integration_test_readiness": [
         "not reported"
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "none/not reported"
+        ],
+        "status": "none",
+        "rationale": "No EPS or system IVV artifacts are integrated into the model. The reported checks are manual inspection and Capella structural/semantic validation of generated model elements, while automated functional verification is explicitly future work.",
+        "evidence": [
+          {
+            "quote": "The validation process focused iteratively on four main areas: satellite platform modeling, functional library development, digital thread, and automation.",
+            "location": "Sec. IV Validation"
+          },
+          {
+            "quote": "The validation of the automating architecture was performed through manual inspection of the resulting model... and through Capella's built-in model validation tools.",
+            "location": "Sec. IV Validation"
+          },
+          {
+            "quote": "Further work may explore the integration of automated functional verification mechanisms to complement the structural and semantic validation demonstrated in this study.",
+            "location": "Sec. IV Validation"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1839,7 +1939,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Single demonstration mission; manual process comparator not quantified; authors also report higher initial modeling effort."
+        "threats_or_alternative_explanations": "Single demonstration mission; manual process comparator not quantified; authors also report higher initial modeling effort.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Consistent deployment of digital models is a model-consistency claim, not EPS or system reliability."
       },
       {
         "id": "C2",
@@ -1886,7 +1990,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Reuse is demonstrated as architecture/library feasibility, not measured replication across projects; underlying standard baselines are not provided."
+        "threats_or_alternative_explanations": "Reuse is demonstrated as architecture/library feasibility, not measured replication across projects; underlying standard baselines are not provided.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Reusable functional groups/libraries are claimed to maintain consistency across operational scenarios."
       },
       {
         "id": "C3",
@@ -1925,7 +2033,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Traceability could depend on disciplined library/model maintenance; no empirical trace-audit evidence."
+        "threats_or_alternative_explanations": "Traceability could depend on disciplined library/model maintenance; no empirical trace-audit evidence.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Traceability/lifecycle-continuity claim only; no direct reliability subtype is supported."
       },
       {
         "id": "C4",
@@ -1966,7 +2078,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "External-source examples are limited; simulation environment integration is described as possible rather than demonstrated in detail."
+        "threats_or_alternative_explanations": "External-source examples are limited; simulation environment integration is described as possible rather than demonstrated in detail.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Interoperability and digital-thread data-flow claim only."
       },
       {
         "id": "C5",
@@ -2005,7 +2121,12 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Manual inspection may miss issues; checks are not independently replicated or quantified."
+        "threats_or_alternative_explanations": "Manual inspection may miss issues; checks are not independently replicated or quantified.",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Claim concerns semantic/structural model correctness and avoiding omissions or unintended artifacts."
       },
       {
         "id": "C6",
@@ -2051,7 +2172,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Variability support is initial; no evidence of decisions made, configurations compared, or mission variants deployed."
+        "threats_or_alternative_explanations": "Variability support is initial; no evidence of decisions made, configurations compared, or mission variants deployed.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Variability/configuration-management claim supports consistency of mission-specific customization."
       },
       {
         "id": "C7",
@@ -2098,7 +2223,11 @@
           }
         ],
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "Cost/schedule benefits could be offset by custom API maintenance and manual library construction; no quantified baseline."
+        "threats_or_alternative_explanations": "Cost/schedule benefits could be offset by custom API maintenance and manual library construction; no quantified baseline.",
+        "reliability_subtype": [
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "The only reliability-adjacent element is reducing implementation error; no EPS reliability is claimed."
       },
       {
         "id": "C8",
@@ -2140,7 +2269,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "The example is not accompanied by a documented team decision, review outcome, or stakeholder evaluation."
+        "threats_or_alternative_explanations": "The example is not accompanied by a documented team decision, review outcome, or stakeholder evaluation.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Decision-support and PCDU linkage example does not claim reliability improvement."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2234,5 +2367,16 @@
       "extraction_confidence_reason": "The markdown is complete and the method/claims/limitations are explicit. Confidence is high for classification and absence judgments, with medium confidence only where the paper's generic small-satellite claims must be mapped to nanosatellite/EPS review categories."
     }
   },
-  "bibtex": "@inproceedings{Mastropietro2025AutomatingObjectOrientedFunctionalModeling,\n  author = {Mastropietro, Alessandro and Račkauskas, Saulius and Knopp, Andreas},\n  title = {Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain},\n  booktitle = {IEEE International Symposium on Systems Engineering (ISSE)},\n  year = {2025},\n  publisher = {IEEE},\n  doi = {10.1109/ISSE65546.2025.11370070}\n}"
+  "bibtex": "@inproceedings{Mastropietro2025AutomatingObjectOrientedFunctionalModeling,\n  author = {Mastropietro, Alessandro and Račkauskas, Saulius and Knopp, Andreas},\n  title = {Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain},\n  booktitle = {IEEE International Symposium on Systems Engineering (ISSE)},\n  year = {2025},\n  publisher = {IEEE},\n  doi = {10.1109/ISSE65546.2025.11370070}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0081.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism unless additional direct evidence is found.",
+      "Keep IVV integration at none/not reported; do not treat Capella model-validation checks as model-integrated EPS/system IVV.",
+      "Do not code EPS reliability; reliability subtypes are limited to model consistency/reliability and defect/error reduction, with non-reliability claims marked not applicable."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

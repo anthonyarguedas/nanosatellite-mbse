@@ -435,18 +435,34 @@
         "transformation",
         "reusable workflow",
         "open package",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "interface-focused model",
+        "low-dynamics / non-detailed-behavior model",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "Generality/reuse is proposed through SysML-to-DSM transformation, open-source Nanospace/scripts, and a reusable preliminary-design workflow illustrated by CREME.",
+      "rationale": "The paper supports reuse mainly as a transferable preliminary-design method around Nanospace, scripts, SysML-to-DSM transformation, and dependency/parameter abstractions. The CREME demonstration is still a specific use case, so mission-agnostic architecture should not be coded. v1.1 labels are supported because the model is high-level, parameter/interface/dependency-focused, and deliberately omits detailed behavior/modes/domains, while claiming the diagrams can be reshaped for new missions.",
       "evidence": [
+        {
+          "quote": "MBSE can be used to capture the system dependencies represented in Figs.1 and 2, allowing to reuse knowledge from previous CubeSat missions. The MBSE diagrams can be reshaped to meet new mission expectations without needing to start from zero",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The objective of this paper is to provide a first approximation for design parameters interactions",
+          "location": "Section II"
+        },
+        {
+          "quote": "mission modes are not discussed in this paper. However, the concept presented here can be easily extended to take mission modes into account as well.",
+          "location": "Section II"
+        },
+        {
+          "quote": "neither Attitude Determination and Control System (ADCS), nor radiation or thermal considerations are included... each of these elements can be easily added since the approach is modular.",
+          "location": "Section II.B"
+        },
         {
           "quote": "using a dedicated algorithm it is possible to generate Design Structure Matrices (DSMs) from a SysML model",
           "location": "Section IV"
-        },
-        {
-          "quote": "Python scripts were developed and used; they can be accessed here ... under the AGPL v3 license.",
-          "location": "Section III.B"
         }
       ],
       "confidence": "medium"
@@ -664,6 +680,32 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The highest evidenced level is preliminary simulation-in-the-loop checking: requirements/design parameters are in Nanospace, external scripts/simulation tools check power/link/reentry constraints, and results are stored/shared through the Nanospace database/API. This is not trace-linked or model-contained formal EPS V&V, and not SIL/HIL or physical test.",
+      "evidence": [
+        {
+          "quote": "Requirements (see table II) are set into Nanospace... They are automatically updated in the database through Nanospace API.",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "Orbit propagation, eclipses determination and contact with ground station events - are handled with a GMAT script. Link budget analysis is done with Dosa.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "Simulation allows for a first check on the order of magnitude of available power... a violation of constraint C-06",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "Intermediary results are also stored in Nanospace... a Python script is used in a semi-automatic process, and eases the link to the Nanospace database.",
+          "location": "Section III.C"
+        }
+      ],
+      "confidence": "medium"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -704,6 +746,35 @@
         {
           "quote": "better communication/information sharing, increased traceability and capacity for reuse, reduce time and cost, improved consistency, system understanding and systems design.",
           "location": "Conclusion"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent outcomes are process/model consistency, avoiding non-converging or incoherent design processes, requirement/constraint checking for mission assurance, and signaling unsatisfied requirements. Do not code EPS reliability: power/DoD checks are present, but the paper does not directly claim MBSE improves EPS reliability. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "monitoring and if necessary correcting that the steps of the process are being followed in the correct order, that the data is consistent between subsystems",
+          "location": "Introduction"
+        },
+        {
+          "quote": "During eclipses, batteries must store enough power to ensure spacecraft survival... batteries may deteriorate... the spacecraft will shutdown and may not wake up",
+          "location": "Section II.B"
+        },
+        {
+          "quote": "The process is semi-automatic, which allows to avoid getting stuck in non-converging designs",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "it could be signaled in the Nanospace UI when a requirement is not satisfied... which design parameters must be updated",
+          "location": "Section IV"
         }
       ],
       "confidence": "medium"
@@ -1333,13 +1404,44 @@
         "transformation",
         "reusable workflow",
         "open package",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "interface-focused model",
+        "low-dynamics / non-detailed-behavior model",
+        "specific-mission model with reusable method only"
       ],
       "key_quotes": [
         "'MBSE can be used to capture the system dependencies represented in Figs.1 and 2, allowing to reuse knowledge from previous CubeSat missions.'",
         "'From these system models, using a dedicated algorithm it is possible to generate Design Structure Matrices (DSMs) from a SysML model.'",
         "'The models contain the functions related to the CubeSat, the space environment, the launch segment, the ground segment, the customer and the legislative and regulatory institutions.'"
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper supports reuse mainly as a transferable preliminary-design method around Nanospace, scripts, SysML-to-DSM transformation, and dependency/parameter abstractions. The CREME demonstration is still a specific use case, so mission-agnostic architecture should not be coded. v1.1 labels are supported because the model is high-level, parameter/interface/dependency-focused, and deliberately omits detailed behavior/modes/domains, while claiming the diagrams can be reshaped for new missions.",
+        "evidence": [
+          {
+            "quote": "MBSE can be used to capture the system dependencies represented in Figs.1 and 2, allowing to reuse knowledge from previous CubeSat missions. The MBSE diagrams can be reshaped to meet new mission expectations without needing to start from zero",
+            "location": "Section III.A"
+          },
+          {
+            "quote": "The objective of this paper is to provide a first approximation for design parameters interactions",
+            "location": "Section II"
+          },
+          {
+            "quote": "mission modes are not discussed in this paper. However, the concept presented here can be easily extended to take mission modes into account as well.",
+            "location": "Section II"
+          },
+          {
+            "quote": "neither Attitude Determination and Control System (ADCS), nor radiation or thermal considerations are included... each of these elements can be easily added since the approach is modular.",
+            "location": "Section II.B"
+          },
+          {
+            "quote": "using a dedicated algorithm it is possible to generate Design Structure Matrices (DSMs) from a SysML model",
+            "location": "Section IV"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1561,7 +1663,33 @@
         "'Power is provided by batteries, which, on CubeSats, are usually charged by Solar panels.'",
         "'Simulation allows for a first check on the order of magnitude of available power ... a violation of constraint C-06 is violated.'",
         "'Simulation shows that, in spite of heavy transceiver data burst, batteries are able to recharge'"
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "The highest evidenced level is preliminary simulation-in-the-loop checking: requirements/design parameters are in Nanospace, external scripts/simulation tools check power/link/reentry constraints, and results are stored/shared through the Nanospace database/API. This is not trace-linked or model-contained formal EPS V&V, and not SIL/HIL or physical test.",
+        "evidence": [
+          {
+            "quote": "Requirements (see table II) are set into Nanospace... They are automatically updated in the database through Nanospace API.",
+            "location": "Section III.C"
+          },
+          {
+            "quote": "Orbit propagation, eclipses determination and contact with ground station events - are handled with a GMAT script. Link budget analysis is done with Dosa.",
+            "location": "Section III.B"
+          },
+          {
+            "quote": "Simulation allows for a first check on the order of magnitude of available power... a violation of constraint C-06",
+            "location": "Section III.C"
+          },
+          {
+            "quote": "Intermediary results are also stored in Nanospace... a Python script is used in a semi-automatic process, and eases the link to the Nanospace database.",
+            "location": "Section III.C"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1594,7 +1722,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "No actual reuse across multiple missions is demonstrated; benefit could arise from any well-maintained dependency model or template, not necessarily MBSE."
+        "threats_alternative_explanations": "No actual reuse across multiple missions is demonstrated; benefit could arise from any well-maintained dependency model or template, not necessarily MBSE.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/traceability/lifecycle-continuity claim, not a reliability or reliability-adjacent outcome."
       },
       {
         "claim_id": "C2",
@@ -1631,7 +1763,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "medium",
-        "threats_alternative_explanations": "The graph/DSM shown can be manually constructed; paper does not quantify improvement in decision quality or iteration time."
+        "threats_alternative_explanations": "The graph/DSM shown can be manually constructed; paper does not quantify improvement in decision quality or iteration time.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "DSM/dependency guidance mainly supports consistency of parameter-change reasoning; no direct EPS or mission reliability claim."
       },
       {
         "claim_id": "C3",
@@ -1670,7 +1806,12 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "No measurement of collaboration, effort, or convergence is provided; benefits may reflect database sharing and scripts rather than MBSE integration."
+        "threats_alternative_explanations": "No measurement of collaboration, effort, or convergence is provided; benefits may reflect database sharing and scripts rather than MBSE integration.",
+        "reliability_subtype": [
+          "process reliability",
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Semi-automatic process, database sharing, and avoidance of non-converging designs support process reliability and data/model consistency."
       },
       {
         "claim_id": "C4",
@@ -1709,7 +1850,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_alternative_explanations": "Evidence supports scripted analysis and requirement checking, but not necessarily MBSE-specific value; assumptions are simplified and not validated against physical tests."
+        "threats_alternative_explanations": "Evidence supports scripted analysis and requirement checking, but not necessarily MBSE-specific value; assumptions are simplified and not validated against physical tests.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Power, link, and reentry simulations check constraints relevant to mission survival/assurance; do not upgrade to EPS reliability."
       },
       {
         "claim_id": "C5",
@@ -1749,7 +1894,12 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Wording is conditional ('could be'); full integration into UI and automated change propagation is future work."
+        "threats_alternative_explanations": "Wording is conditional ('could be'); full integration into UI and automated change propagation is future work.",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "SysML-derived DSM/change-propagation signaling of unsatisfied requirements supports model consistency and reducing missed-update errors."
       },
       {
         "claim_id": "C6",
@@ -1784,7 +1934,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Actual model files/URLs are not present in markdown and no external reuse evidence is provided."
+        "threats_alternative_explanations": "Actual model files/URLs are not present in markdown and no external reuse evidence is provided.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Open-source accessibility/pedagogical reuse claim is not reliability-adjacent."
       },
       {
         "claim_id": "C7",
@@ -1823,7 +1977,11 @@
         },
         "evidence_confidence_rating": "Unsupported",
         "confidence": "medium",
-        "threats_alternative_explanations": "Cost/time and communication outcomes are not evaluated; introductory benefits are cited from MBSE literature rather than measured in CREME."
+        "threats_alternative_explanations": "Cost/time and communication outcomes are not evaluated; introductory benefits are cited from MBSE literature rather than measured in CREME.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Broad generic MBSE value claim includes improved consistency, but no direct system/EPS reliability evidence."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1929,5 +2087,17 @@
       "confidence_reason": "Paper is clear on context, workflow, and tools, but MBSE integration is exploratory, outcome evidence is weak-to-moderate, and markdown omits some footnote URLs/model availability details."
     }
   },
-  "bibtex": "@inproceedings{cordero2022mbse,\n  title={MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study},\n  author={Cordero, S. and Gateau, Thibault and Vingerhoeds, R.},\n  booktitle={2022 IEEE Systems Conference (SysCon)},\n  year={2022},\n  publisher={IEEE},\n  doi={10.1109/syscon53536.2022.9773818}\n}"
+  "bibtex": "@inproceedings{cordero2022mbse,\n  title={MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study},\n  author={Cordero, S. and Gateau, Thibault and Vingerhoeds, R.},\n  booktitle={2022 IEEE Systems Conference (SysCon)},\n  year={2022},\n  publisher={IEEE},\n  doi={10.1109/syscon53536.2022.9773818}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0027.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add v1.1 generality labels for interface-focused and low-dynamics/non-detailed behavior; qualify the CREME case as specific-mission model with reusable method only.",
+      "Do not code mission-agnostic architecture for this paper.",
+      "Keep IVV at simulation-in-the-loop with medium confidence; it is preliminary script/API/database-linked checking, not formal model-contained EPS V&V.",
+      "Do not add EPS reliability; add process reliability for the semi-automated Nanospace workflow claim."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

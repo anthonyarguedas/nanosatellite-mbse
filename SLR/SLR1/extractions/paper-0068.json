@@ -489,18 +489,33 @@
       "values": [
         "transformation",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "interface-focused model",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "The paper provides a method for transforming/encoding OPM information into DSM/DMM and CPM mappings, and claims the same principles apply across decomposition levels.",
+      "rationale": "The paper supports a reusable method/workflow for OPM-to-DSM/DMM-to-CPM information exchange, using high-level and interface-focused representations. The worked model remains a CubeSat/Thermal Control/Radiator case, so it should be treated as a specific-mission/model case with a reusable method, not as a reusable mission-agnostic architecture or template. The paper does not directly justify low-dynamics/non-detailed behavior as a reuse mechanism.",
       "evidence": [
         {
           "quote": "The utility of the proposed approach is that it keeps the same principles regardless of the level of decomposition.",
           "location": "Section 3"
         },
         {
-          "quote": "Based on the data that is encoded in DSM/DMM in Figure 5 we could trace the flow of data that was created during the conceptual design phase to the next phase of the design process.",
-          "location": "Section 3, Figure 6 discussion"
+          "quote": "from MBSE (a high-level abstraction of the system presented in Figure 3) to PLM (a detailed design, presented for one of the subsystems - Radiator shown in Figure 6).",
+          "location": "Section 3"
+        },
+        {
+          "quote": "A practical utility of Figure 5 is the ability to represent the CubeSat subsystems and their interfaces including objects/processes/states in one DSM/DMM representation.",
+          "location": "Section 3"
+        },
+        {
+          "quote": "This approach could also be used with other models.",
+          "location": "Section 4"
+        },
+        {
+          "quote": "In our paper we apply the proposed approach to a CubeSat mission design.",
+          "location": "Abstract"
         }
       ],
       "confidence": "medium"
@@ -666,6 +681,24 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "not_reported",
+      "rationale": "No EPS or system V&V artifacts, verification matrices, test procedures, executable checks, simulation-in-the-loop, SIL/HIL, or model-contained verification artifacts are reported. The contribution is information exchange from MBSE to PLM.",
+      "evidence": [
+        {
+          "quote": "The specific objective of our paper is to demonstrate an approach of managing a digital engineering information exchange for a CubeSat system.",
+          "location": "Section 1.2"
+        },
+        {
+          "quote": "the goal of our work is to demonstrate how the proposed approach facilitates a digital information flow through different product lifecycle stages - from the Model-Based Systems Engineering (MBSE) [8] to the product lifecycle management (PLM) [9] phases.",
+          "location": "Section 1.2"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -707,6 +740,29 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims concern coherent model/data representation and generic error or gap reduction in ontology exchange. There is no direct support for EPS reliability, system/mission reliability, or mission assurance. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Reducing complexity and errors, as well as improving efficiency are critical capabilities associated with a digital transformation of space missions design and delivery.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "It allows to notice gaps in the data exchange between ontologies which are used at the appropriate stages of product development",
+          "location": "Section 3"
+        },
+        {
+          "quote": "Based on the DSM representation similar to Figure 7, any integrated digital engineering data model can be represented and analysed in a very dense and coherent format.",
+          "location": "Section 4"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1292,9 +1348,39 @@
       "generality_reuse_mechanism": [
         "transformation",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "interface-focused model",
+        "specific-mission model with reusable method only"
       ],
-      "generality_reuse_rationale": "The same representation principles are applied at system and subsystem levels, and OPM information is mapped/transformed to DSM/DMM and CPM."
+      "generality_reuse_rationale": "The same representation principles are applied at system and subsystem levels, and OPM information is mapped/transformed to DSM/DMM and CPM.",
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper supports a reusable method/workflow for OPM-to-DSM/DMM-to-CPM information exchange, using high-level and interface-focused representations. The worked model remains a CubeSat/Thermal Control/Radiator case, so it should be treated as a specific-mission/model case with a reusable method, not as a reusable mission-agnostic architecture or template. The paper does not directly justify low-dynamics/non-detailed behavior as a reuse mechanism.",
+        "evidence": [
+          {
+            "quote": "The utility of the proposed approach is that it keeps the same principles regardless of the level of decomposition.",
+            "location": "Section 3"
+          },
+          {
+            "quote": "from MBSE (a high-level abstraction of the system presented in Figure 3) to PLM (a detailed design, presented for one of the subsystems - Radiator shown in Figure 6).",
+            "location": "Section 3"
+          },
+          {
+            "quote": "A practical utility of Figure 5 is the ability to represent the CubeSat subsystems and their interfaces including objects/processes/states in one DSM/DMM representation.",
+            "location": "Section 3"
+          },
+          {
+            "quote": "This approach could also be used with other models.",
+            "location": "Section 4"
+          },
+          {
+            "quote": "In our paper we apply the proposed approach to a CubeSat mission design.",
+            "location": "Abstract"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1401,7 +1487,25 @@
       "evidence_integrated_vv_into_eps_or_system_model": "not reported",
       "integration_test_readiness": [
         "not reported"
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "none/not reported"
+        ],
+        "status": "not_reported",
+        "rationale": "No EPS or system V&V artifacts, verification matrices, test procedures, executable checks, simulation-in-the-loop, SIL/HIL, or model-contained verification artifacts are reported. The contribution is information exchange from MBSE to PLM.",
+        "evidence": [
+          {
+            "quote": "The specific objective of our paper is to demonstrate an approach of managing a digital engineering information exchange for a CubeSat system.",
+            "location": "Section 1.2"
+          },
+          {
+            "quote": "the goal of our work is to demonstrate how the proposed approach facilitates a digital information flow through different product lifecycle stages - from the Model-Based Systems Engineering (MBSE) [8] to the product lifecycle management (PLM) [9] phases.",
+            "location": "Section 1.2"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1441,7 +1545,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "The result demonstrates representability in a simplified subsystem example; it does not show scalability, correctness against an independent model, or measurable integration benefit."
+        "threats_or_alternative_explanations": "The result demonstrates representability in a simplified subsystem example; it does not show scalability, correctness against an independent model, or measurable integration benefit.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "One coherent DSM/DMM representation is a model consistency/completeness claim, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1481,7 +1589,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "The mapping is shown as a matrix/table, but no executable exchange, round-trip synchronization, or downstream engineering validation is reported."
+        "threats_or_alternative_explanations": "The mapping is shown as a matrix/table, but no executable exchange, round-trip synchronization, or downstream engineering validation is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim is about traceability, lifecycle continuity, and interoperability."
       },
       {
         "claim_id": "C3",
@@ -1520,7 +1632,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "The matrix may make relationships visible, but the paper provides no baseline complexity measure, error data, or user evaluation."
+        "threats_or_alternative_explanations": "The matrix may make relationships visible, but the paper provides no baseline complexity measure, error data, or user evaluation.",
+        "reliability_subtype": [
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "The claim is limited to generic ontology/data-exchange error or gap reduction; it is not EPS or mission reliability."
       },
       {
         "claim_id": "C4",
@@ -1557,7 +1673,11 @@
           }
         ],
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "No concurrent design session, stakeholder evaluation, collaboration data, or tool-integration demonstration is reported."
+        "threats_or_alternative_explanations": "No concurrent design session, stakeholder evaluation, collaboration data, or tool-integration demonstration is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim concerns concurrent-engineering tool engagement, not reliability."
       },
       {
         "claim_id": "C5",
@@ -1596,7 +1716,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "The evidence is recursive use within one illustrative case only, not reuse or replication across projects."
+        "threats_or_alternative_explanations": "The evidence is recursive use within one illustrative case only, not reuse or replication across projects.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim concerns method reuse across decomposition levels."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1683,5 +1807,16 @@
       "extraction_confidence_reason": "The full paper text clearly supports method and context coding, but evidence for outcomes is weak and several review-critical details (EPS, verification, model availability, quantitative evaluation, DOI/publisher) are absent or not reported."
     }
   },
-  "bibtex": "@inproceedings{menshenin2020digital,\n  title = {Digital Engineering Information Exchange Model for Space Missions Architecture: A Case Study of a CubeSat Mission},\n  author = {Menshenin, Yaroslav and Brovar, Yana and Knoll, Dominik J. and Crawley, Edward and Fortin, Clement},\n  booktitle = {IAC},\n  year = {2020},\n  note = {IAC-20-D1.4A.6; full venue name not reported in markdown}\n}"
+  "bibtex": "@inproceedings{menshenin2020digital,\n  title = {Digital Engineering Information Exchange Model for Space Missions Architecture: A Case Study of a CubeSat Mission},\n  author = {Menshenin, Yaroslav and Brovar, Yana and Knoll, Dominik J. and Crawley, Edward and Fortin, Clement},\n  booktitle = {IAC},\n  year = {2020},\n  note = {IAC-20-D1.4A.6; full venue name not reported in markdown}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0068.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Repair generality coding: add specific-mission model with reusable method only.",
+      "Remove low-dynamics / non-detailed-behavior model unless stricter project guidance accepts abstract behavior alone as sufficient.",
+      "Do not code mission-agnostic architecture, EPS reliability, or model-integrated IVV for this paper."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

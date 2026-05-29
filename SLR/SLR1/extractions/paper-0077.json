@@ -473,22 +473,24 @@
         "reference model",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "status": "coded",
-      "rationale": "The CSRM is a reference model/template whose logical components and application workflow can be reused and tailored by mission teams; it includes method guidance for pruning/expanding and selecting artifacts.",
+      "rationale": "The CSRM is a reusable CubeSat-system reference model/sandbox and logical architecture intended to be instantiated and tailored by mission teams. The paper supports high-level abstraction and mission-agnostic architecture, but not interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.",
       "evidence": [
         {
-          "quote": "The CSRM logical components are intended to be reused as a starting point for a mission-specific CubeSat logical architecture",
+          "quote": "The CSRM provides the logical architecture of a CubeSat space and ground system. The CSRM logical components are intended to be reused as a starting point for a mission-specific CubeSat logical architecture",
           "location": "CSRM"
         },
         {
-          "quote": "Suggestions for pruning or expanding the CSRM \"sand box\" are included in this paper.",
+          "quote": "The CSRM is a repository for systems engineering artifacts. However, it is not pre-populated with specific stakeholders, technical measures, use cases, and requirements. That is the job of the mission-specific CubeSat team.",
           "location": "CSRM"
         },
         {
-          "quote": "The mission team identifies the systems engineering methodology to be followed revising the MSM organization, elements, relationships, and diagrams as required",
-          "location": "Mission-specific CubeSat Model"
+          "quote": "the levels of abstraction in the CSRM for requirements, constraints and logical design are presented as suggestions and must be tailored to the mission purpose.",
+          "location": "CSRM"
         }
       ],
       "confidence": "high"
@@ -653,6 +655,28 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "model-contained verification artifacts"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV level is model-contained verification artifacts at generic MSM/system level: Verification/Validation Activity elements, properties, diagrams, tables, and hyperlinks are represented in or linked from the model and are trace-linked to requirements/technical measures. This is not EPS-specific and not executable, simulation-in-the-loop, or SIL/HIL.",
+      "evidence": [
+        {
+          "quote": "The Verification Activity element describes the process for verifying an element, e.g. a requirement. For example, the process could include verification plans, procedures, execution, results, and status. The process can be captured in a 1) Verification Activity element properties, or 2) Verification Activity Diagram, or 3) Verification Activity Word document.",
+          "location": "MSM Verification"
+        },
+        {
+          "quote": "The verify relationship is a relationship between a requirement and a test case or other model element that is used to verify the requirement is satisfied.",
+          "location": "MSM Verification"
+        },
+        {
+          "quote": "The Validation Activity and Verification Activity elements have Active Hyperlink properties that can be used to link to V&V Activity Diagrams or V&V Word documents within the CSRM.",
+          "location": "MSM Validation"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -688,6 +712,29 @@
         {
           "quote": "The Validation Activity element has a validates property. The Technical Measure or Mission Objective element has a validated by property.",
           "location": "MSM Validation"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent support is limited to model/baseline consistency and generic system-level V&V/mission-assurance mechanisms. The paper does not support EPS reliability, system/mission reliability as an operational reliability outcome, defect/error reduction, or a generic reliability claim. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "The MSM is maintained throughout all phases of development and operations as the single and central design baseline.",
+          "location": "Mission-specific CubeSat Model"
+        },
+        {
+          "quote": "MSM Verification confirms, by providing objective evidence, that the system and all its elements perform their intended functions and satisfy the requirements allocated to them.",
+          "location": "MSM Verification"
+        },
+        {
+          "quote": "Satisfaction of the requirements will be recorded in the tables with links to CSRM elements and packages.",
+          "location": "RFP"
         }
       ],
       "confidence": "high"
@@ -1340,7 +1387,9 @@
         "reference model",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "evidence_quotes": [
         {
@@ -1351,7 +1400,26 @@
           "quote": "The mission team identifies the systems engineering methodology to be followed revising the MSM organization, elements, relationships, and diagrams as required",
           "location": "Mission-specific CubeSat Model"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The CSRM is a reusable CubeSat-system reference model/sandbox and logical architecture intended to be instantiated and tailored by mission teams. The paper supports high-level abstraction and mission-agnostic architecture, but not interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.",
+        "evidence": [
+          {
+            "quote": "The CSRM provides the logical architecture of a CubeSat space and ground system. The CSRM logical components are intended to be reused as a starting point for a mission-specific CubeSat logical architecture",
+            "location": "CSRM"
+          },
+          {
+            "quote": "The CSRM is a repository for systems engineering artifacts. However, it is not pre-populated with specific stakeholders, technical measures, use cases, and requirements. That is the job of the mission-specific CubeSat team.",
+            "location": "CSRM"
+          },
+          {
+            "quote": "the levels of abstraction in the CSRM for requirements, constraints and logical design are presented as suggestions and must be tailored to the mission purpose.",
+            "location": "CSRM"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1515,7 +1583,29 @@
           "quote": "The Validation Activity and Verification Activity elements have Active Hyperlink properties that can be used to link to V&V Activity Diagrams or V&V Word documents within the CSRM.",
           "location": "MSM Validation"
         }
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "model-contained verification artifacts"
+        ],
+        "status": "coded",
+        "rationale": "The highest supported IVV level is model-contained verification artifacts at generic MSM/system level: Verification/Validation Activity elements, properties, diagrams, tables, and hyperlinks are represented in or linked from the model and are trace-linked to requirements/technical measures. This is not EPS-specific and not executable, simulation-in-the-loop, or SIL/HIL.",
+        "evidence": [
+          {
+            "quote": "The Verification Activity element describes the process for verifying an element, e.g. a requirement. For example, the process could include verification plans, procedures, execution, results, and status. The process can be captured in a 1) Verification Activity element properties, or 2) Verification Activity Diagram, or 3) Verification Activity Word document.",
+            "location": "MSM Verification"
+          },
+          {
+            "quote": "The verify relationship is a relationship between a requirement and a test case or other model element that is used to verify the requirement is satisfied.",
+            "location": "MSM Verification"
+          },
+          {
+            "quote": "The Validation Activity and Verification Activity elements have Active Hyperlink properties that can be used to link to V&V Activity Diagrams or V&V Word documents within the CSRM.",
+            "location": "MSM Validation"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1553,7 +1643,11 @@
         "threats_or_alternative_explanations": [
           "No reported mission-team reuse outcome or replication evidence.",
           "The model is not pre-populated with mission-specific requirements and must be tailored."
-        ]
+        ],
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/reproducibility claim, not reliability-adjacent."
       },
       {
         "claim_id": "C2",
@@ -1593,7 +1687,11 @@
         "threats_or_alternative_explanations": [
           "No evidence that a real mission maintained an MSM through operations.",
           "No baseline comparison to document-centric process is measured."
-        ]
+        ],
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Single central design baseline supports model consistency, not EPS reliability."
       },
       {
         "claim_id": "C3",
@@ -1632,7 +1730,11 @@
         "threats_or_alternative_explanations": [
           "Completeness depends on mission-team tailoring and population.",
           "No stakeholder evaluation is reported."
-        ]
+        ],
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Traceability/completeness/stakeholder-alignment claim without direct reliability or assurance claim."
       },
       {
         "claim_id": "C4",
@@ -1671,7 +1773,11 @@
         "threats_or_alternative_explanations": [
           "V&V is conceptual and generic, not EPS-specific.",
           "No physical test, simulation, or flight evidence is reported."
-        ]
+        ],
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "System-level V&V objective-evidence claim supports mission assurance, but not EPS reliability."
       },
       {
         "claim_id": "C5",
@@ -1711,7 +1817,11 @@
         "threats_or_alternative_explanations": [
           "No model URL or XMI file is provided in the paper.",
           "Tool compatibility is not demonstrated."
-        ]
+        ],
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Access/interoperability/reviewability claim, not reliability-adjacent."
       },
       {
         "claim_id": "C6",
@@ -1750,7 +1860,11 @@
         "threats_or_alternative_explanations": [
           "Parametrics for power, weight, and cost are explicitly not added to CSRM in this status.",
           "No analysis results or decision examples are reported."
-        ]
+        ],
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Technical-measure/property-roll-up decision-support claim; no reliability outcome is claimed."
       },
       {
         "claim_id": "C7",
@@ -1789,7 +1903,11 @@
         "threats_or_alternative_explanations": [
           "Initial satisfaction is based on development-team judgment.",
           "Mission-specific team evaluation is proposed as future/better evaluation."
-        ]
+        ],
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "CSRM validation against RFP/model-evaluation criteria supports model quality/consistency, not direct mission or EPS reliability."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1887,5 +2005,17 @@
       "confidence_reason": "The paper is clear about reference-model scope, artifacts, and conceptual V&V relationships; main uncertainty concerns the exact venue metadata and the degree of actual model availability/application evidence."
     }
   },
-  "bibtex": "@inproceedings{kaslow2019developing,\n  title = {Developing a CubeSat System MBSE Reference Model -- Interim Status #5},\n  author = {Kaslow, David and Cahill, Philip T. and Frank, Rodger},\n  booktitle = {Proceedings of the Small Satellite Conference},\n  year = {2019},\n  note = {Paper SSC19-P2-16; DOI not reported}\n}"
+  "bibtex": "@inproceedings{kaslow2019developing,\n  title = {Developing a CubeSat System MBSE Reference Model -- Interim Status #5},\n  author = {Kaslow, David and Cahill, Philip T. and Frank, Rodger},\n  booktitle = {Proceedings of the Small Satellite Conference},\n  year = {2019},\n  note = {Paper SSC19-P2-16; DOI not reported}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0077.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism unless separately justified; the paper is high-level but does not make nondetailed behavior a reuse mechanism.",
+      "Do not add interface-focused model or specific-mission model with reusable method only.",
+      "IVV is generic system/MSM-level and model-contained/trace-linked; do not code executable/model-based checks, simulation-in-the-loop, SIL/HIL, or EPS-specific IVV.",
+      "Do not code EPS reliability for any claim; C7 should be model consistency/reliability rather than mission assurance."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

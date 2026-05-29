@@ -555,21 +555,27 @@
     "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
       "values": [
         "template",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "RMM is described as a general matrix structure with bounded columns and mapping levels, and the paper provides method guidance and examples that could be reused as a template.",
+      "rationale": "RML/RMM is presented as a reusable requirements-modeling method and matrix structure, and RMM is explicitly described as high-level documentation. However, the actual CubeSat artifact is an NDSAT/example radio-camera-OBC case, not a reusable mission-agnostic architecture. Do not retain low-dynamics / non-detailed-behavior model because the paper does not frame low behavioral detail itself as the reuse mechanism.",
       "evidence": [
         {
           "quote": "RMM contains multiple levels of mapping that map process flow steps to requirements, requirements to business rules, business objectives to features, features to requirements, requirements to code, and requirements to test cases, as illustrated in Fig. 1.",
-          "location": "Section III.A, Requirements Mapping Matrix (RMM)"
+          "location": "Section III.A, Requirements Mapping Matrix"
         },
         {
-          "quote": "RMM only includes eight or less columns in its matrix. The first three columns (L1, L2, L3) are process flows, and the rest of the matrix includes business objectives, requirements, business rules, code and test cases.",
-          "location": "Section III.A, Requirements Mapping Matrix (RMM)"
+          "quote": "It works as a high-level documentation, which maps and traces user requirements with the corresponding test cases.",
+          "location": "Section III.A, Requirements Mapping Matrix"
+        },
+        {
+          "quote": "The corresponding RMM matrix with the code and tests mapped to requirements for the NDSAT (example satellite concept) CubeSat Radio and Camera systems is depicted in Fig. 5.",
+          "location": "Section IV, CubeSat Requirements Modeling"
         }
       ],
-      "confidence": "medium"
+      "confidence": "high"
     },
     "implementation_pathway_tailoring.approach_classification": {
       "values": [
@@ -735,6 +741,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "trace-linked verification artifacts"
+      ],
+      "status": "coded",
+      "rationale": "The RMM explicitly maps and traces requirements to code and test cases, so the best-supported level is trace-linked verification artifacts. It should not be upgraded to executable/model-based checks, simulation-in-the-loop, or SIL/HIL; no EPS-specific IVV model is reported.",
+      "evidence": [
+        {
+          "quote": "It works as a high-level documentation, which maps and traces user requirements with the corresponding test cases.",
+          "location": "Section III.A, Requirements Mapping Matrix"
+        },
+        {
+          "quote": "The corresponding RMM matrix with the code and tests mapped to requirements for the NDSAT (example satellite concept) CubeSat Radio and Camera systems is depicted in Fig. 5.",
+          "location": "Section IV, CubeSat Requirements Modeling"
+        },
+        {
+          "quote": "The sample test cases are depicted in Fig. 6. After executing the test cases if any defects are found that too can be listed and mapped with the business requirements, test scenarios and test cases.",
+          "location": "Section V.C, Scenarios and Test Cases"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "software integration"
@@ -795,6 +823,30 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "process reliability",
+        "model consistency/reliability",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims concern requirements/model consistency, test/traceability process reliability, and defect/error handling. There is no direct EPS reliability, system/mission reliability, or mission-assurance outcome attributable to MBSE; the OBC reliability/availability requirements are requirements, not demonstrated MBSE outcome claims. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "RML also helps CubeSat developers to group and prioritize their requirements to identify ambiguity or inconsistency easily.",
+          "location": "Introduction"
+        },
+        {
+          "quote": "Moreover, it is intended to ensure that the project progresses as per the desired direction and that every requirement is tested thoroughly.",
+          "location": "Section III.A, Requirements Mapping Matrix"
+        },
+        {
+          "quote": "RMM helps to link the requirements, test cases, and defects accurately.",
+          "location": "Section III.A, Requirements Mapping Matrix"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1431,9 +1483,30 @@
       ],
       "generality_reuse_mechanism": [
         "template",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "specific-mission model with reusable method only"
       ],
-      "generality_reuse_notes": "RMM is reusable as a generic mapping matrix/template, but no reusable package, profile, SysML library, or open model is released."
+      "generality_reuse_notes": "RMM is reusable as a generic mapping matrix/template, but no reusable package, profile, SysML library, or open model is released.",
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "RML/RMM is presented as a reusable requirements-modeling method and matrix structure, and RMM is explicitly described as high-level documentation. However, the actual CubeSat artifact is an NDSAT/example radio-camera-OBC case, not a reusable mission-agnostic architecture. Do not retain low-dynamics / non-detailed-behavior model because the paper does not frame low behavioral detail itself as the reuse mechanism.",
+        "evidence": [
+          {
+            "quote": "RMM contains multiple levels of mapping that map process flow steps to requirements, requirements to business rules, business objectives to features, features to requirements, requirements to code, and requirements to test cases, as illustrated in Fig. 1.",
+            "location": "Section III.A, Requirements Mapping Matrix"
+          },
+          {
+            "quote": "It works as a high-level documentation, which maps and traces user requirements with the corresponding test cases.",
+            "location": "Section III.A, Requirements Mapping Matrix"
+          },
+          {
+            "quote": "The corresponding RMM matrix with the code and tests mapped to requirements for the NDSAT (example satellite concept) CubeSat Radio and Camera systems is depicted in Fig. 5.",
+            "location": "Section IV, CubeSat Requirements Modeling"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1515,7 +1588,29 @@
       "integration_test_readiness": [
         "software integration"
       ],
-      "integration_test_readiness_notes": "No links to hardware integration, flat-sat/testbed, environmental testing, or operational validation are reported."
+      "integration_test_readiness_notes": "No links to hardware integration, flat-sat/testbed, environmental testing, or operational validation are reported.",
+      "ivv_integration_level": {
+        "values": [
+          "trace-linked verification artifacts"
+        ],
+        "status": "coded",
+        "rationale": "The RMM explicitly maps and traces requirements to code and test cases, so the best-supported level is trace-linked verification artifacts. It should not be upgraded to executable/model-based checks, simulation-in-the-loop, or SIL/HIL; no EPS-specific IVV model is reported.",
+        "evidence": [
+          {
+            "quote": "It works as a high-level documentation, which maps and traces user requirements with the corresponding test cases.",
+            "location": "Section III.A, Requirements Mapping Matrix"
+          },
+          {
+            "quote": "The corresponding RMM matrix with the code and tests mapped to requirements for the NDSAT (example satellite concept) CubeSat Radio and Camera systems is depicted in Fig. 5.",
+            "location": "Section IV, CubeSat Requirements Modeling"
+          },
+          {
+            "quote": "The sample test cases are depicted in Fig. 6. After executing the test cases if any defects are found that too can be listed and mapped with the business requirements, test scenarios and test cases.",
+            "location": "Section V.C, Scenarios and Test Cases"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1548,7 +1643,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Claim is plausible but based on rationale and a conceptual contrast with UML/SysML, not stakeholder evaluation or comparative measurement."
+        "threats_or_alternative_explanations": "Claim is plausible but based on rationale and a conceptual contrast with UML/SysML, not stakeholder evaluation or comparative measurement.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "The claim is about requirements quality, ambiguity, incompleteness, and inconsistency, not EPS or system reliability."
       },
       {
         "claim_id": "C2",
@@ -1594,7 +1693,11 @@
         ],
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "The example demonstrates representation of links, not that all real project requirements were covered or that defects were reduced."
+        "threats_or_alternative_explanations": "The example demonstrates representation of links, not that all real project requirements were covered or that defects were reduced.",
+        "reliability_subtype": [
+          "process reliability"
+        ],
+        "reliability_subtype_rationale": "Requirement-to-test traceability is reliability-adjacent as a verification-process assurance claim, but it does not evidence EPS reliability."
       },
       {
         "claim_id": "C3",
@@ -1639,7 +1742,11 @@
         ],
         "evidence_confidence_rating": "Unsupported",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Missing/unnecessary requirements could be identified by reviews or testing independent of RMM; no causal evidence is provided."
+        "threats_or_alternative_explanations": "Missing/unnecessary requirements could be identified by reviews or testing independent of RMM; no causal evidence is provided.",
+        "reliability_subtype": [
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "The claim concerns identifying missing/unnecessary requirements and defects; no EPS or mission reliability effect is shown."
       },
       {
         "claim_id": "C4",
@@ -1676,7 +1783,11 @@
         },
         "evidence_confidence_rating": "Unsupported",
         "confidence": "high",
-        "threats_or_alternative_explanations": "No baseline, cost model, schedule data, or project execution evidence is provided."
+        "threats_or_alternative_explanations": "No baseline, cost model, schedule data, or project execution evidence is provided.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim is about testing time, cost, scope, and customer alignment, not reliability or a reliability-adjacent outcome."
       },
       {
         "claim_id": "C5",
@@ -1722,7 +1833,12 @@
         ],
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "The paper does not name or demonstrate the requirements tool, so automation may remain aspirational."
+        "threats_or_alternative_explanations": "The paper does not name or demonstrate the requirements tool, so automation may remain aspirational.",
+        "reliability_subtype": [
+          "process reliability",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Automated missing-link checking and accurate requirements-test-defect linkage support process reliability and defect/error handling only."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1806,5 +1922,16 @@
       "extraction_confidence_reason": "The paper is short and clear, with readable markdown tables/figures. Confidence is high for extracted claims and absences; relevance to EPS/MBSE is coded conservatively because the paper is RML/RMM and OBC/software focused."
     }
   },
-  "bibtex": "@inproceedings{Alanazi2019RequirementsModelingLanguageCubeSats,\n  title={Requirements Modeling Language and Automated Testing for CubeSats},\n  author={Alanazi, Abdulaziz and Jones, Andrew B. and Straub, Jeremy},\n  booktitle={2019 IEEE AUTOTESTCON},\n  year={2019},\n  doi={10.1109/autotestcon43700.2019.8961058},\n  publisher={IEEE}\n}"
+  "bibtex": "@inproceedings{Alanazi2019RequirementsModelingLanguageCubeSats,\n  title={Requirements Modeling Language and Automated Testing for CubeSats},\n  author={Alanazi, Abdulaziz and Jones, Andrew B. and Straub, Jeremy},\n  booktitle={2019 IEEE AUTOTESTCON},\n  year={2019},\n  doi={10.1109/autotestcon43700.2019.8961058},\n  publisher={IEEE}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0034.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Replace current generality coding that includes low-dynamics / non-detailed-behavior model with specific-mission model with reusable method only.",
+      "Upgrade IVV integration level from verification matrix adjacent to model to trace-linked verification artifacts, but do not code executable checks or SIL/HIL.",
+      "Do not add EPS reliability; reliability-adjacent claims are model/process/defect focused only."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

@@ -536,10 +536,11 @@
         "template",
         "reusable workflow",
         "open package",
-        "method guidance"
+        "method guidance",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "The method uses templates and a reusable docs-as-code workflow; the repository is public; the paper gives methodological guidance, while future work aims at broader adoption tutorials/reference use.",
+      "rationale": "The paper supports a reusable docs-as-code method/workflow, templates, public repository, and partial method guidance. The SeaLion architecture itself is mission-specific; broader reuse is claimed for the method/data-model approach, not demonstrated as a mission-agnostic architecture. Do not code high-level abstraction, mission-agnostic architecture, interface-focused model, or low-dynamics / non-detailed-behavior model as realized generality mechanisms.",
       "evidence": [
         {
           "quote": "YAML files are automatically processed using templates language (e.g., Jinja2) via a build shell script.",
@@ -552,9 +553,13 @@
         {
           "quote": "This extended data model would serve as a self-describing specification that new CubeSat projects could adopt for their own CubeSat missions, whereby the SeaLion mission would serve as the first reference implementation.",
           "location": "Section 7 Future Work and Observations"
+        },
+        {
+          "quote": "The content presented in this article is based on the prior mission profile from the launch at WFF into VLEO.",
+          "location": "Section 1.2 SeaLion Mission"
         }
       ],
-      "confidence": "high"
+      "confidence": "medium"
     },
     "implementation_pathway_tailoring.approach_classification": {
       "values": [
@@ -728,6 +733,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "not_reported",
+      "rationale": "The paper mentions verification/validation generically and includes operational verify/validate user stories, but does not report EPS/system verification matrices, model-contained verification artifacts, executable checks, simulation-in-the-loop, SIL/HIL, or trace-linked test/procedure artifacts.",
+      "evidence": [
+        {
+          "quote": "These models were used to conduct activities such as design, specification, analysis, verification, and validation of the system.",
+          "location": "Section 1 Introduction"
+        },
+        {
+          "quote": "These user stories detail the ground station operator's tasks to view the satellite beacon data and to request the satellite health data packet so that the operator can verify that AODS sensors and GPS data are within nominal parameters.",
+          "location": "Section 5.4 Data Structures"
+        },
+        {
+          "quote": "The initial goal is to list the components of the SeaLion CubeSat and to generate assembly steps for them.",
+          "location": "Section 6.2 Component Data Structure and File Implementation"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "links to hardware integration",
@@ -786,6 +813,36 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent claims are mission/system assurance, process/method assurance, model/document consistency, and potential defect/interface-conflict reduction. No claim directly supports EPS reliability. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "assist improving CubeSat success rates",
+          "location": "Abstract"
+        },
+        {
+          "quote": "lack the resources, training, experience, or methodology to reliably give assurance to their missions",
+          "location": "Section 2.2 Ensuring CubeSat Success"
+        },
+        {
+          "quote": "continuous updating is ensured that any changes affecting dependencies within the mission architecture are kept in sync",
+          "location": "Section 5.5 Document Generation"
+        },
+        {
+          "quote": "This would allow for a team to identify \"areas where conflicts could arise in interfaces, and highlights input and output dependency assumptions and requirements\"",
+          "location": "Section 6.2 Component Data Structure and File Implementation"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1666,10 +1723,11 @@
           "template",
           "reusable workflow",
           "open package",
-          "method guidance"
+          "method guidance",
+          "specific-mission model with reusable method only"
         ],
         "status": "coded",
-        "rationale": "The method uses templates and a reusable docs-as-code workflow; the repository is public; the paper gives methodological guidance, while future work aims at broader adoption tutorials/reference use.",
+        "rationale": "The paper supports a reusable docs-as-code method/workflow, templates, public repository, and partial method guidance. The SeaLion architecture itself is mission-specific; broader reuse is claimed for the method/data-model approach, not demonstrated as a mission-agnostic architecture. Do not code high-level abstraction, mission-agnostic architecture, interface-focused model, or low-dynamics / non-detailed-behavior model as realized generality mechanisms.",
         "evidence": [
           {
             "quote": "YAML files are automatically processed using templates language (e.g., Jinja2) via a build shell script.",
@@ -1682,9 +1740,14 @@
           {
             "quote": "This extended data model would serve as a self-describing specification that new CubeSat projects could adopt for their own CubeSat missions, whereby the SeaLion mission would serve as the first reference implementation.",
             "location": "Section 7 Future Work and Observations"
+          },
+          {
+            "quote": "The content presented in this article is based on the prior mission profile from the launch at WFF into VLEO.",
+            "location": "Section 1.2 SeaLion Mission"
           }
         ],
-        "confidence": "high"
+        "confidence": "medium",
+        "v1_1_repair_note": "v1.1 repair added controlled generality/reuse label(s) where supported by the completed extraction: interface-focused model: the extraction identifies interfaces, exchanges, tool/data-flow mappings, or integration links as a reusable organizing mechanism; low-dynamics / non-detailed-behavior model: the extraction indicates limited, nominal, abstract, or non-detailed behavior is deliberately sufficient for the reusable model/method; specific-mission model with reusable method only: the extraction is primarily a single mission/case model whose reusable contribution is the method/workflow rather than a mission-agnostic model asset."
       }
     },
     "implementation_pathway_tailoring": {
@@ -1995,6 +2058,28 @@
           }
         ],
         "confidence": "medium"
+      },
+      "ivv_integration_level": {
+        "values": [
+          "none/not reported"
+        ],
+        "status": "not_reported",
+        "rationale": "The paper mentions verification/validation generically and includes operational verify/validate user stories, but does not report EPS/system verification matrices, model-contained verification artifacts, executable checks, simulation-in-the-loop, SIL/HIL, or trace-linked test/procedure artifacts.",
+        "evidence": [
+          {
+            "quote": "These models were used to conduct activities such as design, specification, analysis, verification, and validation of the system.",
+            "location": "Section 1 Introduction"
+          },
+          {
+            "quote": "These user stories detail the ground station operator's tasks to view the satellite beacon data and to request the satellite health data packet so that the operator can verify that AODS sensors and GPS data are within nominal parameters.",
+            "location": "Section 5.4 Data Structures"
+          },
+          {
+            "quote": "The initial goal is to list the components of the SeaLion CubeSat and to generate assembly steps for them.",
+            "location": "Section 6.2 Component Data Structure and File Implementation"
+          }
+        ],
+        "confidence": "high"
       }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
@@ -2094,7 +2179,12 @@
           "evidence": [],
           "confidence": "medium"
         },
-        "threats_or_alternative_explanations": "Traceability quality may depend on team discipline and completeness of captured legacy work; no independent audit of trace completeness."
+        "threats_or_alternative_explanations": "Traceability quality may depend on team discipline and completeness of captured legacy work; no independent audit of trace completeness.",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Unambiguous data structures, traceability, and reduced ambiguity support model consistency/reliability and potential defect/error reduction, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -2192,7 +2282,11 @@
           "evidence": [],
           "confidence": "medium"
         },
-        "threats_or_alternative_explanations": "Generated documentation may still lag if model content is incomplete or subsystem teams do not provide updates."
+        "threats_or_alternative_explanations": "Generated documentation may still lag if model content is incomplete or subsystem teams do not provide updates.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "The synchronized docs-as-code generation claim concerns keeping model-derived documents consistent."
       },
       {
         "claim_id": "C3",
@@ -2290,7 +2384,11 @@
           "evidence": [],
           "confidence": "medium"
         },
-        "threats_or_alternative_explanations": "Learning may depend on an experienced member; authors report confusion when members attempted self-learning from current guides."
+        "threats_or_alternative_explanations": "Learning may depend on an experienced member; authors report confusion when members attempted self-learning from current guides.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Learning ease, non-proprietary tooling, and reproducibility are not reliability claims."
       },
       {
         "claim_id": "C4",
@@ -2386,7 +2484,13 @@
           "evidence": [],
           "confidence": "medium"
         },
-        "threats_or_alternative_explanations": "CubeSat success depends on hardware, launch, operations, funding, and team factors beyond the architecture method."
+        "threats_or_alternative_explanations": "CubeSat success depends on hardware, launch, operations, funding, and team factors beyond the architecture method.",
+        "reliability_subtype": [
+          "system/mission reliability",
+          "process reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Improving CubeSat success rates and giving assurance to missions is system/mission reliability and mission assurance; the mechanism is process/method support. Do not code as EPS reliability or model consistency/reliability."
       },
       {
         "claim_id": "C5",
@@ -2479,7 +2583,11 @@
           "evidence": [],
           "confidence": "medium"
         },
-        "threats_or_alternative_explanations": "The ability to detect conflicts depends on completeness and correctness of interface data entered by subsystem teams."
+        "threats_or_alternative_explanations": "The ability to detect conflicts depends on completeness and correctness of interface data entered by subsystem teams.",
+        "reliability_subtype": [
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "The interface/N2 claim is about identifying possible interface conflicts, a defect/error-reduction subtype."
       },
       {
         "claim_id": "C6",
@@ -2572,7 +2680,11 @@
           "evidence": [],
           "confidence": "medium"
         },
-        "threats_or_alternative_explanations": "Adoption may require tutorials, customization, and team communication practices not yet fully documented."
+        "threats_or_alternative_explanations": "Adoption may require tutorials, customization, and team communication practices not yet fully documented.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Future reuse/reference-implementation potential is not a reliability claim."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2775,5 +2887,18 @@
       }
     }
   },
-  "bibtex": "@article{Chiu2023SeaLionDocsAsCodeMBSE,\n  author = {Chiu, Kevin and Marquez, Sean and Asundi, Sharanabasaweshwara A.},\n  title = {Model Based Systems Engineering with a Docs-as-Code Approach for the SeaLion CubeSat Project},\n  journal = {Systems},\n  year = {2023},\n  volume = {11},\n  number = {7},\n  pages = {320},\n  doi = {10.3390/systems11070320},\n  publisher = {MDPI}\n}"
+  "bibtex": "@article{Chiu2023SeaLionDocsAsCodeMBSE,\n  author = {Chiu, Kevin and Marquez, Sean and Asundi, Sharanabasaweshwara A.},\n  title = {Model Based Systems Engineering with a Docs-as-Code Approach for the SeaLion CubeSat Project},\n  journal = {Systems},\n  year = {2023},\n  volume = {11},\n  number = {7},\n  pages = {320},\n  doi = {10.3390/systems11070320},\n  publisher = {MDPI}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0037.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism; the paper does not frame limited behavior detail as a reuse mechanism.",
+      "Remove interface-focused model from generality_reuse_mechanism unless coding future/under-development DOF/N2 work separately; it is not a completed general reusable model mechanism.",
+      "Do not add high-level abstraction or mission-agnostic architecture; the implemented architecture is SeaLion-specific.",
+      "IVV integration should remain none/not_reported; operational verify/validate user stories are not model-integrated IVV artifacts.",
+      "No EPS reliability subtype is supported. C4 should use process reliability plus system/mission reliability and mission assurance, not model consistency/reliability."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

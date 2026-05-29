@@ -1,0 +1,108 @@
+{
+  "corpus_id": "paper-0023",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
+      ],
+      "status": "coded",
+      "rationale": "The paper claims a reusable framework/repository/reference model for university CubeSat/nanosatellite teams, expressed through abstract lifecycle/views and process flows. It also includes generic subsystem/interface architecture and explicitly generalizes beyond MASAT1 in the ConOps. Do not code low-dynamics / non-detailed-behavior model from absence of executable detail alone.",
+      "evidence": [
+        {
+          "quote": "The aim of using MBSE for a nanosatellite project is to create a model framework or repository that can be used by university teams (with limited resources) wishing to design CubeSat or Nanosatellite projects.",
+          "location": "Section 2"
+        },
+        {
+          "quote": "MBSE approach can be used to create a PBS model repository that can be used by university teams designing nanosatellite projects, for requirements, design, analysis verification, and validation activities. Choosing to use package diagrams at this level of abstract modeling helps stakeholders understand the structure of the model.",
+          "location": "Section 5"
+        },
+        {
+          "quote": "Define functional and subsystem interfaces",
+          "location": "Fig. 9 / Section 3.4"
+        },
+        {
+          "quote": "Although MASAT1 mission uses passive attitude control, an attitude control mode has been included in ConOps to generalize the model proposed in this paper.",
+          "location": "Section 5.3"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "trace-linked verification artifacts"
+      ],
+      "status": "coded",
+      "rationale": "The SysML requirements table/matrix links requirements to satisfying model elements and verifying behavior/test artifacts, including a Power System satisfy link and Bus System Activation verification. No executable checks, simulation-in-the-loop, SIL/HIL, or physical verification evidence is reported.",
+      "evidence": [
+        {
+          "quote": "These tables describe the requirements and their relationship to other SysML design elements to facilitate requirements traceability, satisfaction, and verification.",
+          "location": "Section 5.1"
+        },
+        {
+          "quote": "The \"Satisfied By\" column shows the model elements that fulfill the requirement. For example, the \"Power System\" subsystem must satisfy operational requirement 100.1.6.",
+          "location": "Section 5.1 / Fig. 15"
+        },
+        {
+          "quote": "The 'Verified By' column shows the specific test cases that determine how the system meets the requirement. For example, the \"Bus System Activation\" activity diagram ... is used to verify operational requirement 100.1.6.",
+          "location": "Section 5.1 / Fig. 15"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "generic reliability claim"
+      ],
+      "status": "coded",
+      "rationale": "The paper directly makes a broad mission-reliability claim for MBSE/SysML and claims design consistency; traceability and verification artifacts support mission-assurance subtype. It does not directly demonstrate EPS reliability, defect/error reduction, or process reliability.",
+      "evidence": [
+        {
+          "quote": "The combination of Model-Based Systems Engineering (MBSE) and Systems Modeling Language (SysML) emerged as an alternative management and design approach that improves mission reliability ... Typical advantages of MBSE are that it provides better traceability, design consistency, quality improvement, and reduced document management overhead.",
+          "location": "Section 1"
+        },
+        {
+          "quote": "These tables describe the requirements and their relationship to other SysML design elements to facilitate requirements traceability, satisfaction, and verification.",
+          "location": "Section 5.1"
+        },
+        {
+          "quote": "The LEOP flow activity diagram is also a way to \"verify\" functional or operational requirements, such as the Bus System Activation state machine (Fig. 23), which verifies operational requirements 100.1.6.",
+          "location": "Section 5.3"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "generic reliability claim"
+      ],
+      "rationale": "Add system/mission reliability because the paper explicitly says MBSE/SysML improves mission reliability; keep generic reliability claim because it is unsupported by outcome data, and model consistency/reliability because the same claim cites design consistency."
+    },
+    {
+      "claim_id": "C6",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "Power-System-linked verification supports mission assurance/requirements verification only; do not code EPS reliability because no EPS reliability outcome or reliability analysis is provided."
+    }
+  ],
+  "repair_notes": [
+    "Add system/mission reliability to the aggregate reliability subtype and C3.",
+    "Do not add EPS reliability for the Power System verification example.",
+    "Generality should emphasize reusable reference/framework, mission-agnostic abstraction, and interfaces; remove low-dynamics / non-detailed-behavior model unless stricter evidence is available."
+  ]
+}

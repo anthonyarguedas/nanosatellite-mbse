@@ -506,22 +506,33 @@
       "values": [
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "low-dynamics / non-detailed-behavior model",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "The work builds on a published CubeSat reference model, describes a reusable SysML-analysis workflow, and plans an academic model/manual, but no actual open package is reported as released.",
+      "rationale": "The reusable contribution is a RAX-specific executable CubeSat model and workflow based on a prior CubeSat reference model. The paper supports high-level and non-detailed abstraction because non-critical subsystems are excluded/grouped and states are binary, while reuse is claimed as a starting point for other CubeSat teams. It does not support mission-agnostic architecture, interface-focused model, or open package: the demonstrated model remains RAX-specific and release is only planned.",
       "evidence": [
         {
-          "quote": "Section 3, Phase I: 'developing a SysML reference model of a CubeSat, and then applying the reference model to model RAX.'",
-          "location": "not specified"
+          "quote": "The first phase of the SSWG MBSE CubeSat project consisted of developing a SysML reference model of a CubeSat, and then applying the reference model to model RAX.",
+          "location": "Section 3, Phase I"
         },
         {
-          "quote": "Section 3, Phase III: 'A new RAX CubeSat model was developed from scratch based on the published CubeSat reference model [8].'",
-          "location": "not specified"
+          "quote": "A new RAX CubeSat model was developed from scratch based on the published CubeSat reference model [8].",
+          "location": "Section 3, Phase III"
         },
         {
-          "quote": "Conclusion: 'The model can be used as a starting point for a CubeSat team to develop their own model and perform trade studies.'",
-          "location": "not specified"
+          "quote": "Detailed modeling was minimized by excluding several other non-critical subsystems, such as attitude determination and control.",
+          "location": "Section 4, SysML Model"
+        },
+        {
+          "quote": "All states were modeled in a binary fashion...",
+          "location": "Section 4, SysML Model"
+        },
+        {
+          "quote": "The model can be used as a starting point for a CubeSat team to develop their own model and perform trade studies.",
+          "location": "Section 6, Conclusion"
         }
       ],
       "confidence": "high"
@@ -724,6 +735,32 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV level is simulation-in-the-loop: requirements are linked to SysML properties and checked through executable behavioral/parametric mission simulations. There is no SIL/HIL, physical test integration, or separate verification procedure evidence.",
+      "evidence": [
+        {
+          "quote": "\"Satisfy\" relationships were used to relate requirements to system properties that are calculated via mission simulation.",
+          "location": "Section 4, SysML Model"
+        },
+        {
+          "quote": "RAX system requirements are verified by using the results of behavioral simulations.",
+          "location": "Figure 6 caption"
+        },
+        {
+          "quote": "During CST simulation... a call is made to MBSE Analyzer to execute various parametric diagrams via ModelCenter.",
+          "location": "Section 4, Model Integration and Execution"
+        },
+        {
+          "quote": "Results of mission simulations were used to check system requirements of minimum energy limit and data download.",
+          "location": "Section 6, Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -766,6 +803,33 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent support is limited to model consistency/reliability and mission-assurance-style requirements checking. The paper does not directly claim EPS reliability, system/mission reliability, process reliability, defect/error reduction, or a generic reliability improvement. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "It provides a cohesive and consistent source of system requirements, design, analysis, and verification.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The time history plots show that the integrated RAX model correctly models the behavior of energy collection and data download, and their interactions.",
+          "location": "Section 5"
+        },
+        {
+          "quote": "The integrated model demonstrates how to accomplish this by performing mission simulations using MBSE models.",
+          "location": "Section 5"
+        },
+        {
+          "quote": "When the solar panel area was reduced further... the energy level went below the required minimum...",
+          "location": "Section 5, Figure 16 discussion"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1425,9 +1489,39 @@
       "generality_reuse_mechanism": [
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "low-dynamics / non-detailed-behavior model",
+        "specific-mission model with reusable method only"
       ],
-      "reuse_availability_notes": "Authors plan academic release of the model/manual and state it contains no proprietary data; actual availability is not reported in the paper."
+      "reuse_availability_notes": "Authors plan academic release of the model/manual and state it contains no proprietary data; actual availability is not reported in the paper.",
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The reusable contribution is a RAX-specific executable CubeSat model and workflow based on a prior CubeSat reference model. The paper supports high-level and non-detailed abstraction because non-critical subsystems are excluded/grouped and states are binary, while reuse is claimed as a starting point for other CubeSat teams. It does not support mission-agnostic architecture, interface-focused model, or open package: the demonstrated model remains RAX-specific and release is only planned.",
+        "evidence": [
+          {
+            "quote": "The first phase of the SSWG MBSE CubeSat project consisted of developing a SysML reference model of a CubeSat, and then applying the reference model to model RAX.",
+            "location": "Section 3, Phase I"
+          },
+          {
+            "quote": "A new RAX CubeSat model was developed from scratch based on the published CubeSat reference model [8].",
+            "location": "Section 3, Phase III"
+          },
+          {
+            "quote": "Detailed modeling was minimized by excluding several other non-critical subsystems, such as attitude determination and control.",
+            "location": "Section 4, SysML Model"
+          },
+          {
+            "quote": "All states were modeled in a binary fashion...",
+            "location": "Section 4, SysML Model"
+          },
+          {
+            "quote": "The model can be used as a starting point for a CubeSat team to develop their own model and perform trade studies.",
+            "location": "Section 6, Conclusion"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1539,7 +1633,33 @@
       ],
       "evidence_integrated_not_separate": "Figure 6 and Section 4 show requirements linked to model properties, while Section 4/5 describe behavioral simulations executing parametric analyses to produce values used for requirement checks.",
       "integration_test_readiness": "not reported",
-      "notes": "No formal EPS test cases, test procedures, verification matrix, SIL/HIL link, fault protection, degradation, or physical integration/test evidence is reported."
+      "notes": "No formal EPS test cases, test procedures, verification matrix, SIL/HIL link, fault protection, degradation, or physical integration/test evidence is reported.",
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "The highest supported IVV level is simulation-in-the-loop: requirements are linked to SysML properties and checked through executable behavioral/parametric mission simulations. There is no SIL/HIL, physical test integration, or separate verification procedure evidence.",
+        "evidence": [
+          {
+            "quote": "\"Satisfy\" relationships were used to relate requirements to system properties that are calculated via mission simulation.",
+            "location": "Section 4, SysML Model"
+          },
+          {
+            "quote": "RAX system requirements are verified by using the results of behavioral simulations.",
+            "location": "Figure 6 caption"
+          },
+          {
+            "quote": "During CST simulation... a call is made to MBSE Analyzer to execute various parametric diagrams via ModelCenter.",
+            "location": "Section 4, Model Integration and Execution"
+          },
+          {
+            "quote": "Results of mission simulations were used to check system requirements of minimum energy limit and data download.",
+            "location": "Section 6, Conclusion"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1576,7 +1696,11 @@
         },
         "evidence_confidence_rating": "Unsupported",
         "confidence": "high",
-        "threats_or_alternative_explanations": "This is a general MBSE rationale, not a measured effect of the RAX implementation."
+        "threats_or_alternative_explanations": "This is a general MBSE rationale, not a measured effect of the RAX implementation.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Generic MBSE consistency-source claim; not EPS or mission reliability."
       },
       {
         "claim_id": "C2",
@@ -1613,7 +1737,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Execution is shown for one prototype mission model using proprietary tools; no independent replication or scalability measurement."
+        "threats_or_alternative_explanations": "Execution is shown for one prototype mission model using proprietary tools; no independent replication or scalability measurement.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Tool integration and executable-model capability claim, with no reliability-adjacent outcome."
       },
       {
         "claim_id": "C3",
@@ -1649,7 +1777,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "The 'correctly models' claim is based on internal plausibility, not comparison with flight telemetry or independent validation."
+        "threats_or_alternative_explanations": "The 'correctly models' claim is based on internal plausibility, not comparison with flight telemetry or independent validation.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "The evidence supports verifying/correctly modeling behavior, not mission assurance or EPS reliability."
       },
       {
         "claim_id": "C4",
@@ -1689,7 +1821,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "The comparator is described qualitatively rather than tested; requirement checks are limited to modeled energy/data requirements."
+        "threats_or_alternative_explanations": "The comparator is described qualitatively rather than tested; requirement checks are limited to modeled energy/data requirements.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Requirements-impact verification throughout mission simulation is mission-assurance-adjacent."
       },
       {
         "claim_id": "C5",
@@ -1726,7 +1862,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Results depend on simplified power/mission assumptions and a prototype RAX model not intended to be accurate to the real satellite."
+        "threats_or_alternative_explanations": "Results depend on simplified power/mission assumptions and a prototype RAX model not intended to be accurate to the real satellite.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Solar-panel sizing is checked against an energy requirement; this supports mission assurance but not EPS reliability."
       },
       {
         "claim_id": "C6",
@@ -1761,7 +1901,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "The potential cost/size benefit is inferred by authors and not evaluated with mass, cost, degradation, or reliability models."
+        "threats_or_alternative_explanations": "The potential cost/size benefit is inferred by authors and not evaluated with mass, cost, degradation, or reliability models.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Battery-capacity/spillover sizing insight is decision support without reliability-adjacent wording."
       },
       {
         "claim_id": "C7",
@@ -1799,7 +1943,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Trade results depend on simplified communication efficiency and selected station/orbit scenarios; financial cost is acknowledged but not modeled."
+        "threats_or_alternative_explanations": "Trade results depend on simplified communication efficiency and selected station/orbit scenarios; financial cost is acknowledged but not modeled.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Downloaded-data requirement satisfaction is checked through mission simulation."
       },
       {
         "claim_id": "C8",
@@ -1833,7 +1981,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "The paper reports planned availability, not actual release, adoption, or replication evidence."
+        "threats_or_alternative_explanations": "The paper reports planned availability, not actual release, adoption, or replication evidence.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/reproducibility claim, not reliability-adjacent."
       },
       {
         "claim_id": "C9",
@@ -1866,7 +2018,11 @@
         },
         "evidence_confidence_rating": "Unsupported",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "A one-case prototype cannot establish scalability; tool utility may be influenced by vendor-specific capabilities and expert users."
+        "threats_or_alternative_explanations": "A one-case prototype cannot establish scalability; tool utility may be influenced by vendor-specific capabilities and expert users.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Scalability/utility claim, not reliability-adjacent."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1952,5 +2108,18 @@
       "extraction_confidence_reason": "The paper markdown includes detailed abstract, methods, figures/tables descriptions, results, and conclusion. Most extraction decisions are directly quote-supported; only lifecycle/tailoring strength and EPS-specificity require moderate interpretation."
     }
   },
-  "bibtex": "@inproceedings{Kaslow2014IntegratedMBSECubeSat,\n  title = {Integrated Model-Based Systems Engineering (MBSE) Applied to the Simulation of a CubeSat Mission},\n  author = {Kaslow, David and Soremekun, Grant and Kim, Hongman and Spangelo, Sara C.},\n  booktitle = {2014 IEEE Aerospace Conference},\n  year = {2014},\n  publisher = {IEEE},\n  doi = {10.1109/AERO.2014.6836317}\n}"
+  "bibtex": "@inproceedings{Kaslow2014IntegratedMBSECubeSat,\n  title = {Integrated Model-Based Systems Engineering (MBSE) Applied to the Simulation of a CubeSat Mission},\n  author = {Kaslow, David and Soremekun, Grant and Kim, Hongman and Spangelo, Sara C.},\n  booktitle = {2014 IEEE Aerospace Conference},\n  year = {2014},\n  publisher = {IEEE},\n  doi = {10.1109/AERO.2014.6836317}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0001.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add high-level abstraction to generality/reuse if absent; retain low-dynamics / non-detailed-behavior model and specific-mission model with reusable method only.",
+      "Do not add mission-agnostic architecture, interface-focused model, or open package.",
+      "IVV integration level as simulation-in-the-loop is supported by satisfy links plus executable behavioral/parametric simulation.",
+      "Remove mission assurance from C3; it is only model consistency/reliability.",
+      "Do not code EPS reliability for any claim."
+    ],
+    "applied_at": "2026-05-28T15:59:43-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

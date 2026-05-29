@@ -545,17 +545,22 @@
     "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
       "values": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "The paper presents the Arcadia/Capella plus Agile workflow as a case-based process for future CubeSat missions, but not an open reusable model package or reference model.",
+      "rationale": "The paper is a 3ColStar-specific case study. Its reusable contribution is the Arcadia/Capella plus Agile workflow and guidance, not a reusable mission-agnostic model, template, library, open package, or reference architecture. High-level/logical abstraction and interface modeling are present, but the paper does not demonstrate those model features as reusable beyond this mission.",
       "evidence": [
         {
-          "quote": "This case study highlights the effectiveness ... providing valuable insights for future missions.",
+          "quote": "This paper presents a case study on integrating Agile Systems Engineering methodologies in the preliminary design phase of satellite systems, focusing on the 3ColStar satellite mission.",
           "location": "Abstract"
         },
         {
-          "quote": "With the presented approach, we were able to expedite the design process ... setting a precedent for future CubeSat missions",
+          "quote": "This case study highlights the effectiveness of Agile Systems Engineering principles ... providing valuable insights for future missions.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "With the presented approach, we were able to expedite the design process ... setting a precedent for future CubeSat missions and beyond.",
           "location": "Section 6 Conclusions"
         }
       ],
@@ -765,6 +770,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "trace-linked verification artifacts"
+      ],
+      "status": "coded",
+      "rationale": "The paper reports Capella trace links from requirements to functions, components, verification test cases, and validation criteria. It also reports external analyses/simulations, but does not show tool connections, executable model-based checks, simulation-in-the-loop integration, SIL/HIL, or physical test evidence. Therefore the current simulation-in-the-loop coding is overstated.",
+      "evidence": [
+        {
+          "quote": "Bidirectional traceability was established ... by creating traceability links between the requirements and their associated system functions, logical components, and verification test cases.",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "From the component to system level, each part was linked to test cases and validation criteria, enabling systematic verification of compliance with mission objectives.",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "the requirements for continuous power were linked to specific physical components, such as solar panels and batteries",
+          "location": "Section 3.3.1 Power Subsystem"
+        }
+      ],
+      "confidence": "medium"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "links to hardware integration",
@@ -817,6 +844,31 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related claims are system-level or model/process assurance claims. The paper supports model consistency/error reduction, mission assurance through traceability and V&V links, and a broad system-level 'more reliable satellite design' claim. It does not directly support EPS reliability as an MBSE outcome. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Through Model-Based Systems Engineering (MBSE), technical consistency was rigorously managed across various architectural documents, ensuring coherency and minimizing errors.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "each part was linked to test cases and validation criteria, enabling systematic verification of compliance with mission objectives",
+          "location": "Section 3.3"
+        },
+        {
+          "quote": "By adopting this methodology, we ensured that the 3ColStar mission's technical and operational feasibility was thoroughly assessed and optimized from the early stages of development, leading to a more reliable satellite design.",
+          "location": "Section 5 Discussion"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1492,7 +1544,8 @@
       ],
       "generality_reuse_mechanism": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "specific-mission model with reusable method only"
       ],
       "key_evidence": [
         {
@@ -1507,7 +1560,26 @@
           "quote": "Requirements were established initially from mission concept, translated into Capella, and linked to various model elements",
           "location": "Section 3.3"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper is a 3ColStar-specific case study. Its reusable contribution is the Arcadia/Capella plus Agile workflow and guidance, not a reusable mission-agnostic model, template, library, open package, or reference architecture. High-level/logical abstraction and interface modeling are present, but the paper does not demonstrate those model features as reusable beyond this mission.",
+        "evidence": [
+          {
+            "quote": "This paper presents a case study on integrating Agile Systems Engineering methodologies in the preliminary design phase of satellite systems, focusing on the 3ColStar satellite mission.",
+            "location": "Abstract"
+          },
+          {
+            "quote": "This case study highlights the effectiveness of Agile Systems Engineering principles ... providing valuable insights for future missions.",
+            "location": "Abstract"
+          },
+          {
+            "quote": "With the presented approach, we were able to expedite the design process ... setting a precedent for future CubeSat missions and beyond.",
+            "location": "Section 6 Conclusions"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps_or_phases": [
@@ -1642,7 +1714,29 @@
           "quote": "The power budget computes the power and energy demand; energy generation; storage; distribution, monitoring and control.",
           "location": "Section 2.3.1"
         }
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "trace-linked verification artifacts"
+        ],
+        "status": "coded",
+        "rationale": "The paper reports Capella trace links from requirements to functions, components, verification test cases, and validation criteria. It also reports external analyses/simulations, but does not show tool connections, executable model-based checks, simulation-in-the-loop integration, SIL/HIL, or physical test evidence. Therefore the current simulation-in-the-loop coding is overstated.",
+        "evidence": [
+          {
+            "quote": "Bidirectional traceability was established ... by creating traceability links between the requirements and their associated system functions, logical components, and verification test cases.",
+            "location": "Section 3.3"
+          },
+          {
+            "quote": "From the component to system level, each part was linked to test cases and validation criteria, enabling systematic verification of compliance with mission objectives.",
+            "location": "Section 3.3"
+          },
+          {
+            "quote": "the requirements for continuous power were linked to specific physical components, such as solar panels and batteries",
+            "location": "Section 3.3.1 Power Subsystem"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1678,7 +1772,12 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "No defect baseline or independent check; Agile meetings and centralized governance may also explain consistency improvements."
+        "threats_or_alternative_explanations": "No defect baseline or independent check; Agile meetings and centralized governance may also explain consistency improvements.",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "The claim is about technical consistency, coherency, and minimizing errors in model/architecture documents, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1719,7 +1818,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Traceability is author-reported; no model export or independent verification of link completeness is provided."
+        "threats_or_alternative_explanations": "Traceability is author-reported; no model export or independent verification of link completeness is provided.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Traceability to verification test cases and validation criteria supports V&V/assurance at system level."
       },
       {
         "claim_id": "C3",
@@ -1761,7 +1864,11 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "No traditional-process comparator; schedule may reflect project scope, team size, proposal deadlines, or prior internal documents."
+        "threats_or_alternative_explanations": "No traditional-process comparator; schedule may reflect project scope, team size, proposal deadlines, or prior internal documents.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim concerns schedule/effort, not reliability."
       },
       {
         "claim_id": "C4",
@@ -1802,7 +1909,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Collaboration gains may be due to weekly meetings, management effort, or institutional roles rather than MBSE artifacts alone."
+        "threats_or_alternative_explanations": "Collaboration gains may be due to weekly meetings, management effort, or institutional roles rather than MBSE artifacts alone.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim concerns communication and integration, not reliability."
       },
       {
         "claim_id": "C5",
@@ -1853,7 +1964,12 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Technical analyses support feasibility but do not prove MBSE caused reliability improvement; physical tests and flight evidence are absent."
+        "threats_or_alternative_explanations": "Technical analyses support feasibility but do not prove MBSE caused reliability improvement; physical tests and flight evidence are absent.",
+        "reliability_subtype": [
+          "system/mission reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The paper claims a more reliable satellite design and early feasibility/risk assessment at system level; it does not isolate EPS reliability or model consistency as the reliability subtype for this claim."
       },
       {
         "claim_id": "C6",
@@ -1891,7 +2007,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Generality is asserted from one mission case; no replication or downloadable template/model is provided."
+        "threats_or_alternative_explanations": "Generality is asserted from one mission case; no replication or downloadable template/model is provided.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim concerns reuse/guidance for future missions, not reliability."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1978,5 +2098,17 @@
       "confidence_reason": "Complete full-text markdown, clear method/tool/context details and explicit limitations. Main uncertainty is evidentiary strength of broad outcome claims, not extraction coverage."
     }
   },
-  "bibtex": "@article{buitragoLeiva2024PreliminaryDesign3ColStar,\n  author = {Buitrago-Leiva, Jeimmy Nataly and Mejía, Juan José and Puerta-Ibarra, Juan Francisco and Acero-Niño, Ignacio Francisco and Guarnizo-Saavedra, Andrés Felipe and Rodriguez-Ferreira, Julian and Rojas-Rodriguez, Leandro and Hernández-Torres, Francisco Luis and Arango-Cotacio, Cristian Esteban and Salazar-Morales, Jorge Enrique and Herrera-Cruz, Miguel Angel and Linares-Vásquez, Mario and Jiménez-Vargas, Jose Fernando and Espíndola-Díaz, Jorge Enrique and Montañez-Sogamoso, Óscar Javier and Camps, Adriano},\n  title = {Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission},\n  journal = {Aerospace},\n  year = {2024},\n  volume = {11},\n  number = {9},\n  pages = {758},\n  doi = {10.3390/aerospace11090758},\n  publisher = {MDPI}\n}"
+  "bibtex": "@article{buitragoLeiva2024PreliminaryDesign3ColStar,\n  author = {Buitrago-Leiva, Jeimmy Nataly and Mejía, Juan José and Puerta-Ibarra, Juan Francisco and Acero-Niño, Ignacio Francisco and Guarnizo-Saavedra, Andrés Felipe and Rodriguez-Ferreira, Julian and Rojas-Rodriguez, Leandro and Hernández-Torres, Francisco Luis and Arango-Cotacio, Cristian Esteban and Salazar-Morales, Jorge Enrique and Herrera-Cruz, Miguel Angel and Linares-Vásquez, Mario and Jiménez-Vargas, Jose Fernando and Espíndola-Díaz, Jorge Enrique and Montañez-Sogamoso, Óscar Javier and Camps, Adriano},\n  title = {Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission},\n  journal = {Aerospace},\n  year = {2024},\n  volume = {11},\n  number = {9},\n  pages = {758},\n  doi = {10.3390/aerospace11090758},\n  publisher = {MDPI}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0078.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove high-level abstraction and interface-focused model from generality_reuse_mechanism unless separately justified as reuse mechanisms beyond the 3ColStar case.",
+      "Downgrade ivv_integration_level from simulation-in-the-loop to trace-linked verification artifacts.",
+      "Do not code EPS reliability for any claim; reliability evidence is system-level, model-consistency, defect/error, or mission-assurance oriented.",
+      "For C5, remove model consistency/reliability unless the claim is reframed around model coherence rather than reliable satellite design."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

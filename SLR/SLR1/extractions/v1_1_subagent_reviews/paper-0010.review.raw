@@ -1,0 +1,150 @@
+{
+  "corpus_id": "paper-0010",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "profile",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction"
+      ],
+      "status": "coded",
+      "rationale": "The paper proposes a reusable RFD/MBSE design process for pico-/nano-satellite systems generally, organized through high-level abstraction layers and supported by possible SysML profiles. It does not provide a specific-mission model, mission-agnostic architecture artifact, interface-focused reusable model, or deliberately low-dynamics reusable model.",
+      "evidence": [
+        {
+          "quote": "We propose to develop a model-based systems engineering process that results in high-confidence designs for small satellite systems in the pico-/nano-class",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The framework for which we follow in implementing this RFD process is based on the space systems mission design flow",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "each level of abstraction... represents a set of requirements or specifications, its associated models, and simulations",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "Customization of SysML for the RFD process can be accomplished through the SysML extensions of stereotypes, which are grouped through packages defined as profiles.",
+          "location": "Section II.B"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "executable/model-based checks"
+      ],
+      "status": "coded",
+      "rationale": "At system level, the paper shows formal/model-based verification through PVS proof obligations and type-correctness checks tied to abstraction-level consistency and traceability. The current simulation-in-the-loop coding is overstated because simulations are described conceptually, while the concrete shown check is PVS/TCC-based. No EPS-specific IVV is reported.",
+      "evidence": [
+        {
+          "quote": "This section will provide definitions and methodology for insuring a correct-by-construction system through verification across each level of abstraction through consistency checks and refinement traceability between levels of abstraction.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "PVS will be used from mission objective to mission concept phase",
+          "location": "Section IV"
+        },
+        {
+          "quote": "Finally, we illustrate a proof obligation to ensure consistency and traceability within the PVS environment... this type checking condition (TCC) would have to be discharged successfully.",
+          "location": "Section V"
+        }
+      ],
+      "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related claims are system-level or generic formal-methods/model-consistency claims. No claim directly supports EPS reliability. Non-reliability claims should remain not applicable at claim level.",
+      "evidence": [
+        {
+          "quote": "RFD process whose results are correct by construction, formally verified, and responsive to system requirement changes.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "many design failures and integration challenges can be eliminated",
+          "location": "Section I"
+        },
+        {
+          "quote": "it is possible to improve system reliability... ensure correct behavior... reviewed in depth for logical consistency",
+          "location": "Section II.C"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1",
+      "reliability_subtype": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "rationale": "High-confidence, correct-by-construction, formally verified PNSat designs are system/mission and model-consistency assurance claims, not EPS reliability."
+    },
+    {
+      "claim_id": "C2",
+      "reliability_subtype": [
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "rationale": "Eliminating design failures and integration challenges is defect/error and mission-assurance related, with no EPS-specific reliability evidence."
+    },
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "The claim is about virtual testing reducing integration-test burden, effort, or schedule; reliability is not the claimed outcome."
+    },
+    {
+      "claim_id": "C4",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "SysML common semantics and ambiguity reduction support model/process consistency, not EPS or physical-system reliability."
+    },
+    {
+      "claim_id": "C5",
+      "reliability_subtype": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "defect/error reduction"
+      ],
+      "rationale": "Formal specifications and PVS checks are claimed to improve system reliability, expose contradictions, and support correctness; the claim is generic/system-level, not EPS-specific."
+    },
+    {
+      "claim_id": "C6",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "Formal traceability across refinement levels supports model consistency and verifiable requirement lineage, not EPS reliability."
+    },
+    {
+      "claim_id": "C7",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Peer-review and archival/reproducibility value is not a reliability claim."
+    },
+    {
+      "claim_id": "C8",
+      "reliability_subtype": [
+        "defect/error reduction"
+      ],
+      "rationale": "Minimal-to-no redesign and correct design imply defect/error reduction; no EPS reliability is supported."
+    }
+  ],
+  "repair_notes": [
+    "Keep generality/reuse as profile, reusable workflow, method guidance, and high-level abstraction; do not add mission-agnostic architecture, interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.",
+    "Repair IVV integration level from simulation-in-the-loop to executable/model-based checks; PVS/TCC proof obligations are shown, but implemented simulation-in-the-loop is not demonstrated.",
+    "Do not code EPS reliability for any claim; reliability evidence is system-level, model-consistency, mission-assurance, or defect/error-reduction only."
+  ]
+}

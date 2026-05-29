@@ -492,22 +492,33 @@
         "template",
         "reference model",
         "library",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
       "status": "coded",
-      "rationale": "CSRM is a reusable reference-model starting point, a library of model elements, and contains instructions/notes for mission-specific population.",
+      "rationale": "The CSRM is a reusable CubeSat reference model and population structure, not a single-mission model. It provides reusable building blocks, a model-element library, and population guidance. The architecture is mission-agnostic and high-level because it is a logical architecture with abstract, generic, loosely defined components to be specialized by mission teams. Do not add interface-focused model or specific-mission model with reusable method only.",
       "evidence": [
         {
-          "quote": "Abstract: CSRM is 'intended to be used... as a starting point'.",
-          "location": "not specified"
+          "quote": "The CSRM is a SysML compliant and platform-independent model that provides building blocks that can be specialized to support CubeSat mission design.",
+          "location": "Introduction / CubeSat System Reference Model"
         },
         {
-          "quote": "Section 3: 'The CSRM provides a library of model elements'.",
-          "location": "not specified"
+          "quote": "The CubeSat System Reference Model (CSRM) is a representation of the logical architecture of a CubeSat System, intended to be used by system architects and engineers as a starting point as they develop the logical architecture of the Space and Ground components of the CubeSat mission of interest to them.",
+          "location": "Introduction / CubeSat System Reference Model"
         },
         {
-          "quote": "Section 3: stakeholder packages 'contain instructions for adding additional stakeholders and their concerns'.",
-          "location": "not specified"
+          "quote": "The CSRM provides a library of model elements but does not dictate what model elements and relationships to use.",
+          "location": "Section 3 / CSRM Landing Page"
+        },
+        {
+          "quote": "The CSRM provides a CubeSat logical space-ground architecture. The logical components are abstractions of the physical components that perform the system functionality without imposing implementation constraints.",
+          "location": "Section 3 / Architecture"
+        },
+        {
+          "quote": "The CubeSat subsystems are generically and loosely defined as a starting point for the mission specific CubeSat team.",
+          "location": "Section 3 / Architecture"
         }
       ],
       "confidence": "high"
@@ -701,6 +712,28 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "model-contained verification artifacts"
+      ],
+      "status": "coded",
+      "rationale": "The paper shows system-level, not EPS-specific, V&V artifacts contained in the CSRM model through Validation/Verification packages, activity elements, tables, element properties, diagrams, and Word-document artifacts. Trace links from verification activities to requirements are also shown. There is no evidence of executable checks, simulation-in-the-loop, SIL/HIL, or physical integration/test as the IVV integration level.",
+      "evidence": [
+        {
+          "quote": "The CSRM provides for defining these elements; and for tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities.",
+          "location": "Section 3 / CSRM Landing Page"
+        },
+        {
+          "quote": "The Verification Activity element describes the process for verifying an element, e.g. a requirement. As an example, the process could include verification plans, procedures execution notes, results, and status. The process can be captured in 1) Verification Activity element properties, or 2) Verification Activity Diagram, or 3) Verification Activity Word document.",
+          "location": "Section 3 / Verification and Validation"
+        },
+        {
+          "quote": "The diagram uses dashed blue arrows to indicate relationships between tables. A third blue dashed arrow originates from the Verification Activities Table and points to the L2.1.1 CubeSat Requirements Table.",
+          "location": "Figure 15 description"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -746,6 +779,29 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "The paper does not make a direct EPS reliability claim. Reliability-subtype coding should be limited to mission-assurance-adjacent V&V/traceability claims and model consistency/reliability for the common-baseline/conformance claim. Generic quality, reuse, schedule, and trade-study claims should not be upgraded to EPS reliability. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Verification confirms, by providing objective evidence, that the system and all its elements perform their intended functions and satisfy the requirements allocated to them, i.e., that the system has been built right.",
+          "location": "Section 3 / Verification and Validation"
+        },
+        {
+          "quote": "Validation confirms, by providing objective evidence, that the system, as-built (or as it will be built), satisfies the stakeholders' needs, objectives, and technical measures, i.e., that the right system has been (or will be) built.",
+          "location": "Section 3 / Verification and Validation"
+        },
+        {
+          "quote": "Retention of these logical elements provides a common baseline for comparing and evaluating different mission-specific implementations and for the sharing and reuse of design elements.",
+          "location": "Background / Current Effort with the Object Management Group"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1462,9 +1518,39 @@
         "template",
         "reference model",
         "library",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
-      "reuse_availability_notes": "The paper reports OMG submission and university use, but does not provide a downloadable CSRM model, repository, license, or final distribution format."
+      "reuse_availability_notes": "The paper reports OMG submission and university use, but does not provide a downloadable CSRM model, repository, license, or final distribution format.",
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The CSRM is a reusable CubeSat reference model and population structure, not a single-mission model. It provides reusable building blocks, a model-element library, and population guidance. The architecture is mission-agnostic and high-level because it is a logical architecture with abstract, generic, loosely defined components to be specialized by mission teams. Do not add interface-focused model or specific-mission model with reusable method only.",
+        "evidence": [
+          {
+            "quote": "The CSRM is a SysML compliant and platform-independent model that provides building blocks that can be specialized to support CubeSat mission design.",
+            "location": "Introduction / CubeSat System Reference Model"
+          },
+          {
+            "quote": "The CubeSat System Reference Model (CSRM) is a representation of the logical architecture of a CubeSat System, intended to be used by system architects and engineers as a starting point as they develop the logical architecture of the Space and Ground components of the CubeSat mission of interest to them.",
+            "location": "Introduction / CubeSat System Reference Model"
+          },
+          {
+            "quote": "The CSRM provides a library of model elements but does not dictate what model elements and relationships to use.",
+            "location": "Section 3 / CSRM Landing Page"
+          },
+          {
+            "quote": "The CSRM provides a CubeSat logical space-ground architecture. The logical components are abstractions of the physical components that perform the system functionality without imposing implementation constraints.",
+            "location": "Section 3 / Architecture"
+          },
+          {
+            "quote": "The CubeSat subsystems are generically and loosely defined as a starting point for the mission specific CubeSat team.",
+            "location": "Section 3 / Architecture"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1587,7 +1673,29 @@
       ],
       "evidence_integrated_not_separate": "The CSRM explicitly links requirements and technical measures to validation/verification activities; Figure 15 shows validation/verification activity tables linked to mission objectives, MOEs, and CubeSat requirements. EPS-specific integration is not shown.",
       "integration_test_readiness": "not reported",
-      "notes": "No EPS verification matrix, EPS test cases, detailed power modes, loads, margins, fault protection, SIL/HIL, or physical integration/test evidence is presented."
+      "notes": "No EPS verification matrix, EPS test cases, detailed power modes, loads, margins, fault protection, SIL/HIL, or physical integration/test evidence is presented.",
+      "ivv_integration_level": {
+        "values": [
+          "model-contained verification artifacts"
+        ],
+        "status": "coded",
+        "rationale": "The paper shows system-level, not EPS-specific, V&V artifacts contained in the CSRM model through Validation/Verification packages, activity elements, tables, element properties, diagrams, and Word-document artifacts. Trace links from verification activities to requirements are also shown. There is no evidence of executable checks, simulation-in-the-loop, SIL/HIL, or physical integration/test as the IVV integration level.",
+        "evidence": [
+          {
+            "quote": "The CSRM provides for defining these elements; and for tracing requirements from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities.",
+            "location": "Section 3 / CSRM Landing Page"
+          },
+          {
+            "quote": "The Verification Activity element describes the process for verifying an element, e.g. a requirement. As an example, the process could include verification plans, procedures execution notes, results, and status. The process can be captured in 1) Verification Activity element properties, or 2) Verification Activity Diagram, or 3) Verification Activity Word document.",
+            "location": "Section 3 / Verification and Validation"
+          },
+          {
+            "quote": "The diagram uses dashed blue arrows to indicate relationships between tables. A third blue dashed arrow originates from the Verification Activities Table and points to the L2.1.1 CubeSat Requirements Table.",
+            "location": "Figure 15 description"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1626,7 +1734,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Benefits may depend on team modeling skill, tool access, CSRM fit to mission method, and actual reuse practice; no baseline or metric is reported."
+        "threats_or_alternative_explanations": "Benefits may depend on team modeling skill, tool access, CSRM fit to mission method, and actual reuse practice; no baseline or metric is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse, economy, and broad quality language is not a direct reliability or assurance claim."
       },
       {
         "claim_id": "C2",
@@ -1665,7 +1777,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "No time, defect, quality, or reuse-count data are provided; knowledge transfer may come from organizational process rather than the model alone."
+        "threats_or_alternative_explanations": "No time, defect, quality, or reuse-count data are provided; knowledge transfer may come from organizational process rather than the model alone.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Development-time, reuse, institutional-knowledge, and design-quality claims are not direct reliability claims."
       },
       {
         "claim_id": "C3",
@@ -1700,7 +1816,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "The paper demonstrates structural capability, not evidence that mission teams maintained complete or correct traces in practice."
+        "threats_or_alternative_explanations": "The paper demonstrates structural capability, not evidence that mission teams maintained complete or correct traces in practice.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Traceability to validation and verification activities supports mission-assurance-adjacent V&V, not EPS reliability."
       },
       {
         "claim_id": "C4",
@@ -1736,7 +1856,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Conformance to common elements may not ensure semantic consistency, tool interoperability, or sustained reuse; OMG evaluation was still in progress."
+        "threats_or_alternative_explanations": "Conformance to common elements may not ensure semantic consistency, tool interoperability, or sustained reuse; OMG evaluation was still in progress.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Common baseline and conformance criteria support consistency of model implementations, not operational system reliability."
       },
       {
         "claim_id": "C5",
@@ -1774,7 +1898,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "Review criteria, independence, adoption depth, mission outcomes, and user feedback details are not reported."
+        "threats_or_alternative_explanations": "Review criteria, independence, adoption depth, mission outcomes, and user feedback details are not reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Professional vetting and university use are adoption/reuse evidence, not reliability evidence."
       },
       {
         "claim_id": "C6",
@@ -1808,7 +1936,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Flexibility may shift tailoring decisions to teams; easy-to-follow notes are reported without evaluation data."
+        "threats_or_alternative_explanations": "Flexibility may shift tailoring decisions to teams; easy-to-follow notes are reported without evaluation data.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Methodology-agnostic tailoring and population guidance are reuse/reproducibility claims, not reliability claims."
       },
       {
         "claim_id": "C7",
@@ -1842,7 +1974,11 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "Evidence relies on summarized prior work; the current paper omits model assumptions, configurations, numerical outputs, and validation."
+        "threats_or_alternative_explanations": "Evidence relies on summarized prior work; the current paper omits model assumptions, configurations, numerical outputs, and validation.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The solar-panel, battery, orbit, and ground-station trade studies compare performance quantities; the paper does not claim EPS reliability or mission assurance from them."
       },
       {
         "claim_id": "C8",
@@ -1880,7 +2016,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "V&V is described structurally; no actual verification execution, acceptance results, or EPS-specific test procedures are shown."
+        "threats_or_alternative_explanations": "V&V is described structurally; no actual verification execution, acceptance results, or EPS-specific test procedures are shown.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Model-contained technical measures and V&V activities support verification/validation assessment at system level, not EPS reliability."
       },
       {
         "claim_id": "C9",
@@ -1914,7 +2054,11 @@
         },
         "evidence_confidence_rating": "Unsupported",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Approval, dissemination, format, control, and actual adoption were unresolved at publication."
+        "threats_or_alternative_explanations": "Approval, dissemination, format, control, and actual adoption were unresolved at publication.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Future OMG/reference-architecture precedent is a reuse/governance claim, not a reliability claim."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2033,5 +2177,16 @@
       "extraction_confidence_reason": "The paper text and figure descriptions are sufficiently complete for system-level CSRM extraction; most classifications are directly quote-supported and absent EPS/outcome evidence is explicit."
     }
   },
-  "bibtex": "@inproceedings{Kaslow2020CubeSatSystemReferenceModel,\n  title = {Development and Application of the CubeSat System Reference Model},\n  author = {Kaslow, D. and Cahill, P. T. and Ayres, B.},\n  booktitle = {2020 IEEE Aerospace Conference},\n  year = {2020},\n  publisher = {IEEE},\n  doi = {10.1109/AERO47225.2020.9172714},\n  url = {https://doi.org/10.1109/AERO47225.2020.9172714}\n}"
+  "bibtex": "@inproceedings{Kaslow2020CubeSatSystemReferenceModel,\n  title = {Development and Application of the CubeSat System Reference Model},\n  author = {Kaslow, D. and Cahill, P. T. and Ayres, B.},\n  booktitle = {2020 IEEE Aerospace Conference},\n  year = {2020},\n  publisher = {IEEE},\n  doi = {10.1109/AERO47225.2020.9172714},\n  url = {https://doi.org/10.1109/AERO47225.2020.9172714}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0011.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Replace the generality field's v1.1 migration-note evidence with direct paper evidence; values are otherwise supported.",
+      "Change IVV integration from trace-linked verification artifacts to model-contained verification artifacts if coding the highest evidenced level.",
+      "Do not code EPS reliability. Remove the historical solar/battery trade-study quote as reliability-subtype evidence; it supports performance trade-study/decision support only."
+    ],
+    "applied_at": "2026-05-28T15:59:43-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

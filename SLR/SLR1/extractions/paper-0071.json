@@ -504,10 +504,12 @@
       "values": [
         "template",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "The article provides a reusable layered SysML template/workflow and claims extension beyond RVSAT-1, but no downloadable package or formal reference model is supplied.",
+      "rationale": "The paper presents an RVSAT-1 SysML template and layered risk-management workflow, and explicitly claims the approach/framework can be reused for other complex systems with modifications. The realized model remains RVSAT-specific, so reuse is primarily of the method/workflow at a high level. Do not code mission-agnostic architecture, interface-focused model, or low-dynamics / non-detailed-behavior model as the reuse mechanism.",
       "evidence": [
         {
           "quote": "images captured from the template of the SysML model for RVSAT1 created in the Eclipse Papyrus IDE",
@@ -518,7 +520,11 @@
           "location": "Abstract"
         },
         {
-          "quote": "Being a modular approach, it also offers the leverage to modify or further develop this idea without many complications, contrary to the documentbased approach.",
+          "quote": "The proposed model is constructed in a layered configuration in SysML... organised in a top-down fashion allowing one to navigate from the top most system level to lower level elements.",
+          "location": "Introduction"
+        },
+        {
+          "quote": "Being a modular approach, it also offers the leverage to modify or further develop this idea without many complications",
           "location": "Summary"
         }
       ],
@@ -694,6 +700,26 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "The paper is not EPS-relevant and presents no EPS IVV model. Generic V&V traceability language and future MATLAB/Simulink interfacing do not show verification artifacts, trace-linked verification items, executable checks, simulation-in-the-loop, SIL/HIL, or implemented tool connections.",
+      "evidence": [
+        {
+          "quote": "This paper focuses on the application of the model-based approach to the process of risk management in RVSAT-1",
+          "location": "Introduction"
+        },
+        {
+          "quote": "This structure allows for seamless traceability and ease of access when performing validation and verification activities.",
+          "location": "Proposed Methodology"
+        },
+        {
+          "quote": "The future scope... can be interfaced with external tools such as MATLAB Systems Composer and Simulink",
+          "location": "Summary"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -740,6 +766,29 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "No EPS reliability is supported. Risk-management claims support only mission-assurance subtyping, because the paper ties risk management to mission-critical risks, system integrity, and failure probability. Generic consistency/completeness claims support model consistency/reliability. Non-reliability claims should remain not applicable at claim level. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "analysis of mission-critical risks have assumed paramount importance to ensure the optimum performance of the system in its operating environment",
+          "location": "Abstract"
+        },
+        {
+          "quote": "If risks to any project are haphazardly managed, the integrity of the system becomes questionable, and increases the probability of failure in its operational environment.",
+          "location": "Summary"
+        },
+        {
+          "quote": "it becomes strenuous to execute the required traceability and to maintain or reuse system requirements and design details",
+          "location": "MBSE and SysML"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1515,10 +1564,12 @@
         "values": [
           "template",
           "reusable workflow",
-          "method guidance"
+          "method guidance",
+          "high-level abstraction",
+          "specific-mission model with reusable method only"
         ],
         "status": "coded",
-        "rationale": "The article provides a reusable layered SysML template/workflow and claims extension beyond RVSAT-1, but no downloadable package or formal reference model is supplied.",
+        "rationale": "The paper presents an RVSAT-1 SysML template and layered risk-management workflow, and explicitly claims the approach/framework can be reused for other complex systems with modifications. The realized model remains RVSAT-specific, so reuse is primarily of the method/workflow at a high level. Do not code mission-agnostic architecture, interface-focused model, or low-dynamics / non-detailed-behavior model as the reuse mechanism.",
         "evidence": [
           {
             "quote": "images captured from the template of the SysML model for RVSAT1 created in the Eclipse Papyrus IDE",
@@ -1529,11 +1580,16 @@
             "location": "Abstract"
           },
           {
-            "quote": "Being a modular approach, it also offers the leverage to modify or further develop this idea without many complications, contrary to the documentbased approach.",
+            "quote": "The proposed model is constructed in a layered configuration in SysML... organised in a top-down fashion allowing one to navigate from the top most system level to lower level elements.",
+            "location": "Introduction"
+          },
+          {
+            "quote": "Being a modular approach, it also offers the leverage to modify or further develop this idea without many complications",
             "location": "Summary"
           }
         ],
-        "confidence": "high"
+        "confidence": "high",
+        "v1_1_repair_note": "v1.1 repair added controlled generality/reuse label(s) where supported by the completed extraction: high-level abstraction: the extraction describes a reusable abstract/reference/conceptual layer or early design representation rather than only a detailed one-off implementation; low-dynamics / non-detailed-behavior model: the extraction indicates limited, nominal, abstract, or non-detailed behavior is deliberately sufficient for the reusable model/method; specific-mission model with reusable method only: the extraction is primarily a single mission/case model whose reusable contribution is the method/workflow rather than a mission-agnostic model asset."
       }
     },
     "implementation_pathway_tailoring": {
@@ -1867,6 +1923,26 @@
         "rationale": "The model is not linked to hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation; assembly/integration/test appears only in author biography, not as a model output.",
         "evidence": [],
         "confidence": "high"
+      },
+      "ivv_integration_level": {
+        "values": [],
+        "status": "not_applicable",
+        "rationale": "The paper is not EPS-relevant and presents no EPS IVV model. Generic V&V traceability language and future MATLAB/Simulink interfacing do not show verification artifacts, trace-linked verification items, executable checks, simulation-in-the-loop, SIL/HIL, or implemented tool connections.",
+        "evidence": [
+          {
+            "quote": "This paper focuses on the application of the model-based approach to the process of risk management in RVSAT-1",
+            "location": "Introduction"
+          },
+          {
+            "quote": "This structure allows for seamless traceability and ease of access when performing validation and verification activities.",
+            "location": "Proposed Methodology"
+          },
+          {
+            "quote": "The future scope... can be interfaced with external tools such as MATLAB Systems Composer and Simulink",
+            "location": "Summary"
+          }
+        ],
+        "confidence": "high"
       }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
@@ -1940,7 +2016,11 @@
           "value": "Weak",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "No populated risk register, baseline comparison, independent validation, or mission outcome evidence is provided; benefits may follow from documentation reorganization rather than MBSE specifically."
+        "threats_or_alternative_explanations": "No populated risk register, baseline comparison, independent validation, or mission outcome evidence is provided; benefits may follow from documentation reorganization rather than MBSE specifically.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "System/subsystem risk understanding is tied to mission-critical risk management, but not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -2001,7 +2081,11 @@
           "value": "Weak",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "Traceability is described as hyperlinks/navigation, not as tested requirements/V&V/design-decision trace chains; no trace completeness metric is reported."
+        "threats_or_alternative_explanations": "Traceability is described as hyperlinks/navigation, not as tested requirements/V&V/design-decision trace chains; no trace completeness metric is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Traceability and ease of access for V&V activities are not presented as a reliability outcome and no IVV artifacts are shown."
       },
       {
         "claim_id": "C3",
@@ -2069,7 +2153,11 @@
           "value": "Weak",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "RPI is a risk-prioritization indicator, not evidence that risks are reduced or decisions improved; thresholds are not validated for this project."
+        "threats_or_alternative_explanations": "RPI is a risk-prioritization indicator, not evidence that risks are reduced or decisions improved; thresholds are not validated for this project.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "RPI and risk-cube prioritization are risk-management mechanisms linked to avoiding project/system failure, not EPS reliability."
       },
       {
         "claim_id": "C4",
@@ -2131,7 +2219,11 @@
           "value": "Unsupported",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "No time/effort measurements or user evaluation demonstrate that bookkeeping or workload is actually reduced."
+        "threats_or_alternative_explanations": "No time/effort measurements or user evaluation demonstrate that bookkeeping or workload is actually reduced.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The claim concerns a balanced approach to managing risks; this is mission-assurance-adjacent only, with no direct system reliability or EPS evidence."
       },
       {
         "claim_id": "C5",
@@ -2193,7 +2285,11 @@
           "value": "Weak",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "This is a generic MBSE argument cited in background, not a demonstrated outcome of the RVSAT-1 risk model."
+        "threats_or_alternative_explanations": "This is a generic MBSE argument cited in background, not a demonstrated outcome of the RVSAT-1 risk model.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Consistency, completeness, and design-change interpretation are model/process consistency claims, not EPS or mission reliability evidence."
       },
       {
         "claim_id": "C6",
@@ -2257,7 +2353,11 @@
           "value": "Unsupported",
           "status": "coded"
         },
-        "threats_or_alternative_explanations": "No reuse across projects, model package, or implemented interface is reported; future integration may require nontrivial toolchain work."
+        "threats_or_alternative_explanations": "No reuse across projects, model package, or implemented interface is reported; future integration may require nontrivial toolchain work.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/modularity and future tool-interface claims are not reliability outcomes as stated."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2478,5 +2578,17 @@
       }
     }
   },
-  "bibtex": "@inproceedings{Nagabhushan2022RVSATRiskSysML,\n  title = {A Model-Based Approach to Risk Management for RVSAT-1: a Student Nano-satellite Project - Using SysML},\n  author = {Nagabhushan, Shashank and Singh, Akash Kumar and S, Suresh Gowda},\n  booktitle = {2022 IEEE Aerospace Conference (AERO)},\n  year = {2022},\n  publisher = {IEEE},\n  doi = {10.1109/AERO53065.2022.9843435}\n}"
+  "bibtex": "@inproceedings{Nagabhushan2022RVSATRiskSysML,\n  title = {A Model-Based Approach to Risk Management for RVSAT-1: a Student Nano-satellite Project - Using SysML},\n  author = {Nagabhushan, Shashank and Singh, Akash Kumar and S, Suresh Gowda},\n  booktitle = {2022 IEEE Aerospace Conference (AERO)},\n  year = {2022},\n  publisher = {IEEE},\n  doi = {10.1109/AERO53065.2022.9843435}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0071.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism.",
+      "Do not add mission-agnostic architecture or interface-focused model; interfaces are present but not the demonstrated reuse mechanism.",
+      "Keep IVV as not applicable for EPS; generic V&V/future-tool language is not model-integrated IVV.",
+      "Do not code EPS reliability; reliability subtypes are limited to mission assurance and model consistency/reliability."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

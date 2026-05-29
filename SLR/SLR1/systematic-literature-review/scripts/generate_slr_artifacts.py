@@ -740,6 +740,32 @@ def count_by_study_field(studies: Sequence[dict], getter) -> List[dict]:
     ]
 
 
+def controlled_field_count_rows(studies: Sequence[dict], field_path: str) -> List[dict]:
+    """Count selected controlled values for a structured_code_summary field.
+
+    Unlike ``controlled_values``, this helper intentionally counts selected
+    values even when the status is ``none`` or ``not_reported``.  That is needed
+    for fields such as the v1.1 IVV integration level, where the controlled
+    value ``none/not reported`` is itself synthesis-relevant.
+    """
+    members: Dict[str, List[str]] = defaultdict(list)
+    statuses: Dict[str, Counter] = defaultdict(Counter)
+    for study in studies:
+        entry = study.get("structured_code_summary", {}).get(field_path, {})
+        for value in as_list(entry.get("values")):
+            members[value].append(study["corpus_id"])
+            statuses[value][entry.get("status", "")] += 1
+    return [
+        {
+            "category": category,
+            "count": len(ids),
+            "statuses": "; ".join(f"{status}={count}" for status, count in sorted(statuses[category].items()) if status),
+            "study_ids": compact_ids(ids),
+        }
+        for category, ids in sorted(members.items(), key=lambda kv: (-len(kv[1]), kv[0]))
+    ]
+
+
 def claim_evidence_rows(studies: Sequence[dict]) -> Tuple[List[dict], List[dict], int, int]:
     domain_counts: Dict[str, Counter] = {domain: Counter() for domain in OUTCOME_DOMAINS}
     domain_studies: Dict[str, set] = defaultdict(set)
@@ -1135,6 +1161,9 @@ def write_results_tables(
     gap_rows: Sequence[dict],
     total_claims: int,
     top_claim_count: int,
+    generality_rows: Sequence[dict],
+    ivv_level_rows: Sequence[dict],
+    reliability_subtype_rows: Sequence[dict],
 ) -> None:
     tier_counts = Counter(study.get("tier", "") for study in studies)
     confidence_counts = Counter(evidence_confidence(claim) for study in studies for claim in get_claims(study))
@@ -1177,10 +1206,28 @@ def write_results_tables(
             ],
         ),
         latex_simple_table(
+            "Reliability subtype counts from the focused codebook-refinement pass.",
+            "tab:reliability-subtype-counts",
+            ["Reliability subtype", "n"],
+            [[row["category"], row["count"]] for row in reliability_subtype_rows],
+        ),
+        latex_simple_table(
+            "Generality/reuse mechanism counts from the focused codebook-refinement pass.",
+            "tab:generality-reuse-counts",
+            ["Generality/reuse mechanism", "n"],
+            [[row["category"], row["count"]] for row in generality_rows],
+        ),
+        latex_simple_table(
             "Pre-physical V&V linkage counts. Categories are multi-label by study.",
             "tab:vv-linkage-counts",
             ["V&V linkage category", "n"],
             [[row["vv_linkage_category"], row["count"]] for row in vv_rows],
+        ),
+        latex_simple_table(
+            "Highest coded IVV integration level.",
+            "tab:ivv-integration-level-counts",
+            ["IVV integration level", "n"],
+            [[row["category"], row["count"]] for row in ivv_level_rows],
         ),
         latex_gap_table(gap_rows),
     ]
@@ -1206,6 +1253,9 @@ def write_data_summary(
     total_claims: int,
     total_domain_memberships: int,
     top_claim_count: int,
+    generality_rows: Sequence[dict],
+    ivv_level_rows: Sequence[dict],
+    reliability_subtype_rows: Sequence[dict],
 ) -> None:
     tier_counts = Counter(study.get("tier", "") for study in studies)
     quality_counts = Counter(str(get_quality(study)[0]) for study in studies)
@@ -1224,7 +1274,7 @@ def write_data_summary(
     lines.append("")
     lines.append("## Output files")
     lines.append("")
-    lines.append("- CSV: `data/study_characteristics.csv`, `data/eps_relevance_counts.csv`, `data/approach_classification_counts.csv`, `data/claim_evidence_by_outcome.csv`, `data/vv_linkage_counts.csv`, `data/gap_mapping_counts.csv`, `data/top_value_claims.csv`.")
+    lines.append("- CSV: `data/study_characteristics.csv`, `data/eps_relevance_counts.csv`, `data/approach_classification_counts.csv`, `data/claim_evidence_by_outcome.csv`, `data/vv_linkage_counts.csv`, `data/gap_mapping_counts.csv`, `data/generality_reuse_mechanism_counts.csv`, `data/ivv_integration_level_counts.csv`, `data/reliability_subtype_counts.csv`, `data/top_value_claims.csv`.")
     lines.append("- Figures: `figures/prisma_flow.{pdf,png}`, `figures/eps_relevance_counts.{pdf,png}`, `figures/claim_evidence_by_outcome.{pdf,png}`, `figures/vv_linkage_counts.{pdf,png}`, `figures/gap_mapping_counts.{pdf,png}`. SVG sources are retained for regenerated plots.")
     lines.append("- LaTeX/Markdown snippets: `drafts/results_tables.tex`, `drafts/data_summary.md`.")
     lines.append("")
@@ -1269,9 +1319,21 @@ def write_data_summary(
         ],
     ))
     lines.append("")
+    lines.append("## Reliability subtype counts")
+    lines.append("")
+    lines.append(markdown_table(["Reliability subtype", "Count", "Statuses"], [[row["category"], row["count"], row["statuses"]] for row in reliability_subtype_rows]))
+    lines.append("")
+    lines.append("## Generality/reuse mechanism counts")
+    lines.append("")
+    lines.append(markdown_table(["Generality/reuse mechanism", "Count", "Statuses"], [[row["category"], row["count"], row["statuses"]] for row in generality_rows]))
+    lines.append("")
     lines.append("## Pre-physical V&V linkage counts")
     lines.append("")
     lines.append(markdown_table(["V&V linkage category", "Count"], [[row["vv_linkage_category"], row["count"]] for row in vv_rows]))
+    lines.append("")
+    lines.append("## IVV integration level counts")
+    lines.append("")
+    lines.append(markdown_table(["IVV integration level", "Count", "Statuses"], [[row["category"], row["count"], row["statuses"]] for row in ivv_level_rows]))
     lines.append("")
     lines.append("## Gap mapping counts")
     lines.append("")
@@ -1287,6 +1349,7 @@ def write_data_summary(
     lines.append(f"- `claim_evidence_by_outcome.csv` uses deterministic multi-label mapping from controlled `outcome_category` codes only; no loose keyword categorization is applied. Claim-domain memberships can exceed the {total_claims} unique claim records because some controlled outcome codes map to more than one synthesis domain.")
     lines.append("- Evidence strength is taken from the standardized `evidence_confidence`/`evidence_confidence_rating` field. `top_value_claims.csv` contains all Moderate and Strong claims.")
     lines.append("- `vv_linkage_counts.csv` is multi-label at the study level and is derived from controlled `eps_verification_specific` artifact, pre-physical mechanism, and integration/test-readiness codes.")
+    lines.append("- `ivv_integration_level_counts.csv`, `reliability_subtype_counts.csv`, and `generality_reuse_mechanism_counts.csv` report selected controlled values from the v1.1 focused recoding pass.")
     lines.append("- Gap labels and order follow the five Buruso Table 5-inspired gap fields already coded in the per-study extraction JSON files.")
     lines.append("- PRISMA counts and the base PRISMA graphic are reused from the scoping review without modifying scoping-review source/output files.")
     lines.append("")
@@ -1326,6 +1389,9 @@ def main() -> None:
     claim_rows, top_claim_rows, total_claims, total_domain_memberships = claim_evidence_rows(studies)
     vv_rows = vv_linkage_rows(studies)
     gap_rows = gap_mapping_rows(studies)
+    generality_rows = controlled_field_count_rows(studies, "mbse_objective_scope_artifacts.generality_reuse_mechanism")
+    ivv_level_rows = controlled_field_count_rows(studies, "eps_verification_specific.ivv_integration_level")
+    reliability_subtype_rows = controlled_field_count_rows(studies, "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype")
 
     write_csv(
         DATA_DIR / "study_characteristics.csv",
@@ -1349,6 +1415,9 @@ def main() -> None:
     )
     write_csv(DATA_DIR / "vv_linkage_counts.csv", vv_rows, ["vv_linkage_category", "count", "study_ids"])
     write_csv(DATA_DIR / "gap_mapping_counts.csv", gap_rows, ["gap_key", "gap_label", "classification", "count", "study_ids"])
+    write_csv(DATA_DIR / "generality_reuse_mechanism_counts.csv", generality_rows, ["category", "count", "statuses", "study_ids"])
+    write_csv(DATA_DIR / "ivv_integration_level_counts.csv", ivv_level_rows, ["category", "count", "statuses", "study_ids"])
+    write_csv(DATA_DIR / "reliability_subtype_counts.csv", reliability_subtype_rows, ["category", "count", "statuses", "study_ids"])
     write_csv(
         DATA_DIR / "top_value_claims.csv",
         top_claim_rows,
@@ -1359,7 +1428,19 @@ def main() -> None:
     )
 
     generate_figures(eps_rows, claim_rows, vv_rows, gap_rows, scoping_info["prisma_counts"])
-    write_results_tables(studies, eps_rows, approach_rows, claim_rows, vv_rows, gap_rows, total_claims, len(top_claim_rows))
+    write_results_tables(
+        studies,
+        eps_rows,
+        approach_rows,
+        claim_rows,
+        vv_rows,
+        gap_rows,
+        total_claims,
+        len(top_claim_rows),
+        generality_rows,
+        ivv_level_rows,
+        reliability_subtype_rows,
+    )
     write_data_summary(
         studies,
         protocol_rqs,
@@ -1372,6 +1453,9 @@ def main() -> None:
         total_claims,
         total_domain_memberships,
         len(top_claim_rows),
+        generality_rows,
+        ivv_level_rows,
+        reliability_subtype_rows,
     )
 
     print(f"Wrote data CSVs to {DATA_DIR.relative_to(SLR1_DIR.parent.parent)}")

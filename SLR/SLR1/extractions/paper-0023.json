@@ -597,30 +597,29 @@
         "template",
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
       "status": "coded",
-      "rationale": "The authors present a reusable framework/repository, package organization, process flows, and guidance tailored to academic teams; no open package/profile/library is reported.",
+      "rationale": "The paper claims a reusable framework/repository/reference model for university CubeSat/nanosatellite teams, expressed through abstract lifecycle/views and process flows. It also includes generic subsystem/interface architecture and explicitly generalizes beyond MASAT1 in the ConOps. Do not code low-dynamics / non-detailed-behavior model from absence of executable detail alone.",
       "evidence": [
         {
-          "quote": "Section 2: \"The aim of using MBSE for a nanosatellite project is to create a model framework or repository that can be used by university teams (with limited resources) wishing to design CubeSat or Nanosatellite projects. This type of formal modeling application will guide them through the entire nanosatellite mission design and management process (mission analysis, system design verification, and validation).\"",
-          "location": "not specified"
+          "quote": "The aim of using MBSE for a nanosatellite project is to create a model framework or repository that can be used by university teams (with limited resources) wishing to design CubeSat or Nanosatellite projects.",
+          "location": "Section 2"
         },
         {
-          "quote": "Section 5: \"MBSE approach can be used to create a PBS model repository that can be used by university teams designing nanosatellite projects, for requirements, design, analysis verification, and validation activities.\"",
-          "location": "not specified"
+          "quote": "MBSE approach can be used to create a PBS model repository that can be used by university teams designing nanosatellite projects, for requirements, design, analysis verification, and validation activities. Choosing to use package diagrams at this level of abstract modeling helps stakeholders understand the structure of the model.",
+          "location": "Section 5"
         },
         {
-          "quote": "Section 3.4/Fig. 8: Needs Definition establishes stakeholders, NGOs, ConOps, and expectation statements and validates MCR; Requirements Definition develops top-level mission and functional requirements, flows down system requirements, develops architecture, analyzes/evaluates, and validates MRR.",
-          "location": "not specified"
+          "quote": "Define functional and subsystem interfaces",
+          "location": "Fig. 9 / Section 3.4"
         },
         {
-          "quote": "Section 3.4/Fig. 9: Functional Breakdown refines top-level requirements and ConOps, translates requirements into functions, decomposes and allocates functions to lower PBS levels, defines functional/subsystem interfaces, analyzes/baselines the logical decomposition model, and outputs PBS/WBS/CBS at System Definition Review.",
-          "location": "not specified"
-        },
-        {
-          "quote": "Section 1: the paper aims to provide MBSE \"including the initial phases of preparation, management, and analysis, tailored for university projects carried out by cohorts of students.\"",
-          "location": "not specified"
+          "quote": "Although MASAT1 mission uses passive attitude control, an attitude control mode has been included in ConOps to generalize the model proposed in this paper.",
+          "location": "Section 5.3"
         }
       ],
       "confidence": "high"
@@ -866,6 +865,28 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "trace-linked verification artifacts"
+      ],
+      "status": "coded",
+      "rationale": "The SysML requirements table/matrix links requirements to satisfying model elements and verifying behavior/test artifacts, including a Power System satisfy link and Bus System Activation verification. No executable checks, simulation-in-the-loop, SIL/HIL, or physical verification evidence is reported.",
+      "evidence": [
+        {
+          "quote": "These tables describe the requirements and their relationship to other SysML design elements to facilitate requirements traceability, satisfaction, and verification.",
+          "location": "Section 5.1"
+        },
+        {
+          "quote": "The \"Satisfied By\" column shows the model elements that fulfill the requirement. For example, the \"Power System\" subsystem must satisfy operational requirement 100.1.6.",
+          "location": "Section 5.1 / Fig. 15"
+        },
+        {
+          "quote": "The 'Verified By' column shows the specific test cases that determine how the system meets the requirement. For example, the \"Bus System Activation\" activity diagram ... is used to verify operational requirement 100.1.6.",
+          "location": "Section 5.1 / Fig. 15"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "links to hardware integration",
@@ -929,6 +950,31 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "generic reliability claim"
+      ],
+      "status": "coded",
+      "rationale": "The paper directly makes a broad mission-reliability claim for MBSE/SysML and claims design consistency; traceability and verification artifacts support mission-assurance subtype. It does not directly demonstrate EPS reliability, defect/error reduction, or process reliability. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "The combination of Model-Based Systems Engineering (MBSE) and Systems Modeling Language (SysML) emerged as an alternative management and design approach that improves mission reliability ... Typical advantages of MBSE are that it provides better traceability, design consistency, quality improvement, and reduced document management overhead.",
+          "location": "Section 1"
+        },
+        {
+          "quote": "These tables describe the requirements and their relationship to other SysML design elements to facilitate requirements traceability, satisfaction, and verification.",
+          "location": "Section 5.1"
+        },
+        {
+          "quote": "The LEOP flow activity diagram is also a way to \"verify\" functional or operational requirements, such as the Bus System Activation state machine (Fig. 23), which verifies operational requirements 100.1.6.",
+          "location": "Section 5.3"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1687,9 +1733,35 @@
         "template",
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
-      "reuse_availability_notes": "The framework is intended as a reusable repository/template for university teams, but no model files, open package, scripts, or repository URL are reported."
+      "reuse_availability_notes": "The framework is intended as a reusable repository/template for university teams, but no model files, open package, scripts, or repository URL are reported.",
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper claims a reusable framework/repository/reference model for university CubeSat/nanosatellite teams, expressed through abstract lifecycle/views and process flows. It also includes generic subsystem/interface architecture and explicitly generalizes beyond MASAT1 in the ConOps. Do not code low-dynamics / non-detailed-behavior model from absence of executable detail alone.",
+        "evidence": [
+          {
+            "quote": "The aim of using MBSE for a nanosatellite project is to create a model framework or repository that can be used by university teams (with limited resources) wishing to design CubeSat or Nanosatellite projects.",
+            "location": "Section 2"
+          },
+          {
+            "quote": "MBSE approach can be used to create a PBS model repository that can be used by university teams designing nanosatellite projects, for requirements, design, analysis verification, and validation activities. Choosing to use package diagrams at this level of abstract modeling helps stakeholders understand the structure of the model.",
+            "location": "Section 5"
+          },
+          {
+            "quote": "Define functional and subsystem interfaces",
+            "location": "Fig. 9 / Section 3.4"
+          },
+          {
+            "quote": "Although MASAT1 mission uses passive attitude control, an attitude control mode has been included in ConOps to generalize the model proposed in this paper.",
+            "location": "Section 5.3"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1811,7 +1883,29 @@
         "links to hardware integration",
         "software integration"
       ],
-      "notes": "EPS coverage is architectural and requirement/behavior linkage oriented. No power-budget calculation, executed simulation, test procedure details, acceptance results, SIL/HIL link, or physical EPS verification evidence is reported."
+      "notes": "EPS coverage is architectural and requirement/behavior linkage oriented. No power-budget calculation, executed simulation, test procedure details, acceptance results, SIL/HIL link, or physical EPS verification evidence is reported.",
+      "ivv_integration_level": {
+        "values": [
+          "trace-linked verification artifacts"
+        ],
+        "status": "coded",
+        "rationale": "The SysML requirements table/matrix links requirements to satisfying model elements and verifying behavior/test artifacts, including a Power System satisfy link and Bus System Activation verification. No executable checks, simulation-in-the-loop, SIL/HIL, or physical verification evidence is reported.",
+        "evidence": [
+          {
+            "quote": "These tables describe the requirements and their relationship to other SysML design elements to facilitate requirements traceability, satisfaction, and verification.",
+            "location": "Section 5.1"
+          },
+          {
+            "quote": "The \"Satisfied By\" column shows the model elements that fulfill the requirement. For example, the \"Power System\" subsystem must satisfy operational requirement 100.1.6.",
+            "location": "Section 5.1 / Fig. 15"
+          },
+          {
+            "quote": "The 'Verified By' column shows the specific test cases that determine how the system meets the requirement. For example, the \"Bus System Activation\" activity diagram ... is used to verify operational requirement 100.1.6.",
+            "location": "Section 5.1 / Fig. 15"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1851,7 +1945,10 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "The paper demonstrates one project-derived framework only; actual reuse, transferability, and team performance are not measured."
+        "threats_or_alternative_explanations": "The paper demonstrates one project-derived framework only; actual reuse, transferability, and team performance are not measured.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C2",
@@ -1892,7 +1989,10 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Simplification may be due to project context rather than MBSE itself; no comparison with an equivalent DBSE or ad hoc process is measured."
+        "threats_or_alternative_explanations": "Simplification may be due to project context rather than MBSE itself; no comparison with an equivalent DBSE or ad hoc process is measured.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C3",
@@ -1926,7 +2026,13 @@
         },
         "evidence_confidence_rating": "Unsupported",
         "confidence": "high",
-        "threats_or_alternative_explanations": "The reliability problem is attributed partly to DBSE/overspecified standards, but the paper provides no reliability analysis or outcome data showing MBSE changed failure likelihood."
+        "threats_or_alternative_explanations": "The reliability problem is attributed partly to DBSE/overspecified standards, but the paper provides no reliability analysis or outcome data showing MBSE changed failure likelihood.",
+        "reliability_subtype": [
+          "system/mission reliability",
+          "model consistency/reliability",
+          "generic reliability claim"
+        ],
+        "reliability_subtype_rationale": "Add system/mission reliability because the paper explicitly says MBSE/SysML improves mission reliability; keep generic reliability claim because it is unsupported by outcome data, and model consistency/reliability because the same claim cites design consistency."
       },
       {
         "claim_id": "C4",
@@ -1965,7 +2071,10 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Only extracts are shown; no full coverage audit, verification result, or independent review of trace correctness is reported."
+        "threats_or_alternative_explanations": "Only extracts are shown; no full coverage audit, verification result, or independent review of trace correctness is reported.",
+        "reliability_subtype": [
+          "mission assurance"
+        ]
       },
       {
         "claim_id": "C5",
@@ -1998,7 +2107,10 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Improved understanding is asserted by authors; no stakeholder survey, task performance, or comparison is provided."
+        "threats_or_alternative_explanations": "Improved understanding is asserted by authors; no stakeholder survey, task performance, or comparison is provided.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ]
       },
       {
         "claim_id": "C6",
@@ -2036,7 +2148,11 @@
         },
         "evidence_confidence_rating": "Moderate",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "Verification is model-artifact linkage rather than an executed simulation, formal proof, test procedure, SIL/HIL result, or hardware validation; the requirement is system operational rather than purely EPS."
+        "threats_or_alternative_explanations": "Verification is model-artifact linkage rather than an executed simulation, formal proof, test procedure, SIL/HIL result, or hardware validation; the requirement is system operational rather than purely EPS.",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Power-System-linked verification supports mission assurance/requirements verification only; do not code EPS reliability because no EPS reliability outcome or reliability analysis is provided."
       },
       {
         "claim_id": "C7",
@@ -2079,7 +2195,10 @@
         },
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "Conclusion uses author self-assessment without independent project-management metric; improvements may reflect increased process discipline rather than MBSE artifacts specifically."
+        "threats_or_alternative_explanations": "Conclusion uses author self-assessment without independent project-management metric; improvements may reflect increased process discipline rather than MBSE artifacts specifically.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C8",
@@ -2112,7 +2231,10 @@
         },
         "evidence_confidence_rating": "Unsupported",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Not implemented in the paper; outcome depends on future tool integration, executable semantics, and user validation."
+        "threats_or_alternative_explanations": "Not implemented in the paper; outcome depends on future tool integration, executable semantics, and user validation.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -2227,5 +2349,16 @@
       "extraction_confidence_rationale": "Full markdown was available and key claims/artifacts are explicitly described. Confidence in descriptive coding is high; confidence in outcome strength is intentionally lower and reflected in claim evidence ratings."
     }
   },
-  "bibtex": "@article{Hanafi2024EffectiveMBSEFramework,\n  title = {Effective Model-Based Systems Engineering framework for academic nanosatellite project management and design},\n  author = {Hanafi, Ahmed and Moutakki, Zakaria and Karim, Mohamed and Rachidi, Tajjeeddine},\n  journal = {CEAS Space Journal},\n  year = {2024},\n  doi = {10.1007/s12567-024-00542-2}\n}"
+  "bibtex": "@article{Hanafi2024EffectiveMBSEFramework,\n  title = {Effective Model-Based Systems Engineering framework for academic nanosatellite project management and design},\n  author = {Hanafi, Ahmed and Moutakki, Zakaria and Karim, Mohamed and Rachidi, Tajjeeddine},\n  journal = {CEAS Space Journal},\n  year = {2024},\n  doi = {10.1007/s12567-024-00542-2}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0023.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add system/mission reliability to the aggregate reliability subtype and C3.",
+      "Do not add EPS reliability for the Power System verification example.",
+      "Generality should emphasize reusable reference/framework, mission-agnostic abstraction, and interfaces; remove low-dynamics / non-detailed-behavior model unless stricter evidence is available."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

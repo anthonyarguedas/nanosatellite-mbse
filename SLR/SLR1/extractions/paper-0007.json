@@ -447,22 +447,24 @@
       "values": [
         "reference model",
         "profile",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "status": "coded",
-      "rationale": "Generality/reuse is supported by the CubeSat Reference Model, a SysML technical measures profile, and a repeatable derivation method from stakeholder concerns to TPMs.",
+      "rationale": "The paper explicitly presents a reusable CubeSat Reference Model, a SysML Technical Measures Profile, and a general method for deriving MOEs, MOPs, and TPMs. The example is mission-level and generic rather than tied to a named mission, supporting high-level abstraction and mission-agnostic architecture. It does not support interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.",
       "evidence": [
         {
-          "quote": "Introduction: \"CubeSat Reference Model that can be used by any CubeSat development team\"",
-          "location": "not specified"
+          "quote": "the development of a CubeSat Reference Model that can be used by any CubeSat development team",
+          "location": "Section 1. Introduction"
         },
         {
-          "quote": "Section 5: \"Figure 1 shows the model elements created as part of the technical measures profile used in this approach.\"",
-          "location": "not specified"
+          "quote": "Figure 1 shows the model elements created as part of the technical measures profile used in this approach.",
+          "location": "Section 5. Incorporating Technical Measures"
         },
         {
-          "quote": "Conclusion: \"general enough to be easily incorporated into many systems engineering methodologies.\"",
-          "location": "not specified"
+          "quote": "This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.",
+          "location": "Section 6. Conclusion"
         }
       ],
       "confidence": "high"
@@ -622,6 +624,24 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "none",
+      "rationale": "The paper shows traceability and parametric technical-measure relationships, but it does not present integrated IVV artifacts such as a verification matrix, test cases, model-contained verification procedures, executable checks, SIL/HIL, or simulation-in-the-loop. V&V model elements are explicitly deferred to future work.",
+      "evidence": [
+        {
+          "quote": "technical measures form a basis for which verification and validation can occur. Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.",
+          "location": "Section 6. Future Work"
+        },
+        {
+          "quote": "This allows different solutions to be evaluated against the MOEs.",
+          "location": "Section 5. Relating MOPs to MOEs"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -658,6 +678,25 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Most outcome claims remain non-reliability claims, but the risk/mission-success claim is reliability-adjacent at CubeSat mission level because it refers to high failure rate and increasing mission success. There is no direct EPS reliability claim. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions and the role technical measurement could play in increasing their success.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Technical measures are used to: determine if the technical solution will meet stakeholder needs, provide early indications if the development effort is not progressing as needed to meet key milestones, predict the likelihood of the delivered solution to meet performance requirements, monitor high risk items, and assess the effectiveness of risk mitigation actions.",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1264,13 +1303,34 @@
       "generality_reuse_mechanism": [
         "reference model",
         "profile",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "evidence_quotes": [
         "Abstract: \"The purpose of this paper is to address that need.\"",
         "Section 5: \"This approach to incorporating technical measures requires the creation of unique model elements that are not part of SysML.\"",
         "Section 5: \"The qualitative descriptions captured in the MOE specifications are now translated into value properties of the mission enterprise.\""
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper explicitly presents a reusable CubeSat Reference Model, a SysML Technical Measures Profile, and a general method for deriving MOEs, MOPs, and TPMs. The example is mission-level and generic rather than tied to a named mission, supporting high-level abstraction and mission-agnostic architecture. It does not support interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.",
+        "evidence": [
+          {
+            "quote": "the development of a CubeSat Reference Model that can be used by any CubeSat development team",
+            "location": "Section 1. Introduction"
+          },
+          {
+            "quote": "Figure 1 shows the model elements created as part of the technical measures profile used in this approach.",
+            "location": "Section 5. Incorporating Technical Measures"
+          },
+          {
+            "quote": "This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.",
+            "location": "Section 6. Conclusion"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1470,7 +1530,25 @@
       "evidence_quotes": [
         "Section 5: \"service life of the CubeSat is a function of ... battery cycles, and solar cell life. These factors are captured as MOPs of the CubeSat in the form of value properties.\"",
         "Conclusion/Future Work: \"Future work is needed to incorporate model elements associated with those activities\"."
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "none/not reported"
+        ],
+        "status": "none",
+        "rationale": "The paper shows traceability and parametric technical-measure relationships, but it does not present integrated IVV artifacts such as a verification matrix, test cases, model-contained verification procedures, executable checks, SIL/HIL, or simulation-in-the-loop. V&V model elements are explicitly deferred to future work.",
+        "evidence": [
+          {
+            "quote": "technical measures form a basis for which verification and validation can occur. Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.",
+            "location": "Section 6. Future Work"
+          },
+          {
+            "quote": "This allows different solutions to be evaluated against the MOEs.",
+            "location": "Section 5. Relating MOPs to MOEs"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1503,7 +1581,10 @@
         "quote_location": "Section 5: \"This allows for complete traceability from the quantified value properties of the mission enterprise block back to the originating stakeholder concern. This enables quickly assessing the impact of any changes to stakeholder concerns.\" Conclusion: \"There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed.\"",
         "evidence_confidence_rating": "Moderate",
         "confidence": "high",
-        "threats_or_alternative_explanations": "Traceability is shown in illustrative model diagrams, but ease of impact assessment is not evaluated with user tasks, change scenarios, baseline process data, or project outcomes."
+        "threats_or_alternative_explanations": "Traceability is shown in illustrative model diagrams, but ease of impact assessment is not evaluated with user tasks, change scenarios, baseline process data, or project outcomes.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C2_parametric_trade_decision_support",
@@ -1534,7 +1615,10 @@
         "quote_location": "Section 5: \"In SysML, constraint blocks and parametric diagrams are used to perform this type of analysis... This allows different solutions to be evaluated against the MOEs.\" Section 5: \"This allows for evaluation of different subsystem solutions based on their impact to the MOP.\"",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "The diagrams may be sufficient for representing relationships, but the paper does not show solver execution, numeric values, sensitivity studies, or decision outcomes."
+        "threats_or_alternative_explanations": "The diagrams may be sufficient for representing relationships, but the paper does not show solver execution, numeric values, sensitivity studies, or decision outcomes.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C3_qualitative_measure_completeness_stakeholder_alignment",
@@ -1565,7 +1649,10 @@
         "quote_location": "Section 5: \"Users may be well versed at stating the need verbally, but not at capturing value properties. The MOE Specification is a model element created for capturing a user's description of the MOE.\" Conclusion: \"The use of textual specifications for defining technical measures broadens the scope to include all types of technical measures within the system model.\"",
         "evidence_confidence_rating": "Moderate",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "The claim is structurally plausible from the profile and examples, but no stakeholder evaluation demonstrates improved communication or completeness."
+        "threats_or_alternative_explanations": "The claim is structurally plausible from the profile and examples, but no stakeholder evaluation demonstrates improved communication or completeness.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C4_generality_reuse_tool_independence",
@@ -1594,7 +1681,10 @@
         "quote_location": "Introduction: \"CubeSat Reference Model that can be used by any CubeSat development team.\" Conclusion: \"This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.\"",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_or_alternative_explanations": "Tool independence is asserted from use of SysML/profile concepts but no implementation in multiple tools, exchange format, package, or replicated adoption is shown."
+        "threats_or_alternative_explanations": "Tool independence is asserted from use of SysML/profile concepts but no implementation in multiple tools, exchange format, package, or replicated adoption is shown.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C5_risk_mission_success_context",
@@ -1627,7 +1717,12 @@
         "quote_location": "Abstract: \"Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions and the role technical measurement could play in increasing their success.\" Technical measurement definition: measures \"provide insight into the progress... and the associated risks and issues\".",
         "evidence_confidence_rating": "Unsupported",
         "confidence": "low",
-        "threats_or_alternative_explanations": "High CubeSat failure rates may be driven by factors outside technical measurement; the paper provides no causal evidence that this MBSE approach improves reliability or mission assurance."
+        "threats_or_alternative_explanations": "High CubeSat failure rates may be driven by factors outside technical measurement; the paper provides no causal evidence that this MBSE approach improves reliability or mission assurance.",
+        "reliability_subtype": [
+          "system/mission reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "This claim links CubeSat high failure rate, mission success, risk insight, and technical measurement. It should not be coded as EPS reliability because the paper does not provide an EPS-specific reliability claim."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1699,5 +1794,16 @@
       "extraction_confidence_reason": "Paper text and figure descriptions clearly expose the method and claims. Confidence in factual extraction is high; confidence in effectiveness claims is lower due to limited evidence."
     }
   },
-  "bibtex": "@inproceedings{Kaslow2018TechnicalMeasurementCubeSat,\n  author = {Kaslow, David and Ayres, Bradley and Cahill, Philip T. and Hart, Laura},\n  title = {A Model-Based Systems Engineering Approach for Technical Measurement with Application to a CubeSat},\n  booktitle = {2018 IEEE Aerospace Conference},\n  year = {2018},\n  publisher = {IEEE},\n  doi = {10.1109/AERO.2018.8396443}\n}"
+  "bibtex": "@inproceedings{Kaslow2018TechnicalMeasurementCubeSat,\n  author = {Kaslow, David and Ayres, Bradley and Cahill, Philip T. and Hart, Laura},\n  title = {A Model-Based Systems Engineering Approach for Technical Measurement with Application to a CubeSat},\n  booktitle = {2018 IEEE Aerospace Conference},\n  year = {2018},\n  publisher = {IEEE},\n  doi = {10.1109/AERO.2018.8396443}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0007.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism; the paper does not present limited behavior as a reuse mechanism.",
+      "Downgrade ivv_integration_level from executable/model-based checks to none/not reported because V&V model elements are future work.",
+      "Add reliability subtype only for the mission-success/risk claim; do not code EPS reliability."
+    ],
+    "applied_at": "2026-05-28T15:59:43-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

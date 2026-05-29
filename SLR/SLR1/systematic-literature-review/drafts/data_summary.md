@@ -6,7 +6,7 @@ Protocol RQs read from `protocol.md`: RQ1: How can nanosatellite missions and EP
 
 ## Output files
 
-- CSV: `data/study_characteristics.csv`, `data/eps_relevance_counts.csv`, `data/approach_classification_counts.csv`, `data/claim_evidence_by_outcome.csv`, `data/vv_linkage_counts.csv`, `data/gap_mapping_counts.csv`, `data/top_value_claims.csv`.
+- CSV: `data/study_characteristics.csv`, `data/eps_relevance_counts.csv`, `data/approach_classification_counts.csv`, `data/claim_evidence_by_outcome.csv`, `data/vv_linkage_counts.csv`, `data/gap_mapping_counts.csv`, `data/generality_reuse_mechanism_counts.csv`, `data/ivv_integration_level_counts.csv`, `data/reliability_subtype_counts.csv`, `data/top_value_claims.csv`.
 - Figures: `figures/prisma_flow.{pdf,png}`, `figures/eps_relevance_counts.{pdf,png}`, `figures/claim_evidence_by_outcome.{pdf,png}`, `figures/vv_linkage_counts.{pdf,png}`, `figures/gap_mapping_counts.{pdf,png}`. SVG sources are retained for regenerated plots.
 - LaTeX/Markdown snippets: `drafts/results_tables.tex`, `drafts/data_summary.md`.
 
@@ -67,6 +67,37 @@ Scoping CSV inputs read: scoping-review/data/category_counts.csv, scoping-review
 | Other / uncategorized value claim | 22 | 3 | 9 | 10 | 0 | 9 | 3 |
 | Governance / ROI / project decisions | 10 | 2 | 6 | 1 | 1 | 6 | 5 |
 
+## Reliability subtype counts
+
+| Reliability subtype | Count | Statuses |
+|---|---|---|
+| model consistency/reliability | 34 | coded=34 |
+| mission assurance | 29 | coded=29 |
+| defect/error reduction | 11 | coded=11 |
+| system/mission reliability | 10 | coded=10 |
+| process reliability | 8 | coded=8 |
+| EPS reliability | 2 | coded=2 |
+| generic reliability claim | 2 | coded=2 |
+
+## Generality/reuse mechanism counts
+
+| Generality/reuse mechanism | Count | Statuses |
+|---|---|---|
+| method guidance | 39 | coded=39 |
+| reusable workflow | 34 | coded=34 |
+| high-level abstraction | 33 | coded=33 |
+| template | 24 | coded=24 |
+| mission-agnostic architecture | 22 | coded=22 |
+| reference model | 21 | coded=21 |
+| specific-mission model with reusable method only | 14 | coded=14 |
+| interface-focused model | 12 | coded=12 |
+| library | 11 | coded=11 |
+| low-dynamics / non-detailed-behavior model | 10 | coded=10 |
+| open package | 6 | coded=6 |
+| profile | 6 | coded=6 |
+| transformation | 6 | coded=6 |
+| pattern | 3 | coded=3 |
+
 ## Pre-physical V&V linkage counts
 
 | V&V linkage category | Count |
@@ -80,6 +111,18 @@ Scoping CSV inputs read: scoping-review/data/category_counts.csv, scoping-review
 | External tool or data-flow coupling for V&V | 11 |
 | Physical/SIL/HIL/integration-test readiness link | 10 |
 | Generic/planned V&V linkage only | 3 |
+
+## IVV integration level counts
+
+| IVV integration level | Count | Statuses |
+|---|---|---|
+| simulation-in-the-loop | 12 | coded=12 |
+| none/not reported | 10 | none=4; not_reported=6 |
+| executable/model-based checks | 6 | coded=6 |
+| trace-linked verification artifacts | 5 | coded=5 |
+| model-contained verification artifacts | 2 | coded=2 |
+| separate document only | 1 | coded=1 |
+| software/hardware-in-the-loop | 1 | coded=1 |
 
 ## Gap mapping counts
 
@@ -96,5 +139,6 @@ Scoping CSV inputs read: scoping-review/data/category_counts.csv, scoping-review
 - `claim_evidence_by_outcome.csv` uses deterministic multi-label mapping from controlled `outcome_category` codes only; no loose keyword categorization is applied. Claim-domain memberships can exceed the 270 unique claim records because some controlled outcome codes map to more than one synthesis domain.
 - Evidence strength is taken from the standardized `evidence_confidence`/`evidence_confidence_rating` field. `top_value_claims.csv` contains all Moderate and Strong claims.
 - `vv_linkage_counts.csv` is multi-label at the study level and is derived from controlled `eps_verification_specific` artifact, pre-physical mechanism, and integration/test-readiness codes.
+- `ivv_integration_level_counts.csv`, `reliability_subtype_counts.csv`, and `generality_reuse_mechanism_counts.csv` report selected controlled values from the v1.1 focused recoding pass.
 - Gap labels and order follow the five Buruso Table 5-inspired gap fields already coded in the per-study extraction JSON files.
 - PRISMA counts and the base PRISMA graphic are reused from the scoping review without modifying scoping-review source/output files.

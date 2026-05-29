@@ -490,22 +490,27 @@
       "values": [
         "profile",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction"
       ],
       "status": "coded",
-      "rationale": "Generality comes from a reusable RFD workflow based on a SMAD mission-design flow, SysML profile/stereotype customization, and method guidance for formal consistency/traceability.",
+      "rationale": "The paper proposes a reusable RFD/MBSE design process for pico-/nano-satellite systems generally, organized through high-level abstraction layers and supported by possible SysML profiles. It does not provide a specific-mission model, mission-agnostic architecture artifact, interface-focused reusable model, or deliberately low-dynamics reusable model.",
       "evidence": [
         {
-          "quote": "Section II.B: \"Customization of SysML for the RFD process can be accomplished through the SysML extensions of stereotypes... profiles.\"",
-          "location": "not specified"
+          "quote": "We propose to develop a model-based systems engineering process that results in high-confidence designs for small satellite systems in the pico-/nano-class",
+          "location": "Abstract"
         },
         {
-          "quote": "Section III.B: \"framework... based on the space systems mission design flow\".",
-          "location": "not specified"
+          "quote": "The framework for which we follow in implementing this RFD process is based on the space systems mission design flow",
+          "location": "Section III.B"
         },
         {
-          "quote": "Section IV defines consistency and traceability methodology across abstraction levels.",
-          "location": "not specified"
+          "quote": "each level of abstraction... represents a set of requirements or specifications, its associated models, and simulations",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "Customization of SysML for the RFD process can be accomplished through the SysML extensions of stereotypes, which are grouped through packages defined as profiles.",
+          "location": "Section II.B"
         }
       ],
       "confidence": "high"
@@ -696,6 +701,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "executable/model-based checks"
+      ],
+      "status": "coded",
+      "rationale": "At system level, the paper shows formal/model-based verification through PVS proof obligations and type-correctness checks tied to abstraction-level consistency and traceability. The current simulation-in-the-loop coding is overstated because simulations are described conceptually, while the concrete shown check is PVS/TCC-based. No EPS-specific IVV is reported.",
+      "evidence": [
+        {
+          "quote": "This section will provide definitions and methodology for insuring a correct-by-construction system through verification across each level of abstraction through consistency checks and refinement traceability between levels of abstraction.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "PVS will be used from mission objective to mission concept phase",
+          "location": "Section IV"
+        },
+        {
+          "quote": "Finally, we illustrate a proof obligation to ensure consistency and traceability within the PVS environment... this type checking condition (TCC) would have to be discharged successfully.",
+          "location": "Section V"
+        }
+      ],
+      "confidence": "medium"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -745,6 +772,31 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related claims are system-level or generic formal-methods/model-consistency claims. No claim directly supports EPS reliability. Non-reliability claims should remain not applicable at claim level. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "RFD process whose results are correct by construction, formally verified, and responsive to system requirement changes.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "many design failures and integration challenges can be eliminated",
+          "location": "Section I"
+        },
+        {
+          "quote": "it is possible to improve system reliability... ensure correct behavior... reviewed in depth for logical consistency",
+          "location": "Section II.C"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1362,13 +1414,37 @@
       "generality_reuse_mechanism": [
         "profile",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction"
       ],
       "key_quotes": [
         "\"This paper develops an intelligent framework that ties requirements, models, and simulations in a cogent manner.\"",
         "\"We have chosen the graphical modeling language of SysML to be used as the basis of our design process development for small satellites\".",
         "\"each level of abstraction... represents a set of requirements or specifications, its associated models, and simulations.\""
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper proposes a reusable RFD/MBSE design process for pico-/nano-satellite systems generally, organized through high-level abstraction layers and supported by possible SysML profiles. It does not provide a specific-mission model, mission-agnostic architecture artifact, interface-focused reusable model, or deliberately low-dynamics reusable model.",
+        "evidence": [
+          {
+            "quote": "We propose to develop a model-based systems engineering process that results in high-confidence designs for small satellite systems in the pico-/nano-class",
+            "location": "Abstract"
+          },
+          {
+            "quote": "The framework for which we follow in implementing this RFD process is based on the space systems mission design flow",
+            "location": "Section III.B"
+          },
+          {
+            "quote": "each level of abstraction... represents a set of requirements or specifications, its associated models, and simulations",
+            "location": "Section III.C"
+          },
+          {
+            "quote": "Customization of SysML for the RFD process can be accomplished through the SysML extensions of stereotypes, which are grouped through packages defined as profiles.",
+            "location": "Section II.B"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_or_phases": [
@@ -1466,7 +1542,29 @@
         "virtual integration"
       ],
       "evidence_verification_integrated_in_model": "System-level integration only: consistency occurs across abstraction levels, traceability occurs between them, and PVS checks are intended from mission objective to mission concept phase. No EPS model integration is shown.",
-      "integration_test_readiness": "not reported; no hardware/software integration, flat-sat, environmental test, operational validation, or EPS test readiness evidence."
+      "integration_test_readiness": "not reported; no hardware/software integration, flat-sat, environmental test, operational validation, or EPS test readiness evidence.",
+      "ivv_integration_level": {
+        "values": [
+          "executable/model-based checks"
+        ],
+        "status": "coded",
+        "rationale": "At system level, the paper shows formal/model-based verification through PVS proof obligations and type-correctness checks tied to abstraction-level consistency and traceability. The current simulation-in-the-loop coding is overstated because simulations are described conceptually, while the concrete shown check is PVS/TCC-based. No EPS-specific IVV is reported.",
+        "evidence": [
+          {
+            "quote": "This section will provide definitions and methodology for insuring a correct-by-construction system through verification across each level of abstraction through consistency checks and refinement traceability between levels of abstraction.",
+            "location": "Section IV"
+          },
+          {
+            "quote": "PVS will be used from mission objective to mission concept phase",
+            "location": "Section IV"
+          },
+          {
+            "quote": "Finally, we illustrate a proof obligation to ensure consistency and traceability within the PVS environment... this type checking condition (TCC) would have to be discharged successfully.",
+            "location": "Section V"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1501,7 +1599,13 @@
         "direct_quote": "\"Reliable and Formal Design (RFD) process whose results are correct by construction, formally verified, and responsive to system requirement changes.\"",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_or_alternative_explanations": "No PNSat/EPS case or outcome metric; correctness depends on complete and valid formalization of requirements and assumptions."
+        "threats_or_alternative_explanations": "No PNSat/EPS case or outcome metric; correctness depends on complete and valid formalization of requirements and assumptions.",
+        "reliability_subtype": [
+          "system/mission reliability",
+          "model consistency/reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "High-confidence, correct-by-construction, formally verified PNSat designs are system/mission and model-consistency assurance claims, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1534,7 +1638,12 @@
         "direct_quote": "\"By integrating formal methods into the proposed design process at the appropriate levels, many design failures and integration challenges can be eliminated.\"",
         "evidence_confidence_rating": "Unsupported",
         "extractor_confidence": "high",
-        "threats_or_alternative_explanations": "Physical interfaces, environmental effects, and incorrect assumptions may remain outside the formal model; no integration-test evidence is reported."
+        "threats_or_alternative_explanations": "Physical interfaces, environmental effects, and incorrect assumptions may remain outside the formal model; no integration-test evidence is reported.",
+        "reliability_subtype": [
+          "mission assurance",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Eliminating design failures and integration challenges is defect/error and mission-assurance related, with no EPS-specific reliability evidence."
       },
       {
         "claim_id": "C3",
@@ -1568,7 +1677,11 @@
         "direct_quote": "\"The integration of formal methods into the design process of a complex system can reduce the need for a significant amount testing during the system integration phase because of the \"correct by construction\" nature of the process. This leads to testing virtually at each level of refinement.\"",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_or_alternative_explanations": "Virtual tests are not shown for a satellite; no evidence of model fidelity, integration readiness, or residual physical-test needs."
+        "threats_or_alternative_explanations": "Virtual tests are not shown for a satellite; no evidence of model fidelity, integration readiness, or residual physical-test needs.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim is about virtual testing reducing integration-test burden, effort, or schedule; reliability is not the claimed outcome."
       },
       {
         "claim_id": "C4",
@@ -1600,7 +1713,11 @@
         "direct_quote": "\"Another important aspect of SysML is that it facilitates communication by being a common language across organizational disciplines, thereby reducing ambiguity caused by a lack of a common formal design semantics.\"",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_or_alternative_explanations": "Benefits depend on team adoption, modeling skill, profile quality, and governance; none are evaluated."
+        "threats_or_alternative_explanations": "Benefits depend on team adoption, modeling skill, profile quality, and governance; none are evaluated.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "SysML common semantics and ambiguity reduction support model/process consistency, not EPS or physical-system reliability."
       },
       {
         "claim_id": "C5",
@@ -1633,7 +1750,13 @@
         "direct_quote": "\"By specifying a complex system in a mathematically rigorous format, it is possible to improve system reliability\"; Section V: \"this type checking condition (TCC) would have to be discharged successfully.\"",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_or_alternative_explanations": "Formal methods cannot correct wrong assumptions; PVS example is a railway crossing and the TCC is not reported as a satellite result."
+        "threats_or_alternative_explanations": "Formal methods cannot correct wrong assumptions; PVS example is a railway crossing and the TCC is not reported as a satellite result.",
+        "reliability_subtype": [
+          "system/mission reliability",
+          "model consistency/reliability",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Formal specifications and PVS checks are claimed to improve system reliability, expose contradictions, and support correctness; the claim is generic/system-level, not EPS-specific."
       },
       {
         "claim_id": "C6",
@@ -1666,7 +1789,11 @@
         "direct_quote": "\"Through traceability, each project engineer has access to contextual information that can assist in determining where a requirement came from, its importance, how it was implemented, and how it was tested.\"",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_or_alternative_explanations": "No traceability tool implementation or trace-link dataset; authors note constraining refinements may limit design space."
+        "threats_or_alternative_explanations": "No traceability tool implementation or trace-link dataset; authors note constraining refinements may limit design space.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Formal traceability across refinement levels supports model consistency and verifiable requirement lineage, not EPS reliability."
       },
       {
         "claim_id": "C7",
@@ -1696,7 +1823,11 @@
         "direct_quote": "\"the use of formal methods in design also offers the benefits to the involved engineering disciplines by rigorously specify systems goals and requirements for both peer review and archival purposes\".",
         "evidence_confidence_rating": "Unsupported",
         "extractor_confidence": "high",
-        "threats_or_alternative_explanations": "Formal notations may reduce readability for practicing engineers; no artifacts are made available for independent review."
+        "threats_or_alternative_explanations": "Formal notations may reduce readability for practicing engineers; no artifacts are made available for independent review.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Peer-review and archival/reproducibility value is not a reliability claim."
       },
       {
         "claim_id": "C8",
@@ -1731,7 +1862,11 @@
         "direct_quote": "\"This proposed RFD process... notionally should lead to a correct design with minimal-to-no redesign through the use of an agile and formal design process based on models.\"",
         "evidence_confidence_rating": "Unsupported",
         "extractor_confidence": "high",
-        "threats_or_alternative_explanations": "The authors qualify the effect as notional; no project adoption data or baseline comparison is provided."
+        "threats_or_alternative_explanations": "The authors qualify the effect as notional; no project adoption data or baseline comparison is provided.",
+        "reliability_subtype": [
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Minimal-to-no redesign and correct design imply defect/error reduction; no EPS reliability is supported."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1853,5 +1988,16 @@
       "extraction_confidence_reason": "The paper is fully available in markdown and the main methodological constructs are explicit; outcome evidence remains weak but classification is clear."
     }
   },
-  "bibtex": "@inproceedings{edmonson2014smallSatelliteSystemsDesignMethodology,\n  title = {Small Satellite Systems Design Methodology: A Formal and Agile Design Process},\n  author = {Edmonson, William and Chenou, Jules and Neogi, Natasha and Herencia-Zapana, Heber},\n  year = {2014},\n  booktitle = {IEEE Systems Conference},\n  publisher = {IEEE},\n  doi = {10.1109/syscon.2014.6819305},\n  url = {https://doi.org/10.1109/syscon.2014.6819305}\n}"
+  "bibtex": "@inproceedings{edmonson2014smallSatelliteSystemsDesignMethodology,\n  title = {Small Satellite Systems Design Methodology: A Formal and Agile Design Process},\n  author = {Edmonson, William and Chenou, Jules and Neogi, Natasha and Herencia-Zapana, Heber},\n  year = {2014},\n  booktitle = {IEEE Systems Conference},\n  publisher = {IEEE},\n  doi = {10.1109/syscon.2014.6819305},\n  url = {https://doi.org/10.1109/syscon.2014.6819305}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0010.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Keep generality/reuse as profile, reusable workflow, method guidance, and high-level abstraction; do not add mission-agnostic architecture, interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.",
+      "Repair IVV integration level from simulation-in-the-loop to executable/model-based checks; PVS/TCC proof obligations are shown, but implemented simulation-in-the-loop is not demonstrated.",
+      "Do not code EPS reliability for any claim; reliability evidence is system-level, model-consistency, mission-assurance, or defect/error-reduction only."
+    ],
+    "applied_at": "2026-05-28T15:59:43-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

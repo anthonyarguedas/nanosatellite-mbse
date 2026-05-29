@@ -444,21 +444,31 @@
       "values": [
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "status": "coded",
-      "rationale": "Generality is supported by the CubeSat Reference Model lineage and an eight-step repeatable method/workflow for teams.",
+      "rationale": "The paper presents a repeatable eight-step method tied to the CubeSat Reference Model and uses generic CubeSat mission-data requirements/use cases that teams can tailor to unique missions. High-level abstraction and mission-agnostic architecture are supported only at the generic CubeSat enterprise / mission-data functional-architecture level. Do not code interface-focused model because interfaces are future work; do not code low-dynamics / non-detailed-behavior model because limited behavior detail is a scope limitation, not a claimed reuse mechanism; do not code specific-mission model with reusable method only because the examples are generic/reference-model examples, not a named specific mission.",
       "evidence": [
         {
-          "quote": "Abstract: 'repeatable, generalized method for CubeSat development teams to follow'.",
-          "location": "not specified"
+          "quote": "This approach provides a repeatable, generalized method for CubeSat development teams to follow",
+          "location": "Abstract"
         },
         {
-          "quote": "Introduction: approach complements SSWG 'CubeSat Reference Model'.",
-          "location": "not specified"
+          "quote": "the SSWG's recent effort has been focused on the development of a CubeSat Reference Model to be used by university CubeSat teams, though it could be used by any CubeSat development team",
+          "location": "Introduction"
+        },
+        {
+          "quote": "Teams would naturally modify these generic requirements to specify the actual mission data collection and distribution requirements for their unique mission.",
+          "location": "Section 4, Starting Point-CubeSat Mission Requirements"
+        },
+        {
+          "quote": "Generalizability. This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.",
+          "location": "Conclusion"
         }
       ],
-      "confidence": "high"
+      "confidence": "medium"
     },
     "implementation_pathway_tailoring.approach_classification": {
       "values": [
@@ -603,6 +613,24 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "none",
+      "rationale": "No EPS model or integrated system/EPS verification artifacts are presented. Requirements-to-use-case and use-case-to-activity refine links are traceability links, not IVV integration. Verification of functional requirements is explicitly left for future work.",
+      "evidence": [
+        {
+          "quote": "Related topics are the allocation of the behaviors to the structural elements responsible for performing those behaviors and verification of the functional requirements.",
+          "location": "Future Work"
+        },
+        {
+          "quote": "The approach presented here just focuses on functional requirements.",
+          "location": "Future Work"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -639,6 +667,30 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent support is generic/process/model-level: reduced development risk, improved quality, rigor, and single-source-of-truth claims. The CubeSat high-failure-rate motivation supports a weak mission-assurance subtype, but there is no EPS reliability or direct system/mission reliability evidence. Non-reliability claims should remain not applicable at claim level. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Some of the benefits of using an MBSE approach over a traditional document-based approach are: enhanced communications, reduced development risk, improved quality, and enhanced knowledge transfer",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Systems engineering artifacts produced using this approach ... are captured in a system model which serves as a single-source-of-truth",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The rapid growth of CubeSat missions combined with historically high failure rates indicates a need for rigorous systems engineering practices",
+          "location": "Section 3, CubeSats"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1221,13 +1273,38 @@
       "generality_reuse_mechanism": [
         "reference model",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
       ],
       "key_method_quotes": [
         "Abstract: 'This paper describes an eight-step approach for defining the behaviors of CubeSats that begins with mission requirements and ends with a functional architecture modeled as an activity hierarchy using... SysML.'",
         "Introduction: 'This approach does not attempt to develop an entirely new methodology. Instead, it draws from existing methodologies...'",
         "Conclusion: 'The approach begins with a well-defined set of mission requirements and ends with a representation of the functional architecture captured as an activity hierarchy.'"
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper presents a repeatable eight-step method tied to the CubeSat Reference Model and uses generic CubeSat mission-data requirements/use cases that teams can tailor to unique missions. High-level abstraction and mission-agnostic architecture are supported only at the generic CubeSat enterprise / mission-data functional-architecture level. Do not code interface-focused model because interfaces are future work; do not code low-dynamics / non-detailed-behavior model because limited behavior detail is a scope limitation, not a claimed reuse mechanism; do not code specific-mission model with reusable method only because the examples are generic/reference-model examples, not a named specific mission.",
+        "evidence": [
+          {
+            "quote": "This approach provides a repeatable, generalized method for CubeSat development teams to follow",
+            "location": "Abstract"
+          },
+          {
+            "quote": "the SSWG's recent effort has been focused on the development of a CubeSat Reference Model to be used by university CubeSat teams, though it could be used by any CubeSat development team",
+            "location": "Introduction"
+          },
+          {
+            "quote": "Teams would naturally modify these generic requirements to specify the actual mission data collection and distribution requirements for their unique mission.",
+            "location": "Section 4, Starting Point-CubeSat Mission Requirements"
+          },
+          {
+            "quote": "Generalizability. This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.",
+            "location": "Conclusion"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_or_phases": [
@@ -1478,7 +1555,25 @@
       "evidence_quotes": [
         "Future Work: 'Related topics are... verification of the functional requirements.'",
         "Table 1 requirements are Collect Mission Data and Distribute Mission Data, not EPS/power requirements."
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "none/not reported"
+        ],
+        "status": "none",
+        "rationale": "No EPS model or integrated system/EPS verification artifacts are presented. Requirements-to-use-case and use-case-to-activity refine links are traceability links, not IVV integration. Verification of functional requirements is explicitly left for future work.",
+        "evidence": [
+          {
+            "quote": "Related topics are the allocation of the behaviors to the structural elements responsible for performing those behaviors and verification of the functional requirements.",
+            "location": "Future Work"
+          },
+          {
+            "quote": "The approach presented here just focuses on functional requirements.",
+            "location": "Future Work"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1514,7 +1609,13 @@
         "threats_alternative_explanations": [
           "The benefits are imported from a general MBSE reference and not evaluated for this CubeSat method.",
           "No CubeSat-specific baseline, metric, or stakeholder validation is reported."
-        ]
+        ],
+        "reliability_subtype": [
+          "process reliability",
+          "model consistency/reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Generic MBSE claims concern reduced development risk, improved quality, rigor, and a single-source system model; this is process/model reliability-adjacent and weak mission assurance, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1549,7 +1650,11 @@
         "threats_alternative_explanations": [
           "Examples are illustrative and limited to mission data collection/distribution.",
           "No evidence that independent teams reused the method or reference model successfully."
-        ]
+        ],
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Repeatability/generality and reference-model reuse claim; no reliability-adjacent outcome."
       },
       {
         "claim_id": "C3",
@@ -1583,7 +1688,11 @@
         "threats_alternative_explanations": [
           "Traceability is shown for two example mission requirements/use cases, not a full mission requirements set.",
           "No verification of completeness or trace correctness by stakeholders/tools is reported."
-        ]
+        ],
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Traceability/completeness claim only; no direct reliability, assurance, defect, or EPS reliability claim."
       },
       {
         "claim_id": "C4",
@@ -1617,7 +1726,11 @@
         "threats_alternative_explanations": [
           "Only selected branches of the activity hierarchy are illustrated.",
           "Future work is needed for allocation, interfaces, and verification, so full architecture completeness is not established."
-        ]
+        ],
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Recursive decomposition/completeness claim only; no direct reliability-adjacent outcome."
       },
       {
         "claim_id": "C5",
@@ -1648,7 +1761,11 @@
         "threats_alternative_explanations": [
           "Only MagicDraw is shown in the paper.",
           "No interoperability or implementation evidence for other tools/methodologies is provided."
-        ]
+        ],
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Tool/method generalizability claim; no reliability-adjacent outcome."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1756,5 +1873,17 @@
       "extraction_confidence_rationale": "The paper is method-focused and the markdown captures the relevant sections, figures, appendices, and future work. Confidence is high for what is reported/absent; medium for lifecycle/tailoring classification where phase labels are inferred from requirements/operational scenario context."
     }
   },
-  "bibtex": "@inproceedings{Kaslow2017CubeSatBehaviors,\n  title = {A model-based systems engineering (MBSE) approach for defining the behaviors of CubeSats},\n  author = {Kaslow, D. and Ayres, B. and Cahill, P. T. and Hart, L. and Yntema, Rose},\n  booktitle = {2017 IEEE Aerospace Conference},\n  year = {2017},\n  publisher = {IEEE},\n  doi = {10.1109/AERO.2017.7943865}\n}"
+  "bibtex": "@inproceedings{Kaslow2017CubeSatBehaviors,\n  title = {A model-based systems engineering (MBSE) approach for defining the behaviors of CubeSats},\n  author = {Kaslow, D. and Ayres, B. and Cahill, P. T. and Hart, L. and Yntema, Rose},\n  booktitle = {2017 IEEE Aerospace Conference},\n  year = {2017},\n  publisher = {IEEE},\n  doi = {10.1109/AERO.2017.7943865}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0002.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism; the paper models behavior via activity hierarchies and does not present low behavioral detail as a reuse mechanism.",
+      "Do not code interface-focused model; interface requirements are explicitly future work.",
+      "Keep IVV at none/not reported with status none; refine links are not verification integration.",
+      "Add process reliability to C1 reliability_subtype; do not add EPS reliability or system/mission reliability."
+    ],
+    "applied_at": "2026-05-28T15:59:43-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

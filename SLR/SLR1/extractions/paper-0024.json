@@ -355,17 +355,26 @@
     },
     "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
       "values": [
-        "method guidance"
+        "method guidance",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "Reusable contribution is a DSM-based entity-mapping method, not a reusable package/template.",
+      "rationale": "The reusable contribution is DSM-based guidance for mapping OPM/CPM/STEP entities across conceptual-to-detailed design. The CubeSat Earth-observation and thermal-control representations are illustrative, mission/subsystem-specific examples; the paper does not claim a reusable CubeSat/EPS template, mission-agnostic architecture, interface-focused spacecraft model, or reusable low-dynamics model.",
       "evidence": [
         {
-          "quote": "Section 3: extracting entities and mapping them through DSM-based methods.",
-          "location": "not specified"
+          "quote": "In our work we use DSM to map the core entities from conceptual to detail design. Doing this, we identify the overlaps and gaps in the digital engineering information exchange.",
+          "location": "Introduction"
+        },
+        {
+          "quote": "To illustrate the information flow from conceptual to detailed design, we chose to represent a technical system by various modeling approaches typical for the different phases of development.",
+          "location": "Section 4"
+        },
+        {
+          "quote": "An analysis for a CubeSat mission is also presented to illustrate the data correspondences between the various models.",
+          "location": "Abstract"
         }
       ],
-      "confidence": "medium"
+      "confidence": "high"
     },
     "implementation_pathway_tailoring.approach_classification": {
       "values": [
@@ -497,6 +506,22 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "The paper is not EPS-specific: Power System appears only as a top-level CubeSat subsystem, while the detailed example is thermal control. No verification matrix, test cases, executable checks, simulation-in-the-loop, SIL/HIL, or model-linked IVV artifacts are presented.",
+      "evidence": [
+        {
+          "quote": "The satellite consists of a number of subsystems, namely an Optical Instrument, a Power System, a Structure, a Communications System, a Thermal Control System, and an Attitude Determination and Control System.",
+          "location": "Section 4"
+        },
+        {
+          "quote": "Following the OPM approach, we can zoom-in on the thermal control system, to represent and design its structure and behavior.",
+          "location": "Section 4"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_applicable",
@@ -527,6 +552,28 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability"
+      ],
+      "status": "coded",
+      "rationale": "C3 and C4 are reliability-adjacent only at the model/data-representation level because they concern consistency/completeness of MBSE-to-PLM information exchange. C1 and C2 remain non-reliability claims. No EPS, system/mission, or physical reliability outcome is supported. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "CPM has been proposed as an advanced PLM framework, which includes behavioral and functional information, as well as geometry.",
+          "location": "Section 2.2"
+        },
+        {
+          "quote": "We have not found any correspondence of this entity with other entities in Fig. 1.",
+          "location": "Section 3, discussion of state"
+        },
+        {
+          "quote": "Current PLM systems explicitly represent space in great detail but leave the time domain mostly as an implicit dimension.",
+          "location": "Section 5"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1059,12 +1106,39 @@
         "entity-frequency chart",
         "STEP/AP242 SFA entity-count table"
       ],
-      "generality_reuse_mechanism": "Reusable method guidance for DSM-based entity mapping; no package/template available.",
+      "generality_reuse_mechanism": [
+        "method guidance",
+        "specific-mission model with reusable method only"
+      ],
       "direct_quotes": [
         "Introduction: analyze three important components of the digital chain to identify misfits preventing integration.",
         "Section 2.1: OPM entities and relationships allow representation of complex systems, function and behavior.",
         "Section 3: 23 entities chosen: 3 OPM, 10 CPM, 10 STEP."
-      ]
+      ],
+      "generality_reuse_mechanism_controlled_values": [
+        "method guidance",
+        "interface-focused model"
+      ],
+      "generality_reuse_mechanism_original_text": "Reusable method guidance for DSM-based entity mapping; no package/template available.",
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The reusable contribution is DSM-based guidance for mapping OPM/CPM/STEP entities across conceptual-to-detailed design. The CubeSat Earth-observation and thermal-control representations are illustrative, mission/subsystem-specific examples; the paper does not claim a reusable CubeSat/EPS template, mission-agnostic architecture, interface-focused spacecraft model, or reusable low-dynamics model.",
+        "evidence": [
+          {
+            "quote": "In our work we use DSM to map the core entities from conceptual to detail design. Doing this, we identify the overlaps and gaps in the digital engineering information exchange.",
+            "location": "Introduction"
+          },
+          {
+            "quote": "To illustrate the information flow from conceptual to detailed design, we chose to represent a technical system by various modeling approaches typical for the different phases of development.",
+            "location": "Section 4"
+          },
+          {
+            "quote": "An analysis for a CubeSat mission is also presented to illustrate the data correspondences between the various models.",
+            "location": "Abstract"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1164,7 +1238,23 @@
       "pre_physical_development_verification_mechanism": "not applicable/not reported",
       "evidence_verification_integrated_in_eps_model": "none",
       "integration_test_readiness": "not reported",
-      "notes": "Power System appears only at high level; detailed subsystem is thermal control."
+      "notes": "Power System appears only at high level; detailed subsystem is thermal control.",
+      "ivv_integration_level": {
+        "values": [],
+        "status": "not_applicable",
+        "rationale": "The paper is not EPS-specific: Power System appears only as a top-level CubeSat subsystem, while the detailed example is thermal control. No verification matrix, test cases, executable checks, simulation-in-the-loop, SIL/HIL, or model-linked IVV artifacts are presented.",
+        "evidence": [
+          {
+            "quote": "The satellite consists of a number of subsystems, namely an Optical Instrument, a Power System, a Structure, a Communications System, a Thermal Control System, and an Attitude Determination and Control System.",
+            "location": "Section 4"
+          },
+          {
+            "quote": "Following the OPM approach, we can zoom-in on the thermal control system, to represent and design its structure and behavior.",
+            "location": "Section 4"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1199,6 +1289,9 @@
           "No actual integrated toolchain evaluated.",
           "No baseline or project outcome metric.",
           "Tool-specific exchange feasibility not demonstrated."
+        ],
+        "reliability_subtype": [
+          "not applicable"
         ]
       },
       {
@@ -1232,6 +1325,9 @@
         "threats_alternative_explanations": [
           "No repository/change-control/trace matrix is shown.",
           "Statement functions as motivation rather than result."
+        ],
+        "reliability_subtype": [
+          "not applicable"
         ]
       },
       {
@@ -1270,7 +1366,11 @@
         "threats_alternative_explanations": [
           "Entity selection and F/P judgments are not independently validated.",
           "Mapping is conceptual rather than tested automated exchange."
-        ]
+        ],
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "DSM mapping identifies overlaps, gaps, and misfits in information exchange, so the reliability-adjacent aspect is model/data consistency only."
       },
       {
         "claim_id": "C4",
@@ -1309,7 +1409,11 @@
           "Simplified assembly may not represent all PLM/AP242 implementations.",
           "Absence of entities may depend on 3D model construction.",
           "Detailed example is thermal, not EPS."
-        ]
+        ],
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "The claim concerns incomplete/inconsistent representation of time/state/behavior across MBSE and PLM models, not EPS or mission reliability."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1387,5 +1491,17 @@
       "extraction_confidence_reason": "Clear for integration-gap coding, but not EPS/V&V-focused and lacks full model assets."
     }
   },
-  "bibtex": "@inproceedings{Menshenin2020MBSEPLM,\n  author = {Menshenin, Yaroslav and Knoll, Dominik and Brovar, Yana and Fortin, Clement},\n  title = {Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design},\n  booktitle = {17th IFIP International Conference on Product Lifecycle Management (PLM)},\n  year = {2020},\n  pages = {593--603},\n  publisher = {Springer},\n  doi = {10.1007/978-3-030-62807-9_47},\n  url = {https://inria.hal.science/hal-03753120v1}\n}"
+  "bibtex": "@inproceedings{Menshenin2020MBSEPLM,\n  author = {Menshenin, Yaroslav and Knoll, Dominik and Brovar, Yana and Fortin, Clement},\n  title = {Analysis of MBSE/PLM Integration: From Conceptual Design to Detailed Design},\n  booktitle = {17th IFIP International Conference on Product Lifecycle Management (PLM)},\n  year = {2020},\n  pages = {593--603},\n  publisher = {Springer},\n  doi = {10.1007/978-3-030-62807-9_47},\n  url = {https://inria.hal.science/hal-03753120v1}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0024.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Replace current generality value interface-focused model; it overstates the evidence.",
+      "Keep method guidance and add specific-mission model with reusable method only.",
+      "Do not code IVV as model-integrated; no trace-linked or executable verification artifacts are shown.",
+      "Do not add EPS reliability; only model consistency/reliability is supported for C3 and C4."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

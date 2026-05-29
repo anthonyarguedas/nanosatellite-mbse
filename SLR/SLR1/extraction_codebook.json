@@ -1,5 +1,5 @@
 {
-  "codebook_version": "1.0",
+  "codebook_version": "1.1",
   "source_protocol": "protocol.md",
   "status_values": [
     "coded",
@@ -225,9 +225,14 @@
         "transformation",
         "reusable workflow",
         "open package",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model",
+        "low-dynamics / non-detailed-behavior model",
+        "specific-mission model with reusable method only"
       ],
-      "coding_note": "Code mechanisms that enable generality or reuse beyond a one-off model. Use status=coded only with contextual evidence; status=not_reported when the paper is silent; status=not_applicable when the concept does not apply; status=none when the paper explicitly indicates absence/no use; status=uncertain when evidence is ambiguous. Do not code from keyword presence alone."
+      "coding_note": "Code mechanisms that enable generality or reuse beyond a one-off model. Do not treat a high-level model as general unless the paper claims or demonstrates adaptability/reuse beyond the specific mission; for single-mission studies, use specific-mission model with reusable method only when the method is transferable but the model itself is mission-specific. Use status=coded only with contextual evidence; status=not_reported when the paper is silent; status=not_applicable when the concept does not apply; status=none when the paper explicitly indicates absence/no use; status=uncertain when evidence is ambiguous. Do not code from keyword presence alone."
     },
     "implementation_pathway_tailoring.approach_classification": {
       "type": "single_select",
@@ -358,6 +363,21 @@
       ],
       "coding_note": "Code mechanisms used before physical hardware development/testing. Use status=coded only with contextual evidence; status=not_reported when the paper is silent; status=not_applicable when the concept does not apply; status=none when the paper explicitly indicates absence/no use; status=uncertain when evidence is ambiguous. Do not code from keyword presence alone."
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "type": "single_select",
+      "allowed_values": [
+        "none/not reported",
+        "separate document only",
+        "verification matrix adjacent to model",
+        "trace-linked verification artifacts",
+        "model-contained verification artifacts",
+        "executable/model-based checks",
+        "simulation-in-the-loop",
+        "software/hardware-in-the-loop",
+        "physical integration/test only"
+      ],
+      "coding_note": "Code the highest level of integration, verification, and validation (IVV) integration evidenced for the EPS/system model. Do not count a verification document as model-integrated unless trace links, containment, executable checks, or tool connections are shown. Use physical integration/test only when evidence is limited to downstream physical testing without pre-physical model integration. Use status=coded only with contextual evidence; status=not_reported when the paper is silent; status=not_applicable when the concept does not apply; status=none when the paper explicitly indicates absence/no use; status=uncertain when evidence is ambiguous. Do not code from keyword presence alone."
+    },
     "eps_verification_specific.integration_test_readiness": {
       "type": "multi_select",
       "allowed_values": [
@@ -393,7 +413,21 @@
         "governance/ROI",
         "other"
       ],
-      "coding_note": "Code the outcome actually claimed and linked to MBSE. Use other plus emergent code for additional categories. Use status=coded only with contextual evidence; status=not_reported when the paper is silent; status=not_applicable when the concept does not apply; status=none when the paper explicitly indicates absence/no use; status=uncertain when evidence is ambiguous. Do not code from keyword presence alone."
+      "coding_note": "Code the outcome actually claimed and linked to MBSE. If coding reliability or a reliability-adjacent outcome, also code reliability_subtype; do not treat process/model reliability as EPS reliability unless directly supported. Use other plus emergent code for additional categories. Use status=coded only with contextual evidence; status=not_reported when the paper is silent; status=not_applicable when the concept does not apply; status=none when the paper explicitly indicates absence/no use; status=uncertain when evidence is ambiguous. Do not code from keyword presence alone."
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "type": "multi_select",
+      "allowed_values": [
+        "EPS reliability",
+        "system/mission reliability",
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction",
+        "generic reliability claim",
+        "not applicable"
+      ],
+      "coding_note": "Use only for claims involving reliability or reliability-adjacent outcomes; code not applicable for non-reliability claims. Keep EPS reliability distinct from process/model reliability and do not upgrade generic reliability claims to EPS reliability without direct EPS evidence. Use status=coded only with contextual evidence; status=not_reported when the paper is silent; status=not_applicable when the concept does not apply; status=none when the paper explicitly indicates absence/no use; status=uncertain when evidence is ambiguous. Do not code from keyword presence alone."
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "type": "single_select",

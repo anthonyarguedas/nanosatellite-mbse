@@ -1,0 +1,85 @@
+{
+  "corpus_id": "paper-0007",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reference model",
+        "profile",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
+      ],
+      "status": "coded",
+      "rationale": "The paper explicitly presents a reusable CubeSat Reference Model, a SysML Technical Measures Profile, and a general method for deriving MOEs, MOPs, and TPMs. The example is mission-level and generic rather than tied to a named mission, supporting high-level abstraction and mission-agnostic architecture. It does not support interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.",
+      "evidence": [
+        {
+          "quote": "the development of a CubeSat Reference Model that can be used by any CubeSat development team",
+          "location": "Section 1. Introduction"
+        },
+        {
+          "quote": "Figure 1 shows the model elements created as part of the technical measures profile used in this approach.",
+          "location": "Section 5. Incorporating Technical Measures"
+        },
+        {
+          "quote": "This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.",
+          "location": "Section 6. Conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "none",
+      "rationale": "The paper shows traceability and parametric technical-measure relationships, but it does not present integrated IVV artifacts such as a verification matrix, test cases, model-contained verification procedures, executable checks, SIL/HIL, or simulation-in-the-loop. V&V model elements are explicitly deferred to future work.",
+      "evidence": [
+        {
+          "quote": "technical measures form a basis for which verification and validation can occur. Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here.",
+          "location": "Section 6. Future Work"
+        },
+        {
+          "quote": "This allows different solutions to be evaluated against the MOEs.",
+          "location": "Section 5. Relating MOPs to MOEs"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "system/mission reliability",
+        "mission assurance",
+        "not applicable"
+      ],
+      "status": "coded",
+      "rationale": "Most outcome claims remain non-reliability claims, but the risk/mission-success claim is reliability-adjacent at CubeSat mission level because it refers to high failure rate and increasing mission success. There is no direct EPS reliability claim.",
+      "evidence": [
+        {
+          "quote": "Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions and the role technical measurement could play in increasing their success.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Technical measures are used to: determine if the technical solution will meet stakeholder needs, provide early indications if the development effort is not progressing as needed to meet key milestones, predict the likelihood of the delivered solution to meet performance requirements, monitor high risk items, and assess the effectiveness of risk mitigation actions.",
+          "location": "Abstract"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C5_risk_mission_success_context",
+      "reliability_subtype": [
+        "system/mission reliability",
+        "mission assurance"
+      ],
+      "rationale": "This claim links CubeSat high failure rate, mission success, risk insight, and technical measurement. It should not be coded as EPS reliability because the paper does not provide an EPS-specific reliability claim."
+    }
+  ],
+  "repair_notes": [
+    "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism; the paper does not present limited behavior as a reuse mechanism.",
+    "Downgrade ivv_integration_level from executable/model-based checks to none/not reported because V&V model elements are future work.",
+    "Add reliability subtype only for the mission-success/risk claim; do not code EPS reliability."
+  ]
+}

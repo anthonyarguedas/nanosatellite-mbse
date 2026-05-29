@@ -523,18 +523,29 @@
       "values": [
         "reusable workflow",
         "open package",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
       "status": "coded",
-      "rationale": "Generality/reuse comes from a named reusable framework/workflow, open-source assets, and method guidance across ARCADIA levels rather than from a formal reference model or SysML profile.",
+      "rationale": "MOSAiC is presented as a reusable framework/workflow rather than only the FIRE-EYE mission model. The paper explicitly claims applicability beyond a specific space application, uses layered abstraction from stakeholder needs to components, emphasizes interfaces/data exchanges between MBSE and simulations, and makes models/code publicly available. Do not code low-dynamics / non-detailed-behavior model because dynamic, time-dependent simulations are central; do not code specific-mission model with reusable method only because the framework itself is claimed adaptable beyond the case.",
       "evidence": [
         {
-          "quote": "The proposed framework, named Modeling and Simulation Architecture for integrated Complex systems (MOSAiC), integrates modeling and simulation, leveraging hetero-functional graph theory [35], enabling progressive model refinement.",
-          "location": "Section 3 Proposed Integrated Framework"
+          "quote": "This paper presents the first version of the unified Modeling and Simulation (M&S) framework MOSAiC ... which connects MBSE with open source, multi-domain simulation environments, with the goal of improving traceability, reusability, and fidelity in the system lifecycle.",
+          "location": "Abstract"
         },
         {
-          "quote": "The framework's open source foundation reinforces its suitability for academic and resource-constrained environments, promoting accessibility, collaboration, and community-driven evolution.",
-          "location": "Section 6 Conclusions"
+          "quote": "Even though this framework is not restricted to a specific space application, it can be especially effective in the field of small-satellite missions",
+          "location": "Section 5 Discussion"
+        },
+        {
+          "quote": "It covers several abstraction layers, from stakeholder-level needs to component-level design",
+          "location": "Section 5 Discussion"
+        },
+        {
+          "quote": "interfacing with simulation tools through standardized data exchanges and co-simulation strategies",
+          "location": "Abstract"
         },
         {
           "quote": "All models and codes presented in this work are available in a public repository",
@@ -753,6 +764,28 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV integration level is simulation-in-the-loop: Capella/PVMT model data are extracted into dynamic simulations that check requirements, preconditions, power balance, battery sufficiency, and communication feasibility before hardware. Do not upgrade to software/hardware-in-the-loop because HIL/digital twin integration is only future work.",
+      "evidence": [
+        {
+          "quote": "Unlike earlier qualitative/exploratory phases, this stage features a direct linkage between formal requirement specifications and simulation results.",
+          "location": "Section 3.2 Analysis and Simulation Module"
+        },
+        {
+          "quote": "By simulating mission execution over time and tracking the activation of modes, it was possible to verify whether preconditions for each OM were satisfied",
+          "location": "Section 4.4 LA Results"
+        },
+        {
+          "quote": "during eclipse periods, the simulation would verify whether battery capacity was sufficient to sustain system operation until sunlight was available for recharging",
+          "location": "Section 4.5 PA Results"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -801,6 +834,36 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "EPS reliability",
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related claims are mixed. EPS reliability is supported only for the EPS/power feasibility claim as a direct power/battery reliability proxy. The paper also makes design-process reliability claims, model-consistency claims, mission-assurance/early-validation claims, and defect/failure-point reduction claims. Do not code system/mission reliability or generic reliability claim beyond these more specific subtypes. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "Results show improved consistency between system models and simulation artifacts",
+          "location": "Abstract"
+        },
+        {
+          "quote": "during eclipse periods, the simulation would verify whether battery capacity was sufficient to sustain system operation until sunlight was available for recharging",
+          "location": "Section 4.5 PA Results"
+        },
+        {
+          "quote": "it allowed for the early identification of potential bottlenecks or failure points—such as inadequate battery sizing, overlapping power demands, or conflicting data flows",
+          "location": "Section 4.5 PA Results"
+        },
+        {
+          "quote": "This enhances both the reliability and agility of the design process",
+          "location": "Section 5 Discussion"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1452,7 +1515,10 @@
       "generality_reuse_mechanism": [
         "reusable workflow",
         "open package",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
       "key_evidence_quotes": [
         {
@@ -1467,7 +1533,34 @@
           "quote": "At the most granular level, the Component level introduces physical constraints, physical behavior, and performance requirements.",
           "location": "Section 3.1 System and Operation Modeling Module"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "MOSAiC is presented as a reusable framework/workflow rather than only the FIRE-EYE mission model. The paper explicitly claims applicability beyond a specific space application, uses layered abstraction from stakeholder needs to components, emphasizes interfaces/data exchanges between MBSE and simulations, and makes models/code publicly available. Do not code low-dynamics / non-detailed-behavior model because dynamic, time-dependent simulations are central; do not code specific-mission model with reusable method only because the framework itself is claimed adaptable beyond the case.",
+        "evidence": [
+          {
+            "quote": "This paper presents the first version of the unified Modeling and Simulation (M&S) framework MOSAiC ... which connects MBSE with open source, multi-domain simulation environments, with the goal of improving traceability, reusability, and fidelity in the system lifecycle.",
+            "location": "Abstract"
+          },
+          {
+            "quote": "Even though this framework is not restricted to a specific space application, it can be especially effective in the field of small-satellite missions",
+            "location": "Section 5 Discussion"
+          },
+          {
+            "quote": "It covers several abstraction layers, from stakeholder-level needs to component-level design",
+            "location": "Section 5 Discussion"
+          },
+          {
+            "quote": "interfacing with simulation tools through standardized data exchanges and co-simulation strategies",
+            "location": "Abstract"
+          },
+          {
+            "quote": "All models and codes presented in this work are available in a public repository",
+            "location": "Data Availability Statement"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps_or_phases": [
@@ -1608,7 +1701,29 @@
           "quote": "For instance, during a communications phase, the simulation would evaluate whether the power budget allowed for the simultaneous operation of the antenna, transmitter, and data processor.",
           "location": "Section 4.5 PA Results"
         }
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "The highest supported IVV integration level is simulation-in-the-loop: Capella/PVMT model data are extracted into dynamic simulations that check requirements, preconditions, power balance, battery sufficiency, and communication feasibility before hardware. Do not upgrade to software/hardware-in-the-loop because HIL/digital twin integration is only future work.",
+        "evidence": [
+          {
+            "quote": "Unlike earlier qualitative/exploratory phases, this stage features a direct linkage between formal requirement specifications and simulation results.",
+            "location": "Section 3.2 Analysis and Simulation Module"
+          },
+          {
+            "quote": "By simulating mission execution over time and tracking the activation of modes, it was possible to verify whether preconditions for each OM were satisfied",
+            "location": "Section 4.4 LA Results"
+          },
+          {
+            "quote": "during eclipse periods, the simulation would verify whether battery capacity was sufficient to sustain system operation until sunlight was available for recharging",
+            "location": "Section 4.5 PA Results"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1643,7 +1758,10 @@
         "evidence_quote": "This paper presents the first version of the unified Modeling and Simulation (M&S) framework MOSAiC ... which connects MBSE with open source, multi-domain simulation environments, with the goal of improving traceability, reusability, and fidelity in the system lifecycle.",
         "evidence_confidence_rating": "Weak",
         "confidence_rationale": "A case demonstration and repository exist, but the claimed improvements are not quantified or compared.",
-        "threats_or_alternative_explanations": "Benefits may derive from disciplined modeling and open tooling generally rather than from MOSAiC specifically; no baseline process is evaluated."
+        "threats_or_alternative_explanations": "Benefits may derive from disciplined modeling and open tooling generally rather than from MOSAiC specifically; no baseline process is evaluated.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C2_consistency_model_simulation_artifacts",
@@ -1676,7 +1794,10 @@
         "evidence_quote": "The extracted dataset includes subsystem-level parameters such as mass, volume, and power consumption—both static and mode-dependent—as well as functional and component exchanges, OMs definitions, and their associated transition conditions.",
         "evidence_confidence_rating": "Moderate",
         "confidence_rationale": "The parser and extracted data flow are concretely described for the case, but consistency is not independently measured.",
-        "threats_or_alternative_explanations": "Consistency may depend on parser implementation and model discipline; no automated semantic validation results are reported."
+        "threats_or_alternative_explanations": "Consistency may depend on parser implementation and model discipline; no automated semantic validation results are reported.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ]
       },
       {
         "claim_id": "C3_early_validation_tradeoffs",
@@ -1712,7 +1833,10 @@
         "evidence_quote": "Overall, this early feedback loop enabled more informed and data-driven design decisions, provided justification for architectural refinements, and strengthened the confidence in the system's capacity to meet mission-level constraints, while moving onto the Physical Architecture layer.",
         "evidence_confidence_rating": "Moderate",
         "confidence_rationale": "Simulation domains and feedback into design are described, but trade alternatives and decision metrics are not tabulated.",
-        "threats_or_alternative_explanations": "The case is representative; effectiveness for other missions or teams is not evaluated."
+        "threats_or_alternative_explanations": "The case is representative; effectiveness for other missions or teams is not evaluated.",
+        "reliability_subtype": [
+          "mission assurance"
+        ]
       },
       {
         "claim_id": "C4_eps_power_feasibility",
@@ -1748,7 +1872,11 @@
         "evidence_quote": "during eclipse periods, the simulation would verify whether battery capacity was sufficient to sustain system operation until sunlight was available for recharging.",
         "evidence_confidence_rating": "Moderate",
         "confidence_rationale": "The EPS architecture and quantitative battery plot support a pre-physical feasibility check, but no independent validation or baseline is presented.",
-        "threats_or_alternative_explanations": "The outcome depends on fidelity of assumed component parameters and orbital/eclipse inputs; no hardware or flight data validation is provided."
+        "threats_or_alternative_explanations": "The outcome depends on fidelity of assumed component parameters and orbital/eclipse inputs; no hardware or flight data validation is provided.",
+        "reliability_subtype": [
+          "EPS reliability",
+          "mission assurance"
+        ]
       },
       {
         "claim_id": "C5_communication_data_budget_feasibility",
@@ -1782,7 +1910,10 @@
         "evidence_quote": "Finally, communication simulations were used to verify the feasibility of data downlink scenarios, accounting for antenna configurations, ground station visibility, and bandwidth allocation.",
         "evidence_confidence_rating": "Moderate",
         "confidence_rationale": "Simulation results are shown quantitatively, but requirements thresholds and independent validation are not provided.",
-        "threats_or_alternative_explanations": "Downlink feasibility may change with higher-fidelity antenna, ground-network, protocol, and operations assumptions."
+        "threats_or_alternative_explanations": "Downlink feasibility may change with higher-fidelity antenna, ground-network, protocol, and operations assumptions.",
+        "reliability_subtype": [
+          "mission assurance"
+        ]
       },
       {
         "claim_id": "C6_reduced_integration_costs_late_surprises",
@@ -1817,7 +1948,12 @@
         "evidence_quote": "Results show improved consistency between system models and simulation artifacts, reduced integration costs, and improved early validation of design choices.",
         "evidence_confidence_rating": "Unsupported",
         "confidence_rationale": "The claim is explicit but not supported by measured cost/rework data or a comparator.",
-        "threats_or_alternative_explanations": "Cost effects could be offset by model-building, training, parser maintenance, and simulation setup effort."
+        "threats_or_alternative_explanations": "Cost effects could be offset by model-building, training, parser maintenance, and simulation setup effort.",
+        "reliability_subtype": [
+          "process reliability",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Add process reliability because the paper explicitly frames the benefit as reliability of the design process; retain defect/error reduction for late surprises, failure points, and corrective action claims. Do not code EPS reliability for this generic process claim."
       },
       {
         "claim_id": "C7_open_source_reproducibility_accessibility",
@@ -1850,7 +1986,10 @@
         "evidence_confidence_rating": "Moderate",
         "confidence_rationale": "Reproducibility of assets is directly supported by repository availability, but broader accessibility/cost outcomes are not measured.",
         "threats_or_alternative_explanations": "Repository availability does not guarantee environment reproducibility, documentation sufficiency, or actual reuse by other teams.",
-        "metric_or_value_indicator_status": "not_reported"
+        "metric_or_value_indicator_status": "not_reported",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C8_mixed_resolution_incremental_validation",
@@ -1887,7 +2026,10 @@
         "evidence_quote": "This hybrid resolution allowed the simulation to produce a more accurate and nuanced performance assessment of the system in its current state, particularly with respect to power and communication resource usage, while maintaining full system-level coherence.",
         "evidence_confidence_rating": "Moderate",
         "confidence_rationale": "The mixed-resolution mechanism and EPS/TTC validation are concrete, but no timing/bottleneck metric is reported.",
-        "threats_or_alternative_explanations": "The schedule benefit is inferred from capability; accuracy depends on correctness of LA defaults and realization mappings."
+        "threats_or_alternative_explanations": "The schedule benefit is inferred from capability; accuracy depends on correctness of LA defaults and realization mappings.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1984,5 +2126,16 @@
       "extraction_confidence_reason": "The markdown is complete enough and the paper is explicit about methods, toolchain, case, and public repository. Confidence is reduced only by limited baseline/validation evidence and one ambiguous rendered form-factor phrase."
     }
   },
-  "bibtex": "@article{Campioli2025MOSAiC,\n  title={Towards a Unified Modeling and Simulation Framework for Space Systems: Integrating Model-Based Systems Engineering with Open Source Multi-Domain Simulation Environments},\n  author={Campioli, Serena and Luccisano, Giacomo and Ferretto, Davide and Stesina, Fabrizio},\n  journal={Aerospace},\n  volume={12},\n  number={8},\n  pages={745},\n  year={2025},\n  doi={10.3390/aerospace12080745}\n}"
+  "bibtex": "@article{Campioli2025MOSAiC,\n  title={Towards a Unified Modeling and Simulation Framework for Space Systems: Integrating Model-Based Systems Engineering with Open Source Multi-Domain Simulation Environments},\n  author={Campioli, Serena and Luccisano, Giacomo and Ferretto, Davide and Stesina, Fabrizio},\n  journal={Aerospace},\n  volume={12},\n  number={8},\n  pages={745},\n  year={2025},\n  doi={10.3390/aerospace12080745}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0043.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add mission-agnostic architecture to generality/reuse; current high-level abstraction and interface-focused model are supported by surrounding claims of adaptability and interface/data-flow integration.",
+      "IVV integration level should remain simulation-in-the-loop; HIL/digital twin is stated only as future work.",
+      "Add process reliability at claim level and aggregate reliability_subtype; retain EPS reliability only for the EPS power/battery feasibility claim."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

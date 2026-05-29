@@ -1,0 +1,129 @@
+{
+  "corpus_id": "paper-0026",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "reference model",
+        "profile",
+        "reusable workflow",
+        "open package",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
+      ],
+      "status": "coded",
+      "rationale": "The paper presents a reusable, open-source CubeSat power-subsystem model based on the CSRM lineage, with an assumptions profile, modeling guidelines, Java traceability workflow, and repository availability. It is not tied to a named mission and is framed as adaptable to future CubeSat projects, so mission-agnostic architecture is supported. The model is deliberately abstract/limited in behavior, with nominal behavior only and mission modes omitted. Do not code specific-mission model with reusable method only.",
+      "evidence": [
+        {
+          "quote": "CubeSat System Reference Model (CSRM) that can be adapted to any CubeSat project",
+          "location": "Section I"
+        },
+        {
+          "quote": "Illustrated with a CubeSat power subsystem model, this section presents how modeling can be realized to provide better traceability and ease of reproduction",
+          "location": "Section III"
+        },
+        {
+          "quote": "For our model, an assumptions profile was created and applied in order to include assumptions.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "In this paper only nominal behavior is shown ... mission modes are not discussed in this paper.",
+          "location": "Section III.A.5"
+        },
+        {
+          "quote": "it can easily be reproduced by those who wish to use it and adapt it to their own needs",
+          "location": "Section V"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "executable/model-based checks"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV integration level is executable/model-based checks: Java reads the Papyrus .uml system model, extracts requirement/assumption/constraint data, evaluates parameter-change scenarios, and outputs respected/not-respected requirement constraint flags. This is stronger than a separate verification document or adjacent matrix, but not simulation-in-the-loop, SIL/HIL, or physical integration/test.",
+      "evidence": [
+        {
+          "quote": "presents an automatic requirement verification approach from system model data with a java code",
+          "location": "Section I"
+        },
+        {
+          "quote": "The code takes as input the Papyrus \".uml\" file of the model from which it extracts ... requirement and assumption constraints, and constraint block data",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "the requirement constraint will be also displayed with a mention of whether is fulfilled with a \" (no-)respected\" flag",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "Batt*1.2＜BC ... not respected ... 0＜PSAM ... respected",
+          "location": "Table III"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "mission assurance",
+        "defect/error reduction",
+        "not applicable"
+      ],
+      "status": "coded",
+      "rationale": "Only the traceability/automatic requirement-checking claim is reliability-adjacent. It supports mission assurance and defect/error reduction through power-budget requirement checking and early detection of design errors. It should not be upgraded to EPS reliability because the paper does not directly report EPS reliability analysis, reliability metrics, fault-tolerance validation, or operational reliability evidence. Non-reliability claims should be not applicable.",
+      "evidence": [
+        {
+          "quote": "allow for the early detection of potential design errors",
+          "location": "Section I"
+        },
+        {
+          "quote": "The power budget must be met to ensure that the consumed power does not exceed the produced power by the CubeSat, which is essential for mission success.",
+          "location": "Section III.A.6"
+        },
+        {
+          "quote": "whether the different model constraints are respected or not following these changes",
+          "location": "Section V"
+        }
+      ],
+      "confidence": "high"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1",
+      "reliability_subtype": [
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "rationale": "Automatic model-based requirement/constraint checks support early detection of design errors and mission-assurance-oriented power-budget compliance, but not demonstrated EPS reliability."
+    },
+    {
+      "claim_id": "C2",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "The claim concerns reproducibility, reuse, and adaptation, not reliability."
+    },
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "The claim concerns cost, schedule, effort, and reuse, not reliability."
+    },
+    {
+      "claim_id": "C4",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "The claim concerns visualization, understanding, completeness, and traceability, not a reliability outcome."
+    }
+  ],
+  "repair_notes": [
+    "Add mission-agnostic architecture to generality_reuse_mechanism; the model is presented as a generic CubeSat power-subsystem starting point adaptable to future missions, not a specific-mission model only.",
+    "Keep executable/model-based checks for ivv_integration_level; do not upgrade to simulation-in-the-loop or SIL/HIL.",
+    "Do not code EPS reliability; reliability-adjacent evidence supports mission assurance and defect/error reduction only."
+  ]
+}

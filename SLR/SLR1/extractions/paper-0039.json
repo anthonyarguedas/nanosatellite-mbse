@@ -434,18 +434,25 @@
         "reference model",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
       "status": "coded",
-      "rationale": "Generality is provided by the CSRM reference model, diagram templates, component library, and a repeatable process for adding mission-specific requirements/components to a PSAT1U baseline template.",
+      "rationale": "The paper supports reuse through a CSRM-derived CubeSat template/reference model, existing diagram templates and component library, and a repeatable process for tailoring the model with mission-specific requirements and payload details. The PSAT1U baseline itself is reusable because mission and payload modules are deliberately left undefined within a design envelope, and interfaces/components are central to the model. Do not code 'specific-mission model with reusable method only' because the model itself is claimed as a reusable template. Do not code 'low-dynamics / non-detailed-behavior model' because the paper does not directly frame limited behavior/dynamics modeling as the reuse mechanism.",
       "evidence": [
         {
-          "quote": "the CSRM is itself a modular architecture enabling the design of a mission-oriented CubeSat",
+          "quote": "the CubeSat System Reference Model (CSRM) ... was chosen as a CubeSat specific template providing the \"logical elements [which] can be reused as a starting point for a mission-specific CubeSat logical architecture.\"",
           "location": "paper markdown line 80"
         },
         {
-          "quote": "existing CSRM model elements and diagram templates as well as the library of system components",
+          "quote": "users can combine their own requirements, mission specific stakeholder use cases and viewpoints with the existing CSRM model elements and diagram templates as well as the library of system components",
           "location": "paper markdown line 313"
+        },
+        {
+          "quote": "The baseline model is unique in that it defines all of the important subsystems, components, and interfaces of the PSAT1U, but leaves the payload and mission specific modules undefined.",
+          "location": "paper markdown line 332"
         },
         {
           "quote": "The PSAT1U model described is itself a template without payload or mission definition and can be designed for any mission as long as the payload is operated within the envelope defined by the model.",
@@ -601,6 +608,24 @@
       "evidence": [],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "not_reported",
+      "rationale": "The EPS model contains architecture, relationships, and power-budget information, but the paper does not report verification matrices, model-contained test artifacts, trace-linked V&V artifacts, executable checks, simulation-in-the-loop, SIL/HIL, or tool-connected IVV. The watchdog/power relationship is a change-propagation relation, not an IVV procedure.",
+      "evidence": [
+        {
+          "quote": "Within the specification for the EPS, pertinent information such as the as-designed power budget (Figure 16) is also available.",
+          "location": "paper markdown line 374"
+        },
+        {
+          "quote": "The model stores design specifics of the PSAT1U as text data within the documentation tab of the appropriate subsystem or component specification.",
+          "location": "paper markdown line 454"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -639,6 +664,20 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability"
+      ],
+      "status": "coded",
+      "rationale": "Only the change-propagation/relationship claim is reliability-adjacent, and only as model consistency/reliability. Explicit EPS reliability language in the paper concerns NiCd battery hardware selection, not an MBSE-derived outcome, so EPS reliability should not be coded. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "any changes made to the Watchdog Timer specification are automatically propagated to the Power subsystem and to any other subsystems or components with a relationship to the Watchdog Timer. The user does not need to manually propagate this change.",
+          "location": "paper markdown line 429"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1210,8 +1249,34 @@
         "reference model",
         "library",
         "reusable workflow",
-        "method guidance"
-      ]
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper supports reuse through a CSRM-derived CubeSat template/reference model, existing diagram templates and component library, and a repeatable process for tailoring the model with mission-specific requirements and payload details. The PSAT1U baseline itself is reusable because mission and payload modules are deliberately left undefined within a design envelope, and interfaces/components are central to the model. Do not code 'specific-mission model with reusable method only' because the model itself is claimed as a reusable template. Do not code 'low-dynamics / non-detailed-behavior model' because the paper does not directly frame limited behavior/dynamics modeling as the reuse mechanism.",
+        "evidence": [
+          {
+            "quote": "the CubeSat System Reference Model (CSRM) ... was chosen as a CubeSat specific template providing the \"logical elements [which] can be reused as a starting point for a mission-specific CubeSat logical architecture.\"",
+            "location": "paper markdown line 80"
+          },
+          {
+            "quote": "users can combine their own requirements, mission specific stakeholder use cases and viewpoints with the existing CSRM model elements and diagram templates as well as the library of system components",
+            "location": "paper markdown line 313"
+          },
+          {
+            "quote": "The baseline model is unique in that it defines all of the important subsystems, components, and interfaces of the PSAT1U, but leaves the payload and mission specific modules undefined.",
+            "location": "paper markdown line 332"
+          },
+          {
+            "quote": "The PSAT1U model described is itself a template without payload or mission definition and can be designed for any mission as long as the payload is operated within the envelope defined by the model.",
+            "location": "paper markdown line 533"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_or_phases": [
@@ -1350,6 +1415,24 @@
       "integration_test_readiness": {
         "status": "not_reported",
         "values": []
+      },
+      "ivv_integration_level": {
+        "values": [
+          "none/not reported"
+        ],
+        "status": "not_reported",
+        "rationale": "The EPS model contains architecture, relationships, and power-budget information, but the paper does not report verification matrices, model-contained test artifacts, trace-linked V&V artifacts, executable checks, simulation-in-the-loop, SIL/HIL, or tool-connected IVV. The watchdog/power relationship is a change-propagation relation, not an IVV procedure.",
+        "evidence": [
+          {
+            "quote": "Within the specification for the EPS, pertinent information such as the as-designed power budget (Figure 16) is also available.",
+            "location": "paper markdown line 374"
+          },
+          {
+            "quote": "The model stores design specifics of the PSAT1U as text data within the documentation tab of the appropriate subsystem or component specification.",
+            "location": "paper markdown line 454"
+          }
+        ],
+        "confidence": "high"
       }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
@@ -1387,7 +1470,11 @@
           "location": "paper markdown lines 31-35"
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "No time/effort metrics, baseline project, or student/team evaluation; the physical PSAT1U standard design itself may also reduce trade-study effort independent of MBSE."
+        "threats_or_alternative_explanations": "No time/effort metrics, baseline project, or student/team evaluation; the physical PSAT1U standard design itself may also reduce trade-study effort independent of MBSE.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/efficiency/time-effort claim; no reliability-adjacent outcome."
       },
       {
         "claim_id": "C2",
@@ -1424,7 +1511,11 @@
           "location": "paper markdown line 332"
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "The paper demonstrates editing payload documentation but does not show successful independent reuse by other teams or missions."
+        "threats_or_alternative_explanations": "The paper demonstrates editing payload documentation but does not show successful independent reuse by other teams or missions.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Design-space and mission-specific tailoring claim; no direct reliability outcome."
       },
       {
         "claim_id": "C3",
@@ -1460,7 +1551,11 @@
           "location": "paper markdown line 429"
         },
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "The demonstration is a single illustrative trace; it does not verify semantic correctness, requirements impact, or effects in a changing project over time."
+        "threats_or_alternative_explanations": "The demonstration is a single illustrative trace; it does not verify semantic correctness, requirements impact, or effects in a changing project over time.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Automatic propagation through model relationships supports model consistency; no EPS or mission reliability is directly evidenced."
       },
       {
         "claim_id": "C4",
@@ -1495,7 +1590,11 @@
           "location": "paper markdown line 454"
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Storing information as text documentation may not provide formal analyzability or consistency checking; no user evidence is reported."
+        "threats_or_alternative_explanations": "Storing information as text documentation may not provide formal analyzability or consistency checking; no user evidence is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Shared documentation/view-edit claim; no reliability-adjacent outcome."
       },
       {
         "claim_id": "C5",
@@ -1525,7 +1624,11 @@
           "location": "paper markdown line 527"
         },
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "The paper does not report actual student use, surveys, learning outcomes, design decisions, or comparison to a non-template course."
+        "threats_or_alternative_explanations": "The paper does not report actual student use, surveys, learning outcomes, design decisions, or comparison to a non-template course.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Educational/adoption and decision-support claim; 'mission success' wording is not enough to code mission assurance or reliability."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1589,5 +1692,17 @@
       "extraction_confidence_reason": "Full markdown is readable and detailed for context and model artifacts; confidence is high for coding but outcome-evidence strength remains low/medium because the paper itself is mostly illustrative."
     }
   },
-  "bibtex": "@inproceedings{Gregory2020CubeSatTemplate,\n  title = {Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites},\n  author = {Gregory, John M. and Kang, Jin S. and Bruninga, R. and Sega, R. and Borky, J. and Kaslow, D. and Downey, George H.},\n  booktitle = {IEEE Aerospace Conference},\n  year = {2020},\n  doi = {10.1109/AERO47225.2020.9172748}\n}"
+  "bibtex": "@inproceedings{Gregory2020CubeSatTemplate,\n  title = {Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites},\n  author = {Gregory, John M. and Kang, Jin S. and Bruninga, R. and Sega, R. and Borky, J. and Kaslow, D. and Downey, George H.},\n  booktitle = {IEEE Aerospace Conference},\n  year = {2020},\n  doi = {10.1109/AERO47225.2020.9172748}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0039.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove 'low-dynamics / non-detailed-behavior model' from generality_reuse_mechanism unless stricter project guidance allows coding from absence of behavioral detail.",
+      "Replace migration-note rationale with fresh paper-based rationale.",
+      "Keep IVV at none/not reported; EPS power budget text in the model is not an integrated verification artifact.",
+      "Do not code EPS reliability from the NiCd battery reliability statement because it is a hardware-design claim, not an MBSE outcome."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

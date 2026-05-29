@@ -479,26 +479,37 @@
         "profile",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
       "status": "coded",
-      "rationale": "Generality is supported by a CRM/template/reference model, SysML stereotypes/profiles, library of model elements, table-based population workflow, and mission-specific development steps.",
+      "rationale": "The paper explicitly presents the CRM as a reusable CubeSat community starting point and OMG specification candidate, not just a high-level one-off model. Reuse is supported by a template/reference model, model-element library, stereotypes/profiles, generic logical architecture, loose subsystem definitions, table-based population workflow, and user guidance. Do not add interface-focused model or specific-mission model with reusable method only.",
       "evidence": [
         {
-          "quote": "Line 165: 'template model' with building blocks.",
-          "location": "not specified"
+          "quote": "Because the initial model was RAX-centric and not suitable for reuse... Develop a CubeSat Reference Model (CRM) that a CubeSat team can use as a starting point for its mission",
+          "location": "Introduction"
         },
         {
-          "quote": "Figure 1 note: CRM provides a 'library of model elements'.",
-          "location": "not specified"
+          "quote": "The CRM provides a library of model elements but does not dictate what model elements and relationships to use.",
+          "location": "Section III.C / Fig. 1 note"
         },
         {
-          "quote": "Figures 4 and 20 show requirement and technical-measure stereotypes/profiles.",
-          "location": "not specified"
+          "quote": "The CRM provides a CubeSat logical architecture. The logical components are abstractions of the physical components... without imposing implementation constraints.",
+          "location": "Section III.F"
         },
         {
-          "quote": "Section V lists mission-specific model development steps.",
-          "location": "not specified"
+          "quote": "The CubeSat and Ground subsystems are generically and loosely defined as a starting point for the mission-specific CubeSat team.",
+          "location": "Section III.F"
+        },
+        {
+          "quote": "It is a template model that provides building blocks that can be specialized to support MBSE CubeSat design.",
+          "location": "Section IV"
+        },
+        {
+          "quote": "A use case can be described in a Use Case Description document... and then, if warranted, detailed in a SysML model.",
+          "location": "Section III.E"
         }
       ],
       "confidence": "high"
@@ -689,6 +700,28 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "trace-linked verification artifacts"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV integration for the current CRM is generic system-level trace-linked verification properties in the model. The paper does not show EPS-specific verification artifacts, a verification matrix, SIL/HIL, simulation-in-loop, or executed model-based checks for the current CRM; power parametrics are future work and RAX power trade studies are background.",
+      "evidence": [
+        {
+          "quote": "The requirement elements and tables can expose requirement properties including: id, name, text, traced to, derived from, refined by, verify method, verified by, and satisfied by.",
+          "location": "Section III.D"
+        },
+        {
+          "quote": "Proof that the assertion is true is accomplished by the verify relationship.",
+          "location": "Section III.D"
+        },
+        {
+          "quote": "The next steps include: 1) adding parametrics for power, weight, and cost...",
+          "location": "Section VII"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -739,6 +772,29 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-subtype coding should remain limited to model-quality/consistency and mission-assurance-adjacent claims. The paper does not directly support EPS reliability, system/mission reliability, process reliability, defect/error reduction, or a generic reliability outcome claim. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "The requirement elements and tables can expose requirement properties including... traced to, derived from, refined by, verify method, verified by, and satisfied by.",
+          "location": "Section III.D"
+        },
+        {
+          "quote": "This provides for traceability between MOPs and MOEs and supports performance analysis of the MOPs to predict if the MOEs will be met.",
+          "location": "Section III.G"
+        },
+        {
+          "quote": "Is the model complete relative to its scope? Is the model well-formed? Is the model consistent?... Does the model accurately reflect the domain of interest?",
+          "location": "Section VI"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1430,15 +1486,47 @@
         "Word/Excel methods embedded in the model; spreadsheet export; CSM web-published HTML; XMI file"
       ],
       "generality_reuse_mechanism": [
-        "CRM template/reference model",
-        "OMG normative XMI specification path",
-        "non-normative CSM implementation and HTML guidance",
-        "reference information/terminology repository",
-        "methodology-agnostic library of model elements",
-        "generic logical architecture and representative components",
-        "requirements and technical-measure profiles/stereotypes",
-        "table-based reusable population workflow"
-      ]
+        "template",
+        "reference model",
+        "profile",
+        "library",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper explicitly presents the CRM as a reusable CubeSat community starting point and OMG specification candidate, not just a high-level one-off model. Reuse is supported by a template/reference model, model-element library, stereotypes/profiles, generic logical architecture, loose subsystem definitions, table-based population workflow, and user guidance. Do not add interface-focused model or specific-mission model with reusable method only.",
+        "evidence": [
+          {
+            "quote": "Because the initial model was RAX-centric and not suitable for reuse... Develop a CubeSat Reference Model (CRM) that a CubeSat team can use as a starting point for its mission",
+            "location": "Introduction"
+          },
+          {
+            "quote": "The CRM provides a library of model elements but does not dictate what model elements and relationships to use.",
+            "location": "Section III.C / Fig. 1 note"
+          },
+          {
+            "quote": "The CRM provides a CubeSat logical architecture. The logical components are abstractions of the physical components... without imposing implementation constraints.",
+            "location": "Section III.F"
+          },
+          {
+            "quote": "The CubeSat and Ground subsystems are generically and loosely defined as a starting point for the mission-specific CubeSat team.",
+            "location": "Section III.F"
+          },
+          {
+            "quote": "It is a template model that provides building blocks that can be specialized to support MBSE CubeSat design.",
+            "location": "Section IV"
+          },
+          {
+            "quote": "A use case can be described in a Use Case Description document... and then, if warranted, detailed in a SysML model.",
+            "location": "Section III.E"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_or_phases": [
@@ -1563,7 +1651,29 @@
       ],
       "evidence_verification_integrated_in_model": "Generic verification integration is present through requirement properties and technical-measure traceability; EPS-specific integrated verification artifacts are absent.",
       "integration_test_readiness": "No EPS hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation links are reported.",
-      "applicability_to_rq3": "Partial/generic only: useful for understanding system-level verification hooks and technical-measure parametrics, not for extracting an EPS verification-procedure model."
+      "applicability_to_rq3": "Partial/generic only: useful for understanding system-level verification hooks and technical-measure parametrics, not for extracting an EPS verification-procedure model.",
+      "ivv_integration_level": {
+        "values": [
+          "trace-linked verification artifacts"
+        ],
+        "status": "coded",
+        "rationale": "The highest supported IVV integration for the current CRM is generic system-level trace-linked verification properties in the model. The paper does not show EPS-specific verification artifacts, a verification matrix, SIL/HIL, simulation-in-loop, or executed model-based checks for the current CRM; power parametrics are future work and RAX power trade studies are background.",
+        "evidence": [
+          {
+            "quote": "The requirement elements and tables can expose requirement properties including: id, name, text, traced to, derived from, refined by, verify method, verified by, and satisfied by.",
+            "location": "Section III.D"
+          },
+          {
+            "quote": "Proof that the assertion is true is accomplished by the verify relationship.",
+            "location": "Section III.D"
+          },
+          {
+            "quote": "The next steps include: 1) adding parametrics for power, weight, and cost...",
+            "location": "Section VII"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1597,7 +1707,11 @@
         "evidence_quote": "'Because the initial model was RAX-centric and not suitable for reuse... Develop a CubeSat Reference Model (CRM) that a CubeSat team can use as a starting point for its mission' and 'This model will be a repository for the systems engineering artifacts created by the mission-specific team.'",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_alternative_explanations": "Reuse is asserted from structure and intended availability; no public model, adoption metrics, or independent reuse results are provided."
+        "threats_alternative_explanations": "Reuse is asserted from structure and intended availability; no public model, adoption metrics, or independent reuse results are provided.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/reproducibility claim; no reliability-adjacent outcome."
       },
       {
         "claim_id": "C2_requirements_traceability_and_verification_properties",
@@ -1629,7 +1743,11 @@
         "evidence_quote": "'The requirement elements and tables can expose requirement properties including: id, name, text, traced to, derived from, refined by, verify method, verified by, and satisfied by' and 'Proof that the assertion is true is accomplished by the verify relationship.'",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_alternative_explanations": "Having relationship properties does not demonstrate that mission teams populated complete/accurate traces or used them to improve outcomes."
+        "threats_alternative_explanations": "Having relationship properties does not demonstrate that mission teams populated complete/accurate traces or used them to improve outcomes.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Trace, satisfy, and verify properties support model consistency, not EPS reliability."
       },
       {
         "claim_id": "C3_use_cases_refine_requirements",
@@ -1663,7 +1781,11 @@
         "evidence_quote": "'Use cases are used to refine requirements. The CRM has use case packages at the Enterprise, CubeSat, and CubeSat subsystems hierarchy level.'",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_alternative_explanations": "Use-case structure may aid communication, but the paper gives no user evaluation or before/after comparison."
+        "threats_alternative_explanations": "Use-case structure may aid communication, but the paper gives no user evaluation or before/after comparison.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Communication, refinement, and completeness claim without direct reliability content."
       },
       {
         "claim_id": "C4_technical_measures_parametric_decision_support",
@@ -1698,7 +1820,12 @@
         "evidence_quote": "'This provides for traceability between MOPs and MOEs and supports performance analysis of the MOPs to predict if the MOEs will be met.'",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_alternative_explanations": "Technical-measure methods may remain in Word/Excel or future constraint blocks; prediction accuracy and decision utility are not validated."
+        "threats_alternative_explanations": "Technical-measure methods may remain in Word/Excel or future constraint blocks; prediction accuracy and decision utility are not validated.",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "MOE/MOP/TPM traceability and performance prediction are mission-assurance-adjacent model outcomes, not EPS reliability."
       },
       {
         "claim_id": "C5_generic_architecture_tailoring",
@@ -1731,7 +1858,11 @@
         "evidence_quote": "'The logical components are a starting point for a mission-specific CubeSat logical architecture, followed by the physical architecture and the CubeSat development' and 'The CubeSat team determines what subsystem capabilities are needed...'.",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_alternative_explanations": "A generic architecture can reduce or increase work depending on mission complexity, team skill, and tool familiarity; no effort data are reported."
+        "threats_alternative_explanations": "A generic architecture can reduce or increase work depending on mission complexity, team skill, and tool familiarity; no effort data are reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Architecture tailoring/reuse claim without direct reliability content."
       },
       {
         "claim_id": "C6_omg_xmi_tool_interoperability",
@@ -1766,7 +1897,11 @@
         "evidence_quote": "'an XML Metadata Interchange file (XMI) file, which is implementation free, can be extracted from the CSM CRM' and a team 'will download the CRM Specification XMI file from OMG and import it into its own graphical modeling tool'.",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "high",
-        "threats_alternative_explanations": "SysML/XMI import may lose semantics or layout across tools; the paper says demonstrating import with no impact remains future work."
+        "threats_alternative_explanations": "SysML/XMI import may lose semantics or layout across tools; the paper says demonstrating import with no impact remains future work.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Interoperability/reproducibility claim, not reliability."
       },
       {
         "claim_id": "C7_crm_validation_strategy_model_quality",
@@ -1801,7 +1936,12 @@
         "evidence_quote": "'The SSWG has already shared the current version of the CRM with trusted partners, with encouraging results; and it has arranged for the first α-test.'",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "medium",
-        "threats_alternative_explanations": "Validation is not independent and is early; trusted partners and SSWG-assisted alpha testers may not represent ordinary adopters."
+        "threats_alternative_explanations": "Validation is not independent and is early; trusted partners and SSWG-assisted alpha testers may not represent ordinary adopters.",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Validation questions address completeness, well-formedness, consistency, domain accuracy, and confidence in CRM use."
       },
       {
         "claim_id": "C8_prior_rax_integrated_trade_studies",
@@ -1835,7 +1975,11 @@
         "evidence_quote": "'Behavioral models were implemented and tightly integrated with parametrics modeling and analysis to demonstrate trade studies...' and 'different configurations of solar panel areas and maximum battery capacity were traded off to compare on-board energy levels'.",
         "evidence_confidence_rating": "Weak",
         "extractor_confidence": "medium",
-        "threats_alternative_explanations": "This is lineage/background evidence from earlier papers, not new evidence for the current CRM implementation; no numeric trade-study results are given here."
+        "threats_alternative_explanations": "This is lineage/background evidence from earlier papers, not new evidence for the current CRM implementation; no numeric trade-study results are given here.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Prior trade-study/integration evidence concerns decision support and interoperability, not a reliability outcome."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1936,5 +2080,16 @@
       "extraction_confidence_reason": "The paper text is clear and detailed for CRM artifacts, but outcome evidence is weak, some claims refer to prior phases, and metadata authors conflict with the visible header."
     }
   },
-  "bibtex": "@inproceedings{Kaslow2018CubeSatCRMInterim4,\n  title = {Developing a {CubeSat} Model-Based System Engineering ({MBSE}) Reference Model -- Interim Status \\#4},\n  author = {Kaslow, David and Ayres, Bradley J. and Cahill, Philip T. and Croney, Chuck and Hart, Laura and Levi, Alejandro G.},\n  year = {2018},\n  doi = {10.2514/6.2018-5328},\n  publisher = {American Institute of Aeronautics and Astronautics}\n}"
+  "bibtex": "@inproceedings{Kaslow2018CubeSatCRMInterim4,\n  title = {Developing a {CubeSat} Model-Based System Engineering ({MBSE}) Reference Model -- Interim Status \\#4},\n  author = {Kaslow, David and Ayres, Bradley J. and Cahill, Philip T. and Croney, Chuck and Hart, Laura and Levi, Alejandro G.},\n  year = {2018},\n  doi = {10.2514/6.2018-5328},\n  publisher = {American Institute of Aeronautics and Astronautics}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0013.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Downgrade IVV integration from executable/model-based checks to trace-linked verification artifacts.",
+      "Do not add EPS reliability; the paper has only generic system/model quality and mission-assurance-adjacent claims.",
+      "Generality/reuse coding is supported, but avoid unsupported interface-focused or specific-mission-only labels."
+    ],
+    "applied_at": "2026-05-28T15:59:43-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

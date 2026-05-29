@@ -1,0 +1,129 @@
+{
+  "corpus_id": "paper-0071",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction",
+        "specific-mission model with reusable method only"
+      ],
+      "status": "coded",
+      "rationale": "The paper presents an RVSAT-1 SysML template and layered risk-management workflow, and explicitly claims the approach/framework can be reused for other complex systems with modifications. The realized model remains RVSAT-specific, so reuse is primarily of the method/workflow at a high level. Do not code mission-agnostic architecture, interface-focused model, or low-dynamics / non-detailed-behavior model as the reuse mechanism.",
+      "evidence": [
+        {
+          "quote": "images captured from the template of the SysML model for RVSAT1 created in the Eclipse Papyrus IDE",
+          "location": "Introduction"
+        },
+        {
+          "quote": "Though developed for RVSAT-1, a student nano-satellite, this approach can be utilized for other complex systems as well.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "The proposed model is constructed in a layered configuration in SysML... organised in a top-down fashion allowing one to navigate from the top most system level to lower level elements.",
+          "location": "Introduction"
+        },
+        {
+          "quote": "Being a modular approach, it also offers the leverage to modify or further develop this idea without many complications",
+          "location": "Summary"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [],
+      "status": "not_applicable",
+      "rationale": "The paper is not EPS-relevant and presents no EPS IVV model. Generic V&V traceability language and future MATLAB/Simulink interfacing do not show verification artifacts, trace-linked verification items, executable checks, simulation-in-the-loop, SIL/HIL, or implemented tool connections.",
+      "evidence": [
+        {
+          "quote": "This paper focuses on the application of the model-based approach to the process of risk management in RVSAT-1",
+          "location": "Introduction"
+        },
+        {
+          "quote": "This structure allows for seamless traceability and ease of access when performing validation and verification activities.",
+          "location": "Proposed Methodology"
+        },
+        {
+          "quote": "The future scope... can be interfaced with external tools such as MATLAB Systems Composer and Simulink",
+          "location": "Summary"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "mission assurance",
+        "model consistency/reliability"
+      ],
+      "status": "coded",
+      "rationale": "No EPS reliability is supported. Risk-management claims support only mission-assurance subtyping, because the paper ties risk management to mission-critical risks, system integrity, and failure probability. Generic consistency/completeness claims support model consistency/reliability. Non-reliability claims should remain not applicable at claim level.",
+      "evidence": [
+        {
+          "quote": "analysis of mission-critical risks have assumed paramount importance to ensure the optimum performance of the system in its operating environment",
+          "location": "Abstract"
+        },
+        {
+          "quote": "If risks to any project are haphazardly managed, the integrity of the system becomes questionable, and increases the probability of failure in its operational environment.",
+          "location": "Summary"
+        },
+        {
+          "quote": "it becomes strenuous to execute the required traceability and to maintain or reuse system requirements and design details",
+          "location": "MBSE and SysML"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "C1",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "System/subsystem risk understanding is tied to mission-critical risk management, but not EPS reliability."
+    },
+    {
+      "claim_id": "C2",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Traceability and ease of access for V&V activities are not presented as a reliability outcome and no IVV artifacts are shown."
+    },
+    {
+      "claim_id": "C3",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "RPI and risk-cube prioritization are risk-management mechanisms linked to avoiding project/system failure, not EPS reliability."
+    },
+    {
+      "claim_id": "C4",
+      "reliability_subtype": [
+        "mission assurance"
+      ],
+      "rationale": "The claim concerns a balanced approach to managing risks; this is mission-assurance-adjacent only, with no direct system reliability or EPS evidence."
+    },
+    {
+      "claim_id": "C5",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "Consistency, completeness, and design-change interpretation are model/process consistency claims, not EPS or mission reliability evidence."
+    },
+    {
+      "claim_id": "C6",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Reuse/modularity and future tool-interface claims are not reliability outcomes as stated."
+    }
+  ],
+  "repair_notes": [
+    "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism.",
+    "Do not add mission-agnostic architecture or interface-focused model; interfaces are present but not the demonstrated reuse mechanism.",
+    "Keep IVV as not applicable for EPS; generic V&V/future-tool language is not model-integrated IVV.",
+    "Do not code EPS reliability; reliability subtypes are limited to mission assurance and model consistency/reliability."
+  ]
+}

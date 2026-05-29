@@ -529,26 +529,29 @@
         "reference model",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
       ],
       "status": "coded",
-      "rationale": "The CubeSat Reference Model is a reusable starting point/template with logical building blocks, swappable component library, and a described workflow for concept trade studies.",
+      "rationale": "The paper directly supports a reusable CubeSat reference-model/template, mission-agnostic logical architecture, component library, and concept-trade workflow. It also supports high-level abstraction through logical components without implementation constraints and interface-focused modeling through interface management, data/information flows, and COTS simulation interfaces. Do not code specific-mission model with reusable method only because the current contribution is explicitly generic, not only a specific mission case. Do not code low-dynamics / non-detailed-behavior model: although the current model is high-level/logical, the paper does not present non-detailed behavior itself as the reuse mechanism and also discusses behavior/state/activity diagrams.",
       "evidence": [
         {
-          "quote": "Goal: 'Provide a CubeSat Reference Model that CubeSat teams can use as starting point...'",
-          "location": "not specified"
+          "quote": "Provide a CubeSat Reference Model that CubeSat teams can use as starting point for their mission-specific CubeSat model.",
+          "location": "Introduction, project goals"
         },
         {
-          "quote": "Section III.A: 'provide a logical architecture... building blocks for any kind of CubeSat mission.'",
-          "location": "not specified"
+          "quote": "The purpose of the CubeSat Reference Model is to provide a logical architecture, which serves as a guide and provide the building blocks for any kind of CubeSat mission.",
+          "location": "Section III.A"
         },
         {
-          "quote": "Figure 8 description includes 'Space and Ground System Components (Library of components to swap in and out of the model).'",
-          "location": "not specified"
+          "quote": "The logical components are abstractions of the physical components that perform the system functionality without imposing implementation constraints.",
+          "location": "Section II.C"
         },
         {
-          "quote": "Section III.C gives a sequence from MOE decomposition to STK interface and trade-space evaluation.",
-          "location": "not specified"
+          "quote": "The system model also integrates other discipline specific engineering models and simulations.",
+          "location": "Abstract"
         }
       ],
       "confidence": "high"
@@ -750,6 +753,32 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "simulation-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV integration level is system-level concept simulation-in-the-loop: the mission model is connected to a space-system simulation model such as STK for parameter input/output and trade-space evaluation, including power sufficiency. This should not be interpreted as an EPS-specific verification procedure, verification matrix, executable check, SIL/HIL, or physical test evidence.",
+      "evidence": [
+        {
+          "quote": "Validation and Verification Strategies",
+          "location": "Figure 8 description"
+        },
+        {
+          "quote": "Trade Studies Requirements Verification",
+          "location": "Figure 8 description"
+        },
+        {
+          "quote": "Next, an interface between the mission model and a space system model (e.g., AGI's System Tool Kit) are established. The interface supports the input (driving parameters) into the space system model and the output (quantifying parameters) from the space system model.",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data to meet the established measures.",
+          "location": "Section III.C"
+        }
+      ],
+      "confidence": "medium"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -794,6 +823,24 @@
         {
           "quote": "Conclusion: reference model can reduce 'burden', serve as 'checklist', and promote 'uniformity and consistency.'",
           "location": "not specified"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability"
+      ],
+      "status": "coded",
+      "rationale": "Only the single-source repository, automatic update, uniformity, and consistency claims support a reliability-adjacent subtype, and that subtype is model consistency/reliability. The paper does not directly claim EPS reliability, system/mission reliability, mission assurance effects, or defect/error reduction. Power-trade and reuse claims are not reliability claims. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "The model is the single, authoritative integrated repository of information. Changes to the model are automatically populated into the system views.",
+          "location": "Section II.B"
+        },
+        {
+          "quote": "a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models.",
+          "location": "Conclusion"
         }
       ],
       "confidence": "high"
@@ -1505,13 +1552,38 @@
         "mission-specific model derived from the reference model"
       ],
       "generality_reuse_mechanism": [
-        "CubeSat Reference Model used as starting point/template",
-        "Object-oriented logical architecture and reusable subsystem building blocks",
-        "Library of space/ground components to swap in/out",
-        "Lifecycle-phase models for gradual adoption",
-        "Concept-trade workflow using MOE/MOP/TPM decomposition and model/simulation interface",
-        "Planned distribution via MagicDraw, ZIP/XMI, OpenMBEE, Teamcenter, and user feedback mechanisms"
-      ]
+        "template",
+        "reference model",
+        "library",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "interface-focused model"
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper directly supports a reusable CubeSat reference-model/template, mission-agnostic logical architecture, component library, and concept-trade workflow. It also supports high-level abstraction through logical components without implementation constraints and interface-focused modeling through interface management, data/information flows, and COTS simulation interfaces. Do not code specific-mission model with reusable method only because the current contribution is explicitly generic, not only a specific mission case. Do not code low-dynamics / non-detailed-behavior model: although the current model is high-level/logical, the paper does not present non-detailed behavior itself as the reuse mechanism and also discusses behavior/state/activity diagrams.",
+        "evidence": [
+          {
+            "quote": "Provide a CubeSat Reference Model that CubeSat teams can use as starting point for their mission-specific CubeSat model.",
+            "location": "Introduction, project goals"
+          },
+          {
+            "quote": "The purpose of the CubeSat Reference Model is to provide a logical architecture, which serves as a guide and provide the building blocks for any kind of CubeSat mission.",
+            "location": "Section III.A"
+          },
+          {
+            "quote": "The logical components are abstractions of the physical components that perform the system functionality without imposing implementation constraints.",
+            "location": "Section II.C"
+          },
+          {
+            "quote": "The system model also integrates other discipline specific engineering models and simulations.",
+            "location": "Abstract"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_or_phases": [
@@ -1626,7 +1698,33 @@
         "state/parametric/activity diagrams"
       ],
       "evidence_verification_integrated_in_model": "Figure 8 connects Validation and Verification Strategies and Trade Studies Requirements Verification to the mission-specific model, and Section III.C uses model-linked measures/trades. Evidence is system-level/conceptual, not EPS-procedure-specific.",
-      "integration_test_readiness": "not reported; no EPS hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation link is provided."
+      "integration_test_readiness": "not reported; no EPS hardware integration, software integration, flat-sat/testbed, environmental test, or operational validation link is provided.",
+      "ivv_integration_level": {
+        "values": [
+          "simulation-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "The highest supported IVV integration level is system-level concept simulation-in-the-loop: the mission model is connected to a space-system simulation model such as STK for parameter input/output and trade-space evaluation, including power sufficiency. This should not be interpreted as an EPS-specific verification procedure, verification matrix, executable check, SIL/HIL, or physical test evidence.",
+        "evidence": [
+          {
+            "quote": "Validation and Verification Strategies",
+            "location": "Figure 8 description"
+          },
+          {
+            "quote": "Trade Studies Requirements Verification",
+            "location": "Figure 8 description"
+          },
+          {
+            "quote": "Next, an interface between the mission model and a space system model (e.g., AGI's System Tool Kit) are established. The interface supports the input (driving parameters) into the space system model and the output (quantifying parameters) from the space system model.",
+            "location": "Section III.C"
+          },
+          {
+            "quote": "The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data to meet the established measures.",
+            "location": "Section III.C"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1662,7 +1760,11 @@
         "evidence_quote": "Abstract: 'MBSE involves creating a system model that is a single source for system engineering such as architecture development and interface management. The system model also integrates other discipline specific engineering models and simulations.' Figure 5: 'Model updates are automatically populated into the system views.'",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "This is a generic MBSE mechanism statement; no trace-link audit, interoperability test, or document-control comparison is reported."
+        "threats_alternative_explanations": "This is a generic MBSE mechanism statement; no trace-link audit, interoperability test, or document-control comparison is reported.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Single authoritative repository and automatic view updates support model consistency only, not EPS or mission reliability."
       },
       {
         "claim_id": "C2",
@@ -1696,7 +1798,11 @@
         "evidence_quote": "Goal: 'Provide a CubeSat Reference Model that CubeSat teams can use as starting point for their mission-specific CubeSat model.' Section III.A: 'provide a logical architecture... the building blocks for any kind of CubeSat mission.'",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "No released model, user replication, or reuse across independent missions is reported in this paper."
+        "threats_alternative_explanations": "No released model, user replication, or reuse across independent missions is reported in this paper.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reusable starting-point/reference-model claim; no reliability outcome is directly claimed."
       },
       {
         "claim_id": "C3",
@@ -1731,7 +1837,11 @@
         "evidence_quote": "Section III.C: 'First, the MOEs are decomposed into measures of performances (MOPs) and technical performance measures (TPMs).' 'The interface supports the input (driving parameters) into the space system model and the output (quantifying parameters) from the space system model.'",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Workflow is described but no current example mission, numerical outputs, sensitivity analysis, or comparison to manual trade studies is shown."
+        "threats_alternative_explanations": "Workflow is described but no current example mission, numerical outputs, sensitivity analysis, or comparison to manual trade studies is shown.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "MOE/MOP/TPM trade workflow and STK interface support decision support/integrability, not reliability."
       },
       {
         "claim_id": "C4",
@@ -1766,7 +1876,11 @@
         "evidence_quote": "Section III: 'The following two trade studies were demonstrated: 1) On board energy level as a function of solar panel area and maximum battery capacity, and 2) quantity of data downloaded...' Section III.C: 'The model is used to establish and evaluate a second-order trade space that provides sufficient power for collect and downlink mission data...'",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "The demonstrated trade studies are referenced from earlier papers rather than reported with methods/results here; 'sufficient power' is not quantified as an EPS verification result."
+        "threats_alternative_explanations": "The demonstrated trade studies are referenced from earlier papers rather than reported with methods/results here; 'sufficient power' is not quantified as an EPS verification result.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Power sufficiency trade is not claimed as EPS reliability or mission reliability evidence."
       },
       {
         "claim_id": "C5",
@@ -1799,7 +1913,11 @@
         "evidence_quote": "'Providing a fully-formed CubeSat Reference Model could be a bit overwhelming... Having models for each life-cycle phase is a more gradual way to get up to speed. That should also make it easier for a team to modify, add, and remove SysML elements...'",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "No user study, training-time metric, or onboarding comparison is reported."
+        "threats_alternative_explanations": "No user study, training-time metric, or onboarding comparison is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Gradual MBSE adoption/easier modification claim is effort/reuse related, not reliability."
       },
       {
         "claim_id": "C6",
@@ -1835,7 +1953,11 @@
         "evidence_quote": "'MBSE holds the promise of reducing the burden of systems engineering tasks... a properly designed reference model can serve as a checklist... and promote uniformity and consistency across future CubeSat models.'",
         "evidence_confidence_rating": "Unsupported",
         "confidence": "high",
-        "threats_alternative_explanations": "No empirical evidence shows burden reduction, checklist completeness, or consistency gains; effect depends on future model release and user adoption."
+        "threats_alternative_explanations": "No empirical evidence shows burden reduction, checklist completeness, or consistency gains; effect depends on future model release and user adoption.",
+        "reliability_subtype": [
+          "model consistency/reliability"
+        ],
+        "reliability_subtype_rationale": "Uniformity and consistency across future CubeSat models support model consistency/reliability only."
       },
       {
         "claim_id": "C7",
@@ -1868,7 +1990,11 @@
         "evidence_quote": "Section III.B: 'The SSWG team is developing a model distribution process to share to external entities...' Figure 9 lists 'MagicDraw, ZIP File, XMI File, OpenMBEE, and Teamcenter.' Conclusion: team 'hopes to release the models publicly in the near future.'",
         "evidence_confidence_rating": "Weak",
         "confidence": "medium",
-        "threats_alternative_explanations": "Distribution is not yet completed; licensing/copyright choices and actual external reuse are not reported."
+        "threats_alternative_explanations": "Distribution is not yet completed; licensing/copyright choices and actual external reuse are not reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Distribution and sharing mechanisms support reuse/reproducibility, not reliability."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1944,5 +2070,16 @@
       "extraction_confidence_rationale": "Full markdown is available and central claims are clear; classification uncertainty mainly concerns whether broad lifecycle/toolchain statements are planned versus implemented."
     }
   },
-  "bibtex": "@inproceedings{Kaslow2015CubeSatMBSEReferenceModelConcept,\n  author = {Kaslow, David and Ayres, Bradley J. and Iwata, Curtis and Shiotani, Bungo},\n  title = {CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase},\n  booktitle = {AIAA SPACE 2015 Conference and Exposition},\n  year = {2015},\n  publisher = {American Institute of Aeronautics and Astronautics},\n  doi = {10.2514/6.2015-4474},\n  url = {https://arc.aiaa.org/doi/10.2514/6.2015-4474}\n}"
+  "bibtex": "@inproceedings{Kaslow2015CubeSatMBSEReferenceModelConcept,\n  author = {Kaslow, David and Ayres, Bradley J. and Iwata, Curtis and Shiotani, Bungo},\n  title = {CubeSat Model-Based System Engineering (MBSE) Reference Model - Application in the Concept Lifecycle Phase},\n  booktitle = {AIAA SPACE 2015 Conference and Exposition},\n  year = {2015},\n  publisher = {American Institute of Aeronautics and Astronautics},\n  doi = {10.2514/6.2015-4474},\n  url = {https://arc.aiaa.org/doi/10.2514/6.2015-4474}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0022.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Revise generality/reuse values: add interface-focused model and remove low-dynamics / non-detailed-behavior model.",
+      "Keep IVV at simulation-in-the-loop only with a system-level concept-trade caveat; do not represent it as EPS-specific verification artifact integration.",
+      "Do not add EPS reliability, system/mission reliability, mission assurance, or defect/error reduction subtypes."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

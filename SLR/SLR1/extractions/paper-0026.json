@@ -487,26 +487,33 @@
         "profile",
         "reusable workflow",
         "open package",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
       "status": "coded",
-      "rationale": "The approach builds from the CSRM reference-model lineage, creates an assumptions profile, provides reusable modeling/code rules and workflow, and exposes the model in a repository.",
+      "rationale": "The paper presents a reusable, open-source CubeSat power-subsystem model based on the CSRM lineage, with an assumptions profile, modeling guidelines, Java traceability workflow, and repository availability. It is not tied to a named mission and is framed as adaptable to future CubeSat projects, so mission-agnostic architecture is supported. The model is deliberately abstract/limited in behavior, with nominal behavior only and mission modes omitted. Do not code specific-mission model with reusable method only.",
       "evidence": [
         {
-          "quote": "builds on existing studies regarding CubeSats system models",
+          "quote": "CubeSat System Reference Model (CSRM) that can be adapted to any CubeSat project",
           "location": "Section I"
         },
         {
-          "quote": "For our model, an assumptions profile was created and applied",
+          "quote": "Illustrated with a CubeSat power subsystem model, this section presents how modeling can be realized to provide better traceability and ease of reproduction",
+          "location": "Section III"
+        },
+        {
+          "quote": "For our model, an assumptions profile was created and applied in order to include assumptions.",
           "location": "Section III.B"
         },
         {
-          "quote": "when building the model the following rules must be respected",
-          "location": "Section IV"
+          "quote": "In this paper only nominal behavior is shown ... mission modes are not discussed in this paper.",
+          "location": "Section III.A.5"
         },
         {
-          "quote": "https://github.com/SalasCorderoS/PowerSV",
-          "location": "Section IV"
+          "quote": "it can easily be reproduced by those who wish to use it and adapt it to their own needs",
+          "location": "Section V"
         }
       ],
       "confidence": "high"
@@ -723,6 +730,32 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "executable/model-based checks"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported IVV integration level is executable/model-based checks: Java reads the Papyrus .uml system model, extracts requirement/assumption/constraint data, evaluates parameter-change scenarios, and outputs respected/not-respected requirement constraint flags. This is stronger than a separate verification document or adjacent matrix, but not simulation-in-the-loop, SIL/HIL, or physical integration/test.",
+      "evidence": [
+        {
+          "quote": "presents an automatic requirement verification approach from system model data with a java code",
+          "location": "Section I"
+        },
+        {
+          "quote": "The code takes as input the Papyrus \".uml\" file of the model from which it extracts ... requirement and assumption constraints, and constraint block data",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "the requirement constraint will be also displayed with a mention of whether is fulfilled with a \" (no-)respected\" flag",
+          "location": "Section III.C"
+        },
+        {
+          "quote": "Batt*1.2＜BC ... not respected ... 0＜PSAM ... respected",
+          "location": "Table III"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -772,6 +805,29 @@
         }
       ],
       "confidence": "medium"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Only the traceability/automatic requirement-checking claim is reliability-adjacent. It supports mission assurance and defect/error reduction through power-budget requirement checking and early detection of design errors. It should not be upgraded to EPS reliability because the paper does not directly report EPS reliability analysis, reliability metrics, fault-tolerance validation, or operational reliability evidence. Non-reliability claims should be not applicable. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "allow for the early detection of potential design errors",
+          "location": "Section I"
+        },
+        {
+          "quote": "The power budget must be met to ensure that the consumed power does not exceed the produced power by the CubeSat, which is essential for mission success.",
+          "location": "Section III.A.6"
+        },
+        {
+          "quote": "whether the different model constraints are respected or not following these changes",
+          "location": "Section V"
+        }
+      ],
+      "confidence": "high"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1413,13 +1469,43 @@
         "profile",
         "reusable workflow",
         "open package",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture",
+        "low-dynamics / non-detailed-behavior model"
       ],
       "key_evidence_quotes": [
         "This model-based approach for CubeSat subsystems helps to visualize and understand what is needed for the design of a CubeSat power subsystem, while guaranteeing that the designers are clearly aware of which requirements are being met and which are not.",
         "For our model, an assumptions profile was created and applied in order to include assumptions.",
         "The model can be found in the project repository."
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper presents a reusable, open-source CubeSat power-subsystem model based on the CSRM lineage, with an assumptions profile, modeling guidelines, Java traceability workflow, and repository availability. It is not tied to a named mission and is framed as adaptable to future CubeSat projects, so mission-agnostic architecture is supported. The model is deliberately abstract/limited in behavior, with nominal behavior only and mission modes omitted. Do not code specific-mission model with reusable method only.",
+        "evidence": [
+          {
+            "quote": "CubeSat System Reference Model (CSRM) that can be adapted to any CubeSat project",
+            "location": "Section I"
+          },
+          {
+            "quote": "Illustrated with a CubeSat power subsystem model, this section presents how modeling can be realized to provide better traceability and ease of reproduction",
+            "location": "Section III"
+          },
+          {
+            "quote": "For our model, an assumptions profile was created and applied in order to include assumptions.",
+            "location": "Section III.B"
+          },
+          {
+            "quote": "In this paper only nominal behavior is shown ... mission modes are not discussed in this paper.",
+            "location": "Section III.A.5"
+          },
+          {
+            "quote": "it can easily be reproduced by those who wish to use it and adapt it to their own needs",
+            "location": "Section V"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "implementation_steps_or_phases_reported": [
@@ -1525,7 +1611,33 @@
         "The power budget must be met to ensure that the consumed power does not exceed the produced power by the CubeSat, which is essential for mission success.",
         "The term constrained parameter corresponds to the parameters that are affected by a certain constraint.",
         "Below this table, the evaluated constraints by the code are pointed out as well as whether they are respected or not in the current scenario."
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "executable/model-based checks"
+        ],
+        "status": "coded",
+        "rationale": "The highest supported IVV integration level is executable/model-based checks: Java reads the Papyrus .uml system model, extracts requirement/assumption/constraint data, evaluates parameter-change scenarios, and outputs respected/not-respected requirement constraint flags. This is stronger than a separate verification document or adjacent matrix, but not simulation-in-the-loop, SIL/HIL, or physical integration/test.",
+        "evidence": [
+          {
+            "quote": "presents an automatic requirement verification approach from system model data with a java code",
+            "location": "Section I"
+          },
+          {
+            "quote": "The code takes as input the Papyrus \".uml\" file of the model from which it extracts ... requirement and assumption constraints, and constraint block data",
+            "location": "Section III.C"
+          },
+          {
+            "quote": "the requirement constraint will be also displayed with a mention of whether is fulfilled with a \" (no-)respected\" flag",
+            "location": "Section III.C"
+          },
+          {
+            "quote": "Batt*1.2＜BC ... not respected ... 0＜PSAM ... respected",
+            "location": "Table III"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1577,7 +1689,12 @@
           }
         ],
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Only one constructed scenario is shown; no independent validation, integration test, or measured design-process benefit is provided. Correct results may reflect correct equation implementation rather than broader MBSE value."
+        "threats_or_alternative_explanations": "Only one constructed scenario is shown; no independent validation, integration test, or measured design-process benefit is provided. Correct results may reflect correct equation implementation rather than broader MBSE value.",
+        "reliability_subtype": [
+          "mission assurance",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Automatic model-based requirement/constraint checks support early detection of design errors and mission-assurance-oriented power-budget compliance, but not demonstrated EPS reliability."
       },
       {
         "id": "C2",
@@ -1620,7 +1737,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Availability does not prove practical reproducibility, reuse effort, or adoption; no replication across independent CubeSat projects is reported."
+        "threats_or_alternative_explanations": "Availability does not prove practical reproducibility, reuse effort, or adoption; no replication across independent CubeSat projects is reported.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim concerns reproducibility, reuse, and adaptation, not reliability."
       },
       {
         "id": "C3",
@@ -1666,7 +1787,11 @@
           }
         ],
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "No cost, schedule, or effort measurements; no baseline; claim may be an expected MBSE benefit rather than a demonstrated result of this model."
+        "threats_or_alternative_explanations": "No cost, schedule, or effort measurements; no baseline; claim may be an expected MBSE benefit rather than a demonstrated result of this model.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim concerns cost, schedule, effort, and reuse, not reliability."
       },
       {
         "id": "C4",
@@ -1706,7 +1831,11 @@
           }
         ],
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "Understandability is asserted by the authors and illustrated by figures; it is not evaluated with users/stakeholders."
+        "threats_or_alternative_explanations": "Understandability is asserted by the authors and illustrated by figures; it is not evaluated with users/stakeholders.",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "The claim concerns visualization, understanding, completeness, and traceability, not a reliability outcome."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1783,5 +1912,16 @@
       "confidence_rationale": "The paper text is complete and specific for model/tool/workflow extraction; outcome strength is limited but clearly documented."
     }
   },
-  "bibtex": "@inproceedings{Strobbe2023OpenSourceCubeSatMBSE,\n  title = {Open-source CubeSat MBSE Approach to Address Traceability: Power Subsystem},\n  author = {Strobbe, Charlotte and Salas Cordero, Sophia and Vingerhoeds, Rob},\n  booktitle = {2023 IEEE International Systems Conference (SysCon)},\n  year = {2023},\n  publisher = {IEEE},\n  doi = {10.1109/syscon53073.2023.10131054}\n}"
+  "bibtex": "@inproceedings{Strobbe2023OpenSourceCubeSatMBSE,\n  title = {Open-source CubeSat MBSE Approach to Address Traceability: Power Subsystem},\n  author = {Strobbe, Charlotte and Salas Cordero, Sophia and Vingerhoeds, Rob},\n  booktitle = {2023 IEEE International Systems Conference (SysCon)},\n  year = {2023},\n  publisher = {IEEE},\n  doi = {10.1109/syscon53073.2023.10131054}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0026.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Add mission-agnostic architecture to generality_reuse_mechanism; the model is presented as a generic CubeSat power-subsystem starting point adaptable to future missions, not a specific-mission model only.",
+      "Keep executable/model-based checks for ivv_integration_level; do not upgrade to simulation-in-the-loop or SIL/HIL.",
+      "Do not code EPS reliability; reliability-adjacent evidence supports mission assurance and defect/error reduction only."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

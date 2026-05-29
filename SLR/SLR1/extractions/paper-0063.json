@@ -529,18 +529,28 @@
     "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
       "values": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "interface-focused model",
+        "specific-mission model with reusable method only"
       ],
       "status": "coded",
-      "rationale": "Reuse is claimed for similar verification scenarios, and the approach is guided by OOSEM and a repeatable verification-model workflow.",
+      "rationale": "The EIRSAT-1 model is specific to one mission and the demonstrated exemplar is the communications subsystem, not a mission-agnostic architecture. Reuse is supported at the workflow/method level: OOSEM/SysML/CATIA Magic are used to construct verification models from test plans, interface them with scripts/hardware, and reuse/apply a similar approach in comparable verification scenarios and remaining subsystems. The interface-focused label is supported by the model-to-script/test-setup exchange and ground-segment interface modeling. Do not add high-level abstraction, mission-agnostic architecture, or low-dynamics / non-detailed-behavior model.",
       "evidence": [
-        {
-          "quote": "the models can be reused several times in similar verification scenarios",
-          "location": "Section III.B"
-        },
         {
           "quote": "As a starting point, we have adopted INCOSE OOSEM.",
           "location": "Section II.A"
+        },
+        {
+          "quote": "The aim is to construct the verification models in MBSE similar to the verification plans in traditional SE and create interface plugins to exchange information between the MBSE environment and the external test scripts.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The MBSE verification model allows the required technical parameters to flow from the system models to the Python client which in turn commands the ground station hardware",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "the models can be reused several times in similar verification scenarios",
+          "location": "Section III.B"
         },
         {
           "quote": "A similar approach will be applied to the remaining subsystems, creating a automated framework.",
@@ -749,6 +759,32 @@
       ],
       "confidence": "high"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "software/hardware-in-the-loop"
+      ],
+      "status": "coded",
+      "rationale": "Although not EPS-specific, the system/communications verification model is model-integrated with external software and ground-station hardware, including parameter flow to a Python client, command of radio/antenna hardware, parametric validation, and automatic requirements-table/compliance-matrix updates. This exceeds separate-document or adjacent-matrix evidence.",
+      "evidence": [
+        {
+          "quote": "With the MBSE approach, the system models are integrated with other programmatic tools to enable exchange of data and allow automated verification of requirements.",
+          "location": "Section III.A"
+        },
+        {
+          "quote": "The verification model is integrated with the actual end-to-end test setup to command the input test parameters through the model diagram.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.",
+          "location": "Section IV"
+        }
+      ],
+      "confidence": "high"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [
         "links to hardware integration",
@@ -808,6 +844,30 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "process reliability",
+        "model consistency/reliability",
+        "mission assurance"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-related evidence concerns reliable verification process sequencing/traceability, model-flow thoroughness, and requirements-compliance assurance. There is no direct EPS reliability or spacecraft system reliability evidence, so EPS reliability and system/mission reliability should not be coded. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "A single integrated environment ensures that system verification is planned and executed in the correct sequence with full traceability based on requirements.",
+          "location": "Section II"
+        },
+        {
+          "quote": "The models are then verified for their reliability using the Magic Model Analyst tool, which allows an assessment of whether the model flow is thorough.",
+          "location": "Section III.B"
+        },
+        {
+          "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+          "location": "Section III.B"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1449,7 +1509,9 @@
       ],
       "generality_reuse_mechanism": [
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "interface-focused model",
+        "specific-mission model with reusable method only"
       ],
       "key_evidence": [
         {
@@ -1464,7 +1526,34 @@
           "quote": "the models can be reused several times in similar verification scenarios",
           "location": "Section III.B"
         }
-      ]
+      ],
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The EIRSAT-1 model is specific to one mission and the demonstrated exemplar is the communications subsystem, not a mission-agnostic architecture. Reuse is supported at the workflow/method level: OOSEM/SysML/CATIA Magic are used to construct verification models from test plans, interface them with scripts/hardware, and reuse/apply a similar approach in comparable verification scenarios and remaining subsystems. The interface-focused label is supported by the model-to-script/test-setup exchange and ground-segment interface modeling. Do not add high-level abstraction, mission-agnostic architecture, or low-dynamics / non-detailed-behavior model.",
+        "evidence": [
+          {
+            "quote": "As a starting point, we have adopted INCOSE OOSEM.",
+            "location": "Section II.A"
+          },
+          {
+            "quote": "The aim is to construct the verification models in MBSE similar to the verification plans in traditional SE and create interface plugins to exchange information between the MBSE environment and the external test scripts.",
+            "location": "Section III.A"
+          },
+          {
+            "quote": "The MBSE verification model allows the required technical parameters to flow from the system models to the Python client which in turn commands the ground station hardware",
+            "location": "Section III.B"
+          },
+          {
+            "quote": "the models can be reused several times in similar verification scenarios",
+            "location": "Section III.B"
+          },
+          {
+            "quote": "A similar approach will be applied to the remaining subsystems, creating a automated framework.",
+            "location": "Section IV"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps": [
@@ -1623,7 +1712,33 @@
         "links to hardware integration",
         "software integration"
       ],
-      "eps_synthesis_note": "Useful for system-level/communications verification integration, but not direct evidence for EPS modeling or EPS pre-physical verification."
+      "eps_synthesis_note": "Useful for system-level/communications verification integration, but not direct evidence for EPS modeling or EPS pre-physical verification.",
+      "ivv_integration_level": {
+        "values": [
+          "software/hardware-in-the-loop"
+        ],
+        "status": "coded",
+        "rationale": "Although not EPS-specific, the system/communications verification model is model-integrated with external software and ground-station hardware, including parameter flow to a Python client, command of radio/antenna hardware, parametric validation, and automatic requirements-table/compliance-matrix updates. This exceeds separate-document or adjacent-matrix evidence.",
+        "evidence": [
+          {
+            "quote": "With the MBSE approach, the system models are integrated with other programmatic tools to enable exchange of data and allow automated verification of requirements.",
+            "location": "Section III.A"
+          },
+          {
+            "quote": "The verification model is integrated with the actual end-to-end test setup to command the input test parameters through the model diagram.",
+            "location": "Section III.B"
+          },
+          {
+            "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance.",
+            "location": "Section III.B"
+          },
+          {
+            "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time.",
+            "location": "Section IV"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1661,7 +1776,12 @@
           "quote": "A single integrated environment ensures that system verification is planned and executed in the correct sequence with full traceability based on requirements."
         },
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "Lifecycle-wide traceability is presented as a project aim; only a Phase C-D communications exemplar is described."
+        "threats_or_alternative_explanations": "Lifecycle-wide traceability is presented as a project aim; only a Phase C-D communications exemplar is described.",
+        "reliability_subtype": [
+          "process reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The claim is about verification being planned/executed in the correct sequence with requirements traceability, supporting process reliability and mission assurance, not EPS reliability."
       },
       {
         "claim_id": "C2",
@@ -1696,7 +1816,10 @@
           "quote": "With the MBSE approach, the system models are integrated with other programmatic tools to enable exchange of data and allow automated verification of requirements."
         },
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "Automation could depend on custom plugin/script implementation not provided; no independent test-result data are shown."
+        "threats_or_alternative_explanations": "Automation could depend on custom plugin/script implementation not provided; no independent test-result data are shown.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C3",
@@ -1734,7 +1857,12 @@
           "quote": "The parametric diagrams within, validate the data exchanged and confirm the requirements compliance. The requirements are verified simultaneously with the test runs"
         },
         "evidence_confidence_rating": "Moderate",
-        "threats_or_alternative_explanations": "The paper does not report actual parameter values, compliance outcomes, or error cases; 'reliability' is model-flow thoroughness, not spacecraft reliability."
+        "threats_or_alternative_explanations": "The paper does not report actual parameter values, compliance outcomes, or error cases; 'reliability' is model-flow thoroughness, not spacecraft reliability.",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "The paper's explicit reliability language concerns Magic Model Analyst assessment of model-flow thoroughness, while parametric validation and requirements compliance support mission assurance."
       },
       {
         "claim_id": "C4",
@@ -1771,7 +1899,10 @@
           "quote": "The Requirements Table in CATIA Magic tool gets updated automatically based on the test outcomes from running the verification model each time. This reduced huge amount of time spent on documenting and reporting the test outcomes to confirm the requirements compliance."
         },
         "evidence_confidence_rating": "Weak",
-        "threats_or_alternative_explanations": "No measured before/after baseline, effort log, or independent validation is provided; improvement may depend on case-specific test-script integration."
+        "threats_or_alternative_explanations": "No measured before/after baseline, effort log, or independent validation is provided; improvement may depend on case-specific test-script integration.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C5",
@@ -1805,7 +1936,10 @@
           "quote": "the models can be reused several times in similar verification scenarios"
         },
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "Future application to remaining subsystems may reveal subsystem-specific integration effort not captured by the communications example."
+        "threats_or_alternative_explanations": "Future application to remaining subsystems may reveal subsystem-specific integration effort not captured by the communications example.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       },
       {
         "claim_id": "C6",
@@ -1833,7 +1967,10 @@
           "quote": "MBSE is becoming critical in today's multi domain systems; with it, engineers have the ability to see cross domain relationships early in the design process"
         },
         "evidence_confidence_rating": "Unsupported",
-        "threats_or_alternative_explanations": "This is a generic MBSE benefit statement and not substantiated by the case results."
+        "threats_or_alternative_explanations": "This is a generic MBSE benefit statement and not substantiated by the case results.",
+        "reliability_subtype": [
+          "not applicable"
+        ]
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1984,5 +2121,17 @@
       "extraction_confidence_reason": "The paper is short and the relevant MBSE, context, and outcome claims are clear; confidence in extraction is high even though the paper's evidence for outcomes is limited."
     }
   },
-  "bibtex": "@inproceedings{akarapu2023development,\n  title = {Development of a Nanosatellite System Modeling Architecture for EIRSAT-1},\n  author = {Akarapu, Sai Krishna Reddy and Stijnen, Bas and McKenna, Caimin and McKeown, David J. and Murphy, D. and Reilly, Jack and Thompson, Joseph W. and Doyle, M. and Wall, R. and McBreen, S. and Hanlon, L.},\n  booktitle = {Proceedings of the IEEE SMC-IT Conference},\n  year = {2023},\n  doi = {10.1109/SMC-IT56444.2023.00022}\n}"
+  "bibtex": "@inproceedings{akarapu2023development,\n  title = {Development of a Nanosatellite System Modeling Architecture for EIRSAT-1},\n  author = {Akarapu, Sai Krishna Reddy and Stijnen, Bas and McKenna, Caimin and McKeown, David J. and Murphy, D. and Reilly, Jack and Thompson, Joseph W. and Doyle, M. and Wall, R. and McBreen, S. and Hanlon, L.},\n  booktitle = {Proceedings of the IEEE SMC-IT Conference},\n  year = {2023},\n  doi = {10.1109/SMC-IT56444.2023.00022}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0063.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Keep generality/reuse coded as reusable workflow, method guidance, interface-focused model, and specific-mission model with reusable method only; do not add mission-agnostic architecture or high-level abstraction.",
+      "Current IVV integration level of software/hardware-in-the-loop is supported for the system/communications model, but note it is not EPS-specific.",
+      "Add process reliability to the reliability subtype summary and C1; do not code EPS reliability or system/mission reliability.",
+      "Remove non-paper migration-audit text from evidence if repairing the extraction file."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

@@ -501,22 +501,27 @@
         "template",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction"
       ],
       "status": "coded",
-      "rationale": "Standardized calculation sheets, user manuals, the CUTE-DB library, and the four-session concurrent workflow provide reuse/guidance across CubeSat cases.",
+      "rationale": "The paper supports reusable early-phase CubeSat design templates/tools and workflow across multiple missions. High-level abstraction is justified because the approach is explicitly preliminary/conceptual-to-subsystem sizing and reused across several CubeSat projects. It does not directly support low-dynamics / non-detailed-behavior model, mission-agnostic architecture, interface-focused model, or specific-mission model with reusable method only.",
       "evidence": [
         {
           "quote": "standardized calculation sheets linked to a CubeSat Technologies Database",
           "location": "Abstract"
         },
         {
-          "quote": "Each spreadsheet is described in detail in a user manual",
-          "location": "Section 2.1"
+          "quote": "from conceptual design up to subsystem sizing",
+          "location": "Abstract"
         },
         {
-          "quote": "this process has been adapted, reducing the workflow into four, 4-hour sessions",
-          "location": "Section 3.1"
+          "quote": "This approach has been implemented and tested during several CubeSats projects",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Each spreadsheet is described in detail in a user manual, from the assumptions used to the mathematical formulas employed to a step-by-step guide to compiling the different sheets.",
+          "location": "Section 2.1"
         }
       ],
       "confidence": "high"
@@ -703,6 +708,28 @@
       ],
       "confidence": "medium"
     },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "executable/model-based checks"
+      ],
+      "status": "coded",
+      "rationale": "The highest supported level is automated/linked spreadsheet consistency and validation checks in the central repository, including the EPS sheet as one discipline. No formal EPS verification matrix, trace-linked V&V artifacts, simulation-in-the-loop, SIL/HIL, or physical test integration is shown.",
+      "evidence": [
+        {
+          "quote": "an alert system consisting of a Check column for the input values in common between two or more disciplines has been implemented in the central repository",
+          "location": "Section 2.1"
+        },
+        {
+          "quote": "The ADCS, CommSys, EPS, Propulsion, Thermal, and Payload sheets are linked to the corresponding spreadsheet, allowing an automatic filling of the 'Inputs' and 'Outputs' tables and ensuring a consistency check on the inputs.",
+          "location": "Section 2.1"
+        },
+        {
+          "quote": "It allows automated data transfer from the other spreadsheets of the S3D Tool and enables faster validation of the sizing, budgets and design",
+          "location": "Section 3.1"
+        }
+      ],
+      "confidence": "medium"
+    },
     "eps_verification_specific.integration_test_readiness": {
       "values": [],
       "status": "not_reported",
@@ -747,6 +774,30 @@
         }
       ],
       "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "mission assurance",
+        "defect/error reduction"
+      ],
+      "status": "coded",
+      "rationale": "Reliability-adjacent coding is limited to model/data consistency, error reduction, and generic early risk/verification mission-assurance claims. The paper does not support EPS reliability or system/mission reliability outcomes. Aggregate normalization: claim-level records retain not applicable where appropriate, but the structured summary lists only substantive reliability/reliability-adjacent subtypes when any are present.",
+      "evidence": [
+        {
+          "quote": "ensuring a consistency check on the inputs",
+          "location": "Section 2.1"
+        },
+        {
+          "quote": "reducing manual effort and minimizing errors",
+          "location": "Section 3.1"
+        },
+        {
+          "quote": "Parallel system development and early identification of potential issues and risks",
+          "location": "Section 2"
+        }
+      ],
+      "confidence": "medium"
     },
     "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
       "values": [
@@ -1416,9 +1467,33 @@
         "template",
         "library",
         "reusable workflow",
-        "method guidance"
+        "method guidance",
+        "high-level abstraction"
       ],
-      "excluded_or_minimal_elements": "No formal SysML/Capella model, requirements diagrams, verification matrices, test procedures, or public reusable package are reported."
+      "excluded_or_minimal_elements": "No formal SysML/Capella model, requirements diagrams, verification matrices, test procedures, or public reusable package are reported.",
+      "generality_reuse_mechanism_v1_1_reasoning": {
+        "status": "coded",
+        "rationale": "The paper supports reusable early-phase CubeSat design templates/tools and workflow across multiple missions. High-level abstraction is justified because the approach is explicitly preliminary/conceptual-to-subsystem sizing and reused across several CubeSat projects. It does not directly support low-dynamics / non-detailed-behavior model, mission-agnostic architecture, interface-focused model, or specific-mission model with reusable method only.",
+        "evidence": [
+          {
+            "quote": "standardized calculation sheets linked to a CubeSat Technologies Database",
+            "location": "Abstract"
+          },
+          {
+            "quote": "from conceptual design up to subsystem sizing",
+            "location": "Abstract"
+          },
+          {
+            "quote": "This approach has been implemented and tested during several CubeSats projects",
+            "location": "Abstract"
+          },
+          {
+            "quote": "Each spreadsheet is described in detail in a user manual, from the assumptions used to the mathematical formulas employed to a step-by-step guide to compiling the different sheets.",
+            "location": "Section 2.1"
+          }
+        ],
+        "confidence": "high"
+      }
     },
     "implementation_pathway_tailoring": {
       "reported_steps_or_phases": [
@@ -1524,7 +1599,29 @@
       "verification_integration_evidence": "Central-repository checks validate common inputs and sizing/budget consistency before physical development; there is no evidence of verification procedures integrated into an EPS model.",
       "integration_test_readiness": [
         "not reported"
-      ]
+      ],
+      "ivv_integration_level": {
+        "values": [
+          "executable/model-based checks"
+        ],
+        "status": "coded",
+        "rationale": "The highest supported level is automated/linked spreadsheet consistency and validation checks in the central repository, including the EPS sheet as one discipline. No formal EPS verification matrix, trace-linked V&V artifacts, simulation-in-the-loop, SIL/HIL, or physical test integration is shown.",
+        "evidence": [
+          {
+            "quote": "an alert system consisting of a Check column for the input values in common between two or more disciplines has been implemented in the central repository",
+            "location": "Section 2.1"
+          },
+          {
+            "quote": "The ADCS, CommSys, EPS, Propulsion, Thermal, and Payload sheets are linked to the corresponding spreadsheet, allowing an automatic filling of the 'Inputs' and 'Outputs' tables and ensuring a consistency check on the inputs.",
+            "location": "Section 2.1"
+          },
+          {
+            "quote": "It allows automated data transfer from the other spreadsheets of the S3D Tool and enables faster validation of the sizing, budgets and design",
+            "location": "Section 3.1"
+          }
+        ],
+        "confidence": "medium"
+      }
     },
     "claimed_outcomes_value_mechanisms_evidence": [
       {
@@ -1560,7 +1657,11 @@
         "evidence_quote": "Using the CE-MBSE methodology, the feasibility study was completed in one month, compared to the three months required when using the traditional approach.",
         "evidence_confidence_rating": "Strong",
         "threats_or_alternative_explanations": "Comparator details are limited; authors note the shown results only include the four sessions and not post-study refinement.",
-        "confidence": "high"
+        "confidence": "high",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Schedule/effort outcome only; no reliability-adjacent claim."
       },
       {
         "claim_id": "C2_cost_reduction",
@@ -1594,7 +1695,11 @@
         "evidence_quote": "The CE-MBSE approach projected a total mission cost of 15 million euros, which is significantly lower than the 22 million euros estimated through the traditional approach.",
         "evidence_confidence_rating": "Strong",
         "threats_or_alternative_explanations": "The paper says the lower cost likely stems from minimized redesigns and optimized resources, but does not provide the cost model details or independent validation.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Cost/ROI outcome only; no reliability-adjacent claim."
       },
       {
         "claim_id": "C3_design_performance_figures_of_merit",
@@ -1627,7 +1732,11 @@
         "evidence_quote": "The CE-MBSE methodology resulted in a spacecraft mass of 22.59 kg, which is approximately 15% lower than the 26.6 kg calculated using the traditional methodology.",
         "evidence_confidence_rating": "Moderate",
         "threats_or_alternative_explanations": "Mass reduction is attributed as likely due to the integrated approach; Delta-V result favors traditional refinement and is affected by differing time allocation.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Decision-support/design-metric outcome; no reliability claim."
       },
       {
         "claim_id": "C4_consistency_error_reduction",
@@ -1662,7 +1771,12 @@
         "evidence_quote": "It allows automated data transfer from the other spreadsheets of the S3D Tool and enables faster validation of the sizing, budgets and design, reducing manual effort and minimizing errors.",
         "evidence_confidence_rating": "Moderate",
         "threats_or_alternative_explanations": "No measured defect reduction or validation-time metric is reported; external tools still require manual entries.",
-        "confidence": "high"
+        "confidence": "high",
+        "reliability_subtype": [
+          "model consistency/reliability",
+          "defect/error reduction"
+        ],
+        "reliability_subtype_rationale": "Central repository consistency checks and automated data transfer are claimed to validate sizing/budgets/design and minimize errors; this is not EPS reliability."
       },
       {
         "claim_id": "C5_communication_alignment",
@@ -1693,7 +1807,11 @@
         "evidence_quote": "the team continuously communicates, discusses, and takes decisions by consensus",
         "evidence_confidence_rating": "Weak",
         "threats_or_alternative_explanations": "No stakeholder survey, communication metric, or independent assessment is reported.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Communication/alignment outcome only."
       },
       {
         "claim_id": "C6_component_selection_decision_support",
@@ -1726,7 +1844,11 @@
         "evidence_quote": "The CUTE-DB provides immediate access to specifications and performance data of commercially available components, supporting not only the component selection during the design process but also ensuring that CubeSat projects are based on current technological realities.",
         "evidence_confidence_rating": "Moderate",
         "threats_or_alternative_explanations": "Database completeness/data quality and update processes are not evaluated beyond source/update description.",
-        "confidence": "high"
+        "confidence": "high",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Component-selection and reuse/decision-support outcome; no reliability-adjacent claim."
       },
       {
         "claim_id": "C7_reuse_across_case_studies",
@@ -1759,7 +1881,11 @@
         "evidence_quote": "the Concurrent Model-Based approach and the related tools (both S3D Tool and CUTE-DB) have been implemented and tested in several case studies, including the Bennu Observer Small Satellites (BOSS) mission, the Geo-Profundo mission [13], and the Cislunar mission [15].",
         "evidence_confidence_rating": "Moderate",
         "threats_or_alternative_explanations": "Only one case has detailed results in the paper; other cases are briefly described or referenced.",
-        "confidence": "high"
+        "confidence": "high",
+        "reliability_subtype": [
+          "not applicable"
+        ],
+        "reliability_subtype_rationale": "Reuse/reproducibility outcome; no reliability-adjacent claim."
       },
       {
         "claim_id": "C8_risk_early_verification",
@@ -1791,7 +1917,11 @@
         "evidence_quote": "Parallel system development and early identification of potential issues and risks ensures a continuous refinement of the models and leads to optimized system design.",
         "evidence_confidence_rating": "Unsupported",
         "threats_or_alternative_explanations": "The paper does not provide risk metric changes, formal verification model evidence, or physical/integration test outcomes.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "reliability_subtype": [
+          "mission assurance"
+        ],
+        "reliability_subtype_rationale": "Early issue/risk identification and earlier verification are generic mission-assurance/process claims; no EPS or system reliability evidence."
       }
     ],
     "governance_roi_project_decision_linkage": {
@@ -1885,5 +2015,17 @@
       "extraction_confidence_reason": "Readable full text with substantial workflow/tool/case detail; uncertainty remains only where the paper uses broad MBSE/verification terms without formal artifacts."
     }
   },
-  "bibtex": "@inproceedings{LaBella2024ConcurrentModelBasedCubeSat,\n  title = {Concurrent Model-Based Approach for CubeSat Mission Design},\n  author = {La Bella, Emanuela and Campioli, Serena and Iossa, Luisa and Corpino, Sabrina and Stesina, Fabrizio},\n  booktitle = {75th International Astronautical Congress (IAC)},\n  year = {2024},\n  address = {Milan, Italy},\n  publisher = {International Astronautical Federation},\n  doi = {10.52202/078374-0035},\n  note = {IAC-24-D3.3}\n}"
+  "bibtex": "@inproceedings{LaBella2024ConcurrentModelBasedCubeSat,\n  title = {Concurrent Model-Based Approach for CubeSat Mission Design},\n  author = {La Bella, Emanuela and Campioli, Serena and Iossa, Luisa and Corpino, Sabrina and Stesina, Fabrizio},\n  booktitle = {75th International Astronautical Congress (IAC)},\n  year = {2024},\n  address = {Milan, Italy},\n  publisher = {International Astronautical Federation},\n  doi = {10.52202/078374-0035},\n  note = {IAC-24-D3.3}\n}",
+  "v1_1_subagent_review": {
+    "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0061.review.raw",
+    "review_status": "needs_repair",
+    "repair_notes": [
+      "Remove low-dynamics / non-detailed-behavior model from generality_reuse_mechanism as unsupported by direct reuse rationale.",
+      "Do not add mission-agnostic architecture, interface-focused model, or specific-mission model with reusable method only.",
+      "Keep IVV only as narrowly interpreted executable/model-based checks; no formal EPS IVV artifacts are reported.",
+      "Do not code EPS reliability or system/mission reliability for any claim."
+    ],
+    "applied_at": "2026-05-28T15:59:44-06:00",
+    "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+  }
 }

@@ -1,0 +1,137 @@
+{
+  "corpus_id": "paper-0016",
+  "review_status": "needs_repair",
+  "structured_code_summary_patch": {
+    "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+      "values": [
+        "template",
+        "reference model",
+        "library",
+        "reusable workflow",
+        "method guidance",
+        "high-level abstraction",
+        "mission-agnostic architecture"
+      ],
+      "status": "coded",
+      "rationale": "The paper explicitly presents a reusable CubeSat Reference Model/logical architecture adaptable to any CubeSat mission. High-level abstraction and mission-agnostic architecture are supported by the logical-architecture framing and reuse/adaptation claims. Do not code interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.",
+      "evidence": [
+        {
+          "quote": "The goal of the team is to provide a sufficiently complete CubeSat Reference Model that can be adapted to any CubeSat project.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "Provide a CubeSat Reference Model that CubeSat teams can use as starting point for their mission-specific CubeSat model.",
+          "location": "Introduction"
+        },
+        {
+          "quote": "The CubeSat Reference Model will provide the logical architecture. It will have all the logical model elements for population by a mission specific CubeSat team.",
+          "location": "Object-Oriented Systems Engineering Method"
+        },
+        {
+          "quote": "The purpose of the CubeSat Reference Model is to provide a logical architecture, which serves as a guide and provides the building blocks for any CubeSat mission.",
+          "location": "Logical Architecture"
+        },
+        {
+          "quote": "Space and Ground System Components ... Library of components to swap in and out of.",
+          "location": "Figure 14 description"
+        }
+      ],
+      "confidence": "high"
+    },
+    "eps_verification_specific.ivv_integration_level": {
+      "values": [
+        "none/not reported"
+      ],
+      "status": "not_reported",
+      "rationale": "The paper mentions V&V generically and shows V&V strategies as contextual input to a mission-specific model, but it does not report trace-linked, model-contained, executable, simulation-in-the-loop, SIL/HIL, or tool-connected IVV artifacts for EPS or the system model. Power trade studies are decision support, not verification procedures.",
+      "evidence": [
+        {
+          "quote": "Validation and Verification Strategies",
+          "location": "Figure 14 description"
+        },
+        {
+          "quote": "This model will provide the foundation for specifying a CubeSat's physical, mechanical, electrical, testing, and operational requirements.",
+          "location": "Current Phase / Stakeholders"
+        },
+        {
+          "quote": "The model element parameters that drive the measures ... are identified. Then the trades can be carried out.",
+          "location": "Concept Life Cycle Trade Studies"
+        }
+      ],
+      "confidence": "high"
+    },
+    "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+      "values": [
+        "model consistency/reliability",
+        "not applicable"
+      ],
+      "status": "coded",
+      "rationale": "Only the repository/view-consistency and checklist/uniformity claims support a reliability-adjacent subtype, and that subtype is model consistency/reliability. No claim directly supports EPS reliability, system/mission reliability, mission assurance, process reliability, defect/error reduction, or a generic reliability claim.",
+      "evidence": [
+        {
+          "quote": "The model is the single, authoritative, integrated repository of information. Changes to the model are automatically populated into the system views.",
+          "location": "Systems Modeling Language"
+        },
+        {
+          "quote": "Requirements and design are contained in the model rather than in a series of independent engineering artifacts.",
+          "location": "Abstract"
+        },
+        {
+          "quote": "a properly designed reference model can serve as a checklist to these teams and promote uniformity and consistency across future CubeSat models.",
+          "location": "Conclusion"
+        }
+      ],
+      "confidence": "medium"
+    }
+  },
+  "claim_level_reliability_subtype_patch": [
+    {
+      "claim_id": "index 0",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Reference-model reuse/reproducibility claim; no reliability-adjacent outcome."
+    },
+    {
+      "claim_id": "index 1",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "Integrated repository and automatically synchronized views support model consistency, not EPS or mission reliability."
+    },
+    {
+      "claim_id": "index 2",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Trade-study/decision-support claim; power variables are analyzed, but no reliability outcome is claimed."
+    },
+    {
+      "claim_id": "index 3",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Tool/model integration claim; no reliability-adjacent outcome."
+    },
+    {
+      "claim_id": "index 4",
+      "reliability_subtype": [
+        "not applicable"
+      ],
+      "rationale": "Effort reduction and reuse claim; no reliability-adjacent outcome."
+    },
+    {
+      "claim_id": "index 5",
+      "reliability_subtype": [
+        "model consistency/reliability"
+      ],
+      "rationale": "Checklist/uniformity/consistency claim concerns consistency across CubeSat models, not EPS reliability."
+    }
+  ],
+  "repair_notes": [
+    "Remove low-dynamics / non-detailed-behavior model from the current generality_reuse_mechanism coding; the paper supports high-level logical abstraction but does not make non-detailed behavior a reuse mechanism.",
+    "Do not add interface-focused model; interfaces are mentioned, but the reuse mechanism is the generic reference/logical architecture and component library.",
+    "Keep IVV integration as none/not reported; V&V/testing terms are not model-integrated verification artifacts.",
+    "Do not upgrade any claim to EPS reliability; reliability_subtype should be model consistency/reliability only for the consistency claims, with other claims not applicable."
+  ]
+}
