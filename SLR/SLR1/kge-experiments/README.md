@@ -1,27 +1,52 @@
 # KG + Embedding Experiments for SLR1
 
-This folder contains a plan and reference pack for experimenting with knowledge-graph (KG) and embedding analyses over `SLR/SLR1/extraction.json`.
+This folder contains reproducible knowledge-graph (KG), deterministic embedding, hybrid graph, GraphRAG-style, and research-agenda experiments over the read-only source extraction `SLR/SLR1/extraction.json`.
 
 ## Current assets
 
 - `../extraction.json` — source structured extraction file; 40 studies, 47 controlled fields, claim-level evidence and limitations.
 - `IMPLEMENTATION_PLAN.md` — full implementation plan and experiment backlog.
-- `schema/kg_schema.md` — proposed property-graph schema and mapping from extraction fields.
-- `experiments/experiment_manifest.json` — machine-readable experiment inventory.
-- `references/references_used.json` — persisted metadata for papers used to shape the plan.
-- `references/references_used.bib` — BibTeX for the same references.
-- `references/reference-notes.md` — why each reference was included.
-- `papers/` — locally downloaded open-access PDFs where available.
-- `searches/` — raw search JSON and merged candidate corpus for KG+embedding references.
+- `schema/kg_schema.md` — property-graph schema and mapping from extraction fields.
+- `scripts/` — runnable pipeline scripts `01_flatten_extraction.py` through `09_research_agenda.py`, plus `run_pipeline.py`.
+- `data/` — flattened JSONL tables for studies, controlled codes, claims, limitations, emergent codes, evidence quotes, and gap mappings.
+- `kg/` — portable property-graph exports (`nodes.csv`, `edges.csv`, GraphML, Neo4j Cypher, DuckDB SQL).
+- `embeddings/` — provenance-rich text cards, deterministic vectors, vectorizer metadata, manifest, and nearest-neighbor records.
+- `outputs/tables/` — controlled-code analyses, semantic audit tables, GraphRAG answer sources, and research-gap priorities.
+- `outputs/reports/` — E0–E13 reports, GraphRAG answers/traces, audit notes, and future research agenda.
+- `outputs/graph_exports/` and `outputs/figures/` — GraphML exports and dependency-light figure/table substitutes.
+- `references/`, `papers/`, and `searches/` — background KG+embedding literature assets used to shape the plan.
 
-## Intended implementation style
+## What the pipeline generates
 
-The experiments should be implemented incrementally:
+The full pipeline normalizes the extraction, builds a KG, runs controlled graph analyses (E1–E6), builds embedding cards and deterministic nearest neighbors, runs semantic clustering/audit and hybrid similarity graph analyses (E7–E11), produces an exploratory GraphRAG demo (E12), and ranks future research gaps (E13).
 
-1. Normalize `extraction.json` into flat tables / JSONL.
-2. Build a first property graph from controlled codes and claim-level evidence.
-3. Add text embeddings for study cards, claims, evidence quotes, limitations, and emergent codes.
-4. Add similarity edges and run community / centrality / gap-prioritization analyses.
-5. Use the KG plus embeddings for exploratory GraphRAG-style querying over the SLR evidence base.
+Key final outputs include:
 
-The goal is exploratory synthesis, not re-running the SLR search or changing the extraction protocol.
+- `outputs/reports/graphrag_demo_questions.md`
+- `outputs/reports/graphrag_limitations.md`
+- `outputs/reports/retrieval_traces.jsonl`
+- `outputs/tables/graphrag_answer_sources.csv`
+- `outputs/tables/research_gap_priorities.csv`
+- `outputs/reports/future_research_agenda.md`
+- `outputs/reports/e13_research_agenda_prioritization.md`
+
+## Rerun from repository root
+
+```bash
+python3 SLR/SLR1/kge-experiments/scripts/run_pipeline.py
+```
+
+Individual stages can also be run directly from the repository root, for example:
+
+```bash
+python3 SLR/SLR1/kge-experiments/scripts/08_graphrag_demo.py
+python3 SLR/SLR1/kge-experiments/scripts/09_research_agenda.py
+```
+
+## Dependencies and embedding fallback
+
+The default embedding/index path uses `hashing_tfidf_v1`, a deterministic offline TF-IDF-style hashing vectorizer implemented with the Python standard library plus `numpy`. Heavyweight embedding, plotting, FAISS, UMAP, HDBSCAN, or API dependencies are not assumed. Where the implementation plan called for UMAP/HDBSCAN, the scripts document dependency-light PCA/SVD and thresholded-neighbor fallbacks.
+
+## Provenance and quality controls
+
+Generated insights preserve study IDs, claim IDs where applicable, field paths, controlled values, snippets/evidence quotes, and model/index metadata. Semantic, hybrid-similarity, GraphRAG, and research-agenda outputs are exploratory synthesis aids over a 40-study corpus; they do not modify the source extraction and should not be treated as statistically significant or as automatic corrections to the SLR coding.
