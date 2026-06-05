@@ -1,0 +1,104 @@
+{
+  "source_dataset": "SLR/SLR1/extraction.json",
+  "generated_at": "2026-06-05",
+  "experiments": [
+    {
+      "id": "E0",
+      "name": "Data audit and baseline descriptive stats",
+      "methods": ["JSON flattening", "controlled-code count validation"],
+      "primary_inputs": ["studies", "structured_code_summary", "statistics"],
+      "outputs": ["field_value_counts.csv", "study_quality_summary.csv", "e0_data_audit.md"]
+    },
+    {
+      "id": "E1",
+      "name": "Claim-evidence graph",
+      "methods": ["property graph", "bipartite counts", "Sankey/alluvial visualization"],
+      "primary_inputs": ["claimed_outcomes_value_mechanisms_evidence[]"],
+      "outputs": ["claim_evidence_graph.graphml", "unsupported_claims.csv"]
+    },
+    {
+      "id": "E2",
+      "name": "EPS verification pathway map",
+      "methods": ["property graph", "path queries", "heatmaps"],
+      "primary_inputs": ["eps_elements_modeled", "verification_validation_artifacts", "pre_physical_development_verification_mechanism", "ivv_integration_level"],
+      "outputs": ["eps_verification_paths.csv", "eps_gap_map.md"]
+    },
+    {
+      "id": "E3",
+      "name": "Toolchain interoperability network",
+      "methods": ["co-occurrence graph", "centrality", "limitation overlays"],
+      "primary_inputs": ["mbse_language_method_tool", "interoperability_mechanisms", "toolchain_limitations"],
+      "outputs": ["tool_cooccurrence.graphml", "toolchain_limitations_heatmap.csv"]
+    },
+    {
+      "id": "E4",
+      "name": "Reuse/generality evidence map",
+      "methods": ["property graph", "availability/evidence cross-tab"],
+      "primary_inputs": ["generality_reuse_mechanism", "reuse_availability_notes", "evidence_type", "evidence_confidence_rating"],
+      "outputs": ["reuse_evidence_map.csv", "reusable_artifact_candidates.md"]
+    },
+    {
+      "id": "E5",
+      "name": "Limitation/gap co-occurrence graph",
+      "methods": ["co-occurrence graph", "centrality", "community detection"],
+      "primary_inputs": ["limitation_flags", "limitation_assessments", "gap_mapping"],
+      "outputs": ["limitation_gap_graph.graphml", "bottlenecks_ranked.csv"]
+    },
+    {
+      "id": "E6",
+      "name": "Lifecycle coverage graph",
+      "methods": ["property graph", "coverage plots"],
+      "primary_inputs": ["lifecycle_stage_addressed", "claim.lifecycle_stage", "verification_validation_artifacts"],
+      "outputs": ["lifecycle_coverage.csv", "lifecycle_artifact_evidence.md"]
+    },
+    {
+      "id": "E7",
+      "name": "Study semantic clustering",
+      "methods": ["text embeddings", "UMAP", "HDBSCAN/agglomerative clustering"],
+      "primary_inputs": ["study_cards"],
+      "outputs": ["study_embeddings.npy", "study_clusters.csv", "study_umap.png"]
+    },
+    {
+      "id": "E8",
+      "name": "Claim semantic clustering",
+      "methods": ["text embeddings", "nearest neighbors", "cluster summaries"],
+      "primary_inputs": ["claim_cards"],
+      "outputs": ["claim_embeddings.npy", "claim_clusters.csv", "weak_recurrent_claims.md"]
+    },
+    {
+      "id": "E9",
+      "name": "Emergent-code consolidation",
+      "methods": ["text embeddings", "near-duplicate clustering"],
+      "primary_inputs": ["emergent_codes"],
+      "outputs": ["emergent_code_clusters.csv", "candidate_codebook_extensions.md"]
+    },
+    {
+      "id": "E10",
+      "name": "Consistency and miscoding audit",
+      "methods": ["embedding nearest neighbors", "controlled-code disagreement detection"],
+      "primary_inputs": ["study_cards", "claim_cards", "controlled codes"],
+      "outputs": ["audit_queue.csv", "audit_queue.md"]
+    },
+    {
+      "id": "E11",
+      "name": "Hybrid similarity graph",
+      "methods": ["KG + SIMILAR_TO edges", "community detection"],
+      "primary_inputs": ["property graph", "nearest_neighbors.jsonl"],
+      "outputs": ["hybrid_similarity_graph.graphml", "hybrid_communities.csv"]
+    },
+    {
+      "id": "E12",
+      "name": "GraphRAG over SLR evidence",
+      "methods": ["vector retrieval", "graph expansion", "provenance-preserving answer generation"],
+      "primary_inputs": ["KG", "embeddings", "evidence quotes"],
+      "outputs": ["graphrag_demo_questions.md", "retrieval_traces.jsonl"]
+    },
+    {
+      "id": "E13",
+      "name": "Research agenda prioritization",
+      "methods": ["scored gap ranking", "evidence weakness weighting"],
+      "primary_inputs": ["gap_mapping", "limitation_flags", "evidence_confidence_rating", "eps_relevance"],
+      "outputs": ["research_gap_priorities.csv", "future_research_agenda.md"]
+    }
+  ]
+}
