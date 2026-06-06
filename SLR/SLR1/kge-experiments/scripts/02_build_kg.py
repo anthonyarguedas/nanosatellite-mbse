@@ -9,7 +9,6 @@ extraction flattening.
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -29,6 +28,7 @@ from kg_common import (
     quote_by_claim,
     sha256_file,
     slugify,
+    source_generated_at_utc,
     sorted_unique_text,
     unique_preserve,
     values,
@@ -621,7 +621,8 @@ def write_manifest(
     repo_root = BASE_DIR.parents[2]
     manifest = {
         "construction_version": CONSTRUCTION_VERSION,
-        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "generated_at_utc": source_generated_at_utc(),
+        "generated_at_basis": "source extraction generated_at; deterministic for idempotent rebuilds",
         "source": "ISSUE-001 flattened JSONL outputs",
         "inputs": [
             {

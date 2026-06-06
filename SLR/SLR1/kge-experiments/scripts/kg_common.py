@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 from collections import defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -113,6 +114,28 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def source_generated_at_utc() -> str:
+    """Return a deterministic UTC timestamp derived from the flattened source extraction."""
+    studies_path = DATA_DIR / "studies.jsonl"
+    if not studies_path.exists():
+        return "unknown"
+    with studies_path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            if not line.strip():
+                continue
+            raw_value = clean_text(json.loads(line).get("source_generated_at"))
+            if not raw_value:
+                return "unknown"
+            try:
+                parsed = datetime.fromisoformat(raw_value.replace("Z", "+00:00"))
+            except ValueError:
+                return raw_value
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc).isoformat()
+    return "unknown"
 
 
 def clean_text(value: Any) -> str | None:

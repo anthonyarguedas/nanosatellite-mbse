@@ -179,9 +179,10 @@ def weak_unsupported_claim_count(claims: Iterable[dict[str, Any]]) -> int:
 
 def top_flags(flags_by_study: dict[str, set[str]], study_ids: Iterable[str], max_items: int = 8) -> str:
     counter: Counter[str] = Counter()
-    for study_id in study_ids:
-        counter.update(flags_by_study.get(study_id, set()))
-    return "; ".join(f"{flag} ({count})" for flag, count in counter.most_common(max_items))
+    for study_id in sorted(study_ids):
+        counter.update(sorted(flags_by_study.get(study_id, set())))
+    ordered = sorted(counter.items(), key=lambda item: (-item[1], item[0]))[:max_items]
+    return "; ".join(f"{flag} ({count})" for flag, count in ordered)
 
 
 def snippet(value: Any, max_chars: int = 300) -> str:

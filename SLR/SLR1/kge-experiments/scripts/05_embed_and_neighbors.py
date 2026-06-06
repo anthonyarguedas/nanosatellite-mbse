@@ -16,7 +16,6 @@ import re
 import subprocess
 import sys
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -33,6 +32,7 @@ from kg_common import (
     load_jsonl,
     markdown_table,
     sha256_file,
+    source_generated_at_utc,
     write_csv,
     write_json,
     write_text,
@@ -351,7 +351,8 @@ def write_manifest(
     manifest = {
         "model_name": MODEL_NAME,
         "model_version": MODEL_VERSION,
-        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "generated_at_utc": source_generated_at_utc(),
+        "generated_at_basis": "source extraction generated_at; deterministic for idempotent rebuilds",
         "exploratory": True,
         "exploratory_note": "Embedding-derived nearest neighbors are lexical/hashed TF-IDF audit aids, not validated semantic clusters or evidence claims.",
         "comparison_scope": "within_unit_type_by_default",

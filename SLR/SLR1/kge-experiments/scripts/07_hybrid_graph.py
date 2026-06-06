@@ -275,7 +275,8 @@ def detect_communities(simple: nx.Graph) -> tuple[list[set[str]], str]:
 
 def top_labels(items: Iterable[str], max_items: int = 8) -> str:
     counts = Counter(items)
-    return "; ".join(f"{label} ({count})" for label, count in counts.most_common(max_items))
+    ordered = sorted(counts.items(), key=lambda item: (-item[1], str(item[0]).lower()))[:max_items]
+    return "; ".join(f"{label} ({count})" for label, count in ordered)
 
 
 def representative_nodes(simple: nx.Graph, nodes: list[str], max_items: int = 8) -> list[str]:
