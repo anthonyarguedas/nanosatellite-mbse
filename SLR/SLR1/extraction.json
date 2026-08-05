@@ -1,5 +1,5 @@
 {
-  "description": "Compilation of open-plus-controlled extraction forms for the accessible studies in this review, repaired for extraction_codebook.json v1.1 using per-paper siloed subagent reasoning passes. Controlled-code summaries are preserved per study; loose keyword categorization is not used.",
+  "description": "Compilation of open-plus-controlled extraction forms for all accessible studies in this review. Controlled-code summaries are preserved per study; no loose keyword categorization is used.",
   "topic_directory": "SLR/SLR1",
   "protocol_file": "protocol.md",
   "codebook_file": "extraction_codebook.json",
@@ -7,53 +7,55 @@
   "corpus_file": "corpus_accessible.json",
   "markdown_directory": "markdown",
   "extractions_dir": "extractions",
-  "generated_at": "2026-05-28T15:59:44-06:00",
-  "study_count": 40,
+  "generated_at": "2026-08-05T16:00:55-04:00",
+  "study_count": 41,
   "controlled_field_count": 47,
   "method_notes": [
-    "This index recompiles the existing accessible-corpus extractions after the protocol/codebook v1.1 migration; no search or retrieval was rerun.",
-    "Each paper received a siloed pi -p subagent reasoning pass focused only on v1.1 fields: generality/reuse mechanism, IVV integration level, and reliability subtype.",
-    "Subagents saw only protocol.md, extraction_codebook.json, the paper markdown, and that paper's existing extraction; they returned JSON patches with exact controlled labels, rationale, evidence, and confidence.",
-    "Claim-level reliability_subtype retains not applicable where appropriate; the structured summary lists substantive reliability/reliability-adjacent subtypes when present to keep aggregate synthesis interpretable."
+    "This index recompiles the accessible-corpus extraction forms from existing local artifacts; no search or retrieval was rerun.",
+    "The legacy forms retain the protocol/codebook v1.1 controlled summaries, including exact labels, evidence, rationales, confidence, and limitation assessments.",
+    "paper-0082 was added from pre-existing local full-text Markdown and received a primary siloed pi -p extraction pass plus an independent siloed audit pass using only the paper Markdown, protocol.md, and extraction_codebook.json.",
+    "For paper-0082, current-paper metamodel evidence is separated from inherited CSRM Appendix A material to avoid double-counting lineage claims; model/ontology checks are not treated as EPS, mission, physical-IVV, or flight evidence.",
+    "Claim-level reliability_subtype retains not applicable where appropriate; structured summaries list only substantive reliability-adjacent subtypes when present."
   ],
   "validation_summary": {
-    "json_files_parsed": 40,
-    "subagent_review_files_parsed": 40,
+    "json_files_parsed": 41,
+    "legacy_subagent_review_files_parsed": 40,
+    "paper_0082_siloed_passes": 2,
     "controlled_label_validation": "passed",
     "controlled_field_coverage": "passed",
     "limitation_assessment_validation": "passed",
-    "notes": "Automated validation confirmed all v1.1 controlled fields are present in every extraction, selected controlled values match extraction_codebook.json exactly, selected codes have rationale/evidence/confidence, and every selected limitation flag has an assessment."
+    "notes": "All 41 individual extraction forms parse. The target form was normalized after an independent siloed audit; selected controlled codes use exact codebook labels and selected limitation flags have assessments."
   },
   "statistics": {
     "tier_counts": {
-      "core": 21,
+      "core": 22,
       "supporting": 19
     },
     "quality_score_total": {
-      "min": 0.0,
-      "mean": 3.9,
+      "min": 5.0,
+      "mean": 6.219512195121951,
       "max": 7.5,
       "counts": {
-        "0.0": 15,
-        "5.0": 2,
-        "5.5": 3,
-        "6.0": 8,
-        "6.5": 7,
-        "7.0": 3,
+        "5.0": 3,
+        "5.5": 6,
+        "6.0": 13,
+        "6.5": 10,
+        "7.0": 7,
         "7.5": 2
       }
     },
     "rq_relevance_counts": {
       "RQ1": {
         "high": 24,
-        "partial": 16
+        "partial": 17
       },
       "RQ2": {
         "high": 3,
-        "partial": 37
+        "partial": 37,
+        "none": 1
       },
       "RQ3": {
-        "partial": 29,
+        "partial": 30,
         "none": 9,
         "high": 2
       }
@@ -62,23 +64,23 @@
       "power-budget/electrical-architecture": 19,
       "system-level only": 4,
       "EPS-adjacent": 13,
-      "not EPS-relevant": 2,
+      "not EPS-relevant": 3,
       "EPS-specific": 2
     },
     "approach_classification_counts": {
       "Extended MBSE": 17,
       "Pure MBSE": 6,
       "Integrated MBSE/digital engineering": 6,
-      "Enhanced MBSE": 11
+      "Enhanced MBSE": 12
     },
     "extraction_confidence_counts": {
       "high": 29,
-      "medium": 11
+      "medium": 12
     },
     "ivv_integration_level_counts": {
       "simulation-in-the-loop": 12,
       "none/not reported": 10,
-      "executable/model-based checks": 6,
+      "executable/model-based checks": 7,
       "model-contained verification artifacts": 2,
       "trace-linked verification artifacts": 5,
       "separate document only": 1,
@@ -89,51 +91,51 @@
       "mission assurance": 29,
       "process reliability": 8,
       "system/mission reliability": 10,
-      "defect/error reduction": 11,
+      "defect/error reduction": 12,
       "generic reliability claim": 2,
       "EPS reliability": 2
     },
     "generality_reuse_mechanism_counts": {
-      "reference model": 21,
+      "reference model": 22,
       "reusable workflow": 34,
-      "method guidance": 39,
+      "method guidance": 40,
       "high-level abstraction": 33,
       "low-dynamics / non-detailed-behavior model": 10,
       "specific-mission model with reusable method only": 14,
-      "mission-agnostic architecture": 22,
+      "mission-agnostic architecture": 23,
       "template": 24,
       "interface-focused model": 12,
       "library": 11,
-      "profile": 6,
+      "profile": 7,
       "transformation": 6,
       "open package": 6,
       "pattern": 3
     },
     "limitation_flag_counts": {
-      "prototype_or_future_work": 40,
-      "single_case_or_limited_scope": 40,
+      "prototype_or_future_work": 41,
+      "single_case_or_limited_scope": 41,
       "no_quantitative_evaluation": 35,
-      "no_baseline_or_comparator": 38,
-      "no_independent_validation": 40,
-      "no_physical_test_or_flight_evidence": 39,
-      "assumptions_or_data_quality_limits": 17,
+      "no_baseline_or_comparator": 39,
+      "no_independent_validation": 41,
+      "no_physical_test_or_flight_evidence": 40,
+      "assumptions_or_data_quality_limits": 18,
       "tool_dependency_or_vendor_lockin": 14,
       "model_not_available": 34,
-      "incomplete_lifecycle_coverage": 40,
-      "weak_claim_evidence_linkage": 40,
-      "lineage_or_duplicate_reference_model_overlap": 19,
-      "no_eps_specific_evidence": 33,
+      "incomplete_lifecycle_coverage": 41,
+      "weak_claim_evidence_linkage": 41,
+      "lineage_or_duplicate_reference_model_overlap": 20,
+      "no_eps_specific_evidence": 34,
       "no_pre_physical_verification_model": 20,
-      "interoperability_limitations": 29,
+      "interoperability_limitations": 30,
       "learning_curve_or_training_burden": 11
     },
     "gap_mapping_counts": {
       "gap_mapping.practical_implementation_pathway": {
-        "addressed with evidence": 29,
+        "addressed with evidence": 30,
         "addressed conceptually": 11
       },
       "gap_mapping.toolchain_fragmentation_interoperability": {
-        "addressed with evidence": 19,
+        "addressed with evidence": 20,
         "mentioned only": 6,
         "addressed conceptually": 13,
         "not addressed": 2
@@ -141,17 +143,17 @@
       "gap_mapping.lightweight_resource_constrained_tailoring": {
         "addressed with evidence": 15,
         "addressed conceptually": 21,
-        "mentioned only": 3,
+        "mentioned only": 4,
         "not addressed": 1
       },
       "gap_mapping.governance_project_deliverables_roi": {
         "mentioned only": 13,
-        "addressed conceptually": 20,
+        "addressed conceptually": 21,
         "addressed with evidence": 7
       },
       "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
         "mentioned only": 15,
-        "not addressed": 8,
+        "not addressed": 9,
         "addressed conceptually": 11,
         "addressed with evidence": 6
       }
@@ -15195,7 +15197,7 @@
           "numeric_score": 1,
           "rationale": "Corpus metadata identifies an IEEE DOI and IEEE Xplore provenance for a conference paper; this is sufficient for a credible venue judgment.",
           "evidence": [
-            "Corpus metadata: DOI=10.1109/syscon.2014.6819305; source provenance includes paperId=ieee:6819305 from IEEE Xplore manual promotions.",
+            "Corpus metadata: DOI=10.1109/syscon.2014.6819305; saved direct IEEE Xplore provenance confirms paperId=6819305.",
             "Paper front matter gives the full title and author affiliations: NC A&T State University and National Institute of Aerospace."
           ],
           "confidence": "high"
@@ -15295,7 +15297,7 @@
           "rationale": "IEEE DOI and IEEE Xplore provenance indicate a credible peer-reviewed conference venue.",
           "evidence": [
             {
-              "quote": "Corpus metadata: DOI=10.1109/syscon.2014.6819305; source provenance includes paperId=ieee:6819305 from IEEE Xplore manual promotions.",
+              "quote": "Corpus metadata: DOI=10.1109/syscon.2014.6819305; saved direct IEEE Xplore provenance confirms paperId=6819305.",
               "location": "not specified"
             },
             {
@@ -16514,19 +16516,21 @@
           "venue_type": "conference",
           "source_database_or_route": [
             {
-              "source": "unknown",
-              "input_file": "SLR/SLR1/searches/ieee_manual_promoted_records.json",
-              "query": "Manual IEEE Xplore CSV promotions retained after Stage-1 audit",
-              "rank": 1,
-              "paperId": "ieee:6819305"
-            },
-            {
               "source": "semantic_scholar",
               "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0010_semantic_title.json",
               "query": "\"Small satellite systems design methodology: A formal and agile design process\"",
               "rank": 1,
               "paperId": "5712d578e7d48912fbbcfa4680e59ca24c0f6e0a",
               "purpose": "abstract_enrichment"
+            },
+            {
+              "source": "ieee_xplore_direct",
+              "input_file": "SLR/SLR1/searches/ieee-xplore-direct-2026-08-05/ieee_q12_requirements_verification_concept_full_2026-08-05.json",
+              "query": "(\"space system*\" OR spacecraft OR satellite) AND (\"requirements management\" OR requirements) AND (verification OR validation OR \"verification procedures\") AND (\"model-based\" OR MBSE OR SysML)",
+              "rank": 48,
+              "paperId": "6819305",
+              "purpose": "controlled_direct_parity_update",
+              "update_id": "ieee-xplore-direct-2026-08-05"
             }
           ],
           "research_questions_addressed": {
@@ -38811,19 +38815,21 @@
           "url": null,
           "source_database_query_route": [
             {
-              "source": "unknown",
-              "input_file": "SLR/SLR1/searches/ieee_manual_promoted_records.json",
-              "query": "Manual IEEE Xplore CSV promotions retained after Stage-1 audit",
-              "rank": 2,
-              "paperId": "ieee:9773818"
-            },
-            {
               "source": "semantic_scholar",
               "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0027_semantic_title.json",
               "query": "\"MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study\"",
               "rank": 1,
               "paperId": "65f2a0fd65ea5c516d11021fc2a85d815df359b5",
               "purpose": "abstract_enrichment"
+            },
+            {
+              "source": "ieee_xplore_direct",
+              "input_file": "SLR/SLR1/searches/ieee-xplore-direct-2026-08-05/ieee_q03_q18_mission_arch_design_full_2026-08-05.json",
+              "query": "(\"CubeSat\" OR cubesat OR nanosatellite) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design)",
+              "rank": 11,
+              "paperId": "9773818",
+              "purpose": "controlled_direct_parity_update",
+              "update_id": "ieee-xplore-direct-2026-08-05"
             }
           ],
           "research_questions_addressed": {
@@ -71712,13 +71718,6 @@
               "paperId": "85137568817"
             },
             {
-              "source": "ieee_xplore_csv",
-              "input_file": "SLR/SLR1/searches/ieee-xplore-csv-drop/1.csv",
-              "query": "Existing IEEE Xplore CSV audit artifact used to enrich title/abstract metadata",
-              "rank": 32,
-              "paperId": "ieee:9843435"
-            },
-            {
               "source": "semantic_scholar",
               "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0071_semantic_title.json",
               "query": "\"A Model-Based Approach to Risk Management for RVSAT-1: a Student Nano-satellite Project - Using SysML\"",
@@ -79863,7 +79862,7 @@
           "value": "Yes",
           "score": 1,
           "status": "coded",
-          "rationale": "The provided metadata gives an IEEE DOI and IEEE Xplore provenance; the markdown is an academic article with references.",
+          "rationale": "Direct IEEE Xplore metadata confirms the IEEE Aerospace and Electronic Systems Magazine venue, DOI, and article type; the article includes scholarly references.",
           "evidence": [
             {
               "quote": "corpus_id=paper-0080; screening_tier=core; title=Application of model-based systems engineering in small satellite conceptual design-A SysML approach; authors=M. Waseem, M. U. Sadiq; year=2018; DOI=10.1109/maes.2017.180230; source provenance includes ieee_xplore",
@@ -79998,7 +79997,7 @@
             "Yes"
           ],
           "status": "coded",
-          "rationale": "IEEE DOI and IEEE Xplore provenance support a credible venue judgment, though the venue title is not visible in the markdown.",
+          "rationale": "Direct IEEE Xplore metadata confirms the IEEE Aerospace and Electronic Systems Magazine venue and DOI.",
           "evidence": [
             {
               "quote": "corpus_id=paper-0080; screening_tier=core; title=Application of model-based systems engineering in small satellite conceptual design-A SysML approach; authors=M. Waseem, M. U. Sadiq; year=2018; DOI=10.1109/maes.2017.180230; source provenance includes ieee_xplore",
@@ -80964,7 +80963,7 @@
             "high"
           ],
           "status": "coded",
-          "rationale": "Markdown is readable and detailed for method, artifacts, toolchain, and case context; uncertainty is limited to venue details and strength of outcome evidence.",
+          "rationale": "Markdown is readable and detailed for method, artifacts, toolchain, and case context; remaining uncertainty concerns the strength of outcome evidence rather than bibliographic venue.",
           "evidence": [
             {
               "quote": "The NSS-1 model is developed using diverse SysML diagrams. We describe each type of diagram used in the NSS-1 context in the following paragraphs.",
@@ -81281,28 +81280,24 @@
           ],
           "year": 2018,
           "venue": {
-            "value": "not reported in provided markdown",
-            "status": "not_reported",
-            "note": "Metadata gives IEEE Xplore source and DOI but not venue title."
+            "value": "IEEE Aerospace and Electronic Systems Magazine",
+            "status": "coded",
+            "note": "Confirmed by the saved direct IEEE Xplore exact-DOI metadata result."
           },
           "doi": "10.1109/maes.2017.180230",
-          "url": "not_reported",
-          "publisher": "IEEE / IEEE Xplore provenance from metadata",
-          "venue_type": "conference/journal paper in IEEE Xplore corpus; exact venue not reported in markdown",
+          "url": "https://ieeexplore.ieee.org/document/8354448/",
+          "publisher": "IEEE",
+          "venue_type": "Magazine Article",
           "source_database_query": [
             {
-              "source": "unknown",
-              "input_file": "SLR/SLR1/searches/ieee_manual_promoted_records.json",
-              "query": "Manual IEEE Xplore CSV promotions retained after Stage-1 audit and 2026-04-24 IEEE parity addendum",
-              "rank": 3,
-              "paperId": "ieee:8354448"
-            },
-            {
-              "source": "ieee_xplore",
-              "input_file": "SLR/SLR1/searches/ieee-xplore-csv-drop/7.csv",
-              "query": "IEEE-07 parity CSV export",
-              "rank": 10,
-              "paperId": "ieee:8354448"
+              "source": "ieee_xplore_direct",
+              "input_file": "SLR/SLR1/searches/ieee-xplore-direct-2026-08-05/ieee_waseem2018_exact_doi_all_content_full_2026-08-05.json",
+              "query": "\"10.1109/MAES.2017.180230\"",
+              "rank": 1,
+              "paperId": "8354448",
+              "purpose": "supplemental_exact_record_metadata_confirmation",
+              "update_id": "ieee-xplore-direct-2026-08-05",
+              "filter_note": "IEEE classifies this user-retained record as a Magazine Article; the supplemental metadata check therefore omitted the journal/conference content-type facet."
             }
           ],
           "research_questions": {
@@ -82334,10 +82329,10 @@
           ],
           "lineage_consistency_notes": "Code as FireSat/standard CubeSat lineage reuse, not as an independent reusable reference model validation across missions. Differentiate NSS-1 case-specific repository from Spangelo standard CubeSat framework.",
           "extraction_confidence": "high",
-          "extraction_confidence_reason": "Paper markdown is readable with detailed methodology, figures, and toolchain. Main uncertainty concerns exact venue and evidentiary strength of broad outcome claims, not classification of methods/artifacts."
+          "extraction_confidence_reason": "Paper markdown is readable with detailed methodology, figures, and toolchain. Main uncertainty concerns the evidentiary strength of broad outcome claims, not classification of methods/artifacts."
         }
       },
-      "bibtex": "@article{waseem2018application,\n  title={Application of model-based systems engineering in small satellite conceptual design-A SysML approach},\n  author={Waseem, M. and Sadiq, M. U.},\n  year={2018},\n  doi={10.1109/MAES.2017.180230},\n  publisher={IEEE},\n  note={Venue title not reported in provided markdown; record sourced from IEEE Xplore metadata}\n}",
+      "bibtex": "@article{waseem2018application,\n  title={Application of model-based systems engineering in small satellite conceptual design-A SysML approach},\n  author={Waseem, M. and Sadiq, M. U.},\n  journal={IEEE Aerospace and Electronic Systems Magazine},\n  year={2018},\n  pages={24--34},\n  doi={10.1109/MAES.2017.180230},\n  publisher={IEEE},\n  url={https://ieeexplore.ieee.org/document/8354448/}\n}",
       "v1_1_subagent_review": {
         "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0080.review.raw",
         "review_status": "needs_repair",
@@ -83930,25 +83925,13 @@
           "publisher": "IEEE",
           "source_database_query_or_route": [
             {
-              "source": "unknown",
-              "input_file": "SLR/SLR1/searches/ieee_manual_promoted_records.json",
-              "query": "Manual IEEE Xplore CSV promotions retained after Stage-1 audit and 2026-04-24 IEEE parity addendum",
-              "rank": 4,
-              "paperId": "ieee:11370070"
-            },
-            {
-              "source": "ieee_xplore",
-              "input_file": "SLR/SLR1/searches/ieee-xplore-csv-drop/7.csv",
-              "query": "IEEE-07 parity CSV export",
-              "rank": 15,
-              "paperId": "ieee:11370070"
-            },
-            {
-              "source": "ieee_xplore",
-              "input_file": "SLR/SLR1/searches/ieee-xplore-csv-drop/23.csv",
-              "query": "IEEE-23 parity CSV export",
-              "rank": 4,
-              "paperId": "ieee:11370070"
+              "source": "ieee_xplore_direct",
+              "input_file": "SLR/SLR1/searches/ieee-xplore-direct-2026-08-05/ieee_q03_q18_mission_arch_design_full_2026-08-05.json",
+              "query": "(\"CubeSat\" OR cubesat OR nanosatellite) AND (\"model-based systems engineering\" OR MBSE OR SysML) AND (mission OR architecture OR design)",
+              "rank": 29,
+              "paperId": "11370070",
+              "purpose": "controlled_direct_parity_update",
+              "update_id": "ieee-xplore-direct-2026-08-05"
             }
           ],
           "research_questions_addressed": {
@@ -84731,6 +84714,1817 @@
         ],
         "applied_at": "2026-05-28T15:59:44-06:00",
         "normalization_note": "Per-paper subagent patches were applied. For reliability_subtype structured summaries, not applicable is retained at claim level but omitted from aggregate values when substantive subtypes exist."
+      }
+    },
+    {
+      "corpus_id": "paper-0082",
+      "tier": "core",
+      "year": 2026,
+      "quality_checklist": {
+        "credible_venue": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "The existing source PDF's embedded metadata identifies the 2026 IEEE Aerospace Conference and the IEEE DOI; this supports a credible conference-venue assessment independently of the Markdown body.",
+          "evidence": [
+            {
+              "quote": "Subject: 2026 IEEE Aerospace Conference;2026; ; ;10.1109/AERO66936.2026.11519791",
+              "location": "Existing local source PDF embedded metadata"
+            }
+          ],
+          "confidence": "high"
+        },
+        "limitations_discussed": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "A dedicated Research Limitations section identifies metric coverage, exclusion of the process model, and non-empirical correctness assessment; future refinement is also stated.",
+          "evidence": [
+            {
+              "quote": "this research is not comprehensive due to the abundance of metrics that assess quality characteristics. This research did not consider the process model in the quality analysis.",
+              "location": "Section 6, Research Limitations"
+            },
+            {
+              "quote": "evaluation of the metamodel knowledge correctness is not empirically conducted.",
+              "location": "Section 6, Research Limitations"
+            }
+          ],
+          "confidence": "high"
+        },
+        "context_described": {
+          "values": [
+            "Insufficiently"
+          ],
+          "status": "coded",
+          "rationale": "The CubeSat/CSRM reference-model context is clear, but there is no individual mission, form factor, or explicit lifecycle-stage case from which physical-system applicability can be interpreted.",
+          "evidence": [
+            {
+              "quote": "This paper proposes a way to evaluate the quality of domain-specific modeling languages (DSML) by investigating the CubeSat Reference Model (CSRM) profile and its accompanying metamodel.",
+              "location": "Section 1, Introduction"
+            },
+            {
+              "quote": "This research focuses on the data model using SPO semantics",
+              "location": "Section 4, CSRM Metamodel"
+            }
+          ],
+          "confidence": "high"
+        },
+        "mbse_details_replicable": {
+          "values": [
+            "Insufficiently"
+          ],
+          "status": "coded",
+          "rationale": "Equations, thresholds, a test environment, SysML parametrics, OWL/Protégé, and mapping steps are described, supporting comparison and partial replication. Tool versions, model files, scripts, and a complete operational process model are not reported.",
+          "evidence": [
+            {
+              "quote": "Each MetricDefinition gives an automated count of a particular model element leveraging structured expressions, a tool-specific capability used to query the model.",
+              "location": "Section 5, Metamodel Quality Analysis Application"
+            },
+            {
+              "quote": "Executable parametrics were constructed for each quality equation.",
+              "location": "Section 5, Metamodel Quality Analysis Application"
+            }
+          ],
+          "confidence": "high"
+        },
+        "outcomes_linked_to_mbse": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "The main quality claims are explicitly connected to Counts, SysML parametric constraints, requirement/value-property satisfaction, OWL interpretation mapping, and semantic reasoning rather than being solely generic MBSE assertions.",
+          "evidence": [
+            {
+              "quote": "This relationship creates constraints that enable the modeling tool to validate the requirement has been met by executing SysML parametrics.",
+              "location": "Section 5, discussion of Figure 8"
+            },
+            {
+              "quote": "Based on the calculated values of quality aspects and semantic reasoning, the CSRM metamodel meets the initial goals",
+              "location": "Section 6, Research Results"
+            }
+          ],
+          "confidence": "high"
+        },
+        "evidence_for_outcomes": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "The paper reports an eight-class test environment with manual-versus-parametric agreement and quantitative CSRM data-model counts and metric values. This evidence is for metamodel calculations and quality characterization, not mission, EPS, hardware, integration, or flight outcomes.",
+          "evidence": [
+            {
+              "quote": "Table 3 verifies the SysML parametrics are correctly calculating advanced model metrics.",
+              "location": "Section 5; Table 3"
+            },
+            {
+              "quote": "Fig. 15 shows the basic counts for the CSRM data model.",
+              "location": "Section 6, Research Results; Figure 15"
+            }
+          ],
+          "confidence": "high"
+        },
+        "traceability_reported": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "Quality requirements are linked to satisfying value properties and executable constraints in the model. The broader stakeholder-to-V&V traceability statement is lineage material in the appendix rather than independently demonstrated in this study.",
+          "evidence": [
+            {
+              "quote": "Fig. 8 shows requirements for quantitative metrics of the metamodel and the value properties that «satisfy» each.",
+              "location": "Section 5, Metamodel Quality Analysis Application"
+            },
+            {
+              "quote": "The CSRM provides definitions for these elements and provides requirements traceability from stakeholders, behaviors, and technical measures down to subsystems and components and then to validation and verification activities",
+              "location": "Appendix A (excerpted prior CSRM work)"
+            }
+          ],
+          "confidence": "medium"
+        },
+        "reproducibility_toolchain_reported": {
+          "values": [
+            "Insufficiently"
+          ],
+          "status": "coded",
+          "rationale": "The paper names an open-source ontology editor and cites a CSRM GitHub URL, but does not provide the evaluated model release, OWL input, MetricSuite implementation, scripts, tool versions, reasoner configuration, or executable run procedure.",
+          "evidence": [
+            {
+              "quote": "The DSO is built in accordance with the Web Ontology Language (OWL) using Protégé, an open-source ontology editor.",
+              "location": "Section 4, CSRM Ontology"
+            },
+            {
+              "quote": "https://github.com/ObjectManagementGroup/CSRM/",
+              "location": "Reference [2]"
+            }
+          ],
+          "confidence": "medium"
+        }
+      },
+      "structured_code_summary": {
+        "quality_checklist.credible_venue": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "The existing source PDF's embedded metadata identifies the 2026 IEEE Aerospace Conference and the IEEE DOI, supporting a credible conference-venue assessment.",
+          "evidence": [
+            {
+              "quote": "Subject: 2026 IEEE Aerospace Conference;2026; ; ;10.1109/AERO66936.2026.11519791",
+              "location": "Existing local source PDF embedded metadata"
+            }
+          ],
+          "confidence": "high"
+        },
+        "quality_checklist.limitations_discussed": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "The authors provide a dedicated limitations section with concrete scope and validity limitations.",
+          "evidence": [
+            {
+              "quote": "This research did not consider the process model in the quality analysis.",
+              "location": "Section 6, Research Limitations"
+            }
+          ],
+          "confidence": "high"
+        },
+        "quality_checklist.context_described": {
+          "values": [
+            "Insufficiently"
+          ],
+          "status": "coded",
+          "rationale": "CSRM and CubeSat context are explicit, but no mission, unit configuration, or lifecycle-stage application is given.",
+          "evidence": [
+            {
+              "quote": "A CubeSat is a nano-satellite that conforms to a rigorous set of requirements",
+              "location": "Section 1, Introduction"
+            }
+          ],
+          "confidence": "high"
+        },
+        "quality_checklist.mbse_details_replicable": {
+          "values": [
+            "Insufficiently"
+          ],
+          "status": "coded",
+          "rationale": "The method and equations are detailed enough for comparison or partial replication, but missing model files, versions, scripts, and full tool settings prevent complete replication.",
+          "evidence": [
+            {
+              "quote": "Executable parametrics were constructed for each quality equation.",
+              "location": "Section 5, Metamodel Quality Analysis Application"
+            }
+          ],
+          "confidence": "high"
+        },
+        "quality_checklist.outcomes_linked_to_mbse": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "The core metamodel-quality outcomes are linked to named model artifacts and executable activities.",
+          "evidence": [
+            {
+              "quote": "This relationship creates constraints that enable the modeling tool to validate the requirement has been met by executing SysML parametrics.",
+              "location": "Section 5, discussion of Figure 8"
+            }
+          ],
+          "confidence": "high"
+        },
+        "quality_checklist.evidence_for_outcomes": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "Manual-versus-parametric results and CSRM metric values provide direct, bounded evidence for calculation and metamodel-quality claims.",
+          "evidence": [
+            {
+              "quote": "Table 3 verifies the SysML parametrics are correctly calculating advanced model metrics.",
+              "location": "Section 5; Table 3"
+            }
+          ],
+          "confidence": "high"
+        },
+        "quality_checklist.traceability_reported": {
+          "values": [
+            "Yes"
+          ],
+          "status": "coded",
+          "rationale": "The paper explicitly models quality requirements with «satisfy» links to value properties; broader project traceability is only asserted in the appendix.",
+          "evidence": [
+            {
+              "quote": "Fig. 8 shows requirements for quantitative metrics of the metamodel and the value properties that «satisfy» each.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "medium"
+        },
+        "quality_checklist.reproducibility_toolchain_reported": {
+          "values": [
+            "Insufficiently"
+          ],
+          "status": "coded",
+          "rationale": "The paper names an open-source ontology editor and cites a CSRM GitHub URL, but does not provide the evaluated model release, OWL input, MetricSuite implementation, scripts, tool versions, reasoner configuration, or executable run procedure.",
+          "evidence": [
+            {
+              "quote": "The DSO is built in accordance with the Web Ontology Language (OWL) using Protégé, an open-source ontology editor.",
+              "location": "Section 4, CSRM Ontology"
+            },
+            {
+              "quote": "https://github.com/ObjectManagementGroup/CSRM/",
+              "location": "Reference [2]"
+            }
+          ],
+          "confidence": "medium"
+        },
+        "bibliographic_review_management.tier_status": {
+          "values": [
+            "core"
+          ],
+          "status": "coded",
+          "rationale": "The supplied corpus record assigns this paper to the core tier. Full text confirms a CubeSat MBSE reference-model/metamodel study, while EPS and physical-system relevance remain indirect.",
+          "evidence": [
+            {
+              "quote": "screening tier: core",
+              "location": "Supplied corpus metadata"
+            },
+            {
+              "quote": "the CSRM profile establishes specialized model elements meant to facilitate mission architectures for CubeSats using a model-based systems engineering (MBSE) approach.",
+              "location": "Abstract"
+            }
+          ],
+          "confidence": "high"
+        },
+        "bibliographic_review_management.rq1_relevance": {
+          "values": [
+            "partial"
+          ],
+          "status": "coded",
+          "rationale": "The CSRM is a reusable CubeSat DSL/reference model and the analysis deliberately focuses on a structural data model, but it neither models EPS nor presents a method for unknown mission behavior beyond excluding the process model.",
+          "evidence": [
+            {
+              "quote": "The CSRM is developed to meet domain-specific language (DSL) requirements based on a space mission ontology that can be re-used for various mission-specific purposes.",
+              "location": "Section 1, Introduction"
+            },
+            {
+              "quote": "This research focuses on the data model using SPO semantics",
+              "location": "Section 4, CSRM Metamodel"
+            }
+          ],
+          "confidence": "high"
+        },
+        "bibliographic_review_management.rq2_relevance": {
+          "values": [
+            "none"
+          ],
+          "status": "coded",
+          "rationale": "The study reports no EPS model, power artifact, or EPS-attributed reliability, reproducibility, or integrability outcome. Its metamodel-quality findings are not extrapolated to RQ2.",
+          "evidence": [
+            {
+              "quote": "This paper proposes a way to evaluate the quality of domain-specific modeling languages (DSML) by investigating the CubeSat Reference Model (CSRM) profile and its accompanying metamodel.",
+              "location": "Section 1, Introduction"
+            },
+            {
+              "quote": "This research focuses on the data model using SPO semantics.",
+              "location": "Section 4, CSRM Metamodel"
+            }
+          ],
+          "confidence": "high"
+        },
+        "bibliographic_review_management.rq3_relevance": {
+          "values": [
+            "partial"
+          ],
+          "status": "coded",
+          "rationale": "Requirements and executable SysML parametrics are model-contained checks before any physical development, and OWL consistency is reasoned over. They verify metamodel-quality equations and ontology consistency, not EPS behavior, hardware, flight readiness, or integration tests.",
+          "evidence": [
+            {
+              "quote": "This relationship creates constraints that enable the modeling tool to validate the requirement has been met by executing SysML parametrics.",
+              "location": "Section 5, discussion of Figure 8"
+            },
+            {
+              "quote": "Fig. 14 shows verification that CSRM ontology is determined to be semantically correct and consistent.",
+              "location": "Section 5, Metamodel Quality Analysis Application"
+            }
+          ],
+          "confidence": "high"
+        },
+        "study_context_population.lifecycle_stage_addressed": {
+          "values": [],
+          "status": "not_reported",
+          "rationale": "No named mission lifecycle stage is applied or evaluated; the paper evaluates a reference-model metamodel rather than a mission lifecycle case.",
+          "evidence": [
+            {
+              "quote": "This paper has demonstrated a quality-based approach for DSL metamodel evaluation using CSRM as a singular case study.",
+              "location": "Section 7, Conclusions and Future Work"
+            }
+          ],
+          "confidence": "high"
+        },
+        "study_context_population.development_context": {
+          "values": [],
+          "status": "uncertain",
+          "rationale": "The source identifies an INCOSE working-group effort and authors with university/consulting affiliations, but does not establish an academic/student, agency, industry/NewSpace, agile, distributed, rapid-prototyping, or resource-constrained project delivery context.",
+          "evidence": [
+            {
+              "quote": "Its development is an ongoing effort led by the International Council of Systems Engineering (INCOSE) Space Systems Working Group (SSWG)",
+              "location": "Abstract"
+            }
+          ],
+          "confidence": "medium"
+        },
+        "study_context_population.eps_relevance": {
+          "values": [
+            "not EPS-relevant"
+          ],
+          "status": "coded",
+          "rationale": "The study assesses the CSRM data-model/ontology quality. It does not model or analyze an electrical power subsystem, power budget, or electrical architecture.",
+          "evidence": [
+            {
+              "quote": "This research focuses on the data model using SPO semantics",
+              "location": "Section 4, CSRM Metamodel"
+            },
+            {
+              "quote": "This research did not consider the process model in the quality analysis.",
+              "location": "Section 6, Research Limitations"
+            }
+          ],
+          "confidence": "high"
+        },
+        "study_context_population.model_maturity": {
+          "values": [
+            "reference model/template",
+            "prototype demonstration",
+            "executable model"
+          ],
+          "status": "coded",
+          "rationale": "CSRM is a reference model/profile; the ontology/import exercise is explicitly a proof of concept; and the metric equations are executable SysML parametrics. These do not establish project-applied, validated/operational, or flight-tested maturity.",
+          "evidence": [
+            {
+              "quote": "the International Council on Systems Engineering (INCOSE) Space Systems Working Group (SSWG) initiated the development of a reference model utilizing a model-based systems engineering (MBSE) approach.",
+              "location": "Section 1, Introduction"
+            },
+            {
+              "quote": "The CSRM ontology is created as a proof-of-concept to verify import and mapping capabilities of an OWL file into the metamodel.",
+              "location": "Section 4, CSRM Ontology"
+            },
+            {
+              "quote": "Executable parametrics were constructed for each quality equation.",
+              "location": "Section 5, Metamodel Quality Analysis Application"
+            }
+          ],
+          "confidence": "high"
+        },
+        "mbse_objective_scope_artifacts.modeling_scope": {
+          "values": [
+            "system",
+            "requirements",
+            "architecture",
+            "verification",
+            "other"
+          ],
+          "status": "coded",
+          "rationale": "The CSRM system/reference architecture, metamodel-quality requirements, and executable verification are substantive. The non-enumerated central scope is metamodel/ontology quality analysis, recorded as other.",
+          "evidence": [
+            {
+              "quote": "Fig. 8 shows requirements for quantitative metrics of the metamodel and the value properties that «satisfy» each.",
+              "location": "Section 5"
+            },
+            {
+              "quote": "This research contributes toward defining a novel methodology for evaluating DSL quality based on the underlying metamodel.",
+              "location": "Section 6, Significance of Results"
+            }
+          ],
+          "confidence": "high"
+        },
+        "mbse_objective_scope_artifacts.model_artifacts_used": {
+          "values": [
+            "requirements diagrams/tables",
+            "block definition/internal block diagrams",
+            "parametrics",
+            "other"
+          ],
+          "status": "coded",
+          "rationale": "Figures show quality-requirements/value-property links, CSRM class/model views, constraint blocks, and parametric diagrams. The CSRM metamodel/concept model, OWL ontology, and MetricSuite are additional artifacts recorded as other.",
+          "evidence": [
+            {
+              "quote": "Fig. 11 shows the mathematical expressions that form executable SysML parametric diagrams and verify quality requirements are met.",
+              "location": "Section 5"
+            },
+            {
+              "quote": "Fig. 7 shows an example of CSRM metamodel classes, superclasses, and subclasses.",
+              "location": "Section 4, Evaluating CSRM Quality"
+            }
+          ],
+          "confidence": "high"
+        },
+        "mbse_objective_scope_artifacts.generality_reuse_mechanism": {
+          "values": [
+            "reference model",
+            "profile",
+            "method guidance",
+            "mission-agnostic architecture"
+          ],
+          "status": "coded",
+          "rationale": "The paper identifies a reference-model/profile, intended reuse for multiple mission-specific purposes, and a metamodel-quality method. These are mechanisms or intentions, not repeated reuse evidence; no open package is coded from inherited appendix material.",
+          "evidence": [
+            {
+              "quote": "The CSRM is developed to meet domain-specific language (DSL) requirements based on a space mission ontology that can be re-used for various mission-specific purposes.",
+              "location": "Section 1, Introduction"
+            },
+            {
+              "quote": "This research contributes toward defining a novel methodology for evaluating DSL quality based on the underlying metamodel.",
+              "location": "Section 6, Significance of Results"
+            }
+          ],
+          "confidence": "medium"
+        },
+        "implementation_pathway_tailoring.approach_classification": {
+          "values": [
+            "Enhanced MBSE"
+          ],
+          "status": "coded",
+          "rationale": "The approach is centered on SysML model artifacts and adds OWL/Protégé semantic reasoning, custom structured-expression counting, and executable parametric calculation. It does not demonstrate connected downstream software/hardware integration across the lifecycle.",
+          "evidence": [
+            {
+              "quote": "After transforming the CSRM metamodel into a Cameo Concept Model (CCM), the OWL file is imported into the CCM for interpretation mapping.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "implementation_pathway_tailoring.tailoring_rationale": {
+          "values": [
+            "organizational constraints"
+          ],
+          "status": "coded",
+          "rationale": "The method substitutes quantitative/verifiable quality requirements for direct elicitation across a wide set of CubeSat stakeholders, which the authors call arduous. No explicit cost, schedule, tool-availability, or resource-constrained tailoring rationale is provided.",
+          "evidence": [
+            {
+              "quote": "With such a wide variety of invested individuals, eliciting quality requirements directly has proven to be an arduous task. Instead, the Quality Model for Metamodels (QM4MM) framework and associated metrics will be used to define verifiable requirements.",
+              "location": "Abstract"
+            }
+          ],
+          "confidence": "high"
+        },
+        "implementation_pathway_tailoring.adoption_guidance": {
+          "values": [
+            "partial guidance"
+          ],
+          "status": "coded",
+          "rationale": "The paper presents ordered construction, counting, testing, parametric, mapping, and reasoning activities, but it does not provide a complete adopter playbook with roles, inputs, handoffs, tool settings, or lifecycle gates.",
+          "evidence": [
+            {
+              "quote": "To validate the accuracy of the MetricDefinition counts, a simple test environment is evaluated",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool": {
+          "values": [
+            "SysML",
+            "Cameo/MagicDraw",
+            "custom tools",
+            "open-source packages",
+            "other"
+          ],
+          "status": "coded",
+          "rationale": "SysML, Cameo Concept Model, the custom MetricSuite Counts, and open-source Protégé are explicit. OWL and semantic reasoners are non-enumerated language/toolchain elements recorded as other.",
+          "evidence": [
+            {
+              "quote": "The DSO is built in accordance with the Web Ontology Language (OWL) using Protégé, an open-source ontology editor.",
+              "location": "Section 4"
+            },
+            {
+              "quote": "After transforming the CSRM metamodel into a Cameo Concept Model (CCM)",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "toolchain_interoperability_lifecycle_continuity.interoperability_mechanisms": {
+          "values": [
+            "model transformation",
+            "import/export"
+          ],
+          "status": "coded",
+          "rationale": "The paper explicitly transforms the CSRM metamodel into CCM and imports the OWL file for interpretation mapping. It does not report APIs, XMI, scripts, or downstream exchange.",
+          "evidence": [
+            {
+              "quote": "After transforming the CSRM metamodel into a Cameo Concept Model (CCM), the OWL file is imported into the CCM for interpretation mapping.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "toolchain_interoperability_lifecycle_continuity.toolchain_limitations": {
+          "values": [
+            "not reported"
+          ],
+          "status": "not_reported",
+          "rationale": "No prescribed toolchain limitation is explicitly reported. The narrowly demonstrated OWL-to-CCM transformation/import is an evidence boundary, not by itself proof of vendor lock-in, manual translation, broken traceability, missing interfaces, scalability, or licensing/cost problems.",
+          "evidence": [
+            {
+              "quote": "The CSRM ontology is created as a proof-of-concept to verify import and mapping capabilities of an OWL file into the metamodel.",
+              "location": "Section 4, CSRM Ontology"
+            }
+          ],
+          "confidence": "high"
+        },
+        "eps_verification_specific.eps_elements_modeled": {
+          "values": [],
+          "status": "not_applicable",
+          "rationale": "No EPS model is within the study boundary; hence solar panels, batteries, loads, budgets, modes, and other EPS elements are not applicable to this extraction rather than being merely unreported subfields of an EPS model.",
+          "evidence": [
+            {
+              "quote": "This research focuses on the data model using SPO semantics",
+              "location": "Section 4"
+            },
+            {
+              "quote": "This research did not consider the process model in the quality analysis.",
+              "location": "Section 6, Research Limitations"
+            }
+          ],
+          "confidence": "high"
+        },
+        "eps_verification_specific.verification_validation_artifacts": {
+          "values": [
+            "executable checks"
+          ],
+          "status": "coded",
+          "rationale": "The study executes SysML parametrics to check metamodel-quality requirements and uses ontology semantic reasoning. These are executable model checks, not EPS test cases/procedures or physical-system V&V artifacts.",
+          "evidence": [
+            {
+              "quote": "Fig. 11 shows the mathematical expressions that form executable SysML parametric diagrams and verify quality requirements are met.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "eps_verification_specific.pre_physical_development_verification_mechanism": {
+          "values": [
+            "parametric checks",
+            "model checking"
+          ],
+          "status": "coded",
+          "rationale": "Parametrics check the six metamodel-quality equations and semantic reasoning checks OWL consistency before physical development. Both mechanisms are restricted to model/ontology quality.",
+          "evidence": [
+            {
+              "quote": "Protégé has several semantic reasoners that ensure compliance with OWL and can validate consistency of the DSL.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "eps_verification_specific.ivv_integration_level": {
+          "values": [
+            "executable/model-based checks"
+          ],
+          "status": "coded",
+          "rationale": "Quality requirements, satisfying value properties, and executable SysML parametrics are model-contained; OWL reasoning is also applied. This is the highest evidenced level, but it is not software/hardware-in-the-loop or physical integration/test evidence.",
+          "evidence": [
+            {
+              "quote": "This relationship creates constraints that enable the modeling tool to validate the requirement has been met by executing SysML parametrics.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "eps_verification_specific.integration_test_readiness": {
+          "values": [],
+          "status": "not_reported",
+          "rationale": "No link from the quality analysis to hardware integration, software integration, flat-sat/testbed, environmental testing, or operational validation is reported. This completed field distinguishes the executable metamodel checks from integration/test readiness.",
+          "evidence": [
+            {
+              "quote": "This paper has demonstrated a quality-based approach for DSL metamodel evaluation using CSRM as a singular case study.",
+              "location": "Section 7"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].outcome_category": {
+          "values": [
+            "integrability/interoperability",
+            "generality/reuse",
+            "consistency",
+            "defect/error reduction",
+            "automation",
+            "decision support",
+            "communication/stakeholder alignment",
+            "risk reduction",
+            "other"
+          ],
+          "status": "coded",
+          "rationale": "The claims retain only current-paper calculation, metric-diagnostic, ontology-consistency, narrow mapping, anticipated-reference-model, and generic validation-rule outcomes. Inherited Appendix A reuse/traceability claims are retained as lineage context, not aggregate current-paper outcomes.",
+          "evidence": [
+            {
+              "quote": "Table 3 verifies the SysML parametrics are correctly calculating advanced model metrics.",
+              "location": "Section 5; Table 3"
+            },
+            {
+              "quote": "After transforming the CSRM metamodel into a Cameo Concept Model (CCM), the OWL file is imported into the CCM for interpretation mapping.",
+              "location": "Section 5"
+            },
+            {
+              "quote": "Incorporating the CSRM into systems engineering (SE) processes can strengthen communication and collaboration across the enterprise.",
+              "location": "Abstract"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].reliability_subtype": {
+          "values": [
+            "defect/error reduction"
+          ],
+          "status": "coded",
+          "rationale": "Only the generic, unsupported validation-rule assertion explicitly claims error reduction. Model/ontology consistency is retained as consistency rather than recoded as a reliability subtype; no EPS, system/mission, process, or mission-assurance reliability outcome is reported.",
+          "evidence": [
+            {
+              "quote": "Customized validation rules within the MBSE tool reduce errors and improve model quality by checking for accuracy and consistency",
+              "location": "Section 5, Metamodel Quality Analysis Application"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].specificity_of_claim": {
+          "values": [
+            "nanosatellite system-level",
+            "generic MBSE"
+          ],
+          "status": "coded",
+          "rationale": "The metric-calculation and generic validation-rule claims are generic MBSE/DSL claims; CSRM metric, ontology, mapping, and anticipated-reference-model claims concern a CubeSat system reference model. No claim is EPS-specific.",
+          "evidence": [
+            {
+              "quote": "This research is anticipated to complement best practices for the greater technical community when creating new domain-specific languages (DSL) in MBSE environments.",
+              "location": "Abstract"
+            },
+            {
+              "quote": "This paper proposes a way to evaluate the quality of domain-specific modeling languages (DSML) by investigating the CubeSat Reference Model (CSRM) profile and its accompanying metamodel.",
+              "location": "Section 1"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism": {
+          "values": [
+            "parametric analysis",
+            "reference model reuse",
+            "model transformation",
+            "requirements linkage",
+            "tool integration",
+            "other"
+          ],
+          "status": "coded",
+          "rationale": "Current-paper claims use quality-requirement/value-property links, executable parametrics, CSRM reference-model reuse, OWL-to-CCM transformation/import, and semantic/count-query mechanisms. The structured-expression and semantic-reasoning mechanisms remain other; Appendix A traceability claims are not aggregated as current outcomes.",
+          "evidence": [
+            {
+              "quote": "Fig. 8 shows requirements for quantitative metrics of the metamodel and the value properties that «satisfy» each.",
+              "location": "Section 5"
+            },
+            {
+              "quote": "Each MetricDefinition gives an automated count of a particular model element leveraging structured expressions",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].lifecycle_stage": {
+          "values": [],
+          "status": "not_reported",
+          "rationale": "No current-paper claim is tied to a named spacecraft lifecycle phase; this is a DSL/metamodel-quality case study rather than a mission lifecycle application.",
+          "evidence": [
+            {
+              "quote": "This paper has demonstrated a quality-based approach for DSL metamodel evaluation using CSRM as a singular case study.",
+              "location": "Section 7, Conclusions and Future Work"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].evidence_type": {
+          "values": [
+            "Assertion only / no evidence",
+            "Single case-study demonstration",
+            "Executable model or simulation result",
+            "Trade-study or requirements-checking result",
+            "Quantitative metric without baseline",
+            "Quantitative comparison with baseline or counterfactual"
+          ],
+          "status": "coded",
+          "rationale": "The strongest evidence is a single synthetic metric-calculation test and one CSRM requirements-checking/mapping case. Broad communication/reuse/risk and error-reduction statements remain assertions; no physical, operational, or repeated-reuse evidence is reported.",
+          "evidence": [
+            {
+              "quote": "Table 3 verifies the SysML parametrics are correctly calculating advanced model metrics.",
+              "location": "Section 5; Table 3"
+            },
+            {
+              "quote": "This research is anticipated to complement best practices for the greater technical community",
+              "location": "Abstract"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator": {
+          "values": [
+            "other"
+          ],
+          "status": "coded",
+          "rationale": "LCOM, CBO, RD, SD, SCR, ULe, counts, mapping coverage, and semantic consistency are metamodel-quality indicators, not physical reliability, power, schedule, or lifecycle metrics.",
+          "evidence": [
+            {
+              "quote": "Fig. 16 compares the final values for the CSRM metamodel quality aspects and results from SysML parametrics.",
+              "location": "Section 6, Research Results"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].baseline_comparator": {
+          "values": [
+            "manual analysis",
+            "not reported"
+          ],
+          "status": "coded",
+          "rationale": "Manual arithmetic is a comparator only for the synthetic eight-class calculation test. No actual-CSRM, reuse, communication, error-reduction, or integration baseline is reported for the other claims.",
+          "evidence": [
+            {
+              "quote": "Table 3. Manual metric results vs SysML parametric results.",
+              "location": "Section 6; Table 3"
+            }
+          ],
+          "confidence": "high"
+        },
+        "claimed_outcomes_value_mechanisms_evidence[].evidence_confidence_rating": {
+          "values": [
+            "Unsupported",
+            "Weak",
+            "Moderate"
+          ],
+          "status": "coded",
+          "rationale": "The synthetic calculation and CSRM metric-diagnostic claims are bounded Moderate evidence; ontology consistency and mapping proof-of-concept claims are Weak; anticipated benefits and generic error reduction are Unsupported.",
+          "evidence": [
+            {
+              "quote": "Although in its infancy, many of these methods lay the foundation for a viable framework",
+              "location": "Section 7"
+            },
+            {
+              "quote": "The parameters are estimates that necessitate further refinement as additional DSL case studies are completed and objectives become evident.",
+              "location": "Section 6, Research Results"
+            }
+          ],
+          "confidence": "high"
+        },
+        "governance_roi_project_decision_linkage.model_governance_strategy": {
+          "values": [
+            "ownership",
+            "model quality criteria"
+          ],
+          "status": "coded",
+          "rationale": "INCOSE SSWG leads the ongoing CSRM effort, and QM4MM thresholds/metrics act as model-quality criteria. Formal configuration/change control, naming, versioning, and review governance are not reported.",
+          "evidence": [
+            {
+              "quote": "Its development is an ongoing effort led by the International Council of Systems Engineering (INCOSE) Space Systems Working Group (SSWG)",
+              "location": "Abstract"
+            },
+            {
+              "quote": "The resulting quality scores will define the following aspects: Cohesiveness; Conciseness; Specificity; Clarity; Learnability",
+              "location": "Section 4, Evaluating CSRM Quality"
+            }
+          ],
+          "confidence": "high"
+        },
+        "governance_roi_project_decision_linkage.roi_value_realization_evidence": {
+          "values": [],
+          "status": "not_reported",
+          "rationale": "No cost of adoption, training effort, saved effort, schedule effect, avoided rework, realized reuse, decision-quality outcome, or mission-assurance benefit is measured. Anticipated iterative improvement is not ROI evidence.",
+          "evidence": [
+            {
+              "quote": "The ability to track the iterative CSRM metamodel metrics may uncover additional ways to compare DSL versions",
+              "location": "Section 7"
+            }
+          ],
+          "confidence": "high"
+        },
+        "gap_mapping.practical_implementation_pathway": {
+          "values": [
+            "addressed with evidence"
+          ],
+          "status": "coded",
+          "rationale": "A bounded but applied workflow is shown: formulate metrics/requirements, build count queries, test them, execute parametrics, map OWL, reason over consistency, and interpret findings. It is not a complete mission-MBSE adoption pathway.",
+          "evidence": [
+            {
+              "quote": "To validate the accuracy of the MetricDefinition counts, a simple test environment is evaluated",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high"
+        },
+        "gap_mapping.toolchain_fragmentation_interoperability": {
+          "values": [
+            "addressed with evidence"
+          ],
+          "status": "coded",
+          "rationale": "OWL-to-CCM transformation/import and interpretation mapping are demonstrated as a narrow interoperability proof of concept. No broader engineering-toolchain continuity is evidenced.",
+          "evidence": [
+            {
+              "quote": "The CSRM ontology is created as a proof-of-concept to verify import and mapping capabilities of an OWL file into the metamodel.",
+              "location": "Section 4"
+            }
+          ],
+          "confidence": "high"
+        },
+        "gap_mapping.lightweight_resource_constrained_tailoring": {
+          "values": [
+            "mentioned only"
+          ],
+          "status": "coded",
+          "rationale": "CubeSat modularity and low cost are mentioned, but the paper does not tailor its method, tooling, effort, or evidence to resource-constrained mission delivery.",
+          "evidence": [
+            {
+              "quote": "In alignment with the modularity and low-cost CubeSat design and build",
+              "location": "Section 1"
+            }
+          ],
+          "confidence": "high"
+        },
+        "gap_mapping.governance_project_deliverables_roi": {
+          "values": [
+            "addressed conceptually"
+          ],
+          "status": "coded",
+          "rationale": "The working group and quality criteria provide a governance-oriented framing, and Appendix A asserts traceability to V&V. No deliverable review, project decision, ROI, or realized value data is demonstrated.",
+          "evidence": [
+            {
+              "quote": "The INCOSE SSWG is presented with the opportunity to iteratively improve the CubeSat DSL based on objective measurements",
+              "location": "Section 7"
+            }
+          ],
+          "confidence": "medium"
+        },
+        "gap_mapping.newspace_agile_distributed_rapid_iteration_alignment": {
+          "values": [
+            "not addressed"
+          ],
+          "status": "coded",
+          "rationale": "The conclusion proposes iterative improvement of the CSRM metrics, but it does not align the method with NewSpace, agile, distributed-team, or rapid-iteration demands. Generic iteration alone is not a mention of that gap.",
+          "evidence": [
+            {
+              "quote": "The INCOSE SSWG is presented with the opportunity to iteratively improve the CubeSat DSL based on objective measurements.",
+              "location": "Section 7, Conclusions and Future Work"
+            }
+          ],
+          "confidence": "high"
+        },
+        "synthesis_consistency.extraction_confidence": {
+          "values": [
+            "medium"
+          ],
+          "status": "coded",
+          "rationale": "The source clearly reports method steps, equations, test-environment calculations, CSRM counts, and author limitations. Confidence is reduced by OCR/table inconsistencies, missing venue/tool-version/assets, and the distinction between demonstrated metamodel checks and unsupported physical/EPS claims.",
+          "evidence": [
+            {
+              "quote": "The parameters are estimates that necessitate further refinement as additional DSL case studies are completed and objectives become evident.",
+              "location": "Section 6, Research Results"
+            }
+          ],
+          "confidence": "high"
+        }
+      },
+      "structured_limitations": {
+        "limitation_flags": [
+          "prototype_or_future_work",
+          "single_case_or_limited_scope",
+          "no_baseline_or_comparator",
+          "no_independent_validation",
+          "no_physical_test_or_flight_evidence",
+          "no_eps_specific_evidence",
+          "assumptions_or_data_quality_limits",
+          "interoperability_limitations",
+          "incomplete_lifecycle_coverage",
+          "weak_claim_evidence_linkage",
+          "lineage_or_duplicate_reference_model_overlap"
+        ],
+        "limitation_assessments": [
+          {
+            "flag": "prototype_or_future_work",
+            "source": "author_stated",
+            "rationale": "The authors characterize the method as early-stage and frame further case studies and cross-domain comparison as future work.",
+            "evidence_quote": "Although in its infancy, many of these methods lay the foundation for a viable framework",
+            "evidence_location": "Section 7, Conclusions and Future Work",
+            "confidence": "high"
+          },
+          {
+            "flag": "single_case_or_limited_scope",
+            "source": "author_stated",
+            "rationale": "The paper explicitly describes CSRM as a singular case study and excludes the process model from quality analysis.",
+            "evidence_quote": "This paper has demonstrated a quality-based approach for DSL metamodel evaluation using CSRM as a singular case study.",
+            "evidence_location": "Section 7",
+            "confidence": "high"
+          },
+          {
+            "flag": "no_baseline_or_comparator",
+            "source": "extractor_identified",
+            "rationale": "The completed claim records show manual analysis only as a comparator for arithmetic in the eight-class test environment; there is no baseline for the actual CSRM quality conclusion, reuse, communication, or project value claims.",
+            "evidence_quote": "Table 3. Manual metric results vs SysML parametric results.",
+            "evidence_location": "Section 6; Table 3",
+            "confidence": "high"
+          },
+          {
+            "flag": "no_independent_validation",
+            "source": "author_stated",
+            "rationale": "Metamodel knowledge correctness is assumed from SME diligence rather than empirically validated by independent domain experts or another external method.",
+            "evidence_quote": "Based on the assumption that domain SMEs constructed the CSRM with due diligence, evaluation of the metamodel knowledge correctness is not empirically conducted.",
+            "evidence_location": "Section 6, Research Limitations",
+            "confidence": "high"
+          },
+          {
+            "flag": "no_physical_test_or_flight_evidence",
+            "source": "extractor_identified",
+            "rationale": "Completed EPS/IVV fields identify only executable metamodel/ontology checks and no integration-test readiness. The paper's singular data-model case scope provides no hardware, environmental, integration, operational, or flight evidence.",
+            "evidence_quote": "This research focuses on the data model using SPO semantics",
+            "evidence_location": "Section 4, CSRM Metamodel",
+            "confidence": "high"
+          },
+          {
+            "flag": "no_eps_specific_evidence",
+            "source": "extractor_identified",
+            "rationale": "The completed EPS field is not applicable because the model boundary is CSRM metamodel/ontology quality; no power subsystem elements, requirements, analyses, or V&V artifacts are represented.",
+            "evidence_quote": "This research did not consider the process model in the quality analysis.",
+            "evidence_location": "Section 6, Research Limitations",
+            "confidence": "high"
+          },
+          {
+            "flag": "assumptions_or_data_quality_limits",
+            "source": "author_stated",
+            "rationale": "Thresholds are described as estimates requiring refinement, and correctness relies on an assumption about SMEs.",
+            "evidence_quote": "The parameters are estimates that necessitate further refinement as additional DSL case studies are completed and objectives become evident.",
+            "evidence_location": "Section 6, Research Results",
+            "confidence": "high"
+          },
+          {
+            "flag": "interoperability_limitations",
+            "source": "extractor_identified",
+            "rationale": "The completed toolchain field documents a proof-of-concept OWL import/mapping only; no interface or continuity to downstream engineering, integration, test, or operations tools is reported.",
+            "evidence_quote": "The CSRM ontology is created as a proof-of-concept to verify import and mapping capabilities of an OWL file into the metamodel.",
+            "evidence_location": "Section 4, CSRM Ontology",
+            "confidence": "medium"
+          },
+          {
+            "flag": "incomplete_lifecycle_coverage",
+            "source": "extractor_identified",
+            "rationale": "The completed lifecycle and integration-readiness fields are not reported, while the stated research boundary is a CSRM data-model quality case. The appendix's general V&V traceability statement does not demonstrate lifecycle execution in this paper.",
+            "evidence_quote": "This paper has demonstrated a quality-based approach for DSL metamodel evaluation using CSRM as a singular case study.",
+            "evidence_location": "Section 7",
+            "confidence": "high"
+          },
+          {
+            "flag": "weak_claim_evidence_linkage",
+            "source": "extractor_identified",
+            "rationale": "The completed claim records distinguish direct metric/check evidence from unmeasured claims about communication, collaboration, reuse, transparency, error reduction, and broader best practice. Those latter claims have no repeated-use, stakeholder, cost, or integration evidence in this study.",
+            "evidence_quote": "This research is anticipated to complement best practices for the greater technical community when creating new domain-specific languages (DSL) in MBSE environments.",
+            "evidence_location": "Abstract",
+            "confidence": "high"
+          },
+          {
+            "flag": "lineage_or_duplicate_reference_model_overlap",
+            "source": "author_stated",
+            "rationale": "Appendix A explicitly reuses prior CSRM work. Its architecture/reuse and broad traceability assertions should be treated as CSRM-lineage context, not a second independently evidenced deployment in this paper.",
+            "evidence_quote": "This appendix is excerpted from the authors' previous work [71] with additional information as it pertains to the CSRM metamodel.",
+            "evidence_location": "Appendix A",
+            "confidence": "high"
+          }
+        ],
+        "emergent_limitations": [
+          {
+            "label": "metric-threshold and conclusion ambiguity",
+            "rationale": "The results narrative says initial specificity goals are met, yet the displayed CSRM SD value is 0.8525 while the stated balanced range is 0.25-0.75 (and Figure 16 displays 0.5-0.75); the displayed RD value of 0.3230 also fails its stated greater-than-0.75 requirement. Interpret the broad positive conclusion cautiously.",
+            "evidence_quote": "The SD represents the class distribution... For this study, an SD value between 0.25 and 0.75 defines a balanced SD distribution. Figure 16 displays: /RD:Real | 0.3230 | The RD value shall be greater than 0.75; /SD:Real | 0.8525 | The SD value shall be between 0.5 and 0.75.",
+            "evidence_location": "Section 4, Specificity; Section 6, Figure 16",
+            "confidence": "high"
+          },
+          {
+            "label": "inherited UML/SysML elements affect CSRM metric values",
+            "rationale": "The counts include eight UML and SysML elements and their relationships, so some reported CSRM metric discrepancies are not purely properties of the CSRM classes.",
+            "evidence_quote": "The eight (8) UML and SysML elements and their relationships with the CSRM metamodel were included in the Counts. The discrepancies this introduces into the metrics are explained in this section.",
+            "evidence_location": "Section 6, Research Result Discussion",
+            "confidence": "high"
+          },
+          {
+            "label": "clarity assessment is only an ontology-mapping proof of concept",
+            "rationale": "The authors state that a mature domain-specific ontology is needed before SCR can support the true quality implications of clarity.",
+            "evidence_quote": "This research demonstrated a proof-of-concept for the SCR evaluation; however, a mature DSO should be leveraged to evaluate the true quality implications of this characteristic.",
+            "evidence_location": "Section 6, Research Result Discussion, Clarity",
+            "confidence": "high"
+          },
+          {
+            "label": "cbo-result-not-inspectable-in-supplied-markdown",
+            "rationale": "The narrative calls CBO exceptional, but the converted Figure 16 table does not display a final CBO row/value. Do not derive a numeric CBO result or treat it as a fully inspectable quantitative outcome.",
+            "evidence_quote": "The CBO value of the CSRM metamodel received an exceptional quality score.",
+            "evidence_location": "Section 6, Research Result Discussion, Coupling; Figure 16 in supplied Markdown",
+            "confidence": "high"
+          }
+        ]
+      },
+      "emergent_codes": [
+        {
+          "label": "metamodel/ontology quality-analysis scope",
+          "category": "modeling_scope_other",
+          "explanation": "The central object of analysis is the CSRM DSL metamodel and its OWL ontology, using QM4MM quality characteristics; this is more specific than the enumerated system/architecture/verification scopes.",
+          "evidence": [
+            {
+              "quote": "This research contributes toward defining a novel methodology for evaluating DSL quality based on the underlying metamodel.",
+              "location": "Section 6, Significance of Results"
+            }
+          ],
+          "confidence": "high",
+          "field_path": "mbse_objective_scope_artifacts.modeling_scope",
+          "description": "The central object of analysis is the CSRM DSL metamodel and its OWL ontology, using QM4MM quality characteristics; this is more specific than the enumerated system/architecture/verification scopes.",
+          "rationale": "Retained as open coding because the controlled vocabulary does not capture this synthesis-relevant detail without overextending a controlled code.",
+          "evidence_quote": "This research contributes toward defining a novel methodology for evaluating DSL quality based on the underlying metamodel."
+        },
+        {
+          "label": "CSRM concept-model, OWL ontology, and MetricSuite artifacts",
+          "category": "model_artifacts_other",
+          "explanation": "Beyond enumerated diagrams and parametrics, the paper uses a CSRM metamodel/concept model, an OWL ontology, and a custom MetricSuite Counts artifact.",
+          "evidence": [
+            {
+              "quote": "The custom MetricSuite\"Counts\" is built to determine the MetricDefinitions.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high",
+          "field_path": "mbse_objective_scope_artifacts.model_artifacts_used",
+          "description": "Beyond enumerated diagrams and parametrics, the paper uses a CSRM metamodel/concept model, an OWL ontology, and a custom MetricSuite Counts artifact.",
+          "rationale": "Retained as open coding because the controlled vocabulary does not capture this synthesis-relevant detail without overextending a controlled code.",
+          "evidence_quote": "The custom MetricSuite\"Counts\" is built to determine the MetricDefinitions."
+        },
+        {
+          "label": "OWL/Protégé semantic-reasoning toolchain",
+          "category": "mbse_language_method_tool_other",
+          "explanation": "OWL and semantic reasoners are central to the interpretation-mapping and ontology-consistency activity but are not separate options in the controlled tool list.",
+          "evidence": [
+            {
+              "quote": "Protégé has several semantic reasoners that ensure compliance with OWL and can validate consistency of the DSL.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high",
+          "field_path": "toolchain_interoperability_lifecycle_continuity.mbse_language_method_tool",
+          "description": "OWL and semantic reasoners are central to the interpretation-mapping and ontology-consistency activity but are not separate options in the controlled tool list.",
+          "rationale": "Retained as open coding because the controlled vocabulary does not capture this synthesis-relevant detail without overextending a controlled code.",
+          "evidence_quote": "Protégé has several semantic reasoners that ensure compliance with OWL and can validate consistency of the DSL."
+        },
+        {
+          "label": "structured-expression MetricSuite query/count mechanism",
+          "category": "mbse_mechanism_other",
+          "explanation": "Custom MetricDefinitions query model elements via structured expressions and automatically supply variables to the quality equations; this is neither a simulation nor automated generation.",
+          "evidence": [
+            {
+              "quote": "Each MetricDefinition gives an automated count of a particular model element leveraging structured expressions, a tool-specific capability used to query the model.",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high",
+          "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+          "description": "Custom MetricDefinitions query model elements via structured expressions and automatically supply variables to the quality equations; this is neither a simulation nor automated generation.",
+          "rationale": "Retained as open coding because the controlled vocabulary does not capture this synthesis-relevant detail without overextending a controlled code.",
+          "evidence_quote": "Each MetricDefinition gives an automated count of a particular model element leveraging structured expressions, a tool-specific capability used to query the model."
+        },
+        {
+          "label": "custom metamodel validation-rule mechanism",
+          "category": "mbse_mechanism_other",
+          "explanation": "The paper refers to customized validation rules that check model accuracy and consistency; this custom rule mechanism is more specific than the enumerated value-mechanism labels and is not evidence of measured defect reduction.",
+          "evidence": [
+            {
+              "quote": "Customized validation rules within the MBSE tool reduce errors and improve model quality by checking for accuracy and consistency",
+              "location": "Section 5"
+            }
+          ],
+          "confidence": "high",
+          "field_path": "claimed_outcomes_value_mechanisms_evidence[].mbse_mechanism",
+          "description": "The paper refers to customized validation rules that check model accuracy and consistency; this custom rule mechanism is more specific than the enumerated value-mechanism labels and is not evidence of measured defect reduction.",
+          "rationale": "Retained as open coding because the controlled vocabulary does not capture this synthesis-relevant detail without overextending a controlled code.",
+          "evidence_quote": "Customized validation rules within the MBSE tool reduce errors and improve model quality by checking for accuracy and consistency"
+        },
+        {
+          "label": "QM4MM metamodel-quality and semantic-mapping indicators",
+          "category": "metric_or_value_indicator_other",
+          "explanation": "LCOM, CBO, RD, SD, SCR, ULe, counts, and semantic consistency are structural/semantic metamodel indicators, not physical reliability, power, schedule, or lifecycle metrics.",
+          "evidence": [
+            {
+              "quote": "Fig. 16 compares the final values for the CSRM metamodel quality aspects and results from SysML parametrics.",
+              "location": "Section 6"
+            }
+          ],
+          "confidence": "high",
+          "field_path": "claimed_outcomes_value_mechanisms_evidence[].metric_or_value_indicator",
+          "description": "LCOM, CBO, RD, SD, SCR, ULe, counts, and semantic consistency are structural/semantic metamodel indicators, not physical reliability, power, schedule, or lifecycle metrics.",
+          "rationale": "Retained as open coding because the controlled vocabulary does not capture this synthesis-relevant detail without overextending a controlled code.",
+          "evidence_quote": "Fig. 16 compares the final values for the CSRM metamodel quality aspects and results from SysML parametrics."
+        },
+        {
+          "label": "test-environment versus CSRM-data-model evidence boundary",
+          "category": "evidence_scope",
+          "explanation": "Manual-versus-parametric agreement is demonstrated in an eight-class synthetic test environment, whereas the CSRM data model supplies a separate set of counts and quality values. Neither is mission or physical-system validation.",
+          "evidence": [
+            {
+              "quote": "To validate the accuracy of the MetricDefinition counts, a simple test environment is evaluated",
+              "location": "Section 5"
+            },
+            {
+              "quote": "Fig. 15 shows the basic counts for the CSRM data model.",
+              "location": "Section 6"
+            }
+          ],
+          "confidence": "high",
+          "field_path": "claimed_outcomes_value_mechanisms_evidence[].evidence_type",
+          "description": "Manual-versus-parametric agreement is demonstrated in an eight-class synthetic test environment, whereas the CSRM data model supplies a separate set of counts and quality values. Neither is mission or physical-system validation.",
+          "rationale": "Retained as open coding because the controlled vocabulary does not capture this synthesis-relevant detail without overextending a controlled code.",
+          "evidence_quote": "To validate the accuracy of the MetricDefinition counts, a simple test environment is evaluated"
+        },
+        {
+          "label": "CSRM v1.1-beta/prior-work lineage",
+          "category": "lineage",
+          "explanation": "The study assesses an ongoing OMG/INCOSE CSRM profile derived from prior authors' work; Appendix A is explicitly excerpted from that lineage and should not be counted as a new mission application or repeated reuse outcome.",
+          "evidence": [
+            {
+              "quote": "Building on the authors' previous work, a CSRM metamodel is created using the subject-predicate-object (SPO) approach.",
+              "location": "Section 4, CSRM Metamodel"
+            },
+            {
+              "quote": "This appendix is excerpted from the authors' previous work [71]",
+              "location": "Appendix A"
+            }
+          ],
+          "confidence": "high",
+          "field_path": "bibliographic_review_management.lineage_overlap_notes",
+          "description": "The study assesses an ongoing OMG/INCOSE CSRM profile derived from prior authors' work; Appendix A is explicitly excerpted from that lineage and should not be counted as a new mission application or repeated reuse outcome.",
+          "rationale": "Retained as open coding because the controlled vocabulary does not capture this synthesis-relevant detail without overextending a controlled code.",
+          "evidence_quote": "Building on the authors' previous work, a CSRM metamodel is created using the subject-predicate-object (SPO) approach."
+        }
+      ],
+      "extraction": {
+        "bibliographic_review_management": {
+          "corpus_id": "paper-0082",
+          "extraction_file_path": "extractions/paper-0082.json",
+          "tier_status": "core",
+          "status_rationale": "Supplied screening tier is core. The full text is centrally about a CubeSat MBSE reference-model/metamodel quality method, though its relevance to EPS and physical-system IVV is indirect and bounded.",
+          "citation": "Rudder, Sarah; Kaslow, David; Adams, Jim. (2026). Evaluating Metamodel Quality of the CubeSat System Reference Model (CSRM) to Improve Domain-Specific Languages (DSL). 2026 IEEE Aerospace Conference. IEEE. https://doi.org/10.1109/AERO66936.2026.11519791.",
+          "title": "Evaluating Metamodel Quality of the CubeSat System Reference Model (CSRM) to Improve Domain-Specific Languages (DSL)",
+          "authors": [
+            "Sarah Rudder",
+            "David Kaslow",
+            "Jim Adams"
+          ],
+          "year": 2026,
+          "venue": "2026 IEEE Aerospace Conference",
+          "doi_or_url": "10.1109/AERO66936.2026.11519791",
+          "publisher": "IEEE",
+          "venue_type": "conference paper",
+          "source_database_or_route": "Scopus exact-title record; existing local full-text markdown",
+          "research_questions_addressed": [
+            {
+              "rq": "RQ1",
+              "relevance": "partial",
+              "rationale": "CSRM is a reusable CubeSat reference-model/profile, but this study evaluates a structural metamodel and does not address EPS or a method for limited/unknown mission behavior."
+            },
+            {
+              "rq": "RQ2",
+              "relevance": "none",
+              "rationale": "No EPS model, power artifact, EPS outcome, or reliability/reproducibility/integrability result attributed to EPS modeling is reported. Metamodel consistency is retained as a bounded open finding, not RQ2 evidence."
+            },
+            {
+              "rq": "RQ3",
+              "relevance": "partial",
+              "rationale": "The paper demonstrates model-contained parametric and ontology-consistency checks before physical development, but they verify DSL/metamodel quality rather than EPS procedures, mission behavior, or physical-system IVV."
+            }
+          ],
+          "lineage_overlap_notes": "CSRM is an ongoing INCOSE SSWG/OMG beta reference-profile lineage. The authors state that the metamodel builds on previous work, and Appendix A is excerpted from prior work [71]. Treat the appendix's reference-model, traceability, and reuse statements as lineage context, not independent evidence of a new mission application, repeated reuse, or physical-system V&V in this paper."
+        },
+        "study_context_population": {
+          "mission_platform": "CubeSat/nanosatellite reference-model domain; no individual mission or flown spacecraft case is described.",
+          "size_form_factor": "CubeSat class; no 1U, 2U, 3U, or other specific form factor is reported.",
+          "mission_name": null,
+          "mission_domain": "General CubeSat mission architecture and space-systems reference modeling.",
+          "organization_type": "INCOSE Space Systems Working Group reference-model effort; authors have university and consulting affiliations.",
+          "project_maturity": "Ongoing CSRM development with an OMG beta specification; the quality method is applied as a singular metamodel case study.",
+          "lifecycle_stage_addressed": [],
+          "development_context": [],
+          "eps_relevance": "not EPS-relevant",
+          "model_maturity": [
+            "reference model/template",
+            "prototype demonstration",
+            "executable model"
+          ],
+          "context_notes": "The paper identifies CubeSats as nanosatellites and evaluates CSRM's data model, ontology, and DSL quality. It does not identify a specific mission, spacecraft configuration, lifecycle phase, EPS, or physical integration setting."
+        },
+        "mbse_objective_scope_artifacts": {
+          "stated_objective_pain_point": "Objectively evaluate CSRM/DSL metamodel quality using QM4MM metrics and verifiable requirements, because eliciting quality requirements across many CubeSat stakeholders is arduous; use results to guide specification robustness and iteration.",
+          "modeling_scope": [
+            "system",
+            "requirements",
+            "architecture",
+            "verification",
+            "other"
+          ],
+          "system_boundary_level_of_abstraction": "CSRM data-model/profile and associated OWL ontology at DSL/metamodel abstraction. It addresses classes, inheritance, object properties, documentation, equivalent-class mappings, and quality constraints—not a mission-specific spacecraft, subsystem, EPS, behavior execution, or physical architecture implementation.",
+          "minimal_or_excluded_modeling": "The research focuses on the SPO data model; the process model is explicitly excluded from quality analysis. EPS elements, mission behavior, hardware/software integration, physical tests, and flight operations are not modeled/evaluated. Knowledge correctness is not empirically tested.",
+          "required_prior_behavioral_domain_knowledge": "Existing CSRM/domain ontology and domain-SME knowledge are assumed. Metric selection requires deep understanding of modeling goals and ontology logical foundations; authors assume SMEs constructed CSRM with due diligence.",
+          "handling_limited_behavioral_knowledge": "The method avoids behavioral/process analysis by evaluating structural data-model properties with SPO semantics, counts, equations, and ontology mapping. It does not demonstrate a method for eliciting or validating unknown CubeSat/EPS behavior.",
+          "model_artifacts_used": [
+            "requirements diagrams/tables",
+            "block definition/internal block diagrams",
+            "parametrics",
+            "other"
+          ],
+          "generality_reuse_mechanism": [
+            "reference model",
+            "profile",
+            "method guidance",
+            "mission-agnostic architecture"
+          ],
+          "generality_reuse_notes": "CSRM is presented as a reusable CubeSat DSL/profile and a mission-agnostic baseline for mission-specific purposes. The metamodel-quality workflow is method guidance. These are stated design mechanisms/intended uses, not evidence of repeated project reuse, an evaluated open package, or physical-system validation.",
+          "generality_reuse_mechanism_v1_1_reasoning": "The current paper explicitly names a reusable space-mission ontology, a CSRM profile, and a DSL-quality method. It does not demonstrate reuse across projects. Appendix A is expressly excerpted prior work, so its repository/license diagram and broad capability statements do not support additional current-paper reuse codes."
+        },
+        "implementation_pathway_tailoring": {
+          "implementation_steps_or_phases": [
+            {
+              "phase": "1. Establish metamodel/ontology boundary",
+              "inputs": "Existing CSRM, prior CSRM work, SPO semantics, and space-mission ontology/domain knowledge.",
+              "activity": "Construct or use the CSRM data model and create an OWL domain-specific ontology proof of concept in Protégé.",
+              "outputs": "CSRM metamodel/data model and OWL representation intended for import and interpretation mapping.",
+              "actors_roles": "Authors/CSRM contributors; domain SMEs are assumed to have constructed the CSRM with due diligence.",
+              "completion_criteria_or_handoff": "No formal criterion reported; OWL representation is handed to CCM import/mapping activity."
+            },
+            {
+              "phase": "2. Define quality requirements",
+              "inputs": "QM4MM/OQuaRE-related literature, CSRM classes/relationships, and selected metric ranges.",
+              "activity": "Select LCOM, CBO, RD, SD, SCR, and ULe; formulate equations, hypothesized thresholds, and SysML requirements/value properties with «satisfy» relationships.",
+              "outputs": "Quantitative metamodel-quality requirements and constraint equations.",
+              "actors_roles": "Researchers/metamodel contributors.",
+              "completion_criteria_or_handoff": "Thresholds are initial estimates; requirements feed count definitions and executable parametrics."
+            },
+            {
+              "phase": "3. Build and validate count queries",
+              "inputs": "Metric definitions and model element types.",
+              "activity": "Build custom MetricSuite Counts using structured expressions; evaluate an eight-class test environment and compare input counts/manual calculations.",
+              "outputs": "Automated class, subclass, superclass, documentation, non-cohesive, equivalent-class, and object-property counts.",
+              "actors_roles": "Researchers/modelers.",
+              "completion_criteria_or_handoff": "Table 3 reports agreement between manual and parametric calculations; validated inputs feed CSRM application."
+            },
+            {
+              "phase": "4. Execute parametric quality checks on the CSRM data model",
+              "inputs": "Counts, constraint blocks, and SysML parametric diagrams.",
+              "activity": "Construct executable parametrics for each equation and calculate CSRM metamodel metrics against initial requirements.",
+              "outputs": "CSRM counts and LCOM/CBO/RD/SD/SCR/ULe values; identified quality issues and recommendations.",
+              "actors_roles": "Researchers/modelers and intended CSRM contributors.",
+              "completion_criteria_or_handoff": "Results are interpreted for specification iteration; no formal design-review gate is reported."
+            },
+            {
+              "phase": "5. Check ontology mapping and consistency",
+              "inputs": "CSRM metamodel and OWL ontology.",
+              "activity": "Transform the metamodel into a Cameo Concept Model, import OWL for interpretation mapping, and use a Protégé semantic reasoner for OWL compliance/consistency.",
+              "outputs": "Interpretation mapping, SCR-related evidence, and a semantic-consistency result.",
+              "actors_roles": "Researchers/modelers.",
+              "completion_criteria_or_handoff": "Proof-of-concept consistency/mapping check; no handoff to software, hardware, or integration test is reported."
+            }
+          ],
+          "mapping_to_se_activities_lifecycle_gates": "Not reported. The steps map to DSL/metamodel construction, requirements specification, verification calculation, and ontology reasoning, but not to SRR, PDR, CDR, integration, test, or operations gates.",
+          "approach_classification": "Enhanced MBSE",
+          "approach_classification_rationale": "A SysML-centered reference-model/metamodel approach is enhanced with OWL/Protégé semantic reasoning, custom structured-expression counting, and executable quality parametrics. No connected downstream digital-engineering environment or hardware/software integration is demonstrated.",
+          "tailoring_rationale": [
+            "organizational constraints"
+          ],
+          "adoption_guidance_for_new_users": "partial guidance",
+          "tailoring_notes": "The quantitative quality approach is motivated by difficult direct elicitation across diverse affected groups. The paper provides method steps and equations, but not a resource-constrained CubeSat adoption plan, staffing/training plan, tool configuration, cost/schedule rationale, or lifecycle-gate playbook."
+        },
+        "toolchain_interoperability_lifecycle_continuity": {
+          "mbse_language_method_tool": [
+            "SysML",
+            "Cameo/MagicDraw",
+            "custom tools",
+            "open-source packages",
+            "other"
+          ],
+          "named_other_methods_tools": "QM4MM framework and associated metrics; SPO approach; Web Ontology Language (OWL); Protégé; unspecified Protégé semantic reasoner(s); Cameo Concept Model (CCM); custom MetricSuite \"Counts\" and MetricDefinitions using structured expressions. The paper does not identify a particular reasoner as actually used.",
+          "toolchain_architecture_data_flow": "CSRM data model/metamodel is transformed into a Cameo Concept Model. An OWL DSO built in Protégé is imported into CCM for interpretation mapping. Within the MBSE model, MetricSuite Counts queries model elements via structured expressions; their values feed SysML quality constraint blocks and executable parametrics. Protégé semantic reasoning checks OWL compliance/consistency. No downstream engineering data flow is described.",
+          "interoperability_mechanisms": [
+            "model transformation",
+            "import/export"
+          ],
+          "syntax_semantic_continuity_evidence": "Narrow evidence only: OWL is imported into CCM for interpretation mapping, SCR is calculated from equivalent classes, and semantic reasoning is used to assess ontology consistency. This establishes ontology/metamodel syntax-semantic continuity, not continuity to detailed architecture, software, hardware, integration, or operations.",
+          "software_hardware_system_integration_readiness": "not reported; the paper gives no links to software build/integration, hardware integration, testbed/flat-sat, environmental testing, or flight/operational validation.",
+          "toolchain_limitations": [
+            "not reported"
+          ],
+          "availability_reproducibility": "The paper identifies Protégé as open source and cites a CSRM GitHub URL in reference [2]. It does not identify the evaluated CSRM release, provide the OWL input, MetricSuite implementation, scripts, tool versions, reasoner configuration, or an executable run procedure sufficient to reproduce the reported analysis."
+        },
+        "eps_verification_specific": {
+          "eps_elements_modeled": [],
+          "eps_elements_notes": "Not applicable: no EPS/power subsystem model, electrical architecture, power budget, mode, margin, load, battery, solar array, degradation, or fault-protection representation is reported.",
+          "eps_requirements_representation": "Not applicable to EPS. The paper represents metamodel-quality requirements (LCOM, CBO, RD, SD, SCR, ULe) linked to value properties; these are not EPS requirements.",
+          "verification_validation_artifacts": [
+            "executable checks"
+          ],
+          "vv_artifacts_not_in_enum": [
+            "MetricSuite Counts structured-expression queries for metamodel elements.",
+            "OWL semantic-reasoner consistency verification and interpretation-mapping/SCR check."
+          ],
+          "pre_physical_development_verification_mechanism": [
+            "parametric checks",
+            "model checking"
+          ],
+          "evidence_verification_integrated_in_model": {
+            "value": "yes, but only for metamodel-quality requirements and OWL ontology consistency",
+            "rationale": "Figure 8 links quality requirements to satisfying value properties, and Figure 11/12 show executable SysML parametric constraints. The reasoner check is applied to the ontology. Neither is an EPS behavioral, hardware, flight, or integration-test verification procedure.",
+            "evidence": [
+              {
+                "quote": "This relationship creates constraints that enable the modeling tool to validate the requirement has been met by executing SysML parametrics.",
+                "location": "Section 5, discussion of Figure 8"
+              },
+              {
+                "quote": "Fig. 14 shows verification that CSRM ontology is determined to be semantically correct and consistent.",
+                "location": "Section 5"
+              }
+            ],
+            "confidence": "high"
+          },
+          "integration_test_readiness": [],
+          "integration_test_notes": "Not reported. Executable checks establish metamodel equation calculation and ontology consistency only; no evidence links their outputs to hardware/software integration, a flat-sat, environmental testing, acceptance testing, or operations.",
+          "ivv_integration_level": "executable/model-based checks"
+        },
+        "claimed_outcomes_value_mechanisms_evidence": [
+          {
+            "claim_id": "C1",
+            "claim_text_or_paraphrase": "The custom MetricSuite Counts and executable SysML parametrics accurately calculate advanced metamodel-quality metrics in the eight-class test environment, enabling automated quality-requirement checking.",
+            "outcome_category": [
+              "automation",
+              "consistency"
+            ],
+            "outcome_category_rationale": "Automation is the model-query/parametric execution; consistency is limited to agreement of count/formula calculations and metamodel-quality checks, not physical-system reliability.",
+            "reliability_subtype": [
+              "not applicable"
+            ],
+            "reliability_subtype_rationale": "Automated calculation agreement is a consistency outcome, but the paper does not frame it as a reliability claim or provide a reliability outcome.",
+            "specificity_of_claim": "generic MBSE",
+            "specificity_rationale": "The claimed metric method is presented as a DSL/metamodel quality approach even though its demonstration uses CSRM.",
+            "mbse_mechanism": [
+              "parametric analysis",
+              "other"
+            ],
+            "mbse_mechanism_rationale": "Executable SysML parametrics consume automatic structured-expression MetricSuite counts; the latter is the non-enumerated other mechanism.",
+            "linked_artifact_process": "MetricSuite Counts/MetricDefinitions, eight-class test environment, SysML constraint blocks and parametric diagrams, and Table 3 manual-versus-parametric calculations.",
+            "lifecycle_stage": [],
+            "lifecycle_stage_status": "not_reported",
+            "lifecycle_stage_rationale": "The result is a metamodel test environment, not an identified spacecraft lifecycle stage.",
+            "evidence_type": [
+              "Single case-study demonstration",
+              "Executable model or simulation result",
+              "Quantitative comparison with baseline or counterfactual"
+            ],
+            "evidence_type_rationale": "The test environment is a single constructed case; executable parametrics are compared against manual calculations in Table 3.",
+            "metric_or_value_indicator": [
+              "other"
+            ],
+            "metric_or_value_indicator_rationale": "The indicators are LCOM, CBO, RD, SD, SCR, and ULe values rather than an enumerated physical/project indicator.",
+            "baseline_comparator": "manual analysis",
+            "baseline_comparator_rationale": "Table 3 explicitly compares manual solutions with parametric results.",
+            "observed_effect_size_or_qualitative_effect": "Manual and parametric results agree for the test environment: LCOM 0.6, CBO 0.5, RD 0.5, SD 0.375, SCR 0.25, and ULe 0.125. This validates arithmetic/count calculation in that test scope only.",
+            "quote_location": "Section 5, Metamodel Quality Analysis Application; Section 6, Table 3",
+            "evidence": [
+              {
+                "quote": "Fig. 10 demonstrates the custom MetricSuite is capable of accurately counting the input variables for the applicable quality metrics.",
+                "location": "Section 5"
+              },
+              {
+                "quote": "Table 3 verifies the SysML parametrics are correctly calculating advanced model metrics.",
+                "location": "Section 5; Table 3"
+              }
+            ],
+            "evidence_confidence_rating": "Moderate",
+            "evidence_confidence_rationale": "Direct numerical agreement supports calculation correctness, but the case is simple and synthetic and does not validate real CSRM quality or system outcomes.",
+            "confidence": "high",
+            "threats_alternative_explanations": "The test environment checks counts and equations, not threshold validity, ontology correctness, CSRM domain coverage, EPS behavior, hardware, integration, or mission performance.",
+            "evidence_scope": "Current-paper evidence: synthetic eight-class metamodel test environment; not an EPS, mission, or physical-system result.",
+            "baseline_status": "coded",
+            "metric_status": "measured in the eight-class test environment"
+          },
+          {
+            "claim_id": "C2",
+            "claim_text_or_paraphrase": "One CSRM data-model metric assessment produces diagnostic values and recommendations that can inform specification iteration; it does not demonstrate a post-change improvement or mission outcome.",
+            "outcome_category": [
+              "decision support",
+              "other"
+            ],
+            "outcome_category_rationale": "The direct value is bounded metric-informed diagnostic guidance. Other denotes metamodel/ontology quality measurement, which is not separately enumerated; do not convert it to risk reduction or reliability.",
+            "reliability_subtype": [
+              "not applicable"
+            ],
+            "reliability_subtype_rationale": "The claim concerns model-quality diagnosis and specification iteration, not an EPS, system, process, or mission reliability result.",
+            "specificity_of_claim": "nanosatellite system-level",
+            "specificity_rationale": "The intended decision recipients are CSRM contributors working on a CubeSat reference model.",
+            "mbse_mechanism": [
+              "parametric analysis",
+              "requirements linkage",
+              "other"
+            ],
+            "mbse_mechanism_rationale": "Metric requirements, their thresholds, Counts, and executable parametrics expose metamodel-quality observations; structured-expression counting is the non-enumerated other mechanism.",
+            "linked_artifact_process": "QM4MM quality requirements, MetricSuite Counts, SysML parametrics, Figure 16 values, and recommendations concerning ConcernOf, generalizations, specificity, and documentation.",
+            "lifecycle_stage": [],
+            "lifecycle_stage_status": "not_reported",
+            "lifecycle_stage_rationale": "The claim is about iterative specification evolution, not a named mission phase.",
+            "evidence_type": [
+              "Single case-study demonstration",
+              "Trade-study or requirements-checking result",
+              "Quantitative metric without baseline"
+            ],
+            "evidence_type_rationale": "The CSRM metrics are a single requirements-checking case with quantitative values and recommendations, but no pre/post CSRM version, alternative method, or decision outcome is compared.",
+            "metric_or_value_indicator": [
+              "other"
+            ],
+            "metric_or_value_indicator_rationale": "LCOM, CBO, RD, SD, SCR, ULe, and model-element counts are metamodel-quality indicators rather than enumerated physical/project indicators.",
+            "baseline_comparator": "not reported",
+            "baseline_comparator_status": "not_reported",
+            "baseline_comparator_rationale": "No prior-CSRM version, alternative method, or post-change decision outcome is compared.",
+            "observed_effect_size_or_qualitative_effect": "The study reports LCOM 0.0167, RD 0.3230, SCR 0.8689, SD 0.8525, and ULe 0.8689 and recommends changes. The displayed RD and SD values conflict with their shown thresholds, so the broad narrative conclusion is not unambiguous.",
+            "quote_location": "Section 6, Research Results and Research Result Discussion; Figure 16",
+            "evidence": [
+              {
+                "quote": "Fig. 16 compares the final values for the CSRM metamodel quality aspects and results from SysML parametrics.",
+                "location": "Section 6, Research Results"
+              },
+              {
+                "quote": "To improve the CSRM conciseness, generalizations between concepts should be more explicit.",
+                "location": "Section 6, Research Result Discussion, Conciseness"
+              },
+              {
+                "quote": "For future applications, the specificity requirement should be adjusted with respect to the original goal of the DSL.",
+                "location": "Section 6, Research Result Discussion, Specificity"
+              }
+            ],
+            "evidence_confidence_rating": "Moderate",
+            "evidence_confidence_rationale": "The paper directly reports one metric assessment and recommendations, but lacks a baseline, independent validation, post-change result, or external ground truth; threshold/narrative inconsistencies further bound the conclusion.",
+            "confidence": "high",
+            "threats_alternative_explanations": "Thresholds are estimates; metamodel knowledge correctness is assumed rather than empirically tested; included UML/SysML elements affect counts; and Figure 16/narrative do not consistently support a blanket quality-success conclusion.",
+            "evidence_scope": "Current-paper evidence: one CSRM metamodel/data-model quality measurement and recommendations, not an EPS, mission, or physical-system outcome.",
+            "baseline_status": "not_reported",
+            "metric_status": "measured for the CSRM data model; no post-recommendation outcome or external quality ground truth"
+          },
+          {
+            "claim_id": "C3",
+            "claim_text_or_paraphrase": "The paper reports that a Protégé semantic reasoner determined the CSRM ontology to be semantically correct and consistent.",
+            "outcome_category": [
+              "consistency"
+            ],
+            "outcome_category_rationale": "The reported outcome is ontology/DSL semantic consistency only.",
+            "reliability_subtype": [
+              "not applicable"
+            ],
+            "reliability_subtype_rationale": "Semantic consistency is not coded as EPS, system, mission, process, or model reliability because no reliability claim or outcome is reported.",
+            "specificity_of_claim": "nanosatellite system-level",
+            "specificity_rationale": "The mapped ontology/metamodel is CSRM, a CubeSat system reference model.",
+            "mbse_mechanism": [
+              "other"
+            ],
+            "mbse_mechanism_rationale": "Semantic reasoning over the OWL ontology is central but is not a separately enumerated mechanism.",
+            "linked_artifact_process": "OWL CSRM ontology/DSO and a Protégé semantic reasoner.",
+            "lifecycle_stage": [],
+            "lifecycle_stage_status": "not_reported",
+            "lifecycle_stage_rationale": "This is a model/ontology interoperability proof of concept, not a named spacecraft lifecycle application.",
+            "evidence_type": [
+              "Single case-study demonstration",
+              "Executable model or simulation result"
+            ],
+            "evidence_type_rationale": "The study reports a single executable semantic-reasoner check; the supplied markdown gives no inspectable reasoner output or independent diagnostic.",
+            "metric_or_value_indicator": [
+              "other"
+            ],
+            "metric_or_value_indicator_rationale": "The semantic-consistency verdict is a non-enumerated structural/semantic indicator.",
+            "baseline_comparator": "not reported",
+            "baseline_comparator_status": "not_reported",
+            "baseline_comparator_rationale": "No alternate ontology, reasoner, baseline, or independent validation is compared.",
+            "observed_effect_size_or_qualitative_effect": "The paper reports a semantic-correctness/consistency verification only; no physical-system or engineering-performance effect is reported.",
+            "quote_location": "Section 5, Metamodel Quality Analysis Application; Figure 14",
+            "evidence": [
+              {
+                "quote": "Fig. 14 shows verification that CSRM ontology is determined to be semantically correct and consistent.",
+                "location": "Section 5, Metamodel Quality Analysis Application"
+              }
+            ],
+            "evidence_confidence_rating": "Weak",
+            "evidence_confidence_rationale": "A result is stated, but the reasoner, version, axioms, inference output, error cases, and independent validation are not reported in the supplied markdown.",
+            "confidence": "medium",
+            "threats_alternative_explanations": "The converted Figure 14 provides no inspectable result detail; semantic consistency does not establish domain correctness, EPS reliability, mission verification, or physical validation.",
+            "evidence_scope": "Current-paper evidence: one CSRM ontology consistency statement; not satellite behavior, EPS performance, or physical validation.",
+            "baseline_status": "not_reported",
+            "metric_status": "reported ontology consistency verdict; detailed reasoner output not reported"
+          },
+          {
+            "claim_id": "C4",
+            "claim_text_or_paraphrase": "Transformation/import of the OWL CSRM ontology into a Cameo Concept Model provides a proof-of-concept interpretation mapping.",
+            "outcome_category": [
+              "integrability/interoperability"
+            ],
+            "outcome_category_rationale": "The directly reported integration is ontology-to-concept-model transformation/import and interpretation mapping.",
+            "reliability_subtype": [
+              "not applicable"
+            ],
+            "reliability_subtype_rationale": "The mapping exercise does not report a reliability outcome.",
+            "specificity_of_claim": "nanosatellite system-level",
+            "specificity_rationale": "The mapped ontology/metamodel is CSRM, a CubeSat system reference model.",
+            "mbse_mechanism": [
+              "model transformation",
+              "tool integration"
+            ],
+            "mbse_mechanism_rationale": "The source explicitly transforms the metamodel to CCM and imports OWL for interpretation mapping.",
+            "linked_artifact_process": "CSRM metamodel, OWL CSRM ontology/DSO, Cameo Concept Model, and equivalent-class interpretation mapping/SCR.",
+            "lifecycle_stage": [],
+            "lifecycle_stage_status": "not_reported",
+            "lifecycle_stage_rationale": "This is a model/ontology interoperability proof of concept, not a named spacecraft lifecycle application.",
+            "evidence_type": [
+              "Single case-study demonstration",
+              "Quantitative metric without baseline"
+            ],
+            "evidence_type_rationale": "A single proof-of-concept mapping is reported with SCR 0.8689; no alternative toolchain, mapping-fidelity test, or downstream validation is compared.",
+            "metric_or_value_indicator": [
+              "other"
+            ],
+            "metric_or_value_indicator_rationale": "SCR/equivalent-class mapping coverage is a non-enumerated structural-semantic indicator.",
+            "baseline_comparator": "not reported",
+            "baseline_comparator_status": "not_reported",
+            "baseline_comparator_rationale": "No alternate transformation/toolchain, round-trip result, or integration baseline is reported.",
+            "observed_effect_size_or_qualitative_effect": "The paper reports OWL import into CCM for interpretation mapping and an SCR of 0.8689. This does not establish complete/round-trip interoperability, lifecycle continuity, or hardware/software integration.",
+            "quote_location": "Section 4, CSRM Ontology; Section 5, Metamodel Quality Analysis Application; Figure 16",
+            "evidence": [
+              {
+                "quote": "After transforming the CSRM metamodel into a Cameo Concept Model (CCM), the OWL file is imported into the CCM for interpretation mapping.",
+                "location": "Section 5, Metamodel Quality Analysis Application"
+              },
+              {
+                "quote": "/SCR:Real | 0.8689",
+                "location": "Figure 16, CSRM Quantitative Metric Results"
+              }
+            ],
+            "evidence_confidence_rating": "Weak",
+            "evidence_confidence_rationale": "The import/mapping is directly reported, but there is no mapping-fidelity test, data-loss analysis, round-trip exchange, downstream handoff, or mature-DSO validation.",
+            "confidence": "high",
+            "threats_alternative_explanations": "The paper says SCR should be one, but reports 0.8689 without a full reconciliation; a narrow ontology mapping does not establish broad toolchain interoperability.",
+            "evidence_scope": "Current-paper evidence: one OWL-to-CCM import/interpretation-mapping proof of concept; not lifecycle toolchain continuity.",
+            "baseline_status": "not_reported",
+            "metric_status": "reported proof-of-concept mapping and SCR 0.8689; no round-trip/fidelity metric"
+          },
+          {
+            "claim_id": "C5",
+            "claim_text_or_paraphrase": "The authors anticipate that incorporating the CSRM can strengthen enterprise communication/collaboration, enable reuse for mission-specific purposes, and mitigate metamodel-quality concerns.",
+            "outcome_category": [
+              "communication/stakeholder alignment",
+              "generality/reuse",
+              "risk reduction"
+            ],
+            "outcome_category_rationale": "The abstract and introduction state anticipated communication/collaboration, reusable mission-specific purposes, and mitigation of quality concerns.",
+            "reliability_subtype": [
+              "not applicable"
+            ],
+            "reliability_subtype_rationale": "The anticipated benefit does not report a reliability outcome.",
+            "specificity_of_claim": "nanosatellite system-level",
+            "specificity_rationale": "The claimed collaboration value is tied to the CubeSat CSRM domain and its stakeholder groups.",
+            "mbse_mechanism": [
+              "reference model reuse"
+            ],
+            "mbse_mechanism_rationale": "The proposed mechanism is adoption of the shared CSRM/profile as a reusable reference artifact.",
+            "linked_artifact_process": "CSRM profile/reference model and its domain-specific SysML additions.",
+            "lifecycle_stage": [],
+            "lifecycle_stage_status": "not_reported",
+            "lifecycle_stage_rationale": "No lifecycle-specific communication outcome is reported.",
+            "evidence_type": [
+              "Assertion only / no evidence"
+            ],
+            "evidence_type_rationale": "The benefits are stated as potential/intended outcomes without stakeholder evaluation, reuse instances, a process comparison, or a measured risk effect.",
+            "metric_or_value_indicator": [],
+            "metric_or_value_indicator_status": "not_reported",
+            "metric_or_value_indicator_rationale": "No communication, reuse, standardization, transparency, or risk outcome measure is reported.",
+            "baseline_comparator": "not reported",
+            "baseline_comparator_status": "not_reported",
+            "baseline_comparator_rationale": "No document-centric process, prior mission, alternative toolchain, or before/after comparison is evaluated.",
+            "observed_effect_size_or_qualitative_effect": "No observed effect is reported; these are anticipated CSRM/reference-model benefits.",
+            "quote_location": "Abstract; Section 1, Introduction",
+            "evidence": [
+              {
+                "quote": "Incorporating the CSRM into systems engineering (SE) processes can strengthen communication and collaboration across the enterprise.",
+                "location": "Abstract"
+              },
+              {
+                "quote": "The CSRM is developed to meet domain-specific language (DSL) requirements based on a space mission ontology that can be re-used for various mission-specific purposes.",
+                "location": "Section 1, Introduction"
+              },
+              {
+                "quote": "this study supports the next iteration of the CSRM and mitigates potential quality concerns.",
+                "location": "Abstract"
+              }
+            ],
+            "evidence_confidence_rating": "Unsupported",
+            "evidence_confidence_rationale": "No stakeholder, reuse, comparison, cost, risk, or integration outcome is observed in this paper.",
+            "confidence": "high",
+            "threats_alternative_explanations": "Any benefits may depend on governance, uptake, training, tool access, organizational process, and model quality; none is evaluated.",
+            "evidence_scope": "Current-paper framing/assertion about an intended CubeSat reference-model capability; not an observed outcome.",
+            "baseline_status": "not_reported",
+            "metric_status": "not reported"
+          },
+          {
+            "claim_id": "C6",
+            "claim_text_or_paraphrase": "Customized MBSE validation rules can reduce errors and improve model quality by checking accuracy and consistency.",
+            "outcome_category": [
+              "defect/error reduction",
+              "consistency",
+              "automation"
+            ],
+            "outcome_category_rationale": "The statement explicitly claims error reduction and quality/consistency improvement through automated validation rules.",
+            "reliability_subtype": [
+              "defect/error reduction"
+            ],
+            "reliability_subtype_rationale": "The reliability-adjacent framing is limited to reducing model errors; no physical or EPS reliability outcome is reported.",
+            "specificity_of_claim": "generic MBSE",
+            "specificity_rationale": "The source frames this as a general MBSE-tool capability rather than a measured CSRM or EPS result.",
+            "mbse_mechanism": [
+              "parametric analysis",
+              "other"
+            ],
+            "mbse_mechanism_rationale": "The paper discusses customized validation rules and implements quality parametrics; the rule mechanism itself is recorded as other because it is not generated code or a listed mechanism.",
+            "linked_artifact_process": "Customized validation rules, Figure 8 quality requirements, and executable SysML parametrics.",
+            "lifecycle_stage": [],
+            "lifecycle_stage_status": "not_reported",
+            "lifecycle_stage_rationale": "No lifecycle stage or project setting is associated with the generic assertion.",
+            "evidence_type": [
+              "Assertion only / no evidence"
+            ],
+            "evidence_type_rationale": "The statement is a cited general assertion; the paper's test validates arithmetic, not a measured reduction in errors.",
+            "metric_or_value_indicator": [],
+            "metric_or_value_indicator_status": "not_reported",
+            "metric_or_value_indicator_rationale": "No count of errors, defects, or quality improvement is reported.",
+            "baseline_comparator": "not reported",
+            "baseline_comparator_status": "not_reported",
+            "baseline_comparator_rationale": "No before/after validation-rule comparison is reported.",
+            "observed_effect_size_or_qualitative_effect": "No observed error-reduction effect is measured in the source; the only direct calculation evidence is Table 3 agreement in the simple test environment.",
+            "quote_location": "Section 5, discussion following Figure 8",
+            "evidence": [
+              {
+                "quote": "Customized validation rules within the MBSE tool reduce errors and improve model quality by checking for accuracy and consistency",
+                "location": "Section 5"
+              }
+            ],
+            "evidence_confidence_rating": "Unsupported",
+            "evidence_confidence_rationale": "The source supplies no defect/error measurement, baseline, or independent evaluation for this claimed outcome.",
+            "confidence": "high",
+            "threats_alternative_explanations": "The statement may be a general property attributed to cited literature; it is not an observed CSRM, EPS, integration, or mission result in this paper.",
+            "evidence_scope": "Current-paper generic MBSE assertion; not a measured CSRM, EPS, integration, or mission result.",
+            "baseline_status": "not_reported",
+            "metric_status": "not reported"
+          }
+        ],
+        "governance_roi_project_decision_linkage": {
+          "model_governance_strategy": [
+            "ownership",
+            "model quality criteria"
+          ],
+          "governance_strategy_details": "The INCOSE SSWG leads ongoing CSRM development; author acknowledgement identifies SSWG domain feedback. QM4MM metrics, requirements, and initial thresholds provide model-quality criteria and are proposed for iterative version comparison. No formal configuration/change control, release process, naming/versioning convention, or review procedure is described.",
+          "traceability_to_project_deliverables_decisions_reviews": "Directly evidenced traceability is narrow: Figure 8 links metamodel-quality requirements to satisfying value properties and parametric checks. Appendix A asserts broader stakeholder-to-V&V traceability, but no project deliverable, design-review decision, gate, or trace coverage result is shown in this study.",
+          "evaluation_criteria_model_quality_usefulness": "QM4MM-derived cohesiveness (LCOM), coupling (CBO), conciseness (RD), specificity (SD), clarity (SCR), learnability (ULe), documentation/class/relationship counts, hypothesized thresholds, and OWL semantic consistency. Authors state these parameters require refinement with further DSL case studies.",
+          "roi_value_realization_evidence": null,
+          "roi_notes": "No adoption cost, training/tooling effort, saved effort, schedule effect, avoided rework, realized reuse, decision quality, or mission-assurance benefit is measured. Anticipated iterative improvement and best-practice value are not ROI evidence.",
+          "programmatic_gates_critical_design_events_supported": "not reported",
+          "model_derived_performance_indicators_management_metrics": "CSRM metamodel-quality indicators are reported (counts and LCOM/CBO/RD/SD/SCR/ULe). They are technical metamodel diagnostics, not project management, cost, schedule, reliability, power, or mission-performance metrics."
+        },
+        "gap_mapping": {
+          "practical_implementation_pathway": "addressed with evidence",
+          "toolchain_fragmentation_interoperability": "addressed with evidence",
+          "lightweight_resource_constrained_tailoring": "mentioned only",
+          "governance_project_deliverables_roi": "addressed conceptually",
+          "newspace_agile_distributed_rapid_iteration_alignment": "not addressed"
+        },
+        "synthesis_consistency": {
+          "key_findings_by_rq": {
+            "RQ1": "Partial relevance only. CSRM is a mission-agnostic CubeSat reference model/profile based on a reusable space-mission ontology, and the study evaluates a high-level SPO data model rather than behavior. It does not model EPS or explain how to represent unknown behavior; it explicitly omits the process model.",
+            "RQ2": "No direct RQ2 evidence. The paper evaluates metamodel/ontology quality, with a metric-calculation test, one CSRM metric assessment, a semantic-consistency statement, and a narrow OWL-to-CCM mapping proof of concept. These are not EPS modeling outcomes and do not establish EPS reliability, reproducibility, or integrability.",
+            "RQ3": "Partial relevance only. Quality requirements are linked to value properties and evaluated with executable SysML parametrics; OWL consistency is checked with a semantic reasoner. These are integrated pre-physical metamodel/ontology checks, not EPS verification procedures, mission behavior verification, hardware/software integration, testbed, environmental test, or flight validation."
+          },
+          "author_stated_limitations_gaps": [
+            "The quality framework is not comprehensive because many metrics exist.",
+            "The process model was not considered in the quality analysis.",
+            "Metamodel knowledge correctness was not empirically assessed because the authors assume domain SMEs constructed CSRM with due diligence.",
+            "Metric parameters are estimates needing refinement as more DSL case studies are completed.",
+            "SCR/clarity evaluation is a proof of concept and needs a mature DSO for true quality implications.",
+            "The paper describes the method as in its infancy and calls for comparison with other-domain modeling languages."
+          ],
+          "extractor_identified_limitations_gaps": [
+            "No EPS elements, EPS requirements, power analyses, or EPS-specific V&V evidence are present.",
+            "No mission-specific lifecycle stage, hardware/software integration, flat-sat/testbed, environmental test, operational validation, or flight evidence is reported.",
+            "Manual-versus-parametric arithmetic is confined to a synthetic eight-class test environment; there is no baseline for actual CSRM quality or asserted organizational/project benefits.",
+            "Only OWL-to-CCM import/mapping is demonstrated; no broader toolchain continuity, round-trip, or mapping-fidelity evidence is described.",
+            "The displayed CSRM RD and SD values/thresholds create ambiguity relative to the broad narrative conclusion; CBO is described qualitatively but no final numeric CBO row is visible in the supplied Markdown table.",
+            "Metric counts include UML/SysML elements, affecting interpretation of CSRM-only quality values.",
+            "Appendix A is prior-work lineage and is not counted as new current-paper evidence of reuse, traceability, V&V, availability, or lifecycle continuity."
+          ],
+          "direct_evidence_quotes": [
+            {
+              "quote": "This research focuses on the data model using SPO semantics",
+              "location": "Section 4, CSRM Metamodel",
+              "use": "Establishes structural/metamodel scope rather than EPS or behavioral-system scope."
+            },
+            {
+              "quote": "The CSRM ontology is created as a proof-of-concept to verify import and mapping capabilities of an OWL file into the metamodel.",
+              "location": "Section 4, CSRM Ontology",
+              "use": "Bounds interoperability evidence to ontology/metamodel mapping."
+            },
+            {
+              "quote": "Fig. 10 demonstrates the custom MetricSuite is capable of accurately counting the input variables for the applicable quality metrics.",
+              "location": "Section 5",
+              "use": "Supports automated-count evidence only."
+            },
+            {
+              "quote": "Table 3 verifies the SysML parametrics are correctly calculating advanced model metrics.",
+              "location": "Section 5; Table 3",
+              "use": "Supports the test-environment calculation result, not physical validation."
+            },
+            {
+              "quote": "Fig. 14 shows verification that CSRM ontology is determined to be semantically correct and consistent.",
+              "location": "Section 5",
+              "use": "Supports ontology consistency check only."
+            },
+            {
+              "quote": "Based on the calculated values of quality aspects and semantic reasoning, the CSRM metamodel meets the initial goals for DSL correctness, cohesiveness, coupling, specificity, and learnability.",
+              "location": "Section 6, Research Results",
+              "use": "Records the authors' broad CSRM quality conclusion."
+            },
+            {
+              "quote": "Based on the assumption that domain SMEs constructed the CSRM with due diligence, evaluation of the metamodel knowledge correctness is not empirically conducted.",
+              "location": "Section 6, Research Limitations",
+              "use": "Records the lack of independent knowledge-correctness validation."
+            },
+            {
+              "quote": "This appendix is excerpted from the authors' previous work [71] with additional information as it pertains to the CSRM metamodel.",
+              "location": "Appendix A",
+              "use": "Prevents double-counting CSRM lineage claims."
+            }
+          ],
+          "notes_for_consistency_with_lineage": "This is a CSRM DSL/metamodel-quality paper, not a new CubeSat mission implementation or an EPS/physical verification case. Appendix A explicitly reproduces prior work [71]; its architecture, reuse, traceability, and V&V statements are retained only as lineage context. The current paper's original evidence is the QM4MM/parametric/semantic analysis, including the synthetic test environment and CSRM data-model counts.",
+          "extraction_confidence": "medium",
+          "extraction_confidence_reason": "Method, equations, artifact roles, test-environment calculations, CSRM counts, semantic-check statements, and author limitations are explicit. Confidence is reduced by missing venue/tool-version/model-asset details, table/OCR threshold inconsistencies, and the need to carefully distinguish model-quality checks from unsupported EPS, hardware, integration, and flight interpretations."
+        }
+      },
+      "bibtex": "@inproceedings{Rudder2026MetamodelQualityCSRM,\n  author = {Rudder, Sarah and Kaslow, David and Adams, Jim},\n  title = {Evaluating Metamodel Quality of the {CubeSat} System Reference Model ({CSRM}) to Improve Domain-Specific Languages ({DSL})},\n  booktitle = {2026 IEEE Aerospace Conference},\n  year = {2026},\n  publisher = {IEEE},\n  doi = {10.1109/AERO66936.2026.11519791}\n}",
+      "v1_1_subagent_review": {
+        "review_file": null,
+        "review_status": "completed",
+        "repair_notes": [
+          "Independent siloed audit changed RQ2 relevance from partial to none because no EPS modeling/outcome evidence is present.",
+          "Removed open package and transformation from generality/reuse mechanisms; inherited Appendix A claims are not aggregated as current-paper outcomes.",
+          "Changed toolchain limitations to not reported; a narrow proof-of-concept mapping alone does not establish missing interfaces.",
+          "Replaced null claim baseline values with exact controlled not reported labels and separated metric calculation, metric diagnosis, semantic consistency, and mapping claims.",
+          "Did not treat model/ontology consistency as EPS/system reliability, physical IVV, lifecycle readiness, or mission evidence."
+        ],
+        "applied_at": "2026-08-05T15:55:15-04:00",
+        "normalization_note": "De novo extraction from existing local Markdown received a primary siloed extraction pass and an independent siloed audit against protocol.md and extraction_codebook.json. No search or retrieval was rerun."
       }
     }
   ]

@@ -33,8 +33,8 @@
 
 \iflatexml
 \else
-\paperfield{Systems engineering; model-based systems engineering; nanosatellites; electrical power systems}
-\abbrevs{EPS, electrical power system; MBSE, model-based systems engineering; PRISMA, Preferred Reporting Items for Systematic Reviews and Meta-Analyses; RQ, research question; SIL, software-in-the-loop; HIL, hardware-in-the-loop; V\&V, verification and validation}
+\paperfield{Systems engineering; MBSE; nanosatellites; electrical power systems}
+\abbrevs{EPS, electrical power system; IVV, integration, verification, and validation; MBSE, model-based systems engineering; PRISMA, Preferred Reporting Items for Systematic Reviews and Meta-Analyses; RQ, research question; SIL, software-in-the-loop; HIL, hardware-in-the-loop; V\&V, verification and validation}
 \corraddress{Corresponding author details to be supplied before submission.}
 \corremail{email-to-be-supplied@example.com}
 \fundinginfo{Funding information to be supplied before submission.}
@@ -49,299 +49,218 @@
 \begin{document}
 
 \maketitle
+
+\begin{abstract}
+\textbf{Purpose:} To distinguish nanosatellite MBSE evidence from EPS-relevant evidence and model-linked V\&V before physical development.\par
+\textbf{Methods:} A protocol-specified review searched Scopus and IEEE Xplore; the final search/reassessment record was closed through 24 April 2026.  Forty extracted reports (21 core and 19 supporting) yielded 270 nested claim records.\par
+\textbf{Results:} Two reports and 17 of 270 claims were EPS-specific.  Direct pre-physical mechanisms were coded in 26 reports, V\&V artifacts in 24, and integration/test readiness in 10; these fields are distinct from a derived mixed-source linkage synthesis.\par
+\textbf{Conclusion:} The corpus reports reusable system-level models and pre-physical analysis, but provides limited reported evidence for direct EPS outcomes, baseline-backed value, and model-to-test closure.
+\keywords{nanosatellites; CubeSats; electrical power systems; model-based systems engineering; verification and validation; systematic literature review}
+\end{abstract}
+% Reset the class's abstract page-label flag; later undefined references still set it normally.
+\makeatletter\let\@refundefined\relax\makeatother
 \selectlanguage{english}
 
-\section{Methodology}
+\section{Introduction}
+Broader reviews of space MBSE provide useful context on implementation and gap framing.  In particular, \citet{Buruso2026MBSESpace} offer a methodological and positioning reference, but their broader synthesis is not evidence about the individual nanosatellite reports assessed here.  An EPS-relevant nanosatellite evidence chain is needed because system-level MBSE models, mission-level outcome claims, and direct power-subsystem evidence cannot be assumed equivalent.
 
-\subsection{Protocol and research questions}
-This review used a predefined protocol to delimit the population, intervention, outcomes, eligibility criteria, and synthesis approach.  The protocol defines a nanosatellite-class population, an MBSE intervention, and outcomes concerned with general modeling, EPS-relevant value, and verification before physical development.  The review method is intentionally narrower than broad space-MBSE syntheses: Buruso et al. \cite{Buruso2026MBSESpace} are used as a methodological and positioning comparator, especially for transparent review procedure and concise enabler classification, but their review is not treated as evidence about the studies included here.
-
-The protocol research questions were:
+This review contributes a protocol-specified, controlled synthesis that distinguishes report-level context from nested claims, EPS-relevance classifications from EPS-specific claims, and direct V\&V source fields from derived linkages.  Its protocol-specified research questions were:
 \begin{description}
 \item[RQ1.] How can nanosatellite missions and EPS be modeled in a general manner with minimal knowledge about their behavior?
 \item[RQ2.] What are the claimed outcomes related to reliability, reproducibility, and integrability derived from EPS modeling in nanosatellite missions?
 \item[RQ3.] How have verification procedures been integrated into EPS models prior to physical development?
 \end{description}
 
-The population was interpreted as CubeSat and nanosatellite-class missions rather than larger spacecraft or smaller educational platforms such as CanSats.  For RQ1, the focal intervention was system-level or EPS-level MBSE.  For RQ2, outcomes had to be attributable to MBSE artifacts, MBSE activities, or model-enabled process changes rather than to the selected EPS technology alone.  For RQ3, the review looked for requirements, verification, validation, IVV, test, simulation, or analysis artifacts integrated in or around the model before hardware development.
+\section{Methodology}
 
-\clearpage
-\subsection{Information sources and search strategy}
-Records were retrieved from Scopus and IEEE Xplore.  Scopus searches were run directly, while IEEE Xplore records were exported and screened using the same eligibility criteria.  Targeted exact-title Google Scholar searches were used only to verify or recover known titles identified through citation chasing; Google Scholar was not used as an open-ended third database.
+\subsection{Protocol, eligibility, and research questions}
+This review followed a predefined protocol for nanosatellite-class missions, MBSE interventions, eligibility decisions, extraction, quality appraisal, and synthesis.  Eligibility was limited to English conference and journal papers published from 2013--2026 that were open access or available through the TEC libraries.  The population comprised CubeSat and nanosatellite-class missions, excluding larger spacecraft and smaller educational platforms such as CanSats.  RQ1 considered system- or EPS-level MBSE rather than other subsystem-level or non-MBSE models.  For RQ2, outcomes had to be attributed to MBSE artifacts, model-enabled activities, or model-enabled process changes rather than to an EPS technology choice.  For RQ3, direct evidence required reported integration of IVV or verification procedures with an MBSE model before physical development.
 
-Search strings combined nanosatellite/CubeSat population terms with MBSE terms such as ``model-based systems engineering'', MBSE, SysML, and selected alternative terminology including Capella, Arcadia, and cyber-physical systems where relevant.  The search strategy followed four concept clusters derived from the protocol: (i) general nanosatellite or CubeSat MBSE reference models, templates, behavior models, and mission/system architectures; (ii) EPS, power-subsystem, power-budget, and electrical-architecture modeling; (iii) verification, validation, IVV, test, requirements-in-the-loop, and traceability; and (iv) outcome and integration terms such as reliability, reproducibility, integrability, interoperability, and lifecycle continuity.  The final record set combined database search results, eligible IEEE Xplore records, and targeted citation-chasing recoveries.
+\subsection{Information sources, selection, and appraisal}
+Candidate searching used Scopus and IEEE Xplore, and the final search/reassessment record was closed through 24 April 2026.  Four concept clusters combined (i) general nanosatellite/CubeSat MBSE reference models, templates, behavior, and mission architecture; (ii) EPS, power, and electrical architecture; (iii) verification, validation, IVV, and test; and (iv) outcomes and integration, including traceability, reproducibility, data formalization, and MBSE/PLM linkage.  Complete source-specific strings, filters, dates, yields, recovery routes, and stopping rationale are provided in the Supporting Information.
 
-Search and screening limits followed the protocol: publication years 2013--2026, English language, conference or journal papers, and either open access or availability through institutional library access.  Search details were recorded for query identifiers, query strings, result totals, recovery searches, and stopping rationale.  The stopping decision was based on saturation of the Scopus--IEEE evidence base and on the observation that later EPS/V\&V recall passes mainly confirmed sparsity rather than uncovering a large hidden literature.
+Exact-title Semantic Scholar metadata/abstract enrichment and targeted Google Scholar fallback and citation chasing informed assessment or recovery of specific records; they were not broad additional database searches.  A total of 199 records were merged and deduplicated to 81 unique candidates.  Screening applied the protocol boundaries and recorded rationales.  Core reports directly informed the RQ synthesis, whereas supporting reports provided relevant context on toolchains, lifecycle continuity, requirements, project practice, or V\&V.
 
-\subsection{Selection process and eligibility criteria}
-Records from the retained searches were merged and deduplicated before screening.  The final PRISMA-style flow was: 199 records identified, 118 duplicates removed, 81 unique records screened, 37 records excluded during screening, 44 reports sought for retrieval, 4 reports not retrieved or inaccessible, and 40 reports extracted.
+Quality appraisal used eight protocol checklist items, scored No = 0, Insufficiently = 0.5, and Yes = 1, covering venue credibility, limitations, context, MBSE detail, outcome linkage, outcome evidence, traceability, and reproducibility or toolchain reporting.  Scores were descriptive and contextual: no quantitative sensitivity analysis was performed, and no score excluded a report.
 
-Screening applied the protocol criteria as follows:
-\begin{itemize}
-\item include English conference or journal papers from 2013--2026;
-\item include CubeSat, nanosatellite, or very close nanosatellite-class system-design studies, and exclude larger generic spacecraft, payload-only, ground-segment-only, software-only, hardware-calibration, education/tutorial, proceedings-volume, and non-space records unless a specific protocol-based rationale supported retention;
-\item include studies using MBSE, SysML, model-based architecture, model-based requirements, model-based simulation/analysis, or closely related digital-engineering approaches at system level, mission level, EPS level, or an EPS-adjacent power/electrical-architecture level;
-\item for RQ1, prioritize system-level or EPS-level models, reference models, templates, reusable workflows, behavior models, and architecture models over isolated subsystem models;
-\item for RQ2, retain claimed outcomes only when the outcome could be linked to MBSE artifacts or model-enabled processes, not merely to EPS component choices;
-\item for RQ3, require explicit verification, validation, IVV, test, requirements traceability, simulation, parametric checking, or pre-physical-development evaluation evidence in or around the model.
-\end{itemize}
+\subsection{Extraction and synthesis safeguards}
+A controlled codebook captured RQ relevance, EPS relevance, model maturity, lifecycle stage, model artifacts, reuse mechanisms, approach classification, interoperability, V\&V artifacts and IVV level, outcomes and evidence, governance and value realization, and the secondary gap mapping.  Screening and extraction decisions used recorded rationales, source quotations, source-report cross-checks, and the controlled codebook.  Only controlled codes contributed to aggregate counts; qualitative observations informed interpretation without creating new memberships.
 
-Screening distinguished core and supporting studies.  Core papers directly shaped the synthesis because they were central to CubeSat/nanosatellite MBSE, EPS/power modeling, traceability, reusable reference models, or V\&V.  Supporting papers were retained when they provided contextual evidence on toolchains, lifecycle continuity, requirements-in-the-loop, risk, project-management, or related nanosatellite MBSE practices without being as central to the protocol RQs.
+A focused codebook-refinement review of generality/reuse, IVV level, and reliability subtype used isolated model-assisted per-report passes.  The allowed labels and field coverage were validated, but this process was not an independent second assessment and no agreement statistic was calculated.
 
-\subsection{Data extraction and quality appraisal}
-Extraction was performed on the 40 accessible reports, comprising 21 core and 19 supporting studies.  The four reports that remained inaccessible at retrieval were classified as unavailable and excluded from the evidence synthesis.
+The analytic units were \textbf{40 included reports}, not 40 independent implementations.  The \textbf{270 claim records are nested within reports}; accordingly, neither report totals nor claim totals estimate independent deployments.  Study multi-select counts are \textbf{report memberships}, whereas claim multi-select counts are \textbf{claim memberships}.  Model maturity is multi-label and is reported as co-occurring labels, not as an ordinal highest-maturity scale.
 
-A standardized extraction form was used for every accessible study and was refactored into two linked layers.  First, a controlled codebook was derived from the protocol and used for synthesis-critical fields with explicit allowed values, including RQ relevance, lifecycle stage, EPS relevance, model maturity, modeling scope, MBSE approach classification, toolchain mechanisms, EPS/V\&V artifacts, IVV integration level, outcome categories, reliability subtype, evidence types, gap mapping, quality ratings, limitation flags, and extraction confidence.  Second, open extraction preserved researcher observations, unexpected mechanisms, tools, claims, caveats, and emergent themes that did not fit the controlled vocabulary.  Extracted fields covered bibliographic metadata; research-question relevance; mission/platform context; lifecycle stage; EPS relevance; model maturity; MBSE objective, scope, engineering artifacts, abstraction level, and reuse mechanism; implementation pathway and tailoring; toolchain, interoperability, and lifecycle-continuity mechanisms; EPS and verification-specific evidence; claimed outcomes, mechanisms, evidence types, metrics, baselines, and confidence ratings; governance, ROI, deliverables, and project-decision linkage; gap mapping; limitations; supporting quotations; lineage notes; and extraction confidence.
+All status distinctions were retained.  Field-status \emph{not reported} denotes source silence, whereas field-status \emph{none} denotes explicit absence or no use.  A selected normalized \emph{not reported} category is distinct from field-status \emph{not reported}, and an unassigned value has no selected controlled label.  Five baseline-comparator records contained free-text values outside the controlled vocabulary and were retained as \emph{unmapped/invalid controlled value}; they are not author-reported statuses.
 
-Each per-study extraction therefore contains both a compact controlled-code summary for aggregation and open `emergent codes' for qualitative synthesis.  Controlled codes were assigned only when the surrounding meaning supported the classification; keyword presence alone was not treated as evidence.  After the codebook was refined, each paper received a focused per-study re-coding pass for generality/reuse, IVV integration level, and reliability subtype so that these later fields were reasoned from the paper context rather than inferred from previous summaries.  Values coded as ``other'' in controlled fields were retained as ``other'' and explained through emergent codes rather than silently expanding the codebook.  Limitation flags were used only for aggregation, while author-stated and extractor-identified limitation rationales were retained as text.
-
-Quality appraisal used the protocol checklist rather than an exclusion threshold.  Each checklist item was scored as No = 0, Insufficiently = 0.5, or Yes = 1.  The checklist assessed venue credibility; whether limitations, threats, assumptions, or scope boundaries were discussed; clarity of nanosatellite/CubeSat context and lifecycle stage; clarity of MBSE method, language, toolchain, model artifacts, and system boundary; whether claimed outcomes were explicitly linked to MBSE artifacts or activities; whether evidence was provided for claims; whether requirements, verification, validation, design decisions, or lifecycle gates were traced to model artifacts when relevant; and whether model availability, reusable assets, data exchange, or implementation details were reported.  Quality scores were used to inform sensitivity, confidence, and discussion of evidence strength; they were not used to automatically remove studies after full-text extraction.
-
-No independent inter-rater reliability assessment was performed.  Consequently, the review does not report agreement statistics.  Instead, extraction consistency was supported by the fixed protocol, a common extraction form, explicit rationales and direct quotes for coding decisions, extraction-confidence ratings, cross-checking extracted data against source reports and eligibility decisions, and the focused per-study re-coding pass for fields introduced by the codebook refinement.
-
-\subsection{Synthesis strategy}
-The synthesis was structured by the three protocol RQs rather than by a general MBSE tool or method taxonomy.  Descriptive statistics were used to summarize study characteristics, study role (core or supporting), EPS relevance, approach classifications, quality-score distribution, research-question relevance, value-claim evidence, and V\&V linkage categories.  Narrative synthesis then interpreted these counts in relation to the protocol questions.
-
-A concise enabler taxonomy was retained only as a secondary explanatory layer.  The Pure, Enhanced, Extended, and Integrated MBSE/digital-engineering categories, together with lifecycle activity anchors such as requirements management, model development, simulation/analysis, configuration management, and collaboration/communication, were used as sensitizing categories consistent with the broader space-MBSE review style of Buruso et al. \cite{Buruso2026MBSESpace}.  The main synthesis, however, focused on two issues specific to this review: the evidence behind claimed value and the linkage between MBSE artifacts and V\&V before physical development.
-
-For RQ1, studies were compared by modeling focus: whole-nanosatellite models that include EPS or power as a subsystem, generic whole-nanosatellite models without explicit EPS, and EPS-only or EPS-first models.  Reuse mechanisms such as reference models, templates, profiles, libraries, open packages, repeatable workflows, high-level abstractions, mission-agnostic architectures, interface-focused models, low-dynamics or non-detailed-behavior models, and specific-mission models with reusable methods were examined as evidence for generality and for modeling with limited prior behavioral knowledge.  For RQ2, each value claim was synthesized by controlled outcome category, reliability subtype, specificity, MBSE mechanism, evidence type, metric or value indicator, baseline or comparator, and evidence-confidence rating.  Multi-label outcome-domain counts were derived from controlled outcome codes only, not from loose keyword searches over claim text; open observations were retained separately as emergent codes for qualitative interpretation.  This prevented asserted benefits such as reliability, reproducibility, integrability, schedule reduction, or communication improvement from being treated as measured effects unless the extraction recorded supporting evidence.  For RQ3, V\&V linkage was synthesized from controlled V\&V artifact, pre-physical verification, integration/test-readiness, and IVV integration-level codes, including requirements-to-model traceability, verification matrices, parametric and power-budget checks, executable simulation or scenario analysis, model-contained verification artifacts, test cases and procedures, automated tests, external tool/data-flow coupling, and evidence of physical, software-in-the-loop, hardware-in-the-loop, or integration-test readiness.
-
-\subsection{Review validity}
-Several measures were used to strengthen review validity while preserving the limits of the available evidence base.  Construct validity was supported by deriving eligibility, extraction fields, and synthesis categories from the protocol RQs and by keeping the broad space-MBSE review \cite{Buruso2026MBSESpace} as a positioning reference rather than as evidence about the included studies.  Search validity was supported by using two major engineering bibliographic sources, exact query logging, deduplication, targeted recall searches for EPS/V\&V sparsity, IEEE parity checks, and citation-chasing recovery for specific missing titles.  The main search limitation is that the database scope was restricted to Scopus and IEEE Xplore, with Google Scholar used only for targeted exact-title verification, so grey literature and some publisher-specific records may be underrepresented.
-
-Selection validity was supported by explicit inclusion/exclusion criteria and recorded screening decisions.  Residual uncertainty remains for records with limited abstracts, borderline eligibility decisions, and inaccessible reports.  Extraction validity was supported by full-text extraction for accessible studies, supporting quotations, quality appraisal, claim-evidence coding, and extraction-confidence ratings.  The absence of an independent inter-rater assessment is a limitation; no reliability statistic is claimed.
-
-Synthesis validity was addressed by separating descriptive study patterns from evidence-backed findings.  Repeated publications from the same CubeSat reference-model lineage were treated with lineage notes so that publication count would not be mistaken for independent replication.  Claims about MBSE value were interpreted through evidence confidence and baseline availability, and EPS-specific conclusions were kept conservative because the evidence base contains many system-level or EPS-adjacent studies but few direct EPS-first studies.  External validity is therefore limited to nanosatellite/CubeSat-class MBSE under the search scope and should not be generalized to all space MBSE practice or to all spacecraft EPS development without further evidence.
+The synthesis is descriptive.  Cross-tabs show controlled-code co-reporting only, not causal linkage.  In particular, lifecycle stage $\times$ IVV level does not establish longitudinal progression or a direct linkage, and EPS-element $\times$ V\&V-artifact co-reporting does not demonstrate element-specific verification.  Narrative synthesis therefore interprets patterns conservatively, with quality and extraction-confidence ratings used to contextualize the evidence.  Supporting Information includes the protocol, complete search record, controlled codebook, included-report inventory, aggregate tables, and claim-level evidence records.
 
 \section{Results}
 \label{sec:results}
 
-\subsection{Search, screening, retrieval, and extraction flow}
-\label{sec:results-flow}
+\subsection{Search, report characteristics, quality, and extraction confidence}
+\label{sec:results-profile}
 
-The final synthesis included the 40 accessible studies that underwent standardized full-text extraction.  The review flow was: 199 records identified, 118 duplicates removed, 81 unique records screened, 37 records excluded during screening, 44 reports sought for retrieval, 4 reports not retrieved or inaccessible, and 40 reports extracted.  Unretrieved reports were excluded from the evidence synthesis.
+The 199 records were merged and deduplicated to 81 candidates; 37 were excluded at screening and 44 were sought for retrieval.  The retrieval candidates comprised 22 core and 22 supporting reports.  One core and three supporting reports were not retrieved, leaving 21 core and 19 supporting extracted reports (40 in total).  The included units are reports, not independent implementations.  Figure~\ref{fig:prisma} presents the selection flow.
 
-\begin{figure}[htbp]
+\begin{figure}[tbp]
 \centering
-\includegraphics[width=0.78\linewidth]{prisma_flow}
-\caption{Flow of record identification, screening, retrieval, and inclusion for the review synthesis.}
-\label{fig:results-prisma-flow}
+\includegraphics[width=0.80\linewidth]{prisma_flow}
+\caption{Selection flow for the review.  The final synthesis contains 40 extracted reports.}
+\label{fig:prisma}
 \end{figure}
 
-The extracted set comprised 21 core studies and 19 supporting studies published from 2013 to 2025.  Counts below therefore refer to the 40 extracted studies unless identified as multi-label claim-domain or V\&V-linkage counts.
+The corpus contains 21 core and 19 supporting reports, published from 2013 to 2025.  Quality scores ranged from 5.0 to 7.5 (mean 6.21): 3 reports scored 5.0, 6 scored 5.5, 13 scored 6.0, 9 scored 6.5, 7 scored 7.0, and 2 scored 7.5.  Extraction confidence was high for 29 reports and medium for 11.  RQ relevance was concentrated in RQ1; RQ2 was usually partial because outcome claims were more often reported than directly evaluated, and RQ3 was frequently partial because model-linked pre-physical V\&V was not always explicit.  Table~\ref{tab:report-profile} summarizes these report-level descriptors and protocol-specified RQ relevance.
 
-\subsection{Study characteristics and quality}
-\label{sec:results-characteristics-quality}
-
-The quality checklist scores ranged from 5.0 to 7.5 on the eight-item scale, with a mean of 6.21.  The score distribution was 5.0 ($n=3$), 5.5 ($n=6$), 6.0 ($n=13$), 6.5 ($n=9$), 7.0 ($n=7$), and 7.5 ($n=2$).  Extraction confidence was coded as high for 29 studies and medium for 11 studies.  RQ relevance was uneven: RQ1 was high for 24 studies and partial for 16; RQ2 was high for 3 and partial for 37; and RQ3 was high for 2, partial for 29, and not relevant for 9.  The mostly partial RQ2 pattern reflects that most papers stated MBSE value claims but did not directly measure EPS reliability, reproducibility, or integrability outcomes.
-
-\begin{table}[htbp]
+\begin{table}[tbp]
 \centering
-\caption{Study, quality, and claim-evidence summary.}
-\label{tab:results-study-quality-summary}
-\begin{tabular}{lr}
+\small
+\caption{Included-report profile, quality, and protocol-specified-RQ relevance.}
+\label{tab:report-profile}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.67\linewidth}r}
 \toprule
-Metric & n \\
+Measure & Value \\
 \midrule
-Extracted studies & 40 \\
-Core studies & 21 \\
-Supporting studies & 19 \\
-Publication year range & 2013--2025 \\
-Claim records & 270 \\
-Unsupported claims & 52 \\
-Weak claims & 139 \\
-Moderate claims & 77 \\
-Strong claims & 2 \\
-High-confidence extractions & 29 \\
-Medium-confidence extractions & 11 \\
+Included reports & 40 \\
+Core / supporting reports & 21 / 19 \\
+Publication years & 2013--2025 \\
+Quality score, mean (range) & 6.21 (5.0--7.5) \\
+High / medium extraction confidence & 29 / 11 \\
+Nested claim records & 270 \\
+RQ1 relevance: high / partial / none & 24 / 16 / 0 \\
+RQ2 relevance: high / partial / none & 3 / 37 / 0 \\
+RQ3 relevance: high / partial / none & 2 / 29 / 9 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Structured limitation flags further contextualize quality.  The dominant limitations were incomplete lifecycle coverage ($n=40$), weak claim--evidence linkage ($n=40$), single-case or limited-scope evidence ($n=40$), no independent validation ($n=40$), prototype or future-work maturity ($n=40$), no physical-test or flight evidence ($n=39$), no baseline or comparator ($n=38$), no quantitative evaluation ($n=35$), unavailable model assets ($n=34$), no EPS-specific evidence ($n=33$), interoperability limitations ($n=29$), and no pre-physical verification model ($n=20$).  These flags were treated as evidence-strength constraints rather than as exclusion criteria, and open limitation text was retained separately from the aggregation flags.
+\subsection{RQ1: Modeling generality and EPS representation}
+\label{sec:results-rq1}
 
-\subsection{Modeling focus and EPS relevance}
-\label{sec:results-modeling-focus-eps}
+EPS relevance was a mutually exclusive report classification.  Nineteen reports were coded as \emph{power-budget/electrical-architecture}, 13 as \emph{EPS-adjacent}, 4 as \emph{system-level only}, 2 as \emph{EPS-specific}, and 2 as \emph{not EPS-relevant}.  Thus, the largest EPS-relevant category reflects power-budget or electrical-architecture work rather than direct EPS-first modeling.
 
-Modeling focus and EPS relevance were synthesized as a single mutually exclusive classification.  Thirty-four studies contained some EPS or power relevance: 19 reported concrete power-budget or electrical-architecture artifacts, 13 were EPS-adjacent, and 2 treated the EPS itself as the primary model scope.  The remaining 6 studies did not model EPS explicitly: 4 were system-level nanosatellite or CubeSat MBSE studies without power-specific artifacts, and 2 contributed nanosatellite MBSE or V\&V evidence outside the EPS domain.
+Model-maturity labels were conceptual framework (18 report memberships), reference model/template (22), prototype demonstration (35), executable model (17), project-applied model (18), and validated/operational model (0).  These labels co-occur and cannot support a statistical maturity ranking.  Both EPS-specific reports were coded as prototype demonstrations; one also had a reference-model/template label and one an executable-model label, while neither had a project-applied nor a validated/operational label \cite{paper-0026,paper-0059}.  Figure~\ref{fig:model-maturity-eps} presents the controlled EPS-relevance and maturity co-reporting.
 
-\begin{figure}[htbp]
+\begin{figure*}[tbp]
 \centering
-\includegraphics[width=0.78\linewidth]{eps_relevance_counts}
-\caption{Mutually exclusive EPS relevance categories in the included studies.}
-\label{fig:results-eps-relevance}
-\end{figure}
+\includegraphics[width=0.94\textwidth]{model_maturity_by_eps_relevance}
+\caption{Controlled EPS-relevance $\times$ model-maturity co-reporting among 40 included reports.  Model maturity is multi-label; cells are report memberships and are descriptive cross-classifications only, not an ordinal ranking, progression, or direct linkage.}
+\label{fig:model-maturity-eps}
+\end{figure*}
 
-\begin{table}[htbp]
+The reported models were carried principally by block definition/internal block diagrams and parametrics (29 report memberships each), requirements diagrams/tables (28), state/activity/sequence diagrams (23), power budgets and executable simulations (21 each), trade-study models (16), interface-control models (15), and generated documents (12).  Test cases/procedures (8), verification matrices (4), and FMEA/risk models (2) were less frequently selected; an additional \emph{other} artifact category was selected in 37 reports.  These are overlapping report memberships, not a common minimum artifact set.
+
+Generality was likewise represented through multiple mechanisms: templates (24 report memberships), high-level abstraction (33), method guidance (39), mission-agnostic architecture (22), and low-dynamics/non-detailed-behavior models (10), alongside reusable workflows and other mechanisms.  These are reported mechanisms for managing generality or reducing behavioral detail, but the corpus does not demonstrate that minimal prior behavioral knowledge is sufficient to model nanosatellite missions or EPS.  Table~\ref{tab:generality-reuse} gives the full controlled memberships.
+
+\begin{table*}[tbp]
 \centering
-\caption{Modeling focus and EPS relevance categories.}
-\label{tab:results-eps-relevance-counts}
-\begin{tabular}{lr}
+\small
+\caption{Controlled generality and reuse mechanisms.  Entries are multi-label report memberships among 40 included reports.}
+\label{tab:generality-reuse}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.34\textwidth}r >{\raggedright\arraybackslash}p{0.34\textwidth}r}
 \toprule
-EPS relevance category & n \\
+Mechanism & $n$ & Mechanism & $n$ \\
 \midrule
-Power-budget/electrical-architecture & 19 \\
-EPS-adjacent & 13 \\
-System-level only & 4 \\
-EPS-specific & 2 \\
-Not EPS-relevant & 2 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The 19 power-budget/electrical-architecture studies should therefore be read as studies with concrete power-related evidence, not as 19 EPS-centered MBSE studies.  Most of this evidence was embedded in system-level models or preliminary design studies.  Examples include RAX/CubeSat energy and data simulations \cite{paper-0001,paper-0003,paper-0008}, SysML parametric mass and power-margin checks \cite{paper-0080}, Capella/Arcadia preliminary EPS allocation for 3ColStar \cite{paper-0078}, CNES concurrent electrical-architecture simulations \cite{paper-0053}, and PLM/Dymola requirements-in-the-loop power simulations \cite{paper-0059}.  Under the controlled codebook, the two EPS-specific studies were the open-source Papyrus/SysML power-subsystem model with Java-based parameter and requirement-traceability extraction \cite{paper-0026} and the requirements-in-the-loop PLM/Dymola CubeSat case in which EPS behavior and state-of-charge simulation were central \cite{paper-0059}.  A full-text re-check confirmed one important boundary case rather than a reclassification: the CNES electrical-architecture study remains coded as power-budget/electrical-architecture because the protocol extraction separated electrical-architecture and power-budget workflows from explicit EPS-specific MBSE models.  Its main analytical object is a power-subsystem model with solar-generator, battery, regulator, bus-topology, and energy-balance simulation evidence, but it is framed as preliminary concurrent electrical-architecture sizing rather than as an EPS-specific MBSE model for the controlled count \cite{paper-0053}.  Not-EPS-relevant studies still contributed general nanosatellite MBSE or V\&V evidence, such as the EIRSAT-1 communications-subsystem verification demonstrator \cite{paper-0063}.
-
-This synthesis is intentionally stricter than simply counting any paper that mentioned power or included a generic EPS block.  EPS appeared frequently as a system concern, but direct EPS-first MBSE evidence remained sparse even after the refactored extraction separated EPS-specific, EPS-adjacent, and power-budget evidence.
-
-Generality and reuse were also multi-label.  Method guidance appeared in 39 studies and reusable workflows in 34, while the refined generality codes identified high-level abstraction in 33 studies, mission-agnostic architecture in 22, reference models in 21, specific-mission models with reusable methods in 14, interface-focused models in 12, libraries in 11, and low-dynamics or non-detailed-behavior models in 10.  These counts show that most papers supported generality through guidance, templates, or abstract architectures rather than through a released reusable EPS model.  Only 6 studies reported open packages, and only 3 were coded as pattern-based reuse.
-
-\subsection{MBSE approaches, languages, and toolchains}
-\label{sec:results-approaches-tools}
-
-Approach classification was dominated by extended and enhanced MBSE rather than fully integrated digital-engineering environments.  Seventeen studies were coded as Extended MBSE, 11 as Enhanced MBSE, 6 as Integrated MBSE/digital engineering, and 6 as Pure MBSE.  This distribution situates the evidence base but does not by itself establish value or V\&V effectiveness.
-
-\begin{table}[htbp]
-\centering
-\caption{MBSE approach-classification counts.}
-\label{tab:results-approach-counts}
-\begin{tabular}{lr}
-\toprule
-Approach classification & n \\
-\midrule
-Extended MBSE & 17 \\
-Enhanced MBSE & 11 \\
-Integrated MBSE/digital engineering & 6 \\
-Pure MBSE & 6 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Tool and language classification showed a SysML-centered set of studies: SysML appeared in 28 studies, custom tools in 17, Cameo/MagicDraw/CATIA Magic in 14, MATLAB/Simulink and STK in 10 each, open-source packages in 9, ModelCenter and PLM/ALM tools in 6 each, Python in 5, Capella/Arcadia in 4, requirements tools in 4, and OpenMBEE in 3.  The high count for ``other'' tools in the controlled summary reflects named toolchains that were preserved as emergent codes rather than forced into loose categories.  Results-relevant toolchains included Papyrus/Eclipse for the EPS-specific open-source case \cite{paper-0026}, Gaphor/UML stereotypes for open-source preliminary-design formalization \cite{paper-0029}, docs-as-code/M30ML for SeaLion documentation and traceability \cite{paper-0037}, Dymola/Modelica in 3DExperience \cite{paper-0059}, and IDM-CIC/Simu-CIC/Opalis for electrical-architecture concurrent engineering \cite{paper-0053}.
-
-Toolchain use was usually reported as a means to connect requirements, architecture, analysis, and verification artifacts.  The strongest toolchain evidence came from executable or data-flow demonstrations, such as MagicDraw/Cameo--ModelCenter--STK--MATLAB integrations for RAX-style CubeSat analysis \cite{paper-0001,paper-0003}, Capella/ForPlan or Capella/open-source simulation coupling \cite{paper-0033,paper-0043}, and SysML/PLM/Dymola requirements-in-the-loop simulation \cite{paper-0059}.  Pure reference-model studies reported reusable structures and V\&V packages, but generally provided less executed analysis evidence \cite{paper-0015,paper-0077}.
-
-\subsection{Claimed outcomes and value-evidence strength}
-\label{sec:results-claims-evidence}
-
-We extracted 270 claim records.  Evidence confidence for those claims was classified as Unsupported ($n=52$), Weak ($n=139$), Moderate ($n=77$), and Strong ($n=2$).  The two strong claims both came from a single concurrent-model-based CubeSat mission-design study that reported a quantitative comparison with a traditional feasibility-study process \cite{paper-0061}.  Outcome domains are multi-label and are now derived from controlled outcome codes only; the 270 claims produced 727 claim-domain memberships.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.92\linewidth]{claim_evidence_by_outcome}
-\caption{Claim evidence by value-outcome domain.  Domains are multi-label, so counts exceed the number of unique claim records.}
-\label{fig:results-claim-evidence}
-\end{figure}
-
-\begin{table*}[htbp]
-\centering
-\scriptsize
-\caption{Claim evidence by value-outcome domain.  Domains are multi-label.}
-\label{tab:results-claim-evidence-by-domain}
-\begin{tabular}{p{0.47\linewidth}rrrrrr}
-\toprule
-Outcome domain & Total & Unsup. & Weak & Mod. & Strong & Studies \\
-\midrule
-Traceability / consistency / requirements quality & 115 & 12 & 62 & 41 & 0 & 37 \\
-Integrability / interoperability / lifecycle continuity & 110 & 13 & 70 & 27 & 0 & 35 \\
-Reproducibility / reuse / openness & 86 & 22 & 56 & 8 & 0 & 35 \\
-Cost / schedule / effort / efficiency / automation & 85 & 23 & 35 & 25 & 2 & 33 \\
-Reliability / mission assurance / risk & 85 & 20 & 29 & 36 & 0 & 33 \\
-Decision support / analysis / trade-space / feasibility & 78 & 10 & 28 & 40 & 0 & 33 \\
-Generality / scalability / tailoring & 78 & 20 & 51 & 7 & 0 & 34 \\
-Communication / collaboration / knowledge & 58 & 14 & 38 & 6 & 0 & 34 \\
-Other / uncategorized value claim & 22 & 3 & 9 & 10 & 0 & 9 \\
-Governance / ROI / project decisions & 10 & 2 & 6 & 1 & 1 & 6 \\
+Method guidance & 39 & Reusable workflow & 34 \\
+High-level abstraction & 33 & Template & 24 \\
+Mission-agnostic architecture & 22 & Reference model & 21 \\
+Specific-mission model with reusable method only & 14 & Interface-focused model & 12 \\
+Library & 11 & Low-dynamics / non-detailed-behavior model & 10 \\
+Profile & 6 & Transformation & 6 \\
+Open package & 6 & Pattern & 3 \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-The most frequent domains were traceability/consistency/requirements quality (115 memberships across 37 studies), integrability/interoperability/lifecycle continuity (110 across 35), reproducibility/reuse/openness (86 across 35), and cost/schedule/effort/automation and reliability/mission-assurance/risk (85 each across 33 studies).  EPS-specific or power-relevant claims were concentrated in integrability/interoperability (62 memberships), traceability/requirements quality (61), decision support (58), cost/schedule/effort/automation (53), reproducibility/reuse (47), and reliability/mission assurance/risk (46).  The explicit ``other'' category reflects the open-coding policy: observations that did not fit controlled outcome labels were preserved rather than reclassified through keywords.
+The EPS-elements field had status \emph{coded} in 33 of 40 reports; field-status \emph{not reported} (source silence), \emph{not applicable}, and \emph{none} (explicit absence or no use) occurred in 1, 5, and 1 reports, respectively.  Among the controlled selections, solar panels and batteries each appeared in 25 report memberships, power budgets in 23, loads in 19, power conditioning/distribution in 18, interfaces in 16, modes and margins in 14 each, degradation in 5, and fault protection in 4.  These co-occurring controlled selections describe reported coverage, not complete EPS architectures.  Figure~\ref{fig:eps-elements} displays the selections and their field-status context.
 
-Reliability subtype coding made the reliability/mission-assurance domain more conservative.  Model consistency or model reliability was the most frequent subtype ($n=34$), followed by mission assurance ($n=29$), defect/error reduction ($n=11$), system/mission reliability ($n=10$), process reliability ($n=8$), generic reliability claims ($n=2$), and EPS reliability ($n=2$).  The two EPS-reliability-coded studies were limited to cases where EPS or power behavior itself was evaluated through model-linked analysis, namely the Capella/open-source multi-domain simulation framework and the PLM/Dymola requirements-in-the-loop EPS case, rather than to broad statements that MBSE improves reliability \cite{paper-0043,paper-0059}.
-
-Moderate evidence typically came from executed simulations, model-derived calculations, traceability artifacts, or case-study outputs.  Examples include the RAX model's energy/data interaction and solar-panel/battery sizing analyses \cite{paper-0001,paper-0003}, Papyrus/Java power-subsystem parameter-impact and requirement-fulfillment tables \cite{paper-0026}, power and SoC simulation against requirements in a PLM/Dymola workflow \cite{paper-0059}, worst-case battery survival simulation with a reported minimum state of charge in an electrical-architecture process \cite{paper-0053}, and positive mass/power margins from SysML parametrics \cite{paper-0080}.  Project-value metrics were rarer and case-specific, such as a one-month versus three-month feasibility-study comparison and lower estimated mission cost in one concurrent-design case \cite{paper-0061}, or the reported four-month preliminary-design cycle using Arcadia and weekly sprints \cite{paper-0078}.
-
-Unsupported and weak claims were common where papers asserted reduced cost, reduced schedule, improved reliability, improved learning, or greater reuse without a baseline, metric, reuse trial, stakeholder evaluation, integration test, or flight/operational evidence.  For example, the EPS-specific Papyrus study provided moderate evidence for traceability and requirement-constraint checking, but its cost/time savings remained a future quantitative-benefit study rather than an observed outcome \cite{paper-0026}.  Reliability/mission-assurance/risk claims accounted for 85 controlled outcome-domain memberships, with 36 moderate and none strong.  The two strong claims were not EPS-specific reliability claims; both concerned cost/schedule effects in a single concurrent-design feasibility comparison \cite{paper-0061}.
-
-\subsection{Verification and validation linkage}
-\label{sec:results-vv-linkage}
-
-For V\&V, each study could receive multiple linkage categories based on controlled EPS/V\&V artifact, pre-physical verification, and integration/test-readiness codes.  EPS/power-specific pre-physical verification appeared in 25 studies; parametric, budget, or constraint checks in 23; executable simulation or scenario analysis before build in 22; test cases, procedures, or V\&V activity packages in 21; requirements-to-model traceability or verification matrices in 19; and external tool or data-flow coupling for V\&V in 11.  Twelve studies had no explicit EPS-focused pre-physical V\&V, 10 linked the model to physical, SIL/HIL, or integration-test readiness, and 3 had only generic or planned V\&V linkage.
-
-\begin{figure}[htbp]
+\begin{figure*}[tbp]
 \centering
-\includegraphics[width=0.92\linewidth]{vv_linkage_counts}
-\caption{Pre-physical V\&V linkage categories.  Categories are multi-label by study.}
-\label{fig:results-vv-linkage}
-\end{figure}
+\includegraphics[width=0.78\textwidth]{eps_elements_modeled}
+\caption{Controlled EPS-element selections.  Field status was \emph{coded} in 33 of 40 reports; field-status \emph{not reported} (source silence), \emph{not applicable}, and \emph{none} (explicit absence or no use) occurred in 1, 5, and 1 reports, respectively.  Bars are report memberships, selections can co-occur, and the neutral no-selected-value bar is not an EPS element.}
+\label{fig:eps-elements}
+\end{figure*}
 
-\begin{table*}[htbp]
+\subsection{Cross-cutting MBSE approach and toolchain continuity}
+\label{sec:results-toolchain}
+
+Approach classification is a cross-cutting characterization rather than a fourth research question.  The Pure, Enhanced, Extended, and Integrated MBSE/digital-engineering taxonomy was adapted from \citet{Buruso2026MBSESpace}.  Six reports were classified as Pure MBSE, 11 as Enhanced MBSE, 17 as Extended MBSE, and 6 as Integrated MBSE/digital engineering.  This classification describes the reported configuration of modeling and analysis activities; it does not establish comparative effectiveness.
+
+Interoperability mechanisms had field status \emph{coded} in 29 of 40 reports: import/export appeared in 20 report memberships, scripts in 14, spreadsheets in 10, and model transformation in 9.  Field-status \emph{not reported} denoted source silence in 10 reports, and 1 report was \emph{uncertain}.  Toolchain limitations were coded from author-stated or extractor-identified evidence, rather than necessarily from author-reported limitations alone: missing interfaces appeared in 20 report memberships, scalability issues in 7, licensing/cost in 5, and vendor lock-in and manual translation in 4 each.  The limitations field had status \emph{coded} in 25 reports and field-status \emph{not reported} (source silence) in 15.  Thus, source silence and a no-selected-controlled-value bar are not evidence of absent mechanisms or limitations.  Figure~\ref{fig:toolchain} contrasts these controlled memberships.
+
+\begin{figure*}[tbp]
 \centering
-\scriptsize
-\caption{Pre-physical V\&V linkage counts.  Categories are multi-label by study.}
-\label{tab:results-vv-linkage-counts}
-\begin{tabular}{p{0.68\linewidth}r}
-\toprule
-V\&V linkage category & n \\
-\midrule
-EPS/power-specific pre-physical verification & 25 \\
-Parametric/budget/constraint checks & 23 \\
-Executable simulation or scenario analysis before build & 22 \\
-Test cases/procedures/V\&V activity packages & 21 \\
-Requirements-to-model traceability or verification matrix & 19 \\
-No explicit EPS-focused pre-physical V\&V & 12 \\
-External tool or data-flow coupling for V\&V & 11 \\
-Physical/SIL/HIL/integration-test readiness link & 10 \\
-Generic/planned V\&V linkage only & 3 \\
-\bottomrule
-\end{tabular}
-\end{table*}
+\includegraphics[width=0.92\textwidth]{toolchain_mechanisms_limitations}
+\caption{Controlled interoperability mechanisms and toolchain limitations.  Bars are multi-label report memberships.  Interoperability field status was \emph{coded} in 29 of 40 reports, \emph{not reported} (source silence) in 10, and \emph{uncertain} in 1; limitations were \emph{coded} in 25 and \emph{not reported} (source silence) in 15.  Neutral bars denote no selected controlled value rather than a substantive category.}
+\label{fig:toolchain}
+\end{figure*}
 
-A separate IVV integration-level code recorded the highest supported integration level for each study.  The most common selected level was simulation-in-the-loop ($n=12$), followed by none/not reported ($n=10$), executable or model-based checks ($n=6$), trace-linked verification artifacts ($n=5$), model-contained verification artifacts ($n=2$), separate document only ($n=1$), and software/hardware-in-the-loop ($n=1$).  Three studies had no selected integration-level value because IVV was not applicable or not reported without a controlled level assignment.  This field was used as a maturity ceiling rather than as a multi-label count of every V\&V mechanism.
+\subsection{RQ2: Claimed outcomes and evidence}
+\label{sec:results-rq2}
 
-\begin{table}[htbp]
+Only 17 of 270 nested claims were EPS-specific.  The full 270-claim synthesis is a broader evidence map for nanosatellite MBSE and cannot be read as 270 EPS-derived outcomes.  It yielded 736 controlled outcome-domain memberships.  The overlapping totals were traceability, consistency, and requirements quality (121); integrability, interoperability, and lifecycle continuity (114); reproducibility, reuse, and openness (87); and reliability, mission assurance, and risk (86).  The remaining domains were cost, schedule, effort, efficiency, and automation (85); decision support, analysis, trade-space, and feasibility (82); generality, scalability, and tailoring (79); communication, collaboration, and knowledge (59); governance, ROI, and project decisions (10); and other/uncategorized controlled outcomes (13).  These are claim-domain memberships, not report counts.
+
+Evidence confidence was Unsupported for 52 claims, Weak for 139, Moderate for 77, and Strong for 2.  The two Strong claims are nested in one report \cite{paper-0061} and therefore do not represent two independent implementations.  Figure~\ref{fig:claim-evidence} displays confidence within each outcome domain; domains can overlap across a claim.
+
+\begin{figure*}[tbp]
 \centering
-\caption{Highest coded IVV integration level.}
-\label{tab:results-ivv-integration-level}
-\begin{tabular}{lr}
-\toprule
-IVV integration level & n \\
-\midrule
-Simulation-in-the-loop & 12 \\
-None/not reported & 10 \\
-Executable/model-based checks & 6 \\
-Trace-linked verification artifacts & 5 \\
-Model-contained verification artifacts & 2 \\
-Separate document only & 1 \\
-Software/hardware-in-the-loop & 1 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=0.82\textwidth]{claim_evidence_by_outcome}
+\caption{Evidence confidence by controlled outcome domain.  The figure summarizes 270 nested claims and 736 overlapping claim-domain memberships; confidence segments partition an individual domain row, not the corpus as a whole.}
+\label{fig:claim-evidence}
+\end{figure*}
 
-Together, the mechanism counts and the IVV maturity coding show that V\&V was usually represented through EPS/power analysis, parametric checks, simulation, and planned or modeled test artifacts.  Explicit links from the model to test execution or integration evidence were still less common than pre-physical analysis, and the focused IVV coding separated actual model integration from generic V\&V language.
+Claim specificity was EPS-specific for 17 claims, nanosatellite system-level for 197, generic space-system for 16, generic MBSE for 39, and unclear for 1.  Of the 17 EPS-specific claims, 4 were Weak and 13 Moderate; none was Strong.  Evidence type is multi-label: illustrative example or conceptual argument was selected for 175 claims, single case-study demonstration for 106, assertion only/no evidence for 72, executable model or simulation result for 36, trade-study or requirements-checking result for 30, quantitative metric without baseline for 18, quantitative comparison with baseline or counterfactual for 3, stakeholder/user/expert evaluation for 6, reuse/replication across projects for 2, and integration/test/operational/flight evidence for 2.
 
-Requirements traceability was usually represented through SysML satisfy/verify relations, verification matrices, or tool-generated traceability views.  In the EPS-specific case, requirement constraints and power-budget equations were extracted from Papyrus and evaluated by Java, producing respected/not-respected flags \cite{paper-0026}.  In academic nanosatellite project modeling, requirements were linked to ``Verified By'' test cases and behavior diagrams such as Bus System Activation and LEOP flow \cite{paper-0023}.  In the 3ColStar preliminary design, EPS continuous-power requirements were traced to physical components such as solar panels and batteries \cite{paper-0078}.  In the NSS-1 SysML case, verify relationships connected mass and power requirements to constraint blocks, and positive margins were used as verification evidence \cite{paper-0080}.
+A named comparator category was selected for 53 claims; the selected normalized comparator categories \emph{none} and \emph{not reported} occurred in 35 and 177 claims, respectively.  The selected normalized \emph{not reported} category is distinct from the baseline field-status \emph{not reported} for 22 claims, which denotes source silence; where field-status \emph{none} is used, it denotes explicit absence or no use.  Five baseline records contained free-text values outside the controlled vocabulary and were retained as \emph{unmapped/invalid controlled value}, not as author-reported statuses.  A stated comparator is not necessarily a quantitative baseline.  Figure~\ref{fig:claim-anatomy} visualizes the claim-evidence and comparator distinctions.
 
-Parametric and executable V\&V evidence was strongest when requirement checks were tied to simulation or budget outputs.  RAX/CubeSat studies executed mission scenarios and trade studies involving energy collection, battery capacity, solar-panel sizing, data storage, and downlink \cite{paper-0001,paper-0003,paper-0008}.  Later studies linked pre-physical V\&V to open-source model-to-analysis pipelines \cite{paper-0027,paper-0029,paper-0043}, PLM/Dymola requirements-in-the-loop simulation \cite{paper-0059}, and electrical-architecture energy-balance simulations before hardware development \cite{paper-0053}.  Test-case or automated-test evidence was more limited and often not EPS-specific, as in the requirements modeling/mapping matrix for CubeSat tests \cite{paper-0034} and the EIRSAT-1 communications verification model coupled to Python and ground-station hardware \cite{paper-0063}.  The physical/SIL/HIL/integration-test readiness category ($n=10$) was broader than completed hardware testing: most linkage still stopped at readiness, planned integration, or partial software/hardware interfaces rather than closed-loop EPS acceptance evidence.
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=\textwidth]{claim_evidence_anatomy}
+\caption{Claim evidence anatomy for 270 nested claims.  Claim specificity is single-select, whereas evidence types are multi-label memberships.  Comparator categories retain named comparators, selected normalized \emph{none} and \emph{not reported}, and unmapped/invalid values as distinct classes.  The selected normalized \emph{not reported} category is distinct from field-status \emph{not reported} (source silence); field-status \emph{none} denotes explicit absence or no use.}
+\label{fig:claim-anatomy}
+\end{figure*}
 
-\subsection{Gap mapping}
+Reliability subtype results are also claim-level, overlapping memberships rather than report counts or a partition: model consistency/reliability (60), mission assurance (57), defect/error reduction (17), system/mission reliability (11), process reliability (10), EPS reliability (2), and generic reliability claim (2).  The not-applicable subtype was selected for 146 claims.  The small EPS-reliability count should therefore not be inflated by broader claims about consistency, mission assurance, or process reliability.
+
+\subsection{RQ3: V\&V integration before physical development}
+\label{sec:results-rq3}
+
+All RQ3 denominators below are over the 40 included reports and include the nine reports coded RQ3-none.  Absence counts are corpus-level context, not prevalence among only RQ3-relevant reports.
+
+The direct pre-physical verification-mechanism field had at least one coded mechanism in 26 reports.  Its overlapping memberships were parametric checks (19), requirements-in-the-loop (17), simulation-in-the-loop (15), trade-study verification (15), virtual integration (10), and model checking (0).  Twenty-five of the 26 reports co-occurred with an EPS-relevant report classification; this is co-reporting only, not evidence that the mechanism was EPS-specific.
+
+A separate direct V\&V-artifact field was coded in 24 reports: simulation scenarios (15), executable checks (14), acceptance criteria (10), test procedures (6), test cases (5), verification matrix (4), SIL/HIL links (2), automated tests (1), and generated test artifacts (0).  The separate integration/test-readiness field was coded in 10 reports: software integration (8), links to hardware integration (6), operational validation (4), flat-sat/testbed (0), and environmental test (0).  These are overlapping report memberships.
+
+Figure~\ref{fig:vv-linkage} presents a separate derived synthesis: a mixed-source union of V\&V artifacts, direct pre-physical mechanisms, and integration/test readiness.  For the generic/planned fallback only, controlled RQ3 relevance was additionally used when no coded V\&V artifact or pre-physical mechanism was selected.  Not every derived category is direct pre-physical evidence.  The derived categories were requirements-to-model traceability or verification matrix (19), executable simulation or scenario analysis (22), parametric/budget/constraint checks (23), test cases/procedures/V\&V activity packages (21), external tool or data-flow coupling for V\&V (11), physical/SIL/HIL/integration-test readiness link (10), EPS/power-relevant V\&V artifact/mechanism co-reporting (25), no coded V\&V artifact or pre-physical mechanism (12), and generic/planned V\&V linkage only (3).  A readiness link does not establish closure.
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=0.88\textwidth]{vv_linkage_counts}
+\caption{Derived V\&V linkage categories.  Values are overlapping report memberships among 40 included reports.  This mixed-source union uses V\&V artifacts, direct pre-physical mechanisms, and integration/test readiness; the generic/planned fallback additionally uses controlled RQ3 relevance when no coded artifact or mechanism is selected.  Not every category is direct pre-physical evidence, and readiness does not establish closure.}
+\label{fig:vv-linkage}
+\end{figure*}
+
+A separate single-select field recorded the highest evidenced IVV integration level for each report.  Simulation-in-the-loop was selected for 12 reports; none/not reported for 10; executable/model-based checks for 6; trace-linked verification artifacts for 5; model-contained verification artifacts for 2; separate document only for 1; and software/hardware-in-the-loop for 1.  Verification matrix adjacent to model and physical integration/test only were each selected for 0 reports.  Three reports had no selected IVV level.  The selected controlled \emph{none/not reported} IVV level is distinct from both the IVV field-status \emph{not reported} and those three unassigned values.
+
+Lifecycle-stage labels were multi-label report memberships: concept/pre-Phase A (36), Phase A/B (21), implementation (17), operations (17), integration and test (11), PDR (2), and CDR (2).  Figure~\ref{fig:lifecycle-ivv} is controlled co-reporting only; it does not trace reports longitudinally through lifecycle stages or demonstrate a direct lifecycle-to-IVV linkage.  In particular, an integration/test or readiness label does not establish completed test closure.
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=0.94\textwidth]{lifecycle_ivv_heatmap}
+\caption{Lifecycle-stage $\times$ IVV-level controlled co-reporting.  Lifecycle labels are multi-label report memberships; cells do not establish longitudinal progression or direct linkage.  The selected none/not-reported IVV level is distinct from the three reports with no selected IVV level.}
+\label{fig:lifecycle-ivv}
+\end{figure*}
+
+\subsection{Buruso-inspired secondary gap mapping}
 \label{sec:results-gap-mapping}
 
-Each study was mapped to five gap categories adapted from the broader space-MBSE gap frame: practical implementation pathway; toolchain fragmentation/interoperability; lightweight/resource-constrained tailoring; governance/project deliverables/ROI/value; and NewSpace/agile/distributed/rapid iteration.  Classifications were coded as addressed with evidence, addressed conceptually, mentioned only, or not addressed.
+A secondary mapping adapted the broad space-MBSE gaps identified by \citet{Buruso2026MBSESpace}; it did not introduce new research questions.  ``Addressed with evidence'' means addressed with report-level evidence under the controlled classification, not that a field-wide gap has been solved.  The mapping is summarized in Table~\ref{tab:gap-mapping}.
 
-\begin{figure}[htbp]
+\begin{table*}[tbp]
 \centering
-\includegraphics[width=0.92\linewidth]{gap_mapping_counts}
-\caption{Gap-mapping counts for the extracted studies.}
-\label{fig:results-gap-mapping}
-\end{figure}
-
-\begin{table*}[htbp]
-\centering
-\scriptsize
-\caption{Gap mapping counts.}
-\label{tab:results-gap-mapping-counts}
-\begin{tabular}{p{0.46\linewidth}rrrr}
+\small
+\caption{Buruso-inspired secondary gap mapping.  Each row is a mutually exclusive classification across 40 reports; ``addressed with evidence'' denotes report-level evidence and not proof that a broader gap is resolved.}
+\label{tab:gap-mapping}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.39\textwidth}rrrr}
 \toprule
 Gap & Evidence & Conceptual & Mentioned & Not addressed \\
 \midrule
@@ -354,90 +273,57 @@ NewSpace/agile/distributed/rapid iteration & 6 & 11 & 15 & 8 \\
 \end{tabular}
 \end{table*}
 
-Implementation pathways were the most consistently addressed gap: all 40 studies addressed the pathway at least conceptually, with 29 evidence-backed and 11 conceptual classifications.  Evidence-backed examples included concrete modeling/data-flow steps for EPS traceability \cite{paper-0026}, concurrent electrical-architecture simulation workflow \cite{paper-0053}, and Capella/Arcadia plus agile preliminary-design execution \cite{paper-0078}.  Toolchain fragmentation/interoperability was also frequently addressed, with 19 evidence-backed cases, 13 conceptual cases, 6 mentioned-only cases, and 2 not-addressed cases.  Evidence-backed toolchain examples included executable RAX integrations \cite{paper-0001,paper-0003}, Papyrus-to-Java EPS analysis \cite{paper-0026}, open-source model-to-simulation coupling \cite{paper-0043}, and model-to-test/tool integration in EIRSAT-1 \cite{paper-0063}.
+Direct governance and value-realization fields provide a narrower perspective than the gap mapping.  Model-governance strategies were coded in 17 of 40 reports, and ROI/value-realization evidence in 5.  These direct fields should not be conflated with the broader governance mapping, which classified 7 reports as addressed with evidence, 20 as addressed conceptually, and 13 as mentioned only.
 
-Lightweight/resource-constrained tailoring was addressed with evidence in 15 studies, addressed conceptually in 21, mentioned only in 3, and not addressed in 1.  Evidence-backed tailoring appeared in studies with rapid analytical design-space exploration \cite{paper-0012}, academic project-management and design tailoring \cite{paper-0023}, open/concurrent preliminary-design tooling \cite{paper-0027}, docs-as-code for a university CubeSat \cite{paper-0037}, causal MBSE user evaluation \cite{paper-0046}, low-cost tradespace modeling \cite{paper-0054}, and agile distributed preliminary design \cite{paper-0078}.
-
-Governance, project deliverables, ROI, and value linkage remained weaker than implementation-pathway and toolchain evidence, but the controlled recoding identified 7 evidence-backed studies, 20 conceptual studies, and 13 mentioned-only studies.  Evidence-backed examples included the 3ColStar study, which reported Capella/Arcadia governance, weekly sprints, requirement/design traceability, and a four-month preliminary design cycle \cite{paper-0078}, as well as studies linking models to project deliverables, cost/schedule comparisons, or requirements-in-loop decision artifacts \cite{paper-0023,paper-0059,paper-0061}.  NewSpace/agile/distributed/rapid-iteration evidence was also limited, with 6 evidence-backed studies, 11 conceptual, 15 mentioned-only, and 8 not addressed.
-
+\FloatBarrier
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Relationship to the broader space-MBSE review}
-\label{sec:discussion-buruso-relationship}
+\subsection{Five cautious findings from the evidence chain}
 
-Buruso et al. provide the appropriate background for this review because their comprehensive space-MBSE synthesis already covers the broad distribution of MBSE methods, modeling languages, tools, lifecycle phases, and enabler classes across space applications \cite{Buruso2026MBSESpace}.  The present review therefore does not treat the recurrence of SysML, Cameo/MagicDraw, Capella/Arcadia, PLM tools, simulation environments, or integrated digital-engineering toolchains as a novel finding by itself.  Instead, those enablers are interpreted only where they affect nanosatellite and EPS-relevant value evidence, implementation burden, or model-linked V\&V.
+\paragraph{System-level and reference-model breadth exceeds direct EPS-specific coverage.}
+The evidence base includes reusable whole-nanosatellite structures and reference-model work, while only two reports are classified as EPS-specific.  The Kaslow/CSRM sequence provides a related publication lineage through reference-model, behavioral, V\&V, and system-architecture contributions \cite{paper-0001,paper-0003,paper-0008,paper-0011,paper-0015}.  It is not independent replication and should not be treated as a statistical maturity benchmark.  The two EPS-specific reports provide more direct power-subsystem examples, while closely related electrical-architecture work remains in the separate power-budget/electrical-architecture category \cite{paper-0026,paper-0053,paper-0059}.  Thus, breadth of system-level representation should not be read as direct evidence of EPS-specific generality or validation.  Figure~\ref{fig:lineage} provides a selected evidence map using publication-facing short labels rather than internal identifiers.
 
-The strongest connection to Buruso et al. is their discussion of value-driven implementation and their Table~5 research gaps.  They identify persistent gaps in practical implementation pathways, fragmented toolchains and lifecycle interoperability, resource-mismatched frameworks for small missions, weak linkage between MBSE artifacts, governance and ROI, and misalignment with NewSpace-style development needs \cite{Buruso2026MBSESpace}.  Our results support those gaps in a narrower population and make their nanosatellite consequences more explicit.  In the included studies, practical implementation pathways and toolchain interoperability are frequently addressed, with evidence-backed classifications in 29 and 19 studies respectively, but governance/ROI/value and NewSpace/agile/distributed development are less frequently addressed with evidence (7 and 6 studies respectively; Table~\ref{tab:results-gap-mapping-counts}).  Thus, the nanosatellite literature is not simply missing MBSE awareness; it is missing durable evidence that the models change project outcomes, review decisions, or downstream verification practice.
-
-This narrower focus also exposes an EPS-specific asymmetry that is hidden in broad space-MBSE taxonomies.  Many studies include EPS or power concerns inside whole-CubeSat models, but only two included studies are coded as EPS-specific \cite{paper-0026,paper-0059}.  The CNES Opalis workflow is substantively power-subsystem-centered, but under the protocol categories it remains power-budget/electrical-architecture rather than EPS-specific because it is a preliminary concurrent-engineering electrical-architecture and sizing workflow \cite{paper-0053}.  Most examples of power modeling are embedded in system-level trade studies, reference-model work, or preliminary design workflows such as RAX energy/data simulation \cite{paper-0001,paper-0003}, SysML power-budget margins \cite{paper-0080}, Capella/Arcadia preliminary EPS allocation \cite{paper-0078}, PLM/Dymola battery simulation \cite{paper-0059}, and electrical-architecture concurrent engineering \cite{paper-0053}.  This extends Buruso et al.'s Table~5 concern about implementation pathways: for nanosatellites, the missing pathway is not only ``how to adopt MBSE,'' but how to maintain an EPS/system thread from mission objectives to power requirements, architectural allocation, analysis, verification procedure, and test evidence without imposing enterprise-scale overhead.
-
-\subsection{The Kaslow/CSRM lineage as a whole-CubeSat maturity benchmark}
-\label{sec:discussion-kaslow-lineage}
-
-The David Kaslow/INCOSE Space Systems Working Group lineage should be interpreted as a sustained whole-CubeSat reference-model program rather than as a set of independent confirmations.  The extracted papers form a sequence from RAX operational-scenario modeling and executable energy/data trade studies \cite{paper-0003,paper-0001,paper-0008}, through CubeSat Reference Model interim reports and distribution/application papers \cite{paper-0004,paper-0022,paper-0016,paper-0031,paper-0005,paper-0013,paper-0077}, to focused behavior, technical-measure, V\&V, CSRM, mission-engineering, and standardized-template contributions \cite{paper-0002,paper-0007,paper-0015,paper-0011,paper-0014,paper-0039}.  This lineage is therefore highly mature as a reusable whole-system MBSE architecture, but its repeated publication history should not be mistaken for independent empirical replication.
-
-Its maturity is visible in breadth.  The CSRM papers move beyond isolated diagrams by organizing stakeholders, requirements, behavior, architecture, technical measures, logical space and ground segments, mission-specific population guidance, and validation/verification activities in a SysML-compliant reference model \cite{paper-0011,paper-0077}.  The strongest evidence of analytical execution comes earlier in the RAX-style demonstrations, where energy collection, battery capacity, data storage, downlink, solar-panel area, and operational scenarios were coupled through SysML and analysis tools \cite{paper-0003,paper-0001,paper-0008}.  The strongest evidence of institutional maturity comes later, where the CSRM is described as formally reviewed, submitted toward an OMG specification, and in use by university CubeSat teams \cite{paper-0011}.  These are important completeness indicators, even though they are not the same as quantified cost, defect, reliability, or flight-test evidence.
-
-\begin{figure}[htbp]
+\begin{figure*}[tbp]
 \centering
-\includegraphics[width=0.96\linewidth]{kaslow_eps_lineage_timeline}
-\caption{Evidence map for the Kaslow/CSRM whole-CubeSat lineage, EPS-specific studies, and the CNES protocol boundary case.  The upper lane contains extracted papers with Kaslow as an author; the lower lane contains the two studies coded as EPS-specific plus the CNES study retained as power-budget/electrical-architecture.  Thick outlines indicate executable/model-based checks or simulation-in-the-loop evidence.  The map is an interpretive evidence display, not a citation-dependency graph.}
-\label{fig:discussion-kaslow-eps-lineage}
-\end{figure}
-\FloatBarrier
+\includegraphics[width=0.92\textwidth]{kaslow_eps_lineage_timeline}
+\caption{Selected evidence map of 19 included reports from the reference-model lineage and EPS-focused/protocol-boundary subset.  Publication-facing short labels identify reports; the display is not an all-corpus aggregate, citation-dependency graph, or derivation chain.  Colors show coded EPS relevance; outlined symbols show executable/model-based checks or simulation-in-the-loop, and the diamond marks the retained power-budget/electrical-architecture boundary report.}
+\label{fig:lineage}
+\end{figure*}
 
-The lineage also clarifies why whole-CubeSat completeness does not imply EPS-specific completeness.  EPS is present, but usually as a subsystem, power budget, technical measure, or trade variable inside a larger mission/system model.  In the RAX proof-of-concept, the power model is comparatively concrete: solar energy collection, battery storage, subsystem power consumption, battery capacity and margin, and energy/data mission interactions are modeled to support trade studies \cite{paper-0003,paper-0001,paper-0008}.  In the later CRM/CSRM work, however, power is generalized into a logical Power Subsystem and related component or budget concepts, while detailed physical sizing and some parametric content are left to the mission-specific or physical design model \cite{paper-0004,paper-0013,paper-0077,paper-0011}.  The result is a whole-CubeSat model that is broad and reusable, but not an EPS-first verification framework.
+\paragraph{The most frequently coded EPS representation is power-budget or electrical architecture.}
+The largest EPS-relevance category is power-budget/electrical-architecture, and the controlled element selections concentrate on solar generation, battery storage, loads, and power budgets.  Interfaces, modes, margins, and power conditioning/distribution also appear, whereas degradation and fault protection are less often coded.  These patterns describe this corpus rather than a universal EPS architecture; multi-select element coverage does not show that every report represented each element or an entire EPS.
 
-The direct EPS-focused evidence has the opposite profile.  Strobbe et al. present an open-source Papyrus/SysML CubeSat power-subsystem model with requirements, structure, behavior, analysis, a power-budget parametric structure, and Java extraction for parameter-impact and respected/not-respected requirement flags \cite{paper-0026}.  Rehman and Fortin use a 3DExperience/RFLP workflow with Dymola simulation to keep numerical power requirements in the loop and evaluate battery state of charge against an EPS-related requirement \cite{paper-0059}.  Boan's CNES study explains why this boundary matters: the electrical-architecture workflow models solar generators, batteries, regulators, bus topology, power profiles, ephemeris-derived energy flows, and state-of-charge margins to size the power subsystem in preliminary design, but it does not become an EPS-specific study under the protocol classification \cite{paper-0053}.  Thus, the conservative statement is not a candidate recoding; it is that two studies are explicitly EPS-specific, while paper~0053 provides closely related power-subsystem evidence inside the separate power-budget/electrical-architecture category.
+\paragraph{Value claims are common, but baseline-backed or independent outcome evidence is uncommon.}
+Traceability, integrability, reproducibility, reliability, and decision-support claims are numerous, and executed engineering demonstrations can be useful for design understanding.  For example, model-linked simulation and trade studies demonstrate pre-physical power or mission analysis \cite{paper-0001,paper-0003,paper-0029,paper-0043,paper-0053,paper-0059}.  Such demonstrations should be distinguished from measured project effects.  Only three claim memberships used quantitative comparison with a baseline or counterfactual, the two Strong claims were nested in one report \cite{paper-0061}, and reuse, integration/test/operational, and stakeholder-evaluation evidence were sparse.  Reported comparators therefore warrant cautious interpretation rather than causal claims about cost, schedule, reliability, or integration outcomes.
 
-This comparison makes ``maturity'' multidimensional.  The Kaslow/CSRM lineage is more complete in architectural breadth, lifecycle vocabulary, reuse intent, traceability scaffolding, and system-level V\&V representation.  The EPS-specific studies are more complete in local analytical depth: they reason directly about solar generation, battery capacity, state of charge, power-budget constraints, and numerical requirement checks, with paper~0053 contributing additional power-subsystem evidence from the adjacent electrical-architecture category.  Yet this direct EPS evidence is later, fewer, mostly prototype or preliminary-design demonstration work, and still lacks flat-sat, environmental-test, operational, or flight validation evidence.  The main research gap is therefore not whether CubeSat MBSE exists, but whether a CSRM-like whole-system thread can retain an executable EPS model from mission modes and power requirements through architecture, analysis, verification cases, test data, and verification closure.
+\paragraph{Pre-physical V\&V is present, but reported evidence of continuous model-to-test closure is limited.}
+Direct mechanism codes and related artifacts indicate reported pre-physical V\&V activity.  Examples include constraint checks linked to requirements, power-budget analyses, and scenario simulations \cite{paper-0026,paper-0023,paper-0059,paper-0080}.  However, the highest selected IVV levels are usually simulation-in-the-loop, executable checks, or trace-linked artifacts.  Readiness does not establish closure, and there is limited reported evidence of model-to-test closure.  The results consequently support reported pre-physical analysis, not a general claim of continuous model-to-test verification closure.
 
-\subsection{Value-driven MBSE remains under-evidenced for nanosatellites}
-\label{sec:discussion-value-evidence}
-
-The review supports Buruso et al.'s claim that MBSE value must be tied to explicit objectives, model usage, governance, and evaluation criteria \cite{Buruso2026MBSESpace}.  The nanosatellite literature reviewed here contains many value claims, but the evidence is generally modest.  RQ2 was coded as high for only 3 studies and partial for 37, and among 270 extracted value-claim records only 2 were classified as strong evidence; 77 were moderate, 139 weak, and 52 unsupported (Table~\ref{tab:results-study-quality-summary}).  The most common domains were traceability, interoperability/lifecycle continuity, reproducibility/reuse, reliability/mission assurance, and cost/schedule/automation or decision-support mechanisms, but the strong evidence was confined to cost/schedule claims in one concurrent-design comparison rather than EPS reliability or verification closure (Table~\ref{tab:results-claim-evidence-by-domain}).  Reliability subtyping sharpened this conclusion: EPS reliability was coded in only two studies, whereas most reliability-adjacent claims concerned model consistency, mission assurance, defect/error reduction, or process reliability.
-
-Moderate evidence usually came from executable demonstrations or traceable artifacts rather than from measured project outcomes.  For example, the RAX studies show how an integrated SysML--ModelCenter--STK--MATLAB workflow can simulate energy and data interactions, support solar-panel and battery-capacity trades, and check mission requirements \cite{paper-0001,paper-0003}.  The open-source Papyrus power-subsystem study demonstrates parameter-impact traceability and requirement-constraint flags from model data \cite{paper-0026}.  PLM/Dymola requirements-in-the-loop simulation reports battery state-of-charge behavior against an SoC requirement \cite{paper-0059}, and the electrical-architecture workflow reports a worst-case battery state-of-charge margin for survival/no-illumination conditions \cite{paper-0053}.  These are useful forms of engineering evidence, but they are mostly prototype, single-case, or pre-physical demonstrations.
-
-Evidence becomes thinner when claims move from technical feasibility to project value.  Reported schedule or cost benefits exist, such as a one-month versus three-month feasibility-study comparison and lower estimated mission cost in a concurrent-design case \cite{paper-0061}, or a four-month preliminary-design cycle with Arcadia and weekly sprints for 3ColStar \cite{paper-0078}.  However, such claims are case-specific and rarely supported by controlled baselines, repeated use, independent stakeholder assessment, or lifecycle follow-through.  Similarly, reference models and templates promise reuse and consistency \cite{paper-0011,paper-0015,paper-0077}, while docs-as-code and open-source workflows improve accessibility and reproducibility \cite{paper-0037,paper-0029}, but the included studies seldom demonstrate reuse across independent missions or quantify the effort required to maintain the model.
-
-The implication is that nanosatellite MBSE remains more artifact-driven than value-driven.  Studies frequently show that a model can contain requirements, architectures, budgets, interfaces, simulations, or generated documents.  Fewer studies define the mission/project objective that justifies the modeling effort, the metric used to evaluate success, the baseline practice being improved, or the review gate at which the model changes a decision.  This is especially important for EPS: power budgets, SoC traces, and margin checks are often convincing local analyses, but they are not always connected to explicit mission assurance objectives such as survival probability, operational availability, fault tolerance, or verification closure.  In this respect, our synthesis directly supports Buruso et al.'s Table~5 gap on weak integration between MBSE artifacts, governance, ROI, and value realization, and shows that the gap persists even in a domain where resource constraints should make value justification central \cite{Buruso2026MBSESpace}.
-
-\subsection{V\&V linkage is present but rarely continuous}
-\label{sec:discussion-vv-continuity}
-
-The included studies do not show an absence of V\&V linkage; rather, they show many partial linkages that rarely form a continuous model-to-test thread.  EPS/power-specific pre-physical verification appeared in 25 studies, parametric/budget/constraint checks in 23, executable simulation or scenario analysis in 22, test cases/procedures/V\&V activity packages in 21, requirements-to-model traceability or verification matrices in 19, and external tool or data-flow coupling in 11 (Table~\ref{tab:results-vv-linkage-counts}).  The highest coded IVV integration level was usually simulation-in-the-loop, executable/model-based checking, or trace-linked artifacts rather than model-contained verification or software/hardware-in-the-loop (Table~\ref{tab:results-ivv-integration-level}).  These counts indicate that nanosatellite MBSE studies often recognize verification as a modeling concern, but that the verified thread usually remains pre-physical and analytical.  They also align with Buruso et al.'s observation that later lifecycle testing, integration, and verification have poorer visibility in the wider space-MBSE literature \cite{Buruso2026MBSESpace}.
-
-The most common V\&V pattern is requirements traceability plus a local analytical check.  The EPS-specific Papyrus study extracts requirement constraints and power-budget parameters to generate respected/not-respected flags \cite{paper-0026}.  The academic nanosatellite framework links requirements to ``Verified By'' test cases and behavior diagrams such as bus activation and LEOP flow \cite{paper-0023}.  The 3ColStar study links continuous-power requirements to EPS components and mode-level power analyses \cite{paper-0078}.  The NSS-1 SysML case uses verify relationships and parametric constraints to compute positive mass and power margins \cite{paper-0080}.  These examples show useful pre-physical verification, but the verification often stops at traceability, calculation, or planned test artifacts.
-
-Executable simulation provides a second important but still partial pattern.  RAX-style workflows connect SysML behavior and parametrics to STK, MATLAB, and ModelCenter to check energy, data, and mission-scenario behavior \cite{paper-0001,paper-0003}.  Other studies link model data to power/data-budget simulation or mission-mode simulation \cite{paper-0027,paper-0029,paper-0033,paper-0043}, PLM/Dymola battery behavior \cite{paper-0059}, and electrical-architecture energy-balance simulation \cite{paper-0053}.  These studies strengthen pre-build confidence and support design trades, but they do not generally show continuity from the same model elements to formal test procedures, hardware-in-the-loop execution, integration-test data, anomaly handling, or acceptance evidence.
-
-The few test-oriented examples reinforce this distinction.  Requirements Modeling Language and RMM work links requirements, code, tests, and defects for CubeSat software-oriented examples \cite{paper-0034}.  EIRSAT-1 demonstrates a communications-subsystem verification model coupled through Python to ground-station hardware and requirements-compliance updates \cite{paper-0063}.  These are among the clearest model-to-test patterns in the included studies, but they are not EPS demonstrations.  For EPS, the literature more often contains power budgets, margin calculations, and simulations than a continuous thread from EPS requirement to model allocation, analysis case, test case, test procedure, measured test data, and verification closure.  This is the central V\&V gap for nanosatellite MBSE: linkage exists, but it is fragmented across requirements traceability, parametric checks, simulation, and planned V\&V packages.
+\paragraph{Toolchain continuity and governance/value evidence are uneven.}
+Import/export, scripts, and transformations document attempts to connect modeling and analysis environments, while missing interfaces, scalability, licensing, and translation limitations are also reported.  Governance strategies and direct ROI/value-realization evidence are coded in fewer reports than general implementation pathways.  These descriptive patterns do not establish a proven bottleneck or identify its cause; they indicate unevenly reported continuity and value evidence in the included corpus.
 
 \subsection{Implications for lightweight nanosatellite MBSE practice}
-\label{sec:discussion-practice-implications}
 
-For resource-constrained CubeSat and nanosatellite teams, the practical implication is not to adopt more MBSE enablers, but to adopt a thinner value-and-verification thread.  Buruso et al.'s Table~5 calls for modular, scalable MBSE frameworks and adoption playbooks for lightweight missions \cite{Buruso2026MBSESpace}.  Our synthesis suggests that such playbooks should start by defining the value hypothesis for the model: which decision, review, risk, or verification activity the model is expected to improve; what artifact will be produced; what metric or comparator will indicate success; and when the modeling effort should stop.  Without these criteria, teams can accumulate model artifacts while still lacking evidence that MBSE improved reliability, reproducibility, integrability, or schedule performance.
+Within these evidence limits, a lightweight approach may be more defensible when it begins with a bounded model thread: mission modes and assumptions, EPS requirements, generation/storage/load and budget abstractions, analysis or executable checks, and the verification artifact needed for the next decision.  Reference-model, open-source, and concurrent-design reports illustrate components of such a thread \cite{paper-0026,paper-0029,paper-0037,paper-0043,paper-0078}.  The review does not establish one preferred toolchain or process.  Rather, it suggests that teams should make the intended decision, evidence type, ownership, and handoff explicit if they seek evidence beyond an illustrative model.
 
-A lightweight nanosatellite playbook should make EPS a first-class model thread rather than a subsystem table appended to the architecture.  At minimum, the thread should connect mission modes and operational scenarios to EPS requirements, power-generation/storage/distribution architecture, assumptions, margins, budget equations, executable checks, verification methods, and test cases.  Studies already provide pieces of this thread: open-source Papyrus/SysML traceability for a power subsystem \cite{paper-0026}, model-derived power and data budgets \cite{paper-0029}, Capella/PVMT simulation coupling \cite{paper-0043}, PLM/Dymola requirements-in-the-loop behavior \cite{paper-0059}, and concurrent electrical-architecture simulation \cite{paper-0053}.  The missing practice guidance is how a small team should select a minimal subset of these mechanisms and maintain it through review and test readiness.
+This framing retains the potential benefit of lightweight tailoring while avoiding an assumption that additional tools create value automatically.  A reported readiness link should be treated as preparation for downstream integration or test, not as evidence that verification has been closed.  Similarly, governance and value-realization claims require direct evidence rather than inference from the presence of a model or a tool connection.
 
-Tool choices should be evaluated against adoption burden as well as analytical capability.  Enterprise or integrated environments can provide powerful lifecycle continuity, as shown by PLM/Dymola and concurrent-engineering workflows \cite{paper-0059,paper-0053}, but they may reproduce the resource-mismatch problem noted by Buruso et al. \cite{Buruso2026MBSESpace}.  Conversely, open-source, plain-text, or docs-as-code approaches can reduce licensing and training barriers while supporting traceability and generated deliverables \cite{paper-0026,paper-0029,paper-0037}.  The OPAL user study suggests that low-training conceptual-design support can be valuable for student teams \cite{paper-0046}, but it also shows that usability is not equivalent to verification capability.  Lightweight practice therefore needs an evidence ladder: accessibility and usability are entry criteria, while value realization requires traceable decisions, executed checks, and eventually test closure.
+\subsection{Threats to validity and review limitations}
 
-The strongest practice pattern in the included studies combines bounded scope, explicit roles, and recurring review cadence.  The 3ColStar case links Capella/Arcadia modeling with weekly sprints, permissions, subsystem responsibilities, traceability, and preliminary-design outputs \cite{paper-0078}.  Academic project-management frameworks similarly connect model artifacts to PBS/WBS/CBS and review gates, although they do not quantify ROI \cite{paper-0023}.  Such examples suggest that adoption playbooks should include not only modeling diagrams and tool scripts, but also governance: who owns requirements, who approves assumption changes, how power-budget changes propagate, what evidence is required at PDR/CDR-like gates, and which artifacts are frozen or regenerated for test planning.
+The search was limited to Scopus and IEEE Xplore and to the protocol's publication and language criteria.  Relevant grey literature, internal mission evidence, and non-indexed tool repositories may therefore be underrepresented.  Four sought reports were not retrieved, and the synthesis is limited to the 40 included reports.
 
-\subsection{Threats to validity and limitations of this review}
-\label{sec:discussion-threats-limitations}
+The controlled coding scheme improves transparency but necessarily simplifies heterogeneous reporting.  No independent second assessment or agreement statistic was conducted, and classifications of EPS relevance, IVV integration, outcome evidence, and gap mapping retain reviewer judgment.  Status distinctions and the explicit unmapped/invalid class mitigate, but do not remove, ambiguity.  Multi-label memberships and descriptive co-reporting also preclude causal or longitudinal inference.
 
-Several threats limit the strength and generality of this discussion.  The search scope was limited primarily to Scopus and IEEE Xplore, with Google Scholar used only for targeted exact-title verification during recovery searches.  Grey literature, internal mission documentation, tool repositories without papers, and industrial reports may contain stronger evidence for MBSE value or model-linked V\&V than the accessible academic literature.  Four potentially eligible reports were not retrieved or remained inaccessible and were excluded from extraction, so the synthesis reflects 40 accessible studies rather than the full set of potentially relevant work.
+Finally, related publications in the reference-model lineage mean that report counts are not independent implementation counts.  Sparse direct EPS-specific coverage, limited baseline-backed value evidence, and limited model-to-test closure constrain generalization beyond the included nanosatellite literature.
 
-Extraction and synthesis also have reliability limits.  The review used a predefined protocol, standardized extraction form, run-specific codebook, supporting quotations, quality appraisal, extraction-confidence ratings, and a focused per-study re-coding pass for later codebook refinements, but no independent inter-rater reliability assessment was performed.  Claim-evidence confidence, EPS relevance, V\&V linkage, reliability subtype, IVV integration level, and Table~5-inspired gap mappings therefore include reviewer judgment.  Controlled-code mapping helped make counts reproducible and reduced the earlier keyword-categorization problem, but it can still simplify nuanced paper content, especially where authors use broad terms such as validation, verification, digital engineering, traceability, or model integration differently.  Emergent codes were retained to keep such observations available for qualitative interpretation.
+\section{Conclusion}
 
-The evidence base is immature: all 40 studies carried at least one structured limitation flag related to incomplete lifecycle coverage, weak claim--evidence linkage, single-case or limited-scope evidence, no independent validation, and prototype/future-work maturity; 39 lacked physical-test or flight evidence; 38 lacked a baseline or comparator; 35 lacked quantitative MBSE-outcome evaluation; and 34 did not make model assets available.  Repeated publications in the CubeSat System Reference Model lineage also mean that publication count should not be interpreted as independent replication.  Because only two included studies are coded EPS-specific, and because the closest additional case remains in the power-budget/electrical-architecture category under the protocol, EPS conclusions necessarily rely on a mixture of whole-nanosatellite, EPS-adjacent, and power-budget/electrical-architecture studies.
+The included reports describe reusable system-level models, claimed MBSE benefits, and pre-physical analysis and verification activity.  The evidence chain thins as the focus narrows to direct EPS scope, baseline-backed value, governance and ROI, and model-to-test closure.  These findings describe the available controlled evidence rather than causal effects: direct EPS validation, measured value realization, and continuous verification closure have limited reported evidence.
 
-Use of Buruso et al.'s Table~5 gaps is another limitation.  The gaps were used as a positioning and sensitizing frame, not as an independent coding validation instrument \cite{Buruso2026MBSESpace}.  Mapping nanosatellite studies onto those broad gaps is useful for comparison, but the resulting categories are coarse and should be interpreted as evidence-strength descriptors rather than definitive classifications of each study.
+\section*{Data and Supporting Information Availability}
+Supporting Information contains the protocol, complete search record, controlled codebook, included-report inventory, aggregate tables, and claim-level evidence records used in this review.
 
-\FloatBarrier
 \bibliography{bibliography/converted_to_latex}
 
 \end{document}

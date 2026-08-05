@@ -2,15 +2,47 @@
 
 ## Current screening snapshot
 
-- Primary candidates screened from merged source: 81
-- Kept in current `corpus.json`: 44
-- Core in current `corpus.json`: 22
+- Primary candidates screened from merged source: 82
+- Kept in current `corpus.json`: 45
+- Core in current `corpus.json`: 23
 - Supporting in current `corpus.json`: 22
 - Rejected from primary merged-candidate screening: 37
-- IEEE Xplore parity screening addendum (2026-04-24): screened `7.csv`, `23.csv`, and `24.csv` from `searches/ieee-xplore-csv-drop/`; 36 raw rows → 26 unique titles. The addendum reaffirmed 10 already-kept papers, promoted 2 user-approved `core` papers into `merged_candidates.json` / `corpus.json`, and logged 14 rejected/not-added decisions.
-- Kept papers with non-empty abstract text in `corpus.json`: 30 / 44
+- Kept papers with non-empty abstract text in `corpus.json`: 31 / 45
 - User-approved overrides in this file: already applied
 - Query provenance, recall audits, and merge/dedup details are maintained in `search-log.md`
+- Controlled direct IEEE update (2026-08-05): all 104 genuinely new direct IEEE records were excluded/not added. None was added or tiered, so no current decision, user override, or kept-count changed.
+
+## Controlled direct IEEE Xplore screening addendum — 2026-08-05
+
+### Scope and controlled result
+
+- Fresh direct IEEE Xplore Q1–Q28 parity results, Q32 title/DOI confirmation, and the 2025–2026 update search are retained in `searches/ieee-xplore-direct-2026-08-05/`. The Q1–Q28 parity matrix is in that directory's `README.md`.
+- Internal direct deduplication and DOI/normalized-title comparison against the 82 existing candidates yielded 298 primary direct identifications → 133 unique direct records. Twenty-nine were matches to existing merged candidates, so their direct IEEE provenance was appended rather than creating duplicates.
+- The remaining **104 genuinely new direct records** were screened under the unchanged protocol and all are `rejected_not_added`. No new merged candidate, `corpus_id`, corpus record, screening tier, or user-approved override was created or changed.
+- The complete per-record decision trail and direct-query ranks are in `searches/ieee-xplore-direct-2026-08-05/ieee_direct_2026-08-05_dedup_and_screening_audit.json`. Its exclusions comprise generic spacecraft/non-nanosatellite records, records outside the target population/domain, communications/subsystem, hardware, process, mission-technology, survey, and non-MBSE-target-model exclusions, including the three reviewer-excluded requirements-engineering records listed below.
+
+### Borderline direct records assessed explicitly
+
+| Decision | Title | Why not added |
+|---|---|---|
+| rejected/not added | *Coupled Cyber–Physical System Modeling and Coregulation of a CubeSat* | CubeSat context, but the available abstract explicitly describes state-space CPS control rather than a system/EPS MBSE model. |
+| rejected/not added | *Feasibility study of a multispectral camera with automatic processing onboard a 27U satellite using model based space system engineering* | Camera-payload feasibility study, not the target nanosatellite system-level/EPS modeling scope. |
+| rejected/not added | *An MBSE conceptual design phase model for inter-satellite communication* | Communications-subsystem model, matching the pre-existing protocol exclusion boundary. |
+| rejected/not added | *The Spacecraft Early Analysis Model: An MBSE Framework for Early Analysis of Spacecraft Behavior* | Generic spacecraft framework; the direct metadata does not establish the required nanosatellite/CubeSat population. |
+
+### Reviewer-excluded requirements-engineering records (not added)
+
+These records are not in `merged_candidates.json` or `corpus.json` and have no screening tier. The reviewer directed their exclusion; the audit records that decision without representing the truncated abstracts as full-text evidence.
+
+| Decision | Year | Title | DOI | Exclusion rationale |
+|---|---:|---|---|---|
+| rejected/not added | 2016 | *Toward requirements engineering of cyber-physical systems: Modeling CubeSat* | `10.1109/AERO.2016.7500897` | Requirements elicitation/specification in a CubeSat context, without an in-scope system/EPS MBSE architecture or model-integrated IVV contribution in the available record. |
+| rejected/not added | 2017 | *Toward model-based requirement engineering tool support* | `10.1109/AERO.2017.7943647` | Requirements-engineering tool support in a CubeSat context, without an in-scope system/EPS MBSE architecture or model-integrated IVV contribution in the available record. |
+| rejected/not added | 2018 | *Towards Cyber-Physical Requirement Engineering Elicitation Tool Support* | `10.23919/WAC.2018.8430399` | CPS requirements-elicitation tool support linked to a CubeSat initiative, without an in-scope system/EPS MBSE architecture or model-integrated IVV contribution in the available record. |
+
+### Retained-record handling
+
+- The direct update re-identified 21 currently kept records and appended direct IEEE provenance without changing their existing decisions. Its Q32 title and DOI checks both resolve to the already-retained `paper-0082`.
 
 ## Screening rule actually applied
 
@@ -39,53 +71,7 @@
 | Developing a CubeSat System MBSE Reference Model – Interim Status #5 | 2019 | new candidate | core | citation-chasing continuation + full-text confirmation | Added as the missing 2019 bridge in the main CSRM lineage, with explicit CSRM application plus mission-specific validation/verification framing. |
 | Preliminary Design of Satellite Systems through the Integration of Model-Based System Engineering and Agile Methodologies: Application to the 3ColStar Mission | 2024 | new candidate | supporting | citation-chasing continuation + exact-title recovery | Added as a nanosatellite / CubeSat Arcadia/Capella case study with strong requirements / architecture / interface consistency claims, but still broader and more process-oriented than the core lineage. |
 | Model-based systems engineering to support the development of nanosatellites | 2014 | new candidate | core | citation-chasing continuation + full-text confirmation | Added as an early nanosatellite MBSE case study focused on requirements development, design validation, and model-linked onboard-software integration. |
-
-## IEEE Xplore parity screening addendum (2026-04-24)
-
-### Scope and rule
-- Source files screened: `searches/ieee-xplore-csv-drop/7.csv`, `searches/ieee-xplore-csv-drop/23.csv`, and `searches/ieee-xplore-csv-drop/24.csv`.
-- Deduplicated screening set: 36 raw IEEE CSV rows → 26 unique titles.
-- Applied the protocol criteria as written: 2013-2026, English conference/journal records, nanosatellite/CubeSat or close small-satellite context, MBSE-oriented system/EPS modeling, MBSE-attributed outcomes for RQ2, and explicit IVV / verification / validation modeling for RQ3.
-- User-approved override in this addendum: `Application of model-based systems engineering in small satellite conceptual design-A SysML approach` and `Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain` were upgraded from my proposed rejection/borderline exclusion to `core`.
-- This addendum records screening decisions from the new IEEE exports. The two user-approved core additions have now been promoted into `merged_candidates.json` and `corpus.json`; rejected/not-added addendum records remain logged only.
-
-### Core decisions from the IEEE addendum
-| Decision | Year | Title | Source CSV(s) | Status | Why core |
-|---|---:|---|---|---|---|
-| core | 2014 | Integrated model-based systems engineering (MBSE) applied to the Simulation of a CubeSat mission | `7.csv` | Reaffirmed existing core | Direct CubeSat mission-level MBSE model integrating SysML, analytical models, simulation, and requirements/design/analysis/verification support. |
-| core | 2017 | Developing a CubeSat Model-Based System Engineering (MBSE) reference model — Interim status #3 | `7.csv` | Reaffirmed existing core | Direct CubeSat MBSE reference-model lineage with system-level SysML modeling and requirements/design/analysis/V&V framing. |
-| core | 2018 | Application of model-based systems engineering in small satellite conceptual design-A SysML approach | `7.csv` | Added to current corpus as core | User upgraded to core. IEEE abstract frames SysML-based small-satellite conceptual design as addressing completeness/consistency, traceability, and change-impact assessment; retained as close nanosatellite-class/general system-level MBSE evidence for RQ1/RQ2. |
-| core | 2021 | Mission Engineering and the CubeSat System Reference Model | `7.csv` | Reaffirmed existing core | Direct CubeSat System Reference Model / mission-engineering extension and central reusable CubeSat MBSE evidence. |
-| core | 2021 | Towards Simulation of CubeSat Operational Scenarios under a Cyber-Physical Systems View | `23.csv` | Reaffirmed existing core | SysML/CPS workflow for CubeSat operational-scenario simulation, including power-consumption / data-generation analysis and early requirements verification. |
-| core | 2023 | Development of a Nanosatellite System Modeling Architecture for EIRSAT-1 | `23.csv`; `24.csv` | Reaffirmed existing core | Direct nanosatellite system-modeling architecture case with MBSE, CubeSat/system-engineering, and verification/validation relevance. |
-| core | 2023 | Open-source CubeSat MBSE Approach to Address Traceability: Power Subsystem | `7.csv` | Reaffirmed existing core | Strongest direct EPS paper: CubeSat power-subsystem SysML model, traceability, and requirement-fulfillment checking. |
-| core | 2025 | Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain | `7.csv`; `23.csv` | Added to current corpus as core | User upgraded to core. The abstract presents an automated object-oriented functional MBSE/System-as-Code approach for standardized satellite-platform digitalization, reuse, traceability, and functional alignment across New Space missions; retained as core generality/reuse evidence for RQ1/RQ2. |
-
-### Supporting decisions from the IEEE addendum
-| Decision | Year | Title | Source CSV(s) | Status | Why supporting |
-|---|---:|---|---|---|---|
-| supporting | 2013 | Model based systems engineering (MBSE) applied to Radio Aurora Explorer (RAX) CubeSat mission operational scenarios | `7.csv`; `24.csv` | Reaffirmed existing supporting | Direct CubeSat MBSE operational-scenario modeling with energy/data/resource constraints; useful but narrower than the core general-model lineage. |
-| supporting | 2018 | A model-based systems engineering approach for technical measurement with application to a CubeSat | `7.csv` | Reaffirmed existing supporting | Relevant MBSE technical-measurement / traceability contribution applied to CubeSat, but not EPS-specific and narrower than core papers. |
-| supporting | 2019 | Requirements Modeling Language and Automated Testing for CubeSats | `24.csv` | Reaffirmed existing supporting | Direct CubeSat requirements validation/testing support for RQ3, but not EPS-specific and not central enough for core. |
-| supporting | 2022 | MBSE Challenges in the Concurrent Preliminary Design of CubeSats: Nanospace Study | `7.csv` | Reaffirmed existing supporting | Relevant CubeSat MBSE/concurrent-engineering integration context; useful for barriers/challenges, but contextual rather than review-defining. |
-
-### Rejected / not-added decisions from the IEEE addendum
-| Decision | Year | Title | Source CSV(s) | Why rejected / not added |
-|---|---:|---|---|---|
-| rejected | 2015 | Optimization of multi-satellite systems using integrated Model Based System Engineering (MBSE) techniques | `7.csv`; `24.csv` | Generic small-satellite / constellation optimization; not clearly nanosatellite/CubeSat-class and not EPS-specific. |
-| rejected | 2016 | A concept for an Agile Mission Development Facility for CubeSat and suborbital missions | `7.csv`; `24.csv` | Facility/platform concept using SysML, not a direct nanosatellite mission or EPS MBSE model. |
-| rejected | 2018 | Adopting MBSE in Construction Equipment Industry: An Experience Report | `7.csv`; `23.csv` | Non-space domain. |
-| rejected | 2018 | An MBSE conceptual design phase model for inter-satellite communication | `24.csv` | MBSE ConOps for inter-satellite communication / VLC subsystem; not system-level nanosatellite/EPS modeling. |
-| rejected | 2018 | Model-Based Semi-Physical Simulation Platform Architecting for Satellite Communication System | `7.csv` | Generic satellite communication simulation platform; not nanosatellite/CubeSat and not EPS. |
-| rejected | 2018 | Radiation Assurance of CubeSat Payloads Using Bayesian Networks and Fault Models | `7.csv`; `24.csv` | CubeSat payload radiation/fault modeling; subsystem/payload reliability, not system-level or EPS MBSE outcomes. |
-| rejected | 2019 | Enhanced Feasibility Assessment of Payload Adapters for NASA's Space Launch System | `24.csv` | SLS payload-adapter feasibility / launch-vehicle context; not nanosatellite/CubeSat MBSE. |
-| rejected | 2020 | Applying Model-Based Systems Engineering to the Development of a Test and Evaluation Tool for Unmanned Autonomous Systems | `7.csv`; `24.csv` | UAS, not space/nanosatellite. |
-| rejected | 2020 | Intersatellite Communication: An MBSE Operational Concept for a Multiorbit Disaggregated System | `7.csv` | Space-related MBSE OpsCon, but communication-system focused and not clearly nanosatellite/EPS/system-level CubeSat modeling. |
-| rejected | 2022 | Reliability Analysis and Failure Mitigation Strategies for the PROVE Pathfinder CubeSat Payload | `7.csv`; `24.csv` | CubeSat payload reliability study; MBSE appears as one reliability-model component, but outcomes are payload/failure-analysis focused rather than EPS/system MBSE. |
-| rejected | 2024 | A Semantic Approach to Spacecraft Verification Planning Using Bayesian Networks | `7.csv`; `24.csv` | Strong generic spacecraft verification/digital-engineering paper, but not nanosatellite/CubeSat and not EPS. |
-| rejected | 2024 | A Tailored Systems Engineering Process for Developing Student-Built CubeSat Class Satellites | `24.csv` | CubeSat-class and MBSE-related, but primarily educational/process tailoring and cohort-performance evaluation rather than target system/EPS MBSE model evidence. |
-| rejected | 2024 | Cardinal Effect in Bistatic SAR Imagery: Analysis and Physical Interpretation | `23.csv` | False positive from “Capella”; SAR imagery/physics paper, not MBSE. |
-| rejected | 2025 | Calibration Platform for MEMS Gyroscopes used in Nanosatellite Attitude Determination and Control Systems | `24.csv` | Nanosatellite ADCS sensor calibration hardware/metrology; not MBSE and not EPS. |
+| Evaluating Metamodel Quality of the CubeSat System Reference Model (CSRM) to Improve Domain-Specific Languages (DSL) | 2026 | new candidate | core | Scopus exact-title confirmation + supplied full text | Direct CSRM lineage evidence: evaluates the reusable CubeSat SysML profile/metamodel with executable quality requirements, parametrics, ontology consistency checking, and trace/verify elements. |
 
 ## Core papers
 | corpus_id | Decision | Year | Title | Evidence basis | Why core |
@@ -100,7 +86,7 @@
 | paper-0005 | core | 2017 | Developing a CubeSat Model-Based System Engineering (MBSE) reference model - Interim status #3 | title+metadata | Core reference-model lineage paper that remains central to generalized CubeSat MBSE. |
 | paper-0015 | core | 2017 | Validation and verification of MBSE compliant CubeSat reference model | abstract | Explicit validation/verification of a CubeSat MBSE reference model, making it key RQ3 evidence. |
 | paper-0013 | core | 2018 | Developing a cubesat model-based system engineering (MBSE) reference model – Interim status #4 | title+metadata | Latest interim paper in the main reference-model lineage and still core for the maturation of reusable CubeSat modeling. |
-| paper-0080 | core | 2018 | Application of model-based systems engineering in small satellite conceptual design-A SysML approach | IEEE abstract + user-approved promotion | User-approved core addition from the IEEE parity addendum; SysML-based small-satellite conceptual design evidence for completeness/consistency, traceability, and change-impact assessment. |
+| paper-0080 | core | 2018 | Application of model-based systems engineering in small satellite conceptual design-A SysML approach | direct IEEE metadata + user override | User-retained core paper with SysML-based small-satellite conceptual-design evidence for completeness/consistency, traceability, and change-impact assessment. IEEE classifies it as a Magazine Article, so its supplemental exact-DOI confirmation is outside the journal/conference parity counts. |
 | paper-0077 | core | 2019 | Developing a CubeSat System MBSE Reference Model – Interim Status #5 | full text + exact-title chase | Closes the missing 2019 gap in the CSRM lineage and adds explicit mission-specific model validation / verification framing before the 2020–2021 CSRM papers. |
 | paper-0011 | core | 2020 | Development and Application of the CubeSat System Reference Model | abstract | Confirms a mature reusable logical architecture for CubeSat systems and explicit MBSE-quality/reusability benefits. |
 | paper-0039 | core | 2020 | Applying a Model-Based Approach to Develop a Standardized Template for CubeSat-class Satellites | abstract | Provides an explicitly reusable CubeSat template/model intended to reduce design time and propagate changes through the system model. |
@@ -111,7 +97,8 @@
 | paper-0023 | core | 2024 | Effective Model-Based Systems Engineering framework for academic nanosatellite project management and design | title+metadata | Central contemporary nanosatellite MBSE framework paper with no contradicting abstract evidence. |
 | paper-0029 | core | 2024 | Open-Source Data Formalization through Model-Based Systems Engineering for Concurrent Preliminary Design of CubeSats | abstract | Promoted to core because the recovered abstract shows a generic CubeSat SysML model serving as a central data source across preliminary-design phases. |
 | paper-0051 | core | 2025 | A Scalable Systems Architecture for CubeSat Test and Evaluation to Improve Mission Success | snippet | Snippet-level evidence still shows a direct CubeSat test-and-evaluation architecture contribution that is central to RQ3. |
-| paper-0081 | core | 2025 | Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain | IEEE abstract + user-approved promotion | User-approved core addition from the IEEE parity addendum; automated object-oriented functional MBSE/System-as-Code approach for standardized satellite-platform digitalization, reuse, traceability, and functional alignment. |
+| paper-0081 | core | 2025 | Automating Object-Oriented Functional Modeling for Standardized Design in the New Space Domain | direct IEEE metadata + user override | User-retained core paper presenting an automated object-oriented functional MBSE/System-as-Code approach for standardized satellite-platform digitalization, reuse, traceability, and functional alignment. |
+| paper-0082 | core | 2026 | Evaluating Metamodel Quality of the CubeSat System Reference Model (CSRM) to Improve Domain-Specific Languages (DSL) | supplied full text + Scopus exact-title confirmation | Direct continuation of the review-defining CSRM lineage: evaluates a reusable CubeSat SysML DSL/metamodel using quantified quality requirements, executable parametrics, semantic consistency checking, and model trace/verify elements. |
 
 ## Supporting papers
 | corpus_id | Decision | Year | Title | Evidence basis | Why supporting |
@@ -181,7 +168,7 @@
 | rejected | 2026 | 46th Academic Space Conference, 2022 | proceedings | Conference proceedings record, not an individual paper. |
 
 ## Screening confidence and corpus quality reflection
-- **Highest confidence:** the main CubeSat MBSE reference-model / template / behavior / mission-architecture lineage is now well supported and coherently represented in the `core` tier.
+- **Highest confidence:** the main CubeSat MBSE reference-model / template / behavior / mission-architecture lineage is now well supported and coherently represented in the `core` tier, including the full-text-supported 2026 CSRM metamodel-quality continuation.
 - **High confidence:** `Open-source CubeSat MBSE Approach to Address Traceability: Power Subsystem` remains the strongest EPS-specific paper in the corpus.
 - **Moderate confidence:** RQ3 is represented, but mainly through general CubeSat reference-model validation, test/evaluation architecture, requirements/testing support, and operational-scenario simulation rather than through a broad EPS-specific V&V literature.
 - **Moderate-low confidence:** the **EPS-specific** subset remains sparse even after abstract enrichment; direct literature combining nanosatellite EPS modeling with explicit verification / IVV / test integration is still thin.

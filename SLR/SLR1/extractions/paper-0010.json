@@ -9,7 +9,7 @@
       "numeric_score": 1,
       "rationale": "Corpus metadata identifies an IEEE DOI and IEEE Xplore provenance for a conference paper; this is sufficient for a credible venue judgment.",
       "evidence": [
-        "Corpus metadata: DOI=10.1109/syscon.2014.6819305; source provenance includes paperId=ieee:6819305 from IEEE Xplore manual promotions.",
+        "Corpus metadata: DOI=10.1109/syscon.2014.6819305; saved direct IEEE Xplore provenance confirms paperId=6819305.",
         "Paper front matter gives the full title and author affiliations: NC A&T State University and National Institute of Aerospace."
       ],
       "confidence": "high"
@@ -109,7 +109,7 @@
       "rationale": "IEEE DOI and IEEE Xplore provenance indicate a credible peer-reviewed conference venue.",
       "evidence": [
         {
-          "quote": "Corpus metadata: DOI=10.1109/syscon.2014.6819305; source provenance includes paperId=ieee:6819305 from IEEE Xplore manual promotions.",
+          "quote": "Corpus metadata: DOI=10.1109/syscon.2014.6819305; saved direct IEEE Xplore provenance confirms paperId=6819305.",
           "location": "not specified"
         },
         {
@@ -1328,19 +1328,21 @@
       "venue_type": "conference",
       "source_database_or_route": [
         {
-          "source": "unknown",
-          "input_file": "SLR/SLR1/searches/ieee_manual_promoted_records.json",
-          "query": "Manual IEEE Xplore CSV promotions retained after Stage-1 audit",
-          "rank": 1,
-          "paperId": "ieee:6819305"
-        },
-        {
           "source": "semantic_scholar",
           "input_file": "SLR/SLR1/searches/abstract_enrichment/paper-0010_semantic_title.json",
           "query": "\"Small satellite systems design methodology: A formal and agile design process\"",
           "rank": 1,
           "paperId": "5712d578e7d48912fbbcfa4680e59ca24c0f6e0a",
           "purpose": "abstract_enrichment"
+        },
+        {
+          "source": "ieee_xplore_direct",
+          "input_file": "SLR/SLR1/searches/ieee-xplore-direct-2026-08-05/ieee_q12_requirements_verification_concept_full_2026-08-05.json",
+          "query": "(\"space system*\" OR spacecraft OR satellite) AND (\"requirements management\" OR requirements) AND (verification OR validation OR \"verification procedures\") AND (\"model-based\" OR MBSE OR SysML)",
+          "rank": 48,
+          "paperId": "6819305",
+          "purpose": "controlled_direct_parity_update",
+          "update_id": "ieee-xplore-direct-2026-08-05"
         }
       ],
       "research_questions_addressed": {

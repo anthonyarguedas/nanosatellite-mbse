@@ -7,7 +7,7 @@
       "value": "Yes",
       "score": 1,
       "status": "coded",
-      "rationale": "The provided metadata gives an IEEE DOI and IEEE Xplore provenance; the markdown is an academic article with references.",
+      "rationale": "Direct IEEE Xplore metadata confirms the IEEE Aerospace and Electronic Systems Magazine venue, DOI, and article type; the article includes scholarly references.",
       "evidence": [
         {
           "quote": "corpus_id=paper-0080; screening_tier=core; title=Application of model-based systems engineering in small satellite conceptual design-A SysML approach; authors=M. Waseem, M. U. Sadiq; year=2018; DOI=10.1109/maes.2017.180230; source provenance includes ieee_xplore",
@@ -142,7 +142,7 @@
         "Yes"
       ],
       "status": "coded",
-      "rationale": "IEEE DOI and IEEE Xplore provenance support a credible venue judgment, though the venue title is not visible in the markdown.",
+      "rationale": "Direct IEEE Xplore metadata confirms the IEEE Aerospace and Electronic Systems Magazine venue and DOI.",
       "evidence": [
         {
           "quote": "corpus_id=paper-0080; screening_tier=core; title=Application of model-based systems engineering in small satellite conceptual design-A SysML approach; authors=M. Waseem, M. U. Sadiq; year=2018; DOI=10.1109/maes.2017.180230; source provenance includes ieee_xplore",
@@ -1108,7 +1108,7 @@
         "high"
       ],
       "status": "coded",
-      "rationale": "Markdown is readable and detailed for method, artifacts, toolchain, and case context; uncertainty is limited to venue details and strength of outcome evidence.",
+      "rationale": "Markdown is readable and detailed for method, artifacts, toolchain, and case context; remaining uncertainty concerns the strength of outcome evidence rather than bibliographic venue.",
       "evidence": [
         {
           "quote": "The NSS-1 model is developed using diverse SysML diagrams. We describe each type of diagram used in the NSS-1 context in the following paragraphs.",
@@ -1425,28 +1425,24 @@
       ],
       "year": 2018,
       "venue": {
-        "value": "not reported in provided markdown",
-        "status": "not_reported",
-        "note": "Metadata gives IEEE Xplore source and DOI but not venue title."
+        "value": "IEEE Aerospace and Electronic Systems Magazine",
+        "status": "coded",
+        "note": "Confirmed by the saved direct IEEE Xplore exact-DOI metadata result."
       },
       "doi": "10.1109/maes.2017.180230",
-      "url": "not_reported",
-      "publisher": "IEEE / IEEE Xplore provenance from metadata",
-      "venue_type": "conference/journal paper in IEEE Xplore corpus; exact venue not reported in markdown",
+      "url": "https://ieeexplore.ieee.org/document/8354448/",
+      "publisher": "IEEE",
+      "venue_type": "Magazine Article",
       "source_database_query": [
         {
-          "source": "unknown",
-          "input_file": "SLR/SLR1/searches/ieee_manual_promoted_records.json",
-          "query": "Manual IEEE Xplore CSV promotions retained after Stage-1 audit and 2026-04-24 IEEE parity addendum",
-          "rank": 3,
-          "paperId": "ieee:8354448"
-        },
-        {
-          "source": "ieee_xplore",
-          "input_file": "SLR/SLR1/searches/ieee-xplore-csv-drop/7.csv",
-          "query": "IEEE-07 parity CSV export",
-          "rank": 10,
-          "paperId": "ieee:8354448"
+          "source": "ieee_xplore_direct",
+          "input_file": "SLR/SLR1/searches/ieee-xplore-direct-2026-08-05/ieee_waseem2018_exact_doi_all_content_full_2026-08-05.json",
+          "query": "\"10.1109/MAES.2017.180230\"",
+          "rank": 1,
+          "paperId": "8354448",
+          "purpose": "supplemental_exact_record_metadata_confirmation",
+          "update_id": "ieee-xplore-direct-2026-08-05",
+          "filter_note": "IEEE classifies this user-retained record as a Magazine Article; the supplemental metadata check therefore omitted the journal/conference content-type facet."
         }
       ],
       "research_questions": {
@@ -2478,10 +2474,10 @@
       ],
       "lineage_consistency_notes": "Code as FireSat/standard CubeSat lineage reuse, not as an independent reusable reference model validation across missions. Differentiate NSS-1 case-specific repository from Spangelo standard CubeSat framework.",
       "extraction_confidence": "high",
-      "extraction_confidence_reason": "Paper markdown is readable with detailed methodology, figures, and toolchain. Main uncertainty concerns exact venue and evidentiary strength of broad outcome claims, not classification of methods/artifacts."
+      "extraction_confidence_reason": "Paper markdown is readable with detailed methodology, figures, and toolchain. Main uncertainty concerns the evidentiary strength of broad outcome claims, not classification of methods/artifacts."
     }
   },
-  "bibtex": "@article{waseem2018application,\n  title={Application of model-based systems engineering in small satellite conceptual design-A SysML approach},\n  author={Waseem, M. and Sadiq, M. U.},\n  year={2018},\n  doi={10.1109/MAES.2017.180230},\n  publisher={IEEE},\n  note={Venue title not reported in provided markdown; record sourced from IEEE Xplore metadata}\n}",
+  "bibtex": "@article{waseem2018application,\n  title={Application of model-based systems engineering in small satellite conceptual design-A SysML approach},\n  author={Waseem, M. and Sadiq, M. U.},\n  journal={IEEE Aerospace and Electronic Systems Magazine},\n  year={2018},\n  pages={24--34},\n  doi={10.1109/MAES.2017.180230},\n  publisher={IEEE},\n  url={https://ieeexplore.ieee.org/document/8354448/}\n}",
   "v1_1_subagent_review": {
     "review_file": "SLR/SLR1/extractions/v1_1_subagent_reviews/paper-0080.review.raw",
     "review_status": "needs_repair",
