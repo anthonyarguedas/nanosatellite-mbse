@@ -4,7 +4,6 @@
 - **Protocol:** `protocol.md`, version `1.0`, frozen 2026-08-06
 - **Planned evidence window:** 2013 through the date each search is run in 2026
 - **Primary databases:** Scopus and IEEE Xplore
-- **Supplementary discovery:** Semantic Scholar and targeted Google Scholar
 - **Search unit:** one exact source-specific query plus its year, language, publication-type, pagination, and retrieval-limit settings
 
 ## 1. Purpose and scope
@@ -146,24 +145,7 @@ Use unfielded Boolean metadata search, inclusive years 2013–2026, language `En
 
 ## 7. Supplementary discovery plan
 
-Run supplementary searches only after the independent Scopus/IEEE merge exposes terminology and coverage gaps.
-
-### Semantic Scholar
-
-Use short natural-language queries because its bulk search is not a Scopus-style Boolean engine. Planned starting probes include:
-
-1. `CubeSat electrical power system model-based systems engineering`
-2. `nanosatellite power subsystem SysML`
-3. `CubeSat MBSE power budget`
-4. `CubeSat system reference model electrical power`
-5. `nanosatellite model-based systems engineering`
-6. `CubeSat SysML verification power`
-
-Save and inspect every full result file. Refine queries whose reported totals are too broad; use title queries for recovery only after a candidate or lineage is independently exposed.
-
-### Google Scholar
-
-Use targeted fallback searches, exact-title recovery, cited-by discovery, and poorly indexed proceedings/chapter recovery. Do not characterize Scholar as exhaustive. Log the query, date, year range, estimated total when available, retrieved ranks, and deterministic stopping limit. Stop and record the failure if blocked rather than treating it as zero results.
+Run supplementary searches only after the independent Scopus/IEEE merge exposes terminology and coverage gaps. The use of arXiv, Semantic Scholar or Google Scholar is forbidden.
 
 ### Citation searching
 
@@ -218,8 +200,6 @@ SLR/SLR1/
   searches/
     scopus/
     ieee-xplore/
-    semantic-scholar/
-    google-scholar/
     worklogs/
     merged_candidates.json
     search-manifest.json

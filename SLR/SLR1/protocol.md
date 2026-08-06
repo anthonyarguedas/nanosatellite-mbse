@@ -154,13 +154,9 @@ For this review, **pre-physical V&V** means a model-based V&V artifact or activi
 
 ### Supplementary discovery and citation searching
 
-- Semantic Scholar, for targeted supplementary discovery and forward/backward citation metadata
-- Google Scholar, for targeted fallback discovery, cited-by searching, and recovery of poorly indexed conference or chapter records
 - Backward and forward citation chasing from included reports and relevant secondary reviews
 
-Semantic Scholar and Google Scholar searches must be logged with exact query text, date, result limit, and selection procedure. They are not to be described as unrestricted exhaustive database searches.
-
-arXiv and other repositories may be used to retrieve an accessible version of an eligible peer-reviewed report, but unpublished preprints are not primary evidence.
+arXiv, Semantic Scholar and Google Scholar searches CANNOT be used.
 
 ## Search strategy
 
