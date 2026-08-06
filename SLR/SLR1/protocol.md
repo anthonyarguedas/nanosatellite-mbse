@@ -1,8 +1,8 @@
 # Review Protocol: Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Review run ID:** `eps-mbse-slr-2026`
-- **Protocol version:** `1.0-draft`
-- **Approval date:** pending researcher review
+- **Protocol version:** `1.0`
+- **Approval date:** 2026-08-06
 
 ## Review status and restart policy
 
@@ -446,4 +446,4 @@ After protocol approval, the restarted review must generate or regenerate, with 
 - validation report; and
 - new PRISMA flow and synthesis outputs.
 
-No search, corpus migration, re-extraction, or manuscript update begins until this protocol has been reviewed and approved.
+This protocol was reviewed and frozen before the new-run searches began. Subsequent changes require a prospective, versioned deviation record.
