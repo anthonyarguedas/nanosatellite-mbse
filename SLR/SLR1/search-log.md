@@ -567,6 +567,14 @@ The complete per-artifact exact query and request metadata are machine-readable 
 - Performed only after the independent freeze and screening. Metadata-only inspection saw 202 retained cache files; 116 cache files matched 35 independently rediscovered reports (5 core; 30 supporting).
 - 83 cache files were unmatched/ambiguous and remain cache-only. See `legacy-known-item-register.md` and `searches/retained-file-recall-audit.json`; these did not contribute records, IDs, screening decisions, or evidence.
 
+## Post-freeze RQ1 answerability audit
+
+- **Date:** 2026-08-06. An independent subagent audited all 92 kept records against the RQ1 representation, purpose, input/assumption, abstraction, and reuse/tailoring fields in protocol v1.0. See `searches/integration/rq1-answerability-audit.md` and its machine-readable companion.
+- **Prospective source restriction:** the researcher directed that Semantic Scholar and Google Scholar not be used for this audit or future agent-assisted work. This is a prospective operational restriction relative to protocol v1.0's supplementary-source plan; historical failed-attempt artifacts remain only as provenance and were not consulted as audit evidence. Only Scopus and IEEE Xplore were used.
+- Three concept probes per primary source tested inputs/assumptions, reuse/tailoring, and abstraction/fidelity. IEEE Xplore used count-only predecessors, giving nine saved raw artifacts in total. Exact queries, filters, source totals, retrieval totals, and hashes are in `searches/rq1-answerability-audit/worklog.md`.
+- Six full probes retrieved 107 occurrences: 95 frozen-set duplicates and 12 irrelevant occurrences, with **zero new plausible candidates**. The probes therefore remain isolated coverage evidence and do not alter the frozen 174 candidates or 92-record corpus.
+- Audit verdict: the corpus is probably sufficient for an exploratory map of representations, purposes, input types, abstraction, and reuse/tailoring, but all remain full-text dependent. Detailed input reporting, deliberate omissions, and demonstrated rather than intended reuse are specifically at risk.
+
 ## Stopping rationale
 
 - Both primary databases completed final accepted Stream-A and deliberately EPS-free Stream-B inputs. All records available within documented source limits were saved/read by specialists, and the retained final input set was isolated and fully merged.
