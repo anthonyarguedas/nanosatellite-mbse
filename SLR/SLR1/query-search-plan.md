@@ -211,7 +211,6 @@ Only after the independent candidate set is frozen, compare its normalized DOI/t
 ```text
 SLR/SLR1/
   protocol.md
-  protocol-approval.md
   query-search-plan.md
   search-log.md
   screening.md

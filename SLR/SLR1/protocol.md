@@ -19,6 +19,32 @@ The earlier searches, screening decisions, corpus, extractions, codebook, synthe
 
 The protocol becomes fixed when approved by the researcher and before the new searches begin. Any later deviation will be recorded prospectively in the new run's search or decision log.
 
+## Approval and pre-search decision record
+
+- **Approval/search authorization date:** 2026-08-06
+- **Frozen version:** `1.0`
+- **Working branch:** `slr1-1.0-restart`
+
+The researcher supplied the `1.0-draft`, identified its material design choices, directed that the review be restarted on a new branch, and explicitly authorized production of the query plan and commencement of new searches. That instruction approved the freeze of version `1.0` before searching.
+
+The identified choices were reviewed and retained as follows:
+
+1. **PocketQube/picosatellite-only exclusion.** This is consistent with the CubeSat/nanosatellite population. Mixed studies remain eligible only when CubeSat/nanosatellite evidence is separable; searches do not deliberately target excluded platforms.
+2. **Open RQ2 outcome set.** This avoids outcome-reporting bias. Reliability/mission assurance, reproducibility/reuse, and integrability/interoperability remain priority strata; other outcomes require the same explicit EPS-thread attribution and evidence coding.
+3. **Tiering incomplete V&V records.** An EPS target, explicit model-to-V&V bridge, and reported V&V method/intent/artifact establish the lowest linked tier. Missing criterion, execution, verdict, or timing remains missing evidence and cannot support a higher tier.
+4. **Broad Stream B.** This is necessary because embedded EPS threads may be absent from metadata. Query partitioning, count pilots, conservative title/abstract retention, and separate unique-yield accounting control workload without imposing an EPS keyword.
+5. **New extraction for every included report.** Legacy extraction and synthesis files were removed. Retained source Markdown/PDF files may be reused only after independent rediscovery and new screening.
+
+Pre-search anti-anchoring controls are part of this approval:
+
+- legacy search results, screening, corpora, codebook, extractions, scoping review, and manuscript were removed before searching;
+- `markdown/` and `pdfs/` were retained only as a source-file cache outside the search evidence base;
+- retained files cannot supply candidates, eligibility decisions, IDs, or extracted data;
+- matching against retained files is deferred until the independent primary-database candidate set is merged, and matches serve only as recall and retrieval checks; and
+- old corpus or extraction data may not be reconstructed from Git history during new search or screening.
+
+There were no deviations at search start. Any later change requires a prospective entry stating its date, rationale, affected artifacts, and protocol version.
+
 ## Review objective
 
 To synthesize how nanosatellite EPSs are represented through MBSE, why those models are constructed, which inputs and assumptions they depend on, which EPS-linked outcomes are claimed, and how EPS verification and validation (V&V) are integrated before physical integration or test.
@@ -434,7 +460,7 @@ The synthesis is a structured evidence map and narrative synthesis; no pooled ef
 
 After protocol approval, the restarted review must generate or regenerate, with run provenance:
 
-- protocol-approval/version record and read-only legacy known-item register;
+- integrated protocol approval/version record and read-only legacy known-item register;
 - exact search log and raw source-specific search results;
 - merged/deduplicated candidate set;
 - title/abstract and full-text screening log;
