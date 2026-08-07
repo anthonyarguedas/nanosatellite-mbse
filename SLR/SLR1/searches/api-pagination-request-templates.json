@@ -1,0 +1,292 @@
+{
+  "schema_version": "1.2",
+  "status": "MAJOR-06 pagination contract and PRESS-corrected no-type-filter final request shapes empirically validated by superseded no-screening pilots; final execution remains unauthorized",
+  "credential_and_pilot_policy": {
+    "credentials_cookies_tokens": "Never serialize credentials, cookies, tokens, authorization headers, or IEEE userInfo. Supply Scopus authentication only in an in-memory X-ELS-APIKey request header from a secure runtime environment.",
+    "private_artifacts": "Raw responses, page-ID/rank reconciliation, normalized pilot outputs, and pilot merge products must be written only under a Git-ignored owner-only directory (0700 directories; 0600 files).",
+    "pilot_classification": "pilot_not_candidate_search",
+    "pilot_records": "Pilot records must not enter candidate screening, a candidate corpus, deduplication for the review, retained evidence, or synthesis. A final run requires separate authorization and a clean output directory."
+  },
+  "implementation": {
+    "driver": "SLR/SLR1/searches/tools/api_pagination_reconcile.py",
+    "driver_sha256": "be9fd8a5202ddb8ef5fec96855d119d840a8c9fbcbbb1f8393836df594d6801e",
+    "runtime_observed": {
+      "uv": "uv 0.9.28 (0e1351e40 2026-01-29)",
+      "python": "CPython 3.13.5",
+      "requests": "2.34.2"
+    },
+    "upstream_academic_search_clients_observed": {
+      "search_scopus.py_sha256": "1c92dde7a62b43d8003767eb0b2c7c262d35ef12ac09da430da65b642def6d9d",
+      "search_ieee_xplore.py_sha256": "7d09758723b759f03d5db95264bfce4c749f43022dd6b2d9c51a1d0be033ab77",
+      "merge_search_results.py_sha256": "fcf0168dd25480dc882de6e53c505fb47eebc3839d772bd96fdfc1b1c921dde4"
+    },
+    "driver_controls": {
+      "validated_page_size": 25,
+      "validated_ordering": "The driver rejects nonvalidated sort values: Scopus must use eid and IEEE must use newest.",
+      "clean_output_requirement": "The driver refuses a non-empty output directory so attempts cannot be mixed or overwritten.",
+      "private_output_enforcement": "On POSIX the driver creates/chmods artifact directories to 0700 and atomic JSON files to 0600.",
+      "response_scrubbing": "Drops normalized secret/context keys (including apiKey/API-key, tokens, cookies, authorization, credentials, and userInfo) and redacts sensitive query parameters from absolute or relative URLs before persistence.",
+      "ieee_type_filter_option": "The historical pilot used ContentType facets. If the separately authorized final strategy has no content-type filter, invoke --ieee-no-content-type-filter; the request then retains only the explicit non-type refinements."
+    }
+  },
+  "common_execution_contract": {
+    "timeout_seconds": 30,
+    "validated_page_size": 25,
+    "retries_after_initial_attempt": 3,
+    "retryable": [
+      "network error",
+      "HTTP 408",
+      "HTTP 425",
+      "HTTP 429",
+      "HTTP 500",
+      "HTTP 502",
+      "HTTP 503",
+      "HTTP 504"
+    ],
+    "retry_delay": "Honor parseable Retry-After; otherwise exponential 1, 2, 4 seconds; cap every wait at 60 seconds.",
+    "terminal_failure": [
+      "HTTP redirect",
+      "HTTP 401",
+      "HTTP 403",
+      "HTTP 418",
+      "other HTTP >=400",
+      "non-JSON response",
+      "IEEE HTML/challenge response"
+    ],
+    "snapshot_attempts_after_total_change": 2,
+    "total_change_rule": "If the source-reported total differs on any page or between complete verification passes, invalidate the entire snapshot, do not normalize or merge it, and restart from page one once. A second total change is a logged terminal source failure; run-metadata is marked failure and no execution-summary is emitted.",
+    "ordered_reconciliation": "Require a stable source ID on every returned record, preserve source response position as global rank 1..source_total, reject repeated page-ID sequences and duplicate IDs, reject unexpected start/offset, short/nonterminal pages, or missing pages, and require a second complete pass with exactly the same ordered ID list.",
+    "success_rule": "A logical query succeeds only when pages_retrieved equals computed expected pages, unique source IDs equals retrieved records, retrieved records equals source total, and the two ordered passes are identical. Any other condition is a failure, never a partial result."
+  },
+  "prospective_final_execution": {
+    "status": "PRESS-corrected no-type-filter request templates validated by fresh superseded no-screening two-pass pilots on 2026-08-07; final execution still requires authorization and a clean directory",
+    "scopus": {
+      "query_id": "S-B1 corrected unrestricted pagination preflight",
+      "method": "GET",
+      "endpoint": "https://api.elsevier.com/content/search/scopus",
+      "headers": {
+        "Accept": "application/json",
+        "X-ELS-APIKey": "required at runtime; value intentionally not serialized"
+      },
+      "query_parameters": {
+        "query": "TITLE-ABS-KEY(cubesat OR cubesats OR \"cube sat\" OR nanosat* OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND TITLE-ABS-KEY(\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR MBSE OR SysML OR \"systems modeling language\" OR Arcadia OR Capella) AND LANGUAGE(english) AND PUBYEAR AFT 2010 AND PUBYEAR BEF 2027",
+        "count": 25,
+        "start": 0,
+        "view": "COMPLETE",
+        "sort": "eid",
+        "httpAccept": "application/json"
+      },
+      "filter_contract": "English and 2011-2026 only; no DOCTYPE clause or other publication-type filter. Replace query only with the exact final S-* block from query-search-plan.md; all displayed final blocks include the year clauses.",
+      "pagination": "zero-based start offsets 0,25,50,... to source-total exhaustion",
+      "validation": {
+        "classification": "pilot_not_candidate_search",
+        "source_total": 85,
+        "retrieved_per_pass": [85, 85],
+        "pages_per_pass": 4,
+        "ordered_passes_identical": true,
+        "retrieved_equals_source_total": true,
+        "global_id_sequence_sha256": "d133619ebb55d0cb40e68a1781e0fbd738092f3a3c49056a6666cf61b95bf8cd",
+        "private_manifest_sha256": "e89596345c9da44c09807b71ba205dd6a350e7de515251b443fdaad045c0a3f9"
+      }
+    },
+    "ieee_xplore": {
+      "query_id": "I-B2 corrected unrestricted pagination preflight",
+      "method": "POST",
+      "endpoint": "https://ieeexplore.ieee.org/rest/search",
+      "headers": {
+        "Accept": "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "Origin": "https://ieeexplore.ieee.org",
+        "Referer": "https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9"
+      },
+      "json_body": {
+        "action": "search",
+        "newsearch": true,
+        "matchBoolean": true,
+        "matchPubs": true,
+        "queryText": "(CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\") AND (requirement OR requirements OR function OR functions OR behavior OR behaviors OR behaviour OR behaviours OR architecture OR architectures OR interface OR interfaces OR traceability OR parametric OR parametrics OR verification OR validation)",
+        "highlight": false,
+        "returnType": "SEARCH",
+        "rowsPerPage": 25,
+        "pageNumber": 1,
+        "sortType": "newest",
+        "ranges": ["2011_2026_Year"],
+        "refinements": ["Language:English"]
+      },
+      "filter_contract": "English and 2011-2026 only; no ContentType refinement or other publication-type filter. Replace queryText only with the exact final I-* block from query-search-plan.md.",
+      "driver_flag": "--ieee-no-content-type-filter",
+      "pagination": "strictly one-based pageNumber 1,2,... to source-total exhaustion",
+      "validation": {
+        "classification": "pilot_not_candidate_search",
+        "source_total": 47,
+        "retrieved_per_pass": [47, 47],
+        "pages_per_pass": 2,
+        "ordered_passes_identical": true,
+        "retrieved_equals_source_total": true,
+        "global_id_sequence_sha256": "66b71e0afa32cd9c337b6d5946b76bfc4f22b2ad7c2b3726414447e534001f39",
+        "private_manifest_sha256": "1d475b5e8fd562459c011fc8fc678f8d374b9dc87435b6c50e1a0e0b8b998934"
+      }
+    }
+  },
+  "scopus": {
+    "pilot_query_id": "S-B1 historical revised-population implementation",
+    "pilot_query_status": "Superseded no-screening pilot. Its document-type filter is retained here only to reproduce this observed API behavior; use the prospectively frozen authorized query/filter set for a final run.",
+    "method": "GET",
+    "endpoint": "https://api.elsevier.com/content/search/scopus",
+    "headers": {
+      "Accept": "application/json",
+      "X-ELS-APIKey": "required at runtime; value intentionally not serialized"
+    },
+    "query_parameters": {
+      "query": "TITLE-ABS-KEY(cubesat OR cubesats OR \"cube sat\" OR nanosat* OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\") AND TITLE-ABS-KEY(\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR MBSE OR SysML OR \"systems modeling language\" OR Arcadia OR Capella) AND LANGUAGE(english) AND (DOCTYPE(ar) OR DOCTYPE(cp) OR DOCTYPE(ch)) AND PUBYEAR AFT 2010 AND PUBYEAR BEF 2027",
+      "count": 25,
+      "start": 0,
+      "view": "COMPLETE",
+      "sort": "eid",
+      "httpAccept": "application/json"
+    },
+    "pagination": {
+      "parameter": "start",
+      "initial_value": 0,
+      "increment": 25,
+      "basis": "zero-based offset",
+      "next_value": "prior start + returned record count; the driver accepts the page only when this equals the expected count and stops only after source-total reconciliation"
+    },
+    "observed_response_contract": {
+      "total_field": "search-results.opensearch:totalResults",
+      "offset_field": "search-results.opensearch:startIndex",
+      "page_size_field": "search-results.opensearch:itemsPerPage",
+      "record_array": "search-results.entry",
+      "stable_page_id": "entry.eid"
+    },
+    "ordering": "Explicit source-native sort=eid. In both complete 80-ID passes the EID sequence was lexically non-increasing and the full ordered list was identical.",
+    "pilot_observation": {
+      "page_offsets": [0, 25, 50, 75],
+      "returned_records": [25, 25, 25, 5],
+      "source_total": 80,
+      "global_rank_ranges": ["1-25", "26-50", "51-75", "76-80"],
+      "global_id_sequence_sha256": "e51c5e04645b2b7bd2e5b7a3215dedbcb569d83928bb09206e068e45c4ef6960"
+    }
+  },
+  "ieee_xplore": {
+    "pilot_query_id": "I-B2 historical revised-population implementation",
+    "pilot_query_status": "Superseded no-screening pilot. Its ContentType facets are retained here only to reproduce this observed API behavior; use the prospectively frozen authorized query/filter set for a final run.",
+    "method": "POST",
+    "endpoint": "https://ieeexplore.ieee.org/rest/search",
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Origin": "https://ieeexplore.ieee.org",
+      "Referer": "https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true",
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131 Safari/537.36",
+      "Accept-Language": "en-US,en;q=0.9"
+    },
+    "json_body": {
+      "action": "search",
+      "newsearch": true,
+      "matchBoolean": true,
+      "matchPubs": true,
+      "queryText": "(CubeSat OR CubeSats OR \"cube sat\" OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\") AND (requirements OR functions OR behavior OR behaviour OR architecture OR interfaces OR traceability OR parametric OR verification OR validation)",
+      "highlight": false,
+      "returnType": "SEARCH",
+      "rowsPerPage": 25,
+      "pageNumber": 1,
+      "sortType": "newest",
+      "ranges": ["2011_2026_Year"],
+      "refinements": [
+        "ContentType:Journals",
+        "ContentType:Conferences",
+        "ContentType:Books",
+        "Language:English"
+      ]
+    },
+    "pagination": {
+      "parameter": "pageNumber",
+      "initial_value": 1,
+      "increment": 1,
+      "basis": "one-based page number; a live probe found pageNumber=0 aliases page 1 and is prohibited",
+      "next_value": "prior pageNumber + 1; stop only after source-total reconciliation"
+    },
+    "observed_response_contract": {
+      "total_field": "totalRecords",
+      "start_field": "startRecord",
+      "end_exclusive_field": "endRecord",
+      "page_size_field": "recordsPerPage",
+      "page_count_field": "totalPages",
+      "record_array": "records",
+      "stable_page_id": "records[].articleNumber"
+    },
+    "ordering": "Explicit source-native sortType=newest. A live page-0/page-1 probe found newest page 0 aliases page 1, while the explicit-newest first-page ordered-ID digest differed from an otherwise identical request that omitted sortType.",
+    "pilot_observation": {
+      "page_numbers": [1, 2],
+      "source_positions": ["startRecord=0,endRecord=25", "startRecord=25,endRecord=42"],
+      "returned_records": [25, 17],
+      "source_total": 42,
+      "total_pages": 2,
+      "global_rank_ranges": ["1-25", "26-42"],
+      "global_id_sequence_sha256": "d39223ea029b945a1a1e4803127f31ed0c53773df6d25c088bbf747a8af70ad5"
+    }
+  },
+  "audited_validation": {
+    "classification": "pilot_not_candidate_search",
+    "candidate_records_used": false,
+    "run_window_utc": "2026-08-07T15:20:15Z to 2026-08-07T15:20:24Z",
+    "private_archive": ".searches/eps-mbse-slr-2026/multipage-api-pilots/2026-08-07/independent-academic-client-audit/",
+    "scopus": {
+      "archive_subdirectory": "scopus-s-b1-final-driver-validation-v3",
+      "archive_manifest_sha256": "f5b23dfe7c080097728ede0de23e2b25aa7d02581963c46f2b062b2904837581",
+      "source_total": 80,
+      "retrieved_records_per_pass": [80, 80],
+      "ordered_passes_identical": true,
+      "missing_pages": [],
+      "duplicate_source_ids": [],
+      "retry_events": 0,
+      "retrieved_equals_source_total_all_passes": true
+    },
+    "ieee_xplore": {
+      "archive_subdirectory": "ieee-i-b2-final-driver-validation-v3",
+      "archive_manifest_sha256": "b83d1f3f47b5d226105b8cf7083bc1f232f2150739021fc001478b514fbf2827",
+      "source_total": 42,
+      "retrieved_records_per_pass": [42, 42],
+      "ordered_passes_identical": true,
+      "missing_pages": [],
+      "duplicate_source_ids": [],
+      "retry_events": 0,
+      "retrieved_equals_source_total_all_passes": true,
+      "page_zero_aliases_page_one": true,
+      "explicit_newest_first_page_id_sha256": "7c5d0571c9e909261b8933853e34a5a22a17e191767e3ee7dd8a8d8454e3515a",
+      "omitted_sort_first_page_id_sha256": "7264ba4100a827fb83ebb2620e38436d3c26b10b3f4f4f7208e1ff7c54998d2b"
+    },
+    "synthetic_control_audit": {
+      "duplicate_source_id": "rejected",
+      "repeated_page_id_sequence": "rejected",
+      "short_nonterminal_page": "rejected",
+      "unexpected_offset_missing_page": "rejected",
+      "in_pass_total_change": "rejected",
+      "first_total_change": "invalidates and cleanly restarts from page one",
+      "second_total_change": "terminal failure; no success summary or normalized output",
+      "retry_after_429": "retried",
+      "http_403": "terminal failure",
+      "sensitive_scrub_and_fixed_page_size": "passed",
+      "fixed_order_guards": "passed; rejects nonvalidated Scopus/IEEE sort values",
+      "ieee_no_content_type_filter": "passed; emits Language:English without a ContentType facet"
+    },
+    "pilot_merge_preflight": {
+      "source_client": "merge_search_results.py",
+      "scopus": {
+        "raw_results": 80,
+        "unique_results": 80,
+        "duplicates_removed": 0,
+        "merged_file_sha256": "bb54d94c947820be4b50a45654a81088180f14f87cf5529a4930389c7cd1d0b5"
+      },
+      "ieee_xplore": {
+        "raw_results": 42,
+        "unique_results": 42,
+        "duplicates_removed": 0,
+        "merged_file_sha256": "77a983b266605c13820adead303bfe49ac2c6ee6a368f94c4ddad42ffa85d959"
+      }
+    }
+  }
+}

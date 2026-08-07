@@ -1,10 +1,10 @@
 # Protocol for a Systematic Review of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Review run ID:** `eps-mbse-slr-2026`
-- **Protocol version:** `1.1` (pre-search freeze candidate)
+- **Protocol version:** `1.2` (frozen)
 - **Scope-decision approval date:** 2026-08-06
-- **Pre-freeze interface/consistency review:** completed 2026-08-06
-- **Final freeze/search authorization:** pending researcher confirmation
+- **Pre-freeze interface/consistency review:** PRESS revisions and fresh validation completed 2026-08-07
+- **Final freeze/search authorization:** 2026-08-07
 
 ## Review status and restart policy
 
@@ -13,13 +13,13 @@ This protocol defines a **new systematic review run** focused on nanosatellite e
 The earlier searches, screening decisions, corpus, extractions, codebook, synthesis, and manuscript are treated as legacy or pilot artifacts. A failed attempt under version 1.0 was abandoned and its search outputs were removed; it supplies no discovery events, records, decisions, or evidence to this run. In particular:
 
 - no previously identified report is automatically included;
-- all records must be found through a documented version-1.1 search or citation-chasing route and screened against this protocol;
+- all records must be found through a documented version-1.2 search or citation-chasing route and screened against this protocol;
 - previous reports may be used only as known-item recall checks when refining the search;
 - every included report must be newly extracted from its full text against a new run-specific codebook; prior extraction may be consulted only during a later discrepancy audit and may not supply new-run evidence;
 - prior counts and classifications must not be carried into the new synthesis; and
 - DOI/title matching may retain a prior corpus ID only as a `legacy_corpus_id`; new-run report-family, report, EPS-thread, outcome/burden, and V&V-record identifiers must be run-specific.
 
-Version 1.1 is the pre-search freeze candidate. No valid new-run discovery search has begun. The dated source-interface diagnostics used to validate syntax, controls, and export behavior before freeze are pilots only: they do not create the independent candidate set, and aggregate pilot observations cannot determine evidence membership. After final authorization, any deviation will be recorded prospectively in the new run's search or decision log.
+Version 1.2 incorporates the pre-freeze refinements recorded below and was frozen and authorized for searching on 2026-08-07. No valid new-run discovery search had begun at the time of the freeze. The dated source-interface diagnostics used to validate syntax, controls, and export behavior before freeze are pilots only: they do not create the independent candidate set, and aggregate pilot observations cannot determine evidence membership. Any deviation after authorization must be recorded prospectively in the new run's search or decision log.
 
 ## Reporting framework
 
@@ -33,27 +33,31 @@ Official guidance to use at the applicable stage:
 - [PRISMA-S search reporting](https://www.prisma-statement.org/prisma-search) and [Rethlefsen et al. (2021)](https://doi.org/10.1186/s13643-020-01542-z); and
 - [PRISMA 2020 statement](https://www.prisma-statement.org/prisma-2020-statement), [checklist](https://www.prisma-statement.org/prisma-2020-checklist), [abstract guidance](https://www.prisma-statement.org/abstracts), and [flow templates](https://www.prisma-statement.org/prisma-2020-flow-diagram).
 
-Registration/contact declarations, contributor and guarantor details, funding/sponsor and competing-interest declarations, and the final search-update policy are intentionally deferred at this stage. Their absence must be stated accurately; this freeze candidate is not represented as administratively PRISMA-P-complete.
+Registration/contact declarations, contributor and guarantor details, funding/sponsor and competing-interest declarations, and the final search-update policy are intentionally deferred at this stage. Their absence must be stated accurately; this frozen protocol is not represented as administratively PRISMA-P-complete.
 
 ## Approval, amendment, and pre-search decision record
 
 - **Scope-decision approval date:** 2026-08-06
-- **Freeze/search authorization date:** pending researcher confirmation
-- **Freeze candidate:** `1.1`, ready for authorization
-- **Search state:** source-interface pilots complete; no valid new-run discovery search executed
+- **Freeze/search authorization date:** 2026-08-07
+- **Frozen protocol:** `1.2`, incorporating the PRESS-corrected pre-freeze refinements
+- **Search state at freeze:** revised pre-freeze pilots complete; no valid new-run discovery search executed
 - **Working branch:** `slr1-1.1-restart`
 
-The researcher reviewed the failed version-1.0 run and prospectively approved the methodological scope decisions incorporated into version 1.1. Version 1.0 remains the superseded baseline in version control. Version 1.1 becomes the governing protocol for valid searches and later review activity only when its final freeze/search authorization is recorded.
+The researcher reviewed the failed version-1.0 run and prospectively approved the methodological scope decisions incorporated into version 1.1 and its pre-freeze refinements. Version 1.0 remains the superseded baseline in version control. Version 1.2 is the governing protocol for all valid searches and later review activity from its authorization on 2026-08-07.
 
 | Change | Date | Timing | Rationale and consequence |
 |---|---|---|---|
-| `1.0` to `1.1` | 2026-08-06 | Before freeze and any valid new-run search | Remove stale search-start claims; extend the evidence window to 2011; expand information sources and admit substantive institutional technical reports; define Buruso (2026) as a secondary-review seed and recall benchmark; make the generic SmallSat exclusion explicit; extract outcome direction and implementation burdens; distinguish V&V scope and object; formalize the study/implementation report-family unit; and clarify that all reported model reuse/tailoring is in scope, with lightweight status only a possible synthesis characterization and never a filter. Version 1.1 will govern all valid searches and evidence decisions after authorization. |
+| `1.0` to `1.1` | 2026-08-06 | Before freeze and any valid new-run search | Remove stale search-start claims; extend the evidence window to 2011; expand information sources and admit substantive institutional technical reports; define Buruso (2026) as a secondary-review seed and recall benchmark; make the generic SmallSat exclusion explicit; extract outcome direction and implementation burdens; distinguish V&V scope and object; formalize the study/implementation report-family unit; and clarify that all reported model reuse/tailoring is in scope, with lightweight status only a possible synthesis characterization and never a filter. These decisions were retained in the frozen version 1.2. |
+| `1.1` pre-freeze refinement | 2026-08-07 | Before freeze and any valid new-run search | Add Web of Science Core Collection as a seventh independent electronic source after live Topic-search, Core Collection edition, ordinary RIS-export, normalization, and merge-interface validation; harmonize source-supported CubeSat/nanosatellite spellings after logged count/syntax pilots; add `CubeSats` to the NTRS matrix after unique-yield testing; and prespecify Scopus plus Web of Science Core Collection for forward citation chasing. These changes update source, stopping, and reconciliation rules without changing eligibility or the RQs. |
+| `1.1` pre-freeze API-pagination refinement | 2026-08-07 | Before freeze and any valid new-run search | Empirically validate the over-one-page current revised-population Scopus S-B1 and IEEE I-B2 API requests; freeze non-secret request templates, source-native ordering and page parameters, two-pass ordered-ID/global-rank reconciliation, retry/stop/total-change behavior, merge preflight, and the hard `retrieved == source total` failure rule. Pilot outputs remain superseded/no-screening artifacts. This changes retrieval reproducibility controls only, not eligibility, concept scope, or other source decisions. |
+| `1.1` model-assisted PRESS revision | 2026-08-07 | Before freeze and any valid new-run search | Correct population, structured-model, relation, and EPS variants in every source translation; replace the incomplete NTRS strategy with a complete 108-cell P×M baseline and full-E local Stream-A tag; freeze an attachment-first ESA dictionary/matcher/fixture implementation; remove unproven Scopus, WoS, and IEEE discovery type filters; document automatic-expansion and exact-day controls; clarify selected O/V probes and structural Stream-A subsets; and run fresh no-screening pilots. MAJOR-06 API pagination was delegated to a subagent with the academic-research package. Eligibility and RQs are unchanged. |
+| `1.1` to `1.2` | 2026-08-07 | Final pre-search freeze, before any valid new-run search | Incorporate the completed PRESS corrections and related pre-freeze validations; record researcher authorization; and establish version 1.2 as the governing protocol. All pilot outputs remain superseded/no-screening artifacts and every final discovery method must start from a clean post-authorization artifact set. |
 
 The identified choices were reviewed and retained or amended as follows:
 
 1. **CubeSat/nanosatellite population.** PocketQube/picosatellite-only, CanSat, and generic `SmallSat`/small-satellite studies are excluded. Mixed studies remain eligible only when the source identifies a CubeSat/nanosatellite-class case and its evidence is separable; searches do not deliberately target excluded platforms.
 2. **Evidence window.** The lower publication-year limit is 2011 so that foundational CubeSat/nanosatellite MBSE reports are not removed by an arbitrary 2013 cutoff.
-3. **Expanded source coverage.** Scopus, IEEE Xplore, Compendex, the full Wiley Online Library publisher database, the full ESA Indico event database, and the NASA Technical Reports Server (NTRS) are searched using source-appropriate methods.
+3. **Expanded source coverage.** Scopus, Web of Science Core Collection, IEEE Xplore, Compendex, the full Wiley Online Library publisher database, the full ESA Indico event database, and the NASA Technical Reports Server (NTRS) are searched using source-appropriate methods.
 4. **Open, direction-neutral RQ2 set.** This avoids directional outcome-reporting bias. Beneficial, null, mixed, and adverse outcomes and implementation burdens are extracted when explicitly attributed to a qualifying EPS thread. Reliability/mission assurance, reproducibility/reuse, and integrability/interoperability remain priority domains; all domains and directions use the same attribution and evidence rules.
 5. **Tiered and differentiated V&V records.** A named EPS target, or a system-wide target explicitly linked to EPS, together with a model-to-V&V bridge and reported V&V method/intent/artifact establishes the lowest linked tier. EPS-specific versus system-wide EPS-linked scope and the object of V&V are coded separately. Missing criterion, execution, verdict, or timing remains missing evidence and cannot support a higher tier.
 6. **Broad Stream B.** This is necessary because embedded EPS threads may be absent from metadata. Query partitioning, count pilots, conservative title/abstract retention, and separate unique-yield accounting control workload without imposing an EPS keyword.
@@ -63,10 +67,10 @@ The identified choices were reviewed and retained or amended as follows:
 
 Pre-search anti-anchoring controls are part of this approval:
 
-- legacy and failed-run search results, screening, corpora, codebook, extractions, scoping review, and manuscript were removed before the valid version-1.1 search;
+- legacy and failed-run search results, screening, corpora, codebook, extractions, scoping review, and manuscript were removed before the valid version-1.2 search;
 - `markdown/` and `pdfs/` were retained only as a source-file cache outside the search evidence base;
 - retained files cannot supply candidates, eligibility decisions, IDs, or extracted data;
-- matching against retained files is deferred until the independently discovered candidate set from all six planned electronic sources is merged, and matches serve only as recall and retrieval checks; and
+- matching against retained files is deferred until the independently discovered candidate set from all seven planned electronic sources is merged, and matches serve only as recall and retrieval checks; and
 - old corpus or extraction data may not be reconstructed from Git history during new search or screening.
 
 Any change after final freeze requires a prospective entry stating its date, exact decision or wording change, rationale, affected artifacts and records, consequences for synthesis, and protocol version.
@@ -202,6 +206,7 @@ For this review, **pre-physical V&V** means a model-based V&V artifact or activi
 ### Electronic databases and repositories
 
 - Scopus, bibliographic database
+- Web of Science Core Collection on the Clarivate Web of Science platform, bibliographic and citation database
 - IEEE Xplore, bibliographic/full-text database
 - Compendex on the Engineering Village platform, bibliographic database
 - Wiley Online Library, searched as a general publisher database across the full platform
@@ -212,10 +217,10 @@ Wiley and ESA Indico are general source searches for this review, not targeted v
 
 ### Supplementary discovery and citation searching
 
-- Backward and forward citation chasing from included reports and relevant secondary reviews
+- Backward chasing from the complete reference lists of included reports and relevant secondary reviews, and forward citation chasing in both Scopus and Web of Science Core Collection
 - Buruso et al. (2026), *Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review* (https://doi.org/10.1002/sys.70051), as a named secondary-review seed and deferred recall benchmark
 
-Buruso et al. (2026) is excluded from primary evidence. A report cited by it may enter the corpus only through a logged version-1.1 database/additional-source discovery event or protocol-compliant citation-chasing event followed by new screening. Its overlap, source-specific rediscovery, citation-chasing yield, and exclusions of apparently relevant reports will be reported separately.
+Buruso et al. (2026) is excluded from primary evidence. A report cited by it may enter the corpus only through a logged version-1.2 database/additional-source discovery event or protocol-compliant citation-chasing event followed by new screening. Its overlap, source-specific rediscovery, citation-chasing yield, and exclusions of apparently relevant reports will be reported separately.
 
 arXiv, Semantic Scholar, and Google Scholar searches CANNOT be used.
 
@@ -228,19 +233,25 @@ Use two complementary search streams so that embedded EPS threads absent from ti
 
 The concept blocks, adapted to each source's syntax and searchable metadata, are:
 
-1. **Population:** CubeSat, nanosatellite, nano-satellite, nanosat, or an explicitly nanosatellite-class mission. Generic `SmallSat`/“small satellite” is neither a positive search concept nor sufficient eligibility evidence;
-2. **EPS:** electrical power system/subsystem, EPS, power subsystem, electrical architecture, power/energy budget, energy balance, battery/storage, solar array/generation, power conditioning/distribution, PCDU, or PMAD; and
-3. **MBSE/system model:** model-based systems engineering, MBSE, SysML, system model/modeling, reference model, digital engineering, Arcadia, Capella, or another validated structured-system-model term.
+1. **Population:** CubeSat/CubeSats, `cube sat`, nanosat, nanosatellite/nanosatellites, singular/plural hyphenated and spaced `nano satellite` variants, or an explicitly nanosatellite-class mission. Generic `SmallSat`/“small satellite” is neither a positive search concept nor sufficient eligibility evidence;
+2. **EPS:** electrical/electric power system or subsystem, EPS, power subsystem, electrical/power architecture, power/energy budget, energy balance, battery/batteries or storage, solar array/power generation, power conditioning/distribution/management/interface, power mode(s), load profile, PCDU, or PMAD; and
+3. **MBSE/system model:** singular/plural model-based system(s) engineering, MBSE, SysML/systems modeling language, singular/plural US/UK system(s) modeling/modelling, reference or object-oriented systems model, digital engineering, Arcadia, Capella, or another validated structured-system-model term.
 
 Targeted RQ2 and RQ3 searches may add benefit, null/adverse outcome, burden, effort, cost, training, traceability, verification, validation, model verification/validation, system/design verification/validation, simulation, model checking, requirements-in-the-loop, MIL, SIL, PIL, HIL, or test terms. These terms will not be mandatory in every query because doing so could suppress relevant RQ1 and embedded-thread reports.
 
-Searches will be piloted in small, targeted sets. The new search log must record, as applicable, exact strings or request bodies, fields, filters, platform/interface, dates and time zone, source-reported totals, retrieved totals, pagination or event-harvest coverage, refinements, failed or overbroad queries, deduplication, coverage checks, and stopping rationale. Refining source-specific syntax or precision within these fixed concept streams is search implementation, not a change to review eligibility; every version and the final used set must remain in the log.
+Searches will be piloted in small, targeted sets. The new search log must record, as applicable, exact strings or request bodies, fields, filters, platform/interface, dates and time zone, source-reported totals, retrieved totals, pagination or event-harvest coverage, automatic stemming/lemmatization/term-expansion state or absence, refinements, failed or overbroad queries, deduplication, coverage checks, and stopping rationale. Refining source-specific syntax or precision within these fixed concept streams is search implementation, not a change to review eligibility; every version and the final used set must remain in the log.
+
+For every final Scopus or IEEE Xplore API query, preserve the non-secret request template, client/version checksum, page requests, ordered source IDs, global ranks, retry events, page/response checksums, and normalization/merge preflight. A logical API result is valid only if the source total is stable throughout the snapshot, every expected page is present, source IDs and page-ID sequences are nonduplicated, a second complete ordered-ID pass agrees, and `retrieved == source total`; otherwise record a source failure and do not merge or screen a partial result. Credentials, cookies, tokens, and pilot records remain outside the candidate corpus. The validated source-specific implementation is in [`searches/api-pagination-request-templates.json`](searches/api-pagination-request-templates.json) and [`searches/tools/api_pagination_reconcile.py`](searches/tools/api_pagination_reconcile.py).
 
 Previously identified reports may be listed before searching in a read-only known-item register. They may guide query refinement if missed, but they enter the corpus only through a logged search or citation-chasing event followed by new screening. Known-item recall and unique inclusions from each stream and source are reported separately.
 
-The independent baseline consists of the merged results from all six electronic databases and repositories. Only after that baseline is frozen will Buruso et al. (2026) and the retained-file cache be used for deferred recall audits. A missed Buruso-cited report can prompt a logged concept-level probe or enter through a logged citation-chasing route; it is never inserted directly.
+Scopus, Web of Science Core Collection, and IEEE Xplore use no discovery publication/content-type filter; publication type is verified during screening. Source controls that admit dates after the exact run day retain their unaltered source totals and receive a logged first-formal-publication-date cutoff with the number removed.
 
-Backward and forward citation chasing starts from every full-text-included report and relevant secondary review. Newly found eligible reports are also chased; iteration stops when one complete backward/forward cycle yields no new eligible report. Every seed, index/platform, direction, cycle, candidate, and decision is logged.
+For ESA Indico, inventory every in-window event/contribution material before candidate gating and union deterministic P×M matches from joined metadata and each extractable attachment; inaccessible/unparseable materials are coverage failures. For NTRS, exhaust all 108 separate cells from six population terms × eighteen complete model terms, then apply the full deterministic E dictionary to the deduplicated union as a Stream-A EPS-explicit tag. In ESA and NTRS, Stream A is structurally contained in Stream B; report `A∩B`, `B-only`, and the union and do not treat expected `A-only = 0` as a performance defect.
+
+The independent baseline consists of the merged results from all seven electronic databases and repositories. Only after that baseline is frozen will Buruso et al. (2026) and the retained-file cache be used for deferred recall audits. A missed Buruso-cited report can prompt a logged concept-level probe or enter through a logged citation-chasing route; it is never inserted directly.
+
+Backward and forward citation chasing starts from every full-text-included report and relevant secondary review. Backward chasing inspects the complete source reference list; forward chasing searches both Scopus and Web of Science Core Collection. A zero result or indexing failure in one forward-citation platform does not waive the other. Newly found eligible reports are chased in the next numbered cycle; iteration stops when one complete backward and dual-platform forward cycle yields no new eligible report. Every seed, platform, direction, exact route, cycle, source/retrieved total, candidate, duplicate, decision, failure, and stopping result is logged. Citation records retain `discovery_route=citation_chasing` separately from their bibliographic source and never bypass normal eligibility screening.
 
 Searching stops when both streams, every planned source and source-specific coverage check, the prespecified concept clusters, and relevant report families discovered during the new run have been tested; citation chasing is complete; and additional searches are predominantly redundant rather than merely convenient or precise. The last search date for every source and strategy is reported; the latest of those dates closes the review's evidence window.
 
@@ -361,7 +372,7 @@ The checklist assesses reporting completeness, direct EPS linkage, and strength 
 
 No funnel plot or statistical publication-bias test is planned because there is no common effect estimate and the evidence types are heterogeneous. Instead, assess and report, for each RQ synthesis:
 
-- coverage/interface limitations and unique yield across the six sources and citation routes;
+- coverage/interface limitations and unique yield across the seven sources and citation routes;
 - effects of the English, date, population, publication-type, retrieval, and source-access limits;
 - unavailable full reports and lead-only material;
 - selective or missing outcome/burden, criterion, result, and limitation reporting;
@@ -588,4 +599,4 @@ The final report will identify itself as a systematic review and use the PRISMA 
 
 The exact administrative declarations intentionally deferred above must be completed or explicitly reported as absent before publication; they are not silently implied by methodological freeze.
 
-The source-interface pilots and consistency checks recorded in the search log are complete, and version 1.1 is ready for final freeze/search authorization. On authorization, record the freeze date here before any valid new-run search; subsequent changes then require a prospective, versioned deviation record.
+The PRESS-corrected source-interface pilots are complete: corrected source strings, the 108-cell NTRS matrix/full-E tag, ESA attachment-first matcher, unrestricted type controls, exact-day/expansion documentation, and delegated API pagination all have logged no-screening validation. This model-assisted review involved no human information specialist. Version 1.2 was frozen and authorized on 2026-08-07; no pilot output is a candidate, and every final discovery method must use clean post-authorization artifacts. Subsequent changes require a prospective, versioned deviation record.

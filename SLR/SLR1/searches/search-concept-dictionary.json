@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0",
+  "dictionary_version": "1.1.0-press-2026-08-07",
+  "review_run": "eps-mbse-slr-2026",
+  "status": "pre-freeze corrected deterministic dictionary",
+  "candidate_logic": {
+    "stream_a": "P AND E AND M within one searched route",
+    "stream_b": "P AND M within one searched route",
+    "routes": [
+      "joined_metadata",
+      "attachment_text"
+    ],
+    "union_rule": "Union Stream-B candidates from joined metadata and from each independently extracted attachment; Stream A is an EPS-explicit tag within that union.",
+    "cross_route_cooccurrence": false,
+    "generic_smallsat_is_population": false
+  },
+  "normalization": {
+    "unicode_form": "NFKC",
+    "case": "Unicode casefold",
+    "html": "decode entities and remove markup before matching",
+    "dash_and_hyphen": "map every Unicode dash punctuation character and ASCII hyphen to one space",
+    "whitespace": "collapse all whitespace to one ASCII space",
+    "punctuation": "retain other punctuation; term matches require token boundaries",
+    "phrase_rule": "match the complete normalized token sequence with standalone boundaries; words may be separated only by normalized whitespace",
+    "wildcards": "no runtime wildcard, stemming, or lemmatization; every wildcard is materialized as the explicit forms below",
+    "acronyms": "all terms use standalone token boundaries, including EPS, MBSE, SysML, PCDU, PMAD, MIL, SIL, PIL, and HIL"
+  },
+  "esa_indico_fields": {
+    "event_metadata": [
+      "event.title",
+      "event.description",
+      "event.category",
+      "event.label",
+      "event.keywords",
+      "event.type",
+      "event.material_metadata"
+    ],
+    "contribution_metadata": [
+      "contribution.title",
+      "contribution.description",
+      "contribution.keywords",
+      "contribution.session",
+      "contribution.track",
+      "contribution.type",
+      "contribution.code",
+      "contribution.author_names",
+      "contribution.author_affiliations",
+      "contribution.material_metadata"
+    ],
+    "attachment_text": [
+      "attachment.extracted_text"
+    ],
+    "metadata_join": "For each contribution, join all listed event and contribution fields plus the metadata of every inventoried material before matching. Event-level materials are also inventoried and matched as event-material records.",
+    "field_provenance": "Retain hits separately for every named field and attachment. Do not retrieve attachments only after metadata matching."
+  },
+  "concepts": {
+    "P": {
+      "label": "CubeSat/nanosatellite population",
+      "terms": [
+        {"id": "P_CUBESAT", "forms": ["CubeSat"]},
+        {"id": "P_CUBESATS", "forms": ["CubeSats"]},
+        {"id": "P_CUBE_SAT", "forms": ["cube sat"]},
+        {"id": "P_NANOSAT", "forms": ["nanosat"]},
+        {"id": "P_NANOSATELLITE", "forms": ["nanosatellite"]},
+        {"id": "P_NANOSATELLITES", "forms": ["nanosatellites"]},
+        {"id": "P_NANO_SATELLITE", "forms": ["nano-satellite", "nano satellite"]},
+        {"id": "P_NANO_SATELLITES", "forms": ["nano-satellites", "nano satellites"]}
+      ],
+      "explicit_nanosat_wildcard_expansion": [
+        "nanosat",
+        "nanosatellite",
+        "nanosatellites"
+      ],
+      "excluded_as_positive_terms": [
+        "SmallSat",
+        "small satellite",
+        "PocketQube",
+        "picosatellite",
+        "CanSat"
+      ]
+    },
+    "E": {
+      "label": "electrical power system",
+      "terms": [
+        {"id": "E_ELECTRICAL_POWER_SYSTEM", "forms": ["electrical power system"]},
+        {"id": "E_ELECTRIC_POWER_SYSTEM", "forms": ["electric power system"]},
+        {"id": "E_ELECTRICAL_POWER_SUBSYSTEM", "forms": ["electrical power subsystem"]},
+        {"id": "E_ELECTRIC_POWER_SUBSYSTEM", "forms": ["electric power subsystem"]},
+        {"id": "E_EPS", "forms": ["EPS"]},
+        {"id": "E_POWER_SUBSYSTEM", "forms": ["power subsystem"]},
+        {"id": "E_ELECTRICAL_ARCHITECTURE", "forms": ["electrical architecture"]},
+        {"id": "E_POWER_ARCHITECTURE", "forms": ["power architecture"]},
+        {"id": "E_PCDU", "forms": ["PCDU"]},
+        {"id": "E_PMAD", "forms": ["PMAD"]},
+        {"id": "E_POWER_BUDGET", "forms": ["power budget"]},
+        {"id": "E_ENERGY_BUDGET", "forms": ["energy budget"]},
+        {"id": "E_ENERGY_BALANCE", "forms": ["energy balance"]},
+        {"id": "E_POWER_GENERATION", "forms": ["power generation"]},
+        {"id": "E_SOLAR_ARRAY", "forms": ["solar array"]},
+        {"id": "E_BATTERY", "forms": ["battery"]},
+        {"id": "E_BATTERIES", "forms": ["batteries"]},
+        {"id": "E_ENERGY_STORAGE", "forms": ["energy storage"]},
+        {"id": "E_POWER_CONDITIONING", "forms": ["power conditioning"]},
+        {"id": "E_POWER_DISTRIBUTION", "forms": ["power distribution"]},
+        {"id": "E_POWER_MANAGEMENT", "forms": ["power management"]},
+        {"id": "E_POWER_INTERFACE", "forms": ["power interface"]},
+        {"id": "E_POWER_MODE", "forms": ["power mode"]},
+        {"id": "E_POWER_MODES", "forms": ["power modes"]},
+        {"id": "E_LOAD_PROFILE", "forms": ["load profile"]}
+      ],
+      "explicit_battery_wildcard_expansion": [
+        "battery",
+        "batteries"
+      ]
+    },
+    "M": {
+      "label": "structured system model / MBSE",
+      "terms": [
+        {"id": "M_MBSE", "forms": ["MBSE"]},
+        {"id": "M_MODEL_BASED_SYSTEMS_ENGINEERING", "forms": ["model-based systems engineering", "model based systems engineering"]},
+        {"id": "M_MODEL_BASED_SYSTEM_ENGINEERING", "forms": ["model-based system engineering", "model based system engineering"]},
+        {"id": "M_SYSML", "forms": ["SysML"]},
+        {"id": "M_SYSTEMS_MODELING_LANGUAGE", "forms": ["systems modeling language"]},
+        {"id": "M_SYSTEM_MODEL", "forms": ["system model"]},
+        {"id": "M_SYSTEMS_MODEL", "forms": ["systems model"]},
+        {"id": "M_SYSTEM_MODELING", "forms": ["system modeling"]},
+        {"id": "M_SYSTEMS_MODELING", "forms": ["systems modeling"]},
+        {"id": "M_SYSTEM_MODELLING", "forms": ["system modelling"]},
+        {"id": "M_SYSTEMS_MODELLING", "forms": ["systems modelling"]},
+        {"id": "M_REFERENCE_MODEL", "forms": ["reference model"]},
+        {"id": "M_DIGITAL_ENGINEERING", "forms": ["digital engineering"]},
+        {"id": "M_ARCADIA", "forms": ["Arcadia"]},
+        {"id": "M_CAPELLA", "forms": ["Capella"]},
+        {"id": "M_OBJECT_ORIENTED_SYSTEMS_MODEL", "forms": ["object-oriented systems model"]}
+      ]
+    },
+    "V": {
+      "label": "selected non-exhaustive V&V sensitivity tags",
+      "terms": [
+        {"id": "V_VERIFICATION", "forms": ["verification"]},
+        {"id": "V_VALIDATION", "forms": ["validation"]},
+        {"id": "V_MODEL_VERIFICATION", "forms": ["model verification"]},
+        {"id": "V_MODEL_VALIDATION", "forms": ["model validation"]},
+        {"id": "V_SYSTEM_VERIFICATION", "forms": ["system verification"]},
+        {"id": "V_SYSTEM_VALIDATION", "forms": ["system validation"]},
+        {"id": "V_DESIGN_VERIFICATION", "forms": ["design verification"]},
+        {"id": "V_DESIGN_VALIDATION", "forms": ["design validation"]},
+        {"id": "V_REQUIREMENTS_IN_LOOP", "forms": ["requirements-in-the-loop"]},
+        {"id": "V_MODEL_CHECKING", "forms": ["model checking"]},
+        {"id": "V_VIRTUAL_INTEGRATION", "forms": ["virtual integration"]},
+        {"id": "V_MIL", "forms": ["MIL"]},
+        {"id": "V_MODEL_IN_LOOP", "forms": ["model-in-the-loop"]},
+        {"id": "V_SIL", "forms": ["SIL"]},
+        {"id": "V_SOFTWARE_IN_LOOP", "forms": ["software-in-the-loop"]},
+        {"id": "V_PIL", "forms": ["PIL"]},
+        {"id": "V_PROCESSOR_IN_LOOP", "forms": ["processor-in-the-loop"]},
+        {"id": "V_HIL", "forms": ["HIL"]},
+        {"id": "V_HARDWARE_IN_LOOP", "forms": ["hardware-in-the-loop"]},
+        {"id": "V_TEST_CASE", "forms": ["test case"]},
+        {"id": "V_TEST_PROCEDURE", "forms": ["test procedure"]},
+        {"id": "V_MODEL_TO_TEST", "forms": ["model-to-test"]}
+      ]
+    },
+    "O": {
+      "label": "selected non-exhaustive outcome/burden sensitivity tags",
+      "terms": [
+        {"id": "O_RELIABILITY", "forms": ["reliability", "reliable"]},
+        {"id": "O_MISSION_ASSURANCE", "forms": ["mission assurance"]},
+        {"id": "O_REPRODUCIBILITY", "forms": ["reproducibility", "reproducible"]},
+        {"id": "O_REUSE", "forms": ["reuse", "reusable"]},
+        {"id": "O_INTEGRABILITY", "forms": ["integrability"]},
+        {"id": "O_INTEROPERABILITY", "forms": ["interoperability"]},
+        {"id": "O_TRACEABILITY", "forms": ["traceability"]},
+        {"id": "O_INTERFACE_CONSISTENCY", "forms": ["interface consistency"]},
+        {"id": "O_LIFECYCLE_CONTINUITY", "forms": ["lifecycle continuity"]},
+        {"id": "O_BENEFIT", "forms": ["benefit", "benefits"]},
+        {"id": "O_IMPACT", "forms": ["impact"]},
+        {"id": "O_OUTCOME", "forms": ["outcome"]},
+        {"id": "O_NO_EFFECT", "forms": ["no effect"]},
+        {"id": "O_ADVERSE", "forms": ["adverse"]},
+        {"id": "O_BURDEN", "forms": ["burden"]},
+        {"id": "O_EFFORT", "forms": ["effort"]},
+        {"id": "O_WORKLOAD", "forms": ["workload"]},
+        {"id": "O_OVERHEAD", "forms": ["overhead"]},
+        {"id": "O_COST", "forms": ["cost"]},
+        {"id": "O_SCHEDULE", "forms": ["schedule"]},
+        {"id": "O_TIME", "forms": ["time"]},
+        {"id": "O_TRAINING", "forms": ["training"]},
+        {"id": "O_SKILL", "forms": ["skill", "skills"]},
+        {"id": "O_LEARNING_CURVE", "forms": ["learning curve"]},
+        {"id": "O_LICENSING", "forms": ["licensing", "license", "licence"]},
+        {"id": "O_RESOURCE", "forms": ["resource", "resources"]},
+        {"id": "O_MAINTENANCE", "forms": ["maintenance"]},
+        {"id": "O_GOVERNANCE", "forms": ["governance"]},
+        {"id": "O_ADOPTION", "forms": ["adoption"]}
+      ]
+    }
+  }
+}
