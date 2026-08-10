@@ -39,6 +39,16 @@ A useful failure was found: default Relevance retained aggregate total 125 but s
 
 The helper deliberately leaves native citation export separate. Wiley exports the visible page (tested safe at 20); preserve each native RIS privately, normalize with the cumulative page-ledger rank, and apply/log the exact run-day cutoff because Wiley's source upper date is month-end.
 
+### Follow-up Wiley latency iteration
+
+A second subagent round examined the 56.99 s broad-run latency without changing the accepted helper. Static profiling attributed at least 8.4 s of that run to known local sleeps: 4.9 s from the 0.35 s two-observation stabilization interval and 3.5 s from the 0.25 s page delay. The remaining approximately 48.6 s includes source navigation/rendering plus load and IPC polling. Removing duplicate `readyState` waiting could reduce serial latency, but ordinary server rendering remains the dominant component.
+
+A reproducibility review conditionally accepted bounded regular visible Chrome tabs, but only when each pass independently starts at page zero, discovers its own extent, visits every normal UI page, disposes pass-one tabs before pass two, and preserves exact ordered reconciliation. It rejected same-origin detached `fetch()`, cached-response replay, or reparsing pass-one HTML as substitutes for independent source observations. With three tabs, seven pages have a theoretical scheduling ceiling near 2.33× versus fourteen serial navigations; this is a model, not a measured speedup.
+
+Two isolated, unmerged prototypes were produced: serial semantic-readiness commit `4649a08` (17 offline tests) and bounded visible-tab commit `0bc3726` (15 offline tests). Independent reviews blocked both from integration. The serial prototype changed pacing to zero, lacked owned-tab/pass cleanup, and did not enforce one hard navigation deadline. The parallel prototype became an unvalidated three-tab default, needed transient execution-context handling, interacted incorrectly with the harness daemon's global title/session handoff, and retained selector assumptions not proved for zero/single-page states. Both branches remain reversible prototypes; agent-tools `main` remains at the previously live-validated `f6bd33a` state.
+
+The sole follow-up live profiler encountered Wiley's access/challenge signal before collecting timing or page-size evidence. It stopped immediately, closed its tab, stopped its named daemon, and made no retry, fetch, page-size request, or repository edit. No result content was inspected. Consequently no faster timing is claimed. After a user restores normal browser access, acceptance requires conservative serial revalidation first, followed by opt-in cap-2/cap-3 comparison against the same 125/125 two-pass Earliest tuple; any challenge, selector drift, total change, or ordered-ID mismatch stops the attempt.
+
 ## Compendex implementation
 
 The restored generic client is:
@@ -94,7 +104,7 @@ Offline support checks completed during this work: 11 IEEE tests, 4 NTRS tests, 
 
 ## Residual gates
 
-- **Wiley:** automate or manually execute page-scoped native RIS export and prove export-to-ledger ordering; keep Collections as a separately logged coverage route.
+- **Wiley:** first restore normal browser access manually and revalidate the conservative serial contract; only then benchmark a fixed opt-in bounded-tab prototype. Separately automate or manually execute page-scoped native RIS export and prove export-to-ledger ordering; keep Collections as a separately logged coverage route.
 - **Compendex:** live zero, one-page/export, and two-page/export smoke tests now pass; add review-specific exhaustive two-pass/native-export orchestration before final discovery.
 - **WoS:** validate a uniform accession identity (or a rigorous RIS range-to-page map), final partial-page lazy hydration, and the ordinary export sequence. Until then, do not claim deterministic bulk enumeration.
 - **All sources:** use clean ignored final-run directories; pilot/speed artifacts cannot become candidates.
