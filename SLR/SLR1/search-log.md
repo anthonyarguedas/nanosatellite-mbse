@@ -1,17 +1,57 @@
 # Search and source-interface log
 
 **Review run:** `eps-mbse-slr-2026`<br>
-**Protocol status during entries below:** version 1.1 pre-search freeze candidate<br>
-**Current protocol status:** version 1.2 frozen and authorized 2026-08-07; no final discovery run is recorded below<br>
+**Protocol status during historical entries below:** version 1.1/1.2 pre-search validation; version-1.3 entries are prospective amendment pilots<br>
+**Current protocol status:** version 1.3 frozen and authorized 2026-08-10; no final discovery run is recorded below<br>
 **Time zone unless stated otherwise:** EDT (UTC−04:00)
 
 ## Status boundary
 
-Every entry dated 2026-08-06 or 2026-08-07 below is `pilot_not_candidate_search`: it validates source syntax, controls, pagination, export, or normalization before protocol authorization. No pilot record establishes discovery provenance or evidence membership. Every accepted strategy must be rerun after the protocol freeze; only those later final-run artifacts may create the independent candidate set.
+Every entry dated 2026-08-06, 2026-08-07, or 2026-08-10 below is `pilot_not_candidate_search` unless explicitly labeled protocol-design-only: it validates source syntax, controls, pagination, export, matching, or prospective amendment design. No pilot record or opaque identifier establishes discovery provenance, relevance, eligibility, or evidence membership. Every accepted strategy must be rerun after the version-1.3 freeze in a clean final-run directory; only those later final-run artifacts may create the independent candidate set.
 
 Aggregate behavior and checksums are retained here without importing pilot hits into screening. The 2026-08-06 raw diagnostics are retained read-only in the access-controlled, Git-ignored `.searches/eps-mbse-slr-2026/interface-pilots/2026-08-06/` work area and indexed by `manifest.json` (88 files; manifest SHA-256 `0e5986a1cd43b8fb1cab65b00ba8863696127eadb579ac9b000e1492bfcd31b4`). The Web of Science export and merge diagnostics are retained under `.searches/eps-mbse-slr-2026/interface-pilots/2026-08-07/` (6 files; manifest SHA-256 `c137b96f8e5406cdbc04783bf1d2ada45446e43959e11c1ad76b0884d2bb80eb`). The population-term API/count pilots are retained under `.searches/eps-mbse-slr-2026/term-variant-pilots/2026-08-07/` (85 files; manifest SHA-256 `12b249a440bda72b4ba2a74b82e90ff3e74f23aeb9aea63a8e3dd4f37e9a8f68`). The two-pass Scopus/IEEE API pilots are under `.searches/eps-mbse-slr-2026/multipage-api-pilots/2026-08-07/`, with source manifests SHA-256 `b0b395fdd388533912511cc296300c30657dd22fc70a341687fe37b1a6f70619` (Scopus) and `c18c2c3d558be6fa8b9c7a931dfd4e40e9765d65fbecdb0ca60254278c97bd25` (IEEE).
 
 PRESS-fix pilots are under `.searches/eps-mbse-slr-2026/press-fix-pilots/2026-08-07/`. Key manifests are: API count/strict artifacts `fda7a1ab5a373b4ab8cd25835fe2f5f5a1d1cda31ea66378ab0a8318844f2217`; browser sources `5c98bffe52e4aaa46ea15437aad538fa9dbcf0414c0a29c8eb9d77a714f086e5`; WoS follow-up `0e516843d2e40bf4aae949e94f641de442613f79cd08c6577c483a5f03f7c3bc`; revised NTRS matrix `6a39421df2e5797e47b3b34e67be71330afd7ebf851c02d88862c228a89b1a9a`; and active post-purge/corrected-rematch ESA artifacts `ae1aba9681d63237ae33b0896cefb94787c24bc4086aeb40d8fe501ecde3f8e8`. These artifacts are not the SLR corpus and must not be passed to candidate screening or represented as final-run discovery output.
+
+## Prospective version-1.3 amendment pilots — 2026-08-10
+
+**Status:** `pilot_not_candidate_search`; model-assisted, not a human information-specialist assessment; no screening, candidate creation, evidence use, or inspection of titles, abstracts, bibliographic metadata content, URLs, full text, prior corpora, Buruso material, or Git history. Source IDs were immediately one-way hashed or kept opaque. Every accepted final strategy must run anew after authorization in clean final-run storage; pilot zeros, overlap, or yield cannot replace a final cell/query.
+
+The amendment adds nested RQ1-G and explicit artifact-lineage grading (`NA`, `G0`–`G4`) under non-compensatory A/E/C/T/P/I gates. Search-design adjudication rejected unsplit `P AND G AND R_ALL`: an architecture-bearing artifact could supply its own relation token, while an R gate could suppress sparse metadata. Final Stream B preserves bibliographic core `B1∪B2` (high-specificity `P∧M` plus broad-model `P∧M∧R`) and local ESA/NTRS core `P∧M`, then adds separately provenance-coded relation-free G1/G2, conservative C1, and model-coupled T2 partitions; R is an optional independent tag for exact G/C1 expansions. Stream A remains `P AND E AND M`, and retrieval through an expansion is not evidence of genericity or tailoring. See [`2026-08-10-genericity-search-design-adjudication.md`](searches/subagent-logs/2026-08-10-genericity-search-design-adjudication.md) and the resolved [`2026-08-10-v1.3-final-consistency-audit.md`](searches/subagent-logs/2026-08-10-v1.3-final-consistency-audit.md).
+
+### API-source opaque-set pilots
+
+All successful API routes used complete retrieval, unique stable IDs, strict source-total reconciliation, two identical ordered passes, English/2011–2026/no-type controls, and a mechanical exact-day cutoff where the source exposed dates.
+
+| Source/partition | Pilot total | Opaque IDs outside fresh B1∪B2 | Exact-day/control note |
+|---|---:|---:|---|
+| Scopus relation-free G1 | 5 | 4 | all current-day accepted |
+| Scopus relation-free G2 | 8 | 6 | all current-day accepted |
+| Scopus C1 | 24 | 7 | all current-day accepted |
+| Scopus T2 | 26 | 2 | all current-day accepted |
+| IEEE relation-free G1 | 0 | 0 | valid two-pass zero |
+| IEEE relation-free G2 | 7 raw | 6 confirmed-current-day | 1 unresolved date |
+| IEEE C1 | 22 raw | 6 confirmed-current-day | 21 confirmed, 1 unresolved |
+| IEEE T2 | 22 raw | 6 confirmed-current-day | 19 confirmed, 3 unresolved |
+
+The rejected initial unsplit relation-gated G query nevertheless reconciled 12/12 twice in Scopus (9 additions) and 7/7 twice in IEEE (6 confirmed-date additions; one unresolved). A corrected architecture-safe split also reconciled but is retained only as an optional precision fallback. A combined exploratory X1 failed component-union equivalence and is superseded. Details: [`2026-08-10-genericity-api-search-pilot.md`](searches/subagent-logs/2026-08-10-genericity-api-search-pilot.md) and [`2026-08-10-genericity-api-refinement-pilot.md`](searches/subagent-logs/2026-08-10-genericity-api-refinement-pilot.md).
+
+### Browser-source opaque-set pilots
+
+| Source | Relation-free G1/G2 | G union outside fresh B1∪B2 | C1/T2 disposition |
+|---|---:|---:|---|
+| Web of Science Core Collection | diagnostic 2/4 only | not accepted | English refinement unavailable; G/C1/T2 attempts retained as failures/provisional diagnostics |
+| Compendex | reconciled 4/8 | 8 | C1/T2 access failures; not zeros |
+| Wiley Online Library | reconciled 5/13 | 9 | C1 reconciled 32/32 with 6 additions; T2 changing-total/pagination failure |
+
+The superseded relation-gated browser pilot had found 4/7/9 additions for WoS/Compendex/Wiley. Relation-free Compendex added one more opaque ID than its gated union; Wiley's unions were identical. These are workload/recall diagnostics only. The final plan retains all prospectively specified source partitions and requires normal control/reconciliation success or a reported final source failure. Details: [`2026-08-10-genericity-browser-search-pilots.md`](searches/subagent-logs/2026-08-10-genericity-browser-search-pilots.md).
+
+### ESA/NTRS finite-route pilots
+
+- **ESA Indico:** deterministic fixtures passed 19/19 concept cases and 13/13 metadata/individual-attachment route cases. A no-network relation-free rematch reused the preserved complete 2026-08-07 census only as a screening-prohibited method test: 8,584 subjects and 5,664 extracted attachment texts; core B 74; G 32; C1 15; G∩C1 6; complete expansion union 41; core∩expansion 26; expansion-only 15; total B 89; unchanged A 23 and structural A-only 0; E-explicit expansion 16; independent-R tag 41; T2 tag 55. Metadata/attachment total-B routes were 20/75 with overlap 6. These subjects are not candidates and cannot be reused; a fresh whole-instance census remains mandatory.
+- **NTRS:** all 301/301 seven-form core/G cells reconciled (126 core + 175 G): core simple sum 39/opaque union 6; G simple sum/union 1; overlap 1; G-only 0. The omitted exact `"cube sat"` 43-cell follow-up was all zero. A separate seven-form C1 run reconciled 161/161 cells with valid zeros. A final audit then identified three still-unrepresented source forms (`nanosatellites`, `"nano satellite"`, `"nano-satellites"`); a focused pilot reconciled all 198/198 remaining cells with valid zeros (54 M, 75 G, 69 C1). The corrected final matrix is 660 mandatory cells (180 core + 250 G + 230 C1), with T2 as a deterministic tag on core B. Pilot zero/overlap cannot authorize omission because NTRS can change retrospectively and the forms/partitions are not structurally equivalent.
+
+ESA/NTRS implementation, coverage, and checksums are reported in [`2026-08-10-genericity-esa-ntrs-pilots.md`](searches/subagent-logs/2026-08-10-genericity-esa-ntrs-pilots.md). The owner-restricted ignored amendment-pilot tree contains 1,679 files in its final manifest; `amendment-pilot-manifest.json` SHA-256 is `6478c4dd45733a3fa0624edba9bb203cc793faabc22b51fedd25de49d9a8b9a5`. No valid final discovery search has begun.
 
 ## Scopus interface diagnostics
 
@@ -55,7 +95,7 @@ Ordinary page-level **Export → RIS (other reference software)** succeeded with
 
 `ris_to_merge_csv.py` converted the native RIS to the common one-row CSV schema while preserving exact query, global rank 1, source total 1, WoS accession in `Paper ID`, DOI, title, authors, year, and abstract (normalized CSV SHA-256 `2c5845d9a0b75bb18b0d58c31c24e6ccf46f703ca50b7af8f0d1f158c6a1c3a5`). A reproducible sidecar retained all 31 cited-reference strings (SHA-256 `fbd8f9807a82590b21e989b8b9bd2c0c9b092132f2d6296aedcf04b4d21791f1`). After adding explicit Web of Science aliases, `merge_search_results.py` canonicalized the source as `web_of_science_core_collection` and reconciled 1 raw/1 unique/0 removed (merged JSON SHA-256 `dd8ea3597ff593f51fc83ee945d74e7b4cadfa0193af7fa639e4cab21e3a5bc8`). The post-fix merger SHA-256 is `fcf0168dd25480dc882de6e53c505fb47eebc3839d772bd96fdfc1b1c921dde4`; all seven offline regression tests passed.
 
-All WoS counts, records, and exports above are dynamic interface diagnostics, not identification, screening, or inclusion evidence. Rerun all six exact Topic strategies and the one-record export/merge preflight after authorization.
+All WoS counts, records, and exports above are dynamic interface diagnostics, not identification, screening, or inclusion evidence. Rerun the six core/sensitivity Topic strategies, all version-1.3 expansion strategies, and the export/merge preflight in the final run.
 
 ## IEEE Xplore interface diagnostics
 
@@ -90,7 +130,7 @@ Count-only runs deliberately discarded the one response record. These are dynami
 
 The delegated historical pilots used the then-current type filters. After MAJOR-01/02/07 corrections, the same audited driver completed fresh broad pilots with spaced-plural/crossed-model variants and no publication/content-type filter; exact prospective request shapes and both generations of pilot descriptors are separated in `api-pagination-request-templates.json`. Both used a 30-second timeout, three retries after the initial attempt for network/408/425/429/5xx failures, `Retry-After` or capped exponential backoff, one permitted clean restart after a changed total, and a hard failure unless all expected pages, unique ordered IDs, matching two-pass order, and `retrieved == source total` hold. Redirect, access/challenge, non-JSON, offset, short-page, duplicate-page/ID, or repeated-total-change conditions are failures, not zero results or partial candidates. The driver strips credential-like fields and IEEE `userInfo`; credentials/cookies/tokens were not written.
 
-The current template SHA-256 is `15087ec37cf4c510fae78583df248c28703a3257365e8e1dea6d73cd4b48a66a`; driver SHA-256 is `be9fd8a5202ddb8ef5fec96855d119d840a8c9fbcbbb1f8393836df594d6801e`. Corrected broad-pilot manifests are `e89596345c9da44c09807b71ba205dd6a350e7de515251b443fdaad045c0a3f9` (Scopus) and `1d475b5e8fd562459c011fc8fc678f8d374b9dc87435b6c50e1a0e0b8b998934` (IEEE). Rerun every final query post-authorization in a clean final-run directory; these pilot records remain superseded and are never candidates.
+At the close of the version-1.2 pilot, the template SHA-256 was `15087ec37cf4c510fae78583df248c28703a3257365e8e1dea6d73cd4b48a66a` and the driver SHA-256 was `be9fd8a5202ddb8ef5fec96855d119d840a8c9fbcbbb1f8393836df594d6801e`; these historical values do not describe the version-1.3 files. Corrected broad-pilot manifests are `e89596345c9da44c09807b71ba205dd6a350e7de515251b443fdaad045c0a3f9` (Scopus) and `1d475b5e8fd562459c011fc8fc678f8d374b9dc87435b6c50e1a0e0b8b998934` (IEEE). Rerun every final query post-authorization in a clean final-run directory; these pilot records remain superseded and are never candidates.
 
 ## PRESS-corrected Scopus and IEEE syntax/count pilots
 
@@ -155,7 +195,7 @@ Further controls confirmed `page.size=100`; two `CubeSat` pages at `from=0` and 
 ## NTRS PRESS-corrected matrix validation
 
 - **Run:** 2026-08-07 11:24:17–11:30:15 EDT; `pilot_not_candidate_search`; no screening, full-text retrieval, candidate classification, or evidence use
-- **Specification:** six exact P terms × eighteen exact M terms = **108 mandatory P×M cells**; no Boolean operators, parentheses, fields, or wildcards
+- **Historical version-1.2 specification (superseded):** six exact P terms × eighteen exact M terms = **108 P×M cells**; no Boolean operators, parentheses, fields, or wildcards
 - **Date/page body:** `published.gte=2011-01-01`, `published.lte=2026-08-07`, `page.size=100`, zero-based `page.from`
 - **Completion:** 108 attempted / 108 HTTP-200 complete / 0 failed; 108 pages reopened and reconciled; 0 retries or total changes
 - **Aggregate diagnostic only:** simple overlapping sum 39/39; six unique NTRS IDs; no record screened
@@ -163,7 +203,7 @@ Further controls confirmed `page.size=100`; two `CubeSat` pages at `from=0` and 
 - **Full-E local tag:** dictionary 25/25 E forms and fixtures 10/10 passed; over the six-ID metadata union, `A∩B=1`, `B-only=5`, `A-only=0`, union=6. A is a structural tag, not an additional discovery stream.
 - **Artifacts:** detailed report [`2026-08-07-ntrs-revised-matrix-validation.md`](searches/subagent-logs/2026-08-07-ntrs-revised-matrix-validation.md); private 458-entry raw manifest SHA-256 `6a39421df2e5797e47b3b34e67be71330afd7ebf851c02d88862c228a89b1a9a`
 
-The prior 136-cell design and selected nine-term E_N matrix are superseded. After authorization, rerun all 108 complete P×M cells to exhaustion, deduplicate their union, and reapply the frozen full-E matcher.
+The prior 136-cell design and selected nine-term E_N matrix were superseded by this version-1.2 pilot; version 1.3 supersedes the 108-cell design in turn. Final execution now requires all 660 P×M/G/C1 cells, deduplication across partitions, and frozen E/T tagging as specified above and in the query plan.
 
 ## Wiley Online Library browser diagnostics
 
@@ -203,7 +243,7 @@ Two detailed reports preserve the 2026-08-07 audit: [`2026-08-07-population-term
 - **Wiley:** original versus revised W-B1 remained 44 Articles & Chapters and 1 Collection; revised W-V1 = 17 plus 1 Collection and W-O1 = 21 plus 1 Collection. The added phrase was accepted; equal totals do not establish set equivalence.
 - **Scopus:** under matched normal-web-UI controls, original S-B1 = 75 and revised S-B1 = 80 (+5). The initial API recheck failed authentication; empty shells written with `total: 0` are invalid and are not source results. After institutional network access became available, the `COMPLETE`-view API retry successfully reproduced 75 and 80. Final Scopus execution still requires a fresh post-authorization authentication preflight.
 - **IEEE Xplore:** original and revised I-B1 both returned 38; revised I-V1 = 1 and I-O1 = 4. The complete revised population block was accepted; equal totals do not establish set equivalence.
-- **NTRS (superseded matrix decision):** the first 56-cell diagnostic tested eight population spellings against seven then-planned `M_N` terms and found source-unique yield for `CubeSats`. PRESS review subsequently identified omitted frozen P/M terms. The 136-cell P/E/M design is retired; the corrected mandatory baseline is 108 complete P×M cells (six P × eighteen M), followed by a full-E local tag over the deduplicated union.
+- **NTRS (superseded matrix decision):** the first 56-cell diagnostic tested eight population spellings against seven then-planned `M_N` terms and found source-unique yield for `CubeSats`. PRESS review subsequently identified omitted frozen P/M terms. The 136-cell P/E/M design was retired; the then-corrected version-1.2 baseline was 108 complete P×M cells (six P × eighteen M), followed by a full-E local tag. Version 1.3 subsequently retained all ten source-representable P forms and added G/C1, yielding the 660-cell current design above.
 
 Those population-audit expressions were later superseded by the PRESS corrections adding bare IEEE `nanosat`, spaced plural `"nano satellites"` everywhere, and the complete NTRS P/M matrix. The exact corrected implementations and fresh pilots are logged below; every strategy must still be rerun after authorization.
 

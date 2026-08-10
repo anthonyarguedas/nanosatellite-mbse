@@ -560,9 +560,15 @@ def parse_ieee_page(data: dict[str, Any], expected_start: int, expected_page_siz
             f"IEEE Xplore returned recordsPerPage {server_page_size}, expected {expected_page_size}"
         )
     expected_total_pages = math.ceil(total / expected_page_size) if total else 0
-    if total_pages != expected_total_pages:
+    # IEEE may report one empty result page for a valid zero-record snapshot.
+    # Accept that documented convention while still requiring one fetched empty
+    # page, two-pass agreement, and retrieved == source total.
+    accepted_total_pages = {expected_total_pages}
+    if total == 0:
+        accepted_total_pages.add(1)
+    if total_pages not in accepted_total_pages:
         raise ReconciliationError(
-            f"IEEE Xplore returned totalPages {total_pages}, expected {expected_total_pages}"
+            f"IEEE Xplore returned totalPages {total_pages}, expected one of {sorted(accepted_total_pages)}"
         )
     records = data.get("records")
     if records is None and total == 0:
@@ -661,9 +667,14 @@ def execute_pass(args: argparse.Namespace, pass_dir: Path, pass_number: int) -> 
             )
 
         expected_count = min(args.page_size, max(0, total - expected_start))
-        if page.server_page_size != args.page_size:
+        # Scopus may echo the actual terminal count in itemsPerPage when the
+        # complete result is shorter than the requested page. Accept only the
+        # frozen size or the computed terminal count; a short nonterminal page
+        # still fails the count/end checks below.
+        if page.server_page_size not in {args.page_size, expected_count}:
             raise ReconciliationError(
-                f"{args.source} page {page_ordinal} advertised page size {page.server_page_size}, expected {args.page_size}"
+                f"{args.source} page {page_ordinal} advertised page size {page.server_page_size}, "
+                f"expected frozen {args.page_size} or terminal count {expected_count}"
             )
         if len(page.records) != expected_count:
             raise ReconciliationError(

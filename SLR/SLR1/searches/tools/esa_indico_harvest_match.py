@@ -6,7 +6,7 @@
 """Whole-instance ESA Indico census, material inventory, extraction, and match.
 
 The operation inventories materials *before* candidate gating.  It matches the
-frozen P/E/M dictionary independently against joined metadata and each
+frozen P/E/M/G/C1/R/T dictionary independently against joined metadata and each
 extractable attachment, then unions the routes.  Pilot mode is the default and
 its output is explicitly prohibited from screening or evidence use.
 """
@@ -386,8 +386,23 @@ def concise_match(result: dict[str, Any]) -> dict[str, Any]:
     return {
         "concepts_present": result["concepts_present"],
         "concept_term_ids": result["concept_term_ids"],
-        "stream_a": result["stream_a"], "stream_b": result["stream_b"],
-        "field_hits": result["field_hits"]
+        "stream_a": result["stream_a"],
+        "stream_b": result["stream_b"],
+        "stream_b_core": result["stream_b_core"],
+        "stream_b_g": result["stream_b_g"],
+        "stream_b_c1": result["stream_b_c1"],
+        "stream_b_genericity": result["stream_b_genericity"],
+        "stream_b_genericity_relation_qualified": result["stream_b_genericity_relation_qualified"],
+        "stream_b_tailoring_tag": result["stream_b_tailoring_tag"],
+        "g_eps_explicit": result["g_eps_explicit"],
+        "c1_eps_explicit": result["c1_eps_explicit"],
+        "genericity_eps_explicit": result["genericity_eps_explicit"],
+        "genericity_artifact_matches": result["genericity_artifact_matches"],
+        "active_genericity_artifact_ids": result["active_genericity_artifact_ids"],
+        "active_g_artifact_ids": result["active_g_artifact_ids"],
+        "active_c1_artifact_ids": result["active_c1_artifact_ids"],
+        "relation_qualified_genericity_artifact_ids": result["relation_qualified_genericity_artifact_ids"],
+        "field_hits": result["field_hits"],
     }
 
 
@@ -438,7 +453,7 @@ def main(argv: list[str] | None = None) -> int:
             "dictionary_sha256": sha256_file(dictionary_path), "matcher_sha256": sha256_file(Path(__file__).with_name("concept_matcher.py")),
             "harvester_sha256": sha256_file(Path(__file__).resolve()), "fixtures_sha256": sha256_file(fixture_path),
             "runtime": {"python": sys.version, "requests": requests.__version__, "pdftotext": tool_version(["pdftotext", "-v"]), "textutil": tool_version(["textutil", "-help"])},
-            "candidate_policy": "No pilot record may be screened or used as evidence. Materials are inventoried before any P/M gate."
+            "candidate_policy": "No pilot record may be screened or used as evidence. Materials are inventoried before core P/M or relation-free complete G/C1 gating; R/T are separate tags."
         }
         atomic_write_json(output_dir / "run-metadata.json", metadata)
         session = requests.Session(); session.headers.update({"Accept": "application/json", "User-Agent": "eps-mbse-slr-2026-esa-census/1.0"})
@@ -563,19 +578,76 @@ def main(argv: list[str] | None = None) -> int:
                 matched = matcher.match_fields({"attachment.extracted_text": text})
                 attachment_matches.append({"url_sha256": sha256_bytes(url.encode("utf-8")), "match": concise_match(matched)})
             attachment_b = any(item["match"]["stream_b"] for item in attachment_matches)
+            attachment_b_core = any(item["match"]["stream_b_core"] for item in attachment_matches)
+            attachment_b_g = any(item["match"]["stream_b_g"] for item in attachment_matches)
+            attachment_b_c1 = any(item["match"]["stream_b_c1"] for item in attachment_matches)
+            attachment_b_genericity = any(item["match"]["stream_b_genericity"] for item in attachment_matches)
+            attachment_b_genericity_relation = any(
+                item["match"]["stream_b_genericity_relation_qualified"] for item in attachment_matches
+            )
+            attachment_tailoring = any(item["match"]["stream_b_tailoring_tag"] for item in attachment_matches)
             attachment_a = any(item["match"]["stream_a"] for item in attachment_matches)
-            stream_b = metadata_match["stream_b"] or attachment_b; stream_a = metadata_match["stream_a"] or attachment_a
+            attachment_g_eps = any(item["match"]["g_eps_explicit"] for item in attachment_matches)
+            attachment_c1_eps = any(item["match"]["c1_eps_explicit"] for item in attachment_matches)
+            attachment_genericity_eps = any(item["match"]["genericity_eps_explicit"] for item in attachment_matches)
+            stream_b_core = metadata_match["stream_b_core"] or attachment_b_core
+            stream_b_g = metadata_match["stream_b_g"] or attachment_b_g
+            stream_b_c1 = metadata_match["stream_b_c1"] or attachment_b_c1
+            stream_b_genericity = stream_b_g or stream_b_c1
+            stream_b_genericity_relation = (
+                metadata_match["stream_b_genericity_relation_qualified"] or attachment_b_genericity_relation
+            )
+            stream_b = stream_b_core or stream_b_genericity
+            stream_a = metadata_match["stream_a"] or attachment_a
+            g_eps_explicit = metadata_match["g_eps_explicit"] or attachment_g_eps
+            c1_eps_explicit = metadata_match["c1_eps_explicit"] or attachment_c1_eps
+            genericity_eps_explicit = metadata_match["genericity_eps_explicit"] or attachment_genericity_eps
+            tailoring_tag = metadata_match["stream_b_tailoring_tag"] or attachment_tailoring
             subject_matches.append({
                 "subject_id": subject["subject_id"], "event_id": subject["event_id"], "contribution_id": subject["contribution_id"],
                 "metadata_match": concise_match(metadata_match), "attachment_matches": attachment_matches,
                 "stream_a": stream_a, "stream_b": stream_b,
-                "routes": {"joined_metadata": metadata_match["stream_b"], "attachment_text": attachment_b}
+                "stream_b_core": stream_b_core, "stream_b_g": stream_b_g, "stream_b_c1": stream_b_c1,
+                "stream_b_genericity": stream_b_genericity,
+                "stream_b_genericity_relation_qualified": stream_b_genericity_relation,
+                "stream_b_tailoring_tag": tailoring_tag,
+                "g_eps_explicit": g_eps_explicit, "c1_eps_explicit": c1_eps_explicit,
+                "genericity_eps_explicit": genericity_eps_explicit,
+                "routes": {
+                    "joined_metadata": metadata_match["stream_b"], "attachment_text": attachment_b,
+                    "joined_metadata_core": metadata_match["stream_b_core"], "attachment_text_core": attachment_b_core,
+                    "joined_metadata_g": metadata_match["stream_b_g"], "attachment_text_g": attachment_b_g,
+                    "joined_metadata_c1": metadata_match["stream_b_c1"], "attachment_text_c1": attachment_b_c1,
+                    "joined_metadata_genericity": metadata_match["stream_b_genericity"],
+                    "attachment_text_genericity": attachment_b_genericity,
+                    "joined_metadata_genericity_relation_qualified": metadata_match[
+                        "stream_b_genericity_relation_qualified"
+                    ],
+                    "attachment_text_genericity_relation_qualified": attachment_b_genericity_relation,
+                    "joined_metadata_tailoring_tag": metadata_match["stream_b_tailoring_tag"],
+                    "attachment_text_tailoring_tag": attachment_tailoring,
+                }
             })
         atomic_write_json(output_dir / "match-results.json", {"subjects": subject_matches})
 
         b_subjects = [item for item in subject_matches if item["stream_b"]]; a_subjects = [item for item in subject_matches if item["stream_a"]]
+        g_eps_subjects = {item["subject_id"] for item in subject_matches if item["g_eps_explicit"]}
+        c1_eps_subjects = {item["subject_id"] for item in subject_matches if item["c1_eps_explicit"]}
+        genericity_eps_subjects = {item["subject_id"] for item in subject_matches if item["genericity_eps_explicit"]}
+        core_b_subjects = {item["subject_id"] for item in subject_matches if item["stream_b_core"]}
+        g_b_subjects = {item["subject_id"] for item in subject_matches if item["stream_b_g"]}
+        c1_b_subjects = {item["subject_id"] for item in subject_matches if item["stream_b_c1"]}
+        genericity_b_subjects = {item["subject_id"] for item in subject_matches if item["stream_b_genericity"]}
+        relation_qualified_g_subjects = {
+            item["subject_id"] for item in subject_matches if item["stream_b_genericity_relation_qualified"]
+        }
+        tailoring_subjects = {item["subject_id"] for item in subject_matches if item["stream_b_tailoring_tag"]}
         metadata_b = {item["subject_id"] for item in subject_matches if item["routes"]["joined_metadata"]}
         attachment_b = {item["subject_id"] for item in subject_matches if item["routes"]["attachment_text"]}
+        metadata_g = {item["subject_id"] for item in subject_matches if item["routes"]["joined_metadata_g"]}
+        attachment_g = {item["subject_id"] for item in subject_matches if item["routes"]["attachment_text_g"]}
+        metadata_c1 = {item["subject_id"] for item in subject_matches if item["routes"]["joined_metadata_c1"]}
+        attachment_c1 = {item["subject_id"] for item in subject_matches if item["routes"]["attachment_text_c1"]}
         retrieved = sum(1 for item in download_results.values() if item.get("retrieved")); parsed = sum(1 for item in download_results.values() if item.get("extraction", {}).get("status") == "parsed")
         summary = {
             "status": "success_with_coverage_failures" if event_failures or retrieved < len(unique_downloads) or parsed < retrieved else "success",
@@ -588,12 +660,30 @@ def main(argv: list[str] | None = None) -> int:
             "document_like_retrieved": retrieved, "document_like_inaccessible_or_failed": len(unique_downloads) - retrieved,
             "document_like_text_parsed": parsed, "document_like_unparseable": retrieved - parsed,
             "subjects_matched": len(subject_matches), "stream_a_eps_explicit_tag": len(a_subjects), "stream_b_union": len(b_subjects),
+            "g_eps_explicit_tag": len(g_eps_subjects), "c1_eps_explicit_tag": len(c1_eps_subjects),
+            "genericity_eps_explicit_tag": len(genericity_eps_subjects),
+            "stream_b_core": len(core_b_subjects), "stream_b_g": len(g_b_subjects),
+            "stream_b_c1": len(c1_b_subjects), "stream_b_genericity": len(genericity_b_subjects),
+            "stream_b_genericity_relation_qualified": len(relation_qualified_g_subjects),
+            "stream_b_tailoring_tag": len(tailoring_subjects),
+            "core_intersection_g": len(core_b_subjects & g_b_subjects),
+            "core_intersection_c1": len(core_b_subjects & c1_b_subjects),
+            "g_intersection_c1": len(g_b_subjects & c1_b_subjects),
+            "core_intersection_genericity": len(core_b_subjects & genericity_b_subjects),
+            "core_only": len(core_b_subjects - genericity_b_subjects),
+            "g_only_vs_core_c1": len(g_b_subjects - core_b_subjects - c1_b_subjects),
+            "c1_only_vs_core_g": len(c1_b_subjects - core_b_subjects - g_b_subjects),
+            "genericity_only": len(genericity_b_subjects - core_b_subjects),
             "a_intersection_b": len({item['subject_id'] for item in a_subjects} & {item['subject_id'] for item in b_subjects}),
             "a_only_structural_error": len({item['subject_id'] for item in a_subjects} - {item['subject_id'] for item in b_subjects}),
             "b_only": len({item['subject_id'] for item in b_subjects} - {item['subject_id'] for item in a_subjects}),
             "metadata_route_b": len(metadata_b), "attachment_route_b": len(attachment_b),
             "metadata_and_attachment_route_b": len(metadata_b & attachment_b), "metadata_only_route_b": len(metadata_b - attachment_b),
             "attachment_only_route_b": len(attachment_b - metadata_b),
+            "metadata_route_g": len(metadata_g), "attachment_route_g": len(attachment_g),
+            "metadata_and_attachment_route_g": len(metadata_g & attachment_g),
+            "metadata_route_c1": len(metadata_c1), "attachment_route_c1": len(attachment_c1),
+            "metadata_and_attachment_route_c1": len(metadata_c1 & attachment_c1),
             "coverage_event_ids_present": {event_id: event_id in root_ids for event_id in ("161", "329", "386", "407", "472")},
             "category_reconciliation": {key: category_reconciliation[key] for key in ("root_equals_top_level_union", "category_9_subset_of_6")},
             "event_export_failures": event_failures, "missing_date_event_ids": missing_dates,

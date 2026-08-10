@@ -1,16 +1,22 @@
 {
-  "schema_version": "1.0",
-  "dictionary_version": "1.1.0-press-2026-08-07",
+  "schema_version": "1.1",
+  "dictionary_version": "1.3.0-genericity-2026-08-10",
   "review_run": "eps-mbse-slr-2026",
-  "status": "pre-freeze corrected deterministic dictionary",
+  "status": "version-1.3 frozen deterministic dictionary",
   "candidate_logic": {
-    "stream_a": "P AND E AND M within one searched route",
-    "stream_b": "P AND M within one searched route",
+    "scope": "Deterministic ESA Indico joined-metadata and individual-attachment matching only. Bibliographic B1/B2/G/C1/T2 strategies and the NTRS finite matrix are defined separately in query-search-plan.md.",
+    "stream_a": "P AND E AND M within one searched route; unchanged by the genericity expansion",
+    "stream_b_core": "P AND M within one searched route",
+    "stream_b_genericity": "P AND a complete precise-G or conservative central-asset artifact within one searched route; no R term is required",
+    "stream_b_genericity_relation_qualified": "Optional precision tag: stream_b_genericity plus at least one independent R hit",
+    "stream_b_tailoring_tag": "P AND M AND T within one route; a structural subset tag, not an added local candidate route",
+    "stream_b": "stream_b_core OR stream_b_genericity",
     "routes": [
       "joined_metadata",
       "attachment_text"
     ],
-    "union_rule": "Union Stream-B candidates from joined metadata and from each independently extracted attachment; Stream A is an EPS-explicit tag within that union.",
+    "union_rule": "Union core-B and genericity/central-asset-expanded B-G candidates from joined metadata and from each independently extracted attachment. Stream A remains the E-explicit tag within core-B; report an E-explicit B-G tag separately. Never combine P, G, R, M, or E hits across metadata and attachment routes.",
+    "relation_caveat": "R is an optional precision/provenance tag, not proof of an MBSE relationship and not required for relation-free artifact recall. The matcher separately records whether an R span does not overlap any required G component, so architecture-bearing phrases cannot self-satisfy that optional tag. Full-text eligibility still requires the protocol's structured-model and EPS bridge evidence.",
     "cross_route_cooccurrence": false,
     "generic_smallsat_is_population": false
   },
@@ -134,6 +140,69 @@
         {"id": "M_OBJECT_ORIENTED_SYSTEMS_MODEL", "forms": ["object-oriented systems model"]}
       ]
     },
+    "G": {
+      "label": "precise genericity/reusable-artifact recall terms",
+      "terms": [
+        {"id": "G_GENERIC_MODEL", "forms": ["generic model"]},
+        {"id": "G_GENERIC_SYSTEM_MODEL", "forms": ["generic system model"]},
+        {"id": "G_REUSABLE_MODEL", "forms": ["reusable model"]},
+        {"id": "G_REUSABLE_SYSTEM_MODEL", "forms": ["reusable system model"]},
+        {"id": "G_CONFIGURABLE_MODEL", "forms": ["configurable model"]},
+        {"id": "G_CONFIGURABLE_SYSTEM_MODEL", "forms": ["configurable system model"]},
+        {"id": "G_MODEL_TEMPLATE", "forms": ["model template"]},
+        {"id": "G_MISSION_AGNOSTIC_MODEL", "forms": ["mission-agnostic model", "mission agnostic model"]},
+        {"id": "G_MISSION_INDEPENDENT_MODEL", "forms": ["mission-independent model", "mission independent model"]},
+        {"id": "G_MISSION_AGNOSTIC_ARCHITECTURE", "forms": ["mission-agnostic architecture", "mission agnostic architecture"]},
+        {"id": "G_MISSION_INDEPENDENT_ARCHITECTURE", "forms": ["mission-independent architecture", "mission independent architecture"]},
+        {"id": "G_REFERENCE_ARCHITECTURE", "forms": ["reference architecture"]},
+        {"id": "G_DOMAIN_MODEL", "forms": ["domain model"]},
+        {"id": "G_METAMODEL", "forms": ["metamodel", "meta-model", "meta model"]},
+        {"id": "G_PRODUCT_LINE_MODEL", "forms": ["product-line model", "product line model"]},
+        {"id": "G_PRODUCT_FAMILY_MODEL", "forms": ["product-family model", "product family model"]},
+        {"id": "G_REFERENCE_MODEL", "forms": ["reference model", "system reference model"]},
+        {"id": "G_MODEL_LIBRARY", "forms": ["model library", "model libraries", "system model library", "system model libraries"]},
+        {"id": "G_MODEL_PATTERN", "forms": ["model pattern", "modeling pattern", "modelling pattern", "system model pattern", "systems model pattern"]},
+        {"id": "G_MODEL_PROFILE", "forms": ["model profile", "system model profile", "systems model profile"]},
+        {"id": "G_SYSML_PROFILE", "forms": ["SysML profile"]},
+        {"id": "G_DOMAIN_SPECIFIC_MODELING_LANGUAGE", "forms": ["domain-specific modeling language", "domain specific modeling language", "domain-specific modelling language", "domain specific modelling language"]}
+      ]
+    },
+    "R": {
+      "label": "optional systems-engineering relation anchors / precision tags",
+      "terms": [
+        {"id": "R_REQUIREMENT", "forms": ["requirement"]},
+        {"id": "R_REQUIREMENTS", "forms": ["requirements"]},
+        {"id": "R_FUNCTION", "forms": ["function"]},
+        {"id": "R_FUNCTIONS", "forms": ["functions"]},
+        {"id": "R_BEHAVIOR", "forms": ["behavior"]},
+        {"id": "R_BEHAVIORS", "forms": ["behaviors"]},
+        {"id": "R_BEHAVIOUR", "forms": ["behaviour"]},
+        {"id": "R_BEHAVIOURS", "forms": ["behaviours"]},
+        {"id": "R_ARCHITECTURE", "forms": ["architecture"]},
+        {"id": "R_ARCHITECTURES", "forms": ["architectures"]},
+        {"id": "R_INTERFACE", "forms": ["interface"]},
+        {"id": "R_INTERFACES", "forms": ["interfaces"]},
+        {"id": "R_TRACEABILITY", "forms": ["traceability"]},
+        {"id": "R_PARAMETRIC", "forms": ["parametric"]},
+        {"id": "R_PARAMETRICS", "forms": ["parametrics"]},
+        {"id": "R_VERIFICATION", "forms": ["verification"]},
+        {"id": "R_VALIDATION", "forms": ["validation"]}
+      ]
+    },
+    "T": {
+      "label": "model-coupled tailoring/reuse tags",
+      "terms": [
+        {"id": "T_REUSE", "forms": ["reuse", "reused", "reusable", "reusing"]},
+        {"id": "T_TAILOR", "forms": ["tailor", "tailors", "tailored", "tailoring"]},
+        {"id": "T_CUSTOMIZE", "forms": ["customize", "customizes", "customized", "customizing", "customization", "customise", "customises", "customised", "customising", "customisation"]},
+        {"id": "T_CONFIGURE", "forms": ["configure", "configures", "configured", "configuring", "configuration"]},
+        {"id": "T_PARAMETERIZE", "forms": ["parameterize", "parameterizes", "parameterized", "parameterizing", "parameterization", "parameterise", "parameterises", "parameterised", "parameterising", "parameterisation"]},
+        {"id": "T_INSTANTIATE", "forms": ["instantiate", "instantiates", "instantiated", "instantiating", "instantiation"]},
+        {"id": "T_VARIABILITY", "forms": ["variability", "variation point"]},
+        {"id": "T_SPECIALIZE", "forms": ["specialize", "specializes", "specialized", "specializing", "specialization", "specialise", "specialises", "specialised", "specialising", "specialisation"]},
+        {"id": "T_ADAPT", "forms": ["adapt", "adapts", "adapted", "adapting", "adaptation"]}
+      ]
+    },
     "V": {
       "label": "selected non-exhaustive V&V sensitivity tags",
       "terms": [
@@ -195,5 +264,40 @@
         {"id": "O_ADOPTION", "forms": ["adoption"]}
       ]
     }
+  },
+  "genericity_recall": {
+    "route_rule": "P AND a complete precise-G or conservative central-asset artifact, evaluated on joined_metadata and on each individual attachment_text route",
+    "cross_route_cooccurrence": false,
+    "relation_independence": {
+      "role": "optional precision tag only; not a candidate requirement",
+      "rule": "For an active G artifact, at least one R occurrence is independent only when it does not overlap any occurrence span of that artifact's required components in the route.",
+      "rationale": "Allows a safe relation-qualified subset to be reported without letting reference architecture or another architecture-bearing artifact satisfy the tag through its own lexical content."
+    },
+    "artifacts": [
+      {"id": "G_GENERIC_MODEL", "cluster": "G1", "all_of": [{"id": "GENERIC_MODEL_PHRASE", "forms": ["generic model"]}]},
+      {"id": "G_REUSABLE_MODEL", "cluster": "G1", "all_of": [{"id": "REUSABLE_MODEL_PHRASE", "forms": ["reusable model"]}]},
+      {"id": "G_CONFIGURABLE_MODEL", "cluster": "G1", "all_of": [{"id": "CONFIGURABLE_MODEL_PHRASE", "forms": ["configurable model"]}]},
+      {"id": "G_GENERIC_SYSTEM_MODEL", "cluster": "G1", "all_of": [{"id": "GENERIC_SYSTEM_MODEL_PHRASE", "forms": ["generic system model"]}]},
+      {"id": "G_REUSABLE_SYSTEM_MODEL", "cluster": "G1", "all_of": [{"id": "REUSABLE_SYSTEM_MODEL_PHRASE", "forms": ["reusable system model"]}]},
+      {"id": "G_CONFIGURABLE_SYSTEM_MODEL", "cluster": "G1", "all_of": [{"id": "CONFIGURABLE_SYSTEM_MODEL_PHRASE", "forms": ["configurable system model"]}]},
+      {"id": "G_MODEL_TEMPLATE", "cluster": "G1", "all_of": [{"id": "MODEL_TEMPLATE_PHRASE", "forms": ["model template"]}]},
+      {"id": "G_MISSION_AGNOSTIC_MODEL", "cluster": "G1", "all_of": [{"id": "MISSION_AGNOSTIC_MODEL_PHRASE", "forms": ["mission-agnostic model", "mission agnostic model"]}]},
+      {"id": "G_MISSION_INDEPENDENT_MODEL", "cluster": "G1", "all_of": [{"id": "MISSION_INDEPENDENT_MODEL_PHRASE", "forms": ["mission-independent model", "mission independent model"]}]},
+      {"id": "G_MISSION_AGNOSTIC_ARCHITECTURE", "cluster": "G1", "all_of": [{"id": "MISSION_AGNOSTIC_ARCHITECTURE_PHRASE", "forms": ["mission-agnostic architecture", "mission agnostic architecture"]}]},
+      {"id": "G_MISSION_INDEPENDENT_ARCHITECTURE", "cluster": "G1", "all_of": [{"id": "MISSION_INDEPENDENT_ARCHITECTURE_PHRASE", "forms": ["mission-independent architecture", "mission independent architecture"]}]},
+      {"id": "G_REFERENCE_ARCHITECTURE", "cluster": "G2", "all_of": [{"id": "REFERENCE_ARCHITECTURE_PHRASE", "forms": ["reference architecture"]}]},
+      {"id": "G_DOMAIN_MODEL", "cluster": "G2", "all_of": [{"id": "DOMAIN_MODEL_PHRASE", "forms": ["domain model"]}]},
+      {"id": "G_METAMODEL", "cluster": "G2", "all_of": [{"id": "METAMODEL_PHRASE", "forms": ["metamodel", "meta-model", "meta model"]}]},
+      {"id": "G_PRODUCT_LINE_MODEL", "cluster": "G2", "all_of": [{"id": "PRODUCT_LINE_MODEL_PHRASE", "forms": ["product-line model", "product line model"]}]},
+      {"id": "G_PRODUCT_FAMILY_MODEL", "cluster": "G2", "all_of": [{"id": "PRODUCT_FAMILY_MODEL_PHRASE", "forms": ["product-family model", "product family model"]}]},
+      {"id": "G_VARIATION_POINT_MODEL", "cluster": "G2", "all_of": [{"id": "VARIATION_POINT_PHRASE", "forms": ["variation point"]}, {"id": "MODEL_TOKEN", "forms": ["model"]}]},
+      {"id": "G_VARIATION_POINT_ARCHITECTURE", "cluster": "G2", "all_of": [{"id": "VARIATION_POINT_PHRASE", "forms": ["variation point"]}, {"id": "ARCHITECTURE_TOKEN", "forms": ["architecture", "architectures"]}]},
+      {"id": "G_REFERENCE_MODEL", "cluster": "C1", "all_of": [{"id": "REFERENCE_MODEL_PHRASE", "forms": ["reference model", "system reference model"]}]},
+      {"id": "G_MODEL_LIBRARY", "cluster": "C1", "all_of": [{"id": "MODEL_LIBRARY_PHRASE", "forms": ["model library", "model libraries", "system model library", "system model libraries"]}]},
+      {"id": "G_MODEL_PATTERN", "cluster": "C1", "all_of": [{"id": "MODEL_PATTERN_PHRASE", "forms": ["model pattern", "modeling pattern", "modelling pattern", "system model pattern", "systems model pattern"]}]},
+      {"id": "G_MODEL_PROFILE", "cluster": "C1", "all_of": [{"id": "MODEL_PROFILE_PHRASE", "forms": ["model profile", "system model profile", "systems model profile"]}]},
+      {"id": "G_SYSML_PROFILE", "cluster": "C1", "all_of": [{"id": "SYSML_PROFILE_PHRASE", "forms": ["SysML profile"]}]},
+      {"id": "G_DOMAIN_SPECIFIC_MODELING_LANGUAGE", "cluster": "C1", "all_of": [{"id": "DOMAIN_SPECIFIC_LANGUAGE_PHRASE", "forms": ["domain-specific modeling language", "domain specific modeling language", "domain-specific modelling language", "domain specific modelling language"]}, {"id": "MODEL_ANCHOR", "forms": ["MBSE", "model-based systems engineering", "model based systems engineering", "model-based system engineering", "model based system engineering", "SysML", "systems modeling language", "system model", "systems model"]}]}
+    ]
   }
 }

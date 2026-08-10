@@ -1,0 +1,225 @@
+{
+  "status": "passed",
+  "classification": "synthetic_regression_not_candidate_search",
+  "screening_prohibited": true,
+  "fixture_count": 13,
+  "passed": 13,
+  "failed": 0,
+  "dictionary_sha256": "b4a6b059256aa61c922b0998d8086f1727dfedfd4113ef883b244a4187f0e932",
+  "matcher_sha256": "08f258393f35b6ae573f8e0a4cc0f9354af996b22d335b459065e9c62f30425a",
+  "fixture_sha256": {
+    "esa-genericity-route-regression.json": "703cea9c0e283048b4472e7ab3d74f6f9ca5739e19dc95ca14f37d567b720448",
+    "esa-genericity-attachment-regression.json": "94475236881692ff4fad89811d2273028debed4108b5bf751636f41acb880314"
+  },
+  "cases": [
+    {
+      "id": "positive_joined_metadata_cross_field_independent_relation",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": true,
+        "attachment_text": false,
+        "union": true,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_REFERENCE_ARCHITECTURE"
+        ]
+      }
+    },
+    {
+      "id": "negative_reference_architecture_self_satisfies_architecture_only",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": false,
+        "attachment_text": false,
+        "union": false,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_REFERENCE_ARCHITECTURE"
+        ]
+      }
+    },
+    {
+      "id": "positive_architecture_artifact_with_independent_requirement",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": true,
+        "attachment_text": false,
+        "union": true,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_MISSION_AGNOSTIC_ARCHITECTURE"
+        ]
+      }
+    },
+    {
+      "id": "negative_generic_artifact_without_relation",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": false,
+        "attachment_text": false,
+        "union": false,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_REUSABLE_SYSTEM_MODEL"
+        ]
+      }
+    },
+    {
+      "id": "positive_variation_point_architecture_with_validation",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": true,
+        "attachment_text": false,
+        "union": true,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_VARIATION_POINT_ARCHITECTURE"
+        ]
+      }
+    },
+    {
+      "id": "negative_no_cross_route_cooccurrence",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": false,
+        "attachment_text": false,
+        "union": false,
+        "candidate_joined_metadata": false,
+        "candidate_attachment_text": false,
+        "candidate_union": false,
+        "active_artifacts": [
+          "G_REUSABLE_MODEL"
+        ]
+      }
+    },
+    {
+      "id": "positive_attachment_unicode_dash_and_uk_behavior",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": false,
+        "attachment_text": true,
+        "union": true,
+        "candidate_joined_metadata": false,
+        "candidate_attachment_text": true,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_METAMODEL"
+        ]
+      }
+    },
+    {
+      "id": "negative_smallsat_not_population",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": false,
+        "attachment_text": false,
+        "union": false,
+        "candidate_joined_metadata": false,
+        "candidate_attachment_text": false,
+        "candidate_union": false,
+        "active_artifacts": [
+          "G_DOMAIN_MODEL"
+        ]
+      }
+    },
+    {
+      "id": "positive_product_family_spaced_variant",
+      "fixture_file": "esa-genericity-route-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "joined_metadata": true,
+        "attachment_text": false,
+        "union": true,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_PRODUCT_FAMILY_MODEL"
+        ]
+      }
+    },
+    {
+      "id": "metadata_join_is_one_route",
+      "fixture_file": "esa-genericity-attachment-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "metadata": true,
+        "attachment": false,
+        "candidate_metadata": true,
+        "candidate_attachment": false,
+        "union": true,
+        "candidate_union": true
+      }
+    },
+    {
+      "id": "single_attachment_positive",
+      "fixture_file": "esa-genericity-attachment-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "metadata": false,
+        "attachment": true,
+        "candidate_metadata": false,
+        "candidate_attachment": true,
+        "union": true,
+        "candidate_union": true
+      }
+    },
+    {
+      "id": "cross_attachment_cooccurrence_is_prohibited",
+      "fixture_file": "esa-genericity-attachment-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "metadata": false,
+        "attachment": false,
+        "candidate_metadata": false,
+        "candidate_attachment": false,
+        "union": false,
+        "candidate_union": false
+      }
+    },
+    {
+      "id": "metadata_attachment_cross_route_cooccurrence_is_prohibited",
+      "fixture_file": "esa-genericity-attachment-regression.json",
+      "passed": true,
+      "errors": [],
+      "observed": {
+        "metadata": false,
+        "attachment": false,
+        "candidate_metadata": false,
+        "candidate_attachment": false,
+        "union": false,
+        "candidate_union": false
+      }
+    }
+  ]
+}

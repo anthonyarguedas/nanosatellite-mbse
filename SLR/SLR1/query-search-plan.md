@@ -1,8 +1,8 @@
 # Query Search Plan: EPS MBSE in CubeSat/Nanosatellite Development
 
 - **Review run:** `eps-mbse-slr-2026`
-- **Protocol:** `protocol.md`, version `1.2`, frozen and authorized 2026-08-07
-- **Plan status:** final discovery is authorized but not yet executed; rerun every accepted method from a clean final-run artifact set
+- **Protocol:** `protocol.md`, version `1.3`, prospectively amended, frozen, and authorized 2026-08-10
+- **Plan status:** no valid final discovery has been executed; run every accepted method from a clean version-1.3 final-run artifact set
 - **Planned evidence window:** 2011 through the date each final search is run in 2026
 - **Electronic sources:** Scopus; Web of Science Core Collection; IEEE Xplore; Compendex on Engineering Village; Wiley Online Library; ESA Indico; NASA Technical Reports Server (NTRS)
 - **Search unit:** one exact source-specific query, request body, or reproducible website-harvest/matching operation together with its fields, limits, pagination/coverage settings, date, and raw artifacts
@@ -12,7 +12,9 @@
 Build a new, independently discovered candidate set for full-text retrieval. The search must support both:
 
 - **Stream A — EPS-explicit:** population × EPS × structured-system-model/MBSE concepts; and
-- **Stream B — embedded-thread recall:** population × structured-system-model/MBSE concepts without a mandatory EPS term.
+- **Stream B — embedded-thread recall:** population combined with structured-system-model/MBSE, precise reusable-artifact (`B-G`), conservative central-asset (`B-C1`), or model-coupled tailoring (`B-T2`) concepts, without a mandatory EPS term.
+
+For the five bibliographic interfaces, **core B is the retained union `B1 ∪ B2`**: B1 is `P AND M_high-specificity`, while B2 is `P AND M_broad-structured-model AND R` because its broader model terms need the established systems-engineering concern block. For ESA/NTRS, deterministic core B is `P AND M` within one local record/route. Thus “core B” is a provenance-coded union, not a claim that every source-native B2 string omits R. The version-1.3 expansion partitions are candidate-generating where source-specific no-screening pilots showed—or a structurally non-contained finite source adaptation prospectively preserves—possible IDs outside core B1∪B2. They are terminology-recall partitions inside Stream B, not additional eligibility routes and not evidence that a retrieved model is generic or tailored. G/C1/T2 words are never mandatory for core-B records, and every included artifact receives the same full-text RQ1-G assessment regardless of discovery query.
 
 Search sensitivity is broader than final scientific eligibility. Route A/Route B status and the required EPS anchor, model anchor, and explicit bridge are full-text decisions, not metadata assumptions. Generic `SmallSat`/small-satellite work is outside the population and is not a positive search concept.
 
@@ -30,7 +32,7 @@ The seven sources are searched in full within their documented interfaces or pub
 | ESA Indico | Whole root/event JSON census plus local attachment-first matcher | Frozen dictionary/code/fixtures passed; 408/408 event exports and all 6,770 material associations inventoried; 5,690 document-like URLs received retrieval/parse outcomes; corrected metadata/attachment A/B routes reconciled |
 | NASA NTRS | Public citations JSON API plus representative normal-UI checks | Complete corrected 6×18 P×M matrix executed 108/108; every page reconciled; full-E local tag and A⊆B invariant passed |
 
-Every observation is logged as `pilot_not_candidate_search` in [`search-log.md`](search-log.md); the finding-by-finding closure map is [`2026-08-07-press-finding-resolution.md`](searches/subagent-logs/2026-08-07-press-finding-resolution.md). Under the authorized version 1.2 protocol, final discovery must rerun every accepted method from a clean final-run artifact set.
+Every version-1.2 observation is logged as `pilot_not_candidate_search` in [`search-log.md`](search-log.md); the finding-by-finding closure map is [`2026-08-07-press-finding-resolution.md`](searches/subagent-logs/2026-08-07-press-finding-resolution.md). Version-1.3 genericity/tailoring pilots are likewise no-screening diagnostics and are recorded separately. Under the authorized version 1.3 protocol, final discovery must rerun every accepted method, including source-applicable `B-G`, `B-C1`, and `B-T2`, from a clean final-run artifact set.
 
 ## 2. Anti-anchoring and provenance rules
 
@@ -79,6 +81,18 @@ Bare `EPS` is always intersected with both population and model blocks in source
 
 Broad `model-based` or `simulation` is insufficient alone. When broad model terms are used, combine them with a systems-engineering relation/concern block such as requirements, function/behavior, architecture, interfaces, traceability, parametrics, verification, or validation.
 
+### G/C1/T2/R — bounded reusable-artifact and tailoring recall expansion
+
+`G`, `C1`, and `T2` are conservative candidate-recall blocks, never genericity verdicts.
+
+- **G1/G2 — precise artifacts:** generic, reusable, or configurable `model`/`system model`; `model template`; hyphenated/spaced mission-agnostic or mission-independent model/architecture; `reference architecture`; `domain model`; `metamodel`/`meta-model`; hyphenated/spaced product-line or product-family model; and complete `variation point AND model/architecture` constructs.
+- **C1 — central reusable assets:** `reference model`/`system reference model`; complete model-library, model-pattern, model-profile, and `SysML profile` phrases; and a hyphenated/spaced US/UK domain-specific modeling-language phrase coupled to an MBSE/system-model anchor. Bare `library`, `pattern`, `profile`, or language is prohibited.
+- **T2 — model-coupled tailoring:** the source's B2 structured-model block plus explicit reuse, tailor, customize/customise, configure, parameterize/parameterise, instantiate, variability/variation point, specialize/specialise, or adapt forms coupled to model(s) or architecture(s).
+
+The preferred Boolean implementations are separate `P AND G1`, `P AND G2`, `P AND C1`, and `P AND M_B2 AND T2` queries, with complete provenance and a union only after each accepted partition is exhausted. No R term is required for precise G/C1 because a relation gate can suppress metadata-sparse artifact reports and can be lexically self-satisfied by `architecture`. For G/C1 expansion records, `R_ALL` (requirements, functions/US-UK behavior, architecture, interfaces, traceability, parametrics, verification, validation) may be retained as an optional precision/provenance tag; this does not remove the required R block from the retained broad-model bibliographic B2 core strategy. If an operationally necessary relation-gated fallback is prospectively piloted, use `G_M AND R_ALL` versus `G_A AND R_NO_ARCH` as separate cells and compare it against relation-free G; never use unsplit `G AND R_ALL`.
+
+Only full-text Route A/B screening establishes MBSE qualification and an EPS bridge. C1/G/T2 retrieval is no evidence of a reusable EPS artifact, and no core-B record must contain these terms. Report each expansion's overlap and unique yield against core B and the accepted cumulative union. A source-adapted partition may be structurally tag-only—for example, T2 where local core B is already `P AND M` without R—but the term hits are still retained for RQ1-G characterization.
+
 ### O/V — selected, non-exhaustive outcome, burden, and V&V sensitivity probes
 
 These lists define the broader optional tagging vocabulary. The exact `*-O1` and `*-V1` strategies below intentionally select a source-representable subset spanning the priority outcome/burden and V&V domains; they are sensitivity probes, not complete translations or baseline eligibility filters. The subset avoids making outcome reporting mandatory and keeps comparable probes across sources. Any later expansion requires a separately logged syntax/count pilot.
@@ -86,6 +100,7 @@ These lists define the broader optional tagging vocabulary. The exact `*-O1` and
 - **Outcomes:** `reliab*`, `mission assurance`, `reproduc*`, `reuse`, `reusable`, `integrab*`, `interoperab*`, `traceab*`, `interface consistency`, `lifecycle continuity`, `benefit`, `impact`, `outcome`, `no effect`, `adverse`.
 - **Implementation burdens:** `burden`, `effort`, `workload`, `overhead`, `cost`, `schedule`, `time`, `training`, `skill`, `learning curve`, `licen*`, `resource`, `maintenance`, `governance`, `adoption`.
 - **V&V:** `verification`, `validation`, `V&V`, `model verification`, `model validation`, `system verification`, `system validation`, `design verification`, `design validation`, `requirements-in-the-loop`, `model checking`, `virtual integration`, `MIL`, `model-in-the-loop`, `SIL`, `software-in-the-loop`, `PIL`, `processor-in-the-loop`, `HIL`, `hardware-in-the-loop`, `test case`, `test procedure`, `model-to-test`.
+Tailoring operations and footprint are additionally tagged within every retrieved record. The 2026-08-10 T1 probe was a strict subset of core B1∪B2, but the later T2 design replaces B2's relation gate with a model/architecture-coupled tailoring block and produced opaque additions; T1 therefore remains superseded and cannot justify omitting T2.
 
 ## 5. Common execution and PRISMA-S log rules
 
@@ -124,7 +139,7 @@ Use the Elsevier Scopus Search API (`https://api.elsevier.com/content/search/sco
 
 The Search API request exposes no separate automatic stemming/lemmatization parameter in the validated template. Record that absence and any changed source documentation/default at final execution; never infer singular/plural or US/UK equivalence, because the explicit variants below remain mandatory.
 
-Pre-freeze diagnostics on 2026-08-06 accepted all six original strings. API totals were: S-A1 = 3, S-A2 = 9, S-B1 = 75, S-B2 = 55, S-V1 = 1, and S-O1 = 4. A complete diagnostic retrieval of S-A1 reconciled all 3 records and normalized JSON merged successfully. On 2026-08-07, the normal Scopus web UI accepted the revised population block and returned S-B1 = 80 versus 75 under matched web-UI controls. An initial API retry failed authentication and produced invalid empty shells, but a later institutional-network retry successfully reproduced original S-B1 = 75 and revised S-B1 = 80 in `COMPLETE` view. These are `pilot_not_candidate_search` observations; after authorization, confirm API authentication afresh and rerun all six revised strategies using only final-run artifacts for discovery.
+Pre-freeze diagnostics on 2026-08-06 accepted all six original strings. API totals were: S-A1 = 3, S-A2 = 9, S-B1 = 75, S-B2 = 55, S-V1 = 1, and S-O1 = 4. A complete diagnostic retrieval of S-A1 reconciled all 3 records and normalized JSON merged successfully. On 2026-08-07, the normal Scopus web UI accepted the revised population block and returned S-B1 = 80 versus 75 under matched web-UI controls. An initial API retry failed authentication and produced invalid empty shells, but a later institutional-network retry successfully reproduced original S-B1 = 75 and revised S-B1 = 80 in `COMPLETE` view. These are `pilot_not_candidate_search` observations; after version-1.3 authorization, confirm API authentication afresh and rerun the six retained core/sensitivity strategies plus the accepted expansion partitions using only final-run artifacts for discovery. An initial relation-gated combined G query retrieved 12 records with 9 opaque additions over the fresh 126-ID S-B1∪S-B2 union, but that formula was superseded because architecture-bearing artifacts could self-satisfy its R block. Follow-up two-pass Scopus pilots accepted relation-free G1 (5 total; 4 additions), relation-free G2 (8; 6), C1 (24; 7), and T2 (26; 2); all had stable ordered passes and no exact-day removal/unresolved record. No title, abstract, eligibility, or evidence assessment occurred, so these are recall diagnostics only.
 
 ### Scopus request template, pagination, and acceptance rule
 
@@ -132,7 +147,7 @@ The versioned non-secret template is [`searches/api-pagination-request-templates
 
 - **GET** `https://api.elsevier.com/content/search/scopus`; `Accept: application/json`; supply `X-ELS-APIKey` only from the secure runtime environment, never in an URL, artifact, log, or command transcript.
 - Query parameters: `count=25`, `start=0,25,50,…`, `view=COMPLETE`, `sort=eid`, and `httpAccept=application/json`. The historical delegated pilot observed `start=0,25,50,75` and pages of 25, 25, 25, and 5 against 80. The PRESS-corrected unrestricted S-B1 preflight then observed the same offsets and a terminal `start=75` page of 10 against 85. `start` is therefore frozen as zero-based offset pagination, not a cursor.
-- Treat `search-results.opensearch:totalResults` on page 1 as the snapshot total; require it unchanged on every subsequent page. Use `entry.eid` in returned order as the page ID, `sort=eid` as the declared source ordering, and preserve ranks `start + 1` through `start + returned_count`. The corrected preflight's full 85-ID sequence was non-increasing by EID and identical across two complete passes.
+- Treat `search-results.opensearch:totalResults` on page 1 as the snapshot total; require it unchanged on every subsequent page. Use `entry.eid` in returned order as the page ID, `sort=eid` as the declared source ordering, and preserve ranks `start + 1` through `start + returned_count`. The corrected preflight's full 85-ID sequence was non-increasing by EID and identical across two complete passes. When the complete result fits one terminal page, Scopus may advertise `itemsPerPage` as the actual terminal count rather than requested 25; accept only requested 25 or the exactly computed terminal count, never a short nonterminal page.
 - Use [`searches/tools/api_pagination_reconcile.py`](searches/tools/api_pagination_reconcile.py), not an arbitrary `max-pages` limit, to retrieve computed pages to exhaustion. It uses a 30-second timeout; retries network/408/425/429/5xx failures three times after the initial attempt with `Retry-After` or capped exponential backoff; stops on redirects, access/authentication responses, malformed JSON, unexpected offsets, short/nonterminal pages, duplicated page-ID sequences/IDs, or a changed total. One changed-total snapshot is restarted from page 1; a repeated change is a source failure. It writes ordered page-ID/global-rank reconciliation, detects missing pages, and fails unless `retrieved == source total` and a second complete pass has the same ordered IDs.
 - Retain raw pages and normalized/merge-preflight outputs only in the access-controlled, Git-ignored run directory. Do not merge or screen a failed snapshot; a `pilot_not_candidate_search` snapshot is superseded and never a review candidate. After a successful **final** snapshot, run the normalizer/`merge_search_results.py` only on its successful normalized pass and retain the source total and global ranks.
 
@@ -162,6 +177,32 @@ TITLE-ABS-KEY(cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" 
 TITLE-ABS-KEY(cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND TITLE-ABS-KEY("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") AND TITLE-ABS-KEY(requirement* OR function* OR behavio* OR architectur* OR interface* OR traceab* OR parametric* OR verification OR validation) AND LANGUAGE(english) AND PUBYEAR AFT 2010 AND PUBYEAR BEF 2027
 ```
 
+### S-BG1 — relation-free precise reusable-model/template artifacts
+
+```text
+TITLE-ABS-KEY(cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND TITLE-ABS-KEY("generic model" OR "generic system model" OR "reusable model" OR "reusable system model" OR "configurable model" OR "configurable system model" OR "model template" OR "mission-agnostic model" OR "mission agnostic model" OR "mission-independent model" OR "mission independent model" OR "mission-agnostic architecture" OR "mission agnostic architecture" OR "mission-independent architecture" OR "mission independent architecture") AND LANGUAGE(english) AND PUBYEAR AFT 2010 AND PUBYEAR BEF 2027
+```
+
+### S-BG2 — relation-free structural reusable artifacts
+
+```text
+TITLE-ABS-KEY(cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND TITLE-ABS-KEY("reference architecture" OR "domain model" OR metamodel OR "meta-model" OR "product-line model" OR "product line model" OR "product-family model" OR "product family model" OR ("variation point" AND (model OR architecture))) AND LANGUAGE(english) AND PUBYEAR AFT 2010 AND PUBYEAR BEF 2027
+```
+
+### S-BC1 — conservative central reusable assets
+
+```text
+TITLE-ABS-KEY(cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND TITLE-ABS-KEY("reference model" OR "system reference model" OR "model library" OR "model libraries" OR "system model library" OR "system model libraries" OR "model pattern" OR "modeling pattern" OR "modelling pattern" OR "system model pattern" OR "systems model pattern" OR "model profile" OR "system model profile" OR "systems model profile" OR "SysML profile" OR (("domain-specific modeling language" OR "domain specific modeling language" OR "domain-specific modelling language" OR "domain specific modelling language") AND ("model-based systems engineering" OR "model based systems engineering" OR "model-based system engineering" OR "model based system engineering" OR MBSE OR SysML OR "systems modeling language" OR "system model" OR "systems model"))) AND LANGUAGE(english) AND PUBYEAR AFT 2010 AND PUBYEAR BEF 2027
+```
+
+### S-BT2 — model/architecture-coupled tailoring
+
+```text
+TITLE-ABS-KEY(cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND TITLE-ABS-KEY("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") AND TITLE-ABS-KEY(((reuse OR reused OR reusable OR reusing OR tailor* OR customiz* OR customis* OR configur* OR parameteriz* OR parameteris* OR instantiat* OR variability OR "variation point" OR specializ* OR specialis*) AND (model OR models OR architecture OR architectures)) OR (adapt* AND (model OR models OR architecture OR architectures))) AND LANGUAGE(english) AND PUBYEAR AFT 2010 AND PUBYEAR BEF 2027
+```
+
+These four separately reconciled queries are required terminology partitions, not genericity/tailoring classifications. Do not replace them with the rejected combined X1 shortcut or the superseded unsplit G×R query.
+
 ### S-V1 — EPS-linked V&V sensitivity probe
 
 ```text
@@ -180,9 +221,9 @@ Search **Web of Science Core Collection**, not All Databases, through Clarivate'
 
 Apply source-native controls for Publication Date from `2011-01-01` through the actual run date and Language = `English`. Select **no Document Type restriction** at discovery; verify publication type during screening. Do not restrict by organization, research area, source title, open-access status, citation count, or individual Core Collection edition. Preserve the Basic Search history entry, exact Topic string, controls, selected editions, run date/time/time zone, source total, declared sort, page size, and complete result/export reconciliation. If Advanced Search is used as a fallback, log its `TS=`/`PY=` strategy as a distinct source-native implementation and demonstrate set equivalence rather than assuming it.
 
-Before each final run, open the current WoS Search Settings and record the observed **Exact Search/lemmatization** control and state. Use the same documented state for all six runs and retain every explicit spelling/number variant regardless; equal counts never establish expansion equivalence. If the Basic Search route no longer exposes or reports the control, record the source default as observed rather than guessing.
+Before each final run, open the current WoS Search Settings and record the observed **Exact Search/lemmatization** control and state. Use the same documented state for all final runs and retain every explicit spelling/number variant regardless; equal counts never establish expansion equivalence. If the Basic Search route no longer exposes or reports the control, record the source default as observed rather than guessing.
 
-A 2026-08-07 PRESS-corrected Basic/Topic pilot used Publication Date `2011-01-01`–`2026-08-07`, English, Editions All, and no Document Type restriction. Dynamic totals were WS-A1 = 1, WS-A2 = 0 (the clean follow-up displayed `Your search found no results`), WS-B1 = 43, WS-B2 = 34, WS-V1 = 1, and WS-O1 = 1. Final B1 versus the same query minus only `"nano satellites"` was 43 versus 43; unrestricted versus the old three-type restriction was also 43 versus 43, with no set-equivalence inference. The Advanced `Exact search` switch was observed unchanged at `aria-checked=false`; no expansion semantics were inferred. Corrected unrestricted WS-B1 also completed an ordinary non-Fast-5000 one-record RIS export. These are `pilot_not_candidate_search` observations; rerun every strategy and export preflight after authorization. Full observations are in [`2026-08-07-press-browser-source-validation.md`](searches/subagent-logs/2026-08-07-press-browser-source-validation.md).
+A 2026-08-07 PRESS-corrected Basic/Topic pilot used Publication Date `2011-01-01`–`2026-08-07`, English, Editions All, and no Document Type restriction. Dynamic totals were WS-A1 = 1, WS-A2 = 0 (the clean follow-up displayed `Your search found no results`), WS-B1 = 43, WS-B2 = 34, WS-V1 = 1, and WS-O1 = 1. Final B1 versus the same query minus only `"nano satellites"` was 43 versus 43; unrestricted versus the old three-type restriction was also 43 versus 43, with no set-equivalence inference. The Advanced `Exact search` switch was observed unchanged at `aria-checked=false`; no expansion semantics were inferred. Corrected unrestricted WS-B1 also completed an ordinary non-Fast-5000 one-record RIS export. These are `pilot_not_candidate_search` observations; rerun every strategy and export preflight after authorization. Full observations are in [`2026-08-07-press-browser-source-validation.md`](searches/subagent-logs/2026-08-07-press-browser-source-validation.md). A later relation-free G1/G2 follow-up displayed diagnostic totals 2/4 but could not execute the required English refinement, so both runs are failures rather than accepted sets. C1/T2 follow-ups were likewise provisional only. The clean final run must execute English-controlled WS-BG1/2, WS-BC1, and WS-BT2 anew or report a source failure; pilot diagnostics cannot substitute.
 
 Use Relevance sort and a declared page size (50 was observed). Read and reconcile every results page, retaining global rank. Use **ordinary Export**, never Fast 5000, in source-supported ranges no larger than 1,000 records. A one-record pilot validated RIS with Custom selection (30), including the WoS accession number, DOI, title, authors, publication year, abstract, editions, and cited references; preserve native RIS unchanged. Normalize each batch with `academic-search/scripts/ris_to_merge_csv.py`, supplying source `Web of Science Core Collection`, the exact query, zero-based rank offset, and source total. Preserve cited references in the native RIS and a reproducible sidecar because the common merge schema does not carry them. Then run `merge_search_results.py`, whose regression-tested alias canonicalizes this source as `web_of_science_core_collection`. Repeat a one-record export/normalization/merge preflight after authorization before bulk export. If ordinary export redirects to authentication or fails, log the failure and obtain an authorized manual export; do not use the Fast 5000 login path as an undocumented substitute.
 
@@ -210,6 +251,32 @@ Use Relevance sort and a declared page size (50 was observed). Read and reconcil
 (CubeSat OR CubeSats OR "cube sat" OR nanosatellite OR nanosatellites OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") AND (requirement* OR function* OR behavio* OR architectur* OR interface* OR traceab* OR parametric* OR verification OR validation)
 ```
 
+### WS-BG1 — relation-free precise reusable-model/template artifacts
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosatellite OR nanosatellites OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("generic model" OR "generic system model" OR "reusable model" OR "reusable system model" OR "configurable model" OR "configurable system model" OR "model template" OR "mission-agnostic model" OR "mission agnostic model" OR "mission-independent model" OR "mission independent model" OR "mission-agnostic architecture" OR "mission agnostic architecture" OR "mission-independent architecture" OR "mission independent architecture")
+```
+
+### WS-BG2 — relation-free structural reusable artifacts
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosatellite OR nanosatellites OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("reference architecture" OR "domain model" OR metamodel OR "meta-model" OR "product-line model" OR "product line model" OR "product-family model" OR "product family model" OR ("variation point" AND (model OR architecture)))
+```
+
+### WS-BC1 — conservative central reusable assets
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosatellite OR nanosatellites OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("reference model" OR "system reference model" OR "model library" OR "model libraries" OR "system model library" OR "system model libraries" OR "model pattern" OR "modeling pattern" OR "modelling pattern" OR "system model pattern" OR "systems model pattern" OR "model profile" OR "system model profile" OR "systems model profile" OR "SysML profile" OR (("domain-specific modeling language" OR "domain specific modeling language" OR "domain-specific modelling language" OR "domain specific modelling language") AND ("model-based systems engineering" OR "model based systems engineering" OR "model-based system engineering" OR "model based system engineering" OR MBSE OR SysML OR "systems modeling language" OR "system model" OR "systems model")))
+```
+
+### WS-BT2 — model/architecture-coupled tailoring
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosatellite OR nanosatellites OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") AND ((((reuse OR reused OR reusable OR reusing OR tailor* OR customiz* OR customis* OR configur* OR parameteriz* OR parameteris* OR instantiat* OR variability OR "variation point" OR specializ* OR specialis*) AND (model OR models OR architecture OR architectures)) OR (adapt* AND (model OR models OR architecture OR architectures))))
+```
+
+These four expansions use the same Topic field and common controls as WS-B1/B2 and are reconciled separately before union.
+
 ### WS-V1 — EPS-linked V&V sensitivity probe
 
 ```text
@@ -228,7 +295,7 @@ Use IEEE Xplore's JSON search interface at `https://ieeexplore.ieee.org/rest/sea
 
 The validated JSON request exposes no separate automatic stemming, lemmatization, or term-expansion parameter. Record that absence and any interface-default statement observed at final execution; the explicit singular/plural and US/UK forms below remain mandatory.
 
-Pre-freeze diagnostics on 2026-08-06 accepted all six original strings and all intended facets. Displayed/API totals were: I-A1 = 4, I-A2 = 2, I-B1 = 38, I-B2 = 42, I-V1 = 1, and I-O1 = 4. A complete diagnostic retrieval of I-A1 reconciled all 4 records and normalized JSON merged successfully. On 2026-08-07, the revised complete population block was accepted; I-B1 remained 38, I-V1 remained 1, and I-O1 remained 4. Equal counts do not prove identical sets. These counts and records are `pilot_not_candidate_search`; rerun every revised query after authorization, preserve fresh count and full-retrieval events, and use only those final reruns for discovery.
+Pre-freeze diagnostics on 2026-08-06 accepted all six original strings and all intended facets. Displayed/API totals were: I-A1 = 4, I-A2 = 2, I-B1 = 38, I-B2 = 42, I-V1 = 1, and I-O1 = 4. A complete diagnostic retrieval of I-A1 reconciled all 4 records and normalized JSON merged successfully. On 2026-08-07, the revised complete population block was accepted; I-B1 remained 38, I-V1 remained 1, and I-O1 remained 4. Equal counts do not prove identical sets. These counts and records are `pilot_not_candidate_search`; rerun the six retained core/sensitivity queries plus the accepted expansion partitions after version-1.3 authorization, preserve fresh count/full retrieval, and use only those final reruns for discovery. An initial relation-gated G query retrieved 7 records and six confirmed-date additions, but its unsplit architecture relation was superseded. Follow-up two-pass relation-free pilots found G1 = 0; G2 = 7 raw/6 exact-day-confirmed with six additions; C1 = 22 raw/21 confirmed with six additions; and T2 = 22 raw/19 confirmed with six additions. Unresolved dates remained separate and no record was screened.
 
 ### IEEE Xplore request template, pagination, and acceptance rule
 
@@ -236,7 +303,7 @@ The versioned non-secret template is [`searches/api-pagination-request-templates
 
 The historical delegated I-B2 pilot observed one-based `pageNumber=1,2`, with `startRecord/endRecord` 0/25 then 25/42. The PRESS-corrected no-type-filter I-B2 preflight observed 0/25 then 25/47, 25 and 22 records, and `totalPages=2`; `pageNumber=0` aliased the first page during a separate probe and is prohibited. `sortType=newest` changed the first-page ordered-ID sequence from the default/relevance sequence; the corrected preflight's full 47 `articleNumber` IDs were identical across two complete passes. Preserve source response order as global ranks 1–47; do not invent a cursor or an unobserved sort field.
 
-Use [`searches/tools/api_pagination_reconcile.py`](searches/tools/api_pagination_reconcile.py) with the common retry, total-change, missing-page, duplicate-ID/page, and strict `retrieved == source total` rules in the template. It retries network/408/425/429/5xx failures three times after the initial request with `Retry-After` or capped exponential backoff, treats redirect/access/challenge/non-JSON responses as failures, reruns one whole snapshot after a changed total, and requires an identical second full ordered-ID pass. Do not merge or screen failed snapshots; pilot outputs remain superseded `pilot_not_candidate_search` artifacts. The empirical run, checksums, archive manifests, and merge preflights are in [`2026-08-07-scopus-ieee-multipage-api-validation.md`](searches/subagent-logs/2026-08-07-scopus-ieee-multipage-api-validation.md).
+Use [`searches/tools/api_pagination_reconcile.py`](searches/tools/api_pagination_reconcile.py) with the common retry, total-change, missing-page, duplicate-ID/page, and strict `retrieved == source total` rules in the template. IEEE may report `totalPages=1` for a valid zero-record response; the reconciler accepts that convention only while fetching one empty page in each pass and requiring source total, retrieved count, and unique-ID count all to equal zero. It retries network/408/425/429/5xx failures three times after the initial request with `Retry-After` or capped exponential backoff, treats redirect/access/challenge/non-JSON responses as failures, reruns one whole snapshot after a changed total, and requires an identical second full ordered-ID pass. Do not merge or screen failed snapshots; pilot outputs remain superseded `pilot_not_candidate_search` artifacts. The empirical run, checksums, archive manifests, and merge preflights are in [`2026-08-07-scopus-ieee-multipage-api-validation.md`](searches/subagent-logs/2026-08-07-scopus-ieee-multipage-api-validation.md).
 
 ### I-A1
 
@@ -261,6 +328,32 @@ Use [`searches/tools/api_pagination_reconcile.py`](searches/tools/api_pagination
 ```text
 (CubeSat OR CubeSats OR "cube sat" OR nanosat OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") AND (requirement OR requirements OR function OR functions OR behavior OR behaviors OR behaviour OR behaviours OR architecture OR architectures OR interface OR interfaces OR traceability OR parametric OR parametrics OR verification OR validation)
 ```
+
+### I-BG1 — relation-free precise reusable-model/template artifacts
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosat OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("generic model" OR "generic system model" OR "reusable model" OR "reusable system model" OR "configurable model" OR "configurable system model" OR "model template" OR "mission-agnostic model" OR "mission agnostic model" OR "mission-independent model" OR "mission independent model" OR "mission-agnostic architecture" OR "mission agnostic architecture" OR "mission-independent architecture" OR "mission independent architecture")
+```
+
+### I-BG2 — relation-free structural reusable artifacts
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosat OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("reference architecture" OR "domain model" OR metamodel OR "meta-model" OR "product-line model" OR "product line model" OR "product-family model" OR "product family model" OR ("variation point" AND (model OR architecture)))
+```
+
+### I-BC1 — conservative central reusable assets
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosat OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("reference model" OR "system reference model" OR "model library" OR "model libraries" OR "system model library" OR "system model libraries" OR "model pattern" OR "modeling pattern" OR "modelling pattern" OR "system model pattern" OR "systems model pattern" OR "model profile" OR "system model profile" OR "systems model profile" OR "SysML profile" OR (("domain-specific modeling language" OR "domain specific modeling language" OR "domain-specific modelling language" OR "domain specific modelling language") AND ("model-based systems engineering" OR "model based systems engineering" OR "model-based system engineering" OR "model based system engineering" OR MBSE OR SysML OR "systems modeling language" OR "system model" OR "systems model")))
+```
+
+### I-BT2 — model/architecture-coupled tailoring
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosat OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") AND (((reuse OR reused OR reusable OR reusing OR tailor OR tailored OR tailoring OR customize OR customized OR customizing OR customization OR customise OR customised OR customising OR customisation OR configure OR configured OR configuring OR configuration OR parameterize OR parameterized OR parameterizing OR parameterization OR parameterise OR parameterised OR parameterising OR parameterisation OR instantiate OR instantiated OR instantiating OR instantiation OR variability OR "variation point" OR specialize OR specialized OR specializing OR specialization OR specialise OR specialised OR specialising OR specialisation) AND (model OR models OR architecture OR architectures)) OR ((adapt OR adapted OR adapting OR adaptation) AND (model OR models OR architecture OR architectures)))
+```
+
+These four separately reconciled queries are required terminology partitions, not genericity/tailoring classifications.
 
 ### I-V1
 
@@ -304,6 +397,32 @@ Set **Turn autostemming off** to checked, because the strategy already prespecif
 ((cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") WN KY) AND (("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") WN KY) AND ((requirement* OR function* OR behavio* OR architectur* OR interface* OR traceab* OR parametric* OR verification OR validation) WN KY) AND (2011-* WN YR) AND (({English}) WN LA)
 ```
 
+### C-BG1 — relation-free precise reusable-model/template artifacts
+
+```text
+((cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") WN KY) AND (("generic model" OR "generic system model" OR "reusable model" OR "reusable system model" OR "configurable model" OR "configurable system model" OR "model template" OR "mission-agnostic model" OR "mission agnostic model" OR "mission-independent model" OR "mission independent model" OR "mission-agnostic architecture" OR "mission agnostic architecture" OR "mission-independent architecture" OR "mission independent architecture") WN KY) AND (2011-* WN YR) AND (({English}) WN LA)
+```
+
+### C-BG2 — relation-free structural reusable artifacts
+
+```text
+((cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") WN KY) AND (("reference architecture" OR "domain model" OR metamodel OR "meta-model" OR "product-line model" OR "product line model" OR "product-family model" OR "product family model" OR ("variation point" AND (model OR architecture))) WN KY) AND (2011-* WN YR) AND (({English}) WN LA)
+```
+
+### C-BC1 — conservative central reusable assets
+
+```text
+((cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") WN KY) AND (("reference model" OR "system reference model" OR "model library" OR "model libraries" OR "system model library" OR "system model libraries" OR "model pattern" OR "modeling pattern" OR "modelling pattern" OR "system model pattern" OR "systems model pattern" OR "model profile" OR "system model profile" OR "systems model profile" OR "SysML profile" OR (("domain-specific modeling language" OR "domain specific modeling language" OR "domain-specific modelling language" OR "domain specific modelling language") AND ("model-based systems engineering" OR "model based systems engineering" OR "model-based system engineering" OR "model based system engineering" OR MBSE OR SysML OR "systems modeling language" OR "system model" OR "systems model"))) WN KY) AND (2011-* WN YR) AND (({English}) WN LA)
+```
+
+### C-BT2 — model/architecture-coupled tailoring
+
+```text
+((cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") WN KY) AND (("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") WN KY) AND ((((reuse OR reused OR reusable OR reusing OR tailor* OR customiz* OR customis* OR configur* OR parameteriz* OR parameteris* OR instantiat* OR variability OR "variation point" OR specializ* OR specialis*) AND (model OR models OR architecture OR architectures)) OR (adapt* AND (model OR models OR architecture OR architectures))) WN KY) AND (2011-* WN YR) AND (({English}) WN LA)
+```
+
+These four expansions retain Compendex-only, autostemming-off, no-type, year, and language controls and are reconciled separately.
+
 ### C-V1
 
 ```text
@@ -316,7 +435,7 @@ Set **Turn autostemming off** to checked, because the strategy already prespecif
 ((cubesat OR cubesats OR "cube sat" OR nanosat* OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") WN KY) AND (("electrical power system" OR "electric power system" OR "power subsystem" OR "power budget" OR "energy budget" OR PCDU OR PMAD OR EPS) WN KY) AND (("model-based systems engineering" OR MBSE OR SysML OR "system model" OR "reference model" OR "digital engineering") WN KY) AND ((reliab* OR "mission assurance" OR reproduc* OR reuse OR reusable OR integrab* OR interoperab* OR traceab* OR benefit* OR impact OR outcome OR burden OR effort OR workload OR overhead OR cost OR schedule OR training OR "learning curve" OR licen* OR adoption) WN KY) AND (2011-* WN YR) AND (({English}) WN LA)
 ```
 
-The first browser diagnostic validated the original expressions under controls later superseded. A 2026-08-07 PRESS-corrected pilot used the exact final strings above with Compendex only, Published 2011–Latest, the literal year/language suffix, autostemming off, Relevance, 100/page, and no type filter: C-A1 = 3, C-A2 = 6, C-B1 = 76, C-B2 = 58, C-V1 = 1, and C-O1 = 1. Final B1 versus the same text minus only `"nano satellites"` was 76 versus 76; equal totals do not prove equal sets. The server summary can retain a broad coverage label despite the literal year clause, so retain both the `YR` clause and UI Published control, audit every exported publication date, preserve the source total, and log removals after the exact run-day cutoff. These are syntax/interface observations, not candidate searches; rerun all six exact strings after authorization. Full details are in [`2026-08-07-press-browser-source-validation.md`](searches/subagent-logs/2026-08-07-press-browser-source-validation.md).
+The first browser diagnostic validated the original expressions under controls later superseded. A 2026-08-07 PRESS-corrected pilot used the exact final strings above with Compendex only, Published 2011–Latest, the literal year/language suffix, autostemming off, Relevance, 100/page, and no type filter: C-A1 = 3, C-A2 = 6, C-B1 = 76, C-B2 = 58, C-V1 = 1, and C-O1 = 1. Final B1 versus the same text minus only `"nano satellites"` was 76 versus 76; equal totals do not prove equal sets. The server summary can retain a broad coverage label despite the literal year clause, so retain both the `YR` clause and UI Published control, audit every exported publication date, preserve the source total, and log removals after the exact run-day cutoff. These are syntax/interface observations, not candidate searches; rerun the six core/sensitivity strings and all accepted expansion strings after authorization. Full details are in [`2026-08-07-press-browser-source-validation.md`](searches/subagent-logs/2026-08-07-press-browser-source-validation.md). A 2026-08-10 relation-free follow-up reconciled C-BG1 = 4 and C-BG2 = 8, union 12, with eight opaque IDs outside a fresh 111-ID B1∪B2 set—one more than the superseded relation-gated union. C1/T2 access attempts failed and are not zeros. No record was screened; rerun all four expansions with final controls.
 
 Engineering Village exposed EndNote/RIS, BibTeX, ASCII, CSV, Excel, PDF, and RTF, with Current page, Citation, Abstract, and Detailed record options and a session basket labelled to 5,000 selected records. A normal one-record **CSV Detailed record** pilot produced a native file with 29 columns; because it omitted exact query and rank, a normalized CSV added the common provenance columns and passed `merge_search_results.py` with source, query, rank, and 1/1 raw/unique counts preserved. Repeat this preflight after authorization, preserve native and normalized files separately, and then export the complete set in logged batches. Save the Search Summary and reconcile source totals, pages, selections, and export batches.
 
@@ -359,6 +478,32 @@ For each run, preserve the exact query, generated URL/parameters, server-normali
 (CubeSat OR CubeSats OR "cube sat" OR nanosat* OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") AND (requirement* OR function* OR behavio* OR architectur* OR interface* OR traceab* OR parametric* OR verification OR validation)
 ```
 
+### W-BG1 — relation-free precise reusable-model/template artifacts
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosat* OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("generic model" OR "generic system model" OR "reusable model" OR "reusable system model" OR "configurable model" OR "configurable system model" OR "model template" OR "mission-agnostic model" OR "mission agnostic model" OR "mission-independent model" OR "mission independent model" OR "mission-agnostic architecture" OR "mission agnostic architecture" OR "mission-independent architecture" OR "mission independent architecture")
+```
+
+### W-BG2 — relation-free structural reusable artifacts
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosat* OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("reference architecture" OR "domain model" OR metamodel OR "meta-model" OR "product-line model" OR "product line model" OR "product-family model" OR "product family model" OR ("variation point" AND (model OR architecture)))
+```
+
+### W-BC1 — conservative central reusable assets
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosat* OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("reference model" OR "system reference model" OR "model library" OR "model libraries" OR "system model library" OR "system model libraries" OR "model pattern" OR "modeling pattern" OR "modelling pattern" OR "system model pattern" OR "systems model pattern" OR "model profile" OR "system model profile" OR "systems model profile" OR "SysML profile" OR (("domain-specific modeling language" OR "domain specific modeling language" OR "domain-specific modelling language" OR "domain specific modelling language") AND ("model-based systems engineering" OR "model based systems engineering" OR "model-based system engineering" OR "model based system engineering" OR MBSE OR SysML OR "systems modeling language" OR "system model" OR "systems model")))
+```
+
+### W-BT2 — model/architecture-coupled tailoring
+
+```text
+(CubeSat OR CubeSats OR "cube sat" OR nanosat* OR nanosatellite OR nanosatellites OR "nano-satellite" OR "nano-satellites" OR "nano satellite" OR "nano satellites") AND ("system model" OR "systems model" OR "system modeling" OR "systems modeling" OR "system modelling" OR "systems modelling" OR "reference model" OR "digital engineering" OR "object-oriented systems model") AND ((((reuse OR reused OR reusable OR reusing OR tailor* OR customiz* OR customis* OR configur* OR parameteriz* OR parameteris* OR instantiat* OR variability OR "variation point" OR specializ* OR specialis*) AND (model OR models OR architecture OR architectures)) OR (adapt* AND (model OR models OR architecture OR architectures))))
+```
+
+These four expansions use the same Anywhere/date/result-tab controls as W-B1/B2 and are reconciled separately before union.
+
 ### W-V1
 
 ```text
@@ -373,7 +518,7 @@ For each run, preserve the exact query, generated URL/parameters, server-normali
 
 Outcome/burden and V&V terms remain optional probes, not baseline restrictions.
 
-A 2026-08-07 PRESS-corrected whole-platform pilot accepted all six exact strings. Articles & Chapters totals were W-A1 = 7, W-A2 = 46, W-B1 = 44, W-B2 = 103, W-V1 = 17, and W-O1 = 21; Collections were respectively unresolvable (the direct route fell back and is not a zero), 2, 1, 4, 1, and 1. Final W-B1 versus the same query minus only `"nano satellites"` remained 44 Articles & Chapters and 1 Collection; equal totals do not establish identical sets. W-B2 pagination reached active page 6 with 3 cards at `pageSize=20`, reconciling 103. Wiley rendered its sort control as `Date` in this dated pilot, so preserve the actual declared sort rather than assuming an earlier default. These observations are `pilot_not_candidate_search`; rerun all six exact strategies after authorization. Full details are in [`2026-08-07-press-browser-source-validation.md`](searches/subagent-logs/2026-08-07-press-browser-source-validation.md).
+A 2026-08-07 PRESS-corrected whole-platform pilot accepted all six exact strings. Articles & Chapters totals were W-A1 = 7, W-A2 = 46, W-B1 = 44, W-B2 = 103, W-V1 = 17, and W-O1 = 21; Collections were respectively unresolvable (the direct route fell back and is not a zero), 2, 1, 4, 1, and 1. Final W-B1 versus the same query minus only `"nano satellites"` remained 44 Articles & Chapters and 1 Collection; equal totals do not establish identical sets. W-B2 pagination reached active page 6 with 3 cards at `pageSize=20`, reconciling 103. Wiley rendered its sort control as `Date` in this dated pilot, so preserve the actual declared sort rather than assuming an earlier default. These observations are `pilot_not_candidate_search`; rerun the six core/sensitivity strategies and all accepted expansion strategies after authorization. Full details are in [`2026-08-07-press-browser-source-validation.md`](searches/subagent-logs/2026-08-07-press-browser-source-validation.md). A relation-free follow-up reconciled W-BG1 = 5 and W-BG2 = 13, union 16, with nine opaque additions over the fresh 124-ID B1∪B2 set; its G union was identical to the superseded gated union. W-BC1 reconciled 32 records with six additions, while W-BT2 failed changing-total/pagination controls and is not an accepted set. No record was screened; every expansion must run anew.
 
 If Wiley rejects or silently rewrites a final expression, first use its validated multi-row equivalent: P, E, and M OR-blocks in three `AllField` rows for Stream A, or P and M in two rows for Stream B; Wiley AND-combines non-empty rows. Confirm source-equivalent counts/sets before acceptance. If needed, partition into finite population-term × model-term cells and, for Stream A, population-term × EPS-term × model-term cells; save each partition and union all complete sets. If no reproducible route works, record a source failure and obtain prospective approval rather than substituting an external index.
 
@@ -392,29 +537,32 @@ Search **the entire public ESA Indico instance**, not only events labeled MBSE. 
 
 Record HTTP status, retrieval time, access/protection outcome, retries, checksum, and parsed contribution count for every event. The validated response shape is one event object in `results[0]`, with contributions in `results[0].contributions`; top-level `count` is therefore not the contribution count. An unavailable or malformed export is a source-access failure, not a zero-contribution event.
 
-Use the frozen dictionary [`searches/search-concept-dictionary.json`](searches/search-concept-dictionary.json), deterministic matcher [`searches/tools/concept_matcher.py`](searches/tools/concept_matcher.py), attachment-first harvester [`searches/tools/esa_indico_harvest_match.py`](searches/tools/esa_indico_harvest_match.py), and field-level positive/negative fixtures [`searches/fixtures/esa-matcher-regression.json`](searches/fixtures/esa-matcher-regression.json). Freeze and record their versions and SHA-256 checksums at each execution. The dictionary specifies the exact P/E/M forms, explicit wildcard expansions, standalone boundaries for acronyms, HTML/entity handling, Unicode NFKC case-folding, Unicode-dash and hyphen/space normalization, phrase behavior, and the absence of implicit stemming or lemmatization.
+Use the frozen dictionary [`searches/search-concept-dictionary.json`](searches/search-concept-dictionary.json), deterministic matcher [`searches/tools/concept_matcher.py`](searches/tools/concept_matcher.py), attachment-first harvester [`searches/tools/esa_indico_harvest_match.py`](searches/tools/esa_indico_harvest_match.py), and field-level positive/negative fixtures [`searches/fixtures/esa-matcher-regression.json`](searches/fixtures/esa-matcher-regression.json). Freeze and record their versions and SHA-256 checksums at each execution. The dictionary specifies the exact P/E/M/G/R forms, complete G artifacts (including two-component variation-point artifacts), independent-R span rule, explicit wildcard expansions, standalone boundaries for acronyms, HTML/entity handling, Unicode NFKC case-folding, Unicode-dash and hyphen/space normalization, phrase behavior, and the absence of implicit stemming or lemmatization.
 
 Create one provenance-preserving joined metadata record per contribution from the exact dictionary-listed event, contribution, author, session/track, and material-metadata fields. **Before any P/M candidate gate**, inventory `folders[].attachments` and legacy `material[].resources` for every in-window event and every contribution. Deduplicate duplicate representations by public attachment URL/ID while preserving all event/contribution associations. Attempt anonymous retrieval of every accessible document-like attachment, including PDF, text/HTML, office/open-document, spreadsheet, and slide/poster formats; normalize and match every successfully extracted text. Record protected, inaccessible, failed, malformed, encrypted, scanned/no-text, and otherwise unparseable materials as coverage failures rather than zero hits. Images, audio, and video remain inventoried even when no text extractor applies.
 
-Match two independently preserved routes; do not create a hit merely by combining a P term from one route with an M term from the other:
+Match two independently preserved routes; do not create a hit by combining P, M, G, R, or E evidence across routes or across separate attachments:
 
 - **joined-metadata route:** all frozen metadata fields for one contribution (or one event-level material record);
 - **attachment-text route:** the normalized extractable text of each individual attachment.
 
 For each route:
 
-- **ESA-A1:** `P AND E AND M`, reported as an EPS-explicit tag;
-- **ESA-B1:** `P AND M`, without a mandatory EPS term.
+- **ESA-A1:** `P AND E AND M`, the unchanged EPS-explicit tag within core B;
+- **ESA-B1:** `P AND M`, without a mandatory EPS term; and
+- **ESA-BG1/ESA-BC1:** `P AND a complete G1/G2 or C1 artifact`, relation-free within the route. Every all-of component (including variation point + model/architecture and domain-specific language + model anchor) must occur in that same route. No bare library/pattern/profile/language term qualifies.
+- **ESA-R-tag:** optionally identify the subset with at least one independent R occurrence whose span does not overlap any required artifact-component occurrence; `reference architecture` cannot self-qualify this tag. R is not a candidate or MBSE-evidence requirement.
+- **ESA-T2 tag:** apply model-coupled tailoring terms to ESA-B1. Because local core B is already `P AND M` without an R gate, `P AND M_B2 AND T2` is structurally contained and cannot be a separate ESA discovery route.
 
-Union the metadata and attachment-text ESA-B1 candidates and retain field/attachment-level term hits and route provenance. By construction ESA-A1 is a subset of ESA-B1: report `A∩B`, `B-only`, and the union, require `A-only = 0` as an invariant, and do not interpret the structural zero as poor Stream-A performance. Generic `SmallSat`/small-satellite does not satisfy P. Event date controls source harvesting only; report-level first formal publication date is checked again during eligibility screening.
+Union metadata and individual-attachment candidates separately for ESA-B1 and relation-free ESA-BG1/BC1, then union those partitions with complete route and field/attachment/span provenance. Also report separate E-explicit G/C1, R-qualified, and T2 tags; do not relabel expansion-only records as ESA-A1. By construction ESA-A1 is a subset of ESA-B1: report `A∩core-B`, core-B-only, all core/G/C1 and G/C1 intersections/exclusive yields, E-explicit G/C1, independent-R/T2 tags, and total B, require `A-only = 0` as an invariant, and do not interpret the structural zero as poor Stream-A performance. Generic `SmallSat`/small-satellite does not satisfy P. Event date controls source harvesting only; report-level first formal publication date is checked again during eligibility screening.
 
-Only after this attachment-first union is complete may screening classify an attachment. Abstracts, posters, slide decks, presentations, and recordings remain lead-only unless a distinct substantive full report is located; they are never discarded solely because surrounding metadata fails P/M. Log every lead-to-report route and screen the distinct report separately. A complete pre-freeze no-screening dry run must reconcile root/child events, in-window exports, contributions, all materials, retrieval/parse failures, metadata/attachment route yield, A/B overlap, and union counts; its records remain `pilot_not_candidate_search` and must not be reused as final discovery output.
+Only after this attachment-first union is complete may screening classify an attachment. Abstracts, posters, slide decks, presentations, and recordings remain lead-only unless a distinct substantive full report is located; they are never discarded solely because surrounding metadata fails P/M. Log every lead-to-report route and screen the distinct report separately. The clean final run must reconcile root/child events, in-window exports, contributions, all materials, retrieval/parse failures, metadata/attachment route yield, A/core-B and core-B/G/C1 overlap, relation-qualified/T2 tags, and the total union. Every diagnostic record remains `pilot_not_candidate_search` and must not be reused as final discovery output.
 
-A complete 2026-08-07 no-screening dry run validated this implementation: 437 root events; 408 in-window event exports retrieved out of 408; 8,394 contributions; 6,770 material associations; 5,690 unique document-like attachments, of which 5,686 were retrieved, 5,664 yielded extractable text, four failed retrieval, and 22 were unparseable/no-text. After correcting an event-material association over-attribution and rerunning a no-network match over the same complete census, the metadata route produced 17 B subjects, attachment text 62, overlap 5, and the union 74, including 57 attachment-only subjects; A∩B was 23, B-only 51, and A-only 0. These are aggregate `pilot_not_candidate_search` matcher diagnostics—not candidates, screening, or evidence—and may not be reused. Checksums and coverage details are in [`2026-08-07-esa-attachment-first-validation.md`](searches/subagent-logs/2026-08-07-esa-attachment-first-validation.md).
+A complete 2026-08-07 no-screening dry run validated the core implementation: 437 root events; 408 in-window event exports retrieved out of 408; 8,394 contributions; 6,770 material associations; 5,690 unique document-like attachments, of which 5,686 were retrieved, 5,664 yielded extractable text, four failed retrieval, and 22 were unparseable/no-text. After correcting an event-material association over-attribution and rerunning a no-network match over the same complete census, the metadata route produced 17 core-B subjects, attachment text 62, overlap 5, and the union 74, including 57 attachment-only subjects; A∩core-B was 23, core-B-only 51, and A-only 0. Version-1.3 synthetic tests then passed 19/19 [base/concept cases](searches/fixtures/esa-matcher-regression-results.json) and 13/13 [route/individual-attachment cases](searches/fixtures/esa-genericity-route-regression-results.json), including relation-free G/C1 positives and architecture self-satisfaction, incomplete all-of, cross-route, and cross-attachment negatives. The latter suite is executed by the tracked aggregation regression driver against separate route and attachment fixture documents; route labels are not assertions made by the base matcher alone. A superseding zero-network rematch over the preserved complete 2026-08-07 census evaluated 8,584 subjects and reused 5,664 extracted attachment texts with complete relation-free G/C1 artifacts: core B 74; G 32; C1 15; G∩C1 6; expansion union 41; core∩G 18; core∩C1 14; core∩expansion 26; core-only 48; expansion-only 15 (14 G-only versus core/C1 and 1 C1-only versus core/G); total B 89; unchanged A 23 with A-only 0; E-explicit expansion 16; independent-R tag 41; and local T2 tag 55. Metadata and attachment routes yielded 20 and 75 total-B subjects with overlap 6. These are aggregate `pilot_not_candidate_search` diagnostics—not candidates, screening, eligibility, or evidence—and may not be reused; final validation still requires the complete fresh census. Checksums and coverage details are logged separately.
 
 Known ESA MBSE event IDs `161`, `329`, `386`, `407`, and `472` are a dated 2026-08-06 coverage set only. After the whole-instance harvest, verify that each was enumerated and its contributions processed. Discover and process any later or differently titled MBSE events through the same unrestricted root inventory; do not limit the source to this list.
 
-Report root events returned; in-window events; contribution exports attempted/retrieved/inaccessible/malformed; contributions parsed; all material attachments inventoried; document-like attachments retrieved, text-parsed, inaccessible, and unparseable; metadata-only, attachment-only, and overlapping candidate routes; `A∩B`, `B-only`, and union candidates; attachments classified; lead-only records; distinct full reports found; and included reports. A later protocol-approved search update reruns the full root census, all in-window event exports, and the complete attachment inventory/text match so retrospective changes are detectable.
+Report root events returned; in-window events; contribution exports attempted/retrieved/inaccessible/malformed; contributions parsed; all material attachments inventoried; document-like attachments retrieved, text-parsed, inaccessible, and unparseable; metadata-only, attachment-only, and overlapping routes for core B and relation-free G/C1; `A∩core-B`, partition intersections/exclusive yields, E-explicit expansion, independent-R and T2 tags, and total-union candidates; attachments classified; lead-only records; distinct full reports found; and included reports. A later protocol-approved search update reruns the full root census, all in-window event exports, and the complete attachment inventory/text match so retrospective changes are detectable.
 
 ## 12. NASA NTRS whole-database search
 
@@ -422,16 +570,20 @@ Search the public **NASA Technical Reports Server** through <https://ntrs.nasa.g
 
 Use these query-cell term sets; every quoted phrase remains one source cell term:
 
-- `P_N = {CubeSat, CubeSats, "cube sat", nanosatellite, "nano-satellite", nanosat, "nano satellites"}`;
-- `M_N = {MBSE, "model-based systems engineering", "model based systems engineering", "model-based system engineering", "model based system engineering", SysML, "systems modeling language", "system model", "systems model", "system modeling", "systems modeling", "system modelling", "systems modelling", "reference model", "digital engineering", Arcadia, Capella, "object-oriented systems model"}`.
+- `P_N = {CubeSat, CubeSats, "cube sat", nanosat, nanosatellite, nanosatellites, "nano-satellite", "nano-satellites", "nano satellite", "nano satellites"}`;
+- `M_N = {MBSE, "model-based systems engineering", "model based systems engineering", "model-based system engineering", "model based system engineering", SysML, "systems modeling language", "system model", "systems model", "system modeling", "systems modeling", "system modelling", "systems modelling", "reference model", "digital engineering", Arcadia, Capella, "object-oriented systems model"}`; and
+- `G_N = {"generic model", "reusable model", "configurable model", "generic system model", "reusable system model", "configurable system model", "model template", "mission-agnostic model", "mission agnostic model", "mission-independent model", "mission independent model", "mission-agnostic architecture", "mission agnostic architecture", "mission-independent architecture", "mission independent architecture", "reference architecture", "domain model", metamodel, "meta-model", "product-line model", "product line model", "product-family model", "product family model", '"variation point" model', '"variation point" architecture'}`; and
+- `C_N = {"reference model", "system reference model", "model library", "model libraries", "system model library", "system model libraries", "model pattern", "modeling pattern", "modelling pattern", "system model pattern", "systems model pattern", "model profile", "system model profile", "systems model profile", "SysML profile", '"domain-specific modeling language" MBSE', '"domain-specific modeling language" SysML', '"domain specific modeling language" MBSE', '"domain specific modeling language" SysML', '"domain-specific modelling language" MBSE', '"domain-specific modelling language" SysML', '"domain specific modelling language" MBSE', '"domain specific modelling language" SysML'}`.
 
-The complete mandatory discovery baseline is **108 N-B cells** (`6 P_N × 18 M_N`). Run and log every cell separately to exhaustion; a dated zero does not establish source equivalence and is not grounds to omit a frozen cell later. This complete `P_N × M_N` union implements Stream B and secures candidate discovery before any EPS tagging.
+The complete mandatory version-1.3 Stream-B implementation is **660 cells**: **180 N-B-core cells** (`10 P_N × 18 M_N`), **250 N-BG cells** (`10 P_N × 25 G_N`), and **230 N-BC1 cells** (`10 P_N × 23 C_N`). Run and log every cell separately to exhaustion; a dated zero or observed subset does not establish source equivalence and is not grounds to omit a frozen cell later. Deduplicate each partition and their union, then report all core/G/C1 intersections, exclusive yields, and total Stream B. The quoted single-string notation above is documentary; each actual `q` is one population atom followed by one complete M, G, or C atom. Variation-point and domain-specific-language atoms contain the shown space-delimited conjunction.
 
-Do not run a redundant mandatory N-A discovery matrix. Instead, after deduplicating the complete N-B union, deterministically apply the full corrected E dictionary in [`searches/search-concept-dictionary.json`](searches/search-concept-dictionary.json) to every returned record's complete available NTRS metadata. This local **N-A EPS-explicit tag** includes both electrical/electric subsystem phrases, all functional terms, `power mode`/`power modes`, and `battery`/`batteries`; it is necessarily a subset of N-B and cannot add candidates. Preserve field-level E hits, report `A∩B`, `B-only`, and the union, require structural `A-only = 0`, and do not interpret that zero as poor Stream-A performance. A small source-query-versus-local-tag equivalence pilot may append one E term to representative P×M parent cells, but those checks are not mandatory discovery cells and cannot compensate for an incomplete N-B matrix.
+This corrects two pre-final cardinality defects: version 1.2 prose/pilots used six P terms while displaying seven, and an early version-1.3 draft still compressed three source-representable population forms without a validated source-semantic equivalence. Because no valid final search occurred, no record is affected. Version 1.3 requires all ten explicit population forms and all three frozen partitions; wildcard behavior or pilot overlap/zeros cannot authorize omission.
 
-**N-V/N-O** remain optional one-at-a-time terms appended only to a logged, already mandatory P×M parent cell when a prespecified concept-coverage audit or named recall miss triggers them. Record the trigger, parent cell, added term, and result; these probes do not replace or alter the 108-cell baseline.
+Do not run a redundant mandatory N-A discovery matrix. Instead, after deduplicating the complete N-B-core∪N-BG∪N-BC1 union, deterministically apply the full corrected E dictionary in [`searches/search-concept-dictionary.json`](searches/search-concept-dictionary.json) to every returned record's complete available NTRS metadata. Within N-B-core, this is the unchanged **N-A EPS-explicit tag**; within N-BG/N-BC1, report separate expansion-E tags rather than relabeling an expansion-only record as Stream A. The E dictionary includes both electrical/electric subsystem phrases, all functional terms, `power mode`/`power modes`, and `battery`/`batteries`; local tags cannot add candidates. Preserve field-level E hits, report `A∩B-core`, core-B-only, expansion-E, all partition overlaps, and the total union; require structural `A-only = 0` relative to core B and do not interpret that zero as poor Stream-A performance. A small source-query-versus-local-tag equivalence pilot may append one E term to representative parent cells, but those checks are not mandatory discovery cells and cannot compensate for an incomplete matrix.
 
-A 2026-08-07 `pilot_not_candidate_search` executed and reopened all 108 corrected P×M cells: 108/108 reconciled in one page each, with 39 overlapping source events and a six-ID unscreened union, no retry/failure/total change, and representative normal-UI syntax checks. The unchanged full-E matcher passed 25/25 term-form self-tests and tagged one of the six metadata records (`A∩B=1`, `B-only=5`, `A-only=0`). These aggregates validate syntax, arithmetic, and tagging only; they are not candidates and all 108 cells must be rerun after authorization. Full details are in [`2026-08-07-ntrs-revised-matrix-validation.md`](searches/subagent-logs/2026-08-07-ntrs-revised-matrix-validation.md).
+**N-V/N-O** remain optional one-at-a-time terms appended only to a logged, already mandatory core/G/C1 parent cell when a prespecified concept-coverage audit or named recall miss triggers them. N-T2 is a deterministic local tag on the core P×M union because `P AND M AND T2` is structurally contained in that union; it cannot add a source record. Record every optional trigger, parent cell, added term, and result; these probes/tags do not replace or alter the 660-cell baseline.
+
+The 2026-08-07 `pilot_not_candidate_search` executed its then-specified six-term 108-cell P×M matrix (which omitted `"cube sat"`) and found a six-ID unscreened union. A model-assisted no-screening pilot on 2026-08-10 first reconstructed a different explicit six-term 108-cell core plus 150 P×G cells, then executed the omitted seventh listed population phrase against all 18 M and 25 G atoms. Across the resulting full seven-term core/G design, all **301/301** cells reconciled with no retry or failure: core simple sum 39/deduplicated opaque union 6; G simple sum 1/opaque union 1; core∩G 1, G-only 0. A separate C1 pilot then reconciled all **161/161** seven-form P×C1 cells with valid zero results. A separate exact `"cube sat"` 43-cell repeat also completed 43/43 with valid zero results, confirming coverage of the term omitted in the 2026-08-07 pilot. Together these runs covered 462 cells. A focused no-screening pilot then reconciled the remaining **198/198** cells for `nanosatellites`, `"nano satellite"`, and `"nano-satellites"` against all 18 M, 25 G, and 23 C1 atoms; all were valid zeros, so the complete 660-cell interface design was exercised before the final freeze. No metadata was inspected and no record was screened. Zeros and overlap do not establish source equivalence or authorize cell omission; all 660 cells must be rerun in a clean final directory. The historical 108-cell details remain in [`2026-08-07-ntrs-revised-matrix-validation.md`](searches/subagent-logs/2026-08-07-ntrs-revised-matrix-validation.md), and the version-1.3 pilot is logged separately.
 
 Do not use `SmallSat` or `small satellite`. Example request body:
 
@@ -449,13 +601,13 @@ Do not use `SmallSat` or `small satellite`. Example request body:
 }
 ```
 
-For a non-discovery source-equivalence check only, an example EPS-appended `q` is `nanosatellite "electrical power system" MBSE`. Every mandatory P×M discovery cell begins at `from: 0` and increments by 100 until returned pages reconcile with `stats.total`. Archive the exact request body, UTC timestamp, status, raw JSON for every page, checksums, API-reported total, returned records, and representative UI cross-checks. If totals change during pagination, preserve the invalid snapshot and rerun the complete logical cell.
+For a non-discovery source-equivalence check only, an example EPS-appended `q` is `nanosatellite "electrical power system" MBSE`. Every mandatory P×M, P×G, or P×C1 discovery cell begins at `from: 0` and increments by 100 until returned pages reconcile with `stats.total`. Archive the exact request body, UTC timestamp, status, raw JSON for every page, checksums, API-reported total, returned records, and representative UI cross-checks. If totals change during pagination, preserve the invalid snapshot and rerun the complete logical cell.
 
 Screen all unique returned records under the protocol's complete date, language, publication-type, population, MBSE, EPS-route, and retrieval rules, and inspect available attachments. Potentially eligible NTRS evidence includes a substantive full primary report—such as a technical publication/memorandum, contractor or grantee report, or conference paper—with methods/results and stable provenance; accessibility alone neither establishes nor defeats scientific eligibility. Preserve NTRS ID, report numbers, STI/document type, technical/peer-review metadata when reported, distribution, version, identifiers, attachment type, and availability. A scientifically plausible report that cannot be obtained follows the protocol's `not_retrieved` route. Abstracts, posters, and presentation-only records are discovery leads only.
 
 Deduplicate NTRS deposits by source ID, report number, DOI, normalized title/author/year, and attachment identity, while retaining all discovery events. Link technical-report, conference, abstract, and presentation manifestations through the protocol's study/implementation report-family mapping; do not erase a substantively distinct report merely because it shares a family.
 
-Report the total and retrieved count for every one of the 108 logical cells, the simple sum across cells with overlap explicitly acknowledged, the separately deduplicated NTRS union, full-E tag hits and `A∩B`/`B-only`/union counts, full reports sought/retrieved, lead-only records, report families, exclusions, and inclusions. Any later protocol-approved update reruns the complete 108-cell matrix and reapplies the versioned E matcher because NTRS may add older records retrospectively.
+Report the total and retrieved count for every one of the 660 logical cells, simple sums for core, G, and C1 with overlap explicitly acknowledged, all partition intersections/exclusive yields/total Stream B, the separately deduplicated NTRS union, full-E tag hits with unchanged A/core-B and separate expansion-E counts, full reports sought/retrieved, lead-only records, report families, exclusions, and inclusions. Any later protocol-approved update reruns the complete 660-cell matrix and reapplies the versioned E matcher because NTRS may add older records retrospectively.
 
 ## 13. Citation searching and Buruso recall benchmark
 
@@ -487,8 +639,8 @@ The use of arXiv, Semantic Scholar, and Google Scholar is forbidden for discover
 4. If a query is overbroad, inspect a sample and refine using fields or structured-model relations—not outcome direction, open-access status, generic SmallSat terms, or legacy titles.
 5. If a query is too narrow, relax one concept variant at a time and log the effect.
 6. Retrieve all records available for every accepted final query or source harvest, subject only to documented source/API limits and failures.
-7. Compare Stream A and Stream B unique yield after deduplication. A broad Stream B route cannot be dropped merely because most records lack EPS terms in metadata.
-8. Keep source-reported totals, actually retrieved totals, unique records, reports, report families, EPS threads, outcome/burden records, and V&V records as distinct counts.
+7. Compare Stream A and total Stream B unique yield after deduplication; within Stream B report intersections and exclusive yields for core B, B-G, B-C1, and B-T2 where candidate-generating. A broad Stream B route or expansion cannot be dropped merely because most records lack EPS terms in metadata or later fail eligibility.
+8. Keep source-reported totals, actually retrieved totals, unique records, reports, report families, EPS threads, reusable-artifact lineages/profiles, tailoring applications, outcome/burden records, and V&V records as distinct counts.
 
 ## 15. Merge, deduplication, and screening
 
@@ -501,6 +653,7 @@ The use of arXiv, Semantic Scholar, and Google Scholar is forbidden for discover
   - `supporting`: plausible CubeSat/nanosatellite structured-system MBSE requiring full text to test for an embedded EPS thread;
   - `rejected`: clearly fails population, publication/date/language, or structured-system-model scope.
 - Do not reject a Stream B record solely because EPS/power is absent from its title or abstract.
+- Discovery through B-G, B-C1, or B-T2 does not establish genericity, tailoring, MBSE qualification, or an EPS thread; screen it under the same rules as every other record and assign RQ1-G dispositions only after inclusion.
 - Reject generic SmallSat/small-satellite-only records unless the source identifies a separable CubeSat/nanosatellite case.
 - Report secondary reviews and lead-only records separately; do not place them in the primary-evidence corpus.
 
@@ -512,7 +665,7 @@ Use the official new-review template for databases and other sources, backed by 
 2. distinguish source-reported/harvested totals from records actually retrieved or parsed;
 3. count duplicate removals before screening separately from records excluded during screening;
 4. reconcile records screened, records excluded, reports sought, reports not retrieved, full reports assessed, and full reports excluded with one primary reason;
-5. make included **reports** the flow endpoint and report report families, EPS threads, outcome/burden records, and V&V records only in separate analytic-denominator tables; and
+5. make included **reports** the flow endpoint and report report families, EPS threads, reusable-artifact lineages/profiles, tailoring applications, outcome/burden records, and V&V records only in separate analytic-denominator tables; and
 6. do not count a retained legacy file as identification unless it is independently rediscovered or reached through a permitted logged citation route.
 
 ## 16. Coverage audit and deferred retained-file recall check
@@ -523,6 +676,7 @@ Audit at least these concept/source clusters without using old screening decisio
 - parametric power/energy budgets bound to system models;
 - whole-spacecraft SysML/MBSE with possible embedded EPS allocation/interface threads;
 - reference/template/domain models and the full range of reported reuse/tailoring approaches;
+- generic/reusable/configurable model artifacts, model templates, reference architectures, metamodels, product-line/family models, central reusable assets, variation points, declared applicability envelopes, and source-located tailoring operations;
 - digital-engineering/toolchain transformations, interoperability, and implementation burdens;
 - beneficial, null, mixed, and adverse EPS-attributed outcomes;
 - model versus system/design verification and validation;
@@ -571,6 +725,9 @@ SLR/SLR1/
     search-concept-dictionary.json
     deduplication-report.json
     report-family-registry.json
+    reusable-artifact-lineage-registry.json
+    tailoring-applications.json
+    genericity-claim-evidence-table.json
     buruso-recall-audit.json
     retained-file-recall-audit.json
     subagent-logs/
@@ -587,10 +744,10 @@ The independent electronic-source and title/abstract corpus stage is complete on
 
 - both streams have final accepted runs in Scopus, Web of Science Core Collection, IEEE Xplore, Compendex, and Wiley, or a documented source failure;
 - every 2011-current ESA Indico event has an export/access outcome; every event/contribution material is inventoried; every accessible document-like attachment has a retrieval/text-extraction outcome; and the complete metadata plus extractable attachment text has been matched with the frozen dictionary;
-- all 108 mandatory NTRS P×M baseline cells have been paginated to exhaustion or have a documented source failure, and the complete versioned E matcher has tagged the deduplicated union;
+- all 660 mandatory NTRS cells (180 P×M core, 250 P×G, and 230 P×C1) have been paginated to exhaustion or have a documented source failure, partition overlap has been reconciled, and the complete versioned E/T matcher has tagged the deduplicated union;
 - all final-query/source records available within documented limits have been saved, read, and reconciled to source totals;
 - required concept clusters, publication types, technical-report routes, and source-specific coverage checks have been audited;
-- Stream A/Stream B and source-unique yields are known;
+- Stream A/total-Stream-B, core-B/B-G/B-C1/B-T2, and source-unique yields are known;
 - additional query refinements are predominantly duplicates or irrelevant records rather than merely inconvenient to search;
 - the merged candidate set, screening log, and retrieval corpus pass provenance and count checks;
 - the independent candidate set and every supplementary expansion have undergone the deferred Buruso and retained-file recall audits, with one complete audit cycle yielding no new eligible report; and

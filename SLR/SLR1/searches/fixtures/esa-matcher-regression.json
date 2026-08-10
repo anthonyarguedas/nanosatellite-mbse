@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "dictionary_version": "1.1.0-press-2026-08-07",
+  "dictionary_version": "1.3.0-genericity-2026-08-10",
   "fixtures": [
     {
       "id": "metadata_stream_a_acronym_boundaries",
@@ -154,10 +154,195 @@
         "concepts_present": ["P", "E", "M"],
         "stream_a": true,
         "stream_b": true,
+        "stream_b_core": true,
+        "stream_b_genericity": false,
         "field_term_ids": {
           "event.title": ["P_NANO_SATELLITES"],
           "contribution.title": ["M_DIGITAL_ENGINEERING"],
           "contribution.material_metadata": ["E_POWER_MODE"]
+        }
+      }
+    },
+    {
+      "id": "precise_genericity_artifact_without_relation_is_candidate",
+      "route": "joined_metadata",
+      "fields": {
+        "contribution.description": "A CubeSat reusable model is available."
+      },
+      "expected": {
+        "concepts_present": ["P", "G"],
+        "concepts_absent": ["M", "R"],
+        "stream_a": false,
+        "stream_b": true,
+        "stream_b_core": false,
+        "stream_b_g": true,
+        "stream_b_c1": false,
+        "stream_b_genericity": true,
+        "stream_b_genericity_relation_qualified": false,
+        "field_term_ids": {
+          "contribution.description": ["P_CUBESAT", "G_REUSABLE_MODEL"]
+        }
+      }
+    },
+    {
+      "id": "genericity_artifact_with_independent_relation",
+      "route": "joined_metadata",
+      "fields": {
+        "event.title": "CubeSats engineering",
+        "contribution.description": "A reference architecture traces requirements and interfaces."
+      },
+      "expected": {
+        "concepts_present": ["P", "G", "R"],
+        "concepts_absent": ["M", "E"],
+        "stream_a": false,
+        "stream_b": true,
+        "stream_b_core": false,
+        "stream_b_g": true,
+        "stream_b_c1": false,
+        "stream_b_genericity": true,
+        "stream_b_genericity_relation_qualified": true,
+        "field_term_ids": {
+          "event.title": ["P_CUBESATS"],
+          "contribution.description": ["G_REFERENCE_ARCHITECTURE", "R_ARCHITECTURE", "R_REQUIREMENTS", "R_INTERFACES"]
+        }
+      }
+    },
+    {
+      "id": "genericity_expansion_receives_eps_tag_within_route",
+      "route": "attachment_text",
+      "fields": {
+        "attachment.extracted_text": "A nano-satellite meta-model links validation to the power budget."
+      },
+      "expected": {
+        "concepts_present": ["P", "E", "G", "R"],
+        "concepts_absent": ["M"],
+        "stream_a": false,
+        "stream_b": true,
+        "stream_b_core": false,
+        "stream_b_g": true,
+        "stream_b_c1": false,
+        "stream_b_genericity": true,
+        "stream_b_genericity_relation_qualified": true,
+        "g_eps_explicit": true,
+        "c1_eps_explicit": false,
+        "genericity_eps_explicit": true,
+        "field_term_ids": {
+          "attachment.extracted_text": ["P_NANO_SATELLITE", "G_METAMODEL", "R_VALIDATION", "E_POWER_BUDGET"]
+        }
+      }
+    },
+    {
+      "id": "architecture_artifact_is_candidate_but_cannot_self_qualify_relation",
+      "route": "joined_metadata",
+      "fields": {
+        "event.title": "CubeSat reference architecture"
+      },
+      "expected": {
+        "concepts_present": ["P", "G", "R"],
+        "concepts_absent": ["M", "E"],
+        "stream_a": false,
+        "stream_b": true,
+        "stream_b_core": false,
+        "stream_b_g": true,
+        "stream_b_c1": false,
+        "stream_b_genericity": true,
+        "stream_b_genericity_relation_qualified": false,
+        "field_term_ids": {
+          "event.title": ["P_CUBESAT", "G_REFERENCE_ARCHITECTURE", "R_ARCHITECTURE"]
+        }
+      }
+    },
+    {
+      "id": "variation_point_artifact_all_of_and_independent_relation",
+      "route": "attachment_text",
+      "fields": {
+        "attachment.extracted_text": "The nanosatellite has a variation point for each supplier model and traces requirements."
+      },
+      "expected": {
+        "concepts_present": ["P", "G", "R"],
+        "concepts_absent": ["M", "E"],
+        "stream_a": false,
+        "stream_b": true,
+        "stream_b_core": false,
+        "stream_b_g": true,
+        "stream_b_c1": false,
+        "stream_b_genericity": true,
+        "stream_b_genericity_relation_qualified": true,
+        "field_term_ids": {
+          "attachment.extracted_text": ["P_NANOSATELLITE", "R_REQUIREMENTS"]
+        }
+      }
+    },
+    {
+      "id": "central_model_library_is_relation_free_candidate",
+      "route": "joined_metadata",
+      "fields": {
+        "contribution.description": "A CubeSat model library is released."
+      },
+      "expected": {
+        "concepts_present": ["P", "G"],
+        "concepts_absent": ["M", "R"],
+        "stream_b": true,
+        "stream_b_core": false,
+        "stream_b_g": false,
+        "stream_b_c1": true,
+        "stream_b_genericity": true,
+        "stream_b_genericity_relation_qualified": false,
+        "field_term_ids": {
+          "contribution.description": ["P_CUBESAT", "G_MODEL_LIBRARY"]
+        }
+      }
+    },
+    {
+      "id": "domain_specific_language_requires_model_anchor_component",
+      "route": "attachment_text",
+      "fields": {
+        "attachment.extracted_text": "The nanosatellite uses a domain-specific modelling language with SysML."
+      },
+      "expected": {
+        "concepts_present": ["P", "G", "M"],
+        "stream_b": true,
+        "stream_b_core": true,
+        "stream_b_g": false,
+        "stream_b_c1": true,
+        "stream_b_genericity": true,
+        "field_term_ids": {
+          "attachment.extracted_text": ["P_NANOSATELLITE", "G_DOMAIN_SPECIFIC_MODELING_LANGUAGE", "M_SYSML"]
+        }
+      }
+    },
+    {
+      "id": "bare_library_is_not_central_asset",
+      "route": "joined_metadata",
+      "fields": {
+        "contribution.description": "A CubeSat library is available."
+      },
+      "expected": {
+        "concepts_present": ["P"],
+        "concepts_absent": ["G", "M", "R"],
+        "stream_b": false,
+        "stream_b_core": false,
+        "stream_b_g": false,
+        "stream_b_c1": false,
+        "stream_b_genericity": false,
+        "field_term_ids": {
+          "contribution.description": ["P_CUBESAT"]
+        }
+      }
+    },
+    {
+      "id": "tailoring_is_a_tag_within_local_core_b",
+      "route": "joined_metadata",
+      "fields": {
+        "contribution.description": "The CubeSat system model is tailored and parameterized."
+      },
+      "expected": {
+        "concepts_present": ["P", "M", "T"],
+        "stream_b": true,
+        "stream_b_core": true,
+        "stream_b_tailoring_tag": true,
+        "field_term_ids": {
+          "contribution.description": ["P_CUBESAT", "M_SYSTEM_MODEL", "T_TAILOR", "T_PARAMETERIZE"]
         }
       }
     }

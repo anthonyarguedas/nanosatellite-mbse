@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = []
 # ///
-"""Static regression checks for the PRESS-corrected source translations."""
+"""Static regression checks for the frozen version-1.3 source translations."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ import sys
 
 
 FAMILIES = ("S", "WS", "I", "C", "W")
-SUFFIXES = ("A1", "A2", "B1", "B2", "V1", "O1")
+SUFFIXES = ("A1", "A2", "B1", "B2", "BG1", "BG2", "BC1", "BT2", "V1", "O1")
 MODEL_VARIANTS = (
     '"system modeling"', '"systems modeling"', '"system modelling"', '"systems modelling"'
 )
@@ -71,12 +71,50 @@ def main() -> int:
             require("DOCTYPE(" not in query, f"{query_id} retains Scopus DOCTYPE filter", failures)
     require("Select **no Document Type restriction**" in plan, "WoS no-type control is not explicit", failures)
     require("Do not add a `ContentType` refinement" in plan, "IEEE no-type control is not explicit", failures)
-    require("**108 N-B cells**" in plan, "NTRS mandatory-cell arithmetic is not 108", failures)
+    for family in FAMILIES:
+        for suffix, required in {
+            "BG1": ('"generic model"', '"model template"'),
+            "BG2": ('"reference architecture"', '"variation point"'),
+            "BC1": ('"model library"', '"domain-specific modeling language"'),
+            "BT2": ('"system model"', "tailor"),
+        }.items():
+            query_id = f"{family}-{suffix}"
+            query = queries[query_id]
+            for token in required:
+                require(token in query, f"{query_id} lacks {token}", failures)
+        for suffix in ("BG1", "BG2", "BC1"):
+            query_id = f"{family}-{suffix}"
+            query = queries[query_id]
+            require("verification" not in query.casefold(), f"{query_id} is not relation-free", failures)
+            require("validation" not in query.casefold(), f"{query_id} is not relation-free", failures)
+
+    for query_id, query in queries.items():
+        balance = 0
+        quoted = False
+        for character in query:
+            if character == '"':
+                quoted = not quoted
+            elif not quoted and character == "(":
+                balance += 1
+            elif not quoted and character == ")":
+                balance -= 1
+            if balance < 0:
+                break
+        require(balance == 0 and not quoted, f"{query_id} has unbalanced parentheses/quotes", failures)
+
+    require("**660 cells**" in plan, "NTRS mandatory-cell arithmetic is not 660", failures)
+    for expected in ("**180 N-B-core cells**", "**250 N-BG cells**", "**230 N-BC1 cells**"):
+        require(expected in plan, f"NTRS partition assertion missing: {expected}", failures)
+    p_n_match = re.search(r"^- `P_N = \{(.*?)\}`;", plan, re.M)
+    require(p_n_match is not None, "NTRS P_N set is missing", failures)
+    if p_n_match:
+        for term in ("CubeSat", "CubeSats", '"cube sat"', "nanosat", "nanosatellite", "nanosatellites", '"nano-satellite"', '"nano-satellites"', '"nano satellite"', '"nano satellites"'):
+            require(term in p_n_match.group(1), f"NTRS P_N lacks {term}", failures)
     require("136 mandatory NTRS" not in plan, "obsolete 136-cell stopping rule remains", failures)
 
     forms = {
         form.casefold()
-        for concept in ("P", "E", "M")
+        for concept in ("P", "E", "M", "G", "R", "T")
         for term in dictionary["concepts"][concept]["terms"]
         for form in term["forms"]
     }
@@ -87,6 +125,10 @@ def main() -> int:
     for form in required_dictionary_forms:
         require(form in forms, f"dictionary lacks {form!r}", failures)
     require(dictionary["candidate_logic"].get("cross_route_cooccurrence") is False, "ESA cross-route matching must remain false", failures)
+    clusters = [artifact.get("cluster") for artifact in dictionary.get("genericity_recall", {}).get("artifacts", [])]
+    require(clusters.count("G1") == 11, "dictionary G1 artifact count is not 11", failures)
+    require(clusters.count("G2") == 7, "dictionary G2 artifact count is not 7", failures)
+    require(clusters.count("C1") == 6, "dictionary C1 artifact count is not 6", failures)
 
     report = {"status": "passed" if not failures else "failed", "queries_checked": len(queries), "failures": failures}
     print(json.dumps(report, indent=2))

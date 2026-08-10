@@ -15,7 +15,9 @@ attempt, with no total change and no retry event. This validates the request
 shape and controls for the historical over-one-page pilots only; it does not
 authorize a final run.
 
-## Versioned non-secret artifacts
+## Versioned non-secret artifacts (historical 2026-08-07 snapshot)
+
+The checksums below preserve the version-1.2 state at this report's date; the linked tracked files were later amended prospectively for version 1.3 and are not expected to retain these hashes.
 
 | Artifact | SHA-256 |
 |---|---|

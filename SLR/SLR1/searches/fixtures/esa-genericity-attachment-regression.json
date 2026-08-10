@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "classification": "pilot_not_candidate_search",
+  "fixtures": [
+    {
+      "id": "metadata_join_is_one_route",
+      "joined_metadata": {
+        "event.title": "CubeSat engineering event",
+        "contribution.title": "Reference architecture",
+        "contribution.description": "Interfaces are verified."
+      },
+      "attachments": [],
+      "expected": {"metadata": true, "attachment": false, "union": true, "candidate_metadata": true, "candidate_attachment": false, "candidate_union": true}
+    },
+    {
+      "id": "single_attachment_positive",
+      "joined_metadata": {},
+      "attachments": [
+        {"attachment_id": "opaque-a", "fields": {"attachment.extracted_text": "A nanosatellite reusable model supports traceability."}}
+      ],
+      "expected": {"metadata": false, "attachment": true, "union": true, "candidate_metadata": false, "candidate_attachment": true, "candidate_union": true}
+    },
+    {
+      "id": "cross_attachment_cooccurrence_is_prohibited",
+      "joined_metadata": {},
+      "attachments": [
+        {"attachment_id": "opaque-a", "fields": {"attachment.extracted_text": "CubeSat requirements."}},
+        {"attachment_id": "opaque-b", "fields": {"attachment.extracted_text": "A reusable model is provided."}}
+      ],
+      "expected": {"metadata": false, "attachment": false, "union": false, "candidate_metadata": false, "candidate_attachment": false, "candidate_union": false}
+    },
+    {
+      "id": "metadata_attachment_cross_route_cooccurrence_is_prohibited",
+      "joined_metadata": {"event.title": "CubeSat event", "contribution.description": "verification"},
+      "attachments": [
+        {"attachment_id": "opaque-c", "fields": {"attachment.extracted_text": "Mission-independent architecture."}}
+      ],
+      "expected": {"metadata": false, "attachment": false, "union": false, "candidate_metadata": false, "candidate_attachment": false, "candidate_union": false}
+    }
+  ]
+}

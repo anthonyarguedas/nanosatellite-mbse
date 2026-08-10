@@ -1,10 +1,10 @@
 # Protocol for a Systematic Review of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Review run ID:** `eps-mbse-slr-2026`
-- **Protocol version:** `1.2` (frozen)
-- **Scope-decision approval date:** 2026-08-06
-- **Pre-freeze interface/consistency review:** PRESS revisions and fresh validation completed 2026-08-07
-- **Final freeze/search authorization:** 2026-08-07
+- **Protocol version:** `1.3` (frozen)
+- **Initial scope-decision approval date:** 2026-08-06
+- **Version-1.2 interface/consistency review:** PRESS revisions and fresh validation completed 2026-08-07
+- **Version-1.3 genericity amendment and final freeze/search authorization:** 2026-08-10
 
 ## Review status and restart policy
 
@@ -13,19 +13,19 @@ This protocol defines a **new systematic review run** focused on nanosatellite e
 The earlier searches, screening decisions, corpus, extractions, codebook, synthesis, and manuscript are treated as legacy or pilot artifacts. A failed attempt under version 1.0 was abandoned and its search outputs were removed; it supplies no discovery events, records, decisions, or evidence to this run. In particular:
 
 - no previously identified report is automatically included;
-- all records must be found through a documented version-1.2 search or citation-chasing route and screened against this protocol;
+- all records must be found through a documented version-1.3 search or citation-chasing route and screened against this protocol;
 - previous reports may be used only as known-item recall checks when refining the search;
 - every included report must be newly extracted from its full text against a new run-specific codebook; prior extraction may be consulted only during a later discrepancy audit and may not supply new-run evidence;
 - prior counts and classifications must not be carried into the new synthesis; and
-- DOI/title matching may retain a prior corpus ID only as a `legacy_corpus_id`; new-run report-family, report, EPS-thread, outcome/burden, and V&V-record identifiers must be run-specific.
+- DOI/title matching may retain a prior corpus ID only as a `legacy_corpus_id`; new-run report-family, report, EPS-thread, reusable-artifact-lineage, tailoring-application, outcome/burden, and V&V-record identifiers must be run-specific.
 
-Version 1.2 incorporates the pre-freeze refinements recorded below and was frozen and authorized for searching on 2026-08-07. No valid new-run discovery search had begun at the time of the freeze. The dated source-interface diagnostics used to validate syntax, controls, and export behavior before freeze are pilots only: they do not create the independent candidate set, and aggregate pilot observations cannot determine evidence membership. Any deviation after authorization must be recorded prospectively in the new run's search or decision log.
+Version 1.3 prospectively supersedes version 1.2. No valid new-run discovery search was executed under version 1.2. The dated version-1.2 source-interface diagnostics and version-1.3 genericity/search diagnostics are pilots only: they do not create the independent candidate set, and their records, opaque identifiers, or aggregate observations cannot determine evidence membership. Every final discovery method must start in a clean version-1.3 final-run artifact set. Any later deviation must be recorded prospectively in the new run's search or decision log.
 
 ## Reporting framework
 
 PRISMA-P (2015) guides this protocol and its amendment history; PRISMA-S (2021) guides the design, execution, preservation, and reporting of every search in [`query-search-plan.md`](query-search-plan.md); and PRISMA 2020 will guide the completed review, abstract, checklist, and flow diagram. These are reporting guidelines, not evidence-validity instruments. Health-review terminology is adapted to this engineering evidence map without inventing clinical effect measures, risk-of-bias tools, or GRADE ratings.
 
-This is a new review, not an update. The completed review will use the PRISMA 2020 flow template for a new systematic review using databases and other sources. Identification and selection are counted at record/report level; report families, EPS threads, outcome/burden records, and V&V records are linked analytic units reported with separate denominators.
+This is a new review, not an update. The completed review will use the PRISMA 2020 flow template for a new systematic review using databases and other sources. Identification and selection are counted at record/report level; report families, EPS threads, reusable-artifact lineages, tailoring applications, outcome/burden records, and V&V records are linked analytic units reported with separate denominators.
 
 Official guidance to use at the applicable stage:
 
@@ -37,13 +37,14 @@ Registration/contact declarations, contributor and guarantor details, funding/sp
 
 ## Approval, amendment, and pre-search decision record
 
-- **Scope-decision approval date:** 2026-08-06
-- **Freeze/search authorization date:** 2026-08-07
-- **Frozen protocol:** `1.2`, incorporating the PRESS-corrected pre-freeze refinements
-- **Search state at freeze:** revised pre-freeze pilots complete; no valid new-run discovery search executed
+- **Initial scope-decision approval date:** 2026-08-06
+- **Version-1.2 freeze/search authorization date:** 2026-08-07
+- **Version-1.3 amendment approval and freeze/search authorization date:** 2026-08-10
+- **Frozen protocol:** `1.3`, incorporating the bounded-genericity amendment and its no-screening search pilots
+- **Search state at version-1.3 freeze:** version-1.2 interface pilots and version-1.3 genericity pilots complete; no valid new-run discovery search executed
 - **Working branch:** `slr1-1.1-restart`
 
-The researcher reviewed the failed version-1.0 run and prospectively approved the methodological scope decisions incorporated into version 1.1 and its pre-freeze refinements. Version 1.0 remains the superseded baseline in version control. Version 1.2 is the governing protocol for all valid searches and later review activity from its authorization on 2026-08-07.
+The researcher reviewed the failed version-1.0 run and prospectively approved the methodological scope decisions incorporated into versions 1.1 and 1.2. On 2026-08-10, before any valid final discovery search, the researcher directed a version-1.3 amendment so the review could define bounded genericity, map tailoring, and grade the strength of evidence for reusable EPS MBSE artifacts. Version 1.0 remains the superseded baseline in version control; version 1.2 remains a superseded pre-search protocol. Version 1.3 is the governing protocol for all valid searches and later review activity from its authorization on 2026-08-10.
 
 | Change | Date | Timing | Rationale and consequence |
 |---|---|---|---|
@@ -52,6 +53,7 @@ The researcher reviewed the failed version-1.0 run and prospectively approved th
 | `1.1` pre-freeze API-pagination refinement | 2026-08-07 | Before freeze and any valid new-run search | Empirically validate the over-one-page current revised-population Scopus S-B1 and IEEE I-B2 API requests; freeze non-secret request templates, source-native ordering and page parameters, two-pass ordered-ID/global-rank reconciliation, retry/stop/total-change behavior, merge preflight, and the hard `retrieved == source total` failure rule. Pilot outputs remain superseded/no-screening artifacts. This changes retrieval reproducibility controls only, not eligibility, concept scope, or other source decisions. |
 | `1.1` model-assisted PRESS revision | 2026-08-07 | Before freeze and any valid new-run search | Correct population, structured-model, relation, and EPS variants in every source translation; replace the incomplete NTRS strategy with a complete 108-cell P×M baseline and full-E local Stream-A tag; freeze an attachment-first ESA dictionary/matcher/fixture implementation; remove unproven Scopus, WoS, and IEEE discovery type filters; document automatic-expansion and exact-day controls; clarify selected O/V probes and structural Stream-A subsets; and run fresh no-screening pilots. MAJOR-06 API pagination was delegated to a subagent with the academic-research package. Eligibility and RQs are unchanged. |
 | `1.1` to `1.2` | 2026-08-07 | Final pre-search freeze, before any valid new-run search | Incorporate the completed PRESS corrections and related pre-freeze validations; record researcher authorization; and establish version 1.2 as the governing protocol. All pilot outputs remain superseded/no-screening artifacts and every final discovery method must start from a clean post-authorization artifact set. |
+| `1.2` to `1.3` | 2026-08-10 | Prospective post-freeze amendment, but still before any valid new-run discovery search, screening, codebook creation, or extraction | Add nested RQ1-G; define genericity as bounded, artifact-specific transferability relative to a declared applicability envelope; distinguish artifact reuse from method/workflow reuse and author claims from demonstrated transfer; add reusable-artifact-lineage and tailoring-application units; prescribe a non-compensatory A/E/C/T/P/I profile and `NA`, `G0`--`G4` evidence tiers; and add separately provenance-coded precise-artifact (`B-G`), conservative central-asset (`B-C1`), and model-coupled tailoring (`B-T2`) recall partitions to Stream B after model-assisted no-screening pilots found opaque source-ID yield outside the version-1.2 B1/B2 union. It rejects an unsplit G×relation formula because architecture could self-satisfy the relation, preserves relation-free exact-artifact recall, expands the NTRS final matrix to 660 finite cells after preserving all ten source-representable population forms, and versions the ESA route matcher/fixtures. The amendment also records the empirically observed Scopus terminal-page and IEEE zero-result conventions without weakening total/ID/two-pass reconciliation. Eligibility, Route A/B, RQ2, RQ3, and the seven information sources are unchanged. Affected artifacts are this protocol, the query plan, search log/dictionary and API reconciler, the not-yet-created extraction codebook, and planned registries; no candidate, screening, or evidence record existed to revise. |
 
 The identified choices were reviewed and retained or amended as follows:
 
@@ -64,10 +66,12 @@ The identified choices were reviewed and retained or amended as follows:
 7. **Buruso (2026) as secondary evidence only.** The review is used for positioning, a deferred recall benchmark, and logged citation chasing. It does not supply primary evidence or bypass independent discovery and new screening.
 8. **New extraction for every included report.** Legacy extraction and synthesis files were removed. Retained source Markdown/PDF files may be reused only after independent rediscovery and new screening.
 9. **All model tailoring is in scope.** Eligibility and discovery do not require a lightweight implementation. Extract every reported reuse/tailoring approach and its implementation footprint; discuss lightweight, scalable, comprehensive, or resource-intensive characteristics only where the source or extracted evidence supports them.
+10. **Genericity is bounded and artifact-specific.** The review grades evidence for transferability of an identifiable EPS-linked model artifact only within its declared applicability envelope. A source label such as generic, reference, template, reusable, configurable, modular, scalable, or open is not itself demonstrated genericity. Method/workflow reuse is mapped separately and cannot establish artifact genericity without persistent EPS model content and source-supported lineage.
+11. **Reusable-artifact and tailoring terms expand recall but never gate eligibility or grading.** Source-adapted precise-artifact, conservative central-asset, and model-coupled tailoring partitions are added within Stream B because no-screening pilots found opaque-ID additions beyond existing B1/B2 retrieval. G/C1/T2 words are not mandatory across core searches, and discovery through an expansion is not evidence that a model is reusable or tailored. Every included artifact is assessed from full text under the same profile regardless of discovery route.
 
 Pre-search anti-anchoring controls are part of this approval:
 
-- legacy and failed-run search results, screening, corpora, codebook, extractions, scoping review, and manuscript were removed before the valid version-1.2 search;
+- legacy and failed-run search results, screening, corpora, codebook, extractions, scoping review, and manuscript were removed before the valid version-1.3 search;
 - `markdown/` and `pdfs/` were retained only as a source-file cache outside the search evidence base;
 - retained files cannot supply candidates, eligibility decisions, IDs, or extracted data;
 - matching against retained files is deferred until the independently discovered candidate set from all seven planned electronic sources is merged, and matches serve only as recall and retrieval checks; and
@@ -77,7 +81,9 @@ Any change after final freeze requires a prospective entry stating its date, exa
 
 ## Review objective
 
-To synthesize how nanosatellite EPSs are represented through MBSE, why those models are constructed, which inputs and assumptions they depend on, how they are reused or tailored, which beneficial, null, mixed, or adverse EPS-linked outcomes and implementation burdens are reported, and how EPS verification and validation (V&V) are integrated before physical integration or test.
+To synthesize how nanosatellite EPSs are represented through MBSE, why those models are constructed, which inputs and assumptions they depend on, how they are reused or tailored, what bounded genericity is specified or demonstrated for identifiable EPS-linked artifacts, which beneficial, null, mixed, or adverse EPS-linked outcomes and implementation burdens are reported, and how EPS verification and validation (V&V) are integrated before physical integration or test.
+
+For reusable artifacts, the review will map the declared applicability envelope, reusable core, variation points, tailoring pathway and footprint, demonstrated target contexts, post-tailoring assurance, dependence, and genericity evidence tier. It will not certify context-free, universal, or “true” genericity.
 
 The analytic scope includes both:
 
@@ -90,7 +96,7 @@ Generic whole-spacecraft MBSE evidence does not answer the research questions me
 
 | Population | Intervention | Comparison | Outcome | Context | Related RQ(s) |
 |---|---|---|---|---|---|
-| EPSs of orbital CubeSat/nanosatellite-class missions | EPS-primary MBSE or an explicit embedded EPS model thread | Not required | EPS representation, model purpose, required inputs and assumptions, abstraction, reuse, tailoring, and required roles/resources | Nanosatellite systems engineering across the lifecycle | RQ1 |
+| EPSs of orbital CubeSat/nanosatellite-class missions | EPS-primary MBSE or an explicit embedded EPS model thread | Not required | EPS representation, model purpose, required inputs and assumptions, abstraction, artifact identity/lineage, declared applicability envelope, reusable core, variation points, tailoring and its footprint, demonstrated coverage and assurance, bounded-genericity evidence tier, and required roles/resources | Nanosatellite systems engineering across the lifecycle | RQ1, including RQ1-G |
 | EPSs of orbital CubeSat/nanosatellite-class missions | EPS-linked MBSE artifacts, analyses, and model-enabled activities | When reported: document-centric practice, manual analysis, alternative toolchain, previous mission/model, or other explicit comparator | Beneficial, null, mixed, or adverse EPS-linked technical and engineering-process outcomes and implementation burdens, especially reliability/mission assurance, reproducibility/reuse, and integrability/interoperability | Nanosatellite development and decision making | RQ2 |
 | EPSs of orbital CubeSat/nanosatellite-class missions | EPS-specific or system-wide EPS-linked model-based V&V before physical integration or test | Separate or document-based V&V, manual checking, another method, or no comparator when reported | V&V scope and object, traceability to V&V artifacts, executable checks, verdicts, virtual integration, and model-to-test continuity | Pre-physical analysis and V&V, with downstream physical links recorded separately | RQ3 |
 
@@ -98,11 +104,13 @@ Generic whole-spacecraft MBSE evidence does not answer the research questions me
 
 1. **RQ1 — representation, purpose, and prerequisites.** How are nanosatellite EPSs represented in EPS-primary MBSE models and embedded EPS model threads; for what stated purposes; what inputs, assumptions, abstraction choices, roles, skills, and resources are reported; and how are the models reused or tailored?
 
+   **RQ1-G — bounded reuse and tailoring.** For each eligible EPS model thread, what, if any, reusable EPS MBSE artifact and artifact lineage is reported; what declared applicability envelope, reusable core, variation points, dependencies, and tailoring pathway does it have; which materially distinct target-context applications and post-tailoring assurances are reported; and at what non-compensatory evidence tier is bounded reuse supported?
+
 2. **RQ2 — EPS-linked outcomes, burdens, and evidence.** Which beneficial, null, mixed, or adverse EPS-specific technical or engineering-process outcomes, and which implementation burdens, are explicitly attributed to EPS MBSE artifacts or model-enabled activities; through what mechanisms; and with what supporting evidence?
 
 3. **RQ3 — EPS-linked pre-physical V&V.** How are EPS-specific or system-wide EPS-linked pre-physical V&V activities connected to EPS requirements, model elements, analyses, or interfaces; what is the object of verification or validation; and what level of preparation, execution, result reporting, and model-to-test continuity is demonstrated?
 
-RQ1–RQ3 are co-primary mapping questions. Within RQ2, reliability/mission assurance, reproducibility/reuse, and integrability/interoperability are prespecified priority presentation strata, not eligibility filters; the open outcome/burden set is coded and reported direction-neutrally without post-hoc suppression of other domains.
+RQ1–RQ3 are co-primary mapping questions. RQ1-G is a prespecified analytic stratum nested within RQ1, not a fourth eligibility question: an eligible report need not claim genericity or report reuse. Within RQ2, reliability/mission assurance, reproducibility/reuse, and integrability/interoperability are prespecified priority presentation strata, not eligibility filters; the open outcome/burden set is coded and reported direction-neutrally without post-hoc suppression of other domains.
 
 ## Operational definitions
 
@@ -130,6 +138,50 @@ Other subsystems are in scope only as explicit EPS loads, interfaces, environmen
 A report need not use the acronym “MBSE,” but it must describe a structured system model used for a systems-engineering purpose and provide extractable evidence of modeled elements and relationships across at least two systems-engineering concerns, such as requirements, functions/behavior, architecture, interfaces, parametrics/analysis, design decisions, or V&V. For report eligibility, those relationships must involve the same EPS entity or thread used to justify inclusion; unrelated report-level MBSE does not qualify otherwise isolated EPS content.
 
 Examples may include SysML, Arcadia/Capella, object-oriented systems models, reference models, or connected digital-engineering environments. A stand-alone circuit model, battery model, SPICE/MATLAB/Simulink simulation, optimization, power-budget spreadsheet, or component-sizing calculation is not MBSE by itself. It qualifies only when its inputs or outputs are explicitly bound, traced, transformed, or otherwise linked to a structured system model.
+
+### Bounded genericity, reusable artifacts, and tailoring
+
+For RQ1-G, **genericity means bounded transferability**: the extent to which the documented core of an identifiable EPS-linked MBSE artifact can be adopted or tailored for stated target contexts within a declared applicability envelope. Genericity is not an intrinsic or context-free property of a paper, diagram, language, tool, repository, workflow, or model merely because it is called generic, reference, standard, template, reusable, configurable, modular, scalable, lightweight, open, or mission-agnostic. The review assesses the support for a claim, not metaphysical or universal “true genericity.”
+
+A **reusable EPS MBSE artifact** is a source-identifiable structured-model asset or documented package of assets that contains, or is explicitly bound to, a qualifying EPS thread and its modeled relations. It may be a reference/template model, metamodel or profile carrying EPS semantics, model library or pattern, interface contract, parametric-model package, transformation/generator with persistent model content, or a larger reusable spacecraft model with a separately reconstructable EPS portion. Public availability is recorded but is not required. A reusable method, workflow, toolchain, transformation procedure, or guidance document is coded as **method/workflow reuse** unless persistent EPS model content and its lineage are identified; a specific-mission artifact does not become generic merely because its method might be reused.
+
+An **artifact lineage** links a base artifact and any versions or derived instances for which identity and continuity are source-supported by a name/version, repository or package identifier, explicit derivation, transformation record, shared model identifiers, or a reconstructable retained core. Shared authors, organization, tool, topic, terminology, or diagrams alone are insufficient. Materially changed cores or unresolved identity are kept as separate/uncertain lineages rather than merged.
+
+A **declared applicability envelope (DAE)** is the source-locatable intended scope for reuse: target platform or mission context, intended lifecycle use or decision, EPS/model boundary and abstraction, material dependencies and required inputs, applicable architecture/interface/tool assumptions, and stated exclusions or limits. At minimum for the genericity profile, the source must report the intended target class/context, intended lifecycle use or decision, EPS/model boundary and abstraction, and at least one material condition, dependency, required input, or exclusion. Evidence may be assembled across explicitly linked reports while preserving the provenance of each field, but an observed mission, a broad “for CubeSats” label, or reviewer expertise cannot fill a missing envelope.
+
+A **reusable core** comprises the model elements, relations, constraints, interfaces, semantics, or packaged assets stated or reconstructably shown to persist across applications. A **variation point** is a source-described location, option, range, rule, or dependency by which the core may vary. **Tailoring** is a source-described configuration, parameterization, selection, specialization, extension, deletion/substitution, interface mapping, transformation/generation, or explicitly justified unchanged adoption that produces or selects a target-specific instance. A parameter sweep or scenario run in one unchanged mission model is analysis, not a cross-context tailoring application. Unstructured reconstruction may demonstrate reuse of a method, but it supports artifact reuse only when lineage and retained core are established.
+
+A **tailoring application** is one artifact-lineage-to-target-context application. The artifact's originating development case counts only when the source identifies it as an adoption/configuration of the same reusable core and reports the retained-core/change or justified-as-is evidence; merely being the mission in which the artifact was created does not count as transfer. Its context tuple records the mission/platform, lifecycle purpose, EPS architecture and interfaces, environment/operations, tool/model configuration, relevant envelope dimensions, what core remained, what changed or was intentionally unchanged, rationale, implementation footprint, and result. Two applications are materially distinct only when they differ on at least one DAE dimension that exercises or tests the claimed reuse; two reports, scenarios, revisions, or names for the same underlying implementation are not distinct applications.
+
+**Demonstrated coverage** is the subset of the DAE represented by reported tailoring applications. It is never assumed to equal the claimed envelope. **Post-tailoring assurance** requires an identifiable tailored configuration, an intended-use-relevant criterion or oracle, an executed check after tailoring, and a reported result or verdict. A syntax, import, or build check alone is insufficient unless that is itself the stated intended use. Assurance may cross-link to RQ3, but it becomes a direct RQ3 V&V record only when the existing EPS target–model-to-V&V bridge–method/intent rule is also met; validation of a base model does not transfer automatically to a derived instance.
+
+Every eligible EPS thread receives an RQ1-G disposition of `not_an_artifact_or_method_only`, `artifact_no_reuse_indication`, `genericity_or_reuse_claim`, `reported_reuse_without_bounded_specification`, `bounded_reuse_candidate`, or `unclear`. Where an EPS-linked artifact is identifiable, the following non-compensatory profile is coded at artifact-lineage/version/scope level; method/workflow-only cases receive `NA` without inventing an artifact lineage. The letters are local profile labels, not the Population block used in searching:
+
+| Gate | Minimum source-supported evidence |
+|---|---|
+| **A — artifact/lineage** | Identifiable EPS-relevant artifact and source-locatable lineage across any claimed instances. |
+| **E — envelope** | Minimum DAE, with each component and source location retained. |
+| **C — core and variation design** | Identified reusable core plus variation points, tailoring rules, and prerequisites; alternatively, an explicit bounded reuse-as-is rule. |
+| **T — transfer/tailoring** | Actual target-context applications with the retained core, changes or justified unchanged adoption, and rationale reported; credited contexts must be materially distinct. |
+| **P — post-tailoring assurance** | For every context credited toward demonstrated reuse, an intended-use-relevant criterion, executed post-tailoring check, and result/verdict. |
+| **I — independent transfer** | At least one credited context is separately adopted or tailored and post-tailoring assured by an adopter team independent of the artifact's originating implementation family, with the adoption and result corroborated in a report, artifact, or data record attributable to that independent adopter/evaluator rather than only asserted by the originator. An external organization/team normally qualifies when lineage continuity is established; a same-organization separate team qualifies only when the source supports separate implementation control, no material participation by the originating implementation team, and a distinct assured application. Independent review of the originator's unchanged instance, disjoint author lists, companion reports, a shared underlying implementation, and unclear relationships do not qualify. |
+
+Code each gate as `demonstrated`, `partial`, `not_reported`, `uncertain`, `none`, or narrowly justified `not_applicable`, with source locations and confidence. **Only `demonstrated` satisfies a gate required by a tier.** `not_applicable` may describe a gate not required at the assigned lower tier but never substitutes for a required gate; `none` means the source affirmatively indicates that the condition was absent or failed, whereas `not_reported` means it cannot be assessed. `partial`, `not_reported`, `uncertain`, `none`, `not_applicable`, and reviewer-inference-only evidence fail a required gate but—apart from source-supported `none`—are not evidence that the underlying capability is absent. Explicit unchanged adoption may satisfy T only when its conditions, target context, retained core, and rationale are reported; it never waives E, C, or P.
+
+Assign the highest cumulative **genericity evidence tier** supported:
+
+| Tier | Minimum conditions | Interpretation |
+|---|---|---|
+| **`NA`** | No identifiable EPS model artifact, or method/workflow reuse only | Artifact genericity is not rated; method/workflow reuse remains in RQ1. |
+| **`G0_artifact_only`** | An EPS-linked artifact is identified, but no genericity/reuse claim or application is reported | No genericity evidence reported; not evidence of non-reusability. |
+| **`G1_claimed_or_unbounded`** | A is supported and the source makes a genericity/reuse claim or reports a traceable but unbounded reuse indication | Claim or indication only; bounded reuse is not established. |
+| **`G2_bounded_reuse_specified`** | A ∧ E ∧ C | Prospective bounded reuse is specified; actual transfer need not have been demonstrated. |
+| **`G3_bounded_reuse_demonstrated`** | G2 ∧ T for at least two materially distinct target contexts ∧ P for every credited context | Bounded reuse is demonstrated, potentially within one dependent implementation family. |
+| **`G4_independently_corroborated`** | G3 ∧ I, with the independent application itself meeting T and P | Bounded transfer is independently adopted and assured, still only for the demonstrated subset of the DAE. |
+
+The cumulative caps are explicit: missing A yields `NA`; A without E∧C cannot exceed G1; one assured application, multiple unassured applications, the uninstantiated originating development case, or repeated reports of one application cannot exceed G2; two materially distinct assured applications of the reusable core can reach G3; and only an independently adopted/tailored, independently corroborated, and assured credited application can reach G4. A wider claimed envelope, a larger model, more parameters, public artifact availability, a higher report-quality score, or strength on another gate cannot compensate for a missing gate or produce a higher tier. Tiers are ordinal evidence classes, not numeric scores, model-quality rankings, maturity levels, benefit measures, prevalence estimates, or guarantees of suitability for untested contexts. Assign one highest tier only after checking every lower-tier prerequisite; retain the gate vector alongside it so artifacts tied at a tier are not implied to be equivalent. Claim concordance (`not_evaluated`, `supported_in_tested_contexts`, `partially_supported`, `mixed`, `not_supported`, or `unclear`) and envelope breadth are reported separately. Failed tailoring, out-of-envelope applications, burdens, and contradictory evidence are retained rather than netted into the tier.
+
+The phrase **generic whole-spacecraft MBSE** in the exclusion rule means whole-spacecraft evidence with no qualifying EPS thread; it is not a judgment about the model's genericity. A whole-spacecraft reusable artifact may receive an RQ1-G profile only for its EPS-linked content and only after normal Route A/B eligibility is established. Genericity status and tier never determine report eligibility.
 
 ### Eligible EPS evidence routes
 
@@ -220,7 +272,7 @@ Wiley and ESA Indico are general source searches for this review, not targeted v
 - Backward chasing from the complete reference lists of included reports and relevant secondary reviews, and forward citation chasing in both Scopus and Web of Science Core Collection
 - Buruso et al. (2026), *Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review* (https://doi.org/10.1002/sys.70051), as a named secondary-review seed and deferred recall benchmark
 
-Buruso et al. (2026) is excluded from primary evidence. A report cited by it may enter the corpus only through a logged version-1.2 database/additional-source discovery event or protocol-compliant citation-chasing event followed by new screening. Its overlap, source-specific rediscovery, citation-chasing yield, and exclusions of apparently relevant reports will be reported separately.
+Buruso et al. (2026) is excluded from primary evidence. A report cited by it may enter the corpus only through a logged version-1.3 database/additional-source discovery event or protocol-compliant citation-chasing event followed by new screening. Its overlap, source-specific rediscovery, citation-chasing yield, and exclusions of apparently relevant reports will be reported separately.
 
 arXiv, Semantic Scholar, and Google Scholar searches CANNOT be used.
 
@@ -229,31 +281,38 @@ arXiv, Semantic Scholar, and Google Scholar searches CANNOT be used.
 Use two complementary search streams so that embedded EPS threads absent from titles or abstracts are not systematically lost:
 
 - **Stream A — EPS-explicit:** combine Population × EPS × MBSE/system-model concepts to identify EPS-primary reports and explicit embedded threads.
-- **Stream B — embedded-thread recall:** combine Population × MBSE/system-model concepts without requiring an EPS term, then screen full texts for a qualifying EPS thread. Stream B is intentionally broader and its unique yield is reported separately.
+- **Stream B — embedded-thread recall:** combine Population with structured-model/MBSE, precise reusable-artifact, conservative central-asset, or model-coupled tailoring concepts without requiring an EPS term, then screen full texts for a qualifying EPS thread. Stream B is intentionally broader and its unique yield is reported separately. Its version-1.3 implementation preserves the existing core routes and adds separately provenance-coded `B-G`, `B-C1`, and, where not structurally contained in core B, `B-T2` partitions.
+
+In the five bibliographic interfaces, **core B means the retained union B1∪B2**: B1 is population plus high-specificity MBSE terms, while B2 combines population and broader structured-model terms with the established systems-engineering relation/concern block needed to control those broader terms. ESA and NTRS instead implement local core B as `P AND M` within one route/record. Accordingly, an optional R tag for exact G/C1 artifacts does not make R optional in bibliographic B2.
 
 The concept blocks, adapted to each source's syntax and searchable metadata, are:
 
 1. **Population:** CubeSat/CubeSats, `cube sat`, nanosat, nanosatellite/nanosatellites, singular/plural hyphenated and spaced `nano satellite` variants, or an explicitly nanosatellite-class mission. Generic `SmallSat`/“small satellite” is neither a positive search concept nor sufficient eligibility evidence;
-2. **EPS:** electrical/electric power system or subsystem, EPS, power subsystem, electrical/power architecture, power/energy budget, energy balance, battery/batteries or storage, solar array/power generation, power conditioning/distribution/management/interface, power mode(s), load profile, PCDU, or PMAD; and
-3. **MBSE/system model:** singular/plural model-based system(s) engineering, MBSE, SysML/systems modeling language, singular/plural US/UK system(s) modeling/modelling, reference or object-oriented systems model, digital engineering, Arcadia, Capella, or another validated structured-system-model term.
+2. **EPS:** electrical/electric power system or subsystem, EPS, power subsystem, electrical/power architecture, power/energy budget, energy balance, battery/batteries or storage, solar array/power generation, power conditioning/distribution/management/interface, power mode(s), load profile, PCDU, or PMAD;
+3. **MBSE/system model (`M`):** singular/plural model-based system(s) engineering, MBSE, SysML/systems modeling language, singular/plural US/UK system(s) modeling/modelling, reference or object-oriented systems model, digital engineering, Arcadia, Capella, or another validated structured-system-model term;
+4. **Precise reusable-artifact (`G`):** complete generic/reusable/configurable model or system-model phrases; model template; mission-agnostic or mission-independent model/architecture; reference architecture; domain model; metamodel/meta-model; product-line/product-family model; or a variation point coupled to model/architecture. The preferred query-source form is relation-free `P AND G`, because exact phrases bound the expansion and an R requirement can both self-satisfy through `architecture` and suppress records whose metadata omit relation words;
+5. **Conservative central asset (`C1`):** reference/system-reference model, model-library, model-pattern, model-profile, or SysML-profile phrases, plus a domain-specific modeling/modelling-language phrase only when coupled to an MBSE/system-model anchor. Bare `library`, `pattern`, `profile`, or language terms are prohibited; and
+6. **Model-coupled tailoring (`T2`):** a B2 structured-model block plus explicit reuse, tailoring, customization, configuration, parameterization, instantiation, variability/variation-point, specialization, or adaptation forms coupled to model(s) or architecture(s). Source-supported wildcards or finite inflections are required.
 
-Targeted RQ2 and RQ3 searches may add benefit, null/adverse outcome, burden, effort, cost, training, traceability, verification, validation, model verification/validation, system/design verification/validation, simulation, model checking, requirements-in-the-loop, MIL, SIL, PIL, HIL, or test terms. These terms will not be mandatory in every query because doing so could suppress relevant RQ1 and embedded-thread reports.
+`B-G`, `B-C1`, and `B-T2` are candidate-generating terminology partitions only where their source adaptation is not structurally contained in core B and complete no-screening pilots support or prospectively preserve possible unique yield. They do not require EPS terms and never replace core B. For G/C1 expansion records, R may be retained as an optional precision/provenance tag; an architecture-bearing artifact cannot qualify that tag through its own overlapping token. Genericity/tailoring terminology is not required for eligibility or grading, and retrieval through any expansion is no evidence that an artifact is reusable.
+
+Targeted RQ2 and RQ3 sensitivity probes may add benefit, null/adverse outcome, burden, effort, cost, training, traceability, verification, validation, model verification/validation, system/design verification/validation, simulation, model checking, requirements-in-the-loop, MIL, SIL, PIL, HIL, or test terms. These terms are not mandatory in every query because doing so could suppress relevant RQ1 and embedded-thread reports. The old T1 probe was a logical subset of core B and added no IDs; the later `T2` design replaces the bibliographic B2 relation gate with a tightly model/architecture-coupled tailoring block and did add opaque IDs in Scopus/IEEE, so the T1 result does not justify dropping T2.
 
 Searches will be piloted in small, targeted sets. The new search log must record, as applicable, exact strings or request bodies, fields, filters, platform/interface, dates and time zone, source-reported totals, retrieved totals, pagination or event-harvest coverage, automatic stemming/lemmatization/term-expansion state or absence, refinements, failed or overbroad queries, deduplication, coverage checks, and stopping rationale. Refining source-specific syntax or precision within these fixed concept streams is search implementation, not a change to review eligibility; every version and the final used set must remain in the log.
 
-For every final Scopus or IEEE Xplore API query, preserve the non-secret request template, client/version checksum, page requests, ordered source IDs, global ranks, retry events, page/response checksums, and normalization/merge preflight. A logical API result is valid only if the source total is stable throughout the snapshot, every expected page is present, source IDs and page-ID sequences are nonduplicated, a second complete ordered-ID pass agrees, and `retrieved == source total`; otherwise record a source failure and do not merge or screen a partial result. Credentials, cookies, tokens, and pilot records remain outside the candidate corpus. The validated source-specific implementation is in [`searches/api-pagination-request-templates.json`](searches/api-pagination-request-templates.json) and [`searches/tools/api_pagination_reconcile.py`](searches/tools/api_pagination_reconcile.py).
+For every final Scopus or IEEE Xplore API query, preserve the non-secret request template, client/version checksum, page requests, ordered source IDs, global ranks, retry events, page/response checksums, and normalization/merge preflight. A logical API result is valid only if the source total is stable throughout the snapshot, every expected page is present, source IDs and page-ID sequences are nonduplicated, a second complete ordered-ID pass agrees, and `retrieved == source total`; otherwise record a source failure and do not merge or screen a partial result. The reconciler accepts the empirically observed Scopus convention in which a one-page terminal result can advertise its actual count rather than the requested 25 and the IEEE convention in which a valid zero result reports one empty page; it still requires exact terminal count, empty-zero reconciliation, and identical complete passes. Credentials, cookies, tokens, and pilot records remain outside the candidate corpus. The validated source-specific implementation is in [`searches/api-pagination-request-templates.json`](searches/api-pagination-request-templates.json) and [`searches/tools/api_pagination_reconcile.py`](searches/tools/api_pagination_reconcile.py).
 
 Previously identified reports may be listed before searching in a read-only known-item register. They may guide query refinement if missed, but they enter the corpus only through a logged search or citation-chasing event followed by new screening. Known-item recall and unique inclusions from each stream and source are reported separately.
 
 Scopus, Web of Science Core Collection, and IEEE Xplore use no discovery publication/content-type filter; publication type is verified during screening. Source controls that admit dates after the exact run day retain their unaltered source totals and receive a logged first-formal-publication-date cutoff with the number removed.
 
-For ESA Indico, inventory every in-window event/contribution material before candidate gating and union deterministic P×M matches from joined metadata and each extractable attachment; inaccessible/unparseable materials are coverage failures. For NTRS, exhaust all 108 separate cells from six population terms × eighteen complete model terms, then apply the full deterministic E dictionary to the deduplicated union as a Stream-A EPS-explicit tag. In ESA and NTRS, Stream A is structurally contained in Stream B; report `A∩B`, `B-only`, and the union and do not treat expected `A-only = 0` as a performance defect.
+For ESA Indico, inventory every in-window event/contribution material before candidate gating and union deterministic core P×M with relation-free complete P×G/C1 artifact matches from joined metadata and each individual extractable attachment; retain independent-R and T2 as separate tags; inaccessible/unparseable materials are coverage failures and terms may not be combined across metadata and attachment routes. For NTRS, exhaust 660 separate cells: ten population terms × eighteen core model terms, the same ten × twenty-five exact G terms, and the same ten × twenty-three exact C1 atoms. This corrects both the superseded version-1.2 six-versus-seven inconsistency and an early version-1.3 compression of three source-representable population forms before any valid search. Apply the full deterministic E/T dictionaries to the deduplicated core-B∪B-G∪B-C1 union. Preserve Stream A as the E-explicit tag within core B and label E-explicit expansion records separately rather than converting a G-only record into Stream A. In ESA and NTRS, Stream A is structurally contained in core B; report core/G/C1 intersections and exclusive yields, total B, A∩core-B, core-B-only, expansion-E and T2 tags, and the union, and do not treat expected `A-only = 0` as a performance defect.
 
 The independent baseline consists of the merged results from all seven electronic databases and repositories. Only after that baseline is frozen will Buruso et al. (2026) and the retained-file cache be used for deferred recall audits. A missed Buruso-cited report can prompt a logged concept-level probe or enter through a logged citation-chasing route; it is never inserted directly.
 
 Backward and forward citation chasing starts from every full-text-included report and relevant secondary review. Backward chasing inspects the complete source reference list; forward chasing searches both Scopus and Web of Science Core Collection. A zero result or indexing failure in one forward-citation platform does not waive the other. Newly found eligible reports are chased in the next numbered cycle; iteration stops when one complete backward and dual-platform forward cycle yields no new eligible report. Every seed, platform, direction, exact route, cycle, source/retrieved total, candidate, duplicate, decision, failure, and stopping result is logged. Citation records retain `discovery_route=citation_chasing` separately from their bibliographic source and never bypass normal eligibility screening.
 
-Searching stops when both streams, every planned source and source-specific coverage check, the prespecified concept clusters, and relevant report families discovered during the new run have been tested; citation chasing is complete; and additional searches are predominantly redundant rather than merely convenient or precise. The last search date for every source and strategy is reported; the latest of those dates closes the review's evidence window.
+Searching stops when both streams, every core, B-G, B-C1, and source-applicable B-T2 partition, every planned source and source-specific coverage check, the prespecified concept clusters, and relevant report families/artifact lineages discovered during the new run have been tested; citation chasing is complete; and additional searches are predominantly redundant rather than merely convenient or precise. The last search date for every source and strategy is reported; the latest of those dates closes the review's evidence window.
 
 ## Data management and audit trail
 
@@ -271,7 +330,7 @@ Use UTF-8 JSON/JSONL or CSV for derived machine-readable data and RIS/BibTeX/CSV
 | Population | Actual or intended orbital CubeSat/nanosatellite-class mission or a nanosatellite-tailored model; a generic SmallSat/small-satellite label alone is excluded, and separable CubeSat/nanosatellite evidence is required in mixed-platform reports | 1--3 |
 | MBSE threshold | Must meet the structured-system-model definition above | 1--3 |
 | EPS threshold | Must meet Route A or Route B at full text | 1--3 |
-| RQ1 contribution | Every eligible EPS thread contributes its reported representation, purpose, inputs/assumptions, abstraction, and reuse/tailoring information; missing fields remain `not_reported` | 1 |
+| RQ1 contribution | Every eligible EPS thread contributes its reported representation, purpose, inputs/assumptions, abstraction, and reuse/tailoring information and receives an RQ1-G disposition; identifiable EPS-linked artifacts receive artifact-lineage profiles and tailoring applications where applicable; missing fields remain `not_reported` | 1, including RQ1-G |
 | RQ2 contribution | Only atomic outcome or implementation-burden records explicitly attributed to a qualifying EPS thread enter direct RQ2 synthesis; direction, mechanism, and evidence completeness are coded separately | 2 |
 | RQ3 contribution | Only `eps_specific` or `system_wide_eps_linked` records with the required target, explicit bridge, and reported V&V method/intent/artifact enter direct RQ3 synthesis; scope, object, criterion completeness, and execution are reported separately | 3 |
 | Mixed system scope | Include only when an EPS thread is separately extractable; synthesize other subsystems only as EPS dependencies/interfaces | 1--3 |
@@ -282,7 +341,7 @@ Use UTF-8 JSON/JSONL or CSV for derived machine-readable data and RIS/BibTeX/CSV
 | Abstract-only/non-research material | Exclude posters/abstracts without full papers, presentation- or slide-only records, recordings, editorials, tutorials, advertisements, patents, and non-scholarly web material. Such records from ESA Indico or NTRS may be logged as discovery leads to a distinct eligible full report but cannot themselves supply primary evidence | 1--3 |
 | Retrieval status | Scientific eligibility is independent of open-access status. Reports not obtained after the defined retrieval process are logged as `not retrieved`, not silently excluded on scientific grounds | 1--3 |
 
-Outcome presence is not a report-level inclusion criterion. A Route A or B report may answer only RQ1 and still be included.
+Outcome, V&V, reuse, genericity-claim, or demonstrated-tailoring presence is not a report-level inclusion criterion. A Route A or B report may answer only the non-genericity portions of RQ1 and still be included. Genericity dispositions, profiles, and tiers are assigned only after scientific eligibility and cannot rescue an ineligible report.
 
 Retrieval follows the run's PDF workflow: DOI/open-access and publisher/repository routes are attempted first, followed by one documented institutional/manual-download pass where needed. Unresolved reports remain in the PRISMA and retrieval records as `not_retrieved`; they do not enter full-text evidence synthesis, but lack of access is not presented as a scientific exclusion reason.
 
@@ -320,17 +379,19 @@ Secondary reviews and generic MBSE sources used for background or citation chasi
 
 ## Units of evidence and identifiers
 
-The review distinguishes five linked analytic units; the report-family relation is cross-report and therefore the units are not assumed to form a strictly nested hierarchy:
+The review distinguishes seven linked analytic units. Report-family and artifact-lineage relations can cross reports and implementations, so the units are not assumed to form a strictly nested hierarchy:
 
-1. **Study/implementation report family:** one underlying investigation, evaluation, mission/design implementation, reference-model release, or materially shared model/toolchain application represented by one or more reports. Family membership requires documented overlap; shared topic, organization, or tool alone is insufficient, and evidence does not transfer between family members.
+1. **Study/implementation report family:** one underlying investigation, evaluation, mission/design implementation, reference-model release, or materially shared model/toolchain application represented by one or more reports. Family membership requires documented overlap; shared topic, organization, or tool alone is insufficient, and evidence does not transfer silently between family members.
 2. **Report:** one distinct publication or institutional technical report. Online-first and issue manifestations of the same work are collapsed, while substantively distinct companion reports remain separately citable and are linked to their family.
 3. **EPS model thread:** one qualifying EPS-primary or embedded chain within a report. A report may contain more than one thread.
-4. **Outcome or implementation-burden record:** one atomic outcome direction or burden linked or potentially linked to a thread. When one statement reports several outcomes, directions, or burdens, create separate records that may share the same quotation.
-5. **V&V record:** one target–method–scenario activity or artifact linked or potentially linked to a thread. Multiple targets, methods, or scenarios use linked atomic records rather than one aggregate record.
+4. **Reusable EPS artifact lineage and genericity profile:** one identifiable base artifact and its source-supported versions/derived instances, linked to every contributing report, family, and EPS thread. Create separate lineages when the retained core or derivation identity is materially different or uncertain. One lineage receives one profile per materially distinct artifact version/scope when a combined profile would conceal changed claims or gates.
+5. **Tailoring application:** one artifact-lineage-to-target-context application, including a justified reuse-as-is case. Multiple reports of the same underlying application are collapsed for context and assurance counts while retaining all report provenance.
+6. **Outcome or implementation-burden record:** one atomic outcome direction or burden linked or potentially linked to a thread. When one statement reports several outcomes, directions, or burdens, create separate records that may share the same quotation.
+7. **V&V record:** one target–method–scenario activity or artifact linked or potentially linked to a thread. Multiple targets, methods, or scenarios use linked atomic records rather than one aggregate record.
 
-Assign a report-family ID, report-to-family relationship type, membership rationale, evidence location, and overlap confidence. A report may map to more than one family when it genuinely reports distinct underlying implementations or evaluations. Reports from the same family are not treated as independent replications. Families are analytic dependence units, not PRISMA flow-diagram units: PRISMA identification and selection counts remain at record/report level.
+Assign a report-family ID, report-to-family relationship type, membership rationale, evidence location, and overlap confidence. A report may map to more than one family when it genuinely reports distinct underlying implementations or evaluations. Reports from the same family are not treated as independent replications. An artifact lineage may span multiple implementation families, but this does not establish independent reuse unless the I gate is source-supported. Conversely, shared organization or artifact name does not justify merging lineages. Each integrated artifact-level field retains report provenance; linking reports must not attribute an unreported fact or result to another report/version. Families and lineages are analytic dependence/identity units, not PRISMA flow-diagram units: PRISMA identification and selection counts remain at record/report level.
 
-New-run IDs must qualify linked records, for example `family_id`, `report_id:thread_id:outcome_burden_id`, and `report_id:thread_id:vnv_id`. A normalized DOI is the preferred cross-run report identity key; NTRS/report numbers and source IDs supplement it, and title–author–year matching requires manual confirmation. Legacy IDs and prior discovery paths are provenance only.
+New-run IDs must qualify linked records, for example `family_id`, `artifact_lineage_id:genericity_profile_id`, `artifact_lineage_id:tailoring_application_id`, `report_id:thread_id:outcome_burden_id`, and `report_id:thread_id:vnv_id`. A normalized DOI is the preferred cross-run report identity key; NTRS/report numbers and source IDs supplement it, and title–author–year matching requires manual confirmation. Artifact identity requires the lineage evidence defined above. Legacy IDs and prior discovery paths are provenance only.
 
 ## Quality checklist
 
@@ -341,7 +402,7 @@ All applicable items use:
 - Yes = 1
 - Not applicable = excluded from that score's denominator
 
-Quality scores contextualize confidence and sensitivity analyses; they are not automatic exclusion thresholds and cannot make an ineligible report, outcome/burden record, or V&V record eligible.
+Quality scores contextualize confidence and sensitivity analyses; they are not automatic exclusion thresholds and cannot make an ineligible report, genericity profile, outcome/burden record, or V&V record eligible. The A/E/C/T/P/I genericity profile and `NA`/`G0`--`G4` tier are not included in this numerical checklist and must not be averaged with it.
 
 ### Report and EPS-thread quality
 
@@ -354,6 +415,20 @@ Quality scores contextualize confidence and sensitivity analyses; they are not a
 7. Are model/tool/data availability, configurations, interfaces, and reusable assets reported sufficiently to assess reproducibility?
 8. Do the authors discuss limitations, scope boundaries, uncertainty, threats to validity, or alternative explanations?
 
+### RQ1-G genericity-evidence audit, when applicable
+
+Apply the A/E/C/T/P/I gates and tier rules above without numerical scoring. In addition to the source location and status for every gate, audit whether:
+
+- the claim object is an EPS-linked model artifact rather than a method, tool, workflow, or generic whole-spacecraft assertion;
+- artifact/version lineage and every credited tailoring application are identifiable without transferring evidence across uncertain versions or duplicate reports;
+- the DAE is distinguished from demonstrated coverage and from reviewer-inferred applicability;
+- retained core, variation points, actual changes, footprint, and any reuse-as-is rationale are reported;
+- each context credited to G3/G4 has a post-tailoring criterion, executed check, and result relevant to intended use;
+- G4 independence reflects an independently adopted/tailored and assured application corroborated by an independent-adopter/evaluator source, not merely the originator's assertion, an independent reviewer, publication, author list, or repeat evaluation of the originator's instance; and
+- failed, mixed, out-of-envelope, or contradictory applications are retained in claim-concordance reporting.
+
+A genericity tier grades the completeness and independence of evidence for bounded transfer; it is not a finding that the artifact is high quality, beneficial, broadly applicable, or superior.
+
 ### RQ2 outcome/burden quality, when applicable
 
 9. Is the outcome or implementation burden explicitly linked to a qualifying EPS thread and a stated MBSE mechanism rather than to EPS technology choice or generic MBSE?
@@ -364,7 +439,7 @@ Quality scores contextualize confidence and sensitivity analyses; they are not a
 11. Are the EPS target, linkage scope, model-to-V&V bridge, source terminology, normalized V&V object, method/artifact, criterion, lifecycle timing, and execution status explicitly reported?
 12. When execution or closure is claimed, are the result/verdict and any downstream software, hardware, integration, test, operational, or flight link evidenced?
 
-Items 1--3 and 8 are scored at report level; items 4--7 at EPS-thread level; items 9--10 for each direct RQ2 outcome/burden record; and items 11--12 for each EPS-linked RQ3 record. Any roll-up is descriptive and retains its unit and applicable-item denominator. Linkage confidence is also retained separately from quality score.
+Items 1--3 and 8 are scored at report level; items 4--7 at EPS-thread level; items 9--10 for each direct RQ2 outcome/burden record; and items 11--12 for each EPS-linked RQ3 record. The separate genericity audit is reported at artifact-lineage/profile and tailoring-application level without a numerical roll-up. Any checklist roll-up is descriptive and retains its unit and applicable-item denominator. Linkage, lineage, and tier confidence are also retained separately from quality score.
 
 ### Appraisal meaning, reporting-bias assessment, and conclusion confidence
 
@@ -375,11 +450,11 @@ No funnel plot or statistical publication-bias test is planned because there is 
 - coverage/interface limitations and unique yield across the seven sources and citation routes;
 - effects of the English, date, population, publication-type, retrieval, and source-access limits;
 - unavailable full reports and lead-only material;
-- selective or missing outcome/burden, criterion, result, and limitation reporting;
-- dependence created by shared study/implementation report families; and
+- selective or missing genericity claims, applicability boundaries, tailoring failures/burdens, outcome/burden, criteria, results, and limitations;
+- dependence created by shared study/implementation report families and repeated reporting of the same artifact lineage/application; and
 - protocol deviations, search refinements, or review-process limitations that could change interpretation.
 
-Assign conclusion-level confidence narratively as `higher`, `moderate`, `lower`, or `insufficient`, with a source-locatable rationale. Consider directness to a qualifying EPS thread, report and record quality, evidence type and comparator, maturity/independent or physical validation, consistency including null/adverse evidence, report-family independence, and review-process limitations. No numerical quality cutoff or mechanical averaging determines confidence. `Higher` requires multiple materially independent, directly linked and well-supported records with no major unexplained inconsistency; `moderate` permits limited independence, maturity, or comparators but still requires directly supporting evidence; `lower` denotes sparse, weak, indirect, dependent, or materially inconsistent support; and `insufficient` denotes no eligible direct evidence for the conclusion. These labels are an engineering-review framework, not GRADE.
+Assign conclusion-level confidence narratively as `higher`, `moderate`, `lower`, or `insufficient`, with a source-locatable rationale. Consider directness to a qualifying EPS thread, report and record quality, the genericity profile/tier where relevant, evidence type and comparator, maturity/independent or physical validation, consistency including null/adverse or failed-transfer evidence, report-family and tailoring-application independence, and review-process limitations. A genericity tier never maps mechanically to a conclusion-confidence label. No numerical quality cutoff or mechanical averaging determines confidence. `Higher` requires multiple materially independent, directly linked and well-supported records with no major unexplained inconsistency; `moderate` permits limited independence, maturity, or comparators but still requires directly supporting evidence; `lower` denotes sparse, weak, indirect, dependent, or materially inconsistent support; and `insufficient` denotes no eligible direct evidence for the conclusion. These labels are an engineering-review framework, not GRADE.
 
 ## Extraction fields
 
@@ -395,8 +470,8 @@ Every synthesis-critical controlled code requires a rationale, a direct quote or
 - Title/abstract screening tier and rationale.
 - Full-text eligibility decision and exclusion rationale, if applicable.
 - Route A/Route B classification and evidence.
-- RQ contribution status: RQ1; count of eligible RQ2 outcome/burden records; count of direct and near-miss RQ3 records.
-- Study/implementation report-family ID(s), report-to-family relationship, membership rationale/evidence, overlap confidence, and shared-result notes.
+- RQ contribution status: RQ1; RQ1-G genericity dispositions and counts of linked artifact-lineage profiles/tailoring applications; count of eligible RQ2 outcome/burden records; count of direct and near-miss RQ3 records.
+- Study/implementation report-family ID(s), linked artifact-lineage ID(s), report-to-family/artifact relationship, membership or identity rationale/evidence, overlap confidence, and shared-result notes.
 - Extraction confidence and assessor/review-pass provenance.
 
 ### Study context and MBSE qualification
@@ -427,7 +502,44 @@ Create one record per qualifying thread:
 - Purpose and decisions supported: definition/sizing, requirements/traceability, trade study, interface management, executable analysis, V&V, reuse/tailoring, communication, lifecycle continuity, or other.
 - Reuse/tailoring mechanism: template, reference model, profile, library, pattern, transformation, reusable workflow, open package, method guidance, mission-agnostic architecture, interface-focused model, specific-mission model with reusable method, or other.
 - Tailoring choices and implementation footprint: model/artifact scope, retained or omitted content, roles, tooling, automation, governance, required resources, rationale, and reported trade-offs. Preserve any author characterization such as lightweight, scalable, comprehensive, or resource-intensive, but do not impose a lightweight threshold or infer one from mission class.
+- Linked artifact-lineage/profile and tailoring-application IDs; genericity disposition; method/workflow-only status where applicable.
 - Thread-level maturity, lifecycle stage, availability, evidence confidence, and limitations.
+
+### Reusable EPS artifact-lineage and genericity-profile record
+
+Register every identifiable EPS-linked artifact and create one profile for each lineage/version/scope that can be assessed without concealing material change:
+
+- Artifact-lineage ID, genericity-profile ID, linked report-family/report/thread IDs, and every source-supported base/derived or version relationship.
+- Artifact object/type: structured system model; reference/template model; metamodel; modeling profile; library/pattern; interface contract; parametric package; transformation/generator with persistent content; larger model with separable EPS content; method/workflow only; toolchain only; other; or unclear.
+- Artifact name, version, repository/package/model identifiers, owner/developer, availability, license where reported, and lineage confidence/rationale. Shared tool, organization, terminology, or topic is not lineage evidence.
+- Exact source terminology and claim text; claim object and actor; claimed reuse/genericity scope; whether the claim concerns the artifact, a method/workflow, toolchain, language/profile, whole spacecraft, or is unclear.
+- Genericity disposition: `not_an_artifact_or_method_only`; `artifact_no_reuse_indication`; `genericity_or_reuse_claim`; `reported_reuse_without_bounded_specification`; `bounded_reuse_candidate`; or `unclear`.
+- DAE fields: intended target platform/mission/form factor; mission/domain/orbit/environment; lifecycle use, purpose, and decision; EPS boundary/architecture/interfaces; abstraction/fidelity; required inputs/data; modeling language/tool/version; organizational/process assumptions; prerequisites; stated exclusions and failure boundaries. Preserve `not_reported` by dimension and record whether the minimum DAE is met.
+- Reusable core/invariants: retained elements, relations, constraints, semantics, interfaces, libraries/packages, identifiers, and source locations.
+- Variation design: variation-point identifier/location; permitted range/options; default; dependencies/constraints; operation type; rationale; and whether the point is source-declared or only reconstructable from an explicit base/derived mapping.
+- Tailoring rules/pathway, required inputs and roles, governance/configuration control, automation, and any bounded reuse-as-is rule.
+- Linked tailoring-application IDs; claimed envelope versus demonstrated-context tuples; number of materially distinct applications after collapsing duplicate reporting; and evidence used to judge distinctness.
+- A/E/C/T/P/I gate status, rationale, evidence location, and confidence for every gate; failed condition(s); highest genericity tier (`NA`, `G0_artifact_only`, `G1_claimed_or_unbounded`, `G2_bounded_reuse_specified`, `G3_bounded_reuse_demonstrated`, or `G4_independently_corroborated`) with a source-locatable cumulative rationale.
+- Claim concordance: `not_evaluated`; `supported_in_tested_contexts`; `partially_supported`; `mixed`; `not_supported`; or `unclear`, preserving failed/out-of-envelope applications and alternative explanations.
+- Profile-level limitations, model/data availability, report-family and lineage dependence, evidence source, extraction confidence, and first/second-check provenance.
+
+Do not award a gate from source silence, source labels alone, a single observed mission, model openness, maturity, or reviewer knowledge. Integrate complementary reports only after lineage is established and retain which report supports each field; do not transfer results between versions or applications.
+
+### Tailoring-application record
+
+Create one record per artifact-lineage-to-target-context application, including a justified unchanged adoption:
+
+- Tailoring-application ID, artifact-lineage/profile ID, linked family/report/thread IDs, target model/configuration identifier, and application identity/duplicate-report rationale.
+- Target-context tuple: mission/platform/form factor; mission purpose/domain; orbit/environment; lifecycle use/decision; EPS architecture/components/interfaces; modes/load profile; model fidelity; language/tool/version; organization/team; and other material DAE dimensions.
+- Relationship to the DAE: inside; boundary case; outside; unclear; or DAE not reported, with rationale. Record the material dimension(s) that distinguish this context from other credited applications.
+- Base/core content retained and evidence; content configured, parameterized, selected, specialized, extended, deleted, substituted, mapped, transformed/generated, rebuilt, or intentionally unchanged; affected variation-point IDs; before/after or base/derived trace; and rationale.
+- Tailoring inputs/assumptions, procedure, roles/skills, automation, tools/licenses/infrastructure, governance, effort/time/cost, maintenance, and other implementation footprint or burden. Do not infer low effort from parameterization or mission class.
+- Resulting artifact/use, decisions or analyses supported, availability/configuration identifier, reported failures/rework/trade-offs, and whether the record demonstrates artifact reuse, method/workflow reuse only, or is unclear.
+- Post-tailoring assurance: intended-use criterion/oracle and provenance; method; execution timing; result/verdict; discrepancies/disposition; and whether all P-gate conditions are met. Link an RQ3 record only when its independent eligibility rule is satisfied.
+- Adopter/evaluator relationship: originating/same team; same organization but operationally separate team; external organization/team; independent evaluation of the originator's instance only; or unclear. Record personnel/implementation-control overlap, the independent adopter/evaluator's own report/artifact/data provenance, report-family evidence, separate adoption/tailoring and assurance evidence, and whether the I gate is met.
+- Evidence source, confidence, limitations, and extraction/second-check provenance.
+
+A single application may inform RQ1-G and also link to RQ2 burden/outcome or RQ3 V&V records, but it does not enter those direct syntheses unless their separate attribution/linkage rules are met.
 
 ### Input and assumption record
 
@@ -508,7 +620,7 @@ Create one atomic target–method–scenario record per candidate activity or ar
 
 - Author-stated limitations, assumptions, and scope boundaries.
 - Extractor-identified evidence gaps, with absence-based explanations only after completing the relevant fields.
-- Narrow controlled limitation flags, including prototype/future work, single case, no comparator, no independent validation, no physical/model-to-test evidence, unavailable model/data, assumptions/data-quality limits, tool dependency, interoperability limits, incomplete lifecycle coverage, ambiguous EPS linkage, generic outcome attribution, or missing V&V criterion.
+- Narrow controlled limitation flags, including prototype/future work, single case, no comparator, no independent validation, no physical/model-to-test evidence, unavailable model/data, assumptions/data-quality limits, tool dependency, interoperability limits, incomplete lifecycle coverage, ambiguous EPS linkage, generic outcome attribution, missing V&V criterion, method/artifact conflation, missing or inferred DAE, unidentified reusable core, no explicit variation rule, tailoring claim without a reconstructable application, ambiguous artifact lineage, duplicate/same-family reuse only, no post-tailoring assurance, or unreported failed/out-of-envelope reuse.
 - Emergent codes for unexpected findings that do not fit the controlled vocabulary; do not silently expand controlled categories during extraction.
 
 ## Calibration, consistency, and validation
@@ -516,13 +628,13 @@ Create one atomic target–method–scenario record per candidate activity or ar
 Before full screening and extraction:
 
 1. pilot the full-text eligibility rule on clear Route A, clear Route B, generic whole-spacecraft MBSE, and non-MBSE EPS examples;
-2. pilot the thread, input/assumption, RQ2 outcome/burden, and RQ3 V&V forms on a deliberately varied sample;
+2. pilot the thread, input/assumption, artifact-lineage/genericity-profile, tailoring-application, RQ2 outcome/burden, and RQ3 V&V forms on a deliberately varied sample, including method-only versus artifact reuse, claim-only, bounded specification, one versus multiple materially distinct contexts, same-family duplication, reuse-as-is, failed transfer, and post-tailoring assurance cases;
 3. revise and then freeze the run-specific codebook before full extraction; and
 4. document all calibration decisions and examples.
 
-Use isolated assessment passes to reduce context carryover. All final Route B inclusions and all direct RQ2/RQ3 linkage decisions must receive a second check. Record whether that check was performed by another human assessor or by a model-assisted validation pass. Do not describe model-assisted validation as independent human review, and calculate an agreement statistic only when the assessment design genuinely supports it.
+Use isolated assessment passes to reduce context carryover. All final Route B inclusions, artifact-lineage merges/splits, G3/G4 tier assignments, and direct RQ2/RQ3 linkage decisions must receive a second check. Calibrate the distinction between a DAE and an observed case, a scenario sweep and tailoring, a model artifact and method/workflow, separate reports and separate applications, and post-tailoring assurance and direct RQ3 V&V. Record whether each check was performed by another human assessor or by a model-assisted validation pass. Do not describe model-assisted validation as independent human review, and calculate an agreement statistic only when the assessment design genuinely supports it.
 
-Validate all extraction JSON against the codebook, exact controlled labels, record IDs, required evidence/rationales, status distinctions, and report-family/report/thread/outcome-burden/V&V referential integrity before synthesis.
+Validate all extraction JSON against the codebook, exact controlled labels, record IDs, required evidence/rationales, status distinctions, and report-family/report/thread/artifact-lineage/genericity-profile/tailoring-application/outcome-burden/V&V referential integrity before synthesis.
 
 ## Planned synthesis
 
@@ -532,7 +644,7 @@ The synthesis is a structured evidence map and narrative synthesis; no pooled ef
 
 Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE studies and reports published from 2011 to 2023, mapping methods, languages, tools, five MBSE phases, and general challenges across heterogeneous space applications. It is used here for positioning, terminology, a deferred recall benchmark, and logged citation chasing, not as primary evidence.
 
-This review is neither an update nor a replication of Buruso et al. It is restricted to orbital CubeSat/nanosatellite EPSs; requires a source-locatable EPS anchor, model anchor, and explicit bridge; and synthesizes material inputs and assumptions, all reported reuse and tailoring approaches, implementation footprint, direct EPS-attributed outcome direction and implementation burdens, and direct EPS target–model–V&V chains. It therefore addresses broader gaps concerning model tailoring and scalability, predominantly anecdotal value claims, and poor visibility of later integration, test, and V&V. System-wide MBSE or V&V is not treated as EPS evidence without the protocol's direct link. Cross-review counts are not compared as effectiveness evidence.
+This review is neither an update nor a replication of Buruso et al. It is restricted to orbital CubeSat/nanosatellite EPSs; requires a source-locatable EPS anchor, model anchor, and explicit bridge; and synthesizes material inputs and assumptions, all reported reuse and tailoring approaches, bounded artifact genericity and its evidential support, implementation footprint, direct EPS-attributed outcome direction and implementation burdens, and direct EPS target–model–V&V chains. It therefore addresses broader gaps concerning model tailoring and scalability, predominantly anecdotal value claims, and poor visibility of later integration, test, and V&V. System-wide MBSE or V&V is not treated as EPS evidence without the protocol's direct link. Cross-review counts are not compared as effectiveness evidence.
 
 For descriptive currency and overlap, publication patterns may be shown separately for 2011--2023, corresponding to Buruso et al.'s evidence window, and 2024 through the final search date. This temporal split does not change eligibility or imply that reports within either period are independent.
 
@@ -542,6 +654,17 @@ For descriptive currency and overlap, publication patterns may be shown separate
 - Distinguish reported inputs and implementation requirements from reviewer-inferred dependencies and from source silence.
 - Where evidence permits, describe how authors characterize implementations as lightweight, scalable, comprehensive, or resource-intensive and compare those characterizations with the reported implementation footprint; lightweight status is not an eligibility filter or required tailoring category.
 - Compare Route A and Route B without assuming either is more mature.
+
+### RQ1-G
+
+- Register identifiable EPS-linked artifact lineages and report method/workflow reuse separately from artifact reuse.
+- Map source terminology and claims, DAE dimensions and missingness, reusable cores, variation points, tailoring pathways, implementation footprints, demonstrated target-context tuples, post-tailoring assurance, failures/boundaries, claim concordance, and A/E/C/T/P/I gates.
+- Present `NA`, G0, G1, G2, G3, and G4 separately at artifact-lineage/profile level. Treat G1 as a claim/indication, G2 as specified bounded reuse, G3 as demonstrated bounded reuse in at least two materially distinct assured contexts, and G4 as independently corroborated bounded reuse.
+- Report DAE breadth separately from evidence tier and show demonstrated coverage as a subset; never rank a broader claim above a narrower but better-supported artifact merely because of scope.
+- Collapse duplicate reports of one tailoring application and distinguish same-family, same-organization/separate-team, and external/independent reuse. Use artifact identity and application denominators rather than publication counts as transfer evidence.
+- Retain one-context tailoring, partial gates, missing assurance, failed/out-of-envelope use, burdens, and contradictory evidence in the profile even when they cannot support G3/G4.
+- Use wording such as “G3 evidence supports bounded reuse of [artifact scope] in [demonstrated contexts], within the stated DAE.” Do not report a model as proven, universally, truly, or context-free generic.
+- A post-tailoring assurance record or tailoring burden enters direct RQ3 or RQ2 synthesis only when its separate linkage/attribution rule is satisfied; genericity tier alone demonstrates neither V&V integration nor benefit.
 
 ### RQ2
 
@@ -558,12 +681,12 @@ For descriptive currency and overlap, publication patterns may be shown separate
 
 ### Cross-cutting safeguards
 
-- Report separate denominators for study/implementation report families, reports, EPS model threads, input/assumption records, outcome/burden records, and V&V records. PRISMA flow counts remain record/report based.
-- Treat outcome/burden and V&V records as nested within reports and dependent within report families, not as independent studies.
+- Report separate denominators for study/implementation report families, reports, EPS model threads, reusable-artifact lineages/profiles, tailoring applications, input/assumption records, outcome/burden records, and V&V records. PRISMA flow counts remain record/report based.
+- Treat tailoring applications, outcome/burden records, and V&V records as linked to reports and dependent within report families; do not treat report counts as independent artifact reuse.
 - Stratify Route A and Route B before presenting combined totals.
 - Identify recurring reports from the same study/implementation family; do not count them as independent replication.
 - Stratify institutional technical reports and other gray literature from peer-reviewed scholarly reports and include publication-provenance sensitivity views where informative.
-- Use quality and linkage-confidence sensitivity views, including Route-A-only and high-confidence subsets where informative.
+- Use quality, linkage/lineage confidence, and genericity-gate sensitivity views, including Route-A-only, high-confidence, G3/G4, and artifact-available subsets where informative; do not convert the genericity tier into a numerical quality score.
 - Interpret cross-tabs only as descriptive co-reporting unless a direct extracted link supports a relationship.
 - Retain `not_reported`, `none`, `not_applicable`, `uncertain`, and invalid/unmapped values distinctly.
 - Treat sparse direct evidence as a review finding rather than filling gaps with generic whole-spacecraft MBSE claims.
@@ -572,13 +695,13 @@ For descriptive currency and overlap, publication patterns may be shown separate
 
 After protocol approval, the restarted review must generate or regenerate, with run provenance:
 
-- integrated protocol approval/version/amendment record, study/implementation report-family registry, and read-only legacy and Buruso-recall known-item registers;
+- integrated protocol approval/version/amendment record, study/implementation report-family registry, reusable EPS artifact-lineage registry, tailoring-application table, and read-only legacy and Buruso-recall known-item registers;
 - exact PRISMA-S-compatible search log, versioned source-matching dictionary/code, and raw source-specific search results;
 - search manifest with file checksums, source dates, interface details, restrictions, and rights/access status;
 - merged/deduplicated candidate set and deduplication report;
 - title/abstract and full-text screening log, retrieval log, accessible corpus, and cited full-text exclusion table with one primary reason per report;
 - run-specific corpus, identifiers, and extraction codebook;
-- per-report extraction files with thread, outcome/burden, and V&V records;
+- per-report extraction files with thread, artifact-lineage/profile and tailoring-application links, outcome/burden, and V&V records, plus an artifact-level claim-to-evidence table;
 - compiled extraction dataset, bibliography, validation report, and analysis code; and
 - machine-readable PRISMA count reconciliation, official PRISMA 2020 flow diagram, synthesis outputs, and completed PRISMA-S/PRISMA 2020 checklists.
 
@@ -591,7 +714,7 @@ The final report will identify itself as a systematic review and use the PRISMA 
 - report every information source actually used and its last search date, with failed/planned-but-unused sources distinguished;
 - link to verbatim final source-native strategies and PRISMA-S logs rather than a cleaned representative query;
 - describe screening, extraction, second checks, conflict handling, and model assistance exactly as performed, never calling model-assisted checking independent human review;
-- explain that no pooled effect estimate is planned and label every descriptive count/proportion by its report-family, report, thread, outcome/burden, or V&V denominator;
+- explain that no pooled effect estimate is planned and label every descriptive count/proportion by its report-family, report, thread, artifact-lineage/profile, tailoring-application, outcome/burden, or V&V denominator;
 - use the new-review databases-and-other-sources flow diagram with records/reports—not linked analytic units—in its boxes;
 - cite apparently eligible full reports excluded at full text with source-locatable reasons;
 - present appraisal, reporting-bias, and conclusion-confidence results using the framework above; and
@@ -599,4 +722,4 @@ The final report will identify itself as a systematic review and use the PRISMA 
 
 The exact administrative declarations intentionally deferred above must be completed or explicitly reported as absent before publication; they are not silently implied by methodological freeze.
 
-The PRESS-corrected source-interface pilots are complete: corrected source strings, the 108-cell NTRS matrix/full-E tag, ESA attachment-first matcher, unrestricted type controls, exact-day/expansion documentation, and delegated API pagination all have logged no-screening validation. This model-assisted review involved no human information specialist. Version 1.2 was frozen and authorized on 2026-08-07; no pilot output is a candidate, and every final discovery method must use clean post-authorization artifacts. Subsequent changes require a prospective, versioned deviation record.
+The version-1.2 PRESS-corrected source-interface pilots and the version-1.3 bounded-genericity/search pilots are complete and logged as no-screening diagnostics. This model-assisted protocol and search review involved no human information specialist; model-assisted checks are not represented as independent human peer review. Version 1.3 was frozen and authorized on 2026-08-10 before any valid final discovery search, codebook creation, screening, or extraction. No pilot output or opaque source identifier is a candidate, and every final discovery method must use clean version-1.3 post-authorization artifacts. Subsequent changes require a prospective, versioned deviation record.

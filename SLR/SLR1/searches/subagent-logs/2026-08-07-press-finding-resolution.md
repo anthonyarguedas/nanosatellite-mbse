@@ -27,7 +27,9 @@
 | **MINOR-04** exact-day cutoff | Scopus, IEEE, Compendex, and Wiley preserve source totals and log a post-search first-formal-publication-date cutoff and removals after the exact run day. |
 | **SUGGESTION-01** redundant NTRS A cells | Adopted after securing the complete P×M union: no mandatory N-A cells; full-E local metadata tagging plus optional logged source-equivalence checks. |
 
-## Frozen implementation checksums
+## Frozen version-1.2 implementation checksums
+
+These hashes preserve the 2026-08-07 closure state. The linked artifacts were later amended prospectively under version 1.3, so their current hashes intentionally differ.
 
 | Artifact | SHA-256 |
 |---|---|

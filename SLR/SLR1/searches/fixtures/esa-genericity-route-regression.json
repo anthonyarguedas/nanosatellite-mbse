@@ -1,0 +1,191 @@
+{
+  "schema_version": "1.0",
+  "classification": "pilot_not_candidate_search",
+  "fixtures": [
+    {
+      "id": "positive_joined_metadata_cross_field_independent_relation",
+      "routes": {
+        "joined_metadata": {
+          "event.title": "CubeSat systems event",
+          "contribution.title": "Reference architecture",
+          "contribution.description": "The interfaces are allocated explicitly."
+        },
+        "attachment_text": {}
+      },
+      "expected": {
+        "joined_metadata": true,
+        "attachment_text": false,
+        "union": true,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_REFERENCE_ARCHITECTURE"
+        ]
+      }
+    },
+    {
+      "id": "negative_reference_architecture_self_satisfies_architecture_only",
+      "routes": {
+        "joined_metadata": {
+          "contribution.description": "CubeSat reference architecture"
+        },
+        "attachment_text": {}
+      },
+      "expected": {
+        "joined_metadata": false,
+        "attachment_text": false,
+        "union": false,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_REFERENCE_ARCHITECTURE"
+        ]
+      }
+    },
+    {
+      "id": "positive_architecture_artifact_with_independent_requirement",
+      "routes": {
+        "joined_metadata": {
+          "contribution.description": "A nanosatellite mission-agnostic architecture traces requirements."
+        },
+        "attachment_text": {}
+      },
+      "expected": {
+        "joined_metadata": true,
+        "attachment_text": false,
+        "union": true,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_MISSION_AGNOSTIC_ARCHITECTURE"
+        ]
+      }
+    },
+    {
+      "id": "negative_generic_artifact_without_relation",
+      "routes": {
+        "joined_metadata": {
+          "contribution.description": "CubeSat reusable system model"
+        },
+        "attachment_text": {}
+      },
+      "expected": {
+        "joined_metadata": false,
+        "attachment_text": false,
+        "union": false,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_REUSABLE_SYSTEM_MODEL"
+        ]
+      }
+    },
+    {
+      "id": "positive_variation_point_architecture_with_validation",
+      "routes": {
+        "joined_metadata": {
+          "contribution.description": "CubeSats use a variation point in the architecture for validation."
+        },
+        "attachment_text": {}
+      },
+      "expected": {
+        "joined_metadata": true,
+        "attachment_text": false,
+        "union": true,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_VARIATION_POINT_ARCHITECTURE"
+        ]
+      }
+    },
+    {
+      "id": "negative_no_cross_route_cooccurrence",
+      "routes": {
+        "joined_metadata": {
+          "event.title": "CubeSat event",
+          "contribution.description": "requirements"
+        },
+        "attachment_text": {
+          "attachment.extracted_text": "A reusable model is supplied."
+        }
+      },
+      "expected": {
+        "joined_metadata": false,
+        "attachment_text": false,
+        "union": false,
+        "candidate_joined_metadata": false,
+        "candidate_attachment_text": false,
+        "candidate_union": false,
+        "active_artifacts": [
+          "G_REUSABLE_MODEL"
+        ]
+      }
+    },
+    {
+      "id": "positive_attachment_unicode_dash_and_uk_behavior",
+      "routes": {
+        "joined_metadata": {},
+        "attachment_text": {
+          "attachment.extracted_text": "The nano–satellite meta-model supports system behaviour."
+        }
+      },
+      "expected": {
+        "joined_metadata": false,
+        "attachment_text": true,
+        "union": true,
+        "candidate_joined_metadata": false,
+        "candidate_attachment_text": true,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_METAMODEL"
+        ]
+      }
+    },
+    {
+      "id": "negative_smallsat_not_population",
+      "routes": {
+        "joined_metadata": {
+          "contribution.description": "Small satellite domain model supports verification."
+        },
+        "attachment_text": {}
+      },
+      "expected": {
+        "joined_metadata": false,
+        "attachment_text": false,
+        "union": false,
+        "candidate_joined_metadata": false,
+        "candidate_attachment_text": false,
+        "candidate_union": false,
+        "active_artifacts": [
+          "G_DOMAIN_MODEL"
+        ]
+      }
+    },
+    {
+      "id": "positive_product_family_spaced_variant",
+      "routes": {
+        "joined_metadata": {
+          "contribution.description": "A CubeSat product family model supports traceability."
+        },
+        "attachment_text": {}
+      },
+      "expected": {
+        "joined_metadata": true,
+        "attachment_text": false,
+        "union": true,
+        "candidate_joined_metadata": true,
+        "candidate_attachment_text": false,
+        "candidate_union": true,
+        "active_artifacts": [
+          "G_PRODUCT_FAMILY_MODEL"
+        ]
+      }
+    }
+  ]
+}

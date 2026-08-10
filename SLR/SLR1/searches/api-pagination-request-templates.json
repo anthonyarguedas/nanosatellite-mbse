@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.2",
-  "status": "MAJOR-06 pagination contract and PRESS-corrected no-type-filter final request shapes empirically validated by superseded no-screening pilots; final execution remains unauthorized",
+  "schema_version": "1.3",
+  "status": "PRESS-corrected no-type-filter request shapes plus version-1.3 genericity and terminal/zero-page conventions empirically validated by superseded no-screening pilots; final execution requires a clean authorized version-1.3 run",
   "credential_and_pilot_policy": {
     "credentials_cookies_tokens": "Never serialize credentials, cookies, tokens, authorization headers, or IEEE userInfo. Supply Scopus authentication only in an in-memory X-ELS-APIKey request header from a secure runtime environment.",
     "private_artifacts": "Raw responses, page-ID/rank reconciliation, normalized pilot outputs, and pilot merge products must be written only under a Git-ignored owner-only directory (0700 directories; 0600 files).",
@@ -9,7 +9,7 @@
   },
   "implementation": {
     "driver": "SLR/SLR1/searches/tools/api_pagination_reconcile.py",
-    "driver_sha256": "be9fd8a5202ddb8ef5fec96855d119d840a8c9fbcbbb1f8393836df594d6801e",
+    "driver_sha256": "31ec4e6198d9aac027cfecd68357bf791e64b96fdcdc59f4fe852c4084c4b016",
     "runtime_observed": {
       "uv": "uv 0.9.28 (0e1351e40 2026-01-29)",
       "python": "CPython 3.13.5",
@@ -26,7 +26,8 @@
       "clean_output_requirement": "The driver refuses a non-empty output directory so attempts cannot be mixed or overwritten.",
       "private_output_enforcement": "On POSIX the driver creates/chmods artifact directories to 0700 and atomic JSON files to 0600.",
       "response_scrubbing": "Drops normalized secret/context keys (including apiKey/API-key, tokens, cookies, authorization, credentials, and userInfo) and redacts sensitive query parameters from absolute or relative URLs before persistence.",
-      "ieee_type_filter_option": "The historical pilot used ContentType facets. If the separately authorized final strategy has no content-type filter, invoke --ieee-no-content-type-filter; the request then retains only the explicit non-type refinements."
+      "ieee_type_filter_option": "The historical pilot used ContentType facets. The authorized final strategy has no content-type filter: invoke --ieee-no-content-type-filter so the request retains only explicit non-type refinements.",
+      "terminal_page_conventions": "Scopus may advertise the actual count on a one-page terminal result; accept only requested page size or the exactly computed terminal count. IEEE may report totalPages=1 for a valid zero result; fetch and reconcile one empty page. Both conventions still require two identical passes and retrieved == source total."
     }
   },
   "common_execution_contract": {
@@ -59,9 +60,10 @@
     "success_rule": "A logical query succeeds only when pages_retrieved equals computed expected pages, unique source IDs equals retrieved records, retrieved records equals source total, and the two ordered passes are identical. Any other condition is a failure, never a partial result."
   },
   "prospective_final_execution": {
-    "status": "PRESS-corrected no-type-filter request templates validated by fresh superseded no-screening two-pass pilots on 2026-08-07; final execution still requires authorization and a clean directory",
+    "status": "Version-1.3 no-type-filter request templates and terminal/zero-page rules validated by superseded no-screening two-pass pilots through 2026-08-10; final execution requires a clean authorized directory",
     "scopus": {
       "query_id": "S-B1 corrected unrestricted pagination preflight",
+      "final_query_ids": ["S-A1", "S-A2", "S-B1", "S-B2", "S-BG1", "S-BG2", "S-BC1", "S-BT2", "S-V1", "S-O1"],
       "method": "GET",
       "endpoint": "https://api.elsevier.com/content/search/scopus",
       "headers": {
@@ -91,6 +93,7 @@
     },
     "ieee_xplore": {
       "query_id": "I-B2 corrected unrestricted pagination preflight",
+      "final_query_ids": ["I-A1", "I-A2", "I-B1", "I-B2", "I-BG1", "I-BG2", "I-BC1", "I-BT2", "I-V1", "I-O1"],
       "method": "POST",
       "endpoint": "https://ieeexplore.ieee.org/rest/search",
       "headers": {
@@ -129,6 +132,49 @@
         "private_manifest_sha256": "1d475b5e8fd562459c011fc8fc678f8d374b9dc87435b6c50e1a0e0b8b998934"
       }
     }
+  },
+  "v1_3_genericity_pilot": {
+    "classification": "pilot_not_candidate_search",
+    "screening_prohibited": true,
+    "run_date": "2026-08-10",
+    "public_reports": [
+      "SLR/SLR1/searches/subagent-logs/2026-08-10-genericity-api-search-pilot.md",
+      "SLR/SLR1/searches/subagent-logs/2026-08-10-genericity-api-refinement-pilot.md"
+    ],
+    "private_copy_manifest_sha256": {
+      "initial_api": "13285ceb80745c58a5e4d8556ca0b02a0d49ea1b90cfb50988987cb84dd14721",
+      "refinement_attempt": "fea0b280f6ab17412a5d0d23b0dfbfc99afd114ae34ddb2d532d5a44f25fa3fc",
+      "successful_scopus_refinement": "64326fbdecf0ba4c7a2f1a4e7aadfb8c8385f0b16eabb61fff2158e78789d313",
+      "architecture_safe_scopus": "7757500e76373c73258914697d89aa4c3767c8d01a688efd31ce0383f5c1de7c",
+      "architecture_safe_ieee_job": "467022cf6af41a73bccd390a9819ba8c43d1f872c59d0d6b0c3c8c5d6832ce07"
+    },
+    "initial_unsplit_relation_gated_query": {
+      "status": "superseded_query_design_but_valid_retrieval_diagnostic",
+      "reason": "An architecture-bearing G phrase could lexically satisfy the unsplit R block.",
+      "scopus": {"source_total": 12, "retrieved_per_pass": [12, 12], "outside_fresh_b1_b2_union": 9},
+      "ieee": {"source_total": 7, "retrieved_per_pass": [7, 7], "confirmed_current_day_outside_fresh_b1_b2_union": 6, "exact_date_unresolved": 1}
+    },
+    "architecture_safe_fallback": {
+      "formula": "P AND ((G_MODEL AND R_ALL) OR (G_ARCH AND R_NO_ARCH))",
+      "role": "validated optional precision fallback, not the preferred final relation-free recall form",
+      "scopus": {"source_total": 12, "retrieved_per_pass": [12, 12], "outside_fresh_b1_b2_union": 9},
+      "ieee": {"source_total": 4, "retrieved_per_pass": [4, 4], "outside_fresh_b1_b2_union": 3, "exact_date_unresolved": 4}
+    },
+    "preferred_final_relation_free_partitions": {
+      "scopus": {
+        "G1": {"source_total": 5, "outside_fresh_b1_b2_union": 4},
+        "G2": {"source_total": 8, "outside_fresh_b1_b2_union": 6},
+        "C1": {"source_total": 24, "outside_fresh_b1_b2_union": 7},
+        "T2": {"source_total": 26, "outside_fresh_b1_b2_union": 2}
+      },
+      "ieee": {
+        "G1": {"source_total": 0, "confirmed_current_day_outside_fresh_b1_b2_union": 0},
+        "G2": {"source_total": 7, "confirmed_current_day_total": 6, "confirmed_current_day_outside_fresh_b1_b2_union": 6},
+        "C1": {"source_total": 22, "confirmed_current_day_total": 21, "confirmed_current_day_outside_fresh_b1_b2_union": 6},
+        "T2": {"source_total": 22, "confirmed_current_day_total": 19, "confirmed_current_day_outside_fresh_b1_b2_union": 6}
+      }
+    },
+    "terminal_zero_validation": "The first narrow-query attempts were retained as parser failures. The versioned driver now accepts only the observed Scopus exact terminal-count and IEEE one-empty-page zero conventions while retaining total/ID/two-pass strictness; an IEEE zero-result two-pass regression succeeded."
   },
   "scopus": {
     "pilot_query_id": "S-B1 historical revised-population implementation",

@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = []
 # ///
-"""Deterministic P/E/M and optional O/V matcher for the SLR1 search.
+"""Deterministic P/E/M/G/C1/R/T and optional O/V matcher for the SLR1 search.
 
 The implementation intentionally performs no stemming or implicit wildcard
 expansion.  Its dictionary supplies every accepted form.  Every hit is retained
@@ -151,6 +151,47 @@ class ConceptMatcher:
                 )
             self.compiled[str(concept)] = compiled_terms
 
+        recall = dictionary.get("genericity_recall")
+        artifacts = recall.get("artifacts") if isinstance(recall, dict) else None
+        if not isinstance(artifacts, list) or not artifacts:
+            raise MatcherError("dictionary must contain genericity_recall.artifacts")
+        self.genericity_artifacts: list[dict[str, Any]] = []
+        seen_artifact_ids: set[str] = set()
+        for artifact in artifacts:
+            artifact_id = artifact.get("id") if isinstance(artifact, dict) else None
+            cluster = artifact.get("cluster") if isinstance(artifact, dict) else None
+            components = artifact.get("all_of") if isinstance(artifact, dict) else None
+            if not isinstance(artifact_id, str) or not artifact_id or artifact_id in seen_artifact_ids:
+                raise MatcherError("genericity artifact IDs must be unique non-empty strings")
+            if cluster not in {"G1", "G2", "C1"} or not isinstance(components, list) or not components:
+                raise MatcherError(f"genericity artifact {artifact_id!r} is incomplete")
+            seen_artifact_ids.add(artifact_id)
+            compiled_components: list[dict[str, Any]] = []
+            for component in components:
+                component_id = component.get("id") if isinstance(component, dict) else None
+                forms = component.get("forms") if isinstance(component, dict) else None
+                if not isinstance(component_id, str) or not isinstance(forms, list) or not forms:
+                    raise MatcherError(f"genericity artifact {artifact_id!r} has an invalid component")
+                normalized_forms: dict[str, str] = {}
+                for source_form in forms:
+                    if not isinstance(source_form, str):
+                        raise MatcherError(f"genericity artifact {artifact_id!r} has a non-string form")
+                    normalized_forms.setdefault(normalize_text(source_form), source_form)
+                compiled_components.append({
+                    "component_id": component_id,
+                    "forms": [
+                        {
+                            "source_form": source_form,
+                            "normalized_form": normalized_form,
+                            "pattern": _pattern_for(normalized_form),
+                        }
+                        for normalized_form, source_form in normalized_forms.items()
+                    ],
+                })
+            self.genericity_artifacts.append({
+                "artifact_id": artifact_id, "cluster": cluster, "components": compiled_components
+            })
+
     @classmethod
     def from_path(cls, path: Path) -> "ConceptMatcher":
         value = load_json(path)
@@ -172,36 +213,126 @@ class ConceptMatcher:
                 hits: list[dict[str, Any]] = []
                 for term in terms:
                     matched_form: dict[str, Any] | None = None
-                    match_count = 0
+                    occurrences: list[dict[str, Any]] = []
                     for form in term["forms"]:
                         matches = list(form["pattern"].finditer(normalized))
                         if matches:
                             matched_form = form
-                            match_count += len(matches)
+                            occurrences.extend(
+                                {
+                                    "dictionary_form": form["source_form"],
+                                    "normalized_form": form["normalized_form"],
+                                    "start": match.start(),
+                                    "end": match.end(),
+                                }
+                                for match in matches
+                            )
                     if matched_form is not None:
                         hits.append(
                             {
                                 "term_id": term["term_id"],
                                 "dictionary_form": matched_form["source_form"],
                                 "normalized_form": matched_form["normalized_form"],
-                                "occurrences": match_count,
+                                "occurrences": occurrences,
+                                "occurrence_count": len(occurrences),
                             }
                         )
                         concept_term_ids[concept].add(term["term_id"])
                 if hits:
                     field_hits.setdefault(field, {})[concept] = hits
 
+        relation_occurrences = [
+            {"field": field, "term_id": hit["term_id"], **occurrence}
+            for field, concepts in field_hits.items()
+            for hit in concepts.get("R", [])
+            for occurrence in hit["occurrences"]
+        ]
+        genericity_artifact_matches: list[dict[str, Any]] = []
+        for artifact in self.genericity_artifacts:
+            component_groups: list[list[dict[str, Any]]] = []
+            for component in artifact["components"]:
+                component_hits: list[dict[str, Any]] = []
+                for field, normalized in normalized_fields.items():
+                    for form in component["forms"]:
+                        component_hits.extend(
+                            {
+                                "field": field,
+                                "component_id": component["component_id"],
+                                "dictionary_form": form["source_form"],
+                                "normalized_form": form["normalized_form"],
+                                "start": match.start(),
+                                "end": match.end(),
+                            }
+                            for match in form["pattern"].finditer(normalized)
+                        )
+                component_groups.append(component_hits)
+            if not all(component_groups):
+                continue
+            component_occurrences = [hit for group in component_groups for hit in group]
+            independent_relations = [
+                relation
+                for relation in relation_occurrences
+                if not any(
+                    relation["field"] == component["field"]
+                    and relation["start"] < component["end"]
+                    and component["start"] < relation["end"]
+                    for component in component_occurrences
+                )
+            ]
+            qualifies = bool(independent_relations)
+            genericity_artifact_matches.append({
+                "artifact_id": artifact["artifact_id"],
+                "cluster": artifact["cluster"],
+                "component_hits": component_groups,
+                "independent_relation_hits": independent_relations,
+                "qualifies_with_independent_relation": qualifies,
+            })
+            concept_term_ids.setdefault("G", set()).add(artifact["artifact_id"])
+
         concepts_present = [concept for concept in self.compiled if concept_term_ids[concept]]
         p_present = bool(concept_term_ids.get("P"))
         e_present = bool(concept_term_ids.get("E"))
         m_present = bool(concept_term_ids.get("M"))
+        t_present = bool(concept_term_ids.get("T"))
+        stream_b_core = p_present and m_present
+        active_genericity_artifacts = [item["artifact_id"] for item in genericity_artifact_matches]
+        active_g_artifacts = [
+            item["artifact_id"] for item in genericity_artifact_matches if item["cluster"] in {"G1", "G2"}
+        ]
+        active_c1_artifacts = [
+            item["artifact_id"] for item in genericity_artifact_matches if item["cluster"] == "C1"
+        ]
+        relation_qualified_genericity_artifacts = [
+            item["artifact_id"]
+            for item in genericity_artifact_matches
+            if item["qualifies_with_independent_relation"]
+        ]
+        stream_b_g = p_present and bool(active_g_artifacts)
+        stream_b_c1 = p_present and bool(active_c1_artifacts)
+        stream_b_genericity = stream_b_g or stream_b_c1
+        stream_b_genericity_relation_qualified = p_present and bool(relation_qualified_genericity_artifacts)
+        stream_b = stream_b_core or stream_b_genericity
         return {
             "concepts_present": concepts_present,
             "concept_term_ids": {
                 concept: sorted(term_ids) for concept, term_ids in concept_term_ids.items() if term_ids
             },
             "stream_a": p_present and e_present and m_present,
-            "stream_b": p_present and m_present,
+            "stream_b": stream_b,
+            "stream_b_core": stream_b_core,
+            "stream_b_g": stream_b_g,
+            "stream_b_c1": stream_b_c1,
+            "stream_b_genericity": stream_b_genericity,
+            "stream_b_genericity_relation_qualified": stream_b_genericity_relation_qualified,
+            "stream_b_tailoring_tag": stream_b_core and t_present,
+            "g_eps_explicit": e_present and stream_b_g,
+            "c1_eps_explicit": e_present and stream_b_c1,
+            "genericity_eps_explicit": e_present and stream_b_genericity,
+            "genericity_artifact_matches": genericity_artifact_matches,
+            "active_genericity_artifact_ids": active_genericity_artifacts,
+            "active_g_artifact_ids": active_g_artifacts,
+            "active_c1_artifact_ids": active_c1_artifacts,
+            "relation_qualified_genericity_artifact_ids": relation_qualified_genericity_artifacts,
             "normalized_fields": normalized_fields,
             "field_hits": field_hits,
         }
@@ -238,7 +369,11 @@ def run_fixtures(matcher: ConceptMatcher, fixture_path: Path) -> dict[str, Any]:
             errors.append(f"missing concepts {sorted(expected_present - actual_concepts)}")
         if expected_absent & actual_concepts:
             errors.append(f"unexpected concepts {sorted(expected_absent & actual_concepts)}")
-        for key in ("stream_a", "stream_b"):
+        for key in (
+            "stream_a", "stream_b", "stream_b_core", "stream_b_g", "stream_b_c1",
+            "stream_b_genericity", "stream_b_genericity_relation_qualified", "stream_b_tailoring_tag",
+            "g_eps_explicit", "c1_eps_explicit", "genericity_eps_explicit"
+        ):
             if key in expected and bool(actual[key]) != bool(expected[key]):
                 errors.append(f"{key} expected {expected[key]!r}, got {actual[key]!r}")
         expected_field_ids = expected.get("field_term_ids", {})
@@ -258,6 +393,15 @@ def run_fixtures(matcher: ConceptMatcher, fixture_path: Path) -> dict[str, Any]:
             "concepts_present": actual["concepts_present"],
             "stream_a": actual["stream_a"],
             "stream_b": actual["stream_b"],
+            "stream_b_core": actual["stream_b_core"],
+            "stream_b_g": actual["stream_b_g"],
+            "stream_b_c1": actual["stream_b_c1"],
+            "stream_b_genericity": actual["stream_b_genericity"],
+            "stream_b_genericity_relation_qualified": actual["stream_b_genericity_relation_qualified"],
+            "stream_b_tailoring_tag": actual["stream_b_tailoring_tag"],
+            "g_eps_explicit": actual["g_eps_explicit"],
+            "c1_eps_explicit": actual["c1_eps_explicit"],
+            "genericity_eps_explicit": actual["genericity_eps_explicit"],
             "field_term_ids": {
                 field: sorted(_field_term_ids(actual, field)) for field in actual.get("field_hits", {})
             },
