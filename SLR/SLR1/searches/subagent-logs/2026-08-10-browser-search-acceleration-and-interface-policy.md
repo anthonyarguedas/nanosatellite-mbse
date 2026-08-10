@@ -49,6 +49,10 @@ Two isolated, unmerged prototypes were produced: serial semantic-readiness commi
 
 The sole follow-up live profiler encountered Wiley's access/challenge signal before collecting timing or page-size evidence. It stopped immediately, closed its tab, stopped its named daemon, and made no retry, fetch, page-size request, or repository edit. No result content was inspected. Consequently no faster timing is claimed. After a user restores normal browser access, acceptance requires conservative serial revalidation first, followed by opt-in cap-2/cap-3 comparison against the same 125/125 two-pass Earliest tuple; any challenge, selector drift, total change, or ordered-ID mismatch stops the attempt.
 
+After normal results were reported in a browser, one conservative retry in the automation-attached Chrome failed with `BrowserSearchError` after 0.512 s and returned no total, pages, IDs, or timing evidence; it was not retried. A no-navigation follow-up then found no already-open Wiley target in that CDP profile, so it could not distinguish a genuine challenge from the known over-broad body-text challenge detector or another contract failure. The next live gate requires leaving a normal Wiley result tab open in the dedicated local automation Chrome (`127.0.0.1:9222`) before any search navigation. A local-evidence audit also found no visible Wiley control or UI-generated capture for `pageSize=50` or `100`; manually forcing those parameters is therefore not an accepted `web_ui` acceleration route.
+
+Second-generation isolated commits `3efb5a5` (serial lifecycle/deadline prototype; 28 offline tests) and `ceb7aaf` (opt-in bounded prototype while preserving the parent serial entry point; 26 offline tests) addressed several first-review findings but remain unmerged. Independent reviews still blocked live use on final-target handoff/schema compatibility, structural challenge detection, selector ambiguity, confirmed target cleanup, hard IPC deadlines, daemon session/marker edge cases, and positive single-page tab handling. The validated agent-tools `main` remains unchanged at `f6bd33a`.
+
 ## Compendex implementation
 
 The restored generic client is:
