@@ -294,6 +294,8 @@ class ConceptMatcher:
         e_present = bool(concept_term_ids.get("E"))
         m_present = bool(concept_term_ids.get("M"))
         t_present = bool(concept_term_ids.get("T"))
+        v1_present = bool(concept_term_ids.get("V1"))
+        o1_present = bool(concept_term_ids.get("O1"))
         stream_b_core = p_present and m_present
         active_genericity_artifacts = [item["artifact_id"] for item in genericity_artifact_matches]
         active_g_artifacts = [
@@ -325,6 +327,8 @@ class ConceptMatcher:
             "stream_b_genericity": stream_b_genericity,
             "stream_b_genericity_relation_qualified": stream_b_genericity_relation_qualified,
             "stream_b_tailoring_tag": stream_b_core and t_present,
+            "v1_sensitivity_tag": stream_b and v1_present,
+            "o1_sensitivity_tag": stream_b and o1_present,
             "g_eps_explicit": e_present and stream_b_g,
             "c1_eps_explicit": e_present and stream_b_c1,
             "genericity_eps_explicit": e_present and stream_b_genericity,
@@ -372,6 +376,7 @@ def run_fixtures(matcher: ConceptMatcher, fixture_path: Path) -> dict[str, Any]:
         for key in (
             "stream_a", "stream_b", "stream_b_core", "stream_b_g", "stream_b_c1",
             "stream_b_genericity", "stream_b_genericity_relation_qualified", "stream_b_tailoring_tag",
+            "v1_sensitivity_tag", "o1_sensitivity_tag",
             "g_eps_explicit", "c1_eps_explicit", "genericity_eps_explicit"
         ):
             if key in expected and bool(actual[key]) != bool(expected[key]):
@@ -399,6 +404,8 @@ def run_fixtures(matcher: ConceptMatcher, fixture_path: Path) -> dict[str, Any]:
             "stream_b_genericity": actual["stream_b_genericity"],
             "stream_b_genericity_relation_qualified": actual["stream_b_genericity_relation_qualified"],
             "stream_b_tailoring_tag": actual["stream_b_tailoring_tag"],
+            "v1_sensitivity_tag": actual["v1_sensitivity_tag"],
+            "o1_sensitivity_tag": actual["o1_sensitivity_tag"],
             "g_eps_explicit": actual["g_eps_explicit"],
             "c1_eps_explicit": actual["c1_eps_explicit"],
             "genericity_eps_explicit": actual["genericity_eps_explicit"],

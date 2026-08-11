@@ -1,11 +1,11 @@
 {
   "schema_version": "1.1",
-  "dictionary_version": "1.3.0-genericity-2026-08-10",
+  "dictionary_version": "1.5.0-source-completeness-2026-08-10",
   "review_run": "eps-mbse-slr-2026",
-  "status": "version-1.3 frozen deterministic dictionary",
+  "status": "version-1.5 frozen dictionary: complete Stream-A, finite T2, comparable V1/O1 tags, and authorized IAF scope",
   "candidate_logic": {
-    "scope": "Deterministic ESA Indico joined-metadata and individual-attachment matching only. Bibliographic B1/B2/G/C1/T2 strategies and the NTRS finite matrix are defined separately in query-search-plan.md.",
-    "stream_a": "P AND E AND M within one searched route; unchanged by the genericity expansion",
+    "scope": "Deterministic ESA Indico joined-metadata/individual-attachment matching and authorized IAF title/abstract matching. Bibliographic A1/A2/A3/B1/B2/G/C1/T2 strategies and the NTRS finite matrix are defined separately in query-search-plan.md; NTRS applies E/T/V1/O1 locally after its source-cell union.",
+    "stream_a": "P AND E AND M within one searched route; source-query equivalent is A1 union A2 union A3",
     "stream_b_core": "P AND M within one searched route",
     "stream_b_genericity": "P AND a complete precise-G or conservative central-asset artifact within one searched route; no R term is required",
     "stream_b_genericity_relation_qualified": "Optional precision tag: stream_b_genericity plus at least one independent R hit",
@@ -15,7 +15,7 @@
       "joined_metadata",
       "attachment_text"
     ],
-    "union_rule": "Union core-B and genericity/central-asset-expanded B-G candidates from joined metadata and from each independently extracted attachment. Stream A remains the E-explicit tag within core-B; report an E-explicit B-G tag separately. Never combine P, G, R, M, or E hits across metadata and attachment routes.",
+    "union_rule": "Union core-B and genericity/central-asset-expanded B-G candidates from joined metadata and from each independently extracted attachment. Stream A remains the E-explicit tag within core-B; report an E-explicit B-G tag separately. Apply the exact finite V1/O1 sensitivity tags without adding candidates. Never combine P, G, R, M, E, V1, or O1 hits across metadata and attachment routes.",
     "relation_caveat": "R is an optional precision/provenance tag, not proof of an MBSE relationship and not required for relation-free artifact recall. The matcher separately records whether an R span does not overlap any required G component, so architecture-bearing phrases cannot self-satisfy that optional tag. Full-text eligibility still requires the protocol's structured-model and EPS bridge evidence.",
     "cross_route_cooccurrence": false,
     "generic_smallsat_is_population": false
@@ -192,7 +192,7 @@
     "T": {
       "label": "model-coupled tailoring/reuse tags",
       "terms": [
-        {"id": "T_REUSE", "forms": ["reuse", "reused", "reusable", "reusing"]},
+        {"id": "T_REUSE", "forms": ["reuse", "reuses", "reused", "reusable", "reusing"]},
         {"id": "T_TAILOR", "forms": ["tailor", "tailors", "tailored", "tailoring"]},
         {"id": "T_CUSTOMIZE", "forms": ["customize", "customizes", "customized", "customizing", "customization", "customise", "customises", "customised", "customising", "customisation"]},
         {"id": "T_CONFIGURE", "forms": ["configure", "configures", "configured", "configuring", "configuration"]},
@@ -237,9 +237,9 @@
         {"id": "O_MISSION_ASSURANCE", "forms": ["mission assurance"]},
         {"id": "O_REPRODUCIBILITY", "forms": ["reproducibility", "reproducible"]},
         {"id": "O_REUSE", "forms": ["reuse", "reusable"]},
-        {"id": "O_INTEGRABILITY", "forms": ["integrability"]},
-        {"id": "O_INTEROPERABILITY", "forms": ["interoperability"]},
-        {"id": "O_TRACEABILITY", "forms": ["traceability"]},
+        {"id": "O_INTEGRABILITY", "forms": ["integrability", "integrable"]},
+        {"id": "O_INTEROPERABILITY", "forms": ["interoperability", "interoperable"]},
+        {"id": "O_TRACEABILITY", "forms": ["traceability", "traceable"]},
         {"id": "O_INTERFACE_CONSISTENCY", "forms": ["interface consistency"]},
         {"id": "O_LIFECYCLE_CONTINUITY", "forms": ["lifecycle continuity"]},
         {"id": "O_BENEFIT", "forms": ["benefit", "benefits"]},
@@ -262,6 +262,58 @@
         {"id": "O_MAINTENANCE", "forms": ["maintenance"]},
         {"id": "O_GOVERNANCE", "forms": ["governance"]},
         {"id": "O_ADOPTION", "forms": ["adoption"]}
+      ]
+    },
+    "V1": {
+      "label": "exact finite cross-source V&V sensitivity probe",
+      "terms": [
+        {"id": "V1_VERIFICATION", "forms": ["verification"]},
+        {"id": "V1_VALIDATION", "forms": ["validation"]},
+        {"id": "V1_TRACEABILITY", "forms": ["traceability", "traceable"]},
+        {"id": "V1_MODEL_VERIFICATION", "forms": ["model verification"]},
+        {"id": "V1_MODEL_VALIDATION", "forms": ["model validation"]},
+        {"id": "V1_SYSTEM_VERIFICATION", "forms": ["system verification"]},
+        {"id": "V1_SYSTEM_VALIDATION", "forms": ["system validation"]},
+        {"id": "V1_MODEL_CHECKING", "forms": ["model checking"]},
+        {"id": "V1_VIRTUAL_INTEGRATION", "forms": ["virtual integration"]},
+        {"id": "V1_REQUIREMENTS_IN_LOOP", "forms": ["requirements-in-the-loop"]},
+        {"id": "V1_MIL", "forms": ["MIL"]},
+        {"id": "V1_MODEL_IN_LOOP", "forms": ["model-in-the-loop"]},
+        {"id": "V1_SIL", "forms": ["SIL"]},
+        {"id": "V1_SOFTWARE_IN_LOOP", "forms": ["software-in-the-loop"]},
+        {"id": "V1_PIL", "forms": ["PIL"]},
+        {"id": "V1_PROCESSOR_IN_LOOP", "forms": ["processor-in-the-loop"]},
+        {"id": "V1_HIL", "forms": ["HIL"]},
+        {"id": "V1_HARDWARE_IN_LOOP", "forms": ["hardware-in-the-loop"]},
+        {"id": "V1_TEST_CASE", "forms": ["test case"]},
+        {"id": "V1_TEST_PROCEDURE", "forms": ["test procedure"]}
+      ]
+    },
+    "O1": {
+      "label": "exact finite cross-source outcome/burden sensitivity probe",
+      "terms": [
+        {"id": "O1_RELIABILITY", "forms": ["reliability", "reliable"]},
+        {"id": "O1_MISSION_ASSURANCE", "forms": ["mission assurance"]},
+        {"id": "O1_REPRODUCIBILITY", "forms": ["reproducibility", "reproducible"]},
+        {"id": "O1_REUSE", "forms": ["reuse", "reusable"]},
+        {"id": "O1_INTEGRABILITY", "forms": ["integrability", "integrable"]},
+        {"id": "O1_INTEROPERABILITY", "forms": ["interoperability", "interoperable"]},
+        {"id": "O1_TRACEABILITY", "forms": ["traceability", "traceable"]},
+        {"id": "O1_BENEFIT", "forms": ["benefit", "benefits"]},
+        {"id": "O1_IMPACT", "forms": ["impact"]},
+        {"id": "O1_OUTCOME", "forms": ["outcome"]},
+        {"id": "O1_NO_EFFECT", "forms": ["no effect"]},
+        {"id": "O1_ADVERSE", "forms": ["adverse"]},
+        {"id": "O1_BURDEN", "forms": ["burden"]},
+        {"id": "O1_EFFORT", "forms": ["effort"]},
+        {"id": "O1_WORKLOAD", "forms": ["workload"]},
+        {"id": "O1_OVERHEAD", "forms": ["overhead"]},
+        {"id": "O1_COST", "forms": ["cost"]},
+        {"id": "O1_SCHEDULE", "forms": ["schedule"]},
+        {"id": "O1_TRAINING", "forms": ["training"]},
+        {"id": "O1_LEARNING_CURVE", "forms": ["learning curve"]},
+        {"id": "O1_LICENSING", "forms": ["licensing", "license", "licence"]},
+        {"id": "O1_ADOPTION", "forms": ["adoption"]}
       ]
     }
   },

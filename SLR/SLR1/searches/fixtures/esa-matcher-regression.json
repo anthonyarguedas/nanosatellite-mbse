@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "dictionary_version": "1.3.0-genericity-2026-08-10",
+  "dictionary_version": "1.5.0-source-completeness-2026-08-10",
   "fixtures": [
     {
       "id": "metadata_stream_a_acronym_boundaries",
@@ -343,6 +343,39 @@
         "stream_b_tailoring_tag": true,
         "field_term_ids": {
           "contribution.description": ["P_CUBESAT", "M_SYSTEM_MODEL", "T_TAILOR", "T_PARAMETERIZE"]
+        }
+      }
+    },
+    {
+      "id": "finite_third_person_tailoring_forms",
+      "route": "joined_metadata",
+      "fields": {
+        "contribution.description": "The CubeSat system model reuses a core, configures interfaces, and adapts the architecture."
+      },
+      "expected": {
+        "concepts_present": ["P", "M", "T"],
+        "stream_b": true,
+        "stream_b_core": true,
+        "stream_b_tailoring_tag": true,
+        "field_term_ids": {
+          "contribution.description": ["P_CUBESAT", "M_SYSTEM_MODEL", "T_REUSE", "T_CONFIGURE", "T_ADAPT"]
+        }
+      }
+    },
+    {
+      "id": "finite_v1_o1_tags_on_candidate_route",
+      "route": "attachment_text",
+      "fields": {
+        "attachment.extracted_text": "A CubeSat system model supports verification and traceable tests, with reliable benefits but an adverse burden and no effect on schedule."
+      },
+      "expected": {
+        "concepts_present": ["P", "M", "V1", "O1"],
+        "stream_b": true,
+        "stream_b_core": true,
+        "v1_sensitivity_tag": true,
+        "o1_sensitivity_tag": true,
+        "field_term_ids": {
+          "attachment.extracted_text": ["P_CUBESAT", "M_SYSTEM_MODEL", "V1_VERIFICATION", "V1_TRACEABILITY", "O1_RELIABILITY", "O1_BENEFIT", "O1_ADVERSE", "O1_BURDEN", "O1_NO_EFFECT", "O1_SCHEDULE"]
         }
       }
     }

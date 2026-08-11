@@ -35,7 +35,7 @@ import xml.etree.ElementTree as ET
 
 import requests
 
-from concept_matcher import ConceptMatcher, MatcherError, atomic_write_json, load_json, normalize_text, run_fixtures, sha256_file
+from concept_matcher import ConceptMatcher, MatcherError, atomic_write_json, normalize_text, run_fixtures, sha256_file
 
 
 ROOT_URL = "https://indico.esa.int/export/categ/0.json"
@@ -394,6 +394,8 @@ def concise_match(result: dict[str, Any]) -> dict[str, Any]:
         "stream_b_genericity": result["stream_b_genericity"],
         "stream_b_genericity_relation_qualified": result["stream_b_genericity_relation_qualified"],
         "stream_b_tailoring_tag": result["stream_b_tailoring_tag"],
+        "v1_sensitivity_tag": result["v1_sensitivity_tag"],
+        "o1_sensitivity_tag": result["o1_sensitivity_tag"],
         "g_eps_explicit": result["g_eps_explicit"],
         "c1_eps_explicit": result["c1_eps_explicit"],
         "genericity_eps_explicit": result["genericity_eps_explicit"],
@@ -586,6 +588,8 @@ def main(argv: list[str] | None = None) -> int:
                 item["match"]["stream_b_genericity_relation_qualified"] for item in attachment_matches
             )
             attachment_tailoring = any(item["match"]["stream_b_tailoring_tag"] for item in attachment_matches)
+            attachment_v1 = any(item["match"]["v1_sensitivity_tag"] for item in attachment_matches)
+            attachment_o1 = any(item["match"]["o1_sensitivity_tag"] for item in attachment_matches)
             attachment_a = any(item["match"]["stream_a"] for item in attachment_matches)
             attachment_g_eps = any(item["match"]["g_eps_explicit"] for item in attachment_matches)
             attachment_c1_eps = any(item["match"]["c1_eps_explicit"] for item in attachment_matches)
@@ -603,6 +607,8 @@ def main(argv: list[str] | None = None) -> int:
             c1_eps_explicit = metadata_match["c1_eps_explicit"] or attachment_c1_eps
             genericity_eps_explicit = metadata_match["genericity_eps_explicit"] or attachment_genericity_eps
             tailoring_tag = metadata_match["stream_b_tailoring_tag"] or attachment_tailoring
+            v1_tag = metadata_match["v1_sensitivity_tag"] or attachment_v1
+            o1_tag = metadata_match["o1_sensitivity_tag"] or attachment_o1
             subject_matches.append({
                 "subject_id": subject["subject_id"], "event_id": subject["event_id"], "contribution_id": subject["contribution_id"],
                 "metadata_match": concise_match(metadata_match), "attachment_matches": attachment_matches,
@@ -611,6 +617,7 @@ def main(argv: list[str] | None = None) -> int:
                 "stream_b_genericity": stream_b_genericity,
                 "stream_b_genericity_relation_qualified": stream_b_genericity_relation,
                 "stream_b_tailoring_tag": tailoring_tag,
+                "v1_sensitivity_tag": v1_tag, "o1_sensitivity_tag": o1_tag,
                 "g_eps_explicit": g_eps_explicit, "c1_eps_explicit": c1_eps_explicit,
                 "genericity_eps_explicit": genericity_eps_explicit,
                 "routes": {
@@ -626,6 +633,10 @@ def main(argv: list[str] | None = None) -> int:
                     "attachment_text_genericity_relation_qualified": attachment_b_genericity_relation,
                     "joined_metadata_tailoring_tag": metadata_match["stream_b_tailoring_tag"],
                     "attachment_text_tailoring_tag": attachment_tailoring,
+                    "joined_metadata_v1_tag": metadata_match["v1_sensitivity_tag"],
+                    "attachment_text_v1_tag": attachment_v1,
+                    "joined_metadata_o1_tag": metadata_match["o1_sensitivity_tag"],
+                    "attachment_text_o1_tag": attachment_o1,
                 }
             })
         atomic_write_json(output_dir / "match-results.json", {"subjects": subject_matches})
@@ -642,6 +653,8 @@ def main(argv: list[str] | None = None) -> int:
             item["subject_id"] for item in subject_matches if item["stream_b_genericity_relation_qualified"]
         }
         tailoring_subjects = {item["subject_id"] for item in subject_matches if item["stream_b_tailoring_tag"]}
+        v1_subjects = {item["subject_id"] for item in subject_matches if item["v1_sensitivity_tag"]}
+        o1_subjects = {item["subject_id"] for item in subject_matches if item["o1_sensitivity_tag"]}
         metadata_b = {item["subject_id"] for item in subject_matches if item["routes"]["joined_metadata"]}
         attachment_b = {item["subject_id"] for item in subject_matches if item["routes"]["attachment_text"]}
         metadata_g = {item["subject_id"] for item in subject_matches if item["routes"]["joined_metadata_g"]}
@@ -666,6 +679,7 @@ def main(argv: list[str] | None = None) -> int:
             "stream_b_c1": len(c1_b_subjects), "stream_b_genericity": len(genericity_b_subjects),
             "stream_b_genericity_relation_qualified": len(relation_qualified_g_subjects),
             "stream_b_tailoring_tag": len(tailoring_subjects),
+            "v1_sensitivity_tag": len(v1_subjects), "o1_sensitivity_tag": len(o1_subjects),
             "core_intersection_g": len(core_b_subjects & g_b_subjects),
             "core_intersection_c1": len(core_b_subjects & c1_b_subjects),
             "g_intersection_c1": len(g_b_subjects & c1_b_subjects),

@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.3",
-  "status": "PRESS-corrected no-type-filter request shapes plus version-1.3 genericity and terminal/zero-page conventions empirically validated by superseded no-screening pilots; final execution requires a clean authorized version-1.3 run",
+  "schema_version": "1.5",
+  "status": "Version-1.5 request contract: complete A1/A2/A3, corrected finite IEEE T2 and finite V1/O1, common 2026-08-10 cutoff, plus empirically validated terminal/zero-page conventions; final execution requires clean authorized storage",
   "credential_and_pilot_policy": {
     "credentials_cookies_tokens": "Never serialize credentials, cookies, tokens, authorization headers, or IEEE userInfo. Supply Scopus authentication only in an in-memory X-ELS-APIKey request header from a secure runtime environment.",
     "private_artifacts": "Raw responses, page-ID/rank reconciliation, normalized pilot outputs, and pilot merge products must be written only under a Git-ignored owner-only directory (0700 directories; 0600 files).",
@@ -60,10 +60,10 @@
     "success_rule": "A logical query succeeds only when pages_retrieved equals computed expected pages, unique source IDs equals retrieved records, retrieved records equals source total, and the two ordered passes are identical. Any other condition is a failure, never a partial result."
   },
   "prospective_final_execution": {
-    "status": "Version-1.3 no-type-filter request templates and terminal/zero-page rules validated by superseded no-screening two-pass pilots through 2026-08-10; final execution requires a clean authorized directory",
+    "status": "Version-1.5 no-type-filter request templates and terminal/zero-page rules; prior two-pass pilots remain superseded and every current query requires a clean authorized directory",
     "scopus": {
       "query_id": "S-B1 corrected unrestricted pagination preflight",
-      "final_query_ids": ["S-A1", "S-A2", "S-B1", "S-B2", "S-BG1", "S-BG2", "S-BC1", "S-BT2", "S-V1", "S-O1"],
+      "final_query_ids": ["S-A1", "S-A2", "S-A3", "S-B1", "S-B2", "S-BG1", "S-BG2", "S-BC1", "S-BT2", "S-V1", "S-O1"],
       "method": "GET",
       "endpoint": "https://api.elsevier.com/content/search/scopus",
       "headers": {
@@ -78,7 +78,7 @@
         "sort": "eid",
         "httpAccept": "application/json"
       },
-      "filter_contract": "English and 2011-2026 only; no DOCTYPE clause or other publication-type filter. Replace query only with the exact final S-* block from query-search-plan.md; all displayed final blocks include the year clauses.",
+      "filter_contract": "English and 2011-2026 source controls followed by the common 2026-08-10 exact-day cutoff; no DOCTYPE clause or other publication-type filter. Replace query only with the exact final S-* block from query-search-plan.md; all displayed final blocks include the year clauses.",
       "pagination": "zero-based start offsets 0,25,50,... to source-total exhaustion",
       "validation": {
         "classification": "pilot_not_candidate_search",
@@ -93,7 +93,7 @@
     },
     "ieee_xplore": {
       "query_id": "I-B2 corrected unrestricted pagination preflight",
-      "final_query_ids": ["I-A1", "I-A2", "I-B1", "I-B2", "I-BG1", "I-BG2", "I-BC1", "I-BT2", "I-V1", "I-O1"],
+      "final_query_ids": ["I-A1", "I-A2", "I-A3", "I-B1", "I-B2", "I-BG1", "I-BG2", "I-BC1", "I-BT2", "I-V1", "I-O1"],
       "method": "POST",
       "endpoint": "https://ieeexplore.ieee.org/rest/search",
       "headers": {
@@ -118,7 +118,7 @@
         "ranges": ["2011_2026_Year"],
         "refinements": ["Language:English"]
       },
-      "filter_contract": "English and 2011-2026 only; no ContentType refinement or other publication-type filter. Replace queryText only with the exact final I-* block from query-search-plan.md.",
+      "filter_contract": "English and 2011-2026 source controls followed by the common 2026-08-10 exact-day cutoff; no ContentType refinement or other publication-type filter. Replace queryText only with the exact final I-* block from query-search-plan.md.",
       "driver_flag": "--ieee-no-content-type-filter",
       "pagination": "strictly one-based pageNumber 1,2,... to source-total exhaustion",
       "validation": {
