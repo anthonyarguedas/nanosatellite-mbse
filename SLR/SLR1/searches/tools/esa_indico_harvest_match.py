@@ -29,7 +29,7 @@ import sys
 import tempfile
 import time
 from typing import Any, Iterable
-from urllib.parse import unquote, urlsplit, urlunsplit
+from urllib.parse import unquote, unquote_plus, urljoin, urlsplit, urlunsplit
 import zipfile
 import xml.etree.ElementTree as ET
 
@@ -41,7 +41,12 @@ from concept_matcher import ConceptMatcher, MatcherError, atomic_write_json, nor
 ROOT_URL = "https://indico.esa.int/export/categ/0.json"
 CATEGORY_URL = "https://indico.esa.int/export/categ/{category_id}.json"
 EVENT_URL = "https://indico.esa.int/export/event/{event_id}.json?detail=contributions"
+ESA_PUBLIC_ORIGIN = "https://indico.esa.int"
+ESA_PUBLIC_HOST = "indico.esa.int"
 CHILD_CATEGORY_IDS = (5, 6, 7, 9)
+MAX_ATTACHMENT_REDIRECTS = 5
+MAX_BOUNDED_PILOT_EVENT_IDS = 5
+SOURCE_ID = re.compile(r"[0-9]+\Z")
 RETRYABLE = {408, 425, 429, 500, 502, 503, 504}
 ACCESS_FAILURES = {401, 403, 418}
 DOCUMENT_EXTENSIONS = {
@@ -59,6 +64,18 @@ DOCUMENT_MIME_TYPES = {
     "application/vnd.oasis.opendocument.spreadsheet", "application/postscript"
 }
 SLIDE_MARKERS = ("slide", "presentation", "poster", "briefing")
+SENSITIVE_URL_QUERY_NAMES = frozenset(
+    {
+        "apikey", "auth", "authorization", "proxyauthorization", "authtoken", "authentication",
+        "accesstoken", "token", "idtoken", "refreshtoken", "bearertoken", "signature", "sig",
+        "cookie", "setcookie", "cookieauth", "xelsapikey",
+        "password", "passwd", "secret", "clientsecret", "privatekey", "accesskey", "accountid",
+        "csrf", "csrftoken", "csrfmiddlewaretoken", "xcsrf", "xcsrftoken", "xsrf", "xsrftoken",
+        "jsessionid", "sid",
+        "session", "sessionid", "sessionkey", "sessiontoken", "searchid", "searchsession",
+        "searchsessionid", "searchcontext", "searchcontextid", "credential", "credentials", "userinfo",
+    }
+)
 
 
 class HarvestError(RuntimeError):
@@ -83,6 +100,7 @@ class Attachment:
     protected: bool
     document_like: bool
     lead_only_hint: bool
+    transport_allowed: bool = True
 
 
 def utc_now() -> str:
@@ -93,9 +111,172 @@ def sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
-def safe_url(value: str) -> str:
-    parsed = urlsplit(value)
-    return urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
+def normalized_query_name(value: str) -> str:
+    """Normalize a query key for exact sensitive-context matching only."""
+    return re.sub(r"[^a-z0-9]", "", unquote_plus(value).casefold())
+
+
+def redact_query_context(query: str) -> str:
+    """Remove only sensitive query keys while preserving benign pieces verbatim."""
+    retained: list[tuple[str, str]] = []
+    pieces = re.split(r"([&;])", query)
+    separator = ""
+    for piece in pieces:
+        if piece in {"&", ";"}:
+            separator = piece
+            continue
+        if not piece:
+            continue
+        key = piece.split("=", 1)[0]
+        if normalized_query_name(key) in SENSITIVE_URL_QUERY_NAMES:
+            continue
+        retained.append((separator, piece))
+        separator = ""
+    return "".join(piece if index == 0 else separator + piece for index, (separator, piece) in enumerate(retained))
+
+
+def is_public_esa_url(value: str) -> bool:
+    """Accept only exact lowercase canonical public ESA URLs without a fragment."""
+    if not isinstance(value, str) or not value.startswith(ESA_PUBLIC_ORIGIN):
+        return False
+    try:
+        parsed = urlsplit(value)
+    except ValueError:
+        return False
+    # Exact netloc rejects userinfo, every explicit port, and host case variants.
+    return (
+        parsed.scheme == "https"
+        and parsed.netloc == ESA_PUBLIC_HOST
+        and not parsed.fragment
+    )
+
+
+def canonical_public_esa_url(value: Any, *, allow_relative: bool = False) -> tuple[str | None, bool]:
+    """Return a safe canonical URL and whether it is unchanged enough to fetch.
+
+    A relative source path may be resolved against the fixed ESA origin.  Absolute
+    URLs, authority-relative URLs, fragments, and noncanonical authorities are
+    refused rather than rewritten into a different request.  Sensitive context is
+    redacted for artifacts but makes the URL ineligible for transport.
+    """
+    if not isinstance(value, str):
+        return None, False
+    raw = value.strip()
+    if not raw:
+        return None, False
+    try:
+        parsed = urlsplit(raw)
+        if parsed.scheme or parsed.netloc:
+            if not is_public_esa_url(raw):
+                return None, False
+            resolved = raw
+        elif allow_relative:
+            resolved = urljoin(f"{ESA_PUBLIC_ORIGIN}/", raw)
+        else:
+            return None, False
+        if not is_public_esa_url(resolved):
+            return None, False
+        resolved_parts = urlsplit(resolved)
+    except ValueError:
+        return None, False
+    redacted_query = redact_query_context(resolved_parts.query)
+    return (
+        urlunsplit(("https", ESA_PUBLIC_HOST, resolved_parts.path, redacted_query, "")),
+        redacted_query == resolved_parts.query,
+    )
+
+
+def safe_url(value: Any) -> str:
+    """Render a safe public URL or an opaque marker without reflecting unsafe text."""
+    normalized, _ = canonical_public_esa_url(value, allow_relative=True)
+    if normalized:
+        return normalized
+    return f"<redacted-non-public-url:{sha256_bytes(str(value).encode('utf-8'))}>"
+
+
+def anonymous_session(headers: dict[str, str]) -> requests.Session:
+    """Create a public-only session without proxy, netrc, cookie, or auth inheritance."""
+    session = requests.Session()
+    session.trust_env = False
+    session.auth = None
+    session.cookies.clear()
+    session.headers.clear()
+    session.headers.update(headers)
+    return session
+
+
+def clear_request_state(session: Any) -> None:
+    """Clear any inherited or post-response credential state from an owned session."""
+    cookies = getattr(session, "cookies", None)
+    clear = getattr(cookies, "clear", None)
+    if callable(clear):
+        clear()
+    headers = getattr(session, "headers", None)
+    if hasattr(headers, "pop"):
+        for name in list(headers):
+            if str(name).casefold() in {"cookie", "authorization", "proxy-authorization"}:
+                headers.pop(name, None)
+    try:
+        session.auth = None
+    except (AttributeError, TypeError):
+        pass
+
+
+def close_response(response: Any) -> None:
+    close = getattr(response, "close", None)
+    if callable(close):
+        close()
+
+
+def source_id(value: Any, label: str) -> str:
+    """Return a path-safe public numeric source identifier or fail closed."""
+    if value is None or isinstance(value, bool):
+        raise HarvestError(f"{label} ID is invalid")
+    identifier = str(value).strip()
+    if not SOURCE_ID.fullmatch(identifier):
+        raise HarvestError(f"{label} ID is invalid")
+    return identifier
+
+
+def contribution_id(contribution: dict[str, Any]) -> str:
+    # db_id is the stable database identifier; public id is only a fallback when absent.
+    value = contribution.get("db_id") if "db_id" in contribution else contribution.get("id")
+    return source_id(value, "contribution")
+
+
+def complete_category(payload: dict[str, Any], label: str) -> tuple[list[dict[str, Any]], list[str]]:
+    """Validate one unpaginated category export before it influences coverage."""
+    events = parse_event_list(payload)
+    reported_count = payload.get("count")
+    if isinstance(reported_count, bool) or not isinstance(reported_count, int) or reported_count != len(events):
+        raise HarvestError(f"{label} category count is invalid")
+    pagenav = payload.get("pagenav")
+    if pagenav is not None and (not isinstance(pagenav, dict) or pagenav.get("next") is not None):
+        raise HarvestError(f"{label} category export pagination is unsupported")
+    ids = [source_id(event.get("id"), f"{label} event") for event in events]
+    if len(set(ids)) != len(ids):
+        raise HarvestError(f"{label} category has duplicate event IDs")
+    return events, ids
+
+
+def bounded_event_ids(values: Iterable[Any], classification: str) -> set[str]:
+    """Validate the small explicit event sample used only by a pilot preflight."""
+    values = list(values)
+    if not values:
+        return set()
+    if classification != "pilot_not_candidate_search":
+        raise HarvestError("bounded --event-id mode is permitted only for pilot_not_candidate_search")
+    if len(values) > MAX_BOUNDED_PILOT_EVENT_IDS:
+        raise HarvestError(f"bounded --event-id mode permits at most {MAX_BOUNDED_PILOT_EVENT_IDS} events")
+    identifiers = [source_id(value, "bounded event selector") for value in values]
+    if len(set(identifiers)) != len(identifiers):
+        raise HarvestError("bounded --event-id selector contains a duplicate ID")
+    return set(identifiers)
+
+
+def safe_failure_reason(error: Exception) -> str:
+    """Keep failure ledgers informative without serializing arbitrary exception text."""
+    return str(error) if isinstance(error, HarvestError) else "unexpected_failure"
 
 
 def safe_name(value: str, fallback: str) -> str:
@@ -123,43 +304,93 @@ def scalar_text(value: Any) -> str:
     return str(value)
 
 
-def response_json(session: requests.Session, url: str, timeout: float, retries: int, delay: float) -> tuple[dict[str, Any], dict[str, Any]]:
+def response_json(
+    session: requests.Session,
+    url: str,
+    timeout: float,
+    retries: int,
+    delay: float,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Fetch one export without redirects or credential/session carry-over."""
     events: list[dict[str, Any]] = []
+    request_url, request_allowed = canonical_public_esa_url(url)
+    if not request_allowed or request_url != url:
+        raise HarvestError(f"non-public-ESA export URL refused: {safe_url(url)}")
     for attempt in range(retries + 1):
+        response: Any | None = None
         try:
-            response = session.get(url, timeout=timeout, allow_redirects=True)
+            clear_request_state(session)
+            response = session.get(url, timeout=timeout, allow_redirects=False)
+            response_url = str(getattr(response, "url", url) or url)
+            response_public_url, response_allowed = canonical_public_esa_url(response_url)
+            if (
+                not response_allowed
+                or response_public_url != response_url
+                or getattr(response, "history", ())
+            ):
+                raise HarvestError(f"redirect or non-public response blocked for {safe_url(url)}")
+            if 300 <= response.status_code < 400:
+                raise HarvestError(f"redirect blocked for {safe_url(url)}")
+            if response.status_code in RETRYABLE and attempt < retries:
+                retry_after = response.headers.get("Retry-After", "")
+                try:
+                    wait = (
+                        min(60.0, max(0.0, float(retry_after)))
+                        if retry_after
+                        else min(30.0, delay * (2**attempt))
+                    )
+                except ValueError:
+                    wait = min(30.0, delay * (2**attempt))
+                events.append(
+                    {"attempt": attempt + 1, "event": f"http_{response.status_code}", "wait": wait}
+                )
+                clear_request_state(session)
+                close_response(response)
+                response = None
+                time.sleep(wait)
+                continue
+            if response.status_code in ACCESS_FAILURES or response.status_code >= 400:
+                raise HarvestError(f"HTTP {response.status_code} for {safe_url(url)}")
+            content_type = response.headers.get("Content-Type", "").casefold()
+            if "json" not in content_type and response.text.lstrip().casefold().startswith(
+                ("<html", "<!doctype html")
+            ):
+                raise HarvestError(f"non-JSON HTML/challenge response for {safe_url(url)}")
+            try:
+                payload = response.json()
+            except ValueError as error:
+                raise HarvestError(f"malformed JSON for {safe_url(url)}") from error
+            if not isinstance(payload, dict):
+                raise HarvestError(f"JSON root is not an object for {safe_url(url)}")
+            raw = response.content
+            return payload, {
+                "url": safe_url(response_url),
+                "status": response.status_code,
+                "retrieved_at_utc": utc_now(),
+                "bytes": len(raw),
+                "sha256": sha256_bytes(raw),
+                "retry_events": events,
+                "raw_bytes": raw,
+            }
         except requests.RequestException as error:
             if attempt >= retries:
-                raise HarvestError(f"network failure for {safe_url(url)} after {attempt + 1} attempts: {type(error).__name__}") from error
+                raise HarvestError(
+                    f"network failure for {safe_url(url)} after {attempt + 1} attempts: {type(error).__name__}"
+                ) from error
             wait = min(30.0, delay * (2**attempt))
-            events.append({"attempt": attempt + 1, "event": "network_error", "error_type": type(error).__name__, "wait": wait})
+            events.append(
+                {
+                    "attempt": attempt + 1,
+                    "event": "network_error",
+                    "error_type": type(error).__name__,
+                    "wait": wait,
+                }
+            )
             time.sleep(wait)
-            continue
-        if response.status_code in RETRYABLE and attempt < retries:
-            retry_after = response.headers.get("Retry-After", "")
-            try:
-                wait = min(60.0, max(0.0, float(retry_after))) if retry_after else min(30.0, delay * (2**attempt))
-            except ValueError:
-                wait = min(30.0, delay * (2**attempt))
-            events.append({"attempt": attempt + 1, "event": f"http_{response.status_code}", "wait": wait})
-            time.sleep(wait)
-            continue
-        if response.status_code in ACCESS_FAILURES or response.status_code >= 400:
-            raise HarvestError(f"HTTP {response.status_code} for {safe_url(url)}")
-        content_type = response.headers.get("Content-Type", "").casefold()
-        if "json" not in content_type and response.text.lstrip().casefold().startswith(("<html", "<!doctype html")):
-            raise HarvestError(f"non-JSON HTML/challenge response for {safe_url(url)}")
-        try:
-            payload = response.json()
-        except ValueError as error:
-            raise HarvestError(f"malformed JSON for {safe_url(url)}") from error
-        if not isinstance(payload, dict):
-            raise HarvestError(f"JSON root is not an object for {safe_url(url)}")
-        raw = response.content
-        return payload, {
-            "url": safe_url(response.url), "status": response.status_code, "retrieved_at_utc": utc_now(),
-            "bytes": len(raw), "sha256": sha256_bytes(raw), "retry_events": events, "raw_bytes": raw
-        }
+        finally:
+            clear_request_state(session)
+            if response is not None:
+                close_response(response)
     raise HarvestError(f"request exhausted for {safe_url(url)}")
 
 
@@ -186,10 +417,37 @@ def attachment_extension(filename: str, url: str) -> str:
 
 def document_like(filename: str, url: str, content_type: str) -> bool:
     mime = content_type.split(";", 1)[0].strip().casefold()
-    return attachment_extension(filename, url) in DOCUMENT_EXTENSIONS or mime.startswith(DOCUMENT_MIME_PREFIXES) or mime in DOCUMENT_MIME_TYPES
+    return (
+        attachment_extension(filename, url) in DOCUMENT_EXTENSIONS
+        or mime.startswith(DOCUMENT_MIME_PREFIXES)
+        or mime in DOCUMENT_MIME_TYPES
+    )
 
 
-def iter_materials(owner: dict[str, Any], association_type: str, event_id: str, contribution_id: str | None) -> Iterable[Attachment]:
+def material_url_details(raw_url: str) -> tuple[str, bool, str]:
+    """Return a safe stored URL, transport eligibility, and non-secret attachment key."""
+    public_url, transport_allowed = canonical_public_esa_url(raw_url, allow_relative=True)
+    stored_url = public_url or safe_url(raw_url)
+    if transport_allowed:
+        return stored_url, True, stored_url
+    return (
+        stored_url,
+        False,
+        f"{stored_url}|redacted-context:{sha256_bytes(raw_url.encode('utf-8'))}",
+    )
+
+
+def attachment_download_key(attachment: Attachment) -> str:
+    """Keep redacted-context coverage outcomes distinct from public URL downloads."""
+    return attachment.url if attachment.transport_allowed else attachment.key
+
+
+def iter_materials(
+    owner: dict[str, Any],
+    association_type: str,
+    event_id: str,
+    contribution_id: str | None,
+) -> Iterable[Attachment]:
     seen: set[str] = set()
     folders = owner.get("folders") if isinstance(owner.get("folders"), list) else []
     for folder in folders:
@@ -201,12 +459,12 @@ def iter_materials(owner: dict[str, Any], association_type: str, event_id: str, 
             if not isinstance(item, dict):
                 continue
             url = str(item.get("download_url") or item.get("url") or "").strip()
+            stored_url, transport_allowed, key = material_url_details(url)
             attachment_id = str(item.get("id", ""))
-            key = url or f"{association_type}:{event_id}:{contribution_id}:{folder_id}:{attachment_id}"
             if not url or key in seen:
                 continue
             seen.add(key)
-            filename = str(item.get("filename") or item.get("title") or Path(urlsplit(url).path).name)
+            filename = str(item.get("filename") or item.get("title") or Path(urlsplit(stored_url).path).name)
             content_type = str(item.get("content_type") or mimetypes.guess_type(filename)[0] or "")
             size = item.get("size") if isinstance(item.get("size"), int) else None
             title = scalar_text(item.get("title"))
@@ -215,10 +473,14 @@ def iter_materials(owner: dict[str, Any], association_type: str, event_id: str, 
             yield Attachment(
                 key=key, association_type=association_type, event_id=event_id, contribution_id=contribution_id,
                 folder_id=folder_id, folder_title=folder_title, attachment_id=attachment_id, title=title,
-                description=description, filename=filename, content_type=content_type, size=size, url=safe_url(url),
+                description=description, filename=filename, content_type=content_type, size=size, url=stored_url,
                 protected=bool(item.get("is_protected") or folder.get("is_protected")),
-                document_like=document_like(filename, url, content_type),
-                lead_only_hint=any(marker in hint_text for marker in SLIDE_MARKERS) or attachment_extension(filename, url) in {".ppt", ".pptx", ".odp"}
+                document_like=document_like(filename, stored_url, content_type),
+                lead_only_hint=(
+                    any(marker in hint_text for marker in SLIDE_MARKERS)
+                    or attachment_extension(filename, stored_url) in {".ppt", ".pptx", ".odp"}
+                ),
+                transport_allowed=transport_allowed,
             )
 
     materials = owner.get("material") if isinstance(owner.get("material"), list) else []
@@ -231,12 +493,12 @@ def iter_materials(owner: dict[str, Any], association_type: str, event_id: str, 
             if not isinstance(resource, dict):
                 continue
             url = str(resource.get("url") or "").strip()
+            stored_url, transport_allowed, key = material_url_details(url)
             attachment_id = str(resource.get("id", ""))
-            key = url or f"{association_type}:{event_id}:{contribution_id}:{folder_id}:{attachment_id}"
             if not url or key in seen:
                 continue
             seen.add(key)
-            filename = str(resource.get("fileName") or resource.get("name") or Path(urlsplit(url).path).name)
+            filename = str(resource.get("fileName") or resource.get("name") or Path(urlsplit(stored_url).path).name)
             content_type = str(resource.get("content_type") or mimetypes.guess_type(filename)[0] or "")
             title = scalar_text(resource.get("name"))
             description = scalar_text(resource.get("description"))
@@ -244,9 +506,14 @@ def iter_materials(owner: dict[str, Any], association_type: str, event_id: str, 
             yield Attachment(
                 key=key, association_type=association_type, event_id=event_id, contribution_id=contribution_id,
                 folder_id=folder_id, folder_title=folder_title, attachment_id=attachment_id, title=title,
-                description=description, filename=filename, content_type=content_type, size=None, url=safe_url(url),
-                protected=bool(resource.get("is_protected")), document_like=document_like(filename, url, content_type),
-                lead_only_hint=any(marker in hint_text for marker in SLIDE_MARKERS) or attachment_extension(filename, url) in {".ppt", ".pptx", ".odp"}
+                description=description, filename=filename, content_type=content_type, size=None, url=stored_url,
+                protected=bool(resource.get("is_protected")),
+                document_like=document_like(filename, stored_url, content_type),
+                lead_only_hint=(
+                    any(marker in hint_text for marker in SLIDE_MARKERS)
+                    or attachment_extension(filename, stored_url) in {".ppt", ".pptx", ".odp"}
+                ),
+                transport_allowed=transport_allowed,
             )
 
 
@@ -287,37 +554,182 @@ def metadata_fields(event: dict[str, Any], contribution: dict[str, Any] | None, 
     return fields
 
 
-def download_attachment(session: requests.Session, attachment: Attachment, destination: Path, timeout: float, retries: int, delay: float) -> dict[str, Any]:
+def redirect_target(current_url: str, response: Any) -> tuple[str | None, str]:
+    """Resolve one public redirect without normalizing an unsafe target into a fetch."""
+    headers = getattr(response, "headers", {}) or {}
+    location = headers.get("Location") if hasattr(headers, "get") else None
+    if not isinstance(location, str) or not location:
+        return None, "redirect_refused_missing_location"
+    try:
+        target_raw = urljoin(current_url, location)
+    except (TypeError, ValueError):
+        return None, "redirect_refused_non_public_origin"
+    target, transport_allowed = canonical_public_esa_url(target_raw)
+    if target is None:
+        return None, "redirect_refused_non_public_origin"
+    if not transport_allowed or target != target_raw:
+        return None, "redirect_refused_sensitive_context"
+    return target, "followed_same_origin"
+
+
+def download_attachment(
+    session: requests.Session,
+    attachment: Attachment,
+    destination: Path,
+    timeout: float,
+    retries: int,
+    delay: float,
+) -> dict[str, Any]:
+    """Retrieve one attachment through a bounded, manually validated redirect chain."""
     if attachment.protected:
         return {"status": "inaccessible_protected", "retrieved": False}
+    request_url, transport_allowed = canonical_public_esa_url(attachment.url)
+    if request_url is None:
+        return {"status": "inaccessible_non_public_origin", "retrieved": False}
+    if (
+        not attachment.transport_allowed
+        or not transport_allowed
+        or request_url != attachment.url
+    ):
+        return {"status": "inaccessible_sensitive_url_context", "retrieved": False}
+
     destination.parent.mkdir(parents=True, exist_ok=True)
     events: list[dict[str, Any]] = []
-    for attempt in range(retries + 1):
-        response: requests.Response | None = None
-        try:
-            response = session.get(attachment.url, timeout=timeout, stream=True, allow_redirects=True)
-        except requests.RequestException as error:
-            if attempt >= retries:
-                return {"status": "network_failure", "retrieved": False, "error_type": type(error).__name__, "retry_events": events}
-            wait = min(30.0, delay * (2**attempt)); events.append({"attempt": attempt + 1, "event": "network_error", "wait": wait}); time.sleep(wait); continue
-        if response.status_code in RETRYABLE and attempt < retries:
-            wait = min(30.0, delay * (2**attempt)); events.append({"attempt": attempt + 1, "event": f"http_{response.status_code}", "wait": wait}); time.sleep(wait); continue
-        if response.status_code >= 400:
-            return {"status": f"http_{response.status_code}", "retrieved": False, "retry_events": events}
-        content_type = response.headers.get("Content-Type", attachment.content_type).split(";", 1)[0]
-        with tempfile.NamedTemporaryFile("wb", dir=destination.parent, prefix=f".{destination.name}.", suffix=".tmp", delete=False) as target:
-            temporary = Path(target.name)
-            digest = hashlib.sha256(); size = 0
+    redirect_hops: list[dict[str, Any]] = []
+
+    def coverage_result(status: str, **extra: Any) -> dict[str, Any]:
+        result: dict[str, Any] = {
+            "status": status,
+            "retrieved": False,
+            "retry_events": events,
+        }
+        if redirect_hops:
+            result["redirect_hops"] = redirect_hops
+        result.update(extra)
+        return result
+
+    current_url = attachment.url
+    seen_urls = {current_url}
+    redirect_count = 0
+    while True:
+        redirected_to: str | None = None
+        for attempt in range(retries + 1):
+            response: Any | None = None
             try:
-                for block in response.iter_content(1024 * 1024):
-                    if block:
-                        target.write(block); digest.update(block); size += len(block)
+                clear_request_state(session)
+                response = session.get(
+                    current_url,
+                    timeout=timeout,
+                    stream=True,
+                    allow_redirects=False,
+                )
+                response_url = str(getattr(response, "url", current_url) or current_url)
+                response_public_url, response_allowed = canonical_public_esa_url(response_url)
+                if (
+                    not response_allowed
+                    or response_public_url != response_url
+                    or getattr(response, "history", ())
+                ):
+                    redirect_hops.append(
+                        {"hop": redirect_count + 1, "status": "response_non_public_origin"}
+                    )
+                    return coverage_result("inaccessible_non_public_origin")
+                if 300 <= response.status_code < 400:
+                    target, hop_status = redirect_target(current_url, response)
+                    hop = {
+                        "hop": redirect_count + 1,
+                        "http_status": response.status_code,
+                        "status": hop_status,
+                    }
+                    if target is None:
+                        redirect_hops.append(hop)
+                        return coverage_result(hop_status)
+                    if target in seen_urls or redirect_count >= MAX_ATTACHMENT_REDIRECTS:
+                        hop["status"] = "redirect_loop_or_limit"
+                        redirect_hops.append(hop)
+                        return coverage_result("redirect_loop_or_limit")
+                    redirect_hops.append(hop)
+                    seen_urls.add(target)
+                    redirect_count += 1
+                    redirected_to = target
+                    break
+                if response.status_code in RETRYABLE and attempt < retries:
+                    wait = min(30.0, delay * (2**attempt))
+                    events.append(
+                        {
+                            "attempt": attempt + 1,
+                            "event": f"http_{response.status_code}",
+                            "wait": wait,
+                        }
+                    )
+                    clear_request_state(session)
+                    close_response(response)
+                    response = None
+                    time.sleep(wait)
+                    continue
+                if response.status_code >= 400:
+                    return coverage_result(f"http_{response.status_code}")
+                content_type = response.headers.get(
+                    "Content-Type", attachment.content_type
+                ).split(";", 1)[0]
+                with tempfile.NamedTemporaryFile(
+                    "wb",
+                    dir=destination.parent,
+                    prefix=f".{destination.name}.",
+                    suffix=".tmp",
+                    delete=False,
+                ) as target_file:
+                    temporary = Path(target_file.name)
+                    digest = hashlib.sha256()
+                    size = 0
+                    try:
+                        for block in response.iter_content(1024 * 1024):
+                            if block:
+                                target_file.write(block)
+                                digest.update(block)
+                                size += len(block)
+                    except requests.RequestException as error:
+                        temporary.unlink(missing_ok=True)
+                        return coverage_result(
+                            "stream_failure", error_type=type(error).__name__
+                        )
+                temporary.replace(destination)
+                result: dict[str, Any] = {
+                    "status": "retrieved",
+                    "retrieved": True,
+                    "path": str(destination),
+                    "bytes": size,
+                    "sha256": digest.hexdigest(),
+                    "content_type": content_type,
+                    "final_url": safe_url(response_url),
+                    "retry_events": events,
+                }
+                if redirect_hops:
+                    result["redirect_hops"] = redirect_hops
+                    result["same_origin_redirects_followed"] = redirect_count
+                return result
             except requests.RequestException as error:
-                temporary.unlink(missing_ok=True)
-                return {"status": "stream_failure", "retrieved": False, "error_type": type(error).__name__, "retry_events": events}
-        temporary.replace(destination)
-        return {"status": "retrieved", "retrieved": True, "path": str(destination), "bytes": size, "sha256": digest.hexdigest(), "content_type": content_type, "final_url": safe_url(response.url), "retry_events": events}
-    return {"status": "network_failure", "retrieved": False, "retry_events": events}
+                if attempt >= retries:
+                    return coverage_result(
+                        "network_failure", error_type=type(error).__name__
+                    )
+                wait = min(30.0, delay * (2**attempt))
+                events.append(
+                    {
+                        "attempt": attempt + 1,
+                        "event": "network_error",
+                        "error_type": type(error).__name__,
+                        "wait": wait,
+                    }
+                )
+                time.sleep(wait)
+            finally:
+                clear_request_state(session)
+                if response is not None:
+                    close_response(response)
+        if redirected_to is None:  # pragma: no cover - every non-redirect branch returns
+            return coverage_result("network_failure")
+        current_url = redirected_to
 
 
 def decode_text_bytes(raw: bytes) -> str:
@@ -421,6 +833,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--date-start", default="2011-01-01")
     parser.add_argument("--date-end", required=True, help="inclusive source-harvest date, YYYY-MM-DD")
     parser.add_argument("--classification", choices=("pilot_not_candidate_search", "final_run"), default="pilot_not_candidate_search")
+    parser.add_argument(
+        "--event-id", action="append", default=[],
+        help=f"Bounded pilot-only event selector (at most {MAX_BOUNDED_PILOT_EVENT_IDS}; repeat per public event ID)",
+    )
     parser.add_argument("--event-workers", type=int, default=8)
     parser.add_argument("--attachment-workers", type=int, default=4)
     parser.add_argument("--timeout", type=float, default=60.0)
@@ -439,6 +855,7 @@ def main(argv: list[str] | None = None) -> int:
             raise HarvestError("date-start is after date-end")
         if args.event_workers < 1 or args.attachment_workers < 1 or args.timeout <= 0 or args.retries < 0:
             raise HarvestError("worker, timeout, or retry values are invalid")
+        selected_event_ids = bounded_event_ids(args.event_id, args.classification)
         if output_dir.exists() and any(output_dir.iterdir()) and not args.overwrite:
             raise HarvestError(f"output directory is not empty: {output_dir}")
         output_dir.mkdir(parents=True, exist_ok=True); os.chmod(output_dir, 0o700)
@@ -455,61 +872,159 @@ def main(argv: list[str] | None = None) -> int:
             "dictionary_sha256": sha256_file(dictionary_path), "matcher_sha256": sha256_file(Path(__file__).with_name("concept_matcher.py")),
             "harvester_sha256": sha256_file(Path(__file__).resolve()), "fixtures_sha256": sha256_file(fixture_path),
             "runtime": {"python": sys.version, "requests": requests.__version__, "pdftotext": tool_version(["pdftotext", "-v"]), "textutil": tool_version(["textutil", "-help"])},
-            "candidate_policy": "No pilot record may be screened or used as evidence. Materials are inventoried before core P/M or relation-free complete G/C1 gating; R/T are separate tags."
+            "candidate_policy": "No pilot record may be screened or used as evidence. Materials are inventoried before core P/M or relation-free complete G/C1 gating; R/T are separate tags.",
+            "bounded_event_selector": sorted(selected_event_ids),
         }
         atomic_write_json(output_dir / "run-metadata.json", metadata)
-        session = requests.Session(); session.headers.update({"Accept": "application/json", "User-Agent": "eps-mbse-slr-2026-esa-census/1.0"})
-
-        root_payload, root_info = response_json(session, ROOT_URL, args.timeout, args.retries, args.backoff_seconds)
-        (output_dir / "raw" / "categories").mkdir(parents=True, exist_ok=True)
-        (output_dir / "raw" / "categories" / "0.json").write_bytes(root_info.pop("raw_bytes"))
-        root_events = parse_event_list(root_payload)
-        child_sets: dict[str, set[str]] = {}; child_info: dict[str, Any] = {}
-        for category_id in CHILD_CATEGORY_IDS:
-            payload, info = response_json(session, CATEGORY_URL.format(category_id=category_id), args.timeout, args.retries, args.backoff_seconds)
-            (output_dir / "raw" / "categories" / f"{category_id}.json").write_bytes(info.pop("raw_bytes"))
-            events = parse_event_list(payload); child_sets[str(category_id)] = {str(item.get("id")) for item in events}; child_info[str(category_id)] = info | {"returned_events": len(events)}
-        root_by_id = {str(item.get("id")): item for item in root_events if str(item.get("id", ""))}
-        root_ids = set(root_by_id); top_union = child_sets.get("5", set()) | child_sets.get("6", set()) | child_sets.get("7", set())
+        request_headers = {"Accept": "application/json", "User-Agent": "eps-mbse-slr-2026-esa-census/1.0"}
+        session = anonymous_session(request_headers)
+        try:
+            root_payload, root_info = response_json(session, ROOT_URL, args.timeout, args.retries, args.backoff_seconds)
+            (output_dir / "raw" / "categories").mkdir(parents=True, exist_ok=True)
+            (output_dir / "raw" / "categories" / "0.json").write_bytes(root_info.pop("raw_bytes"))
+            root_events, root_id_list = complete_category(root_payload, "root")
+            child_sets: dict[str, set[str]] = {}
+            child_info: dict[str, Any] = {}
+            for category_id in CHILD_CATEGORY_IDS:
+                payload, info = response_json(session, CATEGORY_URL.format(category_id=category_id), args.timeout, args.retries, args.backoff_seconds)
+                (output_dir / "raw" / "categories" / f"{category_id}.json").write_bytes(info.pop("raw_bytes"))
+                events, ids = complete_category(payload, f"category {category_id}")
+                child_sets[str(category_id)] = set(ids)
+                child_info[str(category_id)] = info | {
+                    "reported_count": payload["count"], "returned_events": len(events), "unique_ids": len(ids),
+                }
+        finally:
+            session.close()
+        root_by_id = dict(zip(root_id_list, root_events))
+        root_ids = set(root_id_list)
+        top_union = child_sets["5"] | child_sets["6"] | child_sets["7"]
         category_reconciliation = {
-            "root_reported_count": root_payload.get("count"), "root_returned": len(root_events), "root_unique_ids": len(root_ids),
+            "root_reported_count": root_payload["count"], "root_returned": len(root_events), "root_unique_ids": len(root_ids),
             "top_level_union_unique_ids": len(top_union), "root_equals_top_level_union": root_ids == top_union,
             "root_only_ids": sorted(root_ids - top_union), "top_level_only_ids": sorted(top_union - root_ids),
-            "category_9_subset_of_6": child_sets.get("9", set()).issubset(child_sets.get("6", set())),
-            "root_request": root_info, "child_requests": child_info
+            "category_9_subset_of_6": child_sets["9"].issubset(child_sets["6"]),
+            "root_request": root_info, "child_requests": child_info,
         }
         atomic_write_json(output_dir / "category-reconciliation.json", category_reconciliation)
+        if not category_reconciliation["root_equals_top_level_union"] or not category_reconciliation["category_9_subset_of_6"]:
+            raise HarvestError("category reconciliation failed")
+        if selected_event_ids - root_ids:
+            raise HarvestError("bounded event selector contains an ID absent from the root export")
         in_window: list[dict[str, Any]] = []; missing_dates: list[str] = []
-        for event_id, event in sorted(root_by_id.items(), key=lambda item: int(item[0]) if item[0].isdigit() else item[0]):
+        for event_id, event in sorted(root_by_id.items(), key=lambda item: int(item[0])):
             parsed_date = event_date(event)
             if parsed_date is None:
                 missing_dates.append(event_id)
-            elif start <= parsed_date <= end:
+            elif start <= parsed_date <= end and (not selected_event_ids or event_id in selected_event_ids):
                 in_window.append(event)
+        if (
+            selected_event_ids
+            and len(in_window) != len(selected_event_ids)
+            and not missing_dates
+        ):
+            raise HarvestError("bounded event selector contains an out-of-window event")
 
-        event_raw_dir = output_dir / "raw" / "events"; event_raw_dir.mkdir(parents=True, exist_ok=True)
-        event_exports: dict[str, dict[str, Any]] = {}; event_failures: dict[str, dict[str, Any]] = {}
+        event_exports: dict[str, dict[str, Any]] = {}
+        event_failures: dict[str, dict[str, Any]] = {}
+
         def fetch_event(event: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
-            event_id = str(event["id"]); local_session = requests.Session(); local_session.headers.update(session.headers)
-            payload, info = response_json(local_session, EVENT_URL.format(event_id=event_id), args.timeout, args.retries, args.backoff_seconds)
-            return event_id, payload, info
+            event_id = source_id(event.get("id"), "root event")
+            local_session = anonymous_session(request_headers)
+            try:
+                payload, info = response_json(
+                    local_session,
+                    EVENT_URL.format(event_id=event_id),
+                    args.timeout,
+                    args.retries,
+                    args.backoff_seconds,
+                )
+                return event_id, payload, info
+            finally:
+                local_session.close()
+
         with ThreadPoolExecutor(max_workers=args.event_workers) as executor:
-            futures = {executor.submit(fetch_event, event): str(event["id"]) for event in in_window}
+            futures = {
+                executor.submit(fetch_event, event): source_id(event.get("id"), "root event")
+                for event in in_window
+            }
             for future in as_completed(futures):
                 event_id = futures[future]
                 try:
-                    returned_id, payload, info = future.result(); raw = info.pop("raw_bytes"); (event_raw_dir / f"{returned_id}.json").write_bytes(raw)
+                    returned_id, payload, info = future.result()
+                    if returned_id != event_id:
+                        raise HarvestError("event request identity mismatch")
+                    raw = info.get("raw_bytes")
+                    if not isinstance(raw, bytes):
+                        raise HarvestError("event export did not retain raw bytes")
                     results = payload.get("results")
-                    if not isinstance(results, list) or len(results) != 1 or not isinstance(results[0], dict):
+                    if (
+                        not isinstance(results, list)
+                        or len(results) != 1
+                        or not isinstance(results[0], dict)
+                    ):
                         raise HarvestError("event export did not contain exactly one event object")
-                    contributions = results[0].get("contributions")
-                    if not isinstance(contributions, list) or any(not isinstance(item, dict) for item in contributions):
+                    exported_event = results[0]
+                    if source_id(exported_event.get("id"), "event export") != event_id:
+                        raise HarvestError("event export ID did not match the requested event ID")
+                    contributions = exported_event.get("contributions")
+                    if not isinstance(contributions, list) or any(
+                        not isinstance(item, dict) for item in contributions
+                    ):
                         raise HarvestError("event export lacked a contribution array")
-                    event_exports[returned_id] = {"event": results[0], "info": info, "contributions": contributions}
+                    contribution_ids = [contribution_id(item) for item in contributions]
+                    if len(set(contribution_ids)) != len(contribution_ids):
+                        raise HarvestError("event export had duplicate contribution IDs")
+                    event_exports[event_id] = {
+                        "event": exported_event,
+                        "info": info,
+                        "contributions": contributions,
+                        "raw_bytes": raw,
+                    }
                 except Exception as error:  # retain each source coverage failure and continue census
-                    event_failures[event_id] = {"error_type": type(error).__name__, "reason": str(error), "at_utc": utc_now()}
+                    event_failures[event_id] = {
+                        "error_type": type(error).__name__,
+                        "reason": safe_failure_reason(error),
+                        "at_utc": utc_now(),
+                    }
 
-        subjects: list[dict[str, Any]] = []; all_attachments: list[Attachment] = []
+        if missing_dates or event_failures:
+            summary = {
+                "status": "failed_source_coverage",
+                "source_data_mergeable": False,
+                "classification": args.classification,
+                "screening_prohibited": args.classification == "pilot_not_candidate_search",
+                "completed_at_utc": utc_now(),
+                "root_events_returned": len(root_events),
+                "root_unique_events": len(root_ids),
+                "events_missing_or_unparseable_date": len(missing_dates),
+                "in_window_events": len(in_window),
+                "contribution_exports_attempted": len(in_window),
+                "contribution_exports_retrieved": len(event_exports),
+                "contribution_exports_failed": len(event_failures),
+                "partial_event_exports_discarded": len(event_exports),
+                "event_export_failures": event_failures,
+                "missing_date_event_ids": missing_dates,
+                "bounded_event_selector": sorted(selected_event_ids),
+                "category_reconciliation": {
+                    key: category_reconciliation[key]
+                    for key in ("root_equals_top_level_union", "category_9_subset_of_6")
+                },
+            }
+            atomic_write_json(output_dir / "dry-run-summary.json", summary)
+            metadata.update({"status": summary["status"], "completed_at_utc": utc_now()})
+            atomic_write_json(output_dir / "run-metadata.json", metadata)
+            atomic_write_json(output_dir / "manifest.json", manifest(output_dir))
+            print(json.dumps(summary, indent=2, ensure_ascii=False))
+            return 2
+
+        event_raw_dir = output_dir / "raw" / "events"
+        event_raw_dir.mkdir(parents=True, exist_ok=True)
+        for event_id, export in event_exports.items():
+            raw = export.pop("raw_bytes")
+            (event_raw_dir / f"{event_id}.json").write_bytes(raw)
+
+        subjects: list[dict[str, Any]] = []
+        all_attachments: list[Attachment] = []
         for event_id, export in sorted(event_exports.items(), key=lambda item: int(item[0]) if item[0].isdigit() else item[0]):
             event = export["event"]
             event_attachments = list(iter_materials(event, "event", event_id, None)); all_attachments.extend(event_attachments)
@@ -520,11 +1035,11 @@ def main(argv: list[str] | None = None) -> int:
                     "route_attachments": event_attachments,
                 })
             for contribution in export["contributions"]:
-                contribution_id = str(contribution.get("db_id") or contribution.get("id") or "")
-                attachments = list(iter_materials(contribution, "contribution", event_id, contribution_id)); all_attachments.extend(attachments)
+                current_contribution_id = contribution_id(contribution)
+                attachments = list(iter_materials(contribution, "contribution", event_id, current_contribution_id)); all_attachments.extend(attachments)
                 subjects.append({
-                    "subject_id": f"event:{event_id}:contribution:{contribution_id}", "event_id": event_id,
-                    "contribution_id": contribution_id, "event": event, "contribution": contribution,
+                    "subject_id": f"event:{event_id}:contribution:{current_contribution_id}", "event_id": event_id,
+                    "contribution_id": current_contribution_id, "event": event, "contribution": contribution,
                     "metadata_attachments": event_attachments + attachments,
                     "route_attachments": attachments,
                 })
@@ -534,23 +1049,26 @@ def main(argv: list[str] | None = None) -> int:
         unique_downloads: dict[str, Attachment] = {}
         for attachment in all_attachments:
             if attachment.document_like:
-                unique_downloads.setdefault(attachment.url, attachment)
+                unique_downloads.setdefault(attachment_download_key(attachment), attachment)
         attachment_dir = output_dir / "raw" / "attachments"; extraction_dir = output_dir / "derived" / "attachment-text"
         download_results: dict[str, dict[str, Any]] = {}
         def retrieve(item: Attachment) -> tuple[str, dict[str, Any]]:
             extension = attachment_extension(item.filename, item.url)
             filename = safe_name(item.filename, f"attachment-{item.attachment_id}{extension}")
             destination = attachment_dir / item.event_id / (item.contribution_id or "event") / f"{safe_name(item.attachment_id, 'unknown')}-{filename}"
-            local_session = requests.Session(); local_session.headers.update({"User-Agent": session.headers["User-Agent"], "Accept": "*/*"})
-            result = download_attachment(local_session, item, destination, args.timeout, args.retries, args.backoff_seconds)
-            if result.get("retrieved"):
-                text, extraction = extract_text(destination, item); normalized = normalize_text(text)
-                extraction_path = extraction_dir / f"{sha256_bytes(item.url.encode('utf-8'))}.txt"
-                if normalized:
-                    extraction_path.parent.mkdir(parents=True, exist_ok=True); extraction_path.write_text(normalized + "\n", encoding="utf-8")
-                    extraction["text_path"] = str(extraction_path); extraction["text_sha256"] = sha256_file(extraction_path); extraction["normalized_characters"] = len(normalized)
-                result["extraction"] = extraction
-            return item.url, result
+            local_session = anonymous_session({"User-Agent": request_headers["User-Agent"], "Accept": "*/*"})
+            try:
+                result = download_attachment(local_session, item, destination, args.timeout, args.retries, args.backoff_seconds)
+                if result.get("retrieved"):
+                    text, extraction = extract_text(destination, item); normalized = normalize_text(text)
+                    extraction_path = extraction_dir / f"{sha256_bytes(item.url.encode('utf-8'))}.txt"
+                    if normalized:
+                        extraction_path.parent.mkdir(parents=True, exist_ok=True); extraction_path.write_text(normalized + "\n", encoding="utf-8")
+                        extraction["text_path"] = str(extraction_path); extraction["text_sha256"] = sha256_file(extraction_path); extraction["normalized_characters"] = len(normalized)
+                    result["extraction"] = extraction
+                return attachment_download_key(item), result
+            finally:
+                local_session.close()
         with ThreadPoolExecutor(max_workers=args.attachment_workers) as executor:
             futures = {executor.submit(retrieve, item): url for url, item in unique_downloads.items()}
             for future in as_completed(futures):
@@ -558,7 +1076,7 @@ def main(argv: list[str] | None = None) -> int:
                 try:
                     returned_url, result = future.result(); download_results[returned_url] = result
                 except Exception as error:
-                    download_results[url] = {"status": "processing_failure", "retrieved": False, "error_type": type(error).__name__, "reason": str(error)}
+                    download_results[url] = {"status": "processing_failure", "retrieved": False, "error_type": type(error).__name__, "reason": safe_failure_reason(error)}
         atomic_write_json(output_dir / "attachment-coverage.json", {"unique_document_like_urls": len(unique_downloads), "results": download_results})
 
         subject_matches: list[dict[str, Any]] = []
@@ -569,16 +1087,25 @@ def main(argv: list[str] | None = None) -> int:
             # Event-level files are matched once as event-material subjects. A contribution's
             # attachment route contains only files actually associated with that contribution;
             # event material metadata may still appear in the joined-metadata route.
-            association_urls = {item.url for item in subject["route_attachments"] if item.document_like}
-            for url in sorted(association_urls):
-                coverage = download_results.get(url, {})
+            association_keys = {
+                attachment_download_key(item)
+                for item in subject["route_attachments"]
+                if item.document_like
+            }
+            for attachment_key in sorted(association_keys):
+                coverage = download_results.get(attachment_key, {})
                 extraction = coverage.get("extraction") if isinstance(coverage, dict) else None
                 text_path = extraction.get("text_path") if isinstance(extraction, dict) else None
                 if not text_path:
                     continue
                 text = Path(text_path).read_text(encoding="utf-8")
                 matched = matcher.match_fields({"attachment.extracted_text": text})
-                attachment_matches.append({"url_sha256": sha256_bytes(url.encode("utf-8")), "match": concise_match(matched)})
+                attachment_matches.append(
+                    {
+                        "url_sha256": sha256_bytes(attachment_key.encode("utf-8")),
+                        "match": concise_match(matched),
+                    }
+                )
             attachment_b = any(item["match"]["stream_b"] for item in attachment_matches)
             attachment_b_core = any(item["match"]["stream_b_core"] for item in attachment_matches)
             attachment_b_g = any(item["match"]["stream_b_g"] for item in attachment_matches)
@@ -663,8 +1190,14 @@ def main(argv: list[str] | None = None) -> int:
         attachment_c1 = {item["subject_id"] for item in subject_matches if item["routes"]["attachment_text_c1"]}
         retrieved = sum(1 for item in download_results.values() if item.get("retrieved")); parsed = sum(1 for item in download_results.values() if item.get("extraction", {}).get("status") == "parsed")
         summary = {
-            "status": "success_with_coverage_failures" if event_failures or retrieved < len(unique_downloads) or parsed < retrieved else "success",
-            "classification": args.classification, "screening_prohibited": args.classification == "pilot_not_candidate_search",
+            "status": (
+                "success_with_coverage_failures"
+                if retrieved < len(unique_downloads) or parsed < retrieved
+                else "success"
+            ),
+            "source_data_mergeable": True,
+            "classification": args.classification,
+            "screening_prohibited": args.classification == "pilot_not_candidate_search",
             "completed_at_utc": utc_now(), "root_events_returned": len(root_events), "root_unique_events": len(root_ids),
             "events_missing_or_unparseable_date": len(missing_dates), "in_window_events": len(in_window),
             "contribution_exports_attempted": len(in_window), "contribution_exports_retrieved": len(event_exports),
@@ -708,7 +1241,8 @@ def main(argv: list[str] | None = None) -> int:
         atomic_write_json(output_dir / "dry-run-summary.json", summary)
         metadata.update({"status": summary["status"], "completed_at_utc": utc_now()}); atomic_write_json(output_dir / "run-metadata.json", metadata)
         atomic_write_json(output_dir / "manifest.json", manifest(output_dir))
-        print(json.dumps(summary, indent=2, ensure_ascii=False)); return 0
+        print(json.dumps(summary, indent=2, ensure_ascii=False))
+        return 0
     except (HarvestError, MatcherError, ValueError) as error:
         output_dir.mkdir(parents=True, exist_ok=True)
         atomic_write_json(output_dir / "failure.json", {"status": "failure", "classification": args.classification, "screening_prohibited": args.classification == "pilot_not_candidate_search", "error_type": type(error).__name__, "reason": str(error), "at_utc": utc_now()})

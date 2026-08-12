@@ -8,12 +8,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
 
 
-FAMILIES = ("S", "WS", "I", "C", "W", "SN", "PQ", "ARC")
+FAMILIES = ("S", "WS", "I", "C", "W", "SN", "PQ", "OATD", "ARC")
+ALIASED_FAMILIES = {"PQDT": "PQ"}
 SUFFIXES = ("A1", "A2", "A3", "B1", "B2", "BG1", "BG2", "BC1", "BT2", "V1", "O1")
 MODEL_VARIANTS = (
     '"system modeling"', '"systems modeling"', '"system modelling"', '"systems modelling"'
@@ -67,6 +69,13 @@ IEEE_T2_FINITE_TERMS = (
     "adapt", "adapts", "adapted", "adapting", "adaptation",
 )
 SCRIPT_DIR = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts")
+MERGER_PATH = SCRIPT_DIR / "merge_search_results.py"
+MERGER_TEST_PATH = SCRIPT_DIR / "test_merge_search_results.py"
+REQUIRED_MERGER_SOURCE_KEYS = (
+    "proquest_aerospace_index",
+    "proquest_dissertations_theses_global",
+    "oatd",
+)
 PERMITTED_SOURCE_SCRIPTS = {
     "search_aiaa_arc.py", "search_compendex.py", "search_esa_indico.py",
     "search_iaf_digital_library.py", "search_ieee_xplore.py", "search_ntrs.py",
@@ -128,16 +137,27 @@ def main() -> int:
     failures: list[str] = []
 
     require(bool(protocol), "protocol.md is missing beside the query plan", failures)
-    require("**Protocol version:** `1.5` (frozen)" in protocol, "protocol is not frozen as version 1.5", failures)
-    require("| `1.4` to `1.5` |" in protocol, "protocol lacks the version-1.5 amendment record", failures)
+    require("**Protocol version:** `1.6` (frozen)" in protocol, "protocol is not frozen as version 1.6", failures)
+    require("| `1.5` to `1.6` |" in protocol, "protocol lacks the version-1.6 amendment record", failures)
     require(
-        "twelve databases/collections searched through eleven interfaces" in protocol,
-        "protocol lacks the version-1.5 source-count contract",
+        "fourteen independently searched" in protocol and "through twelve interfaces" in protocol,
+        "protocol lacks the version-1.6 source-count contract",
         failures,
     )
     require(
-        "IAF Digital Library" in protocol and "Version 1.5" in protocol,
-        "protocol does not authorize IAF under version 1.5",
+        "IAF Digital Library" in protocol and "Version 1.6" in protocol,
+        "protocol does not retain IAF under version 1.6",
+        failures,
+    )
+    require(
+        "ProQuest Dissertations & Theses Global" in protocol
+        and "Open Access Theses and Dissertations" in protocol,
+        "protocol does not authorize both thesis/dissertation sources",
+        failures,
+    )
+    require(
+        "110 logical direct query events" in protocol,
+        "protocol lacks the version-1.6 logical-query count",
         failures,
     )
     require("2026-08-10" in protocol and "common" in protocol, "protocol lacks the common cutoff", failures)
@@ -147,13 +167,172 @@ def main() -> int:
         for family in FAMILIES
         for suffix in SUFFIXES
     }
+    for alias, source_family in ALIASED_FAMILIES.items():
+        for suffix in SUFFIXES:
+            alias_id = f"{alias}-{suffix}"
+            source_id = f"{source_family}-{suffix}"
+            require(
+                f"| `{alias_id}` | `{source_id}` |" in plan,
+                f"plan lacks normative alias {alias_id} -> {source_id}",
+                failures,
+            )
+            queries[alias_id] = queries[source_id]
+
+    thesis_manifest_entries_checked = 0
+    thesis_manifest_path = (
+        args.plan.parent / "searches" / "thesis-source-query-manifest-v1.6.json"
+    )
+    require(
+        thesis_manifest_path.is_file(),
+        "version-1.6 thesis-source query manifest is missing",
+        failures,
+    )
+    if thesis_manifest_path.is_file():
+        try:
+            thesis_manifest = json.loads(
+                thesis_manifest_path.read_text(encoding="utf-8")
+            )
+        except (OSError, json.JSONDecodeError) as error:
+            failures.append(f"thesis-source query manifest is invalid: {error}")
+            thesis_manifest = {}
+        require(
+            thesis_manifest.get("protocol_version") == "1.6"
+            and thesis_manifest.get("artifact_class")
+            == "frozen_validation_contract_not_search_output",
+            "thesis-source query manifest has the wrong protocol/artifact class",
+            failures,
+        )
+        manifest_sources = thesis_manifest.get("sources", {})
+        require(
+            set(manifest_sources) == {
+                "proquest_dissertations_theses_global", "oatd"
+            },
+            "thesis-source query manifest source keys are not exact",
+            failures,
+        )
+        expected_manifest_families = {
+            "proquest_dissertations_theses_global": ("PQDT", "PQ"),
+            "oatd": ("OATD", "OATD"),
+        }
+        for source_key, (event_family, body_family) in expected_manifest_families.items():
+            source = manifest_sources.get(source_key, {})
+            entries = source.get("queries", []) if isinstance(source, dict) else []
+            require(
+                isinstance(entries, list) and len(entries) == len(SUFFIXES),
+                f"{source_key} manifest must contain exactly eleven queries",
+                failures,
+            )
+            indexed_entries = {
+                entry.get("query_id"): entry
+                for entry in entries
+                if isinstance(entry, dict) and isinstance(entry.get("query_id"), str)
+            }
+            require(
+                len(indexed_entries) == len(entries),
+                f"{source_key} manifest query IDs are missing or duplicated",
+                failures,
+            )
+            for suffix in SUFFIXES:
+                event_id = f"{event_family}-{suffix}"
+                body_id = f"{body_family}-{suffix}"
+                entry = indexed_entries.get(event_id, {})
+                expected_query = queries[event_id]
+                require(
+                    entry.get("source_body_id") == body_id,
+                    f"{event_id} manifest body origin is not {body_id}",
+                    failures,
+                )
+                require(
+                    entry.get("query") == expected_query,
+                    f"{event_id} manifest query differs from the governing plan",
+                    failures,
+                )
+                require(
+                    entry.get("query_sha256")
+                    == hashlib.sha256(expected_query.encode("utf-8")).hexdigest(),
+                    f"{event_id} manifest SHA-256 differs",
+                    failures,
+                )
+                thesis_manifest_entries_checked += 1
+        pqdt_controls = manifest_sources.get(
+            "proquest_dissertations_theses_global", {}
+        ).get("controls", {})
+        require(
+            manifest_sources.get("proquest_dissertations_theses_global", {}).get(
+                "fixed_product_route"
+            ) == "pqdtglobal"
+            and pqdt_controls.get("sort") == "Relevance"
+            and pqdt_controls.get("page_size") == 20
+            and pqdt_controls.get("source_duplicate_exclusion") is False
+            and pqdt_controls.get("full_text_limiter") is False
+            and pqdt_controls.get("spelling_variants") is True
+            and pqdt_controls.get("plural_and_adjective_variants") is True,
+            "PQDT manifest controls differ from the frozen source contract",
+            failures,
+        )
+        oatd_controls = manifest_sources.get("oatd", {}).get("controls", {})
+        require(
+            manifest_sources.get("oatd", {}).get("fixed_search_url")
+            == "https://oatd.org/oatd/search"
+            and oatd_controls.get("form") == "basic"
+            and oatd_controls.get("sort") == "Relevance"
+            and oatd_controls.get("page_size") == 30
+            and oatd_controls.get("native_date_filter") is False
+            and oatd_controls.get("native_language_filter") is False
+            and oatd_controls.get("creative_commons_only") is False
+            and oatd_controls.get("wildcards_permitted") is False,
+            "OATD manifest controls differ from the frozen source contract",
+            failures,
+        )
+
+    thesis_validation_files = (
+        args.plan.parent / "searches" / "tools" / "oatd_basic_count_gate.py",
+        args.plan.parent / "searches" / "tools" / "search_proquest_pqdt_global.py",
+        args.plan.parent / "searches" / "tools" / "test_oatd_basic_count_gate.py",
+        args.plan.parent / "searches" / "tools" / "test_search_proquest_pqdt_global.py",
+        args.plan.parent / "searches" / "tools" / "test_thesis_source_count_gate_fixtures.py",
+        args.plan.parent / "searches" / "fixtures" / "thesis-source-count-gate-v1.6.json",
+    )
+    for path in thesis_validation_files:
+        require(path.is_file(), f"thesis-source validation artifact is missing: {path}", failures)
+    if thesis_manifest_path.is_file():
+        pinned_manifest_sha256 = hashlib.sha256(thesis_manifest_path.read_bytes()).hexdigest()
+        for wrapper_name in ("oatd_basic_count_gate.py", "search_proquest_pqdt_global.py"):
+            wrapper_path = args.plan.parent / "searches" / "tools" / wrapper_name
+            wrapper_text = wrapper_path.read_text(encoding="utf-8") if wrapper_path.is_file() else ""
+            require(
+                pinned_manifest_sha256 in wrapper_text,
+                f"{wrapper_name} does not pin the current thesis-source query manifest",
+                failures,
+            )
+            require(
+                "candidate_import_allowed" in wrapper_text
+                and "merge_input" in wrapper_text
+                and "pilot_not_candidate_search" in wrapper_text,
+                f"{wrapper_name} lacks the non-candidate output boundary",
+                failures,
+            )
+    fixture_path = args.plan.parent / "searches" / "fixtures" / "thesis-source-count-gate-v1.6.json"
+    if fixture_path.is_file():
+        try:
+            fixture_contract = json.loads(fixture_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            failures.append(f"thesis-source count fixture is invalid: {error}")
+        else:
+            require(
+                fixture_contract.get("contains_candidate_records") is False
+                and fixture_contract.get("artifact_class")
+                == "synthetic_interface_contract_fixture_not_search_output",
+                "thesis-source count fixture lacks its synthetic non-candidate boundary",
+                failures,
+            )
 
     for query_id, query in queries.items():
         require('"nano satellites"' in query, f"{query_id} lacks spaced plural nano satellites", failures)
         require(balanced(query), f"{query_id} has unbalanced parentheses/quotes", failures)
 
     for query_id, query in queries.items():
-        if query_id.startswith(("I-", "ARC-")):
+        if query_id.startswith(("I-", "OATD-", "ARC-")):
             require(token_present(query, "nanosat"), f"{query_id} lacks standalone nanosat", failures)
 
     for family in FAMILIES:
@@ -184,7 +363,7 @@ def main() -> int:
             query = queries[query_id]
             for token in required:
                 require(token_present(query, token), f"{query_id} lacks {token}", failures)
-        if family != "I":
+        if family not in {"I", "OATD"}:
             require("tailor*" in queries[f"{family}-BT2"], f"{family}-BT2 lacks tailoring wildcard", failures)
         for suffix in ("BG1", "BG2", "BC1"):
             query_id = f"{family}-{suffix}"
@@ -200,19 +379,36 @@ def main() -> int:
             require(wildcard not in queries[f"{family}-V1"], f"{family}-V1 retains wildcard {wildcard}", failures)
             require(wildcard not in queries[f"{family}-O1"], f"{family}-O1 retains wildcard {wildcard}", failures)
 
-    for token in IEEE_T2_FINITE_TERMS:
-        require(token_present(queries["I-BT2"], token), f"I-BT2 lacks finite inflection {token}", failures)
+    for family in ("I", "OATD"):
+        for token in IEEE_T2_FINITE_TERMS:
+            require(
+                token_present(queries[f"{family}-BT2"], token),
+                f"{family}-BT2 lacks finite inflection {token}",
+                failures,
+            )
 
-    ieee_relation = "(requirement OR requirements OR function OR functions OR behavior OR behaviors OR behaviour OR behaviours OR architecture OR architectures OR interface OR interfaces OR traceability OR parametric OR parametrics OR verification OR validation)"
-    require(ieee_relation in queries["I-B2"], "I-B2 relation block differs from explicit frozen inflections", failures)
+    finite_relation = "(requirement OR requirements OR function OR functions OR behavior OR behaviors OR behaviour OR behaviours OR architecture OR architectures OR interface OR interfaces OR traceability OR parametric OR parametrics OR verification OR validation)"
+    for family in ("I", "OATD"):
+        require(
+            finite_relation in queries[f"{family}-B2"],
+            f"{family}-B2 relation block differs from explicit frozen inflections",
+            failures,
+        )
 
     for required_plan_control in (
-        "version `1.5`", "twelve-database/collection, eleven-interface", "A1 ∪ A2 ∪ A3",
-        "## 14. IAF Digital Library authorized", "2026-08-10", "**940 cells**",
+        "version `1.6`", "fourteen independently searched sources/collections through twelve interfaces",
+        "110 logical direct query events", "99 physical source-native code blocks", "A1 ∪ A2 ∪ A3",
+        "## 13. ProQuest Dissertations & Theses Global", "## 14. Open Access Theses and Dissertations",
+        "## 16. IAF Digital Library authorized", "2026-08-10", "**940 cells**",
         "**180 N-B-core cells**", "**250 N-BG cells**", "**510 N-BC1 cells**",
-        "**280 unpiloted C1 cells**", "pilots-to-run-v1.5.md",
+        "**280 unpiloted C1 cells**", "pilots-to-run-v1.6.md",
+        "PQDT-A1 = 1", "PQDT-B1 = 17", "PQDT-B2 = 9",
+        "OATD-B1** below through the basic interface", "**23**-record aggregate",
+        "Server Too Busy - Please slow down", "form=basic",
+        "search_proquest_pqdt_global.py", "oatd_basic_count_gate.py",
+        "final-run-source-crosswalk-v1.6.json", "failure-register-schema-v1.6.json",
     ):
-        require(required_plan_control in plan, f"version-1.5 plan lacks {required_plan_control}", failures)
+        require(required_plan_control in plan, f"version-1.6 plan lacks {required_plan_control}", failures)
 
     for required_arc_control in (
         "field1=AllField", "access=on", "BeforeMonth=8", "pageSize=20",
@@ -251,7 +447,7 @@ def main() -> int:
             require(f"'{language} {anchor}'" in plan, f"NTRS C_N lacks {language} + {anchor}", failures)
     require("**660 cells**" not in plan or "superseded 660-cell" in plan, "plan treats 660 cells as current", failures)
 
-    require(dictionary.get("dictionary_version") == "1.5.0-source-completeness-2026-08-10", "dictionary version is not 1.5", failures)
+    require(dictionary.get("dictionary_version") == "1.6.0-thesis-sources-2026-08-10", "dictionary version is not 1.6", failures)
     forms = {
         form.casefold()
         for concept in ("P", "E", "M", "G", "R", "T", "V1", "O1")
@@ -279,6 +475,7 @@ def main() -> int:
     require(templates_path.is_file(), "API request template file is missing", failures)
     if templates_path.is_file():
         templates = json.loads(templates_path.read_text(encoding="utf-8"))
+        require(templates.get("schema_version") == "1.6", "API template schema is not 1.6", failures)
         final_execution = templates.get("prospective_final_execution", {})
         for family, source_key in (("S", "scopus"), ("I", "ieee_xplore")):
             observed_ids = set(final_execution.get(source_key, {}).get("final_query_ids", []))
@@ -300,11 +497,26 @@ def main() -> int:
     else:
         require(False, f"source script directory is unavailable: {SCRIPT_DIR}", failures)
 
+    require(MERGER_PATH.is_file(), f"merger is unavailable: {MERGER_PATH}", failures)
+    require(MERGER_TEST_PATH.is_file(), f"merger tests are unavailable: {MERGER_TEST_PATH}", failures)
+    merger_text = MERGER_PATH.read_text(encoding="utf-8") if MERGER_PATH.is_file() else ""
+    merger_test_text = (
+        MERGER_TEST_PATH.read_text(encoding="utf-8") if MERGER_TEST_PATH.is_file() else ""
+    )
+    for source_key in REQUIRED_MERGER_SOURCE_KEYS:
+        require(source_key in merger_text, f"merger lacks source key {source_key}", failures)
+        require(source_key in merger_test_text, f"merger tests lack source key {source_key}", failures)
+
     report = {
         "status": "passed" if not failures else "failed",
-        "protocol_version_checked": "1.5",
+        "protocol_version_checked": "1.6",
+        "physical_query_blocks_checked": len(FAMILIES) * len(SUFFIXES),
+        "aliased_query_blocks_checked": len(ALIASED_FAMILIES) * len(SUFFIXES),
         "queries_checked": len(queries),
+        "thesis_source_manifest_entries_checked": thesis_manifest_entries_checked,
+        "thesis_validation_files_checked": len(thesis_validation_files),
         "source_scripts_checked": len(PERMITTED_SOURCE_SCRIPTS | FORBIDDEN_SOURCE_SCRIPTS),
+        "merger_source_keys_checked": len(REQUIRED_MERGER_SOURCE_KEYS),
         "failures": failures,
     }
     print(json.dumps(report, indent=2))

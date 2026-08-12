@@ -112,6 +112,37 @@ def _pattern_for(normalized_form: str) -> re.Pattern[str]:
     return re.compile(rf"(?<!\w){phrase}(?!\w)", re.UNICODE)
 
 
+# Frozen Section 4 direct-source M partitions. These are term-ID partitions,
+# not additions to the dictionary vocabulary or local candidate eligibility.
+M_HIGH_SPECIFICITY_TERM_IDS = frozenset(
+    {
+        "M_MBSE",
+        "M_MODEL_BASED_SYSTEMS_ENGINEERING",
+        "M_MODEL_BASED_SYSTEM_ENGINEERING",
+        "M_SYSML",
+        "M_SYSTEMS_MODELING_LANGUAGE",
+        "M_ARCADIA",
+        "M_CAPELLA",
+    }
+)
+M_BROAD_STRUCTURED_MODEL_TERM_IDS = frozenset(
+    {
+        "M_SYSTEM_MODEL",
+        "M_SYSTEMS_MODEL",
+        "M_SYSTEM_MODELING",
+        "M_SYSTEMS_MODELING",
+        "M_SYSTEM_MODELLING",
+        "M_SYSTEMS_MODELLING",
+        "M_REFERENCE_MODEL",
+        "M_DIGITAL_ENGINEERING",
+        "M_OBJECT_ORIENTED_SYSTEMS_MODEL",
+    }
+)
+TAILORING_COUPLING_ANCHOR_PATTERN = re.compile(
+    r"(?<!\w)(?:architectures|architecture|models|model)(?!\w)", re.UNICODE
+)
+
+
 class ConceptMatcher:
     def __init__(self, dictionary: dict[str, Any]) -> None:
         if not isinstance(dictionary, dict) or not isinstance(dictionary.get("concepts"), dict):
@@ -150,6 +181,16 @@ class ConceptMatcher:
                     }
                 )
             self.compiled[str(concept)] = compiled_terms
+
+        frozen_m_terms = M_HIGH_SPECIFICITY_TERM_IDS | M_BROAD_STRUCTURED_MODEL_TERM_IDS
+        actual_m_terms = {
+            term["term_id"] for term in self.compiled.get("M", [])
+        }
+        if actual_m_terms != frozen_m_terms:
+            raise MatcherError(
+                "M term IDs must exactly match the frozen high-specificity and "
+                "broad structured-model partitions"
+            )
 
         recall = dictionary.get("genericity_recall")
         artifacts = recall.get("artifacts") if isinstance(recall, dict) else None
@@ -292,8 +333,22 @@ class ConceptMatcher:
         concepts_present = [concept for concept in self.compiled if concept_term_ids[concept]]
         p_present = bool(concept_term_ids.get("P"))
         e_present = bool(concept_term_ids.get("E"))
-        m_present = bool(concept_term_ids.get("M"))
+        m_term_ids = concept_term_ids.get("M", set())
+        m_present = bool(m_term_ids)
+        m_high_specificity_term_ids = sorted(
+            m_term_ids & M_HIGH_SPECIFICITY_TERM_IDS
+        )
+        m_broad_structured_model_term_ids = sorted(
+            m_term_ids & M_BROAD_STRUCTURED_MODEL_TERM_IDS
+        )
         t_present = bool(concept_term_ids.get("T"))
+        # Evaluate anchors per field, then combine only within this one route.
+        # This keeps the frozen T2 operation field-safe without concatenating text.
+        tailoring_coupling_anchor_fields = sorted(
+            field
+            for field, normalized in normalized_fields.items()
+            if TAILORING_COUPLING_ANCHOR_PATTERN.search(normalized)
+        )
         v1_present = bool(concept_term_ids.get("V1"))
         o1_present = bool(concept_term_ids.get("O1"))
         stream_b_core = p_present and m_present
@@ -319,6 +374,9 @@ class ConceptMatcher:
             "concept_term_ids": {
                 concept: sorted(term_ids) for concept, term_ids in concept_term_ids.items() if term_ids
             },
+            "m_high_specificity_term_ids": m_high_specificity_term_ids,
+            "m_broad_structured_model_term_ids": m_broad_structured_model_term_ids,
+            "tailoring_coupling_anchor_fields": tailoring_coupling_anchor_fields,
             "stream_a": p_present and e_present and m_present,
             "stream_b": stream_b,
             "stream_b_core": stream_b_core,
@@ -326,7 +384,9 @@ class ConceptMatcher:
             "stream_b_c1": stream_b_c1,
             "stream_b_genericity": stream_b_genericity,
             "stream_b_genericity_relation_qualified": stream_b_genericity_relation_qualified,
-            "stream_b_tailoring_tag": stream_b_core and t_present,
+            "stream_b_tailoring_tag": bool(
+                stream_b_core and t_present and tailoring_coupling_anchor_fields
+            ),
             "v1_sensitivity_tag": stream_b and v1_present,
             "o1_sensitivity_tag": stream_b and o1_present,
             "g_eps_explicit": e_present and stream_b_g,

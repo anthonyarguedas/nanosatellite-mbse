@@ -1,15 +1,15 @@
 {
   "schema_version": "1.1",
-  "dictionary_version": "1.5.0-source-completeness-2026-08-10",
+  "dictionary_version": "1.6.0-thesis-sources-2026-08-10",
   "review_run": "eps-mbse-slr-2026",
-  "status": "version-1.5 frozen dictionary: complete Stream-A, finite T2, comparable V1/O1 tags, and authorized IAF scope",
+  "status": "version-1.6 frozen dictionary: version-1.5 concept semantics retained for complete Stream-A, finite T2, comparable V1/O1 tags, authorized IAF scope, and the PQDT/OATD source extension",
   "candidate_logic": {
-    "scope": "Deterministic ESA Indico joined-metadata/individual-attachment matching and authorized IAF title/abstract matching. Bibliographic A1/A2/A3/B1/B2/G/C1/T2 strategies and the NTRS finite matrix are defined separately in query-search-plan.md; NTRS applies E/T/V1/O1 locally after its source-cell union.",
+    "scope": "Deterministic ESA Indico joined-metadata/individual-attachment matching and authorized IAF title/abstract matching. Direct A1/A2/A3/B1/B2/G/C1/T2 strategies—including PQDT aliases and finite OATD translations—and the NTRS finite matrix are defined separately in query-search-plan.md; NTRS applies E/T/V1/O1 locally after its source-cell union. No concept form changed in version 1.6.",
     "stream_a": "P AND E AND M within one searched route; source-query equivalent is A1 union A2 union A3",
     "stream_b_core": "P AND M within one searched route",
     "stream_b_genericity": "P AND a complete precise-G or conservative central-asset artifact within one searched route; no R term is required",
     "stream_b_genericity_relation_qualified": "Optional precision tag: stream_b_genericity plus at least one independent R hit",
-    "stream_b_tailoring_tag": "P AND M AND T within one route; a structural subset tag, not an added local candidate route",
+    "stream_b_tailoring_tag": "P AND M AND T AND (model OR models OR architecture OR architectures) within one route with standalone token boundaries; a structural subset tag, not an added local candidate route",
     "stream_b": "stream_b_core OR stream_b_genericity",
     "routes": [
       "joined_metadata",

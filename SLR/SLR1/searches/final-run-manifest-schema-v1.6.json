@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/eps-mbse-slr/final-run-manifest-schema-v1.6.json",
+  "title": "EPS MBSE SLR version-1.6 final-run manifest",
+  "description": "Schema contract only. An instance is not created until explicit final-discovery promotion.",
+  "$comment": "Cross-document source identity and interface/PRISMA mapping are enforced by the governance linter against the hash-pinned final-run source crosswalk; this JSON Schema alone cannot express keyed cross-document uniqueness or mapping.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_class",
+    "review_run",
+    "protocol_version",
+    "cutoff_date",
+    "created_at_utc",
+    "clean_final_root",
+    "pilot_inputs_excluded",
+    "count_unit",
+    "count_basis",
+    "source_crosswalk_sha256",
+    "sources",
+    "failure_register"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.6.0"},
+    "artifact_class": {"const": "final_discovery_manifest"},
+    "review_run": {"const": "eps-mbse-slr-2026"},
+    "protocol_version": {"const": "1.6"},
+    "cutoff_date": {"const": "2026-08-10"},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "clean_final_root": {"const": true},
+    "pilot_inputs_excluded": {"const": true},
+    "count_unit": {"const": "record"},
+    "count_basis": {"const": "within_source_union_before_cross_source_deduplication"},
+    "source_crosswalk_sha256": {"$ref": "#/$defs/sha256"},
+    "sources": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": {"$ref": "#/$defs/sourceRun"}
+    },
+    "failure_register": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256OrNull"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sha256OrNull": {
+      "oneOf": [
+        {"$ref": "#/$defs/sha256"},
+        {"type": "null"}
+      ]
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:[Tt][Oo][Kk][Ee][Nn]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Ss][Ee][Ss][Ss][Ii][Oo][Nn]|[Cc][Ss][Rr][Ff]|[Aa][Cc][Cc][Oo][Uu][Nn][Tt][Ii][Dd]))[A-Za-z0-9][A-Za-z0-9._/-]*$"
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256OrNull"}
+      }
+    },
+    "sourceId": {
+      "enum": [
+        "scopus",
+        "web_of_science_core_collection",
+        "ieee_xplore",
+        "compendex",
+        "inspec",
+        "wiley_online_library",
+        "springer_nature_link",
+        "proquest_aerospace_index",
+        "proquest_dissertations_theses_global",
+        "aiaa_aerospace_research_central",
+        "iaf_digital_library_iac",
+        "oatd",
+        "esa_indico",
+        "ntrs"
+      ]
+    },
+    "interfaceId": {
+      "enum": [
+        "scopus_interface",
+        "web_of_science_interface",
+        "ieee_xplore_interface",
+        "engineering_village_interface",
+        "wiley_online_library_interface",
+        "springer_nature_link_interface",
+        "proquest_platform_interface",
+        "aiaa_arc_interface",
+        "iaf_digital_library_interface",
+        "oatd_interface",
+        "esa_indico_interface",
+        "ntrs_interface"
+      ]
+    },
+    "sourceRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "interface_id",
+        "prisma_channel",
+        "prisma_subtype",
+        "final_disposition",
+        "count_state",
+        "source_union_n",
+        "flow_n",
+        "partial_records_imported",
+        "event_ledger",
+        "source_union_ledger",
+        "dedup_ledger"
+      ],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/sourceId"},
+        "interface_id": {"$ref": "#/$defs/interfaceId"},
+        "prisma_channel": {"enum": ["databases_and_registers", "other_methods"]},
+        "prisma_subtype": {"enum": ["database", "website"]},
+        "final_disposition": {"enum": ["planned", "accepted_final", "failed", "not_run"]},
+        "count_state": {"enum": ["pending", "valid_zero", "valid_nonzero", "unavailable"]},
+        "source_union_n": {"type": ["integer", "null"], "minimum": 0},
+        "flow_n": {"type": ["integer", "null"], "minimum": 0},
+        "partial_records_imported": {"const": false},
+        "event_ledger": {"$ref": "#/$defs/artifactRef"},
+        "source_union_ledger": {"$ref": "#/$defs/artifactRef"},
+        "dedup_ledger": {"$ref": "#/$defs/artifactRef"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"count_state": {"const": "valid_zero"}}, "required": ["count_state"]},
+          "then": {"properties": {"source_union_n": {"const": 0}, "flow_n": {"const": 0}}}
+        },
+        {
+          "if": {"properties": {"count_state": {"const": "valid_nonzero"}}, "required": ["count_state"]},
+          "then": {"properties": {"source_union_n": {"type": "integer", "minimum": 1}, "flow_n": {"type": "integer", "minimum": 1}}}
+        },
+        {
+          "if": {"properties": {"count_state": {"enum": ["pending", "unavailable"]}}, "required": ["count_state"]},
+          "then": {"properties": {"source_union_n": {"type": "null"}, "flow_n": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"final_disposition": {"const": "accepted_final"}}, "required": ["final_disposition"]},
+          "then": {"properties": {"count_state": {"enum": ["valid_zero", "valid_nonzero"]}}}
+        },
+        {
+          "if": {"properties": {"final_disposition": {"const": "failed"}}, "required": ["final_disposition"]},
+          "then": {"properties": {"count_state": {"const": "unavailable"}}}
+        }
+      ]
+    }
+  }
+}

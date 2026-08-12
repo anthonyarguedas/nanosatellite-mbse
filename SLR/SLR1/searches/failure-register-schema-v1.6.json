@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/eps-mbse-slr/failure-register-schema-v1.6.json",
+  "title": "EPS MBSE SLR version-1.6 final-run failure register",
+  "description": "Fail-closed source/event failures. Unavailable totals are null and partial records are never imported.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_class",
+    "review_run",
+    "protocol_version",
+    "created_at_utc",
+    "failures"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.6.0"},
+    "artifact_class": {"const": "final_discovery_failure_register"},
+    "review_run": {"const": "eps-mbse-slr-2026"},
+    "protocol_version": {"const": "1.6"},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "failures": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/failure"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:[Tt][Oo][Kk][Ee][Nn]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Ss][Ee][Ss][Ss][Ii][Oo][Nn]|[Cc][Ss][Rr][Ff]|[Aa][Cc][Cc][Oo][Uu][Nn][Tt][Ii][Dd]))[A-Za-z0-9][A-Za-z0-9._/-]*$"
+    },
+    "sourceId": {
+      "enum": [
+        "scopus",
+        "web_of_science_core_collection",
+        "ieee_xplore",
+        "compendex",
+        "inspec",
+        "wiley_online_library",
+        "springer_nature_link",
+        "proquest_aerospace_index",
+        "proquest_dissertations_theses_global",
+        "aiaa_aerospace_research_central",
+        "iaf_digital_library_iac",
+        "oatd",
+        "esa_indico",
+        "ntrs"
+      ]
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "failure_id",
+        "source_id",
+        "event_id",
+        "occurred_at_utc",
+        "phase",
+        "reason_code",
+        "source_reported_n",
+        "retrieved_n",
+        "accepted_flow_n",
+        "partial_records_imported",
+        "artifact_path",
+        "artifact_sha256",
+        "final_disposition",
+        "successor_event_id",
+        "operator"
+      ],
+      "properties": {
+        "failure_id": {"type": "string", "pattern": "^FAIL-[A-Z0-9][A-Z0-9._-]*$"},
+        "source_id": {"$ref": "#/$defs/sourceId"},
+        "event_id": {"type": ["string", "null"], "minLength": 1},
+        "occurred_at_utc": {"type": "string", "format": "date-time"},
+        "phase": {
+          "enum": [
+            "authentication",
+            "source_selection",
+            "query_submission",
+            "count",
+            "pagination",
+            "identity",
+            "export",
+            "normalization",
+            "merge",
+            "restoration",
+            "other"
+          ]
+        },
+        "reason_code": {
+          "enum": [
+            "access_challenge",
+            "authentication_unavailable",
+            "entitlement_ambiguous",
+            "source_selection_ambiguous",
+            "control_state_unverified",
+            "query_rewrite",
+            "syntax_error",
+            "timeout",
+            "network_error",
+            "changed_total",
+            "pagination_mismatch",
+            "source_cap",
+            "missing_identity",
+            "duplicate_identity",
+            "export_mismatch",
+            "parse_error",
+            "restoration_failure",
+            "other_fail_closed"
+          ]
+        },
+        "source_reported_n": {"type": ["integer", "null"], "minimum": 0},
+        "retrieved_n": {"type": ["integer", "null"], "minimum": 0},
+        "accepted_flow_n": {"const": null},
+        "partial_records_imported": {"const": false},
+        "artifact_path": {
+          "oneOf": [
+            {"$ref": "#/$defs/relativePath"},
+            {"type": "null"}
+          ]
+        },
+        "artifact_sha256": {
+          "oneOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        },
+        "final_disposition": {"enum": ["retry_required", "final_source_failure"]},
+        "successor_event_id": {"type": ["string", "null"], "minLength": 1},
+        "operator": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"final_disposition": {"const": "final_source_failure"}}, "required": ["final_disposition"]},
+          "then": {"properties": {"successor_event_id": {"type": "null"}}}
+        }
+      ]
+    }
+  }
+}

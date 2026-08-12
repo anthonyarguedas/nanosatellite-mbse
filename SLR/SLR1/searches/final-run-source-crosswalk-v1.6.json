@@ -1,0 +1,248 @@
+{
+  "schema_version": "1.0",
+  "protocol_version": "1.6",
+  "review_run": "eps-mbse-slr-2026",
+  "cutoff_date": "2026-08-10",
+  "status": "frozen_pre_final_contract_not_search_output",
+  "prisma_classification_rule": "Treat each bounded structured operational collection as a databases/registers database, irrespective of browser/API/harvest transport, except OATD, which the governing protocol fixes in other methods/websites. This is a documented review-specific classification because PRISMA 2020 does not prescribe one universal publisher/event-platform taxonomy.",
+  "count_basis": "within_source_union_before_cross_source_deduplication",
+  "interfaces": [
+    {
+      "interface_id": "scopus_interface",
+      "platform": "Scopus",
+      "source_ids": ["scopus"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "web_of_science_interface",
+      "platform": "Web of Science",
+      "source_ids": ["web_of_science_core_collection"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "ieee_xplore_interface",
+      "platform": "IEEE Xplore",
+      "source_ids": ["ieee_xplore"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "engineering_village_interface",
+      "platform": "Engineering Village",
+      "source_ids": ["compendex", "inspec"],
+      "simultaneous_multi_source_event": true
+    },
+    {
+      "interface_id": "wiley_online_library_interface",
+      "platform": "Wiley Online Library",
+      "source_ids": ["wiley_online_library"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "springer_nature_link_interface",
+      "platform": "Springer Nature Link",
+      "source_ids": ["springer_nature_link"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "proquest_platform_interface",
+      "platform": "ProQuest Platform",
+      "source_ids": ["proquest_aerospace_index", "proquest_dissertations_theses_global"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "aiaa_arc_interface",
+      "platform": "AIAA Aerospace Research Central",
+      "source_ids": ["aiaa_aerospace_research_central"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "iaf_digital_library_interface",
+      "platform": "IAF Digital Library",
+      "source_ids": ["iaf_digital_library_iac"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "oatd_interface",
+      "platform": "Open Access Theses and Dissertations",
+      "source_ids": ["oatd"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "esa_indico_interface",
+      "platform": "ESA Indico",
+      "source_ids": ["esa_indico"],
+      "simultaneous_multi_source_event": false
+    },
+    {
+      "interface_id": "ntrs_interface",
+      "platform": "NASA Technical Reports Server",
+      "source_ids": ["ntrs"],
+      "simultaneous_multi_source_event": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "scopus",
+      "source_name": "Scopus",
+      "interface_id": "scopus_interface",
+      "source_boundary": "full authorized Scopus database",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "direct_query_family",
+      "identification_unit": true
+    },
+    {
+      "source_id": "web_of_science_core_collection",
+      "source_name": "Web of Science Core Collection",
+      "interface_id": "web_of_science_interface",
+      "source_boundary": "Core Collection only, all available citation-index editions",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "direct_query_family",
+      "identification_unit": true
+    },
+    {
+      "source_id": "ieee_xplore",
+      "source_name": "IEEE Xplore",
+      "interface_id": "ieee_xplore_interface",
+      "source_boundary": "full authorized IEEE Xplore source",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "direct_query_family",
+      "identification_unit": true
+    },
+    {
+      "source_id": "compendex",
+      "source_name": "Compendex",
+      "interface_id": "engineering_village_interface",
+      "source_boundary": "Compendex collection instance in each simultaneous Engineering Village event",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "simultaneous_paired_direct_query",
+      "paired_event_id": "engineering_village_compendex_inspec",
+      "identification_unit": true
+    },
+    {
+      "source_id": "inspec",
+      "source_name": "Inspec",
+      "interface_id": "engineering_village_interface",
+      "source_boundary": "Inspec collection instance in each simultaneous Engineering Village event",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "simultaneous_paired_direct_query",
+      "paired_event_id": "engineering_village_compendex_inspec",
+      "identification_unit": true
+    },
+    {
+      "source_id": "wiley_online_library",
+      "source_name": "Wiley Online Library",
+      "interface_id": "wiley_online_library_interface",
+      "source_boundary": "full Wiley Online Library publisher collection",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "direct_query_family",
+      "identification_unit": true,
+      "classification_note": "review-specific structured publisher-database classification"
+    },
+    {
+      "source_id": "springer_nature_link",
+      "source_name": "Springer Nature Link",
+      "interface_id": "springer_nature_link_interface",
+      "source_boundary": "full Springer Nature Link publisher collection",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "direct_query_family",
+      "identification_unit": true,
+      "classification_note": "review-specific structured publisher-database classification"
+    },
+    {
+      "source_id": "proquest_aerospace_index",
+      "source_name": "Advanced Technologies & Aerospace Index",
+      "interface_id": "proquest_platform_interface",
+      "source_boundary": "exact ATAI-only ProQuest database event",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "separate_proquest_direct_query_event",
+      "platform_event_id": "proquest_atai_only",
+      "identification_unit": true
+    },
+    {
+      "source_id": "proquest_dissertations_theses_global",
+      "source_name": "ProQuest Dissertations & Theses Global",
+      "interface_id": "proquest_platform_interface",
+      "source_boundary": "exact PQDT-Global-only ProQuest database event",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "separate_proquest_direct_query_event",
+      "platform_event_id": "proquest_pqdt_global_only",
+      "identification_unit": true
+    },
+    {
+      "source_id": "aiaa_aerospace_research_central",
+      "source_name": "AIAA Aerospace Research Central",
+      "interface_id": "aiaa_arc_interface",
+      "source_boundary": "source-wide structured AIAA ARC publisher collection",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "direct_query_family",
+      "identification_unit": true,
+      "classification_note": "review-specific structured publisher-database classification"
+    },
+    {
+      "source_id": "iaf_digital_library_iac",
+      "source_name": "IAF Digital Library — IAC proceedings",
+      "interface_id": "iaf_digital_library_interface",
+      "source_boundary": "canonical IAC-2011 through IAC-2026 events only",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "annual_population_harvest_local_match",
+      "identification_unit": true,
+      "classification_note": "review-specific bounded structured event-database classification"
+    },
+    {
+      "source_id": "oatd",
+      "source_name": "Open Access Theses and Dissertations",
+      "interface_id": "oatd_interface",
+      "source_boundary": "whole native OATD index; linked repositories are retrieval locations only",
+      "prisma_channel": "other_methods",
+      "prisma_subtype": "website",
+      "event_mode": "direct_query_family",
+      "identification_unit": true
+    },
+    {
+      "source_id": "esa_indico",
+      "source_name": "ESA Indico",
+      "interface_id": "esa_indico_interface",
+      "source_boundary": "whole public ESA Indico event database",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "whole_instance_harvest_local_match",
+      "identification_unit": true,
+      "classification_note": "review-specific bounded structured event-database classification"
+    },
+    {
+      "source_id": "ntrs",
+      "source_name": "NASA Technical Reports Server",
+      "interface_id": "ntrs_interface",
+      "source_boundary": "full public NTRS database",
+      "prisma_channel": "databases_and_registers",
+      "prisma_subtype": "database",
+      "event_mode": "finite_api_cell_union",
+      "identification_unit": true
+    }
+  ],
+  "non_source_accounting": {
+    "engineering_village_combined_total": "audit_only_not_identification_unit",
+    "proquest_platform_total": "forbidden_combined_count",
+    "oatd_linked_repositories": "retrieval_provenance_not_discovery_sources",
+    "citation_chasing": "later_other_methods_citation_searching_not_one_of_fourteen",
+    "registers": "none_planned_not_a_zero",
+    "organisations": "none_planned_not_a_zero"
+  },
+  "references": [
+    "https://www.prisma-statement.org/prisma-2020-flow-diagram",
+    "https://www.prisma-statement.org/prisma-search",
+    "https://osf.io/y765x/",
+    "https://doi.org/10.5195/jmla.2022.1449"
+  ]
+}

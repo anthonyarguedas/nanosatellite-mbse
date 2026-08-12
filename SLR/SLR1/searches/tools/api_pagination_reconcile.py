@@ -34,7 +34,7 @@ from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import unquote_plus, urlsplit, urlunsplit
 
 import requests
 
@@ -70,8 +70,18 @@ SENSITIVE_NAME_NORMALIZATIONS = {
     "clientsecret",
     "privatekey",
     "accesskey",
+    "accountid",
+    "csrf",
+    "csrftoken",
+    "jsessionid",
+    "searchid",
+    "searchsession",
+    "session",
     "sessionid",
     "sessiontoken",
+    "sid",
+    "xsrf",
+    "xsrftoken",
     "bearertoken",
     "credential",
     "credentials",
@@ -209,19 +219,86 @@ def year_from_text(value: Any) -> int | None:
     return int(match.group(0)) if match else None
 
 
+def decoded_url_component(value: str) -> str | None:
+    """Decode a bounded URL context, treating deeper nesting as unsafe."""
+    decoded = value
+    for _ in range(8):
+        next_value = unquote_plus(decoded)
+        if next_value == decoded:
+            return decoded
+        decoded = next_value
+    # Do not retain a component whose remaining encoding cannot be inspected.
+    return decoded if unquote_plus(decoded) == decoded else None
+
+
+def contains_sensitive_parameter(value: str) -> bool:
+    """Detect direct or encoded sensitive URL context, failing closed."""
+    decoded = decoded_url_component(value)
+    if decoded is None:
+        return True
+    pieces = re.split(r"[?&;#]", decoded)
+    if any(is_sensitive_name(item.split("=", 1)[0]) for item in pieces):
+        return True
+    for item in pieces:
+        if "=" not in item:
+            continue
+        try:
+            nested = urlsplit(item.split("=", 1)[1])
+            _ = nested.port
+            if "@" in nested.netloc:
+                return True
+        except ValueError:
+            return True
+    return False
+
+
+def redacted_query(query: str) -> str:
+    """Remove sensitive query pieces while preserving benign pieces verbatim."""
+    retained: list[str] = []
+    pieces = re.split(r"([&;])", query)
+    for index in range(0, len(pieces), 2):
+        item = pieces[index]
+        separator = pieces[index - 1] if index else ""
+        if contains_sensitive_parameter(item):
+            continue
+        if retained:
+            retained.append(separator or "&")
+        retained.append(item)
+    return "".join(retained)
+
+
 def redacted_url(value: str) -> str:
-    """Remove credential-like query parameters from absolute *or relative* URLs."""
+    """Redact URL context and fail closed when a URL cannot be parsed."""
     try:
         parsed = urlsplit(value)
+        _ = parsed.port
     except ValueError:
+        return ""
+    filtered_query = redacted_query(parsed.query)
+    fragment_contains_sensitive_parameter = contains_sensitive_parameter(parsed.fragment)
+    safe_netloc = parsed.netloc.rsplit("@", 1)[-1]
+    decoded_netloc = decoded_url_component(parsed.netloc)
+    if decoded_netloc is None:
+        return ""
+    encoded_authority_userinfo = safe_netloc == parsed.netloc and "@" in decoded_netloc
+    if (
+        filtered_query == parsed.query
+        and not fragment_contains_sensitive_parameter
+        and safe_netloc == parsed.netloc
+        and not encoded_authority_userinfo
+    ):
         return value
-    if not parsed.query:
-        return value
-    original = parse_qsl(parsed.query, keep_blank_values=True)
-    filtered = [(key, item) for key, item in original if not is_sensitive_name(key)]
-    if len(filtered) == len(original):
-        return value
-    return urlunsplit((parsed.scheme, parsed.netloc, parsed.path, urlencode(filtered), parsed.fragment))
+    if encoded_authority_userinfo:
+        return ""
+    return urlunsplit(
+        (
+            parsed.scheme,
+            safe_netloc,
+            parsed.path,
+            filtered_query,
+            "" if fragment_contains_sensitive_parameter else parsed.fragment,
+        )
+    )
 
 
 def scrub_sensitive(value: Any) -> Any:
@@ -525,7 +602,7 @@ def ieee_document_url(record: dict[str, Any]) -> str:
     if document_link.startswith("https://ieeexplore.ieee.org/"):
         return redacted_url(document_link)
     if document_link.startswith("/"):
-        return f"https://ieeexplore.ieee.org{document_link}"
+        return redacted_url(f"https://ieeexplore.ieee.org{document_link}")
     return f"https://ieeexplore.ieee.org/document/{identifier}/" if identifier else ""
 
 

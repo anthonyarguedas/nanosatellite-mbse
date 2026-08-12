@@ -1,0 +1,1005 @@
+{
+  "schema_version": "1.1",
+  "dictionary_version": "1.6.0-thesis-sources-2026-08-10",
+  "classification": "synthetic_regression_not_candidate_search",
+  "route": "iaf_title_abstract",
+  "purpose": "Strict synthetic field-level positive/negative regression cases for the IAF title/abstract-only route; no source records, candidates, or screening decisions are represented. Every tag and every title/abstract term-ID set is an exact expectation.",
+  "fixtures": [
+    {
+      "id": "all_iaf_tags_and_independent_relation",
+      "record": {
+        "record_id": "synthetic-all-tags",
+        "title": "CubeSat reusable model",
+        "abstract": "MBSE supports an electrical power system through a reference architecture and model library. Independent requirements and traceability guide a tailored system model; verification reports reliable benefits."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": true,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": true,
+          "iaf_a_tag": true,
+          "iaf_b_core": true,
+          "iaf_bg1": true,
+          "iaf_bg2": true,
+          "iaf_g_tag": true,
+          "iaf_bc1": true,
+          "iaf_c1_tag": true,
+          "iaf_r_occurrence_tag": true,
+          "iaf_independent_r_tag": true,
+          "iaf_t2_tag": true,
+          "iaf_v1_tag": true,
+          "iaf_o1_tag": true,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [
+          "abstract",
+          "title"
+        ],
+        "field_term_ids": {
+          "title": [
+            "G_REUSABLE_MODEL",
+            "O1_REUSE",
+            "O_REUSE",
+            "P_CUBESAT",
+            "T_REUSE"
+          ],
+          "abstract": [
+            "E_ELECTRICAL_POWER_SYSTEM",
+            "G_MODEL_LIBRARY",
+            "G_REFERENCE_ARCHITECTURE",
+            "M_MBSE",
+            "M_SYSTEM_MODEL",
+            "O1_BENEFIT",
+            "O1_RELIABILITY",
+            "O1_TRACEABILITY",
+            "O_BENEFIT",
+            "O_RELIABILITY",
+            "O_TRACEABILITY",
+            "R_ARCHITECTURE",
+            "R_REQUIREMENTS",
+            "R_TRACEABILITY",
+            "R_VERIFICATION",
+            "T_TAILOR",
+            "V1_TRACEABILITY",
+            "V1_VERIFICATION",
+            "V_VERIFICATION"
+          ]
+        },
+        "active_genericity_artifact_ids": [
+          "G_MODEL_LIBRARY",
+          "G_REFERENCE_ARCHITECTURE",
+          "G_REUSABLE_MODEL"
+        ],
+        "independent_relation_artifact_ids": [
+          "G_MODEL_LIBRARY",
+          "G_REFERENCE_ARCHITECTURE",
+          "G_REUSABLE_MODEL"
+        ]
+      }
+    },
+    {
+      "id": "title_abstract_cooccurrence_is_allowed_with_field_provenance",
+      "record": {
+        "record_id": "synthetic-cross-field-allowed",
+        "title": "CubeSat electrical power system",
+        "abstract": "MBSE documents the architecture."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": true,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": true,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": true,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [
+          "abstract"
+        ],
+        "field_term_ids": {
+          "title": [
+            "E_ELECTRICAL_POWER_SYSTEM",
+            "P_CUBESAT"
+          ],
+          "abstract": [
+            "M_MBSE",
+            "R_ARCHITECTURE"
+          ]
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "null_abstract_is_a_title_only_lead",
+      "record": {
+        "record_id": "synthetic-null-abstract",
+        "title": "CubeSat MBSE overview",
+        "abstract": null
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": false
+        },
+        "abstract_not_available": true,
+        "abstract_not_available_lead": true,
+        "no_automatic_negative": true,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "empty_abstract_is_a_title_only_lead",
+      "record": {
+        "record_id": "synthetic-empty-abstract",
+        "title": "CubeSat MBSE overview",
+        "abstract": ""
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": false
+        },
+        "abstract_not_available": true,
+        "abstract_not_available_lead": true,
+        "no_automatic_negative": true,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "declared_missing_abstract_is_a_title_only_lead",
+      "record": {
+        "record_id": "synthetic-declared-missing-abstract",
+        "title": "CubeSat MBSE overview",
+        "abstract": null,
+        "abstract_not_available": true
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": false
+        },
+        "abstract_not_available": true,
+        "abstract_not_available_lead": true,
+        "no_automatic_negative": true,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "not_available_abstract_is_a_title_only_lead",
+      "record": {
+        "record_id": "synthetic-not-available-abstract",
+        "title": "CubeSat preliminary catalogue",
+        "abstract": "not available"
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": false,
+          "iaf_high_specificity_m_tag": false,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": false,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": false
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": false
+        },
+        "abstract_not_available": true,
+        "abstract_not_available_lead": true,
+        "no_automatic_negative": true,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "P_CUBESAT"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "nonroute_metadata_cannot_fabricate_a_title_abstract_hit",
+      "record": {
+        "record_id": "synthetic-ignored-metadata",
+        "title": "A catalogue of unrelated systems",
+        "abstract": "No route concept terms occur here.",
+        "authors": "CubeSat MBSE electrical power system",
+        "affiliations": "CubeSat model library",
+        "country": "CubeSat systems modeling language",
+        "publicationTitle": "CubeSat reference architecture",
+        "eventCode": "IAC-2024 CubeSat MBSE",
+        "doi": "10.1234/CubeSat-MBSE",
+        "url": "https://example.invalid/CubeSat-MBSE"
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": false,
+          "iaf_e_tag": false,
+          "iaf_m_tag": false,
+          "iaf_high_specificity_m_tag": false,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": false,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": false
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [
+          "affiliations",
+          "authors",
+          "country",
+          "doi",
+          "eventCode",
+          "publicationTitle",
+          "url"
+        ],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "phrase_split_across_title_and_abstract_does_not_fabricate_population",
+      "record": {
+        "record_id": "synthetic-boundary-split",
+        "title": "Cube",
+        "abstract": "Sat MBSE electrical power system"
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": false,
+          "iaf_e_tag": true,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": false,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": false,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": false
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [],
+          "abstract": [
+            "E_ELECTRICAL_POWER_SYSTEM",
+            "M_MBSE"
+          ]
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "architecture_artifact_cannot_self_satisfy_independent_r",
+      "record": {
+        "record_id": "synthetic-architecture-self-relation",
+        "title": "CubeSat reference architecture",
+        "abstract": "A complete public abstract is supplied."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": false,
+          "iaf_high_specificity_m_tag": false,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": false,
+          "iaf_bg1": false,
+          "iaf_bg2": true,
+          "iaf_g_tag": true,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": true,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [
+          "title"
+        ],
+        "field_term_ids": {
+          "title": [
+            "G_REFERENCE_ARCHITECTURE",
+            "P_CUBESAT",
+            "R_ARCHITECTURE"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [
+          "G_REFERENCE_ARCHITECTURE"
+        ],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "bare_library_is_not_a_c1_asset",
+      "record": {
+        "record_id": "synthetic-bare-library",
+        "title": "CubeSat library",
+        "abstract": "A complete public abstract is supplied."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": false,
+          "iaf_high_specificity_m_tag": false,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": false,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": false
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "P_CUBESAT"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "complete_c1_components_may_combine_within_one_title_abstract_route",
+      "record": {
+        "record_id": "synthetic-domain-language-components",
+        "title": "CubeSat domain-specific modelling language",
+        "abstract": "MBSE supports the architecture."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": true,
+          "iaf_c1_tag": true,
+          "iaf_r_occurrence_tag": true,
+          "iaf_independent_r_tag": true,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [
+          "abstract"
+        ],
+        "field_term_ids": {
+          "title": [
+            "G_DOMAIN_SPECIFIC_MODELING_LANGUAGE",
+            "P_CUBESAT"
+          ],
+          "abstract": [
+            "M_MBSE",
+            "R_ARCHITECTURE"
+          ]
+        },
+        "active_genericity_artifact_ids": [
+          "G_DOMAIN_SPECIFIC_MODELING_LANGUAGE"
+        ],
+        "independent_relation_artifact_ids": [
+          "G_DOMAIN_SPECIFIC_MODELING_LANGUAGE"
+        ]
+      }
+    },
+    {
+      "id": "uncoupled_t2_is_not_a_tag",
+      "record": {
+        "record_id": "synthetic-uncoupled-t2",
+        "title": "CubeSat MBSE",
+        "abstract": "The workflow was tailored."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT"
+          ],
+          "abstract": [
+            "T_TAILOR"
+          ]
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "coupled_t2_model_anchor_may_be_in_another_route_field",
+      "record": {
+        "record_id": "synthetic-coupled-t2-model",
+        "title": "CubeSat MBSE tailored workflow",
+        "abstract": "The model is maintained separately."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": true,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [
+          "abstract"
+        ],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT",
+            "T_TAILOR"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "coupled_t2_architecture_anchor_is_token_bounded",
+      "record": {
+        "record_id": "synthetic-coupled-t2-architecture",
+        "title": "CubeSat MBSE",
+        "abstract": "The tailored architecture is maintained."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": true,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": true,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [
+          "abstract"
+        ],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT"
+          ],
+          "abstract": [
+            "R_ARCHITECTURE",
+            "T_TAILOR"
+          ]
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "t2_architecture_substring_is_not_an_anchor",
+      "record": {
+        "record_id": "synthetic-t2-architecture-substring",
+        "title": "CubeSat MBSE tailored workflow",
+        "abstract": "The architectureless note is maintained."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT",
+            "T_TAILOR"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "high_specificity_m_subtype",
+      "record": {
+        "record_id": "synthetic-high-specificity-m",
+        "title": "CubeSat MBSE overview",
+        "abstract": "A complete public abstract is supplied."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT"
+          ],
+          "abstract": []
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "broad_m_plus_r_subtype",
+      "record": {
+        "record_id": "synthetic-broad-m-plus-r",
+        "title": "CubeSat overview",
+        "abstract": "The system model traces requirements."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": false,
+          "iaf_broad_m_plus_r_tag": true,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": true,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [
+          "abstract"
+        ],
+        "field_term_ids": {
+          "title": [
+            "P_CUBESAT"
+          ],
+          "abstract": [
+            "M_SYSTEM_MODEL",
+            "R_REQUIREMENTS"
+          ]
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "broad_m_without_r_is_not_broad_m_plus_r_subtype",
+      "record": {
+        "record_id": "synthetic-broad-m-without-r",
+        "title": "CubeSat overview",
+        "abstract": "The system model is maintained."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": false,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": false,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [
+          "abstract"
+        ],
+        "field_term_ids": {
+          "title": [
+            "P_CUBESAT"
+          ],
+          "abstract": [
+            "M_SYSTEM_MODEL"
+          ]
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    },
+    {
+      "id": "r_without_broad_m_is_not_broad_m_plus_r_subtype",
+      "record": {
+        "record_id": "synthetic-r-without-broad-m",
+        "title": "CubeSat MBSE overview",
+        "abstract": "Requirements are maintained."
+      },
+      "expected": {
+        "tags": {
+          "iaf_p_tag": true,
+          "iaf_e_tag": false,
+          "iaf_m_tag": true,
+          "iaf_high_specificity_m_tag": true,
+          "iaf_broad_m_plus_r_tag": false,
+          "iaf_a_tag": false,
+          "iaf_b_core": true,
+          "iaf_bg1": false,
+          "iaf_bg2": false,
+          "iaf_g_tag": false,
+          "iaf_bc1": false,
+          "iaf_c1_tag": false,
+          "iaf_r_occurrence_tag": true,
+          "iaf_independent_r_tag": false,
+          "iaf_t2_tag": false,
+          "iaf_v1_tag": false,
+          "iaf_o1_tag": false,
+          "iaf_candidate_union": true
+        },
+        "field_presence": {
+          "title": true,
+          "abstract": true
+        },
+        "abstract_not_available": false,
+        "abstract_not_available_lead": false,
+        "no_automatic_negative": false,
+        "ignored_input_keys": [],
+        "t2_coupling_anchor_fields": [],
+        "field_term_ids": {
+          "title": [
+            "M_MBSE",
+            "P_CUBESAT"
+          ],
+          "abstract": [
+            "R_REQUIREMENTS"
+          ]
+        },
+        "active_genericity_artifact_ids": [],
+        "independent_relation_artifact_ids": []
+      }
+    }
+  ]
+}
