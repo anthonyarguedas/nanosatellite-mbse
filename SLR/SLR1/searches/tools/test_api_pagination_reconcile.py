@@ -1,3 +1,7 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["requests==2.34.2"]
+# ///
 """Offline privacy and frozen-contract regressions for API pagination reconciliation."""
 
 from __future__ import annotations
@@ -6,6 +10,7 @@ import contextlib
 import copy
 import io
 import json
+import sys
 import tempfile
 import unittest
 from argparse import Namespace
@@ -13,7 +18,9 @@ from pathlib import Path
 from urllib.parse import quote_plus
 from unittest.mock import patch
 
-import api_pagination_reconcile as reconcile
+SCRIPTS = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts")
+sys.path.insert(0, str(SCRIPTS))
+import api_pagination_reconcile as reconcile  # noqa: E402
 
 
 MARKER = "SYNTHETIC_URL_REDACTION_MARKER"

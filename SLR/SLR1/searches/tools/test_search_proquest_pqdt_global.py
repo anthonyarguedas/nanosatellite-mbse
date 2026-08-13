@@ -17,7 +17,9 @@ from contextlib import nullcontext, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
-SCRIPT_PATH = Path(__file__).with_name("search_proquest_pqdt_global.py")
+SCRIPT_PATH = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts/search_proquest_pqdt_global.py")
+REVIEW_ROOT = Path(__file__).resolve().parents[2]
+MANIFEST_PATH = REVIEW_ROOT / "searches" / "thesis-source-query-manifest-v1.6.json"
 SPEC = importlib.util.spec_from_file_location("search_proquest_pqdt_global", SCRIPT_PATH)
 if SPEC is None or SPEC.loader is None:  # pragma: no cover
     raise RuntimeError(f"Could not import {SCRIPT_PATH}")
@@ -61,6 +63,14 @@ def form_payload() -> dict[str, object]:
         "submitCount": 1,
         "fullTextControlCount": 1,
         "fullTextChecked": False,
+        "limiterStates": {
+            "fullText": {"controlCount": 1, "visibleControlCount": 1, "activeControlCount": 0},
+            "peerReviewed": {"controlCount": 0, "visibleControlCount": 0, "activeControlCount": 0},
+            "sourceType": {"controlCount": 0, "visibleControlCount": 0, "activeControlCount": 0},
+            "documentType": {"controlCount": 0, "visibleControlCount": 0, "activeControlCount": 0},
+            "degreeOrManuscript": {"controlCount": 0, "visibleControlCount": 0, "activeControlCount": 0},
+            "access": {"controlCount": 0, "visibleControlCount": 0, "activeControlCount": 0},
+        },
         "checkedDiscoveryLimiterCount": 0,
         "challenge": False,
         "loginRoute": False,
@@ -89,9 +99,9 @@ def count_payload(*, total: str = "17 results") -> dict[str, object]:
 
 class FrozenContractTests(unittest.TestCase):
     def test_registry_has_exact_aliases_and_plan_bodies(self) -> None:
-        entries = pqdt.load_frozen_queries()
+        entries = pqdt.load_frozen_queries(MANIFEST_PATH)
         self.assertEqual(tuple(entries), pqdt.QUERY_IDS)
-        plan_path = pqdt.QUERY_MANIFEST_PATH.parents[1] / "query-search-plan.md"
+        plan_path = REVIEW_ROOT / "query-search-plan.md"
         plan = plan_path.read_text(encoding="utf-8")
         for query_id, entry in entries.items():
             body_id = query_id.replace("PQDT-", "PQ-", 1)
@@ -110,23 +120,22 @@ class FrozenContractTests(unittest.TestCase):
         try:
             pqdt.QUERY_MANIFEST_SHA256 = "f" * 64
             with self.assertRaises(pqdt.InputGateError):
-                pqdt.load_frozen_queries()
+                pqdt.load_frozen_queries(MANIFEST_PATH)
         finally:
             pqdt.QUERY_MANIFEST_SHA256 = original
 
     def test_manifest_is_hashed_and_decoded_from_one_read(self) -> None:
-        manifest_bytes = pqdt.QUERY_MANIFEST_PATH.read_bytes()
+        manifest_bytes = MANIFEST_PATH.read_bytes()
         read_once_path = mock.Mock()
         read_once_path.read_bytes.return_value = manifest_bytes
         read_once_path.read_text.side_effect = AssertionError("manifest must not be reread")
         real_sha256 = hashlib.sha256
         real_loads = json.loads
         with (
-            mock.patch.object(pqdt, "QUERY_MANIFEST_PATH", read_once_path),
             mock.patch.object(pqdt.hashlib, "sha256", wraps=real_sha256) as sha256_mock,
             mock.patch.object(pqdt.json, "loads", wraps=real_loads) as loads_mock,
         ):
-            entries = pqdt.load_frozen_queries()
+            entries = pqdt.load_frozen_queries(read_once_path)
         self.assertEqual(tuple(entries), pqdt.QUERY_IDS)
         read_once_path.read_bytes.assert_called_once_with()
         read_once_path.read_text.assert_not_called()
@@ -147,11 +156,10 @@ class FrozenContractTests(unittest.TestCase):
             else:
                 manifest_path.read_bytes.return_value = response
             with (
-                mock.patch.object(pqdt, "QUERY_MANIFEST_PATH", manifest_path),
                 mock.patch.object(pqdt, "QUERY_MANIFEST_SHA256", expected_sha256),
                 self.assertRaises(pqdt.InputGateError) as raised,
             ):
-                pqdt.load_frozen_queries()
+                pqdt.load_frozen_queries(manifest_path)
             self.assertEqual(str(raised.exception), "The pinned thesis-source query manifest is unreadable.")
             self.assertNotIn("raw read failure", str(raised.exception))
 
@@ -213,7 +221,24 @@ class ExactDatabaseAndControlTests(unittest.TestCase):
         self.assertTrue(observed["plural_and_adjective_variants"])
         self.assertTrue(observed["full_text_control_visible"])
         self.assertFalse(observed["full_text_limiter"])
-        self.assertNotIn("other_discovery_limiters", observed)
+        self.assertTrue(observed["all_named_limiter_states_asserted"])
+        for key in (
+            "peer_reviewed_limiter", "source_type_limiter", "document_type_limiter",
+            "degree_or_manuscript_limiter", "access_limiter",
+        ):
+            self.assertFalse(observed[key])
+
+    def test_fixed_commandline_advanced_redirect_is_accepted(self) -> None:
+        payload = form_payload()
+        payload["path"] = "/pqdtglobal/commandline/advanced"
+        self.assertEqual(pqdt.parse_form_state(payload)["sort"], "Relevance")
+        self.assertEqual(
+            pqdt.COMMAND_LINE_PATHS,
+            frozenset({"/pqdtglobal/commandline", "/pqdtglobal/commandline/advanced"}),
+        )
+        payload["path"] = "/pqdtglobal/advanced"
+        with self.assertRaisesRegex(pqdt.ProtocolGateError, "product_route"):
+            pqdt.parse_form_state(payload)
 
     def test_absent_or_ambiguous_full_text_control_fails(self) -> None:
         for count in (0, 2):
@@ -222,6 +247,54 @@ class ExactDatabaseAndControlTests(unittest.TestCase):
             payload["fullTextChecked"] = False
             with self.assertRaisesRegex(pqdt.ProtocolGateError, "full_text_control"):
                 pqdt.parse_form_state(payload)
+
+    def test_current_always_visible_result_option_variant_is_supported(self) -> None:
+        class FakeLocator:
+            def __init__(self, count: int, *, checked: bool = False) -> None:
+                self._count = count
+                self.checked = checked
+                self.clicks = 0
+                self.selected: list[str] = []
+
+            async def count(self) -> int:
+                return self._count
+
+            async def get_attribute(self, _name: str) -> str | None:
+                return None
+
+            async def click(self) -> None:
+                self.clicks += 1
+                self.checked = not self.checked
+
+            async def select_option(self, *, value: str) -> None:
+                self.selected.append(value)
+
+            async def is_checked(self) -> bool:
+                return self.checked
+
+        selectors = {
+            "#showResultPageOptions:visible": FakeLocator(0),
+            "select:is(#sortType, [id^='sortType_']):visible": FakeLocator(1),
+            "select:is(#itemsPerPage, [id^='itemsPerPage_']):visible": FakeLocator(1),
+            "input:is(#excludeDuplicate, [id^='excludeDuplicate_']):visible": FakeLocator(1),
+            "#includeVariantsSpelling:visible": FakeLocator(1),
+            "#includeVariantsPluralsAndAdjectives:visible": FakeLocator(1),
+        }
+
+        class FakePage:
+            def locator(self, selector: str) -> FakeLocator:
+                return selectors[selector]
+
+        asyncio.run(pqdt.configure_result_options(FakePage()))
+        self.assertEqual(
+            selectors["select:is(#sortType, [id^='sortType_']):visible"].selected,
+            ["relevance"],
+        )
+        self.assertEqual(
+            selectors["select:is(#itemsPerPage, [id^='itemsPerPage_']):visible"].selected,
+            ["20"],
+        )
+        self.assertEqual(selectors["#showResultPageOptions:visible"].clicks, 0)
 
     def test_scope_is_reasserted_on_the_single_owned_page(self) -> None:
         source = SCRIPT_PATH.read_text(encoding="utf-8")
@@ -359,7 +432,6 @@ class ExactDatabaseAndControlTests(unittest.TestCase):
             ("spellingChecked", False),
             ("formsChecked", False),
             ("fullTextChecked", True),
-            ("checkedDiscoveryLimiterCount", 1),
             ("queryFieldCount", 2),
         )
         for key, value in mutations:
@@ -367,6 +439,31 @@ class ExactDatabaseAndControlTests(unittest.TestCase):
             payload[key] = value
             with self.assertRaises(pqdt.ProtocolGateError, msg=key):
                 pqdt.parse_form_state(payload)
+
+    def test_hidden_or_active_named_limiter_state_fails(self) -> None:
+        for limiter, mutation in (
+            ("peerReviewed", {"controlCount": 1, "visibleControlCount": 0, "activeControlCount": 1}),
+            ("sourceType", {"controlCount": 2, "visibleControlCount": 1, "activeControlCount": 0}),
+            ("documentType", {"controlCount": 1, "visibleControlCount": 2, "activeControlCount": 0}),
+            ("degreeOrManuscript", {"controlCount": 1, "visibleControlCount": 0, "activeControlCount": 2}),
+            ("access", {"controlCount": 1, "visibleControlCount": 1, "activeControlCount": 1}),
+        ):
+            payload = form_payload()
+            payload["limiterStates"][limiter] = mutation
+            with self.assertRaisesRegex(pqdt.ProtocolGateError, "discovery_limiter"):
+                pqdt.parse_form_state(payload)
+
+    def test_missing_or_ambiguous_named_limiter_state_fails(self) -> None:
+        payload = form_payload()
+        del payload["limiterStates"]["access"]
+        with self.assertRaisesRegex(pqdt.ProtocolGateError, "discovery_limiter_state"):
+            pqdt.parse_form_state(payload)
+        payload = form_payload()
+        payload["limiterStates"]["fullText"] = {
+            "controlCount": 1, "visibleControlCount": 0, "activeControlCount": 0,
+        }
+        with self.assertRaisesRegex(pqdt.ProtocolGateError, "full_text_control"):
+            pqdt.parse_form_state(payload)
 
 
 class AggregateStateTests(unittest.TestCase):
@@ -434,7 +531,7 @@ class PrivacyAndOutputTests(unittest.TestCase):
         self.assertEqual(artifact["candidate_records_serialized"], 0)
         self.assertNotIn("results", artifact)
         self.assertIn(
-            "PQDT-02: absent/hidden/type/degree/access limiter proof remains live",
+            "PQDT-02: authorized live-session confirmation of named limiter states remains required",
             artifact["unvalidated"],
         )
         self.assertIn(
@@ -453,7 +550,42 @@ class PrivacyAndOutputTests(unittest.TestCase):
         pqdt.validate_artifact_allowlist(artifact)
         self.assertIsNone(artifact["source_total"])
         self.assertEqual(artifact["failure_code"], "timeout")
+        self.assertIsNone(artifact["failure_stage"])
+        self.assertIsNone(artifact["failure_reason"])
         self.assertNotIn("SECRET", json.dumps(artifact))
+
+    def test_unexpected_failure_serializes_only_an_allowlisted_stage(self) -> None:
+        error = pqdt.UnexpectedBrowserGateError("configure_result_options")
+        artifact = pqdt.make_artifact(
+            "PQDT-B2", "2" * 64,
+            started_at=None,
+            completed_at="2026-08-11T00:00:01.000Z",
+            total=None,
+            error=error,
+        )
+        pqdt.validate_artifact_allowlist(artifact)
+        self.assertEqual(artifact["failure_code"], "other_fail_closed")
+        self.assertEqual(artifact["failure_stage"], "configure_result_options")
+        self.assertIsNone(artifact["failure_reason"])
+        self.assertEqual(
+            pqdt.UnexpectedBrowserGateError("https://www.proquest.com/private?token=x").stage,
+            "unknown",
+        )
+        self.assertNotIn("proquest.com", json.dumps(artifact))
+
+    def test_known_protocol_reason_is_allowlisted_without_raw_text(self) -> None:
+        artifact = pqdt.make_artifact(
+            "PQDT-B1", "1" * 64,
+            started_at=None,
+            completed_at="2026-08-11T00:00:01.000Z",
+            total=None,
+            error=pqdt.ProtocolGateError("exact_pqdt_selection_not_proven"),
+        )
+        pqdt.validate_artifact_allowlist(artifact)
+        self.assertEqual(artifact["failure_reason"], "exact_pqdt_selection_not_proven")
+        self.assertIsNone(
+            pqdt.safe_failure_reason(pqdt.ProtocolGateError("https://example.test/?token=x"))
+        )
 
     def test_injected_candidate_or_secret_fields_are_rejected(self) -> None:
         for key in ("title", "author", "abstract", "snippet", "paperId", "recordId", "url", "results", "rank", "token"):
@@ -500,6 +632,7 @@ class MainFailureMappingTests(unittest.TestCase):
             ):
                 exit_code = pqdt.main([
                     "--query-id", "PQDT-B2",
+                    "--query-manifest", str(MANIFEST_PATH),
                     "--output-path", str(output_path),
                     "--cdp-url", "http://127.0.0.1:9222",
                 ])
@@ -508,6 +641,8 @@ class MainFailureMappingTests(unittest.TestCase):
         self.assertEqual(calls, [None])
         self.assertEqual(artifact["status"], "error")
         self.assertEqual(artifact["failure_code"], "other_fail_closed")
+        self.assertIsNone(artifact["failure_stage"])
+        self.assertIsNone(artifact["failure_reason"])
         self.assertIsNone(artifact["source_total"])
         self.assertNotIn("synthetic raw browser failure", json.dumps(artifact))
         self.assertNotIn("synthetic raw browser failure", captured_stdout.getvalue())

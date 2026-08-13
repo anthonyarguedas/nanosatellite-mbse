@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["requests==2.34.2"]
+# ///
 """Offline transport, URL, identity, and census tests for the ESA harvester."""
 
 from __future__ import annotations
@@ -6,6 +10,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import sys
 import tempfile
 import unittest
 from collections.abc import Callable
@@ -14,7 +19,9 @@ from typing import Any
 
 import requests
 
-import esa_indico_harvest_match as harvester
+SCRIPTS = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts")
+sys.path.insert(0, str(SCRIPTS))
+import esa_indico_harvest_match as harvester  # noqa: E402
 
 
 class FakeResponse:

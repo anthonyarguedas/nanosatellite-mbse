@@ -16,7 +16,9 @@ from pathlib import Path
 from unittest import mock
 from urllib.parse import parse_qs, urlsplit
 
-SCRIPT_PATH = Path(__file__).with_name("oatd_basic_count_gate.py")
+SCRIPT_PATH = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts/oatd_basic_count_gate.py")
+REVIEW_ROOT = Path(__file__).resolve().parents[2]
+MANIFEST_PATH = REVIEW_ROOT / "searches" / "thesis-source-query-manifest-v1.6.json"
 SPEC = importlib.util.spec_from_file_location("oatd_basic_count_gate", SCRIPT_PATH)
 if SPEC is None or SPEC.loader is None:  # pragma: no cover
     raise RuntimeError(f"Could not import {SCRIPT_PATH}")
@@ -60,9 +62,9 @@ def valid_payload(*, total: int = 43) -> dict[str, object]:
 
 class FrozenRegistryTests(unittest.TestCase):
     def test_registry_is_exact_finite_and_plan_synchronized(self) -> None:
-        entries = oatd.load_frozen_queries()
+        entries = oatd.load_frozen_queries(MANIFEST_PATH)
         self.assertEqual(tuple(entries), oatd.QUERY_IDS)
-        plan_path = oatd.QUERY_MANIFEST_PATH.parents[1] / "query-search-plan.md"
+        plan_path = REVIEW_ROOT / "query-search-plan.md"
         plan = plan_path.read_text(encoding="utf-8")
         for query_id, entry in entries.items():
             match = re.search(
@@ -80,23 +82,22 @@ class FrozenRegistryTests(unittest.TestCase):
         try:
             oatd.QUERY_MANIFEST_SHA256 = "0" * 64
             with self.assertRaises(oatd.InputGateError):
-                oatd.load_frozen_queries()
+                oatd.load_frozen_queries(MANIFEST_PATH)
         finally:
             oatd.QUERY_MANIFEST_SHA256 = original
 
     def test_manifest_is_hashed_and_decoded_from_one_read(self) -> None:
-        manifest_bytes = oatd.QUERY_MANIFEST_PATH.read_bytes()
+        manifest_bytes = MANIFEST_PATH.read_bytes()
         read_once_path = mock.Mock()
         read_once_path.read_bytes.return_value = manifest_bytes
         read_once_path.read_text.side_effect = AssertionError("manifest must not be reread")
         real_sha256 = hashlib.sha256
         real_loads = json.loads
         with (
-            mock.patch.object(oatd, "QUERY_MANIFEST_PATH", read_once_path),
             mock.patch.object(oatd.hashlib, "sha256", wraps=real_sha256) as sha256_mock,
             mock.patch.object(oatd.json, "loads", wraps=real_loads) as loads_mock,
         ):
-            entries = oatd.load_frozen_queries()
+            entries = oatd.load_frozen_queries(read_once_path)
         self.assertEqual(tuple(entries), oatd.QUERY_IDS)
         read_once_path.read_bytes.assert_called_once_with()
         read_once_path.read_text.assert_not_called()
@@ -117,16 +118,15 @@ class FrozenRegistryTests(unittest.TestCase):
             else:
                 manifest_path.read_bytes.return_value = response
             with (
-                mock.patch.object(oatd, "QUERY_MANIFEST_PATH", manifest_path),
                 mock.patch.object(oatd, "QUERY_MANIFEST_SHA256", expected_sha256),
                 self.assertRaises(oatd.InputGateError) as raised,
             ):
-                oatd.load_frozen_queries()
+                oatd.load_frozen_queries(manifest_path)
             self.assertEqual(str(raised.exception), "The pinned thesis-source query manifest is unreadable.")
             self.assertNotIn("raw read failure", str(raised.exception))
 
     def test_url_contains_only_exact_basic_query_parameters(self) -> None:
-        query = oatd.load_frozen_queries()["OATD-B2"]["query"]
+        query = oatd.load_frozen_queries(MANIFEST_PATH)["OATD-B2"]["query"]
         parsed = urlsplit(oatd.build_search_url(query))
         self.assertEqual((parsed.scheme, parsed.netloc, parsed.path), ("https", "oatd.org", "/oatd/search"))
         self.assertEqual(parse_qs(parsed.query), {"q": [query], "form": ["basic"]})
@@ -297,6 +297,7 @@ class MainFailureMappingTests(unittest.TestCase):
             ):
                 exit_code = oatd.main([
                     "--query-id", "OATD-B2",
+                    "--query-manifest", str(MANIFEST_PATH),
                     "--output-path", str(output_path),
                     "--cdp-url", "http://127.0.0.1:9222",
                 ])

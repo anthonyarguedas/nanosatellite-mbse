@@ -16,8 +16,9 @@ from pathlib import Path
 from typing import Any
 
 TOOLS = Path(__file__).resolve().parent
+SCRIPTS = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts")
 FIXTURE = TOOLS.parent / "fixtures" / "wos-ris-gate-synthetic.json"
-sys.path.insert(0, str(TOOLS))
+sys.path.insert(0, str(SCRIPTS))
 import wos_ris_gate as gate  # noqa: E402
 
 
@@ -331,7 +332,7 @@ class GateEndToEndTests(unittest.TestCase):
 
 class OfflineImplementationTests(unittest.TestCase):
     def test_tool_has_no_browser_or_network_dependency_or_static_route(self) -> None:
-        source = (TOOLS / "wos_ris_gate.py").read_text(encoding="utf-8")
+        source = (SCRIPTS / "wos_ris_gate.py").read_text(encoding="utf-8")
         tree = ast.parse(source)
         imports: set[str] = set()
         for node in ast.walk(tree):

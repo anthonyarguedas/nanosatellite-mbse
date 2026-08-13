@@ -13,8 +13,8 @@ from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
-SCRIPT_PATH = Path(__file__).with_name("iaf_title_abstract_matcher.py")
-SEARCHES_PATH = SCRIPT_PATH.parents[1]
+SCRIPT_PATH = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts/iaf_title_abstract_matcher.py")
+SEARCHES_PATH = Path(__file__).resolve().parents[1]
 DICTIONARY_PATH = SEARCHES_PATH / "search-concept-dictionary.json"
 MATCHER_PATH = SCRIPT_PATH.with_name("concept_matcher.py")
 FIXTURE_PATH = SEARCHES_PATH / "fixtures/iaf-title-abstract-matcher-v1.6.json"

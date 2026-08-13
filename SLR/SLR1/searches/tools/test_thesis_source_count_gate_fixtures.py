@@ -10,11 +10,11 @@ import unittest
 from pathlib import Path
 
 TOOLS = Path(__file__).resolve().parent
+EXTERNAL_SCRIPTS = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts")
 FIXTURES = TOOLS.parent / "fixtures" / "thesis-source-count-gate-v1.6.json"
 
 
-def load_module(name: str, filename: str):
-    path = TOOLS / filename
+def load_module(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:  # pragma: no cover
         raise RuntimeError(f"Could not import {path}")
@@ -24,8 +24,14 @@ def load_module(name: str, filename: str):
     return module
 
 
-oatd = load_module("fixture_oatd_basic_count_gate", "oatd_basic_count_gate.py")
-pqdt = load_module("fixture_search_proquest_pqdt_global", "search_proquest_pqdt_global.py")
+oatd = load_module(
+    "fixture_oatd_basic_count_gate",
+    EXTERNAL_SCRIPTS / "oatd_basic_count_gate.py",
+)
+pqdt = load_module(
+    "fixture_search_proquest_pqdt_global",
+    EXTERNAL_SCRIPTS / "search_proquest_pqdt_global.py",
+)
 
 
 class SharedFixtureTests(unittest.TestCase):

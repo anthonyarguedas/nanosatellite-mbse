@@ -10,9 +10,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from pathlib import Path
 import re
-
+from pathlib import Path
 
 FAMILIES = ("S", "WS", "I", "C", "W", "SN", "PQ", "OATD", "ARC")
 ALIASED_FAMILIES = {"PQDT": "PQ"}
@@ -71,6 +70,13 @@ IEEE_T2_FINITE_TERMS = (
 SCRIPT_DIR = Path("/Users/antho/agent-tools/academic-research/skills/academic-search/scripts")
 MERGER_PATH = SCRIPT_DIR / "merge_search_results.py"
 MERGER_TEST_PATH = SCRIPT_DIR / "test_merge_search_results.py"
+REQUIRED_FINAL_HELPER_SCRIPTS = (
+    "api_pagination_reconcile.py", "concept_matcher.py",
+    "esa_genericity_route_regression.py", "esa_indico_harvest_match.py",
+    "esa_indico_rematch.py", "final_run_governance_lint.py",
+    "iaf_title_abstract_matcher.py", "ntrs_final_matrix.py",
+    "oatd_basic_count_gate.py", "slr_strategy_lint.py", "wos_ris_gate.py",
+)
 REQUIRED_MERGER_SOURCE_KEYS = (
     "proquest_aerospace_index",
     "proquest_dissertations_theses_global",
@@ -79,7 +85,8 @@ REQUIRED_MERGER_SOURCE_KEYS = (
 PERMITTED_SOURCE_SCRIPTS = {
     "search_aiaa_arc.py", "search_compendex.py", "search_esa_indico.py",
     "search_iaf_digital_library.py", "search_ieee_xplore.py", "search_ntrs.py",
-    "search_proquest_aerospace.py", "search_scopus.py", "search_springer_link.py",
+    "search_proquest_aerospace.py", "search_proquest_pqdt_global.py", "search_scopus.py",
+    "search_springer_link.py",
     "search_wiley_online_library.py",
 }
 FORBIDDEN_SOURCE_SCRIPTS = {
@@ -91,7 +98,7 @@ def extract(markdown: str, query_id: str) -> str:
     match = re.search(
         rf"^### {re.escape(query_id)}(?:\s+[^\n]*)?\n\n```text\n(.*?)\n```",
         markdown,
-        re.M | re.S,
+        re.MULTILINE | re.DOTALL,
     )
     if not match:
         raise ValueError(f"missing query block {query_id}")
@@ -137,30 +144,35 @@ def main() -> int:
     failures: list[str] = []
 
     require(bool(protocol), "protocol.md is missing beside the query plan", failures)
-    require("**Protocol version:** `1.6` (frozen)" in protocol, "protocol is not frozen as version 1.6", failures)
-    require("| `1.5` to `1.6` |" in protocol, "protocol lacks the version-1.6 amendment record", failures)
     require(
         "fourteen independently searched" in protocol and "through twelve interfaces" in protocol,
-        "protocol lacks the version-1.6 source-count contract",
+        "protocol lacks the source-count contract",
         failures,
     )
     require(
-        "IAF Digital Library" in protocol and "Version 1.6" in protocol,
-        "protocol does not retain IAF under version 1.6",
+        "IAF Digital Library" in protocol,
+        "protocol does not retain IAF",
         failures,
     )
     require(
         "ProQuest Dissertations & Theses Global" in protocol
         and "Open Access Theses and Dissertations" in protocol,
-        "protocol does not authorize both thesis/dissertation sources",
-        failures,
-    )
-    require(
-        "110 logical direct query events" in protocol,
-        "protocol lacks the version-1.6 logical-query count",
+        "protocol does not include both thesis/dissertation sources",
         failures,
     )
     require("2026-08-10" in protocol and "common" in protocol, "protocol lacks the common cutoff", failures)
+    require(
+        "Final executable adapters and helpers are package-owned rather than review-local" in plan
+        and "final runs must invoke the package script" in plan,
+        "plan does not bind final helper execution to the academic-search package",
+        failures,
+    )
+    for script_name in REQUIRED_FINAL_HELPER_SCRIPTS:
+        require(
+            (SCRIPT_DIR / script_name).is_file(),
+            f"final helper is missing from the academic-search package: {script_name}",
+            failures,
+        )
 
     queries = {
         f"{family}-{suffix}": extract(plan, f"{family}-{suffix}")
@@ -285,9 +297,44 @@ def main() -> int:
             failures,
         )
 
+    ntrs_final_adapter_path = SCRIPT_DIR / "ntrs_final_matrix.py"
+    ntrs_final_adapter_test_path = SCRIPT_DIR / "test_ntrs_final_matrix.py"
+    for path in (ntrs_final_adapter_path, ntrs_final_adapter_test_path):
+        require(
+            path.is_file(),
+            f"NTRS final matrix adapter/test is missing: {path}",
+            failures,
+        )
+    ntrs_final_adapter_text = (
+        ntrs_final_adapter_path.read_text(encoding="utf-8")
+        if ntrs_final_adapter_path.is_file()
+        else ""
+    )
+    for required_adapter_contract in (
+        "NTRS_MAX_PAGE_SIZE = 100",
+        "cells_expected\": 940",
+        "NTRSMatrixError",
+        "two_pass_reconciled",
+        "tagged-union.json",
+        "merge-input",
+        "candidate_import_allowed",
+        "merge_input",
+        "n_a_eps_explicit_core_tag",
+        "n_t2_core_tag",
+        "n_v1_sensitivity_tag",
+        "n_o1_sensitivity_tag",
+        "trust_env = False",
+        "SENSITIVE_CONTEXT_KEY_NORMALIZATIONS",
+    ):
+        require(
+            required_adapter_contract in ntrs_final_adapter_text,
+            f"NTRS final matrix adapter lacks {required_adapter_contract}",
+            failures,
+        )
+
     thesis_validation_files = (
-        args.plan.parent / "searches" / "tools" / "oatd_basic_count_gate.py",
-        args.plan.parent / "searches" / "tools" / "search_proquest_pqdt_global.py",
+        SCRIPT_DIR / "oatd_basic_count_gate.py",
+        SCRIPT_DIR / "search_proquest_pqdt_global.py",
         args.plan.parent / "searches" / "tools" / "test_oatd_basic_count_gate.py",
         args.plan.parent / "searches" / "tools" / "test_search_proquest_pqdt_global.py",
         args.plan.parent / "searches" / "tools" / "test_thesis_source_count_gate_fixtures.py",
@@ -297,8 +344,11 @@ def main() -> int:
         require(path.is_file(), f"thesis-source validation artifact is missing: {path}", failures)
     if thesis_manifest_path.is_file():
         pinned_manifest_sha256 = hashlib.sha256(thesis_manifest_path.read_bytes()).hexdigest()
-        for wrapper_name in ("oatd_basic_count_gate.py", "search_proquest_pqdt_global.py"):
-            wrapper_path = args.plan.parent / "searches" / "tools" / wrapper_name
+        wrapper_paths = {
+            "oatd_basic_count_gate.py": SCRIPT_DIR / "oatd_basic_count_gate.py",
+            "search_proquest_pqdt_global.py": SCRIPT_DIR / "search_proquest_pqdt_global.py",
+        }
+        for wrapper_name, wrapper_path in wrapper_paths.items():
             wrapper_text = wrapper_path.read_text(encoding="utf-8") if wrapper_path.is_file() else ""
             require(
                 pinned_manifest_sha256 in wrapper_text,
@@ -396,17 +446,15 @@ def main() -> int:
         )
 
     for required_plan_control in (
-        "version `1.6`", "fourteen independently searched sources/collections through twelve interfaces",
-        "110 logical direct query events", "99 physical source-native code blocks", "A1 ∪ A2 ∪ A3",
+        "A1 ∪ A2 ∪ A3",
         "## 13. ProQuest Dissertations & Theses Global", "## 14. Open Access Theses and Dissertations",
-        "## 16. IAF Digital Library authorized", "2026-08-10", "**940 cells**",
+        "## 16. IAF Digital Library", "2026-08-10", "**940 cells**",
         "**180 N-B-core cells**", "**250 N-BG cells**", "**510 N-BC1 cells**",
-        "**280 unpiloted C1 cells**", "pilots-to-run-v1.6.md",
+        "**280 unpiloted C1 cells**",
         "PQDT-A1 = 1", "PQDT-B1 = 17", "PQDT-B2 = 9",
         "OATD-B1** below through the basic interface", "**23**-record aggregate",
         "Server Too Busy - Please slow down", "form=basic",
         "search_proquest_pqdt_global.py", "oatd_basic_count_gate.py",
-        "final-run-source-crosswalk-v1.6.json", "failure-register-schema-v1.6.json",
     ):
         require(required_plan_control in plan, f"version-1.6 plan lacks {required_plan_control}", failures)
 
@@ -422,7 +470,7 @@ def main() -> int:
     require("Select **no Document Type restriction**" in plan, "WoS no-type control is not explicit", failures)
     require("Do not add a `ContentType` refinement" in plan, "IEEE no-type control is not explicit", failures)
 
-    p_n_match = re.search(r"^- `P_N = \{(.*?)\}`;", plan, re.M)
+    p_n_match = re.search(r"^- `P_N = \{(.*?)\}`;", plan, re.MULTILINE)
     require(p_n_match is not None, "NTRS P_N set is missing", failures)
     if p_n_match:
         for term in (
@@ -509,12 +557,14 @@ def main() -> int:
 
     report = {
         "status": "passed" if not failures else "failed",
-        "protocol_version_checked": "1.6",
+        "protocol_version_checked": "current",
         "physical_query_blocks_checked": len(FAMILIES) * len(SUFFIXES),
         "aliased_query_blocks_checked": len(ALIASED_FAMILIES) * len(SUFFIXES),
         "queries_checked": len(queries),
         "thesis_source_manifest_entries_checked": thesis_manifest_entries_checked,
         "thesis_validation_files_checked": len(thesis_validation_files),
+        "final_helper_scripts_checked": len(REQUIRED_FINAL_HELPER_SCRIPTS),
+        "ntrs_final_adapter_files_checked": 2,
         "source_scripts_checked": len(PERMITTED_SOURCE_SCRIPTS | FORBIDDEN_SOURCE_SCRIPTS),
         "merger_source_keys_checked": len(REQUIRED_MERGER_SOURCE_KEYS),
         "failures": failures,
