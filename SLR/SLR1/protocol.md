@@ -1,8 +1,7 @@
 # Protocol for a Systematic Review of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Working branch:** `slr1-1.1-restart`
-- **Common evidence cutoff:** 2026-08-10
-- **Review-start rule:** the review may start as soon as `protocol.md` and `query-search-plan.md` have no uncommitted changes. No protocol version, freeze, or separate authorization is required, and no SHA/file-hash verification is used.
+- **Common evidence cutoff:** <replace this with the date when searches were run, once they're run>
 
 ## Review status and restart policy
 
@@ -12,12 +11,10 @@ The earlier searches, screening decisions, corpus, extractions, codebook, synthe
 
 - no previously identified report is automatically included;
 - all records must be found through a search documented in the current query plan or through a citation-chasing route and screened against this protocol;
+- `markdown/` and `pdfs/` were retained only as a source-file cache outside the search evidence base;
 - previous reports may be used only as known-item recall checks when refining the search;
 - every included report must be newly extracted from its full text against a new run-specific codebook; prior extraction may be consulted only during a later discrepancy audit and may not supply new-run evidence;
-- prior counts and classifications must not be carried into the new synthesis; and
-- DOI/title matching may retain a prior corpus ID only as a `legacy_corpus_id`; new-run report-family, report, EPS-thread, reusable-artifact-lineage, tailoring-application, outcome/burden, and V&V-record identifiers must be run-specific.
-
-All dated source-interface, genericity/search, source-addition, completion, IAF, and thesis-source pilots are diagnostics only: they do not create the independent candidate set, and their records, opaque identifiers, or aggregate observations cannot determine evidence membership. Every discovery method must write to a clean final-run artifact set. Later methodological changes are recorded by date in the search or decision log and committed directly to these two current documents; they do not require a new protocol/query-plan version or freeze.
+- prior counts and classifications must not be carried into the new synthesis;\
 
 ## Reporting framework
 
@@ -32,40 +29,6 @@ Official guidance to use at the applicable stage:
 - [PRISMA 2020 statement](https://www.prisma-statement.org/prisma-2020-statement), [checklist](https://www.prisma-statement.org/prisma-2020-checklist), [abstract guidance](https://www.prisma-statement.org/abstracts), and [flow templates](https://www.prisma-statement.org/prisma-2020-flow-diagram).
 
 Registration/contact declarations, contributor and guarantor details, and funding/sponsor and competing-interest declarations are intentionally deferred at this stage. Their absence must be stated accurately; this protocol is not represented as administratively PRISMA-P-complete.
-
-## Review start and change policy
-
-- **Initial scope-decision date:** 2026-08-06
-- **Current-method decisions incorporated through:** 2026-08-11
-- **Start condition:** from the repository root, `git status --porcelain -- SLR/SLR1/protocol.md SLR/SLR1/query-search-plan.md` must print nothing. Once it does, the review may start immediately.
-- **No document-governance gate:** do not assign a protocol or query-plan version, freeze either document, or seek a separate search authorization.
-
-The current documents directly contain the governing choices: bounded genericity and tailoring analysis; fourteen sources/collections through twelve interfaces; direct-source `A3`; the complete NTRS matrix; finite V1/O1 terms; completed graduate theses/dissertations; PQDT Global and OATD; a common evidence cutoff; and fixed visible 25/page Engineering Village transport. Dated pilots remain diagnostic and non-candidate. If methodology changes after work begins, edit and commit these documents, record the date, rationale, affected work, and any needed reruns in the decision/search log, then continue—without creating a new protocol/query-plan version or freeze.
-
-The current choices are:
-
-1. **CubeSat/nanosatellite population.** PocketQube/picosatellite-only, CanSat, and generic `SmallSat`/small-satellite studies are excluded. Mixed studies remain eligible only when the source identifies a CubeSat/nanosatellite-class case and its evidence is separable; searches do not deliberately target excluded platforms.
-2. **Evidence window.** The common first-formal-publication window is 2011-01-01 through 2026-08-10 for every electronic source and citation route, regardless of execution date. Source controls that admit later 2026 records retain their raw totals and apply the same exact-day cutoff. To update it, edit and commit both current documents and completely rerun every source and citation route to one new common cutoff.
-3. **Expanded source coverage.** The operational baseline comprises fourteen independently searched electronic sources/collections through twelve interfaces: Scopus; Web of Science Core Collection; IEEE Xplore; Compendex and Inspec searched simultaneously on Engineering Village; the full Wiley Online Library and Springer Nature Link publisher platforms; the exact Advanced Technologies & Aerospace Index and exact ProQuest Dissertations & Theses Global database in separate ProQuest events; source-wide AIAA Aerospace Research Central; IAF Digital Library restricted to IAC proceedings; the whole Open Access Theses and Dissertations index; the full public ESA Indico event database; and the NASA Technical Reports Server (NTRS). ProQuest is one platform/interface used for two non-simultaneous, database-restricted source events; Engineering Village remains one simultaneous two-database event. Every permitted source-specific adapter in `/Users/antho/agent-tools/academic-research/skills/academic-search/scripts` maps to a planned source; PQDT Global, OATD, and Web of Science use separately documented routes. Each source uses the boundary and method below and in the query plan.
-4. **Open, direction-neutral RQ2 set.** This avoids directional outcome-reporting bias. Beneficial, null, mixed, and adverse outcomes and implementation burdens are extracted when explicitly attributed to a qualifying EPS thread. Reliability/mission assurance, reproducibility/reuse, and integrability/interoperability remain priority domains; all domains and directions use the same attribution and evidence rules.
-5. **Tiered and differentiated V&V records.** A named EPS target, or a system-wide target explicitly linked to EPS, together with a model-to-V&V bridge and reported V&V method/intent/artifact establishes the lowest linked tier. EPS-specific versus system-wide EPS-linked scope and the object of V&V are coded separately. Missing criterion, execution, verdict, or timing remains missing evidence and cannot support a higher tier.
-6. **Broad Stream B.** This is necessary because embedded EPS threads may be absent from metadata. Query partitioning, count pilots, conservative title/abstract retention, and separate unique-yield accounting control workload without imposing an EPS keyword.
-7. **Buruso (2026) as secondary evidence only.** The review is used for positioning, a deferred recall benchmark, and logged citation chasing. It does not supply primary evidence or bypass independent discovery and new screening.
-8. **New extraction for every included report.** Legacy extraction and synthesis files were removed. Retained source Markdown/PDF files may be reused only after independent rediscovery and new screening.
-9. **All model tailoring is in scope.** Eligibility and discovery do not require a lightweight implementation. Extract every reported reuse/tailoring approach and its implementation footprint; discuss lightweight, scalable, comprehensive, or resource-intensive characteristics only where the source or extracted evidence supports them.
-10. **Genericity is bounded and artifact-specific.** The review grades evidence for transferability of an identifiable EPS-linked model artifact only within its declared applicability envelope. A source label such as generic, reference, template, reusable, configurable, modular, scalable, or open is not itself demonstrated genericity. Method/workflow reuse is mapped separately and cannot establish artifact genericity without persistent EPS model content and source-supported lineage.
-11. **Reusable-artifact and tailoring terms expand recall but never gate eligibility or grading.** Source-adapted precise-artifact, conservative central-asset, and model-coupled tailoring partitions are added within Stream B because no-screening pilots found opaque-ID additions beyond existing B1/B2 retrieval. G/C1/T2 words are not mandatory across core searches, and discovery through an expansion is not evidence that a model is reusable or tailored. Every included artifact is assessed from full text under the same profile regardless of discovery route.
-12. **Completed graduate theses and dissertations are eligible primary reports.** A completed master's-level thesis or doctoral dissertation/thesis may enter primary evidence only when an identifiable degree-granting institution or authoritative dissertation service supplies stable provenance, the substantive full report is retrievable, and every ordinary scientific eligibility rule is met. Degree acceptance or examination is recorded but is not assumed to equal journal peer review. Undergraduate/bachelor work, non-degree projects, proposals/prospectuses, metadata or abstract stubs, and incomplete degree works are not eligible reports. A thesis and a derivative article remain distinct reports in one report family when substantively distinct; duplicate repository/PQDT/OATD manifestations of the same thesis are one report with multiple discovery events.
-
-Pre-search anti-anchoring controls for this review are:
-
-- legacy and failed-run search results, screening, corpora, codebook, extractions, scoping review, and manuscript were removed before this review's discovery searches;
-- `markdown/` and `pdfs/` were retained only as a source-file cache outside the search evidence base;
-- retained files cannot supply candidates, eligibility decisions, IDs, or extracted data;
-- matching against retained files is deferred until the successful-source candidate set and explicit failure register for all fourteen planned sources/collections are complete and recorded, and matches serve only as recall and retrieval checks; and
-- old corpus or extraction data may not be reconstructed from Git history during new search or screening.
-
-Any change after review work begins is committed directly to the current protocol and query plan and logged with its date, wording, rationale, affected artifacts/records, and consequences for reruns or synthesis. No protocol/query-plan version number or re-freeze is used.
 
 ## Review objective
 
@@ -129,7 +92,7 @@ Examples may include SysML, Arcadia/Capella, object-oriented systems models, ref
 
 ### Bounded genericity, reusable artifacts, and tailoring
 
-For RQ1-G, **genericity means bounded transferability**: the extent to which the documented core of an identifiable EPS-linked MBSE artifact can be adopted or tailored for stated target contexts within a declared applicability envelope. Genericity is not an intrinsic or context-free property of a paper, diagram, language, tool, repository, workflow, or model merely because it is called generic, reference, standard, template, reusable, configurable, modular, scalable, lightweight, open, or mission-agnostic. The review assesses the support for a claim, not metaphysical or universal “true genericity.”
+For RQ1-G, **genericity means bounded transferability**: the extent to which the documented core of an identifiable EPS-linked MBSE artifact can be adopted or tailored for stated target contexts within a declared applicability envelope. Genericity is not an intrinsic or context-free property of a paper, diagram, language, tool, repository, workflow, or model merely because it is called generic, reference, standard, template, reusable, configurable, modular, scalable, lightweight, open, or mission-agnostic.
 
 A **reusable EPS MBSE artifact** is a source-identifiable structured-model asset or documented package of assets that contains, or is explicitly bound to, a qualifying EPS thread and its modeled relations. It may be a reference/template model, metamodel or profile carrying EPS semantics, model library or pattern, interface contract, parametric-model package, transformation/generator with persistent model content, or a larger reusable spacecraft model with a separately reconstructable EPS portion. Public availability is recorded but is not required. A reusable method, workflow, toolchain, transformation procedure, or guidance document is coded as **method/workflow reuse** unless persistent EPS model content and its lineage are identified; a specific-mission artifact does not become generic merely because its method might be reused.
 
@@ -250,18 +213,16 @@ The operational baseline comprises fourteen independently searched sources/colle
 - Scopus, bibliographic database
 - Web of Science Core Collection on the Clarivate Web of Science platform, bibliographic and citation database
 - IEEE Xplore, bibliographic/full-text database
-- Compendex and Inspec, selected and searched simultaneously on the Engineering Village platform, with database-level provenance retained
+- Compendex and Inspec on the Engineering Village platform, queried separately
 - Wiley Online Library, searched as a general publisher database across the full platform
 - Springer Nature Link, searched across the full publisher platform
 - Advanced Technologies & Aerospace Index on the ProQuest Platform, with only that exact index selected
-- ProQuest Dissertations & Theses Global (PQDT Global) on the ProQuest Platform, with only that exact database selected in a separate event
+- ProQuest Dissertations & Theses Global (PQDT Global) on the ProQuest Platform, with only that exact database selected
 - AIAA Aerospace Research Central (ARC), searched source-wide across its publisher-hosted collection
-- IAF Digital Library, restricted to canonical IAC proceedings from 2011 through 2026 with population harvest and deterministic local classification
-- Open Access Theses and Dissertations (OATD), searched across the whole public ETD index; linked institutional repositories are retrieval locations, not additional discovery sources
+- IAF Digital Library, searched across the full database
+- Open Access Theses and Dissertations (OATD), searched across the whole public ETD index
 - ESA Indico, searched as a general event/contribution database across the full public instance
 - NASA Technical Reports Server (NTRS), searched across the full public technical-report database
-
-Wiley, Springer Nature Link, and AIAA ARC are source-wide publisher-platform searches for this review, not named-venue searches; ARC is not claimed to cover AIAA material outside the content indexed by ARC. The two ProQuest events are never combined: the aerospace event excludes PQDT Global and every parent/sibling/all-database selection, while the PQDT event excludes the aerospace index, PQDT Open, institution-only `Dissertations & Theses @` products, and every parent/sibling/all-database selection. OATD's open-repository scope is a property of that source, not an access restriction on the review; OATD provenance remains distinct from the repository used to retrieve a linked full text. IAF is restricted to canonical `IAC-YYYY` events; GLEX, Spring Meetings, other events, manuscript/full-text routes, and the robots-disallowed API are outside its source boundary. Every Engineering Village event retains Compendex and Inspec as separate discovery instances until common record-level deduplication. ESA Indico and NTRS remain whole-collection searches. INCOSE International Symposium content in Wiley and ESA MBSE workshop content in Indico are prespecified coverage checks, not source boundaries.
 
 PRISMA-S records PQDT Global as a named database on the ProQuest Platform and OATD as an indexed online resource. PRISMA 2020 identification accounting places OATD records in the website/other-methods channel while still treating OATD as a mandatory operational source; it preserves separate totals for all fourteen sources/collections. As an explicit review-specific classification decision, the other thirteen bounded, structured operational collections are reported in the databases/registers column as databases, regardless of browser, API, export, or local-harvest transport; none is treated as a study register, and no source is counted in both columns. Engineering Village additionally preserves its simultaneous combined total and separate Compendex/Inspec counts, and each ProQuest source retains its own selection proof, event, count, export, and provenance. The current machine-readable source mapping and null/zero/failure contracts are kept with the final-run crosswalk, manifest schema, and failure-register schema under `searches/`. They may be validated structurally.
 
