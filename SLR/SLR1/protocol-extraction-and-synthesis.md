@@ -16,13 +16,23 @@ For every controlled code that matters to the synthesis, record:
 
 Keep these statuses separate: `not_reported`, `not_applicable`, `none`, and `uncertain`. Also distinguish what the authors report from what the extractor infers.
 
+### Shared extraction structures
+
+Use shared structures rather than copying the same facts into several records:
+
+- An **evidence reference** stores report ID, page or section, figure or table when relevant, quotation or cautious paraphrase, and extractor confidence.
+- A **setting tuple** stores platform and form factor; mission purpose and domain; orbit and environment; lifecycle use and decision; EPS boundary, architecture, components and interfaces; modes and load profile; abstraction or fidelity; required inputs; language, tool and version; organization, team and process; prerequisites; and exclusions or failure boundaries.
+- An **implementation footprint** stores roles, skills and training; staffing; process and automation; tools, licences and infrastructure; model and data preparation; computing; integration and interoperability; governance and configuration control; effort, time, schedule and cost; maintenance; burdens; and mitigations.
+
+Give each shared object an ID, scope, evidence reference, and confidence. Link it from report, thread, artifact, application, outcome, or V&V records as appropriate. Keep declared, planned, and actually observed values separate even when they use the same structure.
+
 ### Report-level bibliographic and review-management fields
 
 For each report, record:
 
 - the new-run report ID, optional old corpus ID, and extraction-file path;
 - full citation, title, authors, year, venue or institutional report series, publication type, DOI or URL, publisher or issuing organization, source or report ID, and any reported peer or technical review;
-- every discovery event, including run ID, database or source, exact query or citation route, date, source record ID, rank when available, and raw search file;
+- every linked new-run discovery-event ID and source record ID; keep the exact query or citation route, date, rank, and raw-file provenance once in the new search log and manifest;
 - title and abstract screening tier and reason;
 - final full-text decision and exclusion reason, if excluded;
 - Route A or Route B and the supporting evidence;
@@ -55,7 +65,7 @@ Record:
 - mission or platform, form factor or mass when reported, mission name and domain, organization type, and project maturity;
 - lifecycle stage actually demonstrated, kept separate from stages that authors only claim or plan;
 - development setting: academic or student, agency, industry or NewSpace, distributed team, agile or concurrent design, rapid prototyping, resource-constrained mission, or `not_reported`;
-- reported MBSE needs and burdens, including roles, skills, training, staffing, time or effort, licences and infrastructure, model and data preparation, computing, integration, governance, maintenance and configuration, cost, schedule, or `not_reported`;
+- a general implementation-footprint link for reported MBSE needs and burdens, or `not_reported`;
 - the authors' objective, problem, intended decision, and reason for using MBSE;
 - evidence that the work qualifies as MBSE: method or language, tools, system-model artifacts, modeled concerns, explicit relationships, and system boundary;
 - model maturity: conceptual framework, reference or template, prototype, executable, used on a project, physically validated, operational or flight, or `not_reported`. More than one value may apply. Do not assume they form an order unless the report does;
@@ -77,7 +87,7 @@ Create one record for each qualifying EPS thread. Record:
 - level of abstraction or fidelity and any phenomena deliberately left out;
 - purpose and supported decisions: definition or sizing, requirements or traceability, trade study, interface management, executable analysis, V&V, reuse or tailoring, communication, continuity across the lifecycle, or another purpose;
 - reuse or tailoring approach: template, reference model, profile, library, pattern, transformation, reusable workflow, open package, method guidance, mission-agnostic architecture, interface-focused model, mission-specific model with a reusable method, or another approach;
-- tailoring choices and implementation footprint, including artifact scope, retained and omitted content, roles, tools, automation, governance, resources, reasons, and trade-offs;
+- tailoring choices, retained and omitted content, reasons and trade-offs, and links to the applicable implementation-footprint and application records;
 - any author description such as *lightweight*, *scalable*, *comprehensive*, or *resource-intensive*. Do not impose a lightweight threshold or infer one from the mission class;
 - linked artifact-lineage, profile, and tailoring-application IDs;
 - genericity disposition and method- or workflow-only status when relevant; and
@@ -108,20 +118,7 @@ Record the source's claim:
 - whether the claim concerns the artifact, method or workflow, toolchain, language or profile, whole spacecraft, or is unclear; and
 - genericity disposition: `not_an_artifact_or_method_only`, `artifact_no_reuse_indication`, `genericity_or_reuse_claim`, `reported_reuse_without_bounded_specification`, `bounded_reuse_candidate`, or `unclear`.
 
-Record the declared applicability envelope (DAE):
-
-- target platform, mission, or form factor;
-- mission domain, orbit, and environment;
-- lifecycle use, purpose, and decision;
-- EPS boundary, architecture, and interfaces;
-- abstraction and fidelity;
-- required inputs and data;
-- modeling language, tool, and version;
-- organization and process assumptions;
-- prerequisites; and
-- exclusions and failure boundaries.
-
-Use `not_reported` separately for each missing dimension. Record whether the minimum DAE is met.
+Record the declared applicability envelope as a declared setting tuple. Use `not_reported` separately for each missing dimension, preserve the source for every value, and record whether the minimum DAE in Part 1 is met.
 
 Record the reusable design:
 
@@ -155,7 +152,7 @@ Record the evidence assessment:
 
 Finally, record profile limits, model and data availability, dependence between report families and within the lineage, evidence source, extraction confidence, and first- and second-check history.
 
-Do not award a gate because a source is silent, because of a label alone, or because only one mission was observed. Openness, maturity, and reviewer knowledge are also not enough. Combine evidence from reports only after establishing a shared lineage. Keep the report source for every combined field. Never transfer a result to another version or application without evidence.
+Apply the gate rules in Part 1. Combine reports only after establishing a shared lineage, preserve report provenance for every combined field, and never transfer a result to another version or application without evidence.
 
 ### Tailoring-application record
 
@@ -169,20 +166,7 @@ Record identity:
 - target model or configuration ID; and
 - reason for treating reports as the same or different application.
 
-Record the target-setting tuple:
-
-- mission, platform, and form factor;
-- mission purpose and domain;
-- orbit and environment;
-- lifecycle use and decision;
-- EPS architecture, components, and interfaces;
-- modes and load profile;
-- model fidelity;
-- language, tool, and version;
-- organization and team; and
-- other material DAE dimensions.
-
-Classify the setting's relationship to the DAE as `inside`, `boundary case`, `outside`, `unclear`, or `DAE not reported`, and give the reason. State which material dimensions distinguish this application from other credited applications.
+Record one observed target-setting tuple for the application. Classify its relationship to the DAE as `inside`, `boundary case`, `outside`, `unclear`, or `DAE not reported`, and give the reason. State which material dimensions distinguish this application from other credited applications.
 
 Record what happened to the artifact:
 
@@ -192,19 +176,7 @@ Record what happened to the artifact:
 - before-and-after or base-to-derived trace; and
 - reason for the changes or unchanged use.
 
-Record the implementation footprint:
-
-- tailoring inputs and assumptions;
-- process;
-- roles and skills;
-- automation;
-- tools, licences, and infrastructure;
-- governance;
-- effort, time, and cost;
-- maintenance; and
-- other burdens.
-
-Do not assume that parameterization or a small mission means little effort.
+Record an application-scoped implementation footprint, including its tailoring inputs and assumptions. Do not assume that parameterization or a small mission means little effort.
 
 Record the result:
 
@@ -391,36 +363,9 @@ Also record evidence source, confidence, limitations, and report-family or nesti
 
 ### Limitations and open extraction
 
-Record:
+Record author-stated limits, assumptions, and scope boundaries. Use narrow controlled flags for substantive limitations such as prototype or future work, single case, no comparator, no independent validation, assumptions or data-quality limits, tool dependence, interoperability limits, and incomplete lifecycle coverage.
 
-- limits, assumptions, and scope boundaries stated by the authors;
-- evidence gaps found by the extractor, but explain an absence only after completing the related fields; and
-- narrow controlled limitation flags.
-
-The limitation flags include:
-
-- prototype or future work;
-- single case;
-- no comparator;
-- no independent validation;
-- no physical or model-to-test evidence;
-- model or data unavailable;
-- assumptions or data-quality limits;
-- tool dependence;
-- interoperability limits;
-- incomplete lifecycle coverage;
-- unclear EPS linkage;
-- general outcome attribution;
-- missing V&V criterion;
-- confusion between a method and artifact;
-- missing or inferred DAE;
-- reusable core not identified;
-- no explicit variation rule;
-- tailoring claim without a reconstructable application;
-- unclear artifact lineage;
-- duplicate or same-family reuse only;
-- no post-tailoring assurance; and
-- failed or outside-envelope reuse not reported.
+Do not manually duplicate conditions already represented by structured fields. Derive flags such as missing V&V criterion, unclear EPS linkage, missing DAE, unidentified reusable core, unclear lineage, same-family reuse only, or absent post-tailoring assurance during validation. This keeps the flag and its source field consistent.
 
 Use emergent codes for unexpected findings that do not fit the controlled vocabulary. Do not silently add new controlled categories during extraction.
 
@@ -463,37 +408,24 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 
 Use that review for context, terminology, a later recall check, and recorded citation searching. Do not use it as primary evidence.
 
-This review is not an update or replication of Buruso et al. It is limited to EPSs for orbital CubeSats and nanosatellites. It requires a source-located EPS anchor, model anchor, and explicit bridge. It also examines topics that the broader review does not cover in the same way:
+This review is not an update or replication of Buruso et al. It applies this protocol's narrower nanosatellite-EPS population, direct EPS linkage rule, and RQ1–RQ3 evidence structures. Do not treat system-wide MBSE or V&V as EPS evidence or compare the two reviews' counts as evidence of effectiveness.
 
-- material inputs and assumptions;
-- every reported reuse and tailoring approach;
-- bounded genericity of identifiable artifacts and the supporting evidence;
-- implementation footprint;
-- outcomes and burdens directly attributed to EPS work; and
-- direct EPS target–model–V&V chains.
-
-This scope addresses known gaps around model tailoring and scalability, value claims that are often anecdotal, and limited reporting of later integration, test, and V&V. Do not treat system-wide MBSE or V&V as EPS evidence without the direct link required by this protocol. Do not compare the two reviews' counts as evidence of effectiveness.
-
-For a descriptive view of currency and overlap, results may be split into 2011–2023, matching Buruso et al.'s evidence window, and 2024 through 2026-08-10. This split does not change eligibility or imply that reports in either period are independent.
+For a descriptive view of currency and overlap, results may be split into 2011–2023, matching Buruso et al.'s evidence window, and 2024 through the common evidence cutoff. This split does not change eligibility or imply independence.
 
 ### RQ1a
 
-- Map EPS boundaries, model concerns, artifacts, purposes, abstraction levels, inputs and assumptions, provenance, handling of uncertainty and margin, all reuse and tailoring approaches, implementation footprint, required roles, skills and resources, trade-offs, and lifecycle use.
-- Keep reported inputs and implementation needs separate from dependencies inferred by the reviewer and from facts the source does not report.
-- When evidence allows, describe uses that authors call lightweight, scalable, comprehensive, or resource-intensive. Compare those labels with the reported implementation footprint. Do not use *lightweight* as an eligibility rule or required tailoring category.
+- Synthesize the study-context, EPS-thread, input-and-assumption, engineering-output, and implementation-footprint records defined above.
+- Keep reported inputs and implementation needs separate from reviewer inference and missing information.
+- Compare author labels such as *lightweight* or *scalable* with the reported footprint; do not turn them into eligibility or tailoring categories.
 - Compare Route A with Route B without assuming that one route is more mature.
 
 ### RQ1b
 
-- Register identifiable EPS-linked artifact lineages. Report reuse of methods or workflows separately from reuse of artifacts.
-- Map the source's terms and claims, DAE dimensions and missing fields, reusable cores, variation points, tailoring processes, implementation footprints, demonstrated setting tuples, post-tailoring assurance, failures and boundaries, claim agreement, and A/E/C/T/P/I gates.
-- Present `NA`, G0, G1, G2, G3, and G4 separately at the artifact-lineage and profile level.
-- Interpret G1 as a claim or sign of reuse, G2 as specified bounded reuse, G3 as bounded reuse demonstrated in at least two materially different assured settings, and G4 as independently confirmed bounded reuse.
-- Report DAE breadth separately from the evidence tier. Show demonstrated coverage as a subset of the DAE. Do not rank a broad claim above a narrow but better-supported artifact merely because it claims a wider scope.
-- Merge duplicate reports of one tailoring application. Distinguish reuse by the same family, a separate team in the same organization, and an outside or independent team. Use artifacts and applications—not publication counts—as the denominator for transfer evidence.
-- Keep one-setting tailoring, partly met gates, missing assurance, failed or outside-envelope use, burdens, and conflicting evidence in the profile even when they do not support G3 or G4.
-- Use wording such as: “G3 evidence supports bounded reuse of [artifact scope] in [demonstrated settings], within the stated DAE.” Do not say a model is proven, universally generic, truly generic, or generic without context.
-- A post-tailoring check or tailoring burden enters direct RQ3 or RQ2 synthesis only if it separately meets the relevant linkage or attribution rule. A genericity tier does not by itself prove V&V integration or benefit.
+- Synthesize artifact-lineage profiles and tailoring applications under the gate and tier definitions in Part 1; keep method or workflow reuse separate from artifact reuse.
+- Present tiers at artifact-lineage/profile level, with the full gate vector, DAE breadth, demonstrated coverage, claim agreement, and failures or conflicts kept separate.
+- Merge duplicate reports of one application and use artifacts and applications—not publication counts—as transfer denominators. Distinguish same-family, separate-team, and independent use.
+- Describe a tier only within the artifact scope and demonstrated settings. Do not call an artifact proven, universally generic, or generic without context.
+- Include a tailoring check or burden in RQ3 or RQ2 only when it separately meets that question's linkage or attribution rule.
 
 ### RQ2
 
@@ -515,10 +447,8 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 
 ### Cross-cutting safeguards
 
-- Give separate denominators for study or implementation report families, reports, EPS model threads, reusable-artifact lineages and profiles, tailoring applications, input and assumption records, outcome and burden records, and V&V records. PRISMA flow counts stay at record and report level.
-- Treat applications, outcome or burden records, and V&V records as linked to reports and dependent within report families. A count of reports is not a count of independent artifact reuses.
+- Apply the [canonical units, denominator, and dependence rules](protocol.md#units-of-evidence-and-counting).
 - Present Route A and Route B separately before combining them.
-- Identify reports from the same study or implementation family. Do not count them as independent replications.
 - Separate institutional technical reports, master's theses, doctoral theses or dissertations, and other grey literature from peer-reviewed scholarly reports. Show sensitivity views by publication provenance when useful. Do not automatically give a degree work less weight merely because it lacks journal peer review.
 - Use sensitivity views based on quality, linkage and lineage confidence, and genericity gates. Useful subsets may include Route A only, high-confidence records, G3/G4 profiles, and available artifacts. Do not turn the genericity tier into a numerical quality score.
 - Treat cross-tabulations as descriptive co-reporting unless extraction provides a direct link.
@@ -527,16 +457,17 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 
 ## Required new-run artifacts
 
-After the clean-document start condition is met, create or recreate these artifacts with run provenance:
+After the clean-document start condition is met, create these artifacts anew with run provenance. Do not restore an earlier run's log, dictionary, schemas, decisions, or data:
 
 - a dated methods decision log;
 - a study or implementation report-family register;
 - a reusable EPS artifact-lineage register;
 - a tailoring-application table;
 - read-only known-item registers for legacy reports and Buruso recall;
-- an exact PRISMA-S search log;
-- the current source-matching dictionary and code;
-- raw source-specific search results, including proof of PQDT selection and OATD interface and pagination files;
+- a new `search-log.md` meeting PRISMA-S requirements;
+- a new `searches/search-concept-dictionary.json` and matching code generated from Part 2;
+- new source/interface crosswalk, final-run manifest schema, and failure-register schema;
+- raw source-specific search results and source-selection or interface proof;
 - a search manifest with dates, interface details, restrictions, rights, and access status;
 - a merged and deduplicated candidate set and deduplication report;
 - title and abstract screening, full-text screening, and retrieval logs;
@@ -553,24 +484,20 @@ Do not publish licensed exports, copyrighted abstracts, or full texts when right
 
 The final report will call itself a systematic review and will follow the PRISMA 2020 checklist and 12-item abstract guidance. It will:
 
-- name every source actually used, give its search date and the common 2026-08-10 evidence cutoff, and distinguish failed or planned-but-unused sources;
+- name every source actually used, give its search date and the common evidence cutoff, and distinguish failed or planned-but-unused sources;
 - link to the exact final source-native searches and PRISMA-S logs instead of showing only a cleaned example query;
 - describe screening, extraction, second checks, conflict handling, and model assistance exactly as performed;
-- never call model-assisted checking independent human review;
+- never call model-assisted checking independent human review or describe source pilots as formal PRESS review;
 - explain why no pooled effect estimate is planned;
 - label every count or proportion with its denominator: report family, report, thread, artifact lineage or profile, tailoring application, outcome or burden, or V&V record;
 - use the new-review PRISMA flow diagram for databases and other sources, with records and reports—not linked analytic units—in its boxes;
 - cite apparently eligible reports excluded after full-text review and give source-located reasons;
 - present appraisal, reporting-bias, and conclusion-confidence results under the [appraisal framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence); and
-- report access to the current protocol and query plan, every dated methods change or departure, limits of the review process and evidence, and availability of data, code, and materials.
+- report access to all three parts of the current protocol, every dated methods change or departure, limits of the review process and evidence, and availability of data, code, and materials.
 
 Complete the administrative declarations deferred in the [reporting framework](protocol.md#reporting-framework) before publication, or clearly say that they are absent. The clean-document start condition does not imply that these declarations exist.
 
-All dated pilots about source interfaces, bounded-genericity searches, added sources, completion, IAF, and PQDT or OATD are no-screening diagnostics. This model-assisted protocol and search review did not involve a human information specialist. Do not describe model-assisted checks or source pilots as formal PRESS review or independent human peer review.
-
-No pilot result, calibration record, or opaque source ID is a candidate. Every discovery method, including PQDT, OATD, and IAF, must create clean final-run files.
-
-The review may start only when `protocol.md`, `protocol-discovery-and-appraisal.md`, `protocol-extraction-and-synthesis.md`, and `query-search-plan.md` have no uncommitted changes. There is no protocol or query-plan version number, freeze, separate approval, or combined pre-final gate.
+Apply the [clean-document start and change policy](protocol.md#review-status-and-restart-policy).
 
 ---
 

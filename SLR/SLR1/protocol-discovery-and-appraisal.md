@@ -33,288 +33,174 @@ As a rule specific to this review, count the other 14 bounded and structured col
 
 Keep separate totals for all 15 sources or collections. For Engineering Village, also keep the combined total and separate Compendex and Inspec totals. For each of the two ProQuest sources, keep separate proof of the selected database, search event, count, export, and provenance.
 
-The final-run files under `searches/` define the current machine-readable source mapping and the rules for null totals, zero totals, and failures. They also contain the manifest and failure-register schemas. Validate these files structurally.
+Create the new-run source mapping and schemas under `searches/` as specified under [new-run source translations and search artifacts](#new-run-source-translations-and-search-artifacts).
 
 ### Supplementary discovery and citation searching
 
-Also use:
-
-- backward citation searching of the full reference lists of every included report and relevant secondary review;
-- forward citation searching of those reports in both Scopus and Web of Science Core Collection; and
-- Buruso et al. (2026), *Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review* (https://doi.org/10.1002/sys.70051), as a named secondary-review seed and a recall check to be used later.
-
-Do not treat Buruso et al. (2026) as primary evidence. A report cited by that review can enter this review only if a planned source search or a recorded citation search finds it and it then passes normal screening. Report separately:
-
-- overlap with Buruso et al.;
-- rediscovery by each source;
-- reports found through citation searching; and
-- reasons for excluding reports that looked relevant.
+Also use backward citation searching, forward citation searching in both Scopus and Web of Science Core Collection, and Buruso et al. (2026), *Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review* (https://doi.org/10.1002/sys.70051), as a secondary-review seed and later recall check. Follow the detailed procedure and stopping rule under [completing the baseline and citation searches](#completing-the-baseline-and-citation-searches). Buruso et al. is not primary evidence and cannot insert a report directly into this review.
 
 ## Search strategy
 
-### Search streams
+### Search streams and set construction
 
-Use two search streams. This is necessary because an EPS thread inside a wider spacecraft model may not appear in the title or abstract.
+Use two complementary streams because an EPS thread inside a wider spacecraft model may not appear in bibliographic metadata.
 
-- **Stream A — EPS-explicit:** combine the Population, EPS, and MBSE/system-model concepts. This stream finds reports focused on EPS and embedded threads that explicitly mention EPS. In the 11 direct query families, implement Stream A as `A1 ∪ A2 ∪ A3`. A3 restores precise combinations of EPS terms with broad model terms. In IAF, ESA, and NTRS, use the equivalent local tag `P AND E AND M`.
-- **Stream B — embedded-thread recall:** combine the Population concept with precise MBSE or structured-model terms. Also search for precise reusable artifacts, conservative central model assets, and model-linked tailoring terms. Do not require an EPS term. Check the full text for an eligible EPS thread. Report records found only by Stream B separately. The current design uses core B and separate `B-G`, `B-C1`, and, where core B does not already contain it, `B-T2` partitions.
+- **Stream A — EPS-explicit:** Population × EPS × MBSE/system-model concepts.
+- **Stream B — embedded-thread recall:** Population × MBSE/system-model concepts and conservative artifact or tailoring expansions, without requiring an EPS term. Every Stream B candidate must be checked at full text for an eligible EPS thread.
 
-There are 11 direct source/query families. They cover 12 databases or collections because the Engineering Village family searches Compendex and Inspec together. For these families, **core B is the union `B1 ∪ B2`**:
+The 11 direct query families are Scopus, Web of Science Core Collection, IEEE Xplore, Engineering Village, Wiley Online Library, Springer Nature Link, Advanced Technologies & Aerospace Index, PQDT Global, OATD, AIAA ARC, and arXiv. Engineering Village covers two databases, Compendex and Inspec. IAF, ESA, and NTRS may use a broader source harvest followed by deterministic local matching when their interfaces cannot represent the direct queries without loss.
 
-- **B1** combines Population with precise MBSE terms.
-- **B2** combines Population and broader structured-model terms with the required systems-engineering relationship or concern block, called R. The R block controls the otherwise broad model terms.
+Use the following exact cross-source concept blocks. Source-native translations may change syntax, field wrappers, and validated wildcard use, but not the intended terms or Boolean relationships.
 
-PQDT and OATD use the same 11 semantic partitions. Do not add thesis or dissertation terms because those sources already contain only degree works. IAF, ESA, and NTRS use a local core-B rule, `P AND M`, within one route or record. An optional R tag can be kept for exact G or C1 artifact matches. This does not make R optional in bibliographic B2 searches.
+#### Population and EPS blocks
 
-### Search concept blocks
+- **Population (`P`):** `CubeSat`, `CubeSats`, `cube sat`, `nanosat`, `nanosatellite`, `nanosatellites`, `nano-satellite`, `nano-satellites`, `nano satellite`, and `nano satellites`. A source may use `nanosat*` only after a new-run pilot confirms its behavior; otherwise list the finite forms. A named mission can establish population eligibility during screening, but no unspecified mission-name list is part of the direct strategy. Do not use `SmallSat` or “small satellite” as a positive concept.
+- **High-specificity EPS (`E_H`):** `electrical power system`, `electric power system`, `electrical power subsystem`, `electric power subsystem`, `EPS`, `power subsystem`, `electrical architecture`, `power architecture`, `PCDU`, and `PMAD`.
+- **Functional or analytical EPS (`E_F`):** `power budget`, `energy budget`, `energy balance`, `power generation`, `solar array`, `battery`, `batteries`, `energy storage`, `power conditioning`, `power distribution`, `power management`, `power interface`, `power mode`, `power modes`, and `load profile`.
+- **All EPS (`E`):** `E_H ∪ E_F`.
 
-Adapt these blocks to each source's syntax and searchable fields:
+#### MBSE and relationship blocks
 
-1. **Population (`P`):** CubeSat, CubeSats, `cube sat`, nanosat, nanosatellite, nanosatellites, singular and plural forms of hyphenated or spaced `nano satellite`, or a clearly named nanosatellite-class mission. Do not use generic `SmallSat` or “small satellite” as a positive search concept. Those terms are also not enough to prove eligibility.
-2. **EPS (`E`):** electrical or electric power system or subsystem; EPS; power subsystem; electrical or power architecture; power or energy budget; energy balance; battery, batteries, or storage; solar array or power generation; power conditioning, distribution, management, or interface; power mode or modes; load profile; PCDU; or PMAD.
-3. **MBSE/system model (`M`):** singular and plural forms of model-based system or systems engineering; MBSE; SysML or systems modeling language; US and UK forms of system or systems modeling/modelling; reference systems model; object-oriented systems model; digital engineering; Arcadia; Capella; or another structured-system-model term that has been validated.
-4. **Precise reusable artifact (`G`):** exact phrases for a complete generic, reusable, or configurable model or system model; model template; mission-agnostic or mission-independent model or architecture; reference architecture; domain model; metamodel or meta-model; product-line or product-family model; or a variation point linked to a model or architecture. Prefer `P AND G` without the R block. These exact phrases already limit the search. Requiring R can wrongly let the word `architecture` satisfy its own relationship test and can miss records whose metadata omit relationship words.
-5. **Conservative central asset (`C1`):** phrases for a reference model, system-reference model, model library, model pattern, model profile, or SysML profile. Include a domain-specific modeling/modelling-language phrase only when it is linked to an MBSE or system-model anchor. Never search for bare `library`, `pattern`, `profile`, or language terms in this block.
-6. **Model-linked tailoring (`T2`):** use a B2 structured-model block together with explicit terms for reuse, tailoring, customization, configuration, parameterization, instantiation, variability or variation points, specialization, or adaptation. These terms must be linked to a model or architecture. Use source-supported wildcards or list the finite word forms.
+- **High-specificity MBSE (`M_H`):** `model-based systems engineering`, `model based systems engineering`, `model-based system engineering`, `model based system engineering`, `MBSE`, `SysML`, `systems modeling language`, `Arcadia`, and `Capella`.
+- **Broad structured model (`M_B`):** `system model`, `systems model`, `system modeling`, `systems modeling`, `system modelling`, `systems modelling`, `reference model`, `digital engineering`, and `object-oriented systems model`.
+- **All MBSE/system-model terms (`M`):** `M_H ∪ M_B`.
+- **Systems-engineering relationship or concern (`R`):** `requirement`, `requirements`, `function`, `functions`, `behavior`, `behaviors`, `behaviour`, `behaviours`, `architecture`, `architectures`, `interface`, `interfaces`, `traceability`, `parametric`, `parametrics`, `verification`, and `validation`.
 
-Use `B-G`, `B-C1`, and `B-T2` to generate candidates only when two conditions hold: the source's core B does not already contain that partition, and completed no-screening pilots support possible unique results or preserve that possibility in advance. These partitions do not require EPS terms and never replace core B.
+`M_B` requires `R` in direct B2 queries because its terms are otherwise broad. Stream A does not require `R`: the EPS block supplies the additional precision.
 
-For G and C1 records, R may be kept as an optional precision and provenance tag. A term such as *reference architecture* cannot satisfy R through the same overlapping word *architecture*. Search terminology about genericity or tailoring is not an eligibility requirement and is not part of the genericity grade. Finding a record through an expansion does not show that its artifact is reusable.
+#### Artifact and tailoring blocks
 
-Targeted sensitivity searches for RQ2 and RQ3 may add terms for:
+- **Precise reusable model or template (`G_model`):** `generic model`, `generic system model`, `reusable model`, `reusable system model`, `configurable model`, `configurable system model`, `model template`; mission-agnostic, `mission agnostic`, mission-independent, and `mission independent`, each paired with `model` or `architecture`.
+- **Structural reusable artifact (`G_structure`):** `reference architecture`, `domain model`, `metamodel`, `meta-model`; product-line, `product line`, product-family, and `product family`, each paired with `model`; and `variation point` paired with `model` or `architecture`.
+- **Conservative central asset (`C1`):** `reference model`, `system reference model`, `model library`, `model libraries`, `system model library`, `system model libraries`, `model pattern`, `modeling pattern`, `modelling pattern`, `system model pattern`, `systems model pattern`, `model profile`, `system model profile`, `systems model profile`, and `SysML profile`. Also include every pairing of the four phrases `domain-specific modeling language`, `domain specific modeling language`, `domain-specific modelling language`, and `domain specific modelling language` with one of these nine anchors: the four model-based system(s)-engineering spellings in `M_H`, `MBSE`, `SysML`, `systems modeling language`, `system model`, or `systems model`. Bare `library`, `pattern`, `profile`, or `language` never qualifies.
+- **Model-linked tailoring (`T2`):** one of `reuse`, `reuses`, `reused`, `reusable`, `reusing`; `tailor`, `tailors`, `tailored`, `tailoring`; `customize`, `customizes`, `customized`, `customizing`, `customization`; `customise`, `customises`, `customised`, `customising`, `customisation`; `configure`, `configures`, `configured`, `configuring`, `configuration`; `parameterize`, `parameterizes`, `parameterized`, `parameterizing`, `parameterization`; `parameterise`, `parameterises`, `parameterised`, `parameterising`, `parameterisation`; `instantiate`, `instantiates`, `instantiated`, `instantiating`, `instantiation`; `variability`; `variation point`; `specialize`, `specializes`, `specialized`, `specializing`, `specialization`; `specialise`, `specialises`, `specialised`, `specialising`, `specialisation`; or `adapt`, `adapts`, `adapted`, `adapting`, `adaptation`, explicitly paired with `model`, `models`, `architecture`, or `architectures`.
 
-- benefits;
-- null or adverse outcomes;
-- burden, effort, cost, or training;
-- traceability;
-- verification, validation, or V&V of models, systems, or designs;
-- simulation or model checking;
-- requirements-in-the-loop; and
-- MIL, SIL, PIL, HIL, or testing.
+`G_model`, `G_structure`, C1, and T2 are recall concepts, not eligibility tests or evidence of reuse. An `architecture` occurrence inside an artifact phrase cannot also satisfy an independent R tag through the same text span.
 
-Every direct `V1` or `O1` query, and every local IAF, ESA, or NTRS tag, must use the same exact finite term sets defined in the query plan and dictionary. Do not assume that a wildcard or automatic expansion on one source is equivalent. These terms do not have to appear in every query because that would miss RQ1 reports and embedded EPS threads.
+#### Outcome and V&V sensitivity blocks
 
-The old T1 probe was fully contained in core B and added no identifiers. The newer `T2` design replaces the bibliographic B2 relationship gate with a narrow tailoring block tied to a model or architecture. It found additional opaque identifiers in Scopus and IEEE. Therefore, the T1 result is not a reason to omit T2.
+Use the following finite sets consistently in direct sensitivity queries and equivalent local tags:
 
-### Pilots, logs, and final search rules
+- **Probe EPS (`E_probe`):** `electrical power system`, `electric power system`, `power subsystem`, `power budget`, `energy budget`, `PCDU`, `PMAD`, and `EPS`.
+- **Probe model (`M_probe`):** `model-based systems engineering`, `MBSE`, `SysML`, `system model`, `reference model`, and `digital engineering`.
+- **V&V (`V1`):** `verification`, `validation`, `traceability`, `traceable`, `model verification`, `model validation`, `system verification`, `system validation`, `requirements-in-the-loop`, `model checking`, `virtual integration`, `MIL`, `model-in-the-loop`, `SIL`, `software-in-the-loop`, `PIL`, `processor-in-the-loop`, `HIL`, `hardware-in-the-loop`, `test case`, and `test procedure`.
+- **Outcome or burden (`O1`):** `reliability`, `reliable`, `mission assurance`, `reproducibility`, `reproducible`, `reuse`, `reusable`, `integrability`, `integrable`, `interoperability`, `interoperable`, `traceability`, `traceable`, `benefit`, `benefits`, `impact`, `outcome`, `no effect`, `adverse`, `burden`, `effort`, `workload`, `overhead`, `cost`, `schedule`, `training`, `learning curve`, `licensing`, `license`, `licence`, and `adoption`.
 
-Run searches in small, focused pilot sets before the final searches. For each relevant event, the new search log must record:
+V1 and O1 are mandatory sensitivity partitions, but their terms are not eligibility requirements and are not added to every query.
 
-- the exact search string and fields;
-- filters and visible controls;
-- platform and interface;
-- date, time, and time zone;
-- the total shown by the source and the number retrieved;
-- pagination or event-harvest coverage;
-- whether stemming, lemmatization, or term expansion was on, off, or unavailable;
-- refinements;
-- failed or overly broad searches;
-- deduplication;
-- coverage checks; and
-- the reason for stopping.
+#### Direct query schedule
 
-Changing source syntax or improving precision within the concept streams above is search implementation, not an eligibility change. Record each dated refinement and the final query set in the log. Do not assign document version numbers for these refinements.
+Execute these 11 semantic partitions in every direct query family unless a newly documented source limitation makes an exact translation impossible. A source-specific failure does not authorize an unrecorded narrower query.
 
-Run every final query through the source's normal browser interface. Use the source-native strings and visible settings in [`query-search-plan.md`](query-search-plan.md). Save proof of the interface and selected source or database. Match a stable source total to complete pagination and source identifiers. When the source provides an ordered list of records, make two passes and require the same identifiers in the same order.
+| ID | Boolean form | Role |
+|---|---|---|
+| `A1` | `P AND E_H AND M_H` | Named EPS × explicit MBSE |
+| `A2` | `P AND E_F AND (M_H OR M_B)` | EPS functions or analyses × all model terms |
+| `A3` | `P AND E_H AND M_B` | Named EPS × broad structured model |
+| `B1` | `P AND M_H` | Embedded-thread baseline |
+| `B2` | `P AND M_B AND R` | Controlled broad-model expansion |
+| `BG1` | `P AND G_model` | Precise reusable model or template |
+| `BG2` | `P AND G_structure` | Structural reusable artifact |
+| `BC1` | `P AND C1` | Conservative central asset |
+| `BT2` | `P AND M_B AND T2` | Model-linked tailoring |
+| `V1` | `P AND E_probe AND M_probe AND V1` | V&V sensitivity query |
+| `O1` | `P AND E_probe AND M_probe AND O1` | Outcome and burden sensitivity query |
 
-Treat any of the following as a failed event: a rewritten query, a stale or short page, a changed total, duplicate or missing identifiers, an export mismatch, or a timeout. Give a failed event a total of `null`, not zero and not a partial count. Never import part of a failed result set.
+Therefore:
 
-Keep the same record as a separate discovery event when more than one source finds it. Deduplicate only after every successful source event has been fully retrieved and normalized.
+- `Stream A = A1 ∪ A2 ∪ A3`;
+- `core Stream B = B1 ∪ B2`; and
+- `expanded Stream B = BG1 ∪ BG2 ∪ BC1 ∪ BT2`.
 
-### Required controls for individual sources
+Retain and screen every record returned by any planned partition, including V1 and O1, while preserving each discovery event. Report intersections and records unique to each stream and expansion after within-source and cross-source deduplication.
 
-#### Engineering Village: Compendex and Inspec
+For a local-harvest source, the minimum equivalent candidate logic is `P AND M` for core B, `P AND E AND M` for the Stream A tag, and separate `P AND G_model`, `P AND G_structure`, and `P AND C1` expansions. Apply T2, V1, O1, and independent R as separate tags. Terms may combine only within the source fields or document route prospectively defined for that local method. Local matching generates candidates; it does not establish scientific eligibility.
 
-- Run every `C-*` query once as a paired Compendex-and-Inspec event. Clear All and Knovel.
-- Use `KY` concept fields.
-- Set Published to 2011–Latest and also use the literal year and English clauses.
-- Turn autostemming off. Sort by Relevance.
-- Use a fixed visible page size of 25.
-- Do not use a discovery document-type filter.
-- Turn source-side duplicate removal off.
+### New-run source translations and search artifacts
 
-The page size controls only transport through the results; it does not change what the search means. Save proof of the exact controls and query. Require a stable total and complete pagination. Every page except the last must show exactly 25 rows, and the final page must match the expected remainder.
+No source-specific query, adapter assumption, search log, concept dictionary, source crosswalk, manifest schema, or failure schema from an earlier attempt governs this run. Before the first related pilot, create the following anew from this protocol and give each artifact new-run provenance:
 
-Make two identical, ordered, value-blind passes that record `(database label, source handle)` for every row. Reconcile the complete native RIS export with the complete paired ledger before normalization and merging.
+- `search-log.md`;
+- `searches/search-concept-dictionary.json`;
+- the source/interface/PRISMA crosswalk;
+- the final-run manifest schema; and
+- the failure-register schema.
 
-Keep:
+The protocol's concept blocks and Boolean schedule are normative. The new dictionary must reproduce them without adding or dropping a concept. Source-specific translations and controls must be regenerated and validated against the current interfaces rather than restored from Git history.
 
-- the combined total;
-- separate Compendex and Inspec totals;
-- the database label for each row;
-- the overall rank; and
-- both database instances through later deduplication.
+For each source or local method, the new log must record before final execution:
 
-A Compendex-only or Inspec-only troubleshooting search cannot replace the paired final event. Do not accept or import any failed or partial prefix.
+- source, database or collection, platform, and interface;
+- query or event IDs and the exact source-native translation of every planned partition;
+- fields, filters, limits, date and language handling, and visible controls;
+- stemming, lemmatization, automatic expansion, and wildcard behavior;
+- source boundaries and selected databases;
+- pagination, result ordering, stable identifiers, export or capture method, and source limits;
+- the relationship between source-native queries and the cross-source semantic blocks;
+- pilot refinements, failures, and the accepted final implementation; and
+- the files and schemas that will preserve the final event.
 
-#### Wiley Online Library
+A syntax or transport change that preserves the semantic blocks is an implementation refinement and belongs in the search log. A change to a concept, Boolean relationship, planned source, evidence window, or eligibility rule is a protocol change and must be committed before the affected final search is run.
 
-- Search the full platform with the documented Anywhere/`AllField` expressions.
-- Use the 20-record Articles & Chapters result pages.
-- Run and log the separate Collections coverage route.
-- Do not apply a venue, content-type, access, or language discovery filter that the interface does not support.
+### Pilots and final search events
 
-Keep the source total and apply the exact-day cutoff. Save the ordered DOI ledger and page-level native RIS files with abstracts. Preserve provenance when merging the normalized files.
+Run small, focused, no-screening pilots to validate each current interface and translation. Pilot records, identifiers, totals, and files are diagnostic only and can never become candidates or final discovery events. Keep pilot storage separate from clean final-run storage.
 
-#### Springer Nature Link
+For every pilot and final event, record:
 
-- Search the full Link platform with unrestricted Keywords.
-- Select English.
-- Set custom dates from 2011 through 2026, then apply the common 2026-08-10 cutoff.
-- Sort by Relevance and use 20 records per page.
-- Do not filter by content type, brand, discipline, venue, or access.
+- exact query or matching operation and fields;
+- controls and restrictions;
+- platform, interface, date, time, and time zone;
+- source-reported and retrieved totals;
+- pagination or harvest coverage;
+- refinements and failures;
+- deduplication and coverage checks; and
+- disposition and reason for stopping.
 
-Twice reconcile the full ordered ledger of DOIs or canonical URLs. If an authorized account is available and the result is within the source's 1,000-record limit, use and save the normal native CSV export. Otherwise, retrieve all normal result pages. If a final result would exceed a source limit, divide it in advance into non-overlapping date ranges.
+Use the source's normal authorized interface or a prospectively validated source-native route. Save proof of the selected source and controls. Retrieve every record in a successful result set. Where the source exposes a stable order, require two complete passes with the same identifiers in the same order. Otherwise define and validate an equivalent completeness check before final execution.
 
-#### Advanced Technologies & Aerospace Index on ProQuest
+A rewritten query, stale or short page, changed or unreconciled total, duplicate or missing identifier, hidden cap, export mismatch, parse failure, or incomplete harvest makes the event a failure. Record its total as `null`, never zero or a partial count, and do not import any prefix. An explicit and reproducible source zero is valid. Access challenges must be handled through the normal interface without bypassing them; unresolved access is a recorded source failure.
 
-- Select only the exact **Advanced Technologies & Aerospace Index**.
-- Use the documented `NOFT` expressions with year and English clauses.
-- Sort by Relevance and use 20 records per page.
-- Record the final state of spelling and word-form expansion.
-- Do not use a full-text, peer-review, source-type, or document-type limit.
-- Turn source duplicate exclusion off.
+Keep duplicate discovery events when the same record is found by different sources or partitions. Deduplicate only after every successful event has been completely retrieved and normalized.
 
-Save proof of the selected database and complete ledgers of page, rank, and source ID. Test a normal native RIS export first and then use batches where available. Keep source provenance after normalization. Never replace this index with its broader parent collection or a sibling database.
+### Known items and common limits
 
-#### ProQuest Dissertations & Theses Global
+Reports known before the search may be listed in a read-only known-item register. A missed item may guide prospective query refinement, but it can enter the review only through a recorded final search or citation-search event and normal screening. Report known-item recall and unique inclusions by stream and source.
 
-Use a separate ProQuest event from the aerospace index.
+The evidence window begins on 2011-01-01 and ends on the common evidence cutoff stated in [Part 1](protocol.md). Set that exact cutoff before the first final search. Use it unchanged for every source and citation route, even when execution occurs later. When an interface cannot apply the exact window, preserve its unaltered total, apply the window locally, and report removed and unresolved records.
 
-- Select only the exact **PQDT Global** database.
-- Run all 11 `PQDT-*` translations.
-- Use the same `NOFT`, year, English, no-type-limit, no-access-limit, source-deduplication-off, and Relevance rules.
+The full report must be in English. Apply a native English limit only after the new-run source validation shows that it is reliable; otherwise determine language during screening. Do not apply a publication-type, access, peer-review, venue, or content-type discovery limit unless a source boundary inherently supplies it or a newly logged source limitation requires it. Source scope does not by itself prove final publication type or report language.
 
-Do not copy page-size, result-limit, database-selection, or export assumptions from the aerospace adapter. First run a PQDT-specific live check. Save proof of the exact selected database before every query.
+### Local-harvest methods
 
-Reconcile all ranks and source IDs in two passes. Test native RIS first, then export safe batches. Preserve degree and source metadata and a stable record URL that does not depend on the session.
+Regenerate the IAF, ESA, and NTRS methods from the current interfaces. A local method may use a complete population or source harvest followed by deterministic matching when direct Boolean translation would lose records. Before final execution, its new-run specification must define:
 
-If a challenge or login page appears, wait, focus the normal browser page, and retry as specified in the query plan. If access rights remain unresolved, database selection is unclear, or a result cap cannot be verified, mark the source as failed with total `null`.
+- the source universe and how completeness is established;
+- metadata, text, or attachment fields included in each matching route;
+- normalization, phrase, wildcard, acronym-boundary, and field-combination rules;
+- exact implementation of P, E, M, `G_model`, `G_structure`, C1, R, T2, V1, and O1;
+- candidate partitions, tags, invariants, and overlap accounting; and
+- treatment of inaccessible, missing, or unparseable material.
 
-#### Open Access Theses and Dissertations
-
-- Search the complete native OATD index.
-- Run all 11 finite `OATD-*` semantic translations through the validated basic `q` syntax.
-- Recheck at execution that the defaults are Relevance and 30 records per page.
-- Do not apply a native date, language, institution, degree, Creative Commons, or extra access limit.
-- Apply the date range from 2011-01-01 through 2026-08-10 and the English rule locally.
-
-Year or language controls in a composer may replace local handling only after a separately recorded test shows equivalent result sets and adequate metadata quality.
-
-Save the exact URL and query echo, source total, sort order, page size, and full stable record-ID or canonical-URL ledger. Make two ordered passes when the interface exposes an order. Keep the linked repository as provenance.
-
-If a challenge, busy page, or access message appears, follow the wait, focus, and retry rule. A hidden result cap, incomplete pages, missing stable identity, or unresolved interface or rights problem makes the total `null`. A repository linked by OATD is a route for obtaining the report; it cannot silently become a new discovery source.
-
-#### AIAA Aerospace Research Central
-
-- Search all content across the source with Anywhere/`AllField` and `access=on`.
-- Use January 2011 through August 2026, then apply the common 2026-08-10 cutoff.
-- Sort by Relevance and use fixed pages of 20 records.
-- Do not apply a language, publication-type, venue, topic, or open-access discovery filter.
-
-Keep the month-based source total. Make two complete DOI pagination passes. For each visible record, use Tools → Download citation to save its RIS exactly as received. Reconcile every RIS record to its DOI.
-
-If a challenge appears, follow the wait, focus, and retry rule. If a row has no DOI, or the interface has changed, stop the run and set the total to `null` until a documented source-native fallback is available. Do not discard the row or replace ARC with another index.
-
-#### arXiv
-
-Search the full repository through Advanced Search. Use All fields and every direct query partition. Do not limit by subject category.
-
-Save complete pagination by canonical arXiv ID, available abstracts, and submission and version details. During screening, apply the English rule, eligible publication-type rule, and common first-formal-publication-date rule. Do not treat an arXiv submission date as a formal publication date.
-
-#### IAF Digital Library
-
-Run the complete Population query across the whole Digital Library. Do not restrict by event code, conference series, or venue. Retrieve the complete public result set and title and abstract metadata from each landing page. Reconcile the results twice.
-
-Apply deterministic local classification for P, M, G, C1, E, R, T2, V1, and O1. Keep event metadata only as record provenance, not as the boundary of the search.
-
-Use only public, browser-visible result and landing pages. Do not use manuscript, full-text, or authenticated routes. Keep leads that have no abstract. Apply the common 2026-08-10 first-formal-publication cutoff during screening.
-
-### Known items, limits, and date handling
-
-Reports known before the search may be listed in a read-only known-item register. A missed item may guide query refinement. It can enter the review only when a recorded search or citation search finds it and it passes new screening. Report known-item recall and the number of unique inclusions from each stream and source.
-
-Do not use a publication-type or content-type discovery filter in a query-based source unless the final log records a source-required change before the final run. PQDT and OATD are already limited by their source scope to degree works. Confirm completed degree or report type during screening.
-
-Apply an English filter during searching in:
-
-- Scopus;
-- Web of Science Core Collection;
-- IEEE Xplore;
-- paired Engineering Village;
-- Springer Nature Link;
-- Advanced Technologies & Aerospace Index; and
-- PQDT Global,
-
-but only where the planned interface provides a reliable control. Check language during screening for Wiley, OATD, AIAA ARC, IAF, arXiv, ESA, and NTRS because no reliable discovery control was validated there.
-
-Use the same evidence cutoff, 2026-08-10, for every source and citation route. Some source controls admit later records. These include Scopus, IEEE, paired Engineering Village, Wiley, Springer, both ProQuest events, AIAA ARC, and IAF. Keep each source's original total unchanged, then apply and log the first-formal-publication-date cutoff. Record how many records were removed and how many remained unresolved. OATD has no native date limit, so apply the full date window locally and keep the same exact-day accounting.
-
-### ESA Indico and NTRS local processing
-
-For **ESA Indico**, first list all event and contribution material through the common cutoff. Do this before deciding which records are candidates. Then take the union of:
-
-- deterministic core `P × M` matches; and
-- complete, relationship-free `P × G/C1` artifact matches.
-
-Apply these rules separately to joined metadata and to each attachment whose text can be extracted. Keep R, T2, V1, and O1 as separate tags. Material that cannot be accessed or parsed is a coverage failure. Do not combine one required term from metadata with another from an attachment.
-
-For **NTRS**, the final run completed on 2026-08-13 and covered 940 separate cells:
-
-- 10 Population terms × 18 core model terms;
-- the same 10 Population terms × 25 exact G terms; and
-- the same 10 Population terms × 51 exact C1 atoms.
-
-The C1 set includes every combination of four language spellings and nine model anchors. After deduplicating the union of core B, B-G, and B-C1, the run applied the full deterministic E and T dictionaries and the exact finite V1 and O1 sets.
-
-Across cells, 40 source records reduced to a six-record union:
-
-- core = 6;
-- G = 1;
-- C1 = 0;
-- core ∩ G = 1;
-- core-only = 5; and
-- expansion-only = 0.
-
-The local tags were:
-
-- full-E core = 1;
-- expansion-E = 0;
-- T2 = 0;
-- V1 = 3; and
-- O1 = 5.
-
-Stream A is the E-explicit subset of NTRS core B. It is already contained in that core, so `A-only = 0`. The protected final artifacts and full execution details are in [`query-search-plan.md`](query-search-plan.md) and [`search-log.md`](search-log.md). When ESA is run, use the same local-tag reporting rules.
+Do not combine required terms across records or across independently defined routes. A failed retrieval or parse is a coverage failure, not a zero. No result, matrix, dictionary, or local classification from an earlier attempt is part of this run.
 
 ### Completing the baseline and citation searches
 
-The independent baseline is complete only after all 15 operational sources or collections have either:
+The independent baseline is complete only after all 15 planned sources or collections have either a complete, reconciled final run or a recorded final source or interface failure. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources. Keep every failure and reason in the new manifest and PRISMA counts.
 
-- a complete and reconciled final run; or
-- a clearly recorded final source or interface failure.
+Only after that baseline and failure register are complete, use Buruso et al. (2026) and the retained-file cache for recall audits. A missed report may trigger a prospective concept-level refinement or enter through a recorded citation route; never add it directly.
 
-Merge results only from complete successful sources. For each successful paired Engineering Village event, keep the separate Compendex and Inspec discovery instances. Keep every failed-source status and reason in the manifest and PRISMA-S/PRISMA counts. Never import the partial beginning of a failed result set.
+Start backward and forward citation searching from every included full-text report and relevant secondary review:
 
-Use Buruso et al. (2026) and the retained-file cache for recall audits only after the successful-source baseline and the failed-source register are complete. A missed report cited by Buruso et al. may trigger a recorded concept-level probe or enter through a recorded citation-search route. Never add it directly.
+- inspect each seed's complete reference list;
+- search forward citations in both Scopus and Web of Science Core Collection;
+- do not waive one forward source because the other returns zero or lacks the seed;
+- add each newly included report as a seed in the next numbered cycle; and
+- stop only after one complete cycle of backward searching and both forward searches finds no new eligible report.
 
-Start backward and forward citation searching from every included full-text report and every relevant secondary review:
+For every citation event, record the seed, platform, direction, exact route, cycle, source and retrieved totals, candidates, duplicates, decisions, failures, and stopping result. Use `discovery_route=citation_chasing`; citation provenance never bypasses screening.
 
-- For backward searching, inspect the complete reference list.
-- For forward searching, search both Scopus and Web of Science Core Collection.
-- A zero result or indexing failure in one forward-citation source does not remove the need to search the other.
-- If a newly found report is eligible, include it as a seed in the next numbered cycle.
-- Stop only when one complete cycle of backward searching and both forward searches finds no new eligible report.
-
-For every citation-search event, record the seed, platform, direction, exact route, cycle, source total, retrieved total, candidates, duplicates, decisions, failures, and stopping result. Give these records `discovery_route=citation_chasing`, separate from their bibliographic source. They must still pass normal eligibility screening.
-
-Stop searching only when every planned version of both streams has either completed at every planned source or failed explicitly without a partial import. This includes:
-
-- all direct-source A1, A2, and A3 queries;
-- every core, B-G, B-C1, and applicable B-T2 partition;
-- every required local V1 and O1 tag; and
-- the full-database IAF route.
-
-Also require every source-specific coverage check and planned concept cluster to complete or fail explicitly. Test relevant report families and artifact lineages found during the new run. Complete citation searching. Additional searches should by then produce mostly duplicates, not merely have become inconvenient or narrow. Report the execution date for every source and strategy. The evidence window always ends on 2026-08-10.
+Stop electronic searching only when A1, A2, A3, B1, B2, BG1, BG2, BC1, BT2, V1, and O1 have completed or failed explicitly for every direct family, and every prospectively specified local equivalent has completed or failed without a partial import. Also complete all source coverage checks and citation cycles. Record the execution date of every strategy. Additional searches should by then yield mainly duplicates rather than being stopped merely because they are inconvenient.
 
 ## Data management and audit trail
 
@@ -340,25 +226,21 @@ Use Git history as the audit trail for text, code, schemas, and derived non-sens
 
 | Criterion | Plain-English rule | RQ(s) |
 |---|---|---|
-| Publication date | Include a report whose first formal publication or issue date is from 2011-01-01 through 2026-08-10. Treat online-first and issue versions as one work. For a degree work, use the earliest date that can be verified as formal issue or publication of the completed thesis or dissertation, and keep the source's date label. Record defence, award, approval, repository deposit, public release, embargo end, and indexing dates separately. Do not silently use one of them as the publication date. | 1–3 |
+| Publication date | Include a report whose first formal publication or issue date is from 2011-01-01 through the common evidence cutoff in Part 1. Treat online-first and issue versions as one work. For a degree work, use the earliest date that can be verified as formal issue or publication of the completed thesis or dissertation, and keep the source's date label. Record defence, award, approval, repository deposit, public release, embargo end, and indexing dates separately. Do not silently substitute one of them for the publication date. | 1–3 |
 | Language | The full report must be in English. English metadata does not prove that the report itself is in English. If the full text cannot be obtained, use `not_retrieved` instead of making a language assumption. | 1–3 |
 | Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; research chapter in an edited scholarly book; institutional technical report; completed master's thesis; or completed doctoral thesis or dissertation. A degree work needs stable institutional or authoritative dissertation-service provenance and substantial methods and results. Empirical comparisons and experience reports may qualify. Record degree acceptance or examination separately from peer or technical review; do not infer one from the other. | 1–3 |
 | Population | The work must concern an actual or planned orbital CubeSat or nanosatellite-class mission, or a model tailored to that class. A generic SmallSat label is not enough. A mixed-platform report needs evidence that can be separated for CubeSats or nanosatellites. | 1–3 |
 | MBSE threshold | The work must meet the [structured-system-model definition](protocol.md#mbse-qualification). | 1–3 |
 | EPS threshold | At full text, the work must meet Route A or Route B. | 1–3 |
-| RQ1a contribution | Extract the representation, purpose, inputs and assumptions, abstraction, implementation needs, and reuse or tailoring practices for every eligible EPS thread. Use `not_reported` for missing fields. | 1a |
-| RQ1b contribution | Give each eligible EPS thread an RQ1b disposition. For identifiable EPS-linked artifacts, create lineage profiles and tailoring applications where relevant. | 1b |
-| RQ2 contribution | Include in direct RQ2 synthesis only atomic outcome or implementation-burden records that the source explicitly links to a qualifying EPS thread. Code direction, mechanism, and evidence completeness separately. | 2 |
-| RQ3 contribution | Include in direct RQ3 synthesis only `eps_specific` or `system_wide_eps_linked` records that have the required target, explicit bridge, and reported V&V method, intent, or artifact. Report scope, object, criterion completeness, and execution separately. | 3 |
 | Mixed system scope | Include only if an EPS thread can be extracted separately. Describe other subsystems only as EPS dependencies or interfaces. | 1–3 |
 | Secondary studies | Exclude secondary studies, including Buruso et al. (2026), from primary evidence. Keep them separately for background, terminology, later recall checks, and citation searching. | 1–3 |
 | Non-MBSE EPS studies | Exclude stand-alone component, circuit, control, optimization, sizing, simulation, or hardware-performance studies unless they have an explicit link to a structured system model. | 1–3 |
 | Generic whole-spacecraft MBSE | Exclude a report without a qualifying EPS thread, even if it mentions an EPS or power budget. | 1–3 |
 | Other-subsystem studies | Exclude unless they contain a qualifying EPS thread. A subsystem's power consumption alone is not enough. | 1–3 |
-| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; incomplete degree work; undergraduate, bachelor's, or non-degree projects; presentation- or slide-only records; recordings; editorials; tutorials; advertisements; patents; and non-scholarly web material. A record from PQDT, OATD, ESA Indico, or NTRS may be kept as a lead to a different eligible full report, but it cannot supply primary evidence itself. | 1–3 |
+| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; incomplete degree work; undergraduate, bachelor's, or non-degree projects; presentation- or slide-only records; recordings; editorials; tutorials; advertisements; patents; preprints without an eligible formal report; and non-scholarly web material. A record from arXiv, PQDT, OATD, ESA Indico, or NTRS may be kept as a lead to a different eligible full report, but it cannot supply primary evidence itself. | 1–3 |
 | Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. | 1–3 |
 
-Do not make any of the following a report-level inclusion test: an outcome, V&V, reuse, a genericity claim, or demonstrated tailoring. A Route A or Route B report can answer only RQ1a and still be included. Assign genericity dispositions, profiles, and tiers only after the report passes scientific eligibility. They cannot make an ineligible report eligible.
+Do not make an outcome, V&V activity, reuse, genericity claim, or demonstrated tailoring a report-level inclusion test. Every eligible thread contributes to RQ1a and receives an RQ1b disposition; create direct RQ2 and RQ3 records only when the relevant definitions are met. These later contribution codes cannot make an ineligible report eligible.
 
 For retrieval, follow the run's PDF workflow:
 
@@ -405,7 +287,7 @@ When using `exclude_wrong_publication_type`, also record one subtype:
 - `abstract_or_metadata_stub`; or
 - `other`, with an explanation.
 
-If completion status is unresolved, hold the record as `publication_type_unresolved` while looking for source-locatable clarification. If a 2026 record gives only a year, or thesis dates conflict, hold it as `date_unresolved`. Do not silently turn either temporary status into an exclusion.
+If completion status is unresolved, hold the record as `publication_type_unresolved` while looking for source-locatable clarification. If a record in the cutoff year gives only a year, or thesis dates conflict, hold it as `date_unresolved`. Do not silently turn either temporary status into an exclusion.
 
 If a plausible completed report is unavailable because of access rights, an embargo, or a broken repository link, use `not_retrieved`. Do not call it the wrong publication type because it is unavailable.
 
@@ -413,43 +295,9 @@ For every Route B inclusion, record the EPS anchor, model anchor, explicit bridg
 
 Keep secondary reviews and general MBSE background sources outside the analytic denominator.
 
-## Units of evidence and identifiers
+## Units and identifiers
 
-Use seven linked units of analysis. Report families and artifact lineages can cross reports and implementations, so these units do not form a simple nested hierarchy.
-
-1. **Study/implementation report family:** one underlying investigation, evaluation, mission or design implementation, reference-model release, or substantially shared model or toolchain use that appears in one or more reports. Require documented overlap. A shared topic, organization, or tool is not enough. Do not move evidence silently between family members.
-2. **Report:** one distinct publication, institutional technical report, or completed thesis or dissertation. Merge online-first and issue versions, and duplicate PQDT, OATD, or repository copies of the same degree work, as versions of one report. Keep a thesis and a substantially different article or technical report as separate reports, but link them to one family when overlap is documented.
-3. **EPS model thread:** one qualifying EPS-primary or embedded chain within a report. One report may contain several threads.
-4. **Reusable EPS artifact lineage and genericity profile:** one identifiable base artifact and its source-supported versions or derived instances, linked to every relevant report, family, and EPS thread. Start separate lineages when the retained core or derivation identity differs materially or is uncertain. Make a separate profile for a materially different version or scope when one combined profile would hide changes in claims or gate evidence.
-5. **Tailoring application:** one application of an artifact lineage to a target setting, including a justified reuse-without-change case. Merge repeated reports of the same underlying application for context and assurance counts, but keep all report provenance.
-6. **Outcome or implementation-burden record:** one atomic outcome direction or burden linked, or possibly linked, to a thread. If one statement contains several outcomes, directions, or burdens, create separate records that may point to the same quotation.
-7. **V&V record:** one target–method–scenario activity or artifact linked, or possibly linked, to a thread. Use linked atomic records for multiple targets, methods, or scenarios instead of one combined record.
-
-For every report-family link, record:
-
-- family ID;
-- report-to-family relationship type;
-- reason for membership;
-- evidence location; and
-- confidence in the overlap.
-
-A report may belong to more than one family if it genuinely covers separate implementations or evaluations. Do not count reports from one family as independent replications.
-
-An artifact lineage may span several implementation families. This alone does not prove independent reuse; the I gate still needs source support. In the other direction, a shared organization or artifact name does not by itself justify merging lineages.
-
-Every artifact-level field that combines reports must keep report provenance. Do not use a linking report to assign an unreported fact or result to another report, artifact version, or application.
-
-Families and lineages describe dependence and identity. They are not PRISMA flow units. Keep PRISMA identification and selection counts at the record and report level.
-
-New-run IDs must show their linked units. Examples are:
-
-- `family_id`;
-- `artifact_lineage_id:genericity_profile_id`;
-- `artifact_lineage_id:tailoring_application_id`;
-- `report_id:thread_id:outcome_burden_id`; and
-- `report_id:thread_id:vnv_id`.
-
-Use a normalized DOI as the preferred identity key for reports across runs. Add NTRS or report numbers and source IDs where available. Confirm title–author–year matches manually. To identify an artifact, require the lineage evidence defined under [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring). Old IDs and old discovery paths are provenance only.
+Use the canonical [units, counting rules, and ID structure](protocol.md#units-of-evidence-and-counting). During discovery and screening, preserve record-to-report identity, all discovery events, report-family evidence, and artifact-lineage evidence without moving facts between linked units. PRISMA flow counts remain at record and report level.
 
 ## Quality checklist
 
@@ -477,17 +325,7 @@ Do not include the A/E/C/T/P/I genericity profile or its `NA` and `G0`–`G4` ti
 
 ### RQ1b genericity-evidence audit, when applicable
 
-Apply the [A/E/C/T/P/I gates and tier rules](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring). Do not give this audit a numerical score. Record a source location and status for every gate. Also check that:
-
-- the claim is about an EPS-linked model artifact, not only a method, tool, workflow, or general whole-spacecraft idea;
-- the artifact or version lineage and every credited tailoring application can be identified without moving evidence across uncertain versions or duplicate reports;
-- the DAE is kept separate from demonstrated coverage and from reviewer guesses about applicability;
-- the source reports the retained core, variation points, actual changes, work required, and any reason for using the artifact unchanged;
-- every setting credited to G3 or G4 has a criterion relevant after tailoring, a check that was run, and a result relevant to intended use;
-- G4 means that an independent adopter tailored or adopted and assured the artifact and that an independent-adopter or evaluator source confirms it. An originator's statement, independent review, publication, different author list, or repeated evaluation of the originator's own instance is not enough; and
-- failed, mixed, outside-envelope, or conflicting applications remain in the claim-agreement results.
-
-A genericity tier measures how complete and independent the evidence is for reuse within stated limits. It does not say that an artifact is high quality, useful, widely applicable, or better than another artifact.
+Apply the [A/E/C/T/P/I gates and tier rules](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring) without a numerical score. Record a source location, status, reason, and confidence for every gate. Audit artifact and version identity, application identity, the separation of the declared envelope from demonstrated coverage, post-tailoring assurance, adopter independence, and failed or conflicting applications. Do not move evidence across uncertain lineages or applications or interpret a tier as general model quality.
 
 ### RQ2 outcome/burden quality, when applicable
 

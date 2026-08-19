@@ -1,7 +1,7 @@
 # Protocol for a Systematic Review of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Working branch:** `slr1-1.1-restart`
-- **Common evidence cutoff:** <replace this with the date when searches were run, once they're run>
+- **Common evidence cutoff:** **TBD.** Set one exact calendar date before the first final search and use it unchanged for every source and citation route.
 
 > **Protocol parts:** **1 — Scope and definitions** (this file) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md)
 
@@ -14,7 +14,7 @@ Treat all material from the earlier review as legacy or pilot material. This inc
 The following rules apply:
 
 - Do not include a report automatically because an earlier review found it.
-- Find every record through a search in the current query plan or through a recorded citation search. Then screen it under this protocol.
+- Find every record through a search defined in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) or through a recorded citation search. Then screen it under this protocol.
 - Use `markdown/` and `pdfs/` only as a cache of source files. They are not part of the search evidence base.
 - Use reports found before this run only to check whether the search can find known items.
 - Extract every included report again from its full text, using a new codebook made for this run.
@@ -26,7 +26,7 @@ The following rules apply:
 Use the following guidance:
 
 - [PRISMA-P (2015) protocols and checklist](https://www.prisma-statement.org/protocols) for this protocol;
-- [PRISMA-S (2021) search reporting](https://www.prisma-statement.org/prisma-search) and [Rethlefsen et al. (2021)](https://doi.org/10.1186/s13643-020-01542-z) to design, run, save, and report every search in [`query-search-plan.md`](query-search-plan.md); and
+- [PRISMA-S (2021) search reporting](https://www.prisma-statement.org/prisma-search) and [Rethlefsen et al. (2021)](https://doi.org/10.1186/s13643-020-01542-z) to design the strategy in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) and to run, save, and report every search in a new-run `search-log.md`; and
 - the [PRISMA 2020 statement](https://www.prisma-statement.org/prisma-2020-statement), [checklist](https://www.prisma-statement.org/prisma-2020-checklist), [abstract guidance](https://www.prisma-statement.org/abstracts), and [flow templates](https://www.prisma-statement.org/prisma-2020-flow-diagram) for the completed review.
 
 These documents are reporting guidelines. They do not prove that evidence is valid. This is an engineering evidence map, so do not invent clinical effect measures, clinical risk-of-bias tools, or GRADE ratings.
@@ -37,33 +37,9 @@ Registration and contact details, contributor and guarantor details, and declara
 
 ## Review objective
 
-The review will explain:
+The review will map how MBSE represents and supports nanosatellite EPS work, including its purposes, inputs and assumptions, implementation, reuse and tailoring, reported outcomes and burdens, and links to V&V before physical integration or testing. For identifiable reusable artifacts, it will assess only source-supported reuse within stated limits; it will not certify universal or context-free genericity.
 
-- how MBSE represents nanosatellite EPSs;
-- why authors build these models;
-- which inputs and assumptions the models use;
-- how authors reuse or tailor the models;
-- what evidence supports claims that an identifiable EPS-linked artifact can be reused within stated limits;
-- which beneficial, null, mixed, or adverse EPS-linked outcomes authors report;
-- which burdens arise when teams implement the approach; and
-- how teams use EPS models for V&V before physical integration or testing.
-
-For each reusable artifact, the review will map its stated range of use, reusable core, points that can vary, tailoring process and effort, demonstrated uses, checks made after tailoring, dependence between reports or uses, and evidence tier. The review will not certify any artifact as universally, context-free, or “truly” generic.
-
-The review covers two kinds of evidence:
-
-1. **EPS-primary MBSE:** the EPS is the main system or viewpoint being modeled.
-2. **Embedded EPS model thread:** a wider nanosatellite model contains a clear chain that links EPS content to systems-engineering artifacts or work.
-
-A report does not answer the research questions merely because it mentions both whole-spacecraft MBSE and an EPS artifact. The report must link them directly as defined below.
-
-## PICOC
-
-| Population | Intervention | Comparison | Outcome | Context | Related RQ(s) |
-|---|---|---|---|---|---|
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-primary MBSE or a clear embedded EPS model thread | Not required | How the EPS is represented; why the model is used; inputs and assumptions; level of abstraction; artifact identity and lineage; stated range of use; reusable core; variation points; tailoring and its effort; demonstrated uses and checks; evidence tier for bounded reuse; and required roles and resources | Nanosatellite systems engineering throughout the lifecycle | RQ1 (RQ1a and RQ1b) |
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-linked MBSE artifacts, analyses, and model-enabled work | When reported: document-based practice, manual analysis, another toolchain, an earlier mission or model, or another clear comparator | Beneficial, null, mixed, or adverse EPS-linked technical and process outcomes, plus implementation burdens. Priority topics are reliability and mission assurance, reproducibility and reuse, and integration and interoperability | Nanosatellite development and decision-making | RQ2 |
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-specific or system-wide-but-EPS-linked model-based V&V before physical integration or test | When reported: separate or document-based V&V, manual checking, another method, or no comparator | V&V scope and object, links to V&V artifacts, executable checks, results, virtual integration, and continuity from model to test | Analysis and V&V before physical work, with later physical links recorded separately | RQ3 |
+The formal questions and analytical dimensions below govern the review. Eligible evidence may be EPS-primary or an embedded EPS model thread, but in either case the source must provide the direct EPS-to-model relationship defined under [eligible EPS evidence routes](#eligible-eps-evidence-routes).
 
 ## Research questions
 
@@ -348,6 +324,24 @@ A simulation or trade study without a stated V&V or checking purpose and without
 For this review, **pre-physical V&V** is a model-based V&V artifact or activity prepared or run before physical integration or testing of the target EPS design. Preparation of a model-derived later physical test is included as preparation. MIL and SIL can qualify while the target EPS hardware remains virtual.
 
 Classify PIL and HIL according to the hardware actually used. They are not wholly pre-physical if target EPS hardware takes part. Representative hardware or hardware outside the target EPS does not turn an otherwise virtual target-EPS activity into a physical EPS test. Record bench, environmental, integration, operational, and flight evidence as later model-to-test continuity. If the timing or target hardware is unclear, code it `uncertain` and do not count it as demonstrated pre-physical execution.
+
+## Units of evidence and counting
+
+Use the following linked units. They do not form a simple hierarchy because report families and artifact lineages may cross reports and implementations.
+
+1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model or toolchain use represented by one or more reports. Require source-supported overlap; a shared topic, organization, or tool is not enough.
+2. **Report:** one distinct publication, institutional report, or completed thesis or dissertation. Merge manifestations of the same report, but retain substantively different companion reports and link them to a family when warranted.
+3. **EPS model thread:** one qualifying EPS-primary or embedded chain within a report.
+4. **Reusable EPS artifact lineage and genericity profile:** one identifiable base artifact and its source-supported versions or derived instances. Split profiles when versions or scopes differ materially.
+5. **Tailoring application:** one use of an artifact lineage in one target setting, including a justified unchanged adoption. Merge repeated reporting of the same application.
+6. **Outcome or implementation-burden record:** one atomic direction or burden linked, or possibly linked, to an EPS thread.
+7. **V&V record:** one target–method–scenario activity or artifact linked, or possibly linked, to an EPS thread.
+
+Record source-supported family and lineage relationships, their reasons, evidence locations, and confidence. Do not move evidence silently between reports, versions, applications, or families. A report can belong to more than one family only when it genuinely covers separate implementations or evaluations.
+
+PRISMA identification and selection counts remain at record and report level. Report separate denominators for families, reports, threads, artifact lineages and profiles, tailoring applications, inputs and assumptions, outcomes and burdens, and V&V records. A report count is not a count of independent implementations or transfers.
+
+Use linked new-run IDs such as `family_id`, `report_id:thread_id`, `artifact_lineage_id:genericity_profile_id`, `artifact_lineage_id:tailoring_application_id`, `report_id:thread_id:outcome_burden_id`, and `report_id:thread_id:vnv_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
 
 ---
 
