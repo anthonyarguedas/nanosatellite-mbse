@@ -12,7 +12,14 @@ For every controlled code that matters to the synthesis, record:
 
 - the reason for the code;
 - a direct quotation or source location when possible; and
-- a confidence rating.
+- a coding-confidence rating of `high`, `moderate`, or `low`.
+
+Coding confidence records how certain the extractor is that the source was located and interpreted correctly. Use `high` for explicit and unambiguous source support, `moderate` when a bounded interpretation or reconstruction is required but supported, and `low` when material ambiguity remains. A low coding-confidence value does not replace the controlled status `uncertain`; record both when appropriate. Coding confidence is not a judgment of methodological quality or evidential strength. Keep these four concepts distinct throughout the codebook and synthesis:
+
+- **coding confidence:** certainty in extraction or classification;
+- **methodological appraisal:** fitness and conduct of the evaluation used to support a claim;
+- **record-level claim support:** support supplied by one evidence unit for one bounded claim; and
+- **conclusion confidence:** confidence in a synthesis conclusion across contributing units.
 
 Keep these statuses separate: `not_reported`, `not_applicable`, `none`, and `uncertain`. Also distinguish what the authors report from what the extractor infers.
 
@@ -20,11 +27,26 @@ Keep these statuses separate: `not_reported`, `not_applicable`, `none`, and `unc
 
 Use shared structures rather than copying the same facts into several records:
 
-- An **evidence reference** stores report ID, page or section, figure or table when relevant, quotation or cautious paraphrase, and extractor confidence.
+- An **evidence reference** stores report ID, page or section, figure or table when relevant, quotation or cautious paraphrase, and coding confidence.
 - A **setting tuple** stores platform and form factor; mission purpose and domain; orbit and environment; lifecycle use and decision; EPS boundary, architecture, components and interfaces; modes and load profile; abstraction or fidelity; required inputs; language, tool and version; organization, team and process; prerequisites; and exclusions or failure boundaries.
 - An **implementation footprint** stores roles, skills and training; staffing; process and automation; tools, licences and infrastructure; model and data preparation; computing; integration and interoperability; governance and configuration control; effort, time, schedule and cost; maintenance; burdens; and mitigations.
+- A **measurement** stores the construct claimed, the actual measure and its definition, and whether it is `direct`, `surrogate`, `intermediate_or_process`, or `unclear` for that construct. Also store the author's justification or validation for a surrogate; observed versus expected status; setting, scenario, population or observational unit; unit and time basis; sample size and denominator; source-reported values; central tendency and dispersion; absolute and relative differences; effect estimate, standard error or confidence interval, exact p-value and statistical method when reported; missing observations and exclusions; and practical interpretation. A measure can be direct for one narrow claim and surrogate for a broader claim, so record the claim scope.
+- A **comparator** stores its typeâ€”`concurrent_control`, `before_after`, `historical_mission`, `earlier_model_or_version`, `manual_or_document_based_process`, `alternative_toolchain_or_method`, `none`, `other`, or `unclear`â€”and a complete description of the baseline. Record whether it is concurrent or historical and planned or retrospective; task, inputs, mission, lifecycle stage, team, experience, training, tools, automation, time available, outcome definition, and data completeness; material differences from the evaluated condition; and an adequacy judgment with reason, evidence reference, and coding confidence. A comparator is required only for a comparative or causal claim.
+- A **confounder assessment** stores each factor that might offer an alternative explanation, including team experience, student or practitioner status, training, model maturity, inherited artifacts, automation, mission complexity, lifecycle stage, data quality, concurrent architecture or process changes, schedule pressure, organizational support, verification effort, and evaluator involvement. Record provenance as `author_identified`, `reviewer_noted_only`, `not_reported`, or `not_applicable`, and record all applicable handling tags from `measured`, `controlled_by_design`, `adjusted_in_analysis`, `discussed_uncontrolled`, and `not_reported`. Also record any reported direction, handling, residual concern, evidence reference, and coding confidence. Reviewer-noted factors inform appraisal but are not primary-study findings.
+- A **derived-value record** preserves every reviewer calculation separately from the reported data. Store source measurement and value IDs, original values and units, formula or transformation, unit conversion, assumptions, missing-data handling, analysis-code path and version when used, extractor, checker, derived result, and sensitivity to reasonable alternative assumptions. Never overwrite a source-reported value with a reviewer-derived value.
+- A **methodological-appraisal object** implements the scoped design and domain appraisal defined in [Part 2](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal). Store its appraisal ID; linked report, family, thread, artifact or profile, application, measurement, outcome or burden, and V&V IDs; design classification; domain statuses, reasons, evidence references, and coding confidence; and no aggregate score or pass.
+- A **record-level claim-support object** stores the linked record and claim, claim kind and scope, relevant measurement, comparator, confounder and appraisal IDs, dependence and applicability, support classification of `unsupported`, `weak`, `moderate`, or `strong`, and a source-located reason. Evidence type and maturity are descriptors and cannot determine this classification by themselves.
 
-Give each shared object an ID, scope, evidence reference, and confidence. Link it from report, thread, artifact, application, outcome, or V&V records as appropriate. Keep declared, planned, and actually observed values separate even when they use the same structure.
+Give each shared object an ID, scope, evidence reference, and coding confidence where interpretation is involved. Link it from report, thread, artifact, application, outcome, or V&V records as appropriate. Keep declared, planned, source-observed, and reviewer-derived values separate even when they use the same structure.
+
+Use the claim-support classes consistently across questions, always within the recorded claim scope:
+
+- **`unsupported`:** the source supplies no extractable observation or result bearing on the claim, or the supplied result does not measure the claimed construct.
+- **`weak`:** there is an extractable basis, but it is materially indirect, relies on an unjustified surrogate, has serious methodological concerns, or lacks a minimum element required for that kind of claim.
+- **`moderate`:** the minimum elements for the claim kind are present and a direct or justified measure supports a bounded result, but important limitations remain in method, independence, comparison, precision, or applicability.
+- **`strong`:** direct or credibly justified measures and a fit, adequately conducted evaluation support the specific bounded claim; every comparator, counterfactual, and confounding requirement applicable to that claim is met, with no major unexplained methodological concern.
+
+A strong classification can apply to a narrow within-case fact and does not imply prevalence, transferability, causality, or broad applicability unless those are the claims appraised.
 
 ### Report-level bibliographic and review-management fields
 
@@ -43,8 +65,8 @@ For each report, record:
 - study or implementation report-family ID or IDs;
 - linked artifact-lineage ID or IDs;
 - the report's relationship to each family or artifact: `same_report_manifestation`, `derivative_report`, `companion_report`, `overlap_uncertain`, or another controlled value;
-- the reason and evidence for family membership or artifact identity, confidence in overlap, and notes on shared results; and
-- extraction confidence, assessor, and review-pass history.
+- the reason and evidence for family membership or artifact identity, overlap coding confidence, and notes on shared results; and
+- overall coding confidence, assessor, and review-pass history.
 
 For a thesis or dissertation, also record:
 
@@ -76,6 +98,7 @@ Record:
 - development setting: academic or student, agency, industry or NewSpace, distributed team, agile or concurrent design, rapid prototyping, resource-constrained mission, or `not_reported`;
 - a general implementation-footprint link for reported MBSE needs and burdens, or `not_reported`;
 - the authors' objective, problem, intended decision, and reason for using MBSE;
+- each evaluation design used in the report and linked methodological-appraisal ID, keeping materially different evaluations separate;
 - evidence that the work qualifies as MBSE: method or language, tools, system-model artifacts, modeled concerns, explicit relationships, and system boundary;
 - model maturity: conceptual framework, reference or template, prototype, executable, used on a project, physically validated, operational or flight, or `not_reported`. More than one value may apply. Do not assume they form an order unless the report does;
 - toolchain structure, data flow, interoperability method, ownership and handoff, and reported limits; and
@@ -100,7 +123,7 @@ Create one record for each qualifying EPS thread. Record:
 - any author description such as *lightweight*, *scalable*, *comprehensive*, or *resource-intensive*. Do not impose a lightweight threshold or infer one from the mission class;
 - linked artifact-lineage, profile, and tailoring-application IDs;
 - genericity disposition and method- or workflow-only status when relevant; and
-- thread maturity, lifecycle stage, availability, evidence confidence, and limitations.
+- thread maturity, lifecycle stage, availability, direct source support, coding confidence, limitations, and any methodological-appraisal or claim-support IDs used for evaluative characterizations.
 
 ### Reusable EPS artifact-lineage and genericity-profile record
 
@@ -115,7 +138,7 @@ Record identity and provenance:
 - artifact name, version, repository, package, and model IDs;
 - owner or developer;
 - availability and licence when reported; and
-- confidence in and reason for the lineage.
+- lineage coding confidence and reason.
 
 A common tool, organization, term, or topic does not prove a shared lineage.
 
@@ -152,14 +175,14 @@ Record tailoring support:
 
 Record the evidence assessment:
 
-- status, reason, source location, and confidence for every A/E/C/T/P/I gate;
+- status, reason, source location, and coding confidence for every A/E/C/T/P/I gate;
 - failed condition or conditions;
 - highest tier: `NA`, `G0_artifact_only`, `G1_claimed_or_unbounded`, `G2_bounded_reuse_specified`, `G3_bounded_reuse_demonstrated`, or `G4_independently_corroborated`;
 - a locatable cumulative reason for that tier;
 - claim agreement: `not_evaluated`, `supported_in_tested_contexts`, `partially_supported`, `mixed`, `not_supported`, or `unclear`; and
 - failed and outside-envelope applications and other possible explanations.
 
-Finally, record profile limits, model and data availability, dependence between report families and within the lineage, evidence source, extraction confidence, and first- and second-check history.
+Finally, record profile limits, model and data availability, dependence between report families and within the lineage, evidence source, coding confidence, and first- and second-check history.
 
 Apply the gate rules in Part 1. Combine reports only after establishing a shared lineage, preserve report provenance for every combined field, and never transfer a result to another version or application without evidence.
 
@@ -192,8 +215,9 @@ Record the result:
 - resulting artifact and use;
 - decisions or analyses supported;
 - availability and configuration ID;
-- failures, rework, and trade-offs; and
-- whether this shows artifact reuse, only method or workflow reuse, or is unclear.
+- failures, rework, and trade-offs;
+- whether this shows artifact reuse, only method or workflow reuse, or is unclear; and
+- linked measurement, derived-value, comparator, confounder-assessment, methodological-appraisal, and claim-support IDs for any evaluative claim about the application.
 
 Record post-tailoring assurance:
 
@@ -216,7 +240,7 @@ Record the adopter or evaluator relationship as one of:
 
 Also record overlap in personnel and control of the implementation; the independent adopter or evaluator's own report, artifact, or data provenance; report-family evidence; separate evidence for adoption or tailoring and assurance; and whether the I gate is met.
 
-Record the evidence source, confidence, limitations, and extraction and second-check history.
+Record the evidence source, coding confidence, methodological limitations, and extraction and second-check history.
 
 One application can inform RQ1 and link to an RQ2 outcome or burden or an RQ3 V&V record. It enters those direct syntheses only when it separately meets their attribution and linkage rules.
 
@@ -243,7 +267,7 @@ Record:
 - stated reason: mission or environment limit, early-phase uncertainty or missing data, conservatism or safety, reuse or tailoring, computing or tool limit, interface standard, decision need, V&V need, or not stated;
 - trace location in a requirement, model element, parameter, figure or table, data file, or external-tool link;
 - reported effect on outputs or decisions; and
-- evidence source and extraction confidence.
+- evidence source and coding confidence.
 
 Do not infer that an input is unnecessary because the source omits it. Use `not_reported` for source silence.
 
@@ -252,11 +276,15 @@ Do not infer that an input is unnecessary because the source omits it. Use `not_
 Keep technical outputs separate from MBSE outcome and burden records. For each output, record:
 
 - output ID and thread ID;
-- quantity or result, units, and time basis;
-- scenario or configuration and input set;
+- linked measurement ID and the source-reported quantity or result in its original form, units, and time basis;
+- scenario or configuration, input set, sample or repetition denominator when relevant, and missing or excluded observations;
 - whether it was calculated, simulated, checked against a criterion, compared, or physically validated;
-- decision or model artifact it informed; and
-- evidence source and confidence.
+- criterion, comparator, uncertainty, sensitivity, and reported statistical information when present;
+- decision or model artifact it informed;
+- any linked derived-value ID, without replacing the reported value; and
+- evidence reference and coding confidence.
+
+An engineering output can be a direct measure of its stated quantity while remaining a surrogate for reliability, assurance, schedule, cost, or another broader construct. Link it to RQ2 or RQ3 only under those questions' normal attribution, measurement, and support rules.
 
 ### RQ2 outcome and implementation-burden evidence record
 
@@ -266,30 +294,33 @@ Record the claim and its scope:
 
 - record ID and linked thread ID;
 - exact result or claim, or a cautious paraphrase;
+- primary claim kind: `descriptive_occurrence`, `feasibility_or_executed_result`, `technical_performance`, `comparative`, `causal_attribution`, `experiential_or_perceived`, `implementation_burden`, `transfer_or_generalization`, `other`, or `unclear`, with additional tags when one statement has more than one role;
 - role: outcome, implementation burden, mixed trade-off, or another role;
-- scope and target;
+- scope, target, population or observational unit, and time horizon;
 - outcome category: EPS reliability; system or mission assurance; defect or error reduction; risk reduction; reproducibility or rerunnability; reuse or replication; integration or interoperability; interface consistency; traceability or requirements quality; completeness; continuity across the lifecycle; decision or trade support; cost; schedule; effort or automation; communication or knowledge; governance or value realization; or another category;
-- reported direction: `beneficial`, `null/no observed effect`, `mixed/conditional`, `adverse`, or `unclear/not reported`; and
-- author-claimed direction, kept separate from the direction supported by the evidence.
+- reported direction: `beneficial`, `null/no observed effect`, `mixed/conditional`, `adverse`, or `unclear/not reported`;
+- author-claimed direction using the same codes; and
+- evidence-supported direction using `beneficial`, `null/no observed effect`, `mixed/conditional`, `adverse`, `unclear`, or `not_supported`, kept separate from the author's wording.
 
 Record the basis for direction:
 
-- how the metric is interpreted;
-- comparator or criterion;
-- time horizon;
-- magnitude, value, and units;
-- conditions; and
-- whether the result is observed or expected.
+- linked measurement IDs and how each measure is interpreted for this claim;
+- whether each measure is direct, surrogate, intermediate or process, or unclear for the claimed construct;
+- criterion and linked comparator ID when applicable;
+- magnitude, units, uncertainty, sample size or denominator, and conditions;
+- linked derived-value IDs; and
+- whether the result is source-observed, author-expected, or reviewer-derived.
 
 For a burden, record:
 
 - category: time or effort; skills or training; staffing; tools, licences, or infrastructure; model or data preparation; computing; integration or interoperability; maintenance, configuration, or governance; schedule; cost or resource use; another category; none reported; or not reported;
 - affected person or group;
 - whether it occurs during adoption or ongoing use;
+- measurement method, including logs, accounting data, observation, survey, interview, or assertion;
 - mitigation; and
 - any linked benefit or trade-off.
 
-For reliability, use the relevant subtype: EPS reliability, system or mission reliability, process reliability, model consistency or reliability, mission assurance, defect or error reduction, generic reliability claim, or not applicable.
+For reliability, use the relevant subtype: EPS reliability, system or mission reliability, process reliability, model consistency or reliability, mission assurance, defect or error reduction, generic reliability claim, or not applicable. A technical proxy such as margin, trace count, or successful execution remains a surrogate unless the source validates its relationship to the reliability or assurance construct claimed.
 
 Record the proposed MBSE mechanism:
 
@@ -309,7 +340,7 @@ Record the proposed MBSE mechanism:
 
 Also record the linked artifact or process and lifecycle stage.
 
-Classify attribution as `explicit EPS-thread attribution`, `ambiguous attribution`, or `generic/not eligible`. Only explicit EPS-thread attribution enters direct RQ2 synthesis.
+Classify attribution as `explicit EPS-thread attribution`, `ambiguous attribution`, or `generic/not eligible`. Only explicit EPS-thread attribution enters direct RQ2 synthesis. Explicit attribution records what the authors attribute to MBSE; it does not by itself demonstrate association or causation. Record author attribution, observed association, and reviewer assessment of causal support separately.
 
 Classify evidence type as:
 
@@ -324,14 +355,23 @@ Classify evidence type as:
 - reuse or replication; or
 - integration, test, operational, or flight evidence.
 
-Record the metric or value, baseline or comparator, observed effect or burden, evidence source, possible alternative explanations, and report-family or nesting notes.
+Evidence type is descriptive. It does not determine claim support. Link every eligible direct RQ2 record to:
 
-Give each record an evidence-confidence level:
+- a comparator object when the claim is comparative or causal, and `not_applicable` otherwise;
+- confounder assessments for material alternative explanations;
+- the methodological-appraisal object for the evaluation supplying the evidence, or `not_applicable` with a reason when an assertion, concept, or illustration has no empirical or evaluative design to appraise; and
+- one record-level claim-support object.
 
-- **Unsupported:** an assertion with no extractable support.
-- **Weak:** a plausible explanation or illustrative or single-case evidence, but no result strong enough to support the claimed direction or burden.
-- **Moderate:** a traceable within-case result, executable or checking result, or metric, but with little comparison or independent validation.
-- **Strong:** suitable comparative, repeated-reuse, independent, integration or test, operational, or flight evidence that directly supports the direction or burden.
+Apply the canonical record-level claim-support classes defined under [shared extraction structures](#shared-extraction-structures) and these RQ2-specific minimums:
+
+- A descriptive occurrence can be strongly supported within one case by direct, locatable evidence and credible ascertainment; this says nothing about prevalence or transfer.
+- A feasibility or executed-result claim requires a defined artifact or activity, execution, and result, plus a criterion when the claim entails checking. Successful execution alone does not establish validity.
+- A comparative claim requires the same construct to be measured under an adequately described and reasonably comparable baseline.
+- A causal claim requires a credible counterfactual and serious treatment of material confounding; explicit author attribution, temporal sequence, or a quantitative value alone is insufficient.
+- An experiential or burden claim can be strongly supported by transparent sampling, collection and analysis of traceable participant evidence or work records; it does not require a comparator unless comparative language is used.
+- A transfer or genericity claim remains governed by the A/E/C/T/P/I gates. Do not substitute this support label for a genericity tier.
+
+Record evidence references, coding confidence, possible alternative explanations, dependence and report-family or nesting notes. Null, adverse, and beneficial directions use the same support rules.
 
 ### RQ3 V&V record
 
@@ -361,6 +401,7 @@ Record the activity:
 Record results and completeness:
 
 - result or verdict;
+- linked measurement and derived-value IDs, including directness of each measure for the asserted V&V claim;
 - whether the result is EPS-specific, system-wide, or `not_reported`;
 - how discrepancies were handled;
 - later link to software integration, hardware integration, flat-sat or bench work, PIL or HIL, environmental testing, operational validation, or flight evidence;
@@ -368,13 +409,23 @@ Record results and completeness:
 - criterion-complete status as `yes`, `no`, or `uncertain`, with evidence; and
 - demonstrated pre-physical execution as `yes`, `no`, or `uncertain`, with evidence about timing, physicality relative to the target, and result.
 
-Also record evidence source, confidence, limitations, and report-family or nesting notes.
+For every direct RQ3 record, link the methodological-appraisal object for the evaluation, or use `not_applicable` with a reason for a proposed or prepared activity with no evaluation to appraise. Link relevant confounder assessments and a comparator object only when a comparative or effectiveness claim requires one. Create at least one record-level claim-support object, and create separate objects when one V&V record is used to support more than one materially different claim, such as execution and validation.
+
+Apply claim-specific support rules:
+
+- target, explicit bridge, and V&V method or intent can support only the existence of an EPS-linked V&V activity;
+- a criterion, execution, and result are required to support an executed-check or verification-result claim;
+- model or design validation additionally requires a credible intended-use oracle or authoritative reference and an evaluation fit to that comparison;
+- model-to-test continuity requires a source-supported link to the later physical artifact or activity; and
+- closure requires compared results and reported handling of discrepancies.
+
+A physical, operational, or flight setting strengthens only a claim that the linked evidence actually tests. It does not automatically validate a model, establish causal effectiveness, or upgrade another V&V claim. Record evidence references, coding confidence, methodological limitations, record-level claim support, applicability, dependence, and report-family or nesting notes.
 
 ### Limitations and open extraction
 
 Record author-stated limits, assumptions, and scope boundaries. Use narrow controlled flags for substantive limitations such as prototype or future work, single case, no comparator, no independent validation, assumptions or data-quality limits, tool dependence, interoperability limits, and incomplete lifecycle coverage.
 
-Do not manually duplicate conditions already represented by structured fields. Derive flags such as missing V&V criterion, unclear EPS linkage, missing DAE, unidentified reusable core, unclear lineage, same-family reuse only, or absent post-tailoring assurance during validation. This keeps the flag and its source field consistent.
+Do not manually duplicate conditions already represented by structured fields. Derive flags such as missing V&V criterion, unclear EPS linkage, missing DAE, unidentified reusable core, unclear lineage, same-family reuse only, absent post-tailoring assurance, unjustified surrogate, missing or inadequate required comparator, material uncontrolled confounding, or serious methodological concern during validation. This keeps the flag and its source field consistent.
 
 Use emergent codes for unexpected findings that do not fit the controlled vocabulary. Do not silently add new controlled categories during extraction.
 
@@ -383,9 +434,10 @@ Use emergent codes for unexpected findings that do not fit the controlled vocabu
 Before full screening and extraction, complete calibration task [`E-001`](TASKS.md):
 
 1. Test the full-text eligibility rule on examples of clear Route A, clear Route B, general whole-spacecraft MBSE, and non-MBSE EPS work.
-2. Test all forms on a deliberately varied sample. This includes the thread, input and assumption, artifact-lineage and profile, tailoring-application, RQ2 outcome and burden, and RQ3 V&V forms. Include examples of method-only versus artifact reuse, claim-only evidence, bounded specification, one versus several materially different settings, duplicate reports from one family, unchanged reuse, failed transfer, and post-tailoring assurance.
-3. Revise and commit the run-specific codebook before full extraction.
-4. Record all calibration decisions and examples.
+2. Test all forms and shared structures on a deliberately varied sample. This includes the thread, input and assumption, measurement, comparator, confounder, derived-value, methodological-appraisal, claim-support, artifact-lineage and profile, tailoring-application, RQ2 outcome and burden, and RQ3 V&V structures. Include model or simulation evaluation, case or experience evidence, comparative evidence, survey or qualitative evidence when available, and mixed-method evidence.
+3. Calibrate claim-specific support on deliberately contrasting examples: a direct single-case descriptive fact; a flight case that does not establish causal benefit; a credible qualitative burden finding; an unjustified surrogate; a confounded comparison; an executed virtual check; a validation claim without an adequate oracle; and a reviewer-derived calculation. Also include method-only versus artifact reuse, claim-only evidence, bounded specification, one versus several materially different settings, duplicate reports from one family, unchanged reuse, failed transfer, and post-tailoring assurance.
+4. Revise and commit the run-specific codebook before full extraction.
+5. Record all calibration decisions and examples.
 
 Use separate assessment passes to reduce carryover from earlier judgments. Require a second check for:
 
@@ -397,6 +449,12 @@ Use separate assessment passes to reduce carryover from earlier judgments. Requi
 
 During calibration, make sure assessors can distinguish:
 
+- coding confidence from methodological appraisal, record-level claim support, and conclusion confidence;
+- evidence type and maturity from support for the particular claim;
+- a direct measure from a surrogate or intermediate measure;
+- author attribution and observed association from reviewer assessment of causal support;
+- an absent comparator from `not_applicable`, and an identified comparator from an adequate one;
+- source-reported data from reviewer-derived values;
 - a DAE from one observed case;
 - a scenario sweep from tailoring;
 - a model artifact from a method or workflow;
@@ -405,7 +463,7 @@ During calibration, make sure assessors can distinguish:
 
 Record whether another human or a model-assisted validation pass performed each check. Never describe a model-assisted check as independent human review. Calculate an agreement statistic only if the assessment design truly supports it.
 
-Before synthesis, validate all extraction JSON against the codebook. Check exact controlled labels, record IDs, required evidence and reasons, distinct statuses, and all links among report families, reports, threads, artifact lineages, genericity profiles, tailoring applications, outcome or burden records, and V&V records.
+Before synthesis, validate all extraction JSON against the codebook. Check exact controlled labels, record IDs, required evidence and reasons, distinct statuses, and all links among report families, reports, threads, measurements, comparators, confounder assessments, derived values, methodological appraisals, claim-support objects, artifact lineages, genericity profiles, tailoring applications, outcome or burden records, and V&V records. Confirm that no source-reported value was overwritten by a derived value and that evidence type or maturity was not used mechanically as claim support.
 
 ## Planned synthesis
 
@@ -424,7 +482,9 @@ For a descriptive view of currency and overlap, results may be split into 2011â€
 ### RQ1
 
 - Synthesize the report-and-implementation-context, EPS-thread, input-and-assumption, engineering-output, and implementation-footprint records defined above.
-- Keep reported inputs and implementation needs separate from reviewer inference and missing information.
+- Keep reported inputs and implementation needs separate from reviewer inference and missing information. Keep source-reported values separate from reviewer-derived values.
+- Identify whether measures used to characterize implementation or performance are direct, surrogate, intermediate or process measures, or unclear for the stated construct.
+- Use methodological appraisal and claim-specific support for evaluative RQ1 characterizations. Do not treat model maturity, physical use, publication type, or coding confidence as automatic evidential strength.
 - Compare author labels such as *lightweight* or *scalable* with the reported footprint; do not turn them into eligibility or tailoring categories.
 - Compare Route A with Route B without assuming that one route is more mature.
 - Synthesize artifact-lineage profiles and tailoring applications under the gate and tier definitions in Part 1; keep method or workflow reuse separate from artifact reuse.
@@ -437,7 +497,10 @@ For a descriptive view of currency and overlap, results may be split into 2011â€
 
 - Synthesize only outcomes and implementation burdens that the source explicitly attributes to a qualifying EPS thread.
 - Keep EPS engineering outputs separate from evidence about value or burden caused by MBSE.
-- Present together the record role, outcome category, author-claimed direction, evidence-supported direction, burden category, proposed mechanism, evidence type, comparator, confidence, and lifecycle stage.
+- Present together the claim kind and scope, record role, outcome category, author-claimed direction, evidence-supported direction, burden category, proposed mechanism, evidence type, measure role, comparator adequacy when applicable, material confounding, methodological appraisal, record-level claim support, applicability, and lifecycle stage.
+- Report direct measures separately from surrogates and intermediate or process measures. Do not restate a proxy as the broader construct unless its relationship was credibly justified or validated.
+- Present comparative and causal claims separately from descriptive, feasibility, and experiential claims. Do not infer causation from explicit author attribution, temporal order, a quantitative value, operational maturity, or flight use alone.
+- Preserve source-reported quantitative values, denominators, uncertainty, and practical interpretation; label every reviewer-derived value and report sensitivity to material assumptions.
 - Treat an unsupported claim as evidence that the claim was made, not that an effect was demonstrated.
 - Never treat `not_reported` as a null result.
 - Do not infer net benefit by counting positive and negative records.
@@ -446,17 +509,21 @@ For a descriptive view of currency and overlap, results may be split into 2011â€
 
 - Map every EPS target-to-model-to-V&V chain.
 - Separate `eps_specific` from `system_wide_eps_linked` records.
-- Also organize evidence by V&V object, completeness of the criterion, execution before physical work, and later model-to-test continuity.
+- Also organize evidence by V&V object, completeness of the criterion, execution before physical work, later model-to-test continuity, methodological appraisal, and record-level claim support.
+- Report measurements, criteria and oracles in their stated scope. Distinguish a direct V&V measure from a surrogate for validity, assurance, or downstream performance.
+- Use a comparator and confounder assessment when a report makes a comparative V&V-effectiveness claim; neither is required merely to document that a linked activity existed.
 - Report analysis-only work, system-wide co-occurrence, and other missing-link near misses separately.
 - Treat a missing criterion as incomplete evidence. Do not silently discard an otherwise explicit EPS-linked V&V record.
-- Do not infer EPS-specific V&V integration or an EPS-specific verdict from a system-wide activity or from items that only appear in the same report.
+- Do not infer validation from successful execution, closure from continuity, causal effectiveness from physical maturity, or an EPS-specific verdict from a system-wide activity or from items that only appear in the same report.
 
 ### Cross-cutting safeguards
 
 - Apply the [canonical units, denominator, and dependence rules](protocol.md#units-of-evidence-and-counting).
 - Present Route A and Route B separately before combining them.
 - Separate arXiv preprints, institutional technical reports, master's theses, doctoral theses or dissertations, and other grey literature from peer-reviewed scholarly reports. Show sensitivity views by publication provenance when useful. Do not automatically give a report less weight merely because it lacks journal peer review.
-- Use sensitivity views based on evidence confidence, directness, publication provenance, linkage and lineage confidence, and genericity gates. Useful subsets may include Route A only, high-confidence records, G3/G4 profiles, and available artifacts. Do not treat the genericity tier as a general evidence-quality score.
+- Keep coding confidence, methodological appraisal, record-level claim support, and conclusion confidence separate in tables and prose.
+- Treat evidence type, publication provenance, model maturity, operational use, physical validation, and flight status as descriptors. Use them to strengthen only conclusions they directly bear on.
+- Use sensitivity views based on methodological concerns, record-level claim support, measure directness, comparator adequacy, material confounding, publication provenance, linkage and lineage coding confidence, and genericity gates. Useful subsets may include Route A only, records without serious methodological concerns, direct-measure records, adequately compared records where comparison is required, G3/G4 profiles, and available artifacts. Do not treat the genericity tier as a general evidence-quality score.
 - Treat cross-tabulations as descriptive co-reporting unless extraction provides a direct link.
 - Keep `not_reported`, `none`, `not_applicable`, `uncertain`, and invalid or unmapped values separate.
 - Treat sparse direct evidence as a result of the review. Do not fill gaps with general whole-spacecraft MBSE claims.
@@ -479,7 +546,7 @@ After clean-start task [`P-000`](TASKS.md) is complete, create these artifacts a
 - title and abstract screening, full-text screening, and retrieval logs;
 - the accessible report set and a table of cited full-text exclusions with one main reason per report;
 - the run-specific corpus, IDs, and extraction codebook;
-- per-report extraction files with links among threads, profiles, applications, outcomes or burdens, and V&V records;
+- per-report extraction files with links among threads, measurements, comparators, confounder assessments, derived values, methodological appraisals, claim-support objects, profiles, applications, outcomes or burdens, and V&V records;
 - an artifact-level claim-to-evidence table;
 - the compiled extraction data, bibliography, validation report, and analysis code; and
 - machine-readable PRISMA count reconciliation, the official PRISMA 2020 flow diagram, synthesis outputs, and completed PRISMA-S and PRISMA 2020 checklists.
@@ -498,7 +565,7 @@ The final report will call itself a systematic review and evidence map and will 
 - label every count or proportion with its denominator: report family, report, thread, artifact lineage or profile, tailoring application, outcome or burden, or V&V record;
 - use the new-review PRISMA flow diagram for databases and other sources, with records and reportsâ€”not linked analytic unitsâ€”in its boxes;
 - cite apparently eligible reports excluded after full-text review and give source-located reasons;
-- present appraisal, reporting-bias, and conclusion-confidence results under the [appraisal framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence); and
+- present methodological appraisal, record-level claim support, reporting-bias, and conclusion-confidence results under the [appraisal framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence), without treating evidence type or maturity as a universal hierarchy; and
 - report access to all three parts of the current protocol, every dated methods change or departure, limits of the review process and evidence, and availability of data, code, and materials.
 
 Complete the administrative declarations under task [`P-002`](TASKS.md) before publication, or clearly say that they are absent. The clean-document start condition does not imply that these declarations exist.

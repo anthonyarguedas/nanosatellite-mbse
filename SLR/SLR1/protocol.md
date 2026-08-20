@@ -70,9 +70,9 @@ The formal questions and analytical dimensions below govern the review. Eligible
 
 ### Prespecified analytical dimensions
 
-- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; material inputs and assumptions; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. Artifact identity and lineage; declared applicability envelope; reusable core; variation points and dependencies; tailoring process and effort; materially distinct applications; post-tailoring assurance; and the A/E/C/T/P/I evidence profile and resulting tier.
-- **RQ2:** outcome or burden category; reported direction; explicit EPS attribution; mechanism; comparator; evidence type; and evidential support.
-- **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and criterion; preparation and execution; result or verdict; and later model-to-test continuity or closure.
+- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; material inputs and assumptions; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. Artifact identity and lineage; declared applicability envelope; reusable core; variation points and dependencies; tailoring process and effort; materially distinct applications; post-tailoring assurance; the A/E/C/T/P/I evidence profile and resulting tier; and methodological appraisal and claim-specific support for evaluative characterizations.
+- **RQ2:** claim kind and scope; outcome or burden category; reported and evidence-supported direction; explicit EPS attribution; mechanism; direct or surrogate measurement; comparator adequacy and confounding when applicable; evaluation design and methodological appraisal; evidence type; and record-level claim support.
+- **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and criterion or oracle; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design and methodological appraisal; claim-specific support; and later model-to-test continuity or closure.
 
 The three mapping areas are equally important. RQ1 is not an additional eligibility test. A report can be eligible without claiming that a model is generic or reusable.
 
@@ -230,7 +230,7 @@ Code each gate as one of:
 - `none`; or
 - `not_applicable`, with a narrow justification.
 
-Record a source location and confidence for each gate. Only `demonstrated` satisfies a gate required for a tier. `not_applicable` may describe a gate that a lower tier does not require, but it cannot replace a required gate. Use `none` when the source clearly says that a condition was absent or failed. Use `not_reported` when the source does not provide enough information to assess it.
+Record a source location and coding confidence for each gate. Only `demonstrated` satisfies a gate required for a tier. `not_applicable` may describe a gate that a lower tier does not require, but it cannot replace a required gate. Use `none` when the source clearly says that a condition was absent or failed. Use `not_reported` when the source does not provide enough information to assess it.
 
 `partial`, `not_reported`, `uncertain`, `none`, `not_applicable`, and evidence based only on reviewer inference all fail a required gate. Except for a source-supported `none`, however, these codes do not prove that the underlying capability is absent. Unchanged adoption can satisfy T only when the source reports its conditions, target setting, retained core, and reason. It never removes the need for E, C, or P.
 
@@ -292,6 +292,8 @@ An outcome or implementation-burden record is eligible for RQ2 only when it has 
 
 Record the proposed model-enabled mechanism when the source states it. Otherwise use `not_reported`. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed record.
 
+Eligibility records the source's explicit attribution; it does not establish that MBSE caused the outcome. During extraction, classify the kind and scope of claim, the directness of each measure, comparator adequacy when a comparison or causal claim requires one, possible confounding, fitness and conduct of the evaluation design, and the resulting support for that specific claim. Keep author attribution, observed association, and reviewer assessment of causal support separate.
+
 A general claim about MBSE is not EPS-specific evidence merely because the same report contains EPS material. Keep claims supported only by assertion, but label them unsupported rather than treating them as demonstrated effects.
 
 A null outcome means that an evaluation found no observed effect or difference. It does not mean `not_reported`, missing evidence, or no claim. Split benefits, adverse effects, null findings, and burdens into separate atomic records whenever possible. Use `mixed/conditional` only when directions cannot be separated by scenario, measure, actor, or condition.
@@ -299,6 +301,8 @@ A null outcome means that an evaluation found no observed effect or difference. 
 A burden can exist alongside a benefit. Do not decide a net effect on the authors' behalf. General project-level MBSE burdens can be kept as RQ1 context. They enter direct RQ2 synthesis only when the source clearly links them to the qualifying EPS thread.
 
 A power or energy margin alone is not a reliability result. Reliability requires a stated link to failure, fault tolerance, availability, risk, assurance, or another defined reliability concept. In the same way, do not infer reproducibility or reuse from model availability, or integration or interoperability from diagrams that merely appear together.
+
+Classify measures as direct, surrogate, intermediate or process measures, or unclear relative to the construct claimed. A surrogate can support only the measured construct unless the source supplies a credible rationale or validation for the wider interpretation. For example, a successful model import can directly show one interoperability event but not general interoperability, and reduced artifact-generation time does not by itself establish an overall schedule reduction.
 
 ### Direct EPS-linked pre-physical V&V
 
@@ -341,6 +345,8 @@ For this review, **pre-physical V&V** is a model-based V&V artifact or activity 
 
 Classify PIL and HIL according to the hardware actually used. They are not wholly pre-physical if target EPS hardware takes part. Representative hardware or hardware outside the target EPS does not turn an otherwise virtual target-EPS activity into a physical EPS test. Record bench, environmental, integration, operational, and flight evidence as later model-to-test continuity. If the timing or target hardware is unclear, code it `uncertain` and do not count it as demonstrated pre-physical execution.
 
+The RQ3 completeness stages are claim-specific descriptors, not a general evidence hierarchy. Target–bridge–method evidence supports the existence of an EPS-linked V&V activity; criterion, execution, and result support an executed-check claim; an appropriate oracle is required for model or design validation; and linked physical evidence supports continuity only for the artifacts and comparisons actually traced. Operational or flight maturity does not automatically strengthen a different claim.
+
 ## Units of evidence and counting
 
 Use the following linked units. They do not form a simple hierarchy because report families and artifact lineages may cross reports and implementations.
@@ -353,7 +359,7 @@ Use the following linked units. They do not form a simple hierarchy because repo
 6. **Outcome or implementation-burden record:** one atomic direction or burden linked, or possibly linked, to an EPS thread.
 7. **V&V record:** one target–method–scenario activity or artifact linked, or possibly linked, to an EPS thread.
 
-Record source-supported family and lineage relationships, their reasons, evidence locations, and confidence. Do not move evidence silently between reports, versions, applications, or families. A report can belong to more than one family only when it genuinely covers separate implementations or evaluations.
+Record source-supported family and lineage relationships, their reasons, evidence locations, and relationship coding confidence. Do not move evidence silently between reports, versions, applications, or families. A report can belong to more than one family only when it genuinely covers separate implementations or evaluations.
 
 PRISMA identification and selection counts remain at record and report level. Report separate denominators for families, reports, threads, artifact lineages and profiles, tailoring applications, inputs and assumptions, outcomes and burdens, and V&V records. A report count is not a count of independent implementations or transfers.
 

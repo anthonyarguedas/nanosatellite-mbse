@@ -303,18 +303,53 @@ Use the canonical [units, counting rules, and ID structure](protocol.md#units-of
 
 ## Unit-level evidence appraisal
 
-Do not calculate a report-level, evidence-unit-level, or aggregate numerical quality score. The review draws conclusions from linked evidence units inside heterogeneous reports; one grade would combine unrelated properties and duplicate information already captured by the extraction fields. Publication venue, peer-review status, technical review, degree examination, and preprint status are provenance to report, not proxies for evidential quality.
+Do not calculate a report-level, evidence-unit-level, or aggregate numerical quality score. The review draws conclusions from linked evidence units inside heterogeneous reports; one grade would combine unrelated properties. Publication venue, peer-review status, technical review, degree examination, preprint status, evidence type, and project maturity are provenance or context, not automatic proxies for evidential quality.
 
-No separate appraisal record, pass, or score is created. Appraisal is implemented by the existing RQ1 gates, RQ2 attribution and evidence-confidence fields, RQ3 linkage and completeness fields, and synthesis-level confidence assessment. Report provenance and context remain descriptive variables.
+Keep four judgments distinct:
+
+1. **Coding confidence** is the assessor's certainty that a source was located and interpreted correctly.
+2. **Methodological appraisal** assesses whether the design and conduct of the evaluation are fit for the particular claim.
+3. **Record-level claim support** assesses how strongly one evidence unit supports one bounded claim.
+4. **Conclusion confidence** assesses a synthesis conclusion across contributing units.
+
+Coding confidence cannot substitute for methodological credibility, and an operational or flight setting cannot automatically upgrade support for a claim it was not designed to test.
+
+Create a scoped methodological-appraisal object when a report makes an empirical or evaluative claim used for RQ1, RQ2, or RQ3. Link it to the existing report, thread, artifact or profile, application, outcome or burden, and V&V IDs that it appraises; it is an extraction structure, not another evidence unit or denominator. One object may support several records only when they use the same design, data, and analysis. Create separate objects when one report contains materially different evaluations, such as a simulation and an interview study.
+
+Classify the evaluation design as one or more of: `model_or_simulation_evaluation`, `case_study_or_experience_report`, `comparative_observational`, `controlled_or_quasi_experimental`, `survey`, `interview_or_qualitative`, `mixed_methods`, `artifact_or_reuse_demonstration`, `other`, or `unclear`.
+
+Appraise these common domains when applicable:
+
+- clarity of the aim and fitness of the design to that aim;
+- description and selection of the mission, cases, participants, scenarios, or other observational units;
+- definition of the MBSE artifact or activity and any comparator;
+- provenance and validity of inputs, data sources, measures, criteria, and oracles;
+- execution fidelity, missing data, exclusions, failures, and adverse or null results;
+- appropriateness and transparency of the analysis;
+- treatment of confounders and credible rival explanations;
+- ethical handling and relevant approvals when human participants or sensitive data are involved;
+- traceability from observations through analysis to the stated conclusion; and
+- limits on applicability outside the evaluated setting.
+
+Also apply design-specific domains:
+
+- **Model or simulation evaluation:** model verification, validation against an authoritative reference when claimed, input and calibration provenance, uncertainty and sensitivity analysis, and scenario coverage.
+- **Comparative, controlled, or quasi-experimental evaluation:** case or group comparability, allocation or selection, treatment fidelity, outcome-measure validity, missingness or attrition, confounding, and appropriateness of statistical analysis.
+- **Case study or experience report:** case-selection rationale, context, chain of evidence, triangulation, rival explanations, and the evaluator's role.
+- **Survey:** sampling frame, representativeness, response and non-response, instrument validity, and analysis.
+- **Interview or qualitative evaluation:** participant selection, data-collection transparency, analytic procedure, diversity of perspectives, reflexivity, and traceability from source material to interpretation.
+- **Artifact or reuse demonstration:** artifact identity, distinction among applications, implementation-family dependence, independent adoption when claimed, post-tailoring assurance, and failed or conflicting applications. The A/E/C/T/P/I gates remain the authoritative bounded-reuse profile and are not duplicated as a generic quality score.
+
+Code each applicable appraisal domain as `adequate`, `some_concerns`, `inadequate`, `not_reported`, `unclear`, or `not_applicable`, with a reason, evidence reference, and coding confidence. Use `inadequate` only for a source-supported methodological deficiency; use `not_reported` when conduct cannot be assessed from the available report. Do not sum, average, or convert domain codes into a pass or numerical score.
 
 Appraise evidence at the unit that supports a finding:
 
-- At report and EPS-thread level, use the extracted mission context, MBSE qualification, EPS anchors and bridges, inputs and assumptions, purpose, implementation footprint, availability, limitations, and extractor confidence.
-- For reusable artifacts and tailoring applications, use the A/E/C/T/P/I gate vector, tier, lineage and adopter confidence, demonstrated coverage, assurance, and failed or conflicting applications.
-- For RQ2, use explicit EPS attribution, mechanism, evidence type, comparator or criterion, result, alternative explanations, dependence, and the record-level evidence-confidence classification.
-- For RQ3, use linkage scope, target and bridge, V&V object, criterion completeness, execution and timing, result or verdict, model-to-test continuity, dependence, and record-level confidence.
+- At report and EPS-thread level, use direct source support for mission context, MBSE qualification, anchors and bridges, inputs and assumptions, purpose, implementation footprint, availability, and limitations. Link a methodological appraisal when an evaluation supports a characterization or footprint claim.
+- For reusable artifacts and tailoring applications, use the A/E/C/T/P/I gate vector, tier, lineage and adopter coding confidence, demonstrated coverage, assurance, failed or conflicting applications, and the methodological appraisal of any evaluation used to claim benefit or transfer.
+- For RQ2, keep author attribution separate from reviewer assessment. Use claim kind, explicit EPS attribution, mechanism, measure directness, comparator adequacy when required, confounding, evaluation design and appraisal, dependence, and record-level claim support.
+- For RQ3, use linkage scope, target and bridge, V&V object, criterion completeness, execution and timing, result or verdict, oracle credibility when validation is claimed, model-to-test continuity, methodological appraisal, dependence, and record-level claim support.
 
-Keep `not_reported`, `none`, `not_applicable`, and `uncertain` distinct. Missing reporting limits what the review can conclude but does not prove that the underlying work was absent or poor. Appraisal cannot make an otherwise ineligible report or record eligible and is not an additional exclusion threshold.
+Keep `not_reported`, `none`, `not_applicable`, and `uncertain` distinct. Missing reporting limits what the review can conclude but does not prove that the underlying work was absent or poor. Methodological appraisal and claim support cannot make an otherwise ineligible report or record eligible and are not additional exclusion thresholds.
 
 ### Appraisal meaning, reporting-bias assessment, and conclusion confidence
 
@@ -326,26 +361,29 @@ Do not make a funnel plot or run a statistical publication-bias test. The eviden
 - the effects of language, date, population, publication-type, retrieval, and source-access limits;
 - specific access and coverage issues, including PQDT entitlement, OATD's repository and participation limits, geographic and institutional imbalance, embargoes, missing abstracts or metadata, uncertainty about degree status, and overlap between PQDT and OATD;
 - reports that could not be obtained and records that were only leads;
-- missing or selectively reported genericity claims, applicability limits, tailoring failures and burdens, outcomes and burdens, criteria, results, and limitations;
+- missing or selectively reported genericity claims, applicability limits, tailoring failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, confounders, criteria or oracles, null or adverse results, and limitations;
 - dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage or application; and
 - protocol departures, search changes, and review-process limits that could affect interpretation.
 
 Give each conclusion a narrative confidence label: `higher`, `moderate`, `lower`, or `insufficient`. Give a source-locatable reason. Consider:
 
+- the kind and scope of claim being synthesized;
 - directness to a qualifying EPS thread;
-- completeness, directness, and evidential support of the contributing units;
+- fitness and methodological appraisal of the contributing evaluation designs;
+- whether measures are direct or are justified surrogates;
+- comparator adequacy and treatment of confounding when the claim is comparative or causal;
+- record-level claim support and applicability to the stated conclusion;
 - the genericity profile and tier when relevant;
-- evidence type and comparator;
-- maturity and independent or physical validation;
+- maturity, independence, or physical validation only when they bear directly on the claim;
 - consistency, including null, adverse, and failed-transfer evidence;
 - independence of report families and tailoring applications; and
 - limitations in the review process.
 
-Never convert a genericity tier automatically into a conclusion-confidence label. Do not use a numerical cutoff or mechanical average.
+Evidence type and maturity remain descriptive and do not determine confidence by themselves. Never convert a genericity tier, coding-confidence value, methodological domain, publication type, or record-support label automatically into a conclusion-confidence label. Do not use a numerical cutoff or mechanical average.
 
-- **Higher:** several materially independent, directly linked, well-supported records and no major unexplained disagreement.
-- **Moderate:** directly supporting evidence exists, but independence, maturity, or comparisons are limited.
-- **Lower:** support is sparse, weak, indirect, dependent, or importantly inconsistent.
+- **Higher:** several materially independent, directly linked, methodologically credible records support the bounded conclusion, all requirements relevant to that kind of claim are met, and there is no major unexplained disagreement.
+- **Moderate:** direct support exists, but there are important limitations in methodology, independence, precision, applicability, or consistency relevant to the conclusion.
+- **Lower:** support is sparse, methodologically concerning, indirect, dependent, or importantly inconsistent.
 - **Insufficient:** there is no eligible direct evidence for the conclusion.
 
 These labels form an engineering-review framework. They are not GRADE.
