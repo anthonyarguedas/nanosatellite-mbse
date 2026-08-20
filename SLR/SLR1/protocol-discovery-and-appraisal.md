@@ -362,8 +362,11 @@ Do not make a funnel plot or run a statistical publication-bias test. The eviden
 - specific access and coverage issues, including PQDT entitlement, OATD's repository and participation limits, geographic and institutional imbalance, embargoes, missing abstracts or metadata, uncertainty about degree status, and overlap between PQDT and OATD;
 - reports that could not be obtained and records that were only leads;
 - missing or selectively reported genericity claims, applicability limits, tailoring failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, confounders, criteria or oracles, null or adverse results, and limitations;
-- dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage or application; and
+- dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage or application;
+- the sole-reviewer extraction design; coverage and failures of model-assisted checks; sole-reviewer test–retest and any supervisor-audit scope; accepted corrections, rejected flags, unresolved discrepancies, and repeated error patterns; and
 - protocol departures, search changes, and review-process limits that could affect interpretation.
+
+Treat the sole-reviewer and model-assistance items as review-process limitations, not as publication or selective-reporting bias in the primary studies.
 
 Give each conclusion a narrative confidence label: `higher`, `moderate`, `lower`, or `insufficient`. Give a source-locatable reason. Consider:
 
