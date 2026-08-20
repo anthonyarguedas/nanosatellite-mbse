@@ -1,8 +1,8 @@
-# Protocol for a Systematic Review of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Extraction and synthesis
+# Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Extraction and synthesis
 
 > **Protocol parts:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · **3 — Extraction and synthesis** (this file)
 >
-> **Definitions used here:** [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), and the [quality checklist](protocol-discovery-and-appraisal.md#quality-checklist).
+> **Definitions used here:** [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), and [unit-level evidence appraisal](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal).
 
 ## Extraction fields
 
@@ -31,7 +31,7 @@ Give each shared object an ID, scope, evidence reference, and confidence. Link i
 For each report, record:
 
 - the new-run report ID, optional old corpus ID, and extraction-file path;
-- full citation, title, authors, year, venue or institutional report series, publication type, DOI or URL, publisher or issuing organization, source or report ID, and any reported peer or technical review;
+- full citation, title, authors, year, venue or institutional report series, publication type and status, DOI, arXiv identifier or URL, publisher or issuing organization, source or report ID, version used for extraction, version dates, any later formal counterpart, and any reported peer or technical review;
 - every linked new-run discovery-event ID and source record ID; keep the exact query or citation route, date, rank, and raw-file provenance once in the new search log and manifest;
 - title and abstract screening tier and reason;
 - final full-text decision and exclusion reason, if excluded;
@@ -58,7 +58,16 @@ For a thesis or dissertation, also record:
 - access, embargo, and licence status; and
 - degree-examination status, kept separate from peer review.
 
-### Study context and MBSE qualification
+For an arXiv preprint, also record:
+
+- arXiv identifier and subject category;
+- every version number and submission date;
+- the earliest version containing the substantial completed report;
+- the version available at the common evidence cutoff and the version used for extraction;
+- any withdrawal, replacement, journal reference, DOI, or formal publication counterpart; and
+- substantive differences among eligible manifestations when reported or observed.
+
+### Report and implementation context and MBSE qualification
 
 Record:
 
@@ -414,7 +423,7 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 
 ### RQ1
 
-- Synthesize the study-context, EPS-thread, input-and-assumption, engineering-output, and implementation-footprint records defined above.
+- Synthesize the report-and-implementation-context, EPS-thread, input-and-assumption, engineering-output, and implementation-footprint records defined above.
 - Keep reported inputs and implementation needs separate from reviewer inference and missing information.
 - Compare author labels such as *lightweight* or *scalable* with the reported footprint; do not turn them into eligibility or tailoring categories.
 - Compare Route A with Route B without assuming that one route is more mature.
@@ -446,8 +455,8 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 
 - Apply the [canonical units, denominator, and dependence rules](protocol.md#units-of-evidence-and-counting).
 - Present Route A and Route B separately before combining them.
-- Separate institutional technical reports, master's theses, doctoral theses or dissertations, and other grey literature from peer-reviewed scholarly reports. Show sensitivity views by publication provenance when useful. Do not automatically give a degree work less weight merely because it lacks journal peer review.
-- Use sensitivity views based on quality, linkage and lineage confidence, and genericity gates. Useful subsets may include Route A only, high-confidence records, G3/G4 profiles, and available artifacts. Do not turn the genericity tier into a numerical quality score.
+- Separate arXiv preprints, institutional technical reports, master's theses, doctoral theses or dissertations, and other grey literature from peer-reviewed scholarly reports. Show sensitivity views by publication provenance when useful. Do not automatically give a report less weight merely because it lacks journal peer review.
+- Use sensitivity views based on evidence confidence, directness, publication provenance, linkage and lineage confidence, and genericity gates. Useful subsets may include Route A only, high-confidence records, G3/G4 profiles, and available artifacts. Do not treat the genericity tier as a general evidence-quality score.
 - Treat cross-tabulations as descriptive co-reporting unless extraction provides a direct link.
 - Keep `not_reported`, `none`, `not_applicable`, `uncertain`, and invalid or unmapped values separate.
 - Treat sparse direct evidence as a result of the review. Do not fill gaps with general whole-spacecraft MBSE claims.
@@ -479,7 +488,7 @@ Do not publish licensed exports, copyrighted abstracts, or full texts when right
 
 ## Completed-review reporting
 
-The final report will call itself a systematic review and will follow the PRISMA 2020 checklist and 12-item abstract guidance. It will:
+The final report will call itself a systematic review and evidence map and will follow the PRISMA 2020 checklist and 12-item abstract guidance. It will:
 
 - name every source actually used, give its search date and the common evidence cutoff set under `P-001`, and distinguish failed or planned-but-unused sources;
 - link to the exact final source-native searches and PRISMA-S logs instead of showing only a cleaned example query;

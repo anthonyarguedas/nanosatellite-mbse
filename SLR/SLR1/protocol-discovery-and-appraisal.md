@@ -1,4 +1,4 @@
-# Protocol for a Systematic Review of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Discovery and appraisal
+# Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Discovery and appraisal
 
 > **Protocol parts:** [1 — Scope and definitions](protocol.md) · **2 — Discovery and appraisal** (this file) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md)
 >
@@ -226,9 +226,9 @@ Use Git history as the audit trail for text, code, schemas, and derived non-sens
 
 | Criterion | Plain-English rule | RQ(s) |
 |---|---|---|
-| Publication date | Include a report whose first formal publication or issue date is from 2011-01-01 through the common evidence cutoff in Part 1. Treat online-first and issue versions as one work. For a degree work, use the earliest date that can be verified as formal issue or publication of the completed thesis or dissertation, and keep the source's date label. Record defence, award, approval, repository deposit, public release, embargo end, and indexing dates separately. Do not silently substitute one of them for the publication date. | 1–3 |
+| Publication date | Include a report with an eligible version dated from 2011-01-01 through the common evidence cutoff in Part 1. Treat online-first and issue versions as manifestations of one work. For an arXiv preprint, use the submission date of the earliest version that contains a substantial completed report, and record every version and date. For a degree work, use the earliest date that can be verified as formal issue or publication of the completed thesis or dissertation, and keep the source's date label. Record formal-publication, defence, award, approval, repository-deposit, public-release, embargo-end, and indexing dates separately. Use only report versions available by the evidence cutoff for eligibility and extraction; do not silently substitute a later version or another date. | 1–3 |
 | Language | The full report must be in English. English metadata does not prove that the report itself is in English. If the full text cannot be obtained, use `not_retrieved` instead of making a language assumption. | 1–3 |
-| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; research chapter in an edited scholarly book; institutional technical report; completed master's thesis; or completed doctoral thesis or dissertation. A degree work needs stable institutional or authoritative dissertation-service provenance and substantial methods and results. Empirical comparisons and experience reports may qualify. Record degree acceptance or examination separately from peer or technical review; do not infer one from the other. | 1–3 |
+| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; research chapter in an edited scholarly book; institutional technical report; arXiv preprint with a stable arXiv identifier and a substantial completed report; completed master's thesis; or completed doctoral thesis or dissertation. A degree work needs stable institutional or authoritative dissertation-service provenance and substantial methods and results. An arXiv preprint is eligible with or without a peer-reviewed counterpart; record its preprint and review status without treating either as an eligibility or quality proxy. Empirical comparisons and experience reports may qualify. Record degree acceptance or examination separately from peer or technical review; do not infer one from the other. | 1–3 |
 | Population | The work must concern an actual or planned orbital CubeSat or nanosatellite-class mission, or a model tailored to that class. A generic SmallSat label is not enough. A mixed-platform report needs evidence that can be separated for CubeSats or nanosatellites. | 1–3 |
 | MBSE threshold | The work must meet the [structured-system-model definition](protocol.md#mbse-qualification). | 1–3 |
 | EPS threshold | At full text, the work must meet Route A or Route B. | 1–3 |
@@ -301,51 +301,24 @@ Keep secondary reviews and general MBSE background sources outside the analytic 
 
 Use the canonical [units, counting rules, and ID structure](protocol.md#units-of-evidence-and-counting). During discovery and screening, preserve record-to-report identity, all discovery events, report-family evidence, and artifact-lineage evidence without moving facts between linked units. PRISMA flow counts remain at record and report level.
 
-## Quality checklist
+## Unit-level evidence appraisal
 
-Score each applicable item as follows:
+Do not calculate a report-level, evidence-unit-level, or aggregate numerical quality score. The review draws conclusions from linked evidence units inside heterogeneous reports; one grade would combine unrelated properties and duplicate information already captured by the extraction fields. Publication venue, peer-review status, technical review, degree examination, and preprint status are provenance to report, not proxies for evidential quality.
 
-- **No = 0**
-- **Insufficiently = 0.5**
-- **Yes = 1**
-- **Not applicable:** remove the item from that score's denominator
+No separate appraisal record, pass, or score is created. Appraisal is implemented by the existing RQ1 gates, RQ2 attribution and evidence-confidence fields, RQ3 linkage and completeness fields, and synthesis-level confidence assessment. Report provenance and context remain descriptive variables.
 
-Use quality scores to give context and for sensitivity views. Do not use them as automatic exclusion thresholds. A score cannot make an ineligible report, genericity profile, outcome or burden record, or V&V record eligible.
+Appraise evidence at the unit that supports a finding:
 
-Do not include the A/E/C/T/P/I genericity profile or its `NA` and `G0`–`G4` tiers in this numerical checklist. Never average a genericity tier with a quality score.
+- At report and EPS-thread level, use the extracted mission context, MBSE qualification, EPS anchors and bridges, inputs and assumptions, purpose, implementation footprint, availability, limitations, and extractor confidence.
+- For reusable artifacts and tailoring applications, use the A/E/C/T/P/I gate vector, tier, lineage and adopter confidence, demonstrated coverage, assurance, and failed or conflicting applications.
+- For RQ2, use explicit EPS attribution, mechanism, evidence type, comparator or criterion, result, alternative explanations, dependence, and the record-level evidence-confidence classification.
+- For RQ3, use linkage scope, target and bridge, V&V object, criterion completeness, execution and timing, result or verdict, model-to-test continuity, dependence, and record-level confidence.
 
-### Report and EPS-thread quality
-
-1. Is this primary research from a credible scholarly venue, an identifiable institutional technical-report series, or a completed degree from an identifiable degree-granting institution or authoritative dissertation service? Can the reviewer verify report type, provenance, completion, and any stated peer review, technical review, or degree examination?
-2. Does the report describe the CubeSat or nanosatellite mission setting and lifecycle stage clearly enough to judge where the evidence applies?
-3. Does it describe the MBSE method, model boundary, language and tools, artifacts, and modeled relationships clearly enough to confirm that it qualifies as MBSE?
-4. Does it report the EPS anchor, model anchor, explicit bridge, and EPS boundary clearly enough to reconstruct the thread?
-5. Does it state the model's purpose, decisions, intended users or roles, and lifecycle use?
-6. Does it report important inputs and assumptions in enough detail, including values or ranges, units or time basis, source, uncertainty or margin, and reason?
-7. Does it report model, tool, and data availability, configurations, interfaces, and reusable assets well enough to judge reproducibility?
-8. Do the authors discuss limits, scope, uncertainty, threats to validity, or other explanations?
-
-### RQ1 genericity-evidence audit, when applicable
-
-Apply the [A/E/C/T/P/I gates and tier rules](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring) without a numerical score. Record a source location, status, reason, and confidence for every gate. Audit artifact and version identity, application identity, the separation of the declared envelope from demonstrated coverage, post-tailoring assurance, adopter independence, and failed or conflicting applications. Do not move evidence across uncertain lineages or applications or interpret a tier as general model quality.
-
-### RQ2 outcome/burden quality, when applicable
-
-9. Does the source explicitly link the outcome or implementation burden to a qualifying EPS thread and a stated MBSE mechanism, rather than to an EPS technology choice or MBSE in general?
-10. Does a suitable metric, traceable case result, comparison, stakeholder assessment, reuse result, integration or test result, operational result, or other evidence support the stated direction or burden?
-
-### RQ3 V&V quality, when applicable
-
-11. Does the source clearly report the EPS target, linkage scope, model-to-V&V bridge, original terminology, normalized V&V object, method or artifact, criterion, lifecycle timing, and execution status?
-12. If execution or closure is claimed, does the source give the result or verdict and evidence of any later software, hardware, integration, test, operational, or flight link?
-
-Score items 1–3 and 8 at report level. Score items 4–7 for each EPS thread, items 9–10 for each direct RQ2 outcome or burden record, and items 11–12 for each EPS-linked RQ3 record.
-
-Report the genericity audit separately at artifact-lineage/profile and tailoring-application level, without a numeric total. Any checklist total is descriptive and must state both its unit and applicable-item denominator. Keep confidence in linkage, lineage, and tiers separate from quality scores.
+Keep `not_reported`, `none`, `not_applicable`, and `uncertain` distinct. Missing reporting limits what the review can conclude but does not prove that the underlying work was absent or poor. Appraisal cannot make an otherwise ineligible report or record eligible and is not an additional exclusion threshold.
 
 ### Appraisal meaning, reporting-bias assessment, and conclusion confidence
 
-This checklist measures reporting completeness, direct linkage to EPS, and strength of support across varied engineering evidence. It is not a validated clinical risk-of-bias tool. Report checklist areas and record-level evidence confidence at their actual units. Do not reduce them to an unexplained “study quality” label.
+These unit-level structures assess directness, reporting completeness, and strength of support across varied engineering evidence. They are not a clinical risk-of-bias tool and must not be reduced to an unexplained “study quality” label.
 
 Do not make a funnel plot or run a statistical publication-bias test. The evidence does not share one effect measure and is too varied. Instead, assess and report the following for each research-question synthesis:
 
@@ -360,7 +333,7 @@ Do not make a funnel plot or run a statistical publication-bias test. The eviden
 Give each conclusion a narrative confidence label: `higher`, `moderate`, `lower`, or `insufficient`. Give a source-locatable reason. Consider:
 
 - directness to a qualifying EPS thread;
-- report and record quality;
+- completeness, directness, and evidential support of the contributing units;
 - the genericity profile and tier when relevant;
 - evidence type and comparator;
 - maturity and independent or physical validation;

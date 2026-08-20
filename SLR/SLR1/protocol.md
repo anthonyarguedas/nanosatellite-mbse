@@ -1,9 +1,15 @@
-# Protocol for a Systematic Review of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
+# Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Working branch:** `slr1-1.1-restart`
 - **Common evidence cutoff:** **TBD.** Set one exact calendar date before the first final search and use it unchanged for every source and citation route. **Task:** [`P-001`](TASKS.md).
 
 > **Protocol parts:** **1 — Scope and definitions** (this file) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md)
+
+## Review type and terminology
+
+This work is a **systematic review with an evidence-map synthesis**. Throughout the protocol, *systematic review* names the overall method of identifying, selecting, appraising, and synthesizing evidence; *evidence map* names the structured descriptive output. Do not call the work a *systematic mapping study*: Kitchenham and Charters use that term for broad, high-level classification with deliberately limited extraction, whereas this review performs in-depth extraction and appraisal of linked evidence units.
+
+Use the evidence-unit terms in [Units of evidence and counting](#units-of-evidence-and-counting) rather than using *study* for every object. In particular, a **record** is a search result, a **report** is a document, and a **study or implementation report family** is the source-supported underlying investigation or implementation represented by one or more reports. EPS threads, artifact profiles, tailoring applications, outcome or burden records, and V&V records are analytic evidence units, not additional studies or PRISMA reports.
 
 ## Review status and restart policy
 
@@ -30,10 +36,11 @@ Track every unresolved action or deferred field stated in any `protocol*.md` fil
 Use the following guidance:
 
 - [PRISMA-P (2015) protocols and checklist](https://www.prisma-statement.org/protocols) for this protocol;
-- [PRISMA-S (2021) search reporting](https://www.prisma-statement.org/prisma-search) and [Rethlefsen et al. (2021)](https://doi.org/10.1186/s13643-020-01542-z) to design the strategy in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) and to run, save, and report every search in a new-run `search-log.md`; and
+- [PRISMA-S (2021) search reporting](https://www.prisma-statement.org/prisma-search) and [Rethlefsen et al. (2021)](https://doi.org/10.1186/s13643-020-01542-z) to design the strategy in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) and to run, save, and report every search in a new-run `search-log.md`;
+- Kitchenham and Charters (2007), *Guidelines for performing Systematic Literature Reviews in Software Engineering*, as complementary engineering conduct guidance for PICOC framing, heterogeneous evidence, protocol and form piloting, selection and extraction consistency, duplicate-report handling, and descriptive or narrative synthesis; and
 - the [PRISMA 2020 statement](https://www.prisma-statement.org/prisma-2020-statement), [checklist](https://www.prisma-statement.org/prisma-2020-checklist), [abstract guidance](https://www.prisma-statement.org/abstracts), and [flow templates](https://www.prisma-statement.org/prisma-2020-flow-diagram) for the completed review.
 
-These documents are reporting guidelines. They do not prove that evidence is valid. This is an engineering evidence map, so do not invent clinical effect measures, clinical risk-of-bias tools, or GRADE ratings.
+PRISMA supplies reporting guidance; Kitchenham and Charters supply complementary engineering-review conduct guidance. Neither proves that evidence is valid. This systematic review produces an engineering evidence map, so do not invent clinical effect measures, clinical risk-of-bias tools, or GRADE ratings.
 
 This is a new review, not an update. Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources. Count identification and selection at the record and report level. Other units—report families, EPS threads, reusable-artifact lineages, tailoring applications, outcome or burden records, and verification and validation (V&V) records—are linked units of analysis. Report a separate denominator for each one.
 
@@ -248,7 +255,7 @@ Apply these caps exactly:
 - Two materially distinct and assured applications of the reusable core can reach G3.
 - G4 requires a credited application that was independently adopted or tailored, independently confirmed, and assured.
 
-A broad claimed envelope, a larger model, more parameters, public access, a higher report-quality score, or strong evidence for another gate cannot make up for a missing gate.
+A broad claimed envelope, a larger model, more parameters, public access, or strong evidence for another gate cannot make up for a missing gate.
 
 The tiers are ordered evidence classes. They are not numeric scores, model-quality rankings, maturity levels, measures of benefit or prevalence, or promises that an artifact will suit an untested setting. Assign one highest tier only after checking every lower-tier requirement. Keep the gate vector so that two artifacts at the same tier are not assumed to be equal.
 
@@ -339,7 +346,7 @@ Classify PIL and HIL according to the hardware actually used. They are not wholl
 Use the following linked units. They do not form a simple hierarchy because report families and artifact lineages may cross reports and implementations.
 
 1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model or toolchain use represented by one or more reports. Require source-supported overlap; a shared topic, organization, or tool is not enough.
-2. **Report:** one distinct publication, institutional report, or completed thesis or dissertation. Merge manifestations of the same report, but retain substantively different companion reports and link them to a family when warranted.
+2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Treat an arXiv preprint and a later formal version as candidate manifestations of the same report: merge them only when no difference material to this review is found, and otherwise retain them as companion reports in the same family. Preserve version-level dates, provenance, and substantive differences in either case.
 3. **EPS model thread:** one qualifying EPS-primary or embedded chain within a report.
 4. **Reusable EPS artifact lineage and genericity profile:** one identifiable base artifact and its source-supported versions or derived instances. Split profiles when versions or scopes differ materially.
 5. **Tailoring application:** one use of an artifact lineage in one target setting, including a justified unchanged adoption. Merge repeated reporting of the same application.
