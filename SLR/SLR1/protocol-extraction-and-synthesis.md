@@ -1,6 +1,6 @@
 # Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Extraction and synthesis
 
-> **Protocol parts:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · **3 — Extraction and synthesis** (this file)
+> **Protocol parts:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · **3 — Extraction and synthesis** (this file) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
 >
 > **Definitions used here:** [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), and [unit-level evidence appraisal](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal).
 
@@ -512,7 +512,9 @@ Complete synthesis and reporting under task [`R-006`](TASKS.md). Use a structure
 
 Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE studies and reports published from 2011 through 2023. It maps methods, languages, tools, five MBSE phases, and general challenges across many kinds of space work.
 
-Use that review for context, terminology, a later recall check, and recorded citation searching. Do not use it as primary evidence.
+Treat Buruso et al. as one known item in the separate [prior-secondary-review search and CRD/DARE assessment](protocol-prior-secondary-reviews.md). It enters that supporting assessment only through a successful final Scopus or Web of Science search and normal screening. The resulting scope and methods assessment contributes to the need-for-review rationale, not to RQ1–RQ3 evidence.
+
+After the main independent baseline is complete, Buruso et al. may also be used for context, terminology, a later primary-report recall check, and recorded citation searching under Part 2. Do not use it as primary evidence or let either role insert one of its cited reports directly.
 
 This review is not an update or replication of Buruso et al. It applies this protocol's narrower nanosatellite-EPS population, direct EPS linkage rule, and RQ1–RQ3 evidence structures. Do not treat system-wide MBSE or V&V as EPS evidence or compare the two reviews' counts as evidence of effectiveness.
 
@@ -576,6 +578,7 @@ After clean-start task [`P-000`](TASKS.md) is complete, create these artifacts a
 - a reusable EPS artifact-lineage register;
 - a tailoring-application table;
 - read-only known-item registers for legacy reports and Buruso recall;
+- the separate prior-secondary-review search bundle required by its [supporting protocol](protocol-prior-secondary-reviews.md#required-artifacts-and-reporting), including its CRD/DARE and overlap matrices and need-for-review statement;
 - a new `search-log.md` meeting PRISMA-S requirements;
 - a new `searches/search-concept-dictionary.json` and matching code generated from Part 2;
 - new source/interface crosswalk, final-run manifest schema, and failure-register schema;
@@ -601,13 +604,14 @@ The final report will call itself a systematic review and evidence map and will 
 - link to the exact final source-native searches and PRISMA-S logs instead of showing only a cleaned example query;
 - describe the sole-reviewer design, human and complete blind model extractions, canonical-audit and reconciliation sequence, test–retest sample selection and delay, requested and completed supervisor scope, discrepancies, escalation, and conflict handling exactly as performed;
 - identify each model or snapshot, provider and execution date, reasoning and generation settings, prompt and codebook version, document-ingestion route, full-extraction module coverage and failures, human-only and model-only units, split or merge candidates, field discrepancies, and the number and disposition of audit flags;
+- report the bounded prior-secondary-review search separately, including its two-source limitation, CRD/DARE assessment, overlap matrix, need disposition, and any resulting protocol change, without adding its records to the main PRISMA flow;
 - never call model-assisted checking independent human review; never call same-reviewer test–retest independent replication; never infer corpus-wide agreement from the small human audit; and never describe source pilots as formal PRESS review;
 - explain why no pooled effect estimate is planned;
 - label every count or proportion with its denominator: report family, report, thread, artifact lineage or profile, tailoring application, outcome or burden, or V&V record;
 - use the new-review PRISMA flow diagram for databases and other sources, with records and reports—not linked analytic units—in its boxes;
 - cite apparently eligible reports excluded after full-text review and give source-located reasons;
 - present methodological appraisal, record-level claim support, reporting-bias, and conclusion-confidence results under the [appraisal framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence), without treating evidence type or maturity as a universal hierarchy; and
-- report access to all three parts of the current protocol, every dated methods change or departure, limits of the review process and evidence, and availability of data, code, and materials.
+- report access to all three main parts and the supporting prior-secondary-review protocol, every dated methods change or departure, limits of the review process and evidence, and availability of data, code, and materials.
 
 Complete the administrative declarations under task [`P-002`](TASKS.md) before publication, or clearly say that they are absent. The clean-document start condition does not imply that these declarations exist.
 

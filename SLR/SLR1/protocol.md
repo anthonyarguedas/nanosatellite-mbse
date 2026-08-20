@@ -3,7 +3,7 @@
 - **Working branch:** `slr1-1.1-restart`
 - **Common evidence cutoff:** **TBD.** Set one exact calendar date before the first final search and use it unchanged for every source and citation route. **Task:** [`P-001`](TASKS.md).
 
-> **Protocol parts:** **1 — Scope and definitions** (this file) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md)
+> **Protocol parts:** **1 — Scope and definitions** (this file) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
 
 ## Review type and terminology
 
@@ -20,10 +20,10 @@ Treat all material from the earlier review as legacy or pilot material. This inc
 The following rules apply:
 
 - Do not include a report automatically because an earlier review found it.
-- Find every record through a search defined in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) or through a recorded citation search. Then screen it under this protocol.
+- Find every main-review primary-evidence record through a search defined in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) or through a recorded citation search. Then screen it under this protocol. Supporting-search records follow their separate [prior-secondary-review protocol](protocol-prior-secondary-reviews.md).
 - Use `markdown/` and `pdfs/` only as a cache of source files. They are not part of the search evidence base.
-- Use reports found before this run only to check whether the search can find known items.
-- Extract every included report again from its full text, using a new codebook made for this run.
+- Use reports found before this run only to check whether the applicable search can find known items.
+- Extract every included main-review report again from its full text, using a new codebook made for this run.
 - Consult an old extraction only in a later discrepancy audit. Do not copy old evidence into the new extraction.
 - Do not carry old counts or classifications into the new synthesis.
 
@@ -45,6 +45,12 @@ PRISMA supplies reporting guidance; Kitchenham and Charters supply complementary
 This is a new review, not an update. Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources. Count identification and selection at the record and report level. Other units—report families, EPS threads, reusable-artifact lineages, tailoring applications, outcome or burden records, and verification and validation (V&V) records—are linked units of analysis. Report a separate denominator for each one.
 
 Registration and contact details, contributor and guarantor details, and declarations about funding, sponsors, and competing interests will be completed later. State clearly when any of these details are still absent. Do not claim that this protocol is administratively complete under PRISMA-P. **Task:** [`P-002`](TASKS.md).
+
+## Need for this review
+
+Before the first final primary-evidence search, conduct the bounded [prior-secondary-review search and CRD/DARE assessment](protocol-prior-secondary-reviews.md). This supporting process uses only Scopus and Web of Science Core Collection, has separate records and counts, and is not a tertiary review. It will determine whether an existing review already covers the nanosatellite-EPS population, direct MBSE relationship, and RQ1–RQ3; identify scope, currency, or methodological gaps; and provide the source-located justification for proceeding. Complete tasks [`PR-001`](TASKS.md) and [`PR-002`](TASKS.md) before [`R-002`](TASKS.md).
+
+A prior review, including Buruso et al. (2026), cannot answer RQ1–RQ3 as evidence in this review and cannot insert its included reports into the primary corpus. If the supporting assessment identifies potential redundancy, reconsider and commit the rationale and any affected protocol scope before beginning the main final searches.
 
 ## Review objective
 

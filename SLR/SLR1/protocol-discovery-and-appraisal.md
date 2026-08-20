@@ -1,6 +1,6 @@
 # Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Discovery and appraisal
 
-> **Protocol parts:** [1 — Scope and definitions](protocol.md) · **2 — Discovery and appraisal** (this file) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md)
+> **Protocol parts:** [1 — Scope and definitions](protocol.md) · **2 — Discovery and appraisal** (this file) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
 >
 > **Definitions used here:** [MBSE qualification](protocol.md#mbse-qualification), [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), and [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring).
 
@@ -35,9 +35,11 @@ Keep separate totals for all 15 sources or collections.
 
 Create the new-run source mapping and schemas under `searches/` as specified under [new-run source translations and search artifacts](#new-run-source-translations-and-search-artifacts).
 
+The separate [prior-secondary-review need assessment](protocol-prior-secondary-reviews.md) searches only Scopus and Web of Science Core Collection. Its `PSR*` events, records, decisions, extractions, and counts are not part of the 15-source primary-evidence baseline or the main PRISMA flow, even though they reuse validated interface behavior and common search infrastructure.
+
 ### Supplementary discovery and citation searching
 
-Also use backward citation searching, forward citation searching in both Scopus and Web of Science Core Collection, and Buruso et al. (2026), *Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review* (https://doi.org/10.1002/sys.70051), as a secondary-review seed and later recall check. Follow the detailed procedure and stopping rule under [completing the baseline and citation searches](#completing-the-baseline-and-citation-searches). Buruso et al. is not primary evidence and cannot insert a report directly into this review.
+Also use backward citation searching, forward citation searching in both Scopus and Web of Science Core Collection, and Buruso et al. (2026), *Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review* (https://doi.org/10.1002/sys.70051), as a secondary-review seed and later recall check. Follow the detailed procedure and stopping rule under [completing the baseline and citation searches](#completing-the-baseline-and-citation-searches). Buruso et al. is separately a known item for the [prior-secondary-review search](protocol-prior-secondary-reviews.md), where it can be assessed only if a final supporting-search event retrieves it. Neither role makes it primary evidence or permits it to insert a report directly into the main review.
 
 ## Search strategy
 
