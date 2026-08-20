@@ -48,7 +48,7 @@ Use two complementary streams because an EPS thread inside a wider spacecraft mo
 - **Stream A — EPS-explicit:** Population × EPS × MBSE/system-model concepts.
 - **Stream B — embedded-thread recall:** Population × MBSE/system-model concepts and conservative artifact or tailoring expansions, without requiring an EPS term. Every Stream B candidate must be checked at full text for an eligible EPS thread.
 
-The 11 direct query families are Scopus, Web of Science Core Collection, IEEE Xplore, Engineering Village, Wiley Online Library, Springer Nature Link, Advanced Technologies & Aerospace Index, PQDT Global, OATD, AIAA ARC, and arXiv. Engineering Village covers two databases, Compendex and Inspec. IAF, ESA, and NTRS may use a broader source harvest followed by deterministic local matching when their interfaces cannot represent the direct queries without loss.
+The 13 direct query families are Scopus, Web of Science Core Collection, IEEE Xplore, Engineering Village, Wiley Online Library, Springer Nature Link, Advanced Technologies & Aerospace Index, PQDT Global, OATD, AIAA ARC, IAF Digital Library, NASA Technical Reports Server (NTRS), and arXiv. Engineering Village covers two databases, Compendex and Inspec. ESA may use a broader source harvest followed by deterministic local matching when its interface cannot represent the direct queries without loss.
 
 Use the following exact cross-source concept blocks. Source-native translations may change syntax, field wrappers, and validated wildcard use, but not the intended terms or Boolean relationships.
 
@@ -90,7 +90,7 @@ V1 and O1 are mandatory sensitivity partitions, but their terms are not eligibil
 
 #### Direct query schedule
 
-Execute these 11 semantic partitions in every direct query family unless a newly documented source limitation makes an exact translation impossible. A source-specific failure does not authorize an unrecorded narrower query.
+Execute these 11 semantic partitions in every direct query family unless a newly documented source limitation makes an exact translation impossible. A source may implement one semantic partition as a prospectively documented, lossless union of source-native query cells when a fixed query-length limit prevents one expression; preserve each cell's query, total, and stable identifiers and reconcile their union. A source-specific failure does not authorize an unrecorded narrower query.
 
 | ID | Boolean form | Role |
 |---|---|---|
@@ -143,11 +143,11 @@ A syntax or transport change that preserves the semantic blocks is an implementa
 
 ### Source-specific guidelines
 
-Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D11` and local-source tasks `S-L01`–`S-L03` in [`TASKS.md`](TASKS.md). For each accepted method, add here the validated source boundary, translation approach, fields and controls, date and language handling, completeness and export method, limits, and failure rules. Keep exact run-specific strings and pilot evidence in the new search log. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
+Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D13` and local-source task `S-L02` in [`TASKS.md`](TASKS.md). For each accepted method, add here the validated source boundary, translation approach, fields and controls, date and language handling, completeness and export method, limits, and failure rules. Keep exact run-specific strings and pilot evidence in the new search log. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
 
 ### Pilots and final search events
 
-Run small, focused, no-screening pilots to validate each current interface and translation under tasks `S-D01`–`S-D11` and `S-L01`–`S-L03` in [`TASKS.md`](TASKS.md). Pilot records, identifiers, totals, and files are diagnostic only and can never become candidates or final discovery events. Keep pilot storage separate from clean final-run storage.
+Run small, focused, no-screening pilots to validate each current interface and translation under tasks `S-D01`–`S-D13` and `S-L02` in [`TASKS.md`](TASKS.md). Pilot records, identifiers, totals, and files are diagnostic only and can never become candidates or final discovery events. Keep pilot storage separate from clean final-run storage.
 
 For every pilot and final event, record:
 
@@ -176,7 +176,7 @@ The full report must be in English. Apply a native English limit only after the 
 
 ### Local-harvest methods
 
-Regenerate the IAF, ESA, and NTRS methods from the current interfaces under tasks [`S-L01`](TASKS.md), `S-L02`, and `S-L03`. A local method may use a complete population or source harvest followed by deterministic matching when direct Boolean translation would lose records. Before final execution, its new-run specification must define:
+Regenerate the ESA method from the current interface under task [`S-L02`](TASKS.md). A local method may use a complete population or source harvest followed by deterministic matching when direct Boolean translation would lose records. Before final execution, its new-run specification must define:
 
 - the source universe and how completeness is established;
 - metadata, text, or attachment fields included in each matching route;
