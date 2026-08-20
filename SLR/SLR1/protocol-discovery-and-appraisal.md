@@ -31,7 +31,7 @@ For PRISMA-S, name PQDT Global as a database on the ProQuest Platform and descri
 
 As a rule specific to this review, count the other 14 bounded and structured collections in the databases/registers column as databases. This rule applies even when a source uses a browser-only workflow or an unusual export format. Do not call any source a study register, and do not count a source in both columns.
 
-Keep separate totals for all 15 sources or collections. For Engineering Village, also keep the combined total and separate Compendex and Inspec totals. For each of the two ProQuest sources, keep separate proof of the selected database, search event, count, export, and provenance.
+Keep separate totals for all 15 sources or collections.
 
 Create the new-run source mapping and schemas under `searches/` as specified under [new-run source translations and search artifacts](#new-run-source-translations-and-search-artifacts).
 
@@ -54,7 +54,7 @@ Use the following exact cross-source concept blocks. Source-native translations 
 
 #### Population and EPS blocks
 
-- **Population (`P`):** `CubeSat`, `CubeSats`, `cube sat`, `nanosat`, `nanosatellite`, `nanosatellites`, `nano-satellite`, `nano-satellites`, `nano satellite`, and `nano satellites`. A source may use `nanosat*` only after a new-run pilot confirms its behavior; otherwise list the finite forms. A named mission can establish population eligibility during screening, but no unspecified mission-name list is part of the direct strategy. Do not use `SmallSat` or “small satellite” as a positive concept.
+- **Population (`P`):** `CubeSat`, `CubeSats`, `cube sat`, `nanosat`, `nanosatellite`, `nanosatellites`, `nano-satellite`, `nano-satellites`, `nano satellite`, and `nano satellites`. A source may use `nanosat*` only after its corresponding `S-D*` or `S-L*` pilot in [`TASKS.md`](TASKS.md) confirms the behavior; otherwise list the finite forms. A named mission can establish population eligibility during screening, but no unspecified mission-name list is part of the direct strategy. Do not use `SmallSat` or “small satellite” as a positive concept.
 - **High-specificity EPS (`E_H`):** `electrical power system`, `electric power system`, `electrical power subsystem`, `electric power subsystem`, `EPS`, `power subsystem`, `electrical architecture`, `power architecture`, `PCDU`, and `PMAD`.
 - **Functional or analytical EPS (`E_F`):** `power budget`, `energy budget`, `energy balance`, `power generation`, `solar array`, `battery`, `batteries`, `energy storage`, `power conditioning`, `power distribution`, `power management`, `power interface`, `power mode`, `power modes`, and `load profile`.
 - **All EPS (`E`):** `E_H ∪ E_F`.
@@ -121,12 +121,11 @@ For a local-harvest source, the minimum equivalent candidate logic is `P AND M` 
 No source-specific query, adapter assumption, search log, concept dictionary, source crosswalk, manifest schema, or failure schema from an earlier attempt governs this run. Before the first related pilot, create the following anew from this protocol and give each artifact new-run provenance:
 
 - `search-log.md`;
-- `searches/search-concept-dictionary.json`;
 - the source/interface/PRISMA crosswalk;
 - the final-run manifest schema; and
 - the failure-register schema.
 
-The protocol's concept blocks and Boolean schedule are normative. The new dictionary must reproduce them without adding or dropping a concept. Source-specific translations and controls must be regenerated and validated against the current interfaces rather than restored from Git history.
+The protocol's concept blocks and Boolean schedule are normative. The new dictionary must reproduce them without adding or dropping a concept. Source-specific translations and controls must be regenerated and validated against the current interfaces rather than restored from Git history. **Task:** [`S-001`](TASKS.md).
 
 For each source or local method, the new log must record before final execution:
 
@@ -142,9 +141,13 @@ For each source or local method, the new log must record before final execution:
 
 A syntax or transport change that preserves the semantic blocks is an implementation refinement and belongs in the search log. A change to a concept, Boolean relationship, planned source, evidence window, or eligibility rule is a protocol change and must be committed before the affected final search is run.
 
+### Source-specific guidelines
+
+Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D11` and local-source tasks `S-L01`–`S-L03` in [`TASKS.md`](TASKS.md). For each accepted method, add here the validated source boundary, translation approach, fields and controls, date and language handling, completeness and export method, limits, and failure rules. Keep exact run-specific strings and pilot evidence in the new search log. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
+
 ### Pilots and final search events
 
-Run small, focused, no-screening pilots to validate each current interface and translation. Pilot records, identifiers, totals, and files are diagnostic only and can never become candidates or final discovery events. Keep pilot storage separate from clean final-run storage.
+Run small, focused, no-screening pilots to validate each current interface and translation under tasks `S-D01`–`S-D11` and `S-L01`–`S-L03` in [`TASKS.md`](TASKS.md). Pilot records, identifiers, totals, and files are diagnostic only and can never become candidates or final discovery events. Keep pilot storage separate from clean final-run storage.
 
 For every pilot and final event, record:
 
@@ -165,15 +168,15 @@ Keep duplicate discovery events when the same record is found by different sourc
 
 ### Known items and common limits
 
-Reports known before the search may be listed in a read-only known-item register. A missed item may guide prospective query refinement, but it can enter the review only through a recorded final search or citation-search event and normal screening. Report known-item recall and unique inclusions by stream and source.
+Create the read-only known-item registers under task [`R-001`](TASKS.md). A missed item may guide prospective query refinement, but it can enter the review only through a recorded final search or citation-search event and normal screening. Report known-item recall and unique inclusions by stream and source.
 
-The evidence window begins on 2011-01-01 and ends on the common evidence cutoff stated in [Part 1](protocol.md). Set that exact cutoff before the first final search. Use it unchanged for every source and citation route, even when execution occurs later. When an interface cannot apply the exact window, preserve its unaltered total, apply the window locally, and report removed and unresolved records.
+The evidence window begins on 2011-01-01 and ends on the common evidence cutoff stated in [Part 1](protocol.md). Set that exact cutoff under task [`P-001`](TASKS.md) before the first final search. Use it unchanged for every source and citation route, even when execution occurs later. When an interface cannot apply the exact window, preserve its unaltered total, apply the window locally, and report removed and unresolved records.
 
 The full report must be in English. Apply a native English limit only after the new-run source validation shows that it is reliable; otherwise determine language during screening. Do not apply a publication-type, access, peer-review, venue, or content-type discovery limit unless a source boundary inherently supplies it or a newly logged source limitation requires it. Source scope does not by itself prove final publication type or report language.
 
 ### Local-harvest methods
 
-Regenerate the IAF, ESA, and NTRS methods from the current interfaces. A local method may use a complete population or source harvest followed by deterministic matching when direct Boolean translation would lose records. Before final execution, its new-run specification must define:
+Regenerate the IAF, ESA, and NTRS methods from the current interfaces under tasks [`S-L01`](TASKS.md), `S-L02`, and `S-L03`. A local method may use a complete population or source harvest followed by deterministic matching when direct Boolean translation would lose records. Before final execution, its new-run specification must define:
 
 - the source universe and how completeness is established;
 - metadata, text, or attachment fields included in each matching route;
@@ -186,7 +189,7 @@ Do not combine required terms across records or across independently defined rou
 
 ### Completing the baseline and citation searches
 
-The independent baseline is complete only after all 15 planned sources or collections have either a complete, reconciled final run or a recorded final source or interface failure. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources. Keep every failure and reason in the new manifest and PRISMA counts.
+Execute and reconcile the electronic baseline under task [`R-002`](TASKS.md) and the recall and citation cycles under [`R-003`](TASKS.md). The independent baseline is complete only after all 15 planned sources or collections have either a complete, reconciled final run or a recorded final source or interface failure. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources. Keep every failure and reason in the new manifest and PRISMA counts.
 
 Only after that baseline and failure register are complete, use Buruso et al. (2026) and the retained-file cache for recall audits. A missed report may trigger a prospective concept-level refinement or enter through a recorded citation route; never add it directly.
 
@@ -204,23 +207,20 @@ Stop electronic searching only when A1, A2, A3, B1, B2, BG1, BG2, BC1, BT2, V1, 
 
 ## Data management and audit trail
 
-Keep review methods, logs, controlled dictionaries, derived data, and analysis code in the Git-tracked `SLR/SLR1/` workspace. Where licences allow, keep raw source files read-only. List every file in a manifest with:
+Keep review methods, logs, controlled dictionaries, derived data, and analysis code in the Git-tracked `SLR/SLR1/` workspace. List every file in a manifest with:
 
 - path;
 - query or event ID;
 - source;
-- timestamp;
-- byte size;
-- access or rights status; and
-- software that created it.
+- timestamp
 
-Record the database interface and software versions actually used. Do not assume that the draft environment stayed unchanged.
+Record the database interface actually used.
 
-Use UTF-8 JSON, JSONL, or CSV for derived machine-readable data. Use RIS, BibTeX, CSV, or another source-native structured format for bibliographic transfer when available. Before every merge or synthesis, validate schemas, IDs, controlled values, and links between records.
+Use UTF-8 JSON for derived machine-readable data. Use BibTeX for bibliographic transfer when available. Before every merge or synthesis, validate schemas, IDs, controlled values, and links between records.
 
 Make deduplication reproducible. Review conflicts manually when identifiers disagree. Keep both the original metadata and the preferred normalized value, with the reason for choosing it.
 
-Use Git history as the audit trail for text, code, schemas, and derived non-sensitive data. Keep licensed raw exports and full texts in access-controlled storage. The repository or search manifest must give their durable location and backup status. Do not publish licensed exports, copyrighted abstracts, or full texts merely to satisfy a checklist.
+Use Git history as the audit trail for text, code, schemas, and derived non-sensitive data.
 
 ## Inclusion and exclusion criteria
 
@@ -237,10 +237,10 @@ Use Git history as the audit trail for text, code, schemas, and derived non-sens
 | Non-MBSE EPS studies | Exclude stand-alone component, circuit, control, optimization, sizing, simulation, or hardware-performance studies unless they have an explicit link to a structured system model. | 1–3 |
 | Generic whole-spacecraft MBSE | Exclude a report without a qualifying EPS thread, even if it mentions an EPS or power budget. | 1–3 |
 | Other-subsystem studies | Exclude unless they contain a qualifying EPS thread. A subsystem's power consumption alone is not enough. | 1–3 |
-| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; incomplete degree work; undergraduate, bachelor's, or non-degree projects; presentation- or slide-only records; recordings; editorials; tutorials; advertisements; patents; preprints without an eligible formal report; and non-scholarly web material. A record from arXiv, PQDT, OATD, ESA Indico, or NTRS may be kept as a lead to a different eligible full report, but it cannot supply primary evidence itself. | 1–3 |
+| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; incomplete degree work; undergraduate, bachelor's, or non-degree projects; presentation- or slide-only records; recordings; editorials; tutorials; advertisements; patents; and non-scholarly web material. | 1–3 |
 | Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. | 1–3 |
 
-Do not make an outcome, V&V activity, reuse, genericity claim, or demonstrated tailoring a report-level inclusion test. Every eligible thread contributes to RQ1a and receives an RQ1b disposition; create direct RQ2 and RQ3 records only when the relevant definitions are met. These later contribution codes cannot make an ineligible report eligible.
+Do not make an outcome, V&V activity, reuse, genericity claim, or demonstrated tailoring a report-level inclusion test. Every eligible thread contributes to RQ1 and receives a disposition; create direct RQ2 and RQ3 records only when the relevant definitions are met. These later contribution codes cannot make an ineligible report eligible.
 
 For retrieval, follow the run's PDF workflow:
 
@@ -251,6 +251,8 @@ For retrieval, follow the run's PDF workflow:
 An OATD record does not prove that the linked full text is still available. Keep unresolved reports in PRISMA and retrieval records as `not_retrieved`. They do not enter full-text evidence synthesis, but do not describe lack of access as a scientific exclusion reason.
 
 ## Screening and eligibility procedure
+
+Execute retrieval and screening under task [`R-004`](TASKS.md).
 
 ### Title and abstract screening
 
@@ -323,7 +325,7 @@ Do not include the A/E/C/T/P/I genericity profile or its `NA` and `G0`–`G4` ti
 7. Does it report model, tool, and data availability, configurations, interfaces, and reusable assets well enough to judge reproducibility?
 8. Do the authors discuss limits, scope, uncertainty, threats to validity, or other explanations?
 
-### RQ1b genericity-evidence audit, when applicable
+### RQ1 genericity-evidence audit, when applicable
 
 Apply the [A/E/C/T/P/I gates and tier rules](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring) without a numerical score. Record a source location, status, reason, and confidence for every gate. Audit artifact and version identity, application identity, the separation of the declared envelope from demonstrated coverage, post-tailoring assurance, adopter independence, and failed or conflicting applications. Do not move evidence across uncertain lineages or applications or interpret a tier as general model quality.
 

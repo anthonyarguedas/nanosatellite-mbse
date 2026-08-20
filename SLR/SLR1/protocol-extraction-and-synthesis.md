@@ -6,7 +6,7 @@
 
 ## Extraction fields
 
-Before extracting any report, create a new `extraction_codebook.json` for this run from this protocol. Earlier codebooks and forms do not govern this run. Do not copy their contents into new-run fields.
+Before extracting any report, create a new `extraction_codebook.json` for this run from this protocol. Earlier codebooks and forms do not govern this run. Do not copy their contents into new-run fields. Create and calibrate it under task [`E-001`](TASKS.md), then perform full extraction and validation under [`R-005`](TASKS.md).
 
 For every controlled code that matters to the synthesis, record:
 
@@ -36,8 +36,8 @@ For each report, record:
 - title and abstract screening tier and reason;
 - final full-text decision and exclusion reason, if excluded;
 - Route A or Route B and the supporting evidence;
-- contribution status for RQ1a, RQ1b, RQ2, and RQ3;
-- the number of linked artifact-lineage profiles and tailoring applications for RQ1b;
+- contribution status for RQ1, RQ2, and RQ3;
+- the number of linked artifact-lineage profiles and tailoring applications for RQ1;
 - the number of eligible RQ2 outcome or burden records;
 - the number of direct and near-miss RQ3 records;
 - study or implementation report-family ID or IDs;
@@ -209,7 +209,7 @@ Also record overlap in personnel and control of the implementation; the independ
 
 Record the evidence source, confidence, limitations, and extraction and second-check history.
 
-One application can inform RQ1b and link to an RQ2 outcome or burden or an RQ3 V&V record. It enters those direct syntheses only when it separately meets their attribution and linkage rules.
+One application can inform RQ1 and link to an RQ2 outcome or burden or an RQ3 V&V record. It enters those direct syntheses only when it separately meets their attribution and linkage rules.
 
 ### Input and assumption record
 
@@ -371,7 +371,7 @@ Use emergent codes for unexpected findings that do not fit the controlled vocabu
 
 ## Calibration, consistency, and validation
 
-Before full screening and extraction:
+Before full screening and extraction, complete calibration task [`E-001`](TASKS.md):
 
 1. Test the full-text eligibility rule on examples of clear Route A, clear Route B, general whole-spacecraft MBSE, and non-MBSE EPS work.
 2. Test all forms on a deliberately varied sample. This includes the thread, input and assumption, artifact-lineage and profile, tailoring-application, RQ2 outcome and burden, and RQ3 V&V forms. Include examples of method-only versus artifact reuse, claim-only evidence, bounded specification, one versus several materially different settings, duplicate reports from one family, unchanged reuse, failed transfer, and post-tailoring assurance.
@@ -400,7 +400,7 @@ Before synthesis, validate all extraction JSON against the codebook. Check exact
 
 ## Planned synthesis
 
-Use a structured evidence map and narrative synthesis. Do not pool effect estimates because the models, outcomes, and evidence designs are expected to differ too much.
+Complete synthesis and reporting under task [`R-006`](TASKS.md). Use a structured evidence map and narrative synthesis. Do not pool effect estimates because the models, outcomes, and evidence designs are expected to differ too much.
 
 ### Relationship to Buruso et al. (2026)
 
@@ -410,17 +410,14 @@ Use that review for context, terminology, a later recall check, and recorded cit
 
 This review is not an update or replication of Buruso et al. It applies this protocol's narrower nanosatellite-EPS population, direct EPS linkage rule, and RQ1–RQ3 evidence structures. Do not treat system-wide MBSE or V&V as EPS evidence or compare the two reviews' counts as evidence of effectiveness.
 
-For a descriptive view of currency and overlap, results may be split into 2011–2023, matching Buruso et al.'s evidence window, and 2024 through the common evidence cutoff. This split does not change eligibility or imply independence.
+For a descriptive view of currency and overlap, results may be split into 2011–2023, matching Buruso et al.'s evidence window, and 2024 through the common evidence cutoff set under task [`P-001`](TASKS.md). This split does not change eligibility or imply independence.
 
-### RQ1a
+### RQ1
 
 - Synthesize the study-context, EPS-thread, input-and-assumption, engineering-output, and implementation-footprint records defined above.
 - Keep reported inputs and implementation needs separate from reviewer inference and missing information.
 - Compare author labels such as *lightweight* or *scalable* with the reported footprint; do not turn them into eligibility or tailoring categories.
 - Compare Route A with Route B without assuming that one route is more mature.
-
-### RQ1b
-
 - Synthesize artifact-lineage profiles and tailoring applications under the gate and tier definitions in Part 1; keep method or workflow reuse separate from artifact reuse.
 - Present tiers at artifact-lineage/profile level, with the full gate vector, DAE breadth, demonstrated coverage, claim agreement, and failures or conflicts kept separate.
 - Merge duplicate reports of one application and use artifacts and applications—not publication counts—as transfer denominators. Distinguish same-family, separate-team, and independent use.
@@ -457,7 +454,7 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 
 ## Required new-run artifacts
 
-After the clean-document start condition is met, create these artifacts anew with run provenance. Do not restore an earlier run's log, dictionary, schemas, decisions, or data:
+After clean-start task [`P-000`](TASKS.md) is complete, create these artifacts anew with run provenance. Do not restore an earlier run's log, dictionary, schemas, decisions, or data. Track search infrastructure under [`S-001`](TASKS.md), extraction forms under `E-001`, and the remaining artifacts under [`A-001`](TASKS.md):
 
 - a dated methods decision log;
 - a study or implementation report-family register;
@@ -484,7 +481,7 @@ Do not publish licensed exports, copyrighted abstracts, or full texts when right
 
 The final report will call itself a systematic review and will follow the PRISMA 2020 checklist and 12-item abstract guidance. It will:
 
-- name every source actually used, give its search date and the common evidence cutoff, and distinguish failed or planned-but-unused sources;
+- name every source actually used, give its search date and the common evidence cutoff set under `P-001`, and distinguish failed or planned-but-unused sources;
 - link to the exact final source-native searches and PRISMA-S logs instead of showing only a cleaned example query;
 - describe screening, extraction, second checks, conflict handling, and model assistance exactly as performed;
 - never call model-assisted checking independent human review or describe source pilots as formal PRESS review;
@@ -495,7 +492,7 @@ The final report will call itself a systematic review and will follow the PRISMA
 - present appraisal, reporting-bias, and conclusion-confidence results under the [appraisal framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence); and
 - report access to all three parts of the current protocol, every dated methods change or departure, limits of the review process and evidence, and availability of data, code, and materials.
 
-Complete the administrative declarations deferred in the [reporting framework](protocol.md#reporting-framework) before publication, or clearly say that they are absent. The clean-document start condition does not imply that these declarations exist.
+Complete the administrative declarations under task [`P-002`](TASKS.md) before publication, or clearly say that they are absent. The clean-document start condition does not imply that these declarations exist.
 
 Apply the [clean-document start and change policy](protocol.md#review-status-and-restart-policy).
 

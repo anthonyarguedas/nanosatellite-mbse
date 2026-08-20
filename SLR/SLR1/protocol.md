@@ -1,7 +1,7 @@
 # Protocol for a Systematic Review of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Working branch:** `slr1-1.1-restart`
-- **Common evidence cutoff:** **TBD.** Set one exact calendar date before the first final search and use it unchanged for every source and citation route.
+- **Common evidence cutoff:** **TBD.** Set one exact calendar date before the first final search and use it unchanged for every source and citation route. **Task:** [`P-001`](TASKS.md).
 
 > **Protocol parts:** **1 — Scope and definitions** (this file) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md)
 
@@ -21,6 +21,10 @@ The following rules apply:
 - Consult an old extraction only in a later discrepancy audit. Do not copy old evidence into the new extraction.
 - Do not carry old counts or classifications into the new synthesis.
 
+The review may start only when `git status --porcelain -- 'SLR/SLR1/protocol*.md'` reports no uncommitted changes. **Task:** [`P-000`](TASKS.md). There is no protocol version number, freeze, separate approval, or additional pre-search authorization gate. Later changes must be dated, committed, and assessed for their effect on completed work.
+
+Track every unresolved action or deferred field stated in any `protocol*.md` file in [`TASKS.md`](TASKS.md) before committing it. Each task must name the protocol sections to review or update. Mark a task complete only after its outputs exist and those sections have been reconciled.
+
 ## Reporting framework
 
 Use the following guidance:
@@ -33,7 +37,7 @@ These documents are reporting guidelines. They do not prove that evidence is val
 
 This is a new review, not an update. Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources. Count identification and selection at the record and report level. Other units—report families, EPS threads, reusable-artifact lineages, tailoring applications, outcome or burden records, and verification and validation (V&V) records—are linked units of analysis. Report a separate denominator for each one.
 
-Registration and contact details, contributor and guarantor details, and declarations about funding, sponsors, and competing interests will be completed later. State clearly when any of these details are still absent. Do not claim that this protocol is administratively complete under PRISMA-P.
+Registration and contact details, contributor and guarantor details, and declarations about funding, sponsors, and competing interests will be completed later. State clearly when any of these details are still absent. Do not claim that this protocol is administratively complete under PRISMA-P. **Task:** [`P-002`](TASKS.md).
 
 ## Review objective
 
@@ -41,11 +45,17 @@ The review will map how MBSE represents and supports nanosatellite EPS work, inc
 
 The formal questions and analytical dimensions below govern the review. Eligible evidence may be EPS-primary or an embedded EPS model thread, but in either case the source must provide the direct EPS-to-model relationship defined under [eligible EPS evidence routes](#eligible-eps-evidence-routes).
 
+## PICOC
+
+| Population | Intervention | Comparison | Outcome | Context | Related RQ(s) |
+|---|---|---|---|---|---|
+| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-primary MBSE or a clear embedded EPS model thread | Not required | How the EPS is represented; why the model is used; inputs and assumptions; level of abstraction; artifact identity and lineage; stated range of use; reusable core; variation points; tailoring and its effort; demonstrated uses and checks; evidence tier for bounded reuse; and required roles and resources | Nanosatellite systems engineering throughout the lifecycle | RQ1 (RQ1a and RQ1b) |
+| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-linked MBSE artifacts, analyses, and model-enabled work | When reported: document-based practice, manual analysis, another toolchain, an earlier mission or model, or another clear comparator | Beneficial, null, mixed, or adverse EPS-linked technical and process outcomes, plus implementation burdens. Priority topics are reliability and mission assurance, reproducibility and reuse, and integration and interoperability | Nanosatellite development and decision-making | RQ2 |
+| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-specific or system-wide-but-EPS-linked model-based V&V before physical integration or test | When reported: separate or document-based V&V, manual checking, another method, or no comparator | V&V scope and object, links to V&V artifacts, executable checks, results, virtual integration, and continuity from model to test | Analysis and V&V before physical work, with later physical links recorded separately | RQ3 |
+
 ## Research questions
 
-1. **RQ1a — representation, use, and implementation.** How are nanosatellite EPSs represented and used in eligible MBSE approaches, and what inputs, assumptions, implementation needs, and reuse or tailoring practices are reported?
-
-   **RQ1b — bounded reuse and tailoring.** For identifiable EPS-linked MBSE artifacts, what is the scope and strength of the reported evidence for bounded reuse and tailoring?
+1. **RQ1 — representation, use, and implementation.** How are nanosatellite EPSs represented and used in MBSE approaches, and what inputs, assumptions, implementation needs and footprint, and bounded reuse or tailoring practices are reported? What evidence supports these characterizations?
 
 2. **RQ2 — EPS-linked outcomes and burdens.** What technical or process outcomes and implementation burdens are explicitly attributed to EPS-linked MBSE, and what mechanisms and evidence are reported for those attributions?
 
@@ -53,12 +63,11 @@ The formal questions and analytical dimensions below govern the review. Eligible
 
 ### Prespecified analytical dimensions
 
-- **RQ1a:** EPS boundary and representation; purpose and supported decisions; abstraction; material inputs and assumptions; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices.
-- **RQ1b:** artifact identity and lineage; declared applicability envelope; reusable core; variation points and dependencies; tailoring process and effort; materially distinct applications; post-tailoring assurance; and the A/E/C/T/P/I evidence profile and resulting tier.
+- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; material inputs and assumptions; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. Artifact identity and lineage; declared applicability envelope; reusable core; variation points and dependencies; tailoring process and effort; materially distinct applications; post-tailoring assurance; and the A/E/C/T/P/I evidence profile and resulting tier.
 - **RQ2:** outcome or burden category; reported direction; explicit EPS attribution; mechanism; comparator; evidence type; and evidential support.
 - **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and criterion; preparation and execution; result or verdict; and later model-to-test continuity or closure.
 
-The three mapping areas—RQ1 (comprising RQ1a and RQ1b), RQ2, and RQ3—are equally important. RQ1b is a planned subquestion, not an additional eligibility test. A report can be eligible without claiming that a model is generic or reusable.
+The three mapping areas are equally important. RQ1 is not an additional eligibility test. A report can be eligible without claiming that a model is generic or reusable.
 
 Within RQ2, reliability and mission assurance, reproducibility and reuse, and integration and interoperability are priority categories for presentation. They are not eligibility tests. Code all eligible outcomes and burdens without favoring a direction or hiding other categories after seeing the results.
 
@@ -107,7 +116,7 @@ Qualifying approaches may use SysML, Arcadia or Capella, object-oriented system 
 
 #### What genericity means in this review
 
-For RQ1b, **genericity means bounded transferability**. It asks whether teams can adopt or tailor the documented core of an identifiable EPS-linked MBSE artifact for stated target settings inside a declared range of use.
+For RQ1, **genericity means bounded transferability**. It asks whether teams can adopt or tailor the documented core of an identifiable EPS-linked MBSE artifact for stated target settings inside a declared range of use.
 
 Genericity is not an unlimited property of a paper, diagram, language, tool, repository, workflow, or model. A label such as *generic*, *reference*, *standard*, *template*, *reusable*, *configurable*, *modular*, *scalable*, *lightweight*, *open*, or *mission-agnostic* is not proof by itself.
 
@@ -183,9 +192,9 @@ Two applications are **materially distinct** only if they differ on at least one
 
 A syntax, import, or build check is not enough unless that check is the artifact's stated intended use. An assurance activity can also link to RQ3, but it is a direct RQ3 record only if it separately meets the EPS target–model-to-V&V bridge–method/intent rule. Validation of a base model does not automatically validate a derived instance.
 
-#### RQ1b dispositions and evidence gates
+#### RQ1 dispositions and evidence gates
 
-Give every eligible EPS thread one of these RQ1b dispositions:
+Give every eligible EPS thread one of these RQ1 dispositions:
 
 - `not_an_artifact_or_method_only`;
 - `artifact_no_reuse_indication`;
@@ -224,7 +233,7 @@ Assign the highest cumulative tier that the evidence supports:
 
 | Tier | Minimum conditions | Meaning |
 |---|---|---|
-| **`NA`** | There is no identifiable EPS model artifact, or only a method or workflow is reused | Do not rate artifact genericity. Keep method or workflow reuse under RQ1a. |
+| **`NA`** | There is no identifiable EPS model artifact, or only a method or workflow is reused | Do not rate artifact genericity. Keep method or workflow reuse under RQ1. |
 | **`G0_artifact_only`** | An EPS-linked artifact is identified, but the source reports no genericity or reuse claim and no application | No genericity evidence was reported. This does not prove that the artifact cannot be reused. |
 | **`G1_claimed_or_unbounded`** | A is met, and the source claims genericity or reuse, or reports a traceable but unbounded sign of reuse | This is a claim or indication only. Bounded reuse is not established. |
 | **`G2_bounded_reuse_specified`** | A ∧ E ∧ C | The source specifies bounded reuse in advance. It does not have to show actual transfer. |
@@ -245,7 +254,7 @@ The tiers are ordered evidence classes. They are not numeric scores, model-quali
 
 Report claim agreement separately as `not_evaluated`, `supported_in_tested_contexts`, `partially_supported`, `mixed`, `not_supported`, or `unclear`. Also report the width of the envelope separately. Keep failed tailoring, uses outside the envelope, burdens, and conflicting evidence; do not average them into the tier.
 
-The exclusion term **generic whole-spacecraft MBSE** means whole-spacecraft evidence with no qualifying EPS thread. It says nothing about whether the model itself is generic. A reusable whole-spacecraft artifact can receive an RQ1b profile only for its EPS-linked content and only after it passes the normal Route A or Route B eligibility rules. Genericity status and tier never decide whether a report is eligible.
+The exclusion term **generic whole-spacecraft MBSE** means whole-spacecraft evidence with no qualifying EPS thread. It says nothing about whether the model itself is generic. A reusable whole-spacecraft artifact can receive an RQ1 profile only for its EPS-linked content and only after it passes the normal Route A or Route B eligibility rules. Genericity status and tier never decide whether a report is eligible.
 
 ### Eligible EPS evidence routes
 
@@ -266,7 +275,7 @@ Support the anchors and bridge with text, a figure or table, a model extract, a 
 
 ### MBSE-enabled outcomes and implementation burdens versus EPS engineering outputs
 
-An **EPS engineering or model output** is a technical result such as minimum state of charge, power margin, battery capacity, solar-array area, voltage or current, energy balance, or a selected architecture. Extract these outputs for RQ1a. They may also support RQ2 or RQ3, but they are not evidence of MBSE value on their own.
+An **EPS engineering or model output** is a technical result such as minimum state of charge, power margin, battery capacity, solar-array area, voltage or current, energy balance, or a selected architecture. Extract these outputs for RQ1. They may also support RQ2 or RQ3, but they are not evidence of MBSE value on their own.
 
 An outcome or implementation-burden record is eligible for RQ2 only when it has all three of the following:
 
@@ -280,7 +289,7 @@ A general claim about MBSE is not EPS-specific evidence merely because the same 
 
 A null outcome means that an evaluation found no observed effect or difference. It does not mean `not_reported`, missing evidence, or no claim. Split benefits, adverse effects, null findings, and burdens into separate atomic records whenever possible. Use `mixed/conditional` only when directions cannot be separated by scenario, measure, actor, or condition.
 
-A burden can exist alongside a benefit. Do not decide a net effect on the authors' behalf. General project-level MBSE burdens can be kept as RQ1a context. They enter direct RQ2 synthesis only when the source clearly links them to the qualifying EPS thread.
+A burden can exist alongside a benefit. Do not decide a net effect on the authors' behalf. General project-level MBSE burdens can be kept as RQ1 context. They enter direct RQ2 synthesis only when the source clearly links them to the qualifying EPS thread.
 
 A power or energy margin alone is not a reliability result. Reliability requires a stated link to failure, fault tolerance, availability, risk, assurance, or another defined reliability concept. In the same way, do not infer reproducibility or reuse from model availability, or integration or interoperability from diagrams that merely appear together.
 
