@@ -27,8 +27,8 @@ CONCEPT_IDS = {
 }
 EXPECTED_TERM_COUNTS = {
     "P": 20,
-    "E_H": 28,
-    "E_F": 30,
+    "E_H": 38,
+    "E_F": 33,
     "M_H": 28,
     "M_B": 27,
     "R": 55,
