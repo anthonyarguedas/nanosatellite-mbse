@@ -655,7 +655,7 @@ PROJECTS = (
         payloads=(
             fact(
                 "Passive-microwave radiometer / deployable antenna (terminology conflict)",
-                "The conference presentation describes an 18.7 GHz passive-microwave radiometer with a deployable cylindrical-reflector antenna that measures Earth-surface brightness temperature for the sea-ice mission. The engineering page calls it a large deployable radiometer antenna, while STARLab uses “radar antenna” shorthand. The graph preserves this terminology conflict rather than silently treating the terms as identical.",
+                "The conference presentation describes an 18.7 GHz passive-microwave radiometer with a deployable cylindrical-reflector antenna that measures Earth-surface brightness temperature for the sea-ice mission. The engineering page calls it a large deployable radiometer antenna, while STARLab uses “radar antenna” shorthand.",
                 ARCTICSAT_PAPER,
                 ARCTICSAT,
                 ARCTICSAT_STARLAB,
@@ -1028,7 +1028,7 @@ PROJECTS = (
         payloads=(
             fact(
                 "Motus and ICARUS telemetry systems",
-                "The official CSA award title identifies Motus and ICARUS as the tracking telemetry systems for the 3U satellite.",
+                "The official CSA award title identifies Motus and ICARUS as the tracking telemetry systems for the 3U satellite. However, the networks themselves are not stated as partners.",
                 CSA_CUBICS,
             ),
             fact(
@@ -1056,13 +1056,6 @@ PROJECTS = (
                 "The IARU filing says the team is planning Exolaunch deployment; the program-wide CSA/Exolaunch agreement does not confirm its individual flight, vehicle or date.",
                 WESTERN_IARU,
                 EXOLAUNCH_CUBICS,
-            ),
-            fact(
-                "No formal Motus/ICARUS partnership publicly identified",
-                "Motus and ICARUS are named mission technologies/telemetry systems, but the reviewed record does not establish either as a contractual project partner.",
-                CSA_CUBICS,
-                WESTERN_IARU,
-                gap=True,
             ),
         ),
         facilities=(
