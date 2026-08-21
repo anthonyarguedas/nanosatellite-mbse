@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SEARCHES = ROOT / "searches"
 
-DIRECT_IDS = {"A1", "A2", "A3", "B1", "B2", "BG1", "BG2", "BC1", "BT2", "V1", "O1"}
+DIRECT_IDS = {"A1", "A2", "A3", "B1", "B2", "BG1", "BG2", "BC1", "BT2"}
 CONCEPT_IDS = {
     "P",
     "E_H",
@@ -24,22 +24,14 @@ CONCEPT_IDS = {
     "G_structure",
     "C1",
     "T2",
-    "E_probe",
-    "M_probe",
-    "V1",
-    "O1",
 }
 EXPECTED_TERM_COUNTS = {
-    "P": 10,
-    "E_H": 10,
-    "E_F": 15,
-    "M_H": 9,
-    "M_B": 9,
-    "R": 17,
-    "E_probe": 8,
-    "M_probe": 6,
-    "V1": 21,
-    "O1": 31,
+    "P": 18,
+    "E_H": 15,
+    "E_F": 21,
+    "M_H": 28,
+    "M_B": 25,
+    "R": 29,
 }
 EXPECTED_TASKS = {
     "S-D01",
@@ -81,6 +73,11 @@ def validate_dictionary() -> None:
     data = load(SEARCHES / "search-concept-dictionary.json")
     require(data["provenance"]["created_new_for_run"] is True, "dictionary lacks new-run provenance")
     require(data["provenance"]["restored_from_prior_run"] is False, "dictionary says it was restored")
+    defaults = data["matching_defaults"]
+    require(defaults["acronym_policy"] == "match standalone lexical tokens, not substrings", "acronym policy differs")
+    require(defaults["pair_policy"]["order"] == "unordered", "pair order differs")
+    require(defaults["pair_policy"]["maximum_intervening_lexical_tokens"] == 5, "pair distance differs")
+    require("free text is mandatory" in defaults["controlled_vocabulary_policy"], "controlled-vocabulary policy differs")
     concepts = data["concepts"]
     require(set(concepts) == CONCEPT_IDS, f"concept IDs differ: {set(concepts) ^ CONCEPT_IDS}")
     for concept_id, count in EXPECTED_TERM_COUNTS.items():
@@ -96,7 +93,7 @@ def validate_dictionary() -> None:
         unknown = set(expression_refs(item["expression"])) - CONCEPT_IDS
         require(not unknown, f"{item['id']} references unknown concepts: {unknown}")
     local = data["local_method_minimum"]
-    require(set(local["independent_tags"]) == {"R", "T2", "V1", "O1"}, "local tags differ")
+    require(set(local["independent_tags"]) == {"R", "T2"}, "local tags differ")
     require({x["id"] for x in local["expansion_candidates"]} == {"BG1", "BG2", "BC1"}, "local expansions differ")
 
 

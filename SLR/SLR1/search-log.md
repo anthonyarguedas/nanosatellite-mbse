@@ -13,6 +13,7 @@ This is the chronological PRISMA-S index for the new run. Detailed source behavi
 | Date and time | Event | Disposition | Artifacts |
 |---|---|---|---|
 | 2026-08-20 | New-run search infrastructure created from the current protocol under `S-001`; no earlier-run search artifacts restored. | Deterministic validation passed; committed before the first pilot. | [`searches/`](searches/) |
+| 2026-08-21 | Preliminary PRESS revision expanded P/E/M/R text words, defined phrase/acronym/pair behavior, removed the redundant V1/O1 discovery partitions, and added controlled-vocabulary pilot requirements. | No final search was affected; the strategy now has nine direct partitions and source translations remain pending regeneration. Infrastructure validation passed. | [`protocol-discovery-and-appraisal.md`](protocol-discovery-and-appraisal.md#search-strategy); [`searches/search-concept-dictionary.json`](searches/search-concept-dictionary.json); [`TASKS.md`](TASKS.md) |
 
 ## Pilot events
 

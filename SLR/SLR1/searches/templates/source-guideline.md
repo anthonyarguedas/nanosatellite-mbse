@@ -18,11 +18,11 @@ State the database or collection boundary, platform, interface, authorized route
 
 ## 2. Interface and field behavior
 
-Record visible/native fields, phrase and Boolean behavior, precedence, punctuation, acronym handling, stemming, lemmatization, automatic expansion, wildcard behavior, and evidence links.
+Record visible/native fields, phrase and Boolean behavior, precedence, punctuation, acronym handling, stemming, lemmatization, automatic expansion, wildcard behavior, and evidence links. Establish whether a genuine controlled vocabulary or distinct indexed-term field exists; where available, record exact descriptors, scope and hierarchy, explosion behavior, field syntax, mapping to free-text concepts, and known-item tests. Otherwise record that none is usable.
 
 ## 3. Translation approach
 
-For a direct source, link `translation-spec.json` and cover A1, A2, A3, B1, B2, BG1, BG2, BC1, BT2, V1, and O1. Explain any lossless cell union and query-length handling.
+For a direct source, link `translation-spec.json` and cover A1, A2, A3, B1, B2, BG1, BG2, BC1, and BT2. Explain any lossless cell union and query-length handling. Free text remains mandatory; accepted controlled terms are OR supplements within the concept they map to.
 
 For a local source, link `local-method-spec.json` and define the source universe, routes, normalization, candidate logic, independent tags, partitions, and invariants.
 

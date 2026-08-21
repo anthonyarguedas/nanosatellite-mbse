@@ -38,14 +38,14 @@ Directory names use lowercase task IDs, for example `s-d01-scopus` and `s-l02-es
 
 ## Required guideline sections
 
-Use [`templates/source-guideline.md`](templates/source-guideline.md). Direct-source acceptance requires guidance for A1, A2, A3, B1, B2, BG1, BG2, BC1, BT2, V1, and O1. Local-source acceptance requires complete candidate and tag rules for P, E, M, `G_model`, `G_structure`, C1, R, T2, V1, and O1.
+Use [`templates/source-guideline.md`](templates/source-guideline.md). Direct-source acceptance requires guidance for A1, A2, A3, B1, B2, BG1, BG2, BC1, and BT2. Local-source acceptance requires complete candidate and tag rules for P, E, M, `G_model`, `G_structure`, C1, R, and T2.
 
 ## Pilot acceptance gate
 
 A supervising reviewer, not the drafting subagent, accepts a pilot only after:
 
 - the manifest validates and all required checks are evidenced or explicitly blocked;
-- source boundary, current interface, fields, controls, expansion, date/language handling, limits, pagination/export, stable identity, completeness, and failure behavior have been tested;
+- source boundary, current interface, fields, controls, expansion, controlled-vocabulary or indexed-term availability and mappings, date/language handling, limits, pagination/export, stable identity, completeness, and failure behavior have been tested;
 - every direct partition or local rule has an exact specification and evidence linkage;
 - no screening or candidate import occurred;
 - the reusable guideline distinguishes observed behavior from official documentation and remaining uncertainty;

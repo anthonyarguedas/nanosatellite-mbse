@@ -52,25 +52,27 @@ Use two complementary streams because an EPS thread inside a wider spacecraft mo
 
 The 13 direct query families are Scopus, Web of Science Core Collection, IEEE Xplore, Engineering Village, Wiley Online Library, Springer Nature Link, Advanced Technologies & Aerospace Index, PQDT Global, OATD, AIAA ARC, IAF Digital Library, NASA Technical Reports Server (NTRS), and arXiv. Engineering Village covers two databases, Compendex and Inspec. ESA may use a broader source harvest followed by deterministic local matching when its interface cannot represent the direct queries without loss.
 
-Use the following exact cross-source concept blocks. Source-native translations may change syntax, field wrappers, and validated wildcard use, but not the intended terms or Boolean relationships.
+Use the following exact cross-source concept blocks. Source-native translations may change syntax, field wrappers, and validated wildcard use, but not the intended terms or Boolean relationships. At concept level, every multiword entry is an ordered phrase; a source may apply only validated punctuation or hyphen normalization. Acronyms must match standalone lexical tokens rather than substrings. Record and test the source-native implementation of these rules.
 
 #### Population and EPS blocks
 
-- **Population (`P`):** `CubeSat`, `CubeSats`, `cube sat`, `nanosat`, `nanosatellite`, `nanosatellites`, `nano-satellite`, `nano-satellites`, `nano satellite`, and `nano satellites`. A source may use `nanosat*` only after its corresponding `S-D*` or `S-L*` pilot in [`TASKS.md`](TASKS.md) confirms the behavior; otherwise list the finite forms. A named mission can establish population eligibility during screening, but no unspecified mission-name list is part of the direct strategy. Do not use `SmallSat` or “small satellite” as a positive concept.
-- **High-specificity EPS (`E_H`):** `electrical power system`, `electric power system`, `electrical power subsystem`, `electric power subsystem`, `EPS`, `power subsystem`, `electrical architecture`, `power architecture`, `PCDU`, and `PMAD`.
-- **Functional or analytical EPS (`E_F`):** `power budget`, `energy budget`, `energy balance`, `power generation`, `solar array`, `battery`, `batteries`, `energy storage`, `power conditioning`, `power distribution`, `power management`, `power interface`, `power mode`, `power modes`, and `load profile`.
+- **Population (`P`):** `CubeSat`, `CubeSats`, `cube sat`, `cube-sat`, `cube-sats`, `cube satellite`, `cube satellites`, `nanosat`, `nanosatellite`, `nanosatellites`, `nano-sat`, `nano-sats`, `nano sat`, `nano sats`, `nano-satellite`, `nano-satellites`, `nano satellite`, and `nano satellites`. A source may use `nanosat*` for the contiguous `nanosat` and `nanosatellite(s)` forms only after its corresponding `S-D*` or `S-L*` pilot in [`TASKS.md`](TASKS.md) confirms the behavior. Keep the separated and hyphenated forms unless the same pilot proves that source normalization retrieves them losslessly. A named mission can establish population eligibility during screening, but no unspecified mission-name list is part of the direct strategy. Do not use `SmallSat` or “small satellite” as a positive concept.
+- **High-specificity EPS (`E_H`):** `electrical power system`, `electric power system`, `electrical power subsystem`, `electric power subsystem`, `EPS`, `power subsystem`, `power system`, `spacecraft power system`, `power supply`, `power control and distribution`, `power management and distribution`, `electrical architecture`, `power architecture`, `PCDU`, and `PMAD`.
+- **Functional or analytical EPS (`E_F`):** `power budget`, `energy budget`, `energy balance`, `power balance`, `power margin`, `power generation`, `solar array`, `solar panel`, `solar panels`, `battery`, `batteries`, `battery management`, `state of charge`, `energy storage`, `power conditioning`, `power distribution`, `power management`, `power interface`, `power mode`, `power modes`, and `load profile`.
 - **All EPS (`E`):** `E_H ∪ E_F`.
 
 #### MBSE and relationship blocks
 
-- **High-specificity MBSE (`M_H`):** `model-based systems engineering`, `model based systems engineering`, `model-based system engineering`, `model based system engineering`, `MBSE`, `SysML`, `systems modeling language`, `Arcadia`, and `Capella`.
-- **Broad structured model (`M_B`):** `system model`, `systems model`, `system modeling`, `systems modeling`, `system modelling`, `systems modelling`, `reference model`, `digital engineering`, and `object-oriented systems model`.
+- **High-specificity MBSE (`M_H`):** `model-based systems engineering`, `model based systems engineering`, `model-based system engineering`, `model based system engineering`, `model-driven systems engineering`, `model driven systems engineering`, `model-driven system engineering`, `model driven system engineering`, `model-centric systems engineering`, `model centric systems engineering`, `model-centric system engineering`, `model centric system engineering`, `MBSE`, `SysML`, `systems modeling language`, `systems modelling language`, `system modeling language`, `system modelling language`, `object-process methodology`, `object process methodology`, `OPM`, `object-oriented systems engineering method`, `object oriented systems engineering method`, `OOSEM`, `object-oriented systems engineering`, `object oriented systems engineering`, `Arcadia`, and `Capella`.
+- **Broad structured model (`M_B`):** `system model`, `systems model`, `system modeling`, `systems modeling`, `system modelling`, `systems modelling`, `reference model`, `digital engineering`, `object-oriented systems model`, `model-based system design`, `model based system design`, `model-based systems design`, `model based systems design`, `system architecture model`, `system architecture models`, `systems architecture model`, `systems architecture models`, `integrated system model`, `integrated system models`, `integrated systems model`, `integrated systems models`, `system-level model`, `system-level models`, `system level model`, and `system level models`.
 - **All MBSE/system-model terms (`M`):** `M_H ∪ M_B`.
-- **Systems-engineering relationship or concern (`R`):** `requirement`, `requirements`, `function`, `functions`, `behavior`, `behaviors`, `behaviour`, `behaviours`, `architecture`, `architectures`, `interface`, `interfaces`, `traceability`, `parametric`, `parametrics`, `verification`, and `validation`.
+- **Systems-engineering relationship or concern (`R`):** `requirement`, `requirements`, `function`, `functions`, `functional`, `behavior`, `behaviors`, `behaviour`, `behaviours`, `behavioral`, `behavioural`, `architecture`, `architectures`, `architectural`, `interface`, `interfaces`, `traceability`, `trace`, `traceable`, `traced`, `allocation`, `allocate`, `allocated`, `constraint`, `constraints`, `parametric`, `parametrics`, `verification`, and `validation`.
 
 `M_B` requires `R` in direct B2 queries because its terms are otherwise broad. Stream A does not require `R`: the EPS block supplies the additional precision.
 
 #### Artifact and tailoring blocks
+
+For every construction described as *paired*, the left and right expressions must occur in either order in the same searchable field or prospectively defined local document route, with no more than five intervening lexical tokens. If an interface cannot express that rule, its pilot may accept a documented broader same-field implementation only when it cannot lose an exact-pair match; apply the exact rule locally where the available fields permit it and report the limitation.
 
 - **Precise reusable model or template (`G_model`):** `generic model`, `generic system model`, `reusable model`, `reusable system model`, `configurable model`, `configurable system model`, `model template`; mission-agnostic, `mission agnostic`, mission-independent, and `mission independent`, each paired with `model` or `architecture`.
 - **Structural reusable artifact (`G_structure`):** `reference architecture`, `domain model`, `metamodel`, `meta-model`; product-line, `product line`, product-family, and `product family`, each paired with `model`; and `variation point` paired with `model` or `architecture`.
@@ -79,20 +81,13 @@ Use the following exact cross-source concept blocks. Source-native translations 
 
 `G_model`, `G_structure`, C1, and T2 are recall concepts, not eligibility tests or evidence of reuse. An `architecture` occurrence inside an artifact phrase cannot also satisfy an independent R tag through the same text span.
 
-#### Outcome and V&V sensitivity blocks
+#### RQ2 and RQ3 identification during extraction
 
-Use the following finite sets consistently in direct sensitivity queries and equivalent local tags:
-
-- **Probe EPS (`E_probe`):** `electrical power system`, `electric power system`, `power subsystem`, `power budget`, `energy budget`, `PCDU`, `PMAD`, and `EPS`.
-- **Probe model (`M_probe`):** `model-based systems engineering`, `MBSE`, `SysML`, `system model`, `reference model`, and `digital engineering`.
-- **V&V (`V1`):** `verification`, `validation`, `traceability`, `traceable`, `model verification`, `model validation`, `system verification`, `system validation`, `requirements-in-the-loop`, `model checking`, `virtual integration`, `MIL`, `model-in-the-loop`, `SIL`, `software-in-the-loop`, `PIL`, `processor-in-the-loop`, `HIL`, `hardware-in-the-loop`, `test case`, and `test procedure`.
-- **Outcome or burden (`O1`):** `reliability`, `reliable`, `mission assurance`, `reproducibility`, `reproducible`, `reuse`, `reusable`, `integrability`, `integrable`, `interoperability`, `interoperable`, `traceability`, `traceable`, `benefit`, `benefits`, `impact`, `outcome`, `no effect`, `adverse`, `burden`, `effort`, `workload`, `overhead`, `cost`, `schedule`, `training`, `learning curve`, `licensing`, `license`, `licence`, and `adoption`.
-
-V1 and O1 are mandatory sensitivity partitions, but their terms are not eligibility requirements and are not added to every query.
+Do not use outcome, implementation-burden, or V&V terms as candidate-discovery blocks. Assess every included full text against the operational RQ2 and RQ3 definitions in [Part 1](protocol.md), regardless of the terminology used by the source. Automated keyword flags may be used only as optional quality-assurance aids; they cannot determine whether an outcome, burden, or V&V record is created.
 
 #### Direct query schedule
 
-Execute these 11 semantic partitions in every direct query family unless a newly documented source limitation makes an exact translation impossible. A source may implement one semantic partition as a prospectively documented, lossless union of source-native query cells when a fixed query-length limit prevents one expression; preserve each cell's query, total, and stable identifiers and reconcile their union. A source-specific failure does not authorize an unrecorded narrower query.
+Execute these nine semantic partitions in every direct query family unless a newly documented source limitation makes an exact translation impossible. A source may implement one semantic partition as a prospectively documented, lossless union of source-native query cells when a fixed query-length limit prevents one expression; preserve each cell's query, total, and stable identifiers and reconcile their union. A source-specific failure does not authorize an unrecorded narrower query.
 
 | ID | Boolean form | Role |
 |---|---|---|
@@ -105,8 +100,6 @@ Execute these 11 semantic partitions in every direct query family unless a newly
 | `BG2` | `P AND G_structure` | Structural reusable artifact |
 | `BC1` | `P AND C1` | Conservative central asset |
 | `BT2` | `P AND M_B AND T2` | Model-linked tailoring |
-| `V1` | `P AND E_probe AND M_probe AND V1` | V&V sensitivity query |
-| `O1` | `P AND E_probe AND M_probe AND O1` | Outcome and burden sensitivity query |
 
 Therefore:
 
@@ -114,9 +107,15 @@ Therefore:
 - `core Stream B = B1 ∪ B2`; and
 - `expanded Stream B = BG1 ∪ BG2 ∪ BC1 ∪ BT2`.
 
-Retain and screen every record returned by any planned partition, including V1 and O1, while preserving each discovery event. Report intersections and records unique to each stream and expansion after within-source and cross-source deduplication.
+Retain and screen every record returned by any planned partition while preserving each discovery event. Report intersections and records unique to each stream and expansion after within-source and cross-source deduplication.
 
-For a local-harvest source, the minimum equivalent candidate logic is `P AND M` for core B, `P AND E AND M` for the Stream A tag, and separate `P AND G_model`, `P AND G_structure`, and `P AND C1` expansions. Apply T2, V1, O1, and independent R as separate tags. Terms may combine only within the source fields or document route prospectively defined for that local method. Local matching generates candidates; it does not establish scientific eligibility.
+For a local-harvest source, the minimum equivalent candidate logic is `P AND M` for core B, `P AND E AND M` for the Stream A tag, and separate `P AND G_model`, `P AND G_structure`, and `P AND C1` expansions. Apply T2 and independent R as separate tags. Terms may combine only within the source fields or document route prospectively defined for that local method. Local matching generates candidates; it does not establish scientific eligibility.
+
+### Controlled vocabulary and indexed terms
+
+Free-text searching remains mandatory. When a source provides a genuine controlled vocabulary or a distinct indexed-term field, construct the applicable concept as the union of its free-text block and validated source-specific descriptors. Inspect thesaurus scope notes, hierarchy, narrower terms, and terms assigned to known relevant records; use explosion only when every included narrower concept is in scope. A generic `systems engineering` descriptor cannot satisfy `M_H` by itself: pair it with a model or modeling descriptor unless the source supplies a specific MBSE descriptor. Do not impose major-topic restrictions, and do not emulate controlled vocabulary on sources that do not provide it.
+
+Record every accepted descriptor, field, hierarchy or explosion setting, mapping to the cross-source block, and known-item effect in the source packet. Controlled terms supplement the normative text words; they neither replace them nor change scientific eligibility.
 
 ### New-run source translations and search artifacts
 
@@ -136,7 +135,7 @@ For each source or local method, the new log and the version-controlled source p
 - source, database or collection, platform, and interface;
 - query or event IDs and the exact source-native translation of every planned partition;
 - fields, filters, limits, date and language handling, and visible controls;
-- stemming, lemmatization, automatic expansion, and wildcard behavior;
+- stemming, lemmatization, automatic expansion, wildcard behavior, and any controlled-vocabulary or indexed-term fields, descriptors, hierarchies, and explosion settings;
 - source boundaries and selected databases;
 - pagination, result ordering, stable identifiers, export or capture method, and source limits;
 - the relationship between source-native queries and the cross-source semantic blocks;
@@ -147,7 +146,7 @@ A syntax or transport change that preserves the semantic blocks is an implementa
 
 ### Source-specific guidelines
 
-Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D13` and local-source task `S-L02` in [`TASKS.md`](TASKS.md). Store each accepted method as a version-controlled source packet under `searches/sources/`; its reusable guideline must state the validated source boundary, translation approach, fields and controls, date and language handling, completeness and export method, limits, and failure rules. Store exact source-native translations outside Markdown where necessary to preserve them losslessly. Keep exact executed strings and dated pilot evidence in the packet's diagnostic-only `pilots/` area, and index the packet and each accepted pilot from the new search log. This section incorporates accepted source packets by reference; update its compact index when each method is accepted. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
+Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D13` and local-source task `S-L02` in [`TASKS.md`](TASKS.md). Store each accepted method as a version-controlled source packet under `searches/sources/`; its reusable guideline must state the validated source boundary, translation approach, fields and controls, controlled-vocabulary or indexed-term behavior where available, date and language handling, completeness and export method, limits, and failure rules. Store exact source-native translations outside Markdown where necessary to preserve them losslessly. Keep exact executed strings and dated pilot evidence in the packet's diagnostic-only `pilots/` area, and index the packet and each accepted pilot from the new search log. This section incorporates accepted source packets by reference; update its compact index when each method is accepted. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
 
 | Task | Source or method | Accepted source packet |
 |---|---|---|
@@ -173,6 +172,7 @@ Run small, focused, no-screening pilots to validate each current interface and t
 For every pilot and final event, record:
 
 - exact query or matching operation and fields;
+- tested controlled-vocabulary or indexed-term behavior and accepted mappings, or confirmation that none is available;
 - controls and restrictions;
 - platform, interface, date, time, and time zone;
 - source-reported and retrieved totals;
@@ -202,7 +202,7 @@ Regenerate the ESA method from the current interface under task [`S-L02`](TASKS.
 - the source universe and how completeness is established;
 - metadata, text, or attachment fields included in each matching route;
 - normalization, phrase, wildcard, acronym-boundary, and field-combination rules;
-- exact implementation of P, E, M, `G_model`, `G_structure`, C1, R, T2, V1, and O1;
+- exact implementation of P, E, M, `G_model`, `G_structure`, C1, R, and T2;
 - candidate partitions, tags, invariants, and overlap accounting; and
 - treatment of inaccessible, missing, or unparseable material.
 
@@ -224,7 +224,7 @@ Start backward and forward citation searching from every included full-text repo
 
 For every citation event, record the seed, platform, direction, exact route, cycle, source and retrieved totals, candidates, duplicates, decisions, failures, and stopping result. Use `discovery_route=citation_chasing`; citation provenance never bypasses screening.
 
-Stop electronic searching only when A1, A2, A3, B1, B2, BG1, BG2, BC1, BT2, V1, and O1 have completed or failed explicitly for every direct family, and every prospectively specified local equivalent has completed or failed without a partial import. Also complete all source coverage checks and citation cycles. Record the execution date of every strategy. Additional searches should by then yield mainly duplicates rather than being stopped merely because they are inconvenient.
+Stop electronic searching only when A1, A2, A3, B1, B2, BG1, BG2, BC1, and BT2 have completed or failed explicitly for every direct family, and every prospectively specified local equivalent has completed or failed without a partial import. Also complete all source coverage checks and citation cycles. Record the execution date of every strategy. Additional searches should by then yield mainly duplicates rather than being stopped merely because they are inconvenient.
 
 ## Data management and audit trail
 
