@@ -1,0 +1,157 @@
+{
+  "schema_version": "slr1-arxiv-safe-diagnostic-summary/v1",
+  "pilot_id": "S-D11-P01-20260821T045351+0000",
+  "task_id": "S-D11",
+  "source_id": "arxiv",
+  "protocol_commit": "ad77460df82764312fb701f6be4ebf7eb5051c41",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "retention_notice": "This tracked summary contains controls, hashes, counts, and stable-ID/version-only observations. Raw browser/adapter JSON remains only in the ignored assigned worklog; no title, abstract, author, bibliographic record, session URL, cookie, credential, or full text is retained here.",
+  "access_disposition": {
+    "classification": "observed",
+    "normal_rendered_ui_reached": true,
+    "login_or_challenge_observed": false,
+    "unresolved_control_failure": true,
+    "recommendation": "skip_for_now",
+    "reason": "The normal visible Add another term control became unavailable while constructing BG2-C2. Source interaction stopped immediately; this is not a native zero or a demonstrated fixed row limit."
+  },
+  "boundary_and_controls": {
+    "homepage_boundary": {
+      "classification": "observed",
+      "statement": "The current rendered homepage exposed top-level Physics, Mathematics, Computer Science, Quantitative Biology, Quantitative Finance, Statistics, Electrical Engineering and Systems Science, and Economics sections."
+    },
+    "advanced_search": {
+      "classification": "observed",
+      "statement": "The current rendered Advanced Search form exposed All fields, visible AND/OR/NOT row operators, category/archive all by default, Include cross-listed papers by default, Show abstracts by default, page sizes 25/50/100/200, and Relevance as the rendered empty-value sort control."
+    },
+    "date_controls": {
+      "classification": "observed",
+      "statement": "The form exposed All dates, Past 12 months, Specific year, and Date range, plus Submission date (most recent), Submission date (original), and Announcement date."
+    },
+    "no_restriction_applied": {
+      "classification": "observed",
+      "statement": "Pilot executions selected All fields, archive/category all, included cross-lists, and no language, content-type, access, peer-review, venue, or publication-type restriction."
+    },
+    "evidence": [
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/homepage-boundary-controls.json","sha256":"f255f8f4ed2f64076e7a95be2f1af20ce98cb1dee07264f436aa356cce5742b7","access_classification":"metadata_only"},
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/advanced-form-controls.json","sha256":"68c2fafffba09c0f1bdbda94fd36c1edddd06bef789f0ce7f15ec5a53bf41f11","access_classification":"metadata_only"}
+    ]
+  },
+  "grammar": {
+    "classification": "observed",
+    "all_fields_exact_echo": true,
+    "simple_operator_counts": {
+      "CubeSat": 469,
+      "nanosatellite": 127,
+      "CubeSat OR nanosatellite": 542,
+      "CubeSat AND nanosatellite": 45
+    },
+    "raw_grouping_limitation": {
+      "statement": "The raw single-row expressions CubeSat OR nanosatellite AND model, (CubeSat OR nanosatellite) AND model, and CubeSat OR (nanosatellite AND model) each returned 34. Raw nested-parenthesis/mixed-operator grouping is therefore not used for source-native translations.",
+      "classification": "observed"
+    },
+    "visible_multi_row_check": {
+      "statement": "Two visible All fields rows, CubeSat OR nanosatellite and model joined by the visible AND operator, returned 149 with an exact rendered multi-row query summary. This is the selected top-level conjunction method.",
+      "classification": "observed"
+    },
+    "phrases_and_punctuation": {
+      "quoted_cube_sat": 6,
+      "unquoted_cube_sat": 36,
+      "quoted_nano_satellite": 58,
+      "quoted_nano_satellite_spaced": 58,
+      "classification": "observed",
+      "rule": "Every multiword or hyphenated protocol phrase remains quoted and every finite spelling remains explicit. Equal counts do not prove stable-ID-set equality."
+    },
+    "case_and_acronyms": {
+      "CubeSat": 469,
+      "cubesat": 469,
+      "MBSE": 70,
+      "mbse": 70,
+      "classification": "observed",
+      "rule": "Case-preserving dictionary spellings remain in files; these bounded equal totals do not establish a universal case/acronym rule."
+    },
+    "morphology": {
+      "battery": 8275,
+      "batteries": 8281,
+      "classification": "observed",
+      "rule": "No stemming, lemmatization, synonym expansion, or automatic expansion is relied on."
+    },
+    "wildcard": {
+      "finite_population_total": 590,
+      "nanosat_star_substitution_total": 590,
+      "classification": "observed_and_inferred",
+      "rule": "nanosat* was accepted and matched the finite-P total in this bounded count-only comparison, but full stable-ID-set equality was not tested. Finite forms remain mandatory and nanosat* is prohibited in the query files."
+    },
+    "source_query_echo_and_exact_total": {
+      "classification": "observed",
+      "statement": "The adapter and manual visible-row diagnostics returned exact source totals or an explicit native zero only after the current form/query summary retained the entered values."
+    },
+    "evidence": [
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/grammar-or.json","sha256":"03b772d8b523e9e31bbc9ebafef040b0420c36a5ef2094f5646c882241899a8b","access_classification":"metadata_only"},
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/grammar-and.json","sha256":"df57dfb44bc4abd3e8ee87103749b3151095f1ff1ef14370355d0b3ea98cc79d","access_classification":"metadata_only"},
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/manual-multirow-positive.json","sha256":"1245c06ec91df5b0d3cd40f0908e3bd32229660ef6ae4e345ed226eff7b65bff","access_classification":"metadata_only"},
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/wildcard-population-finite.json","sha256":"07e3c473802c361b0a0e8fea4985c58c4e449aceeff4ea2082c56f9a1b3ea28a","access_classification":"metadata_only"},
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/wildcard-population-substitution.json","sha256":"564f56dbc066f1f60aeab32bb8e5a2434e19f05f0f2edc6d630ea8485485e595","access_classification":"metadata_only"}
+    ]
+  },
+  "dates_versions_and_language": {
+    "lower_bound": {
+      "classification": "observed",
+      "statement": "The rendered adapter validated Date range from 2011-01-01 with date type submitted_date and no upper bound; the reported source total was exact for the bounded diagnostic."
+    },
+    "upper_cutoff": {
+      "classification": "blocked",
+      "statement": "P-001 has not set the common cutoff. No upper date was invented or tested."
+    },
+    "revision_impact": {
+      "classification": "inferred",
+      "statement": "Because Submission date (most recent) can be later than a report's first substantial version, a final source-side upper bound would silently omit a pre-cutoff report revised after cutoff. Final discovery must be unbounded with complete local base-ID/version-history/date capture."
+    },
+    "identity_and_history": {
+      "classification": "observed",
+      "statement": "One visible canonical abstract path exposed stable base identifier 2607.00815, a visible submission-history container, and a v1 date line. A visible PDF control existed; no PDF was opened or downloaded.",
+      "limitation": "A multiple-revision history was not observed; complete multi-version capture remains untested."
+    },
+    "language": {
+      "classification": "observed_and_inferred",
+      "statement": "No Language control appeared in the current Advanced Search control inventory. No native English restriction is applied; full-report language remains a later screening question."
+    },
+    "evidence": [
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/date-lower-2011.json","sha256":"0a2e077ea229ed36e9d28bb56e79f9c7aeae36d59321dbdff2dd7c5401a202fe","access_classification":"metadata_only"},
+      {"path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/identity-version-history.json","sha256":"4ace782dfafc77f01b15fb970e286e63bacf4d652812c377ec6d0a04ecb3c532","access_classification":"metadata_only"}
+    ]
+  },
+  "pagination_identity_capture_and_completeness": {
+    "classification": "observed",
+    "two_pass_probe": {
+      "query": "cube sat",
+      "source_total": 36,
+      "page_size": 25,
+      "range_ledger": [[1,25],[26,36]],
+      "pass1_unique_base_ids": 36,
+      "pass2_unique_base_ids": 36,
+      "ordered_base_id_ledgers_identical": true,
+      "within_pass_duplicates": false,
+      "totals_reconciled": true
+    },
+    "final_page_control": "On the last observed range, Next controls had is-invisible class and no href. A final procedure must independently recheck this state and fail rather than follow a stale/active final-page control.",
+    "capture_inventory": "On one 25-row rendered result page, every row exposed a canonical /abs/ path and a canonical /pdf/ affordance; no Export or Citation control was observed on that bounded page. No PDF was opened."
+  },
+  "unresolved_or_untested": [
+    "A fixed accepted query-length limit or a complete source-wide term-row limit.",
+    "A full stable-ID-set comparison for finite P versus nanosat*.",
+    "Universal case, acronym, phrase, punctuation, stemming, lemmatization, synonym, or expansion behavior.",
+    "The exact P-001 upper cutoff and final-day source-date behavior.",
+    "A visible multiple-revision submission history and complete every-version/date capture.",
+    "Source-wide page/capture caps and export availability.",
+    "All remaining BG2, BC1, BT2, V1, and O1 cells after the control failure."
+  ],
+  "invalid_local_harness_attempt": {
+    "classification": "observed",
+    "statement": "One early local harness invocation parsed no query rows and submitted an empty title-field search. It is retained in the ignored worklog for audit, was not used as A1 evidence, and retained no records in output.",
+    "path":"SLR/SLR1/searches/worklogs/s-d11-arxiv/S-D11-P01-20260821T045351+0000/raw/partition-A1-C1.ui.json",
+    "sha256":"f93020bed5c807f83a50a6a0d1bdafca8c5e06ba4b98c3e8dd5763cfcdb531a3"
+  },
+  "semantic_change": false
+}
