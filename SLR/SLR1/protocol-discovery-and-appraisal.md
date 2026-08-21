@@ -151,20 +151,20 @@ Source-specific guidelines are intentionally pending regeneration. Run the direc
 
 | Task | Source or method | Accepted source packet |
 |---|---|---|
-| `S-D01` | Scopus | No accepted packet; [blocked diagnostic and draft](searches/sources/s-d01-scopus/) |
+| `S-D01` | Scopus | Pending |
 | `S-D02` | Web of Science Core Collection | Pending |
-| `S-D03` | IEEE Xplore | No accepted packet; [blocked diagnostic and draft](searches/sources/s-d03-ieee-xplore/) |
+| `S-D03` | IEEE Xplore | Pending |
 | `S-D04` | Compendex and Inspec through Engineering Village | Pending |
 | `S-D05` | Wiley Online Library | Pending |
 | `S-D06` | Springer Nature Link | Pending |
 | `S-D07` | Advanced Technologies & Aerospace Index | Pending |
 | `S-D08` | PQDT Global | Pending |
-| `S-D09` | OATD | No accepted packet; [blocked diagnostic and draft](searches/sources/s-d09-oatd/) |
+| `S-D09` | OATD | Pending |
 | `S-D10` | AIAA Aerospace Research Central | Pending |
-| `S-D11` | arXiv | No accepted packet; [blocked diagnostic and draft](searches/sources/s-d11-arxiv/) |
-| `S-D12` | IAF Digital Library | [Accepted guideline v1.0.0 and 48-cell translations](searches/sources/s-d12-iaf-digital-library/) |
-| `S-D13` | NASA Technical Reports Server | [Accepted guideline v1.0.0 and translations](searches/sources/s-d13-ntrs/) |
-| `S-L02` | ESA Indico local harvest | No accepted packet; [blocked local-method draft](searches/sources/s-l02-esa-indico/) |
+| `S-D11` | arXiv | Pending |
+| `S-D12` | IAF Digital Library | Pending |
+| `S-D13` | NASA Technical Reports Server | Pending |
+| `S-L02` | ESA Indico local harvest | Pending |
 
 ### Pilots and final search events
 
