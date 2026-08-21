@@ -1,0 +1,940 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D03-P01-20260821T003654-0400",
+  "task_id": "S-D03",
+  "source_id": "ieee-xplore",
+  "method_type": "direct",
+  "status": "blocked",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-21T00:36:54-04:00",
+  "ended_at": "2026-08-21T00:39:17-04:00",
+  "protocol_commit": "ad77460df82764312fb701f6be4ebf7eb5051c41",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "gpt-5.6-terra",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "IEEE Xplore normal rendered interface (not reached)",
+    "url": "https://ieeexplore.ieee.org/",
+    "access_route": "authorized loopback Chrome required; unavailable before source navigation",
+    "authenticated": false,
+    "authentication_status": "unverified; false means no authenticated IEEE state was observed, not a claim that the user lacks access",
+    "database_or_collection": "IEEE Xplore; current rendered boundary/default scope untested",
+    "platform": "IEEE Xplore",
+    "timezone": "America/New_York (-04:00)"
+  },
+  "executions": [
+    {
+      "execution_id": "D03-BROWSER-ACCESS-001",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Verify authorized loopback browser availability before normal rendered IEEE source interaction.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "browser_harness.py --doctor; no IEEE Xplore navigation",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "browser_route": "authorized loopback only",
+        "source_tab_created": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false,
+        "source_request_made": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Chrome/daemon were reported alive but active browser connections were zero. Per access safety, no source retry or interaction followed."
+    },
+    {
+      "execution_id": "D03-PARTITION-A1-C1",
+      "partition_id": "A1",
+      "cell_id": "A1-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"electrical power system\" OR \"electric power system\" OR \"electrical power subsystem\" OR \"electric power subsystem\" OR \"EPS\" OR \"power subsystem\" OR \"electrical architecture\" OR \"power architecture\" OR \"PCDU\" OR \"PMAD\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"Arcadia\" OR \"Capella\"))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-A2-C1",
+      "partition_id": "A2",
+      "cell_id": "A2-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"power budget\" OR \"energy budget\" OR \"energy balance\" OR \"power generation\" OR \"solar array\" OR \"battery\" OR \"batteries\" OR \"energy storage\" OR \"power conditioning\" OR \"power distribution\" OR \"power management\" OR \"power interface\" OR \"power mode\" OR \"power modes\" OR \"load profile\") AND ((\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"Arcadia\" OR \"Capella\") OR (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\")))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A2.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A2.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-A3-C1",
+      "partition_id": "A3",
+      "cell_id": "A3-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"electrical power system\" OR \"electric power system\" OR \"electrical power subsystem\" OR \"electric power subsystem\" OR \"EPS\" OR \"power subsystem\" OR \"electrical architecture\" OR \"power architecture\" OR \"PCDU\" OR \"PMAD\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\"))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A3.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A3.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-B1-C1",
+      "partition_id": "B1",
+      "cell_id": "B1-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"Arcadia\" OR \"Capella\"))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/B1.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/B1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-B2-C1",
+      "partition_id": "B2",
+      "cell_id": "B2-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\") AND (\"requirement\" OR \"requirements\" OR \"function\" OR \"functions\" OR \"behavior\" OR \"behaviors\" OR \"behaviour\" OR \"behaviours\" OR \"architecture\" OR \"architectures\" OR \"interface\" OR \"interfaces\" OR \"traceability\" OR \"parametric\" OR \"parametrics\" OR \"verification\" OR \"validation\"))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/B2.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/B2.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-BG1-C1",
+      "partition_id": "BG1",
+      "cell_id": "BG1-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"generic model\" OR \"generic system model\" OR \"reusable model\" OR \"reusable system model\" OR \"configurable model\" OR \"configurable system model\" OR \"model template\" OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"model\" OR \"architecture\"))))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BG1.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BG1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-BG2-C1",
+      "partition_id": "BG2",
+      "cell_id": "BG2-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"reference architecture\" OR \"domain model\" OR \"metamodel\" OR \"meta-model\" OR ((\"product-line\" OR \"product line\" OR \"product-family\" OR \"product family\") AND (\"model\")) OR ((\"variation point\") AND (\"model\" OR \"architecture\"))))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BG2.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BG2.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-BC1-C1",
+      "partition_id": "BC1",
+      "cell_id": "BC1-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"reference model\" OR \"system reference model\" OR \"model library\" OR \"model libraries\" OR \"system model library\" OR \"system model libraries\" OR \"model pattern\" OR \"modeling pattern\" OR \"modelling pattern\" OR \"system model pattern\" OR \"systems model pattern\" OR \"model profile\" OR \"system model profile\" OR \"systems model profile\" OR \"SysML profile\" OR ((\"domain-specific modeling language\" OR \"domain specific modeling language\" OR \"domain-specific modelling language\" OR \"domain specific modelling language\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"system model\" OR \"systems model\"))))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BC1.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BC1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-BT2-C1",
+      "partition_id": "BT2",
+      "cell_id": "BT2-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\") AND ((\"reuse\" OR \"reuses\" OR \"reused\" OR \"reusable\" OR \"reusing\" OR \"tailor\" OR \"tailors\" OR \"tailored\" OR \"tailoring\" OR \"customize\" OR \"customizes\" OR \"customized\" OR \"customizing\" OR \"customization\" OR \"customise\" OR \"customises\" OR \"customised\" OR \"customising\" OR \"customisation\" OR \"configure\" OR \"configures\" OR \"configured\" OR \"configuring\" OR \"configuration\" OR \"parameterize\" OR \"parameterizes\" OR \"parameterized\" OR \"parameterizing\" OR \"parameterization\" OR \"parameterise\" OR \"parameterises\" OR \"parameterised\" OR \"parameterising\" OR \"parameterisation\" OR \"instantiate\" OR \"instantiates\" OR \"instantiated\" OR \"instantiating\" OR \"instantiation\" OR \"variability\" OR \"variation point\" OR \"specialize\" OR \"specializes\" OR \"specialized\" OR \"specializing\" OR \"specialization\" OR \"specialise\" OR \"specialises\" OR \"specialised\" OR \"specialising\" OR \"specialisation\" OR \"adapt\" OR \"adapts\" OR \"adapted\" OR \"adapting\" OR \"adaptation\") AND (\"model\" OR \"models\" OR \"architecture\" OR \"architectures\")))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BT2.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BT2.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-V1-C1",
+      "partition_id": "V1",
+      "cell_id": "V1-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"electrical power system\" OR \"electric power system\" OR \"power subsystem\" OR \"power budget\" OR \"energy budget\" OR \"PCDU\" OR \"PMAD\" OR \"EPS\") AND (\"model-based systems engineering\" OR \"MBSE\" OR \"SysML\" OR \"system model\" OR \"reference model\" OR \"digital engineering\") AND (\"verification\" OR \"validation\" OR \"traceability\" OR \"traceable\" OR \"model verification\" OR \"model validation\" OR \"system verification\" OR \"system validation\" OR \"requirements-in-the-loop\" OR \"model checking\" OR \"virtual integration\" OR \"MIL\" OR \"model-in-the-loop\" OR \"SIL\" OR \"software-in-the-loop\" OR \"PIL\" OR \"processor-in-the-loop\" OR \"HIL\" OR \"hardware-in-the-loop\" OR \"test case\" OR \"test procedure\"))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/V1.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/V1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    },
+    {
+      "execution_id": "D03-PARTITION-O1-C1",
+      "partition_id": "O1",
+      "cell_id": "O1-C1",
+      "purpose": "Blocked count-only validation entry for one complete provisional IEEE normal-input query cell; no source submission occurred.",
+      "started_at": "2026-08-21T00:36:54-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"nanosat\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"electrical power system\" OR \"electric power system\" OR \"power subsystem\" OR \"power budget\" OR \"energy budget\" OR \"PCDU\" OR \"PMAD\" OR \"EPS\") AND (\"model-based systems engineering\" OR \"MBSE\" OR \"SysML\" OR \"system model\" OR \"reference model\" OR \"digital engineering\") AND (\"reliability\" OR \"reliable\" OR \"mission assurance\" OR \"reproducibility\" OR \"reproducible\" OR \"reuse\" OR \"reusable\" OR \"integrability\" OR \"integrable\" OR \"interoperability\" OR \"interoperable\" OR \"traceability\" OR \"traceable\" OR \"benefit\" OR \"benefits\" OR \"impact\" OR \"outcome\" OR \"no effect\" OR \"adverse\" OR \"burden\" OR \"effort\" OR \"workload\" OR \"overhead\" OR \"cost\" OR \"schedule\" OR \"training\" OR \"learning curve\" OR \"licensing\" OR \"license\" OR \"licence\" OR \"adoption\"))",
+      "query_file": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/O1.txt",
+      "fields": [
+        "provisional normal visible search input/default source scope; untested"
+      ],
+      "controls": {
+        "source_interaction_started": false,
+        "count_only_planned": true,
+        "date_control": "not applied or observed",
+        "language_limit_applied": false,
+        "content_type_limit_applied": false,
+        "access_limit_applied": false,
+        "peer_review_limit_applied": false,
+        "venue_limit_applied": false,
+        "subject_limit_applied": false,
+        "target_id_supplied": false,
+        "fresh_browser_used": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/O1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt"
+      ],
+      "notes": "Browser-access failure occurred before IEEE navigation; this exact file is a local draft and not an executed source query."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "C00-DIAGNOSTIC-SEPARATION",
+      "requirement": "Pilot remains diagnostic only; no screening or candidate import is permitted.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json"
+      ],
+      "notes": "No source record or candidate workflow was created."
+    },
+    {
+      "check_id": "C01-BROWSER-ACCESS",
+      "requirement": "Use an authorized loopback browser and stop safely if it is inaccessible.",
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "Doctor reported zero active browser connections. No IEEE tab/request was attempted."
+    },
+    {
+      "check_id": "C02-BOUNDARY-DEFAULT-SCOPE",
+      "requirement": "Prove IEEE Xplore platform/database boundary, normal default field/scope, and visible source controls without a discovery restriction.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No rendered IEEE state was available."
+    },
+    {
+      "check_id": "C03-BOOLEAN-PHRASE-GROUPING",
+      "requirement": "Validate normal UI Boolean, phrase, explicit grouping, and precedence behavior.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "Local explicit text is not source grammar evidence."
+    },
+    {
+      "check_id": "C04-PUNCTUATION-HYPHENS",
+      "requirement": "Validate punctuation and finite hyphen/spaced literal behavior.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "All forms are retained locally; source behavior was not observed."
+    },
+    {
+      "check_id": "C05-CASE-ACRONYMS",
+      "requirement": "Validate case and acronym behavior.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No rendered source comparison was possible."
+    },
+    {
+      "check_id": "C06-EXPANSION-MORPHOLOGY",
+      "requirement": "Validate automatic expansion, stemming, and lemmatization behavior.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No expansion is relied on."
+    },
+    {
+      "check_id": "C07-WILDCARD",
+      "requirement": "Validate wildcard behavior and finite P versus nanosat* stable-ID equivalence.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No wildcard is used; no comparison was run."
+    },
+    {
+      "check_id": "C08-QUERY-ECHO-LIMITS",
+      "requirement": "Validate exact query echo/rewrite and accepted full-cell query limits.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No query was submitted."
+    },
+    {
+      "check_id": "C09-ALL-PARTITION-TRANSLATIONS",
+      "requirement": "Maintain exact source-normal draft text for all eleven semantic partitions without silent narrowing.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json"
+      ],
+      "notes": "All local query files pass structural integrity only."
+    },
+    {
+      "check_id": "C10-DATE-LOWER-BOUND",
+      "requirement": "Validate the lower 2011 bound and visible Year control.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No source date control was observed."
+    },
+    {
+      "check_id": "C11-DATE-PRECISION-CUTOFF",
+      "requirement": "Determine exact-day versus year-only precision; use only a diagnostic sentinel/unbounded comparison while P-001 remains unset.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "P-001 is unset and browser access prevented a diagnostic comparison."
+    },
+    {
+      "check_id": "C12-LANGUAGE-AND-NO-RESTRICTION",
+      "requirement": "Validate language handling and no content-type/access/peer-review/venue/subject restriction state.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No source controls were observed; draft applies no restriction."
+    },
+    {
+      "check_id": "C13-TOTAL-AND-EXPLICIT-ZERO",
+      "requirement": "Validate exact rendered total and explicit native zero behavior.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No result page was rendered."
+    },
+    {
+      "check_id": "C14-PAGES-RANGES-ORDER",
+      "requirement": "Validate page size, ranges, pagination, default/selected ordering, and source caps.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No result page was rendered."
+    },
+    {
+      "check_id": "C15-IDENTITY-DETAIL-DOI",
+      "requirement": "Validate article number/stable identity, document route, detail title, and DOI behavior.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No retained-record diagnostic was run."
+    },
+    {
+      "check_id": "C16-CAPTURE-EXPORT-DUPLICATES",
+      "requirement": "Validate capture/export, duplicate behavior, and reconciliation.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No source records were retrieved."
+    },
+    {
+      "check_id": "C17-TWO-PASS-COMPLETENESS",
+      "requirement": "Validate a complete two-pass or equivalent ID/range/total reconciliation method.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ],
+      "notes": "No source pages were traversed."
+    },
+    {
+      "check_id": "C18-RAW-RETENTION",
+      "requirement": "Keep any raw browser/adapter artifact in the ignored assigned worklog and keep tracked evidence safe.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-003"
+      ],
+      "notes": "Only a non-sensitive browser-access text diagnostic was created in the ignored S-D03 worklog."
+    },
+    {
+      "check_id": "C-PARTITION-A1",
+      "requirement": "Validate complete A1 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "A1"
+    },
+    {
+      "check_id": "C-PARTITION-A2",
+      "requirement": "Validate complete A2 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A2.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "A2"
+    },
+    {
+      "check_id": "C-PARTITION-A3",
+      "requirement": "Validate complete A3 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A3.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "A3"
+    },
+    {
+      "check_id": "C-PARTITION-B1",
+      "requirement": "Validate complete B1 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/B1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "B1"
+    },
+    {
+      "check_id": "C-PARTITION-B2",
+      "requirement": "Validate complete B2 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/B2.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "B2"
+    },
+    {
+      "check_id": "C-PARTITION-BG1",
+      "requirement": "Validate complete BG1 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BG1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "BG1"
+    },
+    {
+      "check_id": "C-PARTITION-BG2",
+      "requirement": "Validate complete BG2 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BG2.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "BG2"
+    },
+    {
+      "check_id": "C-PARTITION-BC1",
+      "requirement": "Validate complete BC1 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BC1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "BC1"
+    },
+    {
+      "check_id": "C-PARTITION-BT2",
+      "requirement": "Validate complete BT2 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BT2.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "BT2"
+    },
+    {
+      "check_id": "C-PARTITION-V1",
+      "requirement": "Validate complete V1 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/V1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "V1"
+    },
+    {
+      "check_id": "C-PARTITION-O1",
+      "requirement": "Validate complete O1 cell against the normal rendered IEEE UI.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/O1.txt",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json"
+      ],
+      "notes": "Exact provisional cell exists and passed local integrity; it was not submitted because the browser was inaccessible.",
+      "partition_id": "O1"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/worklogs/s-d03-ieee-xplore/browser-access-doctor-20260821T003654-0400.txt",
+      "role": "safe ignored browser-access diagnostic; no source records",
+      "sha256": "c94afc450dd14a81303b2b089d59a627300b02108173f05ef71d0e97262ab5f9",
+      "access_classification": "metadata_only",
+      "secure_location_reference": "ignored S-D03 worklog"
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/guideline.md",
+      "role": "draft blocked source guideline",
+      "sha256": "a343e118e6074582551032e26087c58bcc9cd47184ab26669140ad0372eef699",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/translation-spec.json",
+      "role": "draft blocked direct translation specification",
+      "sha256": "a9632657a71dc0b62fc5df118b64e9269f87a60bc00525f96a56ccc9120e1323",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1.txt",
+      "role": "exact provisional query cell A1-C1",
+      "sha256": "bb9c2de71a3f1ef9818f3726ed9c4298cf3f5ff9c60657c7951a4e35c931c5e0",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A2.txt",
+      "role": "exact provisional query cell A2-C1",
+      "sha256": "0d6d22972bcb27fcfa08d9a64a42d875c0b3a0291c1e7609466de5571c8a0cbf",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A3.txt",
+      "role": "exact provisional query cell A3-C1",
+      "sha256": "661f024dba9af419c0c280ca82f4bf6eb1a9f5ab9847710725ae7262a4082d7d",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/B1.txt",
+      "role": "exact provisional query cell B1-C1",
+      "sha256": "0b5f8a76e4c3810d838729e0eeff2a09cb12fb66d0bbc1c8bed872f68f51a7fe",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/B2.txt",
+      "role": "exact provisional query cell B2-C1",
+      "sha256": "4bbe50186a5536fb4dfb227bb2300ecdcef0665735f38c63634ef3461cc5c8e1",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BG1.txt",
+      "role": "exact provisional query cell BG1-C1",
+      "sha256": "18863bd6d35956366fa516e84c3aad55cba84e441cf5c6a8e8c328f67fac65df",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BG2.txt",
+      "role": "exact provisional query cell BG2-C1",
+      "sha256": "5c1a4742b4465786812f4f011335f4b4686f6203988375ad665d2dcc1577ad2c",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BC1.txt",
+      "role": "exact provisional query cell BC1-C1",
+      "sha256": "b53c36dc0d4122ee86c02fcc4569dd575cad09023832577d374f23e670bb5d18",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/BT2.txt",
+      "role": "exact provisional query cell BT2-C1",
+      "sha256": "c9c7b44ed814abd18ed56eee577f5458f26bcb50262e1df336917bdb61ad9e14",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/V1.txt",
+      "role": "exact provisional query cell V1-C1",
+      "sha256": "62960ffa4ea79afe2ca1e983f11def9e8192fa3b3883b738f9a8a9cefcdbb710",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/O1.txt",
+      "role": "exact provisional query cell O1-C1",
+      "sha256": "8ec7d8e2ac2d4f8996c6d65f754b91de5316d20af2f078aeab7b14472d490d82",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/observations.md",
+      "role": "labelled blocked pilot observations",
+      "sha256": "c0d80bb7bbce823f28d331a5691cabc339cd7213ca87af99288ac22150e4045a",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/translation-integrity.json",
+      "role": "safe local translation-integrity matrix",
+      "sha256": "31704905bf6864bfbc8c23f57fac13041181ba6e4f5e0db2a0333211006378e5",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/partition-matrix.json",
+      "role": "safe blocked partition matrix",
+      "sha256": "be19bed855714bc7c9ea79e0a0961566ed7b03fd30f8b1ee85f2366d5f742fab",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/evidence-index.json",
+      "role": "safe evidence index",
+      "sha256": "f8467730a5122724f0b34d19f000c3532fa52b40cb9623cd25f2feff2fd2a489",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P01-20260821T003654-0400/manifest.json",
+      "role": "this pilot manifest; hash intentionally null to avoid self-reference",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    }
+  ],
+  "disposition": {
+    "recommendation": "skip_for_now",
+    "reason": "The authorized loopback browser was inaccessible before an IEEE Xplore owned tab could be created. Source totals are null, all source behavior remains untested, and access safety prohibited retrying or bypassing controls.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Restore and prove normal authorized local-CDP access using only a new adapter-owned IEEE tab; do not provide credentials, cookies, target IDs, existing-tab URLs, or saved search/result URLs.",
+      "Revalidate boundary/default scope, visible controls, normal UI grammar, all eleven exact cells, query echo/limits, date/language behavior, explicit zero, stable identity, page/capture/export behavior, source limits, and two-pass completeness.",
+      "Set the exact common cutoff under P-001 and validate date precision before any final run.",
+      "Supervisor review and acceptance/revision are required before any final IEEE event or import."
+    ]
+  }
+}

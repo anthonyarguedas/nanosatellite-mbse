@@ -1,0 +1,813 @@
+{
+  "artifact_version": "slr1-ieee-xplore-translation-spec/v0.1",
+  "task_id": "S-D03",
+  "source_id": "ieee-xplore",
+  "source_name": "IEEE Xplore",
+  "status": "draft_blocked_unvalidated",
+  "created_at": "2026-08-21T00:39:17-04:00",
+  "protocol_commit": "ad77460df82764312fb701f6be4ebf7eb5051c41",
+  "normative_dictionary": {
+    "path": "SLR/SLR1/searches/search-concept-dictionary.json",
+    "sha256": "c8cba2ea59861d3b0a27062685f2f915943e053c247c774f39c8607392c46bd0",
+    "artifact_version": "slr1-search-concepts/v1",
+    "direct_partition_schedule": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2",
+      "V1",
+      "O1"
+    ],
+    "reconciliation": "Local integrity checks dereference the current dictionary and direct schedule; no literal, Boolean relation, SmallSat expansion, or wildcard substitution is added."
+  },
+  "translation_status": {
+    "diagnostic_only": true,
+    "final_execution_prohibited": true,
+    "current_source_validation": {
+      "status": "blocked",
+      "basis": "untested"
+    },
+    "reason": "The authorized loopback browser reported zero active browser connections before IEEE navigation. These are exact provisional normal-input texts with local structural integrity evidence, not accepted IEEE source-native translations."
+  },
+  "source_native_draft": {
+    "interface": "IEEE Xplore normal rendered search UI",
+    "query_entry": "one normal visible search input; no field wrapper is embedded",
+    "field_scope": {
+      "implementation": "No title/abstract/keyword/full-text field restriction is asserted or embedded. The intended source field is the normal default UI scope.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence": [
+        "pilots/S-D03-P01-20260821T003654-0400/observations.md"
+      ]
+    },
+    "grammar": {
+      "implementation": "Provisional explicit AND, OR, parenthesized grouping, and double-quoted finite literals.",
+      "status": "untested",
+      "basis": "inferred",
+      "no_unvalidated_proximity_operator": true,
+      "pair_rule_rendering": "Dictionary pairs are represented only as same-query Boolean conjunctions; this does not assert IEEE proximity, field, or span semantics."
+    },
+    "term_rendering": {
+      "finite_population_forms": "All ten P forms are enumerated exactly; nanosat* is not used.",
+      "wildcard_use": "none",
+      "quote_policy": "Each finite literal is double quoted in the draft files.",
+      "punctuation_and_case": "All supplied spellings and case forms are retained; source normalization is untested."
+    },
+    "source_interface_evidence": {
+      "status": "blocked",
+      "basis": "untested",
+      "evidence": [
+        "pilots/S-D03-P01-20260821T003654-0400/evidence-index.json#E-001"
+      ]
+    }
+  },
+  "controls_and_scope": {
+    "no_silent_narrowing": {
+      "population": "All finite P literals are present; do not add SmallSat or small satellite; do not substitute nanosat* unless future fixed-control stable-ID comparison proves it lossless and semantically safe.",
+      "date_clause_in_files": "none; P-001 has not set the common cutoff and no IEEE date control was observed.",
+      "language_clause_in_files": "none; metadata English cannot establish full-report English.",
+      "prohibited_discovery_limits_in_files": [
+        "content type",
+        "language",
+        "access",
+        "peer review",
+        "venue",
+        "subject",
+        "publication type"
+      ],
+      "failure_rule": "A source rejection, limit, rewrite, or blocked cell never permits deleting terms or using a narrower substitute."
+    },
+    "source_scope_and_controls": {
+      "database_boundary": {
+        "status": "untested",
+        "basis": "untested"
+      },
+      "default_search_scope": {
+        "status": "untested",
+        "basis": "untested"
+      },
+      "content_type_restriction": {
+        "implemented": false,
+        "status": "not_applied; source control untested",
+        "basis": "observed"
+      },
+      "language_restriction": {
+        "implemented": false,
+        "status": "not_applied; source control untested",
+        "basis": "observed"
+      },
+      "access_or_peer_review_restriction": {
+        "implemented": false,
+        "status": "not_applied; source control untested",
+        "basis": "observed"
+      },
+      "venue_or_subject_restriction": {
+        "implemented": false,
+        "status": "not_applied; source control untested",
+        "basis": "observed"
+      },
+      "ordering": {
+        "status": "untested",
+        "basis": "untested"
+      },
+      "page_size": {
+        "status": "untested",
+        "basis": "untested"
+      }
+    },
+    "date_and_language": {
+      "protocol_lower_bound": "2011-01-01",
+      "common_upper_cutoff": null,
+      "P_001_status": "unset",
+      "native_year_control": {
+        "status": "untested",
+        "basis": "untested"
+      },
+      "exact_day_precision": {
+        "status": "untested",
+        "basis": "untested"
+      },
+      "diagnostic_future_sentinel_or_unbounded_comparison": {
+        "status": "not_run because browser access was unavailable",
+        "basis": "observed"
+      },
+      "later_handling_if_year_only": "Preserve the complete source total and source date field/provenance, then apply a documented exact-day local resolution process; retain uncertain dates rather than silently exclude them.",
+      "language": "No native language restriction is applied or asserted. Determine full-report language later during screening unless a future reliable source control is proved."
+    }
+  },
+  "lossless_union_rule": {
+    "current_cell_design": "one provisional complete cell per semantic partition",
+    "current_source_length_evidence": {
+      "status": "untested",
+      "basis": "untested"
+    },
+    "future_if_demonstrated_limit": "Before any replacement run, define every complete cell and its exact UTF-8 file; validate every cell; capture complete stable article-ID sets; take their set union while retaining cell provenance; fail the entire partition with total=null if any cell fails, is capped, or is unreconciled."
+  },
+  "partitions": [
+    {
+      "partition_id": "A1",
+      "stream": "A",
+      "role": "Named EPS × explicit MBSE",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_H"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "E_H",
+        "M_H"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "A1-C1",
+          "query_file": "queries/A1.txt",
+          "query_sha256": "bb9c2de71a3f1ef9818f3726ed9c4298cf3f5ff9c60657c7951a4e35c931c5e0",
+          "query_characters_excluding_final_lf": 626,
+          "query_bytes_including_final_lf": 627,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "A2",
+      "stream": "A",
+      "role": "EPS functions or analyses × all model terms",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_F",
+          {
+            "op": "OR",
+            "args": [
+              "M_H",
+              "M_B"
+            ]
+          }
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "E_F",
+        "M_H",
+        "M_B"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "A2-C1",
+          "query_file": "queries/A2.txt",
+          "query_sha256": "0d6d22972bcb27fcfa08d9a64a42d875c0b3a0291c1e7609466de5571c8a0cbf",
+          "query_characters_excluding_final_lf": 901,
+          "query_bytes_including_final_lf": 902,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "A3",
+      "stream": "A",
+      "role": "Named EPS × broad structured model",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_B"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "E_H",
+        "M_B"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "A3-C1",
+          "query_file": "queries/A3.txt",
+          "query_sha256": "661f024dba9af419c0c280ca82f4bf6eb1a9f5ab9847710725ae7262a4082d7d",
+          "query_characters_excluding_final_lf": 608,
+          "query_bytes_including_final_lf": 609,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "B1",
+      "stream": "core_B",
+      "role": "Embedded-thread baseline",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_H"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "M_H"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "B1-C1",
+          "query_file": "queries/B1.txt",
+          "query_sha256": "0b5f8a76e4c3810d838729e0eeff2a09cb12fb66d0bbc1c8bed872f68f51a7fe",
+          "query_characters_excluding_final_lf": 402,
+          "query_bytes_including_final_lf": 403,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "B2",
+      "stream": "core_B",
+      "role": "Controlled broad-model expansion",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "R"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "M_B",
+        "R"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "B2-C1",
+          "query_file": "queries/B2.txt",
+          "query_sha256": "4bbe50186a5536fb4dfb227bb2300ecdcef0665735f38c63634ef3461cc5c8e1",
+          "query_characters_excluding_final_lf": 664,
+          "query_bytes_including_final_lf": 665,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "BG1",
+      "stream": "expanded_B",
+      "role": "Precise reusable model or template",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_model"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "G_model"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "BG1-C1",
+          "query_file": "queries/BG1.txt",
+          "query_sha256": "18863bd6d35956366fa516e84c3aad55cba84e441cf5c6a8e8c328f67fac65df",
+          "query_characters_excluding_final_lf": 475,
+          "query_bytes_including_final_lf": 476,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "BG2",
+      "stream": "expanded_B",
+      "role": "Structural reusable artifact",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_structure"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "G_structure"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "BG2-C1",
+          "query_file": "queries/BG2.txt",
+          "query_sha256": "5c1a4742b4465786812f4f011335f4b4686f6203988375ad665d2dcc1577ad2c",
+          "query_characters_excluding_final_lf": 406,
+          "query_bytes_including_final_lf": 407,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "BC1",
+      "stream": "expanded_B",
+      "role": "Conservative central asset",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "C1"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "C1"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "BC1-C1",
+          "query_file": "queries/BC1.txt",
+          "query_sha256": "b53c36dc0d4122ee86c02fcc4569dd575cad09023832577d374f23e670bb5d18",
+          "query_characters_excluding_final_lf": 929,
+          "query_bytes_including_final_lf": 930,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "BT2",
+      "stream": "expanded_B",
+      "role": "Model-linked tailoring",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "T2"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "M_B",
+        "T2"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "BT2-C1",
+          "query_file": "queries/BT2.txt",
+          "query_sha256": "c9c7b44ed814abd18ed56eee577f5458f26bcb50262e1df336917bdb61ad9e14",
+          "query_characters_excluding_final_lf": 1384,
+          "query_bytes_including_final_lf": 1385,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "V1",
+      "stream": "sensitivity",
+      "role": "V&V sensitivity query",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_probe",
+          "M_probe",
+          "V1"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "E_probe",
+        "M_probe",
+        "V1"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "V1-C1",
+          "query_file": "queries/V1.txt",
+          "query_sha256": "62960ffa4ea79afe2ca1e983f11def9e8192fa3b3883b738f9a8a9cefcdbb710",
+          "query_characters_excluding_final_lf": 858,
+          "query_bytes_including_final_lf": 859,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "O1",
+      "stream": "sensitivity",
+      "role": "Outcome and burden sensitivity query",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_probe",
+          "M_probe",
+          "O1"
+        ]
+      },
+      "concept_blocks": [
+        "P",
+        "E_probe",
+        "M_probe",
+        "O1"
+      ],
+      "source_translation_status": {
+        "status": "blocked",
+        "basis": "untested"
+      },
+      "cells": [
+        {
+          "cell_id": "O1-C1",
+          "query_file": "queries/O1.txt",
+          "query_sha256": "8ec7d8e2ac2d4f8996c6d65f754b91de5316d20af2f078aeab7b14472d490d82",
+          "query_characters_excluding_final_lf": 921,
+          "query_bytes_including_final_lf": 922,
+          "encoding": "UTF-8",
+          "utf8_bom": false,
+          "final_lf": true,
+          "field_scope": "provisional normal visible input/default source scope; untested",
+          "controls": {
+            "content_type_restriction": false,
+            "language_restriction": false,
+            "access_restriction": false,
+            "peer_review_restriction": false,
+            "venue_restriction": false,
+            "subject_restriction": false,
+            "date_filter": "none in query text; untested source control"
+          },
+          "current_interface_validation": {
+            "status": "blocked",
+            "basis": "untested",
+            "source_reported_total": null,
+            "reason": "No IEEE source interaction was started after the browser-access failure."
+          }
+        }
+      ],
+      "logical_union": {
+        "type": "single_cell_provisional",
+        "lossless_union_required_now": false,
+        "source_length_validation": {
+          "status": "untested",
+          "basis": "untested"
+        },
+        "stable_article_id_union_rule": "If future cells are required, union complete cell sets by the demonstrated IEEE stable article ID; preserve all cell provenance and do not replace a failed cell with a narrower query."
+      }
+    }
+  ],
+  "semantic_change": false,
+  "final_preconditions": [
+    "P-001 common cutoff",
+    "R-002 authorization",
+    "restored authorized loopback browser",
+    "current rendered-UI preflight",
+    "supervisor acceptance or revision"
+  ]
+}
