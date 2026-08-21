@@ -1,0 +1,3068 @@
+{
+  "schema_version": "slr1-iaf-prospective-query-plan/v1",
+  "pilot_id": "S-D12-P01-20260821T043836+0000",
+  "task_id": "S-D12",
+  "source_id": "iaf-digital-library",
+  "protocol_commit": "ad77460df82764312fb701f6be4ebf7eb5051c41",
+  "dictionary": {
+    "path": "SLR/SLR1/searches/search-concept-dictionary.json",
+    "sha256": "c8cba2ea59861d3b0a27062685f2f915943e053c247c774f39c8607392c46bd0",
+    "artifact_version": "slr1-search-concepts/v1"
+  },
+  "normal_public_route": {
+    "route": "GET https://dl.iafastro.directory/search/",
+    "query_parameter": "q",
+    "offset_parameter": "o",
+    "page_size_parameter": "l",
+    "field_scope": "unqualified global public search; field qualifiers are not used because bounded current direct GET probes rewrote ':'",
+    "event_scope": "none; full IAF Digital Library"
+  },
+  "constraint": {
+    "normal_visible_input_maxlength": 500,
+    "enforced_pre_submission_rule": "Every cell has submitted_characters <= 500 and is UTF-8/BOM-free with no terminal newline.",
+    "server_limit_status": "not asserted; direct 501-ASCII probe was accepted and echoed, so 500 is treated as the normal visible input limit only."
+  },
+  "partitions": [
+    {
+      "partition_id": "A1",
+      "stream": "A",
+      "role": "Named EPS × explicit MBSE",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_H"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 594,
+      "split_block": "M_H",
+      "split_block_atoms_in_normative_or": [
+        "M_H.term.01",
+        "M_H.term.02",
+        "M_H.term.03",
+        "M_H.term.04",
+        "M_H.term.05",
+        "M_H.term.06",
+        "M_H.term.07",
+        "M_H.term.08",
+        "M_H.term.09"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "E_H": [
+          "EPS",
+          "PCDU",
+          "PMAD",
+          "electric power subsystem",
+          "electric power system",
+          "electrical architecture",
+          "electrical power subsystem",
+          "electrical power system",
+          "power architecture",
+          "power subsystem"
+        ],
+        "M_H": [
+          "Arcadia",
+          "Capella",
+          "MBSE",
+          "SysML",
+          "model based system engineering",
+          "model based systems engineering",
+          "model-based system engineering",
+          "model-based systems engineering",
+          "systems modeling language"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "A1-C01",
+          "query_file": "queries/A1-C01.txt",
+          "query_sha256": "0bcde1b43117eca2a0e5f93171aeaaf17ae84cfd97e5f04393adf70712cfc534",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 488,
+          "submitted_utf8_bytes": 488,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_H": [
+              "E_H.term.01",
+              "E_H.term.02",
+              "E_H.term.03",
+              "E_H.term.04",
+              "E_H.term.05",
+              "E_H.term.06",
+              "E_H.term.07",
+              "E_H.term.08",
+              "E_H.term.09",
+              "E_H.term.10"
+            ],
+            "M_H": [
+              "M_H.term.01",
+              "M_H.term.02",
+              "M_H.term.03"
+            ]
+          }
+        },
+        {
+          "cell_id": "A1-C02",
+          "query_file": "queries/A1-C02.txt",
+          "query_sha256": "e1403661a4c7c741938072763446666f51513a739e8d4e61a0ffb498e7dae136",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 484,
+          "submitted_utf8_bytes": 484,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_H": [
+              "E_H.term.01",
+              "E_H.term.02",
+              "E_H.term.03",
+              "E_H.term.04",
+              "E_H.term.05",
+              "E_H.term.06",
+              "E_H.term.07",
+              "E_H.term.08",
+              "E_H.term.09",
+              "E_H.term.10"
+            ],
+            "M_H": [
+              "M_H.term.04",
+              "M_H.term.05",
+              "M_H.term.06",
+              "M_H.term.07",
+              "M_H.term.08",
+              "M_H.term.09"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "A2",
+      "stream": "A",
+      "role": "EPS functions or analyses × all model terms",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_F",
+          {
+            "op": "OR",
+            "args": [
+              "M_H",
+              "M_B"
+            ]
+          }
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 867,
+      "split_block": "OR[M_H,M_B]",
+      "split_block_atoms_in_normative_or": [
+        "M_H.term.01",
+        "M_H.term.02",
+        "M_H.term.03",
+        "M_H.term.04",
+        "M_H.term.05",
+        "M_H.term.06",
+        "M_H.term.07",
+        "M_H.term.08",
+        "M_H.term.09",
+        "M_B.term.01",
+        "M_B.term.02",
+        "M_B.term.03",
+        "M_B.term.04",
+        "M_B.term.05",
+        "M_B.term.06",
+        "M_B.term.07",
+        "M_B.term.08",
+        "M_B.term.09"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "E_F": [
+          "batteries",
+          "battery",
+          "energy balance",
+          "energy budget",
+          "energy storage",
+          "load profile",
+          "power budget",
+          "power conditioning",
+          "power distribution",
+          "power generation",
+          "power interface",
+          "power management",
+          "power mode",
+          "power modes",
+          "solar array"
+        ],
+        "OR[M_H,M_B]": [
+          "Arcadia",
+          "Capella",
+          "MBSE",
+          "SysML",
+          "digital engineering",
+          "model based system engineering",
+          "model based systems engineering",
+          "model-based system engineering",
+          "model-based systems engineering",
+          "object-oriented systems model",
+          "reference model",
+          "system model",
+          "system modeling",
+          "system modelling",
+          "systems model",
+          "systems modeling",
+          "systems modeling language",
+          "systems modelling"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "A2-C01",
+          "query_file": "queries/A2-C01.txt",
+          "query_sha256": "5d5d3afccde509f57be9802733ba868a486385bf330efd6aa7ae1277c6465c38",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 482,
+          "submitted_utf8_bytes": 482,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_H.term.01"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C02",
+          "query_file": "queries/A2-C02.txt",
+          "query_sha256": "9352eabf42125115aa40b3689876927e887ffae7425cbad86d4c5e601779cd1c",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 482,
+          "submitted_utf8_bytes": 482,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_H.term.02"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C03",
+          "query_file": "queries/A2-C03.txt",
+          "query_sha256": "9d64f2a5641755b20cb0a051c7d791dc2c08b06ed969a0f1f61a02eaca45e602",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 481,
+          "submitted_utf8_bytes": 481,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_H.term.03"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C04",
+          "query_file": "queries/A2-C04.txt",
+          "query_sha256": "655142f5b89c6f72a3ced07684491c3a1ff8c11d509d386f693846310aad2a67",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 498,
+          "submitted_utf8_bytes": 498,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_H.term.04",
+              "M_H.term.05",
+              "M_H.term.06"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C05",
+          "query_file": "queries/A2-C05.txt",
+          "query_sha256": "704fe311b6ee80f49c27b6c0bb9ab4885e753aef4e12b552e6545da29c736e0a",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 498,
+          "submitted_utf8_bytes": 498,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_H.term.07",
+              "M_H.term.08",
+              "M_H.term.09"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C06",
+          "query_file": "queries/A2-C06.txt",
+          "query_sha256": "c10c6ebe19c77db2a4ee4d1176b201eb023c28c0a158bf62b946c1d85c85ff45",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 482,
+          "submitted_utf8_bytes": 482,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_B.term.01",
+              "M_B.term.02"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C07",
+          "query_file": "queries/A2-C07.txt",
+          "query_sha256": "86fb031b6560bcb56b6c19256a3d7a05d5dc6e6189b2e4f111bfc095dd595bdf",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 488,
+          "submitted_utf8_bytes": 488,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_B.term.03",
+              "M_B.term.04"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C08",
+          "query_file": "queries/A2-C08.txt",
+          "query_sha256": "763362ccf1a2dc33c1ed4d839cdf31368c246e5449979666e59f09ef9fbe5282",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 490,
+          "submitted_utf8_bytes": 490,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_B.term.05",
+              "M_B.term.06"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C09",
+          "query_file": "queries/A2-C09.txt",
+          "query_sha256": "4924eeb52d85daa3734d39b88a516e77c30e9e2f2c1e31a50d32c771b9382781",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 491,
+          "submitted_utf8_bytes": 491,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_B.term.07",
+              "M_B.term.08"
+            ]
+          }
+        },
+        {
+          "cell_id": "A2-C10",
+          "query_file": "queries/A2-C10.txt",
+          "query_sha256": "bb007bfe32e1423983b4cad7a2b7df56c80a0f199dbccf1a76e0ee04168dbd52",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 480,
+          "submitted_utf8_bytes": 480,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_F": [
+              "E_F.term.01",
+              "E_F.term.02",
+              "E_F.term.03",
+              "E_F.term.04",
+              "E_F.term.05",
+              "E_F.term.06",
+              "E_F.term.07",
+              "E_F.term.08",
+              "E_F.term.09",
+              "E_F.term.10",
+              "E_F.term.11",
+              "E_F.term.12",
+              "E_F.term.13",
+              "E_F.term.14",
+              "E_F.term.15"
+            ],
+            "OR[M_H,M_B]": [
+              "M_B.term.09"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "A3",
+      "stream": "A",
+      "role": "Named EPS × broad structured model",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_B"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 584,
+      "split_block": "M_B",
+      "split_block_atoms_in_normative_or": [
+        "M_B.term.01",
+        "M_B.term.02",
+        "M_B.term.03",
+        "M_B.term.04",
+        "M_B.term.05",
+        "M_B.term.06",
+        "M_B.term.07",
+        "M_B.term.08",
+        "M_B.term.09"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "E_H": [
+          "EPS",
+          "PCDU",
+          "PMAD",
+          "electric power subsystem",
+          "electric power system",
+          "electrical architecture",
+          "electrical power subsystem",
+          "electrical power system",
+          "power architecture",
+          "power subsystem"
+        ],
+        "M_B": [
+          "digital engineering",
+          "object-oriented systems model",
+          "reference model",
+          "system model",
+          "system modeling",
+          "system modelling",
+          "systems model",
+          "systems modeling",
+          "systems modelling"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "A3-C01",
+          "query_file": "queries/A3-C01.txt",
+          "query_sha256": "23c3774ebdd04a221bd2b900e15a40519163ae0ab0127e8869e82ffe3e1cc85d",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 480,
+          "submitted_utf8_bytes": 480,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_H": [
+              "E_H.term.01",
+              "E_H.term.02",
+              "E_H.term.03",
+              "E_H.term.04",
+              "E_H.term.05",
+              "E_H.term.06",
+              "E_H.term.07",
+              "E_H.term.08",
+              "E_H.term.09",
+              "E_H.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05"
+            ]
+          }
+        },
+        {
+          "cell_id": "A3-C02",
+          "query_file": "queries/A3-C02.txt",
+          "query_sha256": "92f11a0c7bf5048d906994bc71082b72daeed3539d279a013174c349a371cefd",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 482,
+          "submitted_utf8_bytes": 482,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_H": [
+              "E_H.term.01",
+              "E_H.term.02",
+              "E_H.term.03",
+              "E_H.term.04",
+              "E_H.term.05",
+              "E_H.term.06",
+              "E_H.term.07",
+              "E_H.term.08",
+              "E_H.term.09",
+              "E_H.term.10"
+            ],
+            "M_B": [
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "B1",
+      "stream": "core_B",
+      "role": "Embedded-thread baseline",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_H"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 380,
+      "split_block": null,
+      "split_block_atoms_in_normative_or": [],
+      "split_required": false,
+      "split_proof": "Single-cell exact expression.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "M_H": [
+          "Arcadia",
+          "Capella",
+          "MBSE",
+          "SysML",
+          "model based system engineering",
+          "model based systems engineering",
+          "model-based system engineering",
+          "model-based systems engineering",
+          "systems modeling language"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "B1-C01",
+          "query_file": "queries/B1-C01.txt",
+          "query_sha256": "00b117dafd27f9a5edabf5112e9cb4c77427c15a214470f51113ca156402321b",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 380,
+          "submitted_utf8_bytes": 380,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_H": [
+              "M_H.term.01",
+              "M_H.term.02",
+              "M_H.term.03",
+              "M_H.term.04",
+              "M_H.term.05",
+              "M_H.term.06",
+              "M_H.term.07",
+              "M_H.term.08",
+              "M_H.term.09"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "B2",
+      "stream": "core_B",
+      "role": "Controlled broad-model expansion",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "R"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 612,
+      "split_block": "R",
+      "split_block_atoms_in_normative_or": [
+        "R.term.01",
+        "R.term.02",
+        "R.term.03",
+        "R.term.04",
+        "R.term.05",
+        "R.term.06",
+        "R.term.07",
+        "R.term.08",
+        "R.term.09",
+        "R.term.10",
+        "R.term.11",
+        "R.term.12",
+        "R.term.13",
+        "R.term.14",
+        "R.term.15",
+        "R.term.16",
+        "R.term.17"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "M_B": [
+          "digital engineering",
+          "object-oriented systems model",
+          "reference model",
+          "system model",
+          "system modeling",
+          "system modelling",
+          "systems model",
+          "systems modeling",
+          "systems modelling"
+        ],
+        "R": [
+          "architecture",
+          "architectures",
+          "behavior",
+          "behaviors",
+          "behaviour",
+          "behaviours",
+          "function",
+          "functions",
+          "interface",
+          "interfaces",
+          "parametric",
+          "parametrics",
+          "requirement",
+          "requirements",
+          "traceability",
+          "validation",
+          "verification"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "B2-C01",
+          "query_file": "queries/B2-C01.txt",
+          "query_sha256": "740e536e7ea4bb022bb33356b834b6cf91fee5f6610bc74078896192cd4ea7cd",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 493,
+          "submitted_utf8_bytes": 493,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "R": [
+              "R.term.01",
+              "R.term.02",
+              "R.term.03",
+              "R.term.04",
+              "R.term.05",
+              "R.term.06",
+              "R.term.07",
+              "R.term.08",
+              "R.term.09"
+            ]
+          }
+        },
+        {
+          "cell_id": "B2-C02",
+          "query_file": "queries/B2-C02.txt",
+          "query_sha256": "ed2f099ed89553c6d2006e708f62c49ee02c8f5d91d8b7e66ebfe8f04751aa9b",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 488,
+          "submitted_utf8_bytes": 488,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "R": [
+              "R.term.10",
+              "R.term.11",
+              "R.term.12",
+              "R.term.13",
+              "R.term.14",
+              "R.term.15",
+              "R.term.16",
+              "R.term.17"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "BG1",
+      "stream": "expanded_B",
+      "role": "Precise reusable model or template",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_model"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 529,
+      "split_block": "G_model",
+      "split_block_atoms_in_normative_or": [
+        "G_model.term.01",
+        "G_model.term.02",
+        "G_model.term.03",
+        "G_model.term.04",
+        "G_model.term.05",
+        "G_model.term.06",
+        "G_model.term.07",
+        "G_model.pair.01.left.01",
+        "G_model.pair.01.left.02",
+        "G_model.pair.01.left.03",
+        "G_model.pair.01.left.04"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "G_model": [
+          "architecture",
+          "configurable model",
+          "configurable system model",
+          "generic model",
+          "generic system model",
+          "mission agnostic",
+          "mission independent",
+          "mission-agnostic",
+          "mission-independent",
+          "model",
+          "model template",
+          "reusable model",
+          "reusable system model"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "BG1-C01",
+          "query_file": "queries/BG1-C01.txt",
+          "query_sha256": "f600d5bba12627ea1899e92ab903ef9009e180442fbe2b64ef73173b9d6af33c",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 478,
+          "submitted_utf8_bytes": 478,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "G_model": [
+              "G_model.term.01",
+              "G_model.term.02",
+              "G_model.term.03",
+              "G_model.term.04",
+              "G_model.term.05",
+              "G_model.term.06",
+              "G_model.term.07",
+              "G_model.pair.01.left.01",
+              "G_model.pair.01.left.02",
+              "G_model.pair.01.left.03"
+            ]
+          }
+        },
+        {
+          "cell_id": "BG1-C02",
+          "query_file": "queries/BG1-C02.txt",
+          "query_sha256": "208fbceba166a2346863708df3f657552c96053bb5523c4ccfcfe8713a28d729",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 215,
+          "submitted_utf8_bytes": 215,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "G_model": [
+              "G_model.pair.01.left.04"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "BG2",
+      "stream": "expanded_B",
+      "role": "Structural reusable artifact",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_structure"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 402,
+      "split_block": null,
+      "split_block_atoms_in_normative_or": [],
+      "split_required": false,
+      "split_proof": "Single-cell exact expression.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "G_structure": [
+          "architecture",
+          "domain model",
+          "meta-model",
+          "metamodel",
+          "model",
+          "product family",
+          "product line",
+          "product-family",
+          "product-line",
+          "reference architecture",
+          "variation point"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "BG2-C01",
+          "query_file": "queries/BG2-C01.txt",
+          "query_sha256": "a43d7ad021655ed28025c0724c9e222f84b9fc15763eb528006d4fe0788d2550",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 402,
+          "submitted_utf8_bytes": 402,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "G_structure": [
+              "G_structure.term.01",
+              "G_structure.term.02",
+              "G_structure.term.03",
+              "G_structure.term.04",
+              "G_structure.pair.01.left.01",
+              "G_structure.pair.01.left.02",
+              "G_structure.pair.01.left.03",
+              "G_structure.pair.01.left.04",
+              "G_structure.pair.02.left.01"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "BC1",
+      "stream": "expanded_B",
+      "role": "Conservative central asset",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "C1"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 1601,
+      "split_block": "C1",
+      "split_block_atoms_in_normative_or": [
+        "C1.term.01",
+        "C1.term.02",
+        "C1.term.03",
+        "C1.term.04",
+        "C1.term.05",
+        "C1.term.06",
+        "C1.term.07",
+        "C1.term.08",
+        "C1.term.09",
+        "C1.term.10",
+        "C1.term.11",
+        "C1.term.12",
+        "C1.term.13",
+        "C1.term.14",
+        "C1.term.15",
+        "C1.pair.01.left.01",
+        "C1.pair.01.left.02",
+        "C1.pair.01.left.03",
+        "C1.pair.01.left.04"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "C1": [
+          "MBSE",
+          "SysML",
+          "SysML profile",
+          "domain specific modeling language",
+          "domain specific modelling language",
+          "domain-specific modeling language",
+          "domain-specific modelling language",
+          "model based system engineering",
+          "model based systems engineering",
+          "model libraries",
+          "model library",
+          "model pattern",
+          "model profile",
+          "model-based system engineering",
+          "model-based systems engineering",
+          "modeling pattern",
+          "modelling pattern",
+          "reference model",
+          "system model",
+          "system model libraries",
+          "system model library",
+          "system model pattern",
+          "system model profile",
+          "system reference model",
+          "systems model",
+          "systems model pattern",
+          "systems model profile",
+          "systems modeling language"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "BC1-C01",
+          "query_file": "queries/BC1-C01.txt",
+          "query_sha256": "05995ec3f669791fcc6d91240bf6c60e2b605ac5040f55e6dc4f95d87d59d6ec",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 496,
+          "submitted_utf8_bytes": 496,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "C1": [
+              "C1.term.01",
+              "C1.term.02",
+              "C1.term.03",
+              "C1.term.04",
+              "C1.term.05",
+              "C1.term.06",
+              "C1.term.07",
+              "C1.term.08",
+              "C1.term.09",
+              "C1.term.10",
+              "C1.term.11",
+              "C1.term.12",
+              "C1.term.13",
+              "C1.term.14"
+            ]
+          }
+        },
+        {
+          "cell_id": "BC1-C02",
+          "query_file": "queries/BC1-C02.txt",
+          "query_sha256": "8884bfcf7b02df2ce6920f71171d3b86dba84642b05c9d6e42fe504b4845752d",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 454,
+          "submitted_utf8_bytes": 454,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "C1": [
+              "C1.term.15",
+              "C1.pair.01.left.01"
+            ]
+          }
+        },
+        {
+          "cell_id": "BC1-C03",
+          "query_file": "queries/BC1-C03.txt",
+          "query_sha256": "2fac1241eba276d1deef940a0a0431c88fcc4870085fab4065036690aed1e5eb",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 475,
+          "submitted_utf8_bytes": 475,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "C1": [
+              "C1.pair.01.left.02",
+              "C1.pair.01.left.03"
+            ]
+          }
+        },
+        {
+          "cell_id": "BC1-C04",
+          "query_file": "queries/BC1-C04.txt",
+          "query_sha256": "0c5c61b12a2feb7d470cda661b46611c24399bca9202b0de50a82f715c552d5b",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 436,
+          "submitted_utf8_bytes": 436,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "C1": [
+              "C1.pair.01.left.04"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "BT2",
+      "stream": "expanded_B",
+      "role": "Model-linked tailoring",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "T2"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 1244,
+      "split_block": "T2",
+      "split_block_atoms_in_normative_or": [
+        "T2.pair.01.left.01",
+        "T2.pair.01.left.02",
+        "T2.pair.01.left.03",
+        "T2.pair.01.left.04",
+        "T2.pair.01.left.05",
+        "T2.pair.01.left.06",
+        "T2.pair.01.left.07",
+        "T2.pair.01.left.08",
+        "T2.pair.01.left.09",
+        "T2.pair.01.left.10",
+        "T2.pair.01.left.11",
+        "T2.pair.01.left.12",
+        "T2.pair.01.left.13",
+        "T2.pair.01.left.14",
+        "T2.pair.01.left.15",
+        "T2.pair.01.left.16",
+        "T2.pair.01.left.17",
+        "T2.pair.01.left.18",
+        "T2.pair.01.left.19",
+        "T2.pair.01.left.20",
+        "T2.pair.01.left.21",
+        "T2.pair.01.left.22",
+        "T2.pair.01.left.23",
+        "T2.pair.01.left.24",
+        "T2.pair.01.left.25",
+        "T2.pair.01.left.26",
+        "T2.pair.01.left.27",
+        "T2.pair.01.left.28",
+        "T2.pair.01.left.29",
+        "T2.pair.01.left.30",
+        "T2.pair.01.left.31",
+        "T2.pair.01.left.32",
+        "T2.pair.01.left.33",
+        "T2.pair.01.left.34",
+        "T2.pair.01.left.35",
+        "T2.pair.01.left.36",
+        "T2.pair.01.left.37",
+        "T2.pair.01.left.38",
+        "T2.pair.01.left.39",
+        "T2.pair.01.left.40",
+        "T2.pair.01.left.41",
+        "T2.pair.01.left.42",
+        "T2.pair.01.left.43",
+        "T2.pair.01.left.44",
+        "T2.pair.01.left.45",
+        "T2.pair.01.left.46",
+        "T2.pair.01.left.47",
+        "T2.pair.01.left.48",
+        "T2.pair.01.left.49",
+        "T2.pair.01.left.50",
+        "T2.pair.01.left.51",
+        "T2.pair.01.left.52",
+        "T2.pair.01.left.53",
+        "T2.pair.01.left.54",
+        "T2.pair.01.left.55",
+        "T2.pair.01.left.56"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "M_B": [
+          "digital engineering",
+          "object-oriented systems model",
+          "reference model",
+          "system model",
+          "system modeling",
+          "system modelling",
+          "systems model",
+          "systems modeling",
+          "systems modelling"
+        ],
+        "T2": [
+          "adapt",
+          "adaptation",
+          "adapted",
+          "adapting",
+          "adapts",
+          "architecture",
+          "architectures",
+          "configuration",
+          "configure",
+          "configured",
+          "configures",
+          "configuring",
+          "customisation",
+          "customise",
+          "customised",
+          "customises",
+          "customising",
+          "customization",
+          "customize",
+          "customized",
+          "customizes",
+          "customizing",
+          "instantiate",
+          "instantiated",
+          "instantiates",
+          "instantiating",
+          "instantiation",
+          "model",
+          "models",
+          "parameterisation",
+          "parameterise",
+          "parameterised",
+          "parameterises",
+          "parameterising",
+          "parameterization",
+          "parameterize",
+          "parameterized",
+          "parameterizes",
+          "parameterizing",
+          "reusable",
+          "reuse",
+          "reused",
+          "reuses",
+          "reusing",
+          "specialisation",
+          "specialise",
+          "specialised",
+          "specialises",
+          "specialising",
+          "specialization",
+          "specialize",
+          "specialized",
+          "specializes",
+          "specializing",
+          "tailor",
+          "tailored",
+          "tailoring",
+          "tailors",
+          "variability",
+          "variation point"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "BT2-C01",
+          "query_file": "queries/BT2-C01.txt",
+          "query_sha256": "4ae4662dd45685419d38d69459b06677c33f306e59d38aa6d02c9bb05e1da9ea",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 495,
+          "submitted_utf8_bytes": 495,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.01",
+              "T2.pair.01.left.02",
+              "T2.pair.01.left.03",
+              "T2.pair.01.left.04",
+              "T2.pair.01.left.05",
+              "T2.pair.01.left.06",
+              "T2.pair.01.left.07"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C02",
+          "query_file": "queries/BT2-C02.txt",
+          "query_sha256": "edb17f8764920653b8e401214a73d4670159a71d1b0f8eaee1c2c3cdab935922",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 488,
+          "submitted_utf8_bytes": 488,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.08",
+              "T2.pair.01.left.09",
+              "T2.pair.01.left.10",
+              "T2.pair.01.left.11",
+              "T2.pair.01.left.12"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C03",
+          "query_file": "queries/BT2-C03.txt",
+          "query_sha256": "2df45557904e298db4acf952c82ad80651b30f04767eabb56acdd2fba2cc40e6",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 495,
+          "submitted_utf8_bytes": 495,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.13",
+              "T2.pair.01.left.14",
+              "T2.pair.01.left.15",
+              "T2.pair.01.left.16",
+              "T2.pair.01.left.17"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C04",
+          "query_file": "queries/BT2-C04.txt",
+          "query_sha256": "ebbf8e3c76ae54c88e7250bd78f2e00211cb98e18da37fc572c7fd7a2f1af22e",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 495,
+          "submitted_utf8_bytes": 495,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.18",
+              "T2.pair.01.left.19",
+              "T2.pair.01.left.20",
+              "T2.pair.01.left.21",
+              "T2.pair.01.left.22"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C05",
+          "query_file": "queries/BT2-C05.txt",
+          "query_sha256": "7f656aa12b6f03ab5c535e61cc4a93a68f31d9ab4b4c6280ca6a56eb5c82ce6d",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 487,
+          "submitted_utf8_bytes": 487,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.23",
+              "T2.pair.01.left.24",
+              "T2.pair.01.left.25",
+              "T2.pair.01.left.26"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C06",
+          "query_file": "queries/BT2-C06.txt",
+          "query_sha256": "4eda11ffc254fdba0b1db1327676e824b76dd37d64e26d6ef6eda0e87fc30b74",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 493,
+          "submitted_utf8_bytes": 493,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.27",
+              "T2.pair.01.left.28",
+              "T2.pair.01.left.29",
+              "T2.pair.01.left.30"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C07",
+          "query_file": "queries/BT2-C07.txt",
+          "query_sha256": "89e8d26c70db2e209efeec743c3f02994b6eae4500c3923486a2c4dff1cb42f3",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 494,
+          "submitted_utf8_bytes": 494,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.31",
+              "T2.pair.01.left.32",
+              "T2.pair.01.left.33",
+              "T2.pair.01.left.34"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C08",
+          "query_file": "queries/BT2-C08.txt",
+          "query_sha256": "b098f4a5a6232cc3c359b049c2b04da6b904ca4ed956abb1488e3f8c4f7f4e87",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 486,
+          "submitted_utf8_bytes": 486,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.35",
+              "T2.pair.01.left.36",
+              "T2.pair.01.left.37",
+              "T2.pair.01.left.38"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C09",
+          "query_file": "queries/BT2-C09.txt",
+          "query_sha256": "aab25b18599c762364e084867c741bcd9ad8043eb53e7af8cb2bcfe1f583b5b6",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 489,
+          "submitted_utf8_bytes": 489,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.39",
+              "T2.pair.01.left.40",
+              "T2.pair.01.left.41",
+              "T2.pair.01.left.42"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C10",
+          "query_file": "queries/BT2-C10.txt",
+          "query_sha256": "ef0398ab032f61a8e53f52720e6dae2a58bb31f5f1762c5b6ccb5fb4983f765e",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 500,
+          "submitted_utf8_bytes": 500,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.43",
+              "T2.pair.01.left.44",
+              "T2.pair.01.left.45",
+              "T2.pair.01.left.46",
+              "T2.pair.01.left.47"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C11",
+          "query_file": "queries/BT2-C11.txt",
+          "query_sha256": "4855a08e54d311f46a073b9688931507a9c2bd0608d1420e960737f38c734f03",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 495,
+          "submitted_utf8_bytes": 495,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.48",
+              "T2.pair.01.left.49",
+              "T2.pair.01.left.50",
+              "T2.pair.01.left.51",
+              "T2.pair.01.left.52"
+            ]
+          }
+        },
+        {
+          "cell_id": "BT2-C12",
+          "query_file": "queries/BT2-C12.txt",
+          "query_sha256": "a3453f44153c9860a7d990635a4675beb0393517f56f83262bf8c4b84282a1ee",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 469,
+          "submitted_utf8_bytes": 469,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "M_B": [
+              "M_B.term.01",
+              "M_B.term.02",
+              "M_B.term.03",
+              "M_B.term.04",
+              "M_B.term.05",
+              "M_B.term.06",
+              "M_B.term.07",
+              "M_B.term.08",
+              "M_B.term.09"
+            ],
+            "T2": [
+              "T2.pair.01.left.53",
+              "T2.pair.01.left.54",
+              "T2.pair.01.left.55",
+              "T2.pair.01.left.56"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "V1",
+      "stream": "sensitivity",
+      "role": "V&V sensitivity query",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_probe",
+          "M_probe",
+          "V1"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 810,
+      "split_block": "V1",
+      "split_block_atoms_in_normative_or": [
+        "V1.term.01",
+        "V1.term.02",
+        "V1.term.03",
+        "V1.term.04",
+        "V1.term.05",
+        "V1.term.06",
+        "V1.term.07",
+        "V1.term.08",
+        "V1.term.09",
+        "V1.term.10",
+        "V1.term.11",
+        "V1.term.12",
+        "V1.term.13",
+        "V1.term.14",
+        "V1.term.15",
+        "V1.term.16",
+        "V1.term.17",
+        "V1.term.18",
+        "V1.term.19",
+        "V1.term.20",
+        "V1.term.21"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "E_probe": [
+          "EPS",
+          "PCDU",
+          "PMAD",
+          "electric power system",
+          "electrical power system",
+          "energy budget",
+          "power budget",
+          "power subsystem"
+        ],
+        "M_probe": [
+          "MBSE",
+          "SysML",
+          "digital engineering",
+          "model-based systems engineering",
+          "reference model",
+          "system model"
+        ],
+        "V1": [
+          "HIL",
+          "MIL",
+          "PIL",
+          "SIL",
+          "hardware-in-the-loop",
+          "model checking",
+          "model validation",
+          "model verification",
+          "model-in-the-loop",
+          "processor-in-the-loop",
+          "requirements-in-the-loop",
+          "software-in-the-loop",
+          "system validation",
+          "system verification",
+          "test case",
+          "test procedure",
+          "traceability",
+          "traceable",
+          "validation",
+          "verification",
+          "virtual integration"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "V1-C01",
+          "query_file": "queries/V1-C01.txt",
+          "query_sha256": "f51848ff40489e28c2e78144fff42f5212edb8cb447cff421d2de749a4fdb503",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 500,
+          "submitted_utf8_bytes": 500,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "V1": [
+              "V1.term.01",
+              "V1.term.02",
+              "V1.term.03",
+              "V1.term.04",
+              "V1.term.05"
+            ]
+          }
+        },
+        {
+          "cell_id": "V1-C02",
+          "query_file": "queries/V1-C02.txt",
+          "query_sha256": "28d140c8ecbb966ea848c9545023b5623be33df201b0b2409bf3af8f0f18fea3",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 487,
+          "submitted_utf8_bytes": 487,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "V1": [
+              "V1.term.06",
+              "V1.term.07",
+              "V1.term.08"
+            ]
+          }
+        },
+        {
+          "cell_id": "V1-C03",
+          "query_file": "queries/V1-C03.txt",
+          "query_sha256": "fdc6698ccce84eb4e8ba2e6f1b26bfae44964e6c5622571a0c27c9d1ed8af338",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 499,
+          "submitted_utf8_bytes": 499,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "V1": [
+              "V1.term.09",
+              "V1.term.10",
+              "V1.term.11",
+              "V1.term.12"
+            ]
+          }
+        },
+        {
+          "cell_id": "V1-C04",
+          "query_file": "queries/V1-C04.txt",
+          "query_sha256": "88a26c9e891606b65961aabb27cdf0b5c762022e55b3e91ce235174289547d09",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 480,
+          "submitted_utf8_bytes": 480,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "V1": [
+              "V1.term.13",
+              "V1.term.14",
+              "V1.term.15",
+              "V1.term.16"
+            ]
+          }
+        },
+        {
+          "cell_id": "V1-C05",
+          "query_file": "queries/V1-C05.txt",
+          "query_sha256": "4437672060b4d62fc1adbc17078bf10cd26aa644d3eecaaa86b732f80e12c5f8",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 492,
+          "submitted_utf8_bytes": 492,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "V1": [
+              "V1.term.17",
+              "V1.term.18",
+              "V1.term.19",
+              "V1.term.20"
+            ]
+          }
+        },
+        {
+          "cell_id": "V1-C06",
+          "query_file": "queries/V1-C06.txt",
+          "query_sha256": "ec22e525f70e0689fe7d1940ec88ee85981b0648c732c5b559f02114b9caab49",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 437,
+          "submitted_utf8_bytes": 437,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "V1": [
+              "V1.term.21"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "partition_id": "O1",
+      "stream": "sensitivity",
+      "role": "Outcome and burden sensitivity query",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_probe",
+          "M_probe",
+          "O1"
+        ]
+      },
+      "source_expression_form": "parenthesized global all-metadata Boolean expression; whitespace AND; uppercase OR; double-quoted multiword/hyphenated finite literals and bare single alphanumeric finite tokens; no field qualifier or wildcard",
+      "unsplit_characters": 833,
+      "split_block": "O1",
+      "split_block_atoms_in_normative_or": [
+        "O1.term.01",
+        "O1.term.02",
+        "O1.term.03",
+        "O1.term.04",
+        "O1.term.05",
+        "O1.term.06",
+        "O1.term.07",
+        "O1.term.08",
+        "O1.term.09",
+        "O1.term.10",
+        "O1.term.11",
+        "O1.term.12",
+        "O1.term.13",
+        "O1.term.14",
+        "O1.term.15",
+        "O1.term.16",
+        "O1.term.17",
+        "O1.term.18",
+        "O1.term.19",
+        "O1.term.20",
+        "O1.term.21",
+        "O1.term.22",
+        "O1.term.23",
+        "O1.term.24",
+        "O1.term.25",
+        "O1.term.26",
+        "O1.term.27",
+        "O1.term.28",
+        "O1.term.29",
+        "O1.term.30",
+        "O1.term.31"
+      ],
+      "split_required": true,
+      "split_proof": "Let O be the OR of all atoms in split_block and O_j the disjoint ordered cell chunks. Each cell is (other required blocks AND O_j). Because OR_j O_j = O, OR_j(other AND O_j) = other AND O; thus the stable-paper-ID union of all cells is lossless. Pair-rule atoms are an explicit distributive expansion of each dictionary left-OR/right-OR pair rule.",
+      "stable_paper_id_union_rule": "After two complete passes per cell, union sets by canonical event-code/paper-number pair; preserve every cell_id for each ID; never infer a union from counts; any failed cell makes the partition total null.",
+      "required_term_witnesses_by_block": {
+        "P": [
+          "CubeSat",
+          "CubeSats",
+          "cube sat",
+          "nano satellite",
+          "nano satellites",
+          "nano-satellite",
+          "nano-satellites",
+          "nanosat",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "E_probe": [
+          "EPS",
+          "PCDU",
+          "PMAD",
+          "electric power system",
+          "electrical power system",
+          "energy budget",
+          "power budget",
+          "power subsystem"
+        ],
+        "M_probe": [
+          "MBSE",
+          "SysML",
+          "digital engineering",
+          "model-based systems engineering",
+          "reference model",
+          "system model"
+        ],
+        "O1": [
+          "adoption",
+          "adverse",
+          "benefit",
+          "benefits",
+          "burden",
+          "cost",
+          "effort",
+          "impact",
+          "integrability",
+          "integrable",
+          "interoperability",
+          "interoperable",
+          "learning curve",
+          "licence",
+          "license",
+          "licensing",
+          "mission assurance",
+          "no effect",
+          "outcome",
+          "overhead",
+          "reliability",
+          "reliable",
+          "reproducibility",
+          "reproducible",
+          "reusable",
+          "reuse",
+          "schedule",
+          "traceability",
+          "traceable",
+          "training",
+          "workload"
+        ]
+      },
+      "cells": [
+        {
+          "cell_id": "O1-C01",
+          "query_file": "queries/O1-C01.txt",
+          "query_sha256": "9805d8b152a84da136acfe6ce03e0981f95f2be26dbc4df4199f8fadfbe80f03",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 486,
+          "submitted_utf8_bytes": 486,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "O1": [
+              "O1.term.01",
+              "O1.term.02",
+              "O1.term.03",
+              "O1.term.04"
+            ]
+          }
+        },
+        {
+          "cell_id": "O1-C02",
+          "query_file": "queries/O1-C02.txt",
+          "query_sha256": "8f319d751a2d391573af70cb3b061d22206ab68b03a71ce88947681867cd07f9",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 485,
+          "submitted_utf8_bytes": 485,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "O1": [
+              "O1.term.05",
+              "O1.term.06",
+              "O1.term.07",
+              "O1.term.08",
+              "O1.term.09"
+            ]
+          }
+        },
+        {
+          "cell_id": "O1-C03",
+          "query_file": "queries/O1-C03.txt",
+          "query_sha256": "a1a661e640fb06326a6604a2fe6062bcc768e850cc01d52da52c503ee2fd6084",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 494,
+          "submitted_utf8_bytes": 494,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "O1": [
+              "O1.term.10",
+              "O1.term.11",
+              "O1.term.12",
+              "O1.term.13",
+              "O1.term.14"
+            ]
+          }
+        },
+        {
+          "cell_id": "O1-C04",
+          "query_file": "queries/O1-C04.txt",
+          "query_sha256": "235d516017ad77404b2690cde327e15f93d44dde923396a71db572768b1cb2fb",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 496,
+          "submitted_utf8_bytes": 496,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "O1": [
+              "O1.term.15",
+              "O1.term.16",
+              "O1.term.17",
+              "O1.term.18",
+              "O1.term.19",
+              "O1.term.20",
+              "O1.term.21"
+            ]
+          }
+        },
+        {
+          "cell_id": "O1-C05",
+          "query_file": "queries/O1-C05.txt",
+          "query_sha256": "9c8e9a9dd405747e2decc358dfae0232bde0d32e560fa58d1975eea08f51e1b0",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 493,
+          "submitted_utf8_bytes": 493,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "O1": [
+              "O1.term.22",
+              "O1.term.23",
+              "O1.term.24",
+              "O1.term.25",
+              "O1.term.26",
+              "O1.term.27"
+            ]
+          }
+        },
+        {
+          "cell_id": "O1-C06",
+          "query_file": "queries/O1-C06.txt",
+          "query_sha256": "4dfc98ada7ac37760388ccb88d94872c56491eb1a8b87e94e8f8541f8891638a",
+          "encoding": "UTF-8",
+          "utf8_bom_absent": true,
+          "terminal_newline_present": false,
+          "submitted_characters": 464,
+          "submitted_utf8_bytes": 464,
+          "source_transport": "GET /search/ q parameter; normal percent encoding only; exact decoded q equals file bytes",
+          "selected_or_atoms_by_block": {
+            "P": [
+              "P.term.01",
+              "P.term.02",
+              "P.term.03",
+              "P.term.04",
+              "P.term.05",
+              "P.term.06",
+              "P.term.07",
+              "P.term.08",
+              "P.term.09",
+              "P.term.10"
+            ],
+            "E_probe": [
+              "E_probe.term.01",
+              "E_probe.term.02",
+              "E_probe.term.03",
+              "E_probe.term.04",
+              "E_probe.term.05",
+              "E_probe.term.06",
+              "E_probe.term.07",
+              "E_probe.term.08"
+            ],
+            "M_probe": [
+              "M_probe.term.01",
+              "M_probe.term.02",
+              "M_probe.term.03",
+              "M_probe.term.04",
+              "M_probe.term.05",
+              "M_probe.term.06"
+            ],
+            "O1": [
+              "O1.term.28",
+              "O1.term.29",
+              "O1.term.30",
+              "O1.term.31"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "semantic_change": false
+}
