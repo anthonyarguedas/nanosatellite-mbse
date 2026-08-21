@@ -123,13 +123,15 @@ For a local-harvest source, the minimum equivalent candidate logic is `P AND M` 
 No source-specific query, adapter assumption, search log, concept dictionary, source crosswalk, manifest schema, or failure schema from an earlier attempt governs this run. Before the first related pilot, create the following anew from this protocol and give each artifact new-run provenance:
 
 - `search-log.md`;
+- `searches/search-concept-dictionary.json`;
 - the source/interface/PRISMA crosswalk;
+- the source-packet contract, templates, and pilot-manifest schema;
 - the final-run manifest schema; and
 - the failure-register schema.
 
 The protocol's concept blocks and Boolean schedule are normative. The new dictionary must reproduce them without adding or dropping a concept. Source-specific translations and controls must be regenerated and validated against the current interfaces rather than restored from Git history. **Task:** [`S-001`](TASKS.md).
 
-For each source or local method, the new log must record before final execution:
+For each source or local method, the new log and the version-controlled source packet that it indexes must record before final execution:
 
 - source, database or collection, platform, and interface;
 - query or event IDs and the exact source-native translation of every planned partition;
@@ -145,7 +147,24 @@ A syntax or transport change that preserves the semantic blocks is an implementa
 
 ### Source-specific guidelines
 
-Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D13` and local-source task `S-L02` in [`TASKS.md`](TASKS.md). For each accepted method, add here the validated source boundary, translation approach, fields and controls, date and language handling, completeness and export method, limits, and failure rules. Keep exact run-specific strings and pilot evidence in the new search log. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
+Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D13` and local-source task `S-L02` in [`TASKS.md`](TASKS.md). Store each accepted method as a version-controlled source packet under `searches/sources/`; its reusable guideline must state the validated source boundary, translation approach, fields and controls, date and language handling, completeness and export method, limits, and failure rules. Store exact source-native translations outside Markdown where necessary to preserve them losslessly. Keep exact executed strings and dated pilot evidence in the packet's diagnostic-only `pilots/` area, and index the packet and each accepted pilot from the new search log. This section incorporates accepted source packets by reference; update its compact index when each method is accepted. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
+
+| Task | Source or method | Accepted source packet |
+|---|---|---|
+| `S-D01` | Scopus | Pending |
+| `S-D02` | Web of Science Core Collection | Pending |
+| `S-D03` | IEEE Xplore | Pending |
+| `S-D04` | Compendex and Inspec through Engineering Village | Pending |
+| `S-D05` | Wiley Online Library | Pending |
+| `S-D06` | Springer Nature Link | Pending |
+| `S-D07` | Advanced Technologies & Aerospace Index | Pending |
+| `S-D08` | PQDT Global | Pending |
+| `S-D09` | OATD | Pending |
+| `S-D10` | AIAA Aerospace Research Central | Pending |
+| `S-D11` | arXiv | Pending |
+| `S-D12` | IAF Digital Library | Pending |
+| `S-D13` | NASA Technical Reports Server | Pending |
+| `S-L02` | ESA Indico local harvest | Pending |
 
 ### Pilots and final search events
 

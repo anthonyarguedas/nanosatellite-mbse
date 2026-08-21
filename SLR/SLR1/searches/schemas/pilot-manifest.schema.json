@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/slr1/pilot-manifest.schema.json",
+  "title": "SLR1 diagnostic source-pilot manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pilot_id",
+    "task_id",
+    "source_id",
+    "method_type",
+    "status",
+    "diagnostic_only",
+    "screening_performed",
+    "candidate_import_permitted",
+    "started_at",
+    "ended_at",
+    "protocol_commit",
+    "operator",
+    "interface",
+    "executions",
+    "checks",
+    "artifacts",
+    "disposition"
+  ],
+  "properties": {
+    "schema_version": {"const": "slr1-pilot-manifest/v1"},
+    "pilot_id": {"type": "string", "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)-P[0-9]{2}-[0-9]{8}T[0-9]{6}[+-][0-9]{4}$"},
+    "task_id": {"type": "string", "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)$"},
+    "source_id": {"type": "string", "minLength": 1},
+    "method_type": {"enum": ["direct", "local_harvest"]},
+    "status": {"enum": ["complete", "partial", "blocked", "failed"]},
+    "diagnostic_only": {"const": true},
+    "screening_performed": {"const": false},
+    "candidate_import_permitted": {"const": false},
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": "string", "format": "date-time"},
+    "protocol_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "operator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "human_supervisor"],
+      "properties": {
+        "type": {"enum": ["human", "llm_subagent", "human_with_llm"]},
+        "model": {"type": ["string", "null"]},
+        "human_supervisor": {"type": ["string", "null"]}
+      }
+    },
+    "interface": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "url", "access_route", "authenticated"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri"},
+        "access_route": {"type": "string", "minLength": 1},
+        "authenticated": {"type": "boolean"},
+        "database_or_collection": {"type": "string"},
+        "platform": {"type": "string"},
+        "timezone": {"type": "string"}
+      }
+    },
+    "executions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["execution_id", "purpose", "started_at", "status", "exact_query_or_operation", "source_reported_total", "records_retrieved", "artifact_paths"],
+        "properties": {
+          "execution_id": {"type": "string", "minLength": 1},
+          "partition_id": {"type": ["string", "null"]},
+          "cell_id": {"type": ["string", "null"]},
+          "purpose": {"type": "string", "minLength": 1},
+          "started_at": {"type": "string", "format": "date-time"},
+          "status": {"enum": ["success", "explicit_zero", "partial_diagnostic", "blocked", "failed"]},
+          "exact_query_or_operation": {"type": "string"},
+          "query_file": {"type": ["string", "null"]},
+          "fields": {"type": "array", "items": {"type": "string"}},
+          "controls": {"type": "object"},
+          "source_reported_total": {"type": ["integer", "null"], "minimum": -1},
+          "total_is_exact": {"type": "boolean"},
+          "records_retrieved": {"type": "integer", "minimum": 0},
+          "artifact_paths": {"type": "array", "items": {"type": "string"}},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check_id", "requirement", "status", "basis", "evidence_paths", "notes"],
+        "properties": {
+          "check_id": {"type": "string", "minLength": 1},
+          "requirement": {"type": "string", "minLength": 1},
+          "partition_id": {"type": ["string", "null"]},
+          "status": {"enum": ["verified", "not_applicable", "blocked", "failed", "untested"]},
+          "basis": {"enum": ["observed", "official_documentation", "observed_and_documented", "inferred", "untested"]},
+          "evidence_paths": {"type": "array", "items": {"type": "string"}},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "access_classification"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "role": {"type": "string", "minLength": 1},
+          "sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+          "access_classification": {"enum": ["public", "restricted", "metadata_only"]},
+          "secure_location_reference": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommendation", "reason", "semantic_change", "human_verification_required"],
+      "properties": {
+        "recommendation": {"enum": ["accept", "revise", "repeat", "skip_for_now", "record_source_limitation"]},
+        "reason": {"type": "string", "minLength": 1},
+        "semantic_change": {"type": "boolean"},
+        "human_verification_required": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

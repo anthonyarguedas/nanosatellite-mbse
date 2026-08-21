@@ -1,0 +1,466 @@
+{
+  "artifact_version": "slr1-search-concepts/v1",
+  "created_at": "2026-08-20",
+  "provenance": {
+    "created_new_for_run": true,
+    "restored_from_prior_run": false,
+    "normative_source": "SLR/SLR1/protocol-discovery-and-appraisal.md#search-streams-and-set-construction",
+    "protocol_commit_at_creation": "50511c71d6191c5744d0d900bd85d4f8665297be"
+  },
+  "matching_defaults": {
+    "cross_source_terms_are_literal_concepts": true,
+    "source_native_translation_may_change_syntax_fields_and_validated_wildcards_only": true,
+    "case_policy": "source_native",
+    "phrase_policy": "validate_per_source",
+    "wildcard_policy": "do not use unless validated per source",
+    "eligibility_effect": "search recall concepts do not establish scientific eligibility"
+  },
+  "concepts": {
+    "P": {
+      "label": "Population",
+      "kind": "finite_terms",
+      "terms": [
+        "CubeSat",
+        "CubeSats",
+        "cube sat",
+        "nanosat",
+        "nanosatellite",
+        "nanosatellites",
+        "nano-satellite",
+        "nano-satellites",
+        "nano satellite",
+        "nano satellites"
+      ],
+      "constraints": [
+        "nanosat* may replace finite forms only after source-specific validation",
+        "do not add SmallSat or small satellite as a positive concept"
+      ]
+    },
+    "E_H": {
+      "label": "High-specificity EPS",
+      "kind": "finite_terms",
+      "terms": [
+        "electrical power system",
+        "electric power system",
+        "electrical power subsystem",
+        "electric power subsystem",
+        "EPS",
+        "power subsystem",
+        "electrical architecture",
+        "power architecture",
+        "PCDU",
+        "PMAD"
+      ]
+    },
+    "E_F": {
+      "label": "Functional or analytical EPS",
+      "kind": "finite_terms",
+      "terms": [
+        "power budget",
+        "energy budget",
+        "energy balance",
+        "power generation",
+        "solar array",
+        "battery",
+        "batteries",
+        "energy storage",
+        "power conditioning",
+        "power distribution",
+        "power management",
+        "power interface",
+        "power mode",
+        "power modes",
+        "load profile"
+      ]
+    },
+    "E": {
+      "label": "All EPS",
+      "kind": "union",
+      "members": ["E_H", "E_F"]
+    },
+    "M_H": {
+      "label": "High-specificity MBSE",
+      "kind": "finite_terms",
+      "terms": [
+        "model-based systems engineering",
+        "model based systems engineering",
+        "model-based system engineering",
+        "model based system engineering",
+        "MBSE",
+        "SysML",
+        "systems modeling language",
+        "Arcadia",
+        "Capella"
+      ]
+    },
+    "M_B": {
+      "label": "Broad structured model",
+      "kind": "finite_terms",
+      "terms": [
+        "system model",
+        "systems model",
+        "system modeling",
+        "systems modeling",
+        "system modelling",
+        "systems modelling",
+        "reference model",
+        "digital engineering",
+        "object-oriented systems model"
+      ],
+      "constraints": ["requires independent R in direct B2 queries"]
+    },
+    "M": {
+      "label": "All MBSE and system-model terms",
+      "kind": "union",
+      "members": ["M_H", "M_B"]
+    },
+    "R": {
+      "label": "Systems-engineering relationship or concern",
+      "kind": "finite_terms",
+      "terms": [
+        "requirement",
+        "requirements",
+        "function",
+        "functions",
+        "behavior",
+        "behaviors",
+        "behaviour",
+        "behaviours",
+        "architecture",
+        "architectures",
+        "interface",
+        "interfaces",
+        "traceability",
+        "parametric",
+        "parametrics",
+        "verification",
+        "validation"
+      ],
+      "constraints": ["an architecture span used inside an artifact phrase cannot also satisfy independent R"]
+    },
+    "G_model": {
+      "label": "Precise reusable model or template",
+      "kind": "union_of_terms_and_pairs",
+      "terms": [
+        "generic model",
+        "generic system model",
+        "reusable model",
+        "reusable system model",
+        "configurable model",
+        "configurable system model",
+        "model template"
+      ],
+      "pair_rules": [
+        {
+          "left": ["mission-agnostic", "mission agnostic", "mission-independent", "mission independent"],
+          "right": ["model", "architecture"],
+          "relationship": "explicitly_paired"
+        }
+      ]
+    },
+    "G_structure": {
+      "label": "Structural reusable artifact",
+      "kind": "union_of_terms_and_pairs",
+      "terms": ["reference architecture", "domain model", "metamodel", "meta-model"],
+      "pair_rules": [
+        {
+          "left": ["product-line", "product line", "product-family", "product family"],
+          "right": ["model"],
+          "relationship": "explicitly_paired"
+        },
+        {
+          "left": ["variation point"],
+          "right": ["model", "architecture"],
+          "relationship": "explicitly_paired"
+        }
+      ]
+    },
+    "C1": {
+      "label": "Conservative central asset",
+      "kind": "union_of_terms_and_pairs",
+      "terms": [
+        "reference model",
+        "system reference model",
+        "model library",
+        "model libraries",
+        "system model library",
+        "system model libraries",
+        "model pattern",
+        "modeling pattern",
+        "modelling pattern",
+        "system model pattern",
+        "systems model pattern",
+        "model profile",
+        "system model profile",
+        "systems model profile",
+        "SysML profile"
+      ],
+      "pair_rules": [
+        {
+          "left": [
+            "domain-specific modeling language",
+            "domain specific modeling language",
+            "domain-specific modelling language",
+            "domain specific modelling language"
+          ],
+          "right": [
+            "model-based systems engineering",
+            "model based systems engineering",
+            "model-based system engineering",
+            "model based system engineering",
+            "MBSE",
+            "SysML",
+            "systems modeling language",
+            "system model",
+            "systems model"
+          ],
+          "relationship": "explicitly_paired"
+        }
+      ],
+      "constraints": ["bare library, pattern, profile, or language never qualifies"]
+    },
+    "T2": {
+      "label": "Model-linked tailoring",
+      "kind": "paired_terms",
+      "left": [
+        "reuse",
+        "reuses",
+        "reused",
+        "reusable",
+        "reusing",
+        "tailor",
+        "tailors",
+        "tailored",
+        "tailoring",
+        "customize",
+        "customizes",
+        "customized",
+        "customizing",
+        "customization",
+        "customise",
+        "customises",
+        "customised",
+        "customising",
+        "customisation",
+        "configure",
+        "configures",
+        "configured",
+        "configuring",
+        "configuration",
+        "parameterize",
+        "parameterizes",
+        "parameterized",
+        "parameterizing",
+        "parameterization",
+        "parameterise",
+        "parameterises",
+        "parameterised",
+        "parameterising",
+        "parameterisation",
+        "instantiate",
+        "instantiates",
+        "instantiated",
+        "instantiating",
+        "instantiation",
+        "variability",
+        "variation point",
+        "specialize",
+        "specializes",
+        "specialized",
+        "specializing",
+        "specialization",
+        "specialise",
+        "specialises",
+        "specialised",
+        "specialising",
+        "specialisation",
+        "adapt",
+        "adapts",
+        "adapted",
+        "adapting",
+        "adaptation"
+      ],
+      "right": ["model", "models", "architecture", "architectures"],
+      "relationship": "explicitly_paired"
+    },
+    "E_probe": {
+      "label": "Probe EPS",
+      "kind": "finite_terms",
+      "terms": [
+        "electrical power system",
+        "electric power system",
+        "power subsystem",
+        "power budget",
+        "energy budget",
+        "PCDU",
+        "PMAD",
+        "EPS"
+      ]
+    },
+    "M_probe": {
+      "label": "Probe model",
+      "kind": "finite_terms",
+      "terms": [
+        "model-based systems engineering",
+        "MBSE",
+        "SysML",
+        "system model",
+        "reference model",
+        "digital engineering"
+      ]
+    },
+    "V1": {
+      "label": "Verification and validation sensitivity",
+      "kind": "finite_terms",
+      "terms": [
+        "verification",
+        "validation",
+        "traceability",
+        "traceable",
+        "model verification",
+        "model validation",
+        "system verification",
+        "system validation",
+        "requirements-in-the-loop",
+        "model checking",
+        "virtual integration",
+        "MIL",
+        "model-in-the-loop",
+        "SIL",
+        "software-in-the-loop",
+        "PIL",
+        "processor-in-the-loop",
+        "HIL",
+        "hardware-in-the-loop",
+        "test case",
+        "test procedure"
+      ]
+    },
+    "O1": {
+      "label": "Outcome or burden sensitivity",
+      "kind": "finite_terms",
+      "terms": [
+        "reliability",
+        "reliable",
+        "mission assurance",
+        "reproducibility",
+        "reproducible",
+        "reuse",
+        "reusable",
+        "integrability",
+        "integrable",
+        "interoperability",
+        "interoperable",
+        "traceability",
+        "traceable",
+        "benefit",
+        "benefits",
+        "impact",
+        "outcome",
+        "no effect",
+        "adverse",
+        "burden",
+        "effort",
+        "workload",
+        "overhead",
+        "cost",
+        "schedule",
+        "training",
+        "learning curve",
+        "licensing",
+        "license",
+        "licence",
+        "adoption"
+      ]
+    }
+  },
+  "direct_partitions": [
+    {
+      "id": "A1",
+      "expression": {"op": "AND", "args": ["P", "E_H", "M_H"]},
+      "role": "Named EPS × explicit MBSE",
+      "stream": "A"
+    },
+    {
+      "id": "A2",
+      "expression": {"op": "AND", "args": ["P", "E_F", {"op": "OR", "args": ["M_H", "M_B"]}]},
+      "role": "EPS functions or analyses × all model terms",
+      "stream": "A"
+    },
+    {
+      "id": "A3",
+      "expression": {"op": "AND", "args": ["P", "E_H", "M_B"]},
+      "role": "Named EPS × broad structured model",
+      "stream": "A"
+    },
+    {
+      "id": "B1",
+      "expression": {"op": "AND", "args": ["P", "M_H"]},
+      "role": "Embedded-thread baseline",
+      "stream": "core_B"
+    },
+    {
+      "id": "B2",
+      "expression": {"op": "AND", "args": ["P", "M_B", "R"]},
+      "role": "Controlled broad-model expansion",
+      "stream": "core_B"
+    },
+    {
+      "id": "BG1",
+      "expression": {"op": "AND", "args": ["P", "G_model"]},
+      "role": "Precise reusable model or template",
+      "stream": "expanded_B"
+    },
+    {
+      "id": "BG2",
+      "expression": {"op": "AND", "args": ["P", "G_structure"]},
+      "role": "Structural reusable artifact",
+      "stream": "expanded_B"
+    },
+    {
+      "id": "BC1",
+      "expression": {"op": "AND", "args": ["P", "C1"]},
+      "role": "Conservative central asset",
+      "stream": "expanded_B"
+    },
+    {
+      "id": "BT2",
+      "expression": {"op": "AND", "args": ["P", "M_B", "T2"]},
+      "role": "Model-linked tailoring",
+      "stream": "expanded_B"
+    },
+    {
+      "id": "V1",
+      "expression": {"op": "AND", "args": ["P", "E_probe", "M_probe", "V1"]},
+      "role": "V&V sensitivity query",
+      "stream": "sensitivity"
+    },
+    {
+      "id": "O1",
+      "expression": {"op": "AND", "args": ["P", "E_probe", "M_probe", "O1"]},
+      "role": "Outcome and burden sensitivity query",
+      "stream": "sensitivity"
+    }
+  ],
+  "set_construction": {
+    "stream_A": ["A1", "A2", "A3"],
+    "core_stream_B": ["B1", "B2"],
+    "expanded_stream_B": ["BG1", "BG2", "BC1", "BT2"],
+    "sensitivity": ["V1", "O1"]
+  },
+  "local_method_minimum": {
+    "core_B_candidate": {"op": "AND", "args": ["P", "M"]},
+    "stream_A_tag": {"op": "AND", "args": ["P", "E", "M"]},
+    "expansion_candidates": [
+      {"id": "BG1", "expression": {"op": "AND", "args": ["P", "G_model"]}},
+      {"id": "BG2", "expression": {"op": "AND", "args": ["P", "G_structure"]}},
+      {"id": "BC1", "expression": {"op": "AND", "args": ["P", "C1"]}}
+    ],
+    "independent_tags": ["R", "T2", "V1", "O1"],
+    "constraints": [
+      "terms may combine only within prospectively defined source fields or document routes",
+      "do not combine required terms across records or independently defined routes",
+      "local matching generates candidates and does not establish scientific eligibility"
+    ]
+  }
+}

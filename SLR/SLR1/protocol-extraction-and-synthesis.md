@@ -581,7 +581,7 @@ After clean-start task [`P-000`](TASKS.md) is complete, create these artifacts a
 - the separate prior-secondary-review search bundle required by its [supporting protocol](protocol-prior-secondary-reviews.md#required-artifacts-and-reporting), including its CRD/DARE and overlap matrices and need-for-review statement;
 - a new `search-log.md` meeting PRISMA-S requirements;
 - a new `searches/search-concept-dictionary.json` and matching code generated from Part 2;
-- new source/interface crosswalk, final-run manifest schema, and failure-register schema;
+- new source/interface crosswalk, source-packet templates, pilot and final-run manifest schemas, and failure-register schema;
 - raw source-specific search results and source-selection or interface proof;
 - a search manifest with dates, interface details, restrictions, rights, and access status;
 - a merged and deduplicated candidate set and deduplication report;
