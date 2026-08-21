@@ -151,7 +151,7 @@ Source-specific guidelines are intentionally pending regeneration. Run the direc
 
 | Task | Source or method | Accepted source packet |
 |---|---|---|
-| `S-D01` | Scopus | Pending |
+| `S-D01` | Scopus | No accepted packet; [blocked diagnostic and draft](searches/sources/s-d01-scopus/) |
 | `S-D02` | Web of Science Core Collection | Pending |
 | `S-D03` | IEEE Xplore | Pending |
 | `S-D04` | Compendex and Inspec through Engineering Village | Pending |
@@ -163,8 +163,8 @@ Source-specific guidelines are intentionally pending regeneration. Run the direc
 | `S-D10` | AIAA Aerospace Research Central | Pending |
 | `S-D11` | arXiv | Pending |
 | `S-D12` | IAF Digital Library | Pending |
-| `S-D13` | NASA Technical Reports Server | Pending |
-| `S-L02` | ESA Indico local harvest | Pending |
+| `S-D13` | NASA Technical Reports Server | [Accepted guideline v1.0.0 and translations](searches/sources/s-d13-ntrs/) |
+| `S-L02` | ESA Indico local harvest | No accepted packet; [blocked local-method draft](searches/sources/s-l02-esa-indico/) |
 
 ### Pilots and final search events
 
