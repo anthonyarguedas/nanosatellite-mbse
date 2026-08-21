@@ -1,0 +1,421 @@
+{
+  "schema_version": "slr1-ntrs-translation-spec/v1",
+  "task_id": "S-D13",
+  "source_id": "ntrs",
+  "source_name": "NASA Technical Reports Server (NTRS) / NASA STI Repository public collection",
+  "status": "accepted",
+  "accepted_pilot_id": "S-D13-P01-20260821T034216+0000",
+  "accepted_at": "2026-08-21",
+  "acceptance_note": "The per-partition draft validation labels record the worker stage; supervisor-review.md accepts the complete set as the reusable translation specification subject to P-001 and the final preflight.",
+  "protocol_commit": "7d564870a36d049716b66c9f9770554ecb04e414",
+  "normative_dictionary": {
+    "path": "SLR/SLR1/searches/search-concept-dictionary.json",
+    "artifact_version": "slr1-search-concepts/v1",
+    "source_commit_at_dictionary_creation": "50511c71d6191c5744d0d900bd85d4f8665297be"
+  },
+  "source_native_syntax": {
+    "route": "POST https://ntrs.nasa.gov/api/citations/search",
+    "query_field": "q",
+    "and": "+",
+    "or": "|",
+    "grouping": "parentheses",
+    "phrases": "double quotes",
+    "field_scope": "default global NTRS q scope; no title/abstract restriction",
+    "wildcards": "none used",
+    "automatic_expansion": "none relied upon",
+    "pair_rule_representation": "parenthesized same-record Boolean conjunction; no proximity claim",
+    "transport": "UTF-8 application/json request body; q text is not URL percent-encoded",
+    "query_file_transport_rule": {
+      "classification": "observed",
+      "file_sha256_scope": "all UTF-8 query-file bytes, including its one terminal LF",
+      "executed_q_text": "decode UTF-8 and remove exactly the one terminal LF before assigning q in the JSON body; do not otherwise normalize, rewrap, encode, or rewrite the query",
+      "evidence": "pilots/S-D13-P01-20260821T034216+0000/diagnostic-summary.json"
+    }
+  },
+  "date_and_language_controls_for_future_final_event": {
+    "published": {
+      "gte": "2011-01-01",
+      "lte": "replace only with the P-001 common evidence cutoff before final execution",
+      "mode": "server-side payload filter, not appended to q"
+    },
+    "language": "no native language restriction applied; determine report language during screening unless a later pilot validates a reliable source-side control",
+    "prohibited_discovery_limits": [
+      "publication type",
+      "access",
+      "peer-review",
+      "venue",
+      "content type"
+    ]
+  },
+  "source_term_renderings": {
+    "P": "(CubeSat|CubeSats|\"cube sat\"|nanosat|nanosatellite|nanosatellites|\"nano-satellite\"|\"nano-satellites\"|\"nano satellite\"|\"nano satellites\")",
+    "E_H": "(\"electrical power system\"|\"electric power system\"|\"electrical power subsystem\"|\"electric power subsystem\"|EPS|\"power subsystem\"|\"electrical architecture\"|\"power architecture\"|PCDU|PMAD)",
+    "E_F": "(\"power budget\"|\"energy budget\"|\"energy balance\"|\"power generation\"|\"solar array\"|battery|batteries|\"energy storage\"|\"power conditioning\"|\"power distribution\"|\"power management\"|\"power interface\"|\"power mode\"|\"power modes\"|\"load profile\")",
+    "M_H": "(\"model-based systems engineering\"|\"model based systems engineering\"|\"model-based system engineering\"|\"model based system engineering\"|MBSE|SysML|\"systems modeling language\"|Arcadia|Capella)",
+    "M_B": "(\"system model\"|\"systems model\"|\"system modeling\"|\"systems modeling\"|\"system modelling\"|\"systems modelling\"|\"reference model\"|\"digital engineering\"|\"object-oriented systems model\")",
+    "R": "(requirement|requirements|function|functions|behavior|behaviors|behaviour|behaviours|architecture|architectures|interface|interfaces|traceability|parametric|parametrics|verification|validation)",
+    "G_model": "(\"generic model\"|\"generic system model\"|\"reusable model\"|\"reusable system model\"|\"configurable model\"|\"configurable system model\"|\"model template\"|((\"mission-agnostic\"|\"mission agnostic\"|\"mission-independent\"|\"mission independent\")+(model|architecture)))",
+    "G_structure": "(\"reference architecture\"|\"domain model\"|metamodel|\"meta-model\"|((\"product-line\"|\"product line\"|\"product-family\"|\"product family\")+(model))|((\"variation point\")+(model|architecture)))",
+    "C1": "(\"reference model\"|\"system reference model\"|\"model library\"|\"model libraries\"|\"system model library\"|\"system model libraries\"|\"model pattern\"|\"modeling pattern\"|\"modelling pattern\"|\"system model pattern\"|\"systems model pattern\"|\"model profile\"|\"system model profile\"|\"systems model profile\"|\"SysML profile\"|((\"domain-specific modeling language\"|\"domain specific modeling language\"|\"domain-specific modelling language\"|\"domain specific modelling language\")+(\"model-based systems engineering\"|\"model based systems engineering\"|\"model-based system engineering\"|\"model based system engineering\"|MBSE|SysML|\"systems modeling language\"|\"system model\"|\"systems model\")))",
+    "T2": "(((reuse|reuses|reused|reusable|reusing|tailor|tailors|tailored|tailoring|customize|customizes|customized|customizing|customization|customise|customises|customised|customising|customisation|configure|configures|configured|configuring|configuration|parameterize|parameterizes|parameterized|parameterizing|parameterization|parameterise|parameterises|parameterised|parameterising|parameterisation|instantiate|instantiates|instantiated|instantiating|instantiation|variability|\"variation point\"|specialize|specializes|specialized|specializing|specialization|specialise|specialises|specialised|specialising|specialisation|adapt|adapts|adapted|adapting|adaptation)+(model|models|architecture|architectures)))",
+    "E_probe": "(\"electrical power system\"|\"electric power system\"|\"power subsystem\"|\"power budget\"|\"energy budget\"|PCDU|PMAD|EPS)",
+    "M_probe": "(\"model-based systems engineering\"|MBSE|SysML|\"system model\"|\"reference model\"|\"digital engineering\")",
+    "V1": "(verification|validation|traceability|traceable|\"model verification\"|\"model validation\"|\"system verification\"|\"system validation\"|\"requirements-in-the-loop\"|\"model checking\"|\"virtual integration\"|MIL|\"model-in-the-loop\"|SIL|\"software-in-the-loop\"|PIL|\"processor-in-the-loop\"|HIL|\"hardware-in-the-loop\"|\"test case\"|\"test procedure\")",
+    "O1": "(reliability|reliable|\"mission assurance\"|reproducibility|reproducible|reuse|reusable|integrability|integrable|interoperability|interoperable|traceability|traceable|benefit|benefits|impact|outcome|\"no effect\"|adverse|burden|effort|workload|overhead|cost|schedule|training|\"learning curve\"|licensing|license|licence|adoption)",
+    "E": "((\"electrical power system\"|\"electric power system\"|\"electrical power subsystem\"|\"electric power subsystem\"|EPS|\"power subsystem\"|\"electrical architecture\"|\"power architecture\"|PCDU|PMAD)|(\"power budget\"|\"energy budget\"|\"energy balance\"|\"power generation\"|\"solar array\"|battery|batteries|\"energy storage\"|\"power conditioning\"|\"power distribution\"|\"power management\"|\"power interface\"|\"power mode\"|\"power modes\"|\"load profile\"))",
+    "M": "((\"model-based systems engineering\"|\"model based systems engineering\"|\"model-based system engineering\"|\"model based system engineering\"|MBSE|SysML|\"systems modeling language\"|Arcadia|Capella)|(\"system model\"|\"systems model\"|\"system modeling\"|\"systems modeling\"|\"system modelling\"|\"systems modelling\"|\"reference model\"|\"digital engineering\"|\"object-oriented systems model\"))"
+  },
+  "partitions": [
+    {
+      "partition_id": "A1",
+      "role": "Named EPS × explicit MBSE",
+      "stream": "A",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_H"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/A1.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "ecf9c49170a0b7b92fc3e79f2e8dce9e58c5df7295ebd787ab40f288ea907328",
+      "query_characters_including_terminal_newline": 517,
+      "cells": [
+        {
+          "cell_id": "A1-C1",
+          "query_file": "queries/A1.txt",
+          "query_sha256": "ecf9c49170a0b7b92fc3e79f2e8dce9e58c5df7295ebd787ab40f288ea907328",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "A2",
+      "role": "EPS functions or analyses × all model terms",
+      "stream": "A",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_F",
+          {
+            "op": "OR",
+            "args": [
+              "M_H",
+              "M_B"
+            ]
+          }
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/A2.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "9c967ea62f331a38cbde4c593ca818dbb75e7398cb99bd61e7492b1200a44dfa",
+      "query_characters_including_terminal_newline": 752,
+      "cells": [
+        {
+          "cell_id": "A2-C1",
+          "query_file": "queries/A2.txt",
+          "query_sha256": "9c967ea62f331a38cbde4c593ca818dbb75e7398cb99bd61e7492b1200a44dfa",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "A3",
+      "role": "Named EPS × broad structured model",
+      "stream": "A",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_B"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/A3.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "507764cef213c618e81ac81fd04f440efa8f5abf5f3e19d4e6f0d67417c8ff65",
+      "query_characters_including_terminal_newline": 507,
+      "cells": [
+        {
+          "cell_id": "A3-C1",
+          "query_file": "queries/A3.txt",
+          "query_sha256": "507764cef213c618e81ac81fd04f440efa8f5abf5f3e19d4e6f0d67417c8ff65",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "B1",
+      "role": "Embedded-thread baseline",
+      "stream": "core_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_H"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/B1.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "97f8626d41a1c347a9feff67ed25127e6e871a383abddee024faf9b754e12349",
+      "query_characters_including_terminal_newline": 330,
+      "cells": [
+        {
+          "cell_id": "B1-C1",
+          "query_file": "queries/B1.txt",
+          "query_sha256": "97f8626d41a1c347a9feff67ed25127e6e871a383abddee024faf9b754e12349",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "B2",
+      "role": "Controlled broad-model expansion",
+      "stream": "core_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "R"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/B2.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "6173a2162e24f358fb6838cc8d433838260c52472f058a6c691ace30244f7080",
+      "query_characters_including_terminal_newline": 514,
+      "cells": [
+        {
+          "cell_id": "B2-C1",
+          "query_file": "queries/B2.txt",
+          "query_sha256": "6173a2162e24f358fb6838cc8d433838260c52472f058a6c691ace30244f7080",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "BG1",
+      "role": "Precise reusable model or template",
+      "stream": "expanded_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_model"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/BG1.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "c3dfc80a246889b8cc53ef842765f897b1a2f2c79efeedbedefd58a0ac28fe5f",
+      "query_characters_including_terminal_newline": 394,
+      "cells": [
+        {
+          "cell_id": "BG1-C1",
+          "query_file": "queries/BG1.txt",
+          "query_sha256": "c3dfc80a246889b8cc53ef842765f897b1a2f2c79efeedbedefd58a0ac28fe5f",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "BG2",
+      "role": "Structural reusable artifact",
+      "stream": "expanded_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_structure"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/BG2.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "c33296e40cb011a2a01acde7c68dd760a707e324f9be4a0fcc23174dc6d6e7b1",
+      "query_characters_including_terminal_newline": 323,
+      "cells": [
+        {
+          "cell_id": "BG2-C1",
+          "query_file": "queries/BG2.txt",
+          "query_sha256": "c33296e40cb011a2a01acde7c68dd760a707e324f9be4a0fcc23174dc6d6e7b1",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "BC1",
+      "role": "Conservative central asset",
+      "stream": "expanded_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "C1"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/BC1.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "d612b3802cf4717abf8b5ef5a88b9f6120a55987b7cdfee141e0fd4dec5b30a4",
+      "query_characters_including_terminal_newline": 803,
+      "cells": [
+        {
+          "cell_id": "BC1-C1",
+          "query_file": "queries/BC1.txt",
+          "query_sha256": "d612b3802cf4717abf8b5ef5a88b9f6120a55987b7cdfee141e0fd4dec5b30a4",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "BT2",
+      "role": "Model-linked tailoring",
+      "stream": "expanded_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "T2"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/BT2.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "a1880a605c941d61e17a21fe585861c3d0e2896285070cd3f1bb113a16bedb26",
+      "query_characters_including_terminal_newline": 1022,
+      "cells": [
+        {
+          "cell_id": "BT2-C1",
+          "query_file": "queries/BT2.txt",
+          "query_sha256": "a1880a605c941d61e17a21fe585861c3d0e2896285070cd3f1bb113a16bedb26",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "V1",
+      "role": "V&V sensitivity query",
+      "stream": "sensitivity",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_probe",
+          "M_probe",
+          "V1"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/V1.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "75e89fe11181b64915c173f391b5536e20d3f256a4e2b8632533ca9fb12e1d30",
+      "query_characters_including_terminal_newline": 688,
+      "cells": [
+        {
+          "cell_id": "V1-C1",
+          "query_file": "queries/V1.txt",
+          "query_sha256": "75e89fe11181b64915c173f391b5536e20d3f256a4e2b8632533ca9fb12e1d30",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    },
+    {
+      "partition_id": "O1",
+      "role": "Outcome and burden sensitivity query",
+      "stream": "sensitivity",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_probe",
+          "M_probe",
+          "O1"
+        ]
+      },
+      "translation_status": "draft_validated_syntax_pending_supervisor_acceptance",
+      "query_file": "queries/O1.txt",
+      "query_encoding": "UTF-8",
+      "query_sha256": "6436c9cfd37218be3784298b36a078b8584b15ce1e2316d801085c724a15794f",
+      "query_characters_including_terminal_newline": 681,
+      "cells": [
+        {
+          "cell_id": "O1-C1",
+          "query_file": "queries/O1.txt",
+          "query_sha256": "6436c9cfd37218be3784298b36a078b8584b15ce1e2316d801085c724a15794f",
+          "role": "complete single-cell source-native translation"
+        }
+      ],
+      "lossless_union": {
+        "required": false,
+        "method": "not_applicable_single_cell",
+        "stable_id_union_rule": "If a future fixed NTRS transport/query limit forces cells, retain every cell's full completed stable-ID set, then take the set union by NTRS citation id; never replace a failed cell with a narrower query."
+      }
+    }
+  ],
+  "semantic_change": false,
+  "notes": [
+    "Every finite protocol term is serialized, including duplicate-looking singular/plural/case/hyphen variants.",
+    "No nanosat* wildcard is substituted for finite population terms.",
+    "All Boolean blocks and pair rules are explicitly parenthesized; no unparenthesized precedence is relied upon."
+  ]
+}
