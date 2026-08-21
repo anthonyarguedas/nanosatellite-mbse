@@ -1,0 +1,89 @@
+{
+  "artifact_version": "slr1-scopus-pilot-evidence-index/v1",
+  "pilot_id": "S-D01-P01-20260820T234301-0400",
+  "created_at": "2026-08-21T03:54:03Z",
+  "claim_status_vocabulary": [
+    "observed",
+    "official_documentation",
+    "inferred",
+    "untested"
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E-001",
+      "claim_status": "observed",
+      "claim": "A default-loopback, count-only Scopus Advanced Search attempt for TITLE-ABS-KEY(CubeSat) ended with ScopusProtocolError, total=null, and zero records retrieved before a recognizable rendered state.",
+      "path": "SLR/SLR1/searches/worklogs/s-d01-scopus/d01-route-field-baseline.json",
+      "sha256": "ad67656140210f221c8fa549e22628bd861bc37f7c17f30121fa7d58a1f06c46",
+      "access_classification": "metadata_only",
+      "secure_location_reference": "Ignored worklog; no records, abstracts, credentials, cookies, institution identifiers, or session/search result URLs retained.",
+      "safe_fields_used": [
+        "entered query",
+        "public source endpoint",
+        "source total null",
+        "records retrieved 0",
+        "error type",
+        "adapter hash"
+      ]
+    },
+    {
+      "evidence_id": "E-002",
+      "claim_status": "observed",
+      "claim": "Immediately before the source attempt, browser-harness doctor reported Chrome running and daemon alive but zero active browser connections.",
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P01-20260820T234301-0400/safe-summary.json",
+      "sha256": "0ea984670c218336bfc7cf61e99652607665c448a34de66daf1e6189d6d11662",
+      "access_classification": "public",
+      "limitation": "This is not evidence of Scopus account state or the cause of the source-adapter failure."
+    },
+    {
+      "evidence_id": "E-003",
+      "claim_status": "inferred",
+      "claim": "The inspected general-purpose adapter describes a normal rendered Advanced Search workflow using default loopback CDP and an owned page, with rendered-row/range/identity checks.",
+      "external_tool": "~/agent-tools/academic-research/skills/academic-search/scripts/search_scopus.py",
+      "sha256": "ba11613b8b5daa6e2a6d91b50b8570ab139c15d46a7ee424052c92bff244a9b3",
+      "access_classification": "metadata_only",
+      "limitation": "Adapter behavior is a tool hypothesis, not proof of the current Scopus interface; it was not modified."
+    },
+    {
+      "evidence_id": "E-004",
+      "claim_status": "observed",
+      "claim": "Eleven exact UTF-8 query files exist, have one TITLE-ABS-KEY wrapper each, balanced parentheses, and all required literals from the designated dictionary blocks.",
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P01-20260820T234301-0400/query-integrity.json",
+      "sha256": "f61fd686dae73059f6d8be985bed53ab9e6a3b363153a28d5285af5c9aef31f9",
+      "access_classification": "public",
+      "limitation": "This is a local text-integrity observation, not a source parsing or semantic observation."
+    },
+    {
+      "evidence_id": "E-005",
+      "claim_status": "inferred",
+      "claim": "The provisional draft uses TITLE-ABS-KEY, quoted finite literals, Boolean paired terms, no wildcard, no language/date/publication/access restriction, and no cell union.",
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/translation-spec.json",
+      "sha256": "b1ecd37d33cb557955d55e67d9314fc6a993c5a69270c88f51efff1a792a6618",
+      "access_classification": "public",
+      "limitation": "Current Scopus acceptance, field coverage, query echo, and query length are untested."
+    },
+    {
+      "evidence_id": "E-006",
+      "claim_status": "untested",
+      "claim": "Current Scopus route/scope, all 11 source executions, phrase and Boolean behavior, fields, punctuation, case, acronyms, expansion, wildcard semantics, query length/echo, controls, date/language handling, limits, zero behavior, pagination/export, identity, duplicates, and two-pass completeness.",
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P01-20260820T234301-0400/observations.md",
+      "sha256": "7adc9e3fe503f861aa0f6338c89e0fb86a04f6a09ccc098d2662d4dbac198375",
+      "access_classification": "public",
+      "limitation": "Blocked after the first fail-closed count-only route diagnostic; no untested item supports acceptance."
+    }
+  ],
+  "official_documentation_accepted": [],
+  "safe_summary_paths": [
+    "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P01-20260820T234301-0400/safe-summary.json",
+    "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P01-20260820T234301-0400/safe-partition-summary.json",
+    "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P01-20260820T234301-0400/query-integrity.json"
+  ],
+  "prohibited_uses": [
+    "screening",
+    "relevance assessment",
+    "candidate construction",
+    "candidate import",
+    "final-event accounting",
+    "reuse of this pilot as a final search"
+  ]
+}

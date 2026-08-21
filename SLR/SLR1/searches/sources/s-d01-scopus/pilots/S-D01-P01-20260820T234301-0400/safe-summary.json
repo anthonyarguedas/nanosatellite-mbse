@@ -1,0 +1,57 @@
+{
+  "artifact_version": "slr1-scopus-pilot-safe-summary/v1",
+  "pilot_id": "S-D01-P01-20260820T234301-0400",
+  "created_at": "2026-08-21T03:52:03.605Z",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "access_disposition": {
+    "status": "blocked",
+    "claim_status": "observed",
+    "recommendation": "skip_for_now",
+    "reason": "One normal loopback-CDP count-only adapter attempt produced a ScopusProtocolError and total=null before a recognizable rendered state. No access-control bypass or retry was attempted.",
+    "confirmed_access_challenge_or_login": false,
+    "note": "The artifact does not identify a login, entitlement, CAPTCHA, or challenge as the cause; those states remain unconfirmed."
+  },
+  "browser_harness_doctor": {
+    "claim_status": "observed",
+    "observed_immediately_before_source_attempt": true,
+    "chrome_running": true,
+    "daemon_alive": true,
+    "active_browser_connections": 0,
+    "limitation": "This local harness diagnostic is not evidence of Scopus account state or the cause of the adapter failure."
+  },
+  "adapter_count_only_attempt": {
+    "execution_id": "D01-ROUTE-001",
+    "claim_status": "observed",
+    "started_at": "2026-08-21T03:43:01.010962Z",
+    "ended_at": "2026-08-21T03:44:03.181792Z",
+    "public_source_endpoint": "https://www.scopus.com/search/form.uri?display=advanced",
+    "access_method": "normal_rendered_scopus_browser",
+    "query": "TITLE-ABS-KEY(CubeSat)",
+    "exact_query_echo_proved": false,
+    "source_reported_total": null,
+    "total_is_exact": false,
+    "records_retrieved": 0,
+    "completion_status": "error",
+    "error_type": "ScopusProtocolError",
+    "error": "Scopus browser operation failed (ScopusProtocolError).",
+    "raw_artifact_path": "SLR/SLR1/searches/worklogs/s-d01-scopus/d01-route-field-baseline.json",
+    "raw_artifact_sha256": "ad67656140210f221c8fa549e22628bd861bc37f7c17f30121fa7d58a1f06c46",
+    "raw_artifact_classification": "metadata_only",
+    "search_result_or_session_url_retained": false,
+    "records_or_abstracts_retained": false
+  },
+  "provisional_translation_text": {
+    "claim_status": "observed",
+    "scope": "local files only; not Scopus parser behavior",
+    "status": "draft_blocked_unvalidated",
+    "source_parser_validation": "blocked",
+    "field_wrapper_claim_status": "inferred",
+    "field_wrapper": "TITLE-ABS-KEY",
+    "finite_population_forms_used": true,
+    "nanosat_wildcard_used": false,
+    "query_integrity_all_local_checks_pass": true,
+    "query_integrity_path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P01-20260820T234301-0400/query-integrity.json"
+  }
+}
