@@ -141,9 +141,6 @@ SC_FREYR = Source(
     "Space Concordia — Spacecraft division / SC-FREYR",
     "https://spaceconcordia.ca/spacecraft",
 )
-SC_PROJECTS = Source(
-    "Space Concordia — projects page", "https://spaceconcordia.ca/projects"
-)
 SC_CONCORDIA_NEWS = Source(
     "Concordia — SC-FREYR / AstroYeast partnership (2023-08-02)",
     "https://www.concordia.ca/cunews/main/stories/2023/08/02/canadian-space-agency-awards-350k-to-concordia-team-to-construct-and-launch-its-second-satellite.html",
@@ -153,7 +150,7 @@ SC_CDR_POST = Source(
     "https://www.instagram.com/p/DJatKABMFpo/",
 )
 SC_2024_POST = Source(
-    "Space Concordia — payload / test-board post (2024-09-24)",
+    "Space Concordia — SC-FREYR payload / collaborator post (2024-09-24)",
     "https://www.instagram.com/p/DAUoUjMutho/",
 )
 MANTIS = Source(
@@ -188,8 +185,8 @@ ARCTICSAT_GROUND = Source(
     "https://sites.google.com/view/umstarlabsats/arcticsat/subsystems/ground-station",
 )
 ARCTICSAT_PAPER = Source(
-    "Small Satellite Conference abstract — ArcticSat",
-    "https://digitalcommons.usu.edu/smallsat/2024/all2024/165/",
+    "Small Satellite Conference 2024 — ArcticSat presentation",
+    "https://digitalcommons.usu.edu/cgi/viewcontent.cgi?filename=0&article=5972&context=smallsat&type=additional",
 )
 ARCTICSAT_STARLAB = Source(
     "University of Manitoba STARLab — current satellite missions",
@@ -288,6 +285,10 @@ MARMOTSAT = Source("MARMOTSat project site", "https://www.marmotsat.ca/")
 MARMOT_UVIC = Source(
     "UVic News — MARMOTSat mission and pre-launch integration (2026-07-02)",
     "https://news.uvic.ca/2026/uvic-satellite-to-probe-climate-open-source-radio/",
+)
+MARMOT_RADIO = Source(
+    "UVic Propagation Laboratory — MARMOTSat amateur-radio payload",
+    "https://www.propagationlab.ca/satellite/",
 )
 MARMOT_CDR = Source(
     "MARMOTSat — critical design review update (2025-06-30)",
@@ -479,8 +480,9 @@ PROJECTS = (
         ),
         collaborators=(
             fact(
-                "Zetane Systems (user-supplied; limited public corroboration)",
-                "The supplied project note identifies Zetane support for AI/data-processing integration. A Zetane logo appears in Space Concordia’s SC-FREYR collaborators area, but no reviewed primary text describes the role; this is deliberately not modeled as a fully independently corroborated technical claim.",
+                "Zetane Systems",
+                "A September 2024 Space Concordia post identifies Zetane Systems and AstroYeast as collaborators on SC-FREYR; the current project page also displays Zetane in its collaborators area. Neither source specifies Zetane’s technical role, so no AI/data-processing role is asserted.",
+                SC_2024_POST,
                 SC_FREYR,
             ),
             fact(
@@ -508,11 +510,6 @@ PROJECTS = (
             ),
         ),
         facilities=(
-            fact(
-                "SC-FREYR CDH flight-conditions test board",
-                "A September 2024 team post documents a command-and-data-handling test board simulating flight conditions. This is a test asset, not evidence of a named cleanroom, TVAC or environmental qualification facility.",
-                SC_2024_POST,
-            ),
             fact(
                 "No named project test/operations facility publicly identified",
                 "The reviewed public sources do not identify a dedicated SC-FREYR cleanroom, TVAC, vibration facility or operational ground station.",
@@ -658,7 +655,7 @@ PROJECTS = (
         payloads=(
             fact(
                 "Passive-microwave radiometer / deployable antenna (terminology conflict)",
-                "The detailed conference material describes an 18.7 GHz passive microwave radiometer with a deployable cylindrical-reflector antenna for sea-ice, snow and open-water observations. The engineering page calls it a large deployable radiometer antenna, while STARLab uses “radar antenna” shorthand. The graph preserves this terminology conflict rather than silently treating the terms as identical.",
+                "The conference presentation describes an 18.7 GHz passive-microwave radiometer with a deployable cylindrical-reflector antenna that measures Earth-surface brightness temperature for the sea-ice mission. The engineering page calls it a large deployable radiometer antenna, while STARLab uses “radar antenna” shorthand. The graph preserves this terminology conflict rather than silently treating the terms as identical.",
                 ARCTICSAT_PAPER,
                 ARCTICSAT,
                 ARCTICSAT_STARLAB,
@@ -1119,7 +1116,8 @@ PROJECTS = (
         payloads=(
             fact(
                 "Modular CubeSat Radio / ionospheric sounding experiments",
-                "MARMOTSat describes a novel transionospheric-sounding approach and an open-source spacecraft radio. The project also identifies a VHF digipeater, CW telemetry, DVB-S2 video beacon and amateur-radio experiments; it does not assign a separate commercial instrument name.",
+                "MARMOTSat’s Propagation Laboratory page describes the Modular CubeSat Radio, VHF digipeater, VHF and 10 m CW telemetry, 10 m DVB-S2 video beacon, and ionospheric citizen-science sounding experiment. The project site and UVic News corroborate the transionospheric-sounding and open-source-radio mission; no separate commercial instrument name is published.",
+                MARMOT_RADIO,
                 MARMOTSAT,
                 MARMOT_UVIC,
             ),
