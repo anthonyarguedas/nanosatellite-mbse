@@ -26,12 +26,15 @@ CONCEPT_IDS = {
     "T2",
 }
 EXPECTED_TERM_COUNTS = {
-    "P": 18,
-    "E_H": 15,
-    "E_F": 21,
+    "P": 20,
+    "E_H": 28,
+    "E_F": 30,
     "M_H": 28,
-    "M_B": 25,
-    "R": 29,
+    "M_B": 27,
+    "R": 55,
+    "G_model": 14,
+    "G_structure": 8,
+    "C1": 26,
 }
 EXPECTED_TASKS = {
     "S-D01",

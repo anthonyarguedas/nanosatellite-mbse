@@ -1,5 +1,5 @@
 {
-  "artifact_version": "slr1-search-concepts/v2",
+  "artifact_version": "slr1-search-concepts/v3",
   "created_at": "2026-08-20",
   "revised_at": "2026-08-21",
   "provenance": {
@@ -32,11 +32,13 @@
         "CubeSat",
         "CubeSats",
         "cube sat",
+        "cube sats",
         "cube-sat",
         "cube-sats",
         "cube satellite",
         "cube satellites",
         "nanosat",
+        "nanosats",
         "nanosatellite",
         "nanosatellites",
         "nano-sat",
@@ -49,7 +51,7 @@
         "nano satellites"
       ],
       "constraints": [
-        "nanosat* may replace only contiguous nanosat and nanosatellite(s) forms after source-specific validation; retain separated and hyphenated forms unless normalization is proven lossless",
+        "nanosat* may replace only contiguous nanosat(s) and nanosatellite(s) forms after source-specific validation; retain separated and hyphenated forms unless normalization is proven lossless",
         "do not add SmallSat or small satellite as a positive concept"
       ]
     },
@@ -58,20 +60,33 @@
       "kind": "finite_terms",
       "terms": [
         "electrical power system",
+        "electrical power systems",
         "electric power system",
+        "electric power systems",
         "electrical power subsystem",
+        "electrical power subsystems",
         "electric power subsystem",
+        "electric power subsystems",
         "EPS",
+        "EPSs",
         "power subsystem",
+        "power subsystems",
         "power system",
+        "power systems",
         "spacecraft power system",
+        "spacecraft power systems",
         "power supply",
+        "power supplies",
         "power control and distribution",
         "power management and distribution",
         "electrical architecture",
+        "electrical architectures",
         "power architecture",
+        "power architectures",
         "PCDU",
-        "PMAD"
+        "PCDUs",
+        "PMAD",
+        "PMADs"
       ]
     },
     "E_F": {
@@ -79,26 +94,35 @@
       "kind": "finite_terms",
       "terms": [
         "power budget",
+        "power budgets",
         "energy budget",
+        "energy budgets",
         "energy balance",
+        "energy balances",
         "power balance",
+        "power balances",
         "power margin",
+        "power margins",
         "power generation",
         "solar array",
+        "solar arrays",
         "solar panel",
         "solar panels",
         "battery",
         "batteries",
         "battery management",
         "state of charge",
+        "states of charge",
         "energy storage",
         "power conditioning",
         "power distribution",
         "power management",
         "power interface",
+        "power interfaces",
         "power mode",
         "power modes",
-        "load profile"
+        "load profile",
+        "load profiles"
       ]
     },
     "E": {
@@ -151,8 +175,10 @@
         "system modelling",
         "systems modelling",
         "reference model",
+        "reference models",
         "digital engineering",
         "object-oriented systems model",
+        "object-oriented systems models",
         "model-based system design",
         "model based system design",
         "model-based systems design",
@@ -208,8 +234,34 @@
         "constraints",
         "parametric",
         "parametrics",
+        "analysis",
+        "analyses",
+        "design",
+        "designs",
+        "designed",
+        "designing",
+        "decision",
+        "decisions",
+        "decision-making",
+        "decision making",
+        "trade study",
+        "trade studies",
+        "trade-off",
+        "trade-offs",
+        "tradeoff",
+        "tradeoffs",
         "verification",
-        "validation"
+        "verifications",
+        "verify",
+        "verifies",
+        "verified",
+        "verifying",
+        "validation",
+        "validations",
+        "validate",
+        "validates",
+        "validated",
+        "validating"
       ],
       "constraints": ["an architecture span used inside an artifact phrase cannot also satisfy independent R"]
     },
@@ -218,17 +270,24 @@
       "kind": "union_of_terms_and_pairs",
       "terms": [
         "generic model",
+        "generic models",
         "generic system model",
+        "generic system models",
         "reusable model",
+        "reusable models",
         "reusable system model",
+        "reusable system models",
         "configurable model",
+        "configurable models",
         "configurable system model",
-        "model template"
+        "configurable system models",
+        "model template",
+        "model templates"
       ],
       "pair_rules": [
         {
           "left": ["mission-agnostic", "mission agnostic", "mission-independent", "mission independent"],
-          "right": ["model", "architecture"],
+          "right": ["model", "models", "architecture", "architectures"],
           "relationship": "explicitly_paired"
         }
       ]
@@ -236,16 +295,25 @@
     "G_structure": {
       "label": "Structural reusable artifact",
       "kind": "union_of_terms_and_pairs",
-      "terms": ["reference architecture", "domain model", "metamodel", "meta-model"],
+      "terms": [
+        "reference architecture",
+        "reference architectures",
+        "domain model",
+        "domain models",
+        "metamodel",
+        "metamodels",
+        "meta-model",
+        "meta-models"
+      ],
       "pair_rules": [
         {
           "left": ["product-line", "product line", "product-family", "product family"],
-          "right": ["model"],
+          "right": ["model", "models"],
           "relationship": "explicitly_paired"
         },
         {
-          "left": ["variation point"],
-          "right": ["model", "architecture"],
+          "left": ["variation point", "variation points"],
+          "right": ["model", "models", "architecture", "architectures"],
           "relationship": "explicitly_paired"
         }
       ]
@@ -255,20 +323,31 @@
       "kind": "union_of_terms_and_pairs",
       "terms": [
         "reference model",
+        "reference models",
         "system reference model",
+        "system reference models",
         "model library",
         "model libraries",
         "system model library",
         "system model libraries",
         "model pattern",
+        "model patterns",
         "modeling pattern",
+        "modeling patterns",
         "modelling pattern",
+        "modelling patterns",
         "system model pattern",
+        "system model patterns",
         "systems model pattern",
+        "systems model patterns",
         "model profile",
+        "model profiles",
         "system model profile",
+        "system model profiles",
         "systems model profile",
-        "SysML profile"
+        "systems model profiles",
+        "SysML profile",
+        "SysML profiles"
       ],
       "pair_rules": [
         {
