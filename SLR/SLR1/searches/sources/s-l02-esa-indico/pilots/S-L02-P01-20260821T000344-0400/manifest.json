@@ -1,0 +1,326 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-L02-P01-20260821T000344-0400",
+  "task_id": "S-L02",
+  "source_id": "esa-indico",
+  "method_type": "local_harvest",
+  "status": "blocked",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-20T23:42:30-04:00",
+  "ended_at": "2026-08-21T00:09:59-04:00",
+  "protocol_commit": "7d564870a36d049716b66c9f9770554ecb04e414",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "openai-codex/gpt-5.6-terra",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "ESA Indico public anonymous interface",
+    "url": "https://indico.esa.int/search/",
+    "access_route": "Anonymous HTTPS public search, export, timetable, note, and same-origin attachment routes only; no authentication, cookies, login, or private-object attempt.",
+    "authenticated": false,
+    "database_or_collection": "ESA Indico public event, contribution, material, and public-note object routes",
+    "platform": "ESA Indico",
+    "timezone": "Capture timestamps in UTC; preserve source object timezone fields without conversion."
+  },
+  "executions": [
+    {
+      "execution_id": "X01-object-groups",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded anonymous event, paired contribution/subcontribution, and attachment field/group probe.",
+      "started_at": "2026-08-20T23:43:00-04:00",
+      "status": "partial_diagnostic",
+      "exact_query_or_operation": "GET https://indico.esa.int/search/api/search?q=satellite&type=event; paired GET with type=contribution&type=subcontribution; GET with type=attachment.",
+      "query_file": null,
+      "fields": ["event metadata", "contribution metadata", "attachment metadata", "pagenav", "total"],
+      "controls": {"anonymous": true, "no_login": true, "bounded_pages": true, "screening": false},
+      "source_reported_total": -1,
+      "total_is_exact": false,
+      "records_retrieved": 23,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/01-event-satellite.json",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/02-contributions-satellite.json",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/03-materials-satellite.json"
+      ],
+      "notes": "Diagnostic prefixes only; no result was screened or imported."
+    },
+    {
+      "execution_id": "X02-search-semantics",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded phrase, implicit-term, Boolean-word, symbolic, parenthesis, field-syntax, case, hyphen, finite/wildcard, and explicit-zero diagnostics.",
+      "started_at": "2026-08-20T23:49:00-04:00",
+      "status": "partial_diagnostic",
+      "exact_query_or_operation": "Anonymous GET query matrix at /search/api/search using event and normal paired contribution/subcontribution types; exact strings are retained in the safe query-matrix artifacts.",
+      "query_file": null,
+      "fields": ["q", "type", "total", "pagenav", "result type", "stable IDs", "field-key sets"],
+      "controls": {"anonymous": true, "no_wildcard_harvest": true, "first_page_only_where_noted": true, "screening": false},
+      "source_reported_total": -1,
+      "total_is_exact": false,
+      "records_retrieved": 134,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/13-search-query-matrix.safe.json",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/14-contribution-group-and-pagination.safe.json"
+      ],
+      "notes": "A zero in an individual query is recorded as the source response; this matrix is not a final search."
+    },
+    {
+      "execution_id": "X03-pagination-order",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded paired-contribution and attachment cursor/ordering probe.",
+      "started_at": "2026-08-20T23:50:00-04:00",
+      "status": "partial_diagnostic",
+      "exact_query_or_operation": "GET q=satellite with paired contribution/subcontribution and attachment groups, first cursor, next cursor, and first-page repeat.",
+      "query_file": null,
+      "fields": ["pagenav", "total", "event_id", "contribution_id", "attachment_id", "response type"],
+      "controls": {"anonymous": true, "repeat_pass": true, "screening": false},
+      "source_reported_total": -1,
+      "total_is_exact": false,
+      "records_retrieved": 60,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/14-contribution-group-and-pagination.safe.json",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/23-material-pagination-and-order.safe.json"
+      ],
+      "notes": "The test validates only the observed prefixes and does not establish full search-result completeness."
+    },
+    {
+      "execution_id": "X04-root-category-ranges",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded root-category scope, count, interval, and repeat-order probe.",
+      "started_at": "2026-08-20T23:45:00-04:00",
+      "status": "partial_diagnostic",
+      "exact_query_or_operation": "GET /export/categ/0.json?from=2025-11-04&to=2025-11-06; comparison GET /export/categ/6.json over the same range; repeated GET /export/categ/0.json?from=2026-06-29&to=2026-07-03.",
+      "query_file": null,
+      "fields": ["count", "results", "additionalInfo.eventCategories", "moreFutureEvents", "event id", "startDate", "endDate", "protected folders"],
+      "controls": {"anonymous": true, "bounded_date_windows": true, "repeat_pass": true, "screening": false},
+      "source_reported_total": 7,
+      "total_is_exact": true,
+      "records_retrieved": 21,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/24-category-root-range.safe.json",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/25-category-root-repeat-and-count.safe.json"
+      ],
+      "notes": "Range-local count reconciliation was observed, not whole-universe completeness."
+    },
+    {
+      "execution_id": "X05-event-child-identity",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded event/export/timetable child, identity, note, and relation probe.",
+      "started_at": "2026-08-20T23:44:00-04:00",
+      "status": "partial_diagnostic",
+      "exact_query_or_operation": "GET /export/event/571.json?detail=contributions; GET /export/event/644.json?detail=contributions; GET /export/event/293.json?detail=contributions; GET /event/293/timetable/ and selected note routes.",
+      "query_file": null,
+      "fields": ["event id", "contribution db_id", "friendly_id", "canonical URL", "folders", "attachment id", "note fields", "timetable contribution IDs", "note query IDs"],
+      "controls": {"anonymous": true, "bounded_events": ["571", "644", "293"], "screening": false},
+      "source_reported_total": 3,
+      "total_is_exact": true,
+      "records_retrieved": 187,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/22-identity-and-child-relations.safe.json",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/28-timetable-note-and-child-reconciliation.safe.json",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/29-event-293-export-timetable-note-reconciliation.safe.json"
+      ],
+      "notes": "Count is three top-level event exports plus bounded child ledgers; it is not a candidate count."
+    },
+    {
+      "execution_id": "X06-material-access-and-parse",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded anonymous public PDF retrieval/parser and ZIP transport diagnostic.",
+      "started_at": "2026-08-20T23:55:00-04:00",
+      "status": "partial_diagnostic",
+      "exact_query_or_operation": "GET one public PDF attachment, technical PDF parse only, then discard bytes; HEAD and bounded GET-range probe of one public ZIP attachment.",
+      "query_file": null,
+      "fields": ["HTTP status", "content type", "magic", "byte count", "SHA-256", "pdfinfo exit", "pdftotext exit"],
+      "controls": {"anonymous": true, "no_persistent_fulltext": true, "bounded_range_bytes": 1024, "screening": false},
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 2,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/20-attachment-retrieval-and-parse.safe.json",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/21-public-zip-range-probe.safe.json"
+      ],
+      "notes": "No full archive traversal or candidate matching occurred."
+    },
+    {
+      "execution_id": "X07-external-boundary",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded public route distinction between Indico and general ESA/publications/historical-archive pages.",
+      "started_at": "2026-08-20T23:54:00-04:00",
+      "status": "success",
+      "exact_query_or_operation": "GET https://www.esa.int/esearch; GET ESA Publications listings; GET ESA Archives how-search-and-credit page.",
+      "query_file": null,
+      "fields": ["page title", "public description", "route scope", "access/rights description"],
+      "controls": {"anonymous": true, "no_external_search_execution": true, "screening": false},
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 3,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/17-esa-general-search.md",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/18-esa-publications-listings.md",
+        "SLR/SLR1/searches/worklogs/s-l02-esa-indico/19c-historical-archives-how-search.html"
+      ],
+      "notes": "These routes were inspected only to delimit ESA Indico; none was searched for review candidates."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "C01-diagnostic-separation",
+      "requirement": "Pilot forbids screening and candidate import.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["manifest.json", "observations.md"],
+      "notes": "diagnostic_only=true, screening_performed=false, candidate_import_permitted=false."
+    },
+    {
+      "check_id": "C02-source-boundary",
+      "requirement": "Identify public events, paired contributions/subcontributions, materials, and any relevant public object route.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["safe-diagnostics/interface-search.json", "safe-diagnostics/universe-and-traversal.json"],
+      "notes": "Notes were identified as an additional public text route; bare categories/sessions are structural only in the draft."
+    },
+    {
+      "check_id": "C03-direct-boolean-losslessness",
+      "requirement": "Test phrase, implicit terms, Boolean words, parentheses/symbolic forms, field syntax, and expansion behavior.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["safe-diagnostics/interface-search.json"],
+      "notes": "The observed behavior does not support lossless direct partitions."
+    },
+    {
+      "check_id": "C04-pagination-total-order",
+      "requirement": "Inspect pagination, total=-1 semantics, identifiers, and bounded repeat ordering.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["safe-diagnostics/interface-search.json"],
+      "notes": "Search-prefix behavior was tested only diagnostically."
+    },
+    {
+      "check_id": "C05-root-universe-proof",
+      "requirement": "Establish a reproducible complete public source-universe enumeration and completeness proof.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": ["safe-diagnostics/universe-and-traversal.json", "../../local-method-spec.json"],
+      "notes": "Root recursion, uncapped range coverage, undated objects, and full two-pass ledger remain unproved."
+    },
+    {
+      "check_id": "C06-child-reconciliation",
+      "requirement": "Validate event, contribution, sub-contribution, note, and material child relationships.",
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": ["safe-diagnostics/universe-and-traversal.json"],
+      "notes": "Event/contribution/material/note samples were reconciled; a live sub-contribution and all-event traversal were not."
+    },
+    {
+      "check_id": "C07-local-concept-method",
+      "requirement": "Specify exact local P/E/M/G_model/G_structure/C1/R/T2/V1/O1 matching, tags, overlap accounting, and no cross-route combination.",
+      "status": "verified",
+      "basis": "inferred",
+      "evidence_paths": ["../../local-method-spec.json"],
+      "notes": "The specification is deterministic but final execution remains blocked by C05/C06/C08."
+    },
+    {
+      "check_id": "C08-material-access-and-parsing",
+      "requirement": "Validate attachment retrieval and define missing/inaccessible/unparseable treatment.",
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": ["safe-diagnostics/boundary-materials-and-external-routes.json", "../../local-method-spec.json"],
+      "notes": "One PDF parsed; ZIP transport was probed; all attachment types/recursive parsing remain unvalidated."
+    },
+    {
+      "check_id": "C09-date-language",
+      "requirement": "Define date precision/window and language handling without an unsupported native limit.",
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": ["../../local-method-spec.json", "SLR/SLR1/searches/worklogs/s-l02-esa-indico/adapter-materials-satellite.json"],
+      "notes": "P-001 has not supplied the common cutoff; source language/date gaps are retained rather than filtered."
+    },
+    {
+      "check_id": "C10-external-boundary",
+      "requirement": "Distinguish Indico from general ESA website, publications, and archive searches.",
+      "status": "verified",
+      "basis": "observed_and_documented",
+      "evidence_paths": ["safe-diagnostics/boundary-materials-and-external-routes.json"],
+      "notes": "External route descriptions were read but not used for discovery."
+    },
+    {
+      "check_id": "C11-rate-limit",
+      "requirement": "Inspect rate-limit behavior and define a safe failure/retry rule.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": ["../../local-method-spec.json"],
+      "notes": "No 429/Retry-After ceiling was observed; the draft specifies a conservative future rule."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/guideline.md",
+      "role": "draft reusable source guideline",
+      "sha256": "d987f0201829f019960072a61029e0f0e08538624bee0f7c49a0cec6c4384e43",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/local-method-spec.json",
+      "role": "draft blocked local-method specification",
+      "sha256": "02481d49f4d8e647b094013f369921a04a7407a0ad09233c0dabf50ecbf2b61e",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P01-20260821T000344-0400/observations.md",
+      "role": "labelled diagnostic observations",
+      "sha256": "2183ba47b863583607c3b683571cf6fe2aa9b3769a9c41a38a15ae34a49b1e37",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P01-20260821T000344-0400/safe-diagnostics/interface-search.json",
+      "role": "safe interface-search summary",
+      "sha256": "5314b81f805c097f42db7247424bf2f11cc401fe25e42dc69a2997fc13ba0bfd",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P01-20260821T000344-0400/safe-diagnostics/universe-and-traversal.json",
+      "role": "safe universe/traversal summary",
+      "sha256": "6f7f33c0d651cbf5b9efc4e6467ee7713d86026be53e9b2ffb637c0583099542",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P01-20260821T000344-0400/safe-diagnostics/boundary-materials-and-external-routes.json",
+      "role": "safe boundary/material summary",
+      "sha256": "0d9e59d14ddc6a5d63a187896c93da075b15e23e41cb6f93d09092bb2599f3dc",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P01-20260821T000344-0400/evidence-index.json",
+      "role": "evidence map and ignored-worklog checksum inventory",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    }
+  ],
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "The pilot independently confirmed that direct Boolean translation is lossy and identified a provisional public event/export/timetable/note/material traversal, but did not establish a complete root source universe, full child/note coverage, sub-contribution behavior, or all-material parsing coverage. A final local event would otherwise rely on hidden completeness assumptions.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Decide and, if needed, commit the protocol/source-boundary treatment of public event_note objects before a final run.",
+      "Re-pilot and approve a root-category exhaustive partition/count/two-pass proof, including undated-event handling and cap testing.",
+      "Validate all-event timetable/note traversal and a live sub-contribution instance.",
+      "Validate recursive archive/non-PDF/link attachment handling, source rate limits, and full-run storage/rights procedure.",
+      "Set the P-001 common evidence cutoff before any final date handling."
+    ]
+  }
+}
