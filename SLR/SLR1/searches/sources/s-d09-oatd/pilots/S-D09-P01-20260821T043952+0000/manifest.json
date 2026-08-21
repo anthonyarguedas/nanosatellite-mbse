@@ -1,0 +1,952 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D09-P01-20260821T043952+0000",
+  "task_id": "S-D09",
+  "source_id": "oatd",
+  "method_type": "direct",
+  "status": "blocked",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-21T04:38:28Z",
+  "ended_at": "2026-08-21T04:51:09.922Z",
+  "protocol_commit": "ad77460df82764312fb701f6be4ebf7eb5051c41",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "openai-codex/gpt-5.6-terra",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "Open Access Theses and Dissertations (OATD) normal public rendered interface",
+    "url": "https://oatd.org/",
+    "access_route": "Normal local-CDP rendered public home-page inspection; a separate public FAQ HTTP request encountered Cloudflare and stopped the pilot.",
+    "authenticated": false,
+    "database_or_collection": "Review-intended full public index of electronic theses and dissertations; current OATD indexed boundary unverified.",
+    "platform": "OATD",
+    "timezone": "UTC"
+  },
+  "executions": [
+    {
+      "execution_id": "D09-HOME-UI-001",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded normal rendered public UI inventory; no search submission.",
+      "started_at": "2026-08-21T04:38:28Z",
+      "status": "success",
+      "exact_query_or_operation": "Open https://oatd.org/ in a new local-CDP browser tab; inspect visible basic and advanced form controls without entering/submitting a query.",
+      "query_file": null,
+      "fields": [
+        "visible form action/method/control names and labels only"
+      ],
+      "controls": {
+        "authenticated": false,
+        "query_submitted": false,
+        "record_or_detail_opened": false,
+        "screening": false,
+        "candidate_import": false,
+        "full_text_download": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/derived/home-rendered-ui-summary.json"
+      ],
+      "notes": "Successful visible UI observation only; not a search event or boundary proof."
+    },
+    {
+      "execution_id": "D09-FAQ-CLOUDFLARE-002",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Retrieve public OATD FAQ for official boundary/interface documentation.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "GET https://oatd.org/faq.html",
+      "query_file": null,
+      "fields": [
+        "HTTP status, response headers, response state only"
+      ],
+      "controls": {
+        "authenticated": false,
+        "credentials_entered": false,
+        "challenge_interaction": false,
+        "retry_attempted": false,
+        "workaround_attempted": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/raw-response.bin",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/decoded-preview.txt"
+      ],
+      "notes": "Parsed HTTP 403 with Cf-Mitigated: challenge / Just a moment. This is the pilot stop condition and not a source zero."
+    },
+    {
+      "execution_id": "D09-A1-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "A1",
+      "cell_id": "A1-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"electrical power system\" OR \"electric power system\" OR \"electrical power subsystem\" OR \"electric power subsystem\" OR EPS OR \"power subsystem\" OR \"electrical architecture\" OR \"power architecture\" OR PCDU OR PMAD) AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR MBSE OR SysML OR \"systems modeling language\" OR Arcadia OR Capella))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/A1.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/A1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-A2-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "A2",
+      "cell_id": "A2-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"power budget\" OR \"energy budget\" OR \"energy balance\" OR \"power generation\" OR \"solar array\" OR battery OR batteries OR \"energy storage\" OR \"power conditioning\" OR \"power distribution\" OR \"power management\" OR \"power interface\" OR \"power mode\" OR \"power modes\" OR \"load profile\") AND ((\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR MBSE OR SysML OR \"systems modeling language\" OR Arcadia OR Capella) OR (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\")))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/A2.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/A2.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-A3-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "A3",
+      "cell_id": "A3-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"electrical power system\" OR \"electric power system\" OR \"electrical power subsystem\" OR \"electric power subsystem\" OR EPS OR \"power subsystem\" OR \"electrical architecture\" OR \"power architecture\" OR PCDU OR PMAD) AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\"))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/A3.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/A3.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-B1-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "B1",
+      "cell_id": "B1-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR MBSE OR SysML OR \"systems modeling language\" OR Arcadia OR Capella))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/B1.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/B1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-B2-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "B2",
+      "cell_id": "B2-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\") AND (requirement OR requirements OR function OR functions OR behavior OR behaviors OR behaviour OR behaviours OR architecture OR architectures OR interface OR interfaces OR traceability OR parametric OR parametrics OR verification OR validation))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/B2.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/B2.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-BG1-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "BG1",
+      "cell_id": "BG1-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"generic model\" OR \"generic system model\" OR \"reusable model\" OR \"reusable system model\" OR \"configurable model\" OR \"configurable system model\" OR \"model template\" OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (model OR architecture))))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/BG1.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/BG1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-BG2-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "BG2",
+      "cell_id": "BG2-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"reference architecture\" OR \"domain model\" OR metamodel OR \"meta-model\" OR ((\"product-line\" OR \"product line\" OR \"product-family\" OR \"product family\") AND model) OR (\"variation point\" AND (model OR architecture))))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/BG2.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/BG2.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-BC1-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "BC1",
+      "cell_id": "BC1-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"reference model\" OR \"system reference model\" OR \"model library\" OR \"model libraries\" OR \"system model library\" OR \"system model libraries\" OR \"model pattern\" OR \"modeling pattern\" OR \"modelling pattern\" OR \"system model pattern\" OR \"systems model pattern\" OR \"model profile\" OR \"system model profile\" OR \"systems model profile\" OR \"SysML profile\" OR ((\"domain-specific modeling language\" OR \"domain specific modeling language\" OR \"domain-specific modelling language\" OR \"domain specific modelling language\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR MBSE OR SysML OR \"systems modeling language\" OR \"system model\" OR \"systems model\"))))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/BC1.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/BC1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-BT2-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "BT2",
+      "cell_id": "BT2-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"digital engineering\" OR \"object-oriented systems model\") AND ((reuse OR reuses OR reused OR reusable OR reusing OR tailor OR tailors OR tailored OR tailoring OR customize OR customizes OR customized OR customizing OR customization OR customise OR customises OR customised OR customising OR customisation OR configure OR configures OR configured OR configuring OR configuration OR parameterize OR parameterizes OR parameterized OR parameterizing OR parameterization OR parameterise OR parameterises OR parameterised OR parameterising OR parameterisation OR instantiate OR instantiates OR instantiated OR instantiating OR instantiation OR variability OR \"variation point\" OR specialize OR specializes OR specialized OR specializing OR specialization OR specialise OR specialises OR specialised OR specialising OR specialisation OR adapt OR adapts OR adapted OR adapting OR adaptation) AND (model OR models OR architecture OR architectures)))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/BT2.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/BT2.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-V1-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "V1",
+      "cell_id": "V1-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"electrical power system\" OR \"electric power system\" OR \"power subsystem\" OR \"power budget\" OR \"energy budget\" OR PCDU OR PMAD OR EPS) AND (\"model-based systems engineering\" OR MBSE OR SysML OR \"system model\" OR \"reference model\" OR \"digital engineering\") AND (verification OR validation OR traceability OR traceable OR \"model verification\" OR \"model validation\" OR \"system verification\" OR \"system validation\" OR \"requirements-in-the-loop\" OR \"model checking\" OR \"virtual integration\" OR MIL OR \"model-in-the-loop\" OR SIL OR \"software-in-the-loop\" OR PIL OR \"processor-in-the-loop\" OR HIL OR \"hardware-in-the-loop\" OR \"test case\" OR \"test procedure\"))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/V1.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/V1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    },
+    {
+      "execution_id": "D09-O1-C1-BLOCKED-BEFORE-SUBMISSION",
+      "partition_id": "O1",
+      "cell_id": "O1-C1",
+      "purpose": "Required bounded source-cell diagnostic, explicitly not sent after the observed Cloudflare stop condition.",
+      "started_at": "2026-08-21T04:40:10Z",
+      "status": "blocked",
+      "exact_query_or_operation": "((CubeSat OR CubeSats OR \"cube sat\" OR nanosat OR nanosatellite OR nanosatellites OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"electrical power system\" OR \"electric power system\" OR \"power subsystem\" OR \"power budget\" OR \"energy budget\" OR PCDU OR PMAD OR EPS) AND (\"model-based systems engineering\" OR MBSE OR SysML OR \"system model\" OR \"reference model\" OR \"digital engineering\") AND (reliability OR reliable OR \"mission assurance\" OR reproducibility OR reproducible OR reuse OR reusable OR integrability OR integrable OR interoperability OR interoperable OR traceability OR traceable OR benefit OR benefits OR impact OR outcome OR \"no effect\" OR adverse OR burden OR effort OR workload OR overhead OR cost OR schedule OR training OR \"learning curve\" OR licensing OR license OR licence OR adoption))",
+      "query_file": "SLR/SLR1/searches/sources/s-d09-oatd/queries/O1.txt",
+      "fields": [
+        "prospective unfielded OATD basic q candidate; no source field behavior validated"
+      ],
+      "controls": {
+        "source_request_made": false,
+        "blocked_before_submission": true,
+        "candidate_transport_if_future_validation_succeeds": "visible basic GET /oatd/search with q and hidden form=basic",
+        "evidence_window_lower_bound": "2011-01-01",
+        "common_upper_cutoff": null,
+        "language_limit_applied": false,
+        "access_creative_commons_content_peer_review_publication_type_limit_applied": false,
+        "repository_institution_country_limit_applied": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/O1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "The string is listed to pin the required cell, but no OATD request was made. It is not a source execution, zero, or accepted translation."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "CHK-DIAGNOSTIC-SEPARATION",
+      "requirement": "Pilot remains diagnostic only with no screening or candidate import.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/evidence-index.json"
+      ],
+      "notes": "No record was screened, created, imported, or downloaded."
+    },
+    {
+      "check_id": "CHK-PROTOCOL-ACCOUNTING",
+      "requirement": "Record the review-required OATD indexed-online-resource accounting, separate total, and PRISMA other_methods placement.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "official_documentation",
+      "evidence_paths": [
+        "SLR/SLR1/protocol-discovery-and-appraisal.md",
+        "SLR/SLR1/searches/source-interface-prisma-crosswalk.json"
+      ],
+      "notes": "Review protocol/crosswalk rule only; it does not prove current OATD boundary."
+    },
+    {
+      "check_id": "CHK-CURRENT-SOURCE-BOUNDARY",
+      "requirement": "Independently prove current OATD indexed-resource boundary and repository/resource provenance.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md",
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "Visible homepage copy is insufficient; Cloudflare stopped the documentation/interface route before proof."
+    },
+    {
+      "check_id": "CHK-BASIC-VISIBLE-UI",
+      "requirement": "Inspect current public basic route and visible controls.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/derived/home-rendered-ui-summary.json"
+      ],
+      "notes": "GET /oatd/search with q and form=basic was visible; no query semantics were tested."
+    },
+    {
+      "check_id": "CHK-ADVANCED-VISIBLE-UI",
+      "requirement": "Inspect current public advanced route and visible controls.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/derived/home-rendered-ui-summary.json"
+      ],
+      "notes": "Visible advanced composer controls observed; no advanced query was submitted."
+    },
+    {
+      "check_id": "CHK-GRAMMAR-PHRASE-BOOLEAN-PRECEDENCE",
+      "requirement": "Validate phrase/quote, AND/OR/NOT, precedence, parentheses, and query echo/rewrite.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "No query was sent after challenge."
+    },
+    {
+      "check_id": "CHK-PUNCTUATION-CASE-ACRONYM",
+      "requirement": "Validate punctuation/hyphens, case, and acronym behavior.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Finite variants are locally retained but untested by OATD."
+    },
+    {
+      "check_id": "CHK-EXPANSION-WILDCARD",
+      "requirement": "Validate stemming, lemmatization, automatic expansion, and wildcard behavior.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json"
+      ],
+      "notes": "No expansion is relied upon; no wildcard is present in candidate files."
+    },
+    {
+      "check_id": "CHK-LENGTH-GET-ECHO",
+      "requirement": "Validate full query length, GET transport, and exact submitted-query echo.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/translation-spec.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "GET form action is observed; no candidate was submitted."
+    },
+    {
+      "check_id": "CHK-LOCAL-TRANSLATION-INTEGRITY",
+      "requirement": "Check all 11 query files for UTF-8/no BOM, hashes, parentheses, finite-term coverage, and no wildcard/prohibited term.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json"
+      ],
+      "notes": "Local structural check only."
+    },
+    {
+      "check_id": "CHK-PARTITION-A1",
+      "requirement": "Validate exact current OATD source-native translation for A1 (P AND E_H AND M_H).",
+      "partition_id": "A1",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/A1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but A1-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-A2",
+      "requirement": "Validate exact current OATD source-native translation for A2 (P AND E_F AND (M_H OR M_B)).",
+      "partition_id": "A2",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/A2.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but A2-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-A3",
+      "requirement": "Validate exact current OATD source-native translation for A3 (P AND E_H AND M_B).",
+      "partition_id": "A3",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/A3.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but A3-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-B1",
+      "requirement": "Validate exact current OATD source-native translation for B1 (P AND M_H).",
+      "partition_id": "B1",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/B1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but B1-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-B2",
+      "requirement": "Validate exact current OATD source-native translation for B2 (P AND M_B AND R).",
+      "partition_id": "B2",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/B2.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but B2-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-BG1",
+      "requirement": "Validate exact current OATD source-native translation for BG1 (P AND G_model).",
+      "partition_id": "BG1",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/BG1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but BG1-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-BG2",
+      "requirement": "Validate exact current OATD source-native translation for BG2 (P AND G_structure).",
+      "partition_id": "BG2",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/BG2.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but BG2-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-BC1",
+      "requirement": "Validate exact current OATD source-native translation for BC1 (P AND C1).",
+      "partition_id": "BC1",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/BC1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but BC1-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-BT2",
+      "requirement": "Validate exact current OATD source-native translation for BT2 (P AND M_B AND T2).",
+      "partition_id": "BT2",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/BT2.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but BT2-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-V1",
+      "requirement": "Validate exact current OATD source-native translation for V1 (P AND E_probe AND M_probe AND V1).",
+      "partition_id": "V1",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/V1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but V1-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-PARTITION-O1",
+      "requirement": "Validate exact current OATD source-native translation for O1 (P AND E_probe AND M_probe AND O1).",
+      "partition_id": "O1",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/queries/O1.txt",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Local text check passed, but O1-C1 was not submitted after the Cloudflare stop condition; total=null."
+    },
+    {
+      "check_id": "CHK-DATE-CONTROLS",
+      "requirement": "Validate native date behavior and exact-day precision from 2011-01-01 through the P-001 cutoff.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/derived/home-rendered-ui-summary.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/translation-spec.json"
+      ],
+      "notes": "Earliest/latest controls were visible only; P-001 cutoff remains unset."
+    },
+    {
+      "check_id": "CHK-LANGUAGE-CONTROLS",
+      "requirement": "Validate language control behavior without inferring full-report language.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/derived/home-rendered-ui-summary.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/translation-spec.json"
+      ],
+      "notes": "English option visible only; no language limit applied."
+    },
+    {
+      "check_id": "CHK-NO-UNAPPROVED-LIMITS",
+      "requirement": "Avoid access, Creative-Commons, content, peer-review, publication-type, country, institution/repository, or other unapproved discovery limits.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/derived/home-rendered-ui-summary.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "No search was submitted and no discovery limit was applied."
+    },
+    {
+      "check_id": "CHK-TOTAL-ZERO-RESULTS",
+      "requirement": "Validate source total semantics, explicit zero, displayed ranges, and result rows.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json"
+      ],
+      "notes": "Challenge is total=null, not zero; no result page opened."
+    },
+    {
+      "check_id": "CHK-PAGINATION-EXPORT",
+      "requirement": "Validate page size, ordering, pagination, source cap, capture/export, and ranges.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/derived/home-rendered-ui-summary.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "Visible advanced page-size options alone do not validate any results behavior."
+    },
+    {
+      "check_id": "CHK-STABLE-IDENTITY-PROVENANCE",
+      "requirement": "Validate OATD Record ID, detail route, repository/resource URL treatment, and duplicate behavior.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/translation-spec.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "No result or Record Details page opened."
+    },
+    {
+      "check_id": "CHK-COMPLETENESS-TWO-PASS",
+      "requirement": "Validate two-pass or equivalent stable-ID completeness proof.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/translation-spec.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "No source result set exists."
+    },
+    {
+      "check_id": "CHK-FAILURE-STOP",
+      "requirement": "Stop on Cloudflare/challenge and use null rather than zero.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics/response.json",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md"
+      ],
+      "notes": "HTTP 403 Cf-Mitigated challenge was parsed; no retry or workaround occurred."
+    },
+    {
+      "check_id": "CHK-NO-FULLTEXT-OR-SCREENING",
+      "requirement": "Do not retrieve full text, screen records, create candidates, or import pilot data.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md",
+        "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/evidence-index.json"
+      ],
+      "notes": "No source records were retrieved."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/guideline.md",
+      "role": "draft blocked source guideline",
+      "sha256": "0cb6bfc17997c37c9270337ec96e686509c1803697bce00cc53f47955ebc19ae",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/translation-spec.json",
+      "role": "draft blocked translation specification",
+      "sha256": "ecee37f0eccc238ecf4ab47529f863f205e37b669a0ca2d0cf353fc3d43d848f",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/observations.md",
+      "role": "labelled pilot observations",
+      "sha256": "e41ec3089c50dd70e955f190137cd7b839ba8930078fb2fe0994b627ad972318",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/evidence-index.json",
+      "role": "evidence index; hash after all referenced non-self artifacts",
+      "sha256": "09341cb3b34c54928dc3c029c25014d4055a2e5e6c83e9ec20376895d475726e",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/translation-integrity.json",
+      "role": "local query integrity receipt",
+      "sha256": "75fbe7a60d3211da956bbcde3d3bb5d1dde107d678cc7e7a85e8daa6a2c40fa3",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/A1.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "a7f819539645e721389e2820a2ac845620b9859b286a45ab8e4805d348c2f82e",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/A2.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "d091992a3db20b9c5be2a742d5b85fc9780300a495493af2dd5a98afd03157a1",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/A3.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "0fd37daa848499cecaac5a3ebcb330f162295531d13130e6fa73faf0dc99044b",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/B1.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "03b94a4ff00aeea7649756a4175769dceac94d1bb238677423a8b948f39dbaec",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/B2.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "9ca89a0178babd7f791efdcfca255def1282d7d3d0bd51ae0471921031e0e285",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/BG1.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "fe14a86535c5ce3cbccc3f1718ef519924f60a89e789eeda2298b709f7065f9e",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/BG2.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "f5abfa7ef97662e2dd00ae8fbf992f974c194e39d77710110949514e3e7b9e52",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/BC1.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "0fb2b484e8ab95bfe249c92caf498411196f3a4cdc27ffb2bb24d4acfb62ef10",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/BT2.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "c0c4748462cbaf27d3e06f30bf3a3819b821aa29e563cc8c59fc943c9f2077e4",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/V1.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "5bfd4227edebb240aa17b15fc682cb763c7d561fd2facf95998ea11399950a2e",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/O1.txt",
+      "role": "exact UTF-8 prospective basic q candidate",
+      "sha256": "df9527778cfec382163219053b4e016be8840464bfa1d6e678e1e629dea1e0ac",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/derived/home-rendered-ui-summary.json",
+      "role": "ignored safe browser UI summary",
+      "sha256": "7c2e4db44d3683274d44bec7c30e757256d7d6ca2d6578c3fab3756a5c25bb49",
+      "access_classification": "metadata_only",
+      "secure_location_reference": "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000"
+    },
+    {
+      "path": "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000/official/faq-diagnostics",
+      "role": "ignored Cloudflare challenge diagnostics; raw response remains untracked",
+      "sha256": null,
+      "access_classification": "restricted",
+      "secure_location_reference": "SLR/SLR1/searches/worklogs/s-d09-oatd/S-D09-P01-20260821T043952+0000"
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260821T043952+0000/manifest.json",
+      "role": "this manifest; self-hash intentionally null",
+      "sha256": null,
+      "access_classification": "public",
+      "secure_location_reference": null
+    }
+  ],
+  "disposition": {
+    "recommendation": "skip_for_now",
+    "reason": "A public OATD documentation request returned a Cloudflare managed challenge. Under the pilot protocol, this stopped all query submissions; consequently current query grammar, source boundary, controls, totals, identity, pagination, and completeness are unverified and all partition totals are null.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Smallest follow-up: after the Cloudflare condition is absent, make one normal public rendered-browser preflight in a new owned tab; stop again if any challenge, login, consent/auth wall, or Server Too Busy state appears.",
+      "If challenge-free, prove current basic/advanced grammar, exact echo/rewrite, intended indexed-resource boundary, all 11 cells, date/language controls, total/zero rules, Record ID/repository-resource provenance, pagination, and two-pass completeness before accepting a guideline.",
+      "Set the exact common evidence cutoff under P-001 before any final date-bounded event.",
+      "Supervisor review is required; this worker recommendation is not acceptance."
+    ]
+  }
+}
