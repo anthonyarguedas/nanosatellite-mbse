@@ -1,0 +1,230 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D01-P10-20260822T154458-0400",
+  "task_id": "S-D01",
+  "source_id": "scopus",
+  "method_type": "direct",
+  "status": "partial",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-22T15:44:58-04:00",
+  "ended_at": "2026-08-22T15:45:04-04:00",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "openai-codex/gpt-5.6-terra",
+    "human_supervisor": "pending"
+  },
+  "interface": {
+    "name": "Scopus current rendered Advanced Documents Search",
+    "url": "https://www.scopus.com/pages/search/publications?type=advanced",
+    "access_route": "adapter_default_local_loopback_CDP_owned_tab",
+    "authenticated": true,
+    "database_or_collection": "Scopus",
+    "platform": "Scopus",
+    "timezone": "UTC-04:00",
+    "authentication_status_limit": "P10 used the existing authorized local browser context, entered no credentials, and performed no sign-in or challenge action."
+  },
+  "executions": [
+    {
+      "execution_id": "P10-PREFLIGHT-01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Verify exact reviewed adapter SHA/diff, one focused test suite, read-only browser health/version/anchor, AC power, sleep assertion, and absolute restricted output path before the assigned source diagnostic.",
+      "started_at": "2026-08-22T15:44:58-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Read-only adapter, launcher, CDP, target, power, assertion, and path metadata; one focused offline browser-adapter suite.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "query_submission": false,
+        "browser_launch": false,
+        "browser_restart": false,
+        "user_tab_mutation": false,
+        "controller_anchor_id_observed_only": "C02CA183D7757FFA07F9FFE63511DE8B"
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "pilots/S-D01-P10-20260822T154458-0400/preflight.json",
+        "pilots/S-D01-P10-20260822T154458-0400/adapter-diff-verification.txt",
+        "pilots/S-D01-P10-20260822T154458-0400/focused-test.txt"
+      ],
+      "notes": "Expected adapter SHA and exact two-file reviewed dirty-diff scope matched; diff check passed; the focused suite passed 27 tests and two subtests once."
+    },
+    {
+      "execution_id": "P10-CAP-COUNT-ONLY-01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Exactly one broad count-only cap-classification retry after P09's generic reconciliation timeout.",
+      "started_at": "2026-08-22T15:45:00-04:00",
+      "status": "failed",
+      "exact_query_or_operation": "TITLE-ABS-KEY(\"CubeSat\") count-only diagnostic identified by query hash; expected controlled cap failure is the diagnostic success condition.",
+      "query_file": null,
+      "fields": ["TITLE-ABS-KEY"],
+      "controls": {
+        "count_only": true,
+        "limit": 20,
+        "max_pages": 2,
+        "timeout_seconds": 60,
+        "page_delay_seconds": 1,
+        "adapter_default_local_cdp_route": true,
+        "target_id_supplied": false,
+        "adapter_owned_page_only": true
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P10-20260822T154458-0400/cubesat-cap-count-only.json"
+      ],
+      "notes": "Expected ScopusDisplayCapError at result_reconciliation: null total, zero pages, zero source entries, zero records, and no retained prefix. Exit 1 completed in 3.667 seconds; no second source query ran."
+    },
+    {
+      "execution_id": "P10-POSTFLIGHT-01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Read-only postflight anchor/version/power/sleep/side-effect verification.",
+      "started_at": "2026-08-22T15:45:03-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Read-only launcher, CDP, power/assertion, and exact-window local system-marker checks.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "query_submission": false,
+        "browser_launch": false,
+        "browser_restart": false,
+        "user_tab_mutation": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "pilots/S-D01-P10-20260822T154458-0400/postflight.json"
+      ],
+      "notes": "The sole controller anchor persisted; runtime/disk browser check passed; AC and sleep protection remained active; no actual sleep/wake or About This Mac marker was observed."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P10-C-001",
+      "requirement": "The exact reviewed adapter SHA/diff is verified and the focused Scopus browser suite runs once before source work.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P10-20260822T154458-0400/adapter-diff-verification.txt",
+        "pilots/S-D01-P10-20260822T154458-0400/focused-test.txt"
+      ],
+      "notes": "SHA 10bbf79baec56208820be9463a853582880c4fa92b480a6ebd177730d71d936d matched; exact two-file dirty-diff scope and diff check passed; 27 tests and two subtests passed once."
+    },
+    {
+      "check_id": "P10-C-002",
+      "requirement": "Exactly one normal-local-CDP, adapter-owned, count-only CubeSat source diagnostic is submitted without target-id or user-tab mutation.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P10-20260822T154458-0400/execution-window.json",
+        "pilots/S-D01-P10-20260822T154458-0400/cap-retry-receipt.json"
+      ],
+      "notes": "One source query was attempted; no target-id or cdp override was supplied, and no further source query ran."
+    },
+    {
+      "check_id": "P10-C-003",
+      "requirement": "A current visible result-list cap is classified promptly as a controlled display-cap failure without inventing a source total or retaining a prefix.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P10-20260822T154458-0400/cap-retry-receipt.json"
+      ],
+      "notes": "Exit 1 was ScopusDisplayCapError at result_reconciliation with total=null, zero pages/records, no prefix, and non-mergeable accounting."
+    },
+    {
+      "check_id": "P10-C-004",
+      "requirement": "The P09 generic cap incident is distinguished from the P06 readiness-budget defect and compared by observed timing/classification.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P09-20260822T145405-0400/cap-receipt.json",
+        "pilots/S-D01-P10-20260822T154458-0400/cap-retry-receipt.json"
+      ],
+      "notes": "P09 ended after approximately 61.425 seconds as generic ScopusProtocolError; P10 ended in 3.667 seconds as ScopusDisplayCapError. P06's original trigger remains separately unidentifiable from its safe artifact."
+    },
+    {
+      "check_id": "P10-C-005",
+      "requirement": "Browser anchor, version equality check, power, sleep protection, owned-tab cleanup, and side-effect controls persist through postflight.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P10-20260822T154458-0400/preflight.json",
+        "pilots/S-D01-P10-20260822T154458-0400/postflight.json"
+      ],
+      "notes": "The preserved controller anchor was the sole postflight page target; AC and active caffeinate assertions remained present; no matching sleep/wake or About This Mac marker appeared."
+    },
+    {
+      "check_id": "P10-C-006",
+      "requirement": "Human acceptance, S-C01, P-001, S-002, final all-cell two-pass completeness, and R-002 authorization remain distinct from this cap diagnostic.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "guideline.md"
+      ],
+      "notes": "P10 closes only the observed adapter cap-classification issue; it is not a final event, screening pass, or source-method acceptance."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P10-20260822T154458-0400/manifest.json",
+      "role": "schema-valid P10 partial diagnostic manifest",
+      "access_classification": "metadata_only",
+      "sha256": null,
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P10-20260822T154458-0400/observations.md",
+      "role": "dated P10 observations",
+      "access_classification": "public",
+      "sha256": null,
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P10-20260822T154458-0400/cap-retry-receipt.json",
+      "role": "rights-safe P10 display-cap retry receipt",
+      "access_classification": "metadata_only",
+      "sha256": null,
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P10-20260822T154458-0400/validation-receipt.json",
+      "role": "P10 validation receipt",
+      "access_classification": "metadata_only",
+      "sha256": null,
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P10-20260822T154458-0400/evidence-index.json",
+      "role": "rights-safe P10 evidence inventory",
+      "access_classification": "metadata_only",
+      "sha256": null,
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d01-scopus-restricted/S-D01-P10-20260822T154458-0400",
+      "role": "complete restricted P10 source output, stderr/stdout, command metadata, and local CDP version receipts",
+      "access_classification": "restricted",
+      "sha256": null,
+      "secure_location_reference": ".searches/s-d01-scopus-restricted/S-D01-P10-20260822T154458-0400"
+    }
+  ],
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "P10 closes the P09 cap-classification incident for the reviewed adapter: the required controlled display-cap failure was prompt, non-mergeable, and prefix-free. The packet remains a diagnostic draft pending S-C01, P-001, S-002, final all-cell/two-pass completeness, and human review.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Inspect the restricted P10 error artifact, stderr, and command metadata before relying on the live cap evidence.",
+      "Review the cap-classification patch and its 27-test focused suite together with P09/P10 timing evidence.",
+      "Complete S-C01 and P-001, then retain the existing final-event controls, including two full ordered identity passes, only after S-002 and R-002 authorization."
+    ]
+  }
+}

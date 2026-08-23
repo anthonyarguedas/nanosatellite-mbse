@@ -1,0 +1,105 @@
+{
+  "artifact_version": "slr1-scopus-p08-preflight/v1",
+  "basis": "observed",
+  "pilot_id": "S-D01-P08-20260822T142211-0400",
+  "captured_at_local": "2026-08-22T14:28:37-0400",
+  "captured_at_utc": "2026-08-22T18:28:37Z",
+  "controller_preflight_claim": {
+    "controller_anchor_id": "C02CA183D7757FFA07F9FFE63511DE8B",
+    "controller_anchor_mutated_by_this_pilot": false,
+    "controller_caffeinate_dims_wrapper_observed": true
+  },
+  "adapter": {
+    "script": "/Users/antho/agent-tools/academic-research/skills/academic-search/scripts/search_scopus.py",
+    "expected_sha256": "edec4799e3e431d14d62d64d297ec03943e9b1ae829007df01a8bae830228b56",
+    "sha256_pre_live": "edec4799e3e431d14d62d64d297ec03943e9b1ae829007df01a8bae830228b56",
+    "sha256_matches_expected": true,
+    "expected_dirty_diff_paths": [
+      "academic-research/skills/academic-search/scripts/search_scopus.py",
+      "academic-research/skills/academic-search/tests/test_search_scopus_browser.py"
+    ],
+    "observed_dirty_diff_sha256": "2a8e8b930edcc4682cbee5deabd07f32b48b2ed7e8de46b274266c43e687a163",
+    "observed_test_file_sha256": "32882b22681db751cb1648df35173f3ae70c4b919b95d41a817b383c08dfca23",
+    "diff_check": "passed",
+    "adapter_code_edited_by_pilot": false,
+    "focused_test": {
+      "artifact": "focused-test.txt",
+      "result": "24 passed, 2 subtests passed in 0.06s",
+      "status": "passed",
+      "run_count": 1
+    }
+  },
+  "immutable_inputs": [
+    {
+      "partition_id": "A1",
+      "cell_id": "A1-01",
+      "query_file": "queries/A1.scopus-advanced.txt",
+      "sha256": "8fd3fb75d5e963df0d11a667bc865fac6aa611173dff266ba595f7e20667be88",
+      "bytes": 2096,
+      "mutated": false
+    },
+    {
+      "partition_id": "A2",
+      "cell_id": "A2-01",
+      "query_file": "queries/A2.scopus-advanced.txt",
+      "sha256": "4887452c33411322fb60dae946112b39f3566544549c6675b410bf259659525f",
+      "bytes": 2612,
+      "mutated": false
+    },
+    {
+      "partition_id": "BT2",
+      "cell_id": "BT2-03",
+      "query_file": "queries/BT2-03.scopus-advanced.txt",
+      "sha256": "69e6018f64fad911b796d8f9a3fe5d66bd0064fb6b3d03d797470e3e6b3c45c6",
+      "bytes": 2930,
+      "mutated": false
+    }
+  ],
+  "browser": {
+    "launcher_read_only_check_artifact": "launcher-read-only-check-preflight.txt",
+    "cdp_endpoint": "http://127.0.0.1:9222",
+    "protocol_version": "1.3",
+    "runtime_browser": "Chrome/151.0.7922.174",
+    "runtime_version": "151.0.7922.174",
+    "disk_version": "151.0.7922.174",
+    "runtime_disk_versions_equal": true,
+    "page_target_count": 1,
+    "page_targets": [
+      {
+        "id": "C02CA183D7757FFA07F9FFE63511DE8B",
+        "type": "page",
+        "is_controller_anchor": true
+      }
+    ],
+    "controller_anchor_id": "C02CA183D7757FFA07F9FFE63511DE8B",
+    "controller_anchor_present": true,
+    "user_tab_mutation": false,
+    "browser_launch_or_restart": false
+  },
+  "power_and_sleep_protection": {
+    "ac_power": true,
+    "ac_idle_sleep_setting": "0",
+    "ac_idle_sleep_disabled": true,
+    "active_assertions": {
+      "PreventSystemSleep": "1",
+      "PreventUserIdleSystemSleep": "1",
+      "PreventUserIdleDisplaySleep": "1"
+    },
+    "controller_caffeinate_dims_wrapper_pid": "14069",
+    "controller_caffeinate_dims_wrapper_count": 1,
+    "active_prevent_system_sleep_assertion": true,
+    "source_commands_process_scoped_caffeinate_dims": true,
+    "controller_wrapper_verification_scope": "Observed active controller caffeinate -dims wrapper and matching PreventSystemSleep assertion; no subprocess ancestry inference."
+  },
+  "regression_baseline": {
+    "about_this_mac_log": "about-this-mac-baseline.log",
+    "query_terms": [
+      "_handleAppleEvent",
+      "AboutThisMac event received"
+    ]
+  },
+  "preflight_disposition": {
+    "ready_for_no_query_readiness_stress": true,
+    "reasons_if_not_ready": []
+  }
+}

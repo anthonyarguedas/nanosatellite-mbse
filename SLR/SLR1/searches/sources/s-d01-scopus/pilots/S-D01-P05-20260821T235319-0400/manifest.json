@@ -1,0 +1,212 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D01-P05-20260821T235319-0400",
+  "task_id": "S-D01",
+  "source_id": "scopus",
+  "method_type": "direct",
+  "status": "partial",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-21T23:53:19-04:00",
+  "ended_at": "2026-08-21T23:58:42-04:00",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "gpt-5.6-terra",
+    "human_supervisor": "pending"
+  },
+  "interface": {
+    "name": "Scopus current rendered Advanced Documents Search",
+    "url": "https://www.scopus.com/pages/search/publications?type=advanced",
+    "access_route": "local_loopback_CDP_adapter_owned_tab",
+    "authenticated": true,
+    "database_or_collection": "Scopus",
+    "platform": "Scopus",
+    "timezone": "UTC-04:00",
+    "authentication_status_limit": "P05 used the existing local browser context and did not enter credentials, sign in, or handle a challenge."
+  },
+  "executions": [
+    {
+      "execution_id": "P05-PREFLIGHT-01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Verify the supplied adapter and focused suite once; inspect local CDP, browser health, power, sleep protection, and the exact-window loginwindow baseline without user-tab mutation.",
+      "started_at": "2026-08-21T23:53:19-04:00",
+      "status": "partial_diagnostic",
+      "exact_query_or_operation": "Read only the script fingerprint, one focused offline suite result, local CDP version/list metadata, on-disk browser version, process/PM assertions, and loginwindow baseline. No Scopus query was issued during preflight.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "browser_launch": false,
+        "browser_daemon_start": false,
+        "user_tab_mutation": false,
+        "power_setting_change": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "pilots/S-D01-P05-20260821T235319-0400/preflight.json",
+        "pilots/S-D01-P05-20260821T235319-0400/focused-test.txt",
+        "pilots/S-D01-P05-20260821T235319-0400/about-this-mac-baseline.log"
+      ],
+      "notes": "The expected P04 anchor IDs were already absent at preflight, so their continuity cannot be verified in P05. No anchor was created, navigated, restarted, or closed."
+    },
+    {
+      "execution_id": "P05-A1-COUNT-01",
+      "partition_id": "A1",
+      "cell_id": "A1-01",
+      "purpose": "One fresh immutable A1 count-only retry under the supplied staged adapter.",
+      "started_at": "2026-08-21T23:56:06-04:00",
+      "status": "success",
+      "exact_query_or_operation": "One adapter execution of the immutable A1 source-native query identified by its tracked file and SHA-256; query text is retained only in the restricted saved artifact.",
+      "query_file": "queries/A1.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "mode": "count_only",
+        "limit": 10,
+        "max_pages": 1,
+        "full_abstract_action": "not_requested",
+        "query_sha256": "8fd3fb75d5e963df0d11a667bc865fac6aa611173dff266ba595f7e20667be88"
+      },
+      "source_reported_total": 4,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P05-20260821T235319-0400/a1-count-only.json",
+        ".searches/s-d01-scopus-restricted/S-D01-P05-20260821T235319-0400/a1-command.stderr.log"
+      ],
+      "notes": "The rendered count-only route succeeded: one page, exact total 4, zero retained records by design, and no output_metadata.error_stage field. The full saved artifact and complete command stderr were read."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P05-C-001",
+      "requirement": "Supplied staged adapter fingerprint and focused payload-sequence regression suite are verified before live use.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P05-20260821T235319-0400/preflight.json",
+        "pilots/S-D01-P05-20260821T235319-0400/focused-test.txt"
+      ],
+      "notes": "SHA matched 3f012831c62eca638635be69da9e3d4bcc78b2aa477b4e542a43d55dc2114e7e; the suite was run once and reported 21 passed."
+    },
+    {
+      "check_id": "P05-C-002",
+      "requirement": "One immutable A1 count-only retry returns a reconciled rendered source count.",
+      "partition_id": "A1",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P05-20260821T235319-0400/a1-count-only.json",
+        "pilots/S-D01-P05-20260821T235319-0400/adapter-and-regression-receipt.json"
+      ],
+      "notes": "Count-only status, exact total 4, one page, zero retained records, and no error stage were recorded."
+    },
+    {
+      "check_id": "P05-C-003",
+      "requirement": "No second Scopus query, fallback, user-tab operation, screening, candidate import, final event, sign-in, challenge handling, or full-text action occurs.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P05-20260821T235319-0400/manifest.json",
+        "pilots/S-D01-P05-20260821T235319-0400/observations.md",
+        "pilots/S-D01-P05-20260821T235319-0400/adapter-and-regression-receipt.json"
+      ],
+      "notes": "P05-A1-COUNT-01 was the sole live source command."
+    },
+    {
+      "check_id": "P05-C-004",
+      "requirement": "Exact-window loginwindow About This Mac regression check records zero new matching events.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P05-20260821T235319-0400/execution-window.json",
+        "pilots/S-D01-P05-20260821T235319-0400/about-this-mac-final-window.log"
+      ],
+      "notes": "Zero _handleAppleEvent or AboutThisMac event received lines from 2026-08-21T23:55:09-0400 through 2026-08-21T23:58:42-0400."
+    },
+    {
+      "check_id": "P05-C-005",
+      "requirement": "The two specified pre-existing anchor page IDs remain available before and after the retry.",
+      "status": "failed",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P05-20260821T235319-0400/preflight.json",
+        "pilots/S-D01-P05-20260821T235319-0400/postflight.json"
+      ],
+      "notes": "Both specified P04 anchor IDs were already absent before the A1 command and remained absent after it. P05 did not create or mutate either one; the absence prevents an anchor-continuity verification."
+    },
+    {
+      "check_id": "P05-C-006",
+      "requirement": "Runtime/disk browser equality, daemon absence, AC power, active caffeinate protection, no extra owned page after the adapter closes, and no actual Sleep/Wake markers are checked.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P05-20260821T235319-0400/preflight.json",
+        "pilots/S-D01-P05-20260821T235319-0400/postflight.json",
+        "pilots/S-D01-P05-20260821T235319-0400/sleep-wake-window.log"
+      ],
+      "notes": "Chrome remained 151.0.7922.174 at runtime and on disk; browser daemon remained absent; AC and caffeinate protection remained active; the final page-target list was empty as at preflight; no actual Sleep/Wake markers were found."
+    },
+    {
+      "check_id": "P05-C-007",
+      "requirement": "Corrected-adapter full retrieval, repeatability, pagination, exports, controlled-vocabulary behavior, all remaining partitions, BT2 union, S-C01, and P-001 are not accepted from this retry.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "pilots/S-D01-P05-20260821T235319-0400/observations.md",
+        "guideline.md"
+      ],
+      "notes": "A successful A1 count-only diagnostic is not a complete source run or acceptance evidence."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P05-20260821T235319-0400/manifest.json",
+      "role": "schema-conforming diagnostic manifest",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P05-20260821T235319-0400/observations.md",
+      "role": "dated P05 observations and stopping rationale",
+      "sha256": null,
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P05-20260821T235319-0400/adapter-and-regression-receipt.json",
+      "role": "rights-safe staged-adapter, successful A1, and regression receipt",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P05-20260821T235319-0400/evidence-index.json",
+      "role": "rights-safe P05 evidence inventory",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d01-scopus-restricted/S-D01-P05-20260821T235319-0400",
+      "role": "complete restricted A1 count-only artifact and command outputs",
+      "sha256": null,
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches/s-d01-scopus-restricted/S-D01-P05-20260821T235319-0400"
+    }
+  ],
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "The supplied staged adapter passed its focused suite and a fresh A1 count-only route returned exact total 4, so the P04 cold/stale failure was not reproduced. This remains diagnostic-only: no records were retained, no completeness/export/pagination evidence was obtained, and the expected pre-existing anchor IDs were absent before and after P05.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "A supervising human should first restore or verify the two intended pre-existing anchors without asking automation to create or mutate them, then review P05 before authorizing any separate browser-backed diagnostic scope; do not edit adapter code based on P04's non-reproduced generic failure."
+    ]
+  }
+}

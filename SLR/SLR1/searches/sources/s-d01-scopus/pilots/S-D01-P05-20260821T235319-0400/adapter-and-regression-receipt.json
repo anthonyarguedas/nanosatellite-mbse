@@ -1,0 +1,120 @@
+{
+  "artifact_version": "slr1-scopus-p05-adapter-and-regression-receipt/v1",
+  "pilot_id": "S-D01-P05-20260821T235319-0400",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "basis": "observed",
+  "adapter": {
+    "adapter_id": "search_scopus",
+    "script_sha256": "3f012831c62eca638635be69da9e3d4bcc78b2aa477b4e542a43d55dc2114e7e",
+    "expected_script_sha256": "3f012831c62eca638635be69da9e3d4bcc78b2aa477b4e542a43d55dc2114e7e",
+    "script_sha_matches_expected": true,
+    "focused_test": {
+      "artifact": "focused-test.txt",
+      "result": "21 passed in 0.04s",
+      "expected": "21 passed",
+      "status": "passed",
+      "run_count": 1
+    }
+  },
+  "input": {
+    "partition_id": "A1",
+    "cell_id": "A1-01",
+    "query_file": "queries/A1.scopus-advanced.txt",
+    "query_sha256": "8fd3fb75d5e963df0d11a667bc865fac6aa611173dff266ba595f7e20667be88",
+    "query_bytes": 2096,
+    "query_mutated": false
+  },
+  "preflight": {
+    "cdp_endpoint": "http://127.0.0.1:9222",
+    "cdp_protocol_version": "1.3",
+    "runtime_browser": "Chrome/151.0.7922.174",
+    "disk_browser_version": "151.0.7922.174",
+    "runtime_disk_versions_equal": true,
+    "expected_anchor_page_ids": [
+      "7B621E45F2FEF186E84F410B917A89E0",
+      "1727BDDC892F887D89AF0DBDE4B072C9"
+    ],
+    "observed_page_ids_before": [],
+    "expected_anchors_present_before": false,
+    "browser_harness_daemon_absent": true,
+    "ac_power_before": true,
+    "active_caffeinate_dims_wrapper": true,
+    "active_prevent_system_sleep_assertion": true
+  },
+  "a1_count_only": {
+    "execution_id": "P05-A1-COUNT-01",
+    "started_at_local": "2026-08-21T23:56:06-0400",
+    "started_at_utc": "2026-08-22T03:56:06Z",
+    "ended_at_local": "2026-08-21T23:56:19-0400",
+    "ended_at_utc": "2026-08-22T03:56:19Z",
+    "exit_code": 0,
+    "controls": {
+      "mode": "count_only",
+      "limit": 10,
+      "max_pages": 1,
+      "full_abstract_action": "not_requested"
+    },
+    "status": "count_only",
+    "completion_status": "count_only",
+    "source_reported_total": 4,
+    "total_is_exact": true,
+    "pages_retrieved": 1,
+    "source_entries_seen": 4,
+    "records_retrieved": 0,
+    "partial_prefix_retained": false,
+    "output_metadata_error_stage": null,
+    "output_metadata_error_type": null,
+    "error_stage_status": "not_applicable_success_field_absent",
+    "restricted_artifact": ".searches/s-d01-scopus-restricted/S-D01-P05-20260821T235319-0400/a1-count-only.json",
+    "restricted_artifact_sha256": "1192e2261dac281468c95daca7b007859d9985dcb02003aa5a2bee61d2cb8093",
+    "restricted_artifact_bytes": 32958,
+    "command_stdout": ".searches/s-d01-scopus-restricted/S-D01-P05-20260821T235319-0400/a1-command.stdout.json",
+    "command_stdout_sha256": "1192e2261dac281468c95daca7b007859d9985dcb02003aa5a2bee61d2cb8093",
+    "command_stdout_bytes": 32958,
+    "command_stderr": ".searches/s-d01-scopus-restricted/S-D01-P05-20260821T235319-0400/a1-command.stderr.log",
+    "command_stderr_sha256": "dad8f8dc13e75ac4167d6a95d4f4df979b838f460d6ea9227418f1a13586248b",
+    "command_stderr_bytes": 232,
+    "saved_artifact_read_in_full": true,
+    "command_stderr_read_in_full": true
+  },
+  "about_this_mac_regression": {
+    "execution_window_start_local": "2026-08-21T23:55:09-0400",
+    "execution_window_start_utc": "2026-08-22T03:55:09Z",
+    "execution_window_end_local": "2026-08-21T23:58:42-0400",
+    "execution_window_end_utc": "2026-08-22T03:58:42Z",
+    "log_process": "loginwindow",
+    "query_terms": [
+      "_handleAppleEvent",
+      "AboutThisMac event received"
+    ],
+    "baseline_matching_lines": 0,
+    "final_window_matching_lines": 0,
+    "result": "no_new_about_this_mac_event_observed"
+  },
+  "postflight": {
+    "observed_page_ids_after": [],
+    "expected_anchors_preserved": false,
+    "missing_anchor_page_ids": [
+      "7B621E45F2FEF186E84F410B917A89E0",
+      "1727BDDC892F887D89AF0DBDE4B072C9"
+    ],
+    "no_non_anchor_page_target_remains": true,
+    "runtime_disk_versions_equal": true,
+    "browser_harness_daemon_absent": true,
+    "ac_power_after": true,
+    "active_caffeinate_dims_wrapper": true,
+    "actual_sleep_or_wake_event_observed": false,
+    "sleep_wake_result": "no_matching_actual_sleep_or_wake_event_observed"
+  },
+  "stopping_rule": {
+    "live_scopus_query_count": 1,
+    "second_scopus_query_executed": false,
+    "reason": "P05 was explicitly limited to one immutable A1 count-only command regardless of outcome."
+  },
+  "assessment": {
+    "cold_or_stale_p04_failure_reproduced": false,
+    "code_issue": "false",
+    "reason": "The expected staged adapter SHA and 21-test focused suite passed, and the sole fresh immutable A1 count-only route reconciled exact total 4 without an error stage. P05 supplies no evidence of a code defect and does not justify a code edit.",
+    "next_action": "A supervising human should restore or verify the intended pre-existing anchors without automated mutation, then review P05 before authorizing any separate diagnostic scope."
+  }
+}

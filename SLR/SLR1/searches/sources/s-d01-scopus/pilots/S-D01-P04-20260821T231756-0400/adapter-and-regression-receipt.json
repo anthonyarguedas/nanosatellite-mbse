@@ -1,0 +1,96 @@
+{
+  "artifact_version": "slr1-scopus-p04-adapter-and-regression-receipt/v1",
+  "pilot_id": "S-D01-P04-20260821T231756-0400",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "basis": "observed",
+  "adapter": {
+    "adapter_id": "search_scopus",
+    "script_sha256": "da7c56065d8a3caa0f987134bd8415ee7e24d6dd2d40a9ad51808f5fbedc750c",
+    "expected_script_sha256": "da7c56065d8a3caa0f987134bd8415ee7e24d6dd2d40a9ad51808f5fbedc750c",
+    "script_sha_matches_expected": true,
+    "focused_test": {
+      "artifact": "focused-test.txt",
+      "result": "17 passed in 0.03s",
+      "status": "passed"
+    }
+  },
+  "input": {
+    "partition_id": "A1",
+    "cell_id": "A1-01",
+    "query_file": "queries/A1.scopus-advanced.txt",
+    "query_sha256": "8fd3fb75d5e963df0d11a667bc865fac6aa611173dff266ba595f7e20667be88",
+    "query_bytes": 2096,
+    "query_mutated": false
+  },
+  "preflight": {
+    "cdp_endpoint": "http://127.0.0.1:9222",
+    "cdp_protocol_version": "1.3",
+    "runtime_browser": "Chrome/151.0.7922.174",
+    "disk_browser_version": "151.0.7922.174",
+    "runtime_disk_versions_equal": true,
+    "preexisting_anchor_page_ids": [
+      "7B621E45F2FEF186E84F410B917A89E0",
+      "1727BDDC892F887D89AF0DBDE4B072C9"
+    ],
+    "browser_harness_daemon_absent": true,
+    "ac_power_before": true,
+    "active_caffeinate_prevent_system_sleep_assertion": true
+  },
+  "a1_count_only": {
+    "execution_id": "P04-A1-COUNT-01",
+    "started_at_local": "2026-08-21T23:23:47-04:00",
+    "started_at_utc": "2026-08-22T03:23:47Z",
+    "ended_at_local": "2026-08-21T23:23:49-04:00",
+    "ended_at_utc": "2026-08-22T03:23:49Z",
+    "controls": {
+      "mode": "count_only",
+      "limit": 10,
+      "max_pages": 1,
+      "full_abstract_action": "not_requested"
+    },
+    "status": "failed",
+    "error_type": "ScopusRequestError",
+    "source_reported_total": null,
+    "total_is_exact": false,
+    "pages_retrieved": 0,
+    "records_retrieved": 0,
+    "partial_prefix_retained": false,
+    "restricted_artifact": ".searches/s-d01-scopus-restricted/S-D01-P04-20260821T231756-0400/a1-count-only.json",
+    "restricted_artifact_sha256": "7deaff1d2747616708a57a31acef80cceef102764b9a9fc6954cfb302ace49c1",
+    "restricted_artifact_bytes": 31636,
+    "saved_artifact_read_in_full": true
+  },
+  "about_this_mac_regression": {
+    "execution_window_start_local": "2026-08-21T23:23:24-04:00",
+    "execution_window_start_utc": "2026-08-22T03:23:24Z",
+    "execution_window_end_local": "2026-08-21T23:25:28-04:00",
+    "execution_window_end_utc": "2026-08-22T03:25:28Z",
+    "log_process": "loginwindow",
+    "query_terms": [
+      "_handleAppleEvent",
+      "AboutThisMac event received"
+    ],
+    "baseline_matching_lines": 0,
+    "post_a1_matching_lines": 0,
+    "final_window_matching_lines": 0,
+    "result": "no_new_about_this_mac_event_observed"
+  },
+  "postflight": {
+    "anchors_preserved": true,
+    "adapter_owned_or_other_non_anchor_page_remaining": false,
+    "runtime_disk_versions_equal": true,
+    "power_source_changed": false,
+    "actual_sleep_or_wake_event_observed": false
+  },
+  "stopping_rule": {
+    "bt2_03_executed": false,
+    "reason": "The required fresh A1 count-only execution failed before a reconciled source result, so no further live source query was permitted."
+  },
+  "assessment": {
+    "keyboard_side_effect_regression": "not_observed_in_the_exact_logged_execution_window",
+    "source_route_failure_cause": "unknown",
+    "code_issue": "unresolved",
+    "code_fix_subagent_needed_now": false,
+    "reason": "The corrected payload regression suite passed and the required loginwindow test found zero new AboutThisMac events, but the fresh A1 route again ended as a generic ScopusRequestError. The restricted artifact does not distinguish source/UI/access/transient behavior from an adapter-stage defect."
+  }
+}

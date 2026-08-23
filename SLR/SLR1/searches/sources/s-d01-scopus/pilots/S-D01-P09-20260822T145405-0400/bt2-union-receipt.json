@@ -1,0 +1,79 @@
+{
+  "artifact_version": "slr1-scopus-p09-bt2-union-receipt/v1",
+  "pilot_id": "S-D01-P09-20260822T145405-0400",
+  "basis": "observed",
+  "union_operator": "OR",
+  "canonical_stable_identity_method": "adapter-normalized Scopus publication identity cross-checked against its canonical publication path; identities and paths remain only in the restricted reconciliation.",
+  "controls": {
+    "limit": 20,
+    "max_pages": 2,
+    "timeout_seconds": 60,
+    "page_delay_seconds": 1,
+    "full_abstract_action": "skipped_by_assigned_BT2_capture_method",
+    "adapter_owned_page_only": true
+  },
+  "cells": [
+    {
+      "cell_id": "BT2-01",
+      "query_sha256": "8e86710423684bd58e151a44b44504dd7338e1330f2dfaec59e921ff6ed75bed",
+      "source_reported_total": 2,
+      "pages_retrieved": 1,
+      "records_retrieved": 2,
+      "completion_status": "complete",
+      "restricted_artifact": ".searches/s-d01-scopus-restricted/S-D01-P09-20260822T145405-0400/bt2-01-records.json",
+      "restricted_artifact_sha256": "15c218948f544197a4567b3b5f1e9eb5fbf6ab3c3823f6abfa829f9af7abf4fb",
+      "restricted_artifact_bytes": 44952
+    },
+    {
+      "cell_id": "BT2-02",
+      "query_sha256": "d45d660e4029cf85b44ec8079b931642052622857beb924b931d2c9cf8f910dd",
+      "source_reported_total": 3,
+      "pages_retrieved": 1,
+      "records_retrieved": 3,
+      "completion_status": "complete",
+      "restricted_artifact": ".searches/s-d01-scopus-restricted/S-D01-P09-20260822T145405-0400/bt2-02-records.json",
+      "restricted_artifact_sha256": "93a580dcd555967f1364d3e0492367ff27be99ca4091bd2b80d6c8d818c1b5f8",
+      "restricted_artifact_bytes": 51118
+    },
+    {
+      "cell_id": "BT2-03",
+      "query_sha256": "69e6018f64fad911b796d8f9a3fe5d66bd0064fb6b3d03d797470e3e6b3c45c6",
+      "source_reported_total": 0,
+      "pages_retrieved": 1,
+      "records_retrieved": 0,
+      "completion_status": "explicit_zero_count_only",
+      "reused_pilot_id": "S-D01-P08-20260822T142211-0400",
+      "restricted_artifact": ".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400/bt2-03-explicit-zero-count-only.json",
+      "restricted_artifact_sha256": "aa697dc88b28e95ffc4e939874a81fb34b9281192de77f06cc4136f8ba423b4f",
+      "restricted_artifact_bytes": 40646,
+      "explicit_zero_verified": true
+    },
+    {
+      "cell_id": "BT2-04",
+      "query_sha256": "de8cfd182adab259e24b0248bd24480f6e75efd34b84447159b820fbb766fef9",
+      "source_reported_total": 4,
+      "pages_retrieved": 1,
+      "records_retrieved": 4,
+      "completion_status": "complete",
+      "restricted_artifact": ".searches/s-d01-scopus-restricted/S-D01-P09-20260822T145405-0400/bt2-04-records.json",
+      "restricted_artifact_sha256": "6542cd4901fbd94cf29984ed82f84b4504edb28e57bc82cd791f2aad8d04ed86",
+      "restricted_artifact_bytes": 53974
+    }
+  ],
+  "reconciliation": {
+    "restricted_reconciliation": ".searches/s-d01-scopus-restricted/S-D01-P09-20260822T145405-0400/bt2-union-reconciliation.json",
+    "restricted_reconciliation_sha256": "dc6fd4eecf355479e7609d4d2b238b0a7e63e63d5400a2829eeab98a50eb6b86",
+    "occurrence_count": 9,
+    "union_count": 9,
+    "duplicate_occurrence_count": 0,
+    "canonical_identity_set_sha256": "d3e430bf2bb9f8239a6c9f687fe8b27a12bcf44a86fb0d3ac7fbc35224dd944f",
+    "overlap_matrix": {
+      "BT2-01": {"BT2-01": 2, "BT2-02": 0, "BT2-03": 0, "BT2-04": 0},
+      "BT2-02": {"BT2-01": 0, "BT2-02": 3, "BT2-03": 0, "BT2-04": 0},
+      "BT2-03": {"BT2-01": 0, "BT2-02": 0, "BT2-03": 0, "BT2-04": 0},
+      "BT2-04": {"BT2-01": 0, "BT2-02": 0, "BT2-03": 0, "BT2-04": 4}
+    }
+  },
+  "conclusion": "The four validated cells reconcile to a complete diagnostic OR union of nine unique source records. Do not sum cells for a final run; preserve per-cell discovery provenance and redo the required final two-pass completeness procedure.",
+  "claim_limit": "This is diagnostic-only; no record, identity, title, abstract, candidate import, screening decision, or final-event data is retained in this tracked receipt."
+}

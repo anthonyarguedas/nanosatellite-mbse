@@ -1,0 +1,206 @@
+P08 adapter dirty-worktree verification
+captured_at_local=2026-08-22T14:24:17-0400
+captured_at_utc=2026-08-22T18:24:17Z
+--- git status --short ---
+ M academic-research/skills/academic-search/scripts/search_scopus.py
+ M academic-research/skills/academic-search/tests/test_search_scopus_browser.py
+--- git diff --name-only ---
+academic-research/skills/academic-search/scripts/search_scopus.py
+academic-research/skills/academic-search/tests/test_search_scopus_browser.py
+--- git diff --check ---
+--- sha256 ---
+edec4799e3e431d14d62d64d297ec03943e9b1ae829007df01a8bae830228b56  /Users/antho/agent-tools/academic-research/skills/academic-search/scripts/search_scopus.py
+32882b22681db751cb1648df35173f3ae70c4b919b95d41a817b383c08dfca23  /Users/antho/agent-tools/academic-research/skills/academic-search/tests/test_search_scopus_browser.py
+--- diff sha256 (binary-safe complete worktree diff) ---
+2a8e8b930edcc4682cbee5deabd07f32b48b2ed7e8de46b274266c43e687a163  -
+--- complete diff ---
+diff --git a/academic-research/skills/academic-search/scripts/search_scopus.py b/academic-research/skills/academic-search/scripts/search_scopus.py
+index 66bf0d2..f3aa0b5 100644
+--- a/academic-research/skills/academic-search/scripts/search_scopus.py
++++ b/academic-research/skills/academic-search/scripts/search_scopus.py
+@@ -1176,6 +1176,20 @@ async def _form_state(page: Any) -> dict[str, Any]:
+     return payload
+ 
+ 
++def _form_readiness_page_closed_or_disconnected(page: Any) -> bool:
++    """Detect terminal local-browser loss without examining provider errors."""
++    try:
++        is_closed = getattr(page, "is_closed", None)
++        if callable(is_closed) and is_closed():
++            return True
++        context = getattr(page, "context", None)
++        browser = getattr(context, "browser", None)
++        is_connected = getattr(browser, "is_connected", None)
++        return bool(callable(is_connected) and is_connected() is False)
++    except Exception:  # noqa: BLE001 - an optional liveness probe must not mask the error.
++        return False
++
++
+ def _raise_for_form_access(payload: dict[str, Any]) -> None:
+     for name in ("blocked", "requiresLogin", "syntaxError"):
+         if not isinstance(payload.get(name), bool):
+@@ -1225,22 +1239,49 @@ def parse_scopus_form_state(payload: Any) -> bool:
+ 
+ async def wait_for_advanced_form(page: Any, timeout_seconds: float) -> None:
+     """Wait for native controls, passively allowing a challenge to clear."""
+-    deadline = asyncio.get_running_loop().time() + timeout_seconds
++    loop = asyncio.get_running_loop()
++    deadline = loop.time() + timeout_seconds
+     last_challenge_payload: dict[str, Any] | None = None
++    last_inspection_error: ScopusRequestError | None = None
+     while True:
+-        payload = await _form_state(page)
+-        challenge_visible = is_transient_access_challenge(payload, "blocked")
+-        if challenge_visible:
+-            last_challenge_payload = payload
+-        else:
+-            # A cleared challenge must not turn a later ordinary readiness
+-            # timeout into an access failure.
+-            last_challenge_payload = None
+-            if parse_scopus_form_state(payload):
+-                return
+-        if asyncio.get_running_loop().time() >= deadline:
++        challenge_visible = False
++        remaining = deadline - loop.time()
++        if remaining > 0:
++            try:
++                # A navigation can briefly destroy the JavaScript execution
++                # context after domcontentloaded. Retrying this passive state
++                # inspection does not submit, click, reload, or retry a query.
++                payload = await asyncio.wait_for(_form_state(page), timeout=remaining)
++            except asyncio.TimeoutError as error:
++                if _form_readiness_page_closed_or_disconnected(page):
++                    raise ScopusBrowserError(
++                        "Scopus browser disconnected during form readiness"
++                    ) from error
++                last_inspection_error = ScopusRequestError(
++                    "Scopus Advanced Search form state inspection timed out"
++                )
++            except ScopusRequestError as error:
++                if _form_readiness_page_closed_or_disconnected(page):
++                    raise ScopusBrowserError(
++                        "Scopus browser disconnected during form readiness"
++                    ) from error
++                last_inspection_error = error
++            else:
++                last_inspection_error = None
++                challenge_visible = is_transient_access_challenge(payload, "blocked")
++                if challenge_visible:
++                    last_challenge_payload = payload
++                else:
++                    # A cleared challenge must not turn a later ordinary readiness
++                    # timeout into an access failure.
++                    last_challenge_payload = None
++                    if parse_scopus_form_state(payload):
++                        return
++        if loop.time() >= deadline:
+             if last_challenge_payload is not None:
+                 _raise_for_form_access(last_challenge_payload)
++            if last_inspection_error is not None:
++                raise last_inspection_error
+             raise ScopusRequestError("Scopus Advanced Search form did not become ready in time")
+         await sleep_for_browser_state_poll(
+             deadline,
+diff --git a/academic-research/skills/academic-search/tests/test_search_scopus_browser.py b/academic-research/skills/academic-search/tests/test_search_scopus_browser.py
+index ad60ec2..9f5c0ef 100644
+--- a/academic-research/skills/academic-search/tests/test_search_scopus_browser.py
++++ b/academic-research/skills/academic-search/tests/test_search_scopus_browser.py
+@@ -8,6 +8,7 @@ import json
+ import sys
+ import unittest
+ from pathlib import Path
++from unittest import mock
+ 
+ SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
+ 
+@@ -413,6 +414,85 @@ class ScopusBrowserPureTests(unittest.TestCase):
+         with self.assertRaises(scopus.ScopusAccessError):
+             scopus.parse_scopus_form_state(current_form_payload(blocked=True))
+ 
++    def test_form_readiness_retries_one_transient_state_inspection_error(self):
++        class Page:
++            def __init__(self) -> None:
++                self.calls = 0
++
++            async def evaluate(self, *_args: object) -> dict:
++                self.calls += 1
++                if self.calls == 1:
++                    raise RuntimeError("transient navigation context")
++                return current_form_payload()
++
++        async def no_sleep(*_args: object, **_kwargs: object) -> None:
++            return None
++
++        page = Page()
++        with mock.patch.object(scopus, "sleep_for_browser_state_poll", no_sleep):
++            asyncio.run(scopus.wait_for_advanced_form(page, 1))
++        self.assertEqual(page.calls, 2)
++
++    def test_form_readiness_persistent_inspection_error_is_bounded_and_staged(self):
++        class Page:
++            def __init__(self) -> None:
++                self.calls = 0
++
++            async def evaluate(self, *_args: object) -> dict:
++                self.calls += 1
++                raise RuntimeError("transient navigation context")
++
++        async def wait(page: Page) -> None:
++            await scopus._run_at_error_stage(
++                scopus.ERROR_STAGE_FORM_READINESS,
++                scopus.wait_for_advanced_form(page, 0.02),
++            )
++
++        page = Page()
++        with self.assertRaises(scopus.ScopusRequestError) as raised:
++            asyncio.run(wait(page))
++        self.assertGreaterEqual(page.calls, 1)
++        self.assertEqual(raised.exception.error_stage, scopus.ERROR_STAGE_FORM_READINESS)
++
++    def test_form_readiness_closed_or_disconnected_page_fails_as_browser_error(self):
++        class Browser:
++            def __init__(self, connected: bool) -> None:
++                self.connected = connected
++
++            def is_connected(self) -> bool:
++                return self.connected
++
++        class Context:
++            def __init__(self, connected: bool) -> None:
++                self.browser = Browser(connected)
++
++        class Page:
++            def __init__(self, *, closed: bool, connected: bool) -> None:
++                self.calls = 0
++                self.closed = closed
++                self.context = Context(connected)
++
++            def is_closed(self) -> bool:
++                return self.closed
++
++            async def evaluate(self, *_args: object) -> dict:
++                self.calls += 1
++                raise RuntimeError("browser closed")
++
++        async def wait(page: Page) -> None:
++            await scopus._run_at_error_stage(
++                scopus.ERROR_STAGE_FORM_READINESS,
++                scopus.wait_for_advanced_form(page, 1),
++            )
++
++        for closed, connected in ((True, True), (False, False)):
++            with self.subTest(closed=closed, connected=connected):
++                page = Page(closed=closed, connected=connected)
++                with self.assertRaises(scopus.ScopusBrowserError) as raised:
++                    asyncio.run(wait(page))
++                self.assertEqual(page.calls, 1)
++                self.assertEqual(raised.exception.error_stage, scopus.ERROR_STAGE_FORM_READINESS)
++
+     def test_current_rendered_rows_require_route_range_selection_identity_and_panels(self):
+         payload = page_payload(
+             total=2,
+--- assertions ---
+expected_changed_paths=exact_match
+expected_script_sha256=exact_match
+diff_check=passed
+reviewed_patch_scope=passive_form_state_inspection_retry_and_terminal_page_or_browser_loss_plus_three_focused_tests

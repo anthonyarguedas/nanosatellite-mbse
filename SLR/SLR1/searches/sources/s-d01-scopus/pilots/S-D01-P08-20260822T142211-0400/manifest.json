@@ -1,0 +1,315 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D01-P08-20260822T142211-0400",
+  "task_id": "S-D01",
+  "source_id": "scopus",
+  "method_type": "direct",
+  "status": "partial",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-22T14:23:56-04:00",
+  "ended_at": "2026-08-22T14:39:26-04:00",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "openai-codex/gpt-5.6-terra",
+    "human_supervisor": "pending"
+  },
+  "interface": {
+    "name": "Scopus current rendered Advanced Documents Search",
+    "url": "https://www.scopus.com/pages/search/publications?type=advanced",
+    "access_route": "local_loopback_CDP_adapter_owned_tab",
+    "authenticated": true,
+    "database_or_collection": "Scopus",
+    "platform": "Scopus",
+    "timezone": "UTC-04:00",
+    "authentication_status_limit": "P08 used the existing authorized local browser context; it entered no credentials and did not perform sign-in or challenge handling."
+  },
+  "executions": [
+    {
+      "execution_id": "P08-PREFLIGHT-01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Verify patch/test state, browser health, anchor, version equality, AC, and controller sleep assertions without a source query.",
+      "started_at": "2026-08-22T14:24:17-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Read-only adapter, launcher, CDP, power, assertion, and target metadata.",
+      "query_file": null,
+      "fields": [],
+      "controls": {"query_submission": false, "browser_launch": false, "browser_restart": false, "user_tab_mutation": false},
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "pilots/S-D01-P08-20260822T142211-0400/preflight.json",
+        "pilots/S-D01-P08-20260822T142211-0400/focused-test.txt"
+      ],
+      "notes": "Expected patched SHA and exact two-file diff verified; focused suite ran once and passed 24 tests with two subtests."
+    },
+    {
+      "execution_id": "P08-READINESS-STRESS-01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded sequential no-query patched-adapter form-readiness stress.",
+      "started_at": "2026-08-22T14:30:18-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Ten repetitions of open connection -> owned page -> navigate -> wait_for_advanced_form; no query submission.",
+      "query_file": null,
+      "fields": ["current Advanced Search form controls only"],
+      "controls": {"passes": 10, "timeout_seconds": 60, "query_submission": false, "adapter_owned_tab": true, "user_tab_mutation": false},
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400/readiness-stress.json"],
+      "notes": "10/10 passed; no controlled error; controller anchor preserved before and after every pass."
+    },
+    {
+      "execution_id": "P08-A1-RECORD-01",
+      "partition_id": "A1",
+      "cell_id": "A1-01",
+      "purpose": "Complete native-full-abstract A1 pass 1.",
+      "started_at": "2026-08-22T14:31:47-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Adapter execution of immutable A1 source-native query identified by file and SHA-256.",
+      "query_file": "queries/A1.scopus-advanced.txt",
+      "fields": ["TITLE-ABS-KEY", "native rendered abstract panels"],
+      "controls": {"limit": 20, "max_pages": 2, "timeout_seconds": 60, "page_delay_seconds": 1, "full_abstract_action": "native_show_all_abstracts"},
+      "source_reported_total": 4,
+      "total_is_exact": true,
+      "records_retrieved": 4,
+      "artifact_paths": [".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400/a1-full-abstracts-pass-1.json"],
+      "notes": "One page; four native full abstracts; complete bounded reconciliation."
+    },
+    {
+      "execution_id": "P08-A1-RECORD-02",
+      "partition_id": "A1",
+      "cell_id": "A1-01",
+      "purpose": "Complete native-full-abstract A1 pass 2.",
+      "started_at": "2026-08-22T14:32:56-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Adapter execution of immutable A1 source-native query identified by file and SHA-256.",
+      "query_file": "queries/A1.scopus-advanced.txt",
+      "fields": ["TITLE-ABS-KEY", "native rendered abstract panels"],
+      "controls": {"limit": 20, "max_pages": 2, "timeout_seconds": 60, "page_delay_seconds": 1, "full_abstract_action": "native_show_all_abstracts"},
+      "source_reported_total": 4,
+      "total_is_exact": true,
+      "records_retrieved": 4,
+      "artifact_paths": [".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400/a1-full-abstracts-pass-2.json"],
+      "notes": "One page; four native full abstracts; complete bounded reconciliation and matching ordered stable-identity sequence."
+    },
+    {
+      "execution_id": "P08-A2-PAGINATION-01",
+      "partition_id": "A2",
+      "cell_id": "A2-01",
+      "purpose": "Complete pagination A2 pass 1 with full abstracts intentionally skipped.",
+      "started_at": "2026-08-22T14:34:33-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Adapter execution of immutable A2 source-native query identified by file and SHA-256.",
+      "query_file": "queries/A2.scopus-advanced.txt",
+      "fields": ["TITLE-ABS-KEY"],
+      "controls": {"limit": 20, "max_pages": 2, "timeout_seconds": 60, "page_delay_seconds": 1, "full_abstract_action": "skipped"},
+      "source_reported_total": 14,
+      "total_is_exact": true,
+      "records_retrieved": 14,
+      "artifact_paths": [".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400/a2-pagination-pass-1.json"],
+      "notes": "Two pages; complete bounded reconciliation."
+    },
+    {
+      "execution_id": "P08-A2-PAGINATION-02",
+      "partition_id": "A2",
+      "cell_id": "A2-01",
+      "purpose": "Equivalent complete pagination A2 pass 2 with full abstracts intentionally skipped.",
+      "started_at": "2026-08-22T14:35:46-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Adapter execution of immutable A2 source-native query identified by file and SHA-256.",
+      "query_file": "queries/A2.scopus-advanced.txt",
+      "fields": ["TITLE-ABS-KEY"],
+      "controls": {"limit": 20, "max_pages": 2, "timeout_seconds": 60, "page_delay_seconds": 1, "full_abstract_action": "skipped"},
+      "source_reported_total": 14,
+      "total_is_exact": true,
+      "records_retrieved": 14,
+      "artifact_paths": [".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400/a2-pagination-pass-2.json"],
+      "notes": "Two pages; complete bounded reconciliation and matching ordered stable-identity sequence."
+    },
+    {
+      "execution_id": "P08-BT2-03-ZERO-01",
+      "partition_id": "BT2",
+      "cell_id": "BT2-03",
+      "purpose": "Count-only explicit-zero verification.",
+      "started_at": "2026-08-22T14:37:00-04:00",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "Adapter execution of immutable BT2-03 source-native query identified by file and SHA-256.",
+      "query_file": "queries/BT2-03.scopus-advanced.txt",
+      "fields": ["TITLE-ABS-KEY"],
+      "controls": {"limit": 20, "max_pages": 2, "timeout_seconds": 60, "page_delay_seconds": 1, "count_only": true},
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400/bt2-03-explicit-zero-count-only.json"],
+      "notes": "Native explicit zero; no records or partial prefix retained."
+    },
+    {
+      "execution_id": "P08-POSTFLIGHT-01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Read-only postflight anchor/version/power/marker verification.",
+      "started_at": "2026-08-22T14:39:26-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Read-only local launcher, CDP, power/assertion, and exact-window system marker checks.",
+      "query_file": null,
+      "fields": [],
+      "controls": {"query_submission": false, "browser_launch": false, "browser_restart": false, "user_tab_mutation": false},
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "pilots/S-D01-P08-20260822T142211-0400/postflight.json",
+        "pilots/S-D01-P08-20260822T142211-0400/execution-window.json"
+      ],
+      "notes": "Anchor remained the sole page target; no actual Sleep/Wake or About This Mac marker was observed."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P08-C-001",
+      "requirement": "Expected patched adapter SHA, exact authorized two-file dirty diff, and one focused suite are verified before live use.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P08-20260822T142211-0400/adapter-diff-verification.txt",
+        "pilots/S-D01-P08-20260822T142211-0400/focused-test.txt",
+        "pilots/S-D01-P08-20260822T142211-0400/preflight.json"
+      ],
+      "notes": "SHA matched; only the reviewed adapter/test paths were dirty; diff check passed; 24 focused tests and two subtests passed once."
+    },
+    {
+      "check_id": "P08-C-002",
+      "requirement": "Patched adapter readiness is stable through no-query owned-tab form readiness.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["pilots/S-D01-P08-20260822T142211-0400/adapter-and-stability-receipt.json"],
+      "notes": "Ten sequential passes were ready; no query was submitted; every pass preserved the anchor."
+    },
+    {
+      "check_id": "P08-C-003",
+      "requirement": "A1 native-full-abstract repeatability and ordered stable identity are validated.",
+      "partition_id": "A1",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["pilots/S-D01-P08-20260822T142211-0400/identity-and-repeatability-receipt.json"],
+      "notes": "Two complete four-record one-page passes had matching exact totals and ordered identity hashes, with four native full abstracts each."
+    },
+    {
+      "check_id": "P08-C-004",
+      "requirement": "A2 multi-page repeatability and ordered stable identity are validated.",
+      "partition_id": "A2",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["pilots/S-D01-P08-20260822T142211-0400/identity-and-repeatability-receipt.json"],
+      "notes": "Two complete fourteen-record two-page passes had matching exact totals and ordered identity hashes; abstracts were intentionally skipped."
+    },
+    {
+      "check_id": "P08-C-005",
+      "requirement": "A native explicit no-results state is accepted only as zero.",
+      "partition_id": "BT2",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["pilots/S-D01-P08-20260822T142211-0400/identity-and-repeatability-receipt.json"],
+      "notes": "BT2-03 completed as total zero with zero retained records and no partial prefix."
+    },
+    {
+      "check_id": "P08-C-006",
+      "requirement": "Anchor, runtime/disk equality, AC power, caffeinate assertion, Sleep/Wake markers, and About This Mac markers are recorded.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P08-20260822T142211-0400/preflight.json",
+        "pilots/S-D01-P08-20260822T142211-0400/postflight.json",
+        "pilots/S-D01-P08-20260822T142211-0400/execution-window.json"
+      ],
+      "notes": "The anchor remained sole; versions matched; AC and PreventSystemSleep remained active; zero actual markers were found."
+    },
+    {
+      "check_id": "P08-C-007",
+      "requirement": "No screening, candidate import, final event, source fallback, full text, sign-in, challenge action, access bypass, or user-tab mutation occurs.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "pilots/S-D01-P08-20260822T142211-0400/manifest.json",
+        "pilots/S-D01-P08-20260822T142211-0400/observations.md"
+      ],
+      "notes": "Only P08's five authorized source diagnostics and one no-query stress check ran; record-bearing files are restricted."
+    },
+    {
+      "check_id": "P08-C-008",
+      "requirement": "Export/cap behavior, controlled vocabulary, W/n counting, every planned cell and BT2 union remain distinct from this pilot.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": ["guideline.md", "translation-spec.json"],
+      "notes": "P08 did not test or accept these outstanding requirements."
+    },
+    {
+      "check_id": "P08-C-009",
+      "requirement": "S-C01, P-001, S-002, P-001-dependent limits, and source-method acceptance remain separate.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": ["SLR/SLR1/TASKS.md", "guideline.md"],
+      "notes": "No semantic or protocol change is proposed and no final event is authorized."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P08-20260822T142211-0400/manifest.json",
+      "role": "schema-valid partial diagnostic manifest",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P08-20260822T142211-0400/observations.md",
+      "role": "dated P08 observations",
+      "sha256": null,
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P08-20260822T142211-0400/identity-and-repeatability-receipt.json",
+      "role": "rights-safe counts and identity-hash receipt",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P08-20260822T142211-0400/adapter-and-stability-receipt.json",
+      "role": "rights-safe patch, test, readiness, and live execution receipt",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P08-20260822T142211-0400/evidence-index.json",
+      "role": "rights-safe evidence inventory",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400",
+      "role": "complete restricted P08 raw adapter outputs, stdout, stderr, command metadata, and no-query stress evidence",
+      "sha256": null,
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches/s-d01-scopus-restricted/S-D01-P08-20260822T142211-0400"
+    }
+  ],
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "P08 provides bounded current patched-adapter readiness, A1 native-abstract repeatability, A2 two-page repeatability, and BT2-03 explicit-zero evidence with preserved browser safety controls. It does not satisfy outstanding export/cap, controlled-vocabulary, W/n, all-cell, S-C01, P-001, S-002, or human-acceptance requirements.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Review restricted P08 captures and receipts before relying on this bounded stability evidence.",
+      "Do not treat P08 as proof that P06 is explained or that all intermittent failures are eliminated.",
+      "Resolve export/cap behavior, export-to-identity reconciliation, controlled-vocabulary scope/hierarchy, W/n counting, all planned cells/BT2 union, S-C01, P-001, and S-002 before source-method acceptance or any final event."
+    ]
+  }
+}

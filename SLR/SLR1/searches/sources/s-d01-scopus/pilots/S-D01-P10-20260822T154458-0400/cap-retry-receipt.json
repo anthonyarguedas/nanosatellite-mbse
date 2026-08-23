@@ -1,0 +1,71 @@
+{
+  "artifact_version": "slr1-scopus-p10-cap-retry-receipt/v1",
+  "pilot_id": "S-D01-P10-20260822T154458-0400",
+  "basis": "observed",
+  "execution_id": "P10-CAP-COUNT-ONLY-01",
+  "diagnostic_query_label": "TITLE-ABS-KEY(\"CubeSat\")",
+  "query_sha256": "9d314ab43c03ad9615f0460e50e254072b259f1c80a4c042b388195639b63099",
+  "controls": {
+    "count_only": true,
+    "limit": 20,
+    "max_pages": 2,
+    "timeout_seconds": 60,
+    "page_delay_seconds": 1,
+    "adapter_default_local_cdp_route": true,
+    "target_id_supplied": false,
+    "adapter_owned_page_only": true
+  },
+  "result": {
+    "exit_code": 1,
+    "completion_status": "error",
+    "error_type": "ScopusDisplayCapError",
+    "error_stage": "result_reconciliation",
+    "source_reported_total": null,
+    "total_is_exact": false,
+    "pages_retrieved": 0,
+    "source_entries_retrieved": 0,
+    "records_retrieved": 0,
+    "partial_prefix_retained": false,
+    "merge_eligible": false,
+    "restricted_artifact": ".searches/s-d01-scopus-restricted/S-D01-P10-20260822T154458-0400/cubesat-cap-count-only.json",
+    "restricted_artifact_sha256": "993185881fe5d24871c127da07735e331749350de0b586f464c4bb1da21b152a",
+    "restricted_artifact_bytes": 9771,
+    "restricted_stderr_sha256": "e4a6ae6fde85ad35a1fc111ac6e18756b027a1f8ec3e7f575bff509a12505233",
+    "restricted_stderr_bytes": 201,
+    "restricted_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "restricted_stdout_bytes": 0
+  },
+  "expected_controlled_failure": {
+    "matches_expected_exit_code": true,
+    "matches_expected_error_type": true,
+    "matches_expected_error_stage": true,
+    "matches_expected_safe_accounting": true,
+    "is_successful_cap_diagnostic": true,
+    "code_issue": false
+  },
+  "timing_comparison": {
+    "p09_pilot_id": "S-D01-P09-20260822T145405-0400",
+    "p09_error_type": "ScopusProtocolError",
+    "p09_error_stage": "result_reconciliation",
+    "p09_cli_elapsed_seconds": 61.4247,
+    "p10_command_elapsed_seconds": 3.667,
+    "p10_adapter_cli_elapsed_seconds": 3.490669,
+    "p10_faster_by_seconds_against_p09_cli": 57.7577,
+    "p10_wall_clock_reduction_percent_against_p09_cli": 94.0,
+    "disposition": "P10 classified the same broad diagnostic as a display-cap failure without waiting for the prior 60-second generic reconciliation timeout."
+  },
+  "cap_policy": {
+    "adapter_policy": "A unique visible current result-list range reconciled to current rows is trusted cap evidence when its total is at least the 2,000 rendered-display cap. Conflicting or uncapped aggregate/range evidence remains generic fail-closed reconciliation behavior.",
+    "observed_disposition": "The sole P10 diagnostic reached ScopusDisplayCapError at result_reconciliation, with null total and no retained prefix.",
+    "privacy_and_trigger_limit": "The tracked receipt retains no raw rendered count, page text, source total, records, or raw browser exception. The error class proves the adapter's controlled cap classification, not an exact broad-source total.",
+    "prohibited_inference": "No browser-history value or rendered cap value is used as a reconciled source total."
+  },
+  "p06_and_p09_disposition": {
+    "p06": "P06's readiness-budget defect was separately patched and bounded-validated; its original underlying browser exception remains unidentified by its safe artifact.",
+    "p09": "P09's generic result-reconciliation error was a cap-classification ambiguity caused by conflicting aggregate total evidence and a current range. It did not establish a source total.",
+    "p10": "P10 closes that cap-classification ambiguity for the reviewed adapter SHA. It does not retroactively identify P06's trigger or accept a final search."
+  },
+  "final_rule": "Any rendered display cap, total/range/pagination conflict, or other reconciliation failure remains total=null with zero imported records; never retain a prefix or turn it into zero.",
+  "source_query_count_for_this_diagnostic": 1,
+  "translation_spec_changed": false
+}

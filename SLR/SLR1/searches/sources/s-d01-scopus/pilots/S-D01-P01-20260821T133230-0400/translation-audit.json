@@ -1,0 +1,98 @@
+{
+  "artifact_version": "slr1-scopus-translation-audit/v1",
+  "pilot_id": "S-D01-P01-20260821T133230-0400",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "basis": "derived_from_tracked_dictionary_and_exact_query_files",
+  "status": "passed",
+  "checks": [
+    {
+      "check_id": "finite-term-rendering",
+      "status": "passed",
+      "partitions": [
+        {
+          "partition_id": "A1",
+          "missing_rendered_terms": [],
+          "passed": true
+        },
+        {
+          "partition_id": "A2",
+          "missing_rendered_terms": [],
+          "passed": true
+        },
+        {
+          "partition_id": "A3",
+          "missing_rendered_terms": [],
+          "passed": true
+        },
+        {
+          "partition_id": "B1",
+          "missing_rendered_terms": [],
+          "passed": true
+        },
+        {
+          "partition_id": "B2",
+          "missing_rendered_terms": [],
+          "passed": true
+        },
+        {
+          "partition_id": "BG1",
+          "missing_rendered_terms": [],
+          "passed": true
+        },
+        {
+          "partition_id": "BG2",
+          "missing_rendered_terms": [],
+          "passed": true
+        },
+        {
+          "partition_id": "BC1",
+          "missing_rendered_terms": [],
+          "passed": true
+        }
+      ],
+      "note": "Every finite term required by each ordinary block occurs in its literal source rendering; this does not validate source semantic expansion."
+    },
+    {
+      "check_id": "pair-cross-products",
+      "status": "passed",
+      "partitions": [
+        {
+          "partition_id": "BG1",
+          "missing_pair_count": 0,
+          "passed": true
+        },
+        {
+          "partition_id": "BG2",
+          "missing_pair_count": 0,
+          "passed": true
+        },
+        {
+          "partition_id": "BC1",
+          "missing_pair_count": 0,
+          "passed": true
+        }
+      ],
+      "note": "All declared pair cross-products for BG1, BG2, and BC1 occur as W/6 clauses."
+    },
+    {
+      "check_id": "bt2-lossless-cell-union",
+      "status": "passed",
+      "t2_left_term_count": 56,
+      "t2_right_term_count": 4,
+      "expected_pair_clause_count": 224,
+      "missing_pair_clause_count": 0,
+      "cell_ids": [
+        "BT2-01",
+        "BT2-02",
+        "BT2-03",
+        "BT2-04"
+      ],
+      "note": "The cells partition the ordered T2 left list exactly and each crosses its subgroup with all four right terms."
+    },
+    {
+      "check_id": "spec-query-checksums",
+      "status": "passed",
+      "note": "Every BT2 cell checksum matches translation-spec.json; ordinary-cell checksums are reviewed by the same source-packet audit."
+    }
+  ]
+}
