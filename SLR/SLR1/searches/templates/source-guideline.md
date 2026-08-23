@@ -48,7 +48,7 @@ Give the ordered procedure that a later `R-002` operator can execute without rel
 
 ## 9. Validation evidence
 
-Link accepted pilot manifests and evidence. Distinguish observed interface behavior, official documentation, inference, and untested items.
+Link accepted pilot manifests and evidence. Distinguish observed interface behavior, official documentation, inference, and untested items. After human approval, let `search-log.md` point to the approval commit and pin any external implementation by commit; do not add a separate approval-hash ledger.
 
 ## 10. Remaining limits and protocol impact
 
