@@ -1,0 +1,1416 @@
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["playwright>=1.48,<2"]
+# ///
+"""One owned-page OATD advanced-form diagnostic.
+
+The probe is intentionally narrower than a search adapter.  It attaches only
+through an explicit loopback CDP endpoint, creates one sibling page, submits
+one normal nonblank advanced GET form, and retains only a safe aggregate
+receipt.  It never visits record/detail/full-text routes, serializes browser
+URLs or target IDs, or interacts with access controls.
+
+Source action is opt-in with ``--execute``.  This makes the default CLI path
+safe for offline validation and for tests run by a browser-lease controller.
+"""
+
+from __future__ import annotations
+
+import argparse
+import asyncio
+import json
+import math
+import os
+from collections.abc import Awaitable, Callable, Mapping
+from dataclasses import dataclass
+from ipaddress import ip_address
+from pathlib import Path
+from typing import Any
+from urllib.parse import urlencode, urlsplit, urlunsplit
+
+
+DEFAULT_CDP_URL = "http://127.0.0.1:9222"
+SOURCE_ORIGIN = "https://oatd.org"
+SOURCE_HOST = "oatd.org"
+HOME_URL = f"{SOURCE_ORIGIN}/"
+ADVANCED_PATH = "/oatd/search-composer"
+ADVANCED_ACTION = f"{SOURCE_ORIGIN}{ADVANCED_PATH}"
+
+DEFAULT_TIMEOUT_SECONDS = 30.0
+DEFAULT_POLL_INTERVAL_SECONDS = 0.2
+DEFAULT_BUSY_RETRIES = 2
+DEFAULT_BUSY_RETRY_DELAY_SECONDS = 30.0
+MAX_BUSY_RETRIES = 5
+MIN_BUSY_RETRY_DELAY_SECONDS = 1.0
+MAX_BUSY_RETRY_DELAY_SECONDS = 3_600.0
+CLEANUP_TIMEOUT_SECONDS = 3.0
+CLEANUP_POLL_INTERVAL_SECONDS = 0.05
+MAX_QUERY_CHARACTERS = 50_000
+MAX_FIELD_LABEL_CHARACTERS = 512
+MAX_CONTROL_VALUE_CHARACTERS = 50_000
+
+# These are the only successful GET controls that may be reconstructed for a
+# finite same-tab busy retry.  Values remain in memory and are never copied to
+# the receipt.  A changed/unknown successful control fails closed instead of
+# being copied from an observed URL or generic FormData payload.
+RETRY_CONTROL_NAMES = (
+    "form",
+    "box1",
+    "field1",
+    "joiner1",
+    "box2",
+    "field2",
+    "joiner2",
+    "box3",
+    "field3",
+    "joiner3",
+    "language",
+    "country",
+    "earliest",
+    "latest",
+    "sortby",
+    "pagesize",
+    "cc_only",
+)
+NATIVE_SUBMIT_SELECTOR = (
+    "button:not([type]), button[type=''], button[type='submit' i], "
+    "input[type='submit' i]"
+)
+
+
+class InputValidationError(ValueError):
+    """Raised before any browser connection for an unsafe CLI value."""
+
+
+class ProbeAbort(RuntimeError):
+    """A fixed safe terminal classification; it never carries source text."""
+
+    def __init__(self, classification: str) -> None:
+        super().__init__(classification)
+        self.classification = classification
+
+
+@dataclass(frozen=True)
+class ProbeConfig:
+    """Validated invocation data; sensitive values are never serialized."""
+
+    execute: bool
+    cdp_url: str
+    query: str
+    field_label: str
+    timeout_seconds: float
+    poll_interval_seconds: float
+    busy_retries: int
+    busy_retry_delay_seconds: float
+    output_path: Path
+
+
+@dataclass(frozen=True)
+class FormInspection:
+    """Safe form counts plus transient mapping data required for interaction."""
+
+    source_state: str | None
+    canonical_form_count: int
+    form_index: int
+    method_get: bool
+    box1_count: int
+    field1_count: int
+    matching_field_option_count: int
+    field_value: str | None
+    visible_native_submit_count: int
+
+
+@dataclass(frozen=True)
+class PreparedSubmission:
+    """Prevalidated values for a possible same-tab busy retry."""
+
+    retry_parameters: tuple[tuple[str, str], ...]
+    visible_native_submit_count: int
+
+
+@dataclass(frozen=True)
+class PostClickState:
+    """Allowlisted post-click facts only; no text, URL, or record escapes."""
+
+    challenge: bool
+    busy: bool
+    access: bool
+    syntax_error: bool
+    canonical_advanced_route: bool
+    source_identity: bool
+    form_readback_exact: bool
+    result_kind: str
+    source_total: int | None
+    result_observed: bool
+
+    @property
+    def submission_observed(self) -> bool:
+        return self.result_observed or (
+            self.canonical_advanced_route and self.form_readback_exact
+        )
+
+    @property
+    def busy_retry_safe(self) -> bool:
+        return bool(
+            self.busy
+            and not self.challenge
+            and not self.access
+            and not self.syntax_error
+            and self.canonical_advanced_route
+            and self.form_readback_exact
+        )
+
+
+@dataclass(frozen=True)
+class PostClickOutcome:
+    """The one terminal state from bounded post-click observation."""
+
+    classification: str
+    source_total: int | None
+    polls: int
+    busy_retries_performed: int
+    busy_recovery_attempts: int
+
+
+@dataclass
+class BusyRetryBudget:
+    """Adapter-v3-style finite, run-wide extra-request budget."""
+
+    max_retries: int
+    initial_delay_seconds: float
+    recovery_attempts: int = 0
+    performed_retries: int = 0
+
+    def reserve_delay(self) -> float | None:
+        """Reserve one finite recovery wait and return its capped delay."""
+        if self.recovery_attempts >= self.max_retries:
+            return None
+        delay = min(
+            self.initial_delay_seconds * (2**self.recovery_attempts),
+            MAX_BUSY_RETRY_DELAY_SECONDS,
+        )
+        self.recovery_attempts += 1
+        return delay
+
+    def record_retry(self) -> None:
+        """Record an actual same-tab retry after a reserved wait."""
+        if self.performed_retries >= self.recovery_attempts:
+            raise RuntimeError("busy retry was not reserved")
+        self.performed_retries += 1
+
+
+@dataclass(frozen=True)
+class CleanupReport:
+    """Safe ownership-continuity facts produced before Playwright disconnects."""
+
+    close_attempted: bool
+    page_closed: bool
+    target_disappeared: bool
+    baseline_preserved: bool | None
+
+    @property
+    def verified(self) -> bool:
+        return bool(
+            self.close_attempted
+            and self.page_closed
+            and self.target_disappeared
+            and self.baseline_preserved is True
+        )
+
+
+ADVANCED_FORM_INSPECTION_SCRIPT = r"""
+(fieldLabel) => {
+  const normalize = value => String(value || "").replace(/[\s\u2009\u202f]+/g, " ").trim();
+  const visible = element => Boolean(
+    element && (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+  );
+  const title = normalize(document.title);
+  const sourceTitle = /\bOATD\b/i.test(title);
+  const errors = Array.from(document.querySelectorAll(
+    ".error, .error_message, .message.error, [role='alert']"
+  )).filter(visible).map(element => normalize(element.textContent)).join(" ");
+  const challenge = (!sourceTitle && /just a moment|attention required|verify you are human/i.test(title)) ||
+    Boolean(document.querySelector(
+      "#challenge-running, #challenge-form, iframe[src*='challenges.cloudflare.com'], .cf-challenge-running"
+    ));
+  const busyPattern = /^(?:🟢\s*)?(?:server too busy(?:\s*[-:,.]\s*please slow down)?|please slow down)[.!]?$/i;
+  const busy = busyPattern.test(errors) || (!sourceTitle && busyPattern.test(title));
+  const access = /access denied|forbidden|captcha|enable javascript and cookies/i.test(errors);
+  const syntaxError = /syntax|could not parse|invalid query|search error/i.test(errors);
+  const sourceState = challenge ? "challenge" : busy ? "busy" : access ? "access" :
+    syntaxError ? "syntax" : null;
+  const forms = Array.from(document.forms);
+  const canonical = forms.filter(form => {
+    try {
+      const action = new URL(form.getAttribute("action") || "", document.baseURI);
+      return action.protocol === "https:" && action.hostname.toLowerCase() === "oatd.org" &&
+        action.pathname === "/oatd/search-composer" && form.method.toLowerCase() === "get";
+    } catch (_) {
+      return false;
+    }
+  });
+  const form = canonical.length === 1 ? canonical[0] : null;
+  const fields = form ? Array.from(form.querySelectorAll("select[name='field1']")) : [];
+  const boxes = form ? Array.from(form.querySelectorAll(
+    "input[name='box1'], textarea[name='box1']"
+  )) : [];
+  const field = fields.length === 1 ? fields[0] : null;
+  const options = field ? Array.from(field.options) : [];
+  const wanted = normalize(fieldLabel);
+  const matches = options.filter(option => normalize(option.textContent) === wanted);
+  const nativeSubmits = form ? Array.from(form.querySelectorAll("button, input")).filter(element =>
+    visible(element) && ((element.tagName === "BUTTON" && element.type === "submit") ||
+      (element.tagName === "INPUT" && element.type === "submit"))
+  ) : [];
+  return {
+    source_state: sourceState,
+    canonical_form_count: canonical.length,
+    form_index: form ? forms.indexOf(form) : -1,
+    method_get: Boolean(form && form.method.toLowerCase() === "get"),
+    box1_count: boxes.length,
+    field1_count: fields.length,
+    matching_field_option_count: matches.length,
+    matching_field_value: matches.length === 1 ? String(matches[0].value || "") : null,
+    visible_native_submit_count: nativeSubmits.length
+  };
+}
+"""
+
+FORM_SELF_CHECK_SCRIPT = r"""
+(form) => {
+  const isCanonical = candidate => {
+    try {
+      const action = new URL(candidate.getAttribute("action") || "", document.baseURI);
+      return action.protocol === "https:" && action.hostname.toLowerCase() === "oatd.org" &&
+        action.pathname === "/oatd/search-composer" && candidate.method.toLowerCase() === "get";
+    } catch (_) {
+      return false;
+    }
+  };
+  const canonical = Array.from(document.forms).filter(isCanonical);
+  return {
+    canonical_form_count: canonical.length,
+    selected_form_is_canonical: canonical.length === 1 && canonical[0] === form
+  };
+}
+"""
+
+FORM_CONTROL_INVENTORY_SCRIPT = r"""
+(form, names) => {
+  const allowed = new Set(names);
+  const isIgnored = element => {
+    const type = String(element.type || "").toLowerCase();
+    return ["submit", "button", "reset", "image"].includes(type);
+  };
+  const named = Array.from(form.elements).filter(element => element && element.name && !isIgnored(element));
+  const unexpected = named.filter(element => !allowed.has(element.name));
+  const entries = names.map(name => {
+    const elements = named.filter(element => element.name === name);
+    const element = elements.length === 1 ? elements[0] : null;
+    return {
+      name,
+      count: elements.length,
+      tag: element ? String(element.tagName || "").toLowerCase() : "",
+      type: element ? String(element.type || "").toLowerCase() : "",
+      value: element ? String(element.value || "") : "",
+      checked: element ? Boolean(element.checked) : false,
+      disabled: element ? Boolean(element.disabled) : false
+    };
+  });
+  return { unexpected_data_control_count: unexpected.length, entries };
+}
+"""
+
+POST_CLICK_STATE_SCRIPT = r"""
+(payload) => {
+  const normalize = value => String(value || "").replace(/[\s\u2009\u202f]+/g, " ").trim();
+  const visible = element => Boolean(
+    element && (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+  );
+  const title = normalize(document.title);
+  const sourceTitle = /\bOATD\b/i.test(title);
+  const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
+    .some(element => normalize(element.textContent) === "Open Access Theses and Dissertations");
+  const errors = Array.from(document.querySelectorAll(
+    ".error, .error_message, .message.error, [role='alert']"
+  )).filter(visible).map(element => normalize(element.textContent)).join(" ");
+  const challenge = (!sourceTitle && /just a moment|attention required|verify you are human/i.test(title)) ||
+    Boolean(document.querySelector(
+      "#challenge-running, #challenge-form, iframe[src*='challenges.cloudflare.com'], .cf-challenge-running"
+    ));
+  const busyPattern = /^(?:🟢\s*)?(?:server too busy(?:\s*[-:,.]\s*please slow down)?|please slow down)[.!]?$/i;
+  const busy = busyPattern.test(errors) || (!sourceTitle && busyPattern.test(title));
+  const access = /access denied|forbidden|captcha|enable javascript and cookies/i.test(errors);
+  const syntaxError = /syntax|could not parse|invalid query|search error/i.test(errors);
+  let canonicalRoute = false;
+  try {
+    const location = new URL(window.location.href);
+    canonicalRoute = location.protocol === "https:" && location.hostname.toLowerCase() === "oatd.org" &&
+      location.pathname === "/oatd/search-composer";
+  } catch (_) {}
+  const forms = Array.from(document.forms).filter(form => {
+    try {
+      const action = new URL(form.getAttribute("action") || "", document.baseURI);
+      return action.protocol === "https:" && action.hostname.toLowerCase() === "oatd.org" &&
+        action.pathname === "/oatd/search-composer" && form.method.toLowerCase() === "get";
+    } catch (_) {
+      return false;
+    }
+  });
+  const form = forms.length === 1 ? forms[0] : null;
+  const boxes = form ? Array.from(form.querySelectorAll(
+    "input[name='box1'], textarea[name='box1']"
+  )) : [];
+  const fields = form ? Array.from(form.querySelectorAll("select[name='field1']")) : [];
+  const box = boxes.length === 1 ? boxes[0] : null;
+  const field = fields.length === 1 ? fields[0] : null;
+  const formReadbackExact = Boolean(box && field && String(box.value || "") === payload.query &&
+    String(field.value || "") === payload.fieldValue);
+  const reports = Array.from(document.querySelectorAll("p.matchesReport")).filter(visible);
+  const report = reports.length === 1 ? reports[0] : null;
+  const reportText = normalize(report && report.textContent);
+  const expectedPrefix = `You searched for ${normalize(payload.query)}.`;
+  const suffix = reportText.startsWith(expectedPrefix) ? reportText.slice(expectedPrefix.length).trim() : "";
+  const range = suffix.match(/^Showing records\s+(\d+)\s*[\-–]\s*(\d+)\s+of\s+(\d+)\s+total matches?\.$/i);
+  let resultKind = "unknown";
+  let total = null;
+  if (range) {
+    resultKind = "range";
+    total = Number(range[3]);
+  } else if (/^One record found\.$/i.test(suffix)) {
+    resultKind = "singleton";
+    total = 1;
+  } else if (/^No records match your search\.$/i.test(suffix)) {
+    resultKind = "zero";
+    total = 0;
+  }
+  const resultObserved = Boolean(canonicalRoute && sourceTitle && sourceHeading && formReadbackExact &&
+    report && ["range", "singleton", "zero"].includes(resultKind));
+  return {
+    challenge,
+    busy,
+    access,
+    syntax_error: syntaxError,
+    canonical_advanced_route: canonicalRoute,
+    source_identity: Boolean(sourceTitle && sourceHeading),
+    form_readback_exact: formReadbackExact,
+    result_kind: resultKind,
+    source_total: total,
+    result_observed: resultObserved
+  };
+}
+"""
+
+
+def compact(value: Any) -> str:
+    """Normalize benign whitespace without retaining arbitrary source text."""
+    return " ".join(str(value or "").split())
+
+
+def _is_loopback_host(hostname: str | None) -> bool:
+    if not hostname:
+        return False
+    if hostname.casefold() == "localhost":
+        return True
+    try:
+        return ip_address(hostname).is_loopback
+    except ValueError:
+        return False
+
+
+def validate_loopback_cdp_endpoint(value: str) -> str:
+    """Accept one plain local CDP endpoint; no discovery or remote hosts."""
+    try:
+        parsed = urlsplit(value.strip())
+        port = parsed.port
+    except ValueError as error:
+        raise InputValidationError(
+            "--cdp-url must contain a valid loopback port"
+        ) from error
+    if (
+        parsed.scheme != "http"
+        or not _is_loopback_host(parsed.hostname)
+        or parsed.username
+        or parsed.password
+        or parsed.path not in {"", "/"}
+        or parsed.query
+        or parsed.fragment
+        or port is None
+        or not 1 <= port <= 65_535
+    ):
+        raise InputValidationError("--cdp-url must be a plain loopback http endpoint")
+    return urlunsplit((parsed.scheme, parsed.netloc, "", "", ""))
+
+
+def _finite_positive(value: Any, option: str) -> float:
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError) as error:
+        raise InputValidationError(
+            f"{option} must be a finite positive number"
+        ) from error
+    if not math.isfinite(parsed) or parsed <= 0:
+        raise InputValidationError(f"{option} must be a finite positive number")
+    return parsed
+
+
+def _validate_busy_policy(retries: Any, delay: Any) -> tuple[int, float]:
+    if (
+        not isinstance(retries, int)
+        or isinstance(retries, bool)
+        or not 0 <= retries <= MAX_BUSY_RETRIES
+    ):
+        raise InputValidationError(
+            f"--busy-retries must be an integer from 0 to {MAX_BUSY_RETRIES}"
+        )
+    parsed_delay = _finite_positive(delay, "--busy-retry-delay-seconds")
+    if not MIN_BUSY_RETRY_DELAY_SECONDS <= parsed_delay <= MAX_BUSY_RETRY_DELAY_SECONDS:
+        raise InputValidationError(
+            "--busy-retry-delay-seconds is outside the finite safe range"
+        )
+    return retries, parsed_delay
+
+
+def validate_output_path(value: str) -> Path:
+    """Prepare a create-only receipt destination before browser use."""
+    if not compact(value):
+        raise InputValidationError("--output-path must be nonblank")
+    candidate = Path(value).expanduser()
+    if candidate.is_symlink():
+        raise InputValidationError("--output-path must not be a symlink")
+    path = candidate.resolve(strict=False)
+    if path.exists() or path.is_symlink():
+        raise InputValidationError("--output-path must not already exist")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.parent.is_dir():
+        raise InputValidationError("--output-path parent must be a directory")
+    return path
+
+
+def _validate_nonblank(value: str, option: str, maximum: int) -> str:
+    if not isinstance(value, str) or not compact(value) or len(value) > maximum:
+        raise InputValidationError(
+            f"{option} must be nonblank and within its safe size limit"
+        )
+    if "\x00" in value:
+        raise InputValidationError(f"{option} contains an unsafe control character")
+    return value
+
+
+def _milliseconds(seconds: float) -> int:
+    return max(1, int(seconds * 1_000))
+
+
+def _exact_nonnegative_int(value: Any) -> int | None:
+    if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+        return value
+    return None
+
+
+def _bool(value: Any) -> bool:
+    return value is True
+
+
+def inspect_form_payload(payload: Any) -> FormInspection:
+    """Convert a browser projection to typed facts without returning source text."""
+    if not isinstance(payload, Mapping):
+        raise ProbeAbort("advanced_form_projection_failed")
+    source_state = payload.get("source_state")
+    if source_state not in {None, "challenge", "busy", "access", "syntax"}:
+        raise ProbeAbort("advanced_form_projection_failed")
+    field_value = payload.get("matching_field_value")
+    if (
+        not isinstance(field_value, str)
+        or not field_value
+        or len(field_value) > MAX_CONTROL_VALUE_CHARACTERS
+        or any(character in field_value for character in ("\x00", "\r", "\n"))
+    ):
+        field_value = None
+    return FormInspection(
+        source_state=source_state,
+        canonical_form_count=_exact_nonnegative_int(payload.get("canonical_form_count"))
+        if _exact_nonnegative_int(payload.get("canonical_form_count")) is not None
+        else -1,
+        form_index=payload.get("form_index")
+        if isinstance(payload.get("form_index"), int)
+        and not isinstance(payload.get("form_index"), bool)
+        else -1,
+        method_get=_bool(payload.get("method_get")),
+        box1_count=_exact_nonnegative_int(payload.get("box1_count"))
+        if _exact_nonnegative_int(payload.get("box1_count")) is not None
+        else -1,
+        field1_count=_exact_nonnegative_int(payload.get("field1_count"))
+        if _exact_nonnegative_int(payload.get("field1_count")) is not None
+        else -1,
+        matching_field_option_count=_exact_nonnegative_int(
+            payload.get("matching_field_option_count")
+        )
+        if _exact_nonnegative_int(payload.get("matching_field_option_count"))
+        is not None
+        else -1,
+        field_value=field_value,
+        visible_native_submit_count=_exact_nonnegative_int(
+            payload.get("visible_native_submit_count")
+        )
+        if _exact_nonnegative_int(payload.get("visible_native_submit_count"))
+        is not None
+        else -1,
+    )
+
+
+def _pre_submit_abort(inspection: FormInspection) -> str | None:
+    if inspection.source_state is not None:
+        return f"{inspection.source_state}_before_submission"
+    if (
+        inspection.canonical_form_count != 1
+        or inspection.form_index < 0
+        or not inspection.method_get
+    ):
+        return "canonical_advanced_form_not_observed"
+    if inspection.box1_count != 1 or inspection.field1_count != 1:
+        return "advanced_form_control_mapping_failed"
+    if inspection.matching_field_option_count != 1 or inspection.field_value is None:
+        return "advanced_field_mapping_failed"
+    if inspection.visible_native_submit_count != 1:
+        return "native_submit_control_not_unique"
+    return None
+
+
+async def inspect_advanced_form(page: Any, field_label: str) -> FormInspection:
+    """Read only the canonical form inventory from the owned page."""
+    try:
+        payload = await page.evaluate(ADVANCED_FORM_INSPECTION_SCRIPT, field_label)
+    except Exception as error:
+        raise ProbeAbort("advanced_form_projection_failed") from error
+    return inspect_form_payload(payload)
+
+
+def _safe_control_value(value: Any) -> str | None:
+    if not isinstance(value, str) or len(value) > MAX_CONTROL_VALUE_CHARACTERS:
+        return None
+    if any(character in value for character in ("\x00", "\r", "\n")):
+        return None
+    return value
+
+
+def retry_parameters_from_inventory(
+    inventory: Any, *, query: str, field_value: str
+) -> tuple[tuple[str, str], ...]:
+    """Build a canonical retry query only from the prevalidated form controls."""
+    if (
+        not isinstance(inventory, Mapping)
+        or inventory.get("unexpected_data_control_count") != 0
+    ):
+        raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+    entries = inventory.get("entries")
+    if not isinstance(entries, list) or len(entries) != len(RETRY_CONTROL_NAMES):
+        raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+    by_name: dict[str, Mapping[str, Any]] = {}
+    for entry in entries:
+        if (
+            not isinstance(entry, Mapping)
+            or entry.get("name") not in RETRY_CONTROL_NAMES
+        ):
+            raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+        name = entry["name"]
+        if name in by_name:
+            raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+        by_name[name] = entry
+
+    parameters: list[tuple[str, str]] = []
+    for name in RETRY_CONTROL_NAMES:
+        entry = by_name.get(name)
+        if entry is None:
+            raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+        count = entry.get("count")
+        if not isinstance(count, int) or isinstance(count, bool) or count not in {0, 1}:
+            raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+        if count == 0:
+            if name in {"box1", "field1"}:
+                raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+            continue
+        if entry.get("disabled") is True:
+            raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+        if entry.get("tag") not in {"input", "select", "textarea"}:
+            raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+        control_type = entry.get("type")
+        if not isinstance(control_type, str):
+            raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+        value = _safe_control_value(entry.get("value"))
+        if value is None:
+            raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+        if control_type in {"checkbox", "radio"} and entry.get("checked") is not True:
+            continue
+        if name == "box1" and value != query:
+            raise ProbeAbort("advanced_control_readback_failed")
+        if name == "field1" and value != field_value:
+            raise ProbeAbort("advanced_control_readback_failed")
+        parameters.append((name, value))
+
+    names = {name for name, _ in parameters}
+    if "box1" not in names or "field1" not in names:
+        raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+    return tuple(parameters)
+
+
+def canonical_retry_url(parameters: tuple[tuple[str, str], ...]) -> str:
+    """Construct an in-memory canonical GET URL from prevalidated controls only."""
+    if not parameters:
+        raise ProbeAbort("advanced_retry_controls_not_prevalidated")
+    return f"{ADVANCED_ACTION}?{urlencode(parameters)}"
+
+
+async def prepare_native_submission(
+    page: Any, inspection: FormInspection, query: str
+) -> PreparedSubmission:
+    """Fill, read back, and click exactly one visible native submit control."""
+    abort = _pre_submit_abort(inspection)
+    if abort is not None:
+        raise ProbeAbort(abort)
+    assert inspection.field_value is not None  # narrowed by _pre_submit_abort
+    try:
+        forms = page.locator("form")
+        if await forms.count() <= inspection.form_index:
+            raise ProbeAbort("canonical_advanced_form_not_observed")
+        form = forms.nth(inspection.form_index)
+        self_check = await form.evaluate(FORM_SELF_CHECK_SCRIPT)
+        if not (
+            isinstance(self_check, Mapping)
+            and self_check.get("canonical_form_count") == 1
+            and self_check.get("selected_form_is_canonical") is True
+        ):
+            raise ProbeAbort("canonical_advanced_form_not_observed")
+        box = form.locator("input[name='box1'], textarea[name='box1']")
+        field = form.locator("select[name='field1']")
+        if await box.count() != 1 or await field.count() != 1:
+            raise ProbeAbort("advanced_form_control_mapping_failed")
+        if not await box.is_visible() or not await field.is_visible():
+            raise ProbeAbort("advanced_form_control_mapping_failed")
+        await box.fill(query)
+        await field.select_option(inspection.field_value)
+        if (
+            await box.input_value() != query
+            or await field.input_value() != inspection.field_value
+        ):
+            raise ProbeAbort("advanced_control_readback_failed")
+        inventory = await form.evaluate(
+            FORM_CONTROL_INVENTORY_SCRIPT, list(RETRY_CONTROL_NAMES)
+        )
+        parameters = retry_parameters_from_inventory(
+            inventory, query=query, field_value=inspection.field_value
+        )
+        native_submit = form.locator(NATIVE_SUBMIT_SELECTOR)
+        submit_count = await native_submit.count()
+        if submit_count != 1 or not await native_submit.first.is_visible():
+            raise ProbeAbort("native_submit_control_not_unique")
+        await native_submit.first.click()
+    except ProbeAbort:
+        raise
+    except Exception as error:
+        raise ProbeAbort("native_submit_interaction_failed") from error
+    return PreparedSubmission(
+        retry_parameters=parameters,
+        visible_native_submit_count=submit_count,
+    )
+
+
+def post_click_state_from_payload(payload: Any) -> PostClickState:
+    """Reject malformed state conservatively while keeping only safe fields."""
+    if not isinstance(payload, Mapping):
+        raise ProbeAbort("post_click_projection_failed")
+    kind = payload.get("result_kind")
+    if kind not in {"range", "singleton", "zero"}:
+        kind = "unknown"
+    total = _exact_nonnegative_int(payload.get("source_total"))
+    if kind == "zero" and total != 0:
+        kind = "unknown"
+        total = None
+    if kind == "singleton" and total != 1:
+        kind = "unknown"
+        total = None
+    if kind == "range" and (total is None or total < 1):
+        kind = "unknown"
+        total = None
+    return PostClickState(
+        challenge=_bool(payload.get("challenge")),
+        busy=_bool(payload.get("busy")),
+        access=_bool(payload.get("access")),
+        syntax_error=_bool(payload.get("syntax_error")),
+        canonical_advanced_route=_bool(payload.get("canonical_advanced_route")),
+        source_identity=_bool(payload.get("source_identity")),
+        form_readback_exact=_bool(payload.get("form_readback_exact")),
+        result_kind=kind,
+        source_total=total,
+        result_observed=(
+            _bool(payload.get("result_observed"))
+            and _bool(payload.get("canonical_advanced_route"))
+            and _bool(payload.get("source_identity"))
+            and _bool(payload.get("form_readback_exact"))
+            and kind in {"range", "singleton", "zero"}
+            and total is not None
+        ),
+    )
+
+
+async def _observe_post_click(
+    page: Any, query: str, field_value: str
+) -> PostClickState:
+    payload = await page.evaluate(
+        POST_CLICK_STATE_SCRIPT, {"query": query, "fieldValue": field_value}
+    )
+    return post_click_state_from_payload(payload)
+
+
+async def _sleep_to_deadline(
+    deadline: float,
+    interval: float,
+    clock: Callable[[], float],
+    sleeper: Callable[[float], Awaitable[None]],
+) -> None:
+    remaining = deadline - clock()
+    if remaining > 0:
+        await sleeper(min(interval, remaining))
+
+
+def _outcome(
+    classification: str,
+    *,
+    source_total: int | None,
+    polls: int,
+    budget: BusyRetryBudget,
+) -> PostClickOutcome:
+    return PostClickOutcome(
+        classification=classification,
+        source_total=source_total,
+        polls=polls,
+        busy_retries_performed=budget.performed_retries,
+        busy_recovery_attempts=budget.recovery_attempts,
+    )
+
+
+async def wait_for_post_click_state(
+    page: Any,
+    *,
+    query: str,
+    field_value: str,
+    retry_parameters: tuple[tuple[str, str], ...],
+    timeout_seconds: float,
+    poll_interval_seconds: float,
+    busy_budget: BusyRetryBudget,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> PostClickOutcome:
+    """Poll allowlisted state; only an exclusive busy page can be reissued.
+
+    No navigation event is awaited as the sole submission proof.  A normal
+    source result, zero, syntax state, challenge, busy response, or bounded
+    technical timeout is instead classified from the owned page's safe state.
+    """
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    deadline = clock() + timeout_seconds
+    polls = 0
+    submission_observed = False
+
+    while True:
+        try:
+            state = await _observe_post_click(page, query, field_value)
+            polls += 1
+        except Exception:
+            if clock() >= deadline:
+                return _outcome(
+                    "post_submit_state_timeout"
+                    if submission_observed
+                    else "submission_not_observed_timeout",
+                    source_total=None,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+            continue
+
+        submission_observed = submission_observed or state.submission_observed
+        if state.challenge:
+            # A challenge is passive-only.  In particular, it never reaches the
+            # busy-retry branch and no form is clicked a second time.
+            if clock() >= deadline:
+                return _outcome(
+                    "challenge_after_submission",
+                    source_total=None,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+            continue
+        if state.access:
+            return _outcome(
+                "access_after_submission",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+        if state.syntax_error:
+            return _outcome(
+                "syntax_after_submission",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+        if state.result_observed:
+            if state.result_kind == "zero":
+                return _outcome(
+                    "zero_observed",
+                    source_total=0,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            return _outcome(
+                "result_observed",
+                source_total=state.source_total,
+                polls=polls,
+                budget=busy_budget,
+            )
+        if state.busy:
+            if not state.busy_retry_safe:
+                return _outcome(
+                    "busy_after_submission",
+                    source_total=None,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            delay = busy_budget.reserve_delay()
+            if delay is None:
+                return _outcome(
+                    "busy_after_submission",
+                    source_total=None,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            # Match adapter v3: retain the same owned tab, wait respectfully,
+            # then revalidate before making one canonical extra GET request.
+            await sleeper(delay)
+            try:
+                rechecked = await _observe_post_click(page, query, field_value)
+                polls += 1
+            except Exception:
+                return _outcome(
+                    "busy_revalidation_failed",
+                    source_total=None,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            submission_observed = submission_observed or rechecked.submission_observed
+            if rechecked.challenge:
+                deadline = clock() + timeout_seconds
+                await _sleep_to_deadline(
+                    deadline, poll_interval_seconds, clock, sleeper
+                )
+                continue
+            if not rechecked.busy:
+                deadline = clock() + timeout_seconds
+                # Process the newly observed non-busy state without issuing a
+                # second page evaluation or any navigation.
+                state = rechecked
+                if state.access:
+                    return _outcome(
+                        "access_after_submission",
+                        source_total=None,
+                        polls=polls,
+                        budget=busy_budget,
+                    )
+                if state.syntax_error:
+                    return _outcome(
+                        "syntax_after_submission",
+                        source_total=None,
+                        polls=polls,
+                        budget=busy_budget,
+                    )
+                if state.result_observed:
+                    return _outcome(
+                        "zero_observed"
+                        if state.result_kind == "zero"
+                        else "result_observed",
+                        source_total=0
+                        if state.result_kind == "zero"
+                        else state.source_total,
+                        polls=polls,
+                        budget=busy_budget,
+                    )
+                await _sleep_to_deadline(
+                    deadline, poll_interval_seconds, clock, sleeper
+                )
+                continue
+            if not rechecked.busy_retry_safe:
+                return _outcome(
+                    "busy_after_submission",
+                    source_total=None,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            try:
+                await page.goto(
+                    canonical_retry_url(retry_parameters),
+                    wait_until="domcontentloaded",
+                    timeout=_milliseconds(timeout_seconds),
+                )
+                busy_budget.record_retry()
+            except ProbeAbort:
+                raise
+            except Exception:
+                return _outcome(
+                    "busy_retry_navigation_failed",
+                    source_total=None,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            deadline = clock() + timeout_seconds
+            continue
+
+        if clock() >= deadline:
+            return _outcome(
+                "post_submit_state_timeout"
+                if submission_observed
+                else "submission_not_observed_timeout",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+        await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+
+
+async def target_id_for(context: Any, page: Any) -> str | None:
+    """Read one owned target ID transiently for equality/disappearance checks."""
+    session: Any | None = None
+    try:
+        session = await context.new_cdp_session(page)
+        payload = await session.send("Target.getTargetInfo")
+        info = payload.get("targetInfo") if isinstance(payload, Mapping) else None
+        target_id = info.get("targetId") if isinstance(info, Mapping) else None
+        return target_id if isinstance(target_id, str) and target_id else None
+    except Exception:
+        return None
+    finally:
+        if session is not None:
+            try:
+                await session.detach()
+            except Exception:
+                pass
+
+
+async def active_target_ids(browser: Any) -> set[str] | None:
+    """Read active targets from a browser-level CDP session without tab access."""
+    session: Any | None = None
+    try:
+        session = await browser.new_browser_cdp_session()
+        payload = await session.send("Target.getTargets")
+        infos = payload.get("targetInfos") if isinstance(payload, Mapping) else None
+        if not isinstance(infos, list):
+            return None
+        return {
+            item["targetId"]
+            for item in infos
+            if isinstance(item, Mapping)
+            and item.get("type") == "page"
+            and isinstance(item.get("targetId"), str)
+        }
+    except Exception:
+        return None
+    finally:
+        if session is not None:
+            try:
+                await session.detach()
+            except Exception:
+                pass
+
+
+def baseline_pages_preserved(context: Any, baseline_pages: tuple[Any, ...]) -> bool:
+    """Prove no baseline object was closed, replaced, or supplemented."""
+    try:
+        current = tuple(context.pages)
+        if len(current) != len(baseline_pages):
+            return False
+        if any(left is not right for left, right in zip(current, baseline_pages)):
+            return False
+        return not any(page.is_closed() for page in baseline_pages)
+    except Exception:
+        return False
+
+
+async def _wait_for_target_disappearance(
+    browser: Any,
+    target_id: str,
+    *,
+    clock: Callable[[], float],
+    sleeper: Callable[[float], Awaitable[None]],
+) -> bool:
+    deadline = clock() + CLEANUP_TIMEOUT_SECONDS
+    while True:
+        targets = await active_target_ids(browser)
+        if targets is None:
+            return False
+        if target_id not in targets:
+            return True
+        if clock() >= deadline:
+            return False
+        await sleeper(min(CLEANUP_POLL_INTERVAL_SECONDS, deadline - clock()))
+
+
+async def cleanup_owned_page(
+    browser: Any,
+    context: Any,
+    owned_page: Any,
+    owned_target_id: str | None,
+    baseline_pages: tuple[Any, ...],
+    *,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> CleanupReport:
+    """Close only the owned page and prove its exact CDP target disappeared."""
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    close_attempted = True
+    page_closed = False
+    target_disappeared = False
+    try:
+        if not owned_page.is_closed():
+            await owned_page.close()
+        page_closed = bool(owned_page.is_closed())
+    except Exception:
+        page_closed = False
+    if page_closed and owned_target_id is not None:
+        target_disappeared = await _wait_for_target_disappearance(
+            browser, owned_target_id, clock=clock, sleeper=sleeper
+        )
+    return CleanupReport(
+        close_attempted=close_attempted,
+        page_closed=page_closed,
+        target_disappeared=target_disappeared,
+        baseline_preserved=baseline_pages_preserved(context, baseline_pages),
+    )
+
+
+def new_receipt(execute: bool) -> dict[str, Any]:
+    """Create an output-safe receipt with no caller/source/browser identifiers."""
+    return {
+        "schema_version": "slr1-oatd-advanced-form-probe/v2",
+        "mode": "source_action" if execute else "dry_run",
+        "endpoint_class": "explicit_loopback_cdp",
+        "operation": "one_owned_page_one_native_advanced_get_submission",
+        "record_details_opened": False,
+        "full_text_opened": False,
+        "records_retained": 0,
+        "retention_exclusions": [
+            "url",
+            "target_id",
+            "html",
+            "record",
+            "full_text",
+            "cookie",
+            "exception_string",
+        ],
+        "ownership": {
+            "existing_context_count": None,
+            "baseline_page_count": None,
+            "owned_page_created": False,
+            "owned_page_distinct_from_baseline": False,
+            "owned_target_verified": False,
+            "owned_page_close_attempted": False,
+            "owned_page_closed": False,
+            "owned_target_disappeared": False,
+            "baseline_pages_preserved": None,
+        },
+        "submission": {
+            "canonical_form_count": None,
+            "canonical_get_form": False,
+            "box1_count": None,
+            "field1_count": None,
+            "exact_field_mapping": False,
+            "nonblank_control_readback": False,
+            "visible_native_submit_count": None,
+            "native_submit_clicked": False,
+            "post_click_polls": 0,
+            "busy_recovery_attempts": 0,
+            "busy_retries_performed": 0,
+        },
+        "result": {
+            "status": "not_run",
+            "classification": "not_run",
+            "source_reported_total": None,
+            "observations_accepted": False,
+        },
+    }
+
+
+def _set_result(
+    receipt: dict[str, Any], classification: str, source_total: int | None = None
+) -> None:
+    receipt["result"] = {
+        "status": "observed"
+        if classification in {"result_observed", "zero_observed"}
+        else "blocked",
+        "classification": classification,
+        "source_reported_total": source_total,
+        "observations_accepted": classification in {"result_observed", "zero_observed"},
+    }
+
+
+async def run_probe(
+    config: ProbeConfig,
+    *,
+    playwright_factory: Callable[[], Any] | None = None,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> tuple[int, dict[str, Any]]:
+    """Run the opt-in source action while preserving all baseline pages."""
+    receipt = new_receipt(config.execute)
+    if not config.execute:
+        _set_result(receipt, "dry_run")
+        receipt["result"]["status"] = "not_run"
+        return 0, receipt
+
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    if playwright_factory is None:
+        from playwright.async_api import async_playwright
+
+        playwright_factory = async_playwright
+
+    browser: Any | None = None
+    context: Any | None = None
+    owned_page: Any | None = None
+    owned_page_is_distinct = False
+    owned_target_id: str | None = None
+    baseline_pages: tuple[Any, ...] = ()
+    primary_classification = "browser_connection_failed"
+    primary_total: int | None = None
+
+    try:
+        # The cleanup finally is deliberately nested inside this live context.
+        # Leaving it first was the P03 defect this utility corrects.
+        async with playwright_factory() as playwright:
+            try:
+                browser = await playwright.chromium.connect_over_cdp(
+                    config.cdp_url, timeout=_milliseconds(config.timeout_seconds)
+                )
+                contexts = tuple(browser.contexts)
+                receipt["ownership"]["existing_context_count"] = len(contexts)
+                if len(contexts) != 1:
+                    raise ProbeAbort("unexpected_browser_context_count")
+                context = contexts[0]
+                baseline_pages = tuple(context.pages)
+                receipt["ownership"]["baseline_page_count"] = len(baseline_pages)
+
+                owned_page = await context.new_page()
+                receipt["ownership"]["owned_page_created"] = True
+                distinct = all(
+                    owned_page is not baseline for baseline in baseline_pages
+                )
+                receipt["ownership"]["owned_page_distinct_from_baseline"] = distinct
+                if not distinct:
+                    raise ProbeAbort("owned_page_not_distinct")
+                owned_page_is_distinct = True
+                owned_target_id = await target_id_for(context, owned_page)
+                targets = await active_target_ids(browser)
+                target_verified = bool(
+                    owned_target_id is not None
+                    and targets is not None
+                    and owned_target_id in targets
+                )
+                receipt["ownership"]["owned_target_verified"] = target_verified
+                if not target_verified:
+                    raise ProbeAbort("owned_target_not_verified")
+
+                await owned_page.goto(
+                    HOME_URL,
+                    wait_until="domcontentloaded",
+                    timeout=_milliseconds(config.timeout_seconds),
+                )
+                inspection = await inspect_advanced_form(owned_page, config.field_label)
+                submission = receipt["submission"]
+                submission["canonical_form_count"] = inspection.canonical_form_count
+                submission["canonical_get_form"] = (
+                    inspection.canonical_form_count == 1 and inspection.method_get
+                )
+                submission["box1_count"] = inspection.box1_count
+                submission["field1_count"] = inspection.field1_count
+                submission["exact_field_mapping"] = (
+                    inspection.matching_field_option_count == 1
+                    and inspection.field_value is not None
+                )
+                submission["visible_native_submit_count"] = (
+                    inspection.visible_native_submit_count
+                )
+                pre_submit_abort = _pre_submit_abort(inspection)
+                if pre_submit_abort is not None:
+                    raise ProbeAbort(pre_submit_abort)
+
+                prepared = await prepare_native_submission(
+                    owned_page, inspection, config.query
+                )
+                submission["nonblank_control_readback"] = True
+                submission["visible_native_submit_count"] = (
+                    prepared.visible_native_submit_count
+                )
+                submission["native_submit_clicked"] = True
+                assert inspection.field_value is not None
+                outcome = await wait_for_post_click_state(
+                    owned_page,
+                    query=config.query,
+                    field_value=inspection.field_value,
+                    retry_parameters=prepared.retry_parameters,
+                    timeout_seconds=config.timeout_seconds,
+                    poll_interval_seconds=config.poll_interval_seconds,
+                    busy_budget=BusyRetryBudget(
+                        max_retries=config.busy_retries,
+                        initial_delay_seconds=config.busy_retry_delay_seconds,
+                    ),
+                    clock=clock,
+                    sleeper=sleeper,
+                )
+                submission["post_click_polls"] = outcome.polls
+                submission["busy_recovery_attempts"] = outcome.busy_recovery_attempts
+                submission["busy_retries_performed"] = outcome.busy_retries_performed
+                primary_classification = outcome.classification
+                primary_total = outcome.source_total
+            except ProbeAbort as error:
+                primary_classification = error.classification
+            except Exception:
+                # Do not serialize an exception class or string: both can carry
+                # source URL/query information in a browser implementation.
+                primary_classification = "owned_page_operation_failed"
+            finally:
+                if (
+                    owned_page is not None
+                    and owned_page_is_distinct
+                    and browser is not None
+                    and context is not None
+                ):
+                    try:
+                        cleanup = await cleanup_owned_page(
+                            browser,
+                            context,
+                            owned_page,
+                            owned_target_id,
+                            baseline_pages,
+                            clock=clock,
+                            sleeper=sleeper,
+                        )
+                        ownership = receipt["ownership"]
+                        ownership["owned_page_close_attempted"] = (
+                            cleanup.close_attempted
+                        )
+                        ownership["owned_page_closed"] = cleanup.page_closed
+                        ownership["owned_target_disappeared"] = (
+                            cleanup.target_disappeared
+                        )
+                        ownership["baseline_pages_preserved"] = (
+                            cleanup.baseline_preserved
+                        )
+                        if not cleanup.verified:
+                            primary_classification = "cleanup_verification_failed"
+                            primary_total = None
+                    except Exception:
+                        receipt["ownership"]["owned_page_close_attempted"] = True
+                        receipt["ownership"]["baseline_pages_preserved"] = False
+                        primary_classification = "cleanup_verification_failed"
+                        primary_total = None
+    except Exception:
+        # This also remains identifier-free if Playwright cannot start/stop.
+        # Do not downgrade a proven cleanup failure to a transport category.
+        if primary_classification != "cleanup_verification_failed":
+            primary_classification = "browser_connection_failed"
+            primary_total = None
+
+    _set_result(receipt, primary_classification, primary_total)
+    return (0 if receipt["result"]["observations_accepted"] else 1), receipt
+
+
+def write_new_json(path: Path, payload: Mapping[str, Any]) -> None:
+    """Write one UTF-8 receipt with O_EXCL; never overwrite a prior artifact."""
+    encoded = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags, 0o600)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(encoded)
+    except Exception:
+        try:
+            path.unlink()
+        except OSError:
+            pass
+        raise
+
+
+def parse_args(argv: list[str] | None = None) -> ProbeConfig:
+    """Validate every input and receipt collision before browser import/use."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--execute", action="store_true", help="permit one source action"
+    )
+    parser.add_argument("--cdp-url", default=DEFAULT_CDP_URL)
+    parser.add_argument("--query", required=True)
+    parser.add_argument("--field-label", required=True)
+    parser.add_argument(
+        "--timeout-seconds", type=float, default=DEFAULT_TIMEOUT_SECONDS
+    )
+    parser.add_argument(
+        "--poll-interval-seconds", type=float, default=DEFAULT_POLL_INTERVAL_SECONDS
+    )
+    parser.add_argument("--busy-retries", type=int, default=DEFAULT_BUSY_RETRIES)
+    parser.add_argument(
+        "--busy-retry-delay-seconds",
+        type=float,
+        default=DEFAULT_BUSY_RETRY_DELAY_SECONDS,
+    )
+    parser.add_argument("--output-path", required=True)
+    args = parser.parse_args(argv)
+    try:
+        timeout = _finite_positive(args.timeout_seconds, "--timeout-seconds")
+        interval = _finite_positive(
+            args.poll_interval_seconds, "--poll-interval-seconds"
+        )
+        if interval > timeout:
+            raise InputValidationError(
+                "--poll-interval-seconds cannot exceed --timeout-seconds"
+            )
+        retries, retry_delay = _validate_busy_policy(
+            args.busy_retries, args.busy_retry_delay_seconds
+        )
+        return ProbeConfig(
+            execute=args.execute,
+            cdp_url=validate_loopback_cdp_endpoint(args.cdp_url),
+            query=_validate_nonblank(args.query, "--query", MAX_QUERY_CHARACTERS),
+            field_label=_validate_nonblank(
+                args.field_label, "--field-label", MAX_FIELD_LABEL_CHARACTERS
+            ),
+            timeout_seconds=timeout,
+            poll_interval_seconds=interval,
+            busy_retries=retries,
+            busy_retry_delay_seconds=retry_delay,
+            output_path=validate_output_path(args.output_path),
+        )
+    except InputValidationError as error:
+        parser.error(str(error))
+    raise AssertionError("argparse.error did not exit")  # pragma: no cover
+
+
+def main(argv: list[str] | None = None) -> int:
+    config = parse_args(argv)
+    try:
+        status, receipt = asyncio.run(run_probe(config))
+    except Exception:
+        status, receipt = 1, new_receipt(config.execute)
+        _set_result(receipt, "internal_probe_failure")
+    try:
+        write_new_json(config.output_path, receipt)
+    except OSError:
+        # Do not echo a path: it can be private controller infrastructure.
+        return 2
+    return status
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
