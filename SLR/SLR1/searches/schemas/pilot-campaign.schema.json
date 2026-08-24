@@ -1,0 +1,434 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/slr1/pilot-campaign.schema.json",
+  "title": "SLR1 checkpointed diagnostic pilot campaign",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "task_id",
+    "source_id",
+    "status",
+    "created_at",
+    "updated_at",
+    "diagnostic_only",
+    "screening_performed",
+    "candidate_import_permitted",
+    "candidate_records_imported",
+    "controller_authorization",
+    "attempts",
+    "capability_gates",
+    "decisions",
+    "cancellation",
+    "acceptance"
+  ],
+  "properties": {
+    "schema_version": {"const": "slr1-pilot-campaign/v1"},
+    "campaign_id": {"$ref": "#/$defs/campaignId"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "source_id": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": [
+        "in_progress",
+        "technically_blocked",
+        "methodological_decision_pending",
+        "ready_for_acceptance_review",
+        "accepted",
+        "cancelled"
+      ]
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "diagnostic_only": {"const": true},
+    "screening_performed": {"const": false},
+    "candidate_import_permitted": {"const": false},
+    "candidate_records_imported": {"const": 0},
+    "controller_authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "technical_corrective_attempts_authorized",
+        "maximum_additional_attempts",
+        "maximum_source_operations_per_attempt",
+        "rationale"
+      ],
+      "properties": {
+        "technical_corrective_attempts_authorized": {"type": "boolean"},
+        "maximum_additional_attempts": {"type": "integer", "minimum": 0},
+        "maximum_source_operations_per_attempt": {"type": "integer", "minimum": 0},
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "attempts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/attempt"}
+    },
+    "capability_gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/capabilityGate"}
+    },
+    "decisions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/decision"}
+    },
+    "cancellation": {
+      "type": ["object", "null"],
+      "properties": {
+        "kind": {"const": "operator_cancellation"},
+        "cancelled_by": {"const": "operator"},
+        "cancelled_at": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string", "minLength": 1},
+        "provider_failure": {"const": false}
+      },
+      "required": ["kind", "cancelled_by", "cancelled_at", "reason", "provider_failure"],
+      "additionalProperties": false
+    },
+    "acceptance": {
+      "type": ["object", "null"],
+      "properties": {
+        "accepted_by": {"type": "string", "minLength": 1},
+        "accepted_at": {"type": "string", "format": "date-time"},
+        "rationale": {"type": "string", "minLength": 1}
+      },
+      "required": ["accepted_by", "accepted_at", "rationale"],
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "cancelled"}}},
+      "then": {"properties": {"cancellation": {"$ref": "#/$defs/cancellation"}, "acceptance": {"type": "null"}}},
+      "else": {"properties": {"cancellation": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "accepted"}}},
+      "then": {"properties": {"acceptance": {"$ref": "#/$defs/acceptance"}}},
+      "else": {"properties": {"acceptance": {"type": "null"}}}
+    }
+  ],
+  "$defs": {
+    "taskId": {
+      "type": "string",
+      "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)$"
+    },
+    "campaignId": {
+      "type": "string",
+      "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)-C[0-9]{2}-[0-9]{8}T[0-9]{6}[+-][0-9]{4}$"
+    },
+    "attemptId": {
+      "type": "string",
+      "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)-P[0-9]{2}-[0-9]{8}T[0-9]{6}[+-][0-9]{4}$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gateId": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9-]{1,63}$"
+    },
+    "evidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "gateEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "validity"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "validity": {"enum": ["valid", "invalidated"]}
+      }
+    },
+    "attemptEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "gate_id", "path", "sha256", "validity"],
+      "properties": {
+        "evidence_id": {"type": "string", "pattern": "^[A-Z][A-Z0-9-]{1,63}$"},
+        "gate_id": {"$ref": "#/$defs/gateId"},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "validity": {"enum": ["valid", "invalidated"]}
+      }
+    },
+    "semanticImpact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "review_effect", "rationale"],
+      "properties": {
+        "classification": {"enum": ["none", "controller_technical", "human_methodological"]},
+        "review_effect": {"type": "boolean"},
+        "rationale": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"classification": {"const": "human_methodological"}}},
+          "then": {"properties": {"review_effect": {"const": true}}},
+          "else": {"properties": {"review_effect": {"const": false}}}
+        }
+      ]
+    },
+    "sourceOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "outcome",
+        "source_reported_total",
+        "records_retrieved",
+        "records_imported"
+      ],
+      "properties": {
+        "operation_id": {"type": "string", "minLength": 1},
+        "outcome": {"enum": ["success", "explicit_zero", "failed"]},
+        "source_reported_total": {"type": ["integer", "null"], "minimum": 0},
+        "records_retrieved": {"type": "integer", "minimum": 0},
+        "records_imported": {"const": 0}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"outcome": {"const": "success"}}},
+          "then": {"properties": {"source_reported_total": {"type": "integer", "minimum": 1}}}
+        },
+        {
+          "if": {"properties": {"outcome": {"const": "explicit_zero"}}},
+          "then": {
+            "properties": {
+              "source_reported_total": {"const": 0},
+              "records_retrieved": {"const": 0}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"outcome": {"const": "failed"}}},
+          "then": {
+            "properties": {
+              "source_reported_total": {"type": "null"},
+              "records_retrieved": {"const": 0}
+            }
+          }
+        }
+      ]
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_id",
+        "sequence",
+        "manifest_path",
+        "manifest_sha256",
+        "immutable",
+        "allocation",
+        "source_operations",
+        "evidence"
+      ],
+      "properties": {
+        "attempt_id": {"$ref": "#/$defs/attemptId"},
+        "sequence": {"type": "integer", "minimum": 1},
+        "manifest_path": {"type": "string", "minLength": 1},
+        "manifest_sha256": {"$ref": "#/$defs/hash"},
+        "immutable": {"const": true},
+        "allocation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "attempt_kind",
+            "authorized_by",
+            "authorization_decision_id",
+            "prospectively_authorized",
+            "allocated_at"
+          ],
+          "properties": {
+            "attempt_kind": {"enum": ["initial", "technical_corrective", "methodological_revision"]},
+            "authorized_by": {"enum": ["controller", "human"]},
+            "authorization_decision_id": {"type": ["string", "null"], "minLength": 1},
+            "prospectively_authorized": {"type": "boolean"},
+            "allocated_at": {"type": "string", "format": "date-time"}
+          }
+        },
+        "source_operations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["predeclared_maximum", "performed", "operations"],
+          "properties": {
+            "predeclared_maximum": {"type": "integer", "minimum": 0},
+            "performed": {"type": "integer", "minimum": 0},
+            "operations": {"type": "array", "items": {"$ref": "#/$defs/sourceOperation"}}
+          }
+        },
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/attemptEvidence"}}
+      }
+    },
+    "carryForward": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_attempt_id",
+        "from_gate_id",
+        "evidence",
+        "affected_by_code_or_semantic_change",
+        "rationale"
+      ],
+      "properties": {
+        "from_attempt_id": {"$ref": "#/$defs/attemptId"},
+        "from_gate_id": {"$ref": "#/$defs/gateId"},
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/evidenceReference"}
+        },
+        "affected_by_code_or_semantic_change": {"const": false},
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "invalidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failed_gate_id", "rationale"],
+      "properties": {
+        "failed_gate_id": {"$ref": "#/$defs/gateId"},
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "capabilityGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate_id",
+        "checkpoint_id",
+        "attempt_id",
+        "requirement",
+        "depends_on",
+        "status",
+        "observed_basis",
+        "evidence",
+        "reusable",
+        "carried_forward",
+        "carry_forward",
+        "source_operation_count",
+        "semantic_impact",
+        "invalidation",
+        "notes"
+      ],
+      "properties": {
+        "gate_id": {"$ref": "#/$defs/gateId"},
+        "checkpoint_id": {"type": "string", "pattern": "^CP-[A-Z0-9-]{2,63}$"},
+        "attempt_id": {"$ref": "#/$defs/attemptId"},
+        "requirement": {"type": "string", "minLength": 1},
+        "depends_on": {"type": "array", "items": {"$ref": "#/$defs/gateId"}, "uniqueItems": true},
+        "status": {"enum": ["passed", "failed", "blocked", "untested", "invalidated"]},
+        "observed_basis": {
+          "enum": ["observed", "official_documentation", "observed_and_documented", "inferred", "untested", "carried_forward"]
+        },
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/gateEvidence"}},
+        "reusable": {"type": "boolean"},
+        "carried_forward": {"type": "boolean"},
+        "carry_forward": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/carryForward"}]},
+        "source_operation_count": {"type": "integer", "minimum": 0},
+        "semantic_impact": {"$ref": "#/$defs/semanticImpact"},
+        "invalidation": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/invalidation"}]},
+        "notes": {"type": "string"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"carried_forward": {"const": true}}},
+          "then": {"properties": {"carry_forward": {"$ref": "#/$defs/carryForward"}, "observed_basis": {"const": "carried_forward"}}},
+          "else": {"properties": {"carry_forward": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"status": {"const": "passed"}}},
+          "then": {"properties": {"evidence": {"minItems": 1}}}
+        },
+        {
+          "if": {"properties": {"status": {"const": "invalidated"}}},
+          "then": {"properties": {"evidence": {"minItems": 1}, "invalidation": {"$ref": "#/$defs/invalidation"}}},
+          "else": {"properties": {"invalidation": {"type": "null"}}}
+        }
+      ]
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_id",
+        "attempt_id",
+        "decision_class",
+        "review_effect",
+        "affects_underlying_literature_review",
+        "human_authorization_required",
+        "authorization_status",
+        "authorized_by",
+        "affected_gate_ids",
+        "rationale"
+      ],
+      "properties": {
+        "decision_id": {"type": "string", "pattern": "^D-[A-Z0-9-]{2,63}$"},
+        "attempt_id": {"type": ["string", "null"], "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)-P[0-9]{2}-[0-9]{8}T[0-9]{6}[+-][0-9]{4}$"},
+        "decision_class": {"enum": ["none", "controller_technical", "human_methodological"]},
+        "review_effect": {"type": "boolean"},
+        "affects_underlying_literature_review": {"type": "boolean"},
+        "human_authorization_required": {"type": "boolean"},
+        "authorization_status": {"enum": ["not_required", "prospectively_authorized", "pending", "authorized"]},
+        "authorized_by": {"enum": ["none", "controller", "human"]},
+        "affected_gate_ids": {"type": "array", "items": {"$ref": "#/$defs/gateId"}, "uniqueItems": true},
+        "rationale": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"decision_class": {"const": "human_methodological"}}},
+          "then": {
+            "properties": {
+              "review_effect": {"const": true},
+              "affects_underlying_literature_review": {"const": true},
+              "human_authorization_required": {"const": true}
+            }
+          },
+          "else": {
+            "properties": {
+              "review_effect": {"const": false},
+              "affects_underlying_literature_review": {"const": false},
+              "human_authorization_required": {"const": false}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"decision_class": {"const": "controller_technical"}}},
+          "then": {"properties": {"authorized_by": {"const": "controller"}}}
+        }
+      ]
+    },
+    "cancellation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "cancelled_by", "cancelled_at", "reason", "provider_failure"],
+      "properties": {
+        "kind": {"const": "operator_cancellation"},
+        "cancelled_by": {"const": "operator"},
+        "cancelled_at": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string", "minLength": 1},
+        "provider_failure": {"const": false}
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accepted_by", "accepted_at", "rationale"],
+      "properties": {
+        "accepted_by": {"type": "string", "minLength": 1},
+        "accepted_at": {"type": "string", "format": "date-time"},
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

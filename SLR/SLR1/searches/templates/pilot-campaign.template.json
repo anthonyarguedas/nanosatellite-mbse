@@ -1,0 +1,258 @@
+{
+  "schema_version": "slr1-pilot-campaign/v1",
+  "campaign_id": "S-D01-C01-20260824T150000+0000",
+  "task_id": "S-D01",
+  "source_id": "replace",
+  "status": "technically_blocked",
+  "created_at": "2026-08-24T15:00:00+00:00",
+  "updated_at": "2026-08-24T15:10:00+00:00",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "candidate_records_imported": 0,
+  "controller_authorization": {
+    "technical_corrective_attempts_authorized": true,
+    "maximum_additional_attempts": 2,
+    "maximum_source_operations_per_attempt": 1,
+    "rationale": "Controller may allocate bounded behavior-preserving repairs without changing the review method."
+  },
+  "attempts": [
+    {
+      "attempt_id": "S-D01-P01-20260824T150000+0000",
+      "sequence": 1,
+      "manifest_path": "pilots/S-D01-P01-20260824T150000+0000/manifest.json",
+      "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "initial",
+        "authorized_by": "controller",
+        "authorization_decision_id": null,
+        "prospectively_authorized": false,
+        "allocated_at": "2026-08-24T15:00:00+00:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "OP-P01-QUERY-FIELD",
+            "outcome": "success",
+            "source_reported_total": 12,
+            "records_retrieved": 0,
+            "records_imported": 0
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P01-QUERY",
+          "gate_id": "G-QUERY-TRANSPORT",
+          "path": "pilots/S-D01-P01-20260824T150000+0000/query-transport.json",
+          "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "validity": "valid"
+        },
+        {
+          "evidence_id": "E-P01-FIELD",
+          "gate_id": "G-FIELD-BOUNDARY",
+          "path": "pilots/S-D01-P01-20260824T150000+0000/field-boundary.json",
+          "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+          "validity": "valid"
+        },
+        {
+          "evidence_id": "E-P01-PAGE-ID",
+          "gate_id": "G-PAGE-IDENTITY",
+          "path": "pilots/S-D01-P01-20260824T150000+0000/page-identity.json",
+          "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+          "validity": "invalidated"
+        }
+      ]
+    },
+    {
+      "attempt_id": "S-D01-P02-20260824T151000+0000",
+      "sequence": 2,
+      "manifest_path": "pilots/S-D01-P02-20260824T151000+0000/manifest.json",
+      "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P02",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-24T15:10:00+00:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "OP-P02-PAGINATION",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P02-PAGINATION-FAILURE",
+          "gate_id": "G-PAGINATION-CONTROL",
+          "path": "pilots/S-D01-P02-20260824T151000+0000/pagination-control-failure.json",
+          "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+          "validity": "valid"
+        }
+      ]
+    }
+  ],
+  "capability_gates": [
+    {
+      "gate_id": "G-QUERY-TRANSPORT",
+      "checkpoint_id": "CP-QUERY-TRANSPORT-P02",
+      "attempt_id": "S-D01-P02-20260824T151000+0000",
+      "requirement": "The reviewed query is accepted and echoed in the intended source field.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "carried_forward",
+      "evidence": [
+        {
+          "path": "pilots/S-D01-P01-20260824T150000+0000/query-transport.json",
+          "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": true,
+      "carry_forward": {
+        "from_attempt_id": "S-D01-P01-20260824T150000+0000",
+        "from_gate_id": "G-QUERY-TRANSPORT",
+        "evidence": [
+          {
+            "path": "pilots/S-D01-P01-20260824T150000+0000/query-transport.json",
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          }
+        ],
+        "affected_by_code_or_semantic_change": false,
+        "rationale": "The pagination-only repair does not alter query transport."
+      },
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "The carried query evidence is unchanged."
+      },
+      "invalidation": null,
+      "notes": "Earlier query evidence remains valid after the later pagination failure."
+    },
+    {
+      "gate_id": "G-FIELD-BOUNDARY",
+      "checkpoint_id": "CP-FIELD-BOUNDARY-P02",
+      "attempt_id": "S-D01-P02-20260824T151000+0000",
+      "requirement": "The configured field boundary preserves the reviewed query meaning.",
+      "depends_on": ["G-QUERY-TRANSPORT"],
+      "status": "passed",
+      "observed_basis": "carried_forward",
+      "evidence": [
+        {
+          "path": "pilots/S-D01-P01-20260824T150000+0000/field-boundary.json",
+          "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": true,
+      "carry_forward": {
+        "from_attempt_id": "S-D01-P01-20260824T150000+0000",
+        "from_gate_id": "G-FIELD-BOUNDARY",
+        "evidence": [
+          {
+            "path": "pilots/S-D01-P01-20260824T150000+0000/field-boundary.json",
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          }
+        ],
+        "affected_by_code_or_semantic_change": false,
+        "rationale": "The corrective work is scoped to pagination controls."
+      },
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "The field boundary is unchanged."
+      },
+      "invalidation": null,
+      "notes": "Earlier field evidence remains valid after the later pagination failure."
+    },
+    {
+      "gate_id": "G-PAGINATION-CONTROL",
+      "checkpoint_id": "CP-PAGINATION-CONTROL-P02",
+      "attempt_id": "S-D01-P02-20260824T151000+0000",
+      "requirement": "Pagination controls reconcile the displayed range and preserve ordered retrieval.",
+      "depends_on": ["G-FIELD-BOUNDARY"],
+      "status": "failed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D01-P02-20260824T151000+0000/pagination-control-failure.json",
+          "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The failure concerns controller pagination handling, not review semantics."
+      },
+      "invalidation": null,
+      "notes": "The failed late gate does not invalidate the earlier query or field gates."
+    },
+    {
+      "gate_id": "G-PAGE-IDENTITY",
+      "checkpoint_id": "CP-PAGE-IDENTITY-P01",
+      "attempt_id": "S-D01-P01-20260824T150000+0000",
+      "requirement": "Page identity evidence is reusable only while pagination controls remain valid.",
+      "depends_on": ["G-PAGINATION-CONTROL"],
+      "status": "invalidated",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D01-P01-20260824T150000+0000/page-identity.json",
+          "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+          "validity": "invalidated"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Only pagination-dependent identity evidence is affected."
+      },
+      "invalidation": {
+        "failed_gate_id": "G-PAGINATION-CONTROL",
+        "rationale": "The declared pagination dependency failed in P02."
+      },
+      "notes": "This is the only declared dependent invalidated by the late failure."
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "D-TECH-P02",
+      "attempt_id": "S-D01-P02-20260824T151000+0000",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": ["G-PAGINATION-CONTROL", "G-PAGE-IDENTITY"],
+      "rationale": "A bounded pagination/control repair preserves query, field, and review behavior."
+    }
+  ],
+  "cancellation": null,
+  "acceptance": null
+}

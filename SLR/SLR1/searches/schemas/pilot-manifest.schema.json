@@ -118,6 +118,15 @@
         }
       }
     },
+    "campaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["campaign_id", "attempt_id"],
+      "properties": {
+        "campaign_id": {"type": "string", "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)-C[0-9]{2}-[0-9]{8}T[0-9]{6}[+-][0-9]{4}$"},
+        "attempt_id": {"type": "string", "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)-P[0-9]{2}-[0-9]{8}T[0-9]{6}[+-][0-9]{4}$"}
+      }
+    },
     "disposition": {
       "type": "object",
       "additionalProperties": false,
