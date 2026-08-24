@@ -26,7 +26,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-import validate_search_infrastructure as infrastructure
+import validate_search_infrastructure as infrastructure  # noqa: E402
 
 ROOT = SCRIPT_DIR.parent
 SEARCHES = ROOT / "searches"
@@ -137,6 +137,8 @@ def accepted_campaign() -> dict[str, Any]:
 @contextmanager
 def materialized_campaign(
     data: dict[str, Any] | None = None,
+    *,
+    legacy_manifests: bool = False,
 ) -> Iterator[tuple[Path, Path, dict[str, Any], Path]]:
     """Create a complete source packet with hashed evidence and linked manifests."""
     temporary = tempfile.TemporaryDirectory()
@@ -167,6 +169,20 @@ def materialized_campaign(
                     evidence["sha256"] = evidence_hashes[evidence["path"]]
 
         for attempt in data["attempts"]:
+            terminal = attempt["terminal"]
+            if terminal["browser_backed"]:
+                for receipt_name in ("cleanup_receipt", "lease_receipt"):
+                    receipt = terminal[receipt_name]
+                    if receipt is None:
+                        continue
+                    receipt_path = source_packet / receipt["path"]
+                    receipt_contents = (
+                        f"{receipt_name}-{attempt['attempt_id']}\n"
+                    ).encode()
+                    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+                    receipt_path.write_bytes(receipt_contents)
+                    receipt["sha256"] = sha256(receipt_contents)
+
             manifest = manifest_template()
             manifest.update(
                 {
@@ -174,13 +190,27 @@ def materialized_campaign(
                     "task_id": data["task_id"],
                     "source_id": data["source_id"],
                     "method_type": data["method_type"],
-                    "campaign": {
-                        "campaign_id": data["campaign_id"],
-                        "attempt_id": attempt["attempt_id"],
-                    },
-                    "attempt_terminal": copy.deepcopy(attempt["terminal"]),
                 }
             )
+            if not legacy_manifests:
+                manifest.update(
+                    {
+                        "campaign": {
+                            "campaign_id": data["campaign_id"],
+                            "attempt_id": attempt["attempt_id"],
+                        },
+                        # pilot-manifest.schema.json predates the campaign-only
+                        # terminal verification state; links retain its old shape.
+                        "attempt_terminal": {
+                            key: value
+                            for key, value in attempt["terminal"].items()
+                            if key != "terminal_verification"
+                        },
+                    }
+                )
+            else:
+                manifest.pop("campaign", None)
+                manifest.pop("attempt_terminal", None)
             manifest["status"] = {
                 "completed": "complete",
                 "blocked": "blocked",
@@ -479,8 +509,134 @@ class PilotCampaignValidationTests(unittest.TestCase):
     def test_browser_backed_terminal_requires_cleanup_and_lease_receipts(self) -> None:
         data = campaign()
         terminal = data["attempts"][0]["terminal"]
-        terminal["browser_backed"] = True
+        terminal.update({"browser_backed": True, "terminal_verification": "verified"})
         with self.assertRaises(AssertionError):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_current_browser_terminal_receipts_are_hash_verified(self) -> None:
+        data = campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "browser_backed": True,
+                "terminal_verification": "verified",
+                "cleanup_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/cleanup-receipt.json",
+                    "sha256": "a" * 64,
+                },
+                "lease_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/lease-receipt.json",
+                    "sha256": "b" * 64,
+                },
+            }
+        )
+        with materialized_campaign(data) as (searches_root, _, _, _):
+            self.assertEqual(
+                infrastructure.validate_campaign_artifacts(searches_root), 1
+            )
+
+    def test_current_browser_terminal_rejects_missing_receipt(self) -> None:
+        data = campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "browser_backed": True,
+                "terminal_verification": "verified",
+                "cleanup_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/cleanup-receipt.json",
+                    "sha256": "a" * 64,
+                },
+            }
+        )
+        with self.assertRaises(AssertionError):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_immutable_legacy_browser_terminal_is_allowed_without_receipts(
+        self,
+    ) -> None:
+        data = campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "outcome": "blocked",
+                "category": "technical",
+                "browser_backed": True,
+                "terminal_verification": "legacy_unverifiable",
+                "reason": "Historical browser attempt lacks a public shared-lease receipt.",
+            }
+        )
+        with materialized_campaign(data, legacy_manifests=True) as (
+            searches_root,
+            _,
+            _,
+            _,
+        ):
+            self.assertEqual(
+                infrastructure.validate_campaign_artifacts(searches_root), 1
+            )
+
+    def test_new_linked_manifest_rejects_legacy_browser_terminal(self) -> None:
+        data = campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "outcome": "blocked",
+                "category": "technical",
+                "browser_backed": True,
+                "terminal_verification": "legacy_unverifiable",
+                "reason": "Historical browser attempt lacks a public shared-lease receipt.",
+            }
+        )
+        with materialized_campaign(data) as (
+            searches_root,
+            campaign_path,
+            data,
+            source_packet,
+        ):
+            # A campaign link alone is enough to prove this is not the immutable
+            # pre-campaign manifest shape, while remaining valid under v1 schema.
+            for attempt in data["attempts"]:
+                manifest_path = source_packet / attempt["manifest_path"]
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                manifest.pop("attempt_terminal")
+                attempt["manifest_sha256"] = write_json(manifest_path, manifest)
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(AssertionError, "legacy_unverifiable"):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
+    def test_acceptance_rejects_legacy_unverifiable_browser_terminal(self) -> None:
+        data = accepted_campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "outcome": "blocked",
+                "category": "technical",
+                "browser_backed": True,
+                "terminal_verification": "legacy_unverifiable",
+                "reason": "Historical browser attempt lacks a public shared-lease receipt.",
+            }
+        )
+        with self.assertRaisesRegex(AssertionError, "accepted.*legacy_unverifiable"):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_lease_receipt_cannot_be_a_preflight_or_postflight_artifact(self) -> None:
+        data = campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "browser_backed": True,
+                "terminal_verification": "verified",
+                "cleanup_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/cleanup-receipt.json",
+                    "sha256": "a" * 64,
+                },
+                "lease_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/postflight.json",
+                    "sha256": "b" * 64,
+                },
+            }
+        )
+        with self.assertRaisesRegex(AssertionError, "preflight/postflight"):
             infrastructure.validate_campaign_artifact(data)
 
     def test_busy_reissue_policy_is_auditable_and_accounted(self) -> None:

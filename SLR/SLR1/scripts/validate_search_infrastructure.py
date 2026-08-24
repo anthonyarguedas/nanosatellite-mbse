@@ -102,6 +102,11 @@ CAMPAIGN_STATUSES = {
     "cancelled",
 }
 GATE_STATUSES = {"passed", "failed", "blocked", "untested", "invalidated"}
+TERMINAL_VERIFICATIONS = {
+    "not_applicable",
+    "verified",
+    "legacy_unverifiable",
+}
 DECISION_CLASSES = {"none", "controller_technical", "human_methodological"}
 DECISION_AUTHORIZATION_STATUSES = {
     "not_required",
@@ -239,6 +244,16 @@ def _file_reference(value: Any, label: str) -> tuple[str, str]:
         _relative_path(reference["path"], f"{label}.path"),
         _sha256(reference["sha256"], f"{label}.sha256"),
     )
+
+
+def _shared_lease_reference(value: Any, label: str) -> tuple[str, str]:
+    path, digest = _file_reference(value, label)
+    normalized_path = path.lower()
+    require(
+        "preflight" not in normalized_path and "postflight" not in normalized_path,
+        f"{label} must not reference a preflight/postflight artifact",
+    )
+    return path, digest
 
 
 def _task_prefix(identifier: str, marker: str) -> str:
@@ -478,6 +493,7 @@ def _validate_terminal(value: Any, label: str) -> dict[str, Any]:
             "provider_failure",
             "source_writing_stopped",
             "browser_backed",
+            "terminal_verification",
             "cleanup_receipt",
             "lease_receipt",
             "cancelled_by",
@@ -512,6 +528,11 @@ def _validate_terminal(value: Any, label: str) -> dict[str, Any]:
         f"{label}.source_writing_stopped must be true",
     )
     browser_backed = _boolean(terminal["browser_backed"], f"{label}.browser_backed")
+    terminal_verification = terminal["terminal_verification"]
+    require(
+        terminal_verification in TERMINAL_VERIFICATIONS,
+        f"{label}.terminal_verification is invalid",
+    )
     cancelled_by = terminal["cancelled_by"]
 
     if outcome == "cancelled":
@@ -555,16 +576,37 @@ def _validate_terminal(value: Any, label: str) -> dict[str, Any]:
 
     cleanup = terminal["cleanup_receipt"]
     lease = terminal["lease_receipt"]
-    if browser_backed:
-        _file_reference(cleanup, f"{label}.cleanup_receipt")
-        _file_reference(lease, f"{label}.lease_receipt")
-    else:
+    if not browser_backed:
+        require(
+            terminal_verification == "not_applicable",
+            f"{label}.terminal_verification must be not_applicable when not browser-backed",
+        )
         require(
             cleanup is None,
             f"{label}.cleanup_receipt must be null when not browser-backed",
         )
         require(
             lease is None, f"{label}.lease_receipt must be null when not browser-backed"
+        )
+    elif terminal_verification == "verified":
+        _file_reference(cleanup, f"{label}.cleanup_receipt")
+        _shared_lease_reference(lease, f"{label}.lease_receipt")
+    else:
+        require(
+            terminal_verification == "legacy_unverifiable",
+            f"{label}.terminal_verification is invalid for a browser-backed attempt",
+        )
+        require(
+            outcome in {"blocked", "failed", "cancelled"},
+            f"{label}.legacy_unverifiable terminal cannot be completed",
+        )
+        require(
+            cleanup is None,
+            f"{label}.cleanup_receipt must be null for legacy_unverifiable terminal",
+        )
+        require(
+            lease is None,
+            f"{label}.lease_receipt must be null for legacy_unverifiable terminal",
         )
     _string(terminal["reason"], f"{label}.reason")
     return terminal
@@ -1960,6 +2002,14 @@ def _validate_campaign_state(
         not cancelled_attempts,
         "a cancelled attempt terminal outcome requires cancelled campaign status",
     )
+    if status in {"ready_for_acceptance_review", "accepted"}:
+        require(
+            not any(
+                attempt["terminal"]["terminal_verification"] == "legacy_unverifiable"
+                for attempt in attempts.values()
+            ),
+            f"{status} cannot use legacy_unverifiable browser terminal evidence",
+        )
     if status == "accepted":
         acceptance = _mapping(acceptance, "campaign.acceptance")
         _require_fields(
@@ -2140,12 +2190,19 @@ def _read_source_file(
     return contents
 
 
+def _manifest_terminal_projection(terminal: dict[str, Any]) -> dict[str, Any]:
+    """Project campaign terminal data into the older manifest terminal shape."""
+    return {
+        key: value for key, value in terminal.items() if key != "terminal_verification"
+    }
+
+
 def _validate_manifest_link(
     manifest: Any,
     campaign: dict[str, Any],
     attempt: dict[str, Any],
     label: str,
-) -> None:
+) -> bool:
     manifest = _mapping(manifest, label)
     require(
         manifest.get("pilot_id") == attempt["attempt_id"],
@@ -2163,12 +2220,16 @@ def _validate_manifest_link(
         manifest.get("method_type") == campaign["method_type"],
         f"{label}.method_type does not match campaign method",
     )
-    link = manifest.get("campaign")
-    if link is None:
-        # Campaign and terminal links were additive fields.  The immutable v1
+    has_campaign_link = "campaign" in manifest
+    has_terminal_link = "attempt_terminal" in manifest
+    if not has_campaign_link and not has_terminal_link:
+        # Campaign and terminal links were additive fields. The immutable v1
         # manifests already recorded the identity above and must not be
         # rewritten merely because a later campaign points at them.
-        return
+        return True
+
+    require(has_campaign_link, f"{label}.attempt_terminal requires a campaign link")
+    link = manifest["campaign"]
     require(isinstance(link, dict), f"{label}.campaign link is invalid")
     require(
         link.get("campaign_id") == campaign["campaign_id"],
@@ -2178,11 +2239,13 @@ def _validate_manifest_link(
         link.get("attempt_id") == attempt["attempt_id"],
         f"{label}.campaign.attempt_id does not match attempt",
     )
-    if "attempt_terminal" in manifest:
+    if has_terminal_link:
         require(
-            manifest["attempt_terminal"] == attempt["terminal"],
+            manifest["attempt_terminal"]
+            == _manifest_terminal_projection(attempt["terminal"]),
             f"{label}.attempt_terminal does not match campaign terminal outcome",
         )
+    return False
 
 
 def _validate_campaign_files(
@@ -2205,15 +2268,29 @@ def _validate_campaign_files(
             raise AssertionError(f"{label} is not valid JSON") from exc
         _validate_jsonschema_instance(manifest_schema, manifest, label)
         _validate_pilot_manifest_formats(manifest, label)
-        _validate_manifest_link(manifest, campaign, attempt, label)
+        legacy_manifest = _validate_manifest_link(manifest, campaign, attempt, label)
 
         terminal = attempt["terminal"]
-        if terminal["browser_backed"]:
+        if terminal["terminal_verification"] == "legacy_unverifiable":
+            require(
+                legacy_manifest,
+                f"{label} legacy_unverifiable terminal requires an immutable legacy manifest without campaign or attempt_terminal links",
+            )
+        if (
+            terminal["browser_backed"]
+            and terminal["terminal_verification"] == "verified"
+        ):
             for receipt_name in ("cleanup_receipt", "lease_receipt"):
                 receipt = terminal[receipt_name]
-                path, digest = _file_reference(
-                    receipt, f"campaign.attempts[{index}].terminal.{receipt_name}"
-                )
+                if receipt_name == "lease_receipt":
+                    path, digest = _shared_lease_reference(
+                        receipt,
+                        f"campaign.attempts[{index}].terminal.{receipt_name}",
+                    )
+                else:
+                    path, digest = _file_reference(
+                        receipt, f"campaign.attempts[{index}].terminal.{receipt_name}"
+                    )
                 _read_source_file(
                     source_packet,
                     path,

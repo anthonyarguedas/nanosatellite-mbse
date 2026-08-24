@@ -332,6 +332,7 @@
         "provider_failure",
         "source_writing_stopped",
         "browser_backed",
+        "terminal_verification",
         "cleanup_receipt",
         "lease_receipt",
         "cancelled_by",
@@ -353,6 +354,9 @@
         "provider_failure": {"type": "boolean"},
         "source_writing_stopped": {"const": true},
         "browser_backed": {"type": "boolean"},
+        "terminal_verification": {
+          "enum": ["not_applicable", "verified", "legacy_unverifiable"]
+        },
         "cleanup_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/fileReference"}]},
         "lease_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/fileReference"}]},
         "cancelled_by": {"type": ["string", "null"], "minLength": 1},
@@ -384,15 +388,49 @@
           "then": {"properties": {"provider_failure": {"const": true}}}
         },
         {
+          "if": {"properties": {"browser_backed": {"const": false}}},
+          "then": {
+            "properties": {
+              "terminal_verification": {"const": "not_applicable"},
+              "cleanup_receipt": {"type": "null"},
+              "lease_receipt": {"type": "null"}
+            }
+          }
+        },
+        {
           "if": {"properties": {"browser_backed": {"const": true}}},
+          "then": {
+            "properties": {
+              "terminal_verification": {
+                "enum": ["verified", "legacy_unverifiable"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "browser_backed": {"const": true},
+              "terminal_verification": {"const": "verified"}
+            }
+          },
           "then": {
             "properties": {
               "cleanup_receipt": {"$ref": "#/$defs/fileReference"},
               "lease_receipt": {"$ref": "#/$defs/fileReference"}
             }
-          },
-          "else": {
+          }
+        },
+        {
+          "if": {
             "properties": {
+              "browser_backed": {"const": true},
+              "terminal_verification": {"const": "legacy_unverifiable"}
+            }
+          },
+          "then": {
+            "properties": {
+              "outcome": {"enum": ["blocked", "failed", "cancelled"]},
               "cleanup_receipt": {"type": "null"},
               "lease_receipt": {"type": "null"}
             }
