@@ -71,6 +71,7 @@ def post_state(
     access: bool = False,
     syntax: bool = False,
     route: bool = True,
+    identity: bool = True,
     readback: bool = True,
     kind: str = "unknown",
     total: int | None = None,
@@ -82,7 +83,7 @@ def post_state(
         "access": access,
         "syntax_error": syntax,
         "canonical_advanced_route": route,
-        "source_identity": True,
+        "source_identity": identity,
         "form_readback_exact": readback,
         "result_kind": kind,
         "source_total": total,
@@ -102,8 +103,10 @@ def unknown_state() -> dict:
     return post_state(route=False, readback=False)
 
 
-def busy_state(*, route: bool = True, readback: bool = True) -> dict:
-    return post_state(busy=True, route=route, readback=readback)
+def busy_state(
+    *, route: bool = True, identity: bool = True, readback: bool = True
+) -> dict:
+    return post_state(busy=True, route=route, identity=identity, readback=readback)
 
 
 def budget(retries: int = 2, delay: float = 1.0):
@@ -290,10 +293,21 @@ def valid_inspection(source_state: str | None = None):
     )
 
 
+def safety_payload(**overrides: bool) -> dict[str, bool]:
+    payload = {name: True for name in oatd.PRE_CLICK_SAFETY_FIELDS}
+    payload.update(overrides)
+    return payload
+
+
+def valid_safety() -> oatd.PreClickSafety:
+    return oatd.pre_click_safety_from_payload(safety_payload())
+
+
 def valid_prepared():
     return oatd.PreparedSubmission(
         retry_parameters=(("box1", "private query phrase"), ("field1", "title")),
         visible_native_submit_count=1,
+        pre_click_safety=valid_safety(),
     )
 
 
@@ -364,6 +378,26 @@ class OATDPostClickStateMachineTests(unittest.TestCase):
         outcome, _ = self.run_wait(page)
         self.assertEqual(outcome.classification, "busy_after_submission")
         self.assertEqual(page.goto_calls, [])
+
+    def test_busy_without_source_identity_is_not_reissued(self):
+        page = StatePage([busy_state(identity=False)])
+        outcome, _ = self.run_wait(page)
+        self.assertEqual(outcome.classification, "busy_after_submission")
+        self.assertEqual(page.goto_calls, [])
+
+    def test_throwing_busy_retry_accounts_dispatch_before_goto_returns(self):
+        class ThrowingGotoPage(StatePage):
+            async def goto(self, *args, **kwargs):
+                self.goto_calls.append((args, kwargs))
+                raise RuntimeError("offline dispatched goto failure")
+
+        page = ThrowingGotoPage([busy_state(), busy_state()])
+        outcome, _ = self.run_wait(page)
+        self.assertEqual(outcome.classification, "busy_retry_navigation_failed")
+        self.assertEqual(outcome.busy_retries_attempted, 1)
+        self.assertEqual(outcome.busy_retries_completed, 0)
+        self.assertEqual(outcome.busy_retries_performed, 1)
+        self.assertEqual(len(page.goto_calls), 1)
 
     def test_syntax_access_challenge_and_unobserved_timeout_are_distinct(self):
         syntax, _ = self.run_wait(StatePage([post_state(syntax=True)]))
@@ -488,10 +522,11 @@ class OATDFormPreparationTests(unittest.TestCase):
                 return self
 
         class Form:
-            def __init__(self) -> None:
+            def __init__(self, safety: dict | None = None) -> None:
                 self.box = Control()
                 self.field = Control()
                 self.submit = Control()
+                self.safety = safety or safety_payload()
 
             async def evaluate(self, script, *_args):
                 if script == oatd.FORM_SELF_CHECK_SCRIPT:
@@ -501,6 +536,8 @@ class OATDFormPreparationTests(unittest.TestCase):
                     }
                 if script == oatd.FORM_CONTROL_INVENTORY_SCRIPT:
                     return inventory
+                if script == oatd.PRE_CLICK_SAFETY_SCRIPT:
+                    return self.safety
                 raise AssertionError("unexpected form script")
 
             def locator(self, selector):
@@ -535,6 +572,31 @@ class OATDFormPreparationTests(unittest.TestCase):
         self.assertEqual(form.field.selected, "title")
         self.assertEqual(form.submit.clicked, 1)
         self.assertEqual(prepared.visible_native_submit_count, 1)
+        self.assertTrue(prepared.pre_click_safety.verified)
+
+        for requirement in oatd.PRE_CLICK_SAFETY_FIELDS:
+            with self.subTest(requirement=requirement):
+                form = Form(safety_payload(**{requirement: False}))
+                with self.assertRaises(oatd.PreClickSafetyFailure):
+                    asyncio.run(
+                        oatd.prepare_native_submission(
+                            Page(), valid_inspection(), "private query phrase"
+                        )
+                    )
+                self.assertEqual(form.submit.clicked, 0)
+
+    def test_pre_click_safety_accepts_only_boolean_route_and_submit_proof(self):
+        self.assertTrue(oatd.pre_click_safety_from_payload(safety_payload()).verified)
+        for requirement in oatd.PRE_CLICK_SAFETY_FIELDS:
+            with self.subTest(requirement=requirement):
+                safety = oatd.pre_click_safety_from_payload(
+                    safety_payload(**{requirement: False})
+                )
+                self.assertFalse(safety.verified)
+        malformed = safety_payload()
+        malformed["form_target_self"] = "_self"
+        with self.assertRaises(oatd.ProbeAbort):
+            oatd.pre_click_safety_from_payload(malformed)
 
     def test_source_never_uses_programmatic_form_submission_or_navigation_wait(self):
         source = (SCRIPTS / "oatd_advanced_form_probe.py").read_text(encoding="utf-8")
@@ -543,7 +605,13 @@ class OATDFormPreparationTests(unittest.TestCase):
 
 
 class OATDOwnershipAndCleanupTests(unittest.TestCase):
-    def run_lifecycle(self, session: LeasePlaywright, *, inspection=None):
+    def run_lifecycle(
+        self,
+        session: LeasePlaywright,
+        *,
+        inspection=None,
+        post_click_outcome: oatd.PostClickOutcome | None = None,
+    ):
         with tempfile.TemporaryDirectory() as directory:
             receipt_path = Path(directory) / "receipt.json"
             fake_clock = FakeClock()
@@ -562,9 +630,8 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
                     oatd,
                     "wait_for_post_click_state",
                     new=mock.AsyncMock(
-                        return_value=oatd.PostClickOutcome(
-                            "result_observed", 5, 1, 0, 0
-                        )
+                        return_value=post_click_outcome
+                        or oatd.PostClickOutcome("result_observed", 5, 1, 0, 0)
                     ),
                 ),
             ):
@@ -594,6 +661,19 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
         self.assertNotIn("private query phrase", serialized)
         self.assertNotIn("owned-target-secret", serialized)
 
+    def test_receipt_separates_busy_retry_attempted_and_completed_counts(self):
+        session = LeasePlaywright()
+        status, receipt = self.run_lifecycle(
+            session,
+            post_click_outcome=oatd.PostClickOutcome(
+                "busy_retry_navigation_failed", None, 2, 1, 1, 0
+            ),
+        )
+        self.assertEqual(status, 1)
+        self.assertEqual(receipt["submission"]["busy_retries_attempted"], 1)
+        self.assertEqual(receipt["submission"]["busy_retries_completed"], 0)
+        self.assertEqual(receipt["submission"]["busy_retries_performed"], 1)
+
     def test_non_distinct_new_page_is_never_closed_as_if_owned(self):
         session = LeasePlaywright()
 
@@ -607,6 +687,44 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
         self.assertEqual(session.context.baselines[0].close_calls, 0)
         self.assertFalse(session.context.baselines[0].is_closed())
 
+    def test_alias_wrapper_for_a_baseline_target_fails_before_home_navigation(self):
+        session = LeasePlaywright()
+
+        async def alias_wrapper():
+            alias = LeasePage(session.context, session.context.baselines[0].target_id)
+            session.context.created = alias
+            session.context.pages.append(alias)
+            return alias
+
+        session.context.new_page = alias_wrapper
+        status, receipt = self.run_lifecycle(session)
+        alias = session.context.created
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "owned_target_not_verified"
+        )
+        self.assertEqual(alias.goto_calls, [])
+        self.assertEqual(alias.close_calls, 0)
+        self.assertEqual(session.context.baselines[0].close_calls, 0)
+
+    def test_new_wrapper_with_a_baseline_target_id_fails_before_navigation(self):
+        session = LeasePlaywright()
+
+        async def same_id_page():
+            page = LeasePage(session.context, session.context.baselines[0].target_id)
+            session.context.created = page
+            return page
+
+        session.context.new_page = same_id_page
+        status, receipt = self.run_lifecycle(session)
+        page = session.context.created
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "owned_target_not_verified"
+        )
+        self.assertEqual(page.goto_calls, [])
+        self.assertEqual(page.close_calls, 0)
+
     def test_cleanup_failure_after_close_error_is_terminal_and_null(self):
         session = LeasePlaywright(close_raises=True)
         status, receipt = self.run_lifecycle(session)
@@ -617,6 +735,7 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
         self.assertIsNone(receipt["result"]["source_reported_total"])
         self.assertFalse(receipt["result"]["observations_accepted"])
         self.assertTrue(session.context.created.close_while_live)
+        self.assertNotIn("offline close failure", json.dumps(receipt))
 
     def test_closed_page_with_surviving_exact_target_is_terminal(self):
         session = LeasePlaywright(retain_closed_target=True)
@@ -626,6 +745,7 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
             receipt["result"]["classification"], "cleanup_verification_failed"
         )
         self.assertFalse(receipt["ownership"]["owned_target_disappeared"])
+        self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
 
     def test_baseline_mutation_is_detected_without_closing_a_baseline(self):
         session = LeasePlaywright(mutate_baseline_on_owned_close=True)
@@ -635,6 +755,7 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
             receipt["result"]["classification"], "cleanup_verification_failed"
         )
         self.assertFalse(receipt["ownership"]["baseline_pages_preserved"])
+        self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
         self.assertFalse(session.context.baselines[0].is_closed())
 
     def test_pre_submit_terminal_state_still_closes_owned_page_live(self):
@@ -667,6 +788,50 @@ class OATDInputAndPrivacyTests(unittest.TestCase):
             self.assertEqual(status, 0)
             self.assertFalse(called)
             self.assertEqual(receipt["result"]["classification"], "dry_run")
+
+    def test_direct_runtime_config_rejects_invalid_and_wrong_port_before_factory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            called = False
+
+            def forbidden_factory():
+                nonlocal called
+                called = True
+                raise AssertionError("invalid config must not start Playwright")
+
+            bad_configs = (
+                oatd.ProbeConfig(
+                    execute=True,
+                    cdp_url="http://127.0.0.1:9223",
+                    query="private query phrase",
+                    field_label="Title",
+                    timeout_seconds=1.0,
+                    poll_interval_seconds=0.1,
+                    busy_retries=0,
+                    busy_retry_delay_seconds=1.0,
+                    output_path=Path(directory) / "wrong-port.json",
+                ),
+                oatd.ProbeConfig(
+                    execute="yes",
+                    cdp_url=oatd.DEFAULT_CDP_URL,
+                    query="private query phrase",
+                    field_label="Title",
+                    timeout_seconds=1.0,
+                    poll_interval_seconds=0.1,
+                    busy_retries=0,
+                    busy_retry_delay_seconds=1.0,
+                    output_path=Path(directory) / "invalid-execute.json",
+                ),
+            )
+            for bad_config in bad_configs:
+                with self.subTest(config=bad_config.cdp_url):
+                    status, receipt = asyncio.run(
+                        oatd.run_probe(bad_config, playwright_factory=forbidden_factory)
+                    )
+                    self.assertEqual(status, 1)
+                    self.assertEqual(
+                        receipt["result"]["classification"], "invalid_runtime_config"
+                    )
+            self.assertFalse(called)
 
     def test_invalid_endpoint_and_output_collision_fail_before_browser_use(self):
         with tempfile.TemporaryDirectory() as directory:

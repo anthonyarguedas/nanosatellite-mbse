@@ -24,10 +24,9 @@ import math
 import os
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
-from ipaddress import ip_address
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlencode, urlsplit, urlunsplit
+from urllib.parse import urlencode
 
 
 DEFAULT_CDP_URL = "http://127.0.0.1:9222"
@@ -92,6 +91,73 @@ class ProbeAbort(RuntimeError):
 
 
 @dataclass(frozen=True)
+class PreClickSafety:
+    """Boolean-only proof required immediately before native submission."""
+
+    current_canonical_home_route: bool
+    source_identity: bool
+    exact_https_origin: bool
+    canonical_effective_get_action: bool
+    form_target_self: bool
+    submitter_no_override: bool
+
+    @property
+    def verified(self) -> bool:
+        return bool(
+            self.current_canonical_home_route
+            and self.source_identity
+            and self.exact_https_origin
+            and self.canonical_effective_get_action
+            and self.form_target_self
+            and self.submitter_no_override
+        )
+
+
+class PreClickSafetyFailure(ProbeAbort):
+    """Carries only safe boolean proof facts to the receipt layer."""
+
+    def __init__(self, safety: PreClickSafety) -> None:
+        super().__init__("pre_click_safety_not_verified")
+        self.safety = safety
+
+
+SAFE_PROBE_ABORT_CLASSIFICATIONS = frozenset(
+    {
+        "unexpected_browser_context_count",
+        "baseline_target_inventory_unavailable",
+        "owned_page_not_distinct",
+        "owned_target_not_verified",
+        "challenge_before_submission",
+        "busy_before_submission",
+        "access_before_submission",
+        "syntax_before_submission",
+        "canonical_advanced_form_not_observed",
+        "advanced_form_control_mapping_failed",
+        "advanced_field_mapping_failed",
+        "native_submit_control_not_unique",
+        "advanced_form_projection_failed",
+        "advanced_retry_controls_not_prevalidated",
+        "advanced_control_readback_failed",
+        "native_submit_interaction_failed",
+        "pre_click_safety_projection_failed",
+        "pre_click_safety_not_verified",
+        "post_click_projection_failed",
+    }
+)
+
+
+def safe_probe_abort_classification(error: ProbeAbort) -> str:
+    """Do not let an externally raised ProbeAbort inject receipt content."""
+    classification = error.classification
+    if (
+        type(classification) is str
+        and classification in SAFE_PROBE_ABORT_CLASSIFICATIONS
+    ):
+        return classification
+    return "owned_page_operation_failed"
+
+
+@dataclass(frozen=True)
 class ProbeConfig:
     """Validated invocation data; sensitive values are never serialized."""
 
@@ -127,6 +193,7 @@ class PreparedSubmission:
 
     retry_parameters: tuple[tuple[str, str], ...]
     visible_native_submit_count: int
+    pre_click_safety: PreClickSafety
 
 
 @dataclass(frozen=True)
@@ -158,6 +225,7 @@ class PostClickState:
             and not self.access
             and not self.syntax_error
             and self.canonical_advanced_route
+            and self.source_identity
             and self.form_readback_exact
         )
 
@@ -169,8 +237,15 @@ class PostClickOutcome:
     classification: str
     source_total: int | None
     polls: int
+    # Retained for compatibility; "performed" means dispatched/attempted.
     busy_retries_performed: int
     busy_recovery_attempts: int
+    busy_retries_completed: int = 0
+
+    @property
+    def busy_retries_attempted(self) -> int:
+        """Retries accounted immediately before their awaitable goto call."""
+        return self.busy_retries_performed
 
 
 @dataclass
@@ -180,7 +255,13 @@ class BusyRetryBudget:
     max_retries: int
     initial_delay_seconds: float
     recovery_attempts: int = 0
-    performed_retries: int = 0
+    attempted_retries: int = 0
+    completed_retries: int = 0
+
+    @property
+    def performed_retries(self) -> int:
+        """Compatibility name for retries dispatched to page.goto."""
+        return self.attempted_retries
 
     def reserve_delay(self) -> float | None:
         """Reserve one finite recovery wait and return its capped delay."""
@@ -193,11 +274,17 @@ class BusyRetryBudget:
         self.recovery_attempts += 1
         return delay
 
-    def record_retry(self) -> None:
-        """Record an actual same-tab retry after a reserved wait."""
-        if self.performed_retries >= self.recovery_attempts:
+    def record_retry_attempt(self) -> None:
+        """Consume and account a retry immediately before dispatching goto."""
+        if self.attempted_retries >= self.recovery_attempts:
             raise RuntimeError("busy retry was not reserved")
-        self.performed_retries += 1
+        self.attempted_retries += 1
+
+    def record_retry_completion(self) -> None:
+        """Account only a goto that returned normally after dispatch."""
+        if self.completed_retries >= self.attempted_retries:
+            raise RuntimeError("busy retry completion was not attempted")
+        self.completed_retries += 1
 
 
 @dataclass(frozen=True)
@@ -208,6 +295,7 @@ class CleanupReport:
     page_closed: bool
     target_disappeared: bool
     baseline_preserved: bool | None
+    baseline_target_set_preserved: bool | None = None
 
     @property
     def verified(self) -> bool:
@@ -216,6 +304,7 @@ class CleanupReport:
             and self.page_closed
             and self.target_disappeared
             and self.baseline_preserved is True
+            and self.baseline_target_set_preserved is True
         )
 
 
@@ -293,6 +382,89 @@ FORM_SELF_CHECK_SCRIPT = r"""
     canonical_form_count: canonical.length,
     selected_form_is_canonical: canonical.length === 1 && canonical[0] === form
   };
+}
+"""
+
+PRE_CLICK_SAFETY_SCRIPT = r"""
+(form) => {
+  const result = {
+    current_canonical_home_route: false,
+    source_identity: false,
+    exact_https_origin: false,
+    canonical_effective_get_action: false,
+    form_target_self: false,
+    submitter_no_override: false
+  };
+  const normalize = value => String(value || "").replace(/[\s\u2009\u202f]+/g, " ").trim();
+  const visible = element => Boolean(
+    element && (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+  );
+  const formValue = (candidate, name) => {
+    const descriptor = Object.getOwnPropertyDescriptor(HTMLFormElement.prototype, name);
+    if (!descriptor || typeof descriptor.get !== "function") throw new Error("form getter unavailable");
+    return descriptor.get.call(candidate);
+  };
+  const exactOatdOrigin = value => {
+    try {
+      const parsed = new URL(String(value));
+      return parsed.protocol === "https:" && parsed.origin === "https://oatd.org" &&
+        parsed.hostname === "oatd.org" && parsed.port === "" &&
+        parsed.username === "" && parsed.password === "";
+    } catch (_) {
+      return false;
+    }
+  };
+  try {
+    if (!(form instanceof HTMLFormElement)) return result;
+    const current = new URL(window.location.href);
+    result.exact_https_origin = exactOatdOrigin(current.href);
+    result.current_canonical_home_route = result.exact_https_origin &&
+      current.pathname === "/" && current.search === "" && current.hash === "";
+
+    const sourceTitle = /\bOATD\b/i.test(normalize(document.title));
+    const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
+      .some(element => normalize(element.textContent) === "Open Access Theses and Dissertations");
+    result.source_identity = Boolean(sourceTitle && sourceHeading);
+
+    const isCanonicalEffectiveGet = candidate => {
+      if (!(candidate instanceof HTMLFormElement)) return false;
+      try {
+        const action = new URL(String(formValue(candidate, "action")));
+        return exactOatdOrigin(action.href) && action.pathname === "/oatd/search-composer" &&
+          action.search === "" && action.hash === "" &&
+          String(formValue(candidate, "method")).toLowerCase() === "get";
+      } catch (_) {
+        return false;
+      }
+    };
+    const canonicalForms = Array.from(document.forms).filter(isCanonicalEffectiveGet);
+    result.canonical_effective_get_action = Boolean(
+      isCanonicalEffectiveGet(form) && canonicalForms.length === 1 && canonicalForms[0] === form
+    );
+
+    const isSelfTarget = target => target === "" || target.toLowerCase() === "_self";
+    const effectiveTarget = String(formValue(form, "target") || "");
+    // A document-level base target can otherwise turn an omitted form target
+    // into a new browsing context, so reject every non-self base target too.
+    const baseTargetsAreSelf = Array.from(document.querySelectorAll("base[target]"))
+      .every(base => isSelfTarget(String(base.getAttribute("target") || "")));
+    result.form_target_self = isSelfTarget(effectiveTarget) && baseTargetsAreSelf;
+
+    const nativeSubmits = Array.from(form.querySelectorAll("button, input")).filter(element =>
+      visible(element) && ((element.tagName === "BUTTON" && element.type === "submit") ||
+        (element.tagName === "INPUT" && element.type === "submit"))
+    );
+    const submitter = nativeSubmits.length === 1 ? nativeSubmits[0] : null;
+    result.submitter_no_override = Boolean(
+      submitter && submitter.form === form &&
+      !Element.prototype.hasAttribute.call(submitter, "formaction") &&
+      !Element.prototype.hasAttribute.call(submitter, "formmethod") &&
+      !Element.prototype.hasAttribute.call(submitter, "formtarget")
+    );
+  } catch (_) {
+    // A malformed or changing document leaves the fixed-safe booleans false.
+  }
+  return result;
 }
 """
 
@@ -408,42 +580,16 @@ def compact(value: Any) -> str:
     return " ".join(str(value or "").split())
 
 
-def _is_loopback_host(hostname: str | None) -> bool:
-    if not hostname:
-        return False
-    if hostname.casefold() == "localhost":
-        return True
-    try:
-        return ip_address(hostname).is_loopback
-    except ValueError:
-        return False
-
-
-def validate_loopback_cdp_endpoint(value: str) -> str:
-    """Accept one plain local CDP endpoint; no discovery or remote hosts."""
-    try:
-        parsed = urlsplit(value.strip())
-        port = parsed.port
-    except ValueError as error:
-        raise InputValidationError(
-            "--cdp-url must contain a valid loopback port"
-        ) from error
-    if (
-        parsed.scheme != "http"
-        or not _is_loopback_host(parsed.hostname)
-        or parsed.username
-        or parsed.password
-        or parsed.path not in {"", "/"}
-        or parsed.query
-        or parsed.fragment
-        or port is None
-        or not 1 <= port <= 65_535
-    ):
-        raise InputValidationError("--cdp-url must be a plain loopback http endpoint")
-    return urlunsplit((parsed.scheme, parsed.netloc, "", "", ""))
+def validate_loopback_cdp_endpoint(value: Any) -> str:
+    """Require the one controller-shared CDP endpoint, with no overrides."""
+    if type(value) is not str or value != DEFAULT_CDP_URL:
+        raise InputValidationError(f"--cdp-url must be exactly {DEFAULT_CDP_URL}")
+    return DEFAULT_CDP_URL
 
 
 def _finite_positive(value: Any, option: str) -> float:
+    if isinstance(value, bool):
+        raise InputValidationError(f"{option} must be a finite positive number")
     try:
         parsed = float(value)
     except (TypeError, ValueError) as error:
@@ -489,13 +635,43 @@ def validate_output_path(value: str) -> Path:
 
 
 def _validate_nonblank(value: str, option: str, maximum: int) -> str:
-    if not isinstance(value, str) or not compact(value) or len(value) > maximum:
+    if type(value) is not str or not compact(value) or len(value) > maximum:
         raise InputValidationError(
             f"{option} must be nonblank and within its safe size limit"
         )
     if "\x00" in value:
         raise InputValidationError(f"{option} contains an unsafe control character")
     return value
+
+
+def validate_runtime_config(config: Any) -> ProbeConfig:
+    """Revalidate direct API input before any Playwright lifecycle can start."""
+    if not isinstance(config, ProbeConfig) or type(config.execute) is not bool:
+        raise InputValidationError("runtime probe configuration is invalid")
+    if not isinstance(config.output_path, Path):
+        raise InputValidationError("runtime probe configuration is invalid")
+    timeout = _finite_positive(config.timeout_seconds, "--timeout-seconds")
+    interval = _finite_positive(config.poll_interval_seconds, "--poll-interval-seconds")
+    if interval > timeout:
+        raise InputValidationError(
+            "--poll-interval-seconds cannot exceed --timeout-seconds"
+        )
+    retries, retry_delay = _validate_busy_policy(
+        config.busy_retries, config.busy_retry_delay_seconds
+    )
+    return ProbeConfig(
+        execute=config.execute,
+        cdp_url=validate_loopback_cdp_endpoint(config.cdp_url),
+        query=_validate_nonblank(config.query, "--query", MAX_QUERY_CHARACTERS),
+        field_label=_validate_nonblank(
+            config.field_label, "--field-label", MAX_FIELD_LABEL_CHARACTERS
+        ),
+        timeout_seconds=timeout,
+        poll_interval_seconds=interval,
+        busy_retries=retries,
+        busy_retry_delay_seconds=retry_delay,
+        output_path=validate_output_path(str(config.output_path)),
+    )
 
 
 def _milliseconds(seconds: float) -> int:
@@ -510,6 +686,32 @@ def _exact_nonnegative_int(value: Any) -> int | None:
 
 def _bool(value: Any) -> bool:
     return value is True
+
+
+PRE_CLICK_SAFETY_FIELDS = (
+    "current_canonical_home_route",
+    "source_identity",
+    "exact_https_origin",
+    "canonical_effective_get_action",
+    "form_target_self",
+    "submitter_no_override",
+)
+
+
+def pre_click_safety_from_payload(payload: Any) -> PreClickSafety:
+    """Accept only the boolean proof allowlist from the final form check."""
+    if not isinstance(payload, Mapping) or any(
+        type(payload.get(name)) is not bool for name in PRE_CLICK_SAFETY_FIELDS
+    ):
+        raise ProbeAbort("pre_click_safety_projection_failed")
+    return PreClickSafety(
+        current_canonical_home_route=payload["current_canonical_home_route"],
+        source_identity=payload["source_identity"],
+        exact_https_origin=payload["exact_https_origin"],
+        canonical_effective_get_action=payload["canonical_effective_get_action"],
+        form_target_self=payload["form_target_self"],
+        submitter_no_override=payload["submitter_no_override"],
+    )
 
 
 def inspect_form_payload(payload: Any) -> FormInspection:
@@ -704,6 +906,13 @@ async def prepare_native_submission(
         submit_count = await native_submit.count()
         if submit_count != 1 or not await native_submit.first.is_visible():
             raise ProbeAbort("native_submit_control_not_unique")
+        # This final projection is deliberately adjacent to click. It returns
+        # only booleans, and a changed route/action/target cannot be submitted.
+        safety = pre_click_safety_from_payload(
+            await form.evaluate(PRE_CLICK_SAFETY_SCRIPT)
+        )
+        if not safety.verified:
+            raise PreClickSafetyFailure(safety)
         await native_submit.first.click()
     except ProbeAbort:
         raise
@@ -712,6 +921,7 @@ async def prepare_native_submission(
     return PreparedSubmission(
         retry_parameters=parameters,
         visible_native_submit_count=submit_count,
+        pre_click_safety=safety,
     )
 
 
@@ -784,8 +994,9 @@ def _outcome(
         classification=classification,
         source_total=source_total,
         polls=polls,
-        busy_retries_performed=budget.performed_retries,
+        busy_retries_performed=budget.attempted_retries,
         busy_recovery_attempts=budget.recovery_attempts,
+        busy_retries_completed=budget.completed_retries,
     )
 
 
@@ -949,14 +1160,19 @@ async def wait_for_post_click_state(
                     budget=busy_budget,
                 )
             try:
+                retry_url = canonical_retry_url(retry_parameters)
+            except ProbeAbort:
+                raise
+            # Account before the await: a transport error can occur after the
+            # browser dispatched the GET, so this attempt must never read zero.
+            busy_budget.record_retry_attempt()
+            try:
                 await page.goto(
-                    canonical_retry_url(retry_parameters),
+                    retry_url,
                     wait_until="domcontentloaded",
                     timeout=_milliseconds(timeout_seconds),
                 )
-                busy_budget.record_retry()
-            except ProbeAbort:
-                raise
+                busy_budget.record_retry_completion()
             except Exception:
                 return _outcome(
                     "busy_retry_navigation_failed",
@@ -987,7 +1203,7 @@ async def target_id_for(context: Any, page: Any) -> str | None:
         payload = await session.send("Target.getTargetInfo")
         info = payload.get("targetInfo") if isinstance(payload, Mapping) else None
         target_id = info.get("targetId") if isinstance(info, Mapping) else None
-        return target_id if isinstance(target_id, str) and target_id else None
+        return target_id if type(target_id) is str and target_id else None
     except Exception:
         return None
     finally:
@@ -998,8 +1214,8 @@ async def target_id_for(context: Any, page: Any) -> str | None:
                 pass
 
 
-async def active_target_ids(browser: Any) -> set[str] | None:
-    """Read active targets from a browser-level CDP session without tab access."""
+async def active_target_ids(browser: Any) -> frozenset[str] | None:
+    """Read an unambiguous browser-level page-target inventory in memory."""
     session: Any | None = None
     try:
         session = await browser.new_browser_cdp_session()
@@ -1007,13 +1223,19 @@ async def active_target_ids(browser: Any) -> set[str] | None:
         infos = payload.get("targetInfos") if isinstance(payload, Mapping) else None
         if not isinstance(infos, list):
             return None
-        return {
-            item["targetId"]
-            for item in infos
-            if isinstance(item, Mapping)
-            and item.get("type") == "page"
-            and isinstance(item.get("targetId"), str)
-        }
+        page_target_ids: list[str] = []
+        for item in infos:
+            if not isinstance(item, Mapping):
+                return None
+            if item.get("type") != "page":
+                continue
+            target_id = item.get("targetId")
+            if type(target_id) is not str or not target_id:
+                return None
+            page_target_ids.append(target_id)
+        if len(page_target_ids) != len(set(page_target_ids)):
+            return None
+        return frozenset(page_target_ids)
     except Exception:
         return None
     finally:
@@ -1044,6 +1266,7 @@ async def _wait_for_target_disappearance(
     clock: Callable[[], float],
     sleeper: Callable[[float], Awaitable[None]],
 ) -> bool:
+    """Retain the narrow helper for callers that need disappearance alone."""
     deadline = clock() + CLEANUP_TIMEOUT_SECONDS
     while True:
         targets = await active_target_ids(browser)
@@ -1053,7 +1276,34 @@ async def _wait_for_target_disappearance(
             return True
         if clock() >= deadline:
             return False
-        await sleeper(min(CLEANUP_POLL_INTERVAL_SECONDS, deadline - clock()))
+        await _sleep_to_deadline(
+            deadline, CLEANUP_POLL_INTERVAL_SECONDS, clock, sleeper
+        )
+
+
+async def _wait_for_baseline_target_set(
+    browser: Any,
+    owned_target_id: str,
+    baseline_target_ids: frozenset[str],
+    *,
+    clock: Callable[[], float],
+    sleeper: Callable[[float], Awaitable[None]],
+) -> tuple[bool, bool]:
+    """Wait only for the exact pre-create target set to be restored."""
+    deadline = clock() + CLEANUP_TIMEOUT_SECONDS
+    while True:
+        targets = await active_target_ids(browser)
+        if targets is None:
+            return False, False
+        target_disappeared = owned_target_id not in targets
+        baseline_target_set_preserved = targets == baseline_target_ids
+        if baseline_target_set_preserved:
+            return target_disappeared, True
+        if clock() >= deadline:
+            return target_disappeared, False
+        await _sleep_to_deadline(
+            deadline, CLEANUP_POLL_INTERVAL_SECONDS, clock, sleeper
+        )
 
 
 async def cleanup_owned_page(
@@ -1063,30 +1313,40 @@ async def cleanup_owned_page(
     owned_target_id: str | None,
     baseline_pages: tuple[Any, ...],
     *,
+    baseline_target_ids: frozenset[str] | None = None,
     clock: Callable[[], float] | None = None,
     sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
 ) -> CleanupReport:
-    """Close only the owned page and prove its exact CDP target disappeared."""
+    """Close only a proven new page and restore the exact target baseline live."""
     if clock is None:
         clock = asyncio.get_running_loop().time
     close_attempted = True
     page_closed = False
     target_disappeared = False
+    baseline_target_set_preserved: bool | None = None
     try:
         if not owned_page.is_closed():
             await owned_page.close()
         page_closed = bool(owned_page.is_closed())
     except Exception:
         page_closed = False
-    if page_closed and owned_target_id is not None:
-        target_disappeared = await _wait_for_target_disappearance(
-            browser, owned_target_id, clock=clock, sleeper=sleeper
+    if page_closed and owned_target_id is not None and baseline_target_ids is not None:
+        (
+            target_disappeared,
+            baseline_target_set_preserved,
+        ) = await _wait_for_baseline_target_set(
+            browser,
+            owned_target_id,
+            baseline_target_ids,
+            clock=clock,
+            sleeper=sleeper,
         )
     return CleanupReport(
         close_attempted=close_attempted,
         page_closed=page_closed,
         target_disappeared=target_disappeared,
         baseline_preserved=baseline_pages_preserved(context, baseline_pages),
+        baseline_target_set_preserved=baseline_target_set_preserved,
     )
 
 
@@ -1119,6 +1379,7 @@ def new_receipt(execute: bool) -> dict[str, Any]:
             "owned_page_closed": False,
             "owned_target_disappeared": False,
             "baseline_pages_preserved": None,
+            "baseline_target_set_preserved": None,
         },
         "submission": {
             "canonical_form_count": None,
@@ -1128,9 +1389,18 @@ def new_receipt(execute: bool) -> dict[str, Any]:
             "exact_field_mapping": False,
             "nonblank_control_readback": False,
             "visible_native_submit_count": None,
+            "current_canonical_home_route": False,
+            "current_source_identity": False,
+            "current_exact_https_origin": False,
+            "canonical_effective_get_action": False,
+            "form_target_self": False,
+            "submitter_no_override": False,
+            "pre_click_safety_verified": False,
             "native_submit_clicked": False,
             "post_click_polls": 0,
             "busy_recovery_attempts": 0,
+            "busy_retries_attempted": 0,
+            "busy_retries_completed": 0,
             "busy_retries_performed": 0,
         },
         "result": {
@@ -1140,6 +1410,32 @@ def new_receipt(execute: bool) -> dict[str, Any]:
             "observations_accepted": False,
         },
     }
+
+
+def _boolean_pre_click_safety(value: Any) -> PreClickSafety:
+    """Normalize even an unexpected internal error payload to safe booleans."""
+    try:
+        values = tuple(getattr(value, name) for name in PRE_CLICK_SAFETY_FIELDS)
+    except Exception:
+        values = ()
+    if len(values) != len(PRE_CLICK_SAFETY_FIELDS) or any(
+        type(item) is not bool for item in values
+    ):
+        return PreClickSafety(False, False, False, False, False, False)
+    return PreClickSafety(*values)
+
+
+def _apply_pre_click_safety(receipt: dict[str, Any], safety: Any) -> None:
+    """Copy only final boolean submission-proof facts into the receipt."""
+    safety = _boolean_pre_click_safety(safety)
+    submission = receipt["submission"]
+    submission["current_canonical_home_route"] = safety.current_canonical_home_route
+    submission["current_source_identity"] = safety.source_identity
+    submission["current_exact_https_origin"] = safety.exact_https_origin
+    submission["canonical_effective_get_action"] = safety.canonical_effective_get_action
+    submission["form_target_self"] = safety.form_target_self
+    submission["submitter_no_override"] = safety.submitter_no_override
+    submission["pre_click_safety_verified"] = safety.verified
 
 
 def _set_result(
@@ -1163,6 +1459,14 @@ async def run_probe(
     sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
 ) -> tuple[int, dict[str, Any]]:
     """Run the opt-in source action while preserving all baseline pages."""
+    try:
+        config = validate_runtime_config(config)
+    except Exception:
+        # Direct ProbeConfig construction cannot bypass pre-connection policy.
+        receipt = new_receipt(False)
+        _set_result(receipt, "invalid_runtime_config")
+        return 1, receipt
+
     receipt = new_receipt(config.execute)
     if not config.execute:
         _set_result(receipt, "dry_run")
@@ -1179,9 +1483,10 @@ async def run_probe(
     browser: Any | None = None
     context: Any | None = None
     owned_page: Any | None = None
-    owned_page_is_distinct = False
+    owned_page_safe_to_close = False
     owned_target_id: str | None = None
     baseline_pages: tuple[Any, ...] = ()
+    baseline_target_ids: frozenset[str] | None = None
     primary_classification = "browser_connection_failed"
     primary_total: int | None = None
 
@@ -1200,6 +1505,11 @@ async def run_probe(
                 context = contexts[0]
                 baseline_pages = tuple(context.pages)
                 receipt["ownership"]["baseline_page_count"] = len(baseline_pages)
+                # Browser-level target ownership is the authority. Snapshot it
+                # before creating anything, while retaining IDs only in memory.
+                baseline_target_ids = await active_target_ids(browser)
+                if baseline_target_ids is None:
+                    raise ProbeAbort("baseline_target_inventory_unavailable")
 
                 owned_page = await context.new_page()
                 receipt["ownership"]["owned_page_created"] = True
@@ -1209,14 +1519,29 @@ async def run_probe(
                 receipt["ownership"]["owned_page_distinct_from_baseline"] = distinct
                 if not distinct:
                     raise ProbeAbort("owned_page_not_distinct")
-                owned_page_is_distinct = True
+
+                post_create_target_ids = await active_target_ids(browser)
                 owned_target_id = await target_id_for(context, owned_page)
-                targets = await active_target_ids(browser)
-                target_verified = bool(
+                owned_target_is_new = bool(
                     owned_target_id is not None
-                    and targets is not None
-                    and owned_target_id in targets
+                    and post_create_target_ids is not None
+                    and owned_target_id in post_create_target_ids
+                    and owned_target_id not in baseline_target_ids
                 )
+                # A target that is proven non-baseline is safe to close even if
+                # a concurrent target mutation makes the run fail before goto.
+                owned_page_safe_to_close = owned_target_is_new
+                target_verified = False
+                if owned_target_is_new and post_create_target_ids is not None:
+                    assert owned_target_id is not None
+                    expected_target_ids = baseline_target_ids | frozenset(
+                        {owned_target_id}
+                    )
+                    target_verified = (
+                        post_create_target_ids == expected_target_ids
+                        and post_create_target_ids - baseline_target_ids
+                        == frozenset({owned_target_id})
+                    )
                 receipt["ownership"]["owned_target_verified"] = target_verified
                 if not target_verified:
                     raise ProbeAbort("owned_target_not_verified")
@@ -1252,6 +1577,7 @@ async def run_probe(
                 submission["visible_native_submit_count"] = (
                     prepared.visible_native_submit_count
                 )
+                _apply_pre_click_safety(receipt, prepared.pre_click_safety)
                 submission["native_submit_clicked"] = True
                 assert inspection.field_value is not None
                 outcome = await wait_for_post_click_state(
@@ -1270,11 +1596,16 @@ async def run_probe(
                 )
                 submission["post_click_polls"] = outcome.polls
                 submission["busy_recovery_attempts"] = outcome.busy_recovery_attempts
+                submission["busy_retries_attempted"] = outcome.busy_retries_attempted
+                submission["busy_retries_completed"] = outcome.busy_retries_completed
                 submission["busy_retries_performed"] = outcome.busy_retries_performed
                 primary_classification = outcome.classification
                 primary_total = outcome.source_total
+            except PreClickSafetyFailure as error:
+                _apply_pre_click_safety(receipt, error.safety)
+                primary_classification = "pre_click_safety_not_verified"
             except ProbeAbort as error:
-                primary_classification = error.classification
+                primary_classification = safe_probe_abort_classification(error)
             except Exception:
                 # Do not serialize an exception class or string: both can carry
                 # source URL/query information in a browser implementation.
@@ -1282,9 +1613,10 @@ async def run_probe(
             finally:
                 if (
                     owned_page is not None
-                    and owned_page_is_distinct
+                    and owned_page_safe_to_close
                     and browser is not None
                     and context is not None
+                    and baseline_target_ids is not None
                 ):
                     try:
                         cleanup = await cleanup_owned_page(
@@ -1293,6 +1625,7 @@ async def run_probe(
                             owned_page,
                             owned_target_id,
                             baseline_pages,
+                            baseline_target_ids=baseline_target_ids,
                             clock=clock,
                             sleeper=sleeper,
                         )
@@ -1307,12 +1640,16 @@ async def run_probe(
                         ownership["baseline_pages_preserved"] = (
                             cleanup.baseline_preserved
                         )
+                        ownership["baseline_target_set_preserved"] = (
+                            cleanup.baseline_target_set_preserved
+                        )
                         if not cleanup.verified:
                             primary_classification = "cleanup_verification_failed"
                             primary_total = None
                     except Exception:
                         receipt["ownership"]["owned_page_close_attempted"] = True
                         receipt["ownership"]["baseline_pages_preserved"] = False
+                        receipt["ownership"]["baseline_target_set_preserved"] = False
                         primary_classification = "cleanup_verification_failed"
                         primary_total = None
     except Exception:

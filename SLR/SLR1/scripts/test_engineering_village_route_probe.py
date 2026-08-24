@@ -399,6 +399,51 @@ class EngineeringVillageStabilizationTests(unittest.TestCase):
         self.assertEqual(outcome.failure_code, "projection_durable_failure")
         self.assertFalse(outcome.timed_out)
 
+    def test_late_equal_projection_is_not_accepted_as_stable(self):
+        clock = FakeClock()
+
+        class LatePage(ProjectionPage):
+            def __init__(self):
+                super().__init__([])
+                self.calls = 0
+
+            async def evaluate(self, *_args, **_kwargs):
+                self.calls += 1
+                if self.calls == 2:
+                    clock.value = 1.0
+                return projection_payload()
+
+        page = LatePage()
+        outcome = asyncio.run(
+            ev.stabilize_after_domcontentloaded(
+                page,
+                timeout_seconds=1.0,
+                interval_seconds=0.1,
+                clock=clock,
+                sleeper=clock.sleep,
+            )
+        )
+        self.assertIsNone(outcome.sample)
+        self.assertEqual(outcome.failure_code, "projection_stabilization_timeout")
+        self.assertTrue(outcome.timed_out)
+        self.assertEqual(outcome.stable_samples, 0)
+        self.assertEqual(page.calls, 2)
+
+    def test_slow_projection_is_bounded_by_the_remaining_deadline(self):
+        class SlowPage(ProjectionPage):
+            async def evaluate(self, *_args, **_kwargs):
+                await asyncio.sleep(0.05)
+                return projection_payload()
+
+        outcome = asyncio.run(
+            ev.stabilize_after_domcontentloaded(
+                SlowPage([]), timeout_seconds=0.01, interval_seconds=0.01
+            )
+        )
+        self.assertIsNone(outcome.sample)
+        self.assertEqual(outcome.failure_code, "projection_stabilization_timeout")
+        self.assertTrue(outcome.timed_out)
+
 
 class EngineeringVillageOwnershipAndCleanupTests(unittest.TestCase):
     def run_lifecycle(self, session: LeasePlaywright):
@@ -443,6 +488,52 @@ class EngineeringVillageOwnershipAndCleanupTests(unittest.TestCase):
         self.assertEqual(session.context.baselines[0].close_calls, 0)
         self.assertFalse(session.context.baselines[0].is_closed())
 
+    def test_alias_wrapper_for_a_baseline_target_fails_before_navigation(self):
+        session = LeasePlaywright()
+
+        async def alias_wrapper():
+            alias = LeasePage(
+                session.context,
+                session.context.baselines[0].target_id,
+                evaluations=session.context.evaluations,
+            )
+            session.context.created = alias
+            session.context.pages.append(alias)
+            return alias
+
+        session.context.new_page = alias_wrapper
+        status, receipt = self.run_lifecycle(session)
+        alias = session.context.created
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "owned_target_not_verified"
+        )
+        self.assertEqual(alias.goto_calls, [])
+        self.assertEqual(alias.close_calls, 0)
+        self.assertEqual(session.context.baselines[0].close_calls, 0)
+
+    def test_new_wrapper_with_a_baseline_target_id_fails_before_navigation(self):
+        session = LeasePlaywright()
+
+        async def same_id_page():
+            page = LeasePage(
+                session.context,
+                session.context.baselines[0].target_id,
+                evaluations=session.context.evaluations,
+            )
+            session.context.created = page
+            return page
+
+        session.context.new_page = same_id_page
+        status, receipt = self.run_lifecycle(session)
+        page = session.context.created
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "owned_target_not_verified"
+        )
+        self.assertEqual(page.goto_calls, [])
+        self.assertEqual(page.close_calls, 0)
+
     def test_close_failure_is_terminal_and_no_route_observation_is_accepted(self):
         session = LeasePlaywright(close_raises=True)
         status, receipt = self.run_lifecycle(session)
@@ -452,6 +543,7 @@ class EngineeringVillageOwnershipAndCleanupTests(unittest.TestCase):
         )
         self.assertFalse(receipt["result"]["observations_accepted"])
         self.assertTrue(session.context.created.close_while_live)
+        self.assertNotIn("offline close failure", json.dumps(receipt))
 
     def test_surviving_owned_target_after_close_is_terminal(self):
         session = LeasePlaywright(retain_closed_target=True)
@@ -461,6 +553,7 @@ class EngineeringVillageOwnershipAndCleanupTests(unittest.TestCase):
             receipt["result"]["classification"], "cleanup_verification_failed"
         )
         self.assertFalse(receipt["ownership"]["owned_target_disappeared"])
+        self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
 
     def test_baseline_change_is_detected_without_closing_baseline_pages(self):
         session = LeasePlaywright(mutate_baseline_on_owned_close=True)
@@ -470,6 +563,7 @@ class EngineeringVillageOwnershipAndCleanupTests(unittest.TestCase):
             receipt["result"]["classification"], "cleanup_verification_failed"
         )
         self.assertFalse(receipt["ownership"]["baseline_pages_preserved"])
+        self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
         self.assertFalse(session.context.baselines[0].is_closed())
 
     def test_two_existing_contexts_are_rejected_before_owned_page_creation(self):
@@ -500,6 +594,42 @@ class EngineeringVillageInputAndPrivacyTests(unittest.TestCase):
             self.assertEqual(status, 0)
             self.assertFalse(called)
             self.assertEqual(receipt["result"]["classification"], "dry_run")
+
+    def test_direct_runtime_config_rejects_invalid_and_wrong_port_before_factory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            called = False
+
+            def forbidden_factory():
+                nonlocal called
+                called = True
+                raise AssertionError("invalid config must not start Playwright")
+
+            bad_configs = (
+                ev.ProbeConfig(
+                    execute=True,
+                    cdp_url="http://127.0.0.1:9223",
+                    timeout_seconds=1.0,
+                    stabilization_interval_seconds=0.1,
+                    output_path=Path(directory) / "wrong-port.json",
+                ),
+                ev.ProbeConfig(
+                    execute="yes",
+                    cdp_url=ev.DEFAULT_CDP_URL,
+                    timeout_seconds=1.0,
+                    stabilization_interval_seconds=0.1,
+                    output_path=Path(directory) / "invalid-execute.json",
+                ),
+            )
+            for bad_config in bad_configs:
+                with self.subTest(config=bad_config.cdp_url):
+                    status, receipt = asyncio.run(
+                        ev.run_probe(bad_config, playwright_factory=forbidden_factory)
+                    )
+                    self.assertEqual(status, 1)
+                    self.assertEqual(
+                        receipt["result"]["classification"], "invalid_runtime_config"
+                    )
+            self.assertFalse(called)
 
     def test_invalid_inputs_and_output_collision_fail_before_source_action(self):
         with tempfile.TemporaryDirectory() as directory:
