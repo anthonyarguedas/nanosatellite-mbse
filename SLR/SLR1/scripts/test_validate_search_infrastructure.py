@@ -273,6 +273,26 @@ class PilotCampaignValidationTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "campaign_id does not match"):
                 infrastructure.validate_campaign_artifacts(searches_root)
 
+    def test_legacy_manifest_without_additive_links_is_hashed_and_validated(
+        self,
+    ) -> None:
+        with materialized_campaign() as (
+            searches_root,
+            campaign_path,
+            data,
+            source_packet,
+        ):
+            for attempt in data["attempts"]:
+                manifest_path = source_packet / attempt["manifest_path"]
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                manifest.pop("campaign")
+                manifest.pop("attempt_terminal")
+                attempt["manifest_sha256"] = write_json(manifest_path, manifest)
+            save_campaign(campaign_path, data)
+            self.assertEqual(
+                infrastructure.validate_campaign_artifacts(searches_root), 1
+            )
+
     def test_accepted_campaign_requires_observed_not_inferred_catalog_gate(
         self,
     ) -> None:
@@ -356,6 +376,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
                 "authorization_status": "prospectively_authorized",
                 "authorized_by": "controller",
                 "decided_at": "2026-08-24T15:19:00+00:00",
+                "maximum_source_operations": 0,
                 "affected_gate_ids": ["G-PAGINATION-CONTROL"],
                 "rationale": "Second bounded technical repair.",
             }
@@ -365,6 +386,70 @@ class PilotCampaignValidationTests(unittest.TestCase):
         authorization["maximum_technical_corrective_attempts"] = 1
         authorization["maximum_methodological_revision_attempts"] = 1
         with self.assertRaisesRegex(AssertionError, "finite .*budget"):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_prospective_technical_decision_binds_a_later_attempt(self) -> None:
+        data = campaign()
+        decision = data["decisions"][0]
+        decision["attempt_id"] = None
+        decision["maximum_source_operations"] = 4
+        data["controller_authorization"]["maximum_source_operations_per_attempt"] = 100
+        data["attempts"][1]["source_operations"]["predeclared_maximum"] = 4
+        infrastructure.validate_campaign_artifact(data)
+
+        data["attempts"][1]["source_operations"]["predeclared_maximum"] = 5
+        with self.assertRaisesRegex(
+            AssertionError, "decision .*source-operation bound"
+        ):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_methodological_decision_only_gate_does_not_block_technical_retry(
+        self,
+    ) -> None:
+        data = campaign()
+        data["status"] = "methodological_decision_pending"
+        data["capability_gates"].append(
+            {
+                "gate_id": "G-NEAR6-METHOD",
+                "checkpoint_id": "CP-NEAR6-METHOD",
+                "attempt_id": data["attempts"][0]["attempt_id"],
+                "requirement": "Human decision is required before changing the method.",
+                "depends_on": [],
+                "status": "untested",
+                "observed_basis": "untested",
+                "original_observed_basis": "untested",
+                "evidence": [],
+                "reusable": False,
+                "carried_forward": False,
+                "carry_forward": None,
+                "source_operation_count": 0,
+                "semantic_impact": {
+                    "classification": "human_methodological",
+                    "review_effect": True,
+                    "rationale": "NEAR/6 method remains undecided.",
+                },
+                "invalidation": None,
+                "notes": "Decision-only gate recorded against the initial technical observation.",
+            }
+        )
+        data["decisions"].append(
+            {
+                "decision_id": "D-METHOD-NEAR6",
+                "attempt_id": None,
+                "decision_class": "human_methodological",
+                "review_effect": True,
+                "affects_underlying_literature_review": True,
+                "human_authorization_required": True,
+                "authorization_status": "pending",
+                "authorized_by": "none",
+                "affected_gate_ids": ["G-NEAR6-METHOD"],
+                "rationale": "Human authorization is pending for the NEAR/6 methodological choice.",
+            }
+        )
+        infrastructure.validate_campaign_artifact(data)
+
+        data["capability_gates"][-1]["source_operation_count"] = 1
+        with self.assertRaisesRegex(AssertionError, "cannot authorize source work"):
             infrastructure.validate_campaign_artifact(data)
 
     def test_methodological_gate_cannot_hide_in_technical_attempt(self) -> None:
@@ -425,6 +510,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
                     "reason": "same_tab_busy",
                     "same_tab": True,
                     "preauthorized": True,
+                    "completed": True,
                     "passive_wait_delay_seconds": 5,
                     "receipt": {
                         "path": "pilots/S-D01-P02-20260824T151000+0000/busy-reissue.json",
@@ -434,6 +520,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
             }
         )
         data["controller_authorization"]["maximum_source_operations_per_attempt"] = 2
+        data["decisions"][0]["maximum_source_operations"] = 2
         data["retry_policy"] = {
             "policy_id": "RP-BUSY-01",
             "maximum_retries": 1,
@@ -444,8 +531,62 @@ class PilotCampaignValidationTests(unittest.TestCase):
         }
         infrastructure.validate_campaign_artifact(data)
 
+        retry = data["attempts"][1]["source_operations"]["operations"][1]["retry"]
+        retry["completed"] = False
         data["retry_policy"]["completed"] = 0
+        infrastructure.validate_campaign_artifact(data)
+
+        data["retry_policy"]["completed"] = 1
         with self.assertRaisesRegex(AssertionError, "completed does not match"):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_incomplete_reissue_must_be_failed(self) -> None:
+        data = campaign()
+        operations = data["attempts"][1]["source_operations"]
+        first = operations["operations"][0]
+        first.update(
+            {
+                "outcome": "busy",
+                "source_reported_total": None,
+                "records_retrieved": 0,
+            }
+        )
+        operations["predeclared_maximum"] = 2
+        operations["performed"] = 2
+        operations["operations"].append(
+            {
+                "operation_id": "OP-P02-PAGINATION-REISSUE",
+                "operation_key": "PAGINATION",
+                "outcome": "success",
+                "source_reported_total": 1,
+                "records_retrieved": 0,
+                "records_imported": 0,
+                "retry": {
+                    "reissue_of": "OP-P02-PAGINATION",
+                    "policy_id": "RP-BUSY-01",
+                    "reason": "same_tab_busy",
+                    "same_tab": True,
+                    "preauthorized": True,
+                    "completed": False,
+                    "passive_wait_delay_seconds": 5,
+                    "receipt": {
+                        "path": "pilots/S-D01-P02-20260824T151000+0000/busy-reissue.json",
+                        "sha256": "e" * 64,
+                    },
+                },
+            }
+        )
+        data["controller_authorization"]["maximum_source_operations_per_attempt"] = 2
+        data["decisions"][0]["maximum_source_operations"] = 2
+        data["retry_policy"] = {
+            "policy_id": "RP-BUSY-01",
+            "maximum_retries": 1,
+            "passive_wait_delays_seconds": [5],
+            "attempted": 1,
+            "completed": 0,
+            "preauthorized_same_tab_busy_reissue": True,
+        }
+        with self.assertRaisesRegex(AssertionError, "failed"):
             infrastructure.validate_campaign_artifact(data)
 
     def test_failed_operation_cannot_be_reissued(self) -> None:
@@ -469,6 +610,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
                     "reason": "same_tab_busy",
                     "same_tab": True,
                     "preauthorized": True,
+                    "completed": True,
                     "passive_wait_delay_seconds": 5,
                     "receipt": {
                         "path": "pilots/S-D01-P02-20260824T151000+0000/busy-reissue.json",
@@ -478,6 +620,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
             }
         )
         data["controller_authorization"]["maximum_source_operations_per_attempt"] = 2
+        data["decisions"][0]["maximum_source_operations"] = 2
         data["retry_policy"] = {
             "policy_id": "RP-BUSY-01",
             "maximum_retries": 1,

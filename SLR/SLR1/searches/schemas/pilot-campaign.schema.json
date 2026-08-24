@@ -225,6 +225,7 @@
         "same_tab",
         "preauthorized",
         "passive_wait_delay_seconds",
+        "completed",
         "receipt"
       ],
       "properties": {
@@ -234,6 +235,7 @@
         "same_tab": {"const": true},
         "preauthorized": {"const": true},
         "passive_wait_delay_seconds": {"type": "integer", "minimum": 0},
+        "completed": {"type": "boolean"},
         "receipt": {"$ref": "#/$defs/fileReference"}
       }
     },
@@ -280,6 +282,33 @@
               "records_retrieved": {"const": 0}
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "outcome": {"enum": ["success", "explicit_zero", "busy"]},
+              "retry": {"type": "object"}
+            }
+          },
+          "then": {
+            "properties": {
+              "retry": {
+                "type": "object",
+                "properties": {"completed": {"const": true}}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "retry": {
+                "type": "object",
+                "properties": {"completed": {"const": false}}
+              }
+            }
+          },
+          "then": {"properties": {"outcome": {"const": "failed"}}}
         }
       ]
     },
@@ -564,6 +593,7 @@
         "authorization_status": {"enum": ["not_required", "prospectively_authorized", "pending", "authorized"]},
         "authorized_by": {"enum": ["none", "controller", "human"]},
         "decided_at": {"type": ["string", "null"], "format": "date-time"},
+        "maximum_source_operations": {"type": "integer", "minimum": 0, "maximum": 100},
         "affected_gate_ids": {"type": "array", "items": {"$ref": "#/$defs/gateId"}, "uniqueItems": true},
         "rationale": {"type": "string", "minLength": 1}
       },
@@ -587,7 +617,27 @@
         },
         {
           "if": {"properties": {"decision_class": {"const": "controller_technical"}}},
-          "then": {"properties": {"authorized_by": {"const": "controller"}}}
+          "then": {
+            "required": ["maximum_source_operations", "decided_at"],
+            "properties": {
+              "authorized_by": {"const": "controller"},
+              "affected_gate_ids": {"minItems": 1},
+              "decided_at": {"type": "string", "format": "date-time"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "decision_class": {"const": "controller_technical"},
+              "attempt_id": {"type": "null"}
+            }
+          },
+          "then": {
+            "properties": {
+              "authorization_status": {"const": "prospectively_authorized"}
+            }
+          }
         }
       ]
     },

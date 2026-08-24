@@ -754,6 +754,7 @@ def _validate_attempts(
                         "same_tab",
                         "preauthorized",
                         "passive_wait_delay_seconds",
+                        "completed",
                         "receipt",
                     },
                     retry_label,
@@ -802,6 +803,12 @@ def _validate_attempts(
                     retry["passive_wait_delay_seconds"],
                     f"{retry_label}.passive_wait_delay_seconds",
                 )
+                completed = _boolean(retry["completed"], f"{retry_label}.completed")
+                if not completed:
+                    require(
+                        operation["outcome"] == "failed",
+                        f"{retry_label} incomplete reissue must be failed",
+                    )
                 _file_reference(retry["receipt"], f"{retry_label}.receipt")
                 reissued_operation_ids.add(reissue_of)
                 retry_records.append((attempt_id, operation, retry))
@@ -917,9 +924,10 @@ def _validate_retry_policy(
         attempted == len(retry_records),
         "campaign.retry_policy attempted does not match auditable busy reissues",
     )
+    completed_retries = sum(1 for _, _, retry in retry_records if retry["completed"])
     require(
-        completed == len(retry_records),
-        "campaign.retry_policy completed does not match auditable busy reissues",
+        completed == completed_retries,
+        "campaign.retry_policy completed does not match completed busy reissues",
     )
     preauthorized = _boolean(
         policy["preauthorized_same_tab_busy_reissue"],
@@ -1054,9 +1062,19 @@ def _validate_decisions(
                 authorized_by == "controller",
                 f"{label} technical work must be authorized by the controller",
             )
-            require(
-                attempt_id is not None, f"{label} technical work must cite its attempt"
+            _integer(
+                decision.get("maximum_source_operations"),
+                f"{label}.maximum_source_operations",
             )
+            require(
+                affected,
+                f"{label} technical work must name bounded capability gates",
+            )
+            if attempt_id is None:
+                require(
+                    authorization_status == "prospectively_authorized",
+                    f"{label} unallocated technical work must be prospectively authorized",
+                )
             require(
                 decided_at is not None,
                 f"{label} technical work needs a decision timestamp",
@@ -1586,6 +1604,7 @@ def _validate_allocations(
 
     technical_attempts = 0
     methodological_attempts = 0
+    decision_citations: dict[str, str] = {}
     ordered_attempts = sorted(attempts.items(), key=lambda item: item[1]["sequence"])
     for attempt_id, attempt in ordered_attempts:
         allocation = attempt["allocation"]
@@ -1597,6 +1616,11 @@ def _validate_allocations(
                 decision is not None,
                 f"attempt {attempt_id} references an unknown authorization decision",
             )
+            require(
+                decision_id not in decision_citations,
+                f"authorization decision {decision_id} is cited by more than one attempt",
+            )
+            decision_citations[decision_id] = attempt_id
         require(
             attempt["source_operations"]["predeclared_maximum"] <= maximum_operations,
             f"attempt {attempt_id} exceeds the finite source-operation budget",
@@ -1636,8 +1660,8 @@ def _validate_allocations(
                 decision is not None, f"technical attempt {attempt_id} needs a decision"
             )
             require(
-                decision["attempt_id"] == attempt_id,
-                f"technical decision for {attempt_id} must cite that attempt",
+                decision["attempt_id"] in {None, attempt_id},
+                f"technical decision for {attempt_id} must cite that attempt or prospectively authorize it",
             )
             require(
                 decision["decision_class"] == "controller_technical",
@@ -1646,6 +1670,14 @@ def _validate_allocations(
             require(
                 decision["human_authorization_required"] is False,
                 f"technical attempt {attempt_id} cannot require human authorization",
+            )
+            decision_maximum = _integer(
+                decision["maximum_source_operations"],
+                f"decision {decision_id}.maximum_source_operations",
+            )
+            require(
+                attempt["source_operations"]["predeclared_maximum"] <= decision_maximum,
+                f"technical attempt {attempt_id} exceeds decision {decision_id}'s finite source-operation bound",
             )
             require(
                 _parse_date_time(
@@ -1712,11 +1744,16 @@ def _validate_allocations(
     for decision_id, decision in decisions.items():
         decision_class = decision["decision_class"]
         if decision_class == "controller_technical":
-            attempt = attempts[decision["attempt_id"]]
-            require(
-                attempt["allocation"]["attempt_kind"] == "technical_corrective",
-                f"technical decision {decision_id} cannot authorize a non-technical attempt",
-            )
+            if decision["attempt_id"] is not None:
+                attempt = attempts[decision["attempt_id"]]
+                require(
+                    decision_citations.get(decision_id) == decision["attempt_id"],
+                    f"technical decision {decision_id} is not cited by its attempt",
+                )
+                require(
+                    attempt["allocation"]["attempt_kind"] == "technical_corrective",
+                    f"technical decision {decision_id} cannot authorize a non-technical attempt",
+                )
             for gate_id in decision["affected_gate_ids"]:
                 require(
                     gates[gate_id]["semantic_impact"]["classification"]
@@ -1728,6 +1765,10 @@ def _validate_allocations(
             and decision["authorization_status"] == "authorized"
         ):
             attempt = attempts[decision["attempt_id"]]
+            require(
+                decision_citations.get(decision_id) == decision["attempt_id"],
+                f"methodological decision {decision_id} is not cited by its attempt",
+            )
             require(
                 attempt["allocation"]["attempt_kind"] == "methodological_revision",
                 f"methodological decision {decision_id} must authorize a methodological revision",
@@ -1747,6 +1788,29 @@ def _validate_allocations(
         if gate["semantic_impact"]["classification"] != "human_methodological":
             continue
         attempt = attempts[gate["attempt_id"]]
+        pending_decisions = [
+            decision
+            for decision in decisions.values()
+            if decision["decision_class"] == "human_methodological"
+            and decision["authorization_status"] == "pending"
+            and decision["attempt_id"] is None
+            and gate_id in decision["affected_gate_ids"]
+        ]
+        decision_only = gate["status"] in {"blocked", "untested"} and bool(
+            pending_decisions
+        )
+        if decision_only:
+            require(
+                attempt["allocation"]["attempt_kind"]
+                in {"initial", "technical_corrective"},
+                f"decision-only methodological gate {gate_id} must cite a prior technical observation",
+            )
+            require(
+                gate["source_operation_count"] == 0,
+                f"decision-only methodological gate {gate_id} cannot authorize source work",
+            )
+            continue
+
         require(
             attempt["allocation"]["attempt_kind"] == "methodological_revision",
             f"methodological gate {gate_id} cannot be hidden in a technical attempt",
@@ -2100,7 +2164,12 @@ def _validate_manifest_link(
         f"{label}.method_type does not match campaign method",
     )
     link = manifest.get("campaign")
-    require(isinstance(link, dict), f"{label} lacks required campaign link")
+    if link is None:
+        # Campaign and terminal links were additive fields.  The immutable v1
+        # manifests already recorded the identity above and must not be
+        # rewritten merely because a later campaign points at them.
+        return
+    require(isinstance(link, dict), f"{label}.campaign link is invalid")
     require(
         link.get("campaign_id") == campaign["campaign_id"],
         f"{label}.campaign_id does not match campaign",
