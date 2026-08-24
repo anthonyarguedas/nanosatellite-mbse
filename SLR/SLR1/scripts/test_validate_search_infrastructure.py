@@ -433,6 +433,11 @@ class PilotCampaignValidationTests(unittest.TestCase):
         ):
             infrastructure.validate_campaign_artifact(data)
 
+        data["attempts"][1]["source_operations"]["predeclared_maximum"] = 4
+        decision["affected_gate_ids"] = ["G-QUERY-TRANSPORT"]
+        with self.assertRaisesRegex(AssertionError, "omits an enacted technical gate"):
+            infrastructure.validate_campaign_artifact(data)
+
     def test_methodological_decision_only_gate_does_not_block_technical_retry(
         self,
     ) -> None:

@@ -1731,6 +1731,18 @@ def _validate_allocations(
                 ),
                 f"technical decision for {attempt_id} must predate allocation",
             )
+            if decision["attempt_id"] is None:
+                enacted_technical_gates = {
+                    gate_id
+                    for gate_id, gate in gates.items()
+                    if gate["attempt_id"] == attempt_id
+                    and gate["semantic_impact"]["classification"]
+                    == "controller_technical"
+                }
+                require(
+                    enacted_technical_gates <= set(decision["affected_gate_ids"]),
+                    f"prospective technical decision for {attempt_id} omits an enacted technical gate",
+                )
         else:
             methodological_attempts += 1
             require(
