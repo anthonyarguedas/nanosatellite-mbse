@@ -5,9 +5,11 @@ from __future__ import annotations
 import asyncio
 import importlib.util
 import json
+import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 from unittest import mock
 
@@ -888,6 +890,37 @@ class OATDInputAndPrivacyTests(unittest.TestCase):
             oatd.write_new_json(path, receipt)
             with self.assertRaises(FileExistsError):
                 oatd.write_new_json(path, receipt)
+
+    def test_failed_create_only_write_never_deletes_a_concurrent_winner(self):
+        receipt = oatd.new_receipt(False)
+        winner = b"concurrent winner"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "receipt.json"
+
+            class FailingWriter:
+                def __enter__(self):
+                    return self
+
+                def write(self, _data):
+                    path.unlink()
+                    path.write_bytes(winner)
+                    raise OSError("offline write failure")
+
+                def __exit__(self, _type, _value, _traceback):
+                    os.close(descriptor)
+                    return False
+
+            descriptor = -1
+
+            def fake_fdopen(fd, *_args, **_kwargs):
+                nonlocal descriptor
+                descriptor = fd
+                return FailingWriter()
+
+            with mock.patch.object(oatd.os, "fdopen", side_effect=fake_fdopen):
+                with self.assertRaises(OSError):
+                    oatd.write_new_json(path, receipt)
+            self.assertEqual(path.read_bytes(), winner)
 
 
 if __name__ == "__main__":

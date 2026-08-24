@@ -1674,10 +1674,9 @@ def write_new_json(path: Path, payload: Mapping[str, Any]) -> None:
         with os.fdopen(descriptor, "wb") as handle:
             handle.write(encoded)
     except Exception:
-        try:
-            path.unlink()
-        except OSError:
-            pass
+        # The final name is create-only.  It can be replaced by a concurrent
+        # winner after O_EXCL creation, so rollback must never unlink it.
+        # A failed write remains a quarantined, non-success artifact instead.
         raise
 
 
