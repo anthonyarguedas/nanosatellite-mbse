@@ -1,0 +1,31 @@
+{
+  "schema_version": "slr1-ntrs-p03-code-issue-assessment/v1",
+  "pilot_id": "S-D13-P03-20260824T125840-0400",
+  "adapter_commit": "ff6ed0facc70f95a3096b8ef49b35619b24cacc9",
+  "code_issue": "unresolved",
+  "claim_basis": "observed",
+  "observations": [
+    {
+      "statement": "The pinned adapter's static guard found no direct NTRS API route, requests transport, Playwright request context, or page-side fetch fallback.",
+      "evidence": "pinned-adapter-offline-validation.json",
+      "basis": "observed"
+    },
+    {
+      "statement": "The one live adapter-owned-tab gate produced a record-free NTRSRequestError with error_stage=navigation before rendered form or result evidence was available.",
+      "evidence": "adapter-artifacts/G01-minimal-nanosatellite-count-only.json",
+      "basis": "observed"
+    },
+    {
+      "statement": "The failure artifact does not expose enough rendered evidence to distinguish a current NTRS navigation/access/source failure from an adapter navigation defect without another live attempt, which this pilot is not authorized to make.",
+      "evidence": "initial-rendered-gate.json",
+      "basis": "inferred"
+    }
+  ],
+  "decision": {
+    "new_adapter_defect_demonstrated": false,
+    "adapter_patch_performed": false,
+    "live_queries_after_gate": 0,
+    "reason": "No code defect is demonstrated, but live correctness cannot be cleared after the pre-form navigation failure. The required classification is therefore unresolved rather than true or false."
+  },
+  "smallest_next_action": "Do not patch from this evidence alone. Before requesting a new pilot, have a controller independently establish that the normal public rendered /search UI can be reached through a fresh dedicated browser and then obtain fresh human authorization for one new immutable pilot; if that controlled check reproduces the adapter-only navigation failure despite reachable UI, route it to a separate adapter-fix task."
+}
