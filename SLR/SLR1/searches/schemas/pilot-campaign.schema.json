@@ -9,6 +9,10 @@
     "campaign_id",
     "task_id",
     "source_id",
+    "method_type",
+    "protocol_fingerprint",
+    "dictionary_fingerprint",
+    "capability_catalog",
     "status",
     "created_at",
     "updated_at",
@@ -16,6 +20,7 @@
     "screening_performed",
     "candidate_import_permitted",
     "candidate_records_imported",
+    "retry_policy",
     "controller_authorization",
     "attempts",
     "capability_gates",
@@ -28,6 +33,15 @@
     "campaign_id": {"$ref": "#/$defs/campaignId"},
     "task_id": {"$ref": "#/$defs/taskId"},
     "source_id": {"type": "string", "minLength": 1},
+    "method_type": {"enum": ["direct", "local_harvest"]},
+    "protocol_fingerprint": {"$ref": "#/$defs/hash"},
+    "dictionary_fingerprint": {"$ref": "#/$defs/hash"},
+    "capability_catalog": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/gateId"}
+    },
     "status": {
       "enum": [
         "in_progress",
@@ -44,22 +58,8 @@
     "screening_performed": {"const": false},
     "candidate_import_permitted": {"const": false},
     "candidate_records_imported": {"const": 0},
-    "controller_authorization": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "technical_corrective_attempts_authorized",
-        "maximum_additional_attempts",
-        "maximum_source_operations_per_attempt",
-        "rationale"
-      ],
-      "properties": {
-        "technical_corrective_attempts_authorized": {"type": "boolean"},
-        "maximum_additional_attempts": {"type": "integer", "minimum": 0},
-        "maximum_source_operations_per_attempt": {"type": "integer", "minimum": 0},
-        "rationale": {"type": "string", "minLength": 1}
-      }
-    },
+    "retry_policy": {"$ref": "#/$defs/retryPolicy"},
+    "controller_authorization": {"$ref": "#/$defs/controllerAuthorization"},
     "attempts": {
       "type": "array",
       "minItems": 1,
@@ -75,38 +75,57 @@
       "items": {"$ref": "#/$defs/decision"}
     },
     "cancellation": {
-      "type": ["object", "null"],
-      "properties": {
-        "kind": {"const": "operator_cancellation"},
-        "cancelled_by": {"const": "operator"},
-        "cancelled_at": {"type": "string", "format": "date-time"},
-        "reason": {"type": "string", "minLength": 1},
-        "provider_failure": {"const": false}
-      },
-      "required": ["kind", "cancelled_by", "cancelled_at", "reason", "provider_failure"],
-      "additionalProperties": false
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/cancellation"}]
     },
     "acceptance": {
-      "type": ["object", "null"],
-      "properties": {
-        "accepted_by": {"type": "string", "minLength": 1},
-        "accepted_at": {"type": "string", "format": "date-time"},
-        "rationale": {"type": "string", "minLength": 1}
-      },
-      "required": ["accepted_by", "accepted_at", "rationale"],
-      "additionalProperties": false
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/acceptance"}]
     }
   },
   "allOf": [
     {
       "if": {"properties": {"status": {"const": "cancelled"}}},
-      "then": {"properties": {"cancellation": {"$ref": "#/$defs/cancellation"}, "acceptance": {"type": "null"}}},
+      "then": {
+        "properties": {
+          "cancellation": {"$ref": "#/$defs/cancellation"},
+          "acceptance": {"type": "null"}
+        }
+      },
       "else": {"properties": {"cancellation": {"type": "null"}}}
     },
     {
       "if": {"properties": {"status": {"const": "accepted"}}},
       "then": {"properties": {"acceptance": {"$ref": "#/$defs/acceptance"}}},
       "else": {"properties": {"acceptance": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"method_type": {"const": "direct"}}},
+      "then": {
+        "properties": {
+          "capability_catalog": {
+            "const": [
+              "G-QUERY-TRANSPORT",
+              "G-FIELD-BOUNDARY",
+              "G-PAGINATION-CONTROL",
+              "G-PAGE-IDENTITY"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"method_type": {"const": "local_harvest"}}},
+      "then": {
+        "properties": {
+          "capability_catalog": {
+            "const": [
+              "G-LOCAL-CANDIDATE-LOGIC",
+              "G-LOCAL-TAGGING",
+              "G-LOCAL-HARVEST-COVERAGE",
+              "G-LOCAL-IDENTITY"
+            ]
+          }
+        }
+      }
     }
   ],
   "$defs": {
@@ -130,6 +149,15 @@
       "type": "string",
       "pattern": "^[A-Z][A-Z0-9-]{1,63}$"
     },
+    "fileReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
     "evidenceReference": {
       "type": "object",
       "additionalProperties": false,
@@ -152,13 +180,22 @@
     "attemptEvidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["evidence_id", "gate_id", "path", "sha256", "validity"],
+      "required": ["evidence_id", "gate_id", "path", "sha256", "validity", "basis"],
       "properties": {
         "evidence_id": {"type": "string", "pattern": "^[A-Z][A-Z0-9-]{1,63}$"},
         "gate_id": {"$ref": "#/$defs/gateId"},
         "path": {"type": "string", "minLength": 1},
         "sha256": {"$ref": "#/$defs/hash"},
-        "validity": {"enum": ["valid", "invalidated"]}
+        "validity": {"enum": ["valid", "invalidated"]},
+        "basis": {
+          "enum": [
+            "observed",
+            "official_documentation",
+            "observed_and_documented",
+            "inferred",
+            "untested"
+          ]
+        }
       }
     },
     "semanticImpact": {
@@ -178,22 +215,48 @@
         }
       ]
     },
+    "retryReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reissue_of",
+        "policy_id",
+        "reason",
+        "same_tab",
+        "preauthorized",
+        "passive_wait_delay_seconds",
+        "receipt"
+      ],
+      "properties": {
+        "reissue_of": {"type": "string", "minLength": 1},
+        "policy_id": {"type": "string", "pattern": "^RP-[A-Z0-9-]{2,63}$"},
+        "reason": {"const": "same_tab_busy"},
+        "same_tab": {"const": true},
+        "preauthorized": {"const": true},
+        "passive_wait_delay_seconds": {"type": "integer", "minimum": 0},
+        "receipt": {"$ref": "#/$defs/fileReference"}
+      }
+    },
     "sourceOperation": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "operation_id",
+        "operation_key",
         "outcome",
         "source_reported_total",
         "records_retrieved",
-        "records_imported"
+        "records_imported",
+        "retry"
       ],
       "properties": {
         "operation_id": {"type": "string", "minLength": 1},
-        "outcome": {"enum": ["success", "explicit_zero", "failed"]},
+        "operation_key": {"type": "string", "minLength": 1},
+        "outcome": {"enum": ["success", "explicit_zero", "failed", "busy"]},
         "source_reported_total": {"type": ["integer", "null"], "minimum": 0},
         "records_retrieved": {"type": "integer", "minimum": 0},
-        "records_imported": {"const": 0}
+        "records_imported": {"const": 0},
+        "retry": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/retryReceipt"}]}
       },
       "allOf": [
         {
@@ -210,11 +273,99 @@
           }
         },
         {
-          "if": {"properties": {"outcome": {"const": "failed"}}},
+          "if": {"properties": {"outcome": {"enum": ["failed", "busy"]}}},
           "then": {
             "properties": {
               "source_reported_total": {"type": "null"},
               "records_retrieved": {"const": 0}
+            }
+          }
+        }
+      ]
+    },
+    "sourceOperations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predeclared_maximum", "performed", "operations"],
+      "properties": {
+        "predeclared_maximum": {"type": "integer", "minimum": 0},
+        "performed": {"type": "integer", "minimum": 0},
+        "operations": {"type": "array", "items": {"$ref": "#/$defs/sourceOperation"}}
+      }
+    },
+    "attemptTerminal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "category",
+        "ended_at",
+        "provider_failure",
+        "source_writing_stopped",
+        "browser_backed",
+        "cleanup_receipt",
+        "lease_receipt",
+        "cancelled_by",
+        "reason"
+      ],
+      "properties": {
+        "outcome": {"enum": ["completed", "blocked", "failed", "cancelled"]},
+        "category": {
+          "enum": [
+            "completed",
+            "technical",
+            "provider_failure",
+            "access_blocked",
+            "methodological",
+            "operator_cancellation"
+          ]
+        },
+        "ended_at": {"type": "string", "format": "date-time"},
+        "provider_failure": {"type": "boolean"},
+        "source_writing_stopped": {"const": true},
+        "browser_backed": {"type": "boolean"},
+        "cleanup_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/fileReference"}]},
+        "lease_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/fileReference"}]},
+        "cancelled_by": {"type": ["string", "null"], "minLength": 1},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"outcome": {"const": "cancelled"}}},
+          "then": {
+            "properties": {
+              "category": {"const": "operator_cancellation"},
+              "provider_failure": {"const": false},
+              "cancelled_by": {"const": "operator"}
+            }
+          },
+          "else": {"properties": {"cancelled_by": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"outcome": {"const": "completed"}}},
+          "then": {
+            "properties": {
+              "category": {"const": "completed"},
+              "provider_failure": {"const": false}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"category": {"const": "provider_failure"}}},
+          "then": {"properties": {"provider_failure": {"const": true}}}
+        },
+        {
+          "if": {"properties": {"browser_backed": {"const": true}}},
+          "then": {
+            "properties": {
+              "cleanup_receipt": {"$ref": "#/$defs/fileReference"},
+              "lease_receipt": {"$ref": "#/$defs/fileReference"}
+            }
+          },
+          "else": {
+            "properties": {
+              "cleanup_receipt": {"type": "null"},
+              "lease_receipt": {"type": "null"}
             }
           }
         }
@@ -231,7 +382,8 @@
         "immutable",
         "allocation",
         "source_operations",
-        "evidence"
+        "evidence",
+        "terminal"
       ],
       "properties": {
         "attempt_id": {"$ref": "#/$defs/attemptId"},
@@ -257,17 +409,9 @@
             "allocated_at": {"type": "string", "format": "date-time"}
           }
         },
-        "source_operations": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["predeclared_maximum", "performed", "operations"],
-          "properties": {
-            "predeclared_maximum": {"type": "integer", "minimum": 0},
-            "performed": {"type": "integer", "minimum": 0},
-            "operations": {"type": "array", "items": {"$ref": "#/$defs/sourceOperation"}}
-          }
-        },
-        "evidence": {"type": "array", "items": {"$ref": "#/$defs/attemptEvidence"}}
+        "source_operations": {"$ref": "#/$defs/sourceOperations"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/attemptEvidence"}},
+        "terminal": {"$ref": "#/$defs/attemptTerminal"}
       }
     },
     "carryForward": {
@@ -277,6 +421,7 @@
         "from_attempt_id",
         "from_gate_id",
         "evidence",
+        "original_observed_basis",
         "affected_by_code_or_semantic_change",
         "rationale"
       ],
@@ -286,7 +431,17 @@
         "evidence": {
           "type": "array",
           "minItems": 1,
+          "uniqueItems": true,
           "items": {"$ref": "#/$defs/evidenceReference"}
+        },
+        "original_observed_basis": {
+          "enum": [
+            "observed",
+            "official_documentation",
+            "observed_and_documented",
+            "inferred",
+            "untested"
+          ]
         },
         "affected_by_code_or_semantic_change": {"const": false},
         "rationale": {"type": "string", "minLength": 1}
@@ -312,6 +467,7 @@
         "depends_on",
         "status",
         "observed_basis",
+        "original_observed_basis",
         "evidence",
         "reusable",
         "carried_forward",
@@ -329,7 +485,23 @@
         "depends_on": {"type": "array", "items": {"$ref": "#/$defs/gateId"}, "uniqueItems": true},
         "status": {"enum": ["passed", "failed", "blocked", "untested", "invalidated"]},
         "observed_basis": {
-          "enum": ["observed", "official_documentation", "observed_and_documented", "inferred", "untested", "carried_forward"]
+          "enum": [
+            "observed",
+            "official_documentation",
+            "observed_and_documented",
+            "inferred",
+            "untested",
+            "carried_forward"
+          ]
+        },
+        "original_observed_basis": {
+          "enum": [
+            "observed",
+            "official_documentation",
+            "observed_and_documented",
+            "inferred",
+            "untested"
+          ]
         },
         "evidence": {"type": "array", "items": {"$ref": "#/$defs/gateEvidence"}},
         "reusable": {"type": "boolean"},
@@ -343,7 +515,12 @@
       "allOf": [
         {
           "if": {"properties": {"carried_forward": {"const": true}}},
-          "then": {"properties": {"carry_forward": {"$ref": "#/$defs/carryForward"}, "observed_basis": {"const": "carried_forward"}}},
+          "then": {
+            "properties": {
+              "carry_forward": {"$ref": "#/$defs/carryForward"},
+              "observed_basis": {"const": "carried_forward"}
+            }
+          },
           "else": {"properties": {"carry_forward": {"type": "null"}}}
         },
         {
@@ -352,7 +529,12 @@
         },
         {
           "if": {"properties": {"status": {"const": "invalidated"}}},
-          "then": {"properties": {"evidence": {"minItems": 1}, "invalidation": {"$ref": "#/$defs/invalidation"}}},
+          "then": {
+            "properties": {
+              "evidence": {"minItems": 1},
+              "invalidation": {"$ref": "#/$defs/invalidation"}
+            }
+          },
           "else": {"properties": {"invalidation": {"type": "null"}}}
         }
       ]
@@ -381,6 +563,7 @@
         "human_authorization_required": {"type": "boolean"},
         "authorization_status": {"enum": ["not_required", "prospectively_authorized", "pending", "authorized"]},
         "authorized_by": {"enum": ["none", "controller", "human"]},
+        "decided_at": {"type": ["string", "null"], "format": "date-time"},
         "affected_gate_ids": {"type": "array", "items": {"$ref": "#/$defs/gateId"}, "uniqueItems": true},
         "rationale": {"type": "string", "minLength": 1}
       },
@@ -408,11 +591,56 @@
         }
       ]
     },
+    "retryPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "maximum_retries",
+        "passive_wait_delays_seconds",
+        "attempted",
+        "completed",
+        "preauthorized_same_tab_busy_reissue"
+      ],
+      "properties": {
+        "policy_id": {"type": "string", "pattern": "^RP-[A-Z0-9-]{2,63}$"},
+        "maximum_retries": {"type": "integer", "minimum": 0, "maximum": 100},
+        "passive_wait_delays_seconds": {
+          "type": "array",
+          "items": {"type": "integer", "minimum": 0},
+          "maxItems": 100
+        },
+        "attempted": {"type": "integer", "minimum": 0, "maximum": 100},
+        "completed": {"type": "integer", "minimum": 0, "maximum": 100},
+        "preauthorized_same_tab_busy_reissue": {"type": "boolean"}
+      }
+    },
+    "controllerAuthorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "technical_corrective_attempts_authorized",
+        "maximum_additional_attempts",
+        "maximum_technical_corrective_attempts",
+        "maximum_methodological_revision_attempts",
+        "maximum_source_operations_per_attempt",
+        "rationale"
+      ],
+      "properties": {
+        "technical_corrective_attempts_authorized": {"type": "boolean"},
+        "maximum_additional_attempts": {"type": "integer", "minimum": 0, "maximum": 100},
+        "maximum_technical_corrective_attempts": {"type": "integer", "minimum": 0, "maximum": 100},
+        "maximum_methodological_revision_attempts": {"type": "integer", "minimum": 0, "maximum": 100},
+        "maximum_source_operations_per_attempt": {"type": "integer", "minimum": 0, "maximum": 100},
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
     "cancellation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "cancelled_by", "cancelled_at", "reason", "provider_failure"],
+      "required": ["attempt_id", "kind", "cancelled_by", "cancelled_at", "reason", "provider_failure"],
       "properties": {
+        "attempt_id": {"$ref": "#/$defs/attemptId"},
         "kind": {"const": "operator_cancellation"},
         "cancelled_by": {"const": "operator"},
         "cancelled_at": {"type": "string", "format": "date-time"},
@@ -428,6 +656,30 @@
         "accepted_by": {"type": "string", "minLength": 1},
         "accepted_at": {"type": "string", "format": "date-time"},
         "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "capabilityCatalogs": {
+      "description": "The validator uses these immutable required gate catalogs for acceptance.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direct", "local_harvest"],
+      "properties": {
+        "direct": {
+          "const": [
+            "G-QUERY-TRANSPORT",
+            "G-FIELD-BOUNDARY",
+            "G-PAGINATION-CONTROL",
+            "G-PAGE-IDENTITY"
+          ]
+        },
+        "local_harvest": {
+          "const": [
+            "G-LOCAL-CANDIDATE-LOGIC",
+            "G-LOCAL-TAGGING",
+            "G-LOCAL-HARVEST-COVERAGE",
+            "G-LOCAL-IDENTITY"
+          ]
+        }
       }
     }
   }

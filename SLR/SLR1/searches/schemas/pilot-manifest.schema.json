@@ -30,7 +30,7 @@
     "task_id": {"type": "string", "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)$"},
     "source_id": {"type": "string", "minLength": 1},
     "method_type": {"enum": ["direct", "local_harvest"]},
-    "status": {"enum": ["complete", "partial", "blocked", "failed"]},
+    "status": {"enum": ["complete", "partial", "blocked", "failed", "cancelled"]},
     "diagnostic_only": {"const": true},
     "screening_performed": {"const": false},
     "candidate_import_permitted": {"const": false},
@@ -73,7 +73,7 @@
           "cell_id": {"type": ["string", "null"]},
           "purpose": {"type": "string", "minLength": 1},
           "started_at": {"type": "string", "format": "date-time"},
-          "status": {"enum": ["success", "explicit_zero", "partial_diagnostic", "blocked", "failed"]},
+          "status": {"enum": ["success", "explicit_zero", "partial_diagnostic", "blocked", "failed", "cancelled"]},
           "exact_query_or_operation": {"type": "string"},
           "query_file": {"type": ["string", "null"]},
           "fields": {"type": "array", "items": {"type": "string"}},
@@ -127,6 +127,7 @@
         "attempt_id": {"type": "string", "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)-P[0-9]{2}-[0-9]{8}T[0-9]{6}[+-][0-9]{4}$"}
       }
     },
+    "attempt_terminal": {"$ref": "#/$defs/attemptTerminal"},
     "disposition": {
       "type": "object",
       "additionalProperties": false,
@@ -137,6 +138,87 @@
         "semantic_change": {"type": "boolean"},
         "human_verification_required": {"type": "array", "items": {"type": "string"}}
       }
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fileReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "attemptTerminal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "category",
+        "ended_at",
+        "provider_failure",
+        "source_writing_stopped",
+        "browser_backed",
+        "cleanup_receipt",
+        "lease_receipt",
+        "cancelled_by",
+        "reason"
+      ],
+      "properties": {
+        "outcome": {"enum": ["completed", "blocked", "failed", "cancelled"]},
+        "category": {"enum": ["completed", "technical", "provider_failure", "access_blocked", "methodological", "operator_cancellation"]},
+        "ended_at": {"type": "string", "format": "date-time"},
+        "provider_failure": {"type": "boolean"},
+        "source_writing_stopped": {"const": true},
+        "browser_backed": {"type": "boolean"},
+        "cleanup_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/fileReference"}]},
+        "lease_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/fileReference"}]},
+        "cancelled_by": {"type": ["string", "null"], "minLength": 1},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"outcome": {"const": "cancelled"}}},
+          "then": {
+            "properties": {
+              "category": {"const": "operator_cancellation"},
+              "provider_failure": {"const": false},
+              "cancelled_by": {"const": "operator"}
+            }
+          },
+          "else": {"properties": {"cancelled_by": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"outcome": {"const": "completed"}}},
+          "then": {
+            "properties": {
+              "category": {"const": "completed"},
+              "provider_failure": {"const": false}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"category": {"const": "provider_failure"}}},
+          "then": {"properties": {"provider_failure": {"const": true}}}
+        },
+        {
+          "if": {"properties": {"browser_backed": {"const": true}}},
+          "then": {
+            "properties": {
+              "cleanup_receipt": {"$ref": "#/$defs/fileReference"},
+              "lease_receipt": {"$ref": "#/$defs/fileReference"}
+            }
+          },
+          "else": {
+            "properties": {
+              "cleanup_receipt": {"type": "null"},
+              "lease_receipt": {"type": "null"}
+            }
+          }
+        }
+      ]
     }
   }
 }

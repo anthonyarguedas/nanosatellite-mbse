@@ -1,12 +1,19 @@
-#!/usr/bin/env python3
-"""Validate the new-run SLR1 search infrastructure without using prior-run data."""
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "jsonschema>=4.18,<5",
+# ]
+# ///
+"""Fail-closed validation for the SLR1 search infrastructure and campaigns."""
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
 import re
 import sys
-from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -58,6 +65,34 @@ EXPECTED_TASKS = {
     "S-L02",
 }
 
+REQUIRED_SCHEMA_NAMES = frozenset(
+    {
+        "failure-register.schema.json",
+        "final-run-manifest.schema.json",
+        "pilot-campaign.schema.json",
+        "pilot-manifest.schema.json",
+    }
+)
+
+# These names are intentionally duplicated in the campaign schema's immutable
+# capability_catalog constraints. Keeping the small catalog here makes the
+# acceptance rule auditable without attempting to infer capability coverage.
+CAPABILITY_CATALOG: dict[str, tuple[str, ...]] = {
+    "direct": (
+        "G-QUERY-TRANSPORT",
+        "G-FIELD-BOUNDARY",
+        "G-PAGINATION-CONTROL",
+        "G-PAGE-IDENTITY",
+    ),
+    "local_harvest": (
+        "G-LOCAL-CANDIDATE-LOGIC",
+        "G-LOCAL-TAGGING",
+        "G-LOCAL-HARVEST-COVERAGE",
+        "G-LOCAL-IDENTITY",
+    ),
+}
+REQUIRED_CAPABILITY_CATALOG = CAPABILITY_CATALOG
+
 CAMPAIGN_STATUSES = {
     "in_progress",
     "technically_blocked",
@@ -74,13 +109,17 @@ DECISION_AUTHORIZATION_STATUSES = {
     "pending",
     "authorized",
 }
-OBSERVED_BASES = {
+ORIGINAL_BASES = {
     "observed",
     "official_documentation",
     "observed_and_documented",
     "inferred",
     "untested",
-    "carried_forward",
+}
+ACCEPTANCE_BASES = {
+    "observed",
+    "official_documentation",
+    "observed_and_documented",
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 TASK_ID_RE = re.compile(r"^(S-D(0[1-9]|1[0-3])|S-L02)$")
@@ -93,6 +132,7 @@ ATTEMPT_ID_RE = re.compile(
 GATE_ID_RE = re.compile(r"^[A-Z][A-Z0-9-]{1,63}$")
 CHECKPOINT_ID_RE = re.compile(r"^CP-[A-Z0-9-]{2,63}$")
 DECISION_ID_RE = re.compile(r"^D-[A-Z0-9-]{2,63}$")
+RETRY_POLICY_ID_RE = re.compile(r"^RP-[A-Z0-9-]{2,63}$")
 
 
 def load(path: Path) -> Any:
@@ -155,13 +195,18 @@ def _pattern(value: Any, pattern: re.Pattern[str], label: str) -> str:
     return value
 
 
-def _date_time(value: Any, label: str) -> str:
+def _parse_date_time(value: Any, label: str) -> datetime:
     value = _string(value, label)
     try:
         parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
     except ValueError as exc:
         raise AssertionError(f"{label} must be an ISO 8601 date-time") from exc
     require(parsed.tzinfo is not None, f"{label} must include a timezone")
+    return parsed
+
+
+def _date_time(value: Any, label: str) -> str:
+    _parse_date_time(value, label)
     return value
 
 
@@ -173,6 +218,48 @@ def _unique_strings(values: list[Any], label: str) -> list[str]:
     return strings
 
 
+def _relative_path(value: Any, label: str) -> str:
+    """Accept only a simple, portable path relative to one source packet."""
+    path = _string(value, label)
+    require("\\" not in path, f"{label} must use a relative POSIX path")
+    require(not path.startswith("/"), f"{label} must not be absolute")
+    require(not re.match(r"^[A-Za-z]:", path), f"{label} must not be absolute")
+    parts = path.split("/")
+    require(
+        all(part not in {"", ".", ".."} for part in parts),
+        f"{label} must not contain path traversal",
+    )
+    return path
+
+
+def _file_reference(value: Any, label: str) -> tuple[str, str]:
+    reference = _mapping(value, label)
+    _require_fields(reference, {"path", "sha256"}, label)
+    return (
+        _relative_path(reference["path"], f"{label}.path"),
+        _sha256(reference["sha256"], f"{label}.sha256"),
+    )
+
+
+def _task_prefix(identifier: str, marker: str) -> str:
+    return identifier.split(f"-{marker}", 1)[0]
+
+
+def _require_task_prefix(
+    identifier: Any,
+    pattern: re.Pattern[str],
+    task_id: str,
+    marker: str,
+    label: str,
+) -> str:
+    identifier = _pattern(identifier, pattern, label)
+    require(
+        _task_prefix(identifier, marker) == task_id,
+        f"{label} has the wrong task prefix",
+    )
+    return identifier
+
+
 def expression_refs(value: Any):
     if isinstance(value, str):
         yield value
@@ -181,6 +268,9 @@ def expression_refs(value: Any):
             yield from expression_refs(item)
 
 
+# The historical dictionary/crosswalk checks are intentionally retained. They
+# do not consume source packet contents and keep the infrastructure baseline
+# independent of campaign validation.
 def validate_dictionary() -> None:
     data = load(SEARCHES / "search-concept-dictionary.json")
     require(
@@ -231,7 +321,7 @@ def validate_dictionary() -> None:
     local = data["local_method_minimum"]
     require(set(local["independent_tags"]) == {"R", "T2"}, "local tags differ")
     require(
-        {x["id"] for x in local["expansion_candidates"]} == {"BG1", "BG2", "BC1"},
+        {item["id"] for item in local["expansion_candidates"]} == {"BG1", "BG2", "BC1"},
         "local expansions differ",
     )
 
@@ -241,39 +331,45 @@ def validate_crosswalk() -> None:
     sources = data["sources"]
     interfaces = data["interfaces"]
     require(len(sources) == 15, f"crosswalk has {len(sources)} source rows")
-    require(len({x["source_id"] for x in sources}) == 15, "source IDs are not unique")
+    require(
+        len({item["source_id"] for item in sources}) == 15, "source IDs are not unique"
+    )
     require(len(interfaces) == 13, f"crosswalk has {len(interfaces)} interfaces")
-    interface_ids = {x["interface_id"] for x in interfaces}
+    interface_ids = {item["interface_id"] for item in interfaces}
     require(len(interface_ids) == 13, "interface IDs are not unique")
     require(
-        {x["task_id"] for x in sources} == EXPECTED_TASKS,
+        {item["task_id"] for item in sources} == EXPECTED_TASKS,
         "source task coverage differs",
     )
     require(
-        all(x["interface_id"] in interface_ids for x in sources),
+        all(item["interface_id"] in interface_ids for item in sources),
         "source references unknown interface",
     )
-    oatd = next(x for x in sources if x["source_id"] == "oatd")
+    oatd = next(item for item in sources if item["source_id"] == "oatd")
     require(oatd["prisma_2020_column"] == "other_methods", "OATD PRISMA column differs")
     require(
         all(
-            x["prisma_2020_column"] == "databases_registers"
-            for x in sources
-            if x["source_id"] != "oatd"
+            item["prisma_2020_column"] == "databases_registers"
+            for item in sources
+            if item["source_id"] != "oatd"
         ),
         "a non-OATD source is outside databases/registers",
     )
     require(
-        all(x["separate_total"] is True for x in sources),
+        all(item["separate_total"] is True for item in sources),
         "a source lacks a separate total",
     )
 
 
-def _jsonschema_components() -> tuple[Any, Any] | None:
+def _jsonschema_components() -> tuple[Any, Any]:
+    """Import jsonschema lazily so a plain Python run can explain the failure."""
     try:
         from jsonschema import Draft202012Validator, FormatChecker
-    except ImportError:
-        return None
+    except ImportError as exc:
+        raise RuntimeError(
+            "jsonschema is required for fail-closed validation; run this script with "
+            "`uv run SLR/SLR1/scripts/validate_search_infrastructure.py`"
+        ) from exc
     return Draft202012Validator, FormatChecker
 
 
@@ -289,22 +385,50 @@ def _validate_schema_document(schema: Any, label: str) -> None:
     _list(schema.get("required"), f"{label}.required")
 
 
+def _validation_error_key(error: Any) -> tuple[str, ...]:
+    return tuple(str(part) for part in error.absolute_path)
+
+
 def _validate_jsonschema_instance(
     schema: dict[str, Any], instance: Any, label: str
 ) -> None:
-    components = _jsonschema_components()
-    if components is None:
-        return
-    validator_class, format_checker_class = components
+    validator_class, format_checker_class = _jsonschema_components()
     validator = validator_class(schema, format_checker=format_checker_class())
-    errors = sorted(
-        validator.iter_errors(instance), key=lambda error: list(error.absolute_path)
+    errors = sorted(validator.iter_errors(instance), key=_validation_error_key)
+    if errors:
+        raise AssertionError(f"{label} does not validate: {errors[0].message}")
+
+
+def _load_schemas(searches_root: Path = SEARCHES) -> dict[str, dict[str, Any]]:
+    schema_dir = searches_root / "schemas"
+    schema_paths = {path.name: path for path in schema_dir.glob("*.schema.json")}
+    missing = sorted(REQUIRED_SCHEMA_NAMES - set(schema_paths))
+    require(
+        not missing, f"missing required infrastructure schema(s): {', '.join(missing)}"
     )
-    require(not errors, f"{label} does not validate: {errors[0].message}")
+
+    validator_class, _ = _jsonschema_components()
+    schemas: dict[str, dict[str, Any]] = {}
+    for name, path in sorted(schema_paths.items()):
+        schema = _mapping(load(path), f"schema {name}")
+        _validate_schema_document(schema, f"schema {name}")
+        validator_class.check_schema(schema)
+        schemas[name] = schema
+
+    catalog_schema = schemas["pilot-campaign.schema.json"]["$defs"][
+        "capabilityCatalogs"
+    ]["properties"]
+    for method_type, expected in CAPABILITY_CATALOG.items():
+        declared = catalog_schema[method_type]["const"]
+        require(
+            tuple(declared) == expected,
+            f"pilot campaign schema catalog differs for {method_type}",
+        )
+    return schemas
 
 
 def _validate_pilot_manifest_formats(manifest: Any, label: str) -> None:
-    """Check every date-time and URI format used by the v1 pilot manifest."""
+    """Keep manual diagnostics for the formats that matter to cross-links."""
     manifest = _mapping(manifest, label)
     for field in ("started_at", "ended_at"):
         if field in manifest:
@@ -326,50 +450,147 @@ def _validate_pilot_manifest_formats(manifest: Any, label: str) -> None:
                 )
 
 
-def validate_schemas() -> None:
-    schema_paths = sorted((SEARCHES / "schemas").glob("*.schema.json"))
-    require(len(schema_paths) == 4, "expected exactly four infrastructure schemas")
-    schemas = {path.name: load(path) for path in schema_paths}
-    for name, schema in schemas.items():
-        _validate_schema_document(schema, f"schema {name}")
-
-    components = _jsonschema_components()
-    if components is not None:
-        validator_class, _ = components
-        for schema in schemas.values():
-            validator_class.check_schema(schema)
-
-    pilot_template = load(SEARCHES / "templates" / "pilot-manifest.template.json")
+def validate_schemas(searches_root: Path = SEARCHES) -> dict[str, dict[str, Any]]:
+    """Validate all named schemas plus the two current templates."""
+    schemas = _load_schemas(searches_root)
+    templates = searches_root / "templates"
+    pilot_template = load(templates / "pilot-manifest.template.json")
     _validate_pilot_manifest_formats(pilot_template, "pilot manifest template")
     _validate_jsonschema_instance(
-        schemas["pilot-manifest.schema.json"],
-        pilot_template,
-        "pilot manifest template",
+        schemas["pilot-manifest.schema.json"], pilot_template, "pilot manifest template"
     )
     _validate_jsonschema_instance(
         schemas["pilot-campaign.schema.json"],
-        load(SEARCHES / "templates" / "pilot-campaign.template.json"),
+        load(templates / "pilot-campaign.template.json"),
         "pilot campaign template",
     )
+    return schemas
 
 
-def _validate_source_operation(operation: Any, label: str) -> None:
+def _validate_terminal(value: Any, label: str) -> dict[str, Any]:
+    terminal = _mapping(value, label)
+    _require_fields(
+        terminal,
+        {
+            "outcome",
+            "category",
+            "ended_at",
+            "provider_failure",
+            "source_writing_stopped",
+            "browser_backed",
+            "cleanup_receipt",
+            "lease_receipt",
+            "cancelled_by",
+            "reason",
+        },
+        label,
+    )
+    outcome = terminal["outcome"]
+    require(
+        outcome in {"completed", "blocked", "failed", "cancelled"},
+        f"{label}.outcome is invalid",
+    )
+    category = terminal["category"]
+    require(
+        category
+        in {
+            "completed",
+            "technical",
+            "provider_failure",
+            "access_blocked",
+            "methodological",
+            "operator_cancellation",
+        },
+        f"{label}.category is invalid",
+    )
+    _date_time(terminal["ended_at"], f"{label}.ended_at")
+    provider_failure = _boolean(
+        terminal["provider_failure"], f"{label}.provider_failure"
+    )
+    require(
+        terminal["source_writing_stopped"] is True,
+        f"{label}.source_writing_stopped must be true",
+    )
+    browser_backed = _boolean(terminal["browser_backed"], f"{label}.browser_backed")
+    cancelled_by = terminal["cancelled_by"]
+
+    if outcome == "cancelled":
+        require(
+            category == "operator_cancellation",
+            f"{label} cancellation must use operator_cancellation category",
+        )
+        require(
+            provider_failure is False,
+            f"{label} operator cancellation is not provider failure",
+        )
+        require(cancelled_by == "operator", f"{label} cancellation must name operator")
+    else:
+        require(
+            cancelled_by is None,
+            f"{label}.cancelled_by must be null when not cancelled",
+        )
+    if outcome == "completed":
+        require(
+            category == "completed",
+            f"{label} completed outcome needs completed category",
+        )
+        require(
+            provider_failure is False,
+            f"{label} completed outcome is not provider failure",
+        )
+    if category == "provider_failure":
+        require(
+            provider_failure is True,
+            f"{label} provider category needs provider_failure",
+        )
+    if provider_failure:
+        require(
+            category == "provider_failure",
+            f"{label} provider failure needs provider category",
+        )
+    if category == "operator_cancellation":
+        require(
+            outcome == "cancelled", f"{label} operator category needs cancelled outcome"
+        )
+
+    cleanup = terminal["cleanup_receipt"]
+    lease = terminal["lease_receipt"]
+    if browser_backed:
+        _file_reference(cleanup, f"{label}.cleanup_receipt")
+        _file_reference(lease, f"{label}.lease_receipt")
+    else:
+        require(
+            cleanup is None,
+            f"{label}.cleanup_receipt must be null when not browser-backed",
+        )
+        require(
+            lease is None, f"{label}.lease_receipt must be null when not browser-backed"
+        )
+    _string(terminal["reason"], f"{label}.reason")
+    return terminal
+
+
+def _validate_source_operation(operation: Any, label: str) -> dict[str, Any]:
     operation = _mapping(operation, label)
     _require_fields(
         operation,
         {
             "operation_id",
+            "operation_key",
             "outcome",
             "source_reported_total",
             "records_retrieved",
             "records_imported",
+            "retry",
         },
         label,
     )
     _string(operation["operation_id"], f"{label}.operation_id")
+    _string(operation["operation_key"], f"{label}.operation_key")
     outcome = operation["outcome"]
     require(
-        outcome in {"success", "explicit_zero", "failed"}, f"{label}.outcome is invalid"
+        outcome in {"success", "explicit_zero", "failed", "busy"},
+        f"{label}.outcome is invalid",
     )
     total = operation["source_reported_total"]
     if total is not None:
@@ -387,19 +608,26 @@ def _validate_source_operation(operation: Any, label: str) -> None:
         require(total == 0, f"{label} explicit zero must report total zero")
         require(retrieved == 0, f"{label} explicit zero must retrieve zero records")
     else:
-        require(total is None, f"{label} failure must report a null total, not zero")
-        require(retrieved == 0, f"{label} failure must retrieve zero records")
+        require(total is None, f"{label} {outcome} must report a null total, not zero")
+        require(retrieved == 0, f"{label} {outcome} must retrieve zero records")
+    return operation
 
 
 def _validate_attempts(
     campaign: dict[str, Any],
-) -> tuple[dict[str, dict[str, Any]], dict[tuple[str, str, str], dict[str, Any]]]:
+) -> tuple[
+    dict[str, dict[str, Any]],
+    dict[tuple[str, str, str], dict[str, Any]],
+    list[tuple[str, dict[str, Any], dict[str, Any]]],
+]:
     attempts = _list(campaign["attempts"], "campaign.attempts")
     require(attempts, "campaign.attempts must not be empty")
+    task_id = campaign["task_id"]
     attempts_by_id: dict[str, dict[str, Any]] = {}
     sequences: list[int] = []
     evidence_by_reference: dict[tuple[str, str, str], dict[str, Any]] = {}
     evidence_ids: set[str] = set()
+    retry_records: list[tuple[str, dict[str, Any], dict[str, Any]]] = []
 
     for index, raw_attempt in enumerate(attempts):
         label = f"campaign.attempts[{index}]"
@@ -415,11 +643,12 @@ def _validate_attempts(
                 "allocation",
                 "source_operations",
                 "evidence",
+                "terminal",
             },
             label,
         )
-        attempt_id = _pattern(
-            attempt["attempt_id"], ATTEMPT_ID_RE, f"{label}.attempt_id"
+        attempt_id = _require_task_prefix(
+            attempt["attempt_id"], ATTEMPT_ID_RE, task_id, "P", f"{label}.attempt_id"
         )
         require(
             attempt_id not in attempts_by_id,
@@ -427,7 +656,7 @@ def _validate_attempts(
         )
         sequence = _integer(attempt["sequence"], f"{label}.sequence", minimum=1)
         sequences.append(sequence)
-        _string(attempt["manifest_path"], f"{label}.manifest_path")
+        _relative_path(attempt["manifest_path"], f"{label}.manifest_path")
         _sha256(attempt["manifest_sha256"], f"{label}.manifest_sha256")
         require(attempt["immutable"] is True, f"{label}.immutable must be true")
 
@@ -458,7 +687,11 @@ def _validate_attempts(
             f"{label}.allocation.authorization_decision_id is invalid",
         )
         if decision_id is not None:
-            _string(decision_id, f"{label}.allocation.authorization_decision_id")
+            _pattern(
+                decision_id,
+                DECISION_ID_RE,
+                f"{label}.allocation.authorization_decision_id",
+            )
         _boolean(
             allocation["prospectively_authorized"],
             f"{label}.allocation.prospectively_authorized",
@@ -491,17 +724,89 @@ def _validate_attempts(
             performed <= maximum,
             f"{label}.source_operations exceeds its predeclared maximum",
         )
-        operation_ids: set[str] = set()
-        for operation_index, operation in enumerate(operations):
-            _validate_source_operation(
-                operation, f"{label}.source_operations.operations[{operation_index}]"
-            )
+        operation_ids: dict[str, dict[str, Any]] = {}
+        operation_keys: dict[str, dict[str, Any]] = {}
+        reissued_operation_ids: set[str] = set()
+        for operation_index, raw_operation in enumerate(operations):
+            operation_label = f"{label}.source_operations.operations[{operation_index}]"
+            operation = _validate_source_operation(raw_operation, operation_label)
             operation_id = operation["operation_id"]
             require(
                 operation_id not in operation_ids,
                 f"{label}.source_operations has duplicate operation IDs",
             )
-            operation_ids.add(operation_id)
+            operation_key = operation["operation_key"]
+            retry = operation["retry"]
+            if retry is None:
+                require(
+                    operation_key not in operation_keys,
+                    f"{operation_label} repeats an operation without an auditable retry",
+                )
+            else:
+                retry_label = f"{operation_label}.retry"
+                retry = _mapping(retry, retry_label)
+                _require_fields(
+                    retry,
+                    {
+                        "reissue_of",
+                        "policy_id",
+                        "reason",
+                        "same_tab",
+                        "preauthorized",
+                        "passive_wait_delay_seconds",
+                        "receipt",
+                    },
+                    retry_label,
+                )
+                reissue_of = _string(retry["reissue_of"], f"{retry_label}.reissue_of")
+                require(
+                    reissue_of in operation_ids,
+                    f"{retry_label} must reissue an earlier operation in the same attempt",
+                )
+                previous = operation_ids[reissue_of]
+                require(
+                    previous["outcome"] != "failed",
+                    f"{retry_label} cannot reissue a failed operation",
+                )
+                require(
+                    previous["outcome"] == "busy",
+                    f"{retry_label} may reissue only a same-tab busy operation",
+                )
+                require(
+                    reissue_of not in reissued_operation_ids,
+                    f"{retry_label} reissues an operation more than once",
+                )
+                require(
+                    operation_key == previous["operation_key"],
+                    f"{retry_label} must retain the original operation key",
+                )
+                require(
+                    operation_key in operation_keys,
+                    f"{retry_label} does not continue an earlier operation key",
+                )
+                _pattern(
+                    retry["policy_id"], RETRY_POLICY_ID_RE, f"{retry_label}.policy_id"
+                )
+                require(
+                    retry["reason"] == "same_tab_busy",
+                    f"{retry_label}.reason is invalid",
+                )
+                require(
+                    retry["same_tab"] is True, f"{retry_label}.same_tab must be true"
+                )
+                require(
+                    retry["preauthorized"] is True,
+                    f"{retry_label}.preauthorized must be true",
+                )
+                _integer(
+                    retry["passive_wait_delay_seconds"],
+                    f"{retry_label}.passive_wait_delay_seconds",
+                )
+                _file_reference(retry["receipt"], f"{retry_label}.receipt")
+                reissued_operation_ids.add(reissue_of)
+                retry_records.append((attempt_id, operation, retry))
+            operation_ids[operation_id] = operation
+            operation_keys[operation_key] = operation
 
         evidence = _list(attempt["evidence"], f"{label}.evidence")
         for evidence_index, raw_evidence in enumerate(evidence):
@@ -509,7 +814,7 @@ def _validate_attempts(
             item = _mapping(raw_evidence, evidence_label)
             _require_fields(
                 item,
-                {"evidence_id", "gate_id", "path", "sha256", "validity"},
+                {"evidence_id", "gate_id", "path", "sha256", "validity", "basis"},
                 evidence_label,
             )
             evidence_id = _pattern(
@@ -520,11 +825,14 @@ def _validate_attempts(
             )
             evidence_ids.add(evidence_id)
             _pattern(item["gate_id"], GATE_ID_RE, f"{evidence_label}.gate_id")
-            path = _string(item["path"], f"{evidence_label}.path")
+            path = _relative_path(item["path"], f"{evidence_label}.path")
             digest = _sha256(item["sha256"], f"{evidence_label}.sha256")
             require(
                 item["validity"] in {"valid", "invalidated"},
                 f"{evidence_label}.validity is invalid",
+            )
+            require(
+                item["basis"] in ORIGINAL_BASES, f"{evidence_label}.basis is invalid"
             )
             reference = (attempt_id, path, digest)
             require(
@@ -533,6 +841,7 @@ def _validate_attempts(
             )
             evidence_by_reference[reference] = item
 
+        _validate_terminal(attempt["terminal"], f"{label}.terminal")
         attempts_by_id[attempt_id] = attempt
 
     require(
@@ -543,13 +852,100 @@ def _validate_attempts(
         sorted(sequences) == list(range(1, len(sequences) + 1)),
         "campaign attempt sequences must be contiguous from one",
     )
-    return attempts_by_id, evidence_by_reference
+    initial_attempts = [
+        attempt
+        for attempt in attempts_by_id.values()
+        if attempt["allocation"]["attempt_kind"] == "initial"
+    ]
+    require(
+        len(initial_attempts) == 1, "campaign must have exactly one initial attempt"
+    )
+    require(
+        initial_attempts[0]["sequence"] == 1,
+        "the only initial attempt must have sequence 1",
+    )
+    for attempt_id, attempt in attempts_by_id.items():
+        if attempt["sequence"] > 1:
+            require(
+                attempt["allocation"]["attempt_kind"]
+                in {"technical_corrective", "methodological_revision"},
+                f"later attempt {attempt_id} must be technical_corrective or methodological_revision",
+            )
+    return attempts_by_id, evidence_by_reference, retry_records
+
+
+def _validate_retry_policy(
+    campaign: dict[str, Any],
+    retry_records: list[tuple[str, dict[str, Any], dict[str, Any]]],
+) -> None:
+    policy = _mapping(campaign["retry_policy"], "campaign.retry_policy")
+    _require_fields(
+        policy,
+        {
+            "policy_id",
+            "maximum_retries",
+            "passive_wait_delays_seconds",
+            "attempted",
+            "completed",
+            "preauthorized_same_tab_busy_reissue",
+        },
+        "campaign.retry_policy",
+    )
+    policy_id = _pattern(
+        policy["policy_id"], RETRY_POLICY_ID_RE, "campaign.retry_policy.policy_id"
+    )
+    maximum = _integer(
+        policy["maximum_retries"], "campaign.retry_policy.maximum_retries"
+    )
+    delays = _list(
+        policy["passive_wait_delays_seconds"],
+        "campaign.retry_policy.passive_wait_delays_seconds",
+    )
+    delay_values = [
+        _integer(delay, f"campaign.retry_policy.passive_wait_delays_seconds[{index}]")
+        for index, delay in enumerate(delays)
+    ]
+    require(
+        len(delay_values) == maximum,
+        "campaign.retry_policy delays must prescribe every finite retry",
+    )
+    attempted = _integer(policy["attempted"], "campaign.retry_policy.attempted")
+    completed = _integer(policy["completed"], "campaign.retry_policy.completed")
+    require(attempted <= maximum, "campaign.retry_policy attempted exceeds maximum")
+    require(completed <= attempted, "campaign.retry_policy completed exceeds attempted")
+    require(
+        attempted == len(retry_records),
+        "campaign.retry_policy attempted does not match auditable busy reissues",
+    )
+    require(
+        completed == len(retry_records),
+        "campaign.retry_policy completed does not match auditable busy reissues",
+    )
+    preauthorized = _boolean(
+        policy["preauthorized_same_tab_busy_reissue"],
+        "campaign.retry_policy.preauthorized_same_tab_busy_reissue",
+    )
+    if retry_records:
+        require(
+            preauthorized,
+            "campaign.retry_policy does not preauthorize same-tab busy reissues",
+        )
+    for index, (_, _, retry) in enumerate(retry_records):
+        require(
+            retry["policy_id"] == policy_id,
+            "busy reissue references another campaign retry policy",
+        )
+        require(
+            retry["passive_wait_delay_seconds"] == delay_values[index],
+            "busy reissue does not use its prescribed passive-wait delay",
+        )
 
 
 def _validate_decisions(
     campaign: dict[str, Any], attempts: dict[str, dict[str, Any]]
 ) -> dict[str, dict[str, Any]]:
     decisions = _list(campaign["decisions"], "campaign.decisions")
+    task_id = campaign["task_id"]
     decisions_by_id: dict[str, dict[str, Any]] = {}
     for index, raw_decision in enumerate(decisions):
         label = f"campaign.decisions[{index}]"
@@ -582,7 +978,9 @@ def _validate_decisions(
             f"{label}.attempt_id is invalid",
         )
         if attempt_id is not None:
-            _pattern(attempt_id, ATTEMPT_ID_RE, f"{label}.attempt_id")
+            _require_task_prefix(
+                attempt_id, ATTEMPT_ID_RE, task_id, "P", f"{label}.attempt_id"
+            )
             require(attempt_id in attempts, f"{label} references an unknown attempt")
         decision_class = decision["decision_class"]
         require(
@@ -607,6 +1005,9 @@ def _validate_decisions(
             authorized_by in {"none", "controller", "human"},
             f"{label}.authorized_by is invalid",
         )
+        decided_at = decision.get("decided_at")
+        if decided_at is not None:
+            _date_time(decided_at, f"{label}.decided_at")
         affected = _unique_strings(
             _list(decision["affected_gate_ids"], f"{label}.affected_gate_ids"),
             f"{label}.affected_gate_ids",
@@ -630,6 +1031,11 @@ def _validate_decisions(
                 authorized_by == "none",
                 f"{label} class none must be authorized by none",
             )
+            require(attempt_id is None, f"{label} class none cannot cite an attempt")
+            require(
+                decided_at is None,
+                f"{label} class none cannot have a decision timestamp",
+            )
             require(not affected, f"{label} class none cannot affect capability gates")
         elif decision_class == "controller_technical":
             require(
@@ -648,6 +1054,13 @@ def _validate_decisions(
                 authorized_by == "controller",
                 f"{label} technical work must be authorized by the controller",
             )
+            require(
+                attempt_id is not None, f"{label} technical work must cite its attempt"
+            )
+            require(
+                decided_at is not None,
+                f"{label} technical work needs a decision timestamp",
+            )
         else:
             require(
                 review_effect and affects_review,
@@ -662,13 +1075,32 @@ def _validate_decisions(
                 authorization_status in {"pending", "authorized"},
                 f"{label} methodological authorization is invalid",
             )
-            expected_authorizer = (
-                "none" if authorization_status == "pending" else "human"
-            )
-            require(
-                authorized_by == expected_authorizer,
-                f"{label} methodological authorization has the wrong authorizer",
-            )
+            if authorization_status == "pending":
+                require(
+                    authorized_by == "none",
+                    f"{label} pending method decision has an authorizer",
+                )
+                require(
+                    attempt_id is None,
+                    f"{label} pending method decision cannot allocate an attempt",
+                )
+                require(
+                    decided_at is None,
+                    f"{label} pending method decision cannot have a timestamp",
+                )
+            else:
+                require(
+                    authorized_by == "human",
+                    f"{label} method decision needs human authorizer",
+                )
+                require(
+                    attempt_id is not None,
+                    f"{label} method decision needs methodological attempt",
+                )
+                require(
+                    decided_at is not None,
+                    f"{label} method decision needs human timestamp",
+                )
 
         decisions_by_id[decision_id] = decision
     return decisions_by_id
@@ -691,7 +1123,7 @@ def _validate_semantic_impact(value: Any, label: str) -> dict[str, Any]:
 def _gate_evidence(value: Any, label: str) -> tuple[str, str, str]:
     item = _mapping(value, label)
     _require_fields(item, {"path", "sha256", "validity"}, label)
-    path = _string(item["path"], f"{label}.path")
+    path = _relative_path(item["path"], f"{label}.path")
     digest = _sha256(item["sha256"], f"{label}.sha256")
     validity = item["validity"]
     require(validity in {"valid", "invalidated"}, f"{label}.validity is invalid")
@@ -705,6 +1137,7 @@ def _validate_gates(
 ) -> dict[str, dict[str, Any]]:
     gates = _list(campaign["capability_gates"], "campaign.capability_gates")
     require(gates, "campaign.capability_gates must not be empty")
+    task_id = campaign["task_id"]
     gates_by_id: dict[str, dict[str, Any]] = {}
     checkpoint_ids: set[str] = set()
 
@@ -721,6 +1154,7 @@ def _validate_gates(
                 "depends_on",
                 "status",
                 "observed_basis",
+                "original_observed_basis",
                 "evidence",
                 "reusable",
                 "carried_forward",
@@ -742,7 +1176,9 @@ def _validate_gates(
             f"duplicate checkpoint ID: {checkpoint_id}",
         )
         checkpoint_ids.add(checkpoint_id)
-        attempt_id = _pattern(gate["attempt_id"], ATTEMPT_ID_RE, f"{label}.attempt_id")
+        attempt_id = _require_task_prefix(
+            gate["attempt_id"], ATTEMPT_ID_RE, task_id, "P", f"{label}.attempt_id"
+        )
         require(attempt_id in attempts, f"{label} references an unknown attempt")
         _string(gate["requirement"], f"{label}.requirement")
         dependencies = _unique_strings(
@@ -751,16 +1187,21 @@ def _validate_gates(
         require(gate_id not in dependencies, f"{label} cannot depend on itself")
         status = gate["status"]
         require(status in GATE_STATUSES, f"{label}.status is invalid")
+        observed_basis = gate["observed_basis"]
         require(
-            gate["observed_basis"] in OBSERVED_BASES,
+            observed_basis in ORIGINAL_BASES | {"carried_forward"},
             f"{label}.observed_basis is invalid",
         )
+        original_basis = gate["original_observed_basis"]
+        require(
+            original_basis in ORIGINAL_BASES,
+            f"{label}.original_observed_basis is invalid",
+        )
         evidence = _list(gate["evidence"], f"{label}.evidence")
-        evidence_tuples: list[tuple[str, str, str]] = []
-        for evidence_index, raw_evidence in enumerate(evidence):
-            evidence_tuples.append(
-                _gate_evidence(raw_evidence, f"{label}.evidence[{evidence_index}]")
-            )
+        evidence_tuples = [
+            _gate_evidence(raw_evidence, f"{label}.evidence[{evidence_index}]")
+            for evidence_index, raw_evidence in enumerate(evidence)
+        ]
         require(
             len(evidence_tuples)
             == len({(path, digest) for path, digest, _ in evidence_tuples}),
@@ -784,7 +1225,7 @@ def _validate_gates(
             require(status == "passed", f"{label} may carry forward only a passed gate")
             require(reusable, f"{label} carried-forward evidence must be reusable")
             require(
-                gate["observed_basis"] == "carried_forward",
+                observed_basis == "carried_forward",
                 f"{label} needs carried_forward basis",
             )
             _mapping(carry_forward, f"{label}.carry_forward")
@@ -794,8 +1235,12 @@ def _validate_gates(
                 f"{label}.carry_forward must be null when not carried forward",
             )
             require(
-                gate["observed_basis"] != "carried_forward",
+                observed_basis != "carried_forward",
                 f"{label} cannot claim carried_forward basis",
+            )
+            require(
+                observed_basis == original_basis,
+                f"{label} must retain its original observed basis",
             )
 
         invalidation = gate["invalidation"]
@@ -807,6 +1252,10 @@ def _validate_gates(
             )
         elif status == "failed":
             require(evidence_tuples, f"{label} failed status requires failure evidence")
+            require(
+                all(validity == "valid" for _, _, validity in evidence_tuples),
+                f"{label} failed evidence must be valid",
+            )
             require(
                 not reusable and not carried_forward,
                 f"{label} failed evidence cannot be reusable or carried forward",
@@ -852,6 +1301,10 @@ def _validate_gates(
                     source["validity"] == validity,
                     f"{label} evidence validity differs from its attempt catalogue",
                 )
+                require(
+                    source["basis"] == original_basis,
+                    f"{label} evidence does not retain its original basis",
+                )
 
         gates_by_id[gate_id] = gate
 
@@ -864,15 +1317,13 @@ def _validate_gates(
     return gates_by_id
 
 
-def _validate_dependency_graph(gates: dict[str, dict[str, Any]]) -> dict[str, set[str]]:
-    dependents: dict[str, set[str]] = defaultdict(set)
+def _validate_dependency_graph(gates: dict[str, dict[str, Any]]) -> None:
     for gate_id, gate in gates.items():
         for dependency in gate["depends_on"]:
             require(
                 dependency in gates,
                 f"gate {gate_id} depends on missing gate {dependency}",
             )
-            dependents[dependency].add(gate_id)
 
     states: dict[str, int] = {}
 
@@ -888,7 +1339,6 @@ def _validate_dependency_graph(gates: dict[str, dict[str, Any]]) -> dict[str, se
 
     for gate_id in gates:
         visit(gate_id)
-    return dependents
 
 
 def _validate_decision_gate_references(
@@ -899,32 +1349,6 @@ def _validate_decision_gate_references(
             require(
                 gate_id in gates,
                 f"decision {decision_id} affects unknown gate {gate_id}",
-            )
-
-
-def _validate_methodological_gate_authorization(
-    gates: dict[str, dict[str, Any]], decisions: dict[str, dict[str, Any]]
-) -> None:
-    for gate_id, gate in gates.items():
-        if gate["semantic_impact"]["classification"] != "human_methodological":
-            continue
-        matching_decisions = [
-            decision
-            for decision in decisions.values()
-            if decision["decision_class"] == "human_methodological"
-            and gate_id in decision["affected_gate_ids"]
-        ]
-        require(
-            matching_decisions,
-            f"methodological gate {gate_id} lacks a human methodological decision",
-        )
-        if gate["status"] not in {"blocked", "untested"}:
-            require(
-                any(
-                    decision["authorization_status"] == "authorized"
-                    for decision in matching_decisions
-                ),
-                f"methodological gate {gate_id} lacks completed human authorization",
             )
 
 
@@ -945,6 +1369,7 @@ def _validate_carry_forward(
                 "from_attempt_id",
                 "from_gate_id",
                 "evidence",
+                "original_observed_basis",
                 "affected_by_code_or_semantic_change",
                 "rationale",
             },
@@ -974,6 +1399,15 @@ def _validate_carry_forward(
             source_gate_id == gate_id,
             f"{label} must carry the same stable capability gate",
         )
+        original_basis = carry_forward["original_observed_basis"]
+        require(
+            original_basis in ORIGINAL_BASES,
+            f"{label}.original_observed_basis is invalid",
+        )
+        require(
+            original_basis == gate["original_observed_basis"],
+            f"{label} must retain the original observed basis",
+        )
         require(
             carry_forward["affected_by_code_or_semantic_change"] is False,
             f"{label} cannot carry affected evidence",
@@ -983,10 +1417,7 @@ def _validate_carry_forward(
         require(references, f"{label}.evidence must not be empty")
         carry_tuples: list[tuple[str, str]] = []
         for index, raw_reference in enumerate(references):
-            reference = _mapping(raw_reference, f"{label}.evidence[{index}]")
-            _require_fields(reference, {"path", "sha256"}, f"{label}.evidence[{index}]")
-            path = _string(reference["path"], f"{label}.evidence[{index}].path")
-            digest = _sha256(reference["sha256"], f"{label}.evidence[{index}].sha256")
+            path, digest = _file_reference(raw_reference, f"{label}.evidence[{index}]")
             carry_tuples.append((path, digest))
             source = evidence_by_reference.get((source_attempt_id, path, digest))
             require(
@@ -1000,6 +1431,10 @@ def _validate_carry_forward(
             require(
                 source["validity"] == "valid",
                 f"{label} cannot carry invalidated evidence",
+            )
+            require(
+                source["basis"] == original_basis,
+                f"{label} evidence does not retain the original basis",
             )
         require(
             len(carry_tuples) == len(set(carry_tuples)),
@@ -1020,80 +1455,71 @@ def _validate_carry_forward(
             f"{label} cannot carry evidence through a code or semantic impact",
         )
 
+        source_sequence = source_attempt["sequence"]
         target_sequence = target_attempt["sequence"]
         for decision_id, decision in decisions.items():
-            if gate_id not in decision["affected_gate_ids"]:
+            if (
+                decision["decision_class"] == "none"
+                or gate_id not in decision["affected_gate_ids"]
+            ):
                 continue
             decision_attempt_id = decision["attempt_id"]
-            decision_sequence = (
-                0
-                if decision_attempt_id is None
-                else attempts[decision_attempt_id]["sequence"]
-            )
+            if decision_attempt_id is None:
+                continue
+            decision_sequence = attempts[decision_attempt_id]["sequence"]
             require(
-                decision_sequence > target_sequence,
+                not (source_sequence < decision_sequence <= target_sequence),
                 f"{label} is affected by decision {decision_id} and cannot be carried forward",
             )
 
 
-def _descendants(failed_gate_id: str, dependents: dict[str, set[str]]) -> set[str]:
-    descendants: set[str] = set()
-    pending = list(dependents[failed_gate_id])
-    while pending:
-        gate_id = pending.pop()
-        if gate_id in descendants:
-            continue
-        descendants.add(gate_id)
-        pending.extend(dependents[gate_id])
-    return descendants
+def _failed_ancestors(
+    gates: dict[str, dict[str, Any]], gate_id: str, cache: dict[str, set[str]]
+) -> set[str]:
+    if gate_id in cache:
+        return cache[gate_id]
+    failed: set[str] = set()
+    for dependency in gates[gate_id]["depends_on"]:
+        if gates[dependency]["status"] == "failed":
+            failed.add(dependency)
+        failed.update(_failed_ancestors(gates, dependency, cache))
+    cache[gate_id] = failed
+    return failed
 
 
 def _validate_failure_invalidation(
     gates: dict[str, dict[str, Any]],
-    attempts: dict[str, dict[str, Any]],
-    dependents: dict[str, set[str]],
 ) -> None:
-    failed_gate_ids = {
-        gate_id for gate_id, gate in gates.items() if gate["status"] == "failed"
-    }
-    closures = {
-        gate_id: _descendants(gate_id, dependents) for gate_id in failed_gate_ids
-    }
-
+    cache: dict[str, set[str]] = {}
     for gate_id, gate in gates.items():
-        if gate["status"] != "invalidated":
-            continue
-        invalidation = _mapping(gate["invalidation"], f"gate {gate_id}.invalidation")
-        _require_fields(
-            invalidation,
-            {"failed_gate_id", "rationale"},
-            f"gate {gate_id}.invalidation",
-        )
-        failed_gate_id = _pattern(
-            invalidation["failed_gate_id"],
-            GATE_ID_RE,
-            f"gate {gate_id}.invalidation.failed_gate_id",
-        )
-        _string(invalidation["rationale"], f"gate {gate_id}.invalidation.rationale")
-        require(
-            failed_gate_id in failed_gate_ids,
-            f"gate {gate_id} is not invalidated by a failed gate",
-        )
-        require(
-            gate_id in closures[failed_gate_id],
-            f"gate {gate_id} is not a declared dependent of {failed_gate_id}",
-        )
-
-    for failed_gate_id, descendants in closures.items():
-        failed_sequence = attempts[gates[failed_gate_id]["attempt_id"]]["sequence"]
-        for gate_id in descendants:
-            gate = gates[gate_id]
-            if gate["status"] != "passed":
-                continue
-            gate_sequence = attempts[gate["attempt_id"]]["sequence"]
+        failed_ancestors = _failed_ancestors(gates, gate_id, cache)
+        if gate["status"] == "invalidated":
+            invalidation = _mapping(
+                gate["invalidation"], f"gate {gate_id}.invalidation"
+            )
+            _require_fields(
+                invalidation,
+                {"failed_gate_id", "rationale"},
+                f"gate {gate_id}.invalidation",
+            )
+            failed_gate_id = _pattern(
+                invalidation["failed_gate_id"],
+                GATE_ID_RE,
+                f"gate {gate_id}.invalidation.failed_gate_id",
+            )
+            _string(invalidation["rationale"], f"gate {gate_id}.invalidation.rationale")
             require(
-                gate_sequence > failed_sequence and not gate["carried_forward"],
-                f"failed gate {failed_gate_id} leaves stale passed dependent {gate_id}",
+                failed_gate_id in failed_ancestors,
+                f"gate {gate_id} is not transitively invalidated by {failed_gate_id}",
+            )
+        elif failed_ancestors and gate["status"] == "passed":
+            raise AssertionError(
+                f"failed gate dependency leaves stale passed dependent {gate_id}"
+            )
+        elif failed_ancestors and gate["status"] in {"blocked", "untested"}:
+            require(
+                not gate["evidence"],
+                f"failed gate dependency leaves non-invalidated evidence on {gate_id}",
             )
 
 
@@ -1101,6 +1527,7 @@ def _validate_allocations(
     campaign: dict[str, Any],
     attempts: dict[str, dict[str, Any]],
     decisions: dict[str, dict[str, Any]],
+    gates: dict[str, dict[str, Any]],
 ) -> None:
     authorization = _mapping(
         campaign["controller_authorization"], "campaign.controller_authorization"
@@ -1110,6 +1537,8 @@ def _validate_allocations(
         {
             "technical_corrective_attempts_authorized",
             "maximum_additional_attempts",
+            "maximum_technical_corrective_attempts",
+            "maximum_methodological_revision_attempts",
             "maximum_source_operations_per_attempt",
             "rationale",
         },
@@ -1119,28 +1548,46 @@ def _validate_allocations(
         authorization["technical_corrective_attempts_authorized"],
         "campaign.controller_authorization.technical_corrective_attempts_authorized",
     )
-    maximum_attempts = _integer(
+    maximum_additional = _integer(
         authorization["maximum_additional_attempts"],
         "campaign.controller_authorization.maximum_additional_attempts",
+    )
+    maximum_technical = _integer(
+        authorization["maximum_technical_corrective_attempts"],
+        "campaign.controller_authorization.maximum_technical_corrective_attempts",
+    )
+    maximum_methodological = _integer(
+        authorization["maximum_methodological_revision_attempts"],
+        "campaign.controller_authorization.maximum_methodological_revision_attempts",
     )
     maximum_operations = _integer(
         authorization["maximum_source_operations_per_attempt"],
         "campaign.controller_authorization.maximum_source_operations_per_attempt",
     )
     _string(authorization["rationale"], "campaign.controller_authorization.rationale")
+    require(
+        maximum_technical <= maximum_additional,
+        "technical corrective budget exceeds total additional-attempt budget",
+    )
+    require(
+        maximum_methodological <= maximum_additional,
+        "methodological revision budget exceeds total additional-attempt budget",
+    )
     if technical_authorized:
         require(
-            maximum_attempts >= 1,
-            "controller authorization needs a finite positive attempt bound",
+            maximum_technical >= 1,
+            "controller authorization needs a finite positive technical attempt bound",
         )
     else:
         require(
-            maximum_attempts == 0,
-            "disabled controller authorization must allow zero additional attempts",
+            maximum_technical == 0,
+            "disabled controller authorization must allow zero technical attempts",
         )
 
     technical_attempts = 0
-    for attempt_id, attempt in attempts.items():
+    methodological_attempts = 0
+    ordered_attempts = sorted(attempts.items(), key=lambda item: item[1]["sequence"])
+    for attempt_id, attempt in ordered_attempts:
         allocation = attempt["allocation"]
         kind = allocation["attempt_kind"]
         decision_id = allocation["authorization_decision_id"]
@@ -1150,7 +1597,23 @@ def _validate_allocations(
                 decision is not None,
                 f"attempt {attempt_id} references an unknown authorization decision",
             )
+        require(
+            attempt["source_operations"]["predeclared_maximum"] <= maximum_operations,
+            f"attempt {attempt_id} exceeds the finite source-operation budget",
+        )
         if kind == "initial":
+            require(
+                attempt["sequence"] == 1,
+                f"initial attempt {attempt_id} must have sequence 1",
+            )
+            require(
+                allocation["authorized_by"] == "controller",
+                f"initial attempt {attempt_id} must be controller-allocated",
+            )
+            require(
+                decision_id is None,
+                f"initial attempt {attempt_id} cannot cite an authorization decision",
+            )
             require(
                 not allocation["prospectively_authorized"],
                 f"initial attempt {attempt_id} cannot be prospective",
@@ -1185,11 +1648,17 @@ def _validate_allocations(
                 f"technical attempt {attempt_id} cannot require human authorization",
             )
             require(
-                attempt["source_operations"]["predeclared_maximum"]
-                <= maximum_operations,
-                f"technical attempt {attempt_id} exceeds the controller source-operation bound",
+                _parse_date_time(
+                    decision.get("decided_at"), f"decision {decision_id}.decided_at"
+                )
+                <= _parse_date_time(
+                    allocation["allocated_at"],
+                    f"attempt {attempt_id}.allocation.allocated_at",
+                ),
+                f"technical decision for {attempt_id} must predate allocation",
             )
         else:
+            methodological_attempts += 1
             require(
                 allocation["authorized_by"] == "human",
                 f"methodological attempt {attempt_id} must be human-authorized",
@@ -1211,26 +1680,187 @@ def _validate_allocations(
                 and decision["authorization_status"] == "authorized",
                 f"methodological attempt {attempt_id} lacks an authorized methodological decision",
             )
+            require(
+                decision.get("decided_at") is not None,
+                f"methodological attempt {attempt_id} needs a human decision timestamp",
+            )
+            require(
+                _parse_date_time(
+                    decision.get("decided_at"), f"decision {decision_id}.decided_at"
+                )
+                <= _parse_date_time(
+                    allocation["allocated_at"],
+                    f"attempt {attempt_id}.allocation.allocated_at",
+                ),
+                f"methodological decision for {attempt_id} must predate allocation",
+            )
+
+    additional_attempts = len(attempts) - 1
     require(
-        technical_attempts <= maximum_attempts,
-        "campaign has more technical corrective attempts than its finite controller authorization allows",
+        additional_attempts <= maximum_additional,
+        "campaign exceeds its finite additional-attempt budget",
     )
+    require(
+        technical_attempts <= maximum_technical,
+        "campaign has more technical corrective attempts than its finite controller budget allows",
+    )
+    require(
+        methodological_attempts <= maximum_methodological,
+        "campaign has more methodological revisions than its finite budget allows",
+    )
+
+    for decision_id, decision in decisions.items():
+        decision_class = decision["decision_class"]
+        if decision_class == "controller_technical":
+            attempt = attempts[decision["attempt_id"]]
+            require(
+                attempt["allocation"]["attempt_kind"] == "technical_corrective",
+                f"technical decision {decision_id} cannot authorize a non-technical attempt",
+            )
+            for gate_id in decision["affected_gate_ids"]:
+                require(
+                    gates[gate_id]["semantic_impact"]["classification"]
+                    != "human_methodological",
+                    f"technical decision {decision_id} cannot hide methodological gate {gate_id}",
+                )
+        elif (
+            decision_class == "human_methodological"
+            and decision["authorization_status"] == "authorized"
+        ):
+            attempt = attempts[decision["attempt_id"]]
+            require(
+                attempt["allocation"]["attempt_kind"] == "methodological_revision",
+                f"methodological decision {decision_id} must authorize a methodological revision",
+            )
+            for gate_id in decision["affected_gate_ids"]:
+                gate = gates[gate_id]
+                require(
+                    gate["semantic_impact"]["classification"] == "human_methodological",
+                    f"methodological decision {decision_id} must affect methodological gate {gate_id}",
+                )
+                require(
+                    gate["attempt_id"] == decision["attempt_id"],
+                    f"methodological gate {gate_id} must be recorded in its methodological attempt",
+                )
+
+    for gate_id, gate in gates.items():
+        if gate["semantic_impact"]["classification"] != "human_methodological":
+            continue
+        attempt = attempts[gate["attempt_id"]]
+        require(
+            attempt["allocation"]["attempt_kind"] == "methodological_revision",
+            f"methodological gate {gate_id} cannot be hidden in a technical attempt",
+        )
+        matching_decisions = [
+            decision
+            for decision in decisions.values()
+            if decision["decision_class"] == "human_methodological"
+            and decision["authorization_status"] == "authorized"
+            and decision["attempt_id"] == gate["attempt_id"]
+            and gate_id in decision["affected_gate_ids"]
+            and decision.get("decided_at") is not None
+        ]
+        require(
+            matching_decisions,
+            f"methodological gate {gate_id} lacks a human methodological decision and timestamp",
+        )
+
+
+def _validate_catalog(
+    campaign: dict[str, Any],
+    gates: dict[str, dict[str, Any]],
+    decisions: dict[str, dict[str, Any]],
+) -> None:
+    method_type = campaign["method_type"]
+    require(method_type in CAPABILITY_CATALOG, "campaign.method_type is invalid")
+    catalog = _unique_strings(
+        _list(campaign["capability_catalog"], "campaign.capability_catalog"),
+        "campaign.capability_catalog",
+    )
+    expected = CAPABILITY_CATALOG[method_type]
+    require(
+        tuple(catalog) == expected,
+        f"campaign capability catalog does not match the required {method_type} catalog",
+    )
+    if campaign["status"] != "accepted":
+        return
+    pending = [
+        decision_id
+        for decision_id, decision in decisions.items()
+        if decision["decision_class"] == "human_methodological"
+        and decision["authorization_status"] == "pending"
+    ]
+    require(not pending, "accepted campaign has pending human methodological decision")
+    for gate_id in expected:
+        require(
+            gate_id in gates,
+            f"accepted campaign is missing required catalog gate {gate_id}",
+        )
+        gate = gates[gate_id]
+        require(
+            gate["status"] == "passed", f"accepted catalog gate {gate_id} must pass"
+        )
+        require(
+            gate["reusable"] is True,
+            f"accepted catalog gate {gate_id} must be reusable",
+        )
+        require(
+            gate["original_observed_basis"] in ACCEPTANCE_BASES,
+            f"accepted catalog gate {gate_id} has inferred or untested basis",
+        )
+        evidence = _list(gate["evidence"], f"accepted catalog gate {gate_id}.evidence")
+        require(evidence, f"accepted catalog gate {gate_id} lacks evidence")
+        require(
+            all(item["validity"] == "valid" for item in evidence),
+            f"accepted catalog gate {gate_id} has invalid evidence",
+        )
+    for gate_id, gate in gates.items():
+        require(
+            gate["status"] == "passed", "accepted campaign requires every gate to pass"
+        )
+        require(
+            gate["original_observed_basis"] in ACCEPTANCE_BASES,
+            f"accepted campaign cannot use inferred or untested gate {gate_id}",
+        )
 
 
 def _validate_campaign_state(
     campaign: dict[str, Any],
     gates: dict[str, dict[str, Any]],
     decisions: dict[str, dict[str, Any]],
+    attempts: dict[str, dict[str, Any]],
 ) -> None:
     status = campaign["status"]
     cancellation = campaign["cancellation"]
     acceptance = campaign["acceptance"]
+    cancelled_attempts = [
+        attempt_id
+        for attempt_id, attempt in attempts.items()
+        if attempt["terminal"]["outcome"] == "cancelled"
+    ]
     if status == "cancelled":
         cancellation = _mapping(cancellation, "campaign.cancellation")
         _require_fields(
             cancellation,
-            {"kind", "cancelled_by", "cancelled_at", "reason", "provider_failure"},
+            {
+                "attempt_id",
+                "kind",
+                "cancelled_by",
+                "cancelled_at",
+                "reason",
+                "provider_failure",
+            },
             "campaign.cancellation",
+        )
+        attempt_id = _require_task_prefix(
+            cancellation["attempt_id"],
+            ATTEMPT_ID_RE,
+            campaign["task_id"],
+            "P",
+            "campaign.cancellation.attempt_id",
+        )
+        require(
+            attempt_id in attempts, "campaign cancellation references unknown attempt"
         )
         require(
             cancellation["kind"] == "operator_cancellation",
@@ -1247,11 +1877,24 @@ def _validate_campaign_state(
             "operator cancellation is not provider failure",
         )
         require(acceptance is None, "cancelled campaign cannot have acceptance")
+        require(
+            attempts[attempt_id]["terminal"]["outcome"] == "cancelled",
+            "campaign cancellation must link a cancelled attempt terminal outcome",
+        )
+        latest_attempt_id = max(attempts, key=lambda key: attempts[key]["sequence"])
+        require(
+            attempt_id == latest_attempt_id,
+            "campaign cancellation must link the final allocated attempt",
+        )
         return
 
     require(
         cancellation is None,
         "only a cancelled campaign may contain cancellation details",
+    )
+    require(
+        not cancelled_attempts,
+        "a cancelled attempt terminal outcome requires cancelled campaign status",
     )
     if status == "accepted":
         acceptance = _mapping(acceptance, "campaign.acceptance")
@@ -1297,8 +1940,18 @@ def _validate_campaign_state(
         )
 
 
-def validate_campaign_artifact(campaign: Any) -> None:
-    """Validate cross-record campaign rules that JSON Schema cannot express."""
+def validate_campaign_artifact(
+    campaign: Any,
+    *,
+    campaign_schema: dict[str, Any] | None = None,
+) -> None:
+    """Validate schema and cross-record campaign invariants, without file I/O links."""
+    if campaign_schema is None:
+        campaign_schema = _mapping(
+            load(SEARCHES / "schemas" / "pilot-campaign.schema.json"),
+            "pilot campaign schema",
+        )
+    _validate_jsonschema_instance(campaign_schema, campaign, "campaign")
     campaign = _mapping(campaign, "campaign")
     _require_fields(
         campaign,
@@ -1307,6 +1960,10 @@ def validate_campaign_artifact(campaign: Any) -> None:
             "campaign_id",
             "task_id",
             "source_id",
+            "method_type",
+            "protocol_fingerprint",
+            "dictionary_fingerprint",
+            "capability_catalog",
             "status",
             "created_at",
             "updated_at",
@@ -1314,6 +1971,7 @@ def validate_campaign_artifact(campaign: Any) -> None:
             "screening_performed",
             "candidate_import_permitted",
             "candidate_records_imported",
+            "retry_policy",
             "controller_authorization",
             "attempts",
             "capability_gates",
@@ -1327,12 +1985,23 @@ def validate_campaign_artifact(campaign: Any) -> None:
         campaign["schema_version"] == "slr1-pilot-campaign/v1",
         "campaign schema_version is invalid",
     )
-    _pattern(campaign["campaign_id"], CAMPAIGN_ID_RE, "campaign.campaign_id")
-    _pattern(campaign["task_id"], TASK_ID_RE, "campaign.task_id")
+    task_id = _pattern(campaign["task_id"], TASK_ID_RE, "campaign.task_id")
+    _require_task_prefix(
+        campaign["campaign_id"], CAMPAIGN_ID_RE, task_id, "C", "campaign.campaign_id"
+    )
     _string(campaign["source_id"], "campaign.source_id")
+    require(
+        campaign["method_type"] in CAPABILITY_CATALOG, "campaign.method_type is invalid"
+    )
+    _sha256(campaign["protocol_fingerprint"], "campaign.protocol_fingerprint")
+    _sha256(campaign["dictionary_fingerprint"], "campaign.dictionary_fingerprint")
     require(campaign["status"] in CAMPAIGN_STATUSES, "campaign.status is invalid")
-    _date_time(campaign["created_at"], "campaign.created_at")
-    _date_time(campaign["updated_at"], "campaign.updated_at")
+    created_at = _parse_date_time(campaign["created_at"], "campaign.created_at")
+    updated_at = _parse_date_time(campaign["updated_at"], "campaign.updated_at")
+    require(
+        updated_at >= created_at,
+        "campaign.updated_at must not predate campaign.created_at",
+    )
     require(campaign["diagnostic_only"] is True, "campaign must remain diagnostic-only")
     require(
         campaign["screening_performed"] is False, "campaign must not screen records"
@@ -1348,93 +2017,343 @@ def validate_campaign_artifact(campaign: Any) -> None:
         candidate_records_imported == 0, "campaign must import zero candidate records"
     )
 
-    attempts, evidence_by_reference = _validate_attempts(campaign)
+    attempts, evidence_by_reference, retry_records = _validate_attempts(campaign)
+    _validate_retry_policy(campaign, retry_records)
     decisions = _validate_decisions(campaign, attempts)
     gates = _validate_gates(campaign, attempts, evidence_by_reference)
     _validate_decision_gate_references(decisions, gates)
-    _validate_methodological_gate_authorization(gates, decisions)
-    dependents = _validate_dependency_graph(gates)
+    _validate_dependency_graph(gates)
     _validate_carry_forward(gates, attempts, evidence_by_reference, decisions)
-    _validate_failure_invalidation(gates, attempts, dependents)
-    _validate_allocations(campaign, attempts, decisions)
-    _validate_campaign_state(campaign, gates, decisions)
+    _validate_failure_invalidation(gates)
+    _validate_allocations(campaign, attempts, decisions, gates)
+    _validate_catalog(campaign, gates, decisions)
+    _validate_campaign_state(campaign, gates, decisions, attempts)
 
 
-def validate_campaign_template() -> None:
+def _source_packet_for_campaign(campaign_path: Path, sources_root: Path) -> Path:
+    try:
+        relative = campaign_path.relative_to(sources_root)
+    except ValueError as exc:
+        raise AssertionError(
+            f"campaign is outside searches/sources: {campaign_path}"
+        ) from exc
+    require(
+        len(relative.parts) >= 2,
+        f"campaign is not inside a source packet: {campaign_path}",
+    )
+    source_packet = sources_root / relative.parts[0]
+    try:
+        sources_resolved = sources_root.resolve(strict=True)
+        packet_resolved = source_packet.resolve(strict=True)
+        campaign_resolved = campaign_path.resolve(strict=True)
+        packet_resolved.relative_to(sources_resolved)
+        campaign_resolved.relative_to(packet_resolved)
+    except (FileNotFoundError, OSError, ValueError) as exc:
+        raise AssertionError(
+            f"campaign path escapes its source packet: {campaign_path}"
+        ) from exc
+    return source_packet
+
+
+def _read_source_file(
+    source_packet: Path, relative_path: Any, expected_sha256: Any, label: str
+) -> bytes:
+    relative_path = _relative_path(relative_path, f"{label}.path")
+    expected_sha256 = _sha256(expected_sha256, f"{label}.sha256")
+    try:
+        packet_resolved = source_packet.resolve(strict=True)
+        candidate = source_packet / relative_path
+        resolved = candidate.resolve(strict=True)
+        resolved.relative_to(packet_resolved)
+        require(resolved.is_file(), f"{label} is not a regular file")
+        contents = resolved.read_bytes()
+    except (FileNotFoundError, OSError, ValueError) as exc:
+        raise AssertionError(
+            f"{label} escapes or is missing from its source packet"
+        ) from exc
+    actual_sha256 = hashlib.sha256(contents).hexdigest()
+    require(actual_sha256 == expected_sha256, f"{label} SHA-256 does not match")
+    return contents
+
+
+def _validate_manifest_link(
+    manifest: Any,
+    campaign: dict[str, Any],
+    attempt: dict[str, Any],
+    label: str,
+) -> None:
+    manifest = _mapping(manifest, label)
+    require(
+        manifest.get("pilot_id") == attempt["attempt_id"],
+        f"{label}.pilot_id does not match campaign attempt",
+    )
+    require(
+        manifest.get("task_id") == campaign["task_id"],
+        f"{label}.task_id does not match campaign task",
+    )
+    require(
+        manifest.get("source_id") == campaign["source_id"],
+        f"{label}.source_id does not match campaign source",
+    )
+    require(
+        manifest.get("method_type") == campaign["method_type"],
+        f"{label}.method_type does not match campaign method",
+    )
+    link = manifest.get("campaign")
+    require(isinstance(link, dict), f"{label} lacks required campaign link")
+    require(
+        link.get("campaign_id") == campaign["campaign_id"],
+        f"{label}.campaign_id does not match campaign",
+    )
+    require(
+        link.get("attempt_id") == attempt["attempt_id"],
+        f"{label}.campaign.attempt_id does not match attempt",
+    )
+    if "attempt_terminal" in manifest:
+        require(
+            manifest["attempt_terminal"] == attempt["terminal"],
+            f"{label}.attempt_terminal does not match campaign terminal outcome",
+        )
+
+
+def _validate_campaign_files(
+    campaign: dict[str, Any],
+    source_packet: Path,
+    manifest_schema: dict[str, Any],
+) -> None:
+    """Hash every declared campaign file and validate each linked manifest."""
+    for index, attempt in enumerate(campaign["attempts"]):
+        label = f"campaign.attempts[{index}].manifest"
+        contents = _read_source_file(
+            source_packet,
+            attempt["manifest_path"],
+            attempt["manifest_sha256"],
+            label,
+        )
+        try:
+            manifest = json.loads(contents)
+        except json.JSONDecodeError as exc:
+            raise AssertionError(f"{label} is not valid JSON") from exc
+        _validate_jsonschema_instance(manifest_schema, manifest, label)
+        _validate_pilot_manifest_formats(manifest, label)
+        _validate_manifest_link(manifest, campaign, attempt, label)
+
+        terminal = attempt["terminal"]
+        if terminal["browser_backed"]:
+            for receipt_name in ("cleanup_receipt", "lease_receipt"):
+                receipt = terminal[receipt_name]
+                path, digest = _file_reference(
+                    receipt, f"campaign.attempts[{index}].terminal.{receipt_name}"
+                )
+                _read_source_file(
+                    source_packet,
+                    path,
+                    digest,
+                    f"campaign.attempts[{index}].terminal.{receipt_name}",
+                )
+
+        for operation_index, operation in enumerate(
+            attempt["source_operations"]["operations"]
+        ):
+            retry = operation["retry"]
+            if retry is None:
+                continue
+            path, digest = _file_reference(
+                retry["receipt"],
+                f"campaign.attempts[{index}].source_operations.operations[{operation_index}].retry.receipt",
+            )
+            _read_source_file(
+                source_packet,
+                path,
+                digest,
+                f"campaign.attempts[{index}].source_operations.operations[{operation_index}].retry.receipt",
+            )
+
+        for evidence_index, evidence in enumerate(attempt["evidence"]):
+            _read_source_file(
+                source_packet,
+                evidence["path"],
+                evidence["sha256"],
+                f"campaign.attempts[{index}].evidence[{evidence_index}]",
+            )
+
+    for gate_index, gate in enumerate(campaign["capability_gates"]):
+        for evidence_index, evidence in enumerate(gate["evidence"]):
+            _read_source_file(
+                source_packet,
+                evidence["path"],
+                evidence["sha256"],
+                f"campaign.capability_gates[{gate_index}].evidence[{evidence_index}]",
+            )
+        carry_forward = gate["carry_forward"]
+        if carry_forward is not None:
+            for evidence_index, evidence in enumerate(carry_forward["evidence"]):
+                _read_source_file(
+                    source_packet,
+                    evidence["path"],
+                    evidence["sha256"],
+                    f"campaign.capability_gates[{gate_index}].carry_forward.evidence[{evidence_index}]",
+                )
+
+
+def _validate_campaign_file(
+    campaign_path: Path,
+    searches_root: Path,
+    schemas: dict[str, dict[str, Any]],
+) -> None:
+    source_packet = _source_packet_for_campaign(
+        campaign_path, searches_root / "sources"
+    )
+    campaign = load(campaign_path)
     validate_campaign_artifact(
-        load(SEARCHES / "templates" / "pilot-campaign.template.json")
+        campaign, campaign_schema=schemas["pilot-campaign.schema.json"]
+    )
+    packet_task_prefix = campaign["task_id"].lower()
+    require(
+        source_packet.name == packet_task_prefix
+        or source_packet.name.startswith(f"{packet_task_prefix}-"),
+        "source packet has the wrong task prefix",
+    )
+    _validate_campaign_files(
+        campaign,
+        source_packet,
+        schemas["pilot-manifest.schema.json"],
     )
 
 
-def validate_legacy_pilot_manifests() -> None:
-    """Keep v1 pilot manifests valid when the optional campaign link is absent."""
-    schema = load(SEARCHES / "schemas" / "pilot-manifest.schema.json")
-    required = set(schema["required"])
-    allowed = set(schema["properties"])
-    paths = sorted((SEARCHES / "sources").rglob("manifest.json"))
+def validate_campaign_file(
+    campaign_path: Path,
+    *,
+    searches_root: Path = SEARCHES,
+) -> None:
+    _validate_campaign_file(campaign_path, searches_root, _load_schemas(searches_root))
+
+
+def validate_campaign_artifacts(searches_root: Path = SEARCHES) -> int:
+    """Scan every real campaign.json beneath searches/sources, not just templates."""
+    source_root = searches_root / "sources"
+    require(source_root.is_dir(), f"missing source packet root: {source_root}")
+    schemas = _load_schemas(searches_root)
+    paths = sorted(source_root.rglob("campaign.json"))
+    for campaign_path in paths:
+        _validate_campaign_file(campaign_path, searches_root, schemas)
+    return len(paths)
+
+
+def validate_campaign_template() -> None:
+    schemas = _load_schemas(SEARCHES)
+    validate_campaign_artifact(
+        load(SEARCHES / "templates" / "pilot-campaign.template.json"),
+        campaign_schema=schemas["pilot-campaign.schema.json"],
+    )
+
+
+def validate_legacy_pilot_manifests(searches_root: Path = SEARCHES) -> int:
+    """Validate all v1 manifests while keeping campaign fields optional for legacy data."""
+    schemas = _load_schemas(searches_root)
+    schema = schemas["pilot-manifest.schema.json"]
+    paths = sorted((searches_root / "sources").rglob("manifest.json"))
     require(paths, "expected existing pilot manifests")
     legacy_count = 0
     for path in paths:
-        manifest = _mapping(load(path), f"legacy manifest {path.relative_to(ROOT)}")
-        require(
-            required <= set(manifest),
-            f"legacy manifest lacks required fields: {path.relative_to(ROOT)}",
-        )
-        unknown = set(manifest) - allowed
-        require(
-            not unknown,
-            f"legacy manifest has unknown fields: {path.relative_to(ROOT)}: {sorted(unknown)}",
-        )
+        manifest = _mapping(load(path), f"legacy manifest {path}")
         if "campaign" not in manifest:
             legacy_count += 1
-        label = f"legacy manifest {path.relative_to(ROOT)}"
+        label = f"legacy manifest {path.relative_to(searches_root.parent)}"
         _validate_pilot_manifest_formats(manifest, label)
         _validate_jsonschema_instance(schema, manifest, label)
     require(
         legacy_count > 0, "expected at least one unchanged pre-campaign pilot manifest"
     )
+    return legacy_count
 
 
-def validate_layout() -> None:
+def _normalize_mode(mode: str) -> str:
+    aliases = {
+        "pre-final": "pre-final",
+        "pre-r002": "pre-final",
+        "pre-R002": "pre-final",
+        "final": "final",
+        "r002": "final",
+        "R002": "final",
+    }
+    require(mode in aliases, f"unknown validation mode: {mode}")
+    return aliases[mode]
+
+
+def validate_final_events(
+    mode: str = "pre-final", searches_root: Path = SEARCHES
+) -> None:
+    mode = _normalize_mode(mode)
+    final_events = searches_root / "final-events"
+    require(final_events.is_dir(), f"missing final-events directory: {final_events}")
+    final_files = [
+        path
+        for path in final_events.rglob("*")
+        if path.is_file() and path.name != "README.md"
+    ]
+    if mode == "pre-final":
+        require(
+            not final_files,
+            f"final-events contains premature artifacts: {final_files}",
+        )
+
+
+def validate_layout(mode: str = "pre-final", searches_root: Path = SEARCHES) -> None:
+    root = searches_root.parent
     required = [
-        ROOT / "search-log.md",
-        SEARCHES / "README.md",
-        SEARCHES / "templates" / "source-guideline.md",
-        SEARCHES / "templates" / "source-pilot-prompt.md",
-        SEARCHES / "templates" / "pilot-campaign.template.json",
-        SEARCHES / "final-events" / "README.md",
+        root / "search-log.md",
+        searches_root / "README.md",
+        searches_root / "templates" / "source-guideline.md",
+        searches_root / "templates" / "source-pilot-prompt.md",
+        searches_root / "templates" / "pilot-campaign.template.json",
+        searches_root / "templates" / "pilot-manifest.template.json",
+        searches_root / "final-events" / "README.md",
     ]
     for path in required:
-        require(path.is_file(), f"missing required artifact: {path.relative_to(ROOT)}")
-    final_files = [
-        p
-        for p in (SEARCHES / "final-events").rglob("*")
-        if p.is_file() and p.name != "README.md"
-    ]
-    require(
-        not final_files, f"final-events contains premature artifacts: {final_files}"
+        require(path.is_file(), f"missing required artifact: {path.relative_to(root)}")
+    validate_final_events(mode, searches_root)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--mode",
+        default="pre-final",
+        choices=("pre-final", "final", "pre-r002", "pre-R002", "r002", "R002"),
+        help="pre-final rejects final-events; final (R002) permits them",
     )
-
-
-def main() -> int:
-    checks = [
-        validate_dictionary,
-        validate_crosswalk,
-        validate_schemas,
-        validate_campaign_template,
-        validate_legacy_pilot_manifests,
-        validate_layout,
-    ]
-    for check in checks:
-        check()
-        print(f"ok: {check.__name__}")
-    print("SLR1 search infrastructure validation passed")
-    return 0
+    args = parser.parse_args(argv)
+    try:
+        # Do this before any infrastructure work so plain Python cannot silently
+        # skip JSON Schema or format validation.
+        _jsonschema_components()
+        checks = [
+            validate_dictionary,
+            validate_crosswalk,
+            validate_schemas,
+            validate_campaign_template,
+            validate_campaign_artifacts,
+            validate_legacy_pilot_manifests,
+        ]
+        for check in checks:
+            result = check()
+            suffix = f" ({result})" if check is validate_campaign_artifacts else ""
+            print(f"ok: {check.__name__}{suffix}")
+        validate_layout(args.mode)
+        print("ok: validate_layout")
+        print("SLR1 search infrastructure validation passed")
+        return 0
+    except (
+        AssertionError,
+        KeyError,
+        TypeError,
+        RuntimeError,
+        json.JSONDecodeError,
+    ) as exc:
+        print(f"validation failed: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    try:
-        raise SystemExit(main())
-    except (AssertionError, KeyError, TypeError, json.JSONDecodeError) as exc:
-        print(f"validation failed: {exc}", file=sys.stderr)
-        raise SystemExit(1)
+    raise SystemExit(main())
