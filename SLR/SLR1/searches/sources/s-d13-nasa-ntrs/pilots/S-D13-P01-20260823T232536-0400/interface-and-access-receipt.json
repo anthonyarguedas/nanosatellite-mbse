@@ -1,0 +1,58 @@
+{
+  "schema_version": "slr1-ntrs-interface-receipt/v1",
+  "pilot_id": "S-D13-P01-20260823T232536-0400",
+  "receipt_created_at": "2026-08-24T03:29:24Z",
+  "retention": {
+    "raw_response_bodies_retained": false,
+    "reason": "Only compact public diagnostic metadata was retained; no candidate corpus, cookies, session URLs, or full captures were stored."
+  },
+  "claims": [
+    {
+      "claim": "The first-party NTRS root at https://ntrs.nasa.gov/ returned HTTP 200 over HTTPS.",
+      "basis": "observed",
+      "observed_at": "2026-08-24T03:20:56Z",
+      "request": {"method": "HEAD", "redirects_followed": false},
+      "response": {"status": 200, "content_type": "text/html; charset=utf-8", "content_length": 54667}
+    },
+    {
+      "claim": "The public first-party client served from the root identifies the resource as NTRS/NASA STI Repository and distinguishes public access from a registered collection. The protocol boundary for this task is the full public technical-report database, not registered-only content.",
+      "basis": "official_documentation",
+      "evidence_method": "Current first-party public client text and links observed from the HTTPS root; no full client capture retained.",
+      "official_urls": [
+        "https://ntrs.nasa.gov/",
+        "https://sti.nasa.gov/what-is-the-ntrs/"
+      ]
+    },
+    {
+      "claim": "The current public client bundle configures API root /api and exposes POST /citations/search; its generated client sends JSON request bodies and accepts application/json.",
+      "basis": "observed",
+      "evidence_method": "Static first-party bundle main.7f94518bd2eb676d.js was fetched from the public root and inspected in memory; no full bundle was retained.",
+      "api": {
+        "origin": "https://ntrs.nasa.gov",
+        "route": "/api/citations/search",
+        "method": "POST",
+        "request_content_type": "application/json",
+        "accept": "application/json"
+      }
+    },
+    {
+      "claim": "The current public client source contains advanced-search request properties q, title, status, author, created, published, center, organization, stiTypeDetails, subjectCategory, reportNumber, fundingNumber, and keyword; it presents page-size options 25, 50, and 100 and publication-date sort choices.",
+      "basis": "observed",
+      "evidence_method": "Static first-party bundle inspection only. This does not prove server acceptance, field coverage, q field scope, or response semantics."
+    },
+    {
+      "claim": "The current public client presents record subjectCategories and keywords, and exposes subjectCategory and keyword advanced-search controls.",
+      "basis": "observed",
+      "evidence_method": "Static first-party bundle inspection only. It does not establish that either property is a controlled vocabulary, an indexed search field, a hierarchy, or usable for this review."
+    },
+    {
+      "claim": "Browser preflight is not applicable because this diagnostic used only public anonymous HTTP/API and static first-party routes; no browser was launched or controlled.",
+      "basis": "observed"
+    },
+    {
+      "claim": "A successful API response was not obtained, so authorization success, the live response envelope, selected public-database coverage, q field scope, server-side filter application, and metadata/export behavior remain unverified.",
+      "basis": "untested",
+      "evidence_paths": ["api-transport-probes.json", "adapter-route-test.json"]
+    }
+  ]
+}

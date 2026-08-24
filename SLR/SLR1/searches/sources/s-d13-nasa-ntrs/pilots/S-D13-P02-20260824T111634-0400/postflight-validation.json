@@ -1,0 +1,103 @@
+{
+  "schema_version": "slr1-ntrs-p02-postflight-validation/v1",
+  "scope": "Local validation only; no NTRS request was made by this validator.",
+  "manifest_schema": {
+    "path": "SLR/SLR1/searches/schemas/pilot-manifest.schema.json",
+    "valid": true,
+    "errors": []
+  },
+  "json_parse": {
+    "valid": true,
+    "files_parsed": [
+      "adapter-failure-behavior-receipt.json",
+      "early-gate-decision.json",
+      "evidence-index.json",
+      "health-receipt.json",
+      "manifest.json",
+      "minimal-search-envelope-receipt.json",
+      "offline-partition-audit.json",
+      "pinned-adapter-file-sha256.json",
+      "pinned-adapter-offline-tests.json",
+      "preflight.json"
+    ],
+    "errors": []
+  },
+  "link_validation": {
+    "valid": true,
+    "checked_relative_links": 8,
+    "errors": []
+  },
+  "query_encoding": {
+    "p02_executed_query_utf8_valid": true,
+    "p02_executed_query_has_no_line_ending": true,
+    "p02_executed_query_sha256": "3fc7d31e9abb58d42acd5c95a9549835545de822d0843e28265c6979b1a466d4"
+  },
+  "nine_partition_coverage": {
+    "required_ids": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ],
+    "observed_ids": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ],
+    "exact_coverage": true,
+    "offline_literal_boolean_hash_audit_passed": true
+  },
+  "integrity": {
+    "root_packet_hashes_match_preflight": true,
+    "root_packet_mismatches": [],
+    "p01_hashes_match_preflight": true,
+    "p01_mismatches": [],
+    "private_path_cookie_or_session_value_matches": [],
+    "adapter_worktree_clean": true
+  },
+  "concurrency": {
+    "preflight_status_line_count": 18,
+    "postflight_status_line_count": 18,
+    "status_lines_added_after_preflight": [],
+    "status_lines_removed_after_preflight": [],
+    "status_lines_unchanged_from_preflight": [
+      " M .gitignore",
+      " M SLR/SLR1/AGENTS.md",
+      " M SLR/SLR1/TASKS.md",
+      " M SLR/SLR1/protocol-discovery-and-appraisal.md",
+      " M SLR/SLR1/search-log.md",
+      " M SLR/SLR1/searches/sources/s-d01-scopus/guideline.md",
+      " M SLR/SLR1/searches/sources/s-d01-scopus/human-review.md",
+      " M SLR/SLR1/searches/sources/s-d01-scopus/translation-spec.json",
+      "?? SLR/SLR1/scripts/esa_indico_local_harvest.py",
+      "?? SLR/SLR1/scripts/test_esa_indico_local_harvest.py",
+      "?? SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P11-20260823T144717-0400/",
+      "?? SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P12-20260823T145520-0400/",
+      "?? SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P13-20260823T145616-0400/",
+      "?? SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P14-20260823T150131-0400/",
+      "?? SLR/SLR1/searches/sources/s-d03-ieee-xplore/",
+      "?? SLR/SLR1/searches/sources/s-d09-oatd/",
+      "?? SLR/SLR1/searches/sources/s-d13-nasa-ntrs/",
+      "?? SLR/SLR1/searches/sources/s-l02-esa-indico/"
+    ],
+    "interpretation": "Git status treats the already-untracked NTRS source packet as one pre-existing directory entry; root/P01 hash comparisons separately protect immutable pre-existing packet files. Added/removed status lines outside the NTRS packet are concurrent/unrelated to this P02 write boundary unless independently attributed by their owner."
+  },
+  "early_gate": {
+    "source_request_count": 2,
+    "code_issue_value": "unresolved",
+    "code_issue_value_allowed": true,
+    "draft_source_packet_present": false
+  },
+  "all_validation_checks_passed": true
+}

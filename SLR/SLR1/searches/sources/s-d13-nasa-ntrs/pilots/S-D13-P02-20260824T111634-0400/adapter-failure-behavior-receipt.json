@@ -1,0 +1,52 @@
+{
+  "schema_version": "slr1-ntrs-p02-adapter-failure-behavior/v1",
+  "adapter_commit": "e720192855f8b5356d92fff23caeb6b8f66bbaf4",
+  "basis": "observed offline code/tests plus the one P02 live timeout; not a live source-envelope validation",
+  "live_observation": {
+    "execution": "minimal-search-envelope-receipt.json",
+    "failure_class": "ReadTimeout",
+    "event_total": null,
+    "records_retained": 0,
+    "explicit_zero": false
+  },
+  "committed_adapter_fail_closed_rules": [
+    {
+      "classes": ["HTTP redirect", "401/403", "429", "4xx/5xx", "non-JSON", "non-object envelope", "missing/noninteger stats.total"],
+      "mechanism": "search_ntrs.py _parse_response raises NTRSRequestError or NTRSProtocolError",
+      "offline_basis": "source inspection; focused test receipt"
+    },
+    {
+      "classes": ["changed total", "empty nonterminal page", "short nonterminal page", "page overrun", "missing raw ID", "duplicate raw ID", "insufficient complete bounds", "changed pass order"],
+      "mechanism": "search_ntrs.py strict traversal/reconciliation rejects the run",
+      "offline_basis": "test_search_ntrs.py strict rejection cases passed"
+    },
+    {
+      "classes": ["strict traversal failure after partial progress"],
+      "mechanism": "error_result emits top-level total=null and record-free results=[] while preserving aggregate diagnostic progress only",
+      "offline_basis": "test_search_ntrs.py strict failure artifact case passed"
+    },
+    {
+      "classes": ["explicit native zero"],
+      "mechanism": "strict mode requires two deliberate zero passes and ordered-ID reconciliation",
+      "offline_basis": "test_search_ntrs.py strict-zero case passed",
+      "p02_live_status": "untested; no native zero was observed"
+    },
+    {
+      "classes": ["unverified sort payload"],
+      "mechanism": "adapter records source default ordering and does not send an invented sort payload; strict comparison is an ordered raw-ID sequence",
+      "offline_basis": "test_search_ntrs.py exact-date/order payload case passed",
+      "p02_live_status": "untested"
+    }
+  ],
+  "unvalidated_live_failure_categories": [
+    "query parser/rewrite/control rejection",
+    "response estimate/exactness signal",
+    "stale page",
+    "source export behavior",
+    "language/date field behavior",
+    "source rate-limit response",
+    "public ID persistence"
+  ],
+  "no_adapter_patch_performed": true,
+  "no_live_adapter_run_performed_after_early_gate_timeout": true
+}

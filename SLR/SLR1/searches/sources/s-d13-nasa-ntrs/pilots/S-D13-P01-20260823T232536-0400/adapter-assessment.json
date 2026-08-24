@@ -1,0 +1,57 @@
+{
+  "schema_version": "slr1-ntrs-adapter-assessment/v1",
+  "pilot_id": "S-D13-P01-20260823T232536-0400",
+  "adapter": {
+    "path_reference": "academic-search skill external adapter search_ntrs.py", 
+    "git_commit_at_dispatch": "3231ebddefcc3e7bc707b2a7d66fbe831d363286",
+    "script_sha256": "29063c6d74d227e2d86626b393b4e16ac7d5668afa8a75007e2484c97d1796b4",
+    "version_literal": "1"
+  },
+  "test": {
+    "basis": "observed",
+    "command_form": "uv run search_ntrs.py --query nanosatellite --limit 1 --max-pages 1 --output-path pilots/<pilot-id>/adapter-route-test.json",
+    "started_at_utc": "2026-08-24T03:25:49.877808Z",
+    "ended_at_utc": "2026-08-24T03:26:20.208347Z",
+    "exit_code": 1,
+    "result_path": "adapter-route-test.json",
+    "observed_result": {
+      "status": "error",
+      "error_type": "NTRSRequestError",
+      "source_reported_total": null,
+      "records_retrieved": 0,
+      "merge_eligible": false
+    }
+  },
+  "code_issue": true,
+  "basis": "observed",
+  "findings": [
+    {
+      "id": "NTRS-CODE-01",
+      "statement": "The adapter's emitted PRISMA source descriptor classifies NTRS as prisma_category=online_resource, while the tracked SLR1 source/interface crosswalk requires NTRS in prisma_2020_column=databases_registers and describes it as a technical-report database.",
+      "evidence": [
+        "adapter-route-test.json#/output_metadata/prisma_search_run/source_descriptor/prisma_category",
+        "SLR/SLR1/searches/source-interface-prisma-crosswalk.json#/sources[source_id=ntrs]"
+      ],
+      "impact": "A future adapter artifact would misclassify the required NTRS discovery event in review reporting."
+    },
+    {
+      "id": "NTRS-CODE-02",
+      "statement": "The adapter exposes only integer --year-start/--year-end controls and constructs YYYY-01-01/YYYY-12-31 bounds, so it cannot express an arbitrary exact P-001 upper date. Its bounded loop has no strict final-run mode that performs two complete ordered stable-ID passes or rejects missing/duplicate IDs.",
+      "basis": "observed",
+      "evidence": [
+        "external-adapter:search_ntrs.py#build_published_filter at pinned commit",
+        "external-adapter:search_ntrs.py#search_ntrs at pinned commit",
+        "SLR/SLR1/protocol-discovery-and-appraisal.md#pilots-and-final-search-events"
+      ],
+      "impact": "The current route cannot by itself implement the protocol-required exact-date, stable-identity, duplicate, ordering, and two-pass completeness controls for a final event."
+    }
+  ],
+  "required_stop": {
+    "basis": "observed",
+    "statement": "The demonstrated code issue was preserved without a patch. Per the pilot contract, affected live NTRS querying stopped after this assessment; no retry or second pilot was started."
+  },
+  "smallest_separately_scoped_fix": {
+    "recommendation": "Create one NTRS adapter corrective change, separately reviewed and committed before a newly authorized pilot: correct NTRS PRISMA classification; add exact ISO --date-start/--date-end transport; and add --require-complete that fixes/records validated sort, exhausts pages, checks nonempty unique NTRS IDs, and compares two full ordered ID passes. Add tests for all four behaviors.",
+    "why_not_patch_here": "This subagent is assigned a diagnostic pilot only and may not patch external/shared code."
+  }
+}
