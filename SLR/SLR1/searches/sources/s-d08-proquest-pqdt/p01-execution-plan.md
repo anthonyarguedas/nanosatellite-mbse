@@ -44,7 +44,7 @@ caffeinate -dims uv run ~/agent-tools/internet/skills/browser/scripts/run_with_b
   --owner "$ATTEMPT_ID" \
   --source proquest-pqdt \
   --receipt "SLR/SLR1/searches/sources/s-d08-proquest-pqdt/pilots/$ATTEMPT_ID/receipts/shared-lease.json" \
-  --lease-timeout 900 \
+  --lease-timeout 600 \
   -- \
   uv run SLR/SLR1/scripts/proquest_pilot_runner.py \
     --source proquest-pqdt \

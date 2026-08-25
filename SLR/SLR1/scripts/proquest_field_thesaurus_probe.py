@@ -312,7 +312,12 @@ async def _live_probe(
     except ProbeError:
         raise
     except Exception as error:
-        raise ProbeBrowserError("The ProQuest field/thesaurus probe did not complete.") from error
+        # Preserve only the exception class for a safe bounded diagnostic. The
+        # original exception may contain page text, URLs, or session details.
+        error_class = type(error).__name__
+        raise ProbeBrowserError(
+            f"The ProQuest field/thesaurus probe did not complete ({error_class})."
+        ) from error
 
     result = parse_probe_state(payload, source=source)
     if source == "proquest-pqdt":

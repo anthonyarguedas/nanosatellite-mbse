@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import os
 import stat
@@ -268,6 +269,31 @@ def _ensure_new_paths(paths: Iterable[Path]) -> None:
             raise RunnerInputError(f"create-only output already exists: {path}")
 
 
+def _safe_child_stderr(value: str) -> str:
+    """Keep a bounded trusted-command diagnostic outside the review packet."""
+    normalized = "".join(
+        character if character in "\n\r\t" or ord(character) >= 0x20 else "?"
+        for character in value
+    )
+    encoded = normalized.encode("utf-8", errors="replace")
+    if len(encoded) <= 4096:
+        return normalized
+    return encoded[:4096].decode("utf-8", errors="replace") + "\n[diagnostic truncated]\n"
+
+
+def _write_new_diagnostic(path: Path, value: str) -> str:
+    contents = _safe_child_stderr(value).encode("utf-8")
+    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            descriptor = -1
+            handle.write(contents)
+    finally:
+        if descriptor != -1:
+            os.close(descriptor)
+    return hashlib.sha256(contents).hexdigest()
+
+
 def _safe_output_path(root: Path, name: str) -> Path:
     candidate = (root / name).resolve(strict=False)
     resolved_root = root.resolve(strict=False)
@@ -303,6 +329,9 @@ def render_plan(
                 cdp_url=cdp_url,
                 pilot_date=pilot_date,
             )
+        diagnostic_path = _safe_output_path(
+            output_dir, f"{operation.operation_id}.stderr.txt"
+        )
         planned.append(
             {
                 "operation_id": operation.operation_id,
@@ -323,6 +352,7 @@ def render_plan(
                 ),
                 "command": command,
                 "output_path": str(output_path),
+                "diagnostic_path": str(diagnostic_path),
             }
         )
     return {
@@ -371,8 +401,15 @@ def _read_reconciled_total(path: Path) -> int:
 def run_plan(plan: dict, *, output_dir: Path) -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     ledger_path = _safe_output_path(output_dir, "runner-ledger.json")
-    paths = [Path(item["output_path"]) for item in plan["operations"]] + [ledger_path]
-    _ensure_new_paths(paths)
+    paths = [Path(item["output_path"]) for item in plan["operations"]]
+    diagnostic_paths = {
+        item["operation_id"]: Path(
+            item.get("diagnostic_path")
+            or _safe_output_path(output_dir, f"{item['operation_id']}.stderr.txt")
+        )
+        for item in plan["operations"]
+    }
+    _ensure_new_paths([*paths, *diagnostic_paths.values(), ledger_path])
     completed: list[dict] = []
     outputs_by_id = {
         item["operation_id"]: Path(item["output_path"]) for item in plan["operations"]
@@ -456,9 +493,15 @@ def run_plan(plan: dict, *, output_dir: Path) -> int:
             "stderr_present": bool(completed_process.stderr),
         }
         completed.append(outcome)
-        # Do not print adapter output: it may contain result text. The adapter
-        # owns the JSON artifact; this ledger retains only safe presence bits.
+        # Do not print adapter output: it may contain result text. On failure,
+        # preserve only a bounded trusted-command stderr diagnostic in the
+        # restricted output namespace so the immutable incident is classifiable.
         if completed_process.returncode != 0:
+            diagnostic_path = diagnostic_paths[item["operation_id"]]
+            outcome["stderr_diagnostic_path"] = diagnostic_path.name
+            outcome["stderr_sha256"] = _write_new_diagnostic(
+                diagnostic_path, completed_process.stderr
+            )
             _write_ledger(ledger_path, plan, completed, "failed")
             return completed_process.returncode or 1
     _write_ledger(ledger_path, plan, completed, "completed")

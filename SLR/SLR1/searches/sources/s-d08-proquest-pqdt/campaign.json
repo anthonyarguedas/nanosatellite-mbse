@@ -1,0 +1,526 @@
+{
+  "schema_version": "slr1-pilot-campaign/v1",
+  "campaign_id": "S-D08-C01-20260825T132822-0400",
+  "task_id": "S-D08",
+  "source_id": "proquest-pqdt",
+  "method_type": "direct",
+  "protocol_fingerprint": "d1d92411ad641bc0293389b9699c6676ba998af72c9cfd63c28b59bcf4745ba9",
+  "dictionary_fingerprint": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+  "capability_catalog": [
+    "G-SOURCE-BOUNDARY",
+    "G-QUERY-TRANSPORT",
+    "G-FIELD-BOUNDARY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-CONTENT-CONTROL",
+    "G-RETRIEVAL",
+    "G-PAGINATION-CONTROL",
+    "G-PAGE-IDENTITY",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR"
+  ],
+  "status": "technically_blocked",
+  "created_at": "2026-08-25T13:28:22-04:00",
+  "updated_at": "2026-08-25T13:41:21-04:00",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "candidate_records_imported": 0,
+  "retry_policy": {
+    "policy_id": "RP-D08-P01-NONE",
+    "maximum_retries": 0,
+    "passive_wait_delays_seconds": [],
+    "attempted": 0,
+    "completed": 0,
+    "preauthorized_same_tab_busy_reissue": false
+  },
+  "controller_authorization": {
+    "technical_corrective_attempts_authorized": true,
+    "maximum_additional_attempts": 1,
+    "maximum_technical_corrective_attempts": 1,
+    "maximum_methodological_revision_attempts": 0,
+    "maximum_source_operations_per_attempt": 16,
+    "rationale": "One bounded behavior-preserving technical successor is prospectively authorized; methodological changes remain owner-controlled."
+  },
+  "attempts": [
+    {
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "sequence": 1,
+      "manifest_path": "pilots/S-D08-P01-20260825T132822-0400/manifest.json",
+      "manifest_sha256": "f0edf1e2e936a4e5eff3afc772e77b81748ea708358ca8a75b363545e17ca269",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "initial",
+        "authorized_by": "controller",
+        "authorization_decision_id": null,
+        "prospectively_authorized": false,
+        "allocated_at": "2026-08-25T13:28:22-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 16,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "O01-FIELD-THESAURUS-UI",
+            "operation_key": "FIELD-THESAURUS-UI",
+            "gate_ids": [
+              "G-SOURCE-BOUNDARY",
+              "G-FIELD-BOUNDARY",
+              "G-CONTROLLED-VOCABULARY"
+            ],
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P01-IMMUTABLE-INCIDENT",
+          "gate_id": "G-SOURCE-BOUNDARY",
+          "path": "pilots/S-D08-P01-20260825T132822-0400/immutable-incident.json",
+          "sha256": "3c1b47fa1e49f9d6dc3ceef03d3f5d515e325f55de66a65b4dc6b692cd928df3",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P01-OPERATION-LEDGER",
+          "gate_id": "G-FAILURE-BEHAVIOR",
+          "path": "pilots/S-D08-P01-20260825T132822-0400/operation-ledger.json",
+          "sha256": "86ba45d3214c36d00816f110789ea6ef931c4d3568219ae694e6c58201b76534",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-25T13:36:57-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D08-P01-20260825T132822-0400/browser-cleanup-receipt.json",
+          "sha256": "5a728107133421a1d0d400d54f03bc2d1e4f88f8441e4702cfeafa1a0d0f6691"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D08-P01-20260825T132822-0400/lease-release-receipt.json",
+          "sha256": "854b348c393c0035762b4120a1f0cbc4a84d2523e3345a783de02d9aa727fc81"
+        },
+        "cancelled_by": null,
+        "reason": "O01 failed before its allowlisted probe receipt was published. The assigned runner discarded the child diagnostic; no source total was obtained, no later operation ran, and shared lease cleanup/release were verified."
+      }
+    },
+    {
+      "attempt_id": "S-D08-P02-20260825T133843-0400",
+      "sequence": 2,
+      "manifest_path": "pilots/S-D08-P02-20260825T133843-0400/manifest.json",
+      "manifest_sha256": "84099e83a22dd284719fa0a53876e85b5dd5b001727dd66b84bd4c4972fbf647",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P02-OBSERVABILITY",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-25T13:38:43-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 16,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "O01-FIELD-THESAURUS-UI",
+            "operation_key": "FIELD-THESAURUS-UI",
+            "gate_ids": [
+              "G-SOURCE-BOUNDARY",
+              "G-FIELD-BOUNDARY",
+              "G-CONTROLLED-VOCABULARY"
+            ],
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P02-IMMUTABLE-INCIDENT",
+          "gate_id": "G-SOURCE-BOUNDARY",
+          "path": "pilots/S-D08-P02-20260825T133843-0400/immutable-incident.json",
+          "sha256": "3c068ceda0861494a0df39814a87f7f0c022940e75fad3bea43461ec40bc401e",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-OPERATION-LEDGER",
+          "gate_id": "G-FAILURE-BEHAVIOR",
+          "path": "pilots/S-D08-P02-20260825T133843-0400/operation-ledger.json",
+          "sha256": "0e7f86c20fb38c9d4b6827ce0504bba678b0769e7a3821b56df59405d2f15fe9",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-25T13:41:21-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D08-P02-20260825T133843-0400/browser-cleanup-receipt.json",
+          "sha256": "2078ece5d826a3129971bbcdc7787515ed20beea4f7bdf7c556a491bd87135bb"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D08-P02-20260825T133843-0400/lease-release-receipt.json",
+          "sha256": "64fbcf7168c777efe00695ad876fb3d32f57cedda60e4ef6e0f1fc87b3b5f788"
+        },
+        "cancelled_by": null,
+        "reason": "The bounded technical successor reran O01 only; the trusted PQDT adapter raised PQDTMetadataProtocolError before the allowlisted probe receipt. O02\u2013O16 were not run, no source operation was reissued, and cleanup/release were verified."
+      }
+    }
+  ],
+  "gate_status_snapshots": [],
+  "capability_gates": [
+    {
+      "gate_id": "G-SOURCE-BOUNDARY",
+      "checkpoint_id": "CP-SOURCE-BOUNDARY-P01",
+      "attempt_id": "S-D08-P02-20260825T133843-0400",
+      "requirement": "Exactly one PQDT Global database and the normal ProQuest route are selected.",
+      "depends_on": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D08-P02-20260825T133843-0400/immutable-incident.json",
+          "sha256": "3c068ceda0861494a0df39814a87f7f0c022940e75fad3bea43461ec40bc401e",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The bounded adapter protocol-error diagnosis and safe observability handling do not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "P02 O01 stopped on the trusted PQDT adapter protocol-error class before a safe allowlisted probe result; no source boundary, field, or descriptor claim is accepted."
+    },
+    {
+      "gate_id": "G-QUERY-TRANSPORT",
+      "checkpoint_id": "CP-QUERY-TRANSPORT-P01",
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "requirement": "The exact reviewed query is accepted and echoed by the intended source field.",
+      "depends_on": [
+        "G-SOURCE-BOUNDARY"
+      ],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+    },
+    {
+      "gate_id": "G-FIELD-BOUNDARY",
+      "checkpoint_id": "CP-FIELD-BOUNDARY-P01",
+      "attempt_id": "S-D08-P02-20260825T133843-0400",
+      "requirement": "The observed field implementation preserves the reviewed query meaning.",
+      "depends_on": [
+        "G-QUERY-TRANSPORT"
+      ],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The bounded adapter protocol-error diagnosis and safe observability handling do not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "P02 O01 stopped on the trusted PQDT adapter protocol-error class before a safe allowlisted probe result; no source boundary, field, or descriptor claim is accepted."
+    },
+    {
+      "gate_id": "G-CONTROLLED-VOCABULARY",
+      "checkpoint_id": "CP-CONTROLLED-VOCABULARY-P01",
+      "attempt_id": "S-D08-P02-20260825T133843-0400",
+      "requirement": "Subject/index/thesaurus behavior is observed without inventing descriptors.",
+      "depends_on": [
+        "G-FIELD-BOUNDARY"
+      ],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The bounded adapter protocol-error diagnosis and safe observability handling do not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "P02 O01 stopped on the trusted PQDT adapter protocol-error class before a safe allowlisted probe result; no source boundary, field, or descriptor claim is accepted."
+    },
+    {
+      "gate_id": "G-DATE-CONTROL",
+      "checkpoint_id": "CP-DATE-CONTROL-P01",
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "requirement": "The diagnostic date suffix is applied and its year-granular limitation is recorded.",
+      "depends_on": [
+        "G-QUERY-TRANSPORT"
+      ],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+    },
+    {
+      "gate_id": "G-LANGUAGE-CONTROL",
+      "checkpoint_id": "CP-LANGUAGE-CONTROL-P01",
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "requirement": "The diagnostic language suffix is applied and its screening limitation is recorded.",
+      "depends_on": [
+        "G-QUERY-TRANSPORT"
+      ],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+    },
+    {
+      "gate_id": "G-CONTENT-CONTROL",
+      "checkpoint_id": "CP-CONTENT-CONTROL-P01",
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "requirement": "No unapproved degree, full-text, publication-type, or access restriction is introduced.",
+      "depends_on": [
+        "G-SOURCE-BOUNDARY"
+      ],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+    },
+    {
+      "gate_id": "G-RETRIEVAL",
+      "checkpoint_id": "CP-RETRIEVAL-P01",
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "requirement": "A bounded strict retrieval, when conditionally eligible, reconciles the rendered total and records.",
+      "depends_on": [
+        "G-PAGINATION-CONTROL",
+        "G-PAGE-IDENTITY"
+      ],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+    },
+    {
+      "gate_id": "G-PAGINATION-CONTROL",
+      "checkpoint_id": "CP-PAGINATION-CONTROL-P01",
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "requirement": "Rendered pagination reconciles to the source-reported total.",
+      "depends_on": [
+        "G-QUERY-TRANSPORT"
+      ],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+    },
+    {
+      "gate_id": "G-PAGE-IDENTITY",
+      "checkpoint_id": "CP-PAGE-IDENTITY-P01",
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "requirement": "Rendered numeric ProQuest document identifiers are stable and ordered.",
+      "depends_on": [
+        "G-PAGINATION-CONTROL"
+      ],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+    },
+    {
+      "gate_id": "G-COMPLETENESS",
+      "checkpoint_id": "CP-COMPLETENESS-P01",
+      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "requirement": "The bounded strict A1 two-pass completeness test reconciles, if O16 runs.",
+      "depends_on": [
+        "G-RETRIEVAL",
+        "G-PAGE-IDENTITY"
+      ],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+    },
+    {
+      "gate_id": "G-FAILURE-BEHAVIOR",
+      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P01",
+      "attempt_id": "S-D08-P02-20260825T133843-0400",
+      "requirement": "Failures, busy, challenge, null totals, and no-reissue behavior fail closed.",
+      "depends_on": [
+        "G-QUERY-TRANSPORT"
+      ],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D08-P02-20260825T133843-0400/operation-ledger.json",
+          "sha256": "0e7f86c20fb38c9d4b6827ce0504bba678b0769e7a3821b56df59405d2f15fe9",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No source evidence has been checkpointed yet."
+      },
+      "invalidation": null,
+      "notes": "No-reissue stop and cleanup are observed. The trusted adapter protocol error is preserved; orchestrator patch is required in an isolated agent-tools worktree."
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "D-TECH-P02-OBSERVABILITY",
+      "attempt_id": null,
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "decided_at": "2026-08-25T13:36:57-04:00",
+      "maximum_source_operations": 16,
+      "affected_gate_ids": [
+        "G-SOURCE-BOUNDARY",
+        "G-QUERY-TRANSPORT",
+        "G-FIELD-BOUNDARY",
+        "G-CONTROLLED-VOCABULARY",
+        "G-DATE-CONTROL",
+        "G-LANGUAGE-CONTROL",
+        "G-CONTENT-CONTROL",
+        "G-RETRIEVAL",
+        "G-PAGINATION-CONTROL",
+        "G-PAGE-IDENTITY",
+        "G-COMPLETENESS",
+        "G-FAILURE-BEHAVIOR"
+      ],
+      "rationale": "The assigned runner and probe lost a safe child failure diagnostic. The behavior-preserving patch records a bounded sanitized diagnostic in restricted output only; it does not alter query semantics, source boundary, controls, identity, completeness, or PRISMA accounting. One technical successor is authorized to rerun the exact predeclared plan."
+    }
+  ],
+  "cancellation": null,
+  "acceptance": null
+}

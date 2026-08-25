@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import sys
@@ -152,6 +153,36 @@ class ProQuestRunnerOfflineTests(unittest.TestCase):
             self.assertEqual(payload["performed_operations"], 1)
             self.assertEqual(payload["operations"][-1]["status"], "not_run")
             self.assertEqual(payload["operations"][-1]["dependency_total"], 41)
+
+    def test_failed_child_preserves_bounded_stderr_diagnostic_in_output_namespace(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            plan = {
+                "source_id": "proquest-pqdt",
+                "predeclared_operation_cap": 1,
+                "retry_policy": {"maximum_source_reissues": 0},
+                "operations": [
+                    {
+                        "operation_id": "O01-FAILURE",
+                        "output_path": str(root / "O01-FAILURE.json"),
+                        "command": [
+                            sys.executable,
+                            "-c",
+                            "import sys; sys.stderr.write('safe diagnostic\\n'); sys.exit(7)",
+                        ],
+                    }
+                ],
+            }
+            self.assertEqual(runner.run_plan(plan, output_dir=root), 7)
+            ledger = json.loads((root / "runner-ledger.json").read_text(encoding="utf-8"))
+            operation = ledger["operations"][0]
+            diagnostic = root / operation["stderr_diagnostic_path"]
+            self.assertEqual(diagnostic.read_text(encoding="utf-8"), "safe diagnostic\n")
+            self.assertEqual(diagnostic.stat().st_mode & 0o077, 0)
+            self.assertEqual(
+                operation["stderr_sha256"],
+                hashlib.sha256(diagnostic.read_bytes()).hexdigest(),
+            )
 
     def test_probe_endpoint_and_projection_fail_closed(self) -> None:
         self.assertEqual(

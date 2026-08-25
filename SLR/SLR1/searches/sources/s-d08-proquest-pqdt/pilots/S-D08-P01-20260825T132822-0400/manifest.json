@@ -1,0 +1,201 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D08-P01-20260825T132822-0400",
+  "task_id": "S-D08",
+  "source_id": "proquest-pqdt",
+  "method_type": "direct",
+  "status": "partial",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-25T13:28:22-04:00",
+  "ended_at": "2026-08-25T13:28:22-04:00",
+  "protocol_commit": "a85c21ac68d8cd51cca046675f838c09d274988f",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "gpt-5.6-luna",
+    "human_supervisor": "review owner"
+  },
+  "interface": {
+    "name": "ProQuest Dissertations & Theses Global normal rendered Command Line Search UI",
+    "url": "https://www.proquest.com/pqdtglobal/commandline",
+    "access_route": "shared canonical CfT at 127.0.0.1:9222 through the required lease wrapper",
+    "authenticated": false,
+    "database_or_collection": "ProQuest Dissertations & Theses Global only",
+    "platform": "ProQuest Platform",
+    "timezone": "America/New_York"
+  },
+  "executions": [
+    {
+      "execution_id": "P01-OFFLINE-PREFLIGHT",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Source-free readiness, exact plan, adapter, output, and validator gate before the live phase.",
+      "started_at": "2026-08-25T13:28:22-04:00",
+      "status": "success",
+      "exact_query_or_operation": "No source operation; deterministic offline preparation only.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "source_operations": 0,
+        "screening": false,
+        "candidate_import": false,
+        "lease_acquired": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "preflight.json",
+        "p01-execution-plan.md",
+        "translation-spec.json"
+      ],
+      "notes": "No provider page or record was observed during preflight."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "C01-offline-source-free",
+      "requirement": "Offline reading, exact query-byte, runner, adapter, CLI, output, and validator tests pass before allocation.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json"
+      ],
+      "notes": "All prescribed source-free checks passed."
+    },
+    {
+      "check_id": "C02-plan-lease-bound",
+      "requirement": "The canonical lease maximum is 600 seconds, not 900.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "p01-execution-plan.md"
+      ],
+      "notes": "Deterministic plan defect corrected before attempt allocation."
+    },
+    {
+      "check_id": "C03-shared-cft-preflight",
+      "requirement": "The canonical CfT is healthy, version-matched, single-process, anchored, and lease-free before source work.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json"
+      ],
+      "notes": "Read-only status checks passed; no browser action was performed by preflight."
+    },
+    {
+      "check_id": "C04-no-screening-import",
+      "requirement": "This pilot remains diagnostic-only with no screening or candidate import.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json"
+      ],
+      "notes": "No records were retained or imported."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "guideline.md",
+      "role": "Source-specific diagnostic guideline",
+      "sha256": "36d802aada791ae178c1271fd568ee850202bd7b7db7a2745448df904b18f513",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "p01-execution-plan.md",
+      "role": "Exact P01 execution plan",
+      "sha256": "63606ef3b1b8aef217b48ef549bf055a8f48cd7b77edbe413e7324343fd1c520",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "translation-spec.json",
+      "role": "Source-native translation specification",
+      "sha256": "83b303ba2e22919a60f8ea55a9dbad744b0f7315c7137c67357267def9b836de",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "preflight.json",
+      "role": "Immutable source-free preflight receipt",
+      "sha256": "35c48e761d947c46b87a896104275d7b2f6894f21506b12f1c8f1bf4e3abd1ce",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/A1.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell A1",
+      "sha256": "ff334179ceb51bc8bccdd2cba8ef4656f3983cc3faa19ce045e8010d6ffecb36",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/A2.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell A2",
+      "sha256": "be575d9be7a230ef17cd1f57c80dd232908f82279982d4d6e513fb12e3c5507b",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/A3.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell A3",
+      "sha256": "9f57e17071b4d1bcbed7b1947ad7f7b311cdcc2619fadb9f68ec4c2a2dbe6c12",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/B1.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell B1",
+      "sha256": "27e4001101e744904fd46b04fbe09b7ef2476530865bbee433d2f0032ec47bb3",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/B2.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell B2",
+      "sha256": "406e440f7500f20c31dea95c5cff2dfb1c34ac9066b344939af875137422f423",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/BG1.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell BG1",
+      "sha256": "c8343813b6e6a8d1a5309d3b67bf428c2863e7bb0ad47b219fbbe97c7c0fd871",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/BG2.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell BG2",
+      "sha256": "7e1d215c7c33281643610170ef1b39be426c21ab946cbb486f8252a733e92948",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/BC1.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell BC1",
+      "sha256": "940f5398add39d4b94fb8de58899d0c0472abd993a80a8c915e7f520b7b924e0",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "queries/BT2.proquest-noft.txt",
+      "role": "Exact UTF-8 query cell BT2",
+      "sha256": "80994c9b9ca59c7cf8abf410dd8806841062da5edc78da71bb09039347644eff",
+      "access_classification": "public",
+      "secure_location_reference": null
+    }
+  ],
+  "campaign": {
+    "campaign_id": "S-D08-C01-20260825T132822-0400",
+    "attempt_id": "S-D08-P01-20260825T132822-0400"
+  },
+  "disposition": {
+    "recommendation": "repeat",
+    "reason": "Runtime manifest predeclares the exact bounded live phase; terminal source evidence will be checkpointed in the campaign and safe evidence index without mutating this manifest.",
+    "semantic_change": false,
+    "human_verification_required": []
+  }
+}

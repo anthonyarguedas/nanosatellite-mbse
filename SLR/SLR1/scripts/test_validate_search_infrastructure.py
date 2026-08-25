@@ -696,13 +696,15 @@ class PilotCampaignValidationTests(unittest.TestCase):
 
     def test_d03_failed_year_evidence_cannot_be_carried_to_p05_as_passed(self) -> None:
         data = source_campaign("s-d03-ieee-xplore")
-        p4 = data["attempts"][-1]
+        data["controller_authorization"]["maximum_additional_attempts"] = 5
+        data["controller_authorization"]["maximum_technical_corrective_attempts"] = 5
+        p4 = next(attempt for attempt in data["attempts"] if attempt["sequence"] == 4)
         p5 = copy.deepcopy(p4)
-        p5_id = "S-D03-P05-20260824T161500-0400"
+        p5_id = "S-D03-P07-20260825T161500-0400"
         p5.update(
             {
                 "attempt_id": p5_id,
-                "sequence": 5,
+                "sequence": 7,
                 "manifest_path": f"pilots/{p5_id}/manifest.json",
                 "manifest_sha256": "f" * 64,
                 "evidence": [],
@@ -732,11 +734,16 @@ class PilotCampaignValidationTests(unittest.TestCase):
         year_control = gate(data, "G-YEAR-CONTROL")
         failed_evidence = [
             {"path": item["path"], "sha256": item["sha256"]}
-            for item in year_control["evidence"]
+            for item in p4["evidence"]
+            if item["gate_id"] == "G-YEAR-CONTROL"
         ]
         year_control.update(
             {
                 "checkpoint_id": "CP-YEAR-CONTROL-P05",
+                "evidence": [
+                    {"path": item["path"], "sha256": item["sha256"], "validity": "valid"}
+                    for item in failed_evidence
+                ],
                 "attempt_id": p5_id,
                 "status": "passed",
                 "observed_basis": "carried_forward",
@@ -989,12 +996,15 @@ class PilotCampaignValidationTests(unittest.TestCase):
 
     def test_p05_cannot_hide_pending_near6_work_under_a_none_gate(self) -> None:
         data = source_campaign("s-d03-ieee-xplore")
-        p5_id = "S-D03-P05-20260824T161500-0400"
-        p5 = copy.deepcopy(data["attempts"][-1])
+        data["controller_authorization"]["maximum_additional_attempts"] = 5
+        data["controller_authorization"]["maximum_technical_corrective_attempts"] = 5
+        p5_id = "S-D03-P07-20260825T161500-0400"
+        p4 = next(attempt for attempt in data["attempts"] if attempt["sequence"] == 4)
+        p5 = copy.deepcopy(p4)
         p5.update(
             {
                 "attempt_id": p5_id,
-                "sequence": 5,
+                "sequence": 7,
                 "manifest_path": f"pilots/{p5_id}/manifest.json",
                 "manifest_sha256": "f" * 64,
                 "evidence": [],
@@ -1265,12 +1275,13 @@ class PilotCampaignValidationTests(unittest.TestCase):
             source_packet,
         ):
             data = json.loads(campaign_path.read_text(encoding="utf-8"))
-            p5_id = "S-D03-P05-20260824T161500-0400"
-            p5 = copy.deepcopy(data["attempts"][-1])
+            p5_id = "S-D03-P07-20260825T161500-0400"
+            p4 = next(attempt for attempt in data["attempts"] if attempt["sequence"] == 4)
+            p5 = copy.deepcopy(p4)
             p5.update(
                 {
                     "attempt_id": p5_id,
-                    "sequence": 5,
+                    "sequence": 7,
                     "manifest_path": f"pilots/{p5_id}/manifest.json",
                     "evidence": [],
                     "source_operations": {
@@ -1314,7 +1325,12 @@ class PilotCampaignValidationTests(unittest.TestCase):
                 source_packet,
             ):
                 data = json.loads(campaign_path.read_text(encoding="utf-8"))
-                manifest_path = source_packet / data["attempts"][-1]["manifest_path"]
+                legacy_attempt = next(
+                    attempt
+                    for attempt in data["attempts"]
+                    if attempt["terminal"]["terminal_verification"] == "legacy_unverifiable"
+                )
+                manifest_path = source_packet / legacy_attempt["manifest_path"]
                 manifest_path.unlink()
                 with self.assertRaisesRegex(AssertionError, "escapes or is missing"):
                     infrastructure.validate_campaign_artifacts(searches_root)
@@ -1326,7 +1342,12 @@ class PilotCampaignValidationTests(unittest.TestCase):
                 source_packet,
             ):
                 data = json.loads(campaign_path.read_text(encoding="utf-8"))
-                manifest_path = source_packet / data["attempts"][-1]["manifest_path"]
+                legacy_attempt = next(
+                    attempt
+                    for attempt in data["attempts"]
+                    if attempt["terminal"]["terminal_verification"] == "legacy_unverifiable"
+                )
+                manifest_path = source_packet / legacy_attempt["manifest_path"]
                 external = searches_root.parent / "external-manifest.json"
                 shutil.copyfile(manifest_path, external)
                 manifest_path.unlink()

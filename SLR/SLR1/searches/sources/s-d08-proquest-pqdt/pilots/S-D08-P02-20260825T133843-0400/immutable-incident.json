@@ -1,0 +1,40 @@
+{
+  "schema_version": "slr1-proquest-pqdt-p02-immutable-incident/v1",
+  "incident_id": "INC-S-D08-P02-20260825T133843-0400",
+  "attempt_id": "S-D08-P02-20260825T133843-0400",
+  "recorded_at": "2026-08-25T13:40:45-04:00",
+  "immutable": true,
+  "source_phase_started": true,
+  "failed_operation_id": "O01-FIELD-THESAURUS-UI",
+  "terminal_classification": "technical",
+  "provider_failure": false,
+  "source_total": null,
+  "records_retrieved": 0,
+  "records_imported": 0,
+  "challenge": "not_detected",
+  "busy": "not_detected",
+  "access": "not_detected",
+  "source_operation_reissued": false,
+  "runner_ledger_sha256": "7d6800b92a6f5d26ad530b1017e4d7a64f3c18c806a78920fe2c7755e5bef9dc",
+  "stderr_diagnostic_sha256": "f3b3ae3b4906e0f3828b2a015725e26d33898bfc078f3588364a0255ae9d30a9",
+  "lease_receipt_sha256": "55b71b0e1c809457f3feefebd5f56ca8ddbcc6e14881c872b6554a77c1889e47",
+  "cleanup_verified": true,
+  "anchor_preserved": true,
+  "diagnosis": {
+    "code_issue": true,
+    "component": "~/agent-tools/academic-research/skills/academic-search/scripts/search_pqdt.py via proquest_field_thesaurus_probe.py",
+    "exact_observed_error_class": "PQDTMetadataProtocolError",
+    "exact_safe_stderr": "proquest field probe failed: The ProQuest field/thesaurus probe did not complete (PQDTMetadataProtocolError).",
+    "substage": "not retained by the probe allowlist; no page or record content was retained",
+    "agent_tools_commit": "17a64bf353cc14423f347421e56dc332005bdfe5",
+    "agent_tools_dirty_checkout_untouched": true,
+    "assigned_script_observability_fix_passed": true
+  },
+  "semantic_impact": {
+    "classification": "controller_technical",
+    "review_effect": false,
+    "human_authorization_required": false,
+    "note": "The failure is in the trusted adapter/parser boundary; no query, source boundary, control, identity, completeness, or PRISMA rule was changed."
+  },
+  "next_action": "Stop and preserve this exact safe diagnosis. Do not edit the dirty shared ~/agent-tools checkout or allocate another source attempt; orchestrator must patch/test the trusted adapter in an isolated worktree."
+}
