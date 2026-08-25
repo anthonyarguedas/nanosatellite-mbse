@@ -69,9 +69,16 @@ class ProQuestRunnerOfflineTests(unittest.TestCase):
                 ],
             )
             self.assertTrue(all(item.count_only for item in atai_ops[1:13]))
-            self.assertTrue(all(not item.count_only for item in pqdt_ops[1:]))
+            self.assertTrue(all(item.count_only for item in pqdt_ops[1:15]))
+            self.assertTrue(pqdt_ops[-1].require_complete)
+            self.assertEqual(pqdt_ops[-1].bounded_limit, 40)
+            self.assertEqual(pqdt_ops[-1].bounded_max_pages, 2)
+            self.assertEqual(
+                pqdt_ops[-1].conditional_total_operation_id,
+                "O07-PARTITION-A1",
+            )
 
-    def test_runner_commands_use_one_loopback_endpoint_and_pqdt_has_no_strict_flags(self) -> None:
+    def test_runner_commands_use_one_loopback_endpoint_and_pqdt_safe_modes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             packet = self.packet_root(root, "pqdt")
@@ -90,10 +97,61 @@ class ProQuestRunnerOfflineTests(unittest.TestCase):
             self.assertEqual(plan["predeclared_operation_cap"], 16)
             encoded = json.dumps(plan)
             self.assertIn("YR(2011-2026) AND LA(English)", encoded)
-            self.assertNotIn("--count-only", encoded)
-            self.assertNotIn("--require-complete", encoded)
+            self.assertIn("--count-only", encoded)
+            self.assertIn("--require-complete", encoded)
+            self.assertEqual(
+                plan["operations"][-1]["conditional_total"],
+                {"operation_id": "O07-PARTITION-A1", "minimum": 1, "maximum": 40},
+            )
             self.assertNotIn("9223", encoded)
             self.assertNotIn("fresh-browser", encoded)
+
+    def test_strict_operation_is_not_run_outside_predeclared_total_bound(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            dependency = root / "O07-PARTITION-A1.json"
+            strict = root / "O16-STRICT-A1.json"
+            ledger = root / "runner-ledger.json"
+            plan = {
+                "source_id": "proquest-pqdt",
+                "predeclared_operation_cap": 2,
+                "retry_policy": {},
+                "operations": [
+                    {
+                        "operation_id": "O07-PARTITION-A1",
+                        "output_path": str(dependency),
+                        "conditional_total": None,
+                        "command": [
+                            sys.executable,
+                            "-c",
+                            (
+                                "from pathlib import Path; "
+                                f"Path({str(dependency)!r}).write_text('''{{\"total\": 41}}''')"
+                            ),
+                        ],
+                    },
+                    {
+                        "operation_id": "O16-STRICT-A1",
+                        "output_path": str(strict),
+                        "conditional_total": {
+                            "operation_id": "O07-PARTITION-A1",
+                            "minimum": 1,
+                            "maximum": 40,
+                        },
+                        "command": [
+                            sys.executable,
+                            "-c",
+                            f"from pathlib import Path; Path({str(strict)!r}).touch()",
+                        ],
+                    },
+                ],
+            }
+            self.assertEqual(runner.run_plan(plan, output_dir=root), 0)
+            self.assertFalse(strict.exists())
+            payload = json.loads(ledger.read_text(encoding="utf-8"))
+            self.assertEqual(payload["performed_operations"], 1)
+            self.assertEqual(payload["operations"][-1]["status"], "not_run")
+            self.assertEqual(payload["operations"][-1]["dependency_total"], 41)
 
     def test_probe_endpoint_and_projection_fail_closed(self) -> None:
         self.assertEqual(

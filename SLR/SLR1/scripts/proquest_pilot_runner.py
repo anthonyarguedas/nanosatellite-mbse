@@ -18,6 +18,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import stat
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -45,7 +46,11 @@ class Operation:
     query: str | None = None
     query_file: str | None = None
     count_only: bool = False
+    require_complete: bool = False
     bounded_limit: int = 1
+    bounded_max_pages: int = 1
+    conditional_total_operation_id: str | None = None
+    conditional_total_maximum: int | None = None
 
 
 def validate_cdp_url(value: str) -> str:
@@ -110,7 +115,7 @@ def field_operations(source: str) -> list[Operation]:
             purpose=f"source-native {name} field diagnostic",
             kind="field",
             query=query,
-            count_only=source == "proquest-atai",
+            count_only=True,
         )
         for index, (name, query) in enumerate(fields)
     ]
@@ -136,21 +141,37 @@ def build_operations(source: str, *, packet_root: Path, pilot_date: dt.date) -> 
                 kind="partition",
                 query=query,
                 query_file=query_file,
-                count_only=source == "proquest-atai",
+                count_only=True,
             )
         )
     query, query_file = read_query(packet_root, "A1")
-    operations.append(
-        Operation(
-            operation_id=f"O{len(operations) + 1:02d}-RECORD-A1",
-            purpose="one bounded record/detail and stable-ID diagnostic",
-            kind="record",
-            query=query,
-            query_file=query_file,
-            count_only=False,
-            bounded_limit=1,
+    if source == "proquest-pqdt":
+        operations.append(
+            Operation(
+                operation_id=f"O{len(operations) + 1:02d}-STRICT-A1",
+                purpose="conditional bounded two-pass A1 identity/completeness diagnostic",
+                kind="strict_complete",
+                query=query,
+                query_file=query_file,
+                require_complete=True,
+                bounded_limit=40,
+                bounded_max_pages=2,
+                conditional_total_operation_id="O07-PARTITION-A1",
+                conditional_total_maximum=40,
+            )
         )
-    )
+    else:
+        operations.append(
+            Operation(
+                operation_id=f"O{len(operations) + 1:02d}-RECORD-A1",
+                purpose="one bounded record/detail and stable-ID diagnostic",
+                kind="record",
+                query=query,
+                query_file=query_file,
+                count_only=False,
+                bounded_limit=1,
+            )
+        )
     # Keep the date argument in the operation builder so dry-run output proves
     # the pilot date was parsed even though the adapter command composes it.
     _ = pilot_date
@@ -194,7 +215,7 @@ def operation_arguments(
                 "--limit",
                 str(operation.bounded_limit),
                 "--max-pages",
-                "1",
+                str(operation.bounded_max_pages),
                 "--page-delay-seconds",
                 "0.2",
             ]
@@ -208,7 +229,7 @@ def operation_arguments(
                 "--limit",
                 str(operation.bounded_limit),
                 "--max-pages",
-                "1",
+                str(operation.bounded_max_pages),
                 "--timeout",
                 "30",
                 "--page-delay-seconds",
@@ -219,6 +240,8 @@ def operation_arguments(
         )
     if operation.count_only:
         base.append("--count-only")
+    if operation.require_complete:
+        base.append("--require-complete")
     return base
 
 
@@ -288,6 +311,16 @@ def render_plan(
                 "query_file": operation.query_file,
                 "query_present": operation.query is not None,
                 "count_only": operation.count_only,
+                "require_complete": operation.require_complete,
+                "conditional_total": (
+                    {
+                        "operation_id": operation.conditional_total_operation_id,
+                        "minimum": 1,
+                        "maximum": operation.conditional_total_maximum,
+                    }
+                    if operation.conditional_total_operation_id is not None
+                    else None
+                ),
                 "command": command,
                 "output_path": str(output_path),
             }
@@ -311,13 +344,76 @@ def render_plan(
     }
 
 
+def _read_reconciled_total(path: Path) -> int:
+    """Read one bounded adapter total without following an output symlink."""
+    flags = os.O_RDONLY
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags)
+    try:
+        info = os.fstat(descriptor)
+        if not stat.S_ISREG(info.st_mode) or not 0 < info.st_size <= 2_000_000:
+            raise RunnerInputError("conditional total artifact is not a bounded regular file")
+        with os.fdopen(descriptor, "r", encoding="utf-8") as handle:
+            descriptor = -1
+            payload = json.load(handle)
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise RunnerInputError("conditional total artifact could not be read safely") from error
+    finally:
+        if descriptor != -1:
+            os.close(descriptor)
+    total = payload.get("total") if isinstance(payload, dict) else None
+    if isinstance(total, bool) or not isinstance(total, int) or total < 0:
+        raise RunnerInputError("conditional total artifact lacks a reconciled nonnegative total")
+    return total
+
+
 def run_plan(plan: dict, *, output_dir: Path) -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     ledger_path = _safe_output_path(output_dir, "runner-ledger.json")
     paths = [Path(item["output_path"]) for item in plan["operations"]] + [ledger_path]
     _ensure_new_paths(paths)
     completed: list[dict] = []
+    outputs_by_id = {
+        item["operation_id"]: Path(item["output_path"]) for item in plan["operations"]
+    }
     for item in plan["operations"]:
+        condition = item.get("conditional_total")
+        if condition is not None:
+            dependency_path = outputs_by_id.get(condition.get("operation_id"))
+            try:
+                if dependency_path is None:
+                    raise RunnerInputError("conditional operation references an unknown dependency")
+                total = _read_reconciled_total(dependency_path)
+            except (OSError, RunnerInputError) as error:
+                completed.append(
+                    {
+                        "operation_id": item["operation_id"],
+                        "status": "not_run",
+                        "returncode": None,
+                        "stdout_present": False,
+                        "stderr_present": False,
+                        "reason": "conditional source total could not be validated",
+                    }
+                )
+                _write_ledger(ledger_path, plan, completed, "failed")
+                print(f"proquest runner failed: {error}", file=sys.stderr)
+                return 1
+            minimum = condition.get("minimum")
+            maximum = condition.get("maximum")
+            if total < minimum or total > maximum:
+                completed.append(
+                    {
+                        "operation_id": item["operation_id"],
+                        "status": "not_run",
+                        "returncode": None,
+                        "stdout_present": False,
+                        "stderr_present": False,
+                        "reason": "reconciled source total outside predeclared strict-diagnostic bounds",
+                        "dependency_total": total,
+                    }
+                )
+                continue
         command = item["command"]
         try:
             completed_process = subprocess.run(
@@ -375,7 +471,9 @@ def _write_ledger(path: Path, plan: dict, completed: list[dict], status: str) ->
         "source_id": plan["source_id"],
         "status": status,
         "predeclared_operation_cap": plan["predeclared_operation_cap"],
-        "performed_operations": len(completed),
+        "performed_operations": sum(
+            item.get("status") != "not_run" for item in completed
+        ),
         "operations": completed,
         "retry_policy": plan["retry_policy"],
     }
