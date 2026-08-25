@@ -3,7 +3,7 @@ task_id: S-D08
 source_id: proquest-pqdt
 source_name: ProQuest Dissertations & Theses Global
 method_type: direct
-status: draft
+status: draft_blocked_return_to_exploration
 guideline_version: 0.1.0
 validated_at: null
 protocol_commit: 699f010f02b81dc17c7f17491dab77dbf9bb1feb
@@ -12,10 +12,10 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: ProQuest Dissertations & Theses Global
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
-This is a source-free, diagnostic-only, no-screening, no-import launch bundle for the first diagnostic attempt. It is not an accepted source method and contains no live observation or completed campaign.
+This is a blocked, diagnostic-only, no-screening/no-import draft. P01 and P02 are immutable technical failures at the first live field/thesaurus route; they establish no source total or accepted interface behavior. Continue under [`resume-plan.md`](resume-plan.md) in exploration mode before another evidence attempt.
 
 ## 1. Source boundary and access route
 
@@ -81,13 +81,10 @@ A later operator must first establish P-001 and an accepted campaign, then run t
 
 ## 9. Validation evidence
 
-There is no campaign, manifest, pilot evidence, accepted pilot ID, source total, or current-interface observation in this brand-new packet. The source-free evidence is the exact translation/specification and focused offline tests:
-
-- `SLR/SLR1/scripts/test_proquest_source_packets.py` checks packet/file/hash invariants; and
-- `../agent-tools/academic-research/skills/academic-search/tests/test_proquest_slr1_readiness.py` and `tests/test_search_pqdt.py` check the adapter's CLI, form, exact database boundary, record-free counts, strict two-pass reconciliation, and fail-closed publication contract.
+Campaign [`S-D08-C01`](campaign.json) preserves P01/P02 technical failures. Their live evidence is useful only to motivate exploration; neither passes a gate. Agent-tools source-free tests cover intended count/strict contracts but do not establish current PQDT behavior. The next accepted behavioral evidence must come from a frozen evidence attempt after `S-D08-X01` demonstrates the route live.
 
 The runtime acceptance catalog is `G-SOURCE-BOUNDARY`, `G-QUERY-TRANSPORT`, `G-FIELD-BOUNDARY`, `G-CONTROLLED-VOCABULARY`, `G-DATE-CONTROL`, `G-LANGUAGE-CONTROL`, `G-CONTENT-CONTROL`, `G-RETRIEVAL`, `G-PAGINATION-CONTROL`, `G-PAGE-IDENTITY`, `G-COMPLETENESS`, and `G-FAILURE-BEHAVIOR`. The acceptance campaign must link immutable P01 evidence by SHA-256 and distinguish `observed`, `official_documentation`, `inferred`, and `untested`. No source gate can be accepted from this draft or from static code alone.
 
 ## 10. Remaining limits and protocol impact
 
-The bundle is ready for a bounded, source-free-reviewed P01 launch, not ready for source acceptance or a final search. The principal blockers are current source boundary/field observations, dissertation metadata/subject behavior, thesaurus behavior, pair semantics, date/language controls, rendered retrieval, stable identity, and live validation of the new strict-complete route. No concept, Boolean relationship, source boundary, evidence-window rule, language/content rule, recall rule, completeness definition, or PRISMA accounting rule was changed.
+The source returns to exploration mode and is not ready for source acceptance or a final search. The principal blockers are the current database-selection/Command Line route, field/thesaurus projection, dissertation metadata/subject behavior, pair semantics, date/language controls, rendered retrieval, stable identity, and live validation of count/strict-complete behavior. No concept, Boolean relationship, source boundary, evidence-window rule, language/content rule, recall rule, completeness definition, or PRISMA accounting rule was changed.

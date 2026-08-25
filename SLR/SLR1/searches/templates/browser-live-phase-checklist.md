@@ -1,11 +1,12 @@
 # Shared CfT live-phase checklist
 
-Copy this checklist into the phase receipt or its source-safe evidence index. Complete the offline section before acquiring the lease. Do not include credentials, cookies, session values, profile contents, or private URLs.
+Use this checklist for both exploration and evidence phases. Copy it into the session/attempt receipt or safe evidence index. Do not include credentials, cookies, session values, profile contents, or private URLs.
 
 ## 1. Offline and authorization
 
-- [ ] Pilot/phase ID: `REPLACE`
-- [ ] Campaign and decision class: `REPLACE` (`none`, `controller_technical`, or `human_methodological`)
+- [ ] Mode: `exploration` / `evidence`
+- [ ] Exploration session or pilot/phase ID: `REPLACE`
+- [ ] Campaign and decision class: `not_applicable_for_exploration` / `REPLACE`
 - [ ] Offline reading complete.
 - [ ] Minimum launch gate complete: exact query, command startup, create-only outputs, manifest/receipt shape, and browser health. No broad suite required.
 - [ ] Artifact, rights, cleanup, and reporting plan complete.
@@ -25,12 +26,12 @@ Run the whole browser-backed phase through exactly:
 uv run ~/agent-tools/internet/skills/browser/scripts/run_with_browser_lease.py --owner OWNER --source SOURCE --receipt PATH [--wait SECONDS] [--lease-timeout SECONDS] -- COMMAND...
 ```
 
-- [ ] `COMMAND...` is an adapter client command, not a browser launcher/controller.
+- [ ] `COMMAND...` is a trusted owned-page exploration runner or frozen evidence adapter, not a browser launcher/controller.
 - [ ] The only endpoint is `127.0.0.1:9222`.
 - [ ] The only profile is `~/agent-tools/.browser-profiles/chrome-automation`; no profile or port override is present.
 - [ ] The supervisor asserts that exactly one CfT process uses that profile.
 - [ ] One protected broker anchor is healthy before the phase. It will not be mutated.
-- [ ] The adapter creates/closes only its own page. `browser_harness new_tab` is not used.
+- [ ] The runner creates/closes only its own page. It does not reuse or navigate a baseline page; generic `browser_harness new_tab` is not used.
 - [ ] On macOS, the controller records process-scoped `caffeinate -dims`, power state, and actual Sleep/Wake checks; the lid stays open.
 
 ## 3. Provenance and health record
@@ -59,10 +60,19 @@ A failed version, anchor, sleep, or profile/process health check stops source wo
 
 ## 5. Outcome and handoff
 
-- [ ] Immutable receipt/evidence retained with acquisition, source actions, pacing/wait policy, health, target cleanup, and verified release.
-- [ ] Campaign checkpoint updated with passed, failed, and invalidated dependent gates.
-- [ ] Unaffected prior gates are carried forward by exact evidence path and SHA-256.
+- [ ] Receipt retained with acquisition, source actions, waits, health, target cleanup, and verified release.
 - [ ] Terminal status: `completed` / `blocked` / `failed` / `cancelled`.
-- [ ] A late optional/technical failure is described narrowly; it does not erase successful gates or make the provider wholly inaccessible.
-- [ ] `controller_technical` work requests no human authorization; only a review-affecting `human_methodological` decision does.
-- [ ] No pilot screening/import occurred. A final blocked, failed, or cancelled event imports no partial prefix.
+- [ ] No screening/import/final event occurred.
+
+For **exploration**:
+
+- [ ] One concise exploration log records real-page states, screenshots/DOM references, patches, and what works.
+- [ ] No campaign gate or pilot acceptance is claimed.
+- [ ] A frozen interaction recipe, implementation commit, and proposed evidence plan are ready—or remaining unknowns are explicit.
+
+For **evidence**:
+
+- [ ] Immutable evidence packet is complete.
+- [ ] Controller can checkpoint passed/failed/dependent gates and carry forward unaffected exact-hash evidence.
+- [ ] A technical failure returns the source to exploration rather than triggering selector debugging inside evidence mode.
+- [ ] Only a review-affecting methodological decision is sent to the owner.

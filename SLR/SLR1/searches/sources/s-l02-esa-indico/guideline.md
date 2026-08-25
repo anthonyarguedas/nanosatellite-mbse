@@ -12,7 +12,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: ESA Indico local harvest — draft
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
 > **Draft; not accepted.** This packet does not complete `S-L02`, authorize a final event, screen a record, or import a candidate. P01 and P02 remain immutable historical partial diagnostics. P03 adds current, bounded observations only. The source-free P04 launch bundle is [`p04-execution-plan.md`](p04-execution-plan.md) with [`resume-plan.md`](resume-plan.md); no P04 live observation exists yet. A supervising reviewer must decide whether the draft is sufficiently validated for acceptance and must separately authorize any final run.

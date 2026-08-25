@@ -1,19 +1,13 @@
 # P05 execution plan — OATD transient-challenge technical successor
 
-> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+> **Current architecture:** Follow the [two-mode source-interface policy](../../two-mode-validation-policy.md). Use an agent-driven `X` exploration session to understand/fix an unknown or failing real interface; allocate an immutable `P` evidence attempt only after the route and implementation work live. Any broader offline-suite prerequisite below is superseded.
 
 
-**Status:** source-free prospective launch plan only. `D-TECH-NEXT-P05` authorizes
-exactly one controller-technical successor under campaign
-`S-D09-C01-20260824T161325-0400`; it does not allocate an attempt ID, acquire a
-lease, contact OATD, or create a pilot directory or receipt. P04 and all earlier
-attempts remain immutable and are not reissued.
+**Status:** held deterministic evidence plan. Do not allocate P05 until the OATD exploration session in [`resume-plan.md`](resume-plan.md) demonstrates and freezes a working visible advanced-form submission and aggregate-result route. `D-TECH-NEXT-P05` remains unused; P04 and earlier attempts remain immutable.
 
 ## Fixed scope and accounting
 
-- At runtime, allocate one fresh `S-D09-P05-<runtime timestamp>` attempt as
-  `technical_corrective`. Do not materialize that placeholder now and do not
-  reuse `S-D09-P04-20260825T110122-0400` or its O-001.
+- Only after exploration freeze, allocate one fresh `S-D09-P05-<runtime timestamp>` evidence attempt. Do not use this plan for selector debugging or reuse P04/O-001.
 - The successor has a maximum of **three source operations**: O-001 is one
   corrected nonblank native advanced-form diagnostic; O-002 and O-003 are
   conditional same-page busy reissues only after an exclusive, positively

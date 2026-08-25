@@ -1,6 +1,6 @@
 # P01 execution plan — S-D10 AIAA Aerospace Research Central
 
-> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+> **Current architecture:** Follow the [two-mode source-interface policy](../../two-mode-validation-policy.md). Use an agent-driven `X` exploration session to understand/fix an unknown or failing real interface; allocate an immutable `P` evidence attempt only after the route and implementation work live. Any broader offline-suite prerequisite below is superseded.
 
 
 **State:** source-free launch plan only. P01 has not been allocated, no campaign/manifest exists yet, and no ARC request or current-interface observation has been made.

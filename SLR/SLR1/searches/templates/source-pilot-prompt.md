@@ -1,25 +1,27 @@
-# Source-pilot subagent contract
+# Evidence-pilot subagent contract
 
-You are assigned exactly one SLR1 source-pilot task. Read `SLR/SLR1/AGENTS.md`, all of `SLR/SLR1/searches/README.md`, `SLR/SLR1/searches/templates/browser-live-phase-checklist.md` when browser-backed, the relevant task in `SLR/SLR1/TASKS.md`, and every linked protocol section before acting.
+You are assigned exactly one frozen SLR1 evidence attempt. Read `SLR/SLR1/AGENTS.md`, `searches/README.md`, [`two-mode-validation-policy.md`](../two-mode-validation-policy.md), the browser checklist when applicable, the source's frozen exploration record, campaign, and exact evidence plan.
 
-Constraints:
+## Preconditions
 
-- This is a focused diagnostic pilot, not a final search and not screening. Use only the normal authorized interface or prospectively validated public/native route; never bypass access controls.
-- Before a browser lease, finish only the minimum launch gate: relevant reading, exact query bytes, command import/startup, create-only output paths, manifest/receipt shape, and browser health. Do not run broad/full suites or build extra fixtures as routine preconditions. If this minimum gate fails, patch it with the smallest changed-path check and proceed; do not present the safe stop as completion.
-- The supervisor owns the sole shared CfT process, profile `~/agent-tools/.browser-profiles/chrome-automation`, endpoint `127.0.0.1:9222`, and protected broker anchor. You are a client, never a browser controller: do not launch, stop, restart, configure, copy, rotate, inspect, or extract the browser/profile; do not override its profile or port.
-- For every browser-backed live phase, obtain controller-supplied explicit `OWNER`, `SOURCE`, immutable receipt `PATH`, global-pacing decision, and any finite preauthorized wait policy. Run the entire phase only through:
+- A working live route, interaction recipe, adapter/helper commit, query/control semantics, output contract, and expected evidence must already be frozen from exploration mode.
+- Pass only the minimum launch gate: exact query bytes, command startup, create-only paths, manifest/receipt shape, and browser health. Do not run broad suites.
+- If those prerequisites are absent, stop and return the source to exploration; do not improvise inside evidence mode.
 
-  ```text
-  uv run ~/agent-tools/internet/skills/browser/scripts/run_with_browser_lease.py --owner OWNER --source SOURCE --receipt PATH [--wait SECONDS] [--lease-timeout SECONDS] -- COMMAND...
-  ```
+## Execution
 
-  Do not use another endpoint or wrapper. Generic `browser_harness new_tab` is prohibited. The adapter may create and close only its own page; never mutate the broker anchor.
-- Stop before source work if the controller has not recorded shared-CfT epoch/profile identity and provenance, version/anchor/sleep health, and the single-process/profile assertion. Do not close the lid.
-- Test current behavior; do not treat existing adapters, prior diagnostics, or model memory as proof. Determine whether the source has a genuine controlled vocabulary or distinct indexed-term field. Where available, inspect scope, hierarchy, and known-record descriptors, and test them only as OR supplements to the mapped free-text concept; otherwise document that none is usable.
-- A **challenge** (CAPTCHA, login, verification, or anti-automation) is not **busy** (ordinary capacity, queue, rate-limit, or temporary service condition). In either case keep the same owned page. Never evade access controls, rotate profiles, or create a fresh page to retry. Passively wait only under the predeclared finite policy; otherwise request human action and stop source work.
-- A user/operator stop is `cancelled`, not provider failure. Remain an attached supervised live child; do not detach or background it. On cancellation, the controller must cancel/collect children and verify owned-page cleanup, anchor preservation, lease release, and stopped source-writing before ending supervision. Detached subagents may do source-free offline work only.
-- A technical live failure starts immediate investigation, not a handoff. Use screenshots, semantic DOM inspection, and bounded state polling on your owned real page to identify the actual interface behavior. If no native submit/query occurred, the controller may patch and run a distinct logged technical-retest operation in the same attempt within an extended finite cap; otherwise preserve the operation and use a bounded corrective attempt. Run only minimal changed-path checks before the live retest. Ask the review owner only for methodological changes affecting review scope, recall, limits, semantics, capture/completeness, or PRISMA accounting.
-- Save only inside the assigned source packet. Do not edit shared integration files. Do not retain or classify records beyond the minimum diagnostic metadata needed to test totals, pagination, stable identity, and completeness.
-- Mark unknown behavior unknown. Produce a capability/carry-forward handoff with exact evidence paths and hashes; the controller alone updates `campaign.json`, carrying forward unaffected passed gates and invalidating only the failed gate and declared dependents. Do not call a provider wholly inaccessible when a late optional or technical gate failed. Record `code_issue` as `true`, `false`, or `unresolved`. Do not patch a demonstrated defect unless separately assigned as the source-free code-fix subagent.
-- End after the assigned immutable attempt. Do not self-accept the campaign, start another source, update central status, or commit. A zero-operation setup incident is not a completed pilot: identify the exact fix so the controller can patch it and allocate a non-consuming successor. The controller owns checkpointing and may allocate a new technical corrective attempt within its predeclared enacted-source-phase bounds; human authorization applies only to `human_methodological` changes.
-- Ask for a final summary containing: attempt status/terminal outcome; passed, failed, and dependent capability gates; carry-forward eligibility; files changed; tested and blocked requirements; immutable evidence and receipt paths; `code_issue`; cancellation/cleanup state; technical decisions for the controller; methodological decisions, if any, for the review owner; semantic/protocol impact; and the smallest next action.
+- This is a deterministic diagnostic evidence attempt, not a final search or screening.
+- Use only the normal authorized source/interface and exact frozen operation plan.
+- For browser work, run the complete attached phase through the canonical shared lease. Create/close only owned pages and never mutate the protected anchor.
+- Do not patch selectors, waits, adapters, or scripts during the evidence attempt. A technical failure is preserved once and handed back to exploration mode with the most informative safe evidence available.
+- Distinguish transient challenge, busy, loading, explicit zero, and technical/source failure. Passive challenge wait is allowed only under the frozen finite policy; never solve or bypass it.
+- Record every source action, exact controls, totals, stable IDs, pagination/coverage, zero versus `null`, cleanup, and hashes.
+- Retain no relevance classification, screening decision, candidate import, or final event.
+
+## Write boundary
+
+Write only the assigned evidence packet. Do not edit implementation code, campaign integration files, protocols, dictionaries, crosswalks, another source packet, or `final-events/`. The controller checkpoints `campaign.json` after reviewing your immutable attempt.
+
+## Final summary
+
+Report attempt outcome; operations/cap; passed, failed, and dependent gates; totals/zero/null; identity/coverage evidence; challenge/busy/loading behavior; cleanup/lease status; implementation commit; whether failure is technical or methodological; and whether the controller should checkpoint or return to exploration.

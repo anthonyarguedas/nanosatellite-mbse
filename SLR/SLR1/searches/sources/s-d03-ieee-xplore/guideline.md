@@ -12,10 +12,10 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: IEEE Xplore
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
-**DRAFT — not accepted and not authorized for a final run.** P04 live-validated the committed small-result-page adapter fix on the exact full A1 query and count-tested all nine current semantic cells. P05 then failed closed at its visible publication-year diagnostic, and P06 was the one controller-technical successor using the bounded transitional wait. P06 again returned `total=null` with `IEEEProtocolError` after exact query/year readback but an unreconciled rendered range; content, language, and record-bearing completeness remained correctly unrun. Controller review and source-free technical isolation remain required.
+**DRAFT — not accepted and not authorized for a final run.** P04 live-validated the committed small-result-page adapter fix on the exact full A1 query and count-tested all nine current semantic cells. P05 then failed closed at its visible publication-year diagnostic, and P06 was the one controller-technical successor using the bounded transitional wait. P06 again returned `total=null` with `IEEEProtocolError` after exact query/year readback but an unreconciled rendered range; content, language, and record-bearing completeness remained correctly unrun. The source now returns to `S-D03-X01` agent-driven exploration of the real year-summary/loading state before any further evidence attempt.
 
 ## 1. Source boundary and access route
 
@@ -76,7 +76,7 @@ accepted_pilot_ids: []
 1. **[inferred]** Do not execute a final IEEE event from this draft.
 2. **[observed]** Keep the current one-cell field-native translations and P04 receipts intact. Do not reuse P03 split files.
 3. **[observed]** P05 and its source-bearing successor were preserved under the campaign; P06 then used one runtime attempt, exact A1 only, four conditional gates in order, the shared `127.0.0.1:9222` lease, and the patched bounded same-page wait. No NEAR/6 or prior-partition rerun occurred. Its date bound was the pilot execution date, not `P-001`.
-4. **[inferred]** Obtain controller disposition of the P05/P06 year-control nulls before accepting any method. A later scope must not treat either null as zero or silently remove the date-control requirement.
+4. **[planned]** Use `S-D03-X01` exploration to observe the full loading/year-summary transition with restricted screenshots and semantic DOM, repair the live state machine, and freeze a working recipe. Do not treat P05/P06 nulls as zero or remove the date-control requirement.
 5. **[inferred]** Before any final event, prospectively complete visible year, content-type, and language decisions; exact-A1 full-detail repeats; fixed multipage selection and two page-size-10 passes; stable-identity and total reconciliation; and the required rights-safe capture proof.
 6. **[inferred]** Apply the common `P-001` cutoff only after it is set. Do not add a prohibited final discovery restriction.
 
@@ -89,7 +89,7 @@ accepted_pilot_ids: []
 
 ## 10. Remaining limits and protocol impact
 
-- **[observed]** `code_issue=unresolved`: P06's safe artifact records an exact query/year readback followed by a repeated rendered range mismatch, singleton summary, and five cards. Source-free regressions confirm that the f76610f wait tolerates twenty `Loading results` polls and rejects stable contradictions, but cannot distinguish an IEEE control-hydration state from an adapter selector/invariant issue. The source-bearing operation was not reissued and no shared dirty checkout was edited.
+- **[observed]** `code_issue=unresolved`: P06's safe artifact records an exact query/year readback followed by a repeated rendered range mismatch, singleton summary, and five cards. Offline fixtures cannot distinguish control hydration from a selector/invariant issue; this is precisely the question assigned to exploration mode, not another evidence attempt.
 - **[observed_and_human_approved]** P04 introduced no protocol semantic change. The review owner accepted its `NEAR/6` implementation under the existing broader-fallback rule; P05/P06 introduced no method or cutoff decision.
 - **[observed]** The IEEE stage of S-C01 remains explicitly excluded and wholly unstarted: no candidate register, B1∪B2 baseline, candidate-family query, deduplication, sampling, inspection, or coding occurred.
 - **[inferred]** S-D03 method work is not complete enough for separate IEEE S-C01 authorization because control and completeness validation remain incomplete and the date-control null needs disposition.

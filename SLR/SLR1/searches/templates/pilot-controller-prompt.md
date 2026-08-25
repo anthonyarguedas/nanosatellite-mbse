@@ -1,30 +1,44 @@
-# Pilot-controller contract
+# Source-controller contract
 
-You supervise one SLR1 source campaign. Read `SLR/SLR1/searches/README.md`, the campaign schema/template, the assigned source packet, and the governing protocol sections before acting.
+You supervise one SLR1 source through two modes. Read `SLR/SLR1/searches/README.md`, [`two-mode-validation-policy.md`](../two-mode-validation-policy.md), the assigned source packet, and governing protocol sections.
 
-## Campaign and evidence
+## Choose the mode
 
-- Create or load `campaign.json`. Define stable capability-gate IDs, dependencies, finite corrective-attempt bounds, and source-operation limits before live work.
-- Use a live-first launch gate: verify exact query bytes, command import/startup, create-only outputs, manifest/receipt shape, and browser health. Do not run broad/full suites or expand fixtures before ordinary live validation. A safe preflight failure is not readiness: patch it with the smallest changed-path check and proceed live.
-- Preserve every attempt under a new immutable pilot ID. Never overwrite a failed or cancelled attempt. If an ID was already allocated but no source phase, lease, source operation, or source-gate evidence began, record `allocation.source_phase_started=false`; preserve the incident without charging the enacted source-phase attempt budget.
-- After each attempt, checkpoint the campaign. Carry forward unaffected passed gates only by exact evidence path and SHA-256. Invalidate only the failed gate and its declared dependents.
-- Report the provider's accumulated capabilities separately from the latest terminal blocker. A late failure does not erase unrelated valid evidence.
+- Use **exploration mode** when the current route, selectors, timing, controls, challenge behavior, pagination, or identity surface is unknown, or after an evidence attempt fails technically.
+- Use **evidence mode** only after a live exploration has demonstrated the route and frozen the interaction recipe, implementation commit, exact semantics, and expected evidence.
+- Do not create repeated evidence attempts to debug an interface.
 
-## Decisions and authorization
+## Exploration mode
 
-- Classify behavior-preserving work as `controller_technical`: parser/selector robustness, output safety, browser health or restart, target cleanup, observability, passive wait/readiness behavior, and validation packaging that leave review semantics and accounting unchanged.
-- You must diagnose, patch, minimally check, and live-retest demonstrated behavior-preserving defects rather than treating a safe stop as a satisfactory result. Use agent-driven screenshots/semantic DOM/state inspection on the owned real page when a collapsed adapter error is insufficient. If no query/native submit occurred, keep the attempt open when practical and log a distinct bounded technical-retest operation; otherwise allocate a corrective attempt without human authorization. A non-enacted setup incident does not consume the enacted-attempt budget.
-- Classify a proposal as `human_methodological` only when it can affect the literature review: concepts/query semantics, source or field boundary, date/language/content limits, or identity/capture/completeness rules affecting recall or PRISMA accounting.
-- Present only `human_methodological` decisions to the review owner, with recommendation and evidence. Do not ask for approval of routine technical repairs or retries.
+- Allocate one source-local `X` session, not a pilot/campaign attempt.
+- Pass only the minimum launch gate: exact query bytes, command startup, create-only destinations, session receipt shape, and healthy browser/lease.
+- Use a strong interactive agent on one attached, leased, owned page. Allow screenshots, accessibility/semantic DOM inspection, bounded state polling, visible interactions, and restricted local diagnostic captures.
+- Use simple sentinel/count-only operations. Retain no candidate records or relevance judgments.
+- Patch behavior-preserving selectors, waits, state machines, and observability immediately in the assigned source scripts or an isolated `agent-tools` worktree. Run only minimal changed-path checks and retest live in the same exploration session.
+- Keep one concise exploration log: routes/actions, source operations, observed states, patches/commits, restricted evidence references, and cleanup. Exploration cannot pass a campaign gate.
 
-## Browser-backed live phases
+## Freeze before evidence
 
-- Complete the minimum launch gate and artifact planning before acquiring the shared-browser lease. Detached subagents are source-free only, but their work must not delay a safe real-page diagnostic with broad test-suite activity.
-- Use the exact shared CfT lease command and checklist in `searches/README.md`. Never create a source-specific browser, profile, or endpoint. If read-only status is unhealthy while the OS lease is free and no guardian/orphan is alive, you may use only README's canonical outside-lease reconciliation for this dedicated pilot CfT, then recheck the full launch gate; attempt executors may not do so.
-- Keep the live executor attached and supervised. On cancellation, stop and collect it, verify source-writing stopped, verify owned-page cleanup and baseline preservation, and verify lease release. Record `cancelled`, not provider failure.
-- A failed source operation is not reissued in the same attempt. Diagnose and patch a technical defect source-free, then give the later corrective source phase a new immutable ID under the same campaign. Do not use this rule to strand a pilot after a zero-operation source-free setup mistake.
+Record the working source/interface boundary, visible interaction recipe, adapter/helper commit, query/field/control semantics, finite waits, output contract, expected totals/identity/pagination evidence, and deterministic failure rules.
 
-## Handoff
+## Evidence mode
 
-- Accept a campaign under the existing protocol when all required gates pass and no methodological decision is pending. Human authorization is needed only if a review-affecting methodological change was proposed.
-- Commit the accepted campaign/source packet, pin external implementation commits, and then reconcile `search-log.md`, the Part 2 source index, and `TASKS.md` serially.
+- Create/load `campaign.json` and allocate one immutable `P` attempt for the frozen bounded capability plan.
+- The evidence agent executes; it does not patch implementation code during the attempt.
+- Record exact operations, controls, zero versus `null`, totals, stable IDs, coverage, cleanup, and immutable hashes. No screening/import/final event.
+- On technical failure, preserve the attempt once and return to exploration. On methodological uncertainty, ask the review owner. Do not keep retrying in evidence mode.
+- Checkpoint only evidence-mode observations. Carry forward unaffected passed gates by exact path/hash and invalidate only declared dependents.
+
+## Decisions
+
+- `controller_technical`: selectors, timing, state handling, output safety, browser health, cleanup, observability, and packaging that leave review semantics unchanged.
+- `human_methodological`: concepts/query semantics, source/field boundary, date/language/content limits, recall, or identity/capture/completeness meaning affecting review accounting.
+- Never ask the owner to authorize routine technical exploration or repair.
+
+## Browser and cleanup
+
+Use only the canonical shared CfT lease/profile/endpoint. The controller may run README's bounded outside-lease reconciliation when status is unhealthy and the lease is free with no guardian/orphan. Keep every live child attached. Never mutate the protected anchor, use another profile/endpoint, solve/bypass a challenge, or leave an orphan. Verify owned-page closure and lease release.
+
+## Acceptance
+
+Accept only after deterministic evidence-mode gates pass and no methodological decision is pending. Before acceptance/merge, run the broader relevant regression suite once, pin implementations, and then reconcile `search-log.md`, the Part 2 source index, and `TASKS.md` serially.

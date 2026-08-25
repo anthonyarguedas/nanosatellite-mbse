@@ -15,7 +15,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: Open Access Theses and Dissertations (OATD)
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
 > **Draft only — blocked and not approved.** P02 validated a narrow version-2 count-only route, P03 validated one version-3 basic count-only health gate, and P04 reached a transient challenge before advanced-form submission. P04 remains immutable and was not retried. Exactly one source-free, controller-technical successor is prospectively planned under [`p05-execution-plan.md`](p05-execution-plan.md) to passively wait for that challenge under a finite 30-second policy; no successor attempt ID or source operation exists. No pilot authorizes a final search, screening, candidate import, or source-method acceptance.
@@ -83,7 +83,7 @@ accepted_pilot_ids: []
 
 Do not execute a final OATD event until P-001, source-method approval, and R-002 authorization.
 
-1. Do not directly reissue P02 E-007, P03 E-002, or P04 O-001. After the source-free gates pass, use exactly one runtime successor under [`p05-execution-plan.md`](p05-execution-plan.md); its prospective controller authorization is recorded in `campaign.json` as `D-TECH-NEXT-P05`.
+1. Do not directly reissue prior evidence operations. First complete the agent-driven exploration in [`resume-plan.md`](resume-plan.md), using the visible advanced composer and freezing a working interaction recipe. Only then use the held [`p05-execution-plan.md`](p05-execution-plan.md) as deterministic evidence.
 2. Re-establish the dedicated-browser, power, anchor, and post-sleep preflight. Keep the successor's passive 30-second/0.2-second challenge policy separate from version 3's default finite busy policy; busy recovery remains one invocation, not authorization for a new failed-execution retry.
 3. Revalidate the advanced route with a nonblank field-specific diagnostic; parser, case, punctuation, acronym, expansion, wildcard, malformed/proximity, and planned-cell behavior; controlled-vocabulary status; Record Details provenance; controls; and a naturally bounded strict two-pass route.
 4. Demonstrate a valid unordered same-field pair method or a documented recall-preserving broader same-field construction with local exact-pair handling before permitting BG1, BG2, BC1, or BT2.
@@ -101,7 +101,7 @@ Do not execute a final OATD event until P-001, source-method approval, and R-002
 - **[blocked]** P03's terminal advanced-form navigation timeout leaves the required advanced-field, pair, controlled-vocabulary, controls, positive-detail, pagination, identity, strict-completeness, CSV, and all-cell source checks unresolved.
 - **[observed]** The version-3 basic count-only/marker path succeeded in P03 with no busy recovery. P03's separate permitted direct advanced probe had a timeout and initially left its owned page open; this does not demonstrate a defect in the pinned adapter because that adapter does not submit the advanced composer. Candidate-adapter `code_issue` is therefore **[unresolved]** rather than assumed false for the untested advanced/strict paths. Live strict two-pass, busy recovery, CSV, and no-clobber collision behavior remain untested.
 - **[protocol]** No protocol semantic change is proposed. OATD remains a separate required source, and pair-bearing partitions remain prohibited from final use.
-- **[planned]** The smallest next action is source-free validation of the probe and the one prospective P05 plan. Do not allocate an attempt ID, acquire a lease, execute a source operation, self-accept P04, or run a final OATD search as part of this correction.
+- **[planned]** The next action is `S-D09-X01` exploration on the real visible advanced composer. Exploration may inspect, patch, and retest live but cannot pass gates, screen/import records, or run a final search. Hold P05 until the route works.
 
 ## Future browser operations
 

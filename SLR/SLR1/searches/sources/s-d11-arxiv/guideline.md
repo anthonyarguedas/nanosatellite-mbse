@@ -15,7 +15,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: arXiv Advanced Search
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
 This is a **source-free P01 launch draft**. It is not an accepted source method and contains no live observation, completed campaign, pilot attempt, screening decision, candidate record, or final event. Source-interface statements are labelled **[observed]** only when they describe the local adapter code, **[official_documentation]** only when first-party documentation is actually available in the packet, **[inferred]** for a method consequence, and **[untested]** for current arXiv behavior. No network or provider route was accessed while preparing this packet.

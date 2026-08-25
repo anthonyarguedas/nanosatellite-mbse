@@ -12,7 +12,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: Wiley Online Library
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
 > **Draft only; final use prohibited.** P01 remains immutable and blocked by its old-adapter no-clobber defect. P02 verified the corrective adapter only offline, then stopped before its first Wiley request because the required dedicated browser endpoint was stale. No P02 source-interface claim is accepted.

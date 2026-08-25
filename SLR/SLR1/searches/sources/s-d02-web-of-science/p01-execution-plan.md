@@ -1,6 +1,6 @@
 # S-D02 P01 execution plan — Web of Science Core Collection
 
-> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+> **Current architecture:** Follow the [two-mode source-interface policy](../../two-mode-validation-policy.md). Use an agent-driven `X` exploration session to understand/fix an unknown or failing real interface; allocate an immutable `P` evidence attempt only after the route and implementation work live. Any broader offline-suite prerequisite below is superseded.
 
 
 **Status:** planned, source-free, not executed. **Attempt kind:** initial. **Source operation maximum:** 1 query submission. **Query:** `queries/A1.wos-topic.txt` only (non-pair). **Probe:** `SLR/SLR1/scripts/wos_core_pilot_probe.py`. **Pilot upper bound:** the attempt's execution date; the example below uses `2026-08-25`. It is not `P-001` and is not a final cutoff.

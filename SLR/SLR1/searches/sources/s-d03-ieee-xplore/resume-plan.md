@@ -1,6 +1,6 @@
 # Resume plan — S-D03-C01-20260824T161325-0400
 
-> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+> **Current architecture:** Follow the [two-mode source-interface policy](../../two-mode-validation-policy.md). Use an agent-driven `X` exploration session to understand/fix an unknown or failing real interface; allocate an immutable `P` evidence attempt only after the route and implementation work live. Any broader offline-suite prerequisite below is superseded.
 
 
 **Status:** `technically_blocked`; the review owner authorized `D-METHOD-NEAR6` on 2026-08-25. P05 is immutable and consumed, and its one controller-technical successor P06 is now preserved as a failed technical attempt.
@@ -11,11 +11,11 @@
 - P04 preserves `G-ADAPTER-COUNT`, `G-TRANSLATION-ALGEBRA`, `G-NEAR-SYNTAX`, and all nine diagnostic partition counts; P05 must not rerun those counts or prior field/parser evidence unless the new adapter behavior demonstrates they are affected.
 - `G-NEAR-METHOD` is passed: [`human-review.md`](human-review.md) accepts `NEAR/6` as the conservative broader same-field fallback without claiming exact equivalence.
 
-## P06 outcome and next action
+## P06 outcome and next mode
 
-- P06 (`S-D03-P06-20260825T135127-0400`) was the single controller-technical successor, with **source-operation maximum 4**. It used exact A1 and failed at the first visible year-control operation with `total=null` after an unreconciled rendered range; content, language, and completeness were not run.
-- The attached canonical lease, owned-page cleanup, broker-anchor preservation, power/sleep checks, and verified release are recorded in the P06 packet. The immediate source-free investigation passed the patched adapter/probe tests and leaves `code_issue=unresolved` between source control hydration and the adapter invariant.
-- Do **not** allocate another attempt from this packet or rerun the nine partitions, NEAR/6 controls, prior field/parser diagnostics, S-C01, export, or unrelated record work. Do not adopt a cutoff or change the accepted NEAR/6 method. Any future retry requires a separately recorded technical repair/authorization after source-free isolation.
+- P06 (`S-D03-P06-20260825T135127-0400`) used exact A1 and failed the visible year-control evidence gate with `total=null`: the projection saw five cards beside a stale/singleton summary. Content, language, and completeness were not run.
+- Do not allocate another evidence attempt yet. Open `S-D03-X01-<timestamp>` in **exploration mode** with a strong interactive browser agent. Keep one owned page, retain a restricted screenshot and bounded visible-summary/control projection, observe the full loading/hydration transition, repair the summary/year state machine, and prove the interaction live with a small sentinel query.
+- Freeze a new adapter commit and year-control recipe only after the real page reconciles. Then propose one deterministic evidence attempt for year, content, language, and completeness. Do not rerun partitions, NEAR/6, S-C01, or export during exploration.
 
 ## Shared browser and acceptance
 

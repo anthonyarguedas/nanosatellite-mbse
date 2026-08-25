@@ -1,12 +1,9 @@
 # Resume plan — S-D09-C01-20260824T161325-0400
 
-> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+> **Current architecture:** Follow the [two-mode source-interface policy](../../two-mode-validation-policy.md). Use an agent-driven `X` exploration session to understand/fix an unknown or failing real interface; allocate an immutable `P` evidence attempt only after the route and implementation work live. Any broader offline-suite prerequisite below is superseded.
 
 
-**Status:** `technically_blocked`. Exactly one additional controller-technical
-successor is prospectively authorized by `D-TECH-NEXT-P05`; no attempt ID,
-lease, browser phase, or source operation exists yet. No new human
-methodological authorization is required.
+**Status:** `technically_blocked`; return to exploration mode. The existing `D-TECH-NEXT-P05` evidence plan is held and must not be allocated until a live exploration freezes a working advanced-form recipe. No human methodological authorization is required.
 
 ## Carries forward
 
@@ -16,31 +13,13 @@ methodological authorization is required.
 - Preserve P04's challenge-before-submission null failure and its verified
   cleanup; do not reinterpret or reissue P04 O-001.
 
-## One prospective technical successor
+## Next exploration session
 
-- Allocate exactly one fresh `S-D09-P05-<timestamp>` at runtime as
-  `controller_technical`; the placeholder is not an attempt ID and is not
-  created by this source-free change.
-- **Source-operation maximum: 3:** one corrected advanced-form diagnostic,
-  then at most two existing same-page busy reissues. Passive challenge polls
-  are not source operations or busy retries.
-- Before the one native submission, retain the same owned page and poll only
-  its DOM at a fixed 0.2-second cadence for at most 30 seconds total. Do not
-  click, reload, navigate, submit, solve, or bypass the challenge. Continue
-  the original single guarded native submission only when the canonical
-  advanced form appears. Persistent challenge or transition to login/access/
-  CAPTCHA fails `null` with no retry or prefix.
-- Preserve the existing post-submit busy policy: waits of 30 and 60 seconds,
-  an exclusive safe busy state, and at most two canonical same-page reissues
-  under the shared absolute 180-second deadline. If busy clears during a wait,
-  do not reissue.
-- Do **not** rerun P02 basic parser/count gates, P03 health, P04 O-001, planned
-  cells, Record Details, strict traversal, CSV, or pair-completeness work.
-
-The complete source-free launch procedure and hard stops are in
-[`p05-execution-plan.md`](p05-execution-plan.md). No live phase is authorized
-by this plan text alone; the controller must first pass its offline gates and
-then allocate the one immutable successor ID.
+- Allocate `S-D09-X01-<timestamp>`, not another pilot attempt.
+- Use the normal visible advanced-search/composer route rather than trying to drive hidden home-page forms. In one owned page, inspect the visible form, title-field mapping, native submit control, loading/challenge state, and post-submit aggregate summary with restricted screenshots and bounded semantic DOM evidence.
+- Keep the finite 30-second untouched challenge wait and existing 30/60-second busy policy, but use a small sentinel count-only query and iteratively patch/retest selector/readback issues in the exploration session.
+- Do not visit Record Details, retain records, test pair-bearing cells, or claim gates.
+- When native submission and aggregate reconciliation work live, freeze the interaction recipe and implementation commit. Only then instantiate the held [`p05-execution-plan.md`](p05-execution-plan.md) as a deterministic evidence attempt.
 
 ## Shared browser and acceptance
 

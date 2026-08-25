@@ -12,7 +12,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: REPLACE
 
-> Apply the [live-first validation policy](../live-first-validation-policy.md): current real-page behavior is primary, broad offline suites are deferred, and technical failures require immediate owned-page inspection, patching, and bounded live retest after minimal checks.
+> Apply the [two-mode validation policy](../two-mode-validation-policy.md): use agent-driven exploration to understand and fix the real interface, then run a separate frozen deterministic evidence attempt. Broad offline suites are deferred until a working route is being merged or accepted.
 
 ## 1. Source boundary and access route
 
@@ -50,7 +50,7 @@ Give the ordered procedure that a later `R-002` operator can execute without rel
 
 ## 9. Validation evidence
 
-Link the accepted campaign, immutable attempt manifests, carried-forward capability evidence, and any invalidations. Distinguish observed interface behavior, official documentation, inference, and untested items. Record human approval only for methodological changes affecting the review; behavior-preserving technical decisions remain controller-authorized. Let `search-log.md` point to the campaign acceptance commit and pin external implementations there; do not add a separate approval-hash ledger.
+Link the exploration session that established the working route and the separate accepted campaign/evidence attempts, carried-forward capability evidence, and invalidations. Exploration logs explain implementation but do not pass gates; only deterministic evidence-mode observations can support acceptance. Distinguish observed interface behavior, official documentation, inference, and untested items. Record human approval only for methodological changes affecting the review; behavior-preserving technical exploration remains controller-authorized.
 
 ## 10. Remaining limits and protocol impact
 

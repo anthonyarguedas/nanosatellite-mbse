@@ -12,7 +12,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: NASA Technical Reports Server (NTRS)
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
 This is a **draft, blocked** operating method. It is not accepted and cannot support a final discovery event. Claim labels are **[observed]**, **[official_documentation]**, **[inferred]**, and **[untested]**; no unlabelled source-behavior claim is intended.
@@ -20,9 +20,9 @@ This is a **draft, blocked** operating method. It is not accepted and cannot sup
 ## 1. Source boundary and access route
 
 - **[official_documentation]** The first-party public NTRS client distinguishes public NTRS/STI Repository access from a separate registered collection. This task's protocol boundary is the **full public technical-report database**, not registered-only content, PubSpace, an individual center, or a selected publication type. See [`interface-and-access-receipt.json`](pilots/S-D13-P01-20260823T232536-0400/interface-and-access-receipt.json).
-- **[observed]** `https://ntrs.nasa.gov/` returned HTTP 200 on 2026-08-24T03:20:56Z. The current client exposes the public API route `POST https://ntrs.nasa.gov/api/citations/search` with a JSON body and `Accept: application/json`. The root was accessible, but the search route did not return a successful result in this pilot.
-- **[untested]** A successful anonymous search authorization cannot be claimed: no credentials were supplied, but the search route timed out/returned 504 before a result envelope was received. Do not attempt registered routes, sign-in, NAMS, cookies, or browser access.
-- **[observed]** Browser preflight is not applicable. No browser was launched or controlled; this pilot used public HTTP/API and static first-party routes only.
+- **[observed]** P01/P02's public API route timed out/returned 504 and was later abandoned by review-owner direction. Do not use it as a fallback.
+- **[observed]** P05/P06 demonstrated a healthy anonymous normal rendered root under the shared browser, with no login/challenge state, but failed before query submission while reconciling visible ordering/page-size controls.
+- **[planned]** Use only the normal rendered public interface in `S-D13-X01`; do not attempt registered routes, sign-in, NAMS, cookies, or API fallback.
 
 ## 2. Interface and field behavior
 
@@ -69,28 +69,26 @@ This is a **draft, blocked** operating method. It is not accepted and cannot sup
 
 ## 8. Final-run procedure
 
-Do not execute this procedure until the code issue is fixed, a new pilot is authorized and accepted, P-001 supplies the common cutoff, and source behavior is revalidated.
+Do not define the final-run procedure until exploration and evidence validate the normal rendered NTRS interface; the API route is historical and abandoned.
 
-1. **[inferred]** Use only the public anonymous NTRS API route proven by the new pilot; record the exact POST JSON, content type, response envelope, public boundary, and no-auth result without preserving cookies/session URLs.
-2. **[inferred]** Revalidate all q contrasts, field scope, parser/rewrite behavior, date precision, language metadata/filter reliability, controlled-term status, page-size/offset/cap behavior, exact total semantics, public record identity, and a safe two-page/two-pass ID comparison.
-3. **[inferred]** Apply `published.gte=2011-01-01` and `published.lte=<exact P-001 cutoff>` only after exact-date transport is proven. Apply no English or other prohibited discovery limit unless separately validated and logged.
-4. **[inferred]** Execute every accepted cell in [`translation-spec.json`](translation-spec.json), record its source total and complete stable-ID ledger, exhaust pagination twice under validated deterministic ordering, reconcile union/count/IDs, and fail closed on any discrepancy.
-5. **[inferred]** Retain only complete successful cell artifacts for normalisation, then retain partition/source discovery events through subsequent deduplication. Never move a pilot result into `final-events/` or screening.
+1. Complete the agent-driven rendered-interface exploration in [`resume-plan.md`](resume-plan.md), freezing the visible input, submit, default ordering, page size, result summary, stable ID, pagination, date-control, and failure state machine.
+2. Run a separate deterministic evidence campaign over sentinel, field/control, partition, and completeness capabilities using the frozen rendered route.
+3. After `P-001`, execute each accepted cell with exact source-side/client-side date handling, complete stable-ID ledgers, and two-pass or equivalent completeness. Fail closed on discrepancies.
+4. Never move exploration or pilot results into `final-events/` or screening.
 
 ## 9. Validation evidence
 
 - **[observed]** The pilot manifest is [`manifest.json`](pilots/S-D13-P01-20260823T232536-0400/manifest.json); compact receipts and checksums are in [`evidence-index.json`](pilots/S-D13-P01-20260823T232536-0400/evidence-index.json).
 - **[observed]** The external adapter was pinned at `3231ebddefcc3e7bc707b2a7d66fbe831d363286` and runtime-tested once. Its failure artifact is [`adapter-route-test.json`](pilots/S-D13-P01-20260823T232536-0400/adapter-route-test.json).
 - **[observed]** `code_issue=true`: its emitted PRISMA category is inconsistent with the tracked NTRS crosswalk, and it lacks exact-date and strict two-pass stable-ID final-run controls. The unpatched assessment and smallest scoped fix are in [`adapter-assessment.json`](pilots/S-D13-P01-20260823T232536-0400/adapter-assessment.json).
-- **[observed]** P02–P03 and the immutable zero-operation P04 setup incident are checkpointed in [`campaign.json`](campaign.json). P04 did not acquire a lease or contact NTRS; its deterministic exact-byte plan defect is corrected prospectively in [`p05-execution-plan.md`](p05-execution-plan.md) without altering P03/P04 evidence.
-- **[untested]** No claim in this draft satisfies pilot acceptance for search semantics, controlled vocabulary, date/language behavior, response envelope, pagination, identity, or completeness. `accepted_pilot_ids` remains empty.
+- **[observed]** P02–P04 are checkpointed in [`campaign.json`](campaign.json). P05/P06 subsequently passed rendered source health but failed pre-submit control reconciliation before query echo; they establish no total or partition transport.
+- **[planned]** `S-D13-X01` exploration will diagnose ordering/page-size controls on the actual page. Exploration cannot satisfy acceptance. `accepted_pilot_ids` remains empty.
 
 ## 10. Remaining limits and protocol impact
 
-- **[observed]** The public search route was unavailable to this pilot (timeout/HTTP 504), and the external adapter has a demonstrated issue. No further NTRS live querying was performed after that determination; no retry, second pilot, screening, candidate import, source-log update, protocol edit, staging, or commit occurred.
-- **[untested]** The current NTRS API's parser and full-public-database response behavior remain unresolved. All cells are preserved only as draft syntax and literal-completeness artifacts.
-- **[inferred]** No protocol semantic change is proposed: all nine mappings derive from the current dictionary without candidate terminology or a narrowed Boolean relationship. The limitation is implementation/validation, not a justified change to scope, concept blocks, evidence window, or eligibility.
-- **[inferred]** No human approval is needed for the behavior-preserving correction. `D-TECH-NEXT-P05` prospectively authorizes the corrected two-operation technical diagnostic after the shared-browser epoch gate is healthy. Until live gates pass, record NTRS as an unaccepted source-method limitation rather than a completed source.
+- **[observed]** The API route failed historically and is abandoned. The rendered root is healthy, but P05/P06 did not reconcile pre-submit ordering/page-size controls.
+- **[untested]** Rendered query echo, totals, fields, dates, pagination, stable identity, partitions, and completeness remain unresolved.
+- **[inferred]** No protocol semantic change is proposed. The next work is technical `X` exploration, requiring no human approval. Until later deterministic evidence passes, NTRS remains an unaccepted source-method limitation.
 
 ## Future browser operations
 

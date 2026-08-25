@@ -15,7 +15,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: Scopus
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
 > **Conditionally approved source method.** The review owner approved H1–H5 on 2026-08-23 as recorded in [`human-review.md`](human-review.md); the approved adapter is pinned at commit `9aef2155f0073a8b82f7d5af3ec0870f6e6aeef2`. The Scopus portion of `S-C01` is complete, but formal Part 2 acceptance remains pending the cross-source `S-C01` decision; approval provenance is the Git commit containing this packet. `P-001` is required before the first final search, not before pilot or source-method approval. This packet does not authorize a final search.

@@ -4,6 +4,8 @@
 **Watchdog checkpoint updated:** 2026-08-25T04:24:00-04:00  
 **Scope:** diagnostic readiness only; no final search, screening, candidate import, or source result event.
 
+> **Architecture update (2026-08-25):** the per-source launch classifications below are a historical checkpoint. Under the current [two-mode policy](two-mode-validation-policy.md), an unknown or technically failing route returns to an agent-driven `X` exploration session; a `ready_to_launch` evidence plan is held until exploration has demonstrated and frozen a working live interaction recipe.
+
 ## Current correction — 2026-08-25
 
 The NTRS source-free defect has been fixed without relaunching a pilot. P04 remains immutable, but is now explicitly recorded as `allocation.source_phase_started=false`: it acquired no lease, performed zero source operations, and therefore does not consume the finite enacted source-phase budget. The corrected [`p05-execution-plan.md`](sources/s-d13-nasa-ntrs/p05-execution-plan.md) uses the hash-bound 13-byte `nanosatellite` query exactly, and `D-TECH-NEXT-P05` prospectively authorizes the same two bounded technical operations without human approval. The general campaign workflow now requires controllers to patch deterministic setup failures rather than treating safe stops as satisfactory outcomes.

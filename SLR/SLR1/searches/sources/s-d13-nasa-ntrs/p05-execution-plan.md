@@ -1,6 +1,6 @@
 # P05 execution plan — NASA Technical Reports Server (NTRS)
 
-> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+> **Current architecture:** Follow the [two-mode source-interface policy](../../two-mode-validation-policy.md). Use an agent-driven `X` exploration session to understand/fix an unknown or failing real interface; allocate an immutable `P` evidence attempt only after the route and implementation work live. Any broader offline-suite prerequisite below is superseded.
 
 
 This supersedes the retired P04 launch plan. P04 exposed a source-free plan bug: its pinned SHA-256 described the immutable 13-byte `nanosatellite` file while a redundant assertion required a 14th newline byte. This plan uses the hash-bound immutable bytes exactly. P04 remains immutable and is recorded as `source_phase_started=false`; no lease or source operation occurred.

@@ -12,7 +12,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: Web of Science Core Collection
 
-> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+> **Two-mode validation:** Apply the [current policy](../../two-mode-validation-policy.md). First use agent-driven exploration to make the real interface work; then use a separate frozen deterministic evidence attempt. Exploration findings guide implementation but do not pass acceptance gates.
 
 
 **Draft only.** This is a new source packet. No campaign, pilot attempt, live observation, screening decision, candidate import, or final search has been created. The local Web of Science domain guide is interface knowledge only; its dated observations are not current live proof and are not acceptance evidence for this packet.
