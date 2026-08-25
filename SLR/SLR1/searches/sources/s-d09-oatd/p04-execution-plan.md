@@ -1,5 +1,8 @@
 # P04 execution plan — OATD corrected advanced-form diagnostic
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 > **Retired; do not execute.** This was the pre-live launch plan for immutable
 > P04 `S-D09-P04-20260825T110122-0400`, which has now completed and is recorded
 > as challenge-blocked. It must not be reused or treated as a retry. The one

@@ -12,4 +12,4 @@ Prefer linking to another section or file before duplicating information.
 
 Controllers track tasks in `SLR/SLR1/TASKS.md` and keep the named documentation synchronized; role-specific subagents follow their assigned write boundary.
 
-For source pilots, read and follow `searches/README.md` plus the assigned role template. Keep role-specific browser, workflow, authorization, evidence, and write-boundary instructions there rather than duplicating them here.
+For source pilots, read and follow `searches/README.md`, [`searches/live-first-validation-policy.md`](searches/live-first-validation-policy.md), and the assigned role template. Current real-page functionality is primary; do not delay live validation or technical retests for broad offline suites. Keep role-specific browser, workflow, authorization, evidence, and write-boundary instructions there rather than duplicating them here.

@@ -1,5 +1,8 @@
 # P04 execution plan — NASA Technical Reports Server (NTRS)
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 > **Retired; do not execute.** P04 stopped before its source phase because this plan's hash correctly identified the immutable 13-byte `nanosatellite` query while a redundant raw-byte assertion incorrectly required a newline. The immutable incident is preserved under P04. Use the corrected [`p05-execution-plan.md`](p05-execution-plan.md); do not alter or relaunch P04.
 
 This is the historical source-free launch plan for the next existing-campaign attempt,

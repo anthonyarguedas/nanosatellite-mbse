@@ -12,6 +12,9 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: Wiley Online Library
 
+> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+
+
 > **Draft only; final use prohibited.** P01 remains immutable and blocked by its old-adapter no-clobber defect. P02 verified the corrective adapter only offline, then stopped before its first Wiley request because the required dedicated browser endpoint was stale. No P02 source-interface claim is accepted.
 
 ## 1. Source boundary and access route

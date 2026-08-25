@@ -1,5 +1,8 @@
 # Resume plan — S-D13-C01-20260824T161325-0400
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** `technically_blocked`; corrected P05 is prospectively controller-authorized. No new human authorization is required.
 
 ## Carries forward and preserved history

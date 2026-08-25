@@ -1,5 +1,8 @@
 # S-D12 P01 execution plan
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** launch bundle only. P01 has not run. This source is new: the
 controller must create the first campaign and manifest at runtime from the
 shared templates before any source request. No campaign, attempt, observation,

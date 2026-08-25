@@ -1,5 +1,8 @@
 # Resume plan — S-L02-P04 ESA Indico
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** `controller_technical` launch bundle prepared; no P04 attempt has run. No campaign or attempt is fabricated in Git because this source has historical P01–P03 manifests but no checkpointed campaign.
 
 ## Preserved evidence

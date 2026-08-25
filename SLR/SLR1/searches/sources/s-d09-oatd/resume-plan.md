@@ -1,5 +1,8 @@
 # Resume plan — S-D09-C01-20260824T161325-0400
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** `technically_blocked`. Exactly one additional controller-technical
 successor is prospectively authorized by `D-TECH-NEXT-P05`; no attempt ID,
 lease, browser phase, or source operation exists yet. No new human

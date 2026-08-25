@@ -12,6 +12,8 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: REPLACE
 
+> Apply the [live-first validation policy](../live-first-validation-policy.md): current real-page behavior is primary, broad offline suites are deferred, and technical failures require immediate owned-page inspection, patching, and bounded live retest after minimal checks.
+
 ## 1. Source boundary and access route
 
 State the database or collection boundary, platform, interface, authorized route, and exclusions. Do not record credentials, cookies, session IDs, or private URLs.

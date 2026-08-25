@@ -1,5 +1,8 @@
 # P05 execution plan — OATD transient-challenge technical successor
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** source-free prospective launch plan only. `D-TECH-NEXT-P05` authorizes
 exactly one controller-technical successor under campaign
 `S-D09-C01-20260824T161325-0400`; it does not allocate an attempt ID, acquire a

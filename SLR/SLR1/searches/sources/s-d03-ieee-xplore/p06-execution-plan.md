@@ -1,5 +1,8 @@
 # P06 execution plan — IEEE Xplore
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** source-free controller-technical successor plan for `S-D03-C01`. P05's source-bearing attempt is immutable and consumed; P06 is the single successor authorized for this retry. No review-semantic or methodological change is proposed.
 
 ## Scope and bounds

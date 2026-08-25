@@ -12,6 +12,9 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: NASA Technical Reports Server (NTRS)
 
+> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+
+
 This is a **draft, blocked** operating method. It is not accepted and cannot support a final discovery event. Claim labels are **[observed]**, **[official_documentation]**, **[inferred]**, and **[untested]**; no unlabelled source-behavior claim is intended.
 
 ## 1. Source boundary and access route

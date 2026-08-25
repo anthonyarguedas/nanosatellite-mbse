@@ -1,5 +1,8 @@
 # S-D06 Springer Nature Link resume handoff
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 This is a brand-new source packet. No campaign, attempt, live request, source total, or pilot observation exists yet. Do not infer P01 completion from this file.
 
 1. Finish the offline preflight in [`p01-execution-plan.md`](p01-execution-plan.md): focused Springer tests, transaction-safety tests, challenge-wait tests, and offline `--help`.

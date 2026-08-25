@@ -187,7 +187,7 @@ Source-specific guidelines are intentionally pending regeneration. Run the direc
 
 ### Pilots and final search events
 
-Run small, focused, no-screening pilots to validate each current interface and translation under tasks `S-D01`–`S-D13` and `S-L02` in [`TASKS.md`](TASKS.md). Pilot records, identifiers, totals, and files are diagnostic only and can never become candidates or final discovery events. Keep pilot storage separate from clean final-run storage.
+Run small, focused, no-screening pilots to validate each current interface and translation under tasks `S-D01`–`S-D13` and `S-L02` in [`TASKS.md`](TASKS.md). Apply the [live-first source-pilot policy](searches/live-first-validation-policy.md): current real-page behavior is the primary validation evidence; broad offline suites are deferred until a working implementation is being accepted or merged; and a technical failure triggers immediate owned-page inspection, patching, and bounded live retest after only minimal changed-path checks. Pilot records, identifiers, totals, and files are diagnostic only and can never become candidates or final discovery events. Keep pilot storage separate from clean final-run storage.
 
 For every pilot and final event, record:
 

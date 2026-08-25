@@ -1,5 +1,8 @@
 # P05 execution plan — IEEE Xplore
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** source-free launch bundle for the existing `S-D03-C01` campaign. This plan is diagnostic only and is governed by `D-TECH-NEXT-P05`. It adds no attempt record before runtime, makes no live claim, preserves the review owner's separately recorded `D-METHOD-NEAR6` authorization, and does not rerun P01–P04 work.
 
 ## Fixed scope and bounds

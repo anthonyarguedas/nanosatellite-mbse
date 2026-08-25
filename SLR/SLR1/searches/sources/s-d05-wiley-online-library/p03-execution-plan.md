@@ -1,5 +1,8 @@
 # P03 execution plan — Wiley Online Library
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 This is the source-free plan for `S-D05-P03-<timestamp>`. It is governed by `D-TECH-NEXT-P03`, is diagnostic only, and needs no new human authorization.
 
 ## Fixed scope

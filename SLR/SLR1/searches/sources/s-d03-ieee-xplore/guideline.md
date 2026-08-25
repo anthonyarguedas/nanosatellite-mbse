@@ -12,6 +12,9 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: IEEE Xplore
 
+> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+
+
 **DRAFT — not accepted and not authorized for a final run.** P04 live-validated the committed small-result-page adapter fix on the exact full A1 query and count-tested all nine current semantic cells. P05 then failed closed at its visible publication-year diagnostic, and P06 was the one controller-technical successor using the bounded transitional wait. P06 again returned `total=null` with `IEEEProtocolError` after exact query/year readback but an unreconciled rendered range; content, language, and record-bearing completeness remained correctly unrun. Controller review and source-free technical isolation remain required.
 
 ## 1. Source boundary and access route

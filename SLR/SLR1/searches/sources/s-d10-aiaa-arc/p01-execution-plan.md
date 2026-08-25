@@ -1,5 +1,8 @@
 # P01 execution plan — S-D10 AIAA Aerospace Research Central
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **State:** source-free launch plan only. P01 has not been allocated, no campaign/manifest exists yet, and no ARC request or current-interface observation has been made.
 
 ## Fixed scope and limits

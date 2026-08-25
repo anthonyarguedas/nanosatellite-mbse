@@ -12,6 +12,9 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: IAF Digital Library
 
+> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+
+
 This is a new-run, diagnostic-only draft. No IAF request, source observation,
 pilot, screening decision, candidate import, or final event was made while
 preparing it. Behaviour labels below mean **[inferred]**, **[untested]**, or

@@ -1,5 +1,8 @@
 # S-D07 P01 execution plan — Advanced Technologies & Aerospace Index
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **State:** launch-ready plan only. Do not execute this file during source-free preparation. No campaign, attempt, source total, or live observation exists yet.
 
 ## Runtime identity and campaign creation

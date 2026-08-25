@@ -7,7 +7,7 @@ Copy this checklist into the phase receipt or its source-safe evidence index. Co
 - [ ] Pilot/phase ID: `REPLACE`
 - [ ] Campaign and decision class: `REPLACE` (`none`, `controller_technical`, or `human_methodological`)
 - [ ] Offline reading complete.
-- [ ] Exact query/operation and source-free adapter tests complete.
+- [ ] Minimum launch gate complete: exact query, command startup, create-only outputs, manifest/receipt shape, and browser health. No broad suite required.
 - [ ] Artifact, rights, cleanup, and reporting plan complete.
 - [ ] `OWNER`: `REPLACE` (unique supervised pilot/phase)
 - [ ] `SOURCE`: `REPLACE` (source ID)
@@ -15,7 +15,7 @@ Copy this checklist into the phase receipt or its source-safe evidence index. Co
 - [ ] Global domain-pacing decision: `REPLACE`
 - [ ] Predeclared finite wait/readiness policy, or `none`: `REPLACE`
 
-Only source-free offline work may be concurrent. Every deterministic source-free query-byte, CLI, adapter, output-path, and infrastructure check must pass before lease acquisition. Patch a technical preflight failure rather than treating its safe stop as success. If an attempt ID was already allocated but no source phase began, record `allocation.source_phase_started=false`; it does not consume the enacted source-phase budget. A technical corrective source action must be within the campaign's controller-authorized finite bounds; only a methodological change affecting the review requires human authorization. A prospectively authorized finite passive wait or internal readiness retry may remain in this phase.
+Only source-free work may be concurrent. Require the minimum launch gate above, not a large fixture or regression suite. Patch a technical preflight failure with the smallest direct check and proceed to real-page validation. If an attempt ID was already allocated but no source phase began, record `allocation.source_phase_started=false`; it does not consume the enacted source-phase budget. Technical real-page observation, finite passive waits, and bounded logged retests are controller-authorized; only a methodological change affecting the review requires human authorization.
 
 ## 2. Lease command and shared-browser boundary
 

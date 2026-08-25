@@ -1,5 +1,8 @@
 # S-L02 P04 execution plan — ESA Indico
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** source-free launch plan only. P04 has not run and makes no current-interface claim. The plan is diagnostic, sequential, bounded, and cannot create candidates, screening records, a final event, or a source total.
 
 ## Purpose and fixed method

@@ -1,5 +1,8 @@
 # Resume plan — S-D11-C01 / initial P01
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** `not_started`. This brand-new arXiv source has no campaign, manifest, pilot directory, attempt, receipt, source total, or live observation. Do not fabricate one and do not treat this plan as an attempt.
 
 ## Next runtime allocation

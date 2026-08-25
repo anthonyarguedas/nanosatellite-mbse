@@ -12,6 +12,9 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: AIAA Aerospace Research Central (ARC)
 
+> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+
+
 > **Draft only; final use is prohibited.** This source is brand new in this packet. No ARC pilot has been run here, no current-interface behavior is claimed, and no campaign or attempt is checkpointed. The initial campaign and manifest must be instantiated from the shared templates at runtime immediately before P01 source work.
 
 ## 1. Source boundary and access route

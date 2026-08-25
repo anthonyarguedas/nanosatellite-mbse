@@ -1,5 +1,8 @@
 # S-D06 P01 execution plan — Springer Nature Link
 
+> **Current validation policy:** Follow the [live-first source-pilot policy](../../live-first-validation-policy.md). It supersedes any broader offline-suite prerequisite below: run only the minimum launch gate, inspect failures on the real owned page, patch technical defects immediately, and retest live after minimal changed-path checks.
+
+
 **Status:** source-free launch plan; no attempt has been run. The controller creates the initial campaign and manifest at runtime. This plan is diagnostic-only and does not authorize screening, candidate import, a final event, or a native CSV claim.
 
 ## Fixed scope and bounds

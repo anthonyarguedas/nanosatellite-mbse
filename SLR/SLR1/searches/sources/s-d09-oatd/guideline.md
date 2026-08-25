@@ -15,6 +15,9 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: Open Access Theses and Dissertations (OATD)
 
+> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+
+
 > **Draft only — blocked and not approved.** P02 validated a narrow version-2 count-only route, P03 validated one version-3 basic count-only health gate, and P04 reached a transient challenge before advanced-form submission. P04 remains immutable and was not retried. Exactly one source-free, controller-technical successor is prospectively planned under [`p05-execution-plan.md`](p05-execution-plan.md) to passively wait for that challenge under a finite 30-second policy; no successor attempt ID or source operation exists. No pilot authorizes a final search, screening, candidate import, or source-method acceptance.
 
 ## 1. Source boundary and access route

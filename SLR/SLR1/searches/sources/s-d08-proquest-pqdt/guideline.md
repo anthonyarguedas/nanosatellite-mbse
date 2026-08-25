@@ -12,6 +12,9 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: ProQuest Dissertations & Theses Global
 
+> **Live-first validation:** Apply the [current policy](../../live-first-validation-policy.md). Real-page behavior is primary; use only the minimum launch gate before live work, inspect technical failures on the owned page, patch immediately, and retest live after minimal changed-path checks. Broad offline suites are deferred until a working route is being accepted or merged.
+
+
 This is a source-free, diagnostic-only, no-screening, no-import launch bundle for the first diagnostic attempt. It is not an accepted source method and contains no live observation or completed campaign.
 
 ## 1. Source boundary and access route
