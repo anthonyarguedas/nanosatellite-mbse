@@ -22,7 +22,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-25T11:11:14-04:00",
+  "updated_at": "2026-08-25T13:21:39-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -40,10 +40,10 @@
   },
   "controller_authorization": {
     "technical_corrective_attempts_authorized": true,
-    "maximum_additional_attempts": 3,
+    "maximum_additional_attempts": 4,
     "maximum_source_operations_per_attempt": 7,
-    "rationale": "Three lifetime technical allocations are finite: P02 and P03 consumed two; only P04 remains. P02 historically used seven operations, while D-TECH-NEXT-P04 caps P04 at three including at most two finite busy-recovery reissues.",
-    "maximum_technical_corrective_attempts": 3,
+    "rationale": "P01-P04 are immutable historical technical attempts. Exactly one additional controller-technical successor is prospectively authorized for the demonstrated transient-challenge handling defect; its own decision caps it at one native diagnostic plus at most two existing same-page busy reissues. Passive challenge polls are observations, not source-operation reissues.",
+    "maximum_technical_corrective_attempts": 4,
     "maximum_methodological_revision_attempts": 0
   },
   "attempts": [
@@ -857,6 +857,23 @@
       "rationale": "One P04 is controller-authorized without human approval: run the corrected advanced-form diagnostic once and, only when a positively identified busy state is reached, exercise the already-approved finite recovery within a maximum of three source operations.",
       "maximum_source_operations": 3,
       "decided_at": "2026-08-24T16:13:25-04:00"
+    },
+    {
+      "decision_id": "D-TECH-NEXT-P05",
+      "attempt_id": null,
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-ADVANCED-FORM",
+        "G-BUSY-RECOVERY"
+      ],
+      "rationale": "Exactly one technical successor is authorized without a new human methodological decision: retain one owned page, passively poll a transient challenge for at most 30 seconds at a fixed cadence, then continue the original single native submission only if the canonical advanced form appears. Challenge polls never consume a source-operation or busy-reissue slot; persistent or access/CAPTCHA transitions fail null with no retry. The existing bounded post-submit busy policy remains at most two same-page reissues.",
+      "maximum_source_operations": 3,
+      "decided_at": "2026-08-25T13:21:39-04:00"
     }
   ],
   "cancellation": null,

@@ -105,6 +105,20 @@ def unknown_state() -> dict:
     return post_state(route=False, readback=False)
 
 
+def form_state(source_state: str | None) -> dict:
+    return {
+        "source_state": source_state,
+        "canonical_form_count": 1 if source_state is None else 0,
+        "form_index": 0 if source_state is None else -1,
+        "method_get": source_state is None,
+        "box1_count": 1 if source_state is None else 0,
+        "field1_count": 1 if source_state is None else 0,
+        "matching_field_option_count": 1 if source_state is None else 0,
+        "matching_field_value": "title" if source_state is None else None,
+        "visible_native_submit_count": 1 if source_state is None else 0,
+    }
+
+
 def busy_state(
     *, route: bool = True, identity: bool = True, readback: bool = True
 ) -> dict:
@@ -492,6 +506,9 @@ class OATDPostClickStateMachineTests(unittest.TestCase):
     def test_syntax_access_challenge_and_unobserved_timeout_are_distinct(self):
         syntax, _ = self.run_wait(StatePage([post_state(syntax=True)]))
         access, _ = self.run_wait(StatePage([post_state(access=True)]))
+        challenge_access, _ = self.run_wait(
+            StatePage([post_state(challenge=True, access=True)])
+        )
         challenge, _ = self.run_wait(
             StatePage(
                 [post_state(challenge=True)], fallback=post_state(challenge=True)
@@ -501,6 +518,9 @@ class OATDPostClickStateMachineTests(unittest.TestCase):
         timeout, _ = self.run_wait(StatePage([], fallback=unknown_state()), timeout=0.2)
         self.assertEqual(syntax.classification, "syntax_after_submission")
         self.assertEqual(access.classification, "access_after_submission")
+        self.assertEqual(
+            challenge_access.classification, "access_after_submission"
+        )
         self.assertEqual(challenge.classification, "challenge_after_submission")
         self.assertEqual(timeout.classification, "submission_not_observed_timeout")
 
@@ -508,6 +528,107 @@ class OATDPostClickStateMachineTests(unittest.TestCase):
         page = StatePage([busy_state(), post_state(challenge=True), result_state(2)])
         outcome, _ = self.run_wait(page)
         self.assertEqual(outcome.classification, "result_observed")
+        self.assertEqual(page.goto_calls, [])
+
+
+class OATDChallengeWaitTests(unittest.TestCase):
+    def run_wait(self, page, *, maximum=1.0, interval=0.2, deadline=None):
+        clock = FakeClock()
+        outcome = asyncio.run(
+            oatd.wait_for_challenge_clear(
+                page,
+                field_label="Title",
+                timeout_seconds=maximum,
+                poll_interval_seconds=interval,
+                clock=clock,
+                sleeper=clock.sleep,
+                deadline=deadline,
+                initial_inspection=valid_inspection("challenge"),
+            )
+        )
+        return outcome, clock
+
+    def test_challenge_clears_passively_then_returns_canonical_form(self):
+        page = StatePage([form_state(None)])
+        outcome, clock = self.run_wait(page)
+        self.assertIsNone(outcome.classification)
+        self.assertEqual(outcome.inspection.source_state, None)
+        self.assertEqual(outcome.polls, 1)
+        self.assertEqual(outcome.waited_seconds, 0.2)
+        self.assertEqual(clock.sleeps, [0.2])
+        self.assertEqual(page.goto_calls, [])
+
+    def test_persistent_challenge_expires_with_null_safe_terminal_state(self):
+        page = StatePage([form_state("challenge")], fallback=form_state("challenge"))
+        outcome, clock = self.run_wait(page, maximum=0.5)
+        self.assertEqual(outcome.classification, "challenge_before_submission")
+        self.assertIsNone(outcome.inspection)
+        self.assertEqual(outcome.waited_seconds, 0.5)
+        self.assertEqual(clock.value, 0.5)
+        self.assertEqual(page.goto_calls, [])
+
+    def test_challenge_to_access_transition_stops_without_submission(self):
+        page = StatePage([form_state("access")])
+        outcome, _ = self.run_wait(page)
+        self.assertEqual(outcome.classification, "access_before_submission")
+        self.assertIsNone(outcome.inspection)
+        self.assertEqual(page.goto_calls, [])
+        for terminal_state in ("captcha", "login", "verification"):
+            with self.subTest(terminal_state=terminal_state):
+                projected = oatd.inspect_form_payload(
+                    {"source_state": terminal_state}
+                )
+                self.assertEqual(projected.source_state, "access")
+
+    def test_canonical_form_does_not_submit_before_the_passive_poll(self):
+        session = LeasePlaywright()
+        with tempfile.TemporaryDirectory() as directory:
+            receipt_path = Path(directory) / "receipt.json"
+            fake_clock = FakeClock()
+            inspect = mock.AsyncMock(
+                side_effect=[valid_inspection("challenge"), valid_inspection()]
+            )
+            prepare = mock.AsyncMock(return_value=valid_prepared())
+            post_click = mock.AsyncMock(
+                return_value=oatd.PostClickOutcome("result_observed", 5, 1, 0, 0)
+            )
+            with (
+                mock.patch.object(oatd, "inspect_advanced_form", new=inspect),
+                mock.patch.object(
+                    oatd, "prepare_native_submission", new=prepare
+                ),
+                mock.patch.object(
+                    oatd, "wait_for_post_click_state", new=post_click
+                ),
+            ):
+                status, receipt = asyncio.run(
+                    oatd.run_probe(
+                        config(receipt_path.parent),
+                        playwright_factory=lambda: session,
+                        clock=fake_clock,
+                        sleeper=fake_clock.sleep,
+                    )
+                )
+        self.assertEqual(status, 0)
+        prepare.assert_awaited_once()
+        post_click.assert_awaited_once()
+        self.assertEqual(inspect.await_count, 2)
+        self.assertEqual(receipt["submission"]["challenge_wait_polls"], 1)
+        self.assertEqual(receipt["submission"]["post_click_polls"], 1)
+        self.assertEqual(receipt["submission"]["busy_retries_attempted"], 0)
+        self.assertTrue(receipt["submission"]["native_submit_clicked"])
+        self.assertEqual(len(session.context.created.goto_calls), 1)
+
+    def test_challenge_deadline_is_shared_and_not_restarted(self):
+        page = StatePage(
+            [form_state("challenge"), form_state(None)],
+            fallback=form_state("challenge"),
+        )
+        outcome, clock = self.run_wait(page, maximum=30.0, interval=0.2, deadline=0.25)
+        self.assertEqual(outcome.classification, "challenge_before_submission")
+        self.assertEqual(outcome.polls, 1)
+        self.assertEqual(outcome.waited_seconds, 0.25)
+        self.assertEqual(clock.value, 0.25)
         self.assertEqual(page.goto_calls, [])
 
 

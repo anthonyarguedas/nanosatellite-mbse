@@ -6,10 +6,11 @@
 """One owned-page OATD advanced-form diagnostic.
 
 The probe is intentionally narrower than a search adapter.  It attaches only
-through an explicit loopback CDP endpoint, creates one sibling page, submits
-one normal nonblank advanced GET form, and retains only a safe aggregate
-receipt.  It never visits record/detail/full-text routes, serializes browser
-URLs or target IDs, or interacts with access controls.
+through an explicit loopback CDP endpoint, creates one sibling page, passively
+waits through one finite transient challenge window when needed, submits one
+normal nonblank advanced GET form, and retains only a safe aggregate receipt.
+It never visits record/detail/full-text routes, serializes browser URLs or
+target IDs, or interacts with access controls.
 
 Source action is opt-in with ``--execute``.  This makes the default CLI path
 safe for offline validation and for tests run by a browser-lease controller.
@@ -43,6 +44,12 @@ DEFAULT_BUSY_RETRY_DELAY_SECONDS = 30.0
 MAX_BUSY_RETRIES = 5
 MIN_BUSY_RETRY_DELAY_SECONDS = 1.0
 MAX_BUSY_RETRY_DELAY_SECONDS = 3_600.0
+# A challenge is given one finite, passive-only window before the one native
+# submission.  This is deliberately separate from the post-submit busy
+# reissue budget: challenge polls never consume a source-operation slot.
+DEFAULT_CHALLENGE_WAIT_SECONDS = 30.0
+DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS = 0.2
+MAX_CHALLENGE_WAIT_SECONDS = 30.0
 CLEANUP_TIMEOUT_SECONDS = 3.0
 CLEANUP_POLL_INTERVAL_SECONDS = 0.05
 MAX_QUERY_CHARACTERS = 50_000
@@ -171,6 +178,8 @@ class ProbeConfig:
     busy_retries: int
     busy_retry_delay_seconds: float
     output_path: Path
+    challenge_wait_seconds: float = DEFAULT_CHALLENGE_WAIT_SECONDS
+    challenge_poll_interval_seconds: float = DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS
 
 
 @dataclass
@@ -203,6 +212,16 @@ class PreparedSubmission:
     retry_parameters: tuple[tuple[str, str], ...]
     visible_native_submit_count: int
     pre_click_safety: PreClickSafety
+
+
+@dataclass(frozen=True)
+class ChallengeWaitOutcome:
+    """Passive challenge observation before the single native submission."""
+
+    inspection: FormInspection | None
+    classification: str | None
+    polls: int
+    waited_seconds: float
 
 
 @dataclass(frozen=True)
@@ -334,9 +353,12 @@ ADVANCED_FORM_INSPECTION_SCRIPT = r"""
     ));
   const busyPattern = /^(?:🟢\s*)?(?:server too busy(?:\s*[-:,.]\s*please slow down)?|please slow down)[.!]?$/i;
   const busy = busyPattern.test(errors) || (!sourceTitle && busyPattern.test(title));
-  const access = /access denied|forbidden|captcha|enable javascript and cookies/i.test(errors);
+  const access = /access denied|forbidden|captcha|enable javascript and cookies|log\s*in|sign\s*in|authentication required|verification required/i.test(errors) ||
+    (!sourceTitle && /captcha|log\s*in|sign\s*in|authentication required|verification required/i.test(title));
   const syntaxError = /syntax|could not parse|invalid query|search error/i.test(errors);
-  const sourceState = challenge ? "challenge" : busy ? "busy" : access ? "access" :
+  // Access/CAPTCHA wins over the challenge marker: a transition to an
+  // access-controlled state is terminal and must not receive more waiting.
+  const sourceState = access ? "access" : challenge ? "challenge" : busy ? "busy" :
     syntaxError ? "syntax" : null;
   const forms = Array.from(document.forms);
   const canonical = forms.filter(form => {
@@ -711,7 +733,8 @@ POST_CLICK_STATE_SCRIPT = r"""
     ));
   const busyPattern = /^(?:🟢\s*)?(?:server too busy(?:\s*[-:,.]\s*please slow down)?|please slow down)[.!]?$/i;
   const busy = busyPattern.test(errors) || (!sourceTitle && busyPattern.test(title));
-  const access = /access denied|forbidden|captcha|enable javascript and cookies/i.test(errors);
+  const access = /access denied|forbidden|captcha|enable javascript and cookies|log\s*in|sign\s*in|authentication required|verification required/i.test(errors) ||
+    (!sourceTitle && /captcha|log\s*in|sign\s*in|authentication required|verification required/i.test(title));
   const syntaxError = /syntax|could not parse|invalid query|search error/i.test(errors);
   const canonicalRoute = (__CANONICAL_ADVANCED_ROUTE__)(window.location.href);
   const forms = Array.from(document.forms).filter(form => {
@@ -813,6 +836,23 @@ def _validate_busy_policy(retries: Any, delay: Any) -> tuple[int, float]:
     return retries, parsed_delay
 
 
+def _validate_challenge_wait_policy(wait: Any, interval: Any) -> tuple[float, float]:
+    """Validate the finite passive-only challenge policy."""
+    parsed_wait = _finite_positive(wait, "--challenge-wait-seconds")
+    if parsed_wait > MAX_CHALLENGE_WAIT_SECONDS:
+        raise InputValidationError(
+            "--challenge-wait-seconds exceeds the finite safe challenge bound"
+        )
+    parsed_interval = _finite_positive(
+        interval, "--challenge-poll-interval-seconds"
+    )
+    if parsed_interval > parsed_wait:
+        raise InputValidationError(
+            "--challenge-poll-interval-seconds cannot exceed --challenge-wait-seconds"
+        )
+    return parsed_wait, parsed_interval
+
+
 def validate_output_path(value: str) -> Path:
     """Validate a prospective create-only destination before atomic reservation."""
     if not compact(value):
@@ -884,6 +924,9 @@ def validate_runtime_config(config: Any) -> ProbeConfig:
     retries, retry_delay = _validate_busy_policy(
         config.busy_retries, config.busy_retry_delay_seconds
     )
+    challenge_wait, challenge_interval = _validate_challenge_wait_policy(
+        config.challenge_wait_seconds, config.challenge_poll_interval_seconds
+    )
     return ProbeConfig(
         execute=config.execute,
         cdp_url=validate_loopback_cdp_endpoint(config.cdp_url),
@@ -896,6 +939,8 @@ def validate_runtime_config(config: Any) -> ProbeConfig:
         busy_retries=retries,
         busy_retry_delay_seconds=retry_delay,
         output_path=validate_output_path(str(config.output_path)),
+        challenge_wait_seconds=challenge_wait,
+        challenge_poll_interval_seconds=challenge_interval,
     )
 
 
@@ -944,6 +989,8 @@ def inspect_form_payload(payload: Any) -> FormInspection:
     if not isinstance(payload, Mapping):
         raise ProbeAbort("advanced_form_projection_failed")
     source_state = payload.get("source_state")
+    if source_state in {"captcha", "login", "login_required", "verification"}:
+        source_state = "access"
     if source_state not in {None, "challenge", "busy", "access", "syntax"}:
         raise ProbeAbort("advanced_form_projection_failed")
     field_value = payload.get("matching_field_value")
@@ -1246,6 +1293,114 @@ async def _sleep_to_deadline(
     return clock() < deadline
 
 
+async def wait_for_challenge_clear(
+    page: Any,
+    *,
+    field_label: str,
+    timeout_seconds: float = DEFAULT_CHALLENGE_WAIT_SECONDS,
+    poll_interval_seconds: float = DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+    deadline: float | None = None,
+    initial_inspection: FormInspection | None = None,
+) -> ChallengeWaitOutcome:
+    """Passively wait for one transient challenge on the same owned page.
+
+    The helper performs DOM projections only.  It never clicks, reloads,
+    navigates, submits, or invokes an access-control action.  Its challenge
+    budget is separate from the busy reissue budget and is consumed only by
+    this fixed-cadence observation window.
+    """
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    wait_seconds, poll_interval = _validate_challenge_wait_policy(
+        timeout_seconds, poll_interval_seconds
+    )
+    started = clock()
+    challenge_deadline = started + wait_seconds
+    if deadline is not None:
+        challenge_deadline = min(challenge_deadline, deadline)
+
+    inspection = initial_inspection
+    if inspection is None:
+        remaining = challenge_deadline - clock()
+        if remaining <= 0:
+            return ChallengeWaitOutcome(
+                inspection=None,
+                classification="challenge_before_submission",
+                polls=0,
+                waited_seconds=max(0.0, clock() - started),
+            )
+        try:
+            inspection = await asyncio.wait_for(
+                inspect_advanced_form(page, field_label), timeout=remaining
+            )
+        except asyncio.TimeoutError:
+            return ChallengeWaitOutcome(
+                inspection=None,
+                classification="challenge_before_submission",
+                polls=0,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+            )
+
+    if inspection.source_state != "challenge":
+        return ChallengeWaitOutcome(
+            inspection=inspection,
+            classification=None,
+            polls=0,
+            waited_seconds=0.0,
+        )
+
+    polls = 0
+    while True:
+        if not await _sleep_to_deadline(
+            challenge_deadline, poll_interval, clock, sleeper
+        ):
+            return ChallengeWaitOutcome(
+                inspection=None,
+                classification="challenge_before_submission",
+                polls=polls,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+            )
+        remaining = challenge_deadline - clock()
+        if remaining <= 0:
+            return ChallengeWaitOutcome(
+                inspection=None,
+                classification="challenge_before_submission",
+                polls=polls,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+            )
+        try:
+            inspection = await asyncio.wait_for(
+                inspect_advanced_form(page, field_label), timeout=remaining
+            )
+        except asyncio.TimeoutError:
+            return ChallengeWaitOutcome(
+                inspection=None,
+                classification="challenge_before_submission",
+                polls=polls,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+            )
+        polls += 1
+        state = inspection.source_state
+        if state == "challenge":
+            continue
+        if state == "access":
+            classification = "access_before_submission"
+        elif state == "busy":
+            classification = "busy_before_submission"
+        elif state == "syntax":
+            classification = "syntax_before_submission"
+        else:
+            classification = None
+        return ChallengeWaitOutcome(
+            inspection=inspection if classification is None else None,
+            classification=classification,
+            polls=polls,
+            waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+        )
+
+
 def _outcome(
     classification: str,
     *,
@@ -1364,11 +1519,6 @@ async def wait_for_post_click_state(
                 budget=busy_budget,
             )
         submission_observed = submission_observed or state.submission_observed
-        if state.challenge:
-            # A challenge is passive-only. It never reaches busy retry.
-            challenge_seen = True
-            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
-            continue
         if state.access:
             return _outcome(
                 "access_after_submission",
@@ -1376,6 +1526,11 @@ async def wait_for_post_click_state(
                 polls=polls,
                 budget=busy_budget,
             )
+        if state.challenge:
+            # A challenge is passive-only. It never reaches busy retry.
+            challenge_seen = True
+            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+            continue
         if state.syntax_error:
             return _outcome(
                 "syntax_after_submission",
@@ -1439,10 +1594,6 @@ async def wait_for_post_click_state(
                 budget=busy_budget,
             )
         submission_observed = submission_observed or rechecked.submission_observed
-        if rechecked.challenge:
-            challenge_seen = True
-            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
-            continue
         if rechecked.access:
             return _outcome(
                 "access_after_submission",
@@ -1450,6 +1601,10 @@ async def wait_for_post_click_state(
                 polls=polls,
                 budget=busy_budget,
             )
+        if rechecked.challenge:
+            challenge_seen = True
+            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+            continue
         if rechecked.syntax_error:
             return _outcome(
                 "syntax_after_submission",
@@ -1739,7 +1894,7 @@ async def cleanup_owned_page(
 def new_receipt(execute: bool) -> dict[str, Any]:
     """Create an output-safe receipt with no caller/source/browser identifiers."""
     return {
-        "schema_version": "slr1-oatd-advanced-form-probe/v2",
+        "schema_version": "slr1-oatd-advanced-form-probe/v3",
         "mode": "source_action" if execute else "dry_run",
         "endpoint_class": "explicit_loopback_cdp",
         "operation": "one_owned_page_one_native_advanced_get_submission",
@@ -1783,11 +1938,21 @@ def new_receipt(execute: bool) -> dict[str, Any]:
             "submitter_no_override": False,
             "pre_click_safety_verified": False,
             "native_submit_clicked": False,
+            "challenge_wait_polls": 0,
+            "challenge_wait_seconds": 0.0,
+            "challenge_wait_outcome": "not_used",
             "post_click_polls": 0,
             "busy_recovery_attempts": 0,
             "busy_retries_attempted": 0,
             "busy_retries_completed": 0,
             "busy_retries_performed": 0,
+        },
+        "challenge_wait_policy": {
+            "maximum_seconds": DEFAULT_CHALLENGE_WAIT_SECONDS,
+            "poll_interval_seconds": DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS,
+            "polls": 0,
+            "waited_seconds": 0.0,
+            "outcome": "not_used",
         },
         "result": {
             "status": "not_run",
@@ -1837,6 +2002,44 @@ def _set_result(
     }
 
 
+def _record_form_inspection(receipt: dict[str, Any], inspection: FormInspection) -> None:
+    """Copy only fixed form-count facts into the safe receipt."""
+    submission = receipt["submission"]
+    submission["canonical_form_count"] = inspection.canonical_form_count
+    submission["canonical_get_form"] = bool(
+        inspection.canonical_form_count == 1 and inspection.method_get
+    )
+    submission["box1_count"] = inspection.box1_count
+    submission["field1_count"] = inspection.field1_count
+    submission["exact_field_mapping"] = bool(
+        inspection.matching_field_option_count == 1
+        and inspection.field_value is not None
+    )
+    submission["visible_native_submit_count"] = (
+        inspection.visible_native_submit_count
+    )
+
+
+def _record_challenge_wait(
+    receipt: dict[str, Any],
+    outcome: ChallengeWaitOutcome,
+    *,
+    maximum_seconds: float,
+    poll_interval_seconds: float,
+) -> None:
+    """Keep passive challenge polls distinct from busy source reissues."""
+    policy = receipt["challenge_wait_policy"]
+    policy["maximum_seconds"] = maximum_seconds
+    policy["poll_interval_seconds"] = poll_interval_seconds
+    policy["polls"] = outcome.polls
+    policy["waited_seconds"] = outcome.waited_seconds
+    policy["outcome"] = outcome.classification or "cleared"
+    submission = receipt["submission"]
+    submission["challenge_wait_polls"] = outcome.polls
+    submission["challenge_wait_seconds"] = outcome.waited_seconds
+    submission["challenge_wait_outcome"] = outcome.classification or "cleared"
+
+
 async def run_probe(
     config: ProbeConfig,
     *,
@@ -1854,6 +2057,14 @@ async def run_probe(
         return 1, receipt
 
     receipt = new_receipt(config.execute)
+    # Record the prospective policy even when the page is not challenged; this
+    # makes a passive wait auditable without conflating it with busy reissues.
+    receipt["challenge_wait_policy"]["maximum_seconds"] = (
+        config.challenge_wait_seconds
+    )
+    receipt["challenge_wait_policy"]["poll_interval_seconds"] = (
+        config.challenge_poll_interval_seconds
+    )
     try:
         # Claim the final name before importing or constructing Playwright so a
         # concurrent winner prevents every source action, not merely the write.
@@ -1969,35 +2180,48 @@ async def run_probe(
                             wait_until="domcontentloaded",
                             timeout=_milliseconds(config.timeout_seconds),
                         )
+                        # The challenge wait, native click, and all post-click
+                        # work share one absolute operation deadline.  A
+                        # cleared challenge therefore cannot restart the
+                        # submission budget.
+                        submission_deadline = clock() + config.timeout_seconds
                         inspection = await inspect_advanced_form(
                             owned_page, config.field_label
                         )
                         submission = receipt["submission"]
-                        submission["canonical_form_count"] = (
-                            inspection.canonical_form_count
-                        )
-                        submission["canonical_get_form"] = (
-                            inspection.canonical_form_count == 1
-                            and inspection.method_get
-                        )
-                        submission["box1_count"] = inspection.box1_count
-                        submission["field1_count"] = inspection.field1_count
-                        submission["exact_field_mapping"] = (
-                            inspection.matching_field_option_count == 1
-                            and inspection.field_value is not None
-                        )
-                        submission["visible_native_submit_count"] = (
-                            inspection.visible_native_submit_count
-                        )
+                        _record_form_inspection(receipt, inspection)
+                        if inspection.source_state == "challenge":
+                            challenge_wait = await wait_for_challenge_clear(
+                                owned_page,
+                                field_label=config.field_label,
+                                timeout_seconds=config.challenge_wait_seconds,
+                                poll_interval_seconds=(
+                                    config.challenge_poll_interval_seconds
+                                ),
+                                clock=clock,
+                                sleeper=sleeper,
+                                deadline=submission_deadline,
+                                initial_inspection=inspection,
+                            )
+                            _record_challenge_wait(
+                                receipt,
+                                challenge_wait,
+                                maximum_seconds=config.challenge_wait_seconds,
+                                poll_interval_seconds=(
+                                    config.challenge_poll_interval_seconds
+                                ),
+                            )
+                            if challenge_wait.classification is not None:
+                                raise ProbeAbort(challenge_wait.classification)
+                            if challenge_wait.inspection is None:
+                                raise ProbeAbort("challenge_before_submission")
+                            inspection = challenge_wait.inspection
+                            _record_form_inspection(receipt, inspection)
+
                         pre_submit_abort = _pre_submit_abort(inspection)
                         if pre_submit_abort is not None:
                             raise ProbeAbort(pre_submit_abort)
 
-                        # The native click and all post-click work share one
-                        # deadline.  In particular, a click that hangs while a
-                        # navigation is pending cannot start a fresh polling
-                        # window or skip the live-cleanup finally block.
-                        submission_deadline = clock() + config.timeout_seconds
                         remaining = submission_deadline - clock()
                         if remaining <= 0:
                             raise ProbeAbort("native_submit_interaction_failed")
@@ -2196,6 +2420,18 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
         type=float,
         default=DEFAULT_BUSY_RETRY_DELAY_SECONDS,
     )
+    parser.add_argument(
+        "--challenge-wait-seconds",
+        type=float,
+        default=DEFAULT_CHALLENGE_WAIT_SECONDS,
+        help="finite passive challenge wait cap (maximum 30 seconds)",
+    )
+    parser.add_argument(
+        "--challenge-poll-interval-seconds",
+        type=float,
+        default=DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS,
+        help="fixed passive challenge poll cadence",
+    )
     parser.add_argument("--output-path", required=True)
     args = parser.parse_args(argv)
     try:
@@ -2210,6 +2446,9 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
         retries, retry_delay = _validate_busy_policy(
             args.busy_retries, args.busy_retry_delay_seconds
         )
+        challenge_wait, challenge_interval = _validate_challenge_wait_policy(
+            args.challenge_wait_seconds, args.challenge_poll_interval_seconds
+        )
         return ProbeConfig(
             execute=args.execute,
             cdp_url=validate_loopback_cdp_endpoint(args.cdp_url),
@@ -2222,6 +2461,8 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
             busy_retries=retries,
             busy_retry_delay_seconds=retry_delay,
             output_path=validate_output_path(args.output_path),
+            challenge_wait_seconds=challenge_wait,
+            challenge_poll_interval_seconds=challenge_interval,
         )
     except InputValidationError as error:
         parser.error(str(error))

@@ -1,10 +1,14 @@
 # P04 execution plan — OATD corrected advanced-form diagnostic
 
-**Status:** source-free launch plan; no P04 source operation has been run.  This is
-`D-TECH-NEXT-P04`, a controller-authorized technical corrective attempt under
-campaign `S-D09-C01-20260824T161325-0400`.  It does not change the protocol,
-concept dictionary, translation, field boundary, limits, recall, completeness
-rule, or PRISMA accounting.
+> **Retired; do not execute.** This was the pre-live launch plan for immutable
+> P04 `S-D09-P04-20260825T110122-0400`, which has now completed and is recorded
+> as challenge-blocked. It must not be reused or treated as a retry. The one
+> prospective successor is specified in [`p05-execution-plan.md`](p05-execution-plan.md).
+
+The remaining text below is retained as historical P04 scope and must not be
+used to launch source work. It does not change the protocol, concept
+dictionary, translation, field boundary, limits, recall, completeness rule,
+or PRISMA accounting.
 
 ## Fixed scope and carried gates
 
