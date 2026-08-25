@@ -1,0 +1,223 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D13-P06-20260825T141120-0400",
+  "task_id": "S-D13",
+  "source_id": "ntrs",
+  "method_type": "direct",
+  "status": "failed",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-25T14:11:20-04:00",
+  "ended_at": "2026-08-25T14:16:48-04:00",
+  "protocol_commit": "c424f3db8f0d9546d7b5583730a4fe74c14e62bc",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "openai-codex/gpt-5.6-luna",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "NASA Technical Reports Server normal rendered public search UI",
+    "url": "https://ntrs.nasa.gov/search",
+    "access_route": "Canonical shared CfT lease client through the normal rendered first-party UI; anonymous",
+    "authenticated": false,
+    "database_or_collection": "full public technical-report database required by protocol",
+    "platform": "NASA Technical Reports Server",
+    "timezone": "America/New_York"
+  },
+  "executions": [
+    {
+      "execution_id": "NTRS-P06-SOURCE-HEALTH",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "One mandatory record-free rendered NTRS source-health precheck",
+      "started_at": "2026-08-25T14:16:38-04:00",
+      "status": "success",
+      "exact_query_or_operation": "One navigation to the public NTRS root through one adapter-owned page; no query or records.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "normal_rendered_ui_only": true,
+        "adapter_owned_page_only": true,
+        "one_navigation": true,
+        "timeout_seconds": 30,
+        "stabilization_interval_seconds": 0.2,
+        "automatic_retries": 0,
+        "record_free": true
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches-d13-ntrs/S-D13-P06-20260825T141120-0400/op-01-source-health.json",
+        "source-health-gate.json"
+      ],
+      "notes": "Operational prerequisite, not a search result; health passed and operation 2 was authorized."
+    },
+    {
+      "execution_id": "NTRS-P06-RENDERED-G01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "One conditional exact minimal rendered count-only classification",
+      "started_at": "2026-08-25T14:16:45-04:00",
+      "status": "failed",
+      "exact_query_or_operation": "Rendered NTRS UI minimal query nanosatellite; limit=1; max-pages=1; count-only; skip full abstracts; timeout=90; zero page/detail delays; no date.",
+      "query_file": "pilots/S-D13-P03-20260824T125840-0400/queries/G01-minimal-nanosatellite.txt",
+      "fields": [],
+      "controls": {
+        "normal_rendered_ui_only": true,
+        "adapter_owned_page_only": true,
+        "count_only": true,
+        "skip_full_abstracts": true,
+        "date_filter_sent": false,
+        "limit": 1,
+        "max_pages": 1,
+        "timeout_seconds": 90,
+        "page_delay_seconds": 0,
+        "detail_delay_seconds": 0,
+        "automatic_retries": 0,
+        "fallback": false,
+        "api": false,
+        "failure_stage": "ordering"
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches-d13-ntrs/S-D13-P06-20260825T141120-0400/op-02-rendered-g01.json",
+        "rendered-gate-failure.json",
+        "source-free-diagnosis.json"
+      ],
+      "notes": "Normal 2xx navigation completed, but pre-submit control reconciliation failed before query echo or result evidence; null is a technical failure, not zero."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P06-SOURCE-FREE-GATES",
+      "requirement": "Offline reading, exact input, d872 adapter tests/hashes, CLI checks, infrastructure validation, and output reservations pass before source work.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["preflight.json", "pinned-adapter-offline-validation.json"] ,
+      "notes": "38 adapter tests and 14 health-probe tests passed; no API/fallback guard violation was found."
+    },
+    {
+      "check_id": "P06-SHARED-CFT-PREFLIGHT",
+      "requirement": "Canonical shared CfT health, epoch, profile/process assertion, one anchor, and free lease are verified before live work.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["browser-status-sanitized.json", "preflight.json"],
+      "notes": "Current shared browser was healthy with one protected inert anchor and a free lease."
+    },
+    {
+      "check_id": "P06-SOURCE-HEALTH",
+      "requirement": "One stable record-free source-health precheck passes before the conditional rendered operation.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["source-health-gate.json"],
+      "notes": "One 2xx normal route, source identity, visible search surface, two stable samples, no terminal access state, and verified owned-page cleanup."
+    },
+    {
+      "check_id": "P06-RENDERED-GATE",
+      "requirement": "The conditional rendered count-only operation reaches a reconcilable source result state.",
+      "status": "failed",
+      "basis": "observed",
+      "evidence_paths": ["rendered-gate-failure.json"],
+      "notes": "The d872-pinned adapter stopped at ordering-stage control reconciliation before query echo, total, range, row, ID, or explicit zero."
+    },
+    {
+      "check_id": "P06-IMMEDIATE-DIAGNOSIS",
+      "requirement": "The technical failure is preserved and immediately investigated source-free or through bounded allowlisted postflight state observation without a retry.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["source-free-diagnosis.json", "browser-postflight-sanitized.json"],
+      "notes": "d872 ordering behavior was re-audited with source-free fixtures; postflight browser/lease state was checked and no shared adapter edit or source reissue occurred."
+    },
+    {
+      "check_id": "P06-CLEANUP-LEASE",
+      "requirement": "All owned pages close, the broker anchor remains intact, and the canonical shared lease is released and verified.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["browser-cleanup-receipt.json", "shared-lease-release-receipt.json", "browser-postflight-sanitized.json"],
+      "notes": "The canonical lease receipt reported released and verified-clean; no orphan child/group remained."
+    },
+    {
+      "check_id": "P06-POWER-SLEEP",
+      "requirement": "Process-scoped caffeinate, AC power, lid state, and actual Sleep/Wake result are recorded for the live window.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["power-preflight.json", "power-postflight.json"],
+      "notes": "The complete lease command used caffeinate -dims on AC power; no Sleep/Wake transition was observed in the phase window."
+    },
+    {
+      "check_id": "P06-NO-RETRY-STOP",
+      "requirement": "The failed rendered operation is not reissued and no fallback, partition, detail, export, or completeness operation follows it.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["rendered-gate-failure.json", "source-free-diagnosis.json"],
+      "notes": "Exactly two planned live operations occurred; the adapter operation ran once and the phase stopped."
+    },
+    {
+      "check_id": "P06-NO-SCREENING-IMPORT",
+      "requirement": "No screening, candidate import, partial-prefix import, relevance classification, or final event occurs.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["rendered-gate-failure.json", "source-free-diagnosis.json"],
+      "notes": "All retrieved/imported counts are zero and the unobserved source total remains null."
+    }
+  ],
+  "artifacts": [
+    {"path": "pilot-id.txt", "role": "allocated immutable attempt identifier", "sha256": "26dc7c8ab19c7120e599e46f4b126a4c4c79e2eac46ccc2d890b6d8f30ae710c", "access_classification": "metadata_only", "secure_location_reference": null},
+    {"path": "started-at.txt", "role": "attempt allocation timestamp", "sha256": "89ed4f85a12028456ecb09ad34641dd0164dac90315893f8c39ac30cd48719af", "access_classification": "metadata_only", "secure_location_reference": null},
+    {"path": "preflight.json", "role": "source-free preflight and exact-input receipt", "sha256": "634518408d67988cbd7930f890f637cb6e7d9690b862680300949cab6180c509", "access_classification": "public", "secure_location_reference": null},
+    {"path": "browser-status-sanitized.json", "role": "sanitized canonical shared CfT status", "sha256": "ffe3fa768fe205718baebd0e813ebec275616855bf77e73f52b2e0eeb4bd6b0f", "access_classification": "metadata_only", "secure_location_reference": null},
+    {"path": "power-preflight.json", "role": "pre-live power receipt", "sha256": "a266162095ae03c5394e636f718cfec84a4d8037669e3e97946098644158107f", "access_classification": "metadata_only", "secure_location_reference": null},
+    {"path": "power-postflight.json", "role": "live phase power and Sleep/Wake receipt", "sha256": "7aca30953cb3d08d561db54ca239b91563aab000b9cdf92a964ca2769abda890", "access_classification": "metadata_only", "secure_location_reference": null},
+    {"path": "pre-existing-attempt-hashes.json", "role": "prior-attempt immutability snapshot", "sha256": "08db6a3b3e3d069c9770e52539e5c8600b00db7d26d7e1aeffcb3e244e1a1018", "access_classification": "metadata_only", "secure_location_reference": null},
+    {"path": "browser-live-phase-checklist.md", "role": "completed shared-browser phase checklist", "sha256": "3b2e2213ab8d90723372c66712a59ffaa874b78bdfcaded286b6b9af6e8f3b50", "access_classification": "public", "secure_location_reference": null},
+    {"path": "pinned-adapter-commit.txt", "role": "d872f59 adapter commit pin", "sha256": "e4a632e408ae1fe75b0db64572f4591efd5ac0b51e1dfc3e861d4f0157b7db58", "access_classification": "metadata_only", "secure_location_reference": null},
+    {"path": "pinned-adapter-files-sha256.txt", "role": "current adapter/helper/test/domain-note hashes", "sha256": "31f4e4b7e3a25d51c69daac858555390db3c3683a050db481fa1a25970794e81", "access_classification": "metadata_only", "secure_location_reference": null},
+    {"path": "pinned-adapter-offline-validation.json", "role": "d872 source-free tests and static guard receipt", "sha256": "a6e8fd5159d8e6e67721a03c9fe6aec19ca4acef69510c41370ef68cf1440272", "access_classification": "public", "secure_location_reference": null},
+    {"path": "p06-live-child.sh", "role": "attached bounded two-operation child command", "sha256": "c702fd1c52e28c230e3351bfdee7533d921cf01e20259f45b0157c8a77a94f00", "access_classification": "public", "secure_location_reference": null},
+    {"path": "source-health-gate.json", "role": "record-free source-health summary", "sha256": "28d5084092d96a0229b43810d7817481af54368a7be1c5d64965cdcd5c7c4448", "access_classification": "public", "secure_location_reference": null},
+    {"path": "rendered-gate-failure.json", "role": "record-free rendered failure summary", "sha256": "bdffc80186779067460e6143e22afb56d31eacd58da7f0e650a23a19aef42d96", "access_classification": "public", "secure_location_reference": null},
+    {"path": "source-free-diagnosis.json", "role": "immediate source-free technical diagnosis and repair disposition", "sha256": "ac5a8f6a9d55a304154965231130ae077bafbc34fdc4d9b8b40deb88fbf4895d", "access_classification": "public", "secure_location_reference": null},
+    {"path": "observations.md", "role": "diagnostic observations and controller handoff", "sha256": "f993bce77ab3c33347ffbbd3daaab73bb0c2b1ec35672afbeb970b47cb250984", "access_classification": "public", "secure_location_reference": null},
+    {"path": "browser-cleanup-receipt.json", "role": "sanitized owned-page cleanup receipt", "sha256": "7c48fc23e1582f4738f3aadee5528311344497cae7a99570f4a6235412a4894c", "access_classification": "public", "secure_location_reference": null},
+    {"path": "shared-lease-release-receipt.json", "role": "sanitized canonical lease release receipt", "sha256": "9807455a270d88a5f1b88116dc363774300ef660b555085c744d3ef1cd0dafe1", "access_classification": "public", "secure_location_reference": null},
+    {"path": "browser-postflight-sanitized.json", "role": "postflight anchor/version/cleanup receipt", "sha256": "e5455d7c5c6fc9d0864bb74d90d2a6276cffba666127fb959d3c906fc9b60fe3", "access_classification": "public", "secure_location_reference": null},
+    {"path": ".searches-d13-ntrs/S-D13-P06-20260825T141120-0400/op-01-source-health.json", "role": "restricted record-free source-health receipt", "sha256": "dec80927001d9c392bda327fa41153c10c1d4e2a64af08ffee174af6d9da6df0", "access_classification": "restricted", "secure_location_reference": "restricted attempt namespace"},
+    {"path": ".searches-d13-ntrs/S-D13-P06-20260825T141120-0400/op-02-rendered-g01.json", "role": "restricted record-free rendered failure artifact", "sha256": "a2562022828050aa3e0989a534d320a6635c559992db9ab0b2963e2012a09b26", "access_classification": "restricted", "secure_location_reference": "restricted attempt namespace"},
+    {"path": ".searches-d13-ntrs/S-D13-P06-20260825T141120-0400/browser-lease-receipt.json", "role": "restricted authoritative canonical lease receipt", "sha256": "e2b4e268e0ef1c03d7d2df952d2aed3a926072e7ba290eb4a779f79820f1277c", "access_classification": "restricted", "secure_location_reference": "restricted attempt namespace"}
+  ],
+  "campaign": {
+    "campaign_id": "S-D13-C01-20260824T161325-0400",
+    "attempt_id": "S-D13-P06-20260825T141120-0400"
+  },
+  "attempt_terminal": {
+    "outcome": "failed",
+    "category": "technical",
+    "ended_at": "2026-08-25T14:16:48-04:00",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "browser_backed": true,
+    "cleanup_receipt": {
+      "path": "pilots/S-D13-P06-20260825T141120-0400/browser-cleanup-receipt.json",
+      "sha256": "7c48fc23e1582f4738f3aadee5528311344497cae7a99570f4a6235412a4894c"
+    },
+    "lease_receipt": {
+      "path": "pilots/S-D13-P06-20260825T141120-0400/shared-lease-release-receipt.json",
+      "sha256": "9807455a270d88a5f1b88116dc363774300ef660b555085c744d3ef1cd0dafe1"
+    },
+    "cancelled_by": null,
+    "reason": "The source-health precheck passed, but the one conditional exact rendered nanosatellite count-only operation stopped at ordering-stage control reconciliation before query echo or a reconcilable result state. The failure was preserved with total=null, no retry/fallback, immediate source-free diagnosis, and verified cleanup/release."
+  },
+  "disposition": {
+    "recommendation": "record_source_limitation",
+    "reason": "Normal rendered NTRS health and 2xx navigation were observed, but the d872-pinned adapter did not reach a reconcilable result state at the ordering-stage control gate. No source total or zero is claimed.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Controller: preserve the failed P06 and its source-free diagnosis; no P06 live retry is allowed.",
+      "Review owner: no methodological decision is requested; query/source/order/identity/completeness semantics remain unchanged."
+    ]
+  }
+}

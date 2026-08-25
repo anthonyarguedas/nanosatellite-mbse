@@ -1,0 +1,70 @@
+{
+  "schema_version": "slr1-ntrs-p06-source-free-diagnosis/v1",
+  "attempt_id": "S-D13-P06-20260825T141120-0400",
+  "claim_basis": "observed_source_free_and_observed_live_safe_metadata",
+  "terminal_failure": {
+    "operation_id": "NTRS-P06-RENDERED-G01",
+    "category": "technical",
+    "error_type": "NTRSProtocolError",
+    "reported_error_stage": "ordering",
+    "source_total": null,
+    "records_retrieved": 0,
+    "query_echo_observed": false,
+    "retry_or_fallback": false
+  },
+  "immediate_investigation": {
+    "health_gate": "passed",
+    "postflight_allowlisted_browser_status": {
+      "healthy": true,
+      "one_inert_anchor": true,
+      "lease_released": true,
+      "orphan_child_or_group_alive": false,
+      "browser_epoch_unchanged": true
+    },
+    "adapter_commit": "d872f59f5f20913fbd0ef4de16ea2ab79a6bc883",
+    "adapter_hash": "3df1fc4fb9ba65e5ea9e17005a020135f5397fcc96e2146de01b8305f7af6d5d",
+    "focused_tests": {
+      "test_search_ntrs.py": 38,
+      "source_health_tests": 14,
+      "status": "passed_after_live_failure"
+    },
+    "static_guard": {
+      "no_direct_ntrs_api_transport": true,
+      "no_page_side_fetch_or_xhr_fallback": true,
+      "rendered_ui_only": true
+    }
+  },
+  "source_free_ordering_projection_audit": {
+    "pre_submit_absent_ordering": "passes with ordering_verified=false",
+    "pre_submit_framework_duplicate_default_and_placeholder": "passes and projects Relevance",
+    "pre_submit_late_Relevance": "passes and projects Relevance",
+    "pre_submit_nondefault_Newest": "fails closed as required",
+    "post_submit_missing_ordering": "fails closed as required",
+    "post_submit_default_or_Relevance": "projects Relevance",
+    "post_submit_conflicting_or_nondefault": "fails closed as required"
+  },
+  "observability_finding": {
+    "statement": "The current start_ntrs_rendered_search wrapper labels every parse_visible_controls failure as error_stage=ordering, although that parser also validates page-size controls.",
+    "source_free_reproduction": "A synthetic duplicate page-size payload raises NTRSProtocolError('NTRS exposed ambiguous visible page-size controls') before the wrapper assigns ERROR_STAGE_ORDERING.",
+    "consequence": "The safe live artifact proves a pre-submit control-reconciliation failure but cannot distinguish an ordering-value rejection from a page-size ambiguity; no raw DOM payload is retained by contract.",
+    "semantic_effect": "none"
+  },
+  "repair_disposition": {
+    "behavior_preserving_repair_verified": "d872f59 ordering projection and post-submit Relevance/default guard are present and its focused tests pass",
+    "additional_live_code_defect_demonstrated": false,
+    "additional_shared_patch_applied": false,
+    "shared_agent_tools_edited": false,
+    "query_or_order_semantics_weakened": false,
+    "failed_source_operation_reissued": false,
+    "bounded_state_observation_after_cleanup": true,
+    "next_action": "Preserve P06 as a narrow technical failure with null total; do not retry or run another source operation in P06. A future corrective scope would need a fresh prospectively authorized attempt and a safe control-state diagnostic if the ordering/page-size distinction is required."
+  },
+  "retention": {
+    "raw_dom_payload_retained": false,
+    "raw_console_retained": false,
+    "partial_prefix_retained": false,
+    "screening_performed": false,
+    "candidate_import_permitted": false,
+    "final_event_created": false
+  }
+}

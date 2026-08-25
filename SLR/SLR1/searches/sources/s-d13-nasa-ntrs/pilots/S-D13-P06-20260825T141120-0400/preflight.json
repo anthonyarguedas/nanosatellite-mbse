@@ -1,0 +1,112 @@
+{
+  "schema_version": "slr1-ntrs-p06-preflight/v1",
+  "attempt_id": "S-D13-P06-20260825T141120-0400",
+  "campaign_id": "S-D13-C01-20260824T161325-0400",
+  "decision_id": "D-TECH-NEXT-P06",
+  "decision_class": "controller_technical",
+  "allocated_at": "2026-08-25T14:11:20-04:00",
+  "recorded_at": "2026-08-25T14:11:20-04:00",
+  "offline_materials": {
+    "status": "verified",
+    "source_pilot_contracts_read": true,
+    "ntrs_packet_campaign_p01_p05_evidence_read": true,
+    "p05_ordering_failure_read": true,
+    "d872_ordering_fix_and_tests_read": true,
+    "durable_ntrs_note_read": true,
+    "semantic_change": false
+  },
+  "immutable_query_check": {
+    "query_file": "pilots/S-D13-P03-20260824T125840-0400/queries/G01-minimal-nanosatellite.txt",
+    "utf8_bytes": 13,
+    "raw_text": "nanosatellite",
+    "sha256": "3fc7d31e9abb58d42acd5c95a9549835545de822d0843e28265c6979b1a466d4",
+    "exact_bytes_assertion": "nanosatellite",
+    "source_filter_sent": false
+  },
+  "implementation": {
+    "agent_tools_commit": "d872f59f5f20913fbd0ef4de16ea2ab79a6bc883",
+    "adapter_files_clean": true,
+    "unrelated_shared_dirty_paths_preserved": true,
+    "no_shared_agent_tools_edit": true,
+    "static_guard": {
+      "rendered_ui_only": true,
+      "no_direct_ntrs_api_transport": true,
+      "no_page_side_fetch_or_xhr": true,
+      "no_fallback": true
+    }
+  },
+  "source_free_checks": [
+    {
+      "check_id": "P06-ADAPTER-TESTS",
+      "command": "uv run --with playwright python3 -m unittest -q tests/test_search_ntrs.py",
+      "status": "passed",
+      "tests": 38
+    },
+    {
+      "check_id": "P06-HEALTH-PROBE-TESTS",
+      "command": "uv run --with playwright python3 -m unittest -q SLR/SLR1/scripts/test_ntrs_source_health_probe.py",
+      "status": "passed",
+      "tests": 14
+    },
+    {
+      "check_id": "P06-ADAPTER-CLI",
+      "command": "uv run search_ntrs.py --help (in the pinned agent-tools academic-search checkout)",
+      "status": "passed"
+    },
+    {
+      "check_id": "P06-HEALTH-CLI",
+      "command": "uv run SLR/SLR1/scripts/ntrs_source_health_probe.py --help",
+      "status": "passed"
+    },
+    {
+      "check_id": "P06-INFRASTRUCTURE",
+      "command": "uv run SLR/SLR1/scripts/validate_search_infrastructure.py --mode pre-final",
+      "status": "passed"
+    },
+    {
+      "check_id": "P06-DIFF-CHECK",
+      "command": "git diff --check",
+      "status": "passed"
+    },
+    {
+      "check_id": "P06-OUTPUT-RESERVATION",
+      "status": "passed",
+      "writer_owned_outputs_precreated": false
+    },
+    {
+      "check_id": "P06-CANONICAL-BROWSER-STATUS",
+      "status": "passed",
+      "evidence": "browser-status-sanitized.json"
+    },
+    {
+      "check_id": "P06-POWER-PREFLIGHT",
+      "status": "passed_for_preflight_only",
+      "evidence": "power-preflight.json"
+    }
+  ],
+  "source_operation_plan": {
+    "predeclared_maximum": 2,
+    "operations": [
+      "one record-free source-health root navigation",
+      "one conditional exact 13-byte nanosatellite rendered count-only operation"
+    ],
+    "conditional_transition": "operation 2 only after a passing operation 1 receipt",
+    "maximum_retries": 0,
+    "same_tab_busy_reissue": false,
+    "fallback": false,
+    "api": false,
+    "date_filter": false,
+    "passive_pacing_seconds": 3,
+    "adapter_limit": 1,
+    "adapter_max_pages": 1,
+    "adapter_timeout_seconds": 90,
+    "adapter_page_delay_seconds": 0,
+    "adapter_detail_delay_seconds": 0,
+    "skip_full_abstracts": true,
+    "count_only": true
+  },
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "candidate_records_imported": 0,
+  "final_event_created": false
+}
