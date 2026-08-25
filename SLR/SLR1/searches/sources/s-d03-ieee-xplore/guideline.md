@@ -3,7 +3,7 @@ task_id: S-D03
 source_id: ieee-xplore
 source_name: IEEE Xplore
 method_type: direct
-status: draft_p05_launchable_controls_and_completeness_blocked_pending_controller_human_review
+status: draft_p05_launchable_controls_and_completeness_technically_blocked
 guideline_version: 0.5.0
 validated_at: null
 protocol_commit: 38ab61287443693ddabdd4bb855d535a4585ae35
@@ -27,7 +27,7 @@ accepted_pilot_ids: []
 - **[observed]** The atomic free-text form is `("All Metadata":"term")`. Field labels around a Boolean group produced native zeros in nonzero comparators, so every Boolean atom is fielded individually and outer Boolean groups are explicit and parenthesized.
 - **[observed]** P02 validated the current individually fielded Boolean, quoted phrase, punctuation, acronym, wildcard, and field-route diagnostics. Every normative term remains quoted; no wildcard is used.
 - **[observed]** P04 ran the minimum predeclared generic `NEAR/6` controls with exact echoes: forward and reverse totals were both 573,342, and grouped and distributed-OR totals were both 670,735. This validates current syntax, unordered reversal equality, and grouped/distributed equality for those generic same-field diagnostics.
-- **[inferred]** `NEAR/6` is a conservative same-field fallback for the protocol's at-most-five-intervening-token pair rule. It cannot lose a qualifying pair under either common endpoint/intervening counting convention, but may admit one extra intervening token. It is broader rather than exactly equivalent and requires human approval before source-method acceptance.
+- **[inferred_and_human_approved]** `NEAR/6` is the accepted conservative same-field fallback for the protocol's at-most-five-intervening-token pair rule. It cannot lose a qualifying pair under either common endpoint/intervening counting convention, but may admit one extra intervening token. The review owner accepted that broader-recall implementation under [`D-METHOD-NEAR6`](human-review.md); it is not claimed as exact equivalence.
 - **[observed]** P02 found searchable Index Terms, Author Keywords, and IEEE Terms fields but did not establish a usable current hierarchy, narrower-term, explosion, scope-note, and mapping route. P04 found no contrary evidence.
 - **[observed]** No controlled-vocabulary descriptor supplement is included. Free-text remains mandatory.
 - **[untested]** Case sensitivity, literal token-boundary semantics beyond P02 diagnostics, stemming/lemmatization/automatic expansion, and a formal source query-length or result cap remain unaccepted.
@@ -37,7 +37,7 @@ accepted_pilot_ids: []
 - **[observed]** `translation-spec.json` and all nine current query files are regenerated from `search-concept-dictionary.json` v4. P04's `translation-algebra-audit.json` found every required term and Boolean tree, exactly one cell per partition, no wildcard, and the required pair grouping.
 - **[observed]** A1, A2, A3, B1, and B2 are byte-unchanged from the P02/P03 field-native draft. BG1, BG2, BC1, and BT2 use `NEAR/6` only in their `G_model`, `G_structure`, C1, and T2 pair rules.
 - **[observed]** P04 count-tested one exact cell for every partition: A1=5, A2=11, A3=4, B1=39, B2=65, BG1=0 (native explicit zero), BG2=8, BC1=23, and BT2=11. These are diagnostic counts only, not a final search or accepted source union.
-- **[inferred]** The pair fallback is protocol-permitted as a broader implementation, but it remains pending human approval. No protocol concept or Boolean schedule changed.
+- **[inferred_and_human_approved]** The pair fallback is accepted as a protocol-permitted broader implementation. No protocol concept or Boolean schedule changed.
 
 ## 4. Controls and common limits
 
@@ -87,7 +87,7 @@ accepted_pilot_ids: []
 ## 10. Remaining limits and protocol impact
 
 - **[observed]** `code_issue=unresolved`: the P04 visible-year control run failed with a safe null `IEEEProtocolError`, but the rights-safe artifact does not distinguish a source control behavior from an adapter invariant. P04 made no adapter change or retry.
-- **[observed]** P04 introduced no protocol semantic change. The `NEAR/6` fallback is an implementation choice allowed by the existing broader-fallback rule, pending human approval.
+- **[observed_and_human_approved]** P04 introduced no protocol semantic change. The review owner subsequently accepted its `NEAR/6` implementation under the existing broader-fallback rule.
 - **[observed]** The IEEE stage of S-C01 remains explicitly excluded and wholly unstarted: no candidate register, B1∪B2 baseline, candidate-family query, deduplication, sampling, inspection, or coding occurred.
 - **[inferred]** S-D03 method work is not complete enough for separate IEEE S-C01 authorization because control and completeness validation remain incomplete and the date-control null needs disposition.
 

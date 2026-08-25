@@ -1522,7 +1522,7 @@ def _validate_decisions(
                 )
                 require(
                     attempt_id is not None,
-                    f"{label} method decision needs methodological attempt",
+                    f"{label} authorized method decision needs its evidence attempt",
                 )
                 require(
                     decided_at is not None,
@@ -2407,14 +2407,31 @@ def _validate_allocations(
             and decision["authorization_status"] == "authorized"
         ):
             attempt = attempts[decision["attempt_id"]]
-            require(
-                decision_citations.get(decision_id) == decision["attempt_id"],
-                f"methodological decision {decision_id} is not cited by its attempt",
-            )
-            require(
-                attempt["allocation"]["attempt_kind"] == "methodological_revision",
-                f"methodological decision {decision_id} must authorize a methodological revision",
-            )
+            attempt_kind = attempt["allocation"]["attempt_kind"]
+            if attempt_kind == "methodological_revision":
+                require(
+                    decision_citations.get(decision_id) == decision["attempt_id"],
+                    f"methodological decision {decision_id} is not cited by its attempt",
+                )
+            else:
+                require(
+                    attempt_kind in {"initial", "technical_corrective"},
+                    f"methodological decision {decision_id} cites an invalid evidence attempt",
+                )
+                require(
+                    decision_citations.get(decision_id) is None,
+                    f"post-observation methodological decision {decision_id} cannot authorize its earlier attempt",
+                )
+                require(
+                    _parse_date_time(
+                        decision["decided_at"], f"decision {decision_id}.decided_at"
+                    )
+                    >= _parse_date_time(
+                        attempt["terminal"]["ended_at"],
+                        f"attempt {decision['attempt_id']}.terminal.ended_at",
+                    ),
+                    f"post-observation methodological decision {decision_id} predates its evidence attempt",
+                )
             for gate_id in decision["affected_gate_ids"]:
                 gate = gates[gate_id]
                 require(
@@ -2423,8 +2440,13 @@ def _validate_allocations(
                 )
                 require(
                     gate["attempt_id"] == decision["attempt_id"],
-                    f"methodological gate {gate_id} must be recorded in its methodological attempt",
+                    f"methodological gate {gate_id} must be recorded in its cited attempt",
                 )
+                if attempt_kind != "methodological_revision":
+                    require(
+                        gate["source_operation_count"] == 0,
+                        f"post-observation methodological decision {decision_id} cannot retroactively authorize source work",
+                    )
 
     for gate_id, gate in gates.items():
         if gate["semantic_impact"]["classification"] != "human_methodological":
@@ -2453,10 +2475,6 @@ def _validate_allocations(
             )
             continue
 
-        require(
-            attempt["allocation"]["attempt_kind"] == "methodological_revision",
-            f"methodological gate {gate_id} cannot be hidden in a technical attempt",
-        )
         matching_decisions = [
             decision
             for decision in decisions.values()
@@ -2469,6 +2487,17 @@ def _validate_allocations(
         require(
             matching_decisions,
             f"methodological gate {gate_id} lacks a human methodological decision and timestamp",
+        )
+        attempt_kind = attempt["allocation"]["attempt_kind"]
+        if attempt_kind in {"initial", "technical_corrective"}:
+            require(
+                gate["source_operation_count"] == 0,
+                f"post-observation methodological gate {gate_id} cannot retroactively authorize source work",
+            )
+            continue
+        require(
+            attempt_kind == "methodological_revision",
+            f"methodological gate {gate_id} is attached to an invalid attempt kind",
         )
 
 

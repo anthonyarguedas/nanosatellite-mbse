@@ -1,12 +1,12 @@
 # Resume plan — S-D03-C01-20260824T161325-0400
 
-**Status:** `methodological_decision_pending`; the outstanding `D-METHOD-NEAR6` choice does **not** block the independent technical P05 below. No new human authorization is required for this technical attempt.
+**Status:** `technically_blocked`; the review owner authorized `D-METHOD-NEAR6` on 2026-08-25. The independent technical P05 below remains prospectively controller-authorized.
 
 ## Carries forward
 
 - `G-FIELD-PARSER` from P02 [`execution-ledger.json`](pilots/S-D03-P02-20260824T105020-0400/execution-ledger.json), SHA-256 `eb4ba30d01078da885fb3f206ea38154cfd02f42965ab090d2eb5379bae5422c`. The year-control diagnosis cannot affect its individually fielded All Metadata/parser evidence.
 - P04 preserves `G-ADAPTER-COUNT`, `G-TRANSLATION-ALGEBRA`, `G-NEAR-SYNTAX`, and all nine diagnostic partition counts; P05 must not rerun those counts or prior field/parser evidence unless the new adapter behavior demonstrates they are affected.
-- `G-NEAR-METHOD` remains a pending human methodological choice, not an approved fallback.
+- `G-NEAR-METHOD` is passed: [`human-review.md`](human-review.md) accepts `NEAR/6` as the conservative broader same-field fallback without claiming exact equivalence.
 
 ## Next immutable attempt
 
@@ -16,4 +16,4 @@
 
 ## Shared browser and acceptance
 
-Every browser phase must hold the global shared CfT lease at `127.0.0.1:9222`, record its receipt, preserve the broker anchor, and close only its owned page. Acceptance still depends on a valid year control, its declared dependent controls/completeness evidence, the separate resolved NEAR/6 methodological decision, and all diagnostic/no-import invariants.
+Every browser phase must hold the global shared CfT lease at `127.0.0.1:9222`, record its receipt, preserve the broker anchor, and close only its owned page. Acceptance still depends on a valid year control, its declared dependent controls/completeness evidence, the resolved NEAR/6 decision, and all diagnostic/no-import invariants.

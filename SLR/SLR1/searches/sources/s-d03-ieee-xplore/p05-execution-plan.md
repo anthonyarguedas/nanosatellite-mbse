@@ -1,10 +1,10 @@
 # P05 execution plan — IEEE Xplore
 
-**Status:** source-free launch bundle for the existing `S-D03-C01` campaign. This plan is diagnostic only and is governed by `D-TECH-NEXT-P05`. It adds no attempt record before runtime, makes no live claim, does not resolve `D-METHOD-NEAR6`, and does not rerun P01–P04 work.
+**Status:** source-free launch bundle for the existing `S-D03-C01` campaign. This plan is diagnostic only and is governed by `D-TECH-NEXT-P05`. It adds no attempt record before runtime, makes no live claim, preserves the review owner's separately recorded `D-METHOD-NEAR6` authorization, and does not rerun P01–P04 work.
 
 ## Fixed scope and bounds
 
-- Preserve `campaign.json`, the immutable P01–P04 attempts, the pending `G-NEAR-METHOD` decision, the current dictionary/protocol fingerprints, the exact nine query files, and `translation-spec.json`.
+- Preserve `campaign.json`, the immutable P01–P04 attempts, the authorized `G-NEAR-METHOD` decision, the current dictionary/protocol fingerprints, the exact nine query files, and `translation-spec.json`.
 - Allocate exactly one new runtime attempt, `S-D03-P05-<YYYYMMDDThhmmss-offset>`, as `controller_technical`. The complete phase has a maximum of **four source operations**, in the order below. There are no retries or alternate queries.
 - Use only `queries/A1.ieee-query.txt`, byte-for-byte, for P05 source operations. Do not use the P03 split/control files and do not submit A2, A3, B1, B2, BG1, BG2, BC1, or BT2 again. No NEAR/6 diagnostic, S-C01 work, screening, import, export, or final event is in scope.
 - Set `PILOT_DATE` once at runtime to the actual local calendar date (the scheduled launch date is `2026-08-25`) and derive `PILOT_YEAR` from it. The visible IEEE publication-year diagnostic is **2011 through `PILOT_YEAR` inclusive**. This is an execution-date diagnostic bound only, never `P-001`, a final cutoff, or a discovery restriction adopted by the review.
@@ -112,7 +112,7 @@ The wrapper's one `--receipt` is new for this attempt. The four output paths are
 
 Stop source writing immediately on lease acquisition/release, browser epoch/version, anchor, power/sleep, target ownership, output collision, query rewrite, missing/changed control, challenge/login, busy/rate-limit, service error, null/unreconciled total, parser/selector error, duplicate/missing identity, detail mismatch, short/stale page, changed pagination total, incomplete cleanup, or nonzero child exit. Do not reinterpret a failure as zero and do not retain/import a partial prefix.
 
-After verified release, create the immutable `manifest.json`, `observations.md`, and `evidence-index.json` under `$PACKET` from the safe aggregate outcomes and the restricted inventory. Bind the runtime attempt ID and hashes to the existing campaign only; do not alter prior attempts, central accounting, protocol/dictionary/crosswalk files, or the pending NEAR/6 decision. A failed or blocked P05 remains diagnostic and cannot authorize IEEE S-C01 or a final search.
+After verified release, create the immutable `manifest.json`, `observations.md`, and `evidence-index.json` under `$PACKET` from the safe aggregate outcomes and the restricted inventory. Bind the runtime attempt ID and hashes to the existing campaign only; do not alter prior attempts, central accounting, protocol/dictionary/crosswalk files, or the authorized NEAR/6 decision. A failed or blocked P05 remains diagnostic and cannot authorize IEEE S-C01 or a final search.
 
 ## Offline preflight
 

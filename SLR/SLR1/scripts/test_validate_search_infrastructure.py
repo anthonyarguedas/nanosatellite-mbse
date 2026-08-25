@@ -1123,6 +1123,40 @@ class PilotCampaignValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, "cannot authorize source work"):
             infrastructure.validate_campaign_artifact(data)
 
+    def test_human_can_accept_decision_only_gate_after_technical_observation(
+        self,
+    ) -> None:
+        data = campaign()
+        field_gate = gate(data, "G-FIELD-BOUNDARY")
+        field_gate["semantic_impact"].update(
+            {
+                "classification": "human_methodological",
+                "review_effect": True,
+                "rationale": "The observed implementation is broader and needs owner acceptance.",
+            }
+        )
+        evidence_attempt_id = field_gate["attempt_id"]
+        data["decisions"].append(
+            {
+                "decision_id": "D-METHOD-BROADER-FALLBACK",
+                "attempt_id": evidence_attempt_id,
+                "decision_class": "human_methodological",
+                "review_effect": True,
+                "affects_underlying_literature_review": True,
+                "human_authorization_required": True,
+                "authorization_status": "authorized",
+                "authorized_by": "human",
+                "affected_gate_ids": ["G-FIELD-BOUNDARY"],
+                "rationale": "The review owner accepts the observed broader fallback.",
+                "decided_at": "2026-08-24T15:06:00+00:00",
+            }
+        )
+        infrastructure.validate_campaign_artifact(data)
+
+        data["decisions"][-1]["decided_at"] = "2026-08-24T14:59:00+00:00"
+        with self.assertRaisesRegex(AssertionError, "predates its evidence attempt"):
+            infrastructure.validate_campaign_artifact(data)
+
     def test_methodological_gate_cannot_hide_in_technical_attempt(self) -> None:
         data = campaign()
         pagination = gate(data, "G-PAGINATION-CONTROL")
