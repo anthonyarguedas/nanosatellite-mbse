@@ -2,15 +2,23 @@
   "schema_version": "slr1-pilot-campaign/v1",
   "campaign_id": "S-D01-C01-20260824T150000+0000",
   "task_id": "S-D01",
-  "source_id": "replace",
+  "source_id": "scopus",
   "method_type": "direct",
   "protocol_fingerprint": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
   "dictionary_fingerprint": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
   "capability_catalog": [
+    "G-SOURCE-BOUNDARY",
     "G-QUERY-TRANSPORT",
     "G-FIELD-BOUNDARY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-CONTENT-CONTROL",
+    "G-RETRIEVAL",
     "G-PAGINATION-CONTROL",
-    "G-PAGE-IDENTITY"
+    "G-PAGE-IDENTITY",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR"
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T15:00:00+00:00",
@@ -157,15 +165,16 @@
       }
     }
   ],
+  "gate_status_snapshots": [],
   "capability_gates": [
     {
       "gate_id": "G-QUERY-TRANSPORT",
-      "checkpoint_id": "CP-QUERY-TRANSPORT-P02",
-      "attempt_id": "S-D01-P02-20260824T151000+0000",
+      "checkpoint_id": "CP-QUERY-TRANSPORT-P01",
+      "attempt_id": "S-D01-P01-20260824T150000+0000",
       "requirement": "The reviewed query is accepted and echoed in the intended source field.",
       "depends_on": [],
       "status": "passed",
-      "observed_basis": "carried_forward",
+      "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
@@ -175,37 +184,27 @@
         }
       ],
       "reusable": true,
-      "carried_forward": true,
-      "carry_forward": {
-        "from_attempt_id": "S-D01-P01-20260824T150000+0000",
-        "from_gate_id": "G-QUERY-TRANSPORT",
-        "evidence": [
-          {
-            "path": "pilots/S-D01-P01-20260824T150000+0000/query-transport.json",
-            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
-          }
-        ],
-        "original_observed_basis": "observed",
-        "affected_by_code_or_semantic_change": false,
-        "rationale": "The pagination-only repair does not alter query transport."
-      },
-      "source_operation_count": 0,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
       "semantic_impact": {
         "classification": "none",
         "review_effect": false,
         "rationale": "The carried query evidence is unchanged."
       },
       "invalidation": null,
-      "notes": "Earlier query evidence remains valid after the later pagination failure."
+      "notes": "Initial immutable source evidence remains available."
     },
     {
       "gate_id": "G-FIELD-BOUNDARY",
-      "checkpoint_id": "CP-FIELD-BOUNDARY-P02",
-      "attempt_id": "S-D01-P02-20260824T151000+0000",
+      "checkpoint_id": "CP-FIELD-BOUNDARY-P01",
+      "attempt_id": "S-D01-P01-20260824T150000+0000",
       "requirement": "The configured field boundary preserves the reviewed query meaning.",
-      "depends_on": ["G-QUERY-TRANSPORT"],
+      "depends_on": [
+        "G-QUERY-TRANSPORT"
+      ],
       "status": "passed",
-      "observed_basis": "carried_forward",
+      "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
@@ -215,20 +214,8 @@
         }
       ],
       "reusable": true,
-      "carried_forward": true,
-      "carry_forward": {
-        "from_attempt_id": "S-D01-P01-20260824T150000+0000",
-        "from_gate_id": "G-FIELD-BOUNDARY",
-        "evidence": [
-          {
-            "path": "pilots/S-D01-P01-20260824T150000+0000/field-boundary.json",
-            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
-          }
-        ],
-        "original_observed_basis": "observed",
-        "affected_by_code_or_semantic_change": false,
-        "rationale": "The corrective work is scoped to pagination controls."
-      },
+      "carried_forward": false,
+      "carry_forward": null,
       "source_operation_count": 0,
       "semantic_impact": {
         "classification": "none",
@@ -236,14 +223,16 @@
         "rationale": "The field boundary is unchanged."
       },
       "invalidation": null,
-      "notes": "Earlier field evidence remains valid after the later pagination failure."
+      "notes": "Initial immutable source evidence remains available."
     },
     {
       "gate_id": "G-PAGINATION-CONTROL",
       "checkpoint_id": "CP-PAGINATION-CONTROL-P02",
       "attempt_id": "S-D01-P02-20260824T151000+0000",
       "requirement": "Pagination controls reconcile the displayed range and preserve ordered retrieval.",
-      "depends_on": ["G-FIELD-BOUNDARY"],
+      "depends_on": [
+        "G-FIELD-BOUNDARY"
+      ],
       "status": "failed",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
@@ -271,7 +260,9 @@
       "checkpoint_id": "CP-PAGE-IDENTITY-P01",
       "attempt_id": "S-D01-P01-20260824T150000+0000",
       "requirement": "Page identity evidence is reusable only while pagination controls remain valid.",
-      "depends_on": ["G-PAGINATION-CONTROL"],
+      "depends_on": [
+        "G-PAGINATION-CONTROL"
+      ],
       "status": "invalidated",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
@@ -310,7 +301,10 @@
       "authorized_by": "controller",
       "decided_at": "2026-08-24T15:09:00+00:00",
       "maximum_source_operations": 1,
-      "affected_gate_ids": ["G-PAGINATION-CONTROL", "G-PAGE-IDENTITY"],
+      "affected_gate_ids": [
+        "G-PAGINATION-CONTROL",
+        "G-PAGE-IDENTITY"
+      ],
       "rationale": "A bounded pagination/control repair preserves query, field, and review behavior."
     }
   ],

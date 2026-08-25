@@ -67,6 +67,7 @@ EXPECTED_TASKS = {
 
 REQUIRED_SCHEMA_NAMES = frozenset(
     {
+        "browser-terminal-receipt.schema.json",
         "failure-register.schema.json",
         "final-run-manifest.schema.json",
         "pilot-campaign.schema.json",
@@ -74,24 +75,297 @@ REQUIRED_SCHEMA_NAMES = frozenset(
     }
 )
 
-# These names are intentionally duplicated in the campaign schema's immutable
-# capability_catalog constraints. Keeping the small catalog here makes the
-# acceptance rule auditable without attempting to infer capability coverage.
-CAPABILITY_CATALOG: dict[str, tuple[str, ...]] = {
-    "direct": (
-        "G-QUERY-TRANSPORT",
-        "G-FIELD-BOUNDARY",
-        "G-PAGINATION-CONTROL",
-        "G-PAGE-IDENTITY",
+# Acceptance is intentionally keyed to the reviewed task/source, rather than
+# to a generic interface type. Each direct plan names the minimum evidence
+# domains that must pass before a source can be accepted or distributed.
+DIRECT_ACCEPTANCE_GATES = (
+    "G-SOURCE-BOUNDARY",
+    "G-QUERY-TRANSPORT",
+    "G-FIELD-BOUNDARY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-CONTENT-CONTROL",
+    "G-RETRIEVAL",
+    "G-PAGINATION-CONTROL",
+    "G-PAGE-IDENTITY",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR",
+)
+LOCAL_HARVEST_ACCEPTANCE_GATES = (
+    "G-SOURCE-BOUNDARY",
+    "G-LOCAL-CANDIDATE-LOGIC",
+    "G-LOCAL-TAGGING",
+    "G-LOCAL-HARVEST-COVERAGE",
+    "G-LOCAL-IDENTITY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-RETRIEVAL",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR",
+)
+
+TASK_SOURCE_REQUIRED_GATE_PLANS: dict[tuple[str, str], tuple[str, ...]] = {
+    ("S-D01", "scopus"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D02", "wos-core"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D03", "ieee-xplore"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D04", "compendex"): DIRECT_ACCEPTANCE_GATES + ("G-PAIRED-PROVENANCE",),
+    ("S-D04", "inspec"): DIRECT_ACCEPTANCE_GATES + ("G-PAIRED-PROVENANCE",),
+    ("S-D04", "engineering-village-compendex-inspec"): DIRECT_ACCEPTANCE_GATES
+    + ("G-PAIRED-PROVENANCE",),
+    ("S-D05", "wiley-online-library"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D06", "springer-nature-link"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D07", "proquest-atai"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D08", "proquest-pqdt"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D09", "oatd"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D10", "aiaa-arc"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D11", "arxiv"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D12", "iaf-digital-library"): DIRECT_ACCEPTANCE_GATES,
+    ("S-D13", "ntrs"): DIRECT_ACCEPTANCE_GATES,
+    ("S-L02", "esa-indico"): LOCAL_HARVEST_ACCEPTANCE_GATES,
+}
+TASK_SOURCE_METHOD_TYPES = {
+    key: "local_harvest" if key == ("S-L02", "esa-indico") else "direct"
+    for key in TASK_SOURCE_REQUIRED_GATE_PLANS
+}
+
+# These records are the reviewed migration boundary. A terminal may use
+# legacy_unverifiable only when its immutable manifest identity appears here;
+# absence of optional manifest links is never evidence by itself.
+TRUSTED_PRE_MIGRATION_LEGACY_MANIFESTS: dict[
+    tuple[str, str], frozenset[tuple[str, str, str]]
+] = {
+    ("S-D03", "ieee-xplore"): frozenset(
+        {
+            (
+                "S-D03-P01-20260823T232428-0400",
+                "pilots/S-D03-P01-20260823T232428-0400/manifest.json",
+                "0f91105afa0f377f63669e2a99c66c704ef6b795e71ec433e5b88196f287b3c6",
+            ),
+            (
+                "S-D03-P02-20260824T105020-0400",
+                "pilots/S-D03-P02-20260824T105020-0400/manifest.json",
+                "a1f227e406b3e1161189a9cd7620b7933cd09a82c1edd247046524b98ba70713",
+            ),
+            (
+                "S-D03-P03-20260824T120555-0400",
+                "pilots/S-D03-P03-20260824T120555-0400/manifest.json",
+                "085a82ab8fc7edf9abf578a4a8dbff9c24ba26078c9937d37f8942658caa69e3",
+            ),
+            (
+                "S-D03-P04-20260824T131301-0400",
+                "pilots/S-D03-P04-20260824T131301-0400/manifest.json",
+                "38934e989ab8108e59b627dd90da311bf5091accd3786bdc59fbd8ce85a59856",
+            ),
+        }
     ),
-    "local_harvest": (
-        "G-LOCAL-CANDIDATE-LOGIC",
-        "G-LOCAL-TAGGING",
-        "G-LOCAL-HARVEST-COVERAGE",
-        "G-LOCAL-IDENTITY",
+    ("S-D04", "engineering-village-compendex-inspec"): frozenset(
+        {
+            (
+                "S-D04-P01-20260824T123301-0400",
+                "pilots/S-D04-P01-20260824T123301-0400/manifest.json",
+                "3553d52782f3aeedc1b245803e28b6dadbacefdb04ffbf7c944a2bd044ace2e6",
+            ),
+            (
+                "S-D04-P02-20260824T130842-0400",
+                "pilots/S-D04-P02-20260824T130842-0400/manifest.json",
+                "b1bc43c22278650f7de2e1d9e17d5fe8d65d3483dd21a0dd4e0c910991200991",
+            ),
+        }
+    ),
+    ("S-D05", "wiley-online-library"): frozenset(
+        {
+            (
+                "S-D05-P01-20260824T124916-0400",
+                "pilots/S-D05-P01-20260824T124916-0400/manifest.json",
+                "dbf664d798978e7e82de08156ee3c84f3673c7ae40fa253850908e5b7ff80398",
+            ),
+        }
+    ),
+    ("S-D09", "oatd"): frozenset(
+        {
+            (
+                "S-D09-P01-20260823T232059-0400",
+                "pilots/S-D09-P01-20260823T232059-0400/manifest.json",
+                "c4dd484f1fc465ae3f7534b1ee5e2e5ce141a976e407ec07ce9e91fa15051ec0",
+            ),
+            (
+                "S-D09-P02-20260824T105026-0400",
+                "pilots/S-D09-P02-20260824T105026-0400/manifest.json",
+                "5269012644c979f0836d763ee0e924b0d5988e41690e5101f7f23f0dcc91eab9",
+            ),
+            (
+                "S-D09-P03-20260824T130849-0400",
+                "pilots/S-D09-P03-20260824T130849-0400/manifest.json",
+                "88b81a3fd05ee683e7e91bd040636637ff654c09e2fcb21f015afc835573d7de",
+            ),
+        }
+    ),
+    ("S-D13", "ntrs"): frozenset(
+        {
+            (
+                "S-D13-P03-20260824T125840-0400",
+                "pilots/S-D13-P03-20260824T125840-0400/manifest.json",
+                "82643e0757575adb338b3ac0065bc3b669197e6376062a9f1f95f0edc81d9ee8",
+            ),
+        }
     ),
 }
-REQUIRED_CAPABILITY_CATALOG = CAPABILITY_CATALOG
+
+# Exact coverage also includes non-browser attempts from the same migration
+# boundary. New attempts may be added, but they cannot erase or rewrite one.
+TRUSTED_PRE_MIGRATION_NON_LEGACY_MANIFESTS: dict[
+    tuple[str, str], frozenset[tuple[str, str, str]]
+] = {
+    ("S-D05", "wiley-online-library"): frozenset(
+        {
+            (
+                "S-D05-P02-20260824T134448-0400",
+                "pilots/S-D05-P02-20260824T134448-0400/manifest.json",
+                "1166bf07ef825a3d12037d8a15bc0a5ac2fbc78e6713997619865db22db4dc21",
+            ),
+        }
+    ),
+    ("S-D13", "ntrs"): frozenset(
+        {
+            (
+                "S-D13-P01-20260823T232536-0400",
+                "pilots/S-D13-P01-20260823T232536-0400/manifest.json",
+                "4405ec9cea88c31625203205fa7aad5f887985e5c33666977ee8a17f2aeb4b56",
+            ),
+            (
+                "S-D13-P02-20260824T111634-0400",
+                "pilots/S-D13-P02-20260824T111634-0400/manifest.json",
+                "393b6e79073a0e3aeca20e9fb555e67ca36c2ba76ce0429e7ece835514f7565d",
+            ),
+        }
+    ),
+}
+TRUSTED_PRE_MIGRATION_MANIFEST_COVERAGE = {
+    key: manifests | TRUSTED_PRE_MIGRATION_NON_LEGACY_MANIFESTS.get(key, frozenset())
+    for key, manifests in TRUSTED_PRE_MIGRATION_LEGACY_MANIFESTS.items()
+}
+
+# These reviewed status snapshots are the migration proof for carry-forward
+# from manifests that predate campaign links. They deliberately cover only
+# passed, reusable gates and bind every source manifest and evidence hash.
+TRUSTED_PRE_MIGRATION_GATE_STATUS_SNAPSHOTS = frozenset(
+    {
+        (
+            "S-D03",
+            "ieee-xplore",
+            "GS-P02-FIELD-PARSER",
+            "S-D03-P02-20260824T105020-0400",
+            "pilots/S-D03-P02-20260824T105020-0400/manifest.json",
+            "a1f227e406b3e1161189a9cd7620b7933cd09a82c1edd247046524b98ba70713",
+            "G-FIELD-PARSER",
+            "observed",
+            (
+                (
+                    "pilots/S-D03-P02-20260824T105020-0400/execution-ledger.json",
+                    "eb4ba30d01078da885fb3f206ea38154cfd02f42965ab090d2eb5379bae5422c",
+                ),
+            ),
+        ),
+        (
+            "S-D04",
+            "engineering-village-compendex-inspec",
+            "GS-P01-TRANSLATION-INTEGRITY",
+            "S-D04-P01-20260824T123301-0400",
+            "pilots/S-D04-P01-20260824T123301-0400/manifest.json",
+            "3553d52782f3aeedc1b245803e28b6dadbacefdb04ffbf7c944a2bd044ace2e6",
+            "G-TRANSLATION-INTEGRITY",
+            "observed",
+            (
+                (
+                    "pilots/S-D04-P01-20260824T123301-0400/translation-literal-audit.json",
+                    "df218ce4ab6ff5c07270bbac5e40f7b215bd5d0791bb68a46b06e07590b76d06",
+                ),
+            ),
+        ),
+        (
+            "S-D09",
+            "oatd",
+            "GS-P01-BOUNDARY",
+            "S-D09-P01-20260823T232059-0400",
+            "pilots/S-D09-P01-20260823T232059-0400/manifest.json",
+            "c4dd484f1fc465ae3f7534b1ee5e2e5ce141a976e407ec07ce9e91fa15051ec0",
+            "G-BOUNDARY",
+            "observed",
+            (
+                (
+                    "pilots/S-D09-P01-20260823T232059-0400/official-source-documentation-receipt.json",
+                    "c8674a1d8064e5092399d7cf3d041de40de7272959eff3ca11f19ed6c20781ce",
+                ),
+            ),
+        ),
+        (
+            "S-D09",
+            "oatd",
+            "GS-P02-QUERY-CONSTRUCTION",
+            "S-D09-P02-20260824T105026-0400",
+            "pilots/S-D09-P02-20260824T105026-0400/manifest.json",
+            "5269012644c979f0836d763ee0e924b0d5988e41690e5101f7f23f0dcc91eab9",
+            "G-QUERY-CONSTRUCTION",
+            "observed",
+            (
+                (
+                    "pilots/S-D09-P02-20260824T105026-0400/translation-audit.json",
+                    "9460fca833b8ec6a922906c542aad628f1bc1ba5a50f93e02d27d4e42d24bd71",
+                ),
+            ),
+        ),
+        (
+            "S-D09",
+            "oatd",
+            "GS-P02-BASIC-PARSER",
+            "S-D09-P02-20260824T105026-0400",
+            "pilots/S-D09-P02-20260824T105026-0400/manifest.json",
+            "5269012644c979f0836d763ee0e924b0d5988e41690e5101f7f23f0dcc91eab9",
+            "G-BASIC-PARSER",
+            "observed",
+            (
+                (
+                    "pilots/S-D09-P02-20260824T105026-0400/observations.md",
+                    "10fda2b860863e9b8a574486d8e34d45abd326b024b7a6d047296e37cc7a4133",
+                ),
+            ),
+        ),
+        (
+            "S-D09",
+            "oatd",
+            "GS-P02-BASIC-COUNT",
+            "S-D09-P02-20260824T105026-0400",
+            "pilots/S-D09-P02-20260824T105026-0400/manifest.json",
+            "5269012644c979f0836d763ee0e924b0d5988e41690e5101f7f23f0dcc91eab9",
+            "G-BASIC-COUNT",
+            "observed",
+            (
+                (
+                    "pilots/S-D09-P02-20260824T105026-0400/evidence-index.json",
+                    "bf8a651955d125a33f4e12a77871e548cdb6322a3cf22519f1230c7d30d82d13",
+                ),
+            ),
+        ),
+        (
+            "S-D13",
+            "ntrs",
+            "GS-P02-API-HEALTH",
+            "S-D13-P02-20260824T111634-0400",
+            "pilots/S-D13-P02-20260824T111634-0400/manifest.json",
+            "393b6e79073a0e3aeca20e9fb555e67ca36c2ba76ce0429e7ece835514f7565d",
+            "G-API-HEALTH",
+            "observed",
+            (
+                (
+                    "pilots/S-D13-P02-20260824T111634-0400/health-receipt.json",
+                    "6bb4f86fb73a7ecc2fa7a866a2f059dc373d1ee08bdc87acebf18c29b84d7e52",
+                ),
+            ),
+        ),
+    }
+)
 
 CAMPAIGN_STATUSES = {
     "in_progress",
@@ -138,6 +412,23 @@ GATE_ID_RE = re.compile(r"^[A-Z][A-Z0-9-]{1,63}$")
 CHECKPOINT_ID_RE = re.compile(r"^CP-[A-Z0-9-]{2,63}$")
 DECISION_ID_RE = re.compile(r"^D-[A-Z0-9-]{2,63}$")
 RETRY_POLICY_ID_RE = re.compile(r"^RP-[A-Z0-9-]{2,63}$")
+GATE_SNAPSHOT_ID_RE = re.compile(r"^GS-[A-Z0-9-]{2,63}$")
+UNSAFE_LOCAL_PATH_RE = re.compile(
+    r"(?:~/(?:Library|\.config|AppData)|/(?:Users|home|private|var|tmp|Volumes|"
+    r"Applications|Library)(?:/|$)|(?<![A-Za-z0-9])[A-Za-z]:[\\/])",
+    re.IGNORECASE,
+)
+UNSAFE_PROFILE_RE = re.compile(
+    r"(?:--(?:user-data-dir|profile-directory)\b|(?:google[ /_-]*chrome|"
+    r"chromium)[\\/](?:default|profile[ _-]?\d+))",
+    re.IGNORECASE,
+)
+UNSAFE_BROWSER_COMMAND_RE = re.compile(
+    r"(?:\b(?:google-chrome(?:-stable)?|chromium(?:-browser)?|chrome(?:\.exe)?)"
+    r"\b\s+(?:--|[-\w])|\bopen\s+-a\s+['\"]?(?:google\s+chrome|chromium)|"
+    r"\b(?:osascript|powershell)\b[^\n]*\b(?:google\s+chrome|chromium)\b)",
+    re.IGNORECASE,
+)
 
 
 def load(path: Path) -> Any:
@@ -244,16 +535,6 @@ def _file_reference(value: Any, label: str) -> tuple[str, str]:
         _relative_path(reference["path"], f"{label}.path"),
         _sha256(reference["sha256"], f"{label}.sha256"),
     )
-
-
-def _shared_lease_reference(value: Any, label: str) -> tuple[str, str]:
-    path, digest = _file_reference(value, label)
-    normalized_path = path.lower()
-    require(
-        "preflight" not in normalized_path and "postflight" not in normalized_path,
-        f"{label} must not reference a preflight/postflight artifact",
-    )
-    return path, digest
 
 
 def _task_prefix(identifier: str, marker: str) -> str:
@@ -430,15 +711,26 @@ def _load_schemas(searches_root: Path = SEARCHES) -> dict[str, dict[str, Any]]:
         validator_class.check_schema(schema)
         schemas[name] = schema
 
-    catalog_schema = schemas["pilot-campaign.schema.json"]["$defs"][
-        "capabilityCatalogs"
-    ]["properties"]
-    for method_type, expected in CAPABILITY_CATALOG.items():
-        declared = catalog_schema[method_type]["const"]
+    campaign_definitions = schemas["pilot-campaign.schema.json"]["$defs"]
+    require(
+        "gateStatusSnapshot" in campaign_definitions,
+        "pilot campaign schema lacks immutable gate-status snapshots",
+    )
+    receipt_schema = schemas["browser-terminal-receipt.schema.json"]
+    require(
+        isinstance(receipt_schema.get("oneOf"), list),
+        "browser terminal receipt schema must distinguish receipt kinds",
+    )
+    for plan_key, required_gates in TASK_SOURCE_REQUIRED_GATE_PLANS.items():
         require(
-            tuple(declared) == expected,
-            f"pilot campaign schema catalog differs for {method_type}",
+            len(required_gates) == len(set(required_gates)),
+            f"required gate plan has duplicate gates for {plan_key}",
         )
+        for gate_id in required_gates:
+            require(
+                GATE_ID_RE.fullmatch(gate_id) is not None,
+                f"required gate plan has invalid gate {gate_id}",
+            )
     return schemas
 
 
@@ -589,8 +881,13 @@ def _validate_terminal(value: Any, label: str) -> dict[str, Any]:
             lease is None, f"{label}.lease_receipt must be null when not browser-backed"
         )
     elif terminal_verification == "verified":
-        _file_reference(cleanup, f"{label}.cleanup_receipt")
-        _shared_lease_reference(lease, f"{label}.lease_receipt")
+        cleanup_reference = _file_reference(cleanup, f"{label}.cleanup_receipt")
+        lease_reference = _file_reference(lease, f"{label}.lease_receipt")
+        require(
+            cleanup_reference[0] != lease_reference[0]
+            and cleanup_reference[1] != lease_reference[1],
+            f"{label} cleanup and shared-lease receipts must be distinct",
+        )
     else:
         require(
             terminal_verification == "legacy_unverifiable",
@@ -921,6 +1218,39 @@ def _validate_attempts(
                 f"later attempt {attempt_id} must be technical_corrective or methodological_revision",
             )
     return attempts_by_id, evidence_by_reference, retry_records
+
+
+def _validate_legacy_manifest_inventory(
+    campaign: dict[str, Any], attempts: dict[str, dict[str, Any]]
+) -> None:
+    """Require exact coverage of the reviewed pre-migration terminal inventory."""
+    inventory_key = (campaign["task_id"], campaign["source_id"])
+    expected = TRUSTED_PRE_MIGRATION_LEGACY_MANIFESTS.get(inventory_key, frozenset())
+    actual = frozenset(
+        (
+            attempt_id,
+            attempt["manifest_path"],
+            attempt["manifest_sha256"],
+        )
+        for attempt_id, attempt in attempts.items()
+        if attempt["terminal"]["terminal_verification"] == "legacy_unverifiable"
+    )
+    require(
+        actual == expected,
+        "legacy_unverifiable terminals must exactly match the trusted "
+        "pre-migration manifest inventory",
+    )
+    all_attempts = frozenset(
+        (attempt_id, attempt["manifest_path"], attempt["manifest_sha256"])
+        for attempt_id, attempt in attempts.items()
+    )
+    required_coverage = TRUSTED_PRE_MIGRATION_MANIFEST_COVERAGE.get(
+        inventory_key, frozenset()
+    )
+    require(
+        required_coverage <= all_attempts,
+        "campaign omits a trusted pre-migration manifest identity",
+    )
 
 
 def _validate_retry_policy(
@@ -1377,6 +1707,169 @@ def _validate_gates(
     return gates_by_id
 
 
+def _validate_gate_status_snapshots(
+    campaign: dict[str, Any],
+    attempts: dict[str, dict[str, Any]],
+    evidence_by_reference: dict[tuple[str, str, str], dict[str, Any]],
+    gates: dict[str, dict[str, Any]],
+) -> dict[tuple[str, str], dict[str, Any]]:
+    """Validate immutable, passed-and-reusable source-gate snapshots.
+
+    A carry-forward record cannot manufacture a passing status from a byte hash.
+    The snapshot fixes the source attempt's manifest identity, status, reusability,
+    basis, and exact evidence before a later gate may cite it.
+    """
+    snapshots = _list(
+        campaign["gate_status_snapshots"], "campaign.gate_status_snapshots"
+    )
+    snapshots_by_source: dict[tuple[str, str], dict[str, Any]] = {}
+    snapshot_ids: set[str] = set()
+    task_id = campaign["task_id"]
+
+    for index, raw_snapshot in enumerate(snapshots):
+        label = f"campaign.gate_status_snapshots[{index}]"
+        snapshot = _mapping(raw_snapshot, label)
+        _require_fields(
+            snapshot,
+            {
+                "snapshot_id",
+                "attempt_id",
+                "manifest_path",
+                "manifest_sha256",
+                "gate_id",
+                "status",
+                "reusable",
+                "original_observed_basis",
+                "evidence",
+                "immutable",
+            },
+            label,
+        )
+        snapshot_id = _pattern(
+            snapshot["snapshot_id"], GATE_SNAPSHOT_ID_RE, f"{label}.snapshot_id"
+        )
+        require(
+            snapshot_id not in snapshot_ids,
+            f"duplicate immutable gate-status snapshot ID: {snapshot_id}",
+        )
+        snapshot_ids.add(snapshot_id)
+        attempt_id = _require_task_prefix(
+            snapshot["attempt_id"],
+            ATTEMPT_ID_RE,
+            task_id,
+            "P",
+            f"{label}.attempt_id",
+        )
+        require(
+            attempt_id in attempts,
+            f"{label} references an unknown immutable attempt",
+        )
+        attempt = attempts[attempt_id]
+        require(
+            snapshot["immutable"] is True,
+            f"{label}.immutable must be true",
+        )
+        manifest_path = _relative_path(
+            snapshot["manifest_path"], f"{label}.manifest_path"
+        )
+        manifest_sha256 = _sha256(
+            snapshot["manifest_sha256"], f"{label}.manifest_sha256"
+        )
+        require(
+            manifest_path == attempt["manifest_path"]
+            and manifest_sha256 == attempt["manifest_sha256"],
+            f"{label} must bind the source attempt's immutable manifest identity",
+        )
+        gate_id = _pattern(snapshot["gate_id"], GATE_ID_RE, f"{label}.gate_id")
+        source_key = (attempt_id, gate_id)
+        require(
+            source_key not in snapshots_by_source,
+            f"duplicate immutable gate-status snapshot for {attempt_id}/{gate_id}",
+        )
+        require(
+            snapshot["status"] == "passed",
+            f"{label} must record a passed gate status",
+        )
+        require(
+            snapshot["reusable"] is True,
+            f"{label} must record reusable source evidence",
+        )
+        original_basis = snapshot["original_observed_basis"]
+        require(
+            original_basis in ORIGINAL_BASES,
+            f"{label}.original_observed_basis is invalid",
+        )
+        references = _list(snapshot["evidence"], f"{label}.evidence")
+        require(references, f"{label}.evidence must not be empty")
+        reference_tuples: list[tuple[str, str]] = []
+        for evidence_index, raw_reference in enumerate(references):
+            path, digest = _file_reference(
+                raw_reference, f"{label}.evidence[{evidence_index}]"
+            )
+            reference_tuples.append((path, digest))
+            source = evidence_by_reference.get((attempt_id, path, digest))
+            require(
+                source is not None,
+                f"{label} evidence is not catalogued by its source attempt",
+            )
+            require(
+                source["gate_id"] == gate_id,
+                f"{label} evidence belongs to another gate",
+            )
+            require(
+                source["validity"] == "valid",
+                f"{label} cannot snapshot invalidated evidence",
+            )
+            require(
+                source["basis"] == original_basis,
+                f"{label} evidence does not retain the original basis",
+            )
+        require(
+            len(reference_tuples) == len(set(reference_tuples)),
+            f"{label}.evidence contains duplicate references",
+        )
+        trusted_snapshot = (
+            campaign["task_id"],
+            campaign["source_id"],
+            snapshot_id,
+            attempt_id,
+            manifest_path,
+            manifest_sha256,
+            gate_id,
+            original_basis,
+            tuple(sorted(reference_tuples)),
+        )
+        require(
+            trusted_snapshot in TRUSTED_PRE_MIGRATION_GATE_STATUS_SNAPSHOTS,
+            f"{label} is not in the trusted immutable gate-status migration inventory",
+        )
+
+        source_gate = gates.get(gate_id)
+        if source_gate is not None and source_gate["attempt_id"] == attempt_id:
+            require(
+                source_gate["status"] == "passed" and source_gate["reusable"] is True,
+                f"{label} conflicts with the source attempt's non-passing gate status",
+            )
+            require(
+                source_gate["original_observed_basis"] == original_basis,
+                f"{label} conflicts with the source gate's original basis",
+            )
+            source_gate_evidence = {
+                (path, digest)
+                for path, digest, _ in (
+                    _gate_evidence(item, f"{label}.source_gate")
+                    for item in source_gate["evidence"]
+                )
+            }
+            require(
+                source_gate_evidence == set(reference_tuples),
+                f"{label} conflicts with the source gate's immutable evidence",
+            )
+        snapshots_by_source[source_key] = snapshot
+
+    return snapshots_by_source
+
+
 def _validate_dependency_graph(gates: dict[str, dict[str, Any]]) -> None:
     for gate_id, gate in gates.items():
         for dependency in gate["depends_on"]:
@@ -1417,6 +1910,7 @@ def _validate_carry_forward(
     attempts: dict[str, dict[str, Any]],
     evidence_by_reference: dict[tuple[str, str, str], dict[str, Any]],
     decisions: dict[str, dict[str, Any]],
+    snapshots: dict[tuple[str, str], dict[str, Any]],
 ) -> None:
     for gate_id, gate in gates.items():
         if not gate["carried_forward"]:
@@ -1459,6 +1953,11 @@ def _validate_carry_forward(
             source_gate_id == gate_id,
             f"{label} must carry the same stable capability gate",
         )
+        snapshot = snapshots.get((source_attempt_id, source_gate_id))
+        require(
+            snapshot is not None,
+            f"{label} requires an immutable passed+reusable gate-status snapshot",
+        )
         original_basis = carry_forward["original_observed_basis"]
         require(
             original_basis in ORIGINAL_BASES,
@@ -1467,6 +1966,10 @@ def _validate_carry_forward(
         require(
             original_basis == gate["original_observed_basis"],
             f"{label} must retain the original observed basis",
+        )
+        require(
+            snapshot["original_observed_basis"] == original_basis,
+            f"{label} does not match its immutable gate-status snapshot basis",
         )
         require(
             carry_forward["affected_by_code_or_semantic_change"] is False,
@@ -1499,6 +2002,14 @@ def _validate_carry_forward(
         require(
             len(carry_tuples) == len(set(carry_tuples)),
             f"{label}.evidence contains duplicate references",
+        )
+        snapshot_tuples = {
+            _file_reference(item, f"{label}.snapshot.evidence")
+            for item in snapshot["evidence"]
+        }
+        require(
+            set(carry_tuples) == snapshot_tuples,
+            f"{label} must repeat the immutable passed snapshot evidence path/hash",
         )
         current_tuples = {
             (path, digest)
@@ -1731,18 +2242,17 @@ def _validate_allocations(
                 ),
                 f"technical decision for {attempt_id} must predate allocation",
             )
-            if decision["attempt_id"] is None:
-                enacted_technical_gates = {
-                    gate_id
-                    for gate_id, gate in gates.items()
-                    if gate["attempt_id"] == attempt_id
-                    and gate["semantic_impact"]["classification"]
-                    == "controller_technical"
-                }
-                require(
-                    enacted_technical_gates <= set(decision["affected_gate_ids"]),
-                    f"prospective technical decision for {attempt_id} omits an enacted technical gate",
-                )
+            enacted_technical_gates = {
+                gate_id
+                for gate_id, gate in gates.items()
+                if gate["attempt_id"] == attempt_id
+                and gate["semantic_impact"]["classification"] == "controller_technical"
+                and gate["source_operation_count"] > 0
+            }
+            require(
+                enacted_technical_gates <= set(decision["affected_gate_ids"]),
+                f"technical decision for {attempt_id} omits an enacted controller-technical operation-bearing gate",
+            )
         else:
             methodological_attempts += 1
             require(
@@ -1889,16 +2399,23 @@ def _validate_catalog(
     gates: dict[str, dict[str, Any]],
     decisions: dict[str, dict[str, Any]],
 ) -> None:
-    method_type = campaign["method_type"]
-    require(method_type in CAPABILITY_CATALOG, "campaign.method_type is invalid")
+    plan_key = (campaign["task_id"], campaign["source_id"])
+    expected = TASK_SOURCE_REQUIRED_GATE_PLANS.get(plan_key)
+    require(
+        expected is not None,
+        f"campaign has no frozen task/source required-gate plan for {plan_key}",
+    )
+    require(
+        campaign["method_type"] == TASK_SOURCE_METHOD_TYPES[plan_key],
+        "campaign.method_type does not match its frozen task/source plan",
+    )
     catalog = _unique_strings(
         _list(campaign["capability_catalog"], "campaign.capability_catalog"),
         "campaign.capability_catalog",
     )
-    expected = CAPABILITY_CATALOG[method_type]
     require(
         tuple(catalog) == expected,
-        f"campaign capability catalog does not match the required {method_type} catalog",
+        "campaign capability catalog does not match its frozen task/source required-gate plan",
     )
     if campaign["status"] != "accepted":
         return
@@ -2100,6 +2617,7 @@ def validate_campaign_artifact(
             "retry_policy",
             "controller_authorization",
             "attempts",
+            "gate_status_snapshots",
             "capability_gates",
             "decisions",
             "cancellation",
@@ -2117,7 +2635,8 @@ def validate_campaign_artifact(
     )
     _string(campaign["source_id"], "campaign.source_id")
     require(
-        campaign["method_type"] in CAPABILITY_CATALOG, "campaign.method_type is invalid"
+        campaign["method_type"] in set(TASK_SOURCE_METHOD_TYPES.values()),
+        "campaign.method_type is invalid",
     )
     _sha256(campaign["protocol_fingerprint"], "campaign.protocol_fingerprint")
     _sha256(campaign["dictionary_fingerprint"], "campaign.dictionary_fingerprint")
@@ -2144,12 +2663,18 @@ def validate_campaign_artifact(
     )
 
     attempts, evidence_by_reference, retry_records = _validate_attempts(campaign)
+    _validate_legacy_manifest_inventory(campaign, attempts)
     _validate_retry_policy(campaign, retry_records)
     decisions = _validate_decisions(campaign, attempts)
     gates = _validate_gates(campaign, attempts, evidence_by_reference)
+    snapshots = _validate_gate_status_snapshots(
+        campaign, attempts, evidence_by_reference, gates
+    )
     _validate_decision_gate_references(decisions, gates)
     _validate_dependency_graph(gates)
-    _validate_carry_forward(gates, attempts, evidence_by_reference, decisions)
+    _validate_carry_forward(
+        gates, attempts, evidence_by_reference, decisions, snapshots
+    )
     _validate_failure_invalidation(gates)
     _validate_allocations(campaign, attempts, decisions, gates)
     _validate_catalog(campaign, gates, decisions)
@@ -2200,6 +2725,135 @@ def _read_source_file(
     actual_sha256 = hashlib.sha256(contents).hexdigest()
     require(actual_sha256 == expected_sha256, f"{label} SHA-256 does not match")
     return contents
+
+
+def _validate_campaign_fingerprints(
+    campaign: dict[str, Any], searches_root: Path
+) -> None:
+    expected_files = {
+        "protocol_fingerprint": searches_root.parent / "protocol.md",
+        "dictionary_fingerprint": searches_root / "search-concept-dictionary.json",
+    }
+    for field, path in expected_files.items():
+        try:
+            contents = path.read_bytes()
+        except OSError as exc:
+            raise AssertionError(f"campaign {field} source is missing: {path}") from exc
+        actual = hashlib.sha256(contents).hexdigest()
+        require(
+            campaign[field] == actual,
+            f"campaign.{field} does not match {path.relative_to(searches_root.parent)}",
+        )
+
+
+def _require_non_symlinked_relative_path(
+    source_packet: Path, relative_path: Any, label: str
+) -> None:
+    """Legacy inventory entries must name files, not aliases to files."""
+    relative_path = _relative_path(relative_path, f"{label}.path")
+    candidate = source_packet
+    try:
+        for part in relative_path.split("/"):
+            candidate = candidate / part
+            require(
+                not candidate.is_symlink(),
+                f"{label} trusted legacy manifest must not be symlinked",
+            )
+    except OSError as exc:
+        raise AssertionError(f"{label} is missing from its source packet") from exc
+
+
+def _reject_unsafe_local_evidence(contents: bytes, label: str) -> None:
+    """Keep local browser/profile details out of reviewable campaign evidence."""
+    text = contents.decode("utf-8", errors="replace")
+    require(
+        UNSAFE_LOCAL_PATH_RE.search(text) is None,
+        f"{label} contains an unsafe local absolute path",
+    )
+    require(
+        UNSAFE_PROFILE_RE.search(text) is None,
+        f"{label} contains an unsafe local browser profile reference",
+    )
+    require(
+        UNSAFE_BROWSER_COMMAND_RE.search(text) is None,
+        f"{label} contains an unsafe local browser command",
+    )
+
+
+def _load_receipt(contents: bytes, label: str) -> dict[str, Any]:
+    try:
+        receipt = json.loads(contents)
+    except json.JSONDecodeError as exc:
+        raise AssertionError(f"{label} must be structured JSON") from exc
+    return _mapping(receipt, label)
+
+
+def _validate_browser_terminal_receipts(
+    attempt: dict[str, Any],
+    source_packet: Path,
+    cleanup_reference: tuple[str, str],
+    cleanup_contents: bytes,
+    lease_reference: tuple[str, str],
+    lease_contents: bytes,
+    receipt_schema: dict[str, Any],
+    label: str,
+) -> None:
+    """Validate distinct, sanitized controller cleanup and lease-release records."""
+    _reject_unsafe_local_evidence(cleanup_contents, f"{label}.cleanup_receipt")
+    _reject_unsafe_local_evidence(lease_contents, f"{label}.lease_receipt")
+    cleanup = _load_receipt(cleanup_contents, f"{label}.cleanup_receipt")
+    lease = _load_receipt(lease_contents, f"{label}.lease_receipt")
+    _validate_jsonschema_instance(receipt_schema, cleanup, f"{label}.cleanup_receipt")
+    _validate_jsonschema_instance(receipt_schema, lease, f"{label}.lease_receipt")
+    require(
+        cleanup["receipt_kind"] == "browser_cleanup",
+        f"{label}.cleanup_receipt has the wrong receipt kind",
+    )
+    require(
+        lease["receipt_kind"] == "shared_lease_release",
+        f"{label}.lease_receipt has the wrong receipt kind",
+    )
+    for receipt_name, receipt in (("cleanup", cleanup), ("lease", lease)):
+        require(
+            receipt["attempt_id"] == attempt["attempt_id"],
+            f"{label}.{receipt_name}_receipt is not bound to its attempt ID",
+        )
+    cleanup_controller = _mapping(
+        cleanup["controller"], f"{label}.cleanup_receipt.controller"
+    )
+    lease_controller = _mapping(
+        lease["controller"], f"{label}.lease_receipt.controller"
+    )
+    require(
+        cleanup_controller["controller_id"] == lease_controller["controller_id"],
+        f"{label} cleanup and shared-lease receipts have different controller ownership",
+    )
+    require(
+        cleanup_controller["ownership_verified"] is True
+        and lease_controller["ownership_verified"] is True,
+        f"{label} receipts must verify controller ownership",
+    )
+    cleanup_result = _mapping(cleanup["cleanup"], f"{label}.cleanup_receipt.cleanup")
+    lease_result = _mapping(lease["lease"], f"{label}.lease_receipt.lease")
+    require(
+        cleanup_result["cleanup_verified"] is True,
+        f"{label}.cleanup_receipt must verify cleanup",
+    )
+    require(
+        lease_result["release_verified"] is True,
+        f"{label}.lease_receipt must verify shared-lease release",
+    )
+    try:
+        cleanup_path = (source_packet / cleanup_reference[0]).resolve(strict=True)
+        lease_path = (source_packet / lease_reference[0]).resolve(strict=True)
+    except OSError as exc:
+        raise AssertionError(
+            f"{label} receipt is missing from its source packet"
+        ) from exc
+    require(
+        cleanup_path != lease_path,
+        f"{label} cleanup and shared-lease receipts must not alias the same file",
+    )
 
 
 def _manifest_terminal_projection(terminal: dict[str, Any]) -> dict[str, Any]:
@@ -2264,15 +2918,37 @@ def _validate_campaign_files(
     campaign: dict[str, Any],
     source_packet: Path,
     manifest_schema: dict[str, Any],
+    receipt_schema: dict[str, Any],
 ) -> None:
-    """Hash every declared campaign file and validate each linked manifest."""
+    """Hash every linked file; acceptance candidates must also be locally safe."""
+    require_sanitized_evidence = campaign["status"] in {
+        "ready_for_acceptance_review",
+        "accepted",
+    }
+
+    def read_reference(
+        relative_path: Any,
+        expected_sha256: Any,
+        label: str,
+        *,
+        always_sanitized: bool = False,
+    ) -> bytes:
+        contents = _read_source_file(
+            source_packet, relative_path, expected_sha256, label
+        )
+        if require_sanitized_evidence or always_sanitized:
+            _reject_unsafe_local_evidence(contents, label)
+        return contents
+
     for index, attempt in enumerate(campaign["attempts"]):
         label = f"campaign.attempts[{index}].manifest"
-        contents = _read_source_file(
-            source_packet,
-            attempt["manifest_path"],
-            attempt["manifest_sha256"],
-            label,
+        terminal = attempt["terminal"]
+        if terminal["terminal_verification"] == "legacy_unverifiable":
+            _require_non_symlinked_relative_path(
+                source_packet, attempt["manifest_path"], label
+            )
+        contents = read_reference(
+            attempt["manifest_path"], attempt["manifest_sha256"], label
         )
         try:
             manifest = json.loads(contents)
@@ -2281,34 +2957,60 @@ def _validate_campaign_files(
         _validate_jsonschema_instance(manifest_schema, manifest, label)
         _validate_pilot_manifest_formats(manifest, label)
         legacy_manifest = _validate_manifest_link(manifest, campaign, attempt, label)
-
-        terminal = attempt["terminal"]
+        manifest_identity = (
+            attempt["attempt_id"],
+            attempt["manifest_path"],
+            attempt["manifest_sha256"],
+        )
+        trusted_coverage = TRUSTED_PRE_MIGRATION_MANIFEST_COVERAGE.get(
+            (campaign["task_id"], campaign["source_id"]), frozenset()
+        )
+        if manifest_identity not in trusted_coverage:
+            require(
+                not legacy_manifest,
+                f"{label} new attempt must include campaign manifest links",
+            )
         if terminal["terminal_verification"] == "legacy_unverifiable":
             require(
                 legacy_manifest,
-                f"{label} legacy_unverifiable terminal requires an immutable legacy manifest without campaign or attempt_terminal links",
+                f"{label} legacy_unverifiable terminal requires an immutable legacy "
+                "manifest without campaign or attempt_terminal links",
             )
+
         if (
             terminal["browser_backed"]
             and terminal["terminal_verification"] == "verified"
         ):
-            for receipt_name in ("cleanup_receipt", "lease_receipt"):
-                receipt = terminal[receipt_name]
-                if receipt_name == "lease_receipt":
-                    path, digest = _shared_lease_reference(
-                        receipt,
-                        f"campaign.attempts[{index}].terminal.{receipt_name}",
-                    )
-                else:
-                    path, digest = _file_reference(
-                        receipt, f"campaign.attempts[{index}].terminal.{receipt_name}"
-                    )
-                _read_source_file(
-                    source_packet,
-                    path,
-                    digest,
-                    f"campaign.attempts[{index}].terminal.{receipt_name}",
-                )
+            cleanup_reference = _file_reference(
+                terminal["cleanup_receipt"],
+                f"campaign.attempts[{index}].terminal.cleanup_receipt",
+            )
+            lease_reference = _file_reference(
+                terminal["lease_receipt"],
+                f"campaign.attempts[{index}].terminal.lease_receipt",
+            )
+            cleanup_contents = read_reference(
+                cleanup_reference[0],
+                cleanup_reference[1],
+                f"campaign.attempts[{index}].terminal.cleanup_receipt",
+                always_sanitized=True,
+            )
+            lease_contents = read_reference(
+                lease_reference[0],
+                lease_reference[1],
+                f"campaign.attempts[{index}].terminal.lease_receipt",
+                always_sanitized=True,
+            )
+            _validate_browser_terminal_receipts(
+                attempt,
+                source_packet,
+                cleanup_reference,
+                cleanup_contents,
+                lease_reference,
+                lease_contents,
+                receipt_schema,
+                f"campaign.attempts[{index}].terminal",
+            )
 
         for operation_index, operation in enumerate(
             attempt["source_operations"]["operations"]
@@ -2318,18 +3020,18 @@ def _validate_campaign_files(
                 continue
             path, digest = _file_reference(
                 retry["receipt"],
-                f"campaign.attempts[{index}].source_operations.operations[{operation_index}].retry.receipt",
+                "campaign.attempts["
+                f"{index}].source_operations.operations[{operation_index}].retry.receipt",
             )
-            _read_source_file(
-                source_packet,
+            read_reference(
                 path,
                 digest,
-                f"campaign.attempts[{index}].source_operations.operations[{operation_index}].retry.receipt",
+                "campaign.attempts["
+                f"{index}].source_operations.operations[{operation_index}].retry.receipt",
             )
 
         for evidence_index, evidence in enumerate(attempt["evidence"]):
-            _read_source_file(
-                source_packet,
+            read_reference(
                 evidence["path"],
                 evidence["sha256"],
                 f"campaign.attempts[{index}].evidence[{evidence_index}]",
@@ -2337,8 +3039,7 @@ def _validate_campaign_files(
 
     for gate_index, gate in enumerate(campaign["capability_gates"]):
         for evidence_index, evidence in enumerate(gate["evidence"]):
-            _read_source_file(
-                source_packet,
+            read_reference(
                 evidence["path"],
                 evidence["sha256"],
                 f"campaign.capability_gates[{gate_index}].evidence[{evidence_index}]",
@@ -2346,11 +3047,11 @@ def _validate_campaign_files(
         carry_forward = gate["carry_forward"]
         if carry_forward is not None:
             for evidence_index, evidence in enumerate(carry_forward["evidence"]):
-                _read_source_file(
-                    source_packet,
+                read_reference(
                     evidence["path"],
                     evidence["sha256"],
-                    f"campaign.capability_gates[{gate_index}].carry_forward.evidence[{evidence_index}]",
+                    "campaign.capability_gates["
+                    f"{gate_index}].carry_forward.evidence[{evidence_index}]",
                 )
 
 
@@ -2366,6 +3067,7 @@ def _validate_campaign_file(
     validate_campaign_artifact(
         campaign, campaign_schema=schemas["pilot-campaign.schema.json"]
     )
+    _validate_campaign_fingerprints(campaign, searches_root)
     packet_task_prefix = campaign["task_id"].lower()
     require(
         source_packet.name == packet_task_prefix
@@ -2376,6 +3078,7 @@ def _validate_campaign_file(
         campaign,
         source_packet,
         schemas["pilot-manifest.schema.json"],
+        schemas["browser-terminal-receipt.schema.json"],
     )
 
 

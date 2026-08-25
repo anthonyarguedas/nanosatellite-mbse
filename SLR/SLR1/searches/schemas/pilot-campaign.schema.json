@@ -23,6 +23,7 @@
     "retry_policy",
     "controller_authorization",
     "attempts",
+    "gate_status_snapshots",
     "capability_gates",
     "decisions",
     "cancellation",
@@ -65,6 +66,10 @@
       "minItems": 1,
       "items": {"$ref": "#/$defs/attempt"}
     },
+    "gate_status_snapshots": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/gateStatusSnapshot"}
+    },
     "capability_gates": {
       "type": "array",
       "minItems": 1,
@@ -96,36 +101,6 @@
       "if": {"properties": {"status": {"const": "accepted"}}},
       "then": {"properties": {"acceptance": {"$ref": "#/$defs/acceptance"}}},
       "else": {"properties": {"acceptance": {"type": "null"}}}
-    },
-    {
-      "if": {"properties": {"method_type": {"const": "direct"}}},
-      "then": {
-        "properties": {
-          "capability_catalog": {
-            "const": [
-              "G-QUERY-TRANSPORT",
-              "G-FIELD-BOUNDARY",
-              "G-PAGINATION-CONTROL",
-              "G-PAGE-IDENTITY"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "if": {"properties": {"method_type": {"const": "local_harvest"}}},
-      "then": {
-        "properties": {
-          "capability_catalog": {
-            "const": [
-              "G-LOCAL-CANDIDATE-LOGIC",
-              "G-LOCAL-TAGGING",
-              "G-LOCAL-HARVEST-COVERAGE",
-              "G-LOCAL-IDENTITY"
-            ]
-          }
-        }
-      }
     }
   ],
   "$defs": {
@@ -481,6 +456,48 @@
         "terminal": {"$ref": "#/$defs/attemptTerminal"}
       }
     },
+    "gateStatusSnapshot": {
+      "description": "Immutable passed-and-reusable source-gate state used by a later carry-forward.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot_id",
+        "attempt_id",
+        "manifest_path",
+        "manifest_sha256",
+        "gate_id",
+        "status",
+        "reusable",
+        "original_observed_basis",
+        "evidence",
+        "immutable"
+      ],
+      "properties": {
+        "snapshot_id": {"type": "string", "pattern": "^GS-[A-Z0-9-]{2,63}$"},
+        "attempt_id": {"$ref": "#/$defs/attemptId"},
+        "manifest_path": {"type": "string", "minLength": 1},
+        "manifest_sha256": {"$ref": "#/$defs/hash"},
+        "gate_id": {"$ref": "#/$defs/gateId"},
+        "status": {"const": "passed"},
+        "reusable": {"const": true},
+        "original_observed_basis": {
+          "enum": [
+            "observed",
+            "official_documentation",
+            "observed_and_documented",
+            "inferred",
+            "untested"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/evidenceReference"}
+        },
+        "immutable": {"const": true}
+      }
+    },
     "carryForward": {
       "type": "object",
       "additionalProperties": false,
@@ -744,30 +761,6 @@
         "accepted_by": {"type": "string", "minLength": 1},
         "accepted_at": {"type": "string", "format": "date-time"},
         "rationale": {"type": "string", "minLength": 1}
-      }
-    },
-    "capabilityCatalogs": {
-      "description": "The validator uses these immutable required gate catalogs for acceptance.",
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["direct", "local_harvest"],
-      "properties": {
-        "direct": {
-          "const": [
-            "G-QUERY-TRANSPORT",
-            "G-FIELD-BOUNDARY",
-            "G-PAGINATION-CONTROL",
-            "G-PAGE-IDENTITY"
-          ]
-        },
-        "local_harvest": {
-          "const": [
-            "G-LOCAL-CANDIDATE-LOGIC",
-            "G-LOCAL-TAGGING",
-            "G-LOCAL-HARVEST-COVERAGE",
-            "G-LOCAL-IDENTITY"
-          ]
-        }
       }
     }
   }

@@ -86,6 +86,42 @@ def set_terminal_cancelled(data: dict[str, Any]) -> None:
     }
 
 
+def browser_terminal_receipt(
+    attempt: dict[str, Any], receipt_name: str
+) -> dict[str, Any]:
+    common = {
+        "attempt_id": attempt["attempt_id"],
+        "controller": {
+            "controller_id": "controller-fixture",
+            "owns_attempt": True,
+            "ownership_verified": True,
+        },
+        "verified_at": "2026-08-24T15:11:00+00:00",
+        "sanitized_for_campaign": True,
+    }
+    if receipt_name == "cleanup_receipt":
+        return {
+            "schema_version": "slr1-browser-cleanup-receipt/v1",
+            "receipt_kind": "browser_cleanup",
+            **common,
+            "cleanup": {
+                "owned_pages_closed": True,
+                "controller_anchor_preserved": True,
+                "cleanup_verified": True,
+            },
+        }
+    return {
+        "schema_version": "slr1-shared-lease-release-receipt/v1",
+        "receipt_kind": "shared_lease_release",
+        **common,
+        "lease": {
+            "lease_id": "fixture-shared-browser-lease",
+            "released_by_controller": True,
+            "release_verified": True,
+        },
+    }
+
+
 def accepted_campaign() -> dict[str, Any]:
     """Turn the small template fixture into a structurally accepted campaign."""
     data = campaign()
@@ -93,7 +129,7 @@ def accepted_campaign() -> dict[str, Any]:
     data["acceptance"] = {
         "accepted_by": "human reviewer",
         "accepted_at": "2026-08-24T15:20:00+00:00",
-        "rationale": "All required direct capability gates have current valid evidence.",
+        "rationale": "All required source-plan gates have current valid evidence.",
     }
     p2 = data["attempts"][1]
     p2["source_operations"]["operations"][0].update(
@@ -131,6 +167,56 @@ def accepted_campaign() -> dict[str, Any]:
     )
     identity["evidence"][0]["validity"] = "valid"
     data["attempts"][0]["evidence"][2]["validity"] = "valid"
+
+    required_gates = infrastructure.TASK_SOURCE_REQUIRED_GATE_PLANS[
+        (data["task_id"], data["source_id"])
+    ]
+    existing_gate_ids = {item["gate_id"] for item in data["capability_gates"]}
+    for gate_id in required_gates:
+        if gate_id in existing_gate_ids:
+            continue
+        suffix = gate_id.removeprefix("G-")
+        evidence_path = f"pilots/{p2['attempt_id']}/accepted-{suffix.lower()}.json"
+        p2["evidence"].append(
+            {
+                "evidence_id": f"E-P02-{suffix}",
+                "gate_id": gate_id,
+                "path": evidence_path,
+                "sha256": "e" * 64,
+                "validity": "valid",
+                "basis": "observed",
+            }
+        )
+        data["capability_gates"].append(
+            {
+                "gate_id": gate_id,
+                "checkpoint_id": f"CP-{suffix}-P02",
+                "attempt_id": p2["attempt_id"],
+                "requirement": f"Accepted fixture verifies {suffix.lower()}.",
+                "depends_on": [],
+                "status": "passed",
+                "observed_basis": "observed",
+                "original_observed_basis": "observed",
+                "evidence": [
+                    {
+                        "path": evidence_path,
+                        "sha256": "e" * 64,
+                        "validity": "valid",
+                    }
+                ],
+                "reusable": True,
+                "carried_forward": False,
+                "carry_forward": None,
+                "source_operation_count": 0,
+                "semantic_impact": {
+                    "classification": "none",
+                    "review_effect": False,
+                    "rationale": "The fixture evidence does not change review semantics.",
+                },
+                "invalidation": None,
+                "notes": "",
+            }
+        )
     return data
 
 
@@ -146,10 +232,20 @@ def materialized_campaign(
         temporary_root = Path(temporary.name)
         searches_root = temporary_root / "searches"
         shutil.copytree(SEARCHES / "schemas", searches_root / "schemas")
+        shutil.copyfile(ROOT / "protocol.md", searches_root.parent / "protocol.md")
+        shutil.copyfile(
+            SEARCHES / "search-concept-dictionary.json",
+            searches_root / "search-concept-dictionary.json",
+        )
         source_packet = searches_root / "sources" / "s-d01-fixture"
         source_packet.mkdir(parents=True)
         data = copy.deepcopy(data if data is not None else campaign())
-        data["source_id"] = "fixture"
+        data["protocol_fingerprint"] = sha256(
+            (searches_root.parent / "protocol.md").read_bytes()
+        )
+        data["dictionary_fingerprint"] = sha256(
+            (searches_root / "search-concept-dictionary.json").read_bytes()
+        )
 
         evidence_hashes: dict[str, str] = {}
         for attempt_index, attempt in enumerate(data["attempts"]):
@@ -167,6 +263,9 @@ def materialized_campaign(
             if item["carry_forward"] is not None:
                 for evidence in item["carry_forward"]["evidence"]:
                     evidence["sha256"] = evidence_hashes[evidence["path"]]
+        for snapshot in data["gate_status_snapshots"]:
+            for evidence in snapshot["evidence"]:
+                evidence["sha256"] = evidence_hashes[evidence["path"]]
 
         for attempt in data["attempts"]:
             terminal = attempt["terminal"]
@@ -176,9 +275,9 @@ def materialized_campaign(
                     if receipt is None:
                         continue
                     receipt_path = source_packet / receipt["path"]
-                    receipt_contents = (
-                        f"{receipt_name}-{attempt['attempt_id']}\n"
-                    ).encode()
+                    receipt_contents = json_bytes(
+                        browser_terminal_receipt(attempt, receipt_name)
+                    )
                     receipt_path.parent.mkdir(parents=True, exist_ok=True)
                     receipt_path.write_bytes(receipt_contents)
                     receipt["sha256"] = sha256(receipt_contents)
@@ -221,6 +320,14 @@ def materialized_campaign(
                 source_packet / attempt["manifest_path"], manifest
             )
 
+        attempts_by_id = {
+            attempt["attempt_id"]: attempt for attempt in data["attempts"]
+        }
+        for snapshot in data["gate_status_snapshots"]:
+            source_attempt = attempts_by_id[snapshot["attempt_id"]]
+            snapshot["manifest_path"] = source_attempt["manifest_path"]
+            snapshot["manifest_sha256"] = source_attempt["manifest_sha256"]
+
         campaign_path = source_packet / "campaign.json"
         write_json(campaign_path, data)
         yield searches_root, campaign_path, data, source_packet
@@ -230,6 +337,49 @@ def materialized_campaign(
 
 def save_campaign(path: Path, data: dict[str, Any]) -> None:
     write_json(path, data)
+
+
+def rewrite_linked_manifest_terminal(
+    source_packet: Path, attempt: dict[str, Any]
+) -> None:
+    manifest_path = source_packet / attempt["manifest_path"]
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["attempt_terminal"] = {
+        key: value
+        for key, value in attempt["terminal"].items()
+        if key != "terminal_verification"
+    }
+    attempt["manifest_sha256"] = write_json(manifest_path, manifest)
+
+
+def source_campaign(source_directory: str) -> dict[str, Any]:
+    return json.loads(
+        (SEARCHES / "sources" / source_directory / "campaign.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+
+@contextmanager
+def copied_source_campaign(
+    source_directory: str,
+) -> Iterator[tuple[Path, Path, Path]]:
+    """Isolate a real campaign packet without mutating immutable evidence."""
+    temporary = tempfile.TemporaryDirectory()
+    try:
+        temporary_root = Path(temporary.name)
+        searches_root = temporary_root / "searches"
+        shutil.copytree(SEARCHES / "schemas", searches_root / "schemas")
+        shutil.copyfile(ROOT / "protocol.md", searches_root.parent / "protocol.md")
+        shutil.copyfile(
+            SEARCHES / "search-concept-dictionary.json",
+            searches_root / "search-concept-dictionary.json",
+        )
+        source_packet = searches_root / "sources" / source_directory
+        shutil.copytree(SEARCHES / "sources" / source_directory, source_packet)
+        yield searches_root, source_packet / "campaign.json", source_packet
+    finally:
+        temporary.cleanup()
 
 
 class PilotCampaignValidationTests(unittest.TestCase):
@@ -276,6 +426,63 @@ class PilotCampaignValidationTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "SHA-256 does not match"):
                 infrastructure.validate_campaign_artifacts(searches_root)
 
+    def test_real_campaign_fingerprint_mismatch_is_rejected(self) -> None:
+        with materialized_campaign() as (searches_root, campaign_path, data, _):
+            data["protocol_fingerprint"] = "f" * 64
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(AssertionError, "protocol_fingerprint"):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
+        with materialized_campaign() as (searches_root, campaign_path, data, _):
+            data["dictionary_fingerprint"] = "f" * 64
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(AssertionError, "dictionary_fingerprint"):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
+    def test_acceptance_candidate_rejects_unsafe_local_evidence(self) -> None:
+        cases = (
+            (
+                "accepted",
+                b'{"path": "/Users/reviewer/private.json"}\n',
+                "absolute path",
+            ),
+            (
+                "accepted",
+                b'{"profile": "--profile-directory=Default"}\n',
+                "browser profile",
+            ),
+            (
+                "ready_for_acceptance_review",
+                b'{"command": "google-chrome --headless"}\n',
+                "browser command",
+            ),
+        )
+        for status, contents, message in cases:
+            with self.subTest(status=status):
+                data = accepted_campaign()
+                data["status"] = status
+                if status != "accepted":
+                    data["acceptance"] = None
+                with materialized_campaign(data) as (
+                    searches_root,
+                    campaign_path,
+                    data,
+                    source_packet,
+                ):
+                    attempt = data["attempts"][1]
+                    evidence = next(
+                        item
+                        for item in attempt["evidence"]
+                        if item["gate_id"] == "G-PAGINATION-CONTROL"
+                    )
+                    digest = sha256(contents)
+                    (source_packet / evidence["path"]).write_bytes(contents)
+                    evidence["sha256"] = digest
+                    gate(data, "G-PAGINATION-CONTROL")["evidence"][0]["sha256"] = digest
+                    save_campaign(campaign_path, data)
+                    with self.assertRaisesRegex(AssertionError, message):
+                        infrastructure.validate_campaign_artifacts(searches_root)
+
     def test_campaign_and_attempt_task_prefixes_must_match_task(self) -> None:
         data = campaign()
         data["campaign_id"] = "S-D02-C01-20260824T150000+0000"
@@ -303,33 +510,18 @@ class PilotCampaignValidationTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "campaign_id does not match"):
                 infrastructure.validate_campaign_artifacts(searches_root)
 
-    def test_legacy_manifest_without_additive_links_is_hashed_and_validated(
-        self,
-    ) -> None:
-        with materialized_campaign() as (
-            searches_root,
-            campaign_path,
-            data,
-            source_packet,
-        ):
-            for attempt in data["attempts"]:
-                manifest_path = source_packet / attempt["manifest_path"]
-                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-                manifest.pop("campaign")
-                manifest.pop("attempt_terminal")
-                attempt["manifest_sha256"] = write_json(manifest_path, manifest)
-            save_campaign(campaign_path, data)
-            self.assertEqual(
-                infrastructure.validate_campaign_artifacts(searches_root), 1
-            )
+    def test_unlinked_new_manifest_cannot_claim_legacy_shape(self) -> None:
+        with materialized_campaign(legacy_manifests=True) as (searches_root, _, _, _):
+            with self.assertRaisesRegex(AssertionError, "new attempt must include"):
+                infrastructure.validate_campaign_artifacts(searches_root)
 
     def test_accepted_campaign_requires_observed_not_inferred_catalog_gate(
         self,
     ) -> None:
         data = accepted_campaign()
         query = gate(data, "G-QUERY-TRANSPORT")
+        query["observed_basis"] = "inferred"
         query["original_observed_basis"] = "inferred"
-        query["carry_forward"]["original_observed_basis"] = "inferred"
         data["attempts"][0]["evidence"][0]["basis"] = "inferred"
         with self.assertRaisesRegex(AssertionError, "inferred or untested"):
             infrastructure.validate_campaign_artifact(data)
@@ -350,17 +542,151 @@ class PilotCampaignValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, "missing required catalog gate"):
             infrastructure.validate_campaign_artifact(data)
 
-    def test_carry_forward_retains_original_basis_and_exact_hash(self) -> None:
-        data = campaign()
-        query = gate(data, "G-QUERY-TRANSPORT")
-        query["carry_forward"]["original_observed_basis"] = "official_documentation"
+    def test_generic_direct_catalog_is_not_an_acceptance_plan(self) -> None:
+        data = accepted_campaign()
+        data["capability_catalog"] = [
+            "G-QUERY-TRANSPORT",
+            "G-FIELD-BOUNDARY",
+            "G-PAGINATION-CONTROL",
+            "G-PAGE-IDENTITY",
+        ]
+        with self.assertRaisesRegex(
+            AssertionError, "frozen task/source required-gate plan"
+        ):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_source_plan_covers_required_acceptance_domains(self) -> None:
+        required_domains = {
+            "G-CONTENT-CONTROL",
+            "G-DATE-CONTROL",
+            "G-LANGUAGE-CONTROL",
+            "G-CONTROLLED-VOCABULARY",
+            "G-RETRIEVAL",
+            "G-PAGE-IDENTITY",
+            "G-COMPLETENESS",
+            "G-FAILURE-BEHAVIOR",
+        }
+        plan = infrastructure.TASK_SOURCE_REQUIRED_GATE_PLANS[("S-D01", "scopus")]
+        self.assertTrue(required_domains <= set(plan))
+
+        data = accepted_campaign()
+        data["capability_gates"] = [
+            item
+            for item in data["capability_gates"]
+            if item["gate_id"] != "G-DATE-CONTROL"
+        ]
+        data["attempts"][1]["evidence"] = [
+            item
+            for item in data["attempts"][1]["evidence"]
+            if item["gate_id"] != "G-DATE-CONTROL"
+        ]
+        with self.assertRaisesRegex(AssertionError, "missing required catalog gate"):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_carry_forward_requires_immutable_passed_snapshot(self) -> None:
+        data = source_campaign("s-d03-ieee-xplore")
+        field_parser = gate(data, "G-FIELD-PARSER")
+        field_parser["carry_forward"]["original_observed_basis"] = (
+            "official_documentation"
+        )
         with self.assertRaisesRegex(AssertionError, "original observed basis"):
             infrastructure.validate_campaign_artifact(data)
 
-        data = campaign()
-        query = gate(data, "G-QUERY-TRANSPORT")
-        query["carry_forward"]["evidence"][0]["sha256"] = "f" * 64
+        data = source_campaign("s-d03-ieee-xplore")
+        field_parser = gate(data, "G-FIELD-PARSER")
+        field_parser["carry_forward"]["evidence"][0]["sha256"] = "f" * 64
         with self.assertRaisesRegex(AssertionError, "path/hash"):
+            infrastructure.validate_campaign_artifact(data)
+
+        data = source_campaign("s-d03-ieee-xplore")
+        data["gate_status_snapshots"] = []
+        with self.assertRaisesRegex(
+            AssertionError, "immutable passed\\+reusable gate-status snapshot"
+        ):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_d03_failed_year_evidence_cannot_be_carried_to_p05_as_passed(self) -> None:
+        data = source_campaign("s-d03-ieee-xplore")
+        p4 = data["attempts"][-1]
+        p5 = copy.deepcopy(p4)
+        p5_id = "S-D03-P05-20260824T161500-0400"
+        p5.update(
+            {
+                "attempt_id": p5_id,
+                "sequence": 5,
+                "manifest_path": f"pilots/{p5_id}/manifest.json",
+                "manifest_sha256": "f" * 64,
+                "evidence": [],
+                "source_operations": {
+                    "predeclared_maximum": 0,
+                    "performed": 0,
+                    "operations": [],
+                },
+            }
+        )
+        p5["allocation"].update(
+            {
+                "authorization_decision_id": "D-TECH-NEXT-P05",
+                "allocated_at": "2026-08-24T16:13:25-04:00",
+            }
+        )
+        p5["terminal"].update(
+            {
+                "browser_backed": False,
+                "terminal_verification": "not_applicable",
+                "cleanup_receipt": None,
+                "lease_receipt": None,
+            }
+        )
+        data["attempts"].append(p5)
+
+        year_control = gate(data, "G-YEAR-CONTROL")
+        failed_evidence = [
+            {"path": item["path"], "sha256": item["sha256"]}
+            for item in year_control["evidence"]
+        ]
+        year_control.update(
+            {
+                "checkpoint_id": "CP-YEAR-CONTROL-P05",
+                "attempt_id": p5_id,
+                "status": "passed",
+                "observed_basis": "carried_forward",
+                "reusable": True,
+                "carried_forward": True,
+                "carry_forward": {
+                    "from_attempt_id": p4["attempt_id"],
+                    "from_gate_id": "G-YEAR-CONTROL",
+                    "evidence": failed_evidence,
+                    "original_observed_basis": "observed",
+                    "affected_by_code_or_semantic_change": False,
+                    "rationale": "This false carry is intentionally rejected.",
+                },
+                "source_operation_count": 0,
+                "semantic_impact": {
+                    "classification": "none",
+                    "review_effect": False,
+                    "rationale": "A carry has no new technical effect.",
+                },
+                "invalidation": None,
+            }
+        )
+        data["gate_status_snapshots"].append(
+            {
+                "snapshot_id": "GS-P04-YEAR-CONTROL",
+                "attempt_id": p4["attempt_id"],
+                "manifest_path": p4["manifest_path"],
+                "manifest_sha256": p4["manifest_sha256"],
+                "gate_id": "G-YEAR-CONTROL",
+                "status": "passed",
+                "reusable": True,
+                "original_observed_basis": "observed",
+                "evidence": failed_evidence,
+                "immutable": True,
+            }
+        )
+        with self.assertRaisesRegex(
+            AssertionError, "trusted immutable gate-status migration inventory"
+        ):
             infrastructure.validate_campaign_artifact(data)
 
     def test_second_initial_attempt_is_rejected(self) -> None:
@@ -435,7 +761,16 @@ class PilotCampaignValidationTests(unittest.TestCase):
 
         data["attempts"][1]["source_operations"]["predeclared_maximum"] = 4
         decision["affected_gate_ids"] = ["G-QUERY-TRANSPORT"]
-        with self.assertRaisesRegex(AssertionError, "omits an enacted technical gate"):
+        with self.assertRaisesRegex(AssertionError, "omits an enacted"):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_allocated_technical_decision_scopes_operation_bearing_gate(self) -> None:
+        data = campaign()
+        data["decisions"][0]["affected_gate_ids"] = ["G-PAGE-IDENTITY"]
+        with self.assertRaisesRegex(
+            AssertionError,
+            "omits an enacted controller-technical operation-bearing gate",
+        ):
             infrastructure.validate_campaign_artifact(data)
 
     def test_methodological_decision_only_gate_does_not_block_technical_retry(
@@ -556,58 +891,101 @@ class PilotCampaignValidationTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             infrastructure.validate_campaign_artifact(data)
 
-    def test_immutable_legacy_browser_terminal_is_allowed_without_receipts(
-        self,
-    ) -> None:
-        data = campaign()
-        terminal = data["attempts"][0]["terminal"]
-        terminal.update(
-            {
-                "outcome": "blocked",
-                "category": "technical",
-                "browser_backed": True,
-                "terminal_verification": "legacy_unverifiable",
-                "reason": "Historical browser attempt lacks a public shared-lease receipt.",
-            }
-        )
-        with materialized_campaign(data, legacy_manifests=True) as (
-            searches_root,
-            _,
-            _,
-            _,
-        ):
+    def test_trusted_pre_migration_legacy_inventory_is_accepted(self) -> None:
+        with copied_source_campaign("s-d03-ieee-xplore") as (searches_root, _, _):
             self.assertEqual(
                 infrastructure.validate_campaign_artifacts(searches_root), 1
             )
 
-    def test_new_linked_manifest_rejects_legacy_browser_terminal(self) -> None:
-        data = campaign()
-        terminal = data["attempts"][0]["terminal"]
-        terminal.update(
-            {
-                "outcome": "blocked",
-                "category": "technical",
-                "browser_backed": True,
-                "terminal_verification": "legacy_unverifiable",
-                "reason": "Historical browser attempt lacks a public shared-lease receipt.",
-            }
-        )
-        with materialized_campaign(data) as (
+    def test_pre_migration_manifest_coverage_cannot_be_rewritten(self) -> None:
+        with copied_source_campaign("s-d13-nasa-ntrs") as (
             searches_root,
             campaign_path,
-            data,
+            _,
+        ):
+            data = json.loads(campaign_path.read_text(encoding="utf-8"))
+            data["attempts"][0]["manifest_sha256"] = "f" * 64
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(
+                AssertionError, "omits a trusted pre-migration manifest identity"
+            ):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
+    def test_fresh_unlinked_p05_cannot_claim_legacy_terminal(self) -> None:
+        with copied_source_campaign("s-d03-ieee-xplore") as (
+            searches_root,
+            campaign_path,
             source_packet,
         ):
-            # A campaign link alone is enough to prove this is not the immutable
-            # pre-campaign manifest shape, while remaining valid under v1 schema.
-            for attempt in data["attempts"]:
-                manifest_path = source_packet / attempt["manifest_path"]
-                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-                manifest.pop("attempt_terminal")
-                attempt["manifest_sha256"] = write_json(manifest_path, manifest)
+            data = json.loads(campaign_path.read_text(encoding="utf-8"))
+            p5_id = "S-D03-P05-20260824T161500-0400"
+            p5 = copy.deepcopy(data["attempts"][-1])
+            p5.update(
+                {
+                    "attempt_id": p5_id,
+                    "sequence": 5,
+                    "manifest_path": f"pilots/{p5_id}/manifest.json",
+                    "evidence": [],
+                    "source_operations": {
+                        "predeclared_maximum": 0,
+                        "performed": 0,
+                        "operations": [],
+                    },
+                }
+            )
+            p5["allocation"].update(
+                {
+                    "authorization_decision_id": "D-TECH-NEXT-P05",
+                    "allocated_at": "2026-08-24T16:13:25-04:00",
+                }
+            )
+            manifest = manifest_template()
+            manifest.update(
+                {
+                    "pilot_id": p5_id,
+                    "task_id": data["task_id"],
+                    "source_id": data["source_id"],
+                    "method_type": data["method_type"],
+                    "status": "failed",
+                }
+            )
+            manifest.pop("campaign")
+            manifest.pop("attempt_terminal")
+            p5["manifest_sha256"] = write_json(
+                source_packet / p5["manifest_path"], manifest
+            )
+            data["attempts"].append(p5)
             save_campaign(campaign_path, data)
-            with self.assertRaisesRegex(AssertionError, "legacy_unverifiable"):
+            with self.assertRaisesRegex(AssertionError, "trusted pre-migration"):
                 infrastructure.validate_campaign_artifacts(searches_root)
+
+    def test_missing_or_symlinked_legacy_manifest_is_rejected(self) -> None:
+        with self.subTest("missing"):
+            with copied_source_campaign("s-d03-ieee-xplore") as (
+                searches_root,
+                campaign_path,
+                source_packet,
+            ):
+                data = json.loads(campaign_path.read_text(encoding="utf-8"))
+                manifest_path = source_packet / data["attempts"][-1]["manifest_path"]
+                manifest_path.unlink()
+                with self.assertRaisesRegex(AssertionError, "escapes or is missing"):
+                    infrastructure.validate_campaign_artifacts(searches_root)
+
+        with self.subTest("external symlink"):
+            with copied_source_campaign("s-d03-ieee-xplore") as (
+                searches_root,
+                campaign_path,
+                source_packet,
+            ):
+                data = json.loads(campaign_path.read_text(encoding="utf-8"))
+                manifest_path = source_packet / data["attempts"][-1]["manifest_path"]
+                external = searches_root.parent / "external-manifest.json"
+                shutil.copyfile(manifest_path, external)
+                manifest_path.unlink()
+                manifest_path.symlink_to(external)
+                with self.assertRaisesRegex(AssertionError, "must not be symlinked"):
+                    infrastructure.validate_campaign_artifacts(searches_root)
 
     def test_acceptance_rejects_legacy_unverifiable_browser_terminal(self) -> None:
         data = accepted_campaign()
@@ -621,10 +999,139 @@ class PilotCampaignValidationTests(unittest.TestCase):
                 "reason": "Historical browser attempt lacks a public shared-lease receipt.",
             }
         )
-        with self.assertRaisesRegex(AssertionError, "accepted.*legacy_unverifiable"):
+        with self.assertRaisesRegex(AssertionError, "legacy_unverifiable"):
             infrastructure.validate_campaign_artifact(data)
 
-    def test_lease_receipt_cannot_be_a_preflight_or_postflight_artifact(self) -> None:
+    def test_terminal_receipts_reject_aliasing_and_unrelated_evidence(self) -> None:
+        data = campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "browser_backed": True,
+                "terminal_verification": "verified",
+                "cleanup_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/cleanup-receipt.json",
+                    "sha256": "a" * 64,
+                },
+                "lease_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/lease-receipt.json",
+                    "sha256": "b" * 64,
+                },
+            }
+        )
+        terminal["lease_receipt"] = copy.deepcopy(terminal["cleanup_receipt"])
+        with self.assertRaisesRegex(AssertionError, "must be distinct"):
+            infrastructure.validate_campaign_artifact(data)
+
+        data = campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "browser_backed": True,
+                "terminal_verification": "verified",
+                "cleanup_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/cleanup-receipt.json",
+                    "sha256": "a" * 64,
+                },
+                "lease_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/lease-receipt.json",
+                    "sha256": "b" * 64,
+                },
+            }
+        )
+        with materialized_campaign(data) as (
+            searches_root,
+            campaign_path,
+            data,
+            source_packet,
+        ):
+            attempt = data["attempts"][0]
+            terminal = attempt["terminal"]
+            evidence = attempt["evidence"][0]
+            terminal["cleanup_receipt"] = {
+                "path": evidence["path"],
+                "sha256": evidence["sha256"],
+            }
+            rewrite_linked_manifest_terminal(source_packet, attempt)
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(AssertionError, "structured JSON"):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
+    def test_terminal_receipts_bind_attempt_and_controller_ownership(self) -> None:
+        data = campaign()
+        terminal = data["attempts"][0]["terminal"]
+        terminal.update(
+            {
+                "browser_backed": True,
+                "terminal_verification": "verified",
+                "cleanup_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/cleanup-receipt.json",
+                    "sha256": "a" * 64,
+                },
+                "lease_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/lease-receipt.json",
+                    "sha256": "b" * 64,
+                },
+            }
+        )
+        with materialized_campaign(data) as (
+            searches_root,
+            campaign_path,
+            data,
+            source_packet,
+        ):
+            attempt = data["attempts"][0]
+            receipt_path = (
+                source_packet / attempt["terminal"]["cleanup_receipt"]["path"]
+            )
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            receipt["attempt_id"] = data["attempts"][1]["attempt_id"]
+            attempt["terminal"]["cleanup_receipt"]["sha256"] = write_json(
+                receipt_path, receipt
+            )
+            rewrite_linked_manifest_terminal(source_packet, attempt)
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(AssertionError, "not bound to its attempt ID"):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
+        data = campaign()
+        data["attempts"][0]["terminal"].update(
+            {
+                "browser_backed": True,
+                "terminal_verification": "verified",
+                "cleanup_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/cleanup-receipt.json",
+                    "sha256": "a" * 64,
+                },
+                "lease_receipt": {
+                    "path": "pilots/S-D01-P01-20260824T150000+0000/lease-receipt.json",
+                    "sha256": "b" * 64,
+                },
+            }
+        )
+        with materialized_campaign(data) as (
+            searches_root,
+            campaign_path,
+            data,
+            source_packet,
+        ):
+            attempt = data["attempts"][0]
+            receipt_path = source_packet / attempt["terminal"]["lease_receipt"]["path"]
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            receipt["controller"]["controller_id"] = "another-controller"
+            attempt["terminal"]["lease_receipt"]["sha256"] = write_json(
+                receipt_path, receipt
+            )
+            rewrite_linked_manifest_terminal(source_packet, attempt)
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(
+                AssertionError, "different controller ownership"
+            ):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
+    def test_pre_or_postflight_file_cannot_bypass_structured_lease_receipt(
+        self,
+    ) -> None:
         data = campaign()
         terminal = data["attempts"][0]["terminal"]
         terminal.update(
@@ -641,8 +1148,21 @@ class PilotCampaignValidationTests(unittest.TestCase):
                 },
             }
         )
-        with self.assertRaisesRegex(AssertionError, "preflight/postflight"):
-            infrastructure.validate_campaign_artifact(data)
+        with materialized_campaign(data) as (
+            searches_root,
+            campaign_path,
+            data,
+            source_packet,
+        ):
+            attempt = data["attempts"][0]
+            lease_path = source_packet / attempt["terminal"]["lease_receipt"]["path"]
+            attempt["terminal"]["lease_receipt"]["sha256"] = write_json(
+                lease_path, {"phase": "postflight", "release_verified": True}
+            )
+            rewrite_linked_manifest_terminal(source_packet, attempt)
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(AssertionError, "does not validate"):
+                infrastructure.validate_campaign_artifacts(searches_root)
 
     def test_busy_reissue_policy_is_auditable_and_accounted(self) -> None:
         data = campaign()

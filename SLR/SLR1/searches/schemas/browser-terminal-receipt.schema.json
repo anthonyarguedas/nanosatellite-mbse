@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/slr1/browser-terminal-receipt.schema.json",
+  "title": "SLR1 sanitized browser-terminal receipts",
+  "type": "object",
+  "properties": {},
+  "required": [],
+  "oneOf": [
+    {"$ref": "#/$defs/cleanupReceipt"},
+    {"$ref": "#/$defs/sharedLeaseReleaseReceipt"}
+  ],
+  "$defs": {
+    "attemptId": {
+      "type": "string",
+      "pattern": "^(S-D(0[1-9]|1[0-3])|S-L02)-P[0-9]{2}-[0-9]{8}T[0-9]{6}[+-][0-9]{4}$"
+    },
+    "controllerOwnership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["controller_id", "owns_attempt", "ownership_verified"],
+      "properties": {
+        "controller_id": {"type": "string", "minLength": 1},
+        "owns_attempt": {"const": true},
+        "ownership_verified": {"const": true}
+      }
+    },
+    "cleanupReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "receipt_kind",
+        "attempt_id",
+        "controller",
+        "verified_at",
+        "sanitized_for_campaign",
+        "cleanup"
+      ],
+      "properties": {
+        "schema_version": {"const": "slr1-browser-cleanup-receipt/v1"},
+        "receipt_kind": {"const": "browser_cleanup"},
+        "attempt_id": {"$ref": "#/$defs/attemptId"},
+        "controller": {"$ref": "#/$defs/controllerOwnership"},
+        "verified_at": {"type": "string", "format": "date-time"},
+        "sanitized_for_campaign": {"const": true},
+        "cleanup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "owned_pages_closed",
+            "controller_anchor_preserved",
+            "cleanup_verified"
+          ],
+          "properties": {
+            "owned_pages_closed": {"const": true},
+            "controller_anchor_preserved": {"const": true},
+            "cleanup_verified": {"const": true}
+          }
+        }
+      }
+    },
+    "sharedLeaseReleaseReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "receipt_kind",
+        "attempt_id",
+        "controller",
+        "verified_at",
+        "sanitized_for_campaign",
+        "lease"
+      ],
+      "properties": {
+        "schema_version": {"const": "slr1-shared-lease-release-receipt/v1"},
+        "receipt_kind": {"const": "shared_lease_release"},
+        "attempt_id": {"$ref": "#/$defs/attemptId"},
+        "controller": {"$ref": "#/$defs/controllerOwnership"},
+        "verified_at": {"type": "string", "format": "date-time"},
+        "sanitized_for_campaign": {"const": true},
+        "lease": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "lease_id",
+            "released_by_controller",
+            "release_verified"
+          ],
+          "properties": {
+            "lease_id": {"type": "string", "minLength": 1},
+            "released_by_controller": {"const": true},
+            "release_verified": {"const": true}
+          }
+        }
+      }
+    }
+  }
+}
