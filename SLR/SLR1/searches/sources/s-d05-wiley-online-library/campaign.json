@@ -22,7 +22,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-24T16:13:25-04:00",
+  "updated_at": "2026-08-25T10:43:46-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -151,6 +151,117 @@
         "cancelled_by": null,
         "reason": "P02 corrected-adapter verification passed only source-free. Before H-001, the required dedicated read-only launcher check found the assigned CDP endpoint stale. The P02 stop rule prohibited all source work, browser repair, retry, and final postflight. No live Wiley requirement is satisfied and no source total is claimed."
       }
+    },
+    {
+      "attempt_id": "S-D05-P03-20260825T103818-0400",
+      "sequence": 3,
+      "manifest_path": "pilots/S-D05-P03-20260825T103818-0400/manifest.json",
+      "manifest_sha256": "74b859556b6ca51a86c93c5b8b731cc8d9314f21a7e6be7611730b46db8e9a29",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P03",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-25T10:38:18-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 4,
+        "performed": 3,
+        "operations": [
+          {
+            "operation_id": "OP-01",
+            "operation_key": "HEALTH-B1-ARTICLES-COUNT",
+            "gate_ids": [
+              "G-BROWSER-HEALTH",
+              "G-LIVE-HEALTH"
+            ],
+            "outcome": "success",
+            "source_reported_total": 44,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          },
+          {
+            "operation_id": "OP-02",
+            "operation_key": "PARSER-A1-ARTICLES-COUNT",
+            "gate_ids": [
+              "G-LIVE-INTERFACE"
+            ],
+            "outcome": "success",
+            "source_reported_total": 13,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          },
+          {
+            "operation_id": "OP-03",
+            "operation_key": "BOUNDARY-B1-COLLECTIONS-COUNT",
+            "gate_ids": [
+              "G-LIVE-INTERFACE"
+            ],
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P03-BROWSER-HEALTH",
+          "gate_id": "G-BROWSER-HEALTH",
+          "path": "pilots/S-D05-P03-20260825T103818-0400/preflight.json",
+          "sha256": "7cc8f7d9ed35b17e2ae46755ca3794edbb7e56a72d8d7b141d141d29f1bbe7b8",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P03-LIVE-HEALTH",
+          "gate_id": "G-LIVE-HEALTH",
+          "path": "pilots/S-D05-P03-20260825T103818-0400/health-gate-evidence.json",
+          "sha256": "c078ea6d47b30a55870a6e674d4c989c928ef9f94e2e561e5fa7c741589fcd99",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P03-LIVE-INTERFACE",
+          "gate_id": "G-LIVE-INTERFACE",
+          "path": "pilots/S-D05-P03-20260825T103818-0400/interface-gate-evidence.json",
+          "sha256": "859a32078f7565d206e1f6af4c139fde0636f4affde212ac367d30949d038e79",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P03-LIVE-COMPLETENESS",
+          "gate_id": "G-LIVE-COMPLETENESS",
+          "path": "pilots/S-D05-P03-20260825T103818-0400/completeness-gate-evidence.json",
+          "sha256": "772f7660d48f6330f9cd05b619e7d18ef8226cc68c39f5c2e54aa68480753624",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "completed",
+        "category": "completed",
+        "ended_at": "2026-08-25T10:42:06-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D05-P03-20260825T103818-0400/browser-cleanup-receipt.json",
+          "sha256": "bb99bc186c361d127e9f71faf6c0d42ba9450f53bc0df450a70a72c301880c0b"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D05-P03-20260825T103818-0400/shared-lease-release-receipt.json",
+          "sha256": "7de0c028f875576eca5ea6a83b88385b4f1b6d9f01c9b5ed2c011c7035a04825"
+        },
+        "cancelled_by": null,
+        "reason": "The attached P03 phase completed three conditional count-only source operations successfully. The fourth operation was not run because the first native total was 44, outside the predeclared 1..40 range; completeness remains blocked without a fallback query or partial retrieval."
+      }
     }
   ],
   "gate_status_snapshots": [],
@@ -213,16 +324,107 @@
     },
     {
       "gate_id": "G-BROWSER-HEALTH",
-      "checkpoint_id": "CP-BROWSER-HEALTH-P02",
-      "attempt_id": "S-D05-P02-20260824T134448-0400",
-      "requirement": "The shared browser preflight is healthy immediately before live work.",
+      "checkpoint_id": "CP-BROWSER-HEALTH-P03",
+      "attempt_id": "S-D05-P03-20260825T103818-0400",
+      "requirement": "The shared CfT browser preflight is healthy immediately before live work.",
       "depends_on": [],
-      "status": "failed",
+      "status": "passed",
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D05-P02-20260824T134448-0400/browser-preflight-failure.json",
-          "sha256": "4a4dc727160123604b8544c4730e033763e40f01a7031a1697feb93f7c393e84",
+          "path": "pilots/S-D05-P03-20260825T103818-0400/preflight.json",
+          "sha256": "7cc8f7d9ed35b17e2ae46755ca3794edbb7e56a72d8d7b141d141d29f1bbe7b8",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "This bounded browser/source diagnostic is technical and does not change review semantics."
+      },
+      "invalidation": null,
+      "notes": "P02 historical stale-endpoint failure is superseded for the current checkpoint by P03 healthy shared-CfT evidence; P02 remains immutable.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-LIVE-HEALTH",
+      "checkpoint_id": "CP-LIVE-HEALTH-P03",
+      "attempt_id": "S-D05-P03-20260825T103818-0400",
+      "requirement": "A first record-free Wiley rendered health gate reaches an exact positive total with reconciled route, query echo, and controls.",
+      "depends_on": [
+        "G-BROWSER-HEALTH",
+        "G-OUTPUT-SAFETY"
+      ],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D05-P03-20260825T103818-0400/health-gate-evidence.json",
+          "sha256": "c078ea6d47b30a55870a6e674d4c989c928ef9f94e2e561e5fa7c741589fcd99",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "This bounded browser/source diagnostic is technical and does not change review semantics."
+      },
+      "invalidation": null,
+      "notes": "OP-01 passed with native total 44 and no retained records.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-LIVE-INTERFACE",
+      "checkpoint_id": "CP-LIVE-INTERFACE-P03",
+      "attempt_id": "S-D05-P03-20260825T103818-0400",
+      "requirement": "The predeclared A1 parser/control and Collections boundary diagnostics complete successfully.",
+      "depends_on": [
+        "G-LIVE-HEALTH"
+      ],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D05-P03-20260825T103818-0400/interface-gate-evidence.json",
+          "sha256": "859a32078f7565d206e1f6af4c139fde0636f4affde212ac367d30949d038e79",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 2,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "This bounded browser/source diagnostic is technical and does not change review semantics."
+      },
+      "invalidation": null,
+      "notes": "OP-02 and OP-03 passed; A1 page-level Collections total was unresolved, while the independent Collections route OP-03 was exact.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-LIVE-COMPLETENESS",
+      "checkpoint_id": "CP-LIVE-COMPLETENESS-P03",
+      "attempt_id": "S-D05-P03-20260825T103818-0400",
+      "requirement": "The conditional exact-total two-pass retrieval/native-RIS diagnostic is run only when OP-01 total is 1..40.",
+      "depends_on": [
+        "G-LIVE-INTERFACE"
+      ],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D05-P03-20260825T103818-0400/completeness-gate-evidence.json",
+          "sha256": "772f7660d48f6330f9cd05b619e7d18ef8226cc68c39f5c2e54aa68480753624",
           "validity": "valid"
         }
       ],
@@ -233,84 +435,11 @@
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "Shared browser health is operational and does not alter review semantics."
+        "rationale": "This bounded browser/source diagnostic is technical and does not change review semantics."
       },
       "invalidation": null,
-      "notes": "P02's stale dedicated endpoint is an environment stop, not Wiley behavior.",
+      "notes": "OP-04 was not run because OP-01 total was 44; no fallback query or partial prefix was used.",
       "original_observed_basis": "observed"
-    },
-    {
-      "gate_id": "G-LIVE-HEALTH",
-      "checkpoint_id": "CP-LIVE-HEALTH-P02",
-      "attempt_id": "S-D05-P02-20260824T134448-0400",
-      "requirement": "A first record-free Wiley rendered health gate reaches a reconcilable result state.",
-      "depends_on": [
-        "G-BROWSER-HEALTH",
-        "G-OUTPUT-SAFETY"
-      ],
-      "status": "blocked",
-      "observed_basis": "observed",
-      "evidence": [],
-      "reusable": false,
-      "carried_forward": false,
-      "carry_forward": null,
-      "source_operation_count": 0,
-      "semantic_impact": {
-        "classification": "controller_technical",
-        "review_effect": false,
-        "rationale": "A bounded health gate is technical and preserves review semantics."
-      },
-      "invalidation": null,
-      "notes": "",
-      "original_observed_basis": "observed"
-    },
-    {
-      "gate_id": "G-LIVE-INTERFACE",
-      "checkpoint_id": "CP-LIVE-INTERFACE-P02",
-      "attempt_id": "S-D05-P02-20260824T134448-0400",
-      "requirement": "Only after the live health gate, predeclared route, field, parser, pair, and control tests may run.",
-      "depends_on": [
-        "G-LIVE-HEALTH"
-      ],
-      "status": "blocked",
-      "observed_basis": "untested",
-      "evidence": [],
-      "reusable": false,
-      "carried_forward": false,
-      "carry_forward": null,
-      "source_operation_count": 0,
-      "semantic_impact": {
-        "classification": "controller_technical",
-        "review_effect": false,
-        "rationale": "These diagnostics validate implementation behavior without changing the protocol."
-      },
-      "invalidation": null,
-      "notes": "",
-      "original_observed_basis": "untested"
-    },
-    {
-      "gate_id": "G-LIVE-COMPLETENESS",
-      "checkpoint_id": "CP-LIVE-COMPLETENESS-P02",
-      "attempt_id": "S-D05-P02-20260824T134448-0400",
-      "requirement": "Only supported live tests may advance to the predeclared identity/export/completeness checks.",
-      "depends_on": [
-        "G-LIVE-INTERFACE"
-      ],
-      "status": "blocked",
-      "observed_basis": "untested",
-      "evidence": [],
-      "reusable": false,
-      "carried_forward": false,
-      "carry_forward": null,
-      "source_operation_count": 0,
-      "semantic_impact": {
-        "classification": "controller_technical",
-        "review_effect": false,
-        "rationale": "Validation packaging and completeness mechanics are technical only."
-      },
-      "invalidation": null,
-      "notes": "",
-      "original_observed_basis": "untested"
     }
   ],
   "decisions": [

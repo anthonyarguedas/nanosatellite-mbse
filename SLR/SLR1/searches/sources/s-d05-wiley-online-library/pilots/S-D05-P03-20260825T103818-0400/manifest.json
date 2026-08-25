@@ -1,0 +1,427 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D05-P03-20260825T103818-0400",
+  "task_id": "S-D05",
+  "source_id": "wiley-online-library",
+  "method_type": "direct",
+  "status": "complete",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-25T10:38:18-04:00",
+  "ended_at": "2026-08-25T10:42:06-04:00",
+  "protocol_commit": "cf9129b7e63633468499c27ed76df9d52f20623c",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "controller",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "Wiley Online Library",
+    "url": "https://onlinelibrary.wiley.com/",
+    "access_route": "Normal rendered Wiley Advanced Search through the supervised shared CfT browser lease; count-only Articles & Chapters and Collections diagnostics; no login or access-control bypass.",
+    "authenticated": false,
+    "database_or_collection": "full Wiley Online Library publisher platform; Articles & Chapters and Collections routes tested diagnostically",
+    "platform": "Wiley Online Library",
+    "timezone": "America/New_York (-04:00)"
+  },
+  "executions": [
+    {
+      "execution_id": "OP-01",
+      "partition_id": "B1",
+      "cell_id": "WILEY-B1-C01",
+      "purpose": "First record-free Wiley rendered health gate on the current Articles & Chapters route.",
+      "started_at": "2026-08-25T10:41:00-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Existing queries/B1.wiley-allfield.txt; Articles & Chapters; diagnostic date bound 2011-01-01 through 2026-08-25; Earliest; count-only; one page.",
+      "query_file": "queries/B1.wiley-allfield.txt",
+      "fields": [
+        "Anywhere (AllField)"
+      ],
+      "controls": {
+        "content": "articlesChapters",
+        "target": "default",
+        "count_only": true,
+        "passes": 1,
+        "limit": 20,
+        "max_pages": 1,
+        "page_size": 20,
+        "query_echo": "exact",
+        "source_requests_made": 1,
+        "records_on_first_page": 20,
+        "collections_tab_total": 1
+      },
+      "source_reported_total": 44,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d05-wiley-restricted/S-D05-P03-20260825T103818-0400/op-01-health-b1.json",
+        "live-operation-summary.json"
+      ],
+      "notes": "Positive native total; no normalized records retained."
+    },
+    {
+      "execution_id": "OP-02",
+      "partition_id": "A1",
+      "cell_id": "WILEY-A1-C01",
+      "purpose": "Conditional long-query parser and control diagnostic on Articles & Chapters.",
+      "started_at": "2026-08-25T10:41:25-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Existing queries/A1.wiley-allfield.txt; Articles & Chapters; diagnostic date bound 2011-01-01 through 2026-08-25; Earliest; count-only; one page.",
+      "query_file": "queries/A1.wiley-allfield.txt",
+      "fields": [
+        "Anywhere (AllField)"
+      ],
+      "controls": {
+        "content": "articlesChapters",
+        "target": "default",
+        "count_only": true,
+        "passes": 1,
+        "limit": 20,
+        "max_pages": 1,
+        "page_size": 20,
+        "query_echo": "exact",
+        "source_requests_made": 1,
+        "records_on_first_page": 13,
+        "collections_total_status": "unresolved_not_zero"
+      },
+      "source_reported_total": 13,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d05-wiley-restricted/S-D05-P03-20260825T103818-0400/op-02-parser-a1.json",
+        "live-operation-summary.json"
+      ],
+      "notes": "Conditional operation passed; no normalized records retained."
+    },
+    {
+      "execution_id": "OP-03",
+      "partition_id": "B1",
+      "cell_id": "WILEY-B1-C01",
+      "purpose": "Conditional independent Collections route and boundary diagnostic.",
+      "started_at": "2026-08-25T10:41:56-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Existing queries/B1.wiley-allfield.txt; Collections; diagnostic date bound 2011-01-01 through 2026-08-25; Earliest; count-only; one page.",
+      "query_file": "queries/B1.wiley-allfield.txt",
+      "fields": [
+        "Anywhere (AllField)"
+      ],
+      "controls": {
+        "content": "collections",
+        "target": "collections",
+        "count_only": true,
+        "passes": 1,
+        "limit": 20,
+        "max_pages": 1,
+        "page_size": 20,
+        "query_echo": "exact",
+        "source_requests_made": 1,
+        "records_on_first_page": 1,
+        "collections_are_coverage_containers": true
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d05-wiley-restricted/S-D05-P03-20260825T103818-0400/op-03-collections-b1.json",
+        "live-operation-summary.json"
+      ],
+      "notes": "Positive Collections coverage total; no collection record imported."
+    },
+    {
+      "execution_id": "OP-04",
+      "partition_id": "B1",
+      "cell_id": "WILEY-B1-C01",
+      "purpose": "Conditional exact-total two-pass retrieval/native-RIS completeness diagnostic.",
+      "started_at": "2026-08-25T10:42:02-04:00",
+      "status": "blocked",
+      "exact_query_or_operation": "Not run: operation 1 total was 44, outside the predeclared 1..40 range; no alternate query was selected.",
+      "query_file": "queries/B1.wiley-allfield.txt",
+      "fields": [
+        "Anywhere (AllField)"
+      ],
+      "controls": {
+        "condition": "OP-01 total must be 1..40",
+        "op_01_total": 44,
+        "source_requests_made": 0
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "diagnostic-plan.json",
+        "live-operation-summary.json"
+      ],
+      "notes": "Completeness remains blocked/untested by the exact P03 conditional stop."
+    },
+    {
+      "execution_id": "POSTFLIGHT-001",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Verify owned-page cleanup, protected-anchor preservation, browser health, power window, and lease release.",
+      "started_at": "2026-08-25T10:42:06-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Attached lease postflight and read-only shared-CfT checks.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "source_requests_made": 0,
+        "adapter_pages_surviving": 0,
+        "anchor_preserved": true,
+        "lease_released": true,
+        "cleanup_verified": true,
+        "actual_sleep_wake_darkwake_events": 0
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "postflight.json",
+        "live-phase-receipt.json",
+        "browser-cleanup-receipt.json",
+        "shared-lease-release-receipt.json"
+      ],
+      "notes": "Postflight passed."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P03-SOURCE-FREE",
+      "requirement": "All required offline reading, query-byte, CLI, adapter/output-safety, infrastructure, and whitespace checks pass before source work.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json"
+      ],
+      "notes": "Focused suite 29 tests/20 subtests; current adapter/test hashes match; shared validator and git diff check passed."
+    },
+    {
+      "check_id": "P03-BROWSER-HEALTH",
+      "requirement": "The shared CfT browser, epoch, profile/process assertion, endpoint, version, anchor, power, and lease preflight are healthy.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json",
+        "postflight.json"
+      ],
+      "notes": "One protected inert anchor; matching 152.0.7977.54 runtime/disk; epoch unchanged; lease released cleanly."
+    },
+    {
+      "check_id": "P03-LIVE-HEALTH",
+      "requirement": "The first record-free Wiley Articles & Chapters health gate returns a reconciled positive native total with exact query and controls.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "live-operation-summary.json"
+      ],
+      "notes": "OP-01 total 44; exact echo; 20 first-page cards; count-only output retained zero records."
+    },
+    {
+      "check_id": "P03-LIVE-INTERFACE",
+      "requirement": "The conditional A1 parser/control and Collections boundary diagnostics complete successfully.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "live-operation-summary.json"
+      ],
+      "notes": "OP-02 total 13 and OP-03 Collections total 1; both exact route/control diagnostics; no records retained."
+    },
+    {
+      "check_id": "P03-LIVE-COMPLETENESS",
+      "requirement": "The conditional exact-total two-pass retrieval/native-RIS completeness diagnostic runs only when OP-01 total is 1..40.",
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": [
+        "live-operation-summary.json"
+      ],
+      "notes": "OP-04 was not run because OP-01 total was 44; no alternate query or partial prefix was used."
+    },
+    {
+      "check_id": "P03-OUTPUT-RIGHTS",
+      "requirement": "Restricted source outputs remain outside Git and tracked evidence contains only safe aggregates and hashes.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "restricted-capture-ledger.json",
+        "live-operation-summary.json"
+      ],
+      "notes": "Three raw count-only JSON outputs and three markers are restricted; no RIS/CSV or tracked record list."
+    },
+    {
+      "check_id": "P03-NO-SCREENING-IMPORT",
+      "requirement": "No screening, relevance classification, candidate import, final event, or partial-prefix import occurs.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "observations.md",
+        "source-request-ledger.json",
+        "live-operation-summary.json"
+      ],
+      "notes": "All records_imported and candidate imports are zero."
+    },
+    {
+      "check_id": "P03-CLEANUP",
+      "requirement": "The attached live child remains supervised through cleanup and release, with the broker anchor preserved.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "live-phase-receipt.json",
+        "postflight.json",
+        "browser-cleanup-receipt.json",
+        "shared-lease-release-receipt.json"
+      ],
+      "notes": "Child exit 0; verified-clean; release and anchor preservation verified."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".pilot-id",
+      "role": "allocated immutable attempt identifier",
+      "sha256": "91d6e6cac779dd5fe10644f3323b89fc931bae38a1e4e91efa0b797cfd91efcc",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": ".started-at",
+      "role": "attempt allocation timestamp",
+      "sha256": "4faba1c4d422b591ebb5b61aae4b86d5371a1ddc93d380b859833cc9bc4ba95f",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "preflight.json",
+      "role": "source-free and shared-browser preflight receipt",
+      "sha256": "7cc8f7d9ed35b17e2ae46755ca3794edbb7e56a72d8d7b141d141d29f1bbe7b8",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "diagnostic-plan.json",
+      "role": "bounded P03 operation and stop plan",
+      "sha256": "b98da00e25ff1ab8b2f00f133a8cc7d4d790f920e117a76f880b99fdf3d2262c",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-live-phase-checklist.md",
+      "role": "completed shared-browser live-phase checklist",
+      "sha256": "d7f351fc4e2d4e2227f23efd1b06c6c08fea0aad14a3c0e814b6717a971696f2",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "live-operation-summary.json",
+      "role": "safe aggregate operation results and restricted-output hashes",
+      "sha256": "e7880281929c2a0efbafb46207e9ab504766c3b72a931890c797e0ace31a2a6c",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "live-phase-receipt.json",
+      "role": "immutable raw shared-lease receipt",
+      "sha256": "13b547d57a9a025132ee8b438a42d297a9d2931bf882e177290453b863aca203",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "postflight.json",
+      "role": "sanitized postflight health and cleanup summary",
+      "sha256": "e0546d102c4621cfa9004b9176b642ff98c47d8deec42488be70b808cc6e10f1",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "power-sleep-check.json",
+      "role": "phase power and actual Sleep/Wake check",
+      "sha256": "14bdbc75bac547377b8a2896f58b3ca79c99d99167e7a23d542b7c392eb8ebe8",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-cleanup-receipt.json",
+      "role": "sanitized browser cleanup receipt",
+      "sha256": "bb99bc186c361d127e9f71faf6c0d42ba9450f53bc0df450a70a72c301880c0b",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "shared-lease-release-receipt.json",
+      "role": "sanitized shared lease release receipt",
+      "sha256": "7de0c028f875576eca5ea6a83b88385b4f1b6d9f01c9b5ed2c011c7035a04825",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "source-request-ledger.json",
+      "role": "safe source-operation and pacing ledger",
+      "sha256": "57ea9766fdeead1aa21efddd4d74e0096b8d36beb618884a93ea6de26d9850e5",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "restricted-capture-ledger.json",
+      "role": "safe restricted-capture index",
+      "sha256": "0011bf0fad74c4c5ded183b1f25b406b03401c3664d1139067aa8256d9a6d325",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "observations.md",
+      "role": "rights-safe observations and handoff",
+      "sha256": "b18cfaa9f3f52d483774d3e47f5b311de98753705cccff515a1deb305306a8ca",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "health-gate-evidence.json",
+      "role": "safe aggregate G-LIVE-HEALTH evidence",
+      "sha256": "c078ea6d47b30a55870a6e674d4c989c928ef9f94e2e561e5fa7c741589fcd99",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "interface-gate-evidence.json",
+      "role": "safe aggregate G-LIVE-INTERFACE evidence",
+      "sha256": "859a32078f7565d206e1f6af4c139fde0636f4affde212ac367d30949d038e79",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "completeness-gate-evidence.json",
+      "role": "safe conditional-stop G-LIVE-COMPLETENESS evidence",
+      "sha256": "772f7660d48f6330f9cd05b619e7d18ef8226cc68c39f5c2e54aa68480753624",
+      "access_classification": "public",
+      "secure_location_reference": null
+    }
+  ],
+  "campaign": {
+    "campaign_id": "S-D05-C01-20260824T161325-0400",
+    "attempt_id": "S-D05-P03-20260825T103818-0400"
+  },
+  "attempt_terminal": {
+    "outcome": "completed",
+    "category": "completed",
+    "ended_at": "2026-08-25T10:42:06-04:00",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "browser_backed": true,
+    "cleanup_receipt": {
+      "path": "pilots/S-D05-P03-20260825T103818-0400/browser-cleanup-receipt.json",
+      "sha256": "bb99bc186c361d127e9f71faf6c0d42ba9450f53bc0df450a70a72c301880c0b"
+    },
+    "lease_receipt": {
+      "path": "pilots/S-D05-P03-20260825T103818-0400/shared-lease-release-receipt.json",
+      "sha256": "7de0c028f875576eca5ea6a83b88385b4f1b6d9f01c9b5ed2c011c7035a04825"
+    },
+    "cancelled_by": null,
+    "reason": "The attached P03 phase completed three conditional count-only source operations successfully. The fourth operation was not run because the first native total was 44, outside the predeclared 1..40 range; completeness remains blocked without a fallback query or partial retrieval."
+  },
+  "disposition": {
+    "recommendation": "record_source_limitation",
+    "reason": "P03 completed its bounded record-free health/interface/boundary diagnostics. The exact conditional completeness operation was not eligible at the observed B1 total of 44, so the campaign is not accepted and the draft method remains final-use prohibited.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "No methodological decision is proposed. Any future completeness or final-method action requires a separately authorized scope; do not retry P03 or select a fallback query automatically."
+    ]
+  }
+}
