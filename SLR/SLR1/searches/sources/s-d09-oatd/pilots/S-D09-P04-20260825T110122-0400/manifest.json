@@ -1,0 +1,240 @@
+{
+  "artifacts": [
+    {
+      "access_classification": "public",
+      "path": "browser-cleanup-receipt.json",
+      "role": "sanitized verified owned-page cleanup receipt",
+      "secure_location_reference": null,
+      "sha256": "47df36c946591d67ca93ab065e982c3d3f0db954fdc9a3e0db3be1510a6d4e1f"
+    },
+    {
+      "access_classification": "public",
+      "path": "shared-lease-release-receipt.json",
+      "role": "sanitized verified shared lease release receipt",
+      "secure_location_reference": null,
+      "sha256": "60559403abee68f3edb1cd4d463b95b3f17c833b72eac343bbf919f0556957d1"
+    },
+    {
+      "access_classification": "public",
+      "path": "observations.md",
+      "role": "P04 diagnostic observations and controller handoff",
+      "secure_location_reference": null,
+      "sha256": "511827e3a7a7a0c2bcba13409e36406c2fa7addbb3d9283daddd1912fe189123"
+    },
+    {
+      "access_classification": "public",
+      "path": "evidence-index.json",
+      "role": "rights-safe P04 evidence index",
+      "secure_location_reference": null,
+      "sha256": "41e9eb75f11d8969489bcb92ee8e2457b80723f2e888ebb86f3a9f4dc2211318"
+    },
+    {
+      "access_classification": "restricted",
+      "path": ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/",
+      "role": "restricted browser, lease, operation, power, and postflight evidence",
+      "secure_location_reference": ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/",
+      "sha256": "39c480932a401f705eb88eeb612733733be6c91bb01936f8ab2c0abe7f48ce65"
+    },
+    {
+      "access_classification": "public",
+      "path": "SLR/SLR1/scripts/oatd_advanced_form_probe.py",
+      "role": "source-specific corrected advanced-form probe used without modification",
+      "secure_location_reference": null,
+      "sha256": "3786af4a21d8b9d839797e47598359ecf6aba2993a6cc0cc014978487279a2b5"
+    },
+    {
+      "access_classification": "public",
+      "path": "manifest.json",
+      "role": "immutable P04 diagnostic manifest",
+      "secure_location_reference": null,
+      "sha256": null
+    }
+  ],
+  "attempt_terminal": {
+    "browser_backed": true,
+    "cancelled_by": null,
+    "category": "access_blocked",
+    "cleanup_receipt": {
+      "path": "pilots/S-D09-P04-20260825T110122-0400/browser-cleanup-receipt.json",
+      "sha256": "47df36c946591d67ca93ab065e982c3d3f0db954fdc9a3e0db3be1510a6d4e1f"
+    },
+    "ended_at": "2026-08-25T11:11:14-04:00",
+    "lease_receipt": {
+      "path": "pilots/S-D09-P04-20260825T110122-0400/shared-lease-release-receipt.json",
+      "sha256": "60559403abee68f3edb1cd4d463b95b3f17c833b72eac343bbf919f0556957d1"
+    },
+    "outcome": "blocked",
+    "provider_failure": false,
+    "reason": "The owned page reached an access-control/verification challenge before the corrected advanced form could be mapped or submitted. The challenge was not solved or retried; cleanup and lease release were verified.",
+    "source_writing_stopped": true
+  },
+  "campaign": {
+    "attempt_id": "S-D09-P04-20260825T110122-0400",
+    "campaign_id": "S-D09-C01-20260824T161325-0400"
+  },
+  "candidate_import_permitted": false,
+  "checks": [
+    {
+      "basis": "observed",
+      "check_id": "C-001",
+      "evidence_paths": [
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/controller-preflight/browser-status.json",
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/controller-preflight/lease-status.json",
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/controller-preflight/power-source.txt"
+      ],
+      "notes": "Healthy epoch 5ASpPQYHIFJh_uD--zoyM7LG5u6fCcKh, matching 152.0.7977.54 versions, one protected inert anchor, free lease, and AC power were independently rechecked.",
+      "partition_id": null,
+      "requirement": "Shared CfT epoch/profile/process/endpoint/version/anchor/lease preflight and power checks.",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "C-002",
+      "evidence_paths": [
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/offline-focused-tests.txt",
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/offline-validator.txt",
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/offline-query-campaign-check.json"
+      ],
+      "notes": "41 focused tests passed; current query files matched the carried no-terminal-LF hashes and the campaign was unchanged before the attempt.",
+      "partition_id": null,
+      "requirement": "All deterministic source-free query, CLI, adapter, output-path, infrastructure, and diff checks pass before source work.",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "C-003",
+      "evidence_paths": [
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/S-D09-P04-20260825T110122-0400.advanced-title-receipt.json",
+        "observations.md"
+      ],
+      "notes": "A challenge was detected before canonical form mapping and native submission; no advanced result or field semantics were established.",
+      "partition_id": null,
+      "requirement": "Corrected nonblank advanced-form submission reaches a safe reconciled post-submit result state.",
+      "status": "blocked"
+    },
+    {
+      "basis": "untested",
+      "check_id": "C-004",
+      "evidence_paths": [
+        "observations.md"
+      ],
+      "notes": "No safe busy state occurred; challenge states are never reissued.",
+      "partition_id": null,
+      "requirement": "Preapproved finite same-tab busy recovery is exercised only after an exclusive positively identified busy state.",
+      "status": "untested"
+    },
+    {
+      "basis": "observed",
+      "check_id": "C-005",
+      "evidence_paths": [
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/S-D09-P04-20260825T110122-0400.advanced-title-receipt.json",
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/S-D09-P04-20260825T110122-0400.source-operation-ledger.json"
+      ],
+      "notes": "Challenge produced total=null, zero retained records, and no importable prefix; it was not represented as native zero.",
+      "partition_id": null,
+      "requirement": "Challenge/failure and zero rules preserve null totals and no partial prefix.",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "C-006",
+      "evidence_paths": [
+        "browser-cleanup-receipt.json",
+        "shared-lease-release-receipt.json",
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/postflight/lease-status-after.json"
+      ],
+      "notes": "Owned page closed and disappeared; baseline target set and anchor were preserved; lease is released and free.",
+      "partition_id": null,
+      "requirement": "Owned-page cleanup, broker-anchor preservation, and shared lease release are verified while attached.",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "C-007",
+      "evidence_paths": [
+        "observations.md",
+        "evidence-index.json"
+      ],
+      "notes": "No screening, candidate import, final event, relevance classification, detail/full-text access, or central integration occurred.",
+      "partition_id": null,
+      "requirement": "Diagnostic-only boundary is preserved.",
+      "status": "verified"
+    }
+  ],
+  "diagnostic_only": true,
+  "disposition": {
+    "human_verification_required": [
+      "Review the challenge-before-submission stop and retain it as total=null rather than zero.",
+      "Do not automatically retry P04 or run a final OATD event; any future source phase requires separate explicit authorization.",
+      "Keep pair-bearing BG1, BG2, BC1, and BT2 cells final-use-prohibited until a compliant same-field route is demonstrated."
+    ],
+    "reason": "P04 is blocked before advanced-form submission by a challenge; required field, pair, controls, retrieval, identity, and completeness capabilities remain unresolved.",
+    "recommendation": "revise",
+    "semantic_change": false
+  },
+  "ended_at": "2026-08-25T11:11:14-04:00",
+  "executions": [
+    {
+      "artifact_paths": [
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/S-D09-P04-20260825T110122-0400.advanced-title-receipt.json",
+        ".searches/s-d09-oatd-restricted/S-D09-P04-20260825T110122-0400/S-D09-P04-20260825T110122-0400.source-operation-ledger.json"
+      ],
+      "cell_id": null,
+      "controls": {
+        "busy_retries_configured": 2,
+        "busy_retry_delay_seconds": 30,
+        "challenge_classification": "challenge_before_submission",
+        "date_bound": "2026-08-25 pilot-date diagnostic bound; not submitted as a control",
+        "endpoint": "http://127.0.0.1:9222",
+        "global_pacing_wait_seconds": 60,
+        "mode": "advanced_form_aggregate_only",
+        "native_submit_clicked": false,
+        "poll_interval_seconds": 0.2,
+        "timeout_seconds": 180
+      },
+      "ended_at": "2026-08-25T11:02:59.275641-04:00",
+      "exact_query_or_operation": "Inline native advanced-form diagnostic: query CubeSat AND SysML in the title field.",
+      "execution_id": "O-001",
+      "fields": [
+        "title"
+      ],
+      "notes": "Challenge before submission; no reissue, source result, zero, or partial prefix.",
+      "partition_id": null,
+      "purpose": "One corrected nonblank advanced-form diagnostic after the mandatory global pacing wait.",
+      "query_file": null,
+      "records_retrieved": 0,
+      "source_reported_total": null,
+      "started_at": "2026-08-25T11:02:55.802427-04:00",
+      "status": "blocked",
+      "total_is_exact": false
+    }
+  ],
+  "interface": {
+    "access_route": "Normal rendered OATD advanced form through the supervisor-owned shared CfT lease at http://127.0.0.1:9222; one adapter-owned sibling page; no API, static request, credentials, challenge action, detail route, full text, or alternate endpoint.",
+    "authenticated": false,
+    "database_or_collection": "full public OATD index of electronic theses and dissertations",
+    "name": "Open Access Theses and Dissertations (OATD)",
+    "platform": "OATD",
+    "probe": {
+      "code_issue": false,
+      "schema_version": "slr1-oatd-advanced-form-probe/v2",
+      "script_path": "SLR/SLR1/scripts/oatd_advanced_form_probe.py",
+      "script_sha256": "3786af4a21d8b9d839797e47598359ecf6aba2993a6cc0cc014978487279a2b5"
+    },
+    "timezone": "America/New_York (-04:00)",
+    "url": "https://oatd.org/"
+  },
+  "method_type": "direct",
+  "operator": {
+    "human_supervisor": null,
+    "type": "llm_subagent"
+  },
+  "pilot_id": "S-D09-P04-20260825T110122-0400",
+  "protocol_commit": "ad0b9da75bed2dad1ebdc95a76580688f801b257",
+  "schema_version": "slr1-pilot-manifest/v1",
+  "screening_performed": false,
+  "source_id": "oatd",
+  "started_at": "2026-08-25T11:01:22-04:00",
+  "status": "blocked",
+  "task_id": "S-D09"
+}

@@ -22,7 +22,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-24T16:13:25-04:00",
+  "updated_at": "2026-08-25T11:11:14-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -371,6 +371,68 @@
         "cancelled_by": null,
         "reason": "The required version-3 health gate succeeded, but the first pair/field-first nonblank advanced diagnostic terminated without a reconcilable result. Same-field pair semantics and every remaining advanced, detail, control, strict, and planned-cell requirement remain unresolved; the pilot stopped without retry."
       }
+    },
+    {
+      "attempt_id": "S-D09-P04-20260825T110122-0400",
+      "sequence": 4,
+      "manifest_path": "pilots/S-D09-P04-20260825T110122-0400/manifest.json",
+      "manifest_sha256": "a4b84e446c6aa52b8ea1a18280d529ece4a70dc9d8fe22596751d4f1db5f2c1e",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P04",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-25T11:01:22-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 3,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "O-001",
+            "operation_key": "ADVANCED-TITLE-DIAGNOSTIC",
+            "gate_ids": [
+              "G-ADVANCED-FORM"
+            ],
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P04-ADVANCED-OBS",
+          "gate_id": "G-ADVANCED-FORM",
+          "path": "pilots/S-D09-P04-20260825T110122-0400/observations.md",
+          "sha256": "511827e3a7a7a0c2bcba13409e36406c2fa7addbb3d9283daddd1912fe189123",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "access_blocked",
+        "ended_at": "2026-08-25T11:11:14-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D09-P04-20260825T110122-0400/browser-cleanup-receipt.json",
+          "sha256": "47df36c946591d67ca93ab065e982c3d3f0db954fdc9a3e0db3be1510a6d4e1f"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D09-P04-20260825T110122-0400/shared-lease-release-receipt.json",
+          "sha256": "60559403abee68f3edb1cd4d463b95b3f17c833b72eac343bbf919f0556957d1"
+        },
+        "cancelled_by": null,
+        "reason": "The owned page reached an access-control/verification challenge before the corrected advanced form could be mapped or submitted. The challenge was not solved or retried; cleanup and lease release were verified."
+      }
     }
   ],
   "gate_status_snapshots": [
@@ -667,8 +729,8 @@
     },
     {
       "gate_id": "G-ADVANCED-FORM",
-      "checkpoint_id": "CP-ADVANCED-FORM-P03",
-      "attempt_id": "S-D09-P03-20260824T130849-0400",
+      "checkpoint_id": "CP-ADVANCED-FORM-P04",
+      "attempt_id": "S-D09-P04-20260825T110122-0400",
       "requirement": "A nonblank advanced-field submission has a safe, reconciled post-submit result state.",
       "depends_on": [
         "G-V3-HEALTH"
@@ -677,8 +739,8 @@
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D09-P03-20260824T130849-0400/observations.md",
-          "sha256": "7855cbc43ec4fecd7b77533ea760888a6ddb0b8623c4a9085dfbada654c40140",
+          "path": "pilots/S-D09-P04-20260825T110122-0400/observations.md",
+          "sha256": "511827e3a7a7a0c2bcba13409e36406c2fa7addbb3d9283daddd1912fe189123",
           "validity": "valid"
         }
       ],
@@ -689,16 +751,16 @@
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "Deterministic form navigation and cleanup are technical diagnostic behavior."
+        "rationale": "P04 stopped fail-closed on a challenge before advanced-form submission; no review semantics changed."
       },
       "invalidation": null,
-      "notes": "P03 timed out without a result state; it is neither zero nor accepted field semantics.",
+      "notes": "P04 encountered challenge_before_submission; the advanced field/result state remains unresolved and total is null.",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-BUSY-RECOVERY",
-      "checkpoint_id": "CP-BUSY-RECOVERY-P03",
-      "attempt_id": "S-D09-P03-20260824T130849-0400",
+      "checkpoint_id": "CP-BUSY-RECOVERY-P04",
+      "attempt_id": "S-D09-P04-20260825T110122-0400",
       "requirement": "The preapproved finite version-3 busy recovery is live-tested only after a recognized busy state is reached safely.",
       "depends_on": [
         "G-ADVANCED-FORM"
@@ -713,10 +775,10 @@
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "Finite passive busy recovery was already technically bounded and does not change review semantics."
+        "rationale": "No exclusive safe busy state occurred; the preauthorized finite recovery was not reached."
       },
       "invalidation": null,
-      "notes": "",
+      "notes": "Challenge before submission prevented any busy classification or same-tab reissue.",
       "original_observed_basis": "untested"
     },
     {
