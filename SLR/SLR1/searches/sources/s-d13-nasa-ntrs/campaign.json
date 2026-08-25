@@ -22,7 +22,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-25T04:05:12-04:00",
+  "updated_at": "2026-08-25T08:25:38-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -39,7 +39,7 @@
     "technical_corrective_attempts_authorized": true,
     "maximum_additional_attempts": 3,
     "maximum_source_operations_per_attempt": 3,
-    "rationale": "Three lifetime technical allocations are finite: P02 and P03 consumed two; only P04 remains. P04 is capped at two source operations: health precheck then one conditional rendered classification.",
+    "rationale": "Three enacted technical source-phase allocations are finite: P02 and P03 consumed two; P04 stopped during deterministic source-free setup with source_phase_started=false and zero source operations, so it did not consume the final enacted allocation. One corrected P05 remains, capped at two source operations: health precheck then one conditional rendered classification.",
     "maximum_technical_corrective_attempts": 3,
     "maximum_methodological_revision_attempts": 0
   },
@@ -276,7 +276,8 @@
         "authorized_by": "controller",
         "authorization_decision_id": "D-TECH-NEXT-P04",
         "prospectively_authorized": true,
-        "allocated_at": "2026-08-25T04:02:50-04:00"
+        "allocated_at": "2026-08-25T04:02:50-04:00",
+        "source_phase_started": false
       },
       "source_operations": {
         "predeclared_maximum": 2,
@@ -580,6 +581,23 @@
       "rationale": "One P04 is controller-authorized without human approval: perform a stable source-health precheck, then one shared-profile rendered reachability/navigation classification only; at most two source operations and no partition rerun.",
       "maximum_source_operations": 2,
       "decided_at": "2026-08-24T16:13:25-04:00"
+    },
+    {
+      "decision_id": "D-TECH-NEXT-P05",
+      "attempt_id": null,
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-SOURCE-HEALTH",
+        "G-RENDERED-NAVIGATION"
+      ],
+      "rationale": "P04 was a non-enacted source-free setup incident, not a source attempt. After correcting the exact-byte assertion, one P05 is controller-authorized without human approval: perform a stable source-health precheck, then one conditional shared-profile rendered classification; at most two source operations and no partition rerun.",
+      "maximum_source_operations": 2,
+      "decided_at": "2026-08-25T08:25:38-04:00"
     }
   ],
   "cancellation": null,

@@ -833,6 +833,131 @@ class PilotCampaignValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, "finite .*budget"):
             infrastructure.validate_campaign_artifact(data)
 
+    def test_source_free_setup_incident_does_not_consume_enacted_attempt_budget(
+        self,
+    ) -> None:
+        data = campaign()
+        incident = copy.deepcopy(data["attempts"][1])
+        incident_id = "S-D01-P03-20260824T152000+0000"
+        incident.update(
+            {
+                "attempt_id": incident_id,
+                "sequence": 3,
+                "manifest_path": f"pilots/{incident_id}/manifest.json",
+                "manifest_sha256": "e" * 64,
+                "evidence": [],
+                "source_operations": {
+                    "predeclared_maximum": 1,
+                    "performed": 0,
+                    "operations": [],
+                },
+            }
+        )
+        incident["allocation"].update(
+            {
+                "authorization_decision_id": "D-TECH-P03",
+                "allocated_at": "2026-08-24T15:20:00+00:00",
+                "source_phase_started": False,
+            }
+        )
+        incident["terminal"].update(
+            {
+                "outcome": "blocked",
+                "category": "technical",
+                "ended_at": "2026-08-24T15:21:00+00:00",
+                "provider_failure": False,
+                "browser_backed": False,
+                "terminal_verification": "not_applicable",
+                "cleanup_receipt": None,
+                "lease_receipt": None,
+                "cancelled_by": None,
+                "reason": "A deterministic source-free setup check failed before enactment.",
+            }
+        )
+        data["attempts"].append(incident)
+        data["decisions"].append(
+            {
+                "decision_id": "D-TECH-P03",
+                "attempt_id": incident_id,
+                "decision_class": "controller_technical",
+                "review_effect": False,
+                "affects_underlying_literature_review": False,
+                "human_authorization_required": False,
+                "authorization_status": "prospectively_authorized",
+                "authorized_by": "controller",
+                "decided_at": "2026-08-24T15:19:00+00:00",
+                "maximum_source_operations": 1,
+                "affected_gate_ids": ["G-PAGINATION-CONTROL"],
+                "rationale": "The source-free setup incident did not enact a source phase.",
+            }
+        )
+        authorization = data["controller_authorization"]
+        authorization["maximum_additional_attempts"] = 1
+        authorization["maximum_technical_corrective_attempts"] = 1
+        authorization["maximum_methodological_revision_attempts"] = 1
+
+        infrastructure.validate_campaign_artifact(data)
+
+        del incident["allocation"]["source_phase_started"]
+        with self.assertRaisesRegex(AssertionError, "finite enacted .*budget"):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_non_enacted_setup_incident_cannot_hide_a_source_operation(self) -> None:
+        data = campaign()
+        incident = copy.deepcopy(data["attempts"][1])
+        incident_id = "S-D01-P03-20260824T152000+0000"
+        incident.update(
+            {
+                "attempt_id": incident_id,
+                "sequence": 3,
+                "manifest_path": f"pilots/{incident_id}/manifest.json",
+                "manifest_sha256": "e" * 64,
+                "evidence": [],
+            }
+        )
+        incident["allocation"].update(
+            {
+                "authorization_decision_id": "D-TECH-P03",
+                "allocated_at": "2026-08-24T15:20:00+00:00",
+                "source_phase_started": False,
+            }
+        )
+        incident["terminal"].update(
+            {
+                "outcome": "blocked",
+                "category": "technical",
+                "ended_at": "2026-08-24T15:21:00+00:00",
+                "provider_failure": False,
+                "browser_backed": False,
+                "terminal_verification": "not_applicable",
+                "cleanup_receipt": None,
+                "lease_receipt": None,
+                "cancelled_by": None,
+                "reason": "An invalid non-enacted incident contains source work.",
+            }
+        )
+        data["attempts"].append(incident)
+        data["decisions"].append(
+            {
+                "decision_id": "D-TECH-P03",
+                "attempt_id": incident_id,
+                "decision_class": "controller_technical",
+                "review_effect": False,
+                "affects_underlying_literature_review": False,
+                "human_authorization_required": False,
+                "authorization_status": "prospectively_authorized",
+                "authorized_by": "controller",
+                "decided_at": "2026-08-24T15:19:00+00:00",
+                "maximum_source_operations": 1,
+                "affected_gate_ids": ["G-PAGINATION-CONTROL"],
+                "rationale": "Intentionally invalid test fixture.",
+            }
+        )
+        with self.assertRaisesRegex(
+            AssertionError, "cannot perform source operations before its source phase starts"
+        ):
+            infrastructure.validate_campaign_artifact(data)
+
     def test_prospective_technical_decision_binds_a_later_attempt(self) -> None:
         data = campaign()
         decision = data["decisions"][0]

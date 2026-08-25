@@ -456,7 +456,11 @@
             "authorized_by": {"enum": ["controller", "human"]},
             "authorization_decision_id": {"type": ["string", "null"], "minLength": 1},
             "prospectively_authorized": {"type": "boolean"},
-            "allocated_at": {"type": "string", "format": "date-time"}
+            "allocated_at": {"type": "string", "format": "date-time"},
+            "source_phase_started": {
+              "type": "boolean",
+              "description": "False only when an allocated technical attempt stops during deterministic source-free setup before any lease, browser phase, source operation, or source-gate evidence. Such an incident remains immutable but does not consume an enacted source-phase attempt budget."
+            }
           }
         },
         "source_operations": {"$ref": "#/$defs/sourceOperations"},

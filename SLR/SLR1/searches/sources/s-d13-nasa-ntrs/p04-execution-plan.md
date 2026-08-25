@@ -1,6 +1,8 @@
 # P04 execution plan — NASA Technical Reports Server (NTRS)
 
-This is the exact source-free launch plan for the next existing-campaign attempt,
+> **Retired; do not execute.** P04 stopped before its source phase because this plan's hash correctly identified the immutable 13-byte `nanosatellite` query while a redundant raw-byte assertion incorrectly required a newline. The immutable incident is preserved under P04. Use the corrected [`p05-execution-plan.md`](p05-execution-plan.md); do not alter or relaunch P04.
+
+This is the historical source-free launch plan for the next existing-campaign attempt,
 `S-D13-P04-<runtime timestamp>`. It is diagnostic only. It preserves the
 immutable P01/P02 API failures and P03 rendered-navigation failure; it does not
 accept the source method, change the dictionary, or make a methodological

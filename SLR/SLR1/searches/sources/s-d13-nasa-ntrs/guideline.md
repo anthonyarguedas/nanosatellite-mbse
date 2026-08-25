@@ -79,6 +79,7 @@ Do not execute this procedure until the code issue is fixed, a new pilot is auth
 - **[observed]** The pilot manifest is [`manifest.json`](pilots/S-D13-P01-20260823T232536-0400/manifest.json); compact receipts and checksums are in [`evidence-index.json`](pilots/S-D13-P01-20260823T232536-0400/evidence-index.json).
 - **[observed]** The external adapter was pinned at `3231ebddefcc3e7bc707b2a7d66fbe831d363286` and runtime-tested once. Its failure artifact is [`adapter-route-test.json`](pilots/S-D13-P01-20260823T232536-0400/adapter-route-test.json).
 - **[observed]** `code_issue=true`: its emitted PRISMA category is inconsistent with the tracked NTRS crosswalk, and it lacks exact-date and strict two-pass stable-ID final-run controls. The unpatched assessment and smallest scoped fix are in [`adapter-assessment.json`](pilots/S-D13-P01-20260823T232536-0400/adapter-assessment.json).
+- **[observed]** P02–P03 and the immutable zero-operation P04 setup incident are checkpointed in [`campaign.json`](campaign.json). P04 did not acquire a lease or contact NTRS; its deterministic exact-byte plan defect is corrected prospectively in [`p05-execution-plan.md`](p05-execution-plan.md) without altering P03/P04 evidence.
 - **[untested]** No claim in this draft satisfies pilot acceptance for search semantics, controlled vocabulary, date/language behavior, response envelope, pagination, identity, or completeness. `accepted_pilot_ids` remains empty.
 
 ## 10. Remaining limits and protocol impact
@@ -86,7 +87,7 @@ Do not execute this procedure until the code issue is fixed, a new pilot is auth
 - **[observed]** The public search route was unavailable to this pilot (timeout/HTTP 504), and the external adapter has a demonstrated issue. No further NTRS live querying was performed after that determination; no retry, second pilot, screening, candidate import, source-log update, protocol edit, staging, or commit occurred.
 - **[untested]** The current NTRS API's parser and full-public-database response behavior remain unresolved. All cells are preserved only as draft syntax and literal-completeness artifacts.
 - **[inferred]** No protocol semantic change is proposed: all nine mappings derive from the current dictionary without candidate terminology or a narrowed Boolean relationship. The limitation is implementation/validation, not a justified change to scope, concept blocks, evidence window, or eligibility.
-- **[inferred]** Human approval is needed to authorize the smallest separate adapter fix and, after service recovery, a fresh authorized corrective pilot that resolves the blocked checks. Until then, record NTRS as an unaccepted source-method limitation rather than a completed source.
+- **[inferred]** No human approval is needed for the behavior-preserving correction. `D-TECH-NEXT-P05` prospectively authorizes the corrected two-operation technical diagnostic after the shared-browser epoch gate is healthy. Until live gates pass, record NTRS as an unaccepted source-method limitation rather than a completed source.
 
 ## Future browser operations
 

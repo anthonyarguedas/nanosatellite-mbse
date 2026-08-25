@@ -4,6 +4,12 @@
 **Watchdog checkpoint updated:** 2026-08-25T04:24:00-04:00  
 **Scope:** diagnostic readiness only; no final search, screening, candidate import, or source result event.
 
+## Current correction — 2026-08-25
+
+The NTRS source-free defect has been fixed without relaunching a pilot. P04 remains immutable, but is now explicitly recorded as `allocation.source_phase_started=false`: it acquired no lease, performed zero source operations, and therefore does not consume the finite enacted source-phase budget. The corrected [`p05-execution-plan.md`](sources/s-d13-nasa-ntrs/p05-execution-plan.md) uses the hash-bound 13-byte `nanosatellite` query exactly, and `D-TECH-NEXT-P05` prospectively authorizes the same two bounded technical operations without human approval. The general campaign workflow now requires controllers to patch deterministic setup failures rather than treating safe stops as satisfactory outcomes.
+
+NTRS is therefore source-free ready again. The browser supervisor subsequently reconciled the already-running canonical CfT without restarting it: status is healthy with a current epoch, one inert anchor, matching versions, a free lease, and no guardian/orphan. No NTRS or OATD pilot was relaunched during this correction.
+
 ## Checkpoint outcome
 
 The primary Sol exited successfully and required no replacement Sol. Its integrated source-free tests and bundle audit were collected and independently rerun. The watchdog initially found the documented launch gate satisfied, but the attached NTRS P04 controller then found an exact source-free preflight contradiction before acquiring a browser lease or contacting NTRS:
@@ -22,19 +28,19 @@ OATD P04 was not started. Its source-free plan remains intact, but the strict ga
 | Task | Source / collection | Checkpoint classification | Next plan | Current constraint |
 | --- | --- | --- | --- | --- |
 | S-D01 | Scopus | `no_further_pilot_required` | [`pilot-readiness.md`](sources/s-d01-scopus/pilot-readiness.md) | Cross-source `S-C01` decision and formal reconciliation remain later work. |
-| S-D02 | Web of Science Core Collection | `source_free_ready` | [`p01-execution-plan.md`](sources/s-d02-web-of-science/p01-execution-plan.md) | Current-interface evidence remains live; shared-CfT health must pass before any browser phase. |
-| S-D03 | IEEE Xplore | `source_free_ready` | [`p05-execution-plan.md`](sources/s-d03-ieee-xplore/p05-execution-plan.md) | Technical P05 is independent of pending human `D-METHOD-NEAR6`, but shared-CfT health currently fails. |
-| S-D04 | Compendex + Inspec | `source_free_ready` | [`p03-execution-plan.md`](sources/s-d04-engineering-village/p03-execution-plan.md) | Paired live evidence and later `S-C01` work remain; shared-CfT health currently fails. |
-| S-D05 | Wiley Online Library | `source_free_ready` | [`p03-execution-plan.md`](sources/s-d05-wiley-online-library/p03-execution-plan.md) | Current-interface evidence remains; shared-CfT health currently fails. |
-| S-D06 | Springer Nature Link | `source_free_ready` | [`p01-execution-plan.md`](sources/s-d06-springer-nature-link/p01-execution-plan.md) | Current-interface, vocabulary, and pair evidence remain; shared-CfT health currently fails. |
-| S-D07 | Advanced Technologies & Aerospace Index | `source_free_ready` | [`p01-execution-plan.md`](sources/s-d07-proquest-atai/p01-execution-plan.md) | ATAI-only live evidence remains; shared-CfT health currently fails. |
-| S-D08 | PQDT Global | `source_free_ready` | [`p01-execution-plan.md`](sources/s-d08-proquest-pqdt/p01-execution-plan.md) | PQDT-only evidence and a later strict-completeness method remain; shared-CfT health currently fails. |
-| S-D09 | OATD | `source_free_ready_runtime_blocked` | [`p04-execution-plan.md`](sources/s-d09-oatd/p04-execution-plan.md) | P04 remains prospectively authorized for at most three operations, but was not run because the strict/global browser gate failed. |
-| S-D10 | AIAA ARC | `source_free_ready` | [`p01-execution-plan.md`](sources/s-d10-aiaa-arc/p01-execution-plan.md) | Current-interface/identity/export evidence remains; shared-CfT health currently fails. |
-| S-D11 | arXiv | `source_free_ready` | [`p01-execution-plan.md`](sources/s-d11-arxiv/p01-execution-plan.md) | Rendered-interface and later date/completeness evidence remain; shared-CfT health currently fails. |
-| S-D12 | IAF Digital Library | `source_free_ready` | [`p01-execution-plan.md`](sources/s-d12-iaf-digital-library/p01-execution-plan.md) | Not authorized for execution by this NTRS/OATD watchdog; its HTTP phase remains globally serial. |
-| S-D13 | NTRS | `source_free_blocked` | [`p04-execution-plan.md`](sources/s-d13-nasa-ntrs/p04-execution-plan.md) | P04 is terminal at zero operations because its pinned hash and byte assertion contradict each other. The finite P04 allocation is consumed; no rerun or P05 is currently authorized. |
-| S-L02 | ESA Indico | `source_free_ready` | [`p04-execution-plan.md`](sources/s-l02-esa-indico/p04-execution-plan.md) | Not authorized for execution by this watchdog; bounded evidence and later supervisor acceptance remain. |
+| S-D02 | Web of Science Core Collection | `ready_to_launch` | [`p01-execution-plan.md`](sources/s-d02-web-of-science/p01-execution-plan.md) | Current-interface evidence remains live; the shared-CfT launch gate is currently healthy. |
+| S-D03 | IEEE Xplore | `ready_to_launch` | [`p05-execution-plan.md`](sources/s-d03-ieee-xplore/p05-execution-plan.md) | Technical P05 is independent of pending human `D-METHOD-NEAR6`; the shared-CfT launch gate is currently healthy. |
+| S-D04 | Compendex + Inspec | `ready_to_launch` | [`p03-execution-plan.md`](sources/s-d04-engineering-village/p03-execution-plan.md) | Paired live evidence and later `S-C01` work remain; the shared-CfT launch gate is currently healthy. |
+| S-D05 | Wiley Online Library | `ready_to_launch` | [`p03-execution-plan.md`](sources/s-d05-wiley-online-library/p03-execution-plan.md) | Current-interface evidence remains; the shared-CfT launch gate is currently healthy. |
+| S-D06 | Springer Nature Link | `ready_to_launch` | [`p01-execution-plan.md`](sources/s-d06-springer-nature-link/p01-execution-plan.md) | Current-interface, vocabulary, and pair evidence remain; the shared-CfT launch gate is currently healthy. |
+| S-D07 | Advanced Technologies & Aerospace Index | `ready_to_launch` | [`p01-execution-plan.md`](sources/s-d07-proquest-atai/p01-execution-plan.md) | ATAI-only live evidence remains; the shared-CfT launch gate is currently healthy. |
+| S-D08 | PQDT Global | `ready_to_launch` | [`p01-execution-plan.md`](sources/s-d08-proquest-pqdt/p01-execution-plan.md) | PQDT-only evidence and a later strict-completeness method remain; the shared-CfT launch gate is currently healthy. |
+| S-D09 | OATD | `ready_to_launch` | [`p04-execution-plan.md`](sources/s-d09-oatd/p04-execution-plan.md) | P04 remains prospectively authorized for at most three operations; browser health is restored. It was not launched during this correction. |
+| S-D10 | AIAA ARC | `ready_to_launch` | [`p01-execution-plan.md`](sources/s-d10-aiaa-arc/p01-execution-plan.md) | Current-interface/identity/export evidence remains; the shared-CfT launch gate is currently healthy. |
+| S-D11 | arXiv | `ready_to_launch` | [`p01-execution-plan.md`](sources/s-d11-arxiv/p01-execution-plan.md) | Rendered-interface and later date/completeness evidence remain; the shared-CfT launch gate is currently healthy. |
+| S-D12 | IAF Digital Library | `ready_to_launch` | [`p01-execution-plan.md`](sources/s-d12-iaf-digital-library/p01-execution-plan.md) | Not authorized for execution by this NTRS/OATD watchdog; its HTTP phase remains globally serial. |
+| S-D13 | NTRS | `ready_to_launch` | [`p05-execution-plan.md`](sources/s-d13-nasa-ntrs/p05-execution-plan.md) | P04 is preserved as a non-enacted zero-operation setup incident. Corrected P05 is prospectively authorized and the shared-CfT gate is healthy. It was not relaunched. |
+| S-L02 | ESA Indico | `ready_to_launch` | [`p04-execution-plan.md`](sources/s-l02-esa-indico/p04-execution-plan.md) | Not authorized for execution by this watchdog; bounded evidence and later supervisor acceptance remain. |
 
 ## NTRS immutable checkpoint
 
@@ -69,9 +75,8 @@ All primary readiness Luna jobs and the primary Sol are terminal and collected. 
 
 ## Remaining blockers and next safe actions
 
-1. **NTRS source-free plan blocker:** preserve P03 and P04 immutably. Reconcile the next plan's exact-byte contract with the immutable 13-byte/hash evidence. Because the finite P04 allocation is consumed, any future attempt needs a new prospective controller-technical allocation; this checkpoint authorizes no retry.
-2. **Shared-browser supervisor blocker:** outside any lease, the browser supervisor must restore/prove a matching live browser epoch. The watchdog must not launch, restart, stop, or repair CfT. Re-run only read-only status afterward and require `healthy=true`, one inert anchor, matching versions, a free OS lock, and no guardian/orphan.
-3. **OATD:** P04 remains unconsumed and source-free ready, but no OATD Luna/source command may start until a fresh strict gate passes. No OATD receipt or attempt artifact exists from this checkpoint.
-4. **Later review work:** the IEEE methodological decision, cross-source `S-C01`, PQDT completeness work, campaign acceptance, `S-002`, `P-001`, central reconciliation, and `R-002` remain pending. No task was marked accepted.
+1. **NTRS:** corrected P05 is ready and prospectively authorized. It was intentionally not relaunched during this correction.
+2. **OATD:** P04 remains unconsumed and ready. It was intentionally not launched during this correction.
+3. **Later review work:** the IEEE methodological decision, cross-source `S-C01`, PQDT completeness work, campaign acceptance, `S-002`, `P-001`, central reconciliation, and `R-002` remain pending. No task was marked accepted.
 
 Watchdog logs are retained under `/var/folders/db/fjbrfx1n1kz6lrqlm7jvryp00000gn/T/pilot-readiness-three-hour-watchdog-20260825-005011-43844-3050`.

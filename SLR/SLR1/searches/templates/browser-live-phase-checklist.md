@@ -15,7 +15,7 @@ Copy this checklist into the phase receipt or its source-safe evidence index. Co
 - [ ] Global domain-pacing decision: `REPLACE`
 - [ ] Predeclared finite wait/readiness policy, or `none`: `REPLACE`
 
-Only source-free offline work may be concurrent. A technical corrective source action must be within the campaign's controller-authorized finite bounds; only a methodological change affecting the review requires human authorization. A prospectively authorized finite passive wait or internal readiness retry may remain in this phase.
+Only source-free offline work may be concurrent. Every deterministic source-free query-byte, CLI, adapter, output-path, and infrastructure check must pass before lease acquisition. Patch a technical preflight failure rather than treating its safe stop as success. If an attempt ID was already allocated but no source phase began, record `allocation.source_phase_started=false`; it does not consume the enacted source-phase budget. A technical corrective source action must be within the campaign's controller-authorized finite bounds; only a methodological change affecting the review requires human authorization. A prospectively authorized finite passive wait or internal readiness retry may remain in this phase.
 
 ## 2. Lease command and shared-browser boundary
 

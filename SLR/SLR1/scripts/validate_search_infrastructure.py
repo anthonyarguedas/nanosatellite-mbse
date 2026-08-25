@@ -1043,6 +1043,10 @@ def _validate_attempts(
             f"{label}.allocation.prospectively_authorized",
         )
         _date_time(allocation["allocated_at"], f"{label}.allocation.allocated_at")
+        source_phase_started = _boolean(
+            allocation.get("source_phase_started", True),
+            f"{label}.allocation.source_phase_started",
+        )
 
         source_operations = _mapping(
             attempt["source_operations"], f"{label}.source_operations"
@@ -1194,7 +1198,33 @@ def _validate_attempts(
             )
             evidence_by_reference[reference] = item
 
-        _validate_terminal(attempt["terminal"], f"{label}.terminal")
+        terminal = _mapping(attempt["terminal"], f"{label}.terminal")
+        _validate_terminal(terminal, f"{label}.terminal")
+        if not source_phase_started:
+            require(
+                allocation["attempt_kind"] == "technical_corrective",
+                f"{label} may mark source_phase_started false only for a technical setup incident",
+            )
+            require(
+                performed == 0 and not operations,
+                f"{label} cannot perform source operations before its source phase starts",
+            )
+            require(
+                not evidence,
+                f"{label} cannot attach source-gate evidence before its source phase starts",
+            )
+            require(
+                terminal["outcome"] in {"blocked", "failed"}
+                and terminal["category"] == "technical"
+                and terminal["provider_failure"] is False,
+                f"{label} non-enacted setup incident must be a technical non-provider failure",
+            )
+            require(
+                terminal["browser_backed"] is False
+                and terminal["lease_receipt"] is None
+                and terminal["cleanup_receipt"] is None,
+                f"{label} source_phase_started false cannot claim a browser phase or lease",
+            )
         attempts_by_id[attempt_id] = attempt
 
     require(
@@ -2205,6 +2235,7 @@ def _validate_allocations(
     for attempt_id, attempt in ordered_attempts:
         allocation = attempt["allocation"]
         kind = allocation["attempt_kind"]
+        source_phase_started = allocation.get("source_phase_started", True)
         decision_id = allocation["authorization_decision_id"]
         decision = decisions.get(decision_id) if decision_id is not None else None
         if decision_id is not None:
@@ -2239,7 +2270,8 @@ def _validate_allocations(
                 f"initial attempt {attempt_id} cannot be prospective",
             )
         elif kind == "technical_corrective":
-            technical_attempts += 1
+            if source_phase_started:
+                technical_attempts += 1
             require(
                 technical_authorized,
                 f"technical attempt {attempt_id} lacks controller authorization",
@@ -2332,10 +2364,15 @@ def _validate_allocations(
                 f"methodological decision for {attempt_id} must predate allocation",
             )
 
-    additional_attempts = len(attempts) - 1
+    enacted_additional_attempts = sum(
+        1
+        for attempt in attempts.values()
+        if attempt["sequence"] > 1
+        and attempt["allocation"].get("source_phase_started", True)
+    )
     require(
-        additional_attempts <= maximum_additional,
-        "campaign exceeds its finite additional-attempt budget",
+        enacted_additional_attempts <= maximum_additional,
+        "campaign exceeds its finite enacted additional-attempt budget",
     )
     require(
         technical_attempts <= maximum_technical,
