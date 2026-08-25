@@ -22,7 +22,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-25T08:25:38-04:00",
+  "updated_at": "2026-08-25T11:33:31-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -39,7 +39,7 @@
     "technical_corrective_attempts_authorized": true,
     "maximum_additional_attempts": 3,
     "maximum_source_operations_per_attempt": 3,
-    "rationale": "Three enacted technical source-phase allocations are finite: P02 and P03 consumed two; P04 stopped during deterministic source-free setup with source_phase_started=false and zero source operations, so it did not consume the final enacted allocation. One corrected P05 remains, capped at two source operations: health precheck then one conditional rendered classification.",
+    "rationale": "Three enacted technical source-phase allocations were finite: P02 and P03 consumed two; P04 stopped during deterministic source-free setup with source_phase_started=false and zero source operations, so it did not consume the final enacted allocation. Corrected P05 consumed the final two-operation live phase (health precheck plus one conditional rendered classification); no further source-phase allocation is authorized by this campaign checkpoint.",
     "maximum_technical_corrective_attempts": 3,
     "maximum_methodological_revision_attempts": 0
   },
@@ -298,6 +298,92 @@
         "cancelled_by": null,
         "reason": "P04 stopped before live source work because the immutable P03 query matched the plan hash but failed the plan's exact newline byte assertion; no lease or source operation was acquired or invoked."
       }
+    },
+    {
+      "attempt_id": "S-D13-P05-20260825T112127-0400",
+      "sequence": 5,
+      "manifest_path": "pilots/S-D13-P05-20260825T112127-0400/manifest.json",
+      "manifest_sha256": "d8bda50a1eb7fbc6ea22c89a833de037181eff05a522cde5754a660576ec4d4d",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P05",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-25T15:21:27Z",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 2,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "NTRS-P05-RENDERED-G01",
+            "operation_key": "RENDERED-G01",
+            "gate_ids": [
+              "G-RENDERED-NAVIGATION"
+            ],
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P05-ADAPTER-OFFLINE",
+          "gate_id": "G-BROWSER-ADAPTER-SAFETY",
+          "path": "pilots/S-D13-P05-20260825T112127-0400/pinned-adapter-offline-validation.json",
+          "sha256": "3553af2c3787c3d28c82f945284dde36258f2c340d0b229d07f9ae108f6f6fdd",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P05-SOURCE-HEALTH",
+          "gate_id": "G-SOURCE-HEALTH",
+          "path": "pilots/S-D13-P05-20260825T112127-0400/source-health-gate.json",
+          "sha256": "020522bf9b516e00c02d793f1448d23072a3950c77cb3588566ffde3938ab51c",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P05-RENDERED-GATE",
+          "gate_id": "G-RENDERED-NAVIGATION",
+          "path": "pilots/S-D13-P05-20260825T112127-0400/rendered-gate-failure.json",
+          "sha256": "f84651e9b7dadd053bfc77909c5334b57973dcea8fda6797fb62303d181b1495",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P05-BROWSER-CLEANUP",
+          "gate_id": "G-BROWSER-ADAPTER-SAFETY",
+          "path": "pilots/S-D13-P05-20260825T112127-0400/browser-postflight-sanitized.json",
+          "sha256": "f0f8b4561ce7269f0dbec091f045892f8b9f9034d2a904b569b178b71326b870",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-25T15:31:19.701577Z",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D13-P05-20260825T112127-0400/browser-cleanup-receipt.json",
+          "sha256": "412b64dbe574bd34a66d399b6616eae2c0fb4866ddd73b414c8a252ac073d99b"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D13-P05-20260825T112127-0400/shared-lease-release-receipt.json",
+          "sha256": "da1ef7ef391c422092f38329dbbc082e5783fa3146618b6d00dd336441c5d6e5"
+        },
+        "cancelled_by": null,
+        "reason": "The health precheck passed, but the sole conditional shared-profile rendered count-only classification failed at ordering reconciliation before query echo or a reconcilable result state. The bounded phase stopped without retry; all unobserved totals remain null and cleanup/release verified clean."
+      }
     }
   ],
   "gate_status_snapshots": [
@@ -418,16 +504,16 @@
     },
     {
       "gate_id": "G-BROWSER-ADAPTER-SAFETY",
-      "checkpoint_id": "CP-BROWSER-ADAPTER-P03",
-      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "checkpoint_id": "CP-BROWSER-ADAPTER-P05",
+      "attempt_id": "S-D13-P05-20260825T112127-0400",
       "requirement": "The rendered browser adapter's source-free guard and pin remain valid.",
       "depends_on": [],
       "status": "passed",
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D13-P03-20260824T125840-0400/pinned-adapter-offline-validation.json",
-          "sha256": "116420769efef5eddd3021141fd3bed6a5ca8d73f87b0b3fa1b90ad9259a54fb",
+          "path": "pilots/S-D13-P05-20260825T112127-0400/pinned-adapter-offline-validation.json",
+          "sha256": "3553af2c3787c3d28c82f945284dde36258f2c340d0b229d07f9ae108f6f6fdd",
           "validity": "valid"
         }
       ],
@@ -438,44 +524,44 @@
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "The static rendered-only guard is implementation safety, not a review-method change."
+        "rationale": "P05 re-established the current rendered adapter static guard and focused offline tests after external adapter code changed since P03; this does not change review semantics."
       },
       "invalidation": null,
-      "notes": "",
+      "notes": "Current adapter bytes and offline tests were revalidated in P05. P03 evidence remains immutable historical evidence; it is not overwritten.",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-SOURCE-HEALTH",
-      "checkpoint_id": "CP-SOURCE-HEALTH-P03",
-      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "checkpoint_id": "CP-SOURCE-HEALTH-P05",
+      "attempt_id": "S-D13-P05-20260825T112127-0400",
       "requirement": "A stable source-health precheck must precede any rendered reachability/navigation classification.",
       "depends_on": [],
-      "status": "blocked",
+      "status": "passed",
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D13-P03-20260824T125840-0400/code-issue-assessment.json",
-          "sha256": "341208e8d03d907a652dadd171a03bb69ae682289ec6f0af26463690a13b1fca",
+          "path": "pilots/S-D13-P05-20260825T112127-0400/source-health-gate.json",
+          "sha256": "020522bf9b516e00c02d793f1448d23072a3950c77cb3588566ffde3938ab51c",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 0,
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "A health precheck is a technical operational prerequisite."
+        "rationale": "The one record-free stable health precheck is an operational prerequisite and does not alter review semantics."
       },
       "invalidation": null,
-      "notes": "P03 cannot distinguish source reachability from navigation failure.",
+      "notes": "P05 observed one 2xx normal root route, source identity, visible search surface, two stable samples, no challenge/access/login/busy/error, and verified owned-page cleanup. P03 blocked evidence remains immutable.",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-RENDERED-NAVIGATION",
-      "checkpoint_id": "CP-RENDERED-NAVIGATION-P03",
-      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "checkpoint_id": "CP-RENDERED-NAVIGATION-P05",
+      "attempt_id": "S-D13-P05-20260825T112127-0400",
       "requirement": "One shared-profile rendered reachability/navigation classification reaches a reconcilable state.",
       "depends_on": [
         "G-SOURCE-HEALTH",
@@ -485,8 +571,8 @@
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D13-P03-20260824T125840-0400/initial-rendered-gate.json",
-          "sha256": "52395025be4c1b9036eaa0cc2ac638062db5f2bb26c7fc8327374b9a60e4ce8a",
+          "path": "pilots/S-D13-P05-20260825T112127-0400/rendered-gate-failure.json",
+          "sha256": "f84651e9b7dadd053bfc77909c5334b57973dcea8fda6797fb62303d181b1495",
           "validity": "valid"
         }
       ],
@@ -497,16 +583,16 @@
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "Classifying navigation behavior is technical and preserves the source boundary."
+        "rationale": "The current rendered operation stopped at ordering reconciliation before query/result evidence; this is a technical interface/adapter classification failure, not a review-method change."
       },
       "invalidation": null,
-      "notes": "",
+      "notes": "The sole conditional P05 operation reached normal 2xx rendered navigation but did not reach query echo, total, range, row, ID, or explicit zero. P03 failure remains immutable and is not rewritten.",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-PARTITION-TRANSPORT",
-      "checkpoint_id": "CP-PARTITION-TRANSPORT-P03",
-      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "checkpoint_id": "CP-PARTITION-TRANSPORT-P05",
+      "attempt_id": "S-D13-P05-20260825T112127-0400",
       "requirement": "Partition transport remains blocked until a stable source-health and rendered navigation path exists.",
       "depends_on": [
         "G-RENDERED-NAVIGATION"
@@ -521,10 +607,10 @@
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "Keeping all partitions blocked prevents unsupported source work."
+        "rationale": "All nine partition transports remain blocked by the failed rendered navigation/classification prerequisite."
       },
       "invalidation": null,
-      "notes": "",
+      "notes": "No partition, completeness, screening, candidate import, or final event was attempted.",
       "original_observed_basis": "untested"
     }
   ],
@@ -584,7 +670,7 @@
     },
     {
       "decision_id": "D-TECH-NEXT-P05",
-      "attempt_id": null,
+      "attempt_id": "S-D13-P05-20260825T112127-0400",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,
@@ -595,7 +681,7 @@
         "G-SOURCE-HEALTH",
         "G-RENDERED-NAVIGATION"
       ],
-      "rationale": "P04 was a non-enacted source-free setup incident, not a source attempt. After correcting the exact-byte assertion, one P05 is controller-authorized without human approval: perform a stable source-health precheck, then one conditional shared-profile rendered classification; at most two source operations and no partition rerun.",
+      "rationale": "P04 was a non-enacted source-free setup incident, not a source attempt. After correcting the exact-byte assertion, P05 was controller-authorized without human approval: perform a stable source-health precheck, then one conditional shared-profile rendered classification; at most two source operations and no partition rerun. P05 is now immutably failed at ordering reconciliation with no retry.",
       "maximum_source_operations": 2,
       "decided_at": "2026-08-25T08:25:38-04:00"
     }
