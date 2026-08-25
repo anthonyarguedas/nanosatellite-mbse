@@ -22,7 +22,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-25T12:31:14-04:00",
+  "updated_at": "2026-08-25T12:48:44-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -1104,6 +1104,102 @@
         "cancelled_by": null,
         "reason": "All exact semantic cells and the NEAR/6 gate passed, but the required visible year-control diagnostic failed with total=null and stopped content, language, and record-bearing completeness validation."
       }
+    },
+    {
+      "attempt_id": "S-D03-P05-20260825T123832-0400",
+      "sequence": 5,
+      "manifest_path": "pilots/S-D03-P05-20260825T123832-0400/manifest.json",
+      "manifest_sha256": "1ecba52c9bdb9968d5e93cb8d862c3eb50e98b0b43242d98870b557ef46693ac",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P05-SETUP",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-25T12:38:32-04:00",
+        "source_phase_started": false
+      },
+      "source_operations": {
+        "predeclared_maximum": 4,
+        "performed": 0,
+        "operations": []
+      },
+      "evidence": [],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "technical",
+        "ended_at": "2026-08-25T12:38:33-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": false,
+        "terminal_verification": "not_applicable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "Deterministic lease-runner argument validation rejected --lease-timeout 900 before lease acquisition; source_phase_started=false and no source operation or source-gate evidence began."
+      }
+    },
+    {
+      "attempt_id": "S-D03-P05-20260825T124244-0400",
+      "sequence": 6,
+      "manifest_path": "pilots/S-D03-P05-20260825T124244-0400/manifest.json",
+      "manifest_sha256": "8849d4e4057fc50198a60fa9461175328d706b3a6ac72f5f1cefe3f3870dae39",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P05-LEASE600",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-25T12:42:44-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 4,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "P05-op-01-year-a1",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "G-YEAR-CONTROL",
+            "retry": null,
+            "gate_ids": [
+              "G-YEAR-CONTROL"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P05-YEAR-OP",
+          "gate_id": "G-YEAR-CONTROL",
+          "path": "pilots/S-D03-P05-20260825T124244-0400/year-control-receipt.json",
+          "sha256": "7a115b05caac951f158abf6f4256cc28cd36f172bd91713cc92eaaf8792ca70c",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-25T12:43:56-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D03-P05-20260825T124244-0400/browser-cleanup-receipt.json",
+          "sha256": "268f13d97d9ca2ea1745c7fc57d9b8922b5652b189dc3ddfcf529831761aef50"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D03-P05-20260825T124244-0400/browser-lease-release-receipt.json",
+          "sha256": "ad7e62e71854621a446bc63616763fe1d9dd6af2ab52cf065e1a4f600b1117bd"
+        },
+        "cancelled_by": null,
+        "reason": "The first conditional visible-year-control operation returned total=null with IEEEProtocolError after exact query/control echo and readback; source writing stopped and later operations were not run."
+      }
     }
   ],
   "gate_status_snapshots": [
@@ -1342,8 +1438,8 @@
     },
     {
       "gate_id": "G-YEAR-CONTROL",
-      "checkpoint_id": "CP-YEAR-CONTROL-P04",
-      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "checkpoint_id": "CP-YEAR-CONTROL-P05",
+      "attempt_id": "S-D03-P05-20260825T124244-0400",
       "requirement": "Visible publication-year application and precision are diagnosed without adopting a final cutoff.",
       "depends_on": [
         "G-ADAPTER-COUNT"
@@ -1352,8 +1448,8 @@
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D03-P04-20260824T131301-0400/safe-receipt-control-year-2011-2026.json",
-          "sha256": "222c9fb0bb3a526c4278711b0c8b678dde6be3b6422251446ce1b529cd088aeb",
+          "path": "pilots/S-D03-P05-20260825T124244-0400/year-control-receipt.json",
+          "sha256": "7a115b05caac951f158abf6f4256cc28cd36f172bd91713cc92eaaf8792ca70c",
           "validity": "valid"
         }
       ],
@@ -1367,13 +1463,13 @@
         "rationale": "Instrumenting and diagnosing the visible control does not change the date policy."
       },
       "invalidation": null,
-      "notes": "P04 recorded IEEEProtocolError and total=null; this is not zero.",
+      "notes": "P05 rechecked the visible year control after exact A1 echo and readback; IEEEProtocolError persisted at post-click stabilization with total=null. This is not zero; P04 remains immutable historical evidence.",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-CONTENT-CONTROL",
-      "checkpoint_id": "CP-CONTENT-CONTROL-P04",
-      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "checkpoint_id": "CP-CONTENT-CONTROL-P05",
+      "attempt_id": "S-D03-P05-20260825T124244-0400",
       "requirement": "Visible multiple content-type controls are checked only after the year control is healthy.",
       "depends_on": [
         "G-YEAR-CONTROL"
@@ -1391,13 +1487,13 @@
         "rationale": "The blocked control check leaves review semantics unchanged."
       },
       "invalidation": null,
-      "notes": "",
+      "notes": "P05 did not run content-type selection because G-YEAR-CONTROL failed first.",
       "original_observed_basis": "untested"
     },
     {
       "gate_id": "G-LANGUAGE-CONTROL",
-      "checkpoint_id": "CP-LANGUAGE-CONTROL-P04",
-      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "checkpoint_id": "CP-LANGUAGE-CONTROL-P05",
+      "attempt_id": "S-D03-P05-20260825T124244-0400",
       "requirement": "Rendered language controls are inventoried only after the year control is healthy.",
       "depends_on": [
         "G-YEAR-CONTROL"
@@ -1415,13 +1511,13 @@
         "rationale": "The blocked control check leaves review semantics unchanged."
       },
       "invalidation": null,
-      "notes": "",
+      "notes": "P05 did not run the Language inventory because G-YEAR-CONTROL failed first; English was not selected or applied.",
       "original_observed_basis": "untested"
     },
     {
       "gate_id": "G-COMPLETENESS",
-      "checkpoint_id": "CP-COMPLETENESS-P04",
-      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "checkpoint_id": "CP-COMPLETENESS-P05",
+      "attempt_id": "S-D03-P05-20260825T124244-0400",
       "requirement": "Record-bearing repeat, pagination, identity, and completeness checks run only after the declared controls pass.",
       "depends_on": [
         "G-YEAR-CONTROL",
@@ -1442,7 +1538,7 @@
         "rationale": "The deferred validation concerns capture mechanics, not a change to inclusion criteria."
       },
       "invalidation": null,
-      "notes": "",
+      "notes": "P05 did not run the bounded completeness capture because operation 2 had no total after the year-gate stop.",
       "original_observed_basis": "untested"
     }
   ],
@@ -1532,6 +1628,44 @@
       "rationale": "One new P05 is controller-authorized without human approval: diagnose the visible year control, then run only its declared dependent controls/completeness gates, at a maximum of four source operations.",
       "maximum_source_operations": 4,
       "decided_at": "2026-08-24T16:13:25-04:00"
+    },
+    {
+      "decision_id": "D-TECH-P05-SETUP",
+      "attempt_id": "S-D03-P05-20260825T123832-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-YEAR-CONTROL",
+        "G-CONTENT-CONTROL",
+        "G-LANGUAGE-CONTROL",
+        "G-COMPLETENESS"
+      ],
+      "rationale": "Preserve the deterministic P05 lease-argument setup incident as a non-enacted technical attempt; no source operation was authorized or performed.",
+      "maximum_source_operations": 4,
+      "decided_at": "2026-08-25T12:38:31-04:00"
+    },
+    {
+      "decision_id": "D-TECH-P05-LEASE600",
+      "attempt_id": "S-D03-P05-20260825T124244-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-YEAR-CONTROL",
+        "G-CONTENT-CONTROL",
+        "G-LANGUAGE-CONTROL",
+        "G-COMPLETENESS"
+      ],
+      "rationale": "Use the current canonical lease runner's behavior-preserving 600-second maximum after the source-free setup validation rejected 900; source scope and the four-operation P05 bound are unchanged.",
+      "maximum_source_operations": 4,
+      "decided_at": "2026-08-25T12:42:43-04:00"
     }
   ],
   "cancellation": null,

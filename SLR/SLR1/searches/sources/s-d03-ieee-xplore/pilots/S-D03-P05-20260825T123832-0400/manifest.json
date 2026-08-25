@@ -1,0 +1,120 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D03-P05-20260825T123832-0400",
+  "task_id": "S-D03",
+  "source_id": "ieee-xplore",
+  "method_type": "direct",
+  "status": "blocked",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-25T12:38:32-04:00",
+  "ended_at": "2026-08-25T12:38:33-04:00",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "gpt-5.6-luna",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "IEEE Xplore normal rendered Search UI",
+    "url": "https://ieeexplore.ieee.org/",
+    "access_route": "shared-CfT lease was required but not acquired; no source route was opened",
+    "authenticated": false,
+    "database_or_collection": "IEEE Xplore",
+    "platform": "IEEE Xplore",
+    "timezone": "America/New_York"
+  },
+  "executions": [],
+  "checks": [
+    {
+      "check_id": "C01-offline-preflight",
+      "requirement": "Source-free reading, exact-A1, adapter/probe tests, CLI help, infrastructure validation, and output planning complete before allocation.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/p05-execution-plan.md"
+      ],
+      "notes": "All prescribed source-free checks passed before this runtime setup incident."
+    },
+    {
+      "check_id": "C02-lease-argument",
+      "requirement": "The exact canonical lease command passes runner argument validation before acquiring a lease.",
+      "status": "failed",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P05-20260825T123832-0400/source-free-setup-receipt.json"
+      ],
+      "notes": "The current runner rejects --lease-timeout 900 before lease acquisition because its hard maximum is 600 seconds."
+    },
+    {
+      "check_id": "C03-source-phase-boundary",
+      "requirement": "A setup failure before lease/browser/source work is preserved without source operations or source-gate evidence.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P05-20260825T123832-0400/source-free-setup-receipt.json"
+      ],
+      "notes": "No lease, browser claim, source write, source operation, or source-gate evidence began."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/p05-execution-plan.md",
+      "role": "governing P05 execution plan",
+      "sha256": "96aeb0d233aca948dbb236742c351e60d58b5e75832562897197f91302d80f8b",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P05-20260825T123832-0400/source-free-setup-receipt.json",
+      "role": "immutable pre-lease runner-argument validation incident",
+      "sha256": "b73c57815ba0104d050c5d92eb0a209ca3f452f82b1cdf071f5d7e0022c747cb",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P05-20260825T123832-0400/observations.md",
+      "role": "source-free setup incident observations",
+      "sha256": "4e30789773393763cedfffdffa25b1a17840f1de9760eb464663e81d401416a6",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P05-20260825T123832-0400/evidence-index.json",
+      "role": "rights-safe setup incident evidence index",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P05-20260825T123832-0400/manifest.json",
+      "role": "this immutable setup incident manifest",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    }
+  ],
+  "campaign": {
+    "campaign_id": "S-D03-C01-20260824T161325-0400",
+    "attempt_id": "S-D03-P05-20260825T123832-0400"
+  },
+  "attempt_terminal": {
+    "outcome": "blocked",
+    "category": "technical",
+    "ended_at": "2026-08-25T12:38:33-04:00",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "browser_backed": false,
+    "cleanup_receipt": null,
+    "lease_receipt": null,
+    "cancelled_by": null,
+    "reason": "Deterministic lease-runner argument validation rejected --lease-timeout 900 before lease acquisition; source_phase_started=false and no source operation or source-gate evidence began."
+  },
+  "disposition": {
+    "recommendation": "repeat",
+    "reason": "Use the current canonical runner maximum of 600 seconds for a new technical successor; no review semantics or P05 operation order changes.",
+    "semantic_change": false,
+    "human_verification_required": []
+  }
+}
