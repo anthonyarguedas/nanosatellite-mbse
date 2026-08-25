@@ -22,7 +22,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-25T12:48:44-04:00",
+  "updated_at": "2026-08-25T13:51:40-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -37,10 +37,10 @@
   },
   "controller_authorization": {
     "technical_corrective_attempts_authorized": true,
-    "maximum_additional_attempts": 4,
+    "maximum_additional_attempts": 5,
     "maximum_source_operations_per_attempt": 52,
-    "rationale": "Four lifetime technical allocations are finite: P02–P04 consumed three; one P05 remains. The historical P02 schedule used up to 52 operations, but D-TECH-NEXT-P05 independently caps the sole remaining attempt at four source operations.",
-    "maximum_technical_corrective_attempts": 4,
+    "rationale": "Controller may allocate bounded behavior-preserving repairs without changing the review method; five enacted technical successors are now the finite campaign bound after the P05 source-bearing attempt was consumed and exactly one P06 successor was prospectively authorized.",
+    "maximum_technical_corrective_attempts": 5,
     "maximum_methodological_revision_attempts": 0
   },
   "attempts": [
@@ -1200,6 +1200,68 @@
         "cancelled_by": null,
         "reason": "The first conditional visible-year-control operation returned total=null with IEEEProtocolError after exact query/control echo and readback; source writing stopped and later operations were not run."
       }
+    },
+    {
+      "attempt_id": "S-D03-P06-20260825T135127-0400",
+      "sequence": 7,
+      "manifest_path": "pilots/S-D03-P06-20260825T135127-0400/manifest.json",
+      "manifest_sha256": "0b8bb8af250b052254af3e3476e87a2c1405da7086dba70cae9d251c113c16f0",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P06",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-25T13:51:27-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 4,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "P06-op-01-year-a1",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "G-YEAR-CONTROL",
+            "retry": null,
+            "gate_ids": [
+              "G-YEAR-CONTROL"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P06-YEAR-OP",
+          "gate_id": "G-YEAR-CONTROL",
+          "path": "pilots/S-D03-P06-20260825T135127-0400/year-control-receipt.json",
+          "sha256": "af4c165a49386ac3e5b3599d50708a3fa4d11d6e39fc7cf123ce112735f7a37d",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-25T13:51:40-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D03-P06-20260825T135127-0400/browser-cleanup-receipt.json",
+          "sha256": "accc405c7dde4ae146178ff3c504f36e32fdcfb24748a570fa59627026fcd52b"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D03-P06-20260825T135127-0400/browser-lease-release-receipt.json",
+          "sha256": "2e1be62ab1f05b217e27f493e5cd94442cdba5c794f50b0ba0254c6f24f5efe6"
+        },
+        "cancelled_by": null,
+        "reason": "The first conditional visible-year-control operation returned total=null with an exact query echo and year readback but an unreconciled rendered range; the patched same-page wait failed closed after three repeated contradictory polls, and later operations were not run."
+      }
     }
   ],
   "gate_status_snapshots": [
@@ -1438,8 +1500,8 @@
     },
     {
       "gate_id": "G-YEAR-CONTROL",
-      "checkpoint_id": "CP-YEAR-CONTROL-P05",
-      "attempt_id": "S-D03-P05-20260825T124244-0400",
+      "checkpoint_id": "CP-YEAR-CONTROL-P06",
+      "attempt_id": "S-D03-P06-20260825T135127-0400",
       "requirement": "Visible publication-year application and precision are diagnosed without adopting a final cutoff.",
       "depends_on": [
         "G-ADAPTER-COUNT"
@@ -1448,8 +1510,8 @@
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D03-P05-20260825T124244-0400/year-control-receipt.json",
-          "sha256": "7a115b05caac951f158abf6f4256cc28cd36f172bd91713cc92eaaf8792ca70c",
+          "path": "pilots/S-D03-P06-20260825T135127-0400/year-control-receipt.json",
+          "sha256": "af4c165a49386ac3e5b3599d50708a3fa4d11d6e39fc7cf123ce112735f7a37d",
           "validity": "valid"
         }
       ],
@@ -1463,13 +1525,13 @@
         "rationale": "Instrumenting and diagnosing the visible control does not change the date policy."
       },
       "invalidation": null,
-      "notes": "P05 rechecked the visible year control after exact A1 echo and readback; IEEEProtocolError persisted at post-click stabilization with total=null. This is not zero; P04 remains immutable historical evidence.",
+      "notes": "P06 observed exact query/year readback but an unreconciled rendered range with a singleton summary and five cards; the bounded same-page wait failed closed after three repeated contradictory polls. This is not zero; P05 remains immutable historical evidence.",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-CONTENT-CONTROL",
-      "checkpoint_id": "CP-CONTENT-CONTROL-P05",
-      "attempt_id": "S-D03-P05-20260825T124244-0400",
+      "checkpoint_id": "CP-CONTENT-CONTROL-P06",
+      "attempt_id": "S-D03-P06-20260825T135127-0400",
       "requirement": "Visible multiple content-type controls are checked only after the year control is healthy.",
       "depends_on": [
         "G-YEAR-CONTROL"
@@ -1487,13 +1549,13 @@
         "rationale": "The blocked control check leaves review semantics unchanged."
       },
       "invalidation": null,
-      "notes": "P05 did not run content-type selection because G-YEAR-CONTROL failed first.",
+      "notes": "P06 did not run content-type selection because G-YEAR-CONTROL failed first.",
       "original_observed_basis": "untested"
     },
     {
       "gate_id": "G-LANGUAGE-CONTROL",
-      "checkpoint_id": "CP-LANGUAGE-CONTROL-P05",
-      "attempt_id": "S-D03-P05-20260825T124244-0400",
+      "checkpoint_id": "CP-LANGUAGE-CONTROL-P06",
+      "attempt_id": "S-D03-P06-20260825T135127-0400",
       "requirement": "Rendered language controls are inventoried only after the year control is healthy.",
       "depends_on": [
         "G-YEAR-CONTROL"
@@ -1511,13 +1573,13 @@
         "rationale": "The blocked control check leaves review semantics unchanged."
       },
       "invalidation": null,
-      "notes": "P05 did not run the Language inventory because G-YEAR-CONTROL failed first; English was not selected or applied.",
+      "notes": "P06 did not run the Language inventory because G-YEAR-CONTROL failed first; English was not selected or applied.",
       "original_observed_basis": "untested"
     },
     {
       "gate_id": "G-COMPLETENESS",
-      "checkpoint_id": "CP-COMPLETENESS-P05",
-      "attempt_id": "S-D03-P05-20260825T124244-0400",
+      "checkpoint_id": "CP-COMPLETENESS-P06",
+      "attempt_id": "S-D03-P06-20260825T135127-0400",
       "requirement": "Record-bearing repeat, pagination, identity, and completeness checks run only after the declared controls pass.",
       "depends_on": [
         "G-YEAR-CONTROL",
@@ -1538,7 +1600,7 @@
         "rationale": "The deferred validation concerns capture mechanics, not a change to inclusion criteria."
       },
       "invalidation": null,
-      "notes": "P05 did not run the bounded completeness capture because operation 2 had no total after the year-gate stop.",
+      "notes": "P06 did not run bounded completeness because operation 1 failed before an operation-2 total existed.",
       "original_observed_basis": "untested"
     }
   ],
@@ -1666,6 +1728,25 @@
       "rationale": "Use the current canonical lease runner's behavior-preserving 600-second maximum after the source-free setup validation rejected 900; source scope and the four-operation P05 bound are unchanged.",
       "maximum_source_operations": 4,
       "decided_at": "2026-08-25T12:42:43-04:00"
+    },
+    {
+      "decision_id": "D-TECH-NEXT-P06",
+      "attempt_id": null,
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-YEAR-CONTROL",
+        "G-CONTENT-CONTROL",
+        "G-LANGUAGE-CONTROL",
+        "G-COMPLETENESS"
+      ],
+      "rationale": "One and only one P06 successor is controller-authorized without human approval: retry the visible year control with the patched bounded same-page wait, then run only healthy dependent content, language, and bounded completeness operations, at a maximum of four source operations. The exact A1 query and review semantics are unchanged.",
+      "maximum_source_operations": 4,
+      "decided_at": "2026-08-25T13:50:00-04:00"
     }
   ],
   "cancellation": null,

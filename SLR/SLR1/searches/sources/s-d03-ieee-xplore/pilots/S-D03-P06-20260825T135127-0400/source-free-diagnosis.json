@@ -1,0 +1,62 @@
+{
+  "schema_version": "slr1-ieee-p06-source-free-diagnosis/v1",
+  "attempt_id": "S-D03-P06-20260825T135127-0400",
+  "decision_class": "controller_technical",
+  "basis": "observed",
+  "source_access_after_failure": false,
+  "new_lease_after_failure": false,
+  "source_operation_reissued": false,
+  "shared_agent_tools_checkout_edited": false,
+  "live_trigger": {
+    "operation_id": "P06-op-01-year-a1",
+    "error_type": "IEEEProtocolError",
+    "error_stage": "year_post_click_stabilization",
+    "source_total": null,
+    "query_echo": "exact",
+    "range_echo": "mismatch",
+    "loading_observed": false,
+    "transitional_poll_count": 0,
+    "contradictory_poll_count": 3,
+    "card_count": 5,
+    "sort": "relevance",
+    "challenge": false,
+    "busy": false
+  },
+  "trusted_implementation": {
+    "main_head": "d872f59f5f20913fbd0ef4de16ea2ab79a6bc883",
+    "ieee_fix_commit": "f76610f12bb6f832244ea49d93d0c4d8add8116e",
+    "adapter_sha256": "8523083554e27b7d6117f9ce1840867883db2e6b9b812d7d83dce6f4cf8bcca0",
+    "focused_test_sha256": "0573a7183894b2550511bca7dd0a900f74feb6f04bf260ae6aa2a9cf5bbaf111",
+    "domain_note_sha256": "ce02c2e0e7bb275211e184d791e763519211a98095a62df206388e263ccaf3eb"
+  },
+  "source_free_checks": [
+    {
+      "check": "focused IEEE adapter tests",
+      "status": "passed",
+      "result": "26 passed, 10 subtests"
+    },
+    {
+      "check": "focused IEEE Language probe tests",
+      "status": "passed",
+      "result": "8 passed"
+    },
+    {
+      "check": "Loading/transitional sequence regression",
+      "status": "passed",
+      "result": "twenty Loading polls were not accepted; a later stable reconciled five-card state was accepted"
+    },
+    {
+      "check": "repeated contradiction regression",
+      "status": "passed",
+      "result": "three repeated contradictory snapshots fail closed before timeout"
+    }
+  ],
+  "diagnosis": {
+    "classification": "live_rendered_year_range_reconciliation_unresolved",
+    "code_issue": "unresolved",
+    "finding": "The live safe projection contains an exact query echo and five cards but a mismatched rendered range and singleton summary. The current bounded wait correctly refuses that unreconciled state; offline tests do not establish whether the mismatch is source-side control hydration or an adapter selector/invariant issue.",
+    "technical_impact": "G-YEAR-CONTROL failed; dependent content, language, and completeness operations were correctly not run.",
+    "semantic_impact": false,
+    "recommended_next_action": "Isolate the rendered-range observation/selector behavior source-free before any separately authorized future live phase; do not reinterpret null as zero or import a prefix."
+  }
+}

@@ -701,10 +701,11 @@ class PilotCampaignValidationTests(unittest.TestCase):
         p4 = next(attempt for attempt in data["attempts"] if attempt["sequence"] == 4)
         p5 = copy.deepcopy(p4)
         p5_id = "S-D03-P07-20260825T161500-0400"
+        next_sequence = max(attempt["sequence"] for attempt in data["attempts"]) + 1
         p5.update(
             {
                 "attempt_id": p5_id,
-                "sequence": 7,
+                "sequence": next_sequence,
                 "manifest_path": f"pilots/{p5_id}/manifest.json",
                 "manifest_sha256": "f" * 64,
                 "evidence": [],
@@ -1001,10 +1002,11 @@ class PilotCampaignValidationTests(unittest.TestCase):
         p5_id = "S-D03-P07-20260825T161500-0400"
         p4 = next(attempt for attempt in data["attempts"] if attempt["sequence"] == 4)
         p5 = copy.deepcopy(p4)
+        next_sequence = max(attempt["sequence"] for attempt in data["attempts"]) + 1
         p5.update(
             {
                 "attempt_id": p5_id,
-                "sequence": 7,
+                "sequence": next_sequence,
                 "manifest_path": f"pilots/{p5_id}/manifest.json",
                 "manifest_sha256": "f" * 64,
                 "evidence": [],
@@ -1278,10 +1280,11 @@ class PilotCampaignValidationTests(unittest.TestCase):
             p5_id = "S-D03-P07-20260825T161500-0400"
             p4 = next(attempt for attempt in data["attempts"] if attempt["sequence"] == 4)
             p5 = copy.deepcopy(p4)
+            next_sequence = max(attempt["sequence"] for attempt in data["attempts"]) + 1
             p5.update(
                 {
                     "attempt_id": p5_id,
-                    "sequence": 7,
+                    "sequence": next_sequence,
                     "manifest_path": f"pilots/{p5_id}/manifest.json",
                     "evidence": [],
                     "source_operations": {

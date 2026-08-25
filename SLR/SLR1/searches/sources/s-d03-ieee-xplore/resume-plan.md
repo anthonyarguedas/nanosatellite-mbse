@@ -1,6 +1,6 @@
 # Resume plan — S-D03-C01-20260824T161325-0400
 
-**Status:** `technically_blocked`; the review owner authorized `D-METHOD-NEAR6` on 2026-08-25. The independent technical P05 below remains prospectively controller-authorized.
+**Status:** `technically_blocked`; the review owner authorized `D-METHOD-NEAR6` on 2026-08-25. P05 is immutable and consumed, and its one controller-technical successor P06 is now preserved as a failed technical attempt.
 
 ## Carries forward
 
@@ -8,11 +8,11 @@
 - P04 preserves `G-ADAPTER-COUNT`, `G-TRANSLATION-ALGEBRA`, `G-NEAR-SYNTAX`, and all nine diagnostic partition counts; P05 must not rerun those counts or prior field/parser evidence unless the new adapter behavior demonstrates they are affected.
 - `G-NEAR-METHOD` is passed: [`human-review.md`](human-review.md) accepts `NEAR/6` as the conservative broader same-field fallback without claiming exact equivalence.
 
-## Next immutable attempt
+## P06 outcome and next action
 
-- Allocate `S-D03-P05-<timestamp>` as `controller_technical`; no new human authorization is required.
-- **Source-operation maximum: 4.** Instrument and diagnose the visible year control first; only if it is healthy, run the dependent content-type, language, and one bounded completeness gate. The executable details, exact A1 input, runtime attempt/receipt paths, adapter flags, and hard stops are in [`p05-execution-plan.md`](p05-execution-plan.md).
-- Do **not** rerun the nine partitions, NEAR/6 controls, prior field/parser diagnostics, S-C01, export, or unrelated record work. Do not adopt a cutoff or resolve the NEAR/6 method choice.
+- P06 (`S-D03-P06-20260825T135127-0400`) was the single controller-technical successor, with **source-operation maximum 4**. It used exact A1 and failed at the first visible year-control operation with `total=null` after an unreconciled rendered range; content, language, and completeness were not run.
+- The attached canonical lease, owned-page cleanup, broker-anchor preservation, power/sleep checks, and verified release are recorded in the P06 packet. The immediate source-free investigation passed the patched adapter/probe tests and leaves `code_issue=unresolved` between source control hydration and the adapter invariant.
+- Do **not** allocate another attempt from this packet or rerun the nine partitions, NEAR/6 controls, prior field/parser diagnostics, S-C01, export, or unrelated record work. Do not adopt a cutoff or change the accepted NEAR/6 method. Any future retry requires a separately recorded technical repair/authorization after source-free isolation.
 
 ## Shared browser and acceptance
 

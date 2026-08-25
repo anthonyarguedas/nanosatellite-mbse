@@ -3,7 +3,7 @@ task_id: S-D03
 source_id: ieee-xplore
 source_name: IEEE Xplore
 method_type: direct
-status: draft_p05_launchable_controls_and_completeness_technically_blocked
+status: draft_p06_year_control_technically_blocked
 guideline_version: 0.5.0
 validated_at: null
 protocol_commit: 38ab61287443693ddabdd4bb855d535a4585ae35
@@ -12,7 +12,7 @@ accepted_pilot_ids: []
 
 # Source-specific guideline: IEEE Xplore
 
-**DRAFT — not accepted and not authorized for a final run.** P04 live-validated the committed small-result-page adapter fix on the exact full A1 query and count-tested all nine current semantic cells. A subsequently required visible publication-year diagnostic returned `total=null` with `IEEEProtocolError`; P04 stopped before the remaining controls and every record-bearing completeness check. The source-free P05 launch bundle adds no observation: it plans the four authorized gates in [`p05-execution-plan.md`](p05-execution-plan.md) and a narrow owned-page Language inventory probe. Controller and human review are required.
+**DRAFT — not accepted and not authorized for a final run.** P04 live-validated the committed small-result-page adapter fix on the exact full A1 query and count-tested all nine current semantic cells. P05 then failed closed at its visible publication-year diagnostic, and P06 was the one controller-technical successor using the bounded transitional wait. P06 again returned `total=null` with `IEEEProtocolError` after exact query/year readback but an unreconciled rendered range; content, language, and record-bearing completeness remained correctly unrun. Controller review and source-free technical isolation remain required.
 
 ## 1. Source boundary and access route
 
@@ -42,9 +42,9 @@ accepted_pilot_ids: []
 ## 4. Controls and common limits
 
 - **[observed]** P04 applied no final evidence-window, language, content-type, publication-type, access, venue, or peer-review restriction. `P-001` remains unresolved.
-- **[observed]** The required generic visible publication-year diagnostic requested 2011 through 2026 after every partition succeeded, but returned `IEEEProtocolError`, `total=null`, zero pages, and zero records. The requested source-side year application and its precision are therefore unverified; it is not a common cutoff and no date limit is adopted.
-- **[untested]** The visible Journals-plus-Conferences multiple-selection diagnostic and the rendered Language-facet inventory did not run because the year-control null required an immediate stop. No English limit is adopted; full-report language remains for screening if the method is later accepted.
-- **[planned]** P05 will run the visible year diagnostic first, then the content-type control, then [`ieee_language_control_probe.py`](../../../scripts/ieee_language_control_probe.py) on one adapter-owned page. The probe records only fixed counts/booleans, never returns facet text, and does not select English. Its offline tests are not live evidence.
+- **[observed]** P04, P05, and P06 all failed the required visible publication-year diagnostic with `IEEEProtocolError`, `total=null`, zero pages, and zero records. P06 observed exact query/year readback but a mismatched rendered range, singleton summary, and five cards; its bounded same-page wait stopped after three repeated contradictory polls. The requested source-side year application and its precision are therefore unverified; it is not a common cutoff and no date limit is adopted.
+- **[untested]** The visible Journals-plus-Conferences multiple-selection diagnostic and the rendered Language-facet inventory did not run because the year-control failures required an immediate stop. No English limit is adopted; full-report language remains for screening if the method is later accepted.
+- **[planned]** A future separately authorized phase may rerun the visible year diagnostic first, then the content-type control, then [`ieee_language_control_probe.py`](../../../scripts/ieee_language_control_probe.py) on one adapter-owned page. The probe records only fixed counts/booleans, never returns facet text, and does not select English. Its offline tests are not live evidence.
 - **[observed]** The adapter fixes Relevance when the native rendered UI exposes a sort selection. Complete small result pages can omit a visible Items Per Page selection; P04 A1 count-only observed five cards and an inferred native page size of 25 without treating a hidden control as selected.
 - **[observed]** P02 observed a generic count of 1,301,997 for an individually fielded `power AND system` diagnostic. This is a broad-count observation, not a validated source cap.
 
@@ -72,22 +72,22 @@ accepted_pilot_ids: []
 
 1. **[inferred]** Do not execute a final IEEE event from this draft.
 2. **[observed]** Keep the current one-cell field-native translations and P04 receipts intact. Do not reuse P03 split files.
-3. **[inferred]** Execute P05 only from [`p05-execution-plan.md`](p05-execution-plan.md): one runtime attempt, exact A1 only, four conditional gates in order, shared `127.0.0.1:9222` lease, and no NEAR/6 or prior-partition rerun. Its date bound is the pilot execution date, not `P-001`.
-4. **[inferred]** Obtain controller/human disposition of the P04 year-control null before accepting any method. A later scope must not treat it as a zero or silently remove the date-control requirement.
+3. **[observed]** P05 and its source-bearing successor were preserved under the campaign; P06 then used one runtime attempt, exact A1 only, four conditional gates in order, the shared `127.0.0.1:9222` lease, and the patched bounded same-page wait. No NEAR/6 or prior-partition rerun occurred. Its date bound was the pilot execution date, not `P-001`.
+4. **[inferred]** Obtain controller disposition of the P05/P06 year-control nulls before accepting any method. A later scope must not treat either null as zero or silently remove the date-control requirement.
 5. **[inferred]** Before any final event, prospectively complete visible year, content-type, and language decisions; exact-A1 full-detail repeats; fixed multipage selection and two page-size-10 passes; stable-identity and total reconciliation; and the required rights-safe capture proof.
 6. **[inferred]** Apply the common `P-001` cutoff only after it is set. Do not add a prohibited final discovery restriction.
 
 ## 9. Validation evidence
 
-- **[observed]** P04 evidence is in `pilots/S-D03-P04-20260824T131301-0400/`, notably `execution-plan.json`, `pre-live-current-draft-audit.json`, `near6-gate-receipt.json`, `translation-algebra-audit.json`, safe count receipts, and browser receipts.
-- **[observed]** P04 verified the external adapter at commit `702063f1aedf36337e1233e31e9cb083bd38c7c1`; the adapter SHA-256 was `6d18ffce2239d005447bdf7e6c40c1e77e20e71d81dc6cefdce6b1552b20df2f`, the focused-test SHA-256 was `16ad12ee7bc439c937237a803156bcfed8ebef9f45b88d18c9951eedb5b98f4c`, and the focused suite passed 15 tests before live work.
-- **[observed]** P01–P03 remain immutable. P04 preserved the isolated original anchor, matching browser version, AC power, active sleep assertions, and zero exact-window Sleep/Wake/DarkWake events.
+- **[observed]** P04 evidence is in `pilots/S-D03-P04-20260824T131301-0400/`; P05 evidence is in its two immutable attempt directories; and P06 evidence is in `pilots/S-D03-P06-20260825T135127-0400/`, including `year-control-receipt.json`, browser cleanup/release receipts, `source-free-diagnosis.json`, and the restricted inventory.
+- **[observed]** P06 verified the trusted agent-tools main implementation at `d872f59f5f20913fbd0ef4de16ea2ab79a6bc883`, containing IEEE stabilization commit `f76610f12bb6f832244ea49d93d0c4d8add8116e`; the patched adapter, focused test, and IEEE domain note were exact-hash matched, and the focused adapter suite passed 26 tests plus 10 subtests after the live failure. The Language probe suite passed 8 tests.
+- **[observed]** P01–P05 remain immutable. P06 preserved the broker anchor, matching browser version/epoch, AC power, process-scoped sleep protection, and zero exact-window Sleep/Wake/DarkWake events; lease and owned-target release were verified.
 - **[untested]** No accepted pilot ID, final-run method, source-specific approval commit, or accepted rendered-capture equivalence exists.
 
 ## 10. Remaining limits and protocol impact
 
-- **[observed]** `code_issue=unresolved`: the P04 visible-year control run failed with a safe null `IEEEProtocolError`, but the rights-safe artifact does not distinguish a source control behavior from an adapter invariant. P04 made no adapter change or retry.
-- **[observed_and_human_approved]** P04 introduced no protocol semantic change. The review owner subsequently accepted its `NEAR/6` implementation under the existing broader-fallback rule.
+- **[observed]** `code_issue=unresolved`: P06's safe artifact records an exact query/year readback followed by a repeated rendered range mismatch, singleton summary, and five cards. Source-free regressions confirm that the f76610f wait tolerates twenty `Loading results` polls and rejects stable contradictions, but cannot distinguish an IEEE control-hydration state from an adapter selector/invariant issue. The source-bearing operation was not reissued and no shared dirty checkout was edited.
+- **[observed_and_human_approved]** P04 introduced no protocol semantic change. The review owner accepted its `NEAR/6` implementation under the existing broader-fallback rule; P05/P06 introduced no method or cutoff decision.
 - **[observed]** The IEEE stage of S-C01 remains explicitly excluded and wholly unstarted: no candidate register, B1∪B2 baseline, candidate-family query, deduplication, sampling, inspection, or coding occurred.
 - **[inferred]** S-D03 method work is not complete enough for separate IEEE S-C01 authorization because control and completeness validation remain incomplete and the date-control null needs disposition.
 
