@@ -568,23 +568,83 @@ NATIVE_SUBMIT_GUARD_SCRIPT = r"""
   const safety = safetyFor();
   if (!Object.values(safety).every(Boolean)) return safety;
   const form = submitter.form;
-  const blockUnsafeDefault = event => {
-    if (event.type === "submit" && event.target !== form) return;
-    const stillSafe = safetyFor();
-    const exactSubmitter = event.type !== "submit" || event.submitter === submitter;
-    if (!exactSubmitter || !Object.values(stillSafe).every(Boolean)) {
+  // submit() bypasses submit events.  Lock its public prototype entry for the
+  // short-lived owned page before allowing the click; a nonstandard/unlockable
+  // entry fails closed instead of leaving a programmatic-submit bypass open.
+  const submitDescriptor = Object.getOwnPropertyDescriptor(
+    HTMLFormElement.prototype, "submit"
+  );
+  if (
+    !submitDescriptor ||
+    typeof submitDescriptor.value !== "function" ||
+    (submitDescriptor.writable !== true && submitDescriptor.configurable !== true)
+  ) return empty();
+  try {
+    Object.defineProperty(HTMLFormElement.prototype, "submit", {
+      configurable: false,
+      enumerable: submitDescriptor.enumerable,
+      value: () => undefined,
+      writable: false
+    });
+  } catch (_) {
+    return empty();
+  }
+  let acceptedClick = false;
+  let acceptedSubmit = false;
+  const block = event => {
+    try {
+      if (event.type === "click") {
+        const path = event.composedPath();
+        const exactClick = Boolean(
+          event.isTrusted === true &&
+          (event.target === submitter || path.includes(submitter))
+        );
+        const stillSafe = safetyFor();
+        if (
+          !exactClick ||
+          acceptedClick ||
+          !Object.values(stillSafe).every(Boolean)
+        ) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return;
+        }
+        acceptedClick = true;
+        // Stop at the first capture boundary.  This prevents every later
+        // document/form/control click handler from mutating a form, invoking
+        // HTMLFormElement.prototype.submit(), or submitting another form.
+        // It does not cancel the one native default action.
+        event.stopImmediatePropagation();
+        return;
+      }
+
+      const exactSubmit = Boolean(
+        acceptedClick &&
+        !acceptedSubmit &&
+        event.isTrusted === true &&
+        event.target === form &&
+        event.submitter === submitter
+      );
+      const stillSafe = safetyFor();
+      if (!exactSubmit || !Object.values(stillSafe).every(Boolean)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        return;
+      }
+      acceptedSubmit = true;
+      // Keep the proven native default action, but no later submit handler.
+      event.stopImmediatePropagation();
+    } catch (_) {
+      // An unexpected event shape is never allowed to reach a native default.
       event.preventDefault();
       event.stopImmediatePropagation();
-      return;
     }
-    // Stop later page submit handlers from changing action/target after this
-    // final proof while preserving the browser's native default submission.
-    if (event.type === "submit") event.stopImmediatePropagation();
   };
-  // Pin the exact node and recheck at both native default-action boundaries.
-  // A changed action, target, or submitter therefore cancels rather than submits.
-  submitter.addEventListener("click", blockUnsafeDefault, { capture: true, once: true });
-  window.addEventListener("submit", blockUnsafeDefault, true);
+  // The window capture listener runs before document/form/control handlers.
+  // It permits exactly one pinned click and exactly one matching submit event;
+  // every other click or submit is stopped and canceled while the guard lives.
+  window.addEventListener("click", block, true);
+  window.addEventListener("submit", block, true);
   return safety;
 }
 """
@@ -1029,9 +1089,20 @@ def canonical_retry_url(parameters: tuple[tuple[str, str], ...]) -> str:
 
 
 async def prepare_native_submission(
-    page: Any, inspection: FormInspection, query: str
+    page: Any,
+    inspection: FormInspection,
+    query: str,
+    *,
+    deadline: float | None = None,
+    clock: Callable[[], float] | None = None,
 ) -> PreparedSubmission:
     """Fill, read back, and click exactly one visible native submit control."""
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    if deadline is None:
+        # Direct callers still get a bounded native action.  run_probe always
+        # supplies its shared submission deadline instead.
+        deadline = clock() + DEFAULT_TIMEOUT_SECONDS
     abort = _pre_submit_abort(inspection)
     if abort is not None:
         raise ProbeAbort(abort)
@@ -1088,8 +1159,18 @@ async def prepare_native_submission(
             raise PreClickSafetyFailure(safety)
         # The guard rechecks the pinned submitter and form at click/submit
         # default-action boundaries, so mutation cannot turn this into an
-        # unsafe destination or a second form submission.
-        await submitter.click()
+        # unsafe destination or a second form submission.  Do not let click
+        # wait through an unbounded navigation before post-click observation.
+        remaining = deadline - clock()
+        if not math.isfinite(remaining) or remaining <= 0:
+            raise ProbeAbort("native_submit_interaction_failed")
+        try:
+            await asyncio.wait_for(
+                submitter.click(timeout=_milliseconds(remaining), no_wait_after=True),
+                timeout=remaining,
+            )
+        except asyncio.TimeoutError as error:
+            raise ProbeAbort("native_submit_interaction_failed") from error
     except ProbeAbort:
         raise
     except Exception as error:
@@ -1222,16 +1303,20 @@ async def wait_for_post_click_state(
     busy_budget: BusyRetryBudget,
     clock: Callable[[], float] | None = None,
     sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+    deadline: float | None = None,
 ) -> PostClickOutcome:
     """Poll and retry under one absolute post-click deadline.
 
     Every evaluation, respectful wait, recheck, and retry navigation consumes
     the same deadline. A busy response is reissued only after a fresh safe
-    recheck and never after that deadline has elapsed.
+    recheck and never after that deadline has elapsed.  A caller that has
+    already dispatched the native click supplies its original deadline so the
+    post-click window cannot restart after click or navigation time.
     """
     if clock is None:
         clock = asyncio.get_running_loop().time
-    deadline = clock() + timeout_seconds
+    if deadline is None:
+        deadline = clock() + timeout_seconds
     polls = 0
     submission_observed = False
     challenge_seen = False
@@ -1908,9 +1993,29 @@ async def run_probe(
                         if pre_submit_abort is not None:
                             raise ProbeAbort(pre_submit_abort)
 
-                        prepared = await prepare_native_submission(
-                            owned_page, inspection, config.query
-                        )
+                        # The native click and all post-click work share one
+                        # deadline.  In particular, a click that hangs while a
+                        # navigation is pending cannot start a fresh polling
+                        # window or skip the live-cleanup finally block.
+                        submission_deadline = clock() + config.timeout_seconds
+                        remaining = submission_deadline - clock()
+                        if remaining <= 0:
+                            raise ProbeAbort("native_submit_interaction_failed")
+                        try:
+                            prepared = await asyncio.wait_for(
+                                prepare_native_submission(
+                                    owned_page,
+                                    inspection,
+                                    config.query,
+                                    deadline=submission_deadline,
+                                    clock=clock,
+                                ),
+                                timeout=remaining,
+                            )
+                        except asyncio.TimeoutError as error:
+                            raise ProbeAbort(
+                                "native_submit_interaction_failed"
+                            ) from error
                         submission["nonblank_control_readback"] = True
                         submission["visible_native_submit_count"] = (
                             prepared.visible_native_submit_count
@@ -1931,6 +2036,7 @@ async def run_probe(
                             ),
                             clock=clock,
                             sleeper=sleeper,
+                            deadline=submission_deadline,
                         )
                         submission["post_click_polls"] = outcome.polls
                         submission["busy_recovery_attempts"] = (

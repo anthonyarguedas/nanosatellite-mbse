@@ -291,14 +291,14 @@ class LeasePlaywright:
         return False
 
 
-def config(tmp: Path, *, execute: bool = True) -> object:
+def config(tmp: Path, *, execute: bool = True, timeout_seconds: float = 1.0) -> object:
     return oatd.ProbeConfig(
         execute=execute,
         cdp_url="http://127.0.0.1:9222",
         query="private query phrase",
         field_label="Title",
-        timeout_seconds=1.0,
-        poll_interval_seconds=0.1,
+        timeout_seconds=timeout_seconds,
+        poll_interval_seconds=min(0.1, timeout_seconds),
         busy_retries=2,
         busy_retry_delay_seconds=1.0,
         output_path=tmp / "receipt.json",
@@ -401,6 +401,30 @@ class OATDPostClickStateMachineTests(unittest.TestCase):
         self.assertEqual(outcome.classification, "submission_not_observed_timeout")
         self.assertEqual(outcome.polls, 0)
         self.assertEqual(outcome.busy_retries_attempted, 0)
+
+    def test_explicit_deadline_does_not_restart_after_native_click_time(self):
+        clock = FakeClock()
+        clock.value = 1.0
+        page = StatePage([result_state(7)])
+        outcome = asyncio.run(
+            oatd.wait_for_post_click_state(
+                page,
+                query="private query phrase",
+                field_value="title",
+                retry_parameters=(
+                    ("box1", "private query phrase"),
+                    ("field1", "title"),
+                ),
+                timeout_seconds=10.0,
+                poll_interval_seconds=0.1,
+                busy_budget=budget(),
+                clock=clock,
+                sleeper=clock.sleep,
+                deadline=1.0,
+            )
+        )
+        self.assertEqual(outcome.classification, "submission_not_observed_timeout")
+        self.assertEqual(len(page.states), 1)
 
     def test_busy_delay_is_capped_and_expiry_never_retries(self):
         page = StatePage([busy_state()])
@@ -582,7 +606,7 @@ class OATDFormPreparationTests(unittest.TestCase):
             async def input_value(self):
                 return self.value
 
-            async def click(self):
+            async def click(self, **_kwargs):
                 self.clicked += 1
 
             async def element_handle(self):
@@ -670,7 +694,7 @@ class OATDFormPreparationTests(unittest.TestCase):
                 self.unsafe_clicks = 0
                 self.blocked = False
 
-            async def click(self):
+            async def click(self, **_kwargs):
                 # Simulate a locator-time mutation after the final projection:
                 # replacement plus action/target changes must hit the armed
                 # native event guard rather than an unsafe default submission.
@@ -703,6 +727,237 @@ class OATDFormPreparationTests(unittest.TestCase):
         self.assertTrue(form.mutating_submitter.blocked)
         self.assertEqual(form.mutating_submitter.unsafe_clicks, 0)
         self.assertIsNot(form.submit, form.mutating_submitter)
+
+    def test_native_guard_blocks_later_programmatic_and_foreign_submissions(self):
+        program = f"""
+class Element {{
+  hasAttribute(_name) {{ return false; }}
+}}
+class HTMLFormElement extends Element {{}}
+Object.defineProperties(HTMLFormElement.prototype, {{
+  action: {{ get() {{ return this._action; }} }},
+  method: {{ get() {{ return this._method; }} }},
+  target: {{ get() {{ return this._target; }}}}
+}});
+let directSubmits = 0;
+HTMLFormElement.prototype.submit = function() {{ directSubmits += 1; }};
+class HTMLButtonElement extends Element {{
+  constructor(form) {{
+    super();
+    this.form = form;
+    this.tagName = "BUTTON";
+    this.type = "submit";
+    this.offsetWidth = 1;
+    this.offsetHeight = 1;
+  }}
+  getClientRects() {{ return [{{}}]; }}
+}}
+class HTMLInputElement extends Element {{}}
+const listeners = {{ click: [], submit: [] }};
+const window = {{
+  location: {{ href: "https://oatd.org/" }},
+  addEventListener(type, listener, capture) {{
+    if (capture !== true) throw new Error("expected capture listener");
+    listeners[type].push(listener);
+  }}
+}};
+const document = {{
+  title: "OATD",
+  forms: [],
+  querySelectorAll(selector) {{
+    if (selector === "h3.pageHeader a.inheader") {{
+      return [{{ textContent: "Open Access Theses and Dissertations" }}];
+    }}
+    if (selector === "base[target]") return [];
+    return [];
+  }}
+}};
+const form = new HTMLFormElement();
+form._action = "https://oatd.org/oatd/search-composer";
+form._method = "get";
+form._target = "";
+const otherForm = new HTMLFormElement();
+otherForm._action = "https://off-origin.invalid/";
+otherForm._method = "get";
+otherForm._target = "";
+const submitter = new HTMLButtonElement(form);
+form.querySelectorAll = () => [submitter];
+otherForm.querySelectorAll = () => [];
+document.forms = [form, otherForm];
+let laterClickHandlerRan = false;
+const laterClickHandler = () => {{
+  laterClickHandlerRan = true;
+  form._action = "https://off-origin.invalid/";
+  HTMLFormElement.prototype.submit.call(form);
+  HTMLFormElement.prototype.submit.call(otherForm);
+}};
+const arm = {oatd.NATIVE_SUBMIT_GUARD_SCRIPT};
+const safety = arm(submitter);
+window.addEventListener("click", laterClickHandler, true);
+HTMLFormElement.prototype.submit.call(otherForm);
+const directSubmitBlocked = directSubmits === 0;
+const event = (type, target, submitterValue = null) => {{
+  const state = {{
+    type,
+    target,
+    submitter: submitterValue,
+    isTrusted: true,
+    defaultPrevented: false,
+    stopped: false,
+    composedPath() {{ return [target]; }},
+    preventDefault() {{ this.defaultPrevented = true; }},
+    stopImmediatePropagation() {{ this.stopped = true; }}
+  }};
+  return state;
+}};
+const dispatch = item => {{
+  for (const listener of listeners[item.type]) {{
+    listener(item);
+    if (item.stopped) break;
+  }}
+}};
+const click = event("click", submitter);
+dispatch(click);
+const foreignSubmit = event("submit", otherForm, submitter);
+dispatch(foreignSubmit);
+const expectedSubmit = event("submit", form, submitter);
+dispatch(expectedSubmit);
+process.stdout.write(JSON.stringify({{
+  safety,
+  directSubmitBlocked,
+  laterClickHandlerRan,
+  directSubmits,
+  clickDefaultPrevented: click.defaultPrevented,
+  clickStopped: click.stopped,
+  foreignSubmitDefaultPrevented: foreignSubmit.defaultPrevented,
+  foreignSubmitStopped: foreignSubmit.stopped,
+  expectedSubmitDefaultPrevented: expectedSubmit.defaultPrevented,
+  expectedSubmitStopped: expectedSubmit.stopped
+}}));
+"""
+        completed = subprocess.run(
+            ["node", "-e", program], check=True, capture_output=True, text=True
+        )
+        result = json.loads(completed.stdout)
+        self.assertTrue(all(result["safety"].values()))
+        self.assertTrue(result["directSubmitBlocked"])
+        self.assertFalse(result["laterClickHandlerRan"])
+        self.assertEqual(result["directSubmits"], 0)
+        self.assertFalse(result["clickDefaultPrevented"])
+        self.assertTrue(result["clickStopped"])
+        self.assertTrue(result["foreignSubmitDefaultPrevented"])
+        self.assertTrue(result["foreignSubmitStopped"])
+        self.assertFalse(result["expectedSubmitDefaultPrevented"])
+        self.assertTrue(result["expectedSubmitStopped"])
+
+    def test_native_click_timeout_cancels_the_hanging_operation(self):
+        inventory = self.inventory()
+
+        class Control:
+            def __init__(self, value: str = "") -> None:
+                self.value = value
+
+            async def count(self):
+                return 1
+
+            async def is_visible(self):
+                return True
+
+            async def fill(self, value):
+                self.value = value
+
+            async def select_option(self, value):
+                self.value = value
+
+            async def input_value(self):
+                return self.value
+
+            @property
+            def first(self):
+                return self
+
+        class HangingSubmitter(Control):
+            def __init__(self) -> None:
+                super().__init__()
+                self.cancelled = False
+                self.click_kwargs: dict[str, object] | None = None
+
+            async def element_handle(self):
+                return self
+
+            async def evaluate(self, script, *_args):
+                if script != oatd.NATIVE_SUBMIT_GUARD_SCRIPT:
+                    raise AssertionError("unexpected submitter script")
+                return safety_payload()
+
+            async def click(self, **kwargs):
+                self.click_kwargs = kwargs
+                try:
+                    await asyncio.Event().wait()
+                except asyncio.CancelledError:
+                    self.cancelled = True
+                    raise
+
+        class Form:
+            def __init__(self) -> None:
+                self.box = Control()
+                self.field = Control()
+                self.submit = HangingSubmitter()
+
+            async def evaluate(self, script, *_args):
+                if script == oatd.FORM_SELF_CHECK_SCRIPT:
+                    return {
+                        "canonical_form_count": 1,
+                        "selected_form_is_canonical": True,
+                    }
+                if script == oatd.FORM_CONTROL_INVENTORY_SCRIPT:
+                    return inventory
+                if script == oatd.PRE_CLICK_SAFETY_SCRIPT:
+                    return safety_payload()
+                raise AssertionError("unexpected form script")
+
+            def locator(self, selector):
+                if "box1" in selector:
+                    return self.box
+                if "field1" in selector:
+                    return self.field
+                if selector == oatd.NATIVE_SUBMIT_SELECTOR:
+                    return self.submit
+                raise AssertionError(selector)
+
+        class Forms:
+            async def count(self):
+                return 1
+
+            def nth(self, _index):
+                return form
+
+        class Page:
+            def locator(self, selector):
+                if selector != "form":
+                    raise AssertionError(selector)
+                return Forms()
+
+        form = Form()
+
+        async def invoke():
+            clock = asyncio.get_running_loop().time
+            with self.assertRaises(oatd.ProbeAbort) as raised:
+                await oatd.prepare_native_submission(
+                    Page(),
+                    valid_inspection(),
+                    "private query phrase",
+                    deadline=clock() + 0.01,
+                    clock=clock,
+                )
+            return raised.exception
+
+        error = asyncio.run(invoke())
+        self.assertEqual(error.classification, "native_submit_interaction_failed")
+        self.assertTrue(form.submit.cancelled)
+        self.assertIsNotNone(form.submit.click_kwargs)
+        self.assertTrue(form.submit.click_kwargs["no_wait_after"])
+        self.assertGreater(form.submit.click_kwargs["timeout"], 0)
 
     def test_pre_click_safety_accepts_only_boolean_route_and_submit_proof(self):
         self.assertTrue(oatd.pre_click_safety_from_payload(safety_payload()).verified)
@@ -941,6 +1196,55 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
         self.assertEqual(
             receipt["result"]["classification"], "challenge_before_submission"
         )
+        self.assertTrue(receipt["ownership"]["owned_target_disappeared"])
+        self.assertTrue(session.context.created.close_while_live)
+
+    def test_hanging_click_timeout_still_closes_the_owned_page_live(self):
+        session = LeasePlaywright()
+        cancelled = False
+        supplied_deadline: float | None = None
+
+        async def hanging_prepare(*_args, **_kwargs):
+            nonlocal cancelled, supplied_deadline
+            supplied_deadline = _kwargs.get("deadline")
+            try:
+                await asyncio.Event().wait()
+            except asyncio.CancelledError:
+                cancelled = True
+                raise
+
+        with tempfile.TemporaryDirectory() as directory:
+            fake_clock = FakeClock()
+            post_click = mock.AsyncMock()
+            with (
+                mock.patch.object(
+                    oatd,
+                    "inspect_advanced_form",
+                    new=mock.AsyncMock(return_value=valid_inspection()),
+                ),
+                mock.patch.object(
+                    oatd,
+                    "prepare_native_submission",
+                    new=hanging_prepare,
+                ),
+                mock.patch.object(oatd, "wait_for_post_click_state", new=post_click),
+            ):
+                status, receipt = asyncio.run(
+                    oatd.run_probe(
+                        config(Path(directory), timeout_seconds=0.01),
+                        playwright_factory=lambda: session,
+                        clock=fake_clock,
+                        sleeper=fake_clock.sleep,
+                    )
+                )
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "native_submit_interaction_failed"
+        )
+        self.assertTrue(cancelled)
+        self.assertEqual(supplied_deadline, 0.01)
+        post_click.assert_not_awaited()
+        self.assertTrue(receipt["ownership"]["owned_page_closed"])
         self.assertTrue(receipt["ownership"]["owned_target_disappeared"])
         self.assertTrue(session.context.created.close_while_live)
 
