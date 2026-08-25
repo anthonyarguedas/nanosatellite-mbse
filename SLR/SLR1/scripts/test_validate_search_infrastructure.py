@@ -289,6 +289,7 @@ def materialized_campaign(
                     "task_id": data["task_id"],
                     "source_id": data["source_id"],
                     "method_type": data["method_type"],
+                    "started_at": attempt["allocation"]["allocated_at"],
                 }
             )
             if not legacy_manifests:
@@ -439,6 +440,91 @@ class PilotCampaignValidationTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "dictionary_fingerprint"):
                 infrastructure.validate_campaign_artifacts(searches_root)
 
+    def test_technical_decision_uses_immutable_manifest_start(self) -> None:
+        with materialized_campaign() as (searches_root, campaign_path, data, _):
+            attempt = data["attempts"][1]
+            data["decisions"][0]["decided_at"] = "2026-08-24T15:10:00+00:00"
+            # This mutable allocation time cannot turn a post-start decision into
+            # prospective authorization. The linked manifest still starts at 15:10.
+            attempt["allocation"]["allocated_at"] = "2026-08-24T15:11:00+00:00"
+            save_campaign(campaign_path, data)
+            with self.assertRaisesRegex(
+                AssertionError, "must precede immutable .*manifest.started_at"
+            ):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
+    def test_campaign_text_rejects_local_execution_details_at_every_status(
+        self,
+    ) -> None:
+        cases = (
+            (
+                "gate requirement",
+                "/Users/reviewer/private.json",
+                "absolute path",
+                lambda data, value: gate(data, "G-FIELD-BOUNDARY").__setitem__(
+                    "requirement", value
+                ),
+            ),
+            (
+                "gate notes",
+                "--profile-directory=Default",
+                "browser profile",
+                lambda data, value: gate(data, "G-FIELD-BOUNDARY").__setitem__(
+                    "notes", value
+                ),
+            ),
+            (
+                "controller rationale",
+                "google-chrome --headless",
+                "browser command",
+                lambda data, value: data["controller_authorization"].__setitem__(
+                    "rationale", value
+                ),
+            ),
+            (
+                "decision rationale",
+                "open -a Google Chrome",
+                "browser command",
+                lambda data, value: data["decisions"][0].__setitem__(
+                    "rationale", value
+                ),
+            ),
+            (
+                "terminal reason",
+                "/private/var/folders/terminal.txt",
+                "absolute path",
+                lambda data, value: data["attempts"][1]["terminal"].__setitem__(
+                    "reason", value
+                ),
+            ),
+        )
+        for name, value, message, mutate in cases:
+            with self.subTest(name=name):
+                data = campaign()
+                mutate(data, value)
+                with self.assertRaisesRegex(AssertionError, message):
+                    infrastructure.validate_campaign_artifact(data)
+
+    def test_campaign_file_rejects_unsafe_raw_campaign_text(self) -> None:
+        with materialized_campaign() as (searches_root, campaign_path, _, _):
+            contents = campaign_path.read_text(encoding="utf-8")
+            safe_rationale = (
+                '"rationale": "Controller may allocate bounded behavior-preserving '
+                'repairs without changing the review method."'
+            )
+            self.assertIn(safe_rationale, contents)
+            campaign_path.write_text(
+                contents.replace(
+                    safe_rationale,
+                    '"rationale": "/Users/reviewer/private.json",\n    '
+                    + safe_rationale,
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(AssertionError, "unsafe local absolute path"):
+                infrastructure.validate_campaign_artifacts(searches_root)
+
     def test_acceptance_candidate_rejects_unsafe_local_evidence(self) -> None:
         cases = (
             (
@@ -538,6 +624,9 @@ class PilotCampaignValidationTests(unittest.TestCase):
             for item in data["attempts"][0]["evidence"]
             if item["gate_id"] != "G-PAGE-IDENTITY"
         ]
+        data["attempts"][0]["source_operations"]["operations"][0]["gate_ids"].remove(
+            "G-PAGE-IDENTITY"
+        )
         data["decisions"][0]["affected_gate_ids"] = ["G-PAGINATION-CONTROL"]
         with self.assertRaisesRegex(AssertionError, "missing required catalog gate"):
             infrastructure.validate_campaign_artifact(data)
@@ -761,7 +850,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
 
         data["attempts"][1]["source_operations"]["predeclared_maximum"] = 4
         decision["affected_gate_ids"] = ["G-QUERY-TRANSPORT"]
-        with self.assertRaisesRegex(AssertionError, "omits an enacted"):
+        with self.assertRaisesRegex(AssertionError, "omits a bound"):
             infrastructure.validate_campaign_artifact(data)
 
     def test_allocated_technical_decision_scopes_operation_bearing_gate(self) -> None:
@@ -769,8 +858,92 @@ class PilotCampaignValidationTests(unittest.TestCase):
         data["decisions"][0]["affected_gate_ids"] = ["G-PAGE-IDENTITY"]
         with self.assertRaisesRegex(
             AssertionError,
-            "omits an enacted controller-technical operation-bearing gate",
+            "omits a bound operation-bearing capability gate",
         ):
+            infrastructure.validate_campaign_artifact(data)
+
+    def test_p05_cannot_hide_pending_near6_work_under_a_none_gate(self) -> None:
+        data = source_campaign("s-d03-ieee-xplore")
+        p5_id = "S-D03-P05-20260824T161500-0400"
+        p5 = copy.deepcopy(data["attempts"][-1])
+        p5.update(
+            {
+                "attempt_id": p5_id,
+                "sequence": 5,
+                "manifest_path": f"pilots/{p5_id}/manifest.json",
+                "manifest_sha256": "f" * 64,
+                "evidence": [],
+                "source_operations": {
+                    "predeclared_maximum": 1,
+                    "performed": 1,
+                    "operations": [
+                        {
+                            "operation_id": "P05-NEAR6-BYPASS",
+                            "operation_key": "P05-NEAR6-BYPASS",
+                            "gate_ids": ["G-NEAR6-PENDING-BYPASS"],
+                            "outcome": "failed",
+                            "source_reported_total": None,
+                            "records_retrieved": 0,
+                            "records_imported": 0,
+                            "retry": None,
+                        }
+                    ],
+                },
+            }
+        )
+        p5["allocation"].update(
+            {
+                "authorization_decision_id": "D-TECH-NEXT-P05",
+                "allocated_at": "2026-08-24T16:15:00-04:00",
+            }
+        )
+        p5["terminal"].update(
+            {
+                "outcome": "failed",
+                "category": "technical",
+                "ended_at": "2026-08-24T16:16:00-04:00",
+                "provider_failure": False,
+                "browser_backed": False,
+                "terminal_verification": "not_applicable",
+                "cleanup_receipt": None,
+                "lease_receipt": None,
+                "cancelled_by": None,
+                "reason": "The disallowed methodological operation stopped.",
+            }
+        )
+        data["attempts"].append(p5)
+        data["capability_gates"].append(
+            {
+                "gate_id": "G-NEAR6-PENDING-BYPASS",
+                "checkpoint_id": "CP-NEAR6-PENDING-BYPASS-P05",
+                "attempt_id": p5_id,
+                "requirement": "A pending NEAR/6 methodological action cannot run.",
+                "depends_on": [],
+                "status": "blocked",
+                "observed_basis": "untested",
+                "original_observed_basis": "untested",
+                "evidence": [],
+                "reusable": False,
+                "carried_forward": False,
+                "carry_forward": None,
+                "source_operation_count": 1,
+                "semantic_impact": {
+                    "classification": "none",
+                    "review_effect": False,
+                    "rationale": "The bypass falsely labels pending method work as neutral.",
+                },
+                "invalidation": None,
+                "notes": "This is an intentionally rejected P05 bypass.",
+            }
+        )
+        next_decision = next(
+            decision
+            for decision in data["decisions"]
+            if decision["decision_id"] == "D-TECH-NEXT-P05"
+        )
+        next_decision["affected_gate_ids"].append("G-NEAR6-PENDING-BYPASS")
+
+        with self.assertRaisesRegex(AssertionError, "non-technical capability gate"):
             infrastructure.validate_campaign_artifact(data)
 
     def test_methodological_decision_only_gate_does_not_block_technical_retry(
@@ -819,6 +992,9 @@ class PilotCampaignValidationTests(unittest.TestCase):
         infrastructure.validate_campaign_artifact(data)
 
         data["capability_gates"][-1]["source_operation_count"] = 1
+        data["attempts"][0]["source_operations"]["operations"][0]["gate_ids"].append(
+            "G-NEAR6-METHOD"
+        )
         with self.assertRaisesRegex(AssertionError, "cannot authorize source work"):
             infrastructure.validate_campaign_artifact(data)
 
@@ -832,7 +1008,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
                 "rationale": "This would change the reviewed method.",
             }
         )
-        with self.assertRaisesRegex(AssertionError, "cannot hide methodological"):
+        with self.assertRaisesRegex(AssertionError, "non-technical capability gate"):
             infrastructure.validate_campaign_artifact(data)
 
     def test_cancelled_attempt_terminal_is_linked_and_not_provider_failure(
@@ -893,6 +1069,18 @@ class PilotCampaignValidationTests(unittest.TestCase):
 
     def test_trusted_pre_migration_legacy_inventory_is_accepted(self) -> None:
         with copied_source_campaign("s-d03-ieee-xplore") as (searches_root, _, _):
+            self.assertEqual(
+                infrastructure.validate_campaign_artifacts(searches_root), 1
+            )
+
+    def test_blocked_legacy_evidence_is_not_rewritten_for_privacy(self) -> None:
+        # D05's immutable blocked evidence retains a historical local marker.
+        # Only campaign-owned text and acceptance candidates are sanitized.
+        with copied_source_campaign("s-d05-wiley-online-library") as (
+            searches_root,
+            _,
+            _,
+        ):
             self.assertEqual(
                 infrastructure.validate_campaign_artifacts(searches_root), 1
             )
@@ -1181,6 +1369,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
             {
                 "operation_id": "OP-P02-PAGINATION-REISSUE",
                 "operation_key": "PAGINATION",
+                "gate_ids": ["G-PAGINATION-CONTROL"],
                 "outcome": "failed",
                 "source_reported_total": None,
                 "records_retrieved": 0,
@@ -1202,6 +1391,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
         )
         data["controller_authorization"]["maximum_source_operations_per_attempt"] = 2
         data["decisions"][0]["maximum_source_operations"] = 2
+        gate(data, "G-PAGINATION-CONTROL")["source_operation_count"] = 2
         data["retry_policy"] = {
             "policy_id": "RP-BUSY-01",
             "maximum_retries": 1,
@@ -1238,6 +1428,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
             {
                 "operation_id": "OP-P02-PAGINATION-REISSUE",
                 "operation_key": "PAGINATION",
+                "gate_ids": ["G-PAGINATION-CONTROL"],
                 "outcome": "success",
                 "source_reported_total": 1,
                 "records_retrieved": 0,
@@ -1281,6 +1472,7 @@ class PilotCampaignValidationTests(unittest.TestCase):
             {
                 "operation_id": "OP-P02-PAGINATION-REISSUE",
                 "operation_key": "PAGINATION",
+                "gate_ids": ["G-PAGINATION-CONTROL"],
                 "outcome": "failed",
                 "source_reported_total": None,
                 "records_retrieved": 0,

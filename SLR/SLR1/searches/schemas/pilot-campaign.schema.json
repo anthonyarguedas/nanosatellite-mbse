@@ -220,6 +220,7 @@
       "required": [
         "operation_id",
         "operation_key",
+        "gate_ids",
         "outcome",
         "source_reported_total",
         "records_retrieved",
@@ -229,6 +230,13 @@
       "properties": {
         "operation_id": {"type": "string", "minLength": 1},
         "operation_key": {"type": "string", "minLength": 1},
+        "gate_ids": {
+          "description": "Stable capability gates exercised by this source operation.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/gateId"}
+        },
         "outcome": {"enum": ["success", "explicit_zero", "failed", "busy"]},
         "source_reported_total": {"type": ["integer", "null"], "minimum": 0},
         "records_retrieved": {"type": "integer", "minimum": 0},
@@ -591,7 +599,11 @@
         "reusable": {"type": "boolean"},
         "carried_forward": {"type": "boolean"},
         "carry_forward": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/carryForward"}]},
-        "source_operation_count": {"type": "integer", "minimum": 0},
+        "source_operation_count": {
+          "description": "Number of operations in this gate's attempt that cite this gate ID.",
+          "type": "integer",
+          "minimum": 0
+        },
         "semantic_impact": {"$ref": "#/$defs/semanticImpact"},
         "invalidation": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/invalidation"}]},
         "notes": {"type": "string"}

@@ -916,6 +916,7 @@ def _validate_source_operation(operation: Any, label: str) -> dict[str, Any]:
         {
             "operation_id",
             "operation_key",
+            "gate_ids",
             "outcome",
             "source_reported_total",
             "records_retrieved",
@@ -926,6 +927,12 @@ def _validate_source_operation(operation: Any, label: str) -> dict[str, Any]:
     )
     _string(operation["operation_id"], f"{label}.operation_id")
     _string(operation["operation_key"], f"{label}.operation_key")
+    gate_ids = _unique_strings(
+        _list(operation["gate_ids"], f"{label}.gate_ids"), f"{label}.gate_ids"
+    )
+    require(gate_ids, f"{label}.gate_ids must not be empty")
+    for gate_index, gate_id in enumerate(gate_ids):
+        _pattern(gate_id, GATE_ID_RE, f"{label}.gate_ids[{gate_index}]")
     outcome = operation["outcome"]
     require(
         outcome in {"success", "explicit_zero", "failed", "busy"},
@@ -1905,6 +1912,42 @@ def _validate_decision_gate_references(
             )
 
 
+def _validate_operation_gate_bindings(
+    attempts: dict[str, dict[str, Any]], gates: dict[str, dict[str, Any]]
+) -> None:
+    """Bind every recorded source operation to stable capability-gate IDs.
+
+    A gate's source-operation count describes the operations in the attempt that
+    records that gate's current state. Stable gate IDs may also document an
+    earlier attempt, so their historical bindings remain available to the
+    decision-scope check without changing immutable evidence.
+    """
+    for attempt_id, attempt in attempts.items():
+        for operation_index, operation in enumerate(
+            attempt["source_operations"]["operations"]
+        ):
+            label = (
+                f"attempt {attempt_id}.source_operations.operations[{operation_index}]"
+            )
+            for gate_id in operation["gate_ids"]:
+                require(
+                    gate_id in gates,
+                    f"{label} cites unknown capability gate {gate_id}",
+                )
+
+    for gate_id, gate in gates.items():
+        attempt = attempts[gate["attempt_id"]]
+        bound_count = sum(
+            gate_id in operation["gate_ids"]
+            for operation in attempt["source_operations"]["operations"]
+        )
+        require(
+            gate["source_operation_count"] == bound_count,
+            f"gate {gate_id}.source_operation_count does not match its bound "
+            "source operations",
+        )
+
+
 def _validate_carry_forward(
     gates: dict[str, dict[str, Any]],
     attempts: dict[str, dict[str, Any]],
@@ -2232,26 +2275,24 @@ def _validate_allocations(
                 attempt["source_operations"]["predeclared_maximum"] <= decision_maximum,
                 f"technical attempt {attempt_id} exceeds decision {decision_id}'s finite source-operation bound",
             )
-            require(
-                _parse_date_time(
-                    decision.get("decided_at"), f"decision {decision_id}.decided_at"
-                )
-                <= _parse_date_time(
-                    allocation["allocated_at"],
-                    f"attempt {attempt_id}.allocation.allocated_at",
-                ),
-                f"technical decision for {attempt_id} must predate allocation",
-            )
-            enacted_technical_gates = {
+            operation_gate_ids = {
                 gate_id
-                for gate_id, gate in gates.items()
-                if gate["attempt_id"] == attempt_id
-                and gate["semantic_impact"]["classification"] == "controller_technical"
-                and gate["source_operation_count"] > 0
+                for operation in attempt["source_operations"]["operations"]
+                for gate_id in operation["gate_ids"]
             }
             require(
-                enacted_technical_gates <= set(decision["affected_gate_ids"]),
-                f"technical decision for {attempt_id} omits an enacted controller-technical operation-bearing gate",
+                all(
+                    gates[gate_id]["semantic_impact"]["classification"]
+                    == "controller_technical"
+                    for gate_id in operation_gate_ids
+                ),
+                f"technical attempt {attempt_id} cannot perform a source operation "
+                "under a non-technical capability gate",
+            )
+            require(
+                operation_gate_ids <= set(decision["affected_gate_ids"]),
+                f"technical decision for {attempt_id} omits a bound "
+                "operation-bearing capability gate",
             )
         else:
             methodological_attempts += 1
@@ -2596,6 +2637,7 @@ def validate_campaign_artifact(
         )
     _validate_jsonschema_instance(campaign_schema, campaign, "campaign")
     campaign = _mapping(campaign, "campaign")
+    _reject_unsafe_campaign_data(campaign)
     _require_fields(
         campaign,
         {
@@ -2671,6 +2713,7 @@ def validate_campaign_artifact(
         campaign, attempts, evidence_by_reference, gates
     )
     _validate_decision_gate_references(decisions, gates)
+    _validate_operation_gate_bindings(attempts, gates)
     _validate_dependency_graph(gates)
     _validate_carry_forward(
         gates, attempts, evidence_by_reference, decisions, snapshots
@@ -2778,6 +2821,17 @@ def _reject_unsafe_local_evidence(contents: bytes, label: str) -> None:
         UNSAFE_BROWSER_COMMAND_RE.search(text) is None,
         f"{label} contains an unsafe local browser command",
     )
+
+
+def _reject_unsafe_campaign_data(campaign: dict[str, Any]) -> None:
+    """Reject local execution details in campaign-owned fields at every status.
+
+    Nonaccepted historical artifacts remain hash-checked but are deliberately
+    not sanitized in place. Campaign metadata is current reviewable data and
+    must never repeat a local path, profile, or browser command.
+    """
+    contents = json.dumps(campaign, ensure_ascii=False).encode("utf-8")
+    _reject_unsafe_local_evidence(contents, "campaign")
 
 
 def _load_receipt(contents: bytes, label: str) -> dict[str, Any]:
@@ -2914,6 +2968,37 @@ def _validate_manifest_link(
     return False
 
 
+def _validate_controller_manifest_timing(
+    manifest: dict[str, Any],
+    attempt: dict[str, Any],
+    decisions: dict[str, dict[str, Any]],
+    label: str,
+) -> None:
+    """Use the hashed manifest start, never allocation metadata, for scope timing."""
+    if attempt["allocation"]["attempt_kind"] != "technical_corrective":
+        return
+    decision_id = attempt["allocation"]["authorization_decision_id"]
+    require(
+        isinstance(decision_id, str),
+        f"{label} technical attempt has no authorization decision",
+    )
+    decision = decisions.get(decision_id)
+    require(
+        decision is not None,
+        f"{label} references an unknown authorization decision",
+    )
+    decided_at = _parse_date_time(
+        decision["decided_at"], f"decision {decision_id}.decided_at"
+    )
+    manifest_started_at = _parse_date_time(
+        manifest["started_at"], f"{label}.started_at"
+    )
+    require(
+        decided_at < manifest_started_at,
+        f"technical decision {decision_id} must precede immutable {label}.started_at",
+    )
+
+
 def _validate_campaign_files(
     campaign: dict[str, Any],
     source_packet: Path,
@@ -2924,6 +3009,9 @@ def _validate_campaign_files(
     require_sanitized_evidence = campaign["status"] in {
         "ready_for_acceptance_review",
         "accepted",
+    }
+    decisions = {
+        decision["decision_id"]: decision for decision in campaign["decisions"]
     }
 
     def read_reference(
@@ -2956,7 +3044,9 @@ def _validate_campaign_files(
             raise AssertionError(f"{label} is not valid JSON") from exc
         _validate_jsonschema_instance(manifest_schema, manifest, label)
         _validate_pilot_manifest_formats(manifest, label)
+        manifest = _mapping(manifest, label)
         legacy_manifest = _validate_manifest_link(manifest, campaign, attempt, label)
+        _validate_controller_manifest_timing(manifest, attempt, decisions, label)
         manifest_identity = (
             attempt["attempt_id"],
             attempt["manifest_path"],
@@ -3063,7 +3153,9 @@ def _validate_campaign_file(
     source_packet = _source_packet_for_campaign(
         campaign_path, searches_root / "sources"
     )
-    campaign = load(campaign_path)
+    campaign_contents = campaign_path.read_bytes()
+    _reject_unsafe_local_evidence(campaign_contents, "campaign")
+    campaign = json.loads(campaign_contents)
     validate_campaign_artifact(
         campaign, campaign_schema=schemas["pilot-campaign.schema.json"]
     )
