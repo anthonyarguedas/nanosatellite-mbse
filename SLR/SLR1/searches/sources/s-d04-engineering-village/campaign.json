@@ -21,9 +21,9 @@
     "G-FAILURE-BEHAVIOR",
     "G-PAIRED-PROVENANCE"
   ],
-  "status": "technically_blocked",
+  "status": "in_progress",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-25T15:45:00.000Z",
+  "updated_at": "2026-08-25T15:57:06.337Z",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -248,6 +248,114 @@
         "source_writing_stopped": true,
         "terminal_verification": "verified"
       }
+    },
+    {
+      "allocation": {
+        "allocated_at": "2026-08-25T11:50:47-04:00",
+        "attempt_kind": "technical_corrective",
+        "authorization_decision_id": "D-TECH-NEXT-P04",
+        "authorized_by": "controller",
+        "prospectively_authorized": true,
+        "source_phase_started": true
+      },
+      "attempt_id": "S-D04-P04-20260825T114742-0400",
+      "evidence": [
+        {
+          "basis": "observed",
+          "evidence_id": "E-P04-ROUTE",
+          "gate_id": "G-ROUTE-PROJECTION",
+          "path": "pilots/S-D04-P04-20260825T114742-0400/op-01-route-projection.json",
+          "sha256": "3d172dc9a0b9128891a8036bc65020b5abf5b28e659dae5fb4443f042ab029b3",
+          "validity": "valid"
+        },
+        {
+          "basis": "observed",
+          "evidence_id": "E-P04-ADAPTER",
+          "gate_id": "G-ADAPTER-DIAGNOSTIC",
+          "path": "pilots/S-D04-P04-20260825T114742-0400/op-02-paired-diagnostic.json",
+          "sha256": "6c5497b5f6ef6f968b2fbd3af89d31244b0fc811e29b9423df37b2c12fb80275",
+          "validity": "valid"
+        },
+        {
+          "basis": "observed",
+          "evidence_id": "E-P04-SOURCE-ACCESS",
+          "gate_id": "G-SOURCE-ACCESS",
+          "path": "pilots/S-D04-P04-20260825T114742-0400/op-02-source-access-control.json",
+          "sha256": "0292fa1dd71d246d37199e1af0a78e21271b2a16417f26ae1a166fd82ee7c900",
+          "validity": "valid"
+        },
+        {
+          "basis": "observed",
+          "evidence_id": "E-P04-PROVENANCE",
+          "gate_id": "G-PAIRED-PROVENANCE",
+          "path": "pilots/S-D04-P04-20260825T114742-0400/op-02-paired-provenance.json",
+          "sha256": "f948b1787882dc2a4e65956b902e3dcf30e0713b4ea77976ab98e72684f1aa5a",
+          "validity": "valid"
+        },
+        {
+          "basis": "observed",
+          "evidence_id": "E-P04-CLEANUP",
+          "gate_id": "G-OWNED-PAGE",
+          "path": "pilots/S-D04-P04-20260825T114742-0400/browser-cleanup-receipt.json",
+          "sha256": "b42aed99745d0d523a1e813249d9ae1cbe6c838eb0a0eed058c3825d218ef9db",
+          "validity": "valid"
+        }
+      ],
+      "immutable": true,
+      "manifest_path": "pilots/S-D04-P04-20260825T114742-0400/manifest.json",
+      "manifest_sha256": "cb72d52ca25aaccbc3d1cc0c26fb346e10ac683f396aa18d81a0f7d03cfd03a6",
+      "sequence": 4,
+      "source_operations": {
+        "operations": [
+          {
+            "operation_id": "P04-OP01-ROUTE-PROJECTION",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "P04-OP01-ROUTE-PROJECTION",
+            "retry": null,
+            "gate_ids": [
+              "G-ROUTE-PROJECTION"
+            ]
+          },
+          {
+            "operation_id": "P04-OP02-PAIRED-DIAGNOSTIC",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "P04-OP02-PAIRED-DIAGNOSTIC",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-DIAGNOSTIC",
+              "G-SOURCE-ACCESS",
+              "G-PAIRED-PROVENANCE"
+            ]
+          }
+        ],
+        "performed": 2,
+        "predeclared_maximum": 2
+      },
+      "terminal": {
+        "browser_backed": true,
+        "cancelled_by": null,
+        "category": "completed",
+        "cleanup_receipt": {
+          "path": "pilots/S-D04-P04-20260825T114742-0400/browser-cleanup-receipt.json",
+          "sha256": "b42aed99745d0d523a1e813249d9ae1cbe6c838eb0a0eed058c3825d218ef9db"
+        },
+        "ended_at": "2026-08-25T15:57:06.337Z",
+        "lease_receipt": {
+          "path": "pilots/S-D04-P04-20260825T114742-0400/lease-released-receipt.json",
+          "sha256": "e1d28bed3335b796a8539c2e6e9946cd8ba57bbb8ae45fe15e45d521d2264fd8"
+        },
+        "outcome": "completed",
+        "provider_failure": false,
+        "reason": "Both assigned P04 operations completed within the two-operation cap with exact separate Compendex/Inspec diagnostic totals (83 and 46), no retained records, verified-clean lease cleanup/release, and no screening/import/final event. The stale postflight lease-status receipt view is a narrow controller metadata warning, not a provider failure.",
+        "source_writing_stopped": true,
+        "terminal_verification": "verified"
+      }
     }
   ],
   "gate_status_snapshots": [
@@ -340,22 +448,22 @@
     },
     {
       "gate_id": "G-ROUTE-PROJECTION",
-      "checkpoint_id": "CP-ROUTE-PROJECTION-P02",
-      "attempt_id": "S-D04-P02-20260824T130842-0400",
+      "checkpoint_id": "CP-ROUTE-PROJECTION-P04",
+      "attempt_id": "S-D04-P04-20260825T114742-0400",
       "requirement": "The paired Expert route returns a stabilized safe projection sufficient to classify route/access state.",
       "depends_on": [
         "G-OWNED-PAGE"
       ],
-      "status": "failed",
+      "status": "passed",
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D04-P02-20260824T130842-0400/adapter-assessment.json",
-          "sha256": "64916060a14f04ddc1cb51566f6ccc3e328a5e63a818ac414a35fa51e46d4742",
+          "path": "pilots/S-D04-P04-20260825T114742-0400/op-01-route-projection.json",
+          "sha256": "3d172dc9a0b9128891a8036bc65020b5abf5b28e659dae5fb4443f042ab029b3",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
@@ -365,80 +473,98 @@
         "rationale": "Stabilizing the safe projection does not change source boundary or query semantics."
       },
       "invalidation": null,
-      "notes": "P02 received HTTP 200 but its one safe projection failed; no source access is claimed.",
+      "notes": "P04 received HTTP 200 and a healthy stabilized paired Expert route/access projection with verified owned-page cleanup; this remains bounded diagnostic evidence, not full source-method acceptance.",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-ADAPTER-DIAGNOSTIC",
-      "checkpoint_id": "CP-ADAPTER-DIAGNOSTIC-P02",
-      "attempt_id": "S-D04-P02-20260824T130842-0400",
+      "checkpoint_id": "CP-ADAPTER-DIAGNOSTIC-P04",
+      "attempt_id": "S-D04-P04-20260825T114742-0400",
       "requirement": "One paired current-adapter diagnostic may run only after a healthy route projection.",
       "depends_on": [
         "G-ROUTE-PROJECTION"
       ],
-      "status": "blocked",
+      "status": "passed",
       "observed_basis": "observed",
-      "evidence": [],
-      "reusable": false,
+      "evidence": [
+        {
+          "path": "pilots/S-D04-P04-20260825T114742-0400/op-02-paired-diagnostic.json",
+          "sha256": "6c5497b5f6ef6f968b2fbd3af89d31244b0fc811e29b9423df37b2c12fb80275",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
-      "source_operation_count": 0,
+      "source_operation_count": 1,
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
         "rationale": "The conditional adapter diagnostic is technical and preserves review semantics."
       },
       "invalidation": null,
-      "notes": "",
+      "notes": "P04's paired event completed only after the healthy route gate; it is bounded current-adapter evidence and does not establish full retrieval or completeness.",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-SOURCE-ACCESS",
-      "checkpoint_id": "CP-SOURCE-ACCESS-P02",
-      "attempt_id": "S-D04-P02-20260824T130842-0400",
+      "checkpoint_id": "CP-SOURCE-ACCESS-P04",
+      "attempt_id": "S-D04-P04-20260825T114742-0400",
       "requirement": "Paired Compendex+Inspec source access and controls are established only from a healthy adapter result.",
       "depends_on": [
         "G-ADAPTER-DIAGNOSTIC"
       ],
-      "status": "untested",
-      "observed_basis": "untested",
-      "evidence": [],
-      "reusable": false,
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D04-P04-20260825T114742-0400/op-02-source-access-control.json",
+          "sha256": "0292fa1dd71d246d37199e1af0a78e21271b2a16417f26ae1a166fd82ee7c900",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
-      "source_operation_count": 0,
+      "source_operation_count": 1,
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "The future classification is operational only; it does not revise the paired source boundary."
+        "rationale": "The bounded source access/control observation is operational only; it does not revise the paired source boundary."
       },
       "invalidation": null,
-      "notes": "",
-      "original_observed_basis": "untested"
+      "notes": "P04 observed selected-database controls and exact separate Compendex/Inspec totals; full source-method acceptance remains pending.",
+      "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-PAIRED-PROVENANCE",
-      "checkpoint_id": "CP-PAIRED-PROVENANCE-P02",
-      "attempt_id": "S-D04-P02-20260824T130842-0400",
+      "checkpoint_id": "CP-PAIRED-PROVENANCE-P04",
+      "attempt_id": "S-D04-P04-20260825T114742-0400",
       "requirement": "Paired result provenance and separate Compendex/Inspec totals are demonstrated only after source access.",
       "depends_on": [
         "G-SOURCE-ACCESS"
       ],
-      "status": "untested",
-      "observed_basis": "untested",
-      "evidence": [],
-      "reusable": false,
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D04-P04-20260825T114742-0400/op-02-paired-provenance.json",
+          "sha256": "f948b1787882dc2a4e65956b902e3dcf30e0713b4ea77976ab98e72684f1aa5a",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
-      "source_operation_count": 0,
+      "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "none",
+        "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "The checkpoint does not alter review semantics."
+        "rationale": "The bounded provenance observation is controller technical evidence and does not alter review semantics."
       },
       "invalidation": null,
-      "notes": "",
-      "original_observed_basis": "untested"
+      "notes": "P04 retained separate database provenance summaries and exact totals while leaving the combined paired total null.",
+      "original_observed_basis": "observed"
     }
   ],
   "decisions": [
@@ -479,7 +605,7 @@
     },
     {
       "decision_id": "D-TECH-NEXT-P04",
-      "attempt_id": null,
+      "attempt_id": "S-D04-P04-20260825T114742-0400",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,
@@ -488,11 +614,13 @@
       "authorized_by": "controller",
       "affected_gate_ids": [
         "G-ROUTE-PROJECTION",
-        "G-ADAPTER-DIAGNOSTIC"
+        "G-ADAPTER-DIAGNOSTIC",
+        "G-SOURCE-ACCESS",
+        "G-PAIRED-PROVENANCE"
       ],
-      "rationale": "P03 is a consumed controller technical setup incident: its lease phase began but its nested-heredoc launch wrapper performed zero source operations. Exactly one corrected P04 is prospectively authorized without human approval, using a new immutable identity and file-based child: run the stabilized route/access projection once, then run one paired Compendex-then-Inspec diagnostic only if operation 1 is healthy; at most two source operations and no other query family or review-semantic change.",
+      "rationale": "P03 is a consumed controller technical setup incident: its lease phase began but its nested-heredoc launch wrapper performed zero source operations. Exactly one corrected P04 is prospectively authorized without human approval, using a new immutable identity and file-based child: run the stabilized route/access projection once, then run one paired Compendex-then-Inspec diagnostic only if operation 1 is healthy; at most two source operations and no other query family or review-semantic change. The bounded count/control/provenance gates remain technical observations and do not change source or review semantics.",
       "maximum_source_operations": 2,
-      "decided_at": "2026-08-25T15:45:00-04:00"
+      "decided_at": "2026-08-25T11:45:00-04:00"
     }
   ],
   "cancellation": null,

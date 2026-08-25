@@ -1,0 +1,676 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D04-P04-20260825T114742-0400",
+  "task_id": "S-D04",
+  "source_id": "engineering-village-compendex-inspec",
+  "method_type": "direct",
+  "status": "complete",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-25T15:52:47.646Z",
+  "ended_at": "2026-08-25T15:57:06.337Z",
+  "protocol_commit": "8ebc1c162e919d1e8dcdb815a573d14dc0459dce",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "gpt-5.6-luna",
+    "human_supervisor": "review owner"
+  },
+  "interface": {
+    "name": "Engineering Village Expert Search",
+    "url": "https://www.engineeringvillage.com/search/expert.url",
+    "access_route": "P04 attached shared-CfT lease; one owned route page then sequential paired adapter pages",
+    "authenticated": false,
+    "database_or_collection": "paired Compendex and Inspec databases",
+    "platform": "Engineering Village",
+    "selected_source_ids_required": [
+      "compendex",
+      "inspec"
+    ],
+    "timezone": "America/New_York",
+    "source_totals": {
+      "compendex": 83,
+      "inspec": 46,
+      "paired": null
+    },
+    "code_issue": "false for the current adapter bounded diagnostic; historical P03 controller launch wrapper was corrected; late browser status receipt metadata was stale postflight"
+  },
+  "executions": [
+    {
+      "execution_id": "P04-SETUP",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Attached file-based P04 live setup and process-scoped preflight",
+      "started_at": "2026-08-25T15:52:47.646Z",
+      "status": "success",
+      "exact_query_or_operation": "Acquire the canonical shared lease, verify live process-scoped setup, then enter the one-route/conditional-paired ladder",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "lease_acquired": true,
+        "source_query_submitted": false,
+        "source_operations_performed": 0
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/live-preflight.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-receipt.json"
+      ],
+      "notes": "P04 child setup passed before operation 1."
+    },
+    {
+      "execution_id": "P04-OP01-ROUTE-PROJECTION",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "One corrected stabilized non-query route/access projection",
+      "started_at": "2026-08-25T15:52:47.646Z",
+      "status": "success",
+      "exact_query_or_operation": "One normal navigation to the public paired Expert route followed by bounded stabilized safe projection; no query submission",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "navigation_attempt_count": 1,
+        "healthy_route_projection": true,
+        "owned_page_closed": true,
+        "baseline_target_set_preserved": true
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-01-route-projection.json"
+      ],
+      "notes": "Route receipt is healthy and cleanup/anchor continuity are verified."
+    },
+    {
+      "execution_id": "P04-OP02-PAIRED-DIAGNOSTIC",
+      "partition_id": "B1",
+      "cell_id": "EV-B1-C01",
+      "purpose": "Conditional one-logical-event Compendex-then-Inspec bounded diagnostic",
+      "started_at": "2026-08-25T15:52:47.646Z",
+      "status": "partial_diagnostic",
+      "exact_query_or_operation": "Submit the exact B1 draft once to Compendex and once to Inspec sequentially with limit=1, max_pages=1, and separate count/control/provenance metadata",
+      "query_file": "SLR/SLR1/searches/sources/s-d04-engineering-village/queries/B1.ev-expert.txt",
+      "fields": [],
+      "controls": {
+        "campaign_source_operation_count": 1,
+        "campaign_source_operation_maximum": 1,
+        "database_requests_planned": 2,
+        "database_requests_performed": 2,
+        "selected_databases": [
+          "compendex",
+          "inspec"
+        ],
+        "limit_per_database_request": 1,
+        "max_pages_per_database_request": 1,
+        "require_complete": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 2,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-paired-diagnostic.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-source-access-control.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-paired-provenance.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/restricted-capture-ledger.json"
+      ],
+      "notes": "Separate exact totals: Compendex 83 and Inspec 46; paired total null; one adapter record per database observed in memory and zero records retained."
+    }
+  ],
+  "checks": [
+    {
+      "basis": "observed",
+      "check_id": "PREFLIGHT-OFFLINE",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/query-byte-audit.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/focused-adapter-tests.stdout.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/local-focused-tests.stdout.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/route-help.stdout.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/paired-help.stdout.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/infrastructure-validation.stdout.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/p04-live-child.syntax.stdout.txt"
+      ],
+      "notes": "All deterministic source-free child, query, CLI, adapter, output, and infrastructure checks passed before the lease.",
+      "requirement": "Corrected P04 file child and all source-free query, CLI, adapter, output, infrastructure, and artifact checks pass before live work",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "PREFLIGHT-SHARED-CFT",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-preflight-status.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/prelive-system-status.json"
+      ],
+      "notes": "Read-only preflight observed epoch bldqawxcF3fqkU-S9IBNeLhNxQf0jcIT, one protected anchor, canonical endpoint/profile, matching 152.0.7977.54 versions, released lease, and AC power. No Chrome launch/restart/configuration occurred.",
+      "requirement": "Canonical shared CfT is healthy with one protected inert anchor, matching versions, fixed endpoint/profile, free lease, and AC power",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "LIVE-CHILD-SETUP",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/live-preflight.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-receipt.json"
+      ],
+      "notes": "Attached file-based child reached live preflight under caffeinate -dims before source operation 1.",
+      "requirement": "Attached process-scoped child reaches its live setup gate before source navigation",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "G-ROUTE-PROJECTION",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-01-route-projection.json"
+      ],
+      "notes": "Exactly one healthy stabilized route projection; no query was submitted.",
+      "requirement": "Corrected stabilized paired Expert route/access projection",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "G-ADAPTER-DIAGNOSTIC",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-paired-diagnostic.json"
+      ],
+      "notes": "Exactly one conditional paired event completed after the healthy route gate.",
+      "requirement": "Conditional paired current-adapter diagnostic after a healthy route projection",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "G-SOURCE-ACCESS-COUNT-CONTROL",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-source-access-control.json"
+      ],
+      "notes": "Compendex and Inspec individual database masks, exact totals, and bounded adapter count/control metadata were observed separately; this is not full source-method acceptance.",
+      "requirement": "Bounded paired Compendex/Inspec source access and selected-database controls are observed without inferring a combined total",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "G-PAIRED-PROVENANCE",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-paired-provenance.json"
+      ],
+      "notes": "Separate Compendex and Inspec provenance summaries and exact totals were retained; paired total remains null.",
+      "requirement": "Bounded paired result provenance and separate database totals are demonstrated after source access",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "ACCOUNTING-NULL-PAIRED",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-paired-diagnostic.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/restricted-capture-ledger.json"
+      ],
+      "notes": "Paired total is null by rule; no records were retained, imported, exported, screened, or prefixed.",
+      "requirement": "No combined total is inferred from separate database requests and no record prefix is retained",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "CLEANUP-LEASE",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-receipt.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-cleanup-receipt.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-released-receipt.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-status.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-assessment.json"
+      ],
+      "notes": "Lease receipt and sanitized cleanup/release receipts prove verified-clean cleanup and release with one preserved anchor. The read-only lease-status view was stale after release; the endpoint/app-version check passed and no orphan was observed.",
+      "requirement": "Attached child remains supervised through cleanup; owned page closes, anchor persists, and lease release is verified",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "SYSTEM-SLEEP",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/live-preflight.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/system-postflight.json"
+      ],
+      "notes": "AC power was present and both bounded postflight sources reported zero Sleep/Wake markers.",
+      "requirement": "AC power, process-scoped sleep protection during the attached phase, and bounded Sleep/Wake postflight check",
+      "status": "verified"
+    },
+    {
+      "basis": "observed",
+      "check_id": "POSTFLIGHT-STATUS-VIEW",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-status.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-check.stdout.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-assessment.json"
+      ],
+      "notes": "The lease-status view returned code 1 for stale/missing epoch receipt metadata after release; start_chrome --check independently returned code 0 for endpoint/app-version health. This late controller metadata warning did not affect cleanup/release or source receipts.",
+      "requirement": "Read-only postflight browser status remains fully revalidated after cleanup",
+      "status": "failed"
+    },
+    {
+      "basis": "observed",
+      "check_id": "DIAGNOSTIC-ONLY",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/observations.md",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/restricted-capture-ledger.json"
+      ],
+      "notes": "No screening, relevance classification, candidate import, final event, or final-search record occurred.",
+      "requirement": "No screening, relevance classification, candidate import, or final event",
+      "status": "verified"
+    }
+  ],
+  "artifacts": [
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/adapter-provenance-preflight.txt",
+      "role": "external adapter pin and hash preflight",
+      "secure_location_reference": null,
+      "sha256": "d96df73a11338e906c5b70535416bc60ad3aad8d82e3b312ee2d83e4edceca51"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/allocated-at.txt",
+      "role": "controller allocation timestamp",
+      "secure_location_reference": null,
+      "sha256": "723b9586a9a89cb4f01e1761f351220687ce5b31cda438036f1fcbc28b7d9357"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-cleanup-receipt.json",
+      "role": "sanitized browser cleanup receipt",
+      "secure_location_reference": null,
+      "sha256": "b42aed99745d0d523a1e813249d9ae1cbe6c838eb0a0eed058c3825d218ef9db"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-assessment.json",
+      "role": "safe postflight status discrepancy assessment",
+      "secure_location_reference": null,
+      "sha256": "ffbd7c0e0ca170d4f7027f2f395ae4eb57928d6492cda6faab920d24b3970847"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-check.note.txt",
+      "role": "endpoint/app-version postflight interpretation note",
+      "secure_location_reference": null,
+      "sha256": "7aa74d0592a16ffaebeafd3cdfa821058834876395d4270f6eee5244fafd0687"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-check.status.txt",
+      "role": "endpoint/app-version postflight status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-check.stderr.txt",
+      "role": "endpoint/app-version postflight diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-check.stdout.txt",
+      "role": "read-only endpoint/app-version postflight check",
+      "secure_location_reference": null,
+      "sha256": "ac537b766dc7336136ccdc5bb393c54f42059a6e34adfa5137172fc93b8b229e"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-status.code",
+      "role": "browser postflight status command status",
+      "secure_location_reference": null,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-status.json",
+      "role": "read-only shared-CfT postflight status view",
+      "secure_location_reference": null,
+      "sha256": "a0030d6ef77959cfe738c64b279345375b4186ce285d77802005be6bd56722c9"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-postflight-status.stderr.txt",
+      "role": "browser postflight status diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-preflight-status.code",
+      "role": "browser preflight command status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-preflight-status.json",
+      "role": "read-only shared-CfT preflight status",
+      "secure_location_reference": null,
+      "sha256": "73c652e81ec23f477ed604bf5a10e0c92faec091fa70465d4a3dc94c4a650b71"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/browser-preflight-status.stderr.txt",
+      "role": "browser preflight diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/controller-code-commit.txt",
+      "role": "committed controller technical correction pin",
+      "secure_location_reference": null,
+      "sha256": "717d095de82dfa7c3a607e718f02547642a3fc9a2c068d7ca4a48b32cd11cf89"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/focused-adapter-tests.status.txt",
+      "role": "external focused adapter test status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/focused-adapter-tests.stderr.txt",
+      "role": "external focused adapter test diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/focused-adapter-tests.stdout.txt",
+      "role": "external focused adapter test output",
+      "secure_location_reference": null,
+      "sha256": "1f2d5a6adb0cb0d50a6688abeecb0f029de3774edb8bc553b1c8e5ce5cd91715"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/infrastructure-validation.status.txt",
+      "role": "shared infrastructure validator status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/infrastructure-validation.stderr.txt",
+      "role": "shared infrastructure validator diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/infrastructure-validation.stdout.txt",
+      "role": "shared infrastructure validator output",
+      "secure_location_reference": null,
+      "sha256": "9574d92e994549a21a74cc1f46ca1cfaba02adb7e3bc0261623b7ab7f861856f"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-command.status.txt",
+      "role": "attached lease command status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-command.stderr.txt",
+      "role": "attached lease command diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-command.stdout.txt",
+      "role": "attached lease command stdout",
+      "secure_location_reference": null,
+      "sha256": "1e8c22f3edf949d751f74bc0ded607969084808d9afb6fda3521a6b788275b93"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-receipt.json",
+      "role": "raw safe shared-browser lease receipt",
+      "secure_location_reference": null,
+      "sha256": "f9e88993642dae47235a09ae5954581710d5598ee21efd85b7c8d324bcd39897"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/lease-released-receipt.json",
+      "role": "sanitized shared lease release receipt",
+      "secure_location_reference": null,
+      "sha256": "e1d28bed3335b796a8539c2e6e9946cd8ba57bbb8ae45fe15e45d521d2264fd8"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/live-preflight.json",
+      "role": "attached process-scoped live preflight receipt",
+      "secure_location_reference": null,
+      "sha256": "b6523927a7d7233106f2b3cb30ad491f01428e814f8fd1720111a56fc7fded87"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/local-focused-tests.status.txt",
+      "role": "local route/paired focused test status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/local-focused-tests.stderr.txt",
+      "role": "local route/paired focused test diagnostics",
+      "secure_location_reference": null,
+      "sha256": "c252ffc69b47fc3f3595da1a9c2d6926035fa5473528bcca2965cf15c5108664"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/local-focused-tests.stdout.txt",
+      "role": "local route/paired focused test output",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/observations.md",
+      "role": "diagnostic observations, outcome, limits, and handoff",
+      "secure_location_reference": null,
+      "sha256": "56e058e992e15ea13971d20b35febbe741e31915af9f52404ae994b11c46de68"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-01-route-projection.json",
+      "role": "P04 operation 1 safe route/access projection receipt",
+      "secure_location_reference": null,
+      "sha256": "3d172dc9a0b9128891a8036bc65020b5abf5b28e659dae5fb4443f042ab029b3"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-paired-diagnostic.json",
+      "role": "P04 operation 2 paired count/control/provenance receipt",
+      "secure_location_reference": null,
+      "sha256": "6c5497b5f6ef6f968b2fbd3af89d31244b0fc811e29b9423df37b2c12fb80275"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-source-access-control.json",
+      "role": "bounded paired source-access and selected-database control summary",
+      "secure_location_reference": null,
+      "sha256": "0292fa1dd71d246d37199e1af0a78e21271b2a16417f26ae1a166fd82ee7c900"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/op-02-paired-provenance.json",
+      "role": "bounded separate Compendex/Inspec provenance summary",
+      "secure_location_reference": null,
+      "sha256": "f948b1787882dc2a4e65956b902e3dcf30e0713b4ea77976ab98e72684f1aa5a"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/p04-execution-plan.md",
+      "role": "immutable P04 source-free execution plan and bounds",
+      "secure_location_reference": null,
+      "sha256": "145e9ba1cf2f8419de412ac0c4f74e2573d0ed181acbb661b465b321a92ec128"
+    },
+    {
+      "access_classification": "public",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/p04-live-child.sh",
+      "role": "corrected file-based attached child bundle",
+      "secure_location_reference": null,
+      "sha256": "a77c3ad0cd16ec2fa3eda985e62db466cc65fda31c1ebc3217b1a32ecf0a2c71"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/p04-live-child.syntax.status.txt",
+      "role": "P04 child bash syntax status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/p04-live-child.syntax.stderr.txt",
+      "role": "P04 child syntax diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/p04-live-child.syntax.stdout.txt",
+      "role": "P04 child source-free syntax note",
+      "secure_location_reference": null,
+      "sha256": "3668df308229aa9afb271598369017acca2c0ea0a355e93ec47b73a5c563aad3"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/paired-help.status.txt",
+      "role": "paired diagnostic CLI help status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/paired-help.stderr.txt",
+      "role": "paired diagnostic CLI help diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/paired-help.stdout.txt",
+      "role": "paired diagnostic CLI help output",
+      "secure_location_reference": null,
+      "sha256": "5daf796555268a835fe3b17ce7db0cddfb1970aa1032e718ed9bc012a9536b29"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/phase-start.epoch.txt",
+      "role": "attached phase start epoch marker",
+      "secure_location_reference": null,
+      "sha256": "4812ece464f74cc87c832ab274782f1b7d5011da10e2887fbc6824a1a5b3aafa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/phase-start.txt",
+      "role": "attached phase start marker",
+      "secure_location_reference": null,
+      "sha256": "3c38f13318b92bf77b6b4ee063416e0f4136533ba8e357d438d35268b45551d5"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/pilot-id.txt",
+      "role": "immutable attempt identity",
+      "secure_location_reference": null,
+      "sha256": "8804071de7696c6f04915bce1929803c9ec81568c72a43ce3b66a75e439f4275"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/preexisting-git-status.txt",
+      "role": "pre-attempt worktree status",
+      "secure_location_reference": null,
+      "sha256": "bb717d2bf6ae7bc9082f8592e927116997b5da47f6b087226cab4457f136ba24"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/prelive-system-status.json",
+      "role": "source-free AC/system preflight receipt",
+      "secure_location_reference": null,
+      "sha256": "a240abd44b88b52321218cf3242171a63d26c35cba3d13a916bd046ad55cd62f"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/query-byte-audit.txt",
+      "role": "nine-cell exact query-byte audit",
+      "secure_location_reference": null,
+      "sha256": "df76d15828536d8ae7894ae82b70f6820d6557d94b7cdaf71888873cc380c9b8"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/repository-head.txt",
+      "role": "repository head at P04 allocation",
+      "secure_location_reference": null,
+      "sha256": "717d095de82dfa7c3a607e718f02547642a3fc9a2c068d7ca4a48b32cd11cf89"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/restricted-capture-ledger.json",
+      "role": "zero-capture rights ledger",
+      "secure_location_reference": null,
+      "sha256": "0f7efd7cc1e82a86555b4a67155b4cc09787f9e4b1471485696a80950be27788"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/route-help.status.txt",
+      "role": "route probe CLI help status",
+      "secure_location_reference": null,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/route-help.stderr.txt",
+      "role": "route probe CLI help diagnostics",
+      "secure_location_reference": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/route-help.stdout.txt",
+      "role": "route probe CLI help output",
+      "secure_location_reference": null,
+      "sha256": "2758baec0c8be34a536689f6fb59832e60faab74564ad948ad49336c67690f8a"
+    },
+    {
+      "access_classification": "metadata_only",
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P04-20260825T114742-0400/system-postflight.json",
+      "role": "safe power/caffeinate/Sleep-Wake postflight receipt",
+      "secure_location_reference": null,
+      "sha256": "64f6e85729347eaf6c309d3eda8c3b840d118ade52693056d5cdf98445526b9e"
+    }
+  ],
+  "campaign": {
+    "campaign_id": "S-D04-C01-20260824T161325-0400",
+    "attempt_id": "S-D04-P04-20260825T114742-0400"
+  },
+  "attempt_terminal": {
+    "outcome": "completed",
+    "category": "completed",
+    "ended_at": "2026-08-25T15:57:06.337Z",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "browser_backed": true,
+    "cleanup_receipt": {
+      "path": "pilots/S-D04-P04-20260825T114742-0400/browser-cleanup-receipt.json",
+      "sha256": "b42aed99745d0d523a1e813249d9ae1cbe6c838eb0a0eed058c3825d218ef9db"
+    },
+    "lease_receipt": {
+      "path": "pilots/S-D04-P04-20260825T114742-0400/lease-released-receipt.json",
+      "sha256": "e1d28bed3335b796a8539c2e6e9946cd8ba57bbb8ae45fe15e45d521d2264fd8"
+    },
+    "cancelled_by": null,
+    "reason": "Both assigned P04 operations completed within the two-operation cap with exact separate Compendex/Inspec diagnostic totals (83 and 46), no retained records, verified-clean lease cleanup/release, and no screening/import/final event. The stale postflight lease-status receipt view is a narrow controller metadata warning, not a provider failure."
+  },
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "P04 provides bounded route and current-adapter count/control/provenance evidence but does not validate the complete source method or authorize a final search.",
+    "semantic_change": false,
+    "human_verification_required": []
+  }
+}

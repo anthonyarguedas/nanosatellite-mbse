@@ -1,0 +1,20 @@
+{
+  "attempt_id": "S-D04-P04-20260825T114742-0400",
+  "browser_endpoint_check": {
+    "command": "start_chrome.py --check",
+    "status": 0,
+    "result": "endpoint_and_app_version_healthy"
+  },
+  "lease_status_check": {
+    "command": "run_with_browser_lease.py --status --receipt <attempt-lease-receipt>",
+    "status": 1,
+    "result": "browser_epoch_receipt_stale_or_missing",
+    "lease_state_observed": "released",
+    "orphan_child_or_group_alive": false,
+    "page_count_observed": 1,
+    "protected_anchor_count_observed": 1
+  },
+  "interpretation": "The read-only lease-status metadata check could not revalidate the browser epoch receipt after release, but the lease receipt proves verified-clean cleanup and release, the protected anchor/page count remained one, and the read-only endpoint/app-version check passed. No browser launch, restart, configuration, or source request occurred after release.",
+  "schema_version": "slr1-engineering-village-browser-postflight-assessment/v1",
+  "postflight_source_work_started": false
+}
