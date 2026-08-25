@@ -109,12 +109,7 @@ class TargetSession:
             assert self.page is not None
             return {"targetInfo": {"targetId": self.page.target_id}}
         if method == "Target.getTargets":
-            return {
-                "targetInfos": [
-                    {"type": "page", "targetId": page.target_id}
-                    for page in self.browser.target_pages()
-                ]
-            }
+            return {"targetInfos": self.browser.target_infos()}
         raise AssertionError(method)
 
     async def detach(self) -> None:
@@ -207,11 +202,18 @@ class LeaseContext:
 
 class LeaseBrowser:
     def __init__(
-        self, context: LeaseContext, *, retain_closed_target: bool = False
+        self,
+        context: LeaseContext,
+        *,
+        retain_closed_target: bool = False,
+        persistent_worker_delta: bool = False,
+        post_create_inventory_failures: int = 0,
     ) -> None:
         self.contexts = [context]
         self.context = context
         self.retain_closed_target = retain_closed_target
+        self.persistent_worker_delta = persistent_worker_delta
+        self.post_create_inventory_failures = post_create_inventory_failures
 
     def target_pages(self) -> list[LeasePage]:
         pages = list(self.context.pages)
@@ -219,6 +221,23 @@ class LeaseBrowser:
             if self.context.created not in pages:
                 pages.append(self.context.created)
         return pages
+
+    def target_infos(self) -> list[dict[str, str]]:
+        if self.context.created is not None and self.post_create_inventory_failures > 0:
+            self.post_create_inventory_failures -= 1
+            raise RuntimeError("offline target inventory failure")
+        infos = [
+            {"type": "page", "targetId": page.target_id} for page in self.target_pages()
+        ]
+        if (
+            self.persistent_worker_delta
+            and self.context.created is not None
+            and self.context.created.is_closed()
+        ):
+            infos.append(
+                {"type": "service_worker", "targetId": "persistent-worker-secret"}
+            )
+        return infos
 
     async def new_browser_cdp_session(self) -> TargetSession:
         return TargetSession(self)
@@ -242,6 +261,8 @@ class LeasePlaywright:
         baseline_count: int = 2,
         close_raises: bool = False,
         retain_closed_target: bool = False,
+        persistent_worker_delta: bool = False,
+        post_create_inventory_failures: int = 0,
         mutate_baseline_on_owned_close: bool = False,
         evaluations: list[object] | None = None,
     ) -> None:
@@ -254,7 +275,10 @@ class LeasePlaywright:
             evaluations=evaluations,
         )
         self.browser = LeaseBrowser(
-            self.context, retain_closed_target=retain_closed_target
+            self.context,
+            retain_closed_target=retain_closed_target,
+            persistent_worker_delta=persistent_worker_delta,
+            post_create_inventory_failures=post_create_inventory_failures,
         )
         self.chromium = LeaseChromium(self)
 
@@ -289,6 +313,15 @@ class EngineeringVillageRouteClassificationTests(unittest.TestCase):
         malformed = ev.classify_public_paired_expert_url(
             "https://www.engineeringvillage.com:bad/"
         )
+        alternate_port = ev.classify_public_paired_expert_url(
+            "https://www.engineeringvillage.com:444/search/expert.url?database=3"
+        )
+        explicit_default_port = ev.classify_public_paired_expert_url(
+            "https://www.engineeringvillage.com:443/search/expert.url?database=3"
+        )
+        fragment = ev.classify_public_paired_expert_url(
+            "https://www.engineeringvillage.com/search/expert.url?database=3#private"
+        )
         self.assertEqual(public.route_class, "public_paired_expert_route")
         self.assertTrue(public.expected_host)
         self.assertTrue(public.expected_path)
@@ -299,6 +332,9 @@ class EngineeringVillageRouteClassificationTests(unittest.TestCase):
         self.assertFalse(nonpublic.public_paired_expert_route)
         self.assertEqual(other.route_class, "off_expected_host")
         self.assertEqual(malformed.route_class, "invalid_url")
+        for noncanonical in (alternate_port, explicit_default_port, fragment):
+            self.assertFalse(noncanonical.expected_host)
+            self.assertFalse(noncanonical.public_paired_expert_route)
         self.assertNotIn("session=private", repr(nonpublic))
 
     def test_only_fixed_browser_failure_subclasses_are_retriable(self):
@@ -508,7 +544,8 @@ class EngineeringVillageOwnershipAndCleanupTests(unittest.TestCase):
         alias = session.context.created
         self.assertEqual(status, 1)
         self.assertEqual(
-            receipt["result"]["classification"], "owned_target_not_verified"
+            receipt["result"]["classification"],
+            "owned_page_cleanup_handoff_required",
         )
         self.assertEqual(alias.goto_calls, [])
         self.assertEqual(alias.close_calls, 0)
@@ -556,6 +593,40 @@ class EngineeringVillageOwnershipAndCleanupTests(unittest.TestCase):
         )
         self.assertFalse(receipt["ownership"]["owned_target_disappeared"])
         self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
+
+    def test_persistent_worker_delta_cannot_verify_exact_cleanup(self):
+        session = LeasePlaywright(persistent_worker_delta=True)
+        status, receipt = self.run_lifecycle(session)
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "cleanup_verification_failed"
+        )
+        self.assertTrue(receipt["ownership"]["owned_page_closed"])
+        self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
+        self.assertNotIn("persistent-worker-secret", json.dumps(receipt))
+
+    def test_post_create_inventory_failure_reproves_and_closes_distinct_page(self):
+        session = LeasePlaywright(post_create_inventory_failures=1)
+        status, receipt = self.run_lifecycle(session)
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "owned_target_not_verified"
+        )
+        self.assertEqual(session.context.created.goto_calls, [])
+        self.assertTrue(session.context.created.is_closed())
+        self.assertTrue(receipt["ownership"]["owned_page_closed"])
+
+    def test_unrecoverable_post_create_inventory_reports_safe_handoff(self):
+        session = LeasePlaywright(post_create_inventory_failures=1_000)
+        status, receipt = self.run_lifecycle(session)
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"],
+            "owned_page_cleanup_handoff_required",
+        )
+        self.assertFalse(receipt["ownership"]["owned_page_close_attempted"])
+        self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
+        self.assertNotIn("owned-target-secret", json.dumps(receipt))
 
     def test_baseline_change_is_detected_without_closing_baseline_pages(self):
         session = LeasePlaywright(mutate_baseline_on_owned_close=True)
@@ -701,6 +772,36 @@ class EngineeringVillageInputAndPrivacyTests(unittest.TestCase):
             with mock.patch.object(ev.os, "fdopen", side_effect=fake_fdopen):
                 with self.assertRaises(OSError):
                     ev.write_new_json(path, receipt)
+            self.assertEqual(path.read_bytes(), winner)
+
+    def test_raced_output_winner_blocks_factory_and_navigation(self):
+        winner = b"concurrent winner"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "receipt.json"
+            cfg = config(Path(directory))
+            reserved_path = path.resolve(strict=False)
+            factory_called = False
+            real_open = ev.os.open
+
+            def raced_open(candidate, flags, mode=0o777):
+                if Path(candidate) == reserved_path and not path.exists():
+                    path.write_bytes(winner)
+                return real_open(candidate, flags, mode)
+
+            def forbidden_factory():
+                nonlocal factory_called
+                factory_called = True
+                raise AssertionError("winner must block Playwright")
+
+            with mock.patch.object(ev.os, "open", side_effect=raced_open):
+                status, receipt = asyncio.run(
+                    ev.run_probe(cfg, playwright_factory=forbidden_factory)
+                )
+            self.assertEqual(status, 1)
+            self.assertEqual(
+                receipt["result"]["classification"], "output_reservation_failed"
+            )
+            self.assertFalse(factory_called)
             self.assertEqual(path.read_bytes(), winner)
 
     def test_source_has_one_navigation_and_no_reload_fallback(self):

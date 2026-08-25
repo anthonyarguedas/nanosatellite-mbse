@@ -84,6 +84,7 @@ SAFE_PROBE_ABORT_CLASSIFICATIONS = frozenset(
         "baseline_target_inventory_unavailable",
         "owned_page_not_distinct",
         "owned_target_not_verified",
+        "owned_page_cleanup_handoff_required",
     }
 )
 
@@ -108,6 +109,14 @@ class ProbeConfig:
     timeout_seconds: float
     stabilization_interval_seconds: float
     output_path: Path
+
+
+@dataclass
+class OutputReservation:
+    """One atomically claimed receipt inode held through source activity."""
+
+    path: Path
+    descriptor: int
 
 
 @dataclass(frozen=True)
@@ -289,7 +298,7 @@ def _milliseconds(seconds: float) -> int:
 
 
 def validate_output_path(value: str) -> Path:
-    """Prepare one non-colliding create-only output destination before CDP use."""
+    """Validate a prospective create-only destination before atomic reservation."""
     if not compact(value):
         raise InputValidationError("--output-path must be nonblank")
     candidate = Path(value).expanduser()
@@ -302,6 +311,36 @@ def validate_output_path(value: str) -> Path:
     if not path.parent.is_dir():
         raise InputValidationError("--output-path parent must be a directory")
     return path
+
+
+def reserve_output_path(path: Path) -> OutputReservation:
+    """Atomically claim the final receipt name before any source activity."""
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    return OutputReservation(path=path, descriptor=os.open(path, flags, 0o600))
+
+
+def write_reserved_json(
+    reservation: OutputReservation, payload: Mapping[str, Any]
+) -> None:
+    """Write through a claimed descriptor without ever reopening its pathname."""
+    descriptor = reservation.descriptor
+    if descriptor < 0:
+        raise OSError("receipt reservation is no longer writable")
+    reservation.descriptor = -1
+    encoded = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(encoded)
+    except Exception:
+        # The name can be replaced after O_EXCL creation.  The descriptor may
+        # refer to an unlinked inode, so never unlink the current pathname.
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
+        raise
 
 
 def validate_runtime_config(config: Any) -> ProbeConfig:
@@ -334,16 +373,21 @@ def classify_public_paired_expert_url(value: Any) -> RouteClassification:
     try:
         parsed = urlsplit(value)
         # Access validates malformed port syntax without retaining it.
-        _ = parsed.port
+        port = parsed.port
     except ValueError:
         return RouteClassification("invalid_url", False, False, False)
     hostname = (parsed.hostname or "").casefold()
-    safe_https = (
-        parsed.scheme.casefold() == "https"
+    exact_https_origin = bool(
+        parsed.scheme == "https"
+        and parsed.netloc == EXPECTED_HOST
+        and hostname == EXPECTED_HOST
+        and port is None
         and not parsed.username
         and not parsed.password
+        and not parsed.fragment
+        and "#" not in value
     )
-    expected_host = safe_https and hostname == EXPECTED_HOST
+    expected_host = exact_https_origin
     expected_path = expected_host and parsed.path == EXPECTED_PATH
     public_paired = False
     if expected_path:
@@ -461,8 +505,12 @@ async def _sleep_to_deadline(
     sleeper: Callable[[float], Awaitable[None]],
 ) -> None:
     remaining = deadline - clock()
-    if remaining > 0:
-        await sleeper(min(interval, remaining))
+    if remaining <= 0:
+        return
+    try:
+        await asyncio.wait_for(sleeper(min(interval, remaining)), timeout=remaining)
+    except asyncio.TimeoutError:
+        return
 
 
 async def stabilize_after_domcontentloaded(
@@ -578,7 +626,7 @@ async def target_id_for(context: Any, page: Any) -> str | None:
 
 
 async def active_target_ids(browser: Any) -> frozenset[str] | None:
-    """Read an unambiguous browser-level page-target inventory in memory."""
+    """Read every CDP target identity needed for exact baseline restoration."""
     session: Any | None = None
     try:
         session = await browser.new_browser_cdp_session()
@@ -586,19 +634,25 @@ async def active_target_ids(browser: Any) -> frozenset[str] | None:
         infos = payload.get("targetInfos") if isinstance(payload, Mapping) else None
         if not isinstance(infos, list):
             return None
-        page_target_ids: list[str] = []
+        target_ids: list[str] = []
         for item in infos:
             if not isinstance(item, Mapping):
                 return None
-            if item.get("type") != "page":
-                continue
+            target_type = item.get("type")
             target_id = item.get("targetId")
-            if type(target_id) is not str or not target_id:
+            if (
+                type(target_type) is not str
+                or not target_type
+                or type(target_id) is not str
+                or not target_id
+            ):
                 return None
-            page_target_ids.append(target_id)
-        if len(page_target_ids) != len(set(page_target_ids)):
+            # Do not filter workers, service workers, or any other CDP target:
+            # an exact baseline claim must include their persistent deltas.
+            target_ids.append(target_id)
+        if len(target_ids) != len(set(target_ids)):
             return None
-        return frozenset(page_target_ids)
+        return frozenset(target_ids)
     except Exception:
         return None
     finally:
@@ -607,6 +661,55 @@ async def active_target_ids(browser: Any) -> frozenset[str] | None:
                 await session.detach()
             except Exception:
                 pass
+
+
+async def _active_target_ids_to_deadline(
+    browser: Any, deadline: float, clock: Callable[[], float]
+) -> frozenset[str] | None:
+    """Bound an inventory request while cleanup ownership remains live."""
+    remaining = deadline - clock()
+    if remaining <= 0:
+        return None
+    try:
+        return await asyncio.wait_for(active_target_ids(browser), timeout=remaining)
+    except asyncio.TimeoutError:
+        return None
+
+
+async def recover_owned_target_for_cleanup(
+    browser: Any,
+    context: Any,
+    owned_page: Any,
+    baseline_target_ids: frozenset[str],
+    *,
+    clock: Callable[[], float],
+    sleeper: Callable[[float], Awaitable[None]],
+) -> str | None:
+    """Boundedly reprove a distinct target before closing an uncertain page."""
+    deadline = clock() + CLEANUP_TIMEOUT_SECONDS
+    while True:
+        remaining = deadline - clock()
+        if remaining <= 0:
+            return None
+        try:
+            target_id = await asyncio.wait_for(
+                target_id_for(context, owned_page), timeout=remaining
+            )
+        except asyncio.TimeoutError:
+            return None
+        targets = await _active_target_ids_to_deadline(browser, deadline, clock)
+        if (
+            target_id is not None
+            and target_id not in baseline_target_ids
+            and targets is not None
+            and target_id in targets
+        ):
+            return target_id
+        if clock() >= deadline:
+            return None
+        await _sleep_to_deadline(
+            deadline, CLEANUP_POLL_INTERVAL_SECONDS, clock, sleeper
+        )
 
 
 def baseline_pages_preserved(context: Any, baseline_pages: tuple[Any, ...]) -> bool:
@@ -632,7 +735,7 @@ async def _wait_for_target_disappearance(
     """Retain the narrow helper for callers that need disappearance alone."""
     deadline = clock() + CLEANUP_TIMEOUT_SECONDS
     while True:
-        targets = await active_target_ids(browser)
+        targets = await _active_target_ids_to_deadline(browser, deadline, clock)
         if targets is None:
             return False
         if target_id not in targets:
@@ -655,7 +758,7 @@ async def _wait_for_baseline_target_set(
     """Wait only for the exact pre-create target set to be restored."""
     deadline = clock() + CLEANUP_TIMEOUT_SECONDS
     while True:
-        targets = await active_target_ids(browser)
+        targets = await _active_target_ids_to_deadline(browser, deadline, clock)
         if targets is None:
             return False, False
         target_disappeared = owned_target_id not in targets
@@ -687,9 +790,13 @@ async def cleanup_owned_page(
     page_closed = False
     target_disappeared = False
     baseline_target_set_preserved: bool | None = None
+    close_deadline = clock() + CLEANUP_TIMEOUT_SECONDS
     try:
         if not owned_page.is_closed():
-            await owned_page.close()
+            remaining = close_deadline - clock()
+            if remaining <= 0:
+                raise asyncio.TimeoutError
+            await asyncio.wait_for(owned_page.close(), timeout=remaining)
         page_closed = bool(owned_page.is_closed())
     except Exception:
         page_closed = False
@@ -870,7 +977,7 @@ async def run_probe(
     clock: Callable[[], float] | None = None,
     sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
 ) -> tuple[int, dict[str, Any]]:
-    """Run one opt-in navigation and close it before the live session exits."""
+    """Reserve a receipt, run one opt-in navigation, then close it live."""
     try:
         config = validate_runtime_config(config)
     except Exception:
@@ -880,186 +987,261 @@ async def run_probe(
         return 1, receipt
 
     receipt = new_receipt(config.execute)
-    if not config.execute:
-        _set_result(receipt, "dry_run")
-        receipt["result"]["status"] = "not_run"
-        return 0, receipt
-
-    if clock is None:
-        clock = asyncio.get_running_loop().time
-    if playwright_factory is None:
-        from playwright.async_api import async_playwright
-
-        playwright_factory = async_playwright
+    try:
+        # Claim the final name before importing or constructing Playwright so a
+        # concurrent winner prevents every source action, not merely the write.
+        reservation = reserve_output_path(config.output_path)
+    except OSError:
+        _set_result(receipt, "output_reservation_failed")
+        return 1, receipt
 
     browser: Any | None = None
     context: Any | None = None
     owned_page: Any | None = None
+    owned_page_distinct = False
     owned_page_safe_to_close = False
+    post_create_inventory_failed = False
+    post_create_reverification_required = False
     owned_target_id: str | None = None
     baseline_pages: tuple[Any, ...] = ()
     baseline_target_ids: frozenset[str] | None = None
     classification = "browser_connection_failed"
     healthy = False
+    output_write_failed = False
 
     try:
-        # The nested finally is intentionally inside this async Playwright
-        # context.  It must finish target-disappearance verification before
-        # Playwright disconnects from the browser lease.
-        async with playwright_factory() as playwright:
+        if not config.execute:
+            classification = "dry_run"
+        else:
+            if clock is None:
+                clock = asyncio.get_running_loop().time
+            if playwright_factory is None:
+                from playwright.async_api import async_playwright
+
+                playwright_factory = async_playwright
+
             try:
-                browser = await playwright.chromium.connect_over_cdp(
-                    config.cdp_url, timeout=_milliseconds(config.timeout_seconds)
-                )
-                contexts = tuple(browser.contexts)
-                receipt["ownership"]["existing_context_count"] = len(contexts)
-                if len(contexts) != 1:
-                    raise ProbeAbort("unexpected_browser_context_count")
-                context = contexts[0]
-                baseline_pages = tuple(context.pages)
-                receipt["ownership"]["baseline_page_count"] = len(baseline_pages)
-                # Browser-level target ownership is the authority. Snapshot it
-                # before creating anything, while retaining IDs only in memory.
-                baseline_target_ids = await active_target_ids(browser)
-                if baseline_target_ids is None:
-                    raise ProbeAbort("baseline_target_inventory_unavailable")
-
-                owned_page = await context.new_page()
-                receipt["ownership"]["owned_page_created"] = True
-                distinct = all(
-                    owned_page is not baseline for baseline in baseline_pages
-                )
-                receipt["ownership"]["owned_page_distinct_from_baseline"] = distinct
-                if not distinct:
-                    raise ProbeAbort("owned_page_not_distinct")
-
-                post_create_target_ids = await active_target_ids(browser)
-                owned_target_id = await target_id_for(context, owned_page)
-                owned_target_is_new = bool(
-                    owned_target_id is not None
-                    and post_create_target_ids is not None
-                    and owned_target_id in post_create_target_ids
-                    and owned_target_id not in baseline_target_ids
-                )
-                # A target that is proven non-baseline is safe to close even if
-                # a concurrent target mutation makes the run fail before goto.
-                owned_page_safe_to_close = owned_target_is_new
-                target_verified = False
-                if owned_target_is_new and post_create_target_ids is not None:
-                    assert owned_target_id is not None
-                    expected_target_ids = baseline_target_ids | frozenset(
-                        {owned_target_id}
-                    )
-                    target_verified = (
-                        post_create_target_ids == expected_target_ids
-                        and post_create_target_ids - baseline_target_ids
-                        == frozenset({owned_target_id})
-                    )
-                receipt["ownership"]["owned_target_verified"] = target_verified
-                if not target_verified:
-                    raise ProbeAbort("owned_target_not_verified")
-
-                # This is the only navigation in this probe.  Stabilization
-                # below is evaluate/sleep only and has no reload fallback.
-                receipt["navigation_attempt_count"] = 1
-                response = await owned_page.goto(
-                    PUBLIC_PAIRED_EXPERT_ROUTE,
-                    wait_until="domcontentloaded",
-                    timeout=_milliseconds(config.timeout_seconds),
-                )
-                status = getattr(response, "status", None)
-                receipt["navigation"]["response_status"] = (
-                    status
-                    if isinstance(status, int)
-                    and not isinstance(status, bool)
-                    and 100 <= status <= 599
-                    else None
-                )
-                outcome = await stabilize_after_domcontentloaded(
-                    owned_page,
-                    timeout_seconds=config.timeout_seconds,
-                    interval_seconds=config.stabilization_interval_seconds,
-                    clock=clock,
-                    sleeper=sleeper,
-                )
-                _apply_stabilization(receipt, outcome)
-                classification, healthy = classify_route_result(receipt, outcome)
-            except ProbeAbort as error:
-                classification = safe_probe_abort_classification(error)
-                healthy = False
-            except Exception:
-                classification = "owned_page_operation_failed"
-                healthy = False
-            finally:
-                if (
-                    owned_page is not None
-                    and owned_page_safe_to_close
-                    and browser is not None
-                    and context is not None
-                    and baseline_target_ids is not None
-                ):
+                # The nested finally is intentionally inside this async
+                # Playwright context. It must finish target verification before
+                # Playwright disconnects from the browser lease.
+                async with playwright_factory() as playwright:
                     try:
-                        cleanup = await cleanup_owned_page(
-                            browser,
-                            context,
+                        browser = await playwright.chromium.connect_over_cdp(
+                            config.cdp_url,
+                            timeout=_milliseconds(config.timeout_seconds),
+                        )
+                        contexts = tuple(browser.contexts)
+                        receipt["ownership"]["existing_context_count"] = len(contexts)
+                        if len(contexts) != 1:
+                            raise ProbeAbort("unexpected_browser_context_count")
+                        context = contexts[0]
+                        baseline_pages = tuple(context.pages)
+                        receipt["ownership"]["baseline_page_count"] = len(
+                            baseline_pages
+                        )
+                        # Browser-level target ownership is the authority.
+                        # Snapshot every target type before creating anything.
+                        baseline_target_ids = await active_target_ids(browser)
+                        if baseline_target_ids is None:
+                            raise ProbeAbort("baseline_target_inventory_unavailable")
+
+                        owned_page = await context.new_page()
+                        receipt["ownership"]["owned_page_created"] = True
+                        owned_page_distinct = all(
+                            owned_page is not baseline for baseline in baseline_pages
+                        )
+                        receipt["ownership"]["owned_page_distinct_from_baseline"] = (
+                            owned_page_distinct
+                        )
+                        if not owned_page_distinct:
+                            raise ProbeAbort("owned_page_not_distinct")
+
+                        post_create_timeout = min(
+                            config.timeout_seconds, CLEANUP_TIMEOUT_SECONDS
+                        )
+                        try:
+                            post_create_target_ids = await asyncio.wait_for(
+                                active_target_ids(browser), timeout=post_create_timeout
+                            )
+                        except asyncio.TimeoutError:
+                            post_create_target_ids = None
+                        post_create_inventory_failed = post_create_target_ids is None
+                        try:
+                            owned_target_id = await asyncio.wait_for(
+                                target_id_for(context, owned_page),
+                                timeout=post_create_timeout,
+                            )
+                        except asyncio.TimeoutError:
+                            owned_target_id = None
+                        post_create_reverification_required = bool(
+                            post_create_inventory_failed or owned_target_id is None
+                        )
+                        owned_target_is_new = bool(
+                            owned_target_id is not None
+                            and post_create_target_ids is not None
+                            and owned_target_id in post_create_target_ids
+                            and owned_target_id not in baseline_target_ids
+                        )
+                        # A target that is proven non-baseline is safe to close
+                        # even if a concurrent target mutation blocks goto.
+                        owned_page_safe_to_close = owned_target_is_new
+                        target_verified = False
+                        if owned_target_is_new and post_create_target_ids is not None:
+                            assert owned_target_id is not None
+                            expected_target_ids = baseline_target_ids | frozenset(
+                                {owned_target_id}
+                            )
+                            target_verified = (
+                                post_create_target_ids == expected_target_ids
+                                and post_create_target_ids - baseline_target_ids
+                                == frozenset({owned_target_id})
+                            )
+                        receipt["ownership"]["owned_target_verified"] = target_verified
+                        if not target_verified:
+                            raise ProbeAbort("owned_target_not_verified")
+
+                        # This is the only navigation in this probe.
+                        receipt["navigation_attempt_count"] = 1
+                        response = await owned_page.goto(
+                            PUBLIC_PAIRED_EXPERT_ROUTE,
+                            wait_until="domcontentloaded",
+                            timeout=_milliseconds(config.timeout_seconds),
+                        )
+                        status = getattr(response, "status", None)
+                        receipt["navigation"]["response_status"] = (
+                            status
+                            if isinstance(status, int)
+                            and not isinstance(status, bool)
+                            and 100 <= status <= 599
+                            else None
+                        )
+                        outcome = await stabilize_after_domcontentloaded(
                             owned_page,
-                            owned_target_id,
-                            baseline_pages,
-                            baseline_target_ids=baseline_target_ids,
+                            timeout_seconds=config.timeout_seconds,
+                            interval_seconds=config.stabilization_interval_seconds,
                             clock=clock,
                             sleeper=sleeper,
                         )
-                        ownership = receipt["ownership"]
-                        ownership["owned_page_close_attempted"] = (
-                            cleanup.close_attempted
+                        _apply_stabilization(receipt, outcome)
+                        classification, healthy = classify_route_result(
+                            receipt, outcome
                         )
-                        ownership["owned_page_closed"] = cleanup.page_closed
-                        ownership["owned_target_disappeared"] = (
-                            cleanup.target_disappeared
-                        )
-                        ownership["baseline_pages_preserved"] = (
-                            cleanup.baseline_preserved
-                        )
-                        ownership["baseline_target_set_preserved"] = (
-                            cleanup.baseline_target_set_preserved
-                        )
-                        if not cleanup.verified:
-                            classification = "cleanup_verification_failed"
-                            healthy = False
-                    except Exception:
-                        receipt["ownership"]["owned_page_close_attempted"] = True
-                        receipt["ownership"]["baseline_pages_preserved"] = False
-                        receipt["ownership"]["baseline_target_set_preserved"] = False
-                        classification = "cleanup_verification_failed"
+                    except ProbeAbort as error:
+                        classification = safe_probe_abort_classification(error)
                         healthy = False
-    except Exception:
-        if classification != "cleanup_verification_failed":
-            classification = "browser_connection_failed"
-            healthy = False
+                    except Exception:
+                        classification = "owned_page_operation_failed"
+                        healthy = False
+                    finally:
+                        can_attempt_cleanup = bool(
+                            owned_page is not None
+                            and owned_page_distinct
+                            and browser is not None
+                            and context is not None
+                            and baseline_target_ids is not None
+                        )
+                        if can_attempt_cleanup and post_create_reverification_required:
+                            # An unavailable post-create proof must not strand
+                            # a distinct page. Reprove its target under a
+                            # bounded deadline before closing; otherwise hand
+                            # it off.
+                            if not owned_page_safe_to_close:
+                                try:
+                                    recovered_target_id = (
+                                        await recover_owned_target_for_cleanup(
+                                            browser,
+                                            context,
+                                            owned_page,
+                                            baseline_target_ids,
+                                            clock=clock,
+                                            sleeper=sleeper,
+                                        )
+                                    )
+                                except Exception:
+                                    recovered_target_id = None
+                                if recovered_target_id is None:
+                                    receipt["ownership"]["baseline_pages_preserved"] = (
+                                        baseline_pages_preserved(
+                                            context, baseline_pages
+                                        )
+                                    )
+                                    receipt["ownership"][
+                                        "baseline_target_set_preserved"
+                                    ] = False
+                                    classification = (
+                                        "owned_page_cleanup_handoff_required"
+                                    )
+                                    healthy = False
+                                else:
+                                    owned_target_id = recovered_target_id
+                                    owned_page_safe_to_close = True
+                        if can_attempt_cleanup and owned_page_safe_to_close:
+                            try:
+                                cleanup = await cleanup_owned_page(
+                                    browser,
+                                    context,
+                                    owned_page,
+                                    owned_target_id,
+                                    baseline_pages,
+                                    baseline_target_ids=baseline_target_ids,
+                                    clock=clock,
+                                    sleeper=sleeper,
+                                )
+                                ownership = receipt["ownership"]
+                                ownership["owned_page_close_attempted"] = (
+                                    cleanup.close_attempted
+                                )
+                                ownership["owned_page_closed"] = cleanup.page_closed
+                                ownership["owned_target_disappeared"] = (
+                                    cleanup.target_disappeared
+                                )
+                                ownership["baseline_pages_preserved"] = (
+                                    cleanup.baseline_preserved
+                                )
+                                ownership["baseline_target_set_preserved"] = (
+                                    cleanup.baseline_target_set_preserved
+                                )
+                                if not cleanup.verified:
+                                    classification = "cleanup_verification_failed"
+                                    healthy = False
+                            except Exception:
+                                receipt["ownership"]["owned_page_close_attempted"] = (
+                                    True
+                                )
+                                receipt["ownership"]["baseline_pages_preserved"] = False
+                                receipt["ownership"][
+                                    "baseline_target_set_preserved"
+                                ] = False
+                                classification = "cleanup_verification_failed"
+                                healthy = False
+            except Exception:
+                if classification not in {
+                    "cleanup_verification_failed",
+                    "owned_page_cleanup_handoff_required",
+                }:
+                    classification = "browser_connection_failed"
+                    healthy = False
+    finally:
+        _set_result(receipt, classification, healthy)
+        if not config.execute:
+            receipt["result"]["status"] = "not_run"
+        try:
+            write_reserved_json(reservation, receipt)
+        except Exception:
+            output_write_failed = True
 
-    _set_result(receipt, classification, healthy)
-    return (0 if healthy else 1), receipt
+    if output_write_failed:
+        return 2, receipt
+    return (0 if not config.execute or healthy else 1), receipt
 
 
 def write_new_json(path: Path, payload: Mapping[str, Any]) -> None:
     """Create one JSON receipt using O_EXCL; a collision can never overwrite."""
-    encoded = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
-    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
-    if hasattr(os, "O_NOFOLLOW"):
-        flags |= os.O_NOFOLLOW
-    descriptor = os.open(path, flags, 0o600)
-    try:
-        with os.fdopen(descriptor, "wb") as handle:
-            handle.write(encoded)
-    except Exception:
-        # The final name is create-only.  It can be replaced by a concurrent
-        # winner after O_EXCL creation, so rollback must never unlink it.
-        # A failed write remains a quarantined, non-success artifact instead.
-        raise
+    write_reserved_json(reserve_output_path(path), payload)
 
 
 def parse_args(argv: list[str] | None = None) -> ProbeConfig:
-    """Validate endpoint, timing, and output collision before Playwright import."""
+    """Validate endpoint, timing, and a prospective output destination."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--execute", action="store_true", help="permit one source navigation"
@@ -1099,14 +1281,9 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
 def main(argv: list[str] | None = None) -> int:
     config = parse_args(argv)
     try:
-        status, receipt = asyncio.run(run_probe(config))
+        status, _ = asyncio.run(run_probe(config))
     except Exception:
-        status, receipt = 1, new_receipt(config.execute)
-        _set_result(receipt, "internal_probe_failure")
-    try:
-        write_new_json(config.output_path, receipt)
-    except OSError:
-        # Do not echo a controller-private output path.
+        # run_probe owns the pre-source reservation and its safe final write.
         return 2
     return status
 

@@ -127,6 +127,7 @@ SAFE_PROBE_ABORT_CLASSIFICATIONS = frozenset(
         "baseline_target_inventory_unavailable",
         "owned_page_not_distinct",
         "owned_target_not_verified",
+        "owned_page_cleanup_handoff_required",
         "challenge_before_submission",
         "busy_before_submission",
         "access_before_submission",
@@ -170,6 +171,14 @@ class ProbeConfig:
     busy_retries: int
     busy_retry_delay_seconds: float
     output_path: Path
+
+
+@dataclass
+class OutputReservation:
+    """One atomically claimed receipt inode held through source activity."""
+
+    path: Path
+    descriptor: int
 
 
 @dataclass(frozen=True)
@@ -333,8 +342,10 @@ ADVANCED_FORM_INSPECTION_SCRIPT = r"""
   const canonical = forms.filter(form => {
     try {
       const action = new URL(form.getAttribute("action") || "", document.baseURI);
-      return action.protocol === "https:" && action.hostname.toLowerCase() === "oatd.org" &&
-        action.pathname === "/oatd/search-composer" && form.method.toLowerCase() === "get";
+      return action.protocol === "https:" && action.origin === "https://oatd.org" &&
+        action.hostname === "oatd.org" && action.port === "" && action.username === "" &&
+        action.password === "" && action.pathname === "/oatd/search-composer" &&
+        action.search === "" && action.hash === "" && form.method.toLowerCase() === "get";
     } catch (_) {
       return false;
     }
@@ -371,8 +382,10 @@ FORM_SELF_CHECK_SCRIPT = r"""
   const isCanonical = candidate => {
     try {
       const action = new URL(candidate.getAttribute("action") || "", document.baseURI);
-      return action.protocol === "https:" && action.hostname.toLowerCase() === "oatd.org" &&
-        action.pathname === "/oatd/search-composer" && candidate.method.toLowerCase() === "get";
+      return action.protocol === "https:" && action.origin === "https://oatd.org" &&
+        action.hostname === "oatd.org" && action.port === "" && action.username === "" &&
+        action.password === "" && action.pathname === "/oatd/search-composer" &&
+        action.search === "" && action.hash === "" && candidate.method.toLowerCase() === "get";
     } catch (_) {
       return false;
     }
@@ -409,7 +422,7 @@ PRE_CLICK_SAFETY_SCRIPT = r"""
       const parsed = new URL(String(value));
       return parsed.protocol === "https:" && parsed.origin === "https://oatd.org" &&
         parsed.hostname === "oatd.org" && parsed.port === "" &&
-        parsed.username === "" && parsed.password === "";
+        parsed.username === "" && parsed.password === "" && parsed.hash === "";
     } catch (_) {
       return false;
     }
@@ -468,6 +481,114 @@ PRE_CLICK_SAFETY_SCRIPT = r"""
 }
 """
 
+NATIVE_SUBMIT_GUARD_SCRIPT = r"""
+(submitter) => {
+  const empty = () => ({
+    current_canonical_home_route: false,
+    source_identity: false,
+    exact_https_origin: false,
+    canonical_effective_get_action: false,
+    form_target_self: false,
+    submitter_no_override: false
+  });
+  const normalize = value => String(value || "").replace(/[\s\u2009\u202f]+/g, " ").trim();
+  const visible = element => Boolean(
+    element && (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+  );
+  const formValue = (candidate, name) => {
+    const descriptor = Object.getOwnPropertyDescriptor(HTMLFormElement.prototype, name);
+    if (!descriptor || typeof descriptor.get !== "function") throw new Error("form getter unavailable");
+    return descriptor.get.call(candidate);
+  };
+  const exactOatdOrigin = value => {
+    try {
+      const parsed = new URL(String(value));
+      return parsed.protocol === "https:" && parsed.origin === "https://oatd.org" &&
+        parsed.hostname === "oatd.org" && parsed.port === "" &&
+        parsed.username === "" && parsed.password === "" && parsed.hash === "";
+    } catch (_) {
+      return false;
+    }
+  };
+  const isSelfTarget = target => target === "" || target.toLowerCase() === "_self";
+  const safetyFor = () => {
+    const result = empty();
+    try {
+      if (!(submitter instanceof HTMLButtonElement) && !(submitter instanceof HTMLInputElement)) {
+        return result;
+      }
+      const form = submitter.form;
+      if (!(form instanceof HTMLFormElement)) return result;
+      const current = new URL(window.location.href);
+      result.exact_https_origin = exactOatdOrigin(current.href);
+      result.current_canonical_home_route = result.exact_https_origin &&
+        current.pathname === "/" && current.search === "" && current.hash === "";
+
+      const sourceTitle = /\bOATD\b/i.test(normalize(document.title));
+      const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
+        .some(element => normalize(element.textContent) === "Open Access Theses and Dissertations");
+      result.source_identity = Boolean(sourceTitle && sourceHeading);
+
+      const isCanonicalEffectiveGet = candidate => {
+        if (!(candidate instanceof HTMLFormElement)) return false;
+        try {
+          const action = new URL(String(formValue(candidate, "action")));
+          return exactOatdOrigin(action.href) && action.pathname === "/oatd/search-composer" &&
+            action.search === "" && action.hash === "" &&
+            String(formValue(candidate, "method")).toLowerCase() === "get";
+        } catch (_) {
+          return false;
+        }
+      };
+      const canonicalForms = Array.from(document.forms).filter(isCanonicalEffectiveGet);
+      result.canonical_effective_get_action = Boolean(
+        isCanonicalEffectiveGet(form) && canonicalForms.length === 1 && canonicalForms[0] === form
+      );
+
+      const effectiveTarget = String(formValue(form, "target") || "");
+      const baseTargetsAreSelf = Array.from(document.querySelectorAll("base[target]"))
+        .every(base => isSelfTarget(String(base.getAttribute("target") || "")));
+      result.form_target_self = isSelfTarget(effectiveTarget) && baseTargetsAreSelf;
+
+      const nativeSubmits = Array.from(form.querySelectorAll("button, input")).filter(element =>
+        visible(element) && ((element.tagName === "BUTTON" && element.type === "submit") ||
+          (element.tagName === "INPUT" && element.type === "submit"))
+      );
+      result.submitter_no_override = Boolean(
+        nativeSubmits.length === 1 && nativeSubmits[0] === submitter && submitter.form === form &&
+        !Element.prototype.hasAttribute.call(submitter, "formaction") &&
+        !Element.prototype.hasAttribute.call(submitter, "formmethod") &&
+        !Element.prototype.hasAttribute.call(submitter, "formtarget")
+      );
+    } catch (_) {
+      return empty();
+    }
+    return result;
+  };
+  const safety = safetyFor();
+  if (!Object.values(safety).every(Boolean)) return safety;
+  const form = submitter.form;
+  const blockUnsafeDefault = event => {
+    if (event.type === "submit" && event.target !== form) return;
+    const stillSafe = safetyFor();
+    const exactSubmitter = event.type !== "submit" || event.submitter === submitter;
+    if (!exactSubmitter || !Object.values(stillSafe).every(Boolean)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
+    // Stop later page submit handlers from changing action/target after this
+    // final proof while preserving the browser's native default submission.
+    if (event.type === "submit") event.stopImmediatePropagation();
+  };
+  // Pin the exact node and recheck at both native default-action boundaries.
+  // A changed action, target, or submitter therefore cancels rather than submits.
+  submitter.addEventListener("click", blockUnsafeDefault, { capture: true, once: true });
+  window.addEventListener("submit", blockUnsafeDefault, true);
+  return safety;
+}
+"""
+
 FORM_CONTROL_INVENTORY_SCRIPT = r"""
 (form, names) => {
   const allowed = new Set(names);
@@ -494,6 +615,23 @@ FORM_CONTROL_INVENTORY_SCRIPT = r"""
 }
 """
 
+CANONICAL_ADVANCED_ROUTE_SCRIPT = r"""
+(value) => {
+  try {
+    const raw = String(value);
+    const authority = raw.match(/^https:\/\/([^/?#]*)/);
+    if (!authority || authority[1] !== "oatd.org" || raw.includes("#")) return false;
+    const location = new URL(raw);
+    return location.protocol === "https:" && location.origin === "https://oatd.org" &&
+      location.hostname === "oatd.org" && location.port === "" &&
+      location.username === "" && location.password === "" &&
+      location.pathname === "/oatd/search-composer" && location.hash === "";
+  } catch (_) {
+    return false;
+  }
+}
+"""
+
 POST_CLICK_STATE_SCRIPT = r"""
 (payload) => {
   const normalize = value => String(value || "").replace(/[\s\u2009\u202f]+/g, " ").trim();
@@ -515,17 +653,14 @@ POST_CLICK_STATE_SCRIPT = r"""
   const busy = busyPattern.test(errors) || (!sourceTitle && busyPattern.test(title));
   const access = /access denied|forbidden|captcha|enable javascript and cookies/i.test(errors);
   const syntaxError = /syntax|could not parse|invalid query|search error/i.test(errors);
-  let canonicalRoute = false;
-  try {
-    const location = new URL(window.location.href);
-    canonicalRoute = location.protocol === "https:" && location.hostname.toLowerCase() === "oatd.org" &&
-      location.pathname === "/oatd/search-composer";
-  } catch (_) {}
+  const canonicalRoute = (__CANONICAL_ADVANCED_ROUTE__)(window.location.href);
   const forms = Array.from(document.forms).filter(form => {
     try {
       const action = new URL(form.getAttribute("action") || "", document.baseURI);
-      return action.protocol === "https:" && action.hostname.toLowerCase() === "oatd.org" &&
-        action.pathname === "/oatd/search-composer" && form.method.toLowerCase() === "get";
+      return action.protocol === "https:" && action.origin === "https://oatd.org" &&
+        action.hostname === "oatd.org" && action.port === "" && action.username === "" &&
+        action.password === "" && action.pathname === "/oatd/search-composer" &&
+        action.search === "" && action.hash === "" && form.method.toLowerCase() === "get";
     } catch (_) {
       return false;
     }
@@ -572,7 +707,7 @@ POST_CLICK_STATE_SCRIPT = r"""
     result_observed: resultObserved
   };
 }
-"""
+""".replace("__CANONICAL_ADVANCED_ROUTE__", CANONICAL_ADVANCED_ROUTE_SCRIPT)
 
 
 def compact(value: Any) -> str:
@@ -619,7 +754,7 @@ def _validate_busy_policy(retries: Any, delay: Any) -> tuple[int, float]:
 
 
 def validate_output_path(value: str) -> Path:
-    """Prepare a create-only receipt destination before browser use."""
+    """Validate a prospective create-only destination before atomic reservation."""
     if not compact(value):
         raise InputValidationError("--output-path must be nonblank")
     candidate = Path(value).expanduser()
@@ -632,6 +767,36 @@ def validate_output_path(value: str) -> Path:
     if not path.parent.is_dir():
         raise InputValidationError("--output-path parent must be a directory")
     return path
+
+
+def reserve_output_path(path: Path) -> OutputReservation:
+    """Atomically claim the final receipt name before any source activity."""
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    return OutputReservation(path=path, descriptor=os.open(path, flags, 0o600))
+
+
+def write_reserved_json(
+    reservation: OutputReservation, payload: Mapping[str, Any]
+) -> None:
+    """Write through a claimed descriptor without ever reopening its pathname."""
+    descriptor = reservation.descriptor
+    if descriptor < 0:
+        raise OSError("receipt reservation is no longer writable")
+    reservation.descriptor = -1
+    encoded = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(encoded)
+    except Exception:
+        # A concurrent winner can replace the name after O_EXCL creation.
+        # Never unlink the current pathname while unwinding a failed write.
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
+        raise
 
 
 def _validate_nonblank(value: str, option: str, maximum: int) -> str:
@@ -906,14 +1071,25 @@ async def prepare_native_submission(
         submit_count = await native_submit.count()
         if submit_count != 1 or not await native_submit.first.is_visible():
             raise ProbeAbort("native_submit_control_not_unique")
-        # This final projection is deliberately adjacent to click. It returns
-        # only booleans, and a changed route/action/target cannot be submitted.
+        # Pin before any final safety projection. A Locator can otherwise
+        # resolve a replacement submitter after a safe form was observed.
+        submitter = await native_submit.first.element_handle()
+        if submitter is None:
+            raise ProbeAbort("native_submit_control_not_unique")
         safety = pre_click_safety_from_payload(
             await form.evaluate(PRE_CLICK_SAFETY_SCRIPT)
         )
         if not safety.verified:
             raise PreClickSafetyFailure(safety)
-        await native_submit.first.click()
+        safety = pre_click_safety_from_payload(
+            await submitter.evaluate(NATIVE_SUBMIT_GUARD_SCRIPT)
+        )
+        if not safety.verified:
+            raise PreClickSafetyFailure(safety)
+        # The guard rechecks the pinned submitter and form at click/submit
+        # default-action boundaries, so mutation cannot turn this into an
+        # unsafe destination or a second form submission.
+        await submitter.click()
     except ProbeAbort:
         raise
     except Exception as error:
@@ -977,10 +1153,16 @@ async def _sleep_to_deadline(
     interval: float,
     clock: Callable[[], float],
     sleeper: Callable[[float], Awaitable[None]],
-) -> None:
+) -> bool:
+    """Sleep no longer than the shared deadline, including a custom sleeper."""
     remaining = deadline - clock()
-    if remaining > 0:
-        await sleeper(min(interval, remaining))
+    if remaining <= 0:
+        return False
+    try:
+        await asyncio.wait_for(sleeper(min(interval, remaining)), timeout=remaining)
+    except asyncio.TimeoutError:
+        return False
+    return clock() < deadline
 
 
 def _outcome(
@@ -1000,6 +1182,35 @@ def _outcome(
     )
 
 
+def _post_click_timeout(
+    *,
+    submission_observed: bool,
+    polls: int,
+    budget: BusyRetryBudget,
+) -> PostClickOutcome:
+    """Return the one fixed timeout outcome without retaining browser details."""
+    return _outcome(
+        "post_submit_state_timeout"
+        if submission_observed
+        else "submission_not_observed_timeout",
+        source_total=None,
+        polls=polls,
+        budget=budget,
+    )
+
+
+def _observed_result_outcome(
+    state: PostClickState, *, polls: int, budget: BusyRetryBudget
+) -> PostClickOutcome:
+    """Classify a terminal result before any busy/retry decision."""
+    return _outcome(
+        "zero_observed" if state.result_kind == "zero" else "result_observed",
+        source_total=0 if state.result_kind == "zero" else state.source_total,
+        polls=polls,
+        budget=budget,
+    )
+
+
 async def wait_for_post_click_state(
     page: Any,
     *,
@@ -1012,46 +1223,65 @@ async def wait_for_post_click_state(
     clock: Callable[[], float] | None = None,
     sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
 ) -> PostClickOutcome:
-    """Poll allowlisted state; only an exclusive busy page can be reissued.
+    """Poll and retry under one absolute post-click deadline.
 
-    No navigation event is awaited as the sole submission proof.  A normal
-    source result, zero, syntax state, challenge, busy response, or bounded
-    technical timeout is instead classified from the owned page's safe state.
+    Every evaluation, respectful wait, recheck, and retry navigation consumes
+    the same deadline. A busy response is reissued only after a fresh safe
+    recheck and never after that deadline has elapsed.
     """
     if clock is None:
         clock = asyncio.get_running_loop().time
     deadline = clock() + timeout_seconds
     polls = 0
     submission_observed = False
+    challenge_seen = False
 
     while True:
-        try:
-            state = await _observe_post_click(page, query, field_value)
-            polls += 1
-        except Exception:
-            if clock() >= deadline:
-                return _outcome(
-                    "post_submit_state_timeout"
-                    if submission_observed
-                    else "submission_not_observed_timeout",
-                    source_total=None,
-                    polls=polls,
-                    budget=busy_budget,
-                )
-            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
-            continue
-
-        submission_observed = submission_observed or state.submission_observed
-        if state.challenge:
-            # A challenge is passive-only.  In particular, it never reaches the
-            # busy-retry branch and no form is clicked a second time.
-            if clock() >= deadline:
+        remaining = deadline - clock()
+        if remaining <= 0:
+            if challenge_seen:
                 return _outcome(
                     "challenge_after_submission",
                     source_total=None,
                     polls=polls,
                     budget=busy_budget,
                 )
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        try:
+            state = await asyncio.wait_for(
+                _observe_post_click(page, query, field_value), timeout=remaining
+            )
+            polls += 1
+        except asyncio.TimeoutError:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        except Exception:
+            if clock() >= deadline:
+                return _post_click_timeout(
+                    submission_observed=submission_observed,
+                    polls=polls,
+                    budget=busy_budget,
+                )
+            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+            continue
+
+        if clock() >= deadline:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        submission_observed = submission_observed or state.submission_observed
+        if state.challenge:
+            # A challenge is passive-only. It never reaches busy retry.
+            challenge_seen = True
             await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
             continue
         if state.access:
@@ -1069,130 +1299,142 @@ async def wait_for_post_click_state(
                 budget=busy_budget,
             )
         if state.result_observed:
-            if state.result_kind == "zero":
-                return _outcome(
-                    "zero_observed",
-                    source_total=0,
-                    polls=polls,
-                    budget=busy_budget,
-                )
-            return _outcome(
-                "result_observed",
-                source_total=state.source_total,
-                polls=polls,
-                budget=busy_budget,
-            )
-        if state.busy:
-            if not state.busy_retry_safe:
-                return _outcome(
-                    "busy_after_submission",
-                    source_total=None,
-                    polls=polls,
-                    budget=busy_budget,
-                )
-            delay = busy_budget.reserve_delay()
-            if delay is None:
-                return _outcome(
-                    "busy_after_submission",
-                    source_total=None,
-                    polls=polls,
-                    budget=busy_budget,
-                )
-            # Match adapter v3: retain the same owned tab, wait respectfully,
-            # then revalidate before making one canonical extra GET request.
-            await sleeper(delay)
-            try:
-                rechecked = await _observe_post_click(page, query, field_value)
-                polls += 1
-            except Exception:
-                return _outcome(
-                    "busy_revalidation_failed",
-                    source_total=None,
-                    polls=polls,
-                    budget=busy_budget,
-                )
-            submission_observed = submission_observed or rechecked.submission_observed
-            if rechecked.challenge:
-                deadline = clock() + timeout_seconds
-                await _sleep_to_deadline(
-                    deadline, poll_interval_seconds, clock, sleeper
-                )
-                continue
-            if not rechecked.busy:
-                deadline = clock() + timeout_seconds
-                # Process the newly observed non-busy state without issuing a
-                # second page evaluation or any navigation.
-                state = rechecked
-                if state.access:
-                    return _outcome(
-                        "access_after_submission",
-                        source_total=None,
-                        polls=polls,
-                        budget=busy_budget,
-                    )
-                if state.syntax_error:
-                    return _outcome(
-                        "syntax_after_submission",
-                        source_total=None,
-                        polls=polls,
-                        budget=busy_budget,
-                    )
-                if state.result_observed:
-                    return _outcome(
-                        "zero_observed"
-                        if state.result_kind == "zero"
-                        else "result_observed",
-                        source_total=0
-                        if state.result_kind == "zero"
-                        else state.source_total,
-                        polls=polls,
-                        budget=busy_budget,
-                    )
-                await _sleep_to_deadline(
-                    deadline, poll_interval_seconds, clock, sleeper
-                )
-                continue
-            if not rechecked.busy_retry_safe:
-                return _outcome(
-                    "busy_after_submission",
-                    source_total=None,
-                    polls=polls,
-                    budget=busy_budget,
-                )
-            try:
-                retry_url = canonical_retry_url(retry_parameters)
-            except ProbeAbort:
-                raise
-            # Account before the await: a transport error can occur after the
-            # browser dispatched the GET, so this attempt must never read zero.
-            busy_budget.record_retry_attempt()
-            try:
-                await page.goto(
-                    retry_url,
-                    wait_until="domcontentloaded",
-                    timeout=_milliseconds(timeout_seconds),
-                )
-                busy_budget.record_retry_completion()
-            except Exception:
-                return _outcome(
-                    "busy_retry_navigation_failed",
-                    source_total=None,
-                    polls=polls,
-                    budget=busy_budget,
-                )
-            deadline = clock() + timeout_seconds
+            return _observed_result_outcome(state, polls=polls, budget=busy_budget)
+        if not state.busy:
+            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
             continue
-
-        if clock() >= deadline:
+        if not state.busy_retry_safe:
             return _outcome(
-                "post_submit_state_timeout"
-                if submission_observed
-                else "submission_not_observed_timeout",
+                "busy_after_submission",
                 source_total=None,
                 polls=polls,
                 budget=busy_budget,
             )
-        await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+
+        delay = busy_budget.reserve_delay()
+        if delay is None:
+            return _outcome(
+                "busy_after_submission",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+        # Respect the requested backoff only up to the common deadline.
+        await _sleep_to_deadline(deadline, delay, clock, sleeper)
+        remaining = deadline - clock()
+        if remaining <= 0:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        try:
+            rechecked = await asyncio.wait_for(
+                _observe_post_click(page, query, field_value), timeout=remaining
+            )
+            polls += 1
+        except asyncio.TimeoutError:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        except Exception:
+            return _outcome(
+                "busy_revalidation_failed",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+
+        if clock() >= deadline:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        submission_observed = submission_observed or rechecked.submission_observed
+        if rechecked.challenge:
+            challenge_seen = True
+            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+            continue
+        if rechecked.access:
+            return _outcome(
+                "access_after_submission",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+        if rechecked.syntax_error:
+            return _outcome(
+                "syntax_after_submission",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+        # A terminal result wins even if an inconsistent busy marker remains.
+        # In particular, it must not cause a canonical retry GET.
+        if rechecked.result_observed:
+            return _observed_result_outcome(rechecked, polls=polls, budget=busy_budget)
+        if not rechecked.busy:
+            await _sleep_to_deadline(deadline, poll_interval_seconds, clock, sleeper)
+            continue
+        if not rechecked.busy_retry_safe:
+            return _outcome(
+                "busy_after_submission",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+
+        # Do not construct or dispatch an extra request once time has expired.
+        remaining = deadline - clock()
+        if remaining <= 0:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        retry_url = canonical_retry_url(retry_parameters)
+        remaining = deadline - clock()
+        if remaining <= 0:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        # Account before the await: transport failure can follow dispatch.
+        busy_budget.record_retry_attempt()
+        try:
+            await asyncio.wait_for(
+                page.goto(
+                    retry_url,
+                    wait_until="domcontentloaded",
+                    timeout=_milliseconds(remaining),
+                ),
+                timeout=remaining,
+            )
+            busy_budget.record_retry_completion()
+        except asyncio.TimeoutError:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        except Exception:
+            return _outcome(
+                "busy_retry_navigation_failed",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
+        if clock() >= deadline:
+            return _post_click_timeout(
+                submission_observed=submission_observed,
+                polls=polls,
+                budget=busy_budget,
+            )
+        continue
 
 
 async def target_id_for(context: Any, page: Any) -> str | None:
@@ -1215,7 +1457,7 @@ async def target_id_for(context: Any, page: Any) -> str | None:
 
 
 async def active_target_ids(browser: Any) -> frozenset[str] | None:
-    """Read an unambiguous browser-level page-target inventory in memory."""
+    """Read every CDP target identity needed for exact baseline restoration."""
     session: Any | None = None
     try:
         session = await browser.new_browser_cdp_session()
@@ -1223,19 +1465,25 @@ async def active_target_ids(browser: Any) -> frozenset[str] | None:
         infos = payload.get("targetInfos") if isinstance(payload, Mapping) else None
         if not isinstance(infos, list):
             return None
-        page_target_ids: list[str] = []
+        target_ids: list[str] = []
         for item in infos:
             if not isinstance(item, Mapping):
                 return None
-            if item.get("type") != "page":
-                continue
+            target_type = item.get("type")
             target_id = item.get("targetId")
-            if type(target_id) is not str or not target_id:
+            if (
+                type(target_type) is not str
+                or not target_type
+                or type(target_id) is not str
+                or not target_id
+            ):
                 return None
-            page_target_ids.append(target_id)
-        if len(page_target_ids) != len(set(page_target_ids)):
+            # Persistent workers and service workers are part of an exact
+            # target baseline; do not silently filter them out.
+            target_ids.append(target_id)
+        if len(target_ids) != len(set(target_ids)):
             return None
-        return frozenset(page_target_ids)
+        return frozenset(target_ids)
     except Exception:
         return None
     finally:
@@ -1244,6 +1492,55 @@ async def active_target_ids(browser: Any) -> frozenset[str] | None:
                 await session.detach()
             except Exception:
                 pass
+
+
+async def _active_target_ids_to_deadline(
+    browser: Any, deadline: float, clock: Callable[[], float]
+) -> frozenset[str] | None:
+    """Bound an inventory request while cleanup ownership remains live."""
+    remaining = deadline - clock()
+    if remaining <= 0:
+        return None
+    try:
+        return await asyncio.wait_for(active_target_ids(browser), timeout=remaining)
+    except asyncio.TimeoutError:
+        return None
+
+
+async def recover_owned_target_for_cleanup(
+    browser: Any,
+    context: Any,
+    owned_page: Any,
+    baseline_target_ids: frozenset[str],
+    *,
+    clock: Callable[[], float],
+    sleeper: Callable[[float], Awaitable[None]],
+) -> str | None:
+    """Boundedly reprove a distinct target before closing an uncertain page."""
+    deadline = clock() + CLEANUP_TIMEOUT_SECONDS
+    while True:
+        remaining = deadline - clock()
+        if remaining <= 0:
+            return None
+        try:
+            target_id = await asyncio.wait_for(
+                target_id_for(context, owned_page), timeout=remaining
+            )
+        except asyncio.TimeoutError:
+            return None
+        targets = await _active_target_ids_to_deadline(browser, deadline, clock)
+        if (
+            target_id is not None
+            and target_id not in baseline_target_ids
+            and targets is not None
+            and target_id in targets
+        ):
+            return target_id
+        if clock() >= deadline:
+            return None
+        await _sleep_to_deadline(
+            deadline, CLEANUP_POLL_INTERVAL_SECONDS, clock, sleeper
+        )
 
 
 def baseline_pages_preserved(context: Any, baseline_pages: tuple[Any, ...]) -> bool:
@@ -1269,7 +1566,7 @@ async def _wait_for_target_disappearance(
     """Retain the narrow helper for callers that need disappearance alone."""
     deadline = clock() + CLEANUP_TIMEOUT_SECONDS
     while True:
-        targets = await active_target_ids(browser)
+        targets = await _active_target_ids_to_deadline(browser, deadline, clock)
         if targets is None:
             return False
         if target_id not in targets:
@@ -1292,7 +1589,7 @@ async def _wait_for_baseline_target_set(
     """Wait only for the exact pre-create target set to be restored."""
     deadline = clock() + CLEANUP_TIMEOUT_SECONDS
     while True:
-        targets = await active_target_ids(browser)
+        targets = await _active_target_ids_to_deadline(browser, deadline, clock)
         if targets is None:
             return False, False
         target_disappeared = owned_target_id not in targets
@@ -1324,9 +1621,13 @@ async def cleanup_owned_page(
     page_closed = False
     target_disappeared = False
     baseline_target_set_preserved: bool | None = None
+    close_deadline = clock() + CLEANUP_TIMEOUT_SECONDS
     try:
         if not owned_page.is_closed():
-            await owned_page.close()
+            remaining = close_deadline - clock()
+            if remaining <= 0:
+                raise asyncio.TimeoutError
+            await asyncio.wait_for(owned_page.close(), timeout=remaining)
         page_closed = bool(owned_page.is_closed())
     except Exception:
         page_closed = False
@@ -1458,7 +1759,7 @@ async def run_probe(
     clock: Callable[[], float] | None = None,
     sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
 ) -> tuple[int, dict[str, Any]]:
-    """Run the opt-in source action while preserving all baseline pages."""
+    """Reserve a receipt and run the opt-in action with live cleanup."""
     try:
         config = validate_runtime_config(config)
     except Exception:
@@ -1468,220 +1769,308 @@ async def run_probe(
         return 1, receipt
 
     receipt = new_receipt(config.execute)
-    if not config.execute:
-        _set_result(receipt, "dry_run")
-        receipt["result"]["status"] = "not_run"
-        return 0, receipt
-
-    if clock is None:
-        clock = asyncio.get_running_loop().time
-    if playwright_factory is None:
-        from playwright.async_api import async_playwright
-
-        playwright_factory = async_playwright
+    try:
+        # Claim the final name before importing or constructing Playwright so a
+        # concurrent winner prevents every source action, not merely the write.
+        reservation = reserve_output_path(config.output_path)
+    except OSError:
+        _set_result(receipt, "output_reservation_failed")
+        return 1, receipt
 
     browser: Any | None = None
     context: Any | None = None
     owned_page: Any | None = None
+    owned_page_distinct = False
     owned_page_safe_to_close = False
+    post_create_inventory_failed = False
+    post_create_reverification_required = False
     owned_target_id: str | None = None
     baseline_pages: tuple[Any, ...] = ()
     baseline_target_ids: frozenset[str] | None = None
     primary_classification = "browser_connection_failed"
     primary_total: int | None = None
+    output_write_failed = False
 
     try:
-        # The cleanup finally is deliberately nested inside this live context.
-        # Leaving it first was the P03 defect this utility corrects.
-        async with playwright_factory() as playwright:
+        if not config.execute:
+            primary_classification = "dry_run"
+        else:
+            if clock is None:
+                clock = asyncio.get_running_loop().time
+            if playwright_factory is None:
+                from playwright.async_api import async_playwright
+
+                playwright_factory = async_playwright
+
             try:
-                browser = await playwright.chromium.connect_over_cdp(
-                    config.cdp_url, timeout=_milliseconds(config.timeout_seconds)
-                )
-                contexts = tuple(browser.contexts)
-                receipt["ownership"]["existing_context_count"] = len(contexts)
-                if len(contexts) != 1:
-                    raise ProbeAbort("unexpected_browser_context_count")
-                context = contexts[0]
-                baseline_pages = tuple(context.pages)
-                receipt["ownership"]["baseline_page_count"] = len(baseline_pages)
-                # Browser-level target ownership is the authority. Snapshot it
-                # before creating anything, while retaining IDs only in memory.
-                baseline_target_ids = await active_target_ids(browser)
-                if baseline_target_ids is None:
-                    raise ProbeAbort("baseline_target_inventory_unavailable")
-
-                owned_page = await context.new_page()
-                receipt["ownership"]["owned_page_created"] = True
-                distinct = all(
-                    owned_page is not baseline for baseline in baseline_pages
-                )
-                receipt["ownership"]["owned_page_distinct_from_baseline"] = distinct
-                if not distinct:
-                    raise ProbeAbort("owned_page_not_distinct")
-
-                post_create_target_ids = await active_target_ids(browser)
-                owned_target_id = await target_id_for(context, owned_page)
-                owned_target_is_new = bool(
-                    owned_target_id is not None
-                    and post_create_target_ids is not None
-                    and owned_target_id in post_create_target_ids
-                    and owned_target_id not in baseline_target_ids
-                )
-                # A target that is proven non-baseline is safe to close even if
-                # a concurrent target mutation makes the run fail before goto.
-                owned_page_safe_to_close = owned_target_is_new
-                target_verified = False
-                if owned_target_is_new and post_create_target_ids is not None:
-                    assert owned_target_id is not None
-                    expected_target_ids = baseline_target_ids | frozenset(
-                        {owned_target_id}
-                    )
-                    target_verified = (
-                        post_create_target_ids == expected_target_ids
-                        and post_create_target_ids - baseline_target_ids
-                        == frozenset({owned_target_id})
-                    )
-                receipt["ownership"]["owned_target_verified"] = target_verified
-                if not target_verified:
-                    raise ProbeAbort("owned_target_not_verified")
-
-                await owned_page.goto(
-                    HOME_URL,
-                    wait_until="domcontentloaded",
-                    timeout=_milliseconds(config.timeout_seconds),
-                )
-                inspection = await inspect_advanced_form(owned_page, config.field_label)
-                submission = receipt["submission"]
-                submission["canonical_form_count"] = inspection.canonical_form_count
-                submission["canonical_get_form"] = (
-                    inspection.canonical_form_count == 1 and inspection.method_get
-                )
-                submission["box1_count"] = inspection.box1_count
-                submission["field1_count"] = inspection.field1_count
-                submission["exact_field_mapping"] = (
-                    inspection.matching_field_option_count == 1
-                    and inspection.field_value is not None
-                )
-                submission["visible_native_submit_count"] = (
-                    inspection.visible_native_submit_count
-                )
-                pre_submit_abort = _pre_submit_abort(inspection)
-                if pre_submit_abort is not None:
-                    raise ProbeAbort(pre_submit_abort)
-
-                prepared = await prepare_native_submission(
-                    owned_page, inspection, config.query
-                )
-                submission["nonblank_control_readback"] = True
-                submission["visible_native_submit_count"] = (
-                    prepared.visible_native_submit_count
-                )
-                _apply_pre_click_safety(receipt, prepared.pre_click_safety)
-                submission["native_submit_clicked"] = True
-                assert inspection.field_value is not None
-                outcome = await wait_for_post_click_state(
-                    owned_page,
-                    query=config.query,
-                    field_value=inspection.field_value,
-                    retry_parameters=prepared.retry_parameters,
-                    timeout_seconds=config.timeout_seconds,
-                    poll_interval_seconds=config.poll_interval_seconds,
-                    busy_budget=BusyRetryBudget(
-                        max_retries=config.busy_retries,
-                        initial_delay_seconds=config.busy_retry_delay_seconds,
-                    ),
-                    clock=clock,
-                    sleeper=sleeper,
-                )
-                submission["post_click_polls"] = outcome.polls
-                submission["busy_recovery_attempts"] = outcome.busy_recovery_attempts
-                submission["busy_retries_attempted"] = outcome.busy_retries_attempted
-                submission["busy_retries_completed"] = outcome.busy_retries_completed
-                submission["busy_retries_performed"] = outcome.busy_retries_performed
-                primary_classification = outcome.classification
-                primary_total = outcome.source_total
-            except PreClickSafetyFailure as error:
-                _apply_pre_click_safety(receipt, error.safety)
-                primary_classification = "pre_click_safety_not_verified"
-            except ProbeAbort as error:
-                primary_classification = safe_probe_abort_classification(error)
-            except Exception:
-                # Do not serialize an exception class or string: both can carry
-                # source URL/query information in a browser implementation.
-                primary_classification = "owned_page_operation_failed"
-            finally:
-                if (
-                    owned_page is not None
-                    and owned_page_safe_to_close
-                    and browser is not None
-                    and context is not None
-                    and baseline_target_ids is not None
-                ):
+                # Cleanup remains inside this live browser context so target
+                # disappearance and every target-type baseline are observable.
+                async with playwright_factory() as playwright:
                     try:
-                        cleanup = await cleanup_owned_page(
-                            browser,
-                            context,
+                        browser = await playwright.chromium.connect_over_cdp(
+                            config.cdp_url,
+                            timeout=_milliseconds(config.timeout_seconds),
+                        )
+                        contexts = tuple(browser.contexts)
+                        receipt["ownership"]["existing_context_count"] = len(contexts)
+                        if len(contexts) != 1:
+                            raise ProbeAbort("unexpected_browser_context_count")
+                        context = contexts[0]
+                        baseline_pages = tuple(context.pages)
+                        receipt["ownership"]["baseline_page_count"] = len(
+                            baseline_pages
+                        )
+                        baseline_target_ids = await active_target_ids(browser)
+                        if baseline_target_ids is None:
+                            raise ProbeAbort("baseline_target_inventory_unavailable")
+
+                        owned_page = await context.new_page()
+                        receipt["ownership"]["owned_page_created"] = True
+                        owned_page_distinct = all(
+                            owned_page is not baseline for baseline in baseline_pages
+                        )
+                        receipt["ownership"]["owned_page_distinct_from_baseline"] = (
+                            owned_page_distinct
+                        )
+                        if not owned_page_distinct:
+                            raise ProbeAbort("owned_page_not_distinct")
+
+                        post_create_timeout = min(
+                            config.timeout_seconds, CLEANUP_TIMEOUT_SECONDS
+                        )
+                        try:
+                            post_create_target_ids = await asyncio.wait_for(
+                                active_target_ids(browser), timeout=post_create_timeout
+                            )
+                        except asyncio.TimeoutError:
+                            post_create_target_ids = None
+                        post_create_inventory_failed = post_create_target_ids is None
+                        try:
+                            owned_target_id = await asyncio.wait_for(
+                                target_id_for(context, owned_page),
+                                timeout=post_create_timeout,
+                            )
+                        except asyncio.TimeoutError:
+                            owned_target_id = None
+                        post_create_reverification_required = bool(
+                            post_create_inventory_failed or owned_target_id is None
+                        )
+                        owned_target_is_new = bool(
+                            owned_target_id is not None
+                            and post_create_target_ids is not None
+                            and owned_target_id in post_create_target_ids
+                            and owned_target_id not in baseline_target_ids
+                        )
+                        # A target proven non-baseline is safe to close even if
+                        # concurrent target mutation blocks the home navigation.
+                        owned_page_safe_to_close = owned_target_is_new
+                        target_verified = False
+                        if owned_target_is_new and post_create_target_ids is not None:
+                            assert owned_target_id is not None
+                            expected_target_ids = baseline_target_ids | frozenset(
+                                {owned_target_id}
+                            )
+                            target_verified = (
+                                post_create_target_ids == expected_target_ids
+                                and post_create_target_ids - baseline_target_ids
+                                == frozenset({owned_target_id})
+                            )
+                        receipt["ownership"]["owned_target_verified"] = target_verified
+                        if not target_verified:
+                            raise ProbeAbort("owned_target_not_verified")
+
+                        await owned_page.goto(
+                            HOME_URL,
+                            wait_until="domcontentloaded",
+                            timeout=_milliseconds(config.timeout_seconds),
+                        )
+                        inspection = await inspect_advanced_form(
+                            owned_page, config.field_label
+                        )
+                        submission = receipt["submission"]
+                        submission["canonical_form_count"] = (
+                            inspection.canonical_form_count
+                        )
+                        submission["canonical_get_form"] = (
+                            inspection.canonical_form_count == 1
+                            and inspection.method_get
+                        )
+                        submission["box1_count"] = inspection.box1_count
+                        submission["field1_count"] = inspection.field1_count
+                        submission["exact_field_mapping"] = (
+                            inspection.matching_field_option_count == 1
+                            and inspection.field_value is not None
+                        )
+                        submission["visible_native_submit_count"] = (
+                            inspection.visible_native_submit_count
+                        )
+                        pre_submit_abort = _pre_submit_abort(inspection)
+                        if pre_submit_abort is not None:
+                            raise ProbeAbort(pre_submit_abort)
+
+                        prepared = await prepare_native_submission(
+                            owned_page, inspection, config.query
+                        )
+                        submission["nonblank_control_readback"] = True
+                        submission["visible_native_submit_count"] = (
+                            prepared.visible_native_submit_count
+                        )
+                        _apply_pre_click_safety(receipt, prepared.pre_click_safety)
+                        submission["native_submit_clicked"] = True
+                        assert inspection.field_value is not None
+                        outcome = await wait_for_post_click_state(
                             owned_page,
-                            owned_target_id,
-                            baseline_pages,
-                            baseline_target_ids=baseline_target_ids,
+                            query=config.query,
+                            field_value=inspection.field_value,
+                            retry_parameters=prepared.retry_parameters,
+                            timeout_seconds=config.timeout_seconds,
+                            poll_interval_seconds=config.poll_interval_seconds,
+                            busy_budget=BusyRetryBudget(
+                                max_retries=config.busy_retries,
+                                initial_delay_seconds=config.busy_retry_delay_seconds,
+                            ),
                             clock=clock,
                             sleeper=sleeper,
                         )
-                        ownership = receipt["ownership"]
-                        ownership["owned_page_close_attempted"] = (
-                            cleanup.close_attempted
+                        submission["post_click_polls"] = outcome.polls
+                        submission["busy_recovery_attempts"] = (
+                            outcome.busy_recovery_attempts
                         )
-                        ownership["owned_page_closed"] = cleanup.page_closed
-                        ownership["owned_target_disappeared"] = (
-                            cleanup.target_disappeared
+                        submission["busy_retries_attempted"] = (
+                            outcome.busy_retries_attempted
                         )
-                        ownership["baseline_pages_preserved"] = (
-                            cleanup.baseline_preserved
+                        submission["busy_retries_completed"] = (
+                            outcome.busy_retries_completed
                         )
-                        ownership["baseline_target_set_preserved"] = (
-                            cleanup.baseline_target_set_preserved
+                        submission["busy_retries_performed"] = (
+                            outcome.busy_retries_performed
                         )
-                        if not cleanup.verified:
-                            primary_classification = "cleanup_verification_failed"
-                            primary_total = None
+                        primary_classification = outcome.classification
+                        primary_total = outcome.source_total
+                    except PreClickSafetyFailure as error:
+                        _apply_pre_click_safety(receipt, error.safety)
+                        primary_classification = "pre_click_safety_not_verified"
+                    except ProbeAbort as error:
+                        primary_classification = safe_probe_abort_classification(error)
                     except Exception:
-                        receipt["ownership"]["owned_page_close_attempted"] = True
-                        receipt["ownership"]["baseline_pages_preserved"] = False
-                        receipt["ownership"]["baseline_target_set_preserved"] = False
-                        primary_classification = "cleanup_verification_failed"
-                        primary_total = None
-    except Exception:
-        # This also remains identifier-free if Playwright cannot start/stop.
-        # Do not downgrade a proven cleanup failure to a transport category.
-        if primary_classification != "cleanup_verification_failed":
-            primary_classification = "browser_connection_failed"
-            primary_total = None
+                        # Do not serialize browser exceptions: they can carry
+                        # source URLs or query values in an implementation.
+                        primary_classification = "owned_page_operation_failed"
+                    finally:
+                        can_attempt_cleanup = bool(
+                            owned_page is not None
+                            and owned_page_distinct
+                            and browser is not None
+                            and context is not None
+                            and baseline_target_ids is not None
+                        )
+                        if can_attempt_cleanup and post_create_reverification_required:
+                            # An unavailable post-create proof must not strand
+                            # a distinct page. Reprove it boundedly or hand off.
+                            if not owned_page_safe_to_close:
+                                try:
+                                    recovered_target_id = (
+                                        await recover_owned_target_for_cleanup(
+                                            browser,
+                                            context,
+                                            owned_page,
+                                            baseline_target_ids,
+                                            clock=clock,
+                                            sleeper=sleeper,
+                                        )
+                                    )
+                                except Exception:
+                                    recovered_target_id = None
+                                if recovered_target_id is None:
+                                    receipt["ownership"]["baseline_pages_preserved"] = (
+                                        baseline_pages_preserved(
+                                            context, baseline_pages
+                                        )
+                                    )
+                                    receipt["ownership"][
+                                        "baseline_target_set_preserved"
+                                    ] = False
+                                    primary_classification = (
+                                        "owned_page_cleanup_handoff_required"
+                                    )
+                                    primary_total = None
+                                else:
+                                    owned_target_id = recovered_target_id
+                                    owned_page_safe_to_close = True
+                        if can_attempt_cleanup and owned_page_safe_to_close:
+                            try:
+                                cleanup = await cleanup_owned_page(
+                                    browser,
+                                    context,
+                                    owned_page,
+                                    owned_target_id,
+                                    baseline_pages,
+                                    baseline_target_ids=baseline_target_ids,
+                                    clock=clock,
+                                    sleeper=sleeper,
+                                )
+                                ownership = receipt["ownership"]
+                                ownership["owned_page_close_attempted"] = (
+                                    cleanup.close_attempted
+                                )
+                                ownership["owned_page_closed"] = cleanup.page_closed
+                                ownership["owned_target_disappeared"] = (
+                                    cleanup.target_disappeared
+                                )
+                                ownership["baseline_pages_preserved"] = (
+                                    cleanup.baseline_preserved
+                                )
+                                ownership["baseline_target_set_preserved"] = (
+                                    cleanup.baseline_target_set_preserved
+                                )
+                                if not cleanup.verified:
+                                    primary_classification = (
+                                        "cleanup_verification_failed"
+                                    )
+                                    primary_total = None
+                            except Exception:
+                                receipt["ownership"]["owned_page_close_attempted"] = (
+                                    True
+                                )
+                                receipt["ownership"]["baseline_pages_preserved"] = False
+                                receipt["ownership"][
+                                    "baseline_target_set_preserved"
+                                ] = False
+                                primary_classification = "cleanup_verification_failed"
+                                primary_total = None
+            except Exception:
+                # Do not downgrade a proven cleanup failure or explicit
+                # handoff to a transport category if Playwright stops poorly.
+                if primary_classification not in {
+                    "cleanup_verification_failed",
+                    "owned_page_cleanup_handoff_required",
+                }:
+                    primary_classification = "browser_connection_failed"
+                    primary_total = None
+    finally:
+        _set_result(receipt, primary_classification, primary_total)
+        if not config.execute:
+            receipt["result"]["status"] = "not_run"
+        try:
+            write_reserved_json(reservation, receipt)
+        except Exception:
+            output_write_failed = True
 
-    _set_result(receipt, primary_classification, primary_total)
-    return (0 if receipt["result"]["observations_accepted"] else 1), receipt
+    if output_write_failed:
+        return 2, receipt
+    return (
+        0 if not config.execute or receipt["result"]["observations_accepted"] else 1,
+        receipt,
+    )
 
 
 def write_new_json(path: Path, payload: Mapping[str, Any]) -> None:
     """Write one UTF-8 receipt with O_EXCL; never overwrite a prior artifact."""
-    encoded = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
-    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
-    if hasattr(os, "O_NOFOLLOW"):
-        flags |= os.O_NOFOLLOW
-    descriptor = os.open(path, flags, 0o600)
-    try:
-        with os.fdopen(descriptor, "wb") as handle:
-            handle.write(encoded)
-    except Exception:
-        # The final name is create-only.  It can be replaced by a concurrent
-        # winner after O_EXCL creation, so rollback must never unlink it.
-        # A failed write remains a quarantined, non-success artifact instead.
-        raise
+    write_reserved_json(reserve_output_path(path), payload)
 
 
 def parse_args(argv: list[str] | None = None) -> ProbeConfig:
-    """Validate every input and receipt collision before browser import/use."""
+    """Validate every input and a prospective receipt destination."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--execute", action="store_true", help="permit one source action"
@@ -1736,14 +2125,9 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
 def main(argv: list[str] | None = None) -> int:
     config = parse_args(argv)
     try:
-        status, receipt = asyncio.run(run_probe(config))
+        status, _ = asyncio.run(run_probe(config))
     except Exception:
-        status, receipt = 1, new_receipt(config.execute)
-        _set_result(receipt, "internal_probe_failure")
-    try:
-        write_new_json(config.output_path, receipt)
-    except OSError:
-        # Do not echo a path: it can be private controller infrastructure.
+        # run_probe owns the pre-source reservation and its safe final write.
         return 2
     return status
 

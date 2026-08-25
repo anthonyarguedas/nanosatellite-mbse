@@ -6,10 +6,10 @@ import asyncio
 import importlib.util
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
-from unittest import mock
 from pathlib import Path
 from unittest import mock
 
@@ -128,12 +128,7 @@ class TargetSession:
             assert self.page is not None
             return {"targetInfo": {"targetId": self.page.target_id}}
         if method == "Target.getTargets":
-            return {
-                "targetInfos": [
-                    {"type": "page", "targetId": page.target_id}
-                    for page in self.browser.target_pages()
-                ]
-            }
+            return {"targetInfos": self.browser.target_infos()}
         raise AssertionError(method)
 
     async def detach(self) -> None:
@@ -209,11 +204,18 @@ class LeaseContext:
 
 class LeaseBrowser:
     def __init__(
-        self, context: LeaseContext, *, retain_closed_target: bool = False
+        self,
+        context: LeaseContext,
+        *,
+        retain_closed_target: bool = False,
+        persistent_worker_delta: bool = False,
+        post_create_inventory_failures: int = 0,
     ) -> None:
         self.contexts = [context]
         self.context = context
         self.retain_closed_target = retain_closed_target
+        self.persistent_worker_delta = persistent_worker_delta
+        self.post_create_inventory_failures = post_create_inventory_failures
 
     def target_pages(self) -> list[LeasePage]:
         pages = list(self.context.pages)
@@ -221,6 +223,23 @@ class LeaseBrowser:
             if self.context.created not in pages:
                 pages.append(self.context.created)
         return pages
+
+    def target_infos(self) -> list[dict[str, str]]:
+        if self.context.created is not None and self.post_create_inventory_failures > 0:
+            self.post_create_inventory_failures -= 1
+            raise RuntimeError("offline target inventory failure")
+        infos = [
+            {"type": "page", "targetId": page.target_id} for page in self.target_pages()
+        ]
+        if (
+            self.persistent_worker_delta
+            and self.context.created is not None
+            and self.context.created.is_closed()
+        ):
+            infos.append(
+                {"type": "service_worker", "targetId": "persistent-worker-secret"}
+            )
+        return infos
 
     async def new_browser_cdp_session(self) -> TargetSession:
         return TargetSession(self)
@@ -243,6 +262,8 @@ class LeasePlaywright:
         *,
         close_raises: bool = False,
         retain_closed_target: bool = False,
+        persistent_worker_delta: bool = False,
+        post_create_inventory_failures: int = 0,
         mutate_baseline_on_owned_close: bool = False,
         baseline_count: int = 2,
     ) -> None:
@@ -254,7 +275,10 @@ class LeasePlaywright:
             mutate_baseline_on_owned_close=mutate_baseline_on_owned_close,
         )
         self.browser = LeaseBrowser(
-            self.context, retain_closed_target=retain_closed_target
+            self.context,
+            retain_closed_target=retain_closed_target,
+            persistent_worker_delta=persistent_worker_delta,
+            post_create_inventory_failures=post_create_inventory_failures,
         )
         self.chromium = LeaseChromium(self)
 
@@ -314,7 +338,14 @@ def valid_prepared():
 
 
 class OATDPostClickStateMachineTests(unittest.TestCase):
-    def run_wait(self, page: StatePage, *, retries: int = 2, timeout: float = 1.0):
+    def run_wait(
+        self,
+        page: StatePage,
+        *,
+        retries: int = 2,
+        delay: float = 1.0,
+        timeout: float = 3.0,
+    ):
         clock = FakeClock()
         outcome = asyncio.run(
             oatd.wait_for_post_click_state(
@@ -327,7 +358,7 @@ class OATDPostClickStateMachineTests(unittest.TestCase):
                 ),
                 timeout_seconds=timeout,
                 poll_interval_seconds=0.1,
-                busy_budget=budget(retries),
+                busy_budget=budget(retries, delay),
                 clock=clock,
                 sleeper=clock.sleep,
             )
@@ -360,6 +391,39 @@ class OATDPostClickStateMachineTests(unittest.TestCase):
         self.assertTrue(retry_url.startswith(oatd.ADVANCED_ACTION + "?"))
         self.assertIn("box1=private+query+phrase", retry_url)
         self.assertIn("field1=title", retry_url)
+
+    def test_hanging_post_click_evaluate_is_bounded_by_the_absolute_deadline(self):
+        class HangingEvaluatePage(StatePage):
+            async def evaluate(self, *_args, **_kwargs):
+                await asyncio.Event().wait()
+
+        outcome, _ = self.run_wait(HangingEvaluatePage([]), timeout=0.01)
+        self.assertEqual(outcome.classification, "submission_not_observed_timeout")
+        self.assertEqual(outcome.polls, 0)
+        self.assertEqual(outcome.busy_retries_attempted, 0)
+
+    def test_busy_delay_is_capped_and_expiry_never_retries(self):
+        page = StatePage([busy_state()])
+        outcome, clock = self.run_wait(page, delay=10.0, timeout=0.5)
+        self.assertEqual(outcome.classification, "post_submit_state_timeout")
+        self.assertEqual(clock.sleeps, [0.5])
+        self.assertEqual(outcome.busy_recovery_attempts, 1)
+        self.assertEqual(outcome.busy_retries_attempted, 0)
+        self.assertEqual(page.goto_calls, [])
+
+    def test_busy_recheck_result_wins_over_busy_and_never_reissues(self):
+        page = StatePage(
+            [busy_state(), post_state(busy=True, kind="range", total=9, observed=True)]
+        )
+        outcome, _ = self.run_wait(page)
+        self.assertEqual(
+            (outcome.classification, outcome.source_total), ("result_observed", 9)
+        )
+        self.assertEqual(outcome.polls, 2)
+        self.assertEqual(outcome.busy_recovery_attempts, 1)
+        self.assertEqual(outcome.busy_retries_attempted, 0)
+        self.assertEqual(outcome.busy_retries_completed, 0)
+        self.assertEqual(page.goto_calls, [])
 
     def test_busy_that_clears_during_respectful_wait_is_not_reissued(self):
         page = StatePage([busy_state(), result_state(2)])
@@ -491,7 +555,7 @@ class OATDFormPreparationTests(unittest.TestCase):
                 changed, query="private query phrase", field_value="title"
             )
 
-    def test_native_submission_uses_one_visible_locator_click(self):
+    def test_native_submission_uses_pinned_guard_and_blocks_locator_mutation(self):
         inventory = self.inventory()
 
         class Control:
@@ -499,6 +563,8 @@ class OATDFormPreparationTests(unittest.TestCase):
                 self.value = value
                 self.clicked = 0
                 self.selected: str | None = None
+                self.guard_payload = safety_payload()
+                self.guard_armed = False
 
             async def count(self):
                 return 1
@@ -519,6 +585,15 @@ class OATDFormPreparationTests(unittest.TestCase):
             async def click(self):
                 self.clicked += 1
 
+            async def element_handle(self):
+                return self
+
+            async def evaluate(self, script, *_args):
+                if script != oatd.NATIVE_SUBMIT_GUARD_SCRIPT:
+                    raise AssertionError("unexpected submitter script")
+                self.guard_armed = True
+                return self.guard_payload
+
             @property
             def first(self):
                 return self
@@ -529,6 +604,7 @@ class OATDFormPreparationTests(unittest.TestCase):
                 self.field = Control()
                 self.submit = Control()
                 self.safety = safety or safety_payload()
+                self.submit.guard_payload = self.safety
 
             async def evaluate(self, script, *_args):
                 if script == oatd.FORM_SELF_CHECK_SCRIPT:
@@ -587,6 +663,47 @@ class OATDFormPreparationTests(unittest.TestCase):
                     )
                 self.assertEqual(form.submit.clicked, 0)
 
+        class MutationSubmitter(Control):
+            def __init__(self, form) -> None:
+                super().__init__()
+                self.form = form
+                self.unsafe_clicks = 0
+                self.blocked = False
+
+            async def click(self):
+                # Simulate a locator-time mutation after the final projection:
+                # replacement plus action/target changes must hit the armed
+                # native event guard rather than an unsafe default submission.
+                self.form.submit = Control()
+                self.form.action_changed = True
+                self.form.target_changed = True
+                if self.guard_armed:
+                    self.blocked = True
+                    raise RuntimeError("offline native guard blocked mutation")
+                self.unsafe_clicks += 1
+
+        class MutationForm(Form):
+            def __init__(self) -> None:
+                super().__init__()
+                self.action_changed = False
+                self.target_changed = False
+                self.mutating_submitter = MutationSubmitter(self)
+                self.submit = self.mutating_submitter
+                self.submit.guard_payload = self.safety
+
+        form = MutationForm()
+        with self.assertRaises(oatd.ProbeAbort):
+            asyncio.run(
+                oatd.prepare_native_submission(
+                    Page(), valid_inspection(), "private query phrase"
+                )
+            )
+        self.assertTrue(form.action_changed)
+        self.assertTrue(form.target_changed)
+        self.assertTrue(form.mutating_submitter.blocked)
+        self.assertEqual(form.mutating_submitter.unsafe_clicks, 0)
+        self.assertIsNot(form.submit, form.mutating_submitter)
+
     def test_pre_click_safety_accepts_only_boolean_route_and_submit_proof(self):
         self.assertTrue(oatd.pre_click_safety_from_payload(safety_payload()).verified)
         for requirement in oatd.PRE_CLICK_SAFETY_FIELDS:
@@ -599,6 +716,26 @@ class OATDFormPreparationTests(unittest.TestCase):
         malformed["form_target_self"] = "_self"
         with self.assertRaises(oatd.ProbeAbort):
             oatd.pre_click_safety_from_payload(malformed)
+
+    def test_post_click_route_requires_exact_canonical_origin(self):
+        cases = [
+            "https://oatd.org/oatd/search-composer?box1=x",
+            "https://oatd.org:444/oatd/search-composer?box1=x",
+            "https://oatd.org:443/oatd/search-composer?box1=x",
+            "https://user@oatd.org/oatd/search-composer?box1=x",
+            "https://oatd.org/oatd/search-composer?box1=x#private",
+        ]
+        program = (
+            f"const check = {oatd.CANONICAL_ADVANCED_ROUTE_SCRIPT};\n"
+            f"const cases = {json.dumps(cases)};\n"
+            "process.stdout.write(JSON.stringify(cases.map(check)));"
+        )
+        completed = subprocess.run(
+            ["node", "-e", program], check=True, capture_output=True, text=True
+        )
+        self.assertEqual(
+            json.loads(completed.stdout), [True, False, False, False, False]
+        )
 
     def test_source_never_uses_programmatic_form_submission_or_navigation_wait(self):
         source = (SCRIPTS / "oatd_advanced_form_probe.py").read_text(encoding="utf-8")
@@ -703,7 +840,8 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
         alias = session.context.created
         self.assertEqual(status, 1)
         self.assertEqual(
-            receipt["result"]["classification"], "owned_target_not_verified"
+            receipt["result"]["classification"],
+            "owned_page_cleanup_handoff_required",
         )
         self.assertEqual(alias.goto_calls, [])
         self.assertEqual(alias.close_calls, 0)
@@ -748,6 +886,40 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
         )
         self.assertFalse(receipt["ownership"]["owned_target_disappeared"])
         self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
+
+    def test_persistent_worker_delta_cannot_verify_exact_cleanup(self):
+        session = LeasePlaywright(persistent_worker_delta=True)
+        status, receipt = self.run_lifecycle(session)
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "cleanup_verification_failed"
+        )
+        self.assertTrue(receipt["ownership"]["owned_page_closed"])
+        self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
+        self.assertNotIn("persistent-worker-secret", json.dumps(receipt))
+
+    def test_post_create_inventory_failure_reproves_and_closes_distinct_page(self):
+        session = LeasePlaywright(post_create_inventory_failures=1)
+        status, receipt = self.run_lifecycle(session)
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "owned_target_not_verified"
+        )
+        self.assertEqual(session.context.created.goto_calls, [])
+        self.assertTrue(session.context.created.is_closed())
+        self.assertTrue(receipt["ownership"]["owned_page_closed"])
+
+    def test_unrecoverable_post_create_inventory_reports_safe_handoff(self):
+        session = LeasePlaywright(post_create_inventory_failures=1_000)
+        status, receipt = self.run_lifecycle(session)
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"],
+            "owned_page_cleanup_handoff_required",
+        )
+        self.assertFalse(receipt["ownership"]["owned_page_close_attempted"])
+        self.assertFalse(receipt["ownership"]["baseline_target_set_preserved"])
+        self.assertNotIn("owned-target-secret", json.dumps(receipt))
 
     def test_baseline_mutation_is_detected_without_closing_a_baseline(self):
         session = LeasePlaywright(mutate_baseline_on_owned_close=True)
@@ -890,6 +1062,36 @@ class OATDInputAndPrivacyTests(unittest.TestCase):
             oatd.write_new_json(path, receipt)
             with self.assertRaises(FileExistsError):
                 oatd.write_new_json(path, receipt)
+
+    def test_raced_output_winner_blocks_factory_and_navigation(self):
+        winner = b"concurrent winner"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "receipt.json"
+            cfg = config(Path(directory))
+            reserved_path = path.resolve(strict=False)
+            factory_called = False
+            real_open = oatd.os.open
+
+            def raced_open(candidate, flags, mode=0o777):
+                if Path(candidate) == reserved_path and not path.exists():
+                    path.write_bytes(winner)
+                return real_open(candidate, flags, mode)
+
+            def forbidden_factory():
+                nonlocal factory_called
+                factory_called = True
+                raise AssertionError("winner must block Playwright")
+
+            with mock.patch.object(oatd.os, "open", side_effect=raced_open):
+                status, receipt = asyncio.run(
+                    oatd.run_probe(cfg, playwright_factory=forbidden_factory)
+                )
+            self.assertEqual(status, 1)
+            self.assertEqual(
+                receipt["result"]["classification"], "output_reservation_failed"
+            )
+            self.assertFalse(factory_called)
+            self.assertEqual(path.read_bytes(), winner)
 
     def test_failed_create_only_write_never_deletes_a_concurrent_winner(self):
         receipt = oatd.new_receipt(False)
