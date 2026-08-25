@@ -23,7 +23,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-24T16:13:25-04:00",
+  "updated_at": "2026-08-25T14:28:08.574Z",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -190,6 +190,63 @@
         "lease_receipt": null,
         "cancelled_by": null,
         "reason": "G01 preserved distinct-page and anchor continuity but did not complete its required safe route projection; G02 was therefore not permitted. No source method, source access, paired controls, counts, or adapter lifecycle conclusion was established."
+      }
+    },
+    {
+      "allocation": {
+        "allocated_at": "2026-08-25T10:16:18-04:00",
+        "attempt_kind": "technical_corrective",
+        "authorization_decision_id": "D-TECH-NEXT-P03",
+        "authorized_by": "controller",
+        "prospectively_authorized": true,
+        "source_phase_started": true
+      },
+      "attempt_id": "S-D04-P03-20260825T101618-0400",
+      "evidence": [
+        {
+          "basis": "observed",
+          "evidence_id": "E-P03-SETUP",
+          "gate_id": "G-ROUTE-PROJECTION",
+          "path": "pilots/S-D04-P03-20260825T101618-0400/launch-wrapper-failure.json",
+          "sha256": "a825c52a4446f5de633af88bbb5b18292c172ab228c22cf876279ec6a3d13af8",
+          "validity": "valid"
+        },
+        {
+          "basis": "observed",
+          "evidence_id": "E-P03-CLEANUP",
+          "gate_id": "G-OWNED-PAGE",
+          "path": "pilots/S-D04-P03-20260825T101618-0400/browser-cleanup-receipt.json",
+          "sha256": "4c17558556f55a2ba501b453b9750599edc7dd09e0a2929a8ad79eccd1ac9fda",
+          "validity": "valid"
+        }
+      ],
+      "immutable": true,
+      "manifest_path": "pilots/S-D04-P03-20260825T101618-0400/manifest.json",
+      "manifest_sha256": "e2334525887819e0bfdd7daa4eb20cf883e537d8c61a19439b3f289271a53975",
+      "sequence": 3,
+      "source_operations": {
+        "operations": [],
+        "performed": 0,
+        "predeclared_maximum": 2
+      },
+      "terminal": {
+        "browser_backed": true,
+        "cancelled_by": null,
+        "category": "technical",
+        "cleanup_receipt": {
+          "path": "pilots/S-D04-P03-20260825T101618-0400/browser-cleanup-receipt.json",
+          "sha256": "4c17558556f55a2ba501b453b9750599edc7dd09e0a2929a8ad79eccd1ac9fda"
+        },
+        "ended_at": "2026-08-25T14:26:45.878Z",
+        "lease_receipt": {
+          "path": "pilots/S-D04-P03-20260825T101618-0400/lease-released-receipt.json",
+          "sha256": "179318c040c0d720748f9b8b57010b581724e183b7f17b214d735601e97a0da7"
+        },
+        "outcome": "blocked",
+        "provider_failure": false,
+        "reason": "The attached P03 child stopped before operation 1 because of a deterministic controller launch-wrapper quoting defect. No route navigation, source query, or adapter request occurred; cleanup and lease release were verified.",
+        "source_writing_stopped": true,
+        "terminal_verification": "verified"
       }
     }
   ],
@@ -405,7 +462,7 @@
     },
     {
       "decision_id": "D-TECH-NEXT-P03",
-      "attempt_id": null,
+      "attempt_id": "S-D04-P03-20260825T101618-0400",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,

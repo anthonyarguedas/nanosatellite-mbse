@@ -1,0 +1,35 @@
+{
+  "schema_version": "slr1-engineering-village-p03-launch-failure/v1",
+  "attempt_id": "S-D04-P03-20260825T101618-0400",
+  "classification": "controller_technical_setup_failure",
+  "lease": {
+    "acquired": true,
+    "released": true,
+    "cleanup": "verified-clean",
+    "protected_anchor_preserved": true
+  },
+  "source_phase_started": true,
+  "source_operations_performed": 0,
+  "route_projection_invoked": false,
+  "paired_diagnostic_invoked": false,
+  "source_query_submitted": false,
+  "source_totals": {
+    "paired": null,
+    "compendex": null,
+    "inspec": null
+  },
+  "records_retrieved": 0,
+  "records_retained": 0,
+  "records_imported": 0,
+  "cause": "The attached launch command embedded a quoted heredoc inside a single-quoted bash -ceu argument, so the intended child bundle was not delivered intact. The child stopped before its preflight receipt and before operation 1.",
+  "correction": "A file-based child bundle was written as p03-live-child.sh and passed bash -n; it was not executed by this immutable attempt.",
+  "semantic_protocol_change": false,
+  "retention_exclusions": [
+    "raw_child_exception",
+    "process_id",
+    "process_command",
+    "browser_target_identifier",
+    "browser_url",
+    "source_page_content"
+  ]
+}
