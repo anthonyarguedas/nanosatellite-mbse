@@ -1,0 +1,62 @@
+{
+  "artifact_type": "slr1-ieee-p02-official-documentation-metadata/v1",
+  "pilot_id": "S-D03-P02-20260824T105020-0400",
+  "source_id": "ieee-xplore",
+  "entries": [
+    {
+      "evidence_id": "OD-01",
+      "document_family": "IEEE Xplore rendered Help — Advanced Search",
+      "safe_route_family": "Xplorehelp/searching-ieee-xplore/advanced-search",
+      "basis": "official_documentation",
+      "observed_facts": ["Rendered Help route reached without login or challenge.", "Help route mentioned Advanced Search, Command Search, All Metadata, and Index Terms."],
+      "restricted_evidence": ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E07-official-help-probe.json"
+    },
+    {
+      "evidence_id": "OD-02",
+      "document_family": "IEEE Xplore rendered Help — Command Search",
+      "safe_route_family": "Xplorehelp/searching-ieee-xplore/command-search",
+      "basis": "official_documentation",
+      "observed_facts": ["Rendered help route reached without login or challenge.", "Documentation mentioned Boolean operators, parentheses, wildcard, proximity, NEAR, and ONEAR.", "Documentation mentioned All Metadata, Document Title, Abstract, Author Keywords, IEEE Terms, and Index Terms."],
+      "restricted_evidence": ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E09-official-command-help.json"
+    },
+    {
+      "evidence_id": "OD-03",
+      "document_family": "IEEE Xplore rendered Help — proximity semantics",
+      "safe_route_family": "Xplorehelp/searching-ieee-xplore/command-search",
+      "basis": "official_documentation",
+      "observed_facts": ["NEAR/3 and ONEAR/3 examples were detected.", "Documentation contained distance/intervening-word language and ordered-language for ONEAR.", "P02 did not obtain a direct official statement that NEAR/5 means exactly at most five intervening lexical tokens."],
+      "restricted_evidence": [
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E42-official-semantics-help.json",
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E43-official-proximity-help.json",
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E44-official-proximity-semantics.json"
+      ]
+    },
+    {
+      "evidence_id": "OD-04",
+      "document_family": "Current IEEE rendered Advanced Search interface",
+      "basis": "observed",
+      "observed_facts": ["Visible field options included All Metadata, Full Text & Metadata, Full Text Only, Document Title, Abstract, Index Terms, Author Keywords, and IEEE Terms.", "No separately named INSPEC Controlled Terms or INSPEC Non-Controlled Terms option was observed in the current allowlisted field-option inventory."],
+      "restricted_evidence": [
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E05-advanced-field-options.json",
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E10-advanced-scope-options.json"
+      ]
+    },
+    {
+      "evidence_id": "OD-05",
+      "document_family": "Inspec vocabulary/hierarchy documentation",
+      "basis": "untested",
+      "observed_limit": "P02 could not establish a current official scope-note, hierarchy/narrower-term, explosion, and descriptor mapping route. One guessed IET URL returned 404, static IEEE Help extraction was a client-rendered shell, and a limited official-document discovery attempt was unavailable after the search-provider quota was exhausted.",
+      "consequence": "No descriptor supplement is accepted; mandatory All Metadata free text remains the only draft concept route.",
+      "restricted_evidence": [
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E06-official-advanced-search.stdout",
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E63-official-inspec-thesaurus.stdout",
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P02-20260824T105020-0400/E64-brave-inspec-doc-discovery.stderr"
+      ]
+    }
+  ],
+  "accepted_controlled_vocabulary_mapping": {
+    "status": "none",
+    "basis": "observed",
+    "reason": "No usable hierarchy, narrower-term, explosion, and free-text mapping prerequisite was established. Generic systems-engineering terminology was not used as an MBSE substitute."
+  }
+}

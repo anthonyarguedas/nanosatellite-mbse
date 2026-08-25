@@ -1,0 +1,146 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-L02-P02-20260823T030216-0400",
+  "task_id": "S-L02",
+  "source_id": "esa-indico",
+  "method_type": "local_harvest",
+  "status": "partial",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-23T03:02:25-04:00",
+  "ended_at": "2026-08-23T03:02:32-04:00",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "openai-codex/gpt-5.6-terra",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "ESA Indico public export and direct attachment routes",
+    "url": "https://indico.esa.int/",
+    "access_route": "public anonymous HTTP with redirect following disabled",
+    "authenticated": false,
+    "database_or_collection": "bounded ESA Indico event/material route diagnostics only",
+    "platform": "ESA Indico",
+    "timezone": "timestamps retained with explicit offsets"
+  },
+  "executions": [
+    {
+      "execution_id": "S-L02-P02-E01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Safe anonymous no-redirect access-status check for the two P01 static-only event-472 links",
+      "started_at": "2026-08-23T03:02:25-04:00",
+      "status": "success",
+      "exact_query_or_operation": "GET each explicit event-472 static-only direct attachment route with redirect following disabled; retain no response headers, body, cookies, redirect target, query, or session identifier",
+      "query_file": null,
+      "fields": ["event ID", "contribution ID", "attachment ID", "source route path", "HTTP status", "access status"],
+      "controls": {
+        "event_id": "472",
+        "attachment_ids": ["9769", "9770"],
+        "request_method": "GET",
+        "redirects_followed": 0,
+        "retries": 0,
+        "screening": false
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 2,
+      "artifact_paths": ["safe-receipts/static-only-access-status.json"],
+      "notes": "Both anonymous GETs returned HTTP 302 and were classified access_restricted_or_login. This is an access finding, not a source zero or a PDF download."
+    },
+    {
+      "execution_id": "S-L02-P02-E02",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Bounded legacy material.resources export-shape check using the corrected nested-detail route",
+      "started_at": "2026-08-23T03:02:32-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Public event-558 export with detail=subcontributions; parse only stable IDs, owner kind, resource shape, route-safe classification, and safe response receipt",
+      "query_file": null,
+      "fields": ["event ID", "contribution count", "subcontribution count", "attachment ID", "owner kind", "legacy resource shape"],
+      "controls": {
+        "event_id": "558",
+        "detail": "subcontributions",
+        "owner_page_traversal": false,
+        "material_download": false,
+        "screening": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 1,
+      "artifact_paths": ["safe-receipts/event-558-legacy-material-shape.json"],
+      "notes": "One event-owned legacy material resource was recognized. The check did not prove anonymous download access, full event coverage, or non-PDF extraction."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "C01",
+      "requirement": "Static-only links are not called public downloadable PDFs without an anonymous no-redirect GET classification",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["safe-receipts/static-only-access-status.json"],
+      "notes": "Both tested links entered an HTTP 302 access/login handoff; no redirect target or headers were retained."
+    },
+    {
+      "check_id": "C02",
+      "requirement": "Corrected export parser recognizes legacy material[].resources[] objects and preserves the event owner",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["safe-receipts/event-558-legacy-material-shape.json"],
+      "notes": "The bounded event-558 export had one recognized event-owned legacy resource under detail=subcontributions."
+    },
+    {
+      "check_id": "C03",
+      "requirement": "Full public ESA source-universe, nested material, PDF/text/OCR, and non-PDF terminal-route coverage",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "inferred",
+      "evidence_paths": ["safe-receipts/static-only-access-status.json", "safe-receipts/event-558-legacy-material-shape.json"],
+      "notes": "This P02 was intentionally limited to two correction checks and cannot establish any final completeness condition."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P02-20260823T030216-0400/observations.md",
+      "role": "bounded corrective diagnostic observations",
+      "sha256": "ccba716bee78ae3e5855f3f49531c1c3fd6b5f87fd6736abdcb2badfbc5d6d5d",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P02-20260823T030216-0400/evidence-index.json",
+      "role": "artifact-to-claim evidence index",
+      "sha256": "5b844ae9857f8c527529ffab59b797a3c4c173d3915c8c50e041d5603bf0a301",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P02-20260823T030216-0400/safe-receipts/static-only-access-status.json",
+      "role": "safe direct-material access-status receipt",
+      "sha256": "4e0c4c4023d8f55ce0b662a2a610cd62a7f486aaa6f31e0d025a49a71a3c8747",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P02-20260823T030216-0400/safe-receipts/event-558-legacy-material-shape.json",
+      "role": "bounded legacy material-resource shape receipt",
+      "sha256": "f62a47a39b8415df2ac6d5630756970d3f56afd909187d94f393990306511852",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    }
+  ],
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "P02 corrects two access and export-shape defects but intentionally does not attempt a complete event or source harvest. No final ESA event may be produced.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Review the official exporter documentation and the compatibility fallback before accepting detail=subcontributions as the final route.",
+      "Validate full nested subcontribution material routing, all-public source-boundary behavior, and complete two-pass material/PDF/non-PDF coverage.",
+      "Approve the draft guideline and the correction of the P01 browser-anchor record."
+    ]
+  }
+}

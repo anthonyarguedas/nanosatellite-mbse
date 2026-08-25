@@ -1,0 +1,61 @@
+{
+  "receipt_schema": "slr1-source-pilot-validation-receipt/v1",
+  "pilot_id": "S-D03-P01-20260823T232428-0400",
+  "validated_at": "2026-08-23T23:45:02-04:00",
+  "basis": "observed",
+  "checks": [
+    {
+      "check": "SLR1 shared search infrastructure",
+      "method": "uv run SLR/SLR1/scripts/validate_search_infrastructure.py",
+      "status": "passed",
+      "detail": "dictionary, crosswalk, schemas, and layout passed"
+    },
+    {
+      "check": "pilot manifest schema",
+      "method": "Draft 2020-12 validation against searches/schemas/pilot-manifest.schema.json",
+      "status": "passed",
+      "detail": "manifest validated after its source-packet artifact mapping was completed"
+    },
+    {
+      "check": "nine exact query files",
+      "method": "UTF-8 parse, SHA-256, character/byte count, cell mapping, and offline normative-term audit",
+      "status": "passed",
+      "detail": "all nine single-cell draft partitions passed; source submission remains blocked"
+    },
+    {
+      "check": "guideline structure",
+      "method": "exact 10 required source-guideline headings",
+      "status": "passed",
+      "detail": "all template sections are present"
+    },
+    {
+      "check": "evidence index and artifact hashes",
+      "method": "path existence, SHA-256 verification, required public/metadata-only/restricted classifications, and manifest-artifact verification",
+      "status": "passed",
+      "detail": "all non-self-referential entries matched their bytes and restricted evidence has an ignored secure-location reference"
+    },
+    {
+      "check": "rights boundary",
+      "method": "ignored-storage, tracked-file, record-payload, native-export, local-path, CDP, and query-URL scan",
+      "status": "passed",
+      "detail": "see rights-boundary-receipt.json"
+    },
+    {
+      "check": "scoped Git boundary",
+      "method": "scoped status, staged/unstaged name checks, untracked source-packet listing, whitespace check, and final-events scan",
+      "status": "passed",
+      "detail": "within the assigned path, only source-packet files are untracked; no source-packet path is staged, no scoped whitespace error was found, and final-events remains empty"
+    },
+    {
+      "check": "postflight browser integrity",
+      "method": "read-only dedicated launcher check",
+      "status": "failed",
+      "detail": "endpoint was live but no page target remained; see postflight-receipt.json"
+    }
+  ],
+  "checksum_policy": {
+    "manifest_json": "sha256 deliberately null in its own artifact list to avoid a self-reference cycle; evidence-index.json holds the manifest hash.",
+    "evidence_index_json": "sha256 deliberately null in its own index and manifest artifact list to avoid a self-reference cycle."
+  },
+  "overall_status": "validation_passed_except_for_recorded_browser_integrity_failure"
+}

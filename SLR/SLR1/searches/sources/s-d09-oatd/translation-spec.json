@@ -1,0 +1,431 @@
+{
+  "artifact_version": "slr1-oatd-translation/v0.3.1-draft",
+  "task_id": "S-D09",
+  "source_id": "oatd",
+  "source_name": "Open Access Theses and Dissertations (OATD)",
+  "method_type": "direct",
+  "status": "draft_pending_controller_and_human_review_blocked",
+  "protocol_commit": "343ae7987b0fb7239a5a66d1d2dcaa7fb67a5915",
+  "concept_dictionary": {
+    "path": "../../search-concept-dictionary.json",
+    "artifact_version": "slr1-search-concepts/v4",
+    "revised_at": "2026-08-21"
+  },
+  "implementation": {
+    "repository_commit": "adbf1a06f409aa4c00f739812f9fa0a5ccbe518a",
+    "adapter_path": "/var/folders/db/fjbrfx1n1kz6lrqlm7jvryp00000gn/T/agent-tools-oatd-busy-retry-20260824-115856/academic-research/skills/academic-search/scripts/search_oatd.py",
+    "adapter_version": "3",
+    "adapter_sha256": "2e4a403725aea006f7d41798846cc3be7317aa0ff1946eed4fd2243ada039fbc",
+    "live_validation_status": "P03 health gate submitted successfully on the normal basic route; its first permitted direct nonblank advanced title-field diagnostic ended in an unreconciled navigation timeout, so advanced semantics and busy recovery remain unvalidated",
+    "post_P02_offline_test": "The complete academic-search suite passed 161 tests and 78 subtests; no OATD, browser, or network request was made.",
+    "P02_executed_implementation": {
+      "repository_commit": "5ad2a3158b404cc1bafa3df473bf9755d9cd2eef",
+      "adapter_version": "2",
+      "adapter_sha256": "9dacff622fb27f2b04c19c2fa91b86e86ef5c5e53b77d20718e3397b56fdd66d",
+      "offline_test": "24 focused OATD tests passed before P02 live work; this is historical implementation evidence, not source semantic validation."
+    },
+    "P03_executed_implementation": {
+      "pilot_id": "S-D09-P03-20260824T130849-0400",
+      "focused_offline_test": "39 focused OATD/challenge tests and 28 subtests passed before live work.",
+      "basic_health_gate": {"query": "CubeSat AND SysML", "total": 8, "count_only": true, "busy_retries_performed": 0},
+      "advanced_direct_diagnostic": "A permitted nonblank title-field attempt had no reconcilable result after navigation timeout; it is not candidate-adapter semantic validation."
+    }
+  },
+  "source_route": {
+    "name": "OATD normal rendered basic GET search",
+    "url": "https://oatd.org/oatd/search",
+    "parameters": {
+      "q": "exact query-cell text",
+      "form": "basic"
+    },
+    "P02_observed_controls": {
+      "sort": {
+        "display_value": "relevance",
+        "source_value": "relevanace"
+      },
+      "language": null,
+      "country": null,
+      "earliest": null,
+      "latest": null,
+      "creative_commons_only": false,
+      "page_size": 30
+    },
+    "access_route": "Future live phases use the supervisor-owned shared CfT lease at http://127.0.0.1:9222 with adapter-owned pages only; port 9234 is historical pilot evidence.",
+    "P03_direct_advanced_form_observation": {
+      "basis": "observed",
+      "field_option_labels": ["any field", "title", "author name", "abstract", "university/publisher", "subjects/keywords", "department/discipline"],
+      "controls_visible": ["language", "country", "earliest", "latest", "sortby", "pagesize", "cc_only"],
+      "nonblank_title_attempt": {"query": "CubeSat AND SysML", "status": "unreconciled_navigation_timeout", "source_reported_total": null},
+      "conclusion": "Visible selectors and an attempted native submission do not establish field semantics or a same-field route."
+    }
+  },
+  "translation_scope": {
+    "field_scope": "Basic unqualified search only. P02 did not execute a nonblank advanced field route after E-007's access/busy stop; P03's nonblank title-field attempt had no reconcilable result. Title, abstract, subjects/keywords, and department/discipline semantics are therefore not accepted for translation.",
+    "free_text_mandatory": true,
+    "controlled_vocabulary_supplement": {
+      "status": "none accepted",
+      "reason": "P01's visible subjects/keywords selector and P02's basic controls do not establish a controlled vocabulary, descriptor assignment, scope note, hierarchy, explosion, or usable mapping."
+    },
+    "term_rendering": {
+      "single_token": "bare source query token",
+      "multiword_or_hyphenated": "straight-double-quoted literal",
+      "boolean_operators": "uppercase AND and OR",
+      "parentheses": "explicit around every OR group and outer Boolean construction",
+      "wildcards_used": false,
+      "nanosat_wildcard_substitution_used": false,
+      "normalization_status": "unresolved; retain every normative spelling literally."
+    },
+    "observed_basic_parser": {
+      "uppercase_AND": {
+        "basis": "observed",
+        "execution": "E-001",
+        "query": "CubeSat AND SysML",
+        "source_reported_total": 8
+      },
+      "uppercase_OR_and_parentheses": {
+        "basis": "observed",
+        "execution": "E-002",
+        "query": "(CubeSat OR CubeSats) AND SysML",
+        "source_reported_total": 8
+      },
+      "parentheses_required_for_safe_draft_use": {
+        "basis": "observed",
+        "executions": ["E-004", "E-005"],
+        "parenthesized_total": 1332,
+        "unparenthesized_total": 2,
+        "conclusion": "The observed contrast is non-equivalent. Retain explicit parentheses; do not infer a general precedence rule or record-set relationship from aggregate counts."
+      },
+      "straight_quoted_phrase": {
+        "basis": "observed",
+        "execution": "E-006",
+        "query": "CubeSat AND \"systems engineering\"",
+        "source_reported_total": 85,
+        "conclusion": "Accepted syntax only; ordered-phrase semantics remain unproven."
+      },
+      "unresolved_after_terminal_stop": [
+        "NOT behavior",
+        "case behavior",
+        "punctuation and hyphen normalization",
+        "acronym standalone-token behavior",
+        "stemming, lemmatization, and automatic expansion",
+        "wildcard behavior and nanosat* losslessness",
+        "malformed and proximity syntax",
+        "query/parser/URL length of planned cells"
+      ]
+    },
+    "pair_rendering": {
+      "source_operator": null,
+      "same_field": false,
+      "validation_status": "blocked",
+      "candidate_broad_expression": "Each literal pair is rendered as (left AND right) inside a basic unqualified query solely to preserve the complete dictionary inventory.",
+      "final_use_prohibited": true,
+      "reason": "P02 stopped before advanced field or proximity testing. Basic record-level conjunction can cross fields and is not the protocol-permitted broader same-field fallback. No local exact-pair field route was validated."
+    },
+    "date_language_and_degree_handling": {
+      "final_controls": null,
+      "reason": "P-001 is unresolved and P02 stopped before date/language/country/CC/sort/page-size testing. Preserve the unaltered source total and apply exact date, English full-text, completed degree-work, publication-type, and retrieval uncertainty locally."
+    }
+  },
+  "regeneration": {
+    "pilot_id": "S-D09-P02-20260824T105026-0400",
+    "audit_path": "pilots/S-D09-P02-20260824T105026-0400/translation-audit.json",
+    "byte_for_byte_regeneration": true,
+    "query_cell_count": 12,
+    "missing_finite_terms": [],
+    "missing_pair_clauses": [],
+    "pair_clause_count": 292,
+    "ordered_utf8_cells_including_terminal_lf_sha256": "0c61cd7ba595c60067968d6b8206db2672563d853bf4d39a161af61be77a09f7",
+    "source_syntax_validation": "not performed: E-007 strict access/busy failure triggered the no-retry stop before any partition-cell count-only submission."
+  },
+  "partition_to_cell_unions": [
+    {
+      "partition_id": "A1",
+      "role": "Named EPS × explicit MBSE",
+      "stream": "A",
+      "normative_expression": {"op": "AND", "args": ["P", "E_H", "M_H"]},
+      "union_operator": "identity",
+      "cell_ids": ["A1-01"],
+      "cells": [
+        {
+          "partition_id": "A1",
+          "cell_id": "A1-01",
+          "path": "queries/A1.oatd-basic.txt",
+          "sha256": "171eed1fe19fc98d67d934fc172614418b4e48c9359928f9e7fe800dedbeb647",
+          "characters_excluding_terminal_lf": 2080,
+          "source_native_field": "basic unqualified search (draft)",
+          "free_text_only": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "Identity: the one regenerated cell contains the complete literal partition expression.",
+      "validation_status": "blocked"
+    },
+    {
+      "partition_id": "A2",
+      "role": "EPS functions or analyses × all model terms",
+      "stream": "A",
+      "normative_expression": {"op": "AND", "args": ["P", "E_F", {"op": "OR", "args": ["M_H", "M_B"]}]},
+      "union_operator": "identity",
+      "cell_ids": ["A2-01"],
+      "cells": [
+        {
+          "partition_id": "A2",
+          "cell_id": "A2-01",
+          "path": "queries/A2.oatd-basic.txt",
+          "sha256": "59aca380f5c6c1e827d4a879e04e1883e38eb062a2d2de83564c212f651422d2",
+          "characters_excluding_terminal_lf": 2596,
+          "source_native_field": "basic unqualified search (draft)",
+          "free_text_only": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "Identity: the one regenerated cell contains the complete literal partition expression.",
+      "validation_status": "blocked"
+    },
+    {
+      "partition_id": "A3",
+      "role": "Named EPS × broad structured model",
+      "stream": "A",
+      "normative_expression": {"op": "AND", "args": ["P", "E_H", "M_B"]},
+      "union_operator": "identity",
+      "cell_ids": ["A3-01"],
+      "cells": [
+        {
+          "partition_id": "A3",
+          "cell_id": "A3-01",
+          "path": "queries/A3.oatd-basic.txt",
+          "sha256": "4412f88d7a664dcbeae0a76084f1883d8290f590e4934673ce4dcac7dc155812",
+          "characters_excluding_terminal_lf": 1945,
+          "source_native_field": "basic unqualified search (draft)",
+          "free_text_only": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "Identity: the one regenerated cell contains the complete literal partition expression.",
+      "validation_status": "blocked"
+    },
+    {
+      "partition_id": "B1",
+      "role": "Embedded-thread baseline",
+      "stream": "core_B",
+      "normative_expression": {"op": "AND", "args": ["P", "M_H"]},
+      "union_operator": "identity",
+      "cell_ids": ["B1-01"],
+      "cells": [
+        {
+          "partition_id": "B1",
+          "cell_id": "B1-01",
+          "path": "queries/B1.oatd-basic.txt",
+          "sha256": "8e93cc5adc6e37d993b5dab729fb58421f970e291db7b58669a0bd75edc5a59a",
+          "characters_excluding_terminal_lf": 1194,
+          "source_native_field": "basic unqualified search (draft)",
+          "free_text_only": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "Identity: the one regenerated cell contains the complete literal partition expression.",
+      "validation_status": "blocked"
+    },
+    {
+      "partition_id": "B2",
+      "role": "Controlled broad-model expansion",
+      "stream": "core_B",
+      "normative_expression": {"op": "AND", "args": ["P", "M_B", "R"]},
+      "union_operator": "identity",
+      "cell_ids": ["B2-01"],
+      "cells": [
+        {
+          "partition_id": "B2",
+          "cell_id": "B2-01",
+          "path": "queries/B2.oatd-basic.txt",
+          "sha256": "91414f259ce1a7c84dca926c4e42866adf901690cf16cb0aba107ecc106596b8",
+          "characters_excluding_terminal_lf": 1825,
+          "source_native_field": "basic unqualified search (draft)",
+          "free_text_only": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "Identity: the one regenerated cell contains the complete literal partition expression.",
+      "validation_status": "blocked"
+    },
+    {
+      "partition_id": "BG1",
+      "role": "Precise reusable model or template",
+      "stream": "expanded_B",
+      "normative_expression": {"op": "AND", "args": ["P", "G_model"]},
+      "union_operator": "identity",
+      "cell_ids": ["BG1-01"],
+      "cells": [
+        {
+          "partition_id": "BG1",
+          "cell_id": "BG1-01",
+          "path": "queries/BG1.oatd-basic.txt",
+          "sha256": "b8cb3579dd10e0a6342d9c9774ede328158b610628ca22cb669690c60463d550",
+          "characters_excluding_terminal_lf": 1296,
+          "source_native_field": "basic unqualified search (draft; pair clauses prohibited)",
+          "free_text_only": true,
+          "final_use_prohibited": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "Identity for the literal provisional broad expression only.",
+      "validation_status": "blocked: no same-field pair implementation"
+    },
+    {
+      "partition_id": "BG2",
+      "role": "Structural reusable artifact",
+      "stream": "expanded_B",
+      "normative_expression": {"op": "AND", "args": ["P", "G_structure"]},
+      "union_operator": "identity",
+      "cell_ids": ["BG2-01"],
+      "cells": [
+        {
+          "partition_id": "BG2",
+          "cell_id": "BG2-01",
+          "path": "queries/BG2.oatd-basic.txt",
+          "sha256": "f8c6bd3d111cf4596c29a059959d23e3f8af5410a463b3cb3f921ea226e5bc34",
+          "characters_excluding_terminal_lf": 1029,
+          "source_native_field": "basic unqualified search (draft; pair clauses prohibited)",
+          "free_text_only": true,
+          "final_use_prohibited": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "Identity for the literal provisional broad expression only.",
+      "validation_status": "blocked: no same-field pair implementation"
+    },
+    {
+      "partition_id": "BC1",
+      "role": "Conservative central asset",
+      "stream": "expanded_B",
+      "normative_expression": {"op": "AND", "args": ["P", "C1"]},
+      "union_operator": "identity",
+      "cell_ids": ["BC1-01"],
+      "cells": [
+        {
+          "partition_id": "BC1",
+          "cell_id": "BC1-01",
+          "path": "queries/BC1.oatd-basic.txt",
+          "sha256": "61a040705f9ea681be435138aa4e3237a7900641e4fdfa4d74ec42a4f94a6e50",
+          "characters_excluding_terminal_lf": 3396,
+          "source_native_field": "basic unqualified search (draft; pair clauses prohibited)",
+          "free_text_only": true,
+          "final_use_prohibited": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "Identity for the literal provisional broad expression only.",
+      "validation_status": "blocked: no same-field pair implementation"
+    },
+    {
+      "partition_id": "BT2",
+      "role": "Model-linked tailoring",
+      "stream": "expanded_B",
+      "normative_expression": {"op": "AND", "args": ["P", "M_B", "T2"]},
+      "union_operator": "OR",
+      "cell_ids": ["BT2-01", "BT2-02", "BT2-03", "BT2-04"],
+      "cells": [
+        {
+          "partition_id": "BT2",
+          "cell_id": "BT2-01",
+          "path": "queries/BT2-01.oatd-basic.txt",
+          "sha256": "335b3bafcb9b9e9214dbc6b2d482475f66bc7b90c2434d47f36f0f89faf599d3",
+          "characters_excluding_terminal_lf": 2642,
+          "t2_left_terms": ["reuse", "reuses", "reused", "reusable", "reusing", "tailor", "tailors", "tailored", "tailoring", "customize", "customizes", "customized", "customizing", "customization"],
+          "t2_right_terms": ["model", "models", "architecture", "architectures"],
+          "t2_pair_clause_count": 56,
+          "final_use_prohibited": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        },
+        {
+          "partition_id": "BT2",
+          "cell_id": "BT2-02",
+          "path": "queries/BT2-02.oatd-basic.txt",
+          "sha256": "35d59976ea23b15313bad36403011e9e990681bbe7f37d336fd94faaa7565933",
+          "characters_excluding_terminal_lf": 2814,
+          "t2_left_terms": ["customise", "customises", "customised", "customising", "customisation", "configure", "configures", "configured", "configuring", "configuration", "parameterize", "parameterizes", "parameterized", "parameterizing"],
+          "t2_right_terms": ["model", "models", "architecture", "architectures"],
+          "t2_pair_clause_count": 56,
+          "final_use_prohibited": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        },
+        {
+          "partition_id": "BT2",
+          "cell_id": "BT2-03",
+          "path": "queries/BT2-03.oatd-basic.txt",
+          "sha256": "2b986f4986098b55e72fc45979e32e017df1dde07cf547e0534f2f141355a115",
+          "characters_excluding_terminal_lf": 2914,
+          "t2_left_terms": ["parameterization", "parameterise", "parameterises", "parameterised", "parameterising", "parameterisation", "instantiate", "instantiates", "instantiated", "instantiating", "instantiation", "variability", "variation point", "specialize"],
+          "t2_right_terms": ["model", "models", "architecture", "architectures"],
+          "t2_pair_clause_count": 56,
+          "final_use_prohibited": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        },
+        {
+          "partition_id": "BT2",
+          "cell_id": "BT2-04",
+          "path": "queries/BT2-04.oatd-basic.txt",
+          "sha256": "6b127e971c57b0f9e7fe792cfbf4efa49cc1be23e664211af41c58518aedd16d",
+          "characters_excluding_terminal_lf": 2750,
+          "t2_left_terms": ["specializes", "specialized", "specializing", "specialization", "specialise", "specialises", "specialised", "specialising", "specialisation", "adapt", "adapts", "adapted", "adapting", "adaptation"],
+          "t2_right_terms": ["model", "models", "architecture", "architectures"],
+          "t2_pair_clause_count": 56,
+          "final_use_prohibited": true,
+          "execution": {"status": "not_submitted_due_to_E007_access_busy_stop", "source_reported_total": null, "total_is_exact": false}
+        }
+      ],
+      "lossless_union": true,
+      "lossless_union_proof": "The 56 normative T2 left forms are split in dictionary order into four disjoint 14-term groups. Every cell crosses its 14 forms with all four right forms. OR(BT2-01..BT2-04) therefore contains each 56 × 4 literal broad-pair clause exactly once, with identical P and M_B groups. This is algebraic only and does not establish same-field pair semantics.",
+      "validation_status": "blocked: every pair clause remains final-use-prohibited"
+    }
+  ],
+  "execution_ledger": {
+    "cell_count": 12,
+    "status": "not_submitted_due_to_E007_access_busy_stop",
+    "source_reported_total": null,
+    "total_is_exact": false,
+    "reason": "The terminal strict diagnostic received an access/busy state; the pilot did not submit any later source query."
+  },
+  "live_validation": {
+    "pilot_id": "S-D09-P02-20260824T105026-0400",
+    "status": "blocked",
+    "successful_count_only_executions": [
+      {"execution_id": "E-001", "query": "CubeSat AND SysML", "total": 8},
+      {"execution_id": "E-002", "query": "(CubeSat OR CubeSats) AND SysML", "total": 8},
+      {"execution_id": "E-003", "query": "(CubeSat OR nanosatellite) AND SysML", "total": 8},
+      {"execution_id": "E-004", "query": "CubeSat OR (nanosatellite AND SysML)", "total": 1332},
+      {"execution_id": "E-005", "query": "CubeSat OR nanosatellite AND SysML", "total": 2},
+      {"execution_id": "E-006", "query": "CubeSat AND \"systems engineering\"", "total": 85}
+    ],
+    "strict_failure": {
+      "execution_id": "E-007",
+      "query": "CubeSat AND SysML",
+      "source_reported_total": null,
+      "error_class": "OATDMetadataAccessError",
+      "records_retrieved": 0,
+      "result": "No retry, advanced probe, partition-cell submission, or further source operation was performed."
+    }
+  },
+  "P03_live_validation": {
+    "pilot_id": "S-D09-P03-20260824T130849-0400",
+    "status": "blocked",
+    "successful_count_only_execution": {"execution_id": "E-001", "query": "CubeSat AND SysML", "total": 8, "busy_retries_performed": 0},
+    "terminal_advanced_diagnostic": {
+      "execution_id": "E-002",
+      "query": "CubeSat AND SysML",
+      "field": "title",
+      "source_reported_total": null,
+      "records_retrieved": 0,
+      "result": "The normal home advanced form exposed the nonblank title option and controls, but the attempted native submission ended in a navigation timeout with no reconcilable result. No retry, planned cell, Record Details, strict traversal, CSV, screening, or import followed."
+    },
+    "pair_semantics": "blocked: no same-field proximity or broader same-field construction was demonstrated; every pair-bearing cell remains final-use-prohibited."
+  }
+}

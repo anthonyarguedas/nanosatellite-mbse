@@ -88,6 +88,8 @@ Use this diagnostic procedure:
 5. Accept a candidate only when it retrieves an indexed, confirmed eligible known item missed by the current union, or the unique-record audit finds a source-locatable qualifying structured-system-model use missed by that union. Place a term in `M_H` only when its tested standalone meaning is sufficiently specific; otherwise require `R` through `M_B`, define a conservative paired or expansion construction, or reject it. An acronym or short tool name also requires validated token boundaries and a documented ambiguity assessment.
 6. Record accepted and rejected terms with reasons. Before any affected final search, update this protocol and the concept dictionary, commit the change, regenerate every affected source translation, and rerun its diagnostic checks. Pilot results remain diagnostic and can enter the review only if a later clean final event retrieves them.
 
+**Source-stage status.** The Scopus portion was completed on 2026-08-23 under pilots [`P13`](searches/sources/s-d01-scopus/pilots/S-D01-P13-20260823T145616-0400/) and [`P14`](searches/sources/s-d01-scopus/pilots/S-D01-P14-20260823T150131-0400/). Its prespecified complete-or-sampled unique-record audit supports carrying `model-driven engineering` / `model driven engineering` and `digital twin` / `digital twins` forward only for possible later placement in `M_B` with independent `R`; the other candidates received no Scopus support for addition. This is not cross-source acceptance: all candidates remain non-normative, the concept dictionary and Scopus final translations remain unchanged, and `S-C01` still requires Web of Science, IEEE Xplore, and Compendex/Inspec evidence and a committed cross-source decision.
+
 #### Artifact and tailoring blocks
 
 For every construction described as *paired*, the left and right expressions must occur in either order in the same searchable field or prospectively defined local document route, with no more than five intervening lexical tokens. If an interface cannot express that rule, its pilot may accept a documented broader same-field implementation only when it cannot lose an exact-pair match; apply the exact rule locally where the available fields permit it and report the limitation.
@@ -168,7 +170,7 @@ Source-specific guidelines are intentionally pending regeneration. Run the direc
 
 | Task | Source or method | Accepted source packet |
 |---|---|---|
-| `S-D01` | Scopus | Pending |
+| `S-D01` | Scopus | Pending cross-source `S-C01`; [Scopus candidate stage complete](searches/sources/s-d01-scopus/pilots/S-D01-P14-20260823T150131-0400/candidate-terminology-conclusion.json) |
 | `S-D02` | Web of Science Core Collection | Pending |
 | `S-D03` | IEEE Xplore | Pending |
 | `S-D04` | Compendex and Inspec through Engineering Village | Pending |

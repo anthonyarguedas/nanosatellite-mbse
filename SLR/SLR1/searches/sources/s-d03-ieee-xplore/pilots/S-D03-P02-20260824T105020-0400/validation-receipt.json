@@ -1,0 +1,26 @@
+{
+  "receipt_schema": "slr1-source-pilot-validation-receipt/v2",
+  "pilot_id": "S-D03-P02-20260824T105020-0400",
+  "validated_at": "2026-08-24T11:36:15-04:00",
+  "basis": "observed",
+  "checks": [
+    {"check": "SLR1 shared search infrastructure", "method": "uv run SLR/SLR1/scripts/validate_search_infrastructure.py", "status": "passed", "detail": "dictionary, crosswalk, schemas, and layout passed"},
+    {"check": "pilot manifest schema", "method": "Draft 2020-12 validation against searches/schemas/pilot-manifest.schema.json", "status": "passed", "detail": "P02 manifest schema valid"},
+    {"check": "guideline structure", "method": "exact 10 required source-guideline headings", "status": "passed", "detail": "all ten required headings present"},
+    {"check": "nine exact query files", "method": "UTF-8 SHA-256 and offline normative-term/Boolean audit", "status": "passed", "detail": "all nine one-cell drafts match translation specification and P02 regeneration audit"},
+    {"check": "evidence index and artifact hashes", "method": "path/hash verification excluding deliberate self-hash nulls", "status": "passed", "detail": "all checked tracked artifact bytes matched the evidence index at validation pass"},
+    {"check": "restricted artifact inventory", "method": "path/hash-only restricted inventory", "status": "passed", "detail": "restricted inventory present; no payload was copied into tracked storage"},
+    {"check": "rights boundary", "method": "tracked raw-record, DOI-like identifier, query-URL, local-path, websocket, and native-export scan", "status": "passed", "detail": "all prohibited tracked-content hit counts were zero"},
+    {"check": "P01 immutable boundary", "method": "P01 evidence-index hash verification separated into P01-local and shared-draft paths", "status": "passed", "detail": "7 P01-local hashed artifacts matched; 11 shared source-draft hashes differ only because P02 was authorized to regenerate guideline/spec/query drafts; no P01-local artifact was edited"},
+    {"check": "scoped Git boundary", "method": "staged-name, P01-diff, final-events, and whitespace checks", "status": "passed", "detail": "no staged source-packet entry, no P01 diff entry, no non-README final-event file, and no scoped whitespace error"},
+    {"check": "postflight browser integrity", "method": "read-only launcher, safe anchor census, power/assertion, actual exact-window sleep-event check, and adapter recheck", "status": "passed", "detail": "anchor, version, AC power, sleep assertion, zero actual Sleep/Wake/DarkWake events, clean adapter status, and assigned hashes all passed"},
+    {"check": "source-cell completion", "method": "saved rendered adapter artifact review", "status": "recorded_source_failure", "detail": "A1-C01 returned null IEEEProtocolError; A2–BT2 remained unexecuted under the mandatory terminal stop"}
+  ],
+  "checksum_policy": {
+    "manifest_json": "The evidence index holds the manifest hash; the manifest's own artifact entry is deliberately null.",
+    "evidence_index_json": "The evidence index's own SHA-256 is deliberately null to avoid a self-reference cycle.",
+    "restricted_artifacts": "restricted-artifact-inventory.json records path/hash/access metadata only."
+  },
+  "final_read_only_recheck_after_manifest_evidence_regeneration": "passed",
+  "overall_status": "validation_passed_with_recorded_terminal_source_failure"
+}

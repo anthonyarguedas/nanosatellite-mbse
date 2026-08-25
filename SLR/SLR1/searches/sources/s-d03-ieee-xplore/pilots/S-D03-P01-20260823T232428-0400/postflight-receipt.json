@@ -1,0 +1,53 @@
+{
+  "receipt_schema": "slr1-browser-postflight-receipt/v1",
+  "pilot_id": "S-D03-P01-20260823T232428-0400",
+  "pilot_window": {
+    "started_at": "2026-08-23T23:24:28-04:00",
+    "ended_at": "2026-08-23T23:35:23-04:00",
+    "timezone": "America/New_York"
+  },
+  "basis": "observed",
+  "read_only_launcher_check": {
+    "status": "failed",
+    "endpoint_liveness": "live_but_unusable",
+    "reason": "The dedicated browser endpoint was live but had no page target; the read-only launcher did not create or repair one.",
+    "runtime_disk_version_match": true,
+    "runtime_version": "151.0.7922.174"
+  },
+  "anchor_and_page_integrity": {
+    "controller_anchor_persisted": false,
+    "adapter_owned_pages_closed": "unresolved",
+    "disposition": "blocked",
+    "reason": "No page target remained for the postflight read-only check, so the required controller anchor persistence and adapter-owned-page closure could not be confirmed. No restart, anchor creation, or further live source work was attempted."
+  },
+  "power_and_sleep_assertion": {
+    "power_source": "AC Power",
+    "battery_percent": 100,
+    "prevent_system_sleep": 1,
+    "controller_wrapper_caffeinate_assertion_observed": true
+  },
+  "sleep_wake_log_check": {
+    "method": "pmset log records categorized as Sleep, Wake, or DarkWake within the exact pilot window",
+    "sleep_events": 0,
+    "wake_events": 0,
+    "darkwake_events": 0,
+    "status": "no_actual_sleep_or_wake_event_observed"
+  },
+  "adapter_recheck": {
+    "agent_tools_worktree_status": "clean",
+    "adapter_sha256": "323e15c83f053bd0bddc987326350e9f224a43f78f3c2f46f048d9a62eae849a",
+    "focused_test_sha256": "b853868b3ae451aa521f58b1d934378045c95e4cea24f9f0144c88335a85c838",
+    "adapter_changed_during_pilot": false
+  },
+  "sanitization": {
+    "contains_no": [
+      "cookies",
+      "credentials",
+      "session_or_search_url",
+      "local_profile_path",
+      "account_or_institution_context",
+      "CDP_websocket_identifier",
+      "raw_process_or_environment_dump"
+    ]
+  }
+}

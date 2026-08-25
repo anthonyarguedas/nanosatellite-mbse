@@ -1,0 +1,43 @@
+{
+  "receipt_schema_version": "esa-indico-event-pass-reconciliation/v1",
+  "created_at": "2026-08-23T02:22:09-04:00",
+  "basis": "observed",
+  "event_id": "472",
+  "pass_1": {
+    "artifact": "bounded-event-472-ledger.json",
+    "event_export_observed_at": "2026-08-23T02:20:00-04:00",
+    "event_export_response_sha256": "f61535f26304a39d0ee3e8ed5f92f37dd0613441c82861af7f9cd54f29587420",
+    "contribution_count": 15,
+    "export_attachment_count": 13,
+    "all_route_attachment_count": 15,
+    "static_only_attachment_ids": ["9769", "9770"],
+    "static_only_access_status_at_p01": "access_unverified",
+    "pdf_text_route_complete": false
+  },
+  "pass_2": {
+    "artifact": "bounded-event-472-ledger-pass2.json",
+    "event_export_observed_at": "2026-08-23T02:21:31-04:00",
+    "event_export_response_sha256": "f61535f26304a39d0ee3e8ed5f92f37dd0613441c82861af7f9cd54f29587420",
+    "contribution_count": 15,
+    "export_attachment_count": 13,
+    "all_route_attachment_count": 15,
+    "static_only_attachment_ids": ["9769", "9770"],
+    "static_only_access_status_at_p01": "access_unverified",
+    "pdf_text_route_complete": false
+  },
+  "invariants": {
+    "contribution_identifier_order_matches": true,
+    "attachment_identifier_order_matches": true,
+    "event_export_response_hash_matches": true,
+    "all_export_listed_public_attachments_appeared_on_owner_pages": true,
+    "every_export_listed_public_pdf_has_been_text_extracted": false,
+    "static_only_links_proved_public_in_p01": false
+  },
+  "supervisor_correction": {
+    "correction_receipt": "supervisor-correction-20260823.json",
+    "historical_export_detail_preserved": "contributions",
+    "later_access_evidence_pilot": "S-L02-P02-20260823T030216-0400",
+    "corrected_material_interpretation": "Each pass had thirteen export-listed/public PDF routes and two static-only links. The static-only links were access-unverified in P01 and later classified access_restricted_or_login in P02."
+  },
+  "scope_limit": "Two identical bounded event passes establish only reproducibility for event 472 at the stated timestamps. They do not establish the full ESA universe, public access for static-only links, or PDF-text coverage."
+}

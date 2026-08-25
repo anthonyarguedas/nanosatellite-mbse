@@ -1,0 +1,64 @@
+{
+  "receipt_schema_version": "esa-indico-pdf-text-probe/v1",
+  "basis": "observed",
+  "diagnostic_only": true,
+  "storage_policy": {
+    "pdf_bytes_retained_in_git": false,
+    "pdf_text_retained_in_git": false,
+    "source_text_snippets_retained": false,
+    "method": "public direct PDF was streamed for checksum and Poppler pdftotext counts only"
+  },
+  "parser": {
+    "name": "pdftotext",
+    "version": "26.04.0"
+  },
+  "samples": [
+    {
+      "observed_at": "2026-08-23T01:59:01-04:00",
+      "event_id": "472",
+      "contribution_id": "9142",
+      "attachment_id": "9694",
+      "direct_route_path": "/event/472/contributions/9142/attachments/5812/9694/<public-pdf-filename>",
+      "pdf_sha256": "adac37bf71ce05958acb84c145a2b719d319380584ca50398692a9f62dea830c",
+      "pdf_text_utf8_bytes": 4219,
+      "pdf_text_lines": 205,
+      "literal_term_occurrence_counts": {
+        "MBSE": 4,
+        "SysML": 0,
+        "CubeSat": 0,
+        "nanosatellite": 0,
+        "power": 0
+      },
+      "parse_state": "text_extracted"
+    },
+    {
+      "observed_at": "2026-08-23T02:02:13-04:00",
+      "event_id": "407",
+      "contribution_id": "7384",
+      "attachment_id": "7310",
+      "direct_route_path": "/event/407/contributions/7384/attachments/4788/7310/<public-pdf-filename>",
+      "pdf_sha256": "d58993f416c8f52c83c6206b97caf35c5ad9ba2ff4c47c6ae23611a3e278b765",
+      "pdf_text_utf8_bytes": 15639,
+      "pdf_text_lines": 197,
+      "literal_term_occurrence_counts": {
+        "MBSE": 7,
+        "CubeSat": 1,
+        "SysML": 0,
+        "model-based": 2
+      },
+      "parse_state": "text_extracted",
+      "metadata_contrast_observed_at": "2026-08-23T02:27:05-04:00",
+      "metadata_literal_flags": {
+        "event_title": {"MBSE": true, "CubeSat": false, "nanosatellite": false},
+        "contribution_title": {"MBSE": false, "CubeSat": false, "nanosatellite": false},
+        "contribution_description": {"MBSE": false, "CubeSat": false, "nanosatellite": false},
+        "attachment_filename": {"MBSE": false, "CubeSat": false, "nanosatellite": false}
+      }
+    }
+  ],
+  "interpretation": {
+    "observed": "The second sample had literal MBSE and CubeSat occurrences in PDF text while its own contribution metadata and filename lacked both literals. The event title is a separate metadata route and must not be combined with contribution or PDF text.",
+    "not_claimed": "Literal grep counts are not eligibility decisions and do not establish a final candidate. They demonstrate why a distinct direct-PDF full-text route is required."
+  },
+  "failure_rule": "In a final run, every public PDF must receive a checksum and a successful deterministic text extraction or an explicitly queued OCR/manual result. A download, parse, or OCR failure leaves coverage incomplete rather than zero."
+}

@@ -1,0 +1,90 @@
+{
+  "receipt_schema_version": "esa-indico-supervisor-correction/v1",
+  "created_at": "2026-08-23T03:04:44-04:00",
+  "revised_at": "2026-08-23T03:30:34-04:00",
+  "task_id": "S-L02",
+  "source_id": "esa-indico",
+  "pilot_id": "S-L02-P01-20260823T015622-0400",
+  "basis": "observed_and_documented",
+  "correction_operator": {
+    "type": "ai_orchestrator_with_llm_subagent",
+    "human_supervisor": null,
+    "human_acceptance": false
+  },
+  "diagnostic_only": true,
+  "candidate_import_permitted": false,
+  "historical_execution_preservation": {
+    "p01_event_export_detail": "contributions",
+    "p01_event_export_observed_at": [
+      "2026-08-23T02:20:00-04:00",
+      "2026-08-23T02:21:31-04:00"
+    ],
+    "p01_static_only_attachment_ids": ["9769", "9770"],
+    "p01_direct_get_for_static_only_links": false,
+    "correction_rule": "This receipt does not restate P01 as detail=subcontributions or as PDF-complete; it records the later correction separately."
+  },
+  "official_exporter_documentation": {
+    "basis": "official_documentation",
+    "source": "Indico HTTP Export API documentation, Events detail levels",
+    "url": "https://docs.getindico.io/en/stable/http-api/exporters/event/",
+    "reviewed_in_corrective_review": true,
+    "documented_prospective_detail": "subcontributions",
+    "documented_case_sensitive_field": "subContributions",
+    "implementation_effect": "The prospective route and parser use detail=subcontributions and subContributions first. Lowercase subcontributions remains only a documented compatibility fallback when the case-sensitive field is absent."
+  },
+  "material_and_access_correction": {
+    "p01_true_export_attachment_ids": [
+      "9691", "9692", "9693", "9694", "9695", "9696", "9697", "9698", "9699", "9700", "9701", "9702", "9704"
+    ],
+    "p01_all_route_attachment_ids": [
+      "9691", "9692", "9693", "9694", "9695", "9696", "9697", "9698", "9699", "9700", "9701", "9702", "9704", "9769", "9770"
+    ],
+    "p01_static_only_attachment_ids": ["9769", "9770"],
+    "p01_static_only_access_status": "access_unverified",
+    "later_p02_access_evidence": {
+      "pilot_id": "S-L02-P02-20260823T030216-0400",
+      "artifact_path": "SLR/SLR1/searches/sources/s-l02-esa-indico/pilots/S-L02-P02-20260823T030216-0400/safe-receipts/static-only-access-status.json",
+      "request_method": "GET",
+      "redirects_followed": 0,
+      "attachment_statuses": {
+        "9769": "access_restricted_or_login",
+        "9770": "access_restricted_or_login"
+      },
+      "privacy": "The P02 receipt retains no response headers, body, cookie, redirect target, redirect query, or session identifier."
+    },
+    "corrected_interpretation": "Event 472 had thirteen export-listed/public PDF routes plus two visible static/rendered links whose anonymous access is restricted. It did not have fifteen public PDFs."
+  },
+  "browser_anchor_correction": {
+    "incident_observed_at": "2026-08-23T02:04:21-04:00",
+    "safe_facts": [
+      "Page-target count was observed as zero after the subagent browser-owned-tab closure.",
+      "The supervising controller ran the normal launcher, restored and verified a safe page anchor, and the subsequent read-only check passed.",
+      "The observed page-target count after restoration was two."
+    ],
+    "interpretation_limit": "It cannot be established whether the original controller anchor independently disappeared or was closed. P01 must not claim controller_anchor_untouched=true or controller_anchor_closed=false.",
+    "corrected_record": "Controller-anchor continuity is unproved; restoration by the controller is observed."
+  },
+  "non_pdf_and_irregular_material_correction": {
+    "prospective_rule": "Every public non-PDF material receives a deterministic text-extraction route or a replayable manual/LLM queue. Irregular or external materials are ledgered and queued rather than silently dropped; unresolved access, parse, or queue outcomes leave coverage null.",
+    "p01_scope_limit": "P01's event-407 topology observation did not traverse all contribution pages or extract non-PDF content."
+  },
+  "correction_targets": [
+    "safe-receipts/bounded-event-472-ledger.json",
+    "safe-receipts/bounded-event-472-ledger-pass2.json",
+    "safe-receipts/event-472-pass-reconciliation.json",
+    "safe-receipts/rendered-timetable-navigation-queue.json",
+    "safe-receipts/rendered-timetable-navigation-receipt.json",
+    "safe-receipts/rendered-timetable-receipt-validation.json",
+    "observations.md",
+    "manifest.json",
+    "evidence-index.json"
+  ],
+  "privacy": {
+    "browser_tab_urls_retained": false,
+    "controller_browser_urls_retained": false,
+    "response_headers_retained": false,
+    "response_bodies_retained": false,
+    "cookies_tokens_or_session_identifiers_retained": false,
+    "redirect_targets_or_queries_retained": false
+  }
+}

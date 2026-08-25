@@ -1,0 +1,17 @@
+{
+  "artifact_type": "slr1-ieee-p04-predeclared-inputs/v1",
+  "pilot_id": "S-D03-P04-20260824T131301-0400",
+  "basis": "inferred",
+  "inputs": [
+    {"input_id": "N6-forward", "purpose": "generic NEAR/6 syntax and unordered forward control", "restricted_query_file": "inputs/near6-forward.ieee-query.txt", "sha256": "17ee92c031aaf8bf2d023ebbb1366660859e971829f3dc525eb3c1c497ee0b3d", "byte_count_including_terminal_lf": 60},
+    {"input_id": "N6-reverse", "purpose": "generic NEAR/6 unordered reversal control", "restricted_query_file": "inputs/near6-reverse.ieee-query.txt", "sha256": "57025cc687eca647762e07156cfbbf5d1c651564af8921af947945d68af5bc78", "byte_count_including_terminal_lf": 60},
+    {"input_id": "N6-grouped", "purpose": "generic grouped NEAR/6 operand control", "restricted_query_file": "inputs/near6-grouped.ieee-query.txt", "sha256": "0463f439c4535d0ed515fb8553a6c56f66a9aea775c8c2ec78e40380e386ecaf", "byte_count_including_terminal_lf": 125},
+    {"input_id": "N6-distributed", "purpose": "generic distributed-OR NEAR/6 equivalence control", "restricted_query_file": "inputs/near6-distributed.ieee-query.txt", "sha256": "17e61fd2b7ea98c26c6ac4209103ce605fc2ed7a0ac865bf21166c1a71b85a82", "byte_count_including_terminal_lf": 259},
+    {"input_id": "CTRL-year-and-content", "purpose": "generic individually fielded CubeSat AND MBSE query for the separately labelled year and multiple-content-type controls", "restricted_query_file": "inputs/generic-cubesat-mbse.ieee-query.txt", "sha256": "e742a53e58c57f816d3e17b5487fd3780cc0ff11e1e275979791ea3249307ad7", "byte_count_including_terminal_lf": 57},
+    {"input_id": "Q1", "purpose": "first fixed multipage count-selection query: individually fielded CubeSat AND MBSE", "restricted_query_file": "inputs/Q1-cubesat-mbse.ieee-query.txt", "sha256": "e742a53e58c57f816d3e17b5487fd3780cc0ff11e1e275979791ea3249307ad7", "byte_count_including_terminal_lf": 57},
+    {"input_id": "Q2", "purpose": "second fixed multipage count-selection query: individually fielded nanosatellite AND MBSE", "restricted_query_file": "inputs/Q2-nanosatellite-mbse.ieee-query.txt", "sha256": "7b07e9e256bff5f8530a5f9167a9b57f533e78800396206353ee090e4c675d9b", "byte_count_including_terminal_lf": 63},
+    {"input_id": "Q3", "purpose": "third fixed multipage count-selection query: individually fielded CubeSat AND SysML", "restricted_query_file": "inputs/Q3-cubesat-sysml.ieee-query.txt", "sha256": "52e9b97a9890218ea0d7404dadbafabd99fc839be72fffc92afa7e034377cf9f", "byte_count_including_terminal_lf": 58}
+  ],
+  "selection_rule": "Test Q1, then Q2, then Q3 serially. Select the first exact total in [11,50]; do not inspect record content. If none qualifies, record multipage completeness as blocked and do not adapt terms.",
+  "pair_fallback_rule": "Only after every N6 input succeeds with exact echo, forward=reverse, and grouped=distributed may dictionary-v4 pair-bearing source drafts be regenerated with NEAR/6."
+}

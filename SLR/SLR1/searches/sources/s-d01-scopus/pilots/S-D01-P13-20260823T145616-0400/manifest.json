@@ -1,0 +1,679 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D01-P13-20260823T145616-0400",
+  "task_id": "S-D01",
+  "source_id": "scopus",
+  "method_type": "direct",
+  "status": "partial",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-23T14:57:00-04:00",
+  "ended_at": "2026-08-23T14:59:07-04:00",
+  "protocol_commit": "343ae7987b0fb7239a5a66d1d2dcaa7fb67a5915",
+  "operator": {
+    "type": "human_with_llm",
+    "model": "openai-codex/gpt-5.6-sol",
+    "human_supervisor": "review owner (approval pending)"
+  },
+  "interface": {
+    "name": "Scopus current rendered Advanced Documents Search",
+    "url": "https://www.scopus.com/pages/search/publications?type=advanced",
+    "access_route": "adapter_default_local_loopback_CDP_owned_tab",
+    "authenticated": true,
+    "database_or_collection": "Scopus",
+    "platform": "Scopus",
+    "timezone": "UTC-04:00",
+    "authentication_status_limit": "Existing authorized local browser context; no credentials, sign-in, CAPTCHA, or challenge action."
+  },
+  "executions": [
+    {
+      "execution_id": "RC-K01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "known Route A candidate field: model-based engineering in abstract",
+      "started_at": "2026-08-23T14:57:01-04:00",
+      "status": "success",
+      "exact_query_or_operation": "DOI(\"10.1109/SysCon53073.2023.10131054\") AND ABS(\"model-based engineering\")",
+      "query_file": "queries/rc-k01-k01.scopus-advanced.txt",
+      "fields": [
+        "ABS",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-k01.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-K02",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "known Route A/RFLP candidate field: RFLP in abstract",
+      "started_at": "2026-08-23T14:57:04-04:00",
+      "status": "success",
+      "exact_query_or_operation": "DOI(\"10.1007/978-3-031-62578-7_21\") AND ABS({RFLP})",
+      "query_file": "queries/rc-k02-k02.scopus-advanced.txt",
+      "fields": [
+        "ABS",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-k02.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-K03",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "known reusable-artifact report: any prespecified tool/connected label in KEY",
+      "started_at": "2026-08-23T14:57:07-04:00",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "DOI(\"10.1109/AERO47225.2020.9172714\") AND KEY((\"Cameo Systems Modeler\" OR {MagicDraw} OR {OpenMBEE} OR \"digital thread\" OR \"digital threads\"))",
+      "query_file": "queries/rc-k03-k03.scopus-advanced.txt",
+      "fields": [
+        "KEY",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-k03.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-K04",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "known Route B report: digital-thread candidate in KEY",
+      "started_at": "2026-08-23T14:57:10-04:00",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "EID(\"2-s2.0-85100916615\") AND KEY((\"digital thread\" OR \"digital threads\"))",
+      "query_file": "queries/rc-k04-k04.scopus-advanced.txt",
+      "fields": [
+        "KEY",
+        "EID"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-k04.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-K05",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "known older Route A report: full-tool candidate in KEY",
+      "started_at": "2026-08-23T14:57:13-04:00",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "DOI(\"10.1109/AERO.2014.6836317\") AND KEY((\"Cameo Systems Modeler\" OR {MagicDraw} OR {OpenMBEE} OR \"Enterprise Architect\"))",
+      "query_file": "queries/rc-k05-k05.scopus-advanced.txt",
+      "fields": [
+        "KEY",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-k05.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-K06",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "known journal report: ordinary CORE occurrence in abstract",
+      "started_at": "2026-08-23T14:57:16-04:00",
+      "status": "success",
+      "exact_query_or_operation": "DOI(\"10.3390/systems11070320\") AND ABS({CORE})",
+      "query_file": "queries/rc-k06-k06.scopus-advanced.txt",
+      "fields": [
+        "ABS",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-k06.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-C01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "contrast: digital twin in title",
+      "started_at": "2026-08-23T14:57:18-04:00",
+      "status": "success",
+      "exact_query_or_operation": "DOI(\"10.1109/JSAC.2026.3700576\") AND TITLE(\"digital twin\")",
+      "query_file": "queries/rc-c01-c01.scopus-advanced.txt",
+      "fields": [
+        "TITLE",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-c01.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-C02",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "contrast: digital twin in abstract",
+      "started_at": "2026-08-23T14:57:21-04:00",
+      "status": "success",
+      "exact_query_or_operation": "DOI(\"10.1007/978-3-031-93087-4_11\") AND ABS(\"digital twin\")",
+      "query_file": "queries/rc-c02-c02.scopus-advanced.txt",
+      "fields": [
+        "ABS",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-c02.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-C03",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "contrast: ordinary core in abstract",
+      "started_at": "2026-08-23T14:57:24-04:00",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "DOI(\"10.1109/SBESC53686.2021.9628300\") AND ABS({CORE})",
+      "query_file": "queries/rc-c03-c03.scopus-advanced.txt",
+      "fields": [
+        "ABS",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-c03.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-C04",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "contrast: ordinary core in QuSAD abstract",
+      "started_at": "2026-08-23T14:57:26-04:00",
+      "status": "success",
+      "exact_query_or_operation": "TITLE(\"QuSAD - An Interactive, Space Mission Analysis, Design, and Simulation Toolkit\") AND ABS({CORE})",
+      "query_file": "queries/rc-c04-c04.scopus-advanced.txt",
+      "fields": [
+        "TITLE",
+        "ABS"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-c04.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "RC-C05",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "contrast: digital twin in stand-alone constellation simulation abstract",
+      "started_at": "2026-08-23T14:57:29-04:00",
+      "status": "success",
+      "exact_query_or_operation": "DOI(\"10.52202/078367-0032\") AND ABS(\"digital twin\")",
+      "query_file": "queries/rc-c05-c05.scopus-advanced.txt",
+      "fields": [
+        "ABS",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/rc-c05.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "Q00",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Current B1 OR B2 baseline union",
+      "started_at": "2026-08-23T14:57:32-04:00",
+      "status": "success",
+      "exact_query_or_operation": "(TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR MBSE OR SysML OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR OPM OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR OOSEM OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR Arcadia OR Capella))) OR TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\") AND (requirement OR requirements OR function OR functions OR functional OR behavior OR behaviors OR behaviour OR behaviours OR behavioral OR behavioural OR architecture OR architectures OR architectural OR interface OR interfaces OR traceability OR trace OR traceable OR traced OR allocation OR allocate OR allocated OR constraint OR constraints OR parametric OR parametrics OR analysis OR analyses OR design OR designs OR designed OR designing OR decision OR decisions OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR tradeoff OR tradeoffs OR verification OR verifications OR verify OR verifies OR verified OR verifying OR validation OR validations OR validate OR validates OR validated OR validating))))",
+      "query_file": "queries/q00-core-b1-or-b2.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": false,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 155,
+      "total_is_exact": true,
+      "records_retrieved": 155,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/q00.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "Q01",
+      "partition_id": null,
+      "cell_id": "F01",
+      "purpose": "P AND model-based engineering",
+      "started_at": "2026-08-23T14:58:23-04:00",
+      "status": "success",
+      "exact_query_or_operation": "TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-based engineering\" OR \"model based engineering\")))",
+      "query_file": "queries/q01-model-based-engineering.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": false,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 3,
+      "total_is_exact": true,
+      "records_retrieved": 3,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/q01.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "Q01R",
+      "partition_id": null,
+      "cell_id": "F01",
+      "purpose": "P AND model-based engineering AND R",
+      "started_at": "2026-08-23T14:58:28-04:00",
+      "status": "success",
+      "exact_query_or_operation": "TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-based engineering\" OR \"model based engineering\") AND (requirement OR requirements OR function OR functions OR functional OR behavior OR behaviors OR behaviour OR behaviours OR behavioral OR behavioural OR architecture OR architectures OR architectural OR interface OR interfaces OR traceability OR trace OR traceable OR traced OR allocation OR allocate OR allocated OR constraint OR constraints OR parametric OR parametrics OR analysis OR analyses OR design OR designs OR designed OR designing OR decision OR decisions OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR tradeoff OR tradeoffs OR verification OR verifications OR verify OR verifies OR verified OR verifying OR validation OR validations OR validate OR validates OR validated OR validating)))",
+      "query_file": "queries/q01r-model-based-engineering-and-r.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": false,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 3,
+      "total_is_exact": true,
+      "records_retrieved": 3,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/q01r.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "Q02",
+      "partition_id": null,
+      "cell_id": "F02",
+      "purpose": "P AND model-driven engineering",
+      "started_at": "2026-08-23T14:58:37-04:00",
+      "status": "success",
+      "exact_query_or_operation": "TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-driven engineering\" OR \"model driven engineering\")))",
+      "query_file": "queries/q02-model-driven-engineering.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": false,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 5,
+      "total_is_exact": true,
+      "records_retrieved": 5,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/q02.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "Q02R",
+      "partition_id": null,
+      "cell_id": "F02",
+      "purpose": "P AND model-driven engineering AND R",
+      "started_at": "2026-08-23T14:58:42-04:00",
+      "status": "success",
+      "exact_query_or_operation": "TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-driven engineering\" OR \"model driven engineering\") AND (requirement OR requirements OR function OR functions OR functional OR behavior OR behaviors OR behaviour OR behaviours OR behavioral OR behavioural OR architecture OR architectures OR architectural OR interface OR interfaces OR traceability OR trace OR traceable OR traced OR allocation OR allocate OR allocated OR constraint OR constraints OR parametric OR parametrics OR analysis OR analyses OR design OR designs OR designed OR designing OR decision OR decisions OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR tradeoff OR tradeoffs OR verification OR verifications OR verify OR verifies OR verified OR verifying OR validation OR validations OR validate OR validates OR validated OR validating)))",
+      "query_file": "queries/q02r-model-driven-engineering-and-r.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": false,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 5,
+      "total_is_exact": true,
+      "records_retrieved": 5,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/q02r.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "Q03",
+      "partition_id": null,
+      "cell_id": "F03",
+      "purpose": "P AND model-based design",
+      "started_at": "2026-08-23T14:58:50-04:00",
+      "status": "success",
+      "exact_query_or_operation": "TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-based design\" OR \"model based design\")))",
+      "query_file": "queries/q03-model-based-design.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": false,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 8,
+      "total_is_exact": true,
+      "records_retrieved": 8,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/q03.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "Q03R",
+      "partition_id": null,
+      "cell_id": "F03",
+      "purpose": "P AND model-based design AND R",
+      "started_at": "2026-08-23T14:58:54-04:00",
+      "status": "success",
+      "exact_query_or_operation": "TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-based design\" OR \"model based design\") AND (requirement OR requirements OR function OR functions OR functional OR behavior OR behaviors OR behaviour OR behaviours OR behavioral OR behavioural OR architecture OR architectures OR architectural OR interface OR interfaces OR traceability OR trace OR traceable OR traced OR allocation OR allocate OR allocated OR constraint OR constraints OR parametric OR parametrics OR analysis OR analyses OR design OR designs OR designed OR designing OR decision OR decisions OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR tradeoff OR tradeoffs OR verification OR verifications OR verify OR verifies OR verified OR verifying OR validation OR validations OR validate OR validates OR validated OR validating)))",
+      "query_file": "queries/q03r-model-based-design-and-r.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": false,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 8,
+      "total_is_exact": true,
+      "records_retrieved": 8,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/q03r.json"
+      ],
+      "notes": ""
+    },
+    {
+      "execution_id": "Q04",
+      "partition_id": null,
+      "cell_id": "F04",
+      "purpose": "P AND model-driven design",
+      "started_at": "2026-08-23T14:59:02-04:00",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "TITLE-ABS-KEY(((CubeSat OR CubeSats OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat OR nanosats OR nanosatellite OR nanosatellites OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\") AND (\"model-driven design\" OR \"model driven design\")))",
+      "query_file": "queries/q04-model-driven-design.scopus-advanced.txt",
+      "fields": [
+        "TITLE-ABS-KEY"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": false,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400/q04.json"
+      ],
+      "notes": "Valid explicit zero; q04-explicit-zero-controller-correction.json supersedes the runner stop classification."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P13-C01",
+      "requirement": "Freeze a diverse known-item and contrast register before Q00 or candidate-family searches.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "register-freeze-receipt.json",
+        "known-item-and-contrast-register.json"
+      ],
+      "notes": "Six known and five contrast records were sealed at 14:57:32-04:00; Q00 began afterward."
+    },
+    {
+      "check_id": "P13-C02",
+      "requirement": "Retrieve the complete current B1 OR B2 baseline.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "query-plan.json"
+      ],
+      "notes": "Q00 returned and retained all 155 stable identities."
+    },
+    {
+      "check_id": "P13-C03",
+      "requirement": "Complete candidate families through Q04 without importing records.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "q04-explicit-zero-controller-correction.json"
+      ],
+      "notes": "Q01-Q03 and R variants completed; Q04 was a valid explicit zero. Q04R and remaining families continued in P14."
+    },
+    {
+      "check_id": "P13-C04",
+      "requirement": "Verify actual sleep/wake and About This Mac markers for the exact window.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "system-log-controller-correction.json",
+        "sleep-wake-actual-window-corrected.log",
+        "about-this-mac-final-window-corrected.log"
+      ],
+      "notes": "Corrected macOS log syntax found zero matching events."
+    },
+    {
+      "check_id": "P13-C05",
+      "requirement": "Finish every candidate family and offline term-use audit.",
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [
+        "../S-D01-P14-20260823T150131-0400/query-plan.json"
+      ],
+      "notes": "P14 was the explicitly authorized continuation."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P13-20260823T145616-0400/known-item-and-contrast-register.json",
+      "role": "frozen known-item and contrast register",
+      "access_classification": "metadata_only",
+      "sha256": null,
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P13-20260823T145616-0400",
+      "role": "P13 partial candidate-test packet",
+      "access_classification": "metadata_only",
+      "sha256": null,
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400",
+      "role": "restricted P13 source records and command ledger",
+      "access_classification": "restricted",
+      "sha256": null,
+      "secure_location_reference": ".searches/s-d01-scopus-restricted/S-D01-P13-20260823T145616-0400"
+    }
+  ],
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "P13 validly froze the register and completed Q00 through the Q04 zero; P14 completed the non-retried continuation after correcting the local zero-result validator.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Review the frozen register and P13/P14 continuation boundary; use the corrected Q04 and system-log receipts rather than the superseded runner classifications."
+    ]
+  }
+}

@@ -1,0 +1,355 @@
+{
+  "schema_version": "slr1-pilot-campaign/v1",
+  "campaign_id": "S-D05-C01-20260824T161325-0400",
+  "task_id": "S-D05",
+  "source_id": "wiley-online-library",
+  "method_type": "direct",
+  "protocol_fingerprint": "d1d92411ad641bc0293389b9699c6676ba998af72c9cfd63c28b59bcf4745ba9",
+  "dictionary_fingerprint": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+  "capability_catalog": [
+    "G-SOURCE-BOUNDARY",
+    "G-QUERY-TRANSPORT",
+    "G-FIELD-BOUNDARY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-CONTENT-CONTROL",
+    "G-RETRIEVAL",
+    "G-PAGINATION-CONTROL",
+    "G-PAGE-IDENTITY",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR"
+  ],
+  "status": "technically_blocked",
+  "created_at": "2026-08-24T16:13:25-04:00",
+  "updated_at": "2026-08-24T16:13:25-04:00",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "candidate_records_imported": 0,
+  "retry_policy": {
+    "policy_id": "RP-D05-BUSY-01",
+    "maximum_retries": 0,
+    "passive_wait_delays_seconds": [],
+    "attempted": 0,
+    "completed": 0,
+    "preauthorized_same_tab_busy_reissue": false
+  },
+  "controller_authorization": {
+    "technical_corrective_attempts_authorized": true,
+    "maximum_additional_attempts": 2,
+    "maximum_source_operations_per_attempt": 4,
+    "rationale": "Two lifetime technical allocations are finite: P02 consumed one and only P03 remains. P03 is capped at four source operations after source-free output safety is preserved.",
+    "maximum_technical_corrective_attempts": 2,
+    "maximum_methodological_revision_attempts": 0
+  },
+  "attempts": [
+    {
+      "attempt_id": "S-D05-P01-20260824T124916-0400",
+      "sequence": 1,
+      "manifest_path": "pilots/S-D05-P01-20260824T124916-0400/manifest.json",
+      "manifest_sha256": "dbf664d798978e7e82de08156ee3c84f3673c7ae40fa253850908e5b7ff80398",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "initial",
+        "authorized_by": "controller",
+        "authorization_decision_id": null,
+        "prospectively_authorized": false,
+        "allocated_at": "2026-08-24T12:49:16-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 0,
+        "performed": 0,
+        "operations": []
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P01-OUTPUT-SAFETY",
+          "gate_id": "G-OUTPUT-SAFETY",
+          "path": "pilots/S-D05-P01-20260824T124916-0400/offline-adapter-safety-check.json",
+          "sha256": "d57aa5ef90a6430e4dbb9fd219ca23f2170f1f1269b41a58173851a6fa4b3287",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "technical",
+        "ended_at": "2026-08-24T13:07:29-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "legacy_unverifiable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "Before any source request, OFF-ADP-001 demonstrated that the candidate adapter overwrites normal JSON and CSV outputs. The required no-clobber safety gate fails, so all live Wiley interface, parser, pair, controlled-vocabulary, date/control, zero, retrieval, and completeness requirements remain untested. This pilot is diagnostic only and cannot authorize a retry or final event."
+      }
+    },
+    {
+      "attempt_id": "S-D05-P02-20260824T134448-0400",
+      "sequence": 2,
+      "manifest_path": "pilots/S-D05-P02-20260824T134448-0400/manifest.json",
+      "manifest_sha256": "1166bf07ef825a3d12037d8a15bc0a5ac2fbc78e6713997619865db22db4dc21",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P02",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-24T13:44:48-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 0,
+        "performed": 0,
+        "operations": []
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P02-OUTPUT-SAFETY",
+          "gate_id": "G-OUTPUT-SAFETY",
+          "path": "pilots/S-D05-P02-20260824T134448-0400/adapter-verification.json",
+          "sha256": "62ee00b0266be3b99292b9ea83a52f10c37d37af85add5333c3f0dfc0874e307",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-QUERY-CONSTRUCTION",
+          "gate_id": "G-QUERY-CONSTRUCTION",
+          "path": "pilots/S-D05-P02-20260824T134448-0400/query-regeneration-audit.json",
+          "sha256": "79487ace35ec664a436e904641c35ea38455229e5b0c326a00bf5f712eafbd5f",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-BROWSER-HEALTH",
+          "gate_id": "G-BROWSER-HEALTH",
+          "path": "pilots/S-D05-P02-20260824T134448-0400/browser-preflight-failure.json",
+          "sha256": "4a4dc727160123604b8544c4730e033763e40f01a7031a1697feb93f7c393e84",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-LIVE-HEALTH",
+          "gate_id": "G-LIVE-HEALTH",
+          "path": "pilots/S-D05-P02-20260824T134448-0400/source-request-ledger.json",
+          "sha256": "9622ec6fb4b38269f88765584a2e58ea6e31389680c2ca4e2a33b41f1b2c3a85",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "technical",
+        "ended_at": "2026-08-24T13:55:24-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": false,
+        "terminal_verification": "not_applicable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "P02 corrected-adapter verification passed only source-free. Before H-001, the required dedicated read-only launcher check found the assigned CDP endpoint stale. The P02 stop rule prohibited all source work, browser repair, retry, and final postflight. No live Wiley requirement is satisfied and no source total is claimed."
+      }
+    }
+  ],
+  "gate_status_snapshots": [],
+  "capability_gates": [
+    {
+      "gate_id": "G-OUTPUT-SAFETY",
+      "checkpoint_id": "CP-OUTPUT-SAFETY-P02",
+      "attempt_id": "S-D05-P02-20260824T134448-0400",
+      "requirement": "The corrective adapter refuses output clobbering before source work.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D05-P02-20260824T134448-0400/adapter-verification.json",
+          "sha256": "62ee00b0266be3b99292b9ea83a52f10c37d37af85add5333c3f0dfc0874e307",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "No-clobber behavior is output safety and does not change review semantics."
+      },
+      "invalidation": null,
+      "notes": "P01's immutable old-adapter failure remains catalogued separately.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-QUERY-CONSTRUCTION",
+      "checkpoint_id": "CP-QUERY-CONSTRUCTION-P02",
+      "attempt_id": "S-D05-P02-20260824T134448-0400",
+      "requirement": "All nine draft query constructions reproduce the current dictionary source-free.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D05-P02-20260824T134448-0400/query-regeneration-audit.json",
+          "sha256": "79487ace35ec664a436e904641c35ea38455229e5b0c326a00bf5f712eafbd5f",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "The checkpoint does not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "This proves construction only; no Wiley source behavior exists.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-BROWSER-HEALTH",
+      "checkpoint_id": "CP-BROWSER-HEALTH-P02",
+      "attempt_id": "S-D05-P02-20260824T134448-0400",
+      "requirement": "The shared browser preflight is healthy immediately before live work.",
+      "depends_on": [],
+      "status": "failed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D05-P02-20260824T134448-0400/browser-preflight-failure.json",
+          "sha256": "4a4dc727160123604b8544c4730e033763e40f01a7031a1697feb93f7c393e84",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Shared browser health is operational and does not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "P02's stale dedicated endpoint is an environment stop, not Wiley behavior.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-LIVE-HEALTH",
+      "checkpoint_id": "CP-LIVE-HEALTH-P02",
+      "attempt_id": "S-D05-P02-20260824T134448-0400",
+      "requirement": "A first record-free Wiley rendered health gate reaches a reconcilable result state.",
+      "depends_on": [
+        "G-BROWSER-HEALTH",
+        "G-OUTPUT-SAFETY"
+      ],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "A bounded health gate is technical and preserves review semantics."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-LIVE-INTERFACE",
+      "checkpoint_id": "CP-LIVE-INTERFACE-P02",
+      "attempt_id": "S-D05-P02-20260824T134448-0400",
+      "requirement": "Only after the live health gate, predeclared route, field, parser, pair, and control tests may run.",
+      "depends_on": [
+        "G-LIVE-HEALTH"
+      ],
+      "status": "blocked",
+      "observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "These diagnostics validate implementation behavior without changing the protocol."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "untested"
+    },
+    {
+      "gate_id": "G-LIVE-COMPLETENESS",
+      "checkpoint_id": "CP-LIVE-COMPLETENESS-P02",
+      "attempt_id": "S-D05-P02-20260824T134448-0400",
+      "requirement": "Only supported live tests may advance to the predeclared identity/export/completeness checks.",
+      "depends_on": [
+        "G-LIVE-INTERFACE"
+      ],
+      "status": "blocked",
+      "observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Validation packaging and completeness mechanics are technical only."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "untested"
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "D-TECH-P02",
+      "attempt_id": "S-D05-P02-20260824T134448-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-OUTPUT-SAFETY"
+      ],
+      "rationale": "The P02 no-clobber repair was source-free output safety work with no review-semantic effect.",
+      "maximum_source_operations": 0,
+      "decided_at": "2026-08-24T13:34:55-04:00"
+    },
+    {
+      "decision_id": "D-TECH-NEXT-P03",
+      "attempt_id": null,
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-BROWSER-HEALTH",
+        "G-LIVE-HEALTH",
+        "G-LIVE-INTERFACE",
+        "G-LIVE-COMPLETENESS"
+      ],
+      "rationale": "One P03 is controller-authorized without human approval: complete shared-CfT health, run the first live health gate, then only its predeclared dependent tests, at a maximum of four source operations.",
+      "maximum_source_operations": 4,
+      "decided_at": "2026-08-24T16:13:25-04:00"
+    }
+  ],
+  "cancellation": null,
+  "acceptance": null
+}

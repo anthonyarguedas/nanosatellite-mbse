@@ -1,0 +1,64 @@
+{
+  "schema_version": "slr1-s-d05-adapter-verification/v1",
+  "pilot_id": "S-D05-P01-20260824T124916-0400",
+  "basis": "observed",
+  "candidate": {
+    "script_path": "/Users/antho/agent-tools/academic-research/skills/academic-search/scripts/search_wiley_online_library.py",
+    "candidate_last_touch_commit": "9116353f99a7dd1ad3f9be392b93282ccbff8362",
+    "candidate_parent": "fec4d882f216c1efc41d014cc3c5e8c5c201a43f",
+    "agent_tools_head": "e720192855f8b5356d92fff23caeb6b8f66bbaf4",
+    "candidate_commit_is_ancestor_of_agent_tools_head": true,
+    "relevant_worktree_status": "clean (no porcelain entries for the Wiley adapter or its two verified direct helpers)",
+    "bytes": {
+      "search_wiley_online_library.py": {
+        "expected_sha256": "360ac76f2f0d3530660ce868523eeb4caab809f2e5fd6bcc39da513652bf1205",
+        "observed_sha256": "360ac76f2f0d3530660ce868523eeb4caab809f2e5fd6bcc39da513652bf1205",
+        "match": true
+      },
+      "_browser_search_utils.py": {
+        "expected_sha256": "706d3f56c65518eb842cae9931364f8a10e7c0f1083f4ef75d6418c61be5dcb5",
+        "observed_sha256": "706d3f56c65518eb842cae9931364f8a10e7c0f1083f4ef75d6418c61be5dcb5",
+        "match": true
+      },
+      "_output_utils.py": {
+        "expected_sha256": "ec2cf6fc1c63dc71d7295cd6300eb322c3495e3f3d4c983bd47006a1d0d7b888",
+        "observed_sha256": "ec2cf6fc1c63dc71d7295cd6300eb322c3495e3f3d4c983bd47006a1d0d7b888",
+        "match": true
+      }
+    }
+  },
+  "offline_interface": {
+    "help_command": "uv run search_wiley_online_library.py --help --cdp-url http://127.0.0.1:9236",
+    "help_exit_status": 0,
+    "help_observed_options": [
+      "--query",
+      "--date-start",
+      "--date-end",
+      "--content articlesChapters|collections",
+      "--sort Earliest|Relevance",
+      "--passes",
+      "--count-only",
+      "--require-complete",
+      "--cdp-url",
+      "--fresh-browser",
+      "--output-path",
+      "--csv-output-path",
+      "--native-export-dir"
+    ],
+    "focused_offline_tests": {
+      "command": "uv run pytest -q tests/test_prisma_complex_source_adapters.py tests/test_search_logs.py -k 'wiley or Wiley'",
+      "passed": 3,
+      "deselected": 17,
+      "failed": 0
+    },
+    "local_safety_check": "offline-adapter-safety-check.json"
+  },
+  "demonstrated_defect": {
+    "code_issue": true,
+    "classification": "normal_output_no_clobber_failure",
+    "evidence": "The focused local check began with pre-existing JSON and CSV sentinels in a temporary directory. The adapter's normal JSON and CSV writers replaced both sentinels. The static call path invokes atomic_write_json(output_path, result) and contains no output_path.exists() guard; the native RIS path's separate guard does not protect normal outputs.",
+    "source_requests_made": 0,
+    "required_stop": "No live Wiley query or source/browser phase may begin under P01.",
+    "smallest_separate_fix_scope": "Add atomic refuse-if-exists/no-clobber publication for normal JSON, normalized CSV, and error artifacts; add focused regression tests covering every normal/error output path. Do not change query semantics in that code-fix task."
+  }
+}

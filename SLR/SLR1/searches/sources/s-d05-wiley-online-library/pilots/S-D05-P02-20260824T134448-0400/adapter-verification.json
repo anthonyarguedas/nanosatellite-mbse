@@ -1,0 +1,48 @@
+{
+  "schema_version": "slr1-s-d05-p02-adapter-verification/v1",
+  "pilot_id": "S-D05-P02-20260824T134448-0400",
+  "basis": "observed",
+  "source_requests_made": 0,
+  "browser_pages_created": 0,
+  "candidate": {
+    "script_path": "/var/folders/db/fjbrfx1n1kz6lrqlm7jvryp00000gn/T/agent-tools-wiley-no-clobber-20260824-131248-21819-19860/academic-research/skills/academic-search/scripts/search_wiley_online_library.py",
+    "worktree": "/var/folders/db/fjbrfx1n1kz6lrqlm7jvryp00000gn/T/agent-tools-wiley-no-clobber-20260824-131248-21819-19860",
+    "branch": "wiley-no-clobber-20260824-131248-21819-19860",
+    "head": "c8be56c87fe17f413de7c083b49f3bfebfca5bc7",
+    "required_commit_matches": true,
+    "worktree_clean_before_tests": true,
+    "worktree_clean_after_tests": true,
+    "adapter_sha256": {
+      "expected": "e340e649038e75fd6ada684f708940b6f4eec4b844a59c9e0697a9f25179ff8d",
+      "observed": "e340e649038e75fd6ada684f708940b6f4eec4b844a59c9e0697a9f25179ff8d",
+      "match": true
+    },
+    "test_sha256": {
+      "expected": "aa81bc0e7eb97870cf243c4f7a2de80ae16500046c0cc4946d5edcace4bc08c0",
+      "observed": "aa81bc0e7eb97870cf243c4f7a2de80ae16500046c0cc4946d5edcace4bc08c0",
+      "match": true
+    }
+  },
+  "source_free_checks": {
+    "focused_test_command": "caffeinate -dims uv run pytest -q tests/test_search_wiley_online_library.py",
+    "focused_test_result": "8 passed, 2 subtests passed in 0.05s",
+    "focused_test_coverage": [
+      "pre-existing JSON destination refuses before the source call and preserves bytes",
+      "pre-existing CSV destination refuses before the source call and preserves bytes",
+      "symlink destinations refuse before the source call",
+      "success uses staged atomic create-if-absent publication",
+      "JSON and error-artifact collision paths preserve prior bytes",
+      "CSV collision rolls back only the invocation-owned JSON and never unlinks a replaced destination"
+    ],
+    "cli_help_command": "caffeinate -dims uv run /var/folders/db/fjbrfx1n1kz6lrqlm7jvryp00000gn/T/agent-tools-wiley-no-clobber-20260824-131248-21819-19860/academic-research/skills/academic-search/scripts/search_wiley_online_library.py --help --cdp-url http://127.0.0.1:9236",
+    "cli_help_exit_status": 0,
+    "older_home_adapter_invoked": false
+  },
+  "code_issue": {
+    "value": false,
+    "classification": "no_new_code_issue_demonstrated_in_source_free_p02_verification",
+    "basis": "The pinned focused no-clobber suite passed and the exact pinned bytes/worktree were confirmed. This is not live Wiley validation.",
+    "p01_context": "P01 remains immutable with code_issue=true for the older adapter. P02 does not revise that P01 finding."
+  },
+  "result": "passed_source_free_adapter_gate; live use was subsequently blocked by the dedicated browser endpoint preflight, not by an adapter failure."
+}

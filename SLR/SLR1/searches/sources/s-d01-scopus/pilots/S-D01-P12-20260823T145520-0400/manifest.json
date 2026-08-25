@@ -1,0 +1,107 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D01-P12-20260823T145520-0400",
+  "task_id": "S-D01",
+  "source_id": "scopus",
+  "method_type": "direct",
+  "status": "partial",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-23T14:55:55-04:00",
+  "ended_at": "2026-08-23T14:56:01-04:00",
+  "protocol_commit": "343ae7987b0fb7239a5a66d1d2dcaa7fb67a5915",
+  "operator": {
+    "type": "human_with_llm",
+    "model": "openai-codex/gpt-5.6-sol",
+    "human_supervisor": "review owner (approval pending)"
+  },
+  "interface": {
+    "name": "Scopus current rendered Advanced Documents Search",
+    "url": "https://www.scopus.com/pages/search/publications?type=advanced",
+    "access_route": "adapter_default_local_loopback_CDP_owned_tab",
+    "authenticated": true,
+    "database_or_collection": "Scopus",
+    "platform": "Scopus",
+    "timezone": "UTC-04:00",
+    "authentication_status_limit": "Existing authorized local browser context; no credentials, sign-in, CAPTCHA, or challenge action."
+  },
+  "executions": [
+    {
+      "execution_id": "RC-K01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "known Route A candidate field: model-based engineering in abstract",
+      "started_at": "2026-08-23T14:55:56-04:00",
+      "status": "success",
+      "exact_query_or_operation": "DOI(\"10.1109/SysCon53073.2023.10131054\") AND ABS(\"model-based engineering\")",
+      "query_file": "queries/rc-k01-k01.scopus-advanced.txt",
+      "fields": [
+        "ABS",
+        "DOI"
+      ],
+      "controls": {
+        "date_limit": null,
+        "language_limit": null,
+        "publication_type_limit": null,
+        "count_only": true,
+        "sort": "Date (newest)",
+        "page_size": 10,
+        "automatic_retry": false
+      },
+      "source_reported_total": 1,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d01-scopus-restricted/S-D01-P12-20260823T145520-0400/rc-k01.json"
+      ],
+      "notes": "Successful count-only field-location result; the later stop was a controller-validator error."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P12-C01",
+      "requirement": "Correctly accept the approved adapter commit as an ancestor when pinned bytes and scoped cleanliness match.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json"
+      ],
+      "notes": "Approved adapter commit was an ancestor; pinned hashes, scoped cleanliness, tests, browser, anchor and power all passed."
+    },
+    {
+      "check_id": "P12-C02",
+      "requirement": "Interpret the adapter count-only completion contract.",
+      "status": "failed",
+      "basis": "observed",
+      "evidence_paths": [
+        "live-run-summary.json"
+      ],
+      "notes": "The source output was valid with total 1, but the local validator incorrectly rejected output_metadata.status=count_only."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d01-scopus/pilots/S-D01-P12-20260823T145520-0400",
+      "role": "P12 partial controller/source artifacts",
+      "access_classification": "metadata_only",
+      "sha256": null,
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d01-scopus-restricted/S-D01-P12-20260823T145520-0400",
+      "role": "restricted P12 source output and controller logs",
+      "access_classification": "restricted",
+      "sha256": null,
+      "secure_location_reference": ".searches/s-d01-scopus-restricted/S-D01-P12-20260823T145520-0400"
+    }
+  ],
+  "disposition": {
+    "recommendation": "repeat",
+    "reason": "One register-construction count succeeded, then a local validator rejected the documented count-only status. P13 fixed only that validator and restarted register construction under a new ID.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Verify the RC-K01 source output is a successful count-only result, not a source failure; do not use it in place of P13."
+    ]
+  }
+}

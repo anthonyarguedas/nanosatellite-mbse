@@ -1,23 +1,35 @@
 {
-  "artifact_version": "slr1-scopus-translation/v0.2.0-draft",
+  "artifact_version": "slr1-scopus-translation/v0.2.1-draft",
   "task_id": "S-D01",
   "source_id": "scopus",
   "source_name": "Scopus",
   "method_type": "direct",
-  "status": "human_approved_pending_s_c01",
+  "status": "human_approved_scopus_s_c01_complete_pending_cross_source",
   "human_review": {
     "recorded_at": "2026-08-23T14:02:36-04:00",
     "evidence": "human-review.md",
     "approved_decisions": ["H1", "H2", "H3", "H4", "H5"],
     "adapter_commit": "9aef2155f0073a8b82f7d5af3ec0870f6e6aeef2",
     "approval_provenance": "the Git commit containing this source packet; no separate approval hash ledger",
-    "formal_acceptance_pending": ["S-C01"]
+    "formal_acceptance_pending": ["S-C01 cross-source decision; Scopus stage complete"]
   },
   "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
   "concept_dictionary": {
     "path": "../../search-concept-dictionary.json",
     "artifact_version": "slr1-search-concepts/v4",
     "revised_at": "2026-08-21"
+  },
+  "candidate_terminology_test": {
+    "status": "scopus_stage_complete_pending_cross_source_decision",
+    "evidence": "pilots/S-D01-P14-20260823T150131-0400/candidate-terminology-conclusion.json",
+    "carry_forward_candidate_families": [
+      ["model-driven engineering", "model driven engineering"],
+      ["digital twin", "digital twins"]
+    ],
+    "possible_later_placement": "M_B with independent R only",
+    "normative_change": false,
+    "query_regeneration_required_at_this_stage": false,
+    "reason": "The protocol requires the remaining Web of Science, IEEE Xplore, and Compendex/Inspec tests and a committed cross-source decision before any candidate changes a concept block."
   },
   "translation_scope": {
     "field": "TITLE-ABS-KEY",
@@ -584,7 +596,7 @@
     },
     "not_final": true,
     "remaining_conditions": [
-      "S-C01 has not frozen its register or accepted/rejected candidate MBSE terms.",
+      "The Scopus stage of S-C01 is complete; all candidate terms remain non-normative pending the other mandated sources and cross-source decision.",
       "The adapter is pinned at commit 9aef2155f0073a8b82f7d5af3ec0870f6e6aeef2 and approval provenance is the Git commit containing this source packet.",
       "P-001 is deferred until source pilots are complete and must be selected before the first final search; it is not a pilot-acceptance dependency."
     ]

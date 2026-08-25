@@ -1,0 +1,44 @@
+{
+  "created_at": "2026-08-23T14:09:14-04:00",
+  "diagnostic_only": true,
+  "items": [
+    {
+      "action": "ocr_public_pdf_from_secure_checksum",
+      "failure_rule": "An absent/failed OCR receipt makes local PDF coverage incomplete.",
+      "input": {
+        "attachment_id": "9701",
+        "event_id": "472",
+        "pdf_sha256": "301b0ad2ea53a4ae606788a24e911d40e2a8bc95bd38675c03d3d95df487eaa5"
+      },
+      "queue_id": "ESA-OCR-472-9701",
+      "reason": "Deterministic text extraction was empty.",
+      "required_command": "uv run ~/agent-tools/processing/skills/pdf-to-markdown/scripts/pdf_to_markdown.py --input <secure-pdf-path> --output-path <outside-git-ocr-output-dir> --image-mode keep",
+      "required_output": [
+        "text_sha256",
+        "parser_or_ocr_route",
+        "completed_at",
+        "operator"
+      ]
+    },
+    {
+      "action": "ocr_public_pdf_from_secure_checksum",
+      "failure_rule": "An absent/failed OCR receipt makes local PDF coverage incomplete.",
+      "input": {
+        "attachment_id": "9699",
+        "event_id": "472",
+        "pdf_sha256": "9f0dd52e9840920509e8bd9991a51ecdc8d095e007511b21644badcd0eddbdd1"
+      },
+      "queue_id": "ESA-OCR-472-9699",
+      "reason": "Deterministic text extraction was empty.",
+      "required_command": "uv run ~/agent-tools/processing/skills/pdf-to-markdown/scripts/pdf_to_markdown.py --input <secure-pdf-path> --output-path <outside-git-ocr-output-dir> --image-mode keep",
+      "required_output": [
+        "text_sha256",
+        "parser_or_ocr_route",
+        "completed_at",
+        "operator"
+      ]
+    }
+  ],
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "queue_schema_version": "esa-indico-manual-navigation-queue/v1"
+}

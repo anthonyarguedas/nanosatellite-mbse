@@ -1,0 +1,406 @@
+{
+  "schema_version": "slr1-direct-translation-spec/v1",
+  "artifact_version": "slr1-arxiv-translation/v0.1.0-draft",
+  "task_id": "S-D11",
+  "source_id": "arxiv",
+  "source_name": "arXiv Advanced Search",
+  "method_type": "direct",
+  "status": "draft_unvalidated",
+  "protocol_commit": "df530c27c2319f46acf86d8f1715bfde2d8719c1",
+  "normative_provenance": {
+    "dictionary_path": "SLR/SLR1/searches/search-concept-dictionary.json",
+    "dictionary_artifact_version": "slr1-search-concepts/v4",
+    "dictionary_sha256": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+    "protocol_sections": [
+      "SLR/SLR1/protocol-discovery-and-appraisal.md#search-streams-and-set-construction",
+      "SLR/SLR1/protocol-discovery-and-appraisal.md#direct-query-schedule",
+      "SLR/SLR1/protocol-discovery-and-appraisal.md#controlled-vocabulary-and-indexed-terms"
+    ],
+    "required_partition_ids": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ],
+    "candidate_terminology_policy": "S-C01 candidate terminology is not included and is not normative for this source-stage task."
+  },
+  "source_interface": {
+    "endpoint": "https://arxiv.org/search/advanced",
+    "route": "normal rendered arXiv Advanced Search UI",
+    "request_method": "GET through the rendered browser page",
+    "term_row": "terms-0-term",
+    "term_operator": "terms-0-operator=AND",
+    "term_field": "terms-0-field=all",
+    "field_boundary": "All fields, exactly the visible arXiv all-fields control; no title/abstract/author subfield is substituted.",
+    "classification_scope": "classification-physics_archives=all and classification-include_cross_list=include",
+    "sort_control": "order=empty value, rendered as Relevance",
+    "source_behavior_status": "untested_until_P01"
+  },
+  "translation_scope": {
+    "field": "all",
+    "field_label": "All fields",
+    "free_text_mandatory": true,
+    "controlled_vocabulary_supplement": {
+      "status": "none_accepted",
+      "reason": "No genuine source-controlled vocabulary or usable indexed-term descriptor is established in the source-free packet. Do not emulate one."
+    },
+    "term_rendering": {
+      "single_lexical_token": "source token, preserving dictionary spelling and case",
+      "multiword_or_punctuation_phrase": "straight-double-quoted ordered phrase",
+      "wildcards_used": false,
+      "nanosat_wildcard_substitution_used": false,
+      "candidate_terminology_added": false,
+      "source_parser_validation": "untested"
+    },
+    "boolean_rendering": {
+      "and": "AND",
+      "or": "OR",
+      "grouping": "explicit parentheses around every concept block",
+      "source_parser_validation": "untested"
+    }
+  },
+  "paired_term_handling": {
+    "normative_requirement": "Unordered pair in one searchable field with no more than five intervening lexical tokens.",
+    "native_proximity_support": "untested",
+    "draft_fallback": "BG1, BG2, BC1, and BT2 use a broader conjunctive left-group/right-group expression inside the single visible all-fields route. This cannot lose an exact pair if arXiv applies the all-fields route as one searchable field, but it may retrieve cross-field or distant matches and is not claimed exact.",
+    "same_field_basis": "The source-native field is the single visible all-fields control; the no-loss claim is draft/inferred only until P01.",
+    "lossless_shards_required": false
+  },
+  "controls": {
+    "diagnostic_only": true,
+    "evidence_window": {
+      "lower_inclusive": "2011-01-01",
+      "upper_final": "P-001 exact common cutoff, not yet set",
+      "pilot_upper_bound": "Use the actual P01 execution year as the visible submitted-date upper-year bound and label it pilot-date diagnostic only. It is not P-001 and is not a final publication-date cutoff.",
+      "source_control": "date-filter_by=date_range; date-date_type=submitted_date; date-from_date/year and date-to_date/year",
+      "precision": "year-granular source control in the current adapter; exact day semantics untested"
+    },
+    "language": {
+      "native_english_filter": "not imposed",
+      "reason": "The protocol requires full-text English at screening; English metadata or a source language control would not prove full-text language."
+    },
+    "publication_type_access_and_content": {
+      "publication_type_filter": "not imposed",
+      "access_filter": "not imposed",
+      "peer_review_filter": "not imposed",
+      "venue_filter": "not imposed",
+      "content_type_filter": "not imposed",
+      "major_topic_filter": "not imposed",
+      "source_boundary_note": "The arXiv repository boundary makes records preprints, but does not make every record a substantial completed eligible report."
+    },
+    "visible_defaults": {
+      "abstracts": "show",
+      "classification_physics_archives": "all",
+      "include_cross_list": "include",
+      "sort": "Relevance"
+    }
+  },
+  "publication_type_and_version_identity": {
+    "source_publication_kind": "arXiv preprint/repository record",
+    "eligibility_rule": "Apply the protocol publication-type rule at full text. A repository result, a Preprint label, or a DOI does not establish a substantial completed report, English full text, or peer review.",
+    "stable_identity": "Use the canonical bare arXiv identifier (for example, 2401.12345) as the source record identity; do not substitute DOI, title, or rank.",
+    "version_rule": "If the rendered canonical abstract/PDF route explicitly contains vN, preserve that version separately from the bare identifier. If no suffix is rendered, record version as unknown/not exposed; never infer v1.",
+    "date_rule": "The visible Submitted date and version history are arXiv submission metadata. For screening, use the earliest version containing a substantial completed report as required by the protocol and record every available version/date. Do not relabel a posting/submission date as another source publication date.",
+    "companion_rule": "Do not merge an arXiv preprint with a formal version during a pilot. Later report-family merging is a full-text identity decision under the protocol and must preserve version-level provenance and substantive differences."
+  },
+  "partition_to_cell_unions": [
+    {
+      "partition_id": "A1",
+      "role": "Named EPS × explicit MBSE",
+      "stream": "A",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_H"
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-A1-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-A1-C01",
+          "path": "queries/A1.arxiv-advanced.txt",
+          "sha256": "7d18dad1f313f85fbc784b8aa242e8d4a81a96f693da963c1651b3b5d60b3225",
+          "utf8_bytes": 2079,
+          "characters_excluding_terminal_lf": 2078,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    },
+    {
+      "partition_id": "A2",
+      "role": "EPS functions or analyses × all model terms",
+      "stream": "A",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_F",
+          {
+            "op": "OR",
+            "args": [
+              "M_H",
+              "M_B"
+            ]
+          }
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-A2-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-A2-C01",
+          "path": "queries/A2.arxiv-advanced.txt",
+          "sha256": "e904aa3ff17688a20163222a09a56f76e0b348220df355decb0364b1764ff279",
+          "utf8_bytes": 2595,
+          "characters_excluding_terminal_lf": 2594,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    },
+    {
+      "partition_id": "A3",
+      "role": "Named EPS × broad structured model",
+      "stream": "A",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_B"
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-A3-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-A3-C01",
+          "path": "queries/A3.arxiv-advanced.txt",
+          "sha256": "d1c236b0400a9245792af47abb9620be03009a80b12192dac27c02dfe83ccad9",
+          "utf8_bytes": 1944,
+          "characters_excluding_terminal_lf": 1943,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    },
+    {
+      "partition_id": "B1",
+      "role": "Embedded-thread baseline",
+      "stream": "core_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_H"
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-B1-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-B1-C01",
+          "path": "queries/B1.arxiv-advanced.txt",
+          "sha256": "c62f4611fe8976720c472f22fbfc2dbde58fa08d1589c714f35ac101e8f639c7",
+          "utf8_bytes": 1193,
+          "characters_excluding_terminal_lf": 1192,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    },
+    {
+      "partition_id": "B2",
+      "role": "Controlled broad-model expansion",
+      "stream": "core_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "R"
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-B2-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-B2-C01",
+          "path": "queries/B2.arxiv-advanced.txt",
+          "sha256": "62acf9ef2d779098b49b067cd4036af26fe1113a416b3db05d6ed735d24d4f5a",
+          "utf8_bytes": 1824,
+          "characters_excluding_terminal_lf": 1823,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    },
+    {
+      "partition_id": "BG1",
+      "role": "Precise reusable model or template",
+      "stream": "expanded_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_model"
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-BG1-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-BG1-C01",
+          "path": "queries/BG1.arxiv-advanced.txt",
+          "sha256": "20cc8ae1cb64e0a31da97e019429c12f36c2a7be4bb4caa643edd13e08e1c3c0",
+          "utf8_bytes": 816,
+          "characters_excluding_terminal_lf": 815,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    },
+    {
+      "partition_id": "BG2",
+      "role": "Structural reusable artifact",
+      "stream": "expanded_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_structure"
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-BG2-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-BG2-C01",
+          "path": "queries/BG2.arxiv-advanced.txt",
+          "sha256": "127d98b96cb48313bed5851716daa9625f67253cafbf2af6058a72470cb2a687",
+          "utf8_bytes": 680,
+          "characters_excluding_terminal_lf": 679,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    },
+    {
+      "partition_id": "BC1",
+      "role": "Conservative central asset",
+      "stream": "expanded_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "C1"
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-BC1-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-BC1-C01",
+          "path": "queries/BC1.arxiv-advanced.txt",
+          "sha256": "bb8ba12a8c074ac8a32d41d4a929594276184c03246e002fd6604e1e56c20c21",
+          "utf8_bytes": 1337,
+          "characters_excluding_terminal_lf": 1336,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    },
+    {
+      "partition_id": "BT2",
+      "role": "Model-linked tailoring",
+      "stream": "expanded_B",
+      "normative_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "T2"
+        ]
+      },
+      "union_operator": "identity",
+      "cell_ids": [
+        "ARXIV-BT2-C01"
+      ],
+      "cells": [
+        {
+          "cell_id": "ARXIV-BT2-C01",
+          "path": "queries/BT2.arxiv-advanced.txt",
+          "sha256": "cf9b6b60dc557618ee4b052107986073ff0dff82db73d282bebd334f435ee891",
+          "utf8_bytes": 1940,
+          "characters_excluding_terminal_lf": 1939,
+          "source_native_field": "all",
+          "free_text_only": true,
+          "lossless_cell": true
+        }
+      ],
+      "lossless_union": true,
+      "validation_status": "draft_not_live_validated"
+    }
+  ],
+  "lossless_union_rule": {
+    "per_partition": "Each partition has one exact UTF-8 cell; its union is the identity set of that cell.",
+    "shards": "No lossless shards are required by the current adapter safety limit for these draft cells. If the live UI rejects a cell for length, stop and define prospective complete shards; never silently shorten a cell.",
+    "failure": "A failed, null-total, rewritten, short, stale, duplicate-ID, malformed, or incomplete cell is not a zero and contributes no importable prefix."
+  },
+  "generation": {
+    "generator": "Source-free renderer from slr1-search-concepts/v4; exact query files are the normative cells.",
+    "term_preservation": "Every finite dictionary literal required by each partition is present in its cell; no S-C01 term, wildcard, descriptor, or semantic narrowing was added.",
+    "query_file_encoding": "UTF-8 with one terminal LF; query text is entered verbatim as the single all-fields term.",
+    "live_validation": "none; P01 is required before acceptance."
+  },
+  "evidence_links": []
+}

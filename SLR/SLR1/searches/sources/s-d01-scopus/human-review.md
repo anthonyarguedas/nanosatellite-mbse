@@ -29,3 +29,7 @@ The review owner will choose the common evidence cutoff after the source pilots 
 ## Remaining gate
 
 The Scopus method is human-approved on H1–H5 but is not yet formally accepted in Part 2. The adapter is pinned by commit and this approval is recorded by the Git commit containing this source packet. Complete `S-C01`, apply any terminology decision to the protocol, dictionary, and translations, and then perform the formal `S-D01` status reconciliation. `P-001` remains a final-search dependency, not a pilot-acceptance dependency.
+
+## Post-review diagnostic status
+
+The Scopus portion of `S-C01` was completed after this H1–H5 decision under pilots [`P13`](pilots/S-D01-P13-20260823T145616-0400/) and [`P14`](pilots/S-D01-P14-20260823T150131-0400/). It carries two candidate families forward for cross-source review but makes no normative change. This note does not extend the earlier human approval to the new term-use judgments: the review owner still needs to review them with the Web of Science, IEEE Xplore, and Compendex/Inspec results before the protocol, dictionary, translations, or formal `S-D01` status can change.

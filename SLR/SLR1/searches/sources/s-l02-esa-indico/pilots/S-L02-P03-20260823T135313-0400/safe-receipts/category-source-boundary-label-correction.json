@@ -1,0 +1,23 @@
+{
+  "receipt_schema_version": "esa-indico-category-boundary-label-correction/v1",
+  "created_at": "2026-08-23T14:48:53-04:00",
+  "basis": "observed_and_documented",
+  "diagnostic_only": true,
+  "correction_scope": "P03 only; P01/P02 historical artifacts are unchanged.",
+  "targets": [
+    {
+      "artifact": "category-5-2023-11.json",
+      "artifact_sha256": "d376585557d850ebf84af72ef8a7ff758e166f3e2fb2e2ce082b978bfa13b351",
+      "requested_category_id": "5",
+      "request_path": "/export/categ/5.json?from=2023-11-01&to=2023-11-30"
+    },
+    {
+      "artifact": "category-6-2023-11.json",
+      "artifact_sha256": "39ea10cf443c421859ad82ee8a80bd91f8ac67e828e4c67d861174e98fa7c52d",
+      "requested_category_id": "6",
+      "request_path": "/export/categ/6.json?from=2023-11-01&to=2023-11-30"
+    }
+  ],
+  "correction": "The old generic source_boundary label said root-category export even for nonzero category inputs. The request paths and category_id fields were always correct. The implementation now labels each category request accurately; this receipt changes no source observation, count, ID, timestamp, or interpretation of root recursion.",
+  "scope_limit": "The correction does not establish that category 0 recursively covers every public category."
+}

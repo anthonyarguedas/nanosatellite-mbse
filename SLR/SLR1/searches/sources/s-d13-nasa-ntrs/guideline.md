@@ -87,3 +87,7 @@ Do not execute this procedure until the code issue is fixed, a new pilot is auth
 - **[untested]** The current NTRS API's parser and full-public-database response behavior remain unresolved. All cells are preserved only as draft syntax and literal-completeness artifacts.
 - **[inferred]** No protocol semantic change is proposed: all nine mappings derive from the current dictionary without candidate terminology or a narrowed Boolean relationship. The limitation is implementation/validation, not a justified change to scope, concept blocks, evidence window, or eligibility.
 - **[inferred]** Human approval is needed to authorize the smallest separate adapter fix and, after service recovery, a fresh authorized corrective pilot that resolves the blocked checks. Until then, record NTRS as an unaccepted source-method limitation rather than a completed source.
+
+## Future browser operations
+
+Historical per-source endpoint/profile facts remain immutable evidence. All future browser phases use the global shared CfT lease at `127.0.0.1:9222`; do not reinterpret historical observations.

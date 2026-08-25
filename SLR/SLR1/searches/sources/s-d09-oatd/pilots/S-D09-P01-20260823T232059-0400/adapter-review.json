@@ -1,0 +1,35 @@
+{
+  "artifact_version": "slr1-oatd-adapter-review/v1",
+  "pilot_id": "S-D09-P01-20260823T232059-0400",
+  "basis": "observed static inspection of the candidate implementation; not proof of current OATD behavior except where separately linked to a live execution",
+  "candidate_repository": "/Users/antho/agent-tools",
+  "candidate_repository_commit": "3231ebddefcc3e7bc707b2a7d66fbe831d363286",
+  "candidate_repository_commit_verified": true,
+  "adapter": {
+    "path": "/Users/antho/agent-tools/academic-research/skills/academic-search/scripts/search_oatd.py",
+    "sha256": "c654b34750fa651407ab5d09baf452abec6167a625a8c1995b7e57aa4095b043",
+    "adapter_id": "search_oatd",
+    "adapter_version": "1"
+  },
+  "observed_capability_assessment": {
+    "basic_route_scope": "Uses only the OATD basic GET search route and Record Details collection; it does not submit the advanced composer.",
+    "blank_control_assumptions": "Requires blank language, country, earliest, latest and unchecked CC controls, relevance value 'relevanace', and 30 results per page in its basic result-state validator.",
+    "date_language_country_cc": "No CLI controls for date, language, country, or CC-only limits are exposed.",
+    "detail_metadata": "Collects Record ID, title, author, resource URL/format, publication date, university/publisher, and abstract; it has no extraction for the visible advanced subjects/keywords or department/discipline fields and cannot establish degree completion or full-text eligibility.",
+    "pagination_identity": "Implements one forward pagination traversal with source total/range/rank checks and Record Details IDs. It has no two-pass stable-order option.",
+    "completeness_mode": "Can label one traversal complete when user-supplied limit and max-pages exhaust the displayed total, but has no --require-complete gate or two-pass reconciliation required by this protocol.",
+    "count_only": "No --count-only option is exposed; even a positive aggregate syntax test opens one Record Details page at limit 1.",
+    "report_ready": "Generic PRISMA linkage can make a mocked/one-pass completed artifact report-ready; that cannot by itself meet this protocol's required two-pass identity completeness proof.",
+    "transaction_and_no_clobber": "Writes atomically, but validate_output_paths only rejects duplicate CLI paths and atomic_write_json uses os.replace on the requested output path. It does not refuse an existing output path."
+  },
+  "demonstrated_code_issue": {
+    "value": true,
+    "reason": "The candidate adapter lacks no-clobber protection and can atomically replace an existing artifact. Its one-pass, caller-bounded completion model also lacks the protocol-required --require-complete/two-pass gate. These are report-ready final-run safety defects, not a source zero or a reason to relax the protocol.",
+    "source_locations": [
+      {"file": "search_oatd.py", "lines": "1501-1515, 1634-1653", "finding": "CLI lacks count-only, require-complete, passes, date, language, country, and CC controls; output is written after a single traversal."},
+      {"file": "_browser_search_utils.py", "lines": "310-320, 665-687", "finding": "Output-path validation allows existing paths and atomic_write_json finishes with os.replace."}
+    ],
+    "required_response": "Preserve this pilot, stop further live querying, and send a separately authorized code-fix subagent. The fix must add refuse-overwrite semantics, an explicit strict completeness/two-pass mode, safe aggregate count-only mode, and review-required controls/metadata before a new pilot may test it."
+  },
+  "live_execution_link": "exec-001-native-zero.json used this exact adapter SHA with explicit --cdp-url http://127.0.0.1:9234 and succeeded only for an explicit native zero. That narrow success does not cure the static defects."
+}

@@ -1,0 +1,438 @@
+{
+  "schema_version": "slr1-proquest-translation-spec/v1",
+  "method_type": "direct",
+  "status": "draft_unvalidated_source_free",
+  "governing_protocol_commit": "699f010f02b81dc17c7f17491dab77dbf9bb1feb",
+  "normative_provenance": {
+    "dictionary_path": "SLR/SLR1/searches/search-concept-dictionary.json",
+    "dictionary_artifact_version": "slr1-search-concepts/v4",
+    "dictionary_sha256": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+    "required_partition_ids": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ],
+    "candidate_terminology_policy": "S-C01 terms are absent from every translation and are not accepted search concepts."
+  },
+  "source_native_implementation": {
+    "query_syntax": "ProQuest Command Line Search",
+    "free_text_field": {
+      "code": "NOFT",
+      "atomic_form": "NOFT(\"term\")",
+      "group_form": "NOFT((\"term 1\" OR \"term 2\"))",
+      "status": "draft_candidate_unvalidated"
+    },
+    "boolean_form": "Fully parenthesized AND/OR expressions; every normative literal is retained as a quoted atom.",
+    "phrase_policy": "Every multiword dictionary entry remains one quoted ordered phrase; punctuation and hyphen normalization are untested.",
+    "acronym_policy": "Quoted single-token literals are retained; standalone-token behavior is untested.",
+    "wildcard_policy": "No wildcard is used.",
+    "stemming_and_expansion": "No stemming, lemmatization, spelling, plural/adjective, or automatic expansion is assumed by the translation; current behavior is untested.",
+    "pair_form": "NOFT((\"left\" NEAR/6 \"right\"))",
+    "pair_semantics": "NEAR/6 is the source-native draft candidate for unordered pairs with at most five intervening lexical tokens. Direction, distance, phrase-tokenization, and same-NOFT-field behavior are untested; pair-bearing partitions cannot be accepted on this draft alone.",
+    "subject_and_index_probes": {
+      "subject_index_fields": [
+        {
+          "code": "SU",
+          "query": "SU(\"CubeSat\")",
+          "purpose": "subject-field syntax and behavior"
+        },
+        {
+          "code": "IF",
+          "query": "IF(\"CubeSat\")",
+          "purpose": "indexed-term field syntax and behavior"
+        },
+        {
+          "code": "NOFT",
+          "query": "NOFT(\"CubeSat\")",
+          "purpose": "free-text comparator"
+        }
+      ],
+      "metadata_record_fields": [
+        "subject terms",
+        "index terms"
+      ],
+      "thesaurus": "Inspect only a normal visible source control or record-linked thesaurus/index-term route; scope notes, hierarchy, narrower terms, explosion, and known-record assignment are all untested."
+    }
+  },
+  "controlled_vocabulary": {
+    "free_text_remains_mandatory": true,
+    "accepted_descriptors": [],
+    "thesaurus_status": "untested",
+    "indexed_term_field_status": "untested",
+    "reason": "No current interface observation is being claimed. Subject/index probes and any visible thesaurus or hierarchy must be tested before a descriptor can supplement a mapped free-text block."
+  },
+  "query_length_and_cell_policy": {
+    "observed_source_limit": null,
+    "adapter_input_ceiling_characters": 50000,
+    "adapter_ceiling_basis": "static local adapter validation only; not a provider query-length observation",
+    "current_cells": "One complete source-native cell per partition; no offline cell is split or narrowed.",
+    "future_split_rule": "If a current source limit rejects a complete cell, define a lossless union of complete cells before execution, retain every cell query/total/ID set, and reconcile the stable-ID union. A failure never authorizes a narrower replacement."
+  },
+  "lossless_union_rule": {
+    "union_operator": "stable source-identifier set union",
+    "identity": "Numeric ProQuest document ID only after nonempty uniqueness and repeatability are observed.",
+    "one_cell_identity": "A one-cell partition has the identity union of its sole cell, subject to later source validation.",
+    "failure": "Access, syntax, field, control, total, pagination, detail, identity, export, or completeness failure makes that cell total null and imports no prefix.",
+    "basis": "inferred_from_protocol_and_static_adapter_contract"
+  },
+  "partitions": [
+    {
+      "partition_id": "A1",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_H"
+        ]
+      },
+      "role": "Named EPS × explicit MBSE",
+      "stream": "A",
+      "cell_ids": [
+        "ATAI-A1-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-A1-C01",
+          "exact_query_file": "queries/A1.proquest-noft.txt",
+          "sha256": "ff334179ceb51bc8bccdd2cba8ef4656f3983cc3faa19ce045e8010d6ffecb36",
+          "character_count_including_terminal_newline": 2139,
+          "utf8_byte_count": 2139,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    },
+    {
+      "partition_id": "A2",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_F",
+          {
+            "op": "OR",
+            "args": [
+              "M_H",
+              "M_B"
+            ]
+          }
+        ]
+      },
+      "role": "EPS functions or analyses × all model terms",
+      "stream": "A",
+      "cell_ids": [
+        "ATAI-A2-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-A2-C01",
+          "exact_query_file": "queries/A2.proquest-noft.txt",
+          "sha256": "be575d9be7a230ef17cd1f57c80dd232908f82279982d4d6e513fb12e3c5507b",
+          "character_count_including_terminal_newline": 2649,
+          "utf8_byte_count": 2649,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    },
+    {
+      "partition_id": "A3",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "E_H",
+          "M_B"
+        ]
+      },
+      "role": "Named EPS × broad structured model",
+      "stream": "A",
+      "cell_ids": [
+        "ATAI-A3-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-A3-C01",
+          "exact_query_file": "queries/A3.proquest-noft.txt",
+          "sha256": "9f57e17071b4d1bcbed7b1947ad7f7b311cdcc2619fadb9f68ec4c2a2dbe6c12",
+          "character_count_including_terminal_newline": 1992,
+          "utf8_byte_count": 1992,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    },
+    {
+      "partition_id": "B1",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_H"
+        ]
+      },
+      "role": "Embedded-thread baseline",
+      "stream": "core_B",
+      "cell_ids": [
+        "ATAI-B1-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-B1-C01",
+          "exact_query_file": "queries/B1.proquest-noft.txt",
+          "sha256": "27e4001101e744904fd46b04fbe09b7ef2476530865bbee433d2f0032ec47bb3",
+          "character_count_including_terminal_newline": 1231,
+          "utf8_byte_count": 1231,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    },
+    {
+      "partition_id": "B2",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "R"
+        ]
+      },
+      "role": "Controlled broad-model expansion",
+      "stream": "core_B",
+      "cell_ids": [
+        "ATAI-B2-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-B2-C01",
+          "exact_query_file": "queries/B2.proquest-noft.txt",
+          "sha256": "406e440f7500f20c31dea95c5cff2dfb1c34ac9066b344939af875137422f423",
+          "character_count_including_terminal_newline": 1954,
+          "utf8_byte_count": 1954,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    },
+    {
+      "partition_id": "BG1",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_model"
+        ]
+      },
+      "role": "Precise reusable model or template",
+      "stream": "expanded_B",
+      "cell_ids": [
+        "ATAI-BG1-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-BG1-C01",
+          "exact_query_file": "queries/BG1.proquest-noft.txt",
+          "sha256": "c8343813b6e6a8d1a5309d3b67bf428c2863e7bb0ad47b219fbbe97c7c0fd871",
+          "character_count_including_terminal_newline": 1499,
+          "utf8_byte_count": 1499,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    },
+    {
+      "partition_id": "BG2",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "G_structure"
+        ]
+      },
+      "role": "Structural reusable artifact",
+      "stream": "expanded_B",
+      "cell_ids": [
+        "ATAI-BG2-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-BG2-C01",
+          "exact_query_file": "queries/BG2.proquest-noft.txt",
+          "sha256": "7e1d215c7c33281643610170ef1b39be426c21ab946cbb486f8252a733e92948",
+          "character_count_including_terminal_newline": 1236,
+          "utf8_byte_count": 1236,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    },
+    {
+      "partition_id": "BC1",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "C1"
+        ]
+      },
+      "role": "Conservative central asset",
+      "stream": "expanded_B",
+      "cell_ids": [
+        "ATAI-BC1-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-BC1-C01",
+          "exact_query_file": "queries/BC1.proquest-noft.txt",
+          "sha256": "940f5398add39d4b94fb8de58899d0c0472abd993a80a8c915e7f520b7b924e0",
+          "character_count_including_terminal_newline": 3763,
+          "utf8_byte_count": 3763,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    },
+    {
+      "partition_id": "BT2",
+      "semantic_expression": {
+        "op": "AND",
+        "args": [
+          "P",
+          "M_B",
+          "T2"
+        ]
+      },
+      "role": "Model-linked tailoring",
+      "stream": "expanded_B",
+      "cell_ids": [
+        "ATAI-BT2-C01"
+      ],
+      "source_native_cells": [
+        {
+          "cell_id": "ATAI-BT2-C01",
+          "exact_query_file": "queries/BT2.proquest-noft.txt",
+          "sha256": "80994c9b9ca59c7cf8abf410dd8806841062da5edc78da71bb09039347644eff",
+          "character_count_including_terminal_newline": 10863,
+          "utf8_byte_count": 10863,
+          "query_status": "draft_not_submitted_source_free",
+          "source_reported_total": null,
+          "total_is_exact": false,
+          "basis": "untested"
+        }
+      ],
+      "lossless_union": {
+        "cell_count": 1,
+        "required": false,
+        "rationale": "One offline cell contains the complete dictionary Boolean expression. No source query-length or parser limit has been observed.",
+        "basis": "observed_offline"
+      }
+    }
+  ],
+  "offline_translation_audit": {
+    "all_nine_partitions_present": true,
+    "all_normative_finite_terms_preserved": true,
+    "pair_cross_products_preserved": true,
+    "one_cell_per_partition": true,
+    "source_submission_performed": false,
+    "basis": "observed_offline"
+  },
+  "evidence_links": [],
+  "task_id": "S-D07",
+  "source_id": "proquest-atai",
+  "source_name": "Advanced Technologies & Aerospace Index",
+  "source_boundary": {
+    "database_or_collection": "Advanced Technologies & Aerospace Index only",
+    "platform": "ProQuest Platform",
+    "interface": "normal rendered ProQuest database selector and Command Line Search UI",
+    "validated_routes": [
+      "https://www.proquest.com/ataindex/databases/advanced",
+      "https://www.proquest.com/ataindex/commandline"
+    ],
+    "excluded_database_labels": [
+      "Advanced Technologies & Computer Science Collection Full Text Included",
+      "Advanced Technologies & Aerospace Database Full Text Included",
+      "Computer Science Database Full Text Included"
+    ],
+    "selection_rule": "Exactly one checkbox labelled Advanced Technologies & Aerospace Index; never combine it with any sibling or parent database.",
+    "basis": "official_local_adapter_intent_and_untested_current_interface"
+  },
+  "controls": {
+    "date": "Pilot diagnostic lower bound 2011-01-01 and upper bound 2026-08-25; adapter year syntax is YR(2011-2026), so exact day/month precision is untested and this is not P-001.",
+    "language": "Adapter diagnostic suffix LA(English); native reliability and full-report language remain untested.",
+    "content": "No publication-type, access, peer-review, venue, or content-type restriction.",
+    "result_controls": "Static adapter contract targets Relevance, 20 records/page, source duplicate exclusion off, spelling/form expansion off, and show-expansions off; current interface persistence is untested.",
+    "export": "Native export is not automated; normalized JSON/CSV is diagnostic only."
+  }
+}

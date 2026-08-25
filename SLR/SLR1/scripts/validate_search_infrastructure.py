@@ -3259,6 +3259,8 @@ def validate_layout(mode: str = "pre-final", searches_root: Path = SEARCHES) -> 
         searches_root / "README.md",
         searches_root / "templates" / "source-guideline.md",
         searches_root / "templates" / "source-pilot-prompt.md",
+        searches_root / "templates" / "pilot-controller-prompt.md",
+        searches_root / "templates" / "browser-live-phase-checklist.md",
         searches_root / "templates" / "pilot-campaign.template.json",
         searches_root / "templates" / "pilot-manifest.template.json",
         searches_root / "final-events" / "README.md",

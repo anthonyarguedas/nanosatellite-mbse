@@ -1,0 +1,45 @@
+{
+  "schema_version": "slr1-s-d05-browser-preflight-receipt/v1",
+  "pilot_id": "S-D05-P01-20260824T124916-0400",
+  "basis": "observed",
+  "controller_preflight": {
+    "marker": "/var/folders/db/fjbrfx1n1kz6lrqlm7jvryp00000gn/T/pi-subagent-wiley-p01-20260824-124501-8300-2044/controller-preflight/preflight.ok",
+    "marker_text": "preflight_passed 2026-08-24T12:45:05-04:00 endpoint=http://127.0.0.1:9236 profile=/Users/antho/agent-tools/.browser-profiles/wiley-pilot-9236",
+    "dedicated_cdp_url": "http://127.0.0.1:9236",
+    "dedicated_profile": "/Users/antho/agent-tools/.browser-profiles/wiley-pilot-9236",
+    "runtime_version": "Chrome/151.0.7922.174",
+    "disk_runtime_version_check": "passed by controller read-only launcher check",
+    "anchor": {
+      "type": "page",
+      "url": "chrome://newtab/",
+      "target_id_sha256": "81fe2791f516c4075b7cc137684884fc63a33e9c7baecfc4a8f69564e5d4e3a1"
+    }
+  },
+  "power_and_process": {
+    "observed_at": "2026-08-24T12:45:32-04:00",
+    "power_source": "AC Power",
+    "battery": "100%; charged; 0:00 remaining; present=true",
+    "pilot_caffeinate": {
+      "pid": 8309,
+      "owner": "zsh pid 8308",
+      "assertions": [
+        "PreventUserIdleSystemSleep",
+        "PreventUserIdleDisplaySleep",
+        "PreventSystemSleep",
+        "PreventDiskIdle"
+      ]
+    },
+    "clamshell": {
+      "AppleClamshellState": "No",
+      "AppleClamshellCausesSleep": "No",
+      "limitation": "caffeinate does not override physical clamshell sleep; keep the lid open during any future browser phase. This observation cannot guarantee later physical-lid state."
+    }
+  },
+  "adapter_bytes": {
+    "search_wiley_online_library.py": "360ac76f2f0d3530660ce868523eeb4caab809f2e5fd6bcc39da513652bf1205",
+    "_browser_search_utils.py": "706d3f56c65518eb842cae9931364f8a10e7c0f1083f4ef75d6418c61be5dcb5",
+    "_output_utils.py": "ec2cf6fc1c63dc71d7295cd6300eb322c3495e3f3d4c983bd47006a1d0d7b888"
+  },
+  "source_requests_made_before_code_gate": 0,
+  "result": "controller gate inspected and healthy before the offline candidate-adapter safety check; no Wiley source request was made."
+}

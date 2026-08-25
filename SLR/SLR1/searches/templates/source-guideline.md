@@ -44,11 +44,11 @@ List access, query, control, total, range, page, export, parsing, identity, and 
 
 ## 8. Final-run procedure
 
-Give the ordered procedure that a later `R-002` operator can execute without relying on pilot memory. Do not execute it during the pilot.
+Give the ordered procedure that a later `R-002` operator can execute without relying on pilot memory. For browser-backed work, refer to the shared CfT contract at `SLR/SLR1/searches/README.md`; do not prescribe a source-specific browser process, profile, or port. Do not execute it during the pilot.
 
 ## 9. Validation evidence
 
-Link accepted pilot manifests and evidence. Distinguish observed interface behavior, official documentation, inference, and untested items. After human approval, let `search-log.md` point to the approval commit and pin any external implementation by commit; do not add a separate approval-hash ledger.
+Link the accepted campaign, immutable attempt manifests, carried-forward capability evidence, and any invalidations. Distinguish observed interface behavior, official documentation, inference, and untested items. Record human approval only for methodological changes affecting the review; behavior-preserving technical decisions remain controller-authorized. Let `search-log.md` point to the campaign acceptance commit and pin external implementations there; do not add a separate approval-hash ledger.
 
 ## 10. Remaining limits and protocol impact
 

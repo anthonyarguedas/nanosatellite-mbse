@@ -1,0 +1,162 @@
+{
+  "artifact_type": "slr1-ieee-p03-diagnostic-plan/v1",
+  "pilot_id": "S-D03-P03-20260824T120555-0400",
+  "task_id": "S-D03",
+  "source_id": "ieee-xplore",
+  "created_at": "2026-08-24T12:07:56-0400",
+  "basis": "observed",
+  "authorization_scope": "A1 failure diagnosis only: one short control, one exact full-A1 state-stage probe, one exact full-A1 adapter retry, and fixed two-cell A1 split only if the stated gate permits.",
+  "lifecycle": {
+    "diagnostic_only": true,
+    "screening_performed": false,
+    "candidate_import_permitted": false,
+    "no_s_c01": true,
+    "no_other_partitions": true,
+    "no_final_event": true,
+    "no_adaptive_retries": true
+  },
+  "query_construction": {
+    "dictionary_generated": true,
+    "term_audit": "a1-algebra-term-audit.json",
+    "query_receipts": {
+      "short_control": {
+        "query_file": "queries/A1-P03-short-control.ieee-query.txt",
+        "semantic_role": "A1-shaped P[1] AND E_H[1] AND M_H[1] control",
+        "file_sha256": "19beecc22602bed1a44376c9bf9ea506c3d7167cbbdd69accef65bd595bd5841",
+        "submitted_query_sha256": "82b91f5d1c8734095a6e0603b17976b76e2799094e8a43b8058c977cb2e97fb5",
+        "file_utf8_byte_count_including_terminal_lf": 133,
+        "file_character_count_including_terminal_lf": 133,
+        "submitted_raw_utf8_byte_count": 132,
+        "submitted_raw_character_count": 132,
+        "form_encoded_queryText_character_count": 182,
+        "full_initial_url_character_count": 259,
+        "atom_count": 3,
+        "terminal_lf_stripped_for_submission": true
+      },
+      "full_a1_reference": {
+        "query_file": "queries/A1-P03-unsegmented-reference.ieee-query.txt",
+        "semantic_role": "A1 = P AND E_H AND M_H unsegmented reference",
+        "file_sha256": "bf8caf009e189c1869619b399fc43629a7f4ad96bbd111587214351e8d2cce01",
+        "submitted_query_sha256": "54306f0fe9d6c5b0a17ade48c04438f8cd65fe9941edbb9c0f8d6e14a8b83199",
+        "file_utf8_byte_count_including_terminal_lf": 3583,
+        "file_character_count_including_terminal_lf": 3583,
+        "submitted_raw_utf8_byte_count": 3582,
+        "submitted_raw_character_count": 3582,
+        "form_encoded_queryText_character_count": 4802,
+        "full_initial_url_character_count": 4879,
+        "atom_count": 86,
+        "terminal_lf_stripped_for_submission": true
+      },
+      "a1_01": {
+        "query_file": "queries/A1-P03-01.ieee-query.txt",
+        "semantic_role": "A1-01 = P AND E_H[1..18] AND M_H",
+        "file_sha256": "7691d742f425e597a4c07c6db5c0d881725132ed843967b110ed978d22ee78f9",
+        "submitted_query_sha256": "3191242a264deb18d9d23564a734f5bcd0c8044c17f91ba19c33c2fc0eb7f74d",
+        "file_utf8_byte_count_including_terminal_lf": 2809,
+        "file_character_count_including_terminal_lf": 2809,
+        "submitted_raw_utf8_byte_count": 2808,
+        "submitted_raw_character_count": 2808,
+        "form_encoded_queryText_character_count": 3748,
+        "full_initial_url_character_count": 3825,
+        "atom_count": 66,
+        "terminal_lf_stripped_for_submission": true
+      },
+      "a1_02": {
+        "query_file": "queries/A1-P03-02.ieee-query.txt",
+        "semantic_role": "A1-02 = P AND E_H[19..38] AND M_H",
+        "file_sha256": "3ff406814fe45b4f16090d86a9ddf4f9e5b02d8f1b40033daccb2c11e7a763c1",
+        "submitted_query_sha256": "0732591500b100582509bae9e3495167e8f65e1f14b2578ae0feb71324e1cd58",
+        "file_utf8_byte_count_including_terminal_lf": 2812,
+        "file_character_count_including_terminal_lf": 2812,
+        "submitted_raw_utf8_byte_count": 2811,
+        "submitted_raw_character_count": 2811,
+        "form_encoded_queryText_character_count": 3779,
+        "full_initial_url_character_count": 3856,
+        "atom_count": 68,
+        "terminal_lf_stripped_for_submission": true
+      }
+    }
+  },
+  "fixed_serial_operation_order": [
+    {
+      "operation_id": "P03-E01-short-control-adapter",
+      "operation": "adapter count-only short A1-shaped control",
+      "query_key": "short_control",
+      "maximum_runs": 1,
+      "success_gate": "exact query echo; exact numeric total or validated native zero; count_only status; zero retained records; safe owned-page closure",
+      "stop_on": [
+        "null total",
+        "query rewrite",
+        "access or challenge",
+        "anchor failure",
+        "browser-safety failure"
+      ]
+    },
+    {
+      "operation_id": "P03-E02-full-a1-state-stage",
+      "operation": "temporary Playwright state-stage probe of exact unsegmented full A1",
+      "query_key": "full_a1_reference",
+      "maximum_runs": 1,
+      "projection_only": [
+        "navigation response class/status",
+        "expected host/path",
+        "query echo count and match boolean",
+        "source root/header readiness",
+        "summary class",
+        "card count",
+        "sort/page-size/pagination counts",
+        "challenge/login flags",
+        "allowlisted terminal category booleans",
+        "anchor census before/during/after"
+      ],
+      "stop_on": [
+        "access or challenge",
+        "anchor failure",
+        "browser-safety failure"
+      ]
+    },
+    {
+      "operation_id": "P03-E03-full-a1-adapter-retry",
+      "operation": "adapter count-only exact unsegmented full A1 retry",
+      "query_key": "full_a1_reference",
+      "maximum_runs": 1,
+      "classification_gate": {
+        "valid_reconciled_probe_state_and_adapter_failure": "code_issue=true; stop; no split",
+        "both_probe_and_adapter_succeed_with_exact_echo": "full A1 successful; stop; no split",
+        "explicit_probe_query_complexity_or_length_category_and_closed_adapter_failure": "code_issue=false; permit fixed split gate",
+        "probe_absent_unrecognized_generic_or_nonexact_echo_or_unreconciled": "code_issue=unresolved; stop; no split"
+      }
+    },
+    {
+      "operation_id": "P03-E04-A1-01-adapter",
+      "operation": "fixed split-cell A1-01 adapter count-only",
+      "query_key": "a1_01",
+      "maximum_runs": 1,
+      "conditional_on": "P03-E03 explicitly classifies source behavior code_issue=false and permits split gate",
+      "success_gate": "exact query echo; exact numeric total or validated native zero; zero retained records",
+      "stop_on": [
+        "null total",
+        "query rewrite",
+        "access or challenge",
+        "anchor failure",
+        "browser-safety failure"
+      ]
+    },
+    {
+      "operation_id": "P03-E05-A1-02-adapter",
+      "operation": "fixed split-cell A1-02 adapter count-only",
+      "query_key": "a1_02",
+      "maximum_runs": 1,
+      "conditional_on": "P03-E04 succeeded",
+      "success_gate": "exact query echo; exact numeric total or validated native zero; zero retained records",
+      "stop_on": [
+        "null total",
+        "query rewrite",
+        "access or challenge",
+        "anchor failure",
+        "browser-safety failure"
+      ]
+    }
+  ],
+  "split_union_rule": "Do not sum cell totals. If both cells succeed, mark only algebraic source-cell validation complete; stable-identity union deduplication and completeness remain pending later authorization."
+}

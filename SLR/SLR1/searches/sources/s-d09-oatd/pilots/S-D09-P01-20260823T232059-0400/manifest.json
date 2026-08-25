@@ -1,0 +1,276 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D09-P01-20260823T232059-0400",
+  "task_id": "S-D09",
+  "source_id": "oatd",
+  "method_type": "direct",
+  "status": "blocked",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-23T23:20:59-04:00",
+  "ended_at": "2026-08-23T23:42:41-04:00",
+  "protocol_commit": "343ae7987b0fb7239a5a66d1d2dcaa7fb67a5915",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "openai-codex/gpt-5.6-terra",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "Open Access Theses and Dissertations (OATD)",
+    "url": "https://oatd.org/",
+    "access_route": "Dedicated local Chrome CDP context; normal rendered OATD basic GET and normal home advanced-composer form only; no API, login, challenge bypass, or direct full-text retrieval.",
+    "authenticated": false,
+    "database_or_collection": "full public OATD index of electronic theses and dissertations",
+    "platform": "OATD",
+    "timezone": "America/New_York (-04:00)",
+    "candidate_adapter": {
+      "repository_commit": "3231ebddefcc3e7bc707b2a7d66fbe831d363286",
+      "script_path": "/Users/antho/agent-tools/academic-research/skills/academic-search/scripts/search_oatd.py",
+      "script_sha256": "c654b34750fa651407ab5d09baf452abec6167a625a8c1995b7e57aa4095b043",
+      "code_issue": true
+    }
+  },
+  "executions": [
+    {
+      "execution_id": "E-001",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Validate normal basic route, exact query echo, native explicit zero, and blank source control state without retrieving a record.",
+      "started_at": "2026-08-23T23:24:21-04:00",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "OATD basic GET q=oatdpilotzerotokenxqz20260823; form=basic; adapter invoked with explicit --cdp-url http://127.0.0.1:9234.",
+      "query_file": null,
+      "fields": ["basic unqualified search"],
+      "controls": {
+        "form": "basic",
+        "language": null,
+        "country": null,
+        "earliest": null,
+        "latest": null,
+        "cc_only": false,
+        "sort": "relevance (source value relevanace)",
+        "page_size": 30
+      },
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-001-native-zero.json"],
+      "notes": "A completed diagnostic native zero only; no candidate records or screening."
+    },
+    {
+      "execution_id": "E-002",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Inspect visible normal home basic and advanced form controls without retaining record cards.",
+      "started_at": "2026-08-23T23:29:33-04:00",
+      "status": "success",
+      "exact_query_or_operation": "Adapter-owned blank page navigated to normal OATD home; DOM inventory of the basic and advanced GET form controls only.",
+      "query_file": null,
+      "fields": ["any field", "title", "author name", "abstract", "university/publisher", "subjects/keywords", "department/discipline"],
+      "controls": {
+        "advanced_row_joiners": ["AND", "OR", "PHRASE", "NOT"],
+        "language_control_visible": true,
+        "country_control_visible": true,
+        "earliest_latest_visible": true,
+        "sort_values": ["relevanace", "author", "publisher", "pub_dt"],
+        "page_sizes": [30, 60, 100],
+        "cc_only_visible": true
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-002-advanced-controls.json"],
+      "notes": "A control inventory, not a search result."
+    },
+    {
+      "execution_id": "E-ADV-001",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Inspect the normal advanced-composer route before attempting any field semantics.",
+      "started_at": "2026-08-23T23:24:25-04:00",
+      "status": "failed",
+      "exact_query_or_operation": "Normal OATD advanced-composer route /oatd/search-composer with its blank/default form state; resulting route showed q=*:*.",
+      "query_file": null,
+      "fields": [],
+      "controls": {},
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": ["SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260823T232059-0400/observations.md"],
+      "notes": "The rendered page said Server Too Busy - Please slow down. The timestamp is an approximate sequencing time because this direct observation had no emitted receipt. It is a failure/null, was not retried, and does not establish advanced semantics."
+    },
+    {
+      "execution_id": "E-003",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Aggregate-only basic parser diagnostic suite covering Boolean, phrase, punctuation, acronym, case, inflection, wildcard, proximity, length, and malformed input.",
+      "started_at": "2026-08-23T23:31:35-04:00",
+      "status": "failed",
+      "exact_query_or_operation": "Planned query suite and failure details are retained in the restricted E-003 failure receipt; browser-harness CDP IPC Page.navigate timed out before a recoverable aggregate ledger was emitted.",
+      "query_file": null,
+      "fields": ["basic unqualified search"],
+      "controls": {"form": "basic", "aggregate_only": true},
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-003-basic-syntax-aggregate.json",
+        ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-003-basic-syntax-aggregate.failure.json"
+      ],
+      "notes": "Progress is unknown, so no planned query is credited as completed. No retry or later live OATD query occurred."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "C-001",
+      "requirement": "Dedicated browser/power/version/anchor preflight and postflight.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["environment-preflight.json", "postflight-receipt.json"],
+      "notes": "Chrome 151.0.7922.174, AC power, active pilot caffeinate assertions, exact launcher check, and the controller anchor were preserved; no actual Sleep/Wake/DarkWake event was present in the filtered pilot-window log."
+    },
+    {
+      "check_id": "C-002",
+      "requirement": "Source boundary, repository provenance limits, OATD/PQDT distinction, and PRISMA treatment.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed_and_documented",
+      "evidence_paths": ["official-source-documentation-receipt.json", "../../../../source-interface-prisma-crosswalk.json"],
+      "notes": "OATD documentation and the protocol/crosswalk distinguish aggregation index, originating hosts, and PQDT. Record-level provenance remains untested."
+    },
+    {
+      "check_id": "C-003",
+      "requirement": "Normal basic interface and explicit native zero behavior.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-001-native-zero.json"],
+      "notes": "Exact basic query echo/reconciliation produced source total 0 and zero rows."
+    },
+    {
+      "check_id": "C-004",
+      "requirement": "Visible advanced fields and controls.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-002-advanced-controls.json"],
+      "notes": "Visible controls were inventoried; their search semantics are not established."
+    },
+    {
+      "check_id": "C-005",
+      "requirement": "Boolean, precedence, quotes, punctuation/hyphen, acronym, case, stemming/expansion, wildcard, and length behavior.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-003-basic-syntax-aggregate.failure.json"],
+      "notes": "The aggregate-only suite failed with no recoverable source ledger and was not retried."
+    },
+    {
+      "check_id": "C-006",
+      "requirement": "Controlled vocabulary, indexed-term/subject field, hierarchy/explosion, and Record Details inspection.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": ["observations.md", ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-002-advanced-controls.json"],
+      "notes": "Visible subjects/keywords selector only; no detail record or vocabulary semantics completed."
+    },
+    {
+      "check_id": "C-007",
+      "requirement": "All nine direct partitions are literal, lossless at cell algebra, and map to exact UTF-8 query files.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["../../translation-spec.json", "translation-audit.json"],
+      "notes": "Offline audit verifies term/pair preservation and BT2 algebra only; it is not source semantic validation."
+    },
+    {
+      "check_id": "C-008",
+      "requirement": "Current aggregate/minimal syntax check and total for every query cell.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": ["../../translation-spec.json", ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-003-basic-syntax-aggregate.failure.json"],
+      "notes": "No partition cell was submitted after the transport failure; every cell total is null."
+    },
+    {
+      "check_id": "C-009",
+      "requirement": "Valid same-field <=5-token pair implementation or a compliant broader same-field fallback.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": ["../../translation-spec.json"],
+      "notes": "No proximity or field semantics were observed. Draft record-level broad pair clauses are final-use-prohibited."
+    },
+    {
+      "check_id": "C-010",
+      "requirement": "Date, language, country, CC, sort, page-size, and prohibited-limit behavior.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": [".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-002-advanced-controls.json"],
+      "notes": "Controls were visible but no behavior was safely established."
+    },
+    {
+      "check_id": "C-011",
+      "requirement": "Positive Record Details provenance, pagination, export/capture, stable identity, and completeness/repeatability.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "untested",
+      "evidence_paths": ["observations.md"],
+      "notes": "Only an explicit zero completed; no positive record or prefix was retained."
+    },
+    {
+      "check_id": "C-012",
+      "requirement": "Failure/null handling without treating transport or busy state as zero.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["observations.md", ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-003-basic-syntax-aggregate.failure.json"],
+      "notes": "Advanced busy and CDP transport failure are recorded with null total; the sole zero is explicit/native."
+    },
+    {
+      "check_id": "C-013",
+      "requirement": "Candidate adapter has no-clobber, strict completeness, count-only, and report-ready final-run safeguards.",
+      "partition_id": null,
+      "status": "failed",
+      "basis": "observed",
+      "evidence_paths": ["adapter-review.json"],
+      "notes": "code_issue=true: output can be replaced and required strict modes/controls are absent."
+    },
+    {
+      "check_id": "C-014",
+      "requirement": "Diagnostic-only separation: no screening, candidate corpus, final event, or import.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": ["observations.md"],
+      "notes": "No positive record was retained; no screening or import occurred."
+    }
+  ],
+  "artifacts": [
+    {"path": "SLR/SLR1/searches/sources/s-d09-oatd/guideline.md", "role": "draft reusable source guideline", "sha256": null, "access_classification": "public", "secure_location_reference": null},
+    {"path": "SLR/SLR1/searches/sources/s-d09-oatd/translation-spec.json", "role": "draft exact cell mapping and lossless-union specification", "sha256": null, "access_classification": "public", "secure_location_reference": null},
+    {"path": "SLR/SLR1/searches/sources/s-d09-oatd/queries/", "role": "12 exact UTF-8 candidate query cells", "sha256": null, "access_classification": "public", "secure_location_reference": null},
+    {"path": "SLR/SLR1/searches/sources/s-d09-oatd/human-review.md", "role": "pending methodological decisions and recommendations only", "sha256": null, "access_classification": "public", "secure_location_reference": null},
+    {"path": "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260823T232059-0400/observations.md", "role": "rights-safe diagnostic observations", "sha256": null, "access_classification": "public", "secure_location_reference": null},
+    {"path": "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260823T232059-0400/evidence-index.json", "role": "safe evidence locations and checksums", "sha256": null, "access_classification": "public", "secure_location_reference": null},
+    {"path": ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-001-native-zero.json", "role": "raw bounded native-zero adapter artifact", "sha256": "45e1493ff7a71052493422a90e7fbdd8ea259d7206f5ea7c520acdabdccf0b6b", "access_classification": "restricted", "secure_location_reference": ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/"},
+    {"path": ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-002-advanced-controls.json", "role": "raw visible-control inventory", "sha256": "8a7d0af1b6068e870c8e3834f16cd45bff836dcc031cd48184044be24bab5112", "access_classification": "restricted", "secure_location_reference": ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/"},
+    {"path": ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/exec-003-basic-syntax-aggregate.failure.json", "role": "raw transport-failure receipt", "sha256": "c8205802bcb5e5f17f2297c37461fb6834c15bbdd26438394fc552ca260271c4", "access_classification": "restricted", "secure_location_reference": ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/"},
+    {"path": ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/postflight-cdp-list.json", "role": "raw postflight anchor evidence", "sha256": "08f01547557a7e6d203de777646e2d8a88f8b84e4a4a937ab283dd608d9d533a", "access_classification": "restricted", "secure_location_reference": ".searches/s-d09-oatd-restricted/S-D09-P01-20260823T232059-0400/"},
+    {"path": "SLR/SLR1/searches/sources/s-d09-oatd/pilots/S-D09-P01-20260823T232059-0400/validation-receipt.json", "role": "schema and integrity validation receipt", "sha256": "ba06979faff320d7d5b1168b1052205c9e318f6eda9dd706fbed9d7c9c350d95", "access_classification": "public", "secure_location_reference": null}
+  ],
+  "disposition": {
+    "recommendation": "repeat",
+    "reason": "A narrow native zero and visible controls were observed, but required syntax, pair, controls, detail, pagination, identity, and completeness validation is blocked. The candidate adapter has a demonstrated no-clobber/strict-completeness defect (code_issue=true), so a separate code-fix and newly authorized pilot are required.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Review and approve or reject the source boundary/reporting treatment and local eligibility handling recommendations in human-review.md.",
+      "Require a validated same-field pair method before accepting pair-bearing partitions.",
+      "Review the separate adapter code-fix before authorizing a new pilot ID.",
+      "Do not approve this blocked pilot or execute a final OATD search from its draft queries."
+    ]
+  }
+}

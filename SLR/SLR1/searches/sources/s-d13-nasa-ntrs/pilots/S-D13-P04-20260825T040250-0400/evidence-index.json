@@ -1,0 +1,56 @@
+{
+  "schema_version": "slr1-ntrs-p04-evidence-index/v1",
+  "pilot_id": "S-D13-P04-20260825T040250-0400",
+  "generated_at": "2026-08-25T04:05:12-04:00",
+  "checksum_algorithm": "sha256",
+  "retention": {
+    "candidate_records_retained": false,
+    "raw_source_responses_retained": false,
+    "credentials_cookies_sessions_profile_contents_retained": false,
+    "browsing_urls_websocket_urls_raw_target_ids_retained": false,
+    "full_text_downloads_retained": false
+  },
+  "source_operation_accounting": {
+    "predeclared_maximum": 2,
+    "performed": 0,
+    "operations": [],
+    "source_reported_total": null,
+    "records_retrieved": 0,
+    "records_imported": 0,
+    "explicit_zero_observed": false,
+    "screening_performed": false,
+    "candidate_import_permitted": false,
+    "final_event_created": false
+  },
+  "evidence": [
+    {"evidence_id": "E-P04-PREFLIGHT", "path": "preflight.json", "role": "source-free preflight and immutable query contract", "sha256": "954805888b16869e2ac27b2be5ad2a20dd3ba0aaa81c5e274415400279d43aac", "access_classification": "public", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-BROWSER-STATUS", "path": "browser-status-sanitized.json", "role": "safe read-only browser anchor and lease status", "sha256": "d5a158cef580bdb2f43ea5b6113016c2751b52dd54275510309b30329606aeca", "access_classification": "metadata_only", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-POWER-SLEEP", "path": "power-sleep-check.json", "role": "safe non-acquired phase power and Sleep/Wake record", "sha256": "e204a3db0405b8c49237421114c6b6b71ed5b32dbe0f725abf47e404a8f4ec79", "access_classification": "metadata_only", "claim_basis": "untested"},
+    {"evidence_id": "E-P04-CHECKLIST", "path": "browser-live-phase-checklist.md", "role": "shared-browser boundary checklist", "sha256": "f5c07a046fe98b36bf8ad6d7ab65496b615a12629bc0dd152f695da3cba2d1d1", "access_classification": "public", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-IMMUTABILITY", "path": "pre-existing-attempt-hashes.json", "role": "P01/P02/P03 immutability snapshot", "sha256": "3b5ff55fdddc6401a86a042a47225446d98e852e59cd9027e20d5b943a1a8198", "access_classification": "metadata_only", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-POSTFLIGHT", "path": "postflight-validation.json", "role": "focused zero-operation postflight validation", "sha256": "64328307e4ddcee044888ca400b45d66e632635020c39b2893056164d32eabbe", "access_classification": "public", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-OBSERVATIONS", "path": "observations.md", "role": "diagnostic observations and handoff", "sha256": "b77dcc4d1ff384c4e35a825c8d6d6c8f4a556bd3ce34a12050ce35bc8f0690ce", "access_classification": "public", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-ID", "path": "pilot-id.txt", "role": "allocated immutable attempt identifier", "sha256": "94a529ced51e4d1e3173463296720046586aa43d512046418ad8cffce489ee2b", "access_classification": "metadata_only", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-START", "path": "started-at.txt", "role": "attempt allocation timestamp", "sha256": "949be5fd458771bb004fe1812c5cd68a52408d1b7ee23c0582b7319e98ccbacd", "access_classification": "metadata_only", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-MANIFEST", "path": "manifest.json", "role": "immutable P04 manifest", "sha256": "69329b23ef4b901388988c154193dfbb9d2a7bfd701a188a86356b25326d0e19", "access_classification": "public", "claim_basis": "observed"},
+    {"evidence_id": "E-P04-RESTRICTED-LEDGER", "path": ".searches-d13-ntrs/S-D13-P04-20260825T040250-0400/source-operation-ledger.json", "role": "restricted zero-operation ledger", "sha256": "197df8e7383299c88107707662eb4a37ba729e73e14bc3d789eabaa119083c94", "access_classification": "restricted", "claim_basis": "observed"},
+    {"evidence_id": "E-P03-QUERY", "path": "pilots/S-D13-P03-20260824T125840-0400/queries/G01-minimal-nanosatellite.txt", "role": "immutable prior minimal query checked by P04 preflight", "sha256": "3fc7d31e9abb58d42acd5c95a9549835545de822d0843e28265c6979b1a466d4", "access_classification": "public", "claim_basis": "observed"},
+    {"evidence_id": "E-P01-MANIFEST", "path": "pilots/S-D13-P01-20260823T232536-0400/manifest.json", "role": "immutable prior attempt manifest reference", "sha256": "4405ec9cea88c31625203205fa7aad5f887985e5c33666977ee8a17f2aeb4b56", "access_classification": "public", "claim_basis": "observed"},
+    {"evidence_id": "E-P02-MANIFEST", "path": "pilots/S-D13-P02-20260824T111634-0400/manifest.json", "role": "immutable prior attempt manifest reference", "sha256": "393b6e79073a0e3aeca20e9fb555e67ca36c2ba76ce0429e7ece835514f7565d", "access_classification": "public", "claim_basis": "observed"},
+    {"evidence_id": "E-P03-MANIFEST", "path": "pilots/S-D13-P03-20260824T125840-0400/manifest.json", "role": "immutable prior attempt manifest reference", "sha256": "82643e0757575adb338b3ac0065bc3b669197e6376062a9f1f95f0edc81d9ee8", "access_classification": "public", "claim_basis": "observed"}
+  ],
+  "reserved_writer_paths_not_created": [
+    "restricted/browser-lease-receipt.json",
+    "restricted/op-01-source-health.json",
+    "restricted/op-02-rendered-g01.json"
+  ],
+  "integrity_scope": "All P04 tracked artifacts cited above are hash-bound except this self-referential evidence index. The manifest and prior immutable manifests are independently hash-bound; no source response or browser receipt exists for P04.",
+  "terminal": {
+    "outcome": "blocked",
+    "category": "technical",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "code_issue": "unresolved",
+    "semantic_change": false
+  }
+}

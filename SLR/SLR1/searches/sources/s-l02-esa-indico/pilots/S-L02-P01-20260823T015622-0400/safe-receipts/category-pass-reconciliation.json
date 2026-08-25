@@ -1,0 +1,32 @@
+{
+  "receipt_schema_version": "esa-indico-category-pass-reconciliation/v1",
+  "created_at": "2026-08-23T02:21:06-04:00",
+  "basis": "observed",
+  "bounded_window": {
+    "category_id": "0",
+    "from_date": "2023-11-01",
+    "to_date": "2023-11-30"
+  },
+  "pass_1": {
+    "artifact": "bounded-category-2023-11.json",
+    "observed_at": "2026-08-23T02:20:31-04:00",
+    "source_reported_total": 8,
+    "retrieved_total": 8,
+    "response_sha256": "e0be88c79e081b7cc4768c99fae0e2e4f18028df6a09f8da73803ddc38062ba0",
+    "event_ids_in_source_order": ["473", "456", "485", "470", "472", "467", "403", "350"]
+  },
+  "pass_2": {
+    "artifact": "bounded-category-2023-11-pass2.json",
+    "observed_at": "2026-08-23T02:20:43-04:00",
+    "source_reported_total": 8,
+    "retrieved_total": 8,
+    "response_sha256": "e0be88c79e081b7cc4768c99fae0e2e4f18028df6a09f8da73803ddc38062ba0",
+    "event_ids_in_source_order": ["473", "456", "485", "470", "472", "467", "403", "350"]
+  },
+  "invariants": {
+    "each_source_total_reconciles_to_rows": true,
+    "stable_identifier_order_matches": true,
+    "response_hash_matches": true
+  },
+  "scope_limit": "This validates only the stated November 2023 root-category window. It does not prove all-time root-category coverage, recursive-category semantics, or a final source universe."
+}

@@ -1,0 +1,265 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D04-P02-20260824T130842-0400",
+  "task_id": "S-D04",
+  "source_id": "engineering-village-compendex-inspec",
+  "method_type": "direct",
+  "status": "blocked",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-24T17:20:10.146Z",
+  "ended_at": "2026-08-24T13:23:53-04:00",
+  "protocol_commit": "8ebc1c162e919d1e8dcdb815a573d14dc0459dce",
+  "operator": {
+    "type": "llm_subagent",
+    "model": "openai-codex/gpt-5.6-terra",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "Engineering Village Expert Search",
+    "url": "https://www.engineeringvillage.com/search/expert.url",
+    "access_route": "P02 performed one non-query, separately owned-page normal route probe; G02 was prohibited because G01 was not healthy.",
+    "authenticated": false,
+    "database_or_collection": "paired Compendex and Inspec databases",
+    "platform": "Engineering Village",
+    "timezone": "America/New_York",
+    "selected_source_ids_required": [
+      "compendex",
+      "inspec"
+    ],
+    "source_totals": {
+      "paired": null,
+      "compendex": null,
+      "inspec": null
+    },
+    "code_issue": "unresolved"
+  },
+  "executions": [
+    {
+      "execution_id": "G01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "One non-query owned-page route probe that preserves the private controller anchor and records only a safe projection.",
+      "started_at": "2026-08-24T17:20:10.146Z",
+      "status": "blocked",
+      "exact_query_or_operation": "Create one distinct page with Playwright context.new_page(); navigate it once to the paired Expert route; submit no query and interact with no source control.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "query_submitted": false,
+        "control_clicked": false,
+        "reload_performed": false,
+        "manual_access_step_followed": false,
+        "navigation_attempt_count": 1
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g01_owned_page_probe.py",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g01-safe-receipt.json"
+      ],
+      "notes": "The independently owned target and controller-anchor continuity were proven, but the safe post-navigation projection did not complete. This is a blocked gate, not source access/control evidence."
+    },
+    {
+      "execution_id": "G02-NOT-RUN",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "Record the fixed decision-ladder stop after an unhealthy G01; no adapter process was invoked.",
+      "started_at": "2026-08-24T17:20:13.690Z",
+      "status": "blocked",
+      "exact_query_or_operation": "Conditional current combined adapter diagnostic was not started because G01 was blocked.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "authorized_adapter_invocations": 1,
+        "actual_adapter_invocations": 0,
+        "source_query_submitted": false,
+        "selected_databases": [
+          "compendex",
+          "inspec"
+        ]
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g02-safe-receipt.json"
+      ],
+      "notes": "No title-phrase query, adapter-owned page, source row, export, result count, or partial prefix was created by G02."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "PREFLIGHT-01",
+      "requirement": "Dedicated 9237 read-only health/version check, private new-tab anchor, AC power, and current runner caffeinate evidence before live work",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/launcher-read-only-check-prelive-recheck.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/prelive-safety-recheck.json"
+      ],
+      "notes": "The initial no-source-work assertion detector was mechanically conservative; the immediate recheck read complete command output and verified all required assertions before G01."
+    },
+    {
+      "check_id": "G01-OWNERSHIP-01",
+      "requirement": "One sole private new-tab anchor, one distinct Playwright-created owned target, and final restoration to that sole unchanged anchor",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g01-safe-receipt.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/browser-postflight.json"
+      ],
+      "notes": "Only boolean/count continuity evidence was retained; raw target identifiers and URLs were never written."
+    },
+    {
+      "check_id": "G01-ROUTE-01",
+      "requirement": "Healthy non-query paired Expert route projection with expected host/route/title/controls/query field and no access, login, challenge, or syntax marker",
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g01-safe-receipt.json"
+      ],
+      "notes": "The one permitted navigation returned status 200, but the safe projection did not complete. No page text, HTML, screenshot, source control state, or source result was retained or inferred."
+    },
+    {
+      "check_id": "G02-DECISION-01",
+      "requirement": "Exactly one current combined-adapter invocation only after a healthy G01",
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g01-safe-receipt.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g02-safe-receipt.json"
+      ],
+      "notes": "G01 was not healthy; the adapter was not invoked and no source query was submitted."
+    },
+    {
+      "check_id": "ACCOUNTING-01",
+      "requirement": "Failure/null accounting with no explicit-zero claim and no retained prefix",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g02-safe-receipt.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/restricted-capture-ledger.json"
+      ],
+      "notes": "Paired, Compendex, and Inspec totals are null; zero records were retrieved and no source prefix exists."
+    },
+    {
+      "check_id": "DIAGNOSTIC-01",
+      "requirement": "No screening, eligibility coding, candidate import, or final event",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/manifest.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g02-safe-receipt.json"
+      ],
+      "notes": "Diagnostic-only flags are fixed and G02 did not start."
+    },
+    {
+      "check_id": "RIGHTS-01",
+      "requirement": "No raw target/session/credential/source content leakage and restricted-root accounting",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g01-safe-receipt.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/restricted-capture-ledger.json"
+      ],
+      "notes": "The restricted inventory reports zero source artifacts; public receipts are safe projections only."
+    },
+    {
+      "check_id": "POSTFLIGHT-01",
+      "requirement": "Read-only health, private-anchor continuity, AC/caffeinate observation, and exact-window Sleep/Wake check after the stop",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/launcher-read-only-check-postflight.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/browser-postflight.json",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/system-postflight-recheck.json"
+      ],
+      "notes": "The final read-only inspection found one unchanged new-tab anchor; AC/caffeinate were observed and both bounded log checks found zero Sleep/Wake markers."
+    },
+    {
+      "check_id": "ADAPTER-01",
+      "requirement": "Current adapter pin/hashes and P01 bounded route/lifecycle classification",
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/adapter-provenance-preflight.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/adapter-provenance-postflight.txt",
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/adapter-assessment.json"
+      ],
+      "notes": "Adapter bytes remained pinned and unchanged, but G02 was prohibited; code_issue remains unresolved."
+    },
+    {
+      "check_id": "SC01-01",
+      "requirement": "S-C01 Compendex/Inspec candidate terminology work",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/observations.md"
+      ],
+      "notes": "Explicitly excluded from P02."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g01_owned_page_probe.py",
+      "role": "one-shot safe G01 owned-page probe",
+      "sha256": "284127152c71b58eb9f716acb31af4e72cc477b0eb0066232c6e2529dee7e527",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g01-safe-receipt.json",
+      "role": "safe G01 receipt",
+      "sha256": "c59aaf64fcda1206c57310ab4aae8ac66a8205056294cb7a6b707d06a9f87099",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/g02-safe-receipt.json",
+      "role": "conditional G02 non-invocation receipt",
+      "sha256": "1f31adff57979800533586d5180c1ac08d4d5e3cf5287ce3e9743dac8f233de7",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/browser-postflight.json",
+      "role": "redacted browser-anchor postflight receipt",
+      "sha256": "d4a33a03f8e34c129de40046ca34263dbbfb236f906e4270053fdd7b65b85eb5",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/system-postflight-recheck.json",
+      "role": "safe exact-window power/caffeinate/sleep postflight receipt",
+      "sha256": "9f3eda246746d3f32fd619c3cac0e51cbdffc88b734b5f8392bc0ca8affa0a03",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/adapter-assessment.json",
+      "role": "P02 adapter code-issue assessment",
+      "sha256": "64916060a14f04ddc1cb51566f6ccc3e328a5e63a818ac414a35fa51e46d4742",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d04-engineering-village/pilots/S-D04-P02-20260824T130842-0400/restricted-capture-ledger.json",
+      "role": "zero-source-capture rights ledger",
+      "sha256": "28eadf2ba5335c987e24520ec89bc1af00da2057380a842380c0362c70de2aae",
+      "access_classification": "metadata_only",
+      "secure_location_reference": ".searches/s-d04-engineering-village-restricted/S-D04-P02-20260824T130842-0400/"
+    }
+  ],
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "G01 preserved distinct-page and anchor continuity but did not complete its required safe route projection; G02 was therefore not permitted. No source method, source access, paired controls, counts, or adapter lifecycle conclusion was established.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Review the blocked G01 safe-inspection outcome and all P02 validation receipts.",
+      "If further work is desired, authorize a new immutable scope; P02 cannot retry, accept itself, or authorize a final Engineering Village run."
+    ]
+  }
+}

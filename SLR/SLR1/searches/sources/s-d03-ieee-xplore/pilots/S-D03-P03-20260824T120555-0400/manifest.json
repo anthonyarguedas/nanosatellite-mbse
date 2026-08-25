@@ -1,0 +1,428 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D03-P03-20260824T120555-0400",
+  "task_id": "S-D03",
+  "source_id": "ieee-xplore",
+  "method_type": "direct",
+  "status": "failed",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-24T12:06:07-04:00",
+  "ended_at": "2026-08-24T12:19:24-04:00",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "operator": {
+    "type": "llm_subagent",
+    "model": null,
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "IEEE Xplore normal rendered Search UI",
+    "url": "https://ieeexplore.ieee.org/",
+    "access_route": "isolated controller-provisioned browser; normal rendered interface only",
+    "authenticated": false,
+    "database_or_collection": "IEEE Xplore",
+    "platform": "IEEE Xplore",
+    "timezone": "America/New_York"
+  },
+  "executions": [
+    {
+      "execution_id": "P03-E01-short-control-adapter",
+      "partition_id": "A1",
+      "cell_id": "P03-short-control",
+      "purpose": "one predeclared A1-shaped short syntax/adapter health control",
+      "started_at": "2026-08-24T12:16:14-0400",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "See exact P03 short-control query file; safe receipt confirms exact echo and validated native zero.",
+      "query_file": "queries/A1-P03-short-control.ieee-query.txt",
+      "fields": [
+        "All Metadata"
+      ],
+      "controls": {
+        "count_only": true,
+        "year": null,
+        "language": null,
+        "content_type": [],
+        "final_cutoff": null,
+        "limit": 1,
+        "max_pages": 1,
+        "requested_page_size": 10
+      },
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P03-20260824T120555-0400/P03-E01-short-control.adapter.json",
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P03-20260824T120555-0400/P03-E01-short-control.safe-receipt.json"
+      ],
+      "notes": "Count-only diagnostic; no records retained, screened, or imported."
+    },
+    {
+      "execution_id": "P03-E02-full-a1-state-stage",
+      "partition_id": "A1",
+      "cell_id": "A1-C01",
+      "purpose": "one exact full-A1 Playwright state-stage probe with allowlisted projection only",
+      "started_at": "2026-08-24T12:17:09-0400",
+      "status": "success",
+      "exact_query_or_operation": "See exact P03 unsegmented full-A1 reference query file; probe retained only an allowlisted state projection.",
+      "query_file": "queries/A1-P03-unsegmented-reference.ieee-query.txt",
+      "fields": [
+        "All Metadata"
+      ],
+      "controls": {
+        "count_only": true,
+        "state_stage_projection_only": true,
+        "year": null,
+        "language": null,
+        "content_type": [],
+        "final_cutoff": null
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P03-20260824T120555-0400/P03-E02-full-a1-state-stage.projection.json"
+      ],
+      "notes": "Valid exact-echo rendered state; no numeric total, record, page text, HTML, screenshot, or session URL retained."
+    },
+    {
+      "execution_id": "P03-E03-full-a1-adapter-retry",
+      "partition_id": "A1",
+      "cell_id": "A1-C01",
+      "purpose": "one exact full-A1 count-only adapter retry after state-stage probe",
+      "started_at": "2026-08-24T12:17:47-0400",
+      "status": "failed",
+      "exact_query_or_operation": "See exact P03 unsegmented full-A1 reference query file; terminal null failure recorded safely.",
+      "query_file": "queries/A1-P03-unsegmented-reference.ieee-query.txt",
+      "fields": [
+        "All Metadata"
+      ],
+      "controls": {
+        "count_only": true,
+        "year": null,
+        "language": null,
+        "content_type": [],
+        "final_cutoff": null,
+        "limit": 1,
+        "max_pages": 1,
+        "requested_page_size": 10
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P03-20260824T120555-0400/P03-E03-full-a1-adapter-retry.adapter.json",
+        ".searches/s-d03-ieee-xplore-restricted/S-D03-P03-20260824T120555-0400/P03-E03-full-a1-adapter-retry.safe-receipt.json"
+      ],
+      "notes": "IEEEProtocolError; exact echo, null total, zero pages/records, no prefix retained; split gate prohibited."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "C01-lifecycle",
+      "requirement": "P03 remained diagnostic-only with no screening or candidate import.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/observations.md"
+      ],
+      "notes": "Manifest flags and ledger record no screening/candidate activity."
+    },
+    {
+      "check_id": "C02-preflight",
+      "requirement": "Dedicated browser, exact anchor, version, AC power, sleep assertion, adapter identity, and focused suite passed before live work.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/browser-preflight-receipt.json"
+      ],
+      "notes": "Read-only launcher/version/anchor checks passed; focused suite passed once before live work."
+    },
+    {
+      "check_id": "C03-predeclared-inputs",
+      "requirement": "P03 fixed exact query files, lengths, hashes, atom counts, and lossless split algebra before live source work.",
+      "partition_id": "A1",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/diagnostic-plan.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/a1-algebra-term-audit.json"
+      ],
+      "notes": "Full reference is byte-identical to A1; split was prospectively fixed but conditional."
+    },
+    {
+      "check_id": "C04-short-control",
+      "requirement": "Run one A1-shaped short adapter count-only control with exact echo and safe closure.",
+      "partition_id": "A1",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/execution-ledger.json"
+      ],
+      "notes": "Validated native zero, zero retained records, and post-closure anchor census."
+    },
+    {
+      "check_id": "C05-state-stage",
+      "requirement": "Run one exact full-A1 rights-safe state-stage probe with allowlisted projection and safe page closure.",
+      "partition_id": "A1",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/execution-ledger.json"
+      ],
+      "notes": "Valid exact-echo ranged rendered state; no page text, HTML, records, screenshot, or session URL retained."
+    },
+    {
+      "check_id": "C06-exact-adapter-retry",
+      "requirement": "Run one exact full-A1 adapter retry and classify it against the state-stage result.",
+      "partition_id": "A1",
+      "status": "failed",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/execution-ledger.json"
+      ],
+      "notes": "Adapter returned IEEEProtocolError with total=null, zero pages, and zero records despite valid state-stage evidence."
+    },
+    {
+      "check_id": "C07-code-issue",
+      "requirement": "Classify valid-state plus adapter-failure behavior and stop without patching or another source retry.",
+      "partition_id": "A1",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/execution-ledger.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/observations.md"
+      ],
+      "notes": "code_issue=true; no adapter edit, no source retry, and no split cell."
+    },
+    {
+      "check_id": "C08-fixed-split-gate",
+      "requirement": "Run the fixed lossless split only if the exact step-3 gate explicitly permits it.",
+      "partition_id": "A1",
+      "status": "not_applicable",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/execution-ledger.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/a1-algebra-term-audit.json"
+      ],
+      "notes": "Valid-state plus adapter-failure branch prohibited split execution; union remains null/unaccepted."
+    },
+    {
+      "check_id": "C09-s-c01-boundary",
+      "requirement": "Do not decide or start IEEE S-C01 within P03.",
+      "partition_id": null,
+      "status": "not_applicable",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/observations.md"
+      ],
+      "notes": "No candidate terminology activity occurred."
+    },
+    {
+      "check_id": "C10-rights",
+      "requirement": "Keep raw adapter/probe/log/script material restricted and tracked evidence rights-safe.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/rights-boundary-receipt.json",
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/restricted-artifact-inventory.json"
+      ],
+      "notes": "Tracked scan recorded zero prohibited-content hits."
+    },
+    {
+      "check_id": "C11-postflight",
+      "requirement": "Postflight preserves exact anchor, version, AC/assertion, and no actual Sleep/Wake/DarkWake event.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/browser-postflight-receipt.json"
+      ],
+      "notes": "Read-only launcher and exact-anchor census passed after final adapter closure."
+    },
+    {
+      "check_id": "C12-immutable-boundary",
+      "requirement": "Do not edit P01/P02, central integration, final events, adapter code, staging, or commit.",
+      "partition_id": null,
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/validation-receipt.json"
+      ],
+      "notes": "P01/P02 local hashes, scoped Git boundary, adapter identity, and final-events checks passed."
+    },
+    {
+      "check_id": "C13-method-completion",
+      "requirement": "Do not accept the source method or mark S-C01 ready from P03.",
+      "partition_id": null,
+      "status": "blocked",
+      "basis": "observed",
+      "evidence_paths": [
+        "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/observations.md"
+      ],
+      "notes": "Draft method remains unaccepted; separate fix and later authorization are required."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/guideline.md",
+      "role": "draft reusable 10-section source guideline",
+      "sha256": "339bfd9817ba6dc53592928d127d00b9a618667acd29e58afdbadccf8db5cca4",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/translation-spec.json",
+      "role": "draft direct-source translation specification",
+      "sha256": "60de967d3bb1ab3c1dbecd6323c86e988206f78d14f59aa7f97c0a6703c1be3e",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1.ieee-query.txt",
+      "role": "exact UTF-8 P03 IEEE query input",
+      "sha256": "bf8caf009e189c1869619b399fc43629a7f4ad96bbd111587214351e8d2cce01",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1-P03-01.ieee-query.txt",
+      "role": "exact UTF-8 P03 IEEE query input",
+      "sha256": "7691d742f425e597a4c07c6db5c0d881725132ed843967b110ed978d22ee78f9",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1-P03-02.ieee-query.txt",
+      "role": "exact UTF-8 P03 IEEE query input",
+      "sha256": "3ff406814fe45b4f16090d86a9ddf4f9e5b02d8f1b40033daccb2c11e7a763c1",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1-P03-short-control.ieee-query.txt",
+      "role": "exact UTF-8 P03 IEEE query input",
+      "sha256": "19beecc22602bed1a44376c9bf9ea506c3d7167cbbdd69accef65bd595bd5841",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/queries/A1-P03-unsegmented-reference.ieee-query.txt",
+      "role": "exact UTF-8 P03 IEEE query input",
+      "sha256": "bf8caf009e189c1869619b399fc43629a7f4ad96bbd111587214351e8d2cce01",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/a1-algebra-term-audit.json",
+      "role": "machine-readable P03 A1 term, hash, and algebra audit",
+      "sha256": "2b8751ff88891659c6ac15edf1dbba0f3646d107006083b0a3c312f81340ac3d",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/browser-postflight-receipt.json",
+      "role": "sanitized browser/power postflight receipt",
+      "sha256": "766fdc6d17ca782e87748d712c6b09b187450fb343c118ef5520d16336f0488d",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/browser-preflight-receipt.json",
+      "role": "sanitized browser/adapter preflight receipt",
+      "sha256": "fd2909345aa893f98cea3fb106d7dc7b981116c2477cff49eddb56a4eb7204cd",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/diagnostic-plan.json",
+      "role": "predeclared P03 fixed diagnostic plan and query receipts",
+      "sha256": "ed2ee56157e568d90b1d660d5b8144370804d95a898a0b04bad873950c35480e",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/execution-ledger.json",
+      "role": "safe aggregate execution ledger",
+      "sha256": "a57cf83814fb712fa3f56b82f9cac5b701b250cbb2d83785fcc77fe7f7a5d166",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/observations.md",
+      "role": "safe P03 observations and disposition",
+      "sha256": "59b63221d9202f0ccff7fa285f1a757a7bbdd94d8ed5016167bc5a072b6d2a9d",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/restricted-artifact-inventory.json",
+      "role": "path/hash-only restricted artifact inventory",
+      "sha256": "9edf2a80cf5e8e31360a2b9ed89a5e783df4765d04626f548734a4cf216866c6",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/rights-boundary-receipt.json",
+      "role": "rights-boundary scan receipt",
+      "sha256": "76b44f9adeacf32e8e3d40f70464c63131f70e5999eae6b5feea065cf98327bd",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/validation-receipt.json",
+      "role": "schema/infrastructure/query/evidence validation receipt",
+      "sha256": "cbc7f993714691cc4d3fe80e0c94e4eae67c75f35f212ec1ac7f1d4da1bc5cf7",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/manifest.json",
+      "role": "this pilot manifest",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "SLR/SLR1/searches/sources/s-d03-ieee-xplore/pilots/S-D03-P03-20260824T120555-0400/evidence-index.json",
+      "role": "this evidence index",
+      "sha256": null,
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d03-ieee-xplore-restricted/S-D03-P03-20260824T120555-0400/",
+      "role": "restricted raw adapter/probe artifacts, stdout/stderr, and support scripts; individually indexed by restricted-artifact-inventory.json",
+      "sha256": null,
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches/s-d03-ieee-xplore-restricted/S-D03-P03-20260824T120555-0400/"
+    },
+    {
+      "path": "external:academic-search/search_ieee_xplore.py",
+      "role": "pinned external IEEE rendered-browser adapter",
+      "sha256": "04577d62040b9b812070bb2ec758a70d2b1dc3413d025404ef8c92abdea9b9fd",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "external:academic-search/test_search_ieee_xplore_browser.py",
+      "role": "pinned external focused adapter test",
+      "sha256": "75d972f95e0179cab3ca97a922c35f4a9999a37795b41c9735667ace30000096",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    }
+  ],
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "P03 establishes code_issue=true for the exact A1 adapter behavior; a separate committed adapter fix and new authorization are required before another source pilot.",
+    "semantic_change": false,
+    "human_verification_required": [
+      "Review the P03 valid-state versus adapter-failure evidence and approve or reject a separate adapter-code-fix task.",
+      "After a committed fix, decide whether a new narrowly scoped pilot should revalidate A1 before any other partition.",
+      "Do not authorize S-C01 until interface, all cells, controls, non-singleton identity/pagination, completeness, and rights-safe capture gates are complete."
+    ]
+  }
+}

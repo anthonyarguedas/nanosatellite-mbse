@@ -1,0 +1,1539 @@
+{
+  "schema_version": "slr1-pilot-campaign/v1",
+  "campaign_id": "S-D03-C01-20260824T161325-0400",
+  "task_id": "S-D03",
+  "source_id": "ieee-xplore",
+  "method_type": "direct",
+  "protocol_fingerprint": "d1d92411ad641bc0293389b9699c6676ba998af72c9cfd63c28b59bcf4745ba9",
+  "dictionary_fingerprint": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+  "capability_catalog": [
+    "G-SOURCE-BOUNDARY",
+    "G-QUERY-TRANSPORT",
+    "G-FIELD-BOUNDARY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-CONTENT-CONTROL",
+    "G-RETRIEVAL",
+    "G-PAGINATION-CONTROL",
+    "G-PAGE-IDENTITY",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR"
+  ],
+  "status": "methodological_decision_pending",
+  "created_at": "2026-08-24T16:13:25-04:00",
+  "updated_at": "2026-08-24T16:13:25-04:00",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "candidate_records_imported": 0,
+  "retry_policy": {
+    "policy_id": "RP-D03-BUSY-01",
+    "maximum_retries": 0,
+    "passive_wait_delays_seconds": [],
+    "attempted": 0,
+    "completed": 0,
+    "preauthorized_same_tab_busy_reissue": false
+  },
+  "controller_authorization": {
+    "technical_corrective_attempts_authorized": true,
+    "maximum_additional_attempts": 4,
+    "maximum_source_operations_per_attempt": 52,
+    "rationale": "Four lifetime technical allocations are finite: P02–P04 consumed three; one P05 remains. The historical P02 schedule used up to 52 operations, but D-TECH-NEXT-P05 independently caps the sole remaining attempt at four source operations.",
+    "maximum_technical_corrective_attempts": 4,
+    "maximum_methodological_revision_attempts": 0
+  },
+  "attempts": [
+    {
+      "attempt_id": "S-D03-P01-20260823T232428-0400",
+      "sequence": 1,
+      "manifest_path": "pilots/S-D03-P01-20260823T232428-0400/manifest.json",
+      "manifest_sha256": "0f91105afa0f377f63669e2a99c66c704ef6b795e71ec433e5b88196f287b3c6",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "initial",
+        "authorized_by": "controller",
+        "authorization_decision_id": null,
+        "prospectively_authorized": false,
+        "allocated_at": "2026-08-23T23:24:28-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "E01",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E01",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P01-FAILSAFE",
+          "gate_id": "G-FAILSAFE",
+          "path": "pilots/S-D03-P01-20260823T232428-0400/observations.md",
+          "sha256": "fe05457b5b82a6bb5594aa05298bd6049f59a99d3ef8209a48b472e27bfde63a",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "technical",
+        "ended_at": "2026-08-23T23:35:23-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "legacy_unverifiable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "Repeat only as a newly authorized P02 after a separately reviewed and committed adapter fix; P01 is blocked by the live singleton-summary parser defect and postflight anchor absence."
+      }
+    },
+    {
+      "attempt_id": "S-D03-P02-20260824T105020-0400",
+      "sequence": 2,
+      "manifest_path": "pilots/S-D03-P02-20260824T105020-0400/manifest.json",
+      "manifest_sha256": "a1f227e406b3e1161189a9cd7620b7933cd09a82c1edd247046524b98ba70713",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P02",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-24T10:50:20-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 52,
+        "performed": 52,
+        "operations": [
+          {
+            "operation_id": "E01",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 1,
+            "records_imported": 0,
+            "operation_key": "E01",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E02",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 1,
+            "records_imported": 0,
+            "operation_key": "E02",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E11",
+            "outcome": "success",
+            "source_reported_total": 962,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E11",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E12",
+            "outcome": "success",
+            "source_reported_total": 962,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E12",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E13",
+            "outcome": "success",
+            "source_reported_total": 2806,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E13",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E14",
+            "outcome": "success",
+            "source_reported_total": 2651,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E14",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E15",
+            "outcome": "success",
+            "source_reported_total": 395,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E15",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E16",
+            "outcome": "success",
+            "source_reported_total": 742,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E16",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E17",
+            "outcome": "success",
+            "source_reported_total": 328,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E17",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E18",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E18",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E19",
+            "outcome": "success",
+            "source_reported_total": 531,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E19",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E20",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E20",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E21",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E21",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E22",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E22",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E23",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E23",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E24",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E24",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E25",
+            "outcome": "success",
+            "source_reported_total": 6459,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E25",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E26",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E26",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E27",
+            "outcome": "success",
+            "source_reported_total": 3780,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E27",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E28",
+            "outcome": "success",
+            "source_reported_total": 43,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E28",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E29",
+            "outcome": "success",
+            "source_reported_total": 43,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E29",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E30",
+            "outcome": "success",
+            "source_reported_total": 1089,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E30",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E31",
+            "outcome": "success",
+            "source_reported_total": 1095,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E31",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E32",
+            "outcome": "success",
+            "source_reported_total": 962,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E32",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E33",
+            "outcome": "success",
+            "source_reported_total": 962,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E33",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E34",
+            "outcome": "success",
+            "source_reported_total": 1042,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E34",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E35",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E35",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E36",
+            "outcome": "success",
+            "source_reported_total": 4239,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E36",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E37",
+            "outcome": "success",
+            "source_reported_total": 503,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E37",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E38",
+            "outcome": "success",
+            "source_reported_total": 1039,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E38",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E39",
+            "outcome": "success",
+            "source_reported_total": 991,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E39",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E40",
+            "outcome": "success",
+            "source_reported_total": 31,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E40",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E41",
+            "outcome": "success",
+            "source_reported_total": 459,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E41",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E45",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E45",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E46",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E46",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E47",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E47",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E48",
+            "outcome": "success",
+            "source_reported_total": 1301997,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E48",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E49",
+            "outcome": "success",
+            "source_reported_total": 1089,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E49",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E50",
+            "outcome": "success",
+            "source_reported_total": 761,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E50",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E51",
+            "outcome": "success",
+            "source_reported_total": 711282,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E51",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E52",
+            "outcome": "success",
+            "source_reported_total": 711282,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E52",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E53",
+            "outcome": "success",
+            "source_reported_total": 625532,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E53",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E54",
+            "outcome": "success",
+            "source_reported_total": 847085,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E54",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E55",
+            "outcome": "success",
+            "source_reported_total": 847085,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E55",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E57",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E57",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E58",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E58",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E59",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 1,
+            "records_imported": 0,
+            "operation_key": "E59",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E60",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E60",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E61",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 1,
+            "records_imported": 0,
+            "operation_key": "E61",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E66",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E66",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E67",
+            "outcome": "success",
+            "source_reported_total": 1,
+            "records_retrieved": 1,
+            "records_imported": 0,
+            "operation_key": "E67",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "E70-A1",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "E70-A1",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P02-FIELD-PARSER",
+          "gate_id": "G-FIELD-PARSER",
+          "path": "pilots/S-D03-P02-20260824T105020-0400/execution-ledger.json",
+          "sha256": "eb4ba30d01078da885fb3f206ea38154cfd02f42965ab090d2eb5379bae5422c",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-24T11:35:15-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "legacy_unverifiable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "The repaired singleton route succeeded, but A1-C01 ended with a null technical failure. Source writing stopped; no partial translation is accepted."
+      }
+    },
+    {
+      "attempt_id": "S-D03-P03-20260824T120555-0400",
+      "sequence": 3,
+      "manifest_path": "pilots/S-D03-P03-20260824T120555-0400/manifest.json",
+      "manifest_sha256": "085a82ab8fc7edf9abf578a4a8dbff9c24ba26078c9937d37f8942658caa69e3",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P03",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-24T12:06:07-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 3,
+        "performed": 3,
+        "operations": [
+          {
+            "operation_id": "P03-E01-short-control-adapter",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "P03-E01-short-control-adapter",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "P03-E02-full-a1-state-stage",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "P03-E02-full-a1-state-stage",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          },
+          {
+            "operation_id": "P03-E03-full-a1-adapter-retry",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "P03-E03-full-a1-adapter-retry",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P03-ADAPTER-COUNT",
+          "gate_id": "G-ADAPTER-COUNT",
+          "path": "pilots/S-D03-P03-20260824T120555-0400/observations.md",
+          "sha256": "59b63221d9202f0ccff7fa285f1a757a7bbdd94d8ed5016167bc5a072b6d2a9d",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-24T12:19:24-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "legacy_unverifiable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "P03 establishes code_issue=true for the exact A1 adapter behavior; a separate committed adapter fix and new authorization are required before another source pilot."
+      }
+    },
+    {
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "sequence": 4,
+      "manifest_path": "pilots/S-D03-P04-20260824T131301-0400/manifest.json",
+      "manifest_sha256": "38934e989ab8108e59b627dd90da311bf5091accd3786bdc59fbd8ce85a59856",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P04",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-24T13:13:01-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 14,
+        "performed": 14,
+        "operations": [
+          {
+            "operation_id": "A1-fix-gate",
+            "outcome": "success",
+            "source_reported_total": 5,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "A1-fix-gate",
+            "retry": null,
+            "gate_ids": [
+              "G-ADAPTER-COUNT",
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "N6-forward",
+            "outcome": "success",
+            "source_reported_total": 573342,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "N6-forward",
+            "retry": null,
+            "gate_ids": [
+              "G-NEAR-SYNTAX"
+            ]
+          },
+          {
+            "operation_id": "N6-reverse",
+            "outcome": "success",
+            "source_reported_total": 573342,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "N6-reverse",
+            "retry": null,
+            "gate_ids": [
+              "G-NEAR-SYNTAX"
+            ]
+          },
+          {
+            "operation_id": "N6-grouped",
+            "outcome": "success",
+            "source_reported_total": 670735,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "N6-grouped",
+            "retry": null,
+            "gate_ids": [
+              "G-NEAR-SYNTAX"
+            ]
+          },
+          {
+            "operation_id": "N6-distributed",
+            "outcome": "success",
+            "source_reported_total": 670735,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "N6-distributed",
+            "retry": null,
+            "gate_ids": [
+              "G-NEAR-SYNTAX"
+            ]
+          },
+          {
+            "operation_id": "partition-A2",
+            "outcome": "success",
+            "source_reported_total": 11,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "partition-A2",
+            "retry": null,
+            "gate_ids": [
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "partition-A3",
+            "outcome": "success",
+            "source_reported_total": 4,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "partition-A3",
+            "retry": null,
+            "gate_ids": [
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "partition-B1",
+            "outcome": "success",
+            "source_reported_total": 39,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "partition-B1",
+            "retry": null,
+            "gate_ids": [
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "partition-B2",
+            "outcome": "success",
+            "source_reported_total": 65,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "partition-B2",
+            "retry": null,
+            "gate_ids": [
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "partition-BG1",
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "partition-BG1",
+            "retry": null,
+            "gate_ids": [
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "partition-BG2",
+            "outcome": "success",
+            "source_reported_total": 8,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "partition-BG2",
+            "retry": null,
+            "gate_ids": [
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "partition-BC1",
+            "outcome": "success",
+            "source_reported_total": 23,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "partition-BC1",
+            "retry": null,
+            "gate_ids": [
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "partition-BT2",
+            "outcome": "success",
+            "source_reported_total": 11,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "partition-BT2",
+            "retry": null,
+            "gate_ids": [
+              "G-PARTITION-COUNTS"
+            ]
+          },
+          {
+            "operation_id": "control-year-2011-2026",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "control-year-2011-2026",
+            "retry": null,
+            "gate_ids": [
+              "G-YEAR-CONTROL"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P04-FAILSAFE",
+          "gate_id": "G-FAILSAFE",
+          "path": "pilots/S-D03-P04-20260824T131301-0400/rights-boundary-final-receipt.json",
+          "sha256": "2fc1efbf1b9afaee2ebc35aadfabdab69720eacc239d455bf6fcf4bebbd77894",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P04-ADAPTER-COUNT",
+          "gate_id": "G-ADAPTER-COUNT",
+          "path": "pilots/S-D03-P04-20260824T131301-0400/adapter-validation-receipt.json",
+          "sha256": "5968e4b4d4f41d23f06b1b22a98e5c966ca92f96b9726e2401de3b2b24d5379c",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P04-NEAR-SYNTAX",
+          "gate_id": "G-NEAR-SYNTAX",
+          "path": "pilots/S-D03-P04-20260824T131301-0400/near6-gate-receipt.json",
+          "sha256": "c808bdab3833ef7e20f9b9acf38461efc1ee6c9c68bad68c7eaafd8673461e36",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P04-TRANSLATION",
+          "gate_id": "G-TRANSLATION-ALGEBRA",
+          "path": "pilots/S-D03-P04-20260824T131301-0400/translation-algebra-audit.json",
+          "sha256": "38f41e4aae127995fa04e837b6700822989aa7957c758a2fed86db5249574d01",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P04-PARTITION-COUNTS",
+          "gate_id": "G-PARTITION-COUNTS",
+          "path": "pilots/S-D03-P04-20260824T131301-0400/execution-ledger.json",
+          "sha256": "7611e50293fce449463ee998bb3ec71e2c0eaf6d252348899c419f18f8f97ada",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P04-NEAR-METHOD",
+          "gate_id": "G-NEAR-METHOD",
+          "path": "pilots/S-D03-P04-20260824T131301-0400/observations.md",
+          "sha256": "95ff54b5cdfbd5e24205c2e547a5f4467b72fef5cdab04b5bce298fc2242d9df",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P04-YEAR-CONTROL",
+          "gate_id": "G-YEAR-CONTROL",
+          "path": "pilots/S-D03-P04-20260824T131301-0400/safe-receipt-control-year-2011-2026.json",
+          "sha256": "222c9fb0bb3a526c4278711b0c8b678dde6be3b6422251446ce1b529cd088aeb",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-24T13:32:05-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "legacy_unverifiable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "All exact semantic cells and the NEAR/6 gate passed, but the required visible year-control diagnostic failed with total=null and stopped content, language, and record-bearing completeness validation."
+      }
+    }
+  ],
+  "gate_status_snapshots": [
+    {
+      "snapshot_id": "GS-P02-FIELD-PARSER",
+      "attempt_id": "S-D03-P02-20260824T105020-0400",
+      "manifest_path": "pilots/S-D03-P02-20260824T105020-0400/manifest.json",
+      "manifest_sha256": "a1f227e406b3e1161189a9cd7620b7933cd09a82c1edd247046524b98ba70713",
+      "gate_id": "G-FIELD-PARSER",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P02-20260824T105020-0400/execution-ledger.json",
+          "sha256": "eb4ba30d01078da885fb3f206ea38154cfd02f42965ab090d2eb5379bae5422c"
+        }
+      ],
+      "immutable": true
+    }
+  ],
+  "capability_gates": [
+    {
+      "gate_id": "G-FAILSAFE",
+      "checkpoint_id": "CP-FAILSAFE-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "Failures remain null with no screening, import, or partial prefix.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P04-20260824T131301-0400/rights-boundary-final-receipt.json",
+          "sha256": "2fc1efbf1b9afaee2ebc35aadfabdab69720eacc239d455bf6fcf4bebbd77894",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "The checkpoint does not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "P01's immutable failure observation remains catalogued; P04 retains the fail-closed boundary.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-FIELD-PARSER",
+      "checkpoint_id": "CP-FIELD-PARSER-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "Individually fielded All Metadata predicates and the validated parser/Boolean route remain reusable.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "carried_forward",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P02-20260824T105020-0400/execution-ledger.json",
+          "sha256": "eb4ba30d01078da885fb3f206ea38154cfd02f42965ab090d2eb5379bae5422c",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": true,
+      "carry_forward": {
+        "from_attempt_id": "S-D03-P02-20260824T105020-0400",
+        "from_gate_id": "G-FIELD-PARSER",
+        "evidence": [
+          {
+            "path": "pilots/S-D03-P02-20260824T105020-0400/execution-ledger.json",
+            "sha256": "eb4ba30d01078da885fb3f206ea38154cfd02f42965ab090d2eb5379bae5422c"
+          }
+        ],
+        "affected_by_code_or_semantic_change": false,
+        "rationale": "P04's small-result adapter repair and year-control diagnosis did not change P02's independently demonstrated field/parser route.",
+        "original_observed_basis": "observed"
+      },
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "The cited immutable evidence is unaffected by the scoped technical work."
+      },
+      "invalidation": null,
+      "notes": "The carried gate deliberately excludes the pending NEAR/6 method choice.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-ADAPTER-COUNT",
+      "checkpoint_id": "CP-ADAPTER-COUNT-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "The committed small-result adapter path count-tests exact A1 safely.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P04-20260824T131301-0400/adapter-validation-receipt.json",
+          "sha256": "5968e4b4d4f41d23f06b1b22a98e5c966ca92f96b9726e2401de3b2b24d5379c",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The repair changes adapter robustness only, not the review method."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-TRANSLATION-ALGEBRA",
+      "checkpoint_id": "CP-TRANSLATION-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "All nine current cells preserve the dictionary literals and Boolean algebra.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P04-20260824T131301-0400/translation-algebra-audit.json",
+          "sha256": "38f41e4aae127995fa04e837b6700822989aa7957c758a2fed86db5249574d01",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "The checkpoint does not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "This records construction integrity, not final-search acceptance.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-NEAR-SYNTAX",
+      "checkpoint_id": "CP-NEAR-SYNTAX-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "Generic same-field NEAR/6 syntax, reversal, and grouped/distributed controls are observed.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P04-20260824T131301-0400/near6-gate-receipt.json",
+          "sha256": "c808bdab3833ef7e20f9b9acf38461efc1ee6c9c68bad68c7eaafd8673461e36",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 4,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The bounded syntax controls are controller-authorized diagnostics and do not adopt the broader review method."
+      },
+      "invalidation": null,
+      "notes": "Observed syntax is separated from the pending review-affecting fallback choice.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-PARTITION-COUNTS",
+      "checkpoint_id": "CP-PARTITION-COUNTS-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "All nine current semantic cells have retained diagnostic count-only outcomes.",
+      "depends_on": [
+        "G-ADAPTER-COUNT",
+        "G-TRANSLATION-ALGEBRA",
+        "G-NEAR-SYNTAX"
+      ],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P04-20260824T131301-0400/execution-ledger.json",
+          "sha256": "7611e50293fce449463ee998bb3ec71e2c0eaf6d252348899c419f18f8f97ada",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 9,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The bounded count-only partition diagnostics are controller-authorized and do not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "Preserves A1=5, A2=11, A3=4, B1=39, B2=65, BG1=0, BG2=8, BC1=23, and BT2=11 as diagnostic counts.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-NEAR-METHOD",
+      "checkpoint_id": "CP-NEAR-METHOD-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "Accepting broader NEAR/6 as the review method's pair fallback requires a review-affecting decision.",
+      "depends_on": [
+        "G-NEAR-SYNTAX"
+      ],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P04-20260824T131301-0400/observations.md",
+          "sha256": "95ff54b5cdfbd5e24205c2e547a5f4467b72fef5cdab04b5bce298fc2242d9df",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "human_methodological",
+        "review_effect": true,
+        "rationale": "The broader fallback may affect recall relative to the exact pair rule."
+      },
+      "invalidation": null,
+      "notes": "This pending choice is independent of the year-control technical correction.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-YEAR-CONTROL",
+      "checkpoint_id": "CP-YEAR-CONTROL-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "Visible publication-year application and precision are diagnosed without adopting a final cutoff.",
+      "depends_on": [
+        "G-ADAPTER-COUNT"
+      ],
+      "status": "failed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D03-P04-20260824T131301-0400/safe-receipt-control-year-2011-2026.json",
+          "sha256": "222c9fb0bb3a526c4278711b0c8b678dde6be3b6422251446ce1b529cd088aeb",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Instrumenting and diagnosing the visible control does not change the date policy."
+      },
+      "invalidation": null,
+      "notes": "P04 recorded IEEEProtocolError and total=null; this is not zero.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-CONTENT-CONTROL",
+      "checkpoint_id": "CP-CONTENT-CONTROL-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "Visible multiple content-type controls are checked only after the year control is healthy.",
+      "depends_on": [
+        "G-YEAR-CONTROL"
+      ],
+      "status": "blocked",
+      "observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The blocked control check leaves review semantics unchanged."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "untested"
+    },
+    {
+      "gate_id": "G-LANGUAGE-CONTROL",
+      "checkpoint_id": "CP-LANGUAGE-CONTROL-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "Rendered language controls are inventoried only after the year control is healthy.",
+      "depends_on": [
+        "G-YEAR-CONTROL"
+      ],
+      "status": "blocked",
+      "observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The blocked control check leaves review semantics unchanged."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "untested"
+    },
+    {
+      "gate_id": "G-COMPLETENESS",
+      "checkpoint_id": "CP-COMPLETENESS-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "requirement": "Record-bearing repeat, pagination, identity, and completeness checks run only after the declared controls pass.",
+      "depends_on": [
+        "G-YEAR-CONTROL",
+        "G-CONTENT-CONTROL",
+        "G-LANGUAGE-CONTROL",
+        "G-PARTITION-COUNTS"
+      ],
+      "status": "blocked",
+      "observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The deferred validation concerns capture mechanics, not a change to inclusion criteria."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "untested"
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "D-TECH-P02",
+      "attempt_id": "S-D03-P02-20260824T105020-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-ADAPTER-COUNT"
+      ],
+      "rationale": "The P02 parser repair was a bounded adapter robustness correction with no review-semantic change.",
+      "maximum_source_operations": 52,
+      "decided_at": "2026-08-24T10:47:34-04:00"
+    },
+    {
+      "decision_id": "D-TECH-P03",
+      "attempt_id": "S-D03-P03-20260824T120555-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-ADAPTER-COUNT"
+      ],
+      "rationale": "The P03 diagnosis isolated adapter behavior without changing query or review semantics.",
+      "maximum_source_operations": 3,
+      "decided_at": "2026-08-24T11:59:09-04:00"
+    },
+    {
+      "decision_id": "D-TECH-P04",
+      "attempt_id": "S-D03-P04-20260824T131301-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-ADAPTER-COUNT",
+        "G-TRANSLATION-ALGEBRA",
+        "G-NEAR-SYNTAX",
+        "G-PARTITION-COUNTS",
+        "G-YEAR-CONTROL"
+      ],
+      "rationale": "The P04 adapter and observability work was technical; it did not approve the broader pair fallback.",
+      "maximum_source_operations": 14,
+      "decided_at": "2026-08-24T13:08:25-04:00"
+    },
+    {
+      "decision_id": "D-METHOD-NEAR6",
+      "attempt_id": null,
+      "decision_class": "human_methodological",
+      "review_effect": true,
+      "affects_underlying_literature_review": true,
+      "human_authorization_required": true,
+      "authorization_status": "pending",
+      "authorized_by": "none",
+      "affected_gate_ids": [
+        "G-NEAR-METHOD"
+      ],
+      "rationale": "The documented NEAR/6 fallback is broader than the exact pair rule and may affect recall; it remains pending review-owner choice.",
+      "decided_at": null
+    },
+    {
+      "decision_id": "D-TECH-NEXT-P05",
+      "attempt_id": null,
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-YEAR-CONTROL",
+        "G-CONTENT-CONTROL",
+        "G-LANGUAGE-CONTROL",
+        "G-COMPLETENESS"
+      ],
+      "rationale": "One new P05 is controller-authorized without human approval: diagnose the visible year control, then run only its declared dependent controls/completeness gates, at a maximum of four source operations.",
+      "maximum_source_operations": 4,
+      "decided_at": "2026-08-24T16:13:25-04:00"
+    }
+  ],
+  "cancellation": null,
+  "acceptance": null
+}

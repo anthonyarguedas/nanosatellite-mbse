@@ -1,0 +1,38 @@
+{
+  "artifact_version": "slr1-oatd-validation-receipt/v1",
+  "pilot_id": "S-D09-P01-20260823T232059-0400",
+  "validated_at": "2026-08-23T23:52:09-04:00",
+  "results": [
+    {
+      "check": "JSON parse",
+      "scope": "all tracked packet JSON and restricted pilot JSON",
+      "result": "pass"
+    },
+    {
+      "check": "tracked pilot-manifest schema",
+      "command": "uvx --from check-jsonschema check-jsonschema --schemafile SLR/SLR1/searches/schemas/pilot-manifest.schema.json manifest.json",
+      "result": "pass"
+    },
+    {
+      "check": "exact query-cell integrity",
+      "scope": "12 UTF-8 cells: terminal LF, SHA-256 excluding terminal LF, Unicode character count, all nine partition identifiers, all finite terms, and four-cell BT2 OR union",
+      "result": "pass"
+    },
+    {
+      "check": "cross references",
+      "scope": "tracked Markdown links, translation-cell paths, concept dictionary path, manifest artifacts/check evidence paths, and evidence-index paths",
+      "result": "pass"
+    },
+    {
+      "check": "status invariants",
+      "scope": "draft guideline/translation status, empty guideline accepted_pilot_ids, manifest diagnostic flags, blocked status",
+      "result": "pass"
+    },
+    {
+      "check": "shared new-run infrastructure",
+      "command": "uv run SLR/SLR1/scripts/validate_search_infrastructure.py",
+      "result": "pass"
+    }
+  ],
+  "limitations": "Validation confirms artifact integrity and declared blocked status. It does not convert unsubmitted source query cells, untested parser semantics, untested controls, or untested completeness behavior into validated source behavior."
+}

@@ -1,0 +1,587 @@
+{
+  "schema_version": "slr1-pilot-campaign/v1",
+  "campaign_id": "S-D13-C01-20260824T161325-0400",
+  "task_id": "S-D13",
+  "source_id": "ntrs",
+  "method_type": "direct",
+  "protocol_fingerprint": "d1d92411ad641bc0293389b9699c6676ba998af72c9cfd63c28b59bcf4745ba9",
+  "dictionary_fingerprint": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+  "capability_catalog": [
+    "G-SOURCE-BOUNDARY",
+    "G-QUERY-TRANSPORT",
+    "G-FIELD-BOUNDARY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-CONTENT-CONTROL",
+    "G-RETRIEVAL",
+    "G-PAGINATION-CONTROL",
+    "G-PAGE-IDENTITY",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR"
+  ],
+  "status": "technically_blocked",
+  "created_at": "2026-08-24T16:13:25-04:00",
+  "updated_at": "2026-08-25T04:05:12-04:00",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "candidate_records_imported": 0,
+  "retry_policy": {
+    "policy_id": "RP-D13-BUSY-01",
+    "maximum_retries": 0,
+    "passive_wait_delays_seconds": [],
+    "attempted": 0,
+    "completed": 0,
+    "preauthorized_same_tab_busy_reissue": false
+  },
+  "controller_authorization": {
+    "technical_corrective_attempts_authorized": true,
+    "maximum_additional_attempts": 3,
+    "maximum_source_operations_per_attempt": 3,
+    "rationale": "Three lifetime technical allocations are finite: P02 and P03 consumed two; only P04 remains. P04 is capped at two source operations: health precheck then one conditional rendered classification.",
+    "maximum_technical_corrective_attempts": 3,
+    "maximum_methodological_revision_attempts": 0
+  },
+  "attempts": [
+    {
+      "attempt_id": "S-D13-P01-20260823T232536-0400",
+      "sequence": 1,
+      "manifest_path": "pilots/S-D13-P01-20260823T232536-0400/manifest.json",
+      "manifest_sha256": "4405ec9cea88c31625203205fa7aad5f887985e5c33666977ee8a17f2aeb4b56",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "initial",
+        "authorized_by": "controller",
+        "authorization_decision_id": null,
+        "prospectively_authorized": false,
+        "allocated_at": "2026-08-23T23:25:36-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 3,
+        "performed": 3,
+        "operations": [
+          {
+            "operation_id": "NTRS-API-PROBE-01",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "NTRS-API-PROBE-01",
+            "retry": null,
+            "gate_ids": [
+              "G-API-BACKEND-FAILURE"
+            ]
+          },
+          {
+            "operation_id": "NTRS-API-PROBE-02",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "NTRS-API-PROBE-02",
+            "retry": null,
+            "gate_ids": [
+              "G-API-BACKEND-FAILURE"
+            ]
+          },
+          {
+            "operation_id": "NTRS-ADAPTER-PROBE-01",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "NTRS-ADAPTER-PROBE-01",
+            "retry": null,
+            "gate_ids": [
+              "G-API-BACKEND-FAILURE"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P01-API-BACKEND",
+          "gate_id": "G-API-BACKEND-FAILURE",
+          "path": "pilots/S-D13-P01-20260823T232536-0400/api-transport-probes.json",
+          "sha256": "a1837147ec6269cb13cdd97c03464fd445d2e0a0318e0a924e90938d27284456",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "provider_failure",
+        "ended_at": "2026-08-24T03:37:51Z",
+        "provider_failure": true,
+        "source_writing_stopped": true,
+        "browser_backed": false,
+        "terminal_verification": "not_applicable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "Public API probes timed out/returned 504 before any source result envelope; current external adapter has demonstrated reporting and final-run control defects. Draft translations are preserved but unvalidated."
+      }
+    },
+    {
+      "attempt_id": "S-D13-P02-20260824T111634-0400",
+      "sequence": 2,
+      "manifest_path": "pilots/S-D13-P02-20260824T111634-0400/manifest.json",
+      "manifest_sha256": "393b6e79073a0e3aeca20e9fb555e67ca36c2ba76ce0429e7ece835514f7565d",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P02",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-24T11:16:34-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "NTRS-P02-MINIMAL-SEARCH-01",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "NTRS-P02-MINIMAL-SEARCH-01",
+            "retry": null,
+            "gate_ids": [
+              "G-API-BACKEND-FAILURE"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P02-API-HEALTH",
+          "gate_id": "G-API-HEALTH",
+          "path": "pilots/S-D13-P02-20260824T111634-0400/health-receipt.json",
+          "sha256": "6bb4f86fb73a7ecc2fa7a866a2f059dc373d1ee08bdc87acebf18c29b84d7e52",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-API-BACKEND",
+          "gate_id": "G-API-BACKEND-FAILURE",
+          "path": "pilots/S-D13-P02-20260824T111634-0400/minimal-search-envelope-receipt.json",
+          "sha256": "8e6727106821d52fdaeb13620036cf3f10164af31aaf9f503701ce7660bb7f3d",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-API-ADAPTER",
+          "gate_id": "G-API-ADAPTER-SAFETY",
+          "path": "pilots/S-D13-P02-20260824T111634-0400/pinned-adapter-offline-tests.json",
+          "sha256": "c8a0e29276112d3cb992ae0b0fe90886b1603914abf074fecc00f42d65b0831c",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "provider_failure",
+        "ended_at": "2026-08-24T11:38:14-04:00",
+        "provider_failure": true,
+        "source_writing_stopped": true,
+        "browser_backed": false,
+        "terminal_verification": "not_applicable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "The P02 health route was healthy but the sole mandatory minimal anonymous search timed out before a JSON envelope. The resulting total is null, no cell was narrowed or retried, and the live source behavior remains unavailable for validation."
+      }
+    },
+    {
+      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "sequence": 3,
+      "manifest_path": "pilots/S-D13-P03-20260824T125840-0400/manifest.json",
+      "manifest_sha256": "82643e0757575adb338b3ac0065bc3b669197e6376062a9f1f95f0edc81d9ee8",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-P03",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-24T12:58:40-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "NTRS-P03-G01",
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "operation_key": "NTRS-P03-G01",
+            "retry": null,
+            "gate_ids": [
+              "G-RENDERED-NAVIGATION"
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P03-BROWSER-ADAPTER",
+          "gate_id": "G-BROWSER-ADAPTER-SAFETY",
+          "path": "pilots/S-D13-P03-20260824T125840-0400/pinned-adapter-offline-validation.json",
+          "sha256": "116420769efef5eddd3021141fd3bed6a5ca8d73f87b0b3fa1b90ad9259a54fb",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P03-RENDERED-NAVIGATION",
+          "gate_id": "G-RENDERED-NAVIGATION",
+          "path": "pilots/S-D13-P03-20260824T125840-0400/initial-rendered-gate.json",
+          "sha256": "52395025be4c1b9036eaa0cc2ac638062db5f2bb26c7fc8327374b9a60e4ce8a",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P03-SOURCE-HEALTH",
+          "gate_id": "G-SOURCE-HEALTH",
+          "path": "pilots/S-D13-P03-20260824T125840-0400/code-issue-assessment.json",
+          "sha256": "341208e8d03d907a652dadd171a03bb69ae682289ec6f0af26463690a13b1fca",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "technical",
+        "ended_at": "2026-08-24T13:19:12-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "legacy_unverifiable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "The sole required rendered count-only gate failed at navigation before a source-visible form/query/total/range/row or explicit zero. All later live validation and cell transport stopped without retry; every affected total is null."
+      }
+    },
+    {
+      "attempt_id": "S-D13-P04-20260825T040250-0400",
+      "sequence": 4,
+      "manifest_path": "pilots/S-D13-P04-20260825T040250-0400/manifest.json",
+      "manifest_sha256": "69329b23ef4b901388988c154193dfbb9d2a7bfd701a188a86356b25326d0e19",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P04",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-25T04:02:50-04:00"
+      },
+      "source_operations": {
+        "predeclared_maximum": 2,
+        "performed": 0,
+        "operations": []
+      },
+      "evidence": [],
+      "terminal": {
+        "outcome": "blocked",
+        "category": "technical",
+        "ended_at": "2026-08-25T04:05:12-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": false,
+        "terminal_verification": "not_applicable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "P04 stopped before live source work because the immutable P03 query matched the plan hash but failed the plan's exact newline byte assertion; no lease or source operation was acquired or invoked."
+      }
+    }
+  ],
+  "gate_status_snapshots": [
+    {
+      "snapshot_id": "GS-P02-API-HEALTH",
+      "attempt_id": "S-D13-P02-20260824T111634-0400",
+      "manifest_path": "pilots/S-D13-P02-20260824T111634-0400/manifest.json",
+      "manifest_sha256": "393b6e79073a0e3aeca20e9fb555e67ca36c2ba76ce0429e7ece835514f7565d",
+      "gate_id": "G-API-HEALTH",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D13-P02-20260824T111634-0400/health-receipt.json",
+          "sha256": "6bb4f86fb73a7ecc2fa7a866a2f059dc373d1ee08bdc87acebf18c29b84d7e52"
+        }
+      ],
+      "immutable": true
+    }
+  ],
+  "capability_gates": [
+    {
+      "gate_id": "G-API-BACKEND-FAILURE",
+      "checkpoint_id": "CP-API-BACKEND-P02",
+      "attempt_id": "S-D13-P02-20260824T111634-0400",
+      "requirement": "The historic API/backend search failures remain null, record-free observations rather than zeros.",
+      "depends_on": [],
+      "status": "failed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D13-P02-20260824T111634-0400/minimal-search-envelope-receipt.json",
+          "sha256": "8e6727106821d52fdaeb13620036cf3f10164af31aaf9f503701ce7660bb7f3d",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Preserving failure classification does not alter review semantics."
+      },
+      "invalidation": null,
+      "notes": "P01's timeout/504 evidence is separately catalogued and remains immutable.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-API-HEALTH",
+      "checkpoint_id": "CP-API-HEALTH-P03",
+      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "requirement": "The P02 public API health response remains a historical route observation only.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "carried_forward",
+      "evidence": [
+        {
+          "path": "pilots/S-D13-P02-20260824T111634-0400/health-receipt.json",
+          "sha256": "6bb4f86fb73a7ecc2fa7a866a2f059dc373d1ee08bdc87acebf18c29b84d7e52",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": true,
+      "carry_forward": {
+        "from_attempt_id": "S-D13-P02-20260824T111634-0400",
+        "from_gate_id": "G-API-HEALTH",
+        "evidence": [
+          {
+            "path": "pilots/S-D13-P02-20260824T111634-0400/health-receipt.json",
+            "sha256": "6bb4f86fb73a7ecc2fa7a866a2f059dc373d1ee08bdc87acebf18c29b84d7e52"
+          }
+        ],
+        "affected_by_code_or_semantic_change": false,
+        "rationale": "The browser-route change does not alter the immutable P02 API-health receipt; it is not treated as rendered-search reachability.",
+        "original_observed_basis": "observed"
+      },
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "The cited immutable evidence is unaffected by the scoped technical work."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-API-ADAPTER-SAFETY",
+      "checkpoint_id": "CP-API-ADAPTER-P02",
+      "attempt_id": "S-D13-P02-20260824T111634-0400",
+      "requirement": "P02's corrected API adapter had source-free safety checks.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D13-P02-20260824T111634-0400/pinned-adapter-offline-tests.json",
+          "sha256": "c8a0e29276112d3cb992ae0b0fe90886b1603914abf074fecc00f42d65b0831c",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The source-free implementation check does not change review semantics."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-BROWSER-ADAPTER-SAFETY",
+      "checkpoint_id": "CP-BROWSER-ADAPTER-P03",
+      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "requirement": "The rendered browser adapter's source-free guard and pin remain valid.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D13-P03-20260824T125840-0400/pinned-adapter-offline-validation.json",
+          "sha256": "116420769efef5eddd3021141fd3bed6a5ca8d73f87b0b3fa1b90ad9259a54fb",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The static rendered-only guard is implementation safety, not a review-method change."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-SOURCE-HEALTH",
+      "checkpoint_id": "CP-SOURCE-HEALTH-P03",
+      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "requirement": "A stable source-health precheck must precede any rendered reachability/navigation classification.",
+      "depends_on": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D13-P03-20260824T125840-0400/code-issue-assessment.json",
+          "sha256": "341208e8d03d907a652dadd171a03bb69ae682289ec6f0af26463690a13b1fca",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "A health precheck is a technical operational prerequisite."
+      },
+      "invalidation": null,
+      "notes": "P03 cannot distinguish source reachability from navigation failure.",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-RENDERED-NAVIGATION",
+      "checkpoint_id": "CP-RENDERED-NAVIGATION-P03",
+      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "requirement": "One shared-profile rendered reachability/navigation classification reaches a reconcilable state.",
+      "depends_on": [
+        "G-SOURCE-HEALTH",
+        "G-BROWSER-ADAPTER-SAFETY"
+      ],
+      "status": "failed",
+      "observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D13-P03-20260824T125840-0400/initial-rendered-gate.json",
+          "sha256": "52395025be4c1b9036eaa0cc2ac638062db5f2bb26c7fc8327374b9a60e4ce8a",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Classifying navigation behavior is technical and preserves the source boundary."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "observed"
+    },
+    {
+      "gate_id": "G-PARTITION-TRANSPORT",
+      "checkpoint_id": "CP-PARTITION-TRANSPORT-P03",
+      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "requirement": "Partition transport remains blocked until a stable source-health and rendered navigation path exists.",
+      "depends_on": [
+        "G-RENDERED-NAVIGATION"
+      ],
+      "status": "blocked",
+      "observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Keeping all partitions blocked prevents unsupported source work."
+      },
+      "invalidation": null,
+      "notes": "",
+      "original_observed_basis": "untested"
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "D-TECH-P02",
+      "attempt_id": "S-D13-P02-20260824T111634-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-API-ADAPTER-SAFETY",
+        "G-API-BACKEND-FAILURE"
+      ],
+      "rationale": "The API adapter correction and its failure handling were technical; they did not change NTRS review semantics.",
+      "maximum_source_operations": 1,
+      "decided_at": "2026-08-24T11:16:33-04:00"
+    },
+    {
+      "decision_id": "D-TECH-P03",
+      "attempt_id": "S-D13-P03-20260824T125840-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-BROWSER-ADAPTER-SAFETY",
+        "G-SOURCE-HEALTH",
+        "G-RENDERED-NAVIGATION",
+        "G-PARTITION-TRANSPORT"
+      ],
+      "rationale": "The rendered-browser migration was an implementation-route correction, not a boundary or query-semantic change.",
+      "maximum_source_operations": 1,
+      "decided_at": "2026-08-24T12:58:39-04:00"
+    },
+    {
+      "decision_id": "D-TECH-NEXT-P04",
+      "attempt_id": "S-D13-P04-20260825T040250-0400",
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-SOURCE-HEALTH",
+        "G-RENDERED-NAVIGATION"
+      ],
+      "rationale": "One P04 is controller-authorized without human approval: perform a stable source-health precheck, then one shared-profile rendered reachability/navigation classification only; at most two source operations and no partition rerun.",
+      "maximum_source_operations": 2,
+      "decided_at": "2026-08-24T16:13:25-04:00"
+    }
+  ],
+  "cancellation": null,
+  "acceptance": null
+}

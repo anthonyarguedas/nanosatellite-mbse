@@ -1,0 +1,32 @@
+{
+  "schema_version": "slr1-ntrs-p04-postflight-validation/v1",
+  "attempt_id": "S-D13-P04-20260825T040250-0400",
+  "validation_status": "passed_for_zero_operation_blocked_attempt",
+  "recorded_at": "2026-08-25T04:05:12-04:00",
+  "checks": [
+    {"check_id": "P04-JSON-AND-MANIFEST", "status": "passed", "basis": "observed", "notes": "P04 JSON artifacts parse; the manifest is schema-valid and linked to the campaign attempt."},
+    {"check_id": "P04-CAMPAIGN", "status": "passed", "basis": "observed", "notes": "The shared infrastructure validator passed all checks, including five campaign artifacts; P04 is bound to D-TECH-NEXT-P04."},
+    {"check_id": "P04-HASHES", "status": "passed", "basis": "observed", "notes": "Manifest and evidence-index cited artifacts, restricted ledger, query, and prior immutable manifest references reconcile to their recorded SHA-256 values."},
+    {"check_id": "P04-PRIOR-IMMUTABILITY", "status": "passed", "basis": "observed", "notes": "P01, P02, and P03 manifest hashes remain exactly the pre-P04 values; no prior attempt file was edited or overwritten."},
+    {"check_id": "P04-WRITER-STOP", "status": "passed", "basis": "observed", "notes": "No source-health or adapter writer process remains, and all three writer-owned restricted output files are absent."},
+    {"check_id": "P04-ACCOUNTING", "status": "passed", "basis": "observed", "notes": "Source operations are 0/2; total is null/unobserved rather than zero; retrieved, imported, screened, and final-event counts are zero."},
+    {"check_id": "P04-LEASE-CLEANUP", "status": "passed", "basis": "observed", "notes": "No P04 lease was acquired. Read-only status showed a released lease, free OS lock, one inert anchor, and no orphan child/group."},
+    {"check_id": "P04-WHITESPACE", "status": "passed", "basis": "observed", "notes": "git diff --check passed."}
+  ],
+  "source_action_performed": false,
+  "screening_performed": false,
+  "candidate_records_imported": 0,
+  "final_event_created": false,
+  "code_issue": "unresolved",
+  "semantic_change": false,
+  "power_sleep": "not_measured; no live phase was entered",
+  "retention_exclusions": [
+    "credentials",
+    "cookies",
+    "profile_contents",
+    "browsing_urls",
+    "websocket_urls",
+    "raw_target_ids",
+    "source_response_bodies"
+  ]
+}

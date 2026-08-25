@@ -1,0 +1,30 @@
+{
+  "schema_version": "slr1-engineering-village-adapter-assessment/v1",
+  "pilot_id": "S-D04-P01-20260824T123301-0400",
+  "adapter": {
+    "repository_commit": "e720192855f8b5356d92fff23caeb6b8f66bbaf4",
+    "implementation": "_engineering_village_search.py",
+    "implementation_sha256": "4a7291b4bbcf898486d37bd72b65d4e2684cd4dd4a744d0181c1262f03a686a5",
+    "compendex_wrapper_sha256": "af4a77dd5a0d4150eb5fb473c5a82be78008bdfc920ec36fa3baf5edfa871978",
+    "inspec_wrapper_sha256": "ae6eb1ef6cda909b83154f61594351d4e767c8909c281604101b8acdfde515c1"
+  },
+  "offline_validation": {
+    "command_receipt": "focused-adapter-tests.status.txt",
+    "result": "19 passed",
+    "scope": "offline marker/receipt/strict-selection regression tests; not evidence of current Engineering Village behavior"
+  },
+  "live_observation": {
+    "execution_id": "E01",
+    "requested_mode": "normal rendered Expert Search; paired compendex+inspec; strict two-pass workflow; normal same-origin RIS only",
+    "result": "The adapter stopped before a reconciled result page with its safe ownership/source-host error. It emitted no result artifact, count, row, identifier, or RIS capture.",
+    "direct_route_comparator": "E02 observed an Expert Search page title at the public Expert route, but did not submit a query or inspect source controls/results after the controller-anchor continuity anomaly was detected."
+  },
+  "code_issue": "unresolved",
+  "classification_reason": "The adapter’s safe error deliberately omits the final off-host/non-search URL. The title-only direct route observation is insufficient to distinguish a native redirect/access boundary from an adapter-owned-page lifecycle defect. The offline tests pass but cannot settle this live discrepancy. No code defect is demonstrated; no claim of code_issue=false is justified.",
+  "action_taken": [
+    "No adapter, browser-harness, protocol, dictionary, or shared file was patched.",
+    "No further live source querying was performed after the unreconciled behavior.",
+    "No automatic retry or new pilot was started."
+  ],
+  "smallest_next_diagnostic": "After controller/human review and a fresh dedicated-browser preflight/anchor, perform one separately authorized, adapter-owned paired Expert-page route diagnostic that records only safe final URL class and control presence; stop immediately on another discrepancy before querying or exporting."
+}

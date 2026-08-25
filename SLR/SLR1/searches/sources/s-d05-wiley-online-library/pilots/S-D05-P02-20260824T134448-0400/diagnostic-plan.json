@@ -1,0 +1,305 @@
+{
+  "schema_version": "slr1-s-d05-p02-diagnostic-plan/v1",
+  "pilot_id": "S-D05-P02-20260824T134448-0400",
+  "prepared_at": "2026-08-24T13:44:48-04:00",
+  "prepared_before_first_wiley_request": true,
+  "authorization": {
+    "review_owner_authorized_at": "2026-08-24T13:34:55-04:00",
+    "scope": "One corrective diagnostic P02 only; no final search, screening, candidate import, automatic retry, self-approval, central integration, or code patch."
+  },
+  "review_state": {
+    "protocol_commit": "cf9129b7e63633468499c27ed76df9d52f20623c",
+    "repository_status_at_allocation": "Unrelated concurrent dirty paths were present before P02; P02 will write only its assigned D05 packet and its authorized ignored restricted root.",
+    "p001_status": "unresolved",
+    "diagnostic_date_bound": {
+      "lower_inclusive": "2011-01-01",
+      "upper_inclusive": "2026-08-24",
+      "label": "P02 execution-date diagnostic bound only; not P-001 and not a final common cutoff."
+    }
+  },
+  "pinned_adapter_preconditions": {
+    "adapter_path": "/var/folders/db/fjbrfx1n1kz6lrqlm7jvryp00000gn/T/agent-tools-wiley-no-clobber-20260824-131248-21819-19860/academic-research/skills/academic-search/scripts/search_wiley_online_library.py",
+    "worktree_branch": "wiley-no-clobber-20260824-131248-21819-19860",
+    "commit": "c8be56c87fe17f413de7c083b49f3bfebfca5bc7",
+    "adapter_sha256": "e340e649038e75fd6ada684f708940b6f4eec4b844a59c9e0697a9f25179ff8d",
+    "test_sha256": "aa81bc0e7eb97870cf243c4f7a2de80ae16500046c0cc4946d5edcace4bc08c0",
+    "focused_test_command": "caffeinate -dims uv run pytest -q tests/test_search_wiley_online_library.py",
+    "focused_test_result": "8 passed, 2 subtests passed; source-free no-clobber coverage includes existing JSON/CSV, symlink, success, race, failure-artifact, and rollback paths.",
+    "verified_before_source_use": true
+  },
+  "browser_contract": {
+    "cdp_url": "http://127.0.0.1:9236",
+    "profile": "/Users/antho/agent-tools/.browser-profiles/wiley-pilot-9236",
+    "controller_anchor": {
+      "url": "chrome://newtab/",
+      "target_id_sha256": "81fe2791f516c4075b7cc137684884fc63a33e9c7baecfc4a8f69564e5d4e3a1"
+    },
+    "read_only_check_command": "BH_NAME=wiley-pilot-9236 BH_CDP_URL=http://127.0.0.1:9236 BH_CHROME_APP='/Users/antho/agent-tools/.browser-apps/Google Chrome.app' caffeinate -dims uv run /Users/antho/agent-tools/internet/skills/browser/scripts/start_chrome.py --check",
+    "recheck_rule": "Run the exact dedicated read-only launcher check before every materially separated live phase and at postflight. Stop on stale endpoint, missing/replaced anchor, surviving owned page, version skew, login, CAPTCHA, challenge, access ambiguity, or actual Sleep/Wake/DarkWake event."
+  },
+  "storage": {
+    "tracked_pilot_dir": "SLR/SLR1/searches/sources/s-d05-wiley-online-library/pilots/S-D05-P02-20260824T134448-0400/",
+    "restricted_root": ".searches/s-d05-wiley-restricted/S-D05-P02-20260824T134448-0400/",
+    "policy": "Raw Wiley JSON/CSV, RIS, page/DOM capture, record identifiers, source URLs with search state, screenshots, and command logs remain only under the restricted root. Tracked receipts carry only exact queries, aggregate counts, controls, safe public paths, hashes, and no record list."
+  },
+  "execution_rules": {
+    "serialized": true,
+    "minimum_seconds_between_completed_source_executions": 3,
+    "adapter_timeout_seconds": 60,
+    "count_only_passes": 2,
+    "all_adapter_invocations_use_explicit_cdp_url": true,
+    "no_retry_of_failed_material_operation": true,
+    "failure_stop_rule": "An unexplained failure, rewrite, access state, source-state inconsistency, or adapter/code ambiguity ends live work. A planned explicit parser rejection is recorded only if the rendered source state is explicit and reconciled."
+  },
+  "query_regeneration": {
+    "phase_id": "Q-001",
+    "purpose": "Regenerate in memory from slr1-search-concepts/v4 and audit all nine root query files before any final-cell submission.",
+    "invariants": [
+      "A1, A2, A3, B1, B2, BG1, BG2, BC1, and BT2 in normative order",
+      "every finite literal retained exactly once or more as required",
+      "all pair cross-products present exactly once",
+      "no S-C01 candidate terminology",
+      "no wildcard compression",
+      "UTF-8 byte hash, byte length, and one terminal LF match the regenerated expression"
+    ]
+  },
+  "planned_live_phases": [
+    {
+      "phase_id": "H-001",
+      "kind": "adapter_count_only_health_and_method_ladder_a",
+      "purpose": "The sole first Wiley request: prove the normal rendered Articles & Chapters route, exact URL controls, stable first-page state across two observations, record-free non-mergeable output, and adapter-owned-page cleanup.",
+      "exact_query": "\"CubeSat\" AND \"systems engineering\"",
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-24",
+      "content": "articlesChapters",
+      "sort": "Earliest",
+      "limit": 20,
+      "max_pages": 1,
+      "passes": 2,
+      "count_only": true,
+      "output": "raw/H-001-health.json",
+      "method_ladder_position": "a",
+      "success_gates": [
+        "integer exact total or explicit native zero; no error/access state",
+        "two successful first-page observations with equal total, cards/range, and ordered-ID hash",
+        "exact query/date/content/target/sort/page-size controls retained and no source rewrite",
+        "zero records in output and non-mergeable count-only status",
+        "next dedicated read-only check finds only the original controller anchor"
+      ],
+      "failure_action": "Stop all live Wiley work."
+    },
+    {
+      "phase_id": "I-001",
+      "kind": "one_custom_owned_page_interface_and_known_record_inspection",
+      "precondition": "H-001 healthy",
+      "purpose": "On exactly one custom-owned page, inspect normal Advanced Search and the public protocol-known Wiley landing page https://onlinelibrary.wiley.com/doi/10.1002/sys.70051 without retaining raw DOM/page text or assessing relevance.",
+      "safe_facts_requested": [
+        "full-platform/normal-Advanced-Search labels and visible field option labels/values",
+        "one-row Anywhere/AllField surface and query/help/operator/rewrite surfaces",
+        "whether visible help documents uppercase AND/OR/NOT, quotes, wildcard, and any proximity syntax",
+        "visible keyword, indexed-term, controlled-vocabulary, hierarchy, scope, narrower, and explosion surfaces only; no author keyword values",
+        "access/challenge/login state and owned-page closure"
+      ],
+      "restricted_raw_location": "browser/I-001/",
+      "failure_action": "Stop all live Wiley work."
+    },
+    {
+      "phase_id": "C-001",
+      "kind": "adapter_count_only_collections_route",
+      "precondition": "H-001 healthy",
+      "purpose": "Validate the active Collections coverage route and its independent exact total for the H-001 query; collections remain coverage containers and no records are retrieved.",
+      "exact_query": "\"CubeSat\" AND \"systems engineering\"",
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-24",
+      "content": "collections",
+      "sort": "Earliest",
+      "limit": 20,
+      "max_pages": 1,
+      "passes": 2,
+      "count_only": true,
+      "output": "raw/C-001-collections.json",
+      "failure_action": "Stop all live Wiley work."
+    },
+    {
+      "phase_id": "D-001",
+      "kind": "aggregate_only_parser_operator_and_grouping_contrast",
+      "precondition": "H-001 and I-001 healthy",
+      "exact_query": "\"CubeSat\" AND (\"systems engineering\" OR \"model-based systems engineering\") NOT \"CanSat\"",
+      "purpose": "Test documented uppercase AND/OR/NOT, quoted phrases, and explicit grouping without record retrieval.",
+      "output": "raw/D-001.json"
+    },
+    {
+      "phase_id": "D-002",
+      "kind": "aggregate_only_precedence_contrast",
+      "precondition": "D-001 healthy",
+      "exact_query": "\"CubeSat\" OR (\"nanosatellite\" AND battery)",
+      "purpose": "Test an explicit grouped OR/AND contrast.",
+      "output": "raw/D-002.json"
+    },
+    {
+      "phase_id": "D-003",
+      "kind": "aggregate_only_precedence_contrast",
+      "precondition": "D-002 healthy",
+      "exact_query": "(\"CubeSat\" OR \"nanosatellite\") AND battery",
+      "purpose": "Contrast explicit grouping with D-002; counts alone will not be treated as a complete proof of precedence.",
+      "output": "raw/D-003.json"
+    },
+    {
+      "phase_id": "D-004",
+      "kind": "aggregate_only_phrase_punctuation_hyphen_contrast",
+      "precondition": "D-003 healthy",
+      "exact_query": "\"CubeSat\" AND \"model-based systems engineering\"",
+      "purpose": "Test the hyphenated quoted phrase route.",
+      "output": "raw/D-004.json"
+    },
+    {
+      "phase_id": "D-005",
+      "kind": "aggregate_only_phrase_punctuation_hyphen_contrast",
+      "precondition": "D-004 healthy",
+      "exact_query": "\"CubeSat\" AND \"model based systems engineering\"",
+      "purpose": "Contrast the spaced quoted phrase with D-004; no lossless normalization claim follows from counts alone.",
+      "output": "raw/D-005.json"
+    },
+    {
+      "phase_id": "D-006",
+      "kind": "aggregate_only_case_and_acronym_contrast",
+      "precondition": "D-005 healthy",
+      "exact_query": "\"CubeSat\" AND MBSE",
+      "purpose": "Test an unquoted uppercase acronym under a narrow context.",
+      "output": "raw/D-006.json"
+    },
+    {
+      "phase_id": "D-007",
+      "kind": "aggregate_only_case_and_acronym_contrast",
+      "precondition": "D-006 healthy",
+      "exact_query": "\"CubeSat\" AND mbse",
+      "purpose": "Contrast lowercase acronym handling with D-006; standalone-token identity remains unresolved without field-level evidence.",
+      "output": "raw/D-007.json"
+    },
+    {
+      "phase_id": "D-008",
+      "kind": "aggregate_only_documented_wildcard_contrast",
+      "precondition": "D-007 healthy and I-001 documents native wildcard availability",
+      "exact_query": "CubeSat* AND \"systems engineering\"",
+      "purpose": "Test only the visible/documented suffix wildcard, never a leading or quoted wildcard.",
+      "output": "raw/D-008.json"
+    },
+    {
+      "phase_id": "D-009",
+      "kind": "aggregate_only_inflection_expansion_contrast",
+      "precondition": "D-008 healthy",
+      "exact_query": "\"CubeSat\" AND \"systems engineering\" AND model",
+      "purpose": "Compare an unquoted singular form under a narrow context; no automatic stemming or expansion is inferred from a count.",
+      "output": "raw/D-009.json"
+    },
+    {
+      "phase_id": "D-010",
+      "kind": "aggregate_only_inflection_expansion_contrast",
+      "precondition": "D-009 healthy",
+      "exact_query": "\"CubeSat\" AND \"systems engineering\" AND models",
+      "purpose": "Contrast a plural form with D-009; retain all normative forms unless identity-level losslessness is independently proved.",
+      "output": "raw/D-010.json"
+    },
+    {
+      "phase_id": "Z-001",
+      "kind": "adapter_count_only_native_zero",
+      "precondition": "D-010 healthy",
+      "exact_query": "\"slr1wileyp02qzxywvp20260824\"",
+      "purpose": "Validate one reproducible native explicit zero through two first-page observations; only a reconciled explicit no-result state may be recorded as zero.",
+      "output": "raw/Z-001-explicit-zero.json",
+      "failure_action": "If not an explicit reconciled zero, record null/untested as appropriate and stop live work rather than tuning."
+    },
+    {
+      "phase_id": "F-001",
+      "kind": "supported_final_draft_cells_count_only",
+      "precondition": "Parser, one-AllField, query-echo/no-rewrite, and relevant length gates all healthy; pair gate is deliberately excluded.",
+      "cell_ids": ["A1", "A2", "A3", "B1", "B2"],
+      "purpose": "Submit each non-pair v4 root cell exactly once as a count-only diagnostic. Each has a unique no-clobber restricted JSON path and remains final-use-prohibited pending human acceptance.",
+      "output_pattern": "raw/F-<CELL>-count-only.json",
+      "excluded_pair_cells": {
+        "cell_ids": ["BG1", "BG2", "BC1", "BT2"],
+        "reason": "No exact unordered <=5-token Wiley-native proximity or demonstrated compliant same-field fallback will be claimed from aggregate Anywhere behavior. Do not submit an unsupported broader pair cell. BT2 is neither split nor submitted unless all pair gates become supported."
+      },
+      "failure_action": "A source-explicit planned parser/length rejection may be recorded only if reconciled; otherwise stop live work."
+    },
+    {
+      "phase_id": "L-001",
+      "kind": "ordered_method_set_ladder",
+      "purpose": "Continue only if the preceding ladder item lacks an exact total 21 through 40; stop the ladder at the first qualifying item. No tuning outside this frozen ladder.",
+      "items": [
+        {
+          "position": "b",
+          "exact_query": "\"CubeSat\" AND battery",
+          "date_start": "2020-01-01",
+          "date_end": "2026-08-24",
+          "output": "raw/L-001b.json"
+        },
+        {
+          "position": "c",
+          "exact_query": "\"nanosatellite\" AND battery",
+          "date_start": "2011-01-01",
+          "date_end": "2026-08-24",
+          "output": "raw/L-001c.json"
+        },
+        {
+          "position": "d",
+          "exact_query": "\"CubeSat\"",
+          "date_start": "2024-01-01",
+          "date_end": "2024-12-31",
+          "output": "raw/L-001d.json"
+        }
+      ],
+      "controls": {
+        "content": "articlesChapters",
+        "sort": "Earliest",
+        "limit": 20,
+        "max_pages": 1,
+        "passes": 2,
+        "count_only": true
+      },
+      "no_qualifier_action": "Mark two-page export and strict complete diagnostic untested; make no further tuning probes."
+    },
+    {
+      "phase_id": "R-001",
+      "kind": "one_strict_complete_two_page_diagnostic",
+      "precondition": "Exactly one frozen method-ladder item has a reconciled exact total in 21..40; all prior relevant controls remain healthy.",
+      "purpose": "Run one non-screening complete diagnostic using that exact selected query/window with --expected-source-total, two passes, full page coverage, normalized JSON/CSV, and native page-scoped RIS only in restricted storage.",
+      "controls_to_fill_after_ladder_selection": {
+        "limit": "selected exact total",
+        "max_pages": "ceil(selected exact total / 20)",
+        "passes": 2,
+        "require_complete": true,
+        "sort": "Earliest",
+        "native_export_dir": "raw/R-001-native-ris/",
+        "json_output": "raw/R-001-complete.json",
+        "csv_output": "raw/R-001-complete.csv"
+      },
+      "reconciliation_required": [
+        "selected source total equals source entries retrieved and unique DOI-ledger count",
+        "genuine page transition and exact 20-card non-final-page arithmetic",
+        "identical ordered DOI-ledger hash across two passes",
+        "page-scoped RIS batches one-to-one to each rendered DOI batch",
+        "no relevance inspection, screening, import, or final-event use"
+      ],
+      "failure_action": "Preserve a record-free error artifact or restricted partial artifact, classify total null, and stop; do not retry."
+    }
+  ],
+  "default_adapter_controls_for_count_only": {
+    "date_start": "2011-01-01",
+    "date_end": "2026-08-24",
+    "content": "articlesChapters",
+    "sort": "Earliest",
+    "limit": 20,
+    "max_pages": 1,
+    "passes": 2,
+    "timeout": 60,
+    "page_delay_seconds": 0,
+    "cdp_url": "http://127.0.0.1:9236",
+    "count_only": true
+  },
+  "source_requests_made_at_plan_creation": 0,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "final_event_permitted": false,
+  "accepted_pilot_ids_to_modify": []
+}

@@ -1,0 +1,372 @@
+{
+  "spec_schema_version": "s-l02-esa-indico-local-method-spec/v0.1",
+  "status": "draft_ready_for_supervisor_review",
+  "task_id": "S-L02",
+  "source_id": "esa-indico",
+  "source_name": "ESA Indico",
+  "method_type": "local_harvest",
+  "created_at": "2026-08-23T02:32:17-04:00",
+  "revised_at": "2026-08-23T14:58:03-04:00",
+  "protocol_commit": "38ab61287443693ddabdd4bb855d535a4585ae35",
+  "concept_dictionary": {
+    "path": "SLR/SLR1/searches/search-concept-dictionary.json",
+    "artifact_version": "slr1-search-concepts/v4",
+    "sha256": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+    "binding_rule": "The final operator must halt if the loaded dictionary hash or required concept structure differs. This specification imports the exact current terms from that file; it does not add source-specific terms, synonyms, wildcards, or controlled-vocabulary mappings."
+  },
+  "evidence_index": {
+    "bounded_category_passes": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/category-pass-reconciliation.json",
+    "bounded_event_passes": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/event-472-pass-reconciliation.json",
+    "event_material_and_non_pdf_probe": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/event-407-material-topology-probe.json",
+    "rendered_timetable_queue_and_receipt": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/rendered-timetable-navigation-queue.json",
+    "rendered_timetable_receipt_validation": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/rendered-timetable-receipt-validation.json",
+    "pdf_text_probe": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/pdf-text-probe.json",
+    "one_box_event_probes": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/one-box-event-search-probes.json",
+    "one_box_phrase_followup": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/one-box-phrase-followup.json",
+    "one_box_contribution_probes": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/one-box-contribution-search-probes.json",
+    "one_box_material_probe": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/one-box-material-search-probe.json",
+    "controlled_vocabulary_probe": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/export-schema-controlled-vocabulary-probe.json",
+    "unusable_contribution_export_routes": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/unusable-contribution-export-route-probe.json",
+    "head_get_route_probe": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/head-get-route-probe.json",
+    "p01_supervisor_correction": "pilots/S-L02-P01-20260823T015622-0400/safe-receipts/supervisor-correction-20260823.json",
+    "p02_static_only_access_status": "pilots/S-L02-P02-20260823T030216-0400/safe-receipts/static-only-access-status.json",
+    "p02_legacy_material_shape": "pilots/S-L02-P02-20260823T030216-0400/safe-receipts/event-558-legacy-material-shape.json",
+    "p03_official_documentation": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/official-documentation-review.json",
+    "p03_root_window_and_cap": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/category-root-window-reconciliation.json",
+    "p03_root_component_scope": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/category-root-component-scope-comparison.json",
+    "p03_category_label_correction": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/category-source-boundary-label-correction.json",
+    "p03_cap_probe": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/root-cap-probe-2020-2024-reconciliation.json",
+    "p03_detail_coverage": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/event-407-detail-coverage.json",
+    "p03_complete_bounded_pdf_ocr": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/event-472-complete-public-pdf-ocr-summary.json",
+    "p03_ocr_receipts": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/event-472-ocr-exact-command-completion-receipts.json",
+    "p03_non_pdf_queue": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/event-407-nonpdf-owner-reconciliation-summary.json",
+    "p03_export_identity_failure": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/event-321-export-identity-failure.json",
+    "p03_nested_irregular_shape_scan": "pilots/S-L02-P03-20260823T135313-0400/safe-receipts/bounded-subcontribution-shape-scan-2020-2024-first12.json"
+  },
+  "source_boundary": {
+    "intended_boundary": "The full public ESA Indico event, contribution/subcontribution, event-material, contribution-material, and direct-public-PDF population visible at the final snapshot time.",
+    "boundary_status": "partial_not_proven",
+    "basis": "observed_and_official_documentation_with_all_time_boundary_still_unproven",
+    "current_observations": [
+      {
+        "claim": "A public root-category export for category 0 returned eight rows and count=8 for the bounded 2023-11-01 through 2023-11-30 input; two passes had the same ordered event IDs and response hash.",
+        "basis": "observed",
+        "evidence": "bounded_category_passes"
+      },
+      {
+        "claim": "Historical P01 event exports with detail=contributions supplied event ID, contribution db_id values, nested material folders, and some attachment URLs for a bounded event, but omitted two attachment IDs subsequently found on contribution page and rendered timetable routes. P01's historical route is retained as evidence only, not as the prospective method.",
+        "basis": "observed",
+        "evidence": "bounded_event_passes"
+      },
+      {
+        "claim": "The public static event root can expose an event-level attachment, and a bounded event export contained both PDF and non-PDF materials.",
+        "basis": "observed",
+        "evidence": "event_material_and_non_pdf_probe"
+      },
+      {
+        "claim": "A bounded corrected-detail event export exposed an event-owned legacy material.resources object whose resource URL was safely recognized as a same-origin attachment route.",
+        "basis": "observed",
+        "evidence": "p02_legacy_material_shape"
+      },
+      {
+        "claim": "The two P01 static-only event-472 links were access-unverified in P01; separate P02 anonymous no-redirect GETs classified both access_restricted_or_login.",
+        "basis": "observed",
+        "evidence": "p02_static_only_access_status"
+      },
+      {
+        "claim": "In a repeated November 2023 window, category 0 returned the exact union of explicit category-5 and category-6 windows (8 IDs total). This proves only the stated bounded root/component observation, not all-descendant recursion.",
+        "basis": "observed",
+        "evidence": "p03_root_component_scope"
+      },
+      {
+        "claim": "A 2020-2024 category-0 cap probe returned count=148 and 148 rows in two identical ordered/hash passes. The response complete flag was absent/null, so no general no-cap claim is made.",
+        "basis": "observed",
+        "evidence": "p03_cap_probe"
+      }
+    ],
+    "unproven_assumptions_that_must_not_be_used_as_final_evidence": [
+      "That category 0 recursively and exhaustively includes every public ESA category for all time.",
+      "That the category export's from/to semantics can enumerate every historic/current public event without a validated start/end sentinel or a hidden response cap.",
+      "That the public export includes every subcontribution or gives its rendered route.",
+      "That static owner pages remain a complete material listing for every future event type."
+    ]
+  },
+  "route_plan": {
+    "public_only": true,
+    "authentication": "prohibited",
+    "redirect_policy": "do_not_follow",
+    "head_requests": "not_used; the bounded pilot observed HTTP 400 on HEAD while equivalent direct GET routes succeeded.",
+    "rate_limit": {
+      "minimum_seconds_between_requests": 0.5,
+      "retries": 2,
+      "retryable_http_statuses": [408, 425, 429, 500, 502, 503, 504],
+      "access_or_challenge_statuses": [401, 403, 418],
+      "no_redirect_3xx": "access_restricted_or_login",
+      "failure_rule": "A no-redirect 3xx/login handoff, access, challenge, transport, parse, or rate-limit exhaustion is a failed route/coverage condition, never a source zero. Close error responses and do not retain response headers, cookies, redirect targets/queries, or session identifiers."
+    },
+    "event_census": {
+      "route_template": "/export/categ/0.json?from={inclusive_start}&to={inclusive_end}",
+      "purpose": "Enumerate source event IDs, not candidates.",
+      "required_row_fields": ["id", "categoryId", "startDate", "endDate", "url"],
+      "required_invariants_per_window": [
+        "response count is a non-negative integer and exactly equals results.length",
+        "every event ID is non-empty and unique within the response",
+        "each public event URL path exactly agrees with its event ID",
+        "no result row is malformed or silently dropped"
+      ],
+      "full_run_design": "P03 observed inclusive event-period overlap: event 472 appeared on its 2023-11-16 start/end day but not 2023-11-17, event 467 appeared on both 2023-11-16 and 2023-11-17, and long-running events remained on 2023-11-18. It also observed accepted bounded zero inputs at 1900-01-01 and 2100-01-01. Before final execution, the supervisor must freeze defensible lower/upper sentinels, calibrate parent-window versus overlapping child-window unions for a cap check, partition the validated interval with one-day overlap, preserve every occurrence, and reconcile the stable event-ID union in two passes. A count==rows result and an absent/null complete flag are necessary but not all-time completeness proof.",
+      "basis": "observed_bounded_semantics_and_failure_closed_final_design"
+    },
+    "event_and_contribution_metadata": {
+      "route_template": "/export/event/{event_id}.json?detail=subcontributions",
+      "official_documentation": {
+        "url": "https://docs.getindico.io/en/stable/http-api/exporters/event/",
+        "detail": "subcontributions",
+        "nested_field": "subContributions"
+      },
+      "required_invariants": [
+        "response count equals 1 and results.length equals 1",
+        "returned event ID equals the requested event ID",
+        "every contribution has a stable db_id/contribution_id/id and a matching canonical contribution path",
+        "read case-sensitive subContributions; use lowercase subcontributions only when the documented field is absent, and fail on conflicting dual fields",
+        "recognize legacy material[].resources[] resource IDs/names/same-origin URLs without losing event/contribution owner identity",
+        "conflicting duplicate contribution IDs fail coverage",
+        "event and contribution metadata are retained/hashed separately from attachment/PDF documents",
+        "for a sessions-bearing representative event, require the detail=subcontributions contribution-ID set to equal the detail=sessions top-level-plus-session contribution-ID union; fail on a mismatch"
+      ],
+      "historical_p01_limit": "P01 actually used detail=contributions. It remains historical evidence and must not be described as a detail=subcontributions execution.",
+      "observed_limit": "This route is not treated as a complete material enumeration route because attachment IDs 9769 and 9770 were absent from the bounded historical P01 event export but present on a contribution page/timetable route. P03 observed for event 407 that detail=subcontributions listed 62 contribution IDs and exactly matched the union exposed by detail=sessions (11 top-level plus 51 session-held IDs); this validates that route only for the sampled session-bearing event.",
+      "basis": "observed_and_documented"
+    },
+    "event_material_enumeration": {
+      "route_template": "/event/{event_id}/",
+      "method": "Fetch the public static HTML with GET and extract only direct attachment paths matching the prospectively pinned event attachment pattern.",
+      "stable_attachment_path_pattern": "/event/{event_id}/attachments/{folder_id}/{attachment_id}/{filename}",
+      "observed": "Event 407's static root page contained one observed event-level attachment path.",
+      "evidence": "event_material_and_non_pdf_probe"
+    },
+    "contribution_material_enumeration": {
+      "route_template": "/event/{event_id}/contributions/{contribution_id}/",
+      "method": "Fetch every exported contribution's public static HTML with GET and extract only direct attachment paths matching the prospectively pinned contribution attachment pattern.",
+      "stable_attachment_path_pattern": "/event/{event_id}/contributions/{contribution_id}/attachments/{folder_id}/{attachment_id}/{filename}",
+      "reconciliation": "Preserve true export_attachment_ids before static merging and separately record all_route_attachment_ids. The union of export-declared-unprotected validated-direct attachments must be a subset of static owner-page attachments. Static-only IDs are retained rather than discarded and start access_unverified; a direct access result, ID/owner/path conflict, or conflicting attachment metadata is explicit. An export-declared-unprotected item whose anonymous GET is restricted is a coverage failure; a static-only/unknown-protection item whose no-redirect GET is restricted is a terminal non-public boundary disposition, not a public PDF or zero.",
+      "observed": "Two static-only attachment IDs were reproducible across two event-472 passes; P01 did not GET them and P02 later classified both access_restricted_or_login.",
+      "evidence": "bounded_event_passes"
+    },
+    "subcontribution_handling": {
+      "enumeration": "Request detail=subcontributions, record every documented subContributions record as the composite event_id:parent_contribution_id:subcontribution_id, and preserve its own metadata route. Lowercase subcontributions is only a compatibility fallback if the documented field is absent.",
+      "material_route": "unvalidated; P03 found no non-empty subContributions record in 19 successful bounded event exports (and one separate export failed on an attachment metadata identity conflict), so it did not fabricate a nested material route.",
+      "fallback": "Generate a content-free manual/browser navigation queue with stable IDs, terminal outcome, timestamp, operator, and coverage-receipt checksum. No validated receipt means incomplete coverage; no final event may proceed when a non-empty nested record appears until its owner/material route is proven.",
+      "basis": "official_documentation_observed_zero_samples_and_failure_closed"
+    },
+    "direct_pdf_full_text": {
+      "route_source": "Only a same-origin direct attachment whose separate anonymous no-redirect GET proves application/pdf plus %PDF- is a confirmed public PDF. An export is_protected=false value and a visible .pdf filename/path are provisional until that GET succeeds. A static-only/unknown-protection 3xx/login disposition is non-public; an export-declared-unprotected 3xx/login result is a coverage conflict.",
+      "access_statuses": ["public_pdf", "public_non_pdf", "access_unverified", "access_restricted_or_login", "other_failure", "protected_not_public"],
+      "fetch_validation": [
+        "GET only; no redirect",
+        "public same-origin URL",
+        "HTTP success",
+        "application/pdf content type",
+        "PDF magic header %PDF-",
+        "SHA-256 of bytes"
+      ],
+      "secure_storage": "PDF bytes and extracted text must be outside every Git worktree. The Git ledger stores only IDs, route paths, hashes, byte counts, parser/OCR state, and a logical secure-location reference.",
+      "deterministic_parser": "pdftotext UTF-8. A non-zero parser exit is a parse failure. Empty deterministic text is OCR-required, not zero text/no match. OCR text is accepted only after an external, content-safe receipt keyed to the OCR queue ID/PDF checksum and matching the stripped OCR-body hash/byte count.",
+      "observed": "P03 completed one bounded event-472 public-PDF route: all 13 confirmed public PDFs were separately anonymously GET-probed, fetched, checksummed, and parsed; 11 had deterministic text and two empty parses completed the mandated outside-Git OCR handoff. The two static-only links were separately classified restricted/non-public. Matching ran only after that bounded material/PDF/OCR coverage reconciled, with no candidate import.",
+      "evidence": "p03_complete_bounded_pdf_ocr"
+    },
+    "rendered_route_cross_check": {
+      "route_template": "/event/{event_id}/timetable/",
+      "role": "A reproducible adapter-owned-browser/manual check for visible attachment IDs when static/export routes disagree or an event type is irregular. It is not a substitute for deterministic event/contribution traversal.",
+      "receipt_contract": "esa-indico-manual-navigation-receipt/v1 with stable input IDs, outcome, timestamp, operator, and observed attachment IDs/paths; no source text or browser-tab URL.",
+      "observed": "A queued rendered timetable receipt reconciled all fifteen event-472 attachment IDs, including two absent from export. It did not prove those links public; P01 access was unverified and P02 later classified both restricted/login.",
+      "browser_anchor_correction": "P01 controller-anchor continuity is unproved after the owned-tab closure; controller restoration is observed. No browser URL is retained.",
+      "evidence": "p01_supervisor_correction"
+    }
+  },
+  "stable_identity_and_duplicate_rules": {
+    "event": "event_id",
+    "contribution": "event_id:contribution_stable_id (db_id preferred, then contribution_id or id)",
+    "subcontribution": "event_id:parent_contribution_id:subcontribution_id; source-local component is retained explicitly",
+    "attachment": "attachment_id plus owner and canonical direct route path; a conflicting URL, owner, content metadata, or hash for one stable attachment ID fails the event",
+    "document_route": "event/contribution/subcontribution/attachment object identity plus route_type; no route ID may repeat",
+    "duplicate_discovery": "Keep every raw discovery occurrence/window/pass in the ledger. Collapse only identical stable identities after all pass-level reconciliation. Never erase a source row just because a later route names the same object.",
+    "changed_or_disappearing_content": "If an item appears in pass A but not pass B, a route hash/ID changes, a listed public attachment vanishes, or a direct PDF hash changes, mark the event/window failed and restart from an explicitly documented new snapshot; do not merge a prefix."
+  },
+  "local_document_routes_and_field_boundaries": {
+    "rule": "Required concepts may combine only within exactly one local document route. They never combine across event, contribution, subcontribution, attachment, PDF, non-PDF text route, different records, or independently fetched pages.",
+    "routes": [
+      {
+        "route_type": "event_metadata",
+        "source_object": "one event_id",
+        "fields": ["title", "description", "keywords (each list value is a separate field boundary)"],
+        "combination_rule": "Independent concept tests may co-occur only for diagnostic audit within this metadata document. An ordered phrase cannot cross a field boundary or two separate keyword-list values. This route is candidate_eligible=false: metadata is not sufficient for ESA discovery."
+      },
+      {
+        "route_type": "contribution_metadata",
+        "source_object": "one event_id:contribution_id",
+        "fields": ["title", "description", "keywords (each list value is a separate field boundary)"],
+        "combination_rule": "Same-object diagnostic metadata only; never combines parent event metadata or an attachment. Ordered phrases cannot cross separate keyword-list values. This route is candidate_eligible=false."
+      },
+      {
+        "route_type": "subcontribution_metadata",
+        "source_object": "one event_id:parent_contribution_id:subcontribution_id",
+        "fields": ["title", "description", "keywords (each list value is a separate field boundary)"],
+        "combination_rule": "Same-object diagnostic metadata only. Ordered phrases cannot cross separate keyword-list values. This route is candidate_eligible=false and blocked from final use until nested coverage is validated."
+      },
+      {
+        "route_type": "event_attachment_metadata_or_contribution_attachment_metadata",
+        "source_object": "one attachment_id with its event or contribution owner",
+        "fields": ["title", "description", "filename"],
+        "combination_rule": "Same attachment only; a filename does not borrow terms from its parent record. This route is candidate_eligible=false: attachment metadata/filenames are not sufficient for ESA discovery."
+      },
+      {
+        "route_type": "public_pdf_full_text",
+        "source_object": "one public attachment_id and one exact PDF hash",
+        "fields": ["full_text"],
+        "combination_rule": "A confirmed public PDF is its own required candidate_eligible=true local document route. It never combines with its filename, attachment metadata, contribution metadata, event metadata, or another PDF. OCR body frontmatter is stripped before matching."
+      },
+      {
+        "route_type": "public_non_pdf_text_or_manual_text",
+        "source_object": "one public non-PDF attachment_id and its terminal extractor/manual text hash",
+        "fields": ["full_text"],
+        "combination_rule": "A non-PDF text route is its own attachment document and is required for coverage accounting, but is candidate_eligible=false under the ESA PDF-content constraint unless a future protocol-approved route reclassifies it as a confirmed PDF. It is created only after a supported deterministic extractor or replayable manual/LLM text-route receipt; no source text is retained in Git. An inaccessible, unsupported, or unparseable item leaves coverage null rather than becoming a no-match."
+      }
+    ],
+    "status": "P03-implemented: metadata/filenames are auditable noncandidate routes; only terminal confirmed public PDF text or OCR text is candidate_eligible. Reviewer confirmation of exact local normalization remains required."
+  },
+  "normalization_and_matching": {
+    "implementation": "SLR/SLR1/scripts/esa_indico_local_harvest.py",
+    "unicode": "NFKC then Unicode casefold.",
+    "whitespace": "HTML entities are decoded, markup is stripped from source metadata, and whitespace is collapsed for matching. Distinct values in a source keywords list remain distinct local fields, so an ordered phrase cannot cross their boundary.",
+    "lexical_tokens": "Unicode word tokens excluding underscore. Token matching supplies standalone acronym boundaries; a token MBSE cannot match xMBSE or MBSE2023.",
+    "ordered_phrases": "Every finite multiword dictionary entry is tokenized under the same policy and must occur contiguously in the listed order within one field. No phrase crosses a field boundary.",
+    "punctuation_and_hyphens": "The Unicode hyphen family is normalized to ASCII hyphen; hyphens and ordinary punctuation delimit tokens. This intentionally treats the dictionary's explicitly listed hyphenated and spaced spellings as equivalent local lexical sequences. Period-separated or otherwise unlisted acronym spellings are not compacted.",
+    "wildcards_stemming_expansion": "None. The matcher uses only literal dictionary terms, including each listed singular/plural and spelling form. nanosat* is never substituted.",
+    "pair_rule": {
+      "order": "unordered",
+      "maximum_intervening_lexical_tokens": 5,
+      "same_field_required": true,
+      "nonoverlap_required": true,
+      "formula": "For non-overlapping left/right spans in one field, count tokens strictly between the end of the earlier span and start of the later span; accept only <=5."
+    },
+    "R_architecture_exclusion": "An R hit exactly equal to architecture/architectures is suppressed only when its span is consumed by a G_model, G_structure, C1, or T2 artifact expression in the same field. A separate architecture span can still be independent R.",
+    "basis": "draft_local_implementation; its unit tests are evidence for code behavior, not proof of ESA native search behavior"
+  },
+  "concept_implementation": {
+    "P": "Exact finite-term matcher for dictionary concept P.",
+    "E_H": "Exact finite-term matcher for dictionary E_H.",
+    "E_F": "Exact finite-term matcher for dictionary E_F.",
+    "E": "E_H OR E_F within the same document route.",
+    "M_H": "Exact finite-term matcher for dictionary M_H.",
+    "M_B": "Exact finite-term matcher for dictionary M_B.",
+    "M": "M_H OR M_B within the same document route.",
+    "G_model": "Exact direct terms plus each dictionary pair rule using the maximum-five-token rule.",
+    "G_structure": "Exact direct terms plus each dictionary pair rule using the maximum-five-token rule.",
+    "C1": "Exact direct terms plus each dictionary pair rule using the maximum-five-token rule; bare library, pattern, profile, or language is not a match because it is not in C1.",
+    "R": "Exact finite-term matcher, after the independent-architecture suppression rule.",
+    "T2": "Exact dictionary left/right pairing with unordered maximum-five-token rule."
+  },
+  "candidate_partitions_tags_and_accounting": {
+    "candidate_partitions_per_document_route": {
+      "core_B": "P AND M",
+      "BG1": "P AND G_model",
+      "BG2": "P AND G_structure",
+      "BC1": "P AND C1"
+    },
+    "independent_tags_per_document_route": {
+      "stream_A_tag": "P AND E AND M",
+      "B2_equivalent_tag": "P AND M_B AND independent R",
+      "BT2_equivalent_tag": "P AND M_B AND T2",
+      "R_tag": "independent R",
+      "T2_tag": "T2"
+    },
+    "candidate_union": "For a candidate_eligible terminal public-PDF/PDF-OCR route only, core_B OR BG1 OR BG2 OR BC1. Metadata, contribution, event, attachment filename, and non-PDF routes may retain diagnostic raw matches/tags but cannot emit an ESA candidate. Neither a tag nor a candidate establishes scientific eligibility.",
+    "invariants": [
+      "stream_A_tag implies core_B",
+      "B2_equivalent_tag implies core_B",
+      "BT2_equivalent_tag implies core_B",
+      "on candidate_eligible routes, candidate_union equals the OR of the four candidate partitions; noncandidate metadata/filename routes expose only raw diagnostic matches",
+      "each document route ID is unique",
+      "all output hits include term/pair spans and field labels but no retained source snippet",
+      "route-level and source-object-level counts remain separate"
+    ],
+    "overlap_accounting": "Record raw diagnostic route matches separately from candidate-eligible terminal-PDF route counts; report per-partition candidate document-route counts, every pairwise candidate intersection, candidate document-route union, and candidate source-object union. Preserve all route IDs behind a source object so later deduplication cannot erase route provenance.",
+    "screening_prohibition": "This local matching is discovery only. It must not code eligibility, population validity, EPS-route validity, language, date, publication type, or an included report."
+  },
+  "search_box_and_controlled_vocabulary": {
+    "one_box_status": "not_a_lossless_boolean_source",
+    "reason": "The human-supervisor method constraint requires local harvest. In current event-only probes, MBSE returned four events but MBSE AND CubeSat and MBSE OR CubeSat each returned an explicit zero; no fielded Boolean syntax or complete Boolean implementation was validated. A zero on those diagnostic strings is not treated as a final source zero.",
+    "phrase_observation": "Quoted and unquoted MBSE, and quoted/unquoted model based systems engineering, returned the same bounded event IDs/hash in observed probes. This does not prove general exact-phrase semantics.",
+    "punctuation_observation": "model-based systems engineering returned zero in the bounded event probe whereas model based systems engineering returned four IDs; no punctuation normalization is accepted for native search.",
+    "acronym_and_token_observation": "MBSE and MBSE2023 returned observed event rows, but event keywords could explain the result, so standalone native acronym boundary behavior remains unvalidated.",
+    "stemming_expansion_observation": "First pages for nanosatellite, nanosatellites, and nanosat differed and had unavailable total=-1 with next pages; stemming/expansion is not assumed.",
+    "implicit_term_behavior": "Only q plus result type parameters were observed in the public route. No source-side implicit conjunction, field selection, proximity, or block nesting is accepted.",
+    "controlled_vocabulary": {
+      "usable": false,
+      "assessment": "No genuine controlled vocabulary or distinct indexed-term field was validated. The bounded export exposed generic keywords only; no descriptor, scope-note, hierarchy, thesaurus, or explosion control was observed. Keywords are not emulated as controlled vocabulary.",
+      "basis": "observed_bounded_export_schema",
+      "evidence": "controlled_vocabulary_probe"
+    }
+  },
+  "date_language_and_limits": {
+    "common_evidence_cutoff": "TBD under P-001; no final run may start while it remains unset.",
+    "date_behavior": "Event start/end date and attachment modified date are retained only as source metadata. They are not assumed to be formal publication dates and do not exclude a local document route. Formal date eligibility is determined later during screening/retrieval.",
+    "language_behavior": "Event language metadata may be retained, but no native English filter is applied and metadata cannot establish full-report language. Language remains a screening/retrieval decision.",
+    "discovery_limits": "No publication type, access, peer-review, venue, content-type, or subject limit is applied. Every public non-PDF item receives either a supported deterministic text extractor or a replayable human/LLM/manual text-route queue even though it cannot itself emit a PDF-only ESA candidate. Static-only links remain access_unverified until GET proves public access; irregular/external links are ledgered and queued. None of these states is a zero or silent deletion.",
+    "source_date_window_design_status": "P03 observed date-span overlap and accepted zero inputs at 1900-01-01 and 2100-01-01, but those are candidate sentinels only. The final calendar partition and all-time root coverage remain blocked pending a supervisor-approved all-public boundary/cap calibration; source event dates are never a lossless publication-date filter."
+  },
+  "completeness_and_two_pass_design": {
+    "pass_A": [
+      "Create a timestamped source snapshot and calendar-window plan only after the root-category boundary gate passes.",
+      "Enumerate/reconcile every root-category window and preserve every raw occurrence.",
+      "Fetch/reconcile every event export, static event page, and every static contribution page.",
+      "Generate/check the material ledger, probe static-only access, download/hash every confirmed public PDF, extract PDF/non-PDF text or complete OCR/manual receipts, and match only when all coverage states pass."
+    ],
+    "pass_B": [
+      "Repeat all pass-A routes from a fresh anonymous client in the same declared snapshot window and source order.",
+      "Require equality of per-window count/ordered event IDs, event/contribution/subcontribution IDs, true export and all-route attachment owner/ID/path ledgers, public PDF checksum ledger, PDF/non-PDF parser/manual terminal states, and deterministic matching output.",
+      "Use rendered/manual queue receipts as a third route only for declared irregular items; validate queue IDs one-to-one and require expected attachment IDs as a subset of observed IDs."
+    ],
+    "success_gate": "Only a complete A/B equality reconciliation and resolved required manual/OCR queue can create a final local-harvest result. If a source changes during the run, report total=null and do not import a partial prefix.",
+    "pilot_result": "P01's historical identifier/topology facts and P02's correction remain preserved. P03 additionally completed one current event-472 public-PDF/OCR/matching path (13 confirmed public PDFs, two restricted static-only links excluded as non-public), compared current sessions/subcontributions contribution inventories for event 407, and fully owner-page/probe enumerated event 407's 28 public non-PDF routes into a failure-closed queue. It also observed an event-321 attachment title identity conflict. These are method diagnostics, not a final census, screening, candidate import, or two-download-pass proof."
+  },
+  "failure_and_zero_rules": {
+    "valid_explicit_zero": "Only a complete, reconciled source response whose native count is exactly 0 for the declared bounded operation. Search-box diagnostic zeros cannot represent the local harvest source zero.",
+    "mandatory_null_or_failed_coverage": [
+      "unknown or unreconciled source universe",
+      "category count/row mismatch, duplicate/conflicting/missing ID, hidden cap, changed ordered pass, or missing boundary proof",
+      "event export count/result/event-ID mismatch",
+      "static owner page inaccessible, malformed, or missing an export-declared-unprotected attachment",
+      "attachment owner/URL/metadata conflict (including P03's event-321 title conflict) or disappearing content",
+      "protected/restricted direct file without an explicit public-boundary disposition",
+      "a static-only/unknown-protection link called public without a no-redirect GET; an export-declared-unprotected link whose no-redirect GET is restricted; wrong content type, redirect, invalid magic header, checksum conflict, parser error, empty text without completed OCR, or unresolved manual receipt",
+      "public non-PDF without a completed deterministic extractor or replayable manual/LLM text-route receipt; irregular/external material silently dropped instead of queued",
+      "any unmatched queue item, access challenge, authentication prompt, CAPTCHA, or transport failure"
+    ],
+    "partial_prefix_rule": "Do not issue candidate records, source totals, or final-event import from a prefix. Preserve only quarantined safe ledgers/receipts and a failure reason.",
+    "unusable_route_observation": "Two candidate contribution-export routes returned 404 and 503 in the pilot and are explicitly not used; a failed route is not a zero.",
+    "evidence": "unusable_contribution_export_routes"
+  },
+  "automation_and_manual_boundary": {
+    "script": "SLR/SLR1/scripts/esa_indico_local_harvest.py",
+    "deterministic_scope": [
+      "anonymous public GET, no redirects, rate limiting, retry bounds, safe response receipts",
+      "bounded category/event/static-owner-page enumeration and stable-ID reconciliation",
+      "attachment/access classification for public_pdf/public_non_pdf/restricted/non-public/conflict states, true-export versus all-route reconciliation, safe no-redirect access-status receipts, secure PDF checkpointing, checksums, deterministic pdftotext extraction, and validated external OCR-body ingestion",
+      "dictionary-locked local matching, partition/tag invariants, overlap counts",
+      "content-free PDF, non-PDF, irregular/external, and OCR queue templates and receipt validation"
+    ],
+    "manual_or_llm_scope": "Only generated irregular, external, non-PDF, subcontribution, or OCR queues may use manual/LLM work. The operator may navigate an adapter-owned tab but must record stable input IDs, timestamp, output attachment/contribution IDs or hashes, terminal text/extraction outcome, and a failure reason. An unsupported, inaccessible, or unparseable material is not a no-match and leaves coverage null. No undocumented navigation can satisfy completeness.",
+    "storage_boundary": "Raw exports and copyrighted PDFs/text belong in an operator-approved secure location outside Git. Git receives no raw PDF/source text and only safe hashes, counts, route paths, and receipts."
+  },
+  "acceptance_blockers": [
+    "Obtain supervisor acceptance or authoritative source evidence that category 0 is the all-public recursive universe; P03's bounded root/component union, inclusive-overlap observations, 148-row cap probe, and candidate sentinels do not prove this all-time claim.",
+    "Freeze a defensible all-time lower/upper sentinel and run the final source-wide category/event/material census twice after P-001; calibrate parent/child window unions because P03 observed no complete flag.",
+    "Find and validate a non-empty public subContributions owner/material route, or retain a final source-coverage failure whenever one appears. P03 found none in its bounded successful samples.",
+    "Validate terminal routing for every public non-PDF and a real irregular/external material in both final passes. P03 proved 28 public videos are queued and rejects an unsupported terminal receipt, but did not resolve them; no irregular/external export route was observed in its bounded successful scans.",
+    "Handle every event-local identity conflict as coverage null unless a new explicitly validated correction route resolves it; P03 observed event 321 attachment 6771 with conflicting title metadata.",
+    "Repeat full direct-download/checksum/parser/OCR reconciliation for every final public PDF in both final passes. P03 validates one current bounded 13-PDF path, not final all-source coverage.",
+    "Review the PDF-only candidate gate, same-object diagnostic metadata boundaries, keyword-value boundaries, and hyphen-token normalization semantics; set P-001 evidence cutoff and obtain supervising-reviewer acceptance. This draft is not self-accepted."
+  ]
+}

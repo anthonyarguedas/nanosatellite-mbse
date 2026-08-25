@@ -1,0 +1,52 @@
+{
+  "caffeinate": {
+    "current_assertion_query_succeeded": true,
+    "current_prevent_system_sleep_assertion_present": true,
+    "current_runner_caffeinate_process_observed": true,
+    "note": "Process-scoped caffeinate does not claim protection from manual or clamshell sleep.",
+    "preflight_receipt_inspected": true,
+    "preflight_receipt_names_runner": true,
+    "preflight_receipt_required_assertions_present": true
+  },
+  "captured_at": "2026-08-24T17:23:28.998Z",
+  "ended_at": "2026-08-24T17:23:29.024Z",
+  "live_source_window": {
+    "ended_at": "2026-08-24T17:20:13.690Z",
+    "operation": "G01 non-query owned-page route probe only",
+    "started_at": "2026-08-24T17:20:10.146Z"
+  },
+  "pilot_id": "S-D04-P02-20260824T130842-0400",
+  "power": {
+    "current_pmset_battery_query_succeeded": true,
+    "source": "AC Power"
+  },
+  "preflight_system_baselines": [
+    {
+      "name": "pmset-log-baseline.txt",
+      "read_without_copying": true,
+      "sha256": "183b22d9f98ef61df367435f2ecb0145239549c9a19eafce308d6459198d30a1"
+    },
+    {
+      "name": "loginwindow-baseline.txt",
+      "read_without_copying": true,
+      "sha256": "29b84ca34d54ed1ce14275625c738da20db602047b5449163bdcde31bd2c2941"
+    }
+  ],
+  "retention_exclusions": [
+    "raw_system_event_logs",
+    "process_id",
+    "process_command",
+    "raw_target_id",
+    "browser_url",
+    "source_page_content"
+  ],
+  "schema_version": "slr1-engineering-village-system-postflight/v1",
+  "sleep_wake_events_during_live_source_window": {
+    "conclusion": "No Sleep/Wake markers observed in either available timestamp-bounded source.",
+    "loginwindow_log_checked": true,
+    "loginwindow_sleep_wake_event_count": 0,
+    "pmset_log_checked": true,
+    "pmset_sleep_wake_event_count": 0,
+    "query": "timestamp-bounded case-insensitive Sleep/Wake marker count; raw system-event lines not retained"
+  }
+}
