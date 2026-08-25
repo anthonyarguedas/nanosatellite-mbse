@@ -20,7 +20,7 @@ You supervise one SLR1 source campaign. Read `SLR/SLR1/searches/README.md`, the 
 ## Browser-backed live phases
 
 - Complete reading, query generation, source-free tests, and artifact planning before acquiring the shared-browser lease. Detached subagents are source-free only.
-- Use the exact shared CfT lease command and checklist in `searches/README.md`. Never create a source-specific browser, profile, or endpoint.
+- Use the exact shared CfT lease command and checklist in `searches/README.md`. Never create a source-specific browser, profile, or endpoint. If read-only status is unhealthy while the OS lease is free and no guardian/orphan is alive, you may use only README's canonical outside-lease reconciliation for this dedicated pilot CfT, then recheck the full launch gate; attempt executors may not do so.
 - Keep the live executor attached and supervised. On cancellation, stop and collect it, verify source-writing stopped, verify owned-page cleanup and baseline preservation, and verify lease release. Record `cancelled`, not provider failure.
 - A failed source operation is not reissued in the same attempt. Diagnose and patch a technical defect source-free, then give the later corrective source phase a new immutable ID under the same campaign. Do not use this rule to strand a pilot after a zero-operation source-free setup mistake.
 

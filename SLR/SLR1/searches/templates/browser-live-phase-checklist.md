@@ -47,7 +47,7 @@ Record before/after values and safe evidence paths:
 | Sleep protection, power, and Sleep/Wake result | `REPLACE` | `REPLACE` | `REPLACE` |
 | Hashed adapter-owned target identities and closure | `REPLACE` | `REPLACE` | `REPLACE` |
 
-A failed version, anchor, sleep, or profile/process health check stops source work. Only the supervisor may repair/restart CfT outside the lease; record the resulting new browser epoch.
+A failed version, anchor, sleep, or profile/process health check stops source work. Outside any lease, the supervisor—or the assigned controller using only README's bounded canonical reconciliation after proving the OS lease free and no guardian/orphan alive—may restore this dedicated CfT; record the resulting new browser epoch and recheck the complete launch gate.
 
 ## 4. Busy, challenge, cancellation, and cleanup
 

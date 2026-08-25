@@ -43,9 +43,11 @@ This contract supersedes per-source fresh-browser, profile, port, launcher, and 
 
 ### Fixed supervisor service
 
-- The browser supervisor alone owns one Chrome for Testing (CfT) process, its persistent profile `~/agent-tools/.browser-profiles/chrome-automation`, and endpoint `127.0.0.1:9222`. There must never be multiple Chrome processes using that profile.
-- Pilots and controllers are clients, never browser controllers. They must not launch, stop, restart, force-quit, or configure CfT; copy, rotate, inspect, or extract a profile; or set a browser, profile, endpoint, or port override. If the service is unhealthy, stop before source work and ask the supervisor to resolve it outside an active lease.
+- One supervisor-managed Chrome for Testing (CfT) process owns the dedicated pilot profile `~/agent-tools/.browser-profiles/chrome-automation` and endpoint `127.0.0.1:9222`. There must never be multiple Chrome processes using that profile.
+- Attempt executors are clients, never browser controllers. They must not launch, stop, restart, force-quit, or configure CfT; copy, rotate, inspect, or extract a profile; or set a browser, profile, endpoint, or port override. An assigned campaign controller may perform only the bounded canonical reconciliation described below, outside a lease; it may not perform manual process/profile administration.
 - The supervisor owns one protected broker anchor. Clients must not navigate, close, or mutate it. An adapter may create and close only pages it owns. Generic `browser_harness new_tab` is prohibited.
+
+Because this CfT installation and profile are dedicated to these pilots, an assigned controller need not wait for a separate supervisor round trip when the read-only status is unhealthy. Outside any lease, and only after status proves the OS lease free and no guardian/orphan alive, the controller may run the canonical `start_chrome.py --wait 30` reconciliation under `caffeinate -dims`. That command may reconcile the existing canonical process, recreate one inert anchor, write a new epoch receipt, or launch the canonical process if absent. The controller must then require healthy status, one inert anchor, matching versions, the canonical profile/endpoint, and a free lease before source work. It must not kill Chrome, manipulate the profile, choose another process/endpoint, or use this allowance during or to escape a source condition.
 
 ### Offline first, then one leased live phase
 
@@ -69,7 +71,7 @@ Before source navigation and again at cleanup, the supervisor/controller records
 - process-scoped sleep protection, power state, and actual Sleep/Wake check for the phase; and
 - supervision, cancellation, cleanup, and terminal outcome.
 
-Never record profile contents, cookies, credentials, or session values. On macOS, keep the lease child under process-scoped `caffeinate -dims`; it does not override clamshell sleep, so keep the lid open. A version/anchor/sleep health failure stops source work. Only the supervisor may repair or restart CfT, outside a lease, producing a new recorded browser epoch.
+Never record profile contents, cookies, credentials, or session values. On macOS, keep the lease child under process-scoped `caffeinate -dims`; it does not override clamshell sleep, so keep the lid open. A version/anchor/sleep health failure stops source work. The supervisor—or an assigned controller using only the bounded canonical reconciliation above—may restore CfT outside a lease, producing a new recorded browser epoch.
 
 ### Challenge, busy, pacing, and stopping
 
