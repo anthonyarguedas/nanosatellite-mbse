@@ -1,4 +1,4 @@
-"""Offline tests for the bounded Engineering Village P03 paired event."""
+"""Offline tests for the bounded Engineering Village P03/P04 paired event."""
 
 from __future__ import annotations
 
@@ -92,6 +92,28 @@ class EngineeringVillagePairedDiagnosticTests(unittest.TestCase):
                 adapter_calls={"compendex": forbidden, "inspec": forbidden},
             )
             self.assertEqual(collision_status, 1)
+
+    def test_p04_identity_selects_p04_operation_metadata(self):
+        with tempfile.TemporaryDirectory() as directory:
+            config, _, output = self.make_config(directory, execute=False)
+            config = config.__class__(
+                **{
+                    **config.__dict__,
+                    "attempt_id": "S-D04-P04-20260825T114307-0400",
+                }
+            )
+            status, receipt = ev.run_paired_diagnostic(config)
+            self.assertEqual(status, 0)
+            self.assertEqual(receipt["operation_id"], "P04-OP02-PAIRED-DIAGNOSTIC")
+            self.assertTrue(
+                all(
+                    request["request_id"].startswith(
+                        "S-D04-P04-20260825T114307-0400:P04-OP02-PAIRED-DIAGNOSTIC:"
+                    )
+                    for request in receipt["database_requests"]
+                )
+            )
+            self.assertTrue(output.is_file())
 
     def test_success_is_one_paired_operation_with_two_explicit_requests(self):
         with tempfile.TemporaryDirectory() as directory:

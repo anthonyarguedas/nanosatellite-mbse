@@ -23,7 +23,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-25T14:28:08.574Z",
+  "updated_at": "2026-08-25T15:45:00.000Z",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -38,10 +38,10 @@
   },
   "controller_authorization": {
     "technical_corrective_attempts_authorized": true,
-    "maximum_additional_attempts": 2,
+    "maximum_additional_attempts": 3,
     "maximum_source_operations_per_attempt": 2,
-    "rationale": "Two lifetime technical allocations are finite: P02 consumed one and only P03 remains. The remaining P03 has a strict two-source-operation maximum for the projection and conditional adapter diagnostic.",
-    "maximum_technical_corrective_attempts": 2,
+    "rationale": "Three lifetime technical allocations are finite: P02 and P03 consumed two, with P03 preserved as a consumed controller launch-setup incident despite zero source operations. Exactly one behavior-preserving P04 remains, capped at two source operations: the corrected stabilized route/access projection, then one conditional paired Compendex-then-Inspec diagnostic. No methodological revision or further technical attempt is authorized.",
+    "maximum_technical_corrective_attempts": 3,
     "maximum_methodological_revision_attempts": 0
   },
   "attempts": [
@@ -476,6 +476,23 @@
       "rationale": "One P03 is controller-authorized without human approval: run a stabilized route/access projection once, then one adapter diagnostic only if that projection is healthy; at most two source operations.",
       "maximum_source_operations": 2,
       "decided_at": "2026-08-24T16:13:25-04:00"
+    },
+    {
+      "decision_id": "D-TECH-NEXT-P04",
+      "attempt_id": null,
+      "decision_class": "controller_technical",
+      "review_effect": false,
+      "affects_underlying_literature_review": false,
+      "human_authorization_required": false,
+      "authorization_status": "prospectively_authorized",
+      "authorized_by": "controller",
+      "affected_gate_ids": [
+        "G-ROUTE-PROJECTION",
+        "G-ADAPTER-DIAGNOSTIC"
+      ],
+      "rationale": "P03 is a consumed controller technical setup incident: its lease phase began but its nested-heredoc launch wrapper performed zero source operations. Exactly one corrected P04 is prospectively authorized without human approval, using a new immutable identity and file-based child: run the stabilized route/access projection once, then run one paired Compendex-then-Inspec diagnostic only if operation 1 is healthy; at most two source operations and no other query family or review-semantic change.",
+      "maximum_source_operations": 2,
+      "decided_at": "2026-08-25T15:45:00-04:00"
     }
   ],
   "cancellation": null,

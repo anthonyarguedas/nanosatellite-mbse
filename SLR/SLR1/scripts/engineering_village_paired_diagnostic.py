@@ -3,7 +3,7 @@
 # requires-python = ">=3.10"
 # dependencies = ["playwright>=1.48,<2"]
 # ///
-"""Run the single P03 paired Compendex/Inspec diagnostic event.
+"""Run the single bounded P03/P04 paired Compendex/Inspec diagnostic event.
 
 This is a bounded attached diagnostic, not a final-search runner.  It is
 intentionally separate from the route projection: operation 1 is performed by
@@ -11,7 +11,8 @@ intentionally separate from the route projection: operation 1 is performed by
 one logical paired event contains exactly two explicitly counted component
 requests, one to Compendex and one to Inspec.  Existing Engineering Village
 adapter calls are made sequentially so that only one adapter-owned page exists
-at a time.
+at a time.  The attempt ID selects the matching immutable operation label;
+only the controller-authorized P03/P04 identities are accepted.
 
 The adapter results are inspected only for safe count, selection, control, and
 provenance metadata.  Bibliographic records are never written.  A successful
@@ -45,6 +46,7 @@ DIAGNOSTIC_LIMIT = 1
 DIAGNOSTIC_MAX_PAGES = 1
 DIAGNOSTIC_YEAR_START = 2011
 OPERATION_ID = "P03-OP02-PAIRED-DIAGNOSTIC"
+OPERATION_ID_SUFFIX = "-OP02-PAIRED-DIAGNOSTIC"
 DATABASES = ("compendex", "inspec")
 DATABASE_MASKS = {"compendex": "1", "inspec": "2"}
 ADAPTER_DIRECTORY = Path(
@@ -89,7 +91,19 @@ AdapterCall = Callable[..., Mapping[str, Any]]
 Sleeper = Callable[[float], None]
 
 
-_ATTEMPT_ID_PATTERN = re.compile(r"^S-D04-P03-[A-Za-z0-9][A-Za-z0-9._+:-]*$")
+_ATTEMPT_ID_PATTERN = re.compile(
+    r"^S-D04-P(?P<attempt_number>03|04)-[A-Za-z0-9][A-Za-z0-9._+:-]*$"
+)
+
+
+def operation_id_for_attempt(attempt_id: str) -> str:
+    """Bind operation metadata to the validated immutable P03/P04 identity."""
+    match = _ATTEMPT_ID_PATTERN.fullmatch(attempt_id)
+    if match is None:
+        raise InputValidationError(
+            "--attempt-id must be a runtime S-D04-P03 or S-D04-P04 timestamp identifier"
+        )
+    return f"P{match.group('attempt_number')}{OPERATION_ID_SUFFIX}"
 
 
 def _finite_nonnegative(value: Any, option: str) -> float:
@@ -123,7 +137,7 @@ def validate_cdp_url(value: Any) -> str:
 def validate_attempt_id(value: Any) -> str:
     if type(value) is not str or not _ATTEMPT_ID_PATTERN.fullmatch(value):
         raise InputValidationError(
-            "--attempt-id must be a runtime S-D04-P03 timestamp identifier"
+            "--attempt-id must be a runtime S-D04-P03 or S-D04-P04 timestamp identifier"
         )
     return value
 
@@ -255,9 +269,11 @@ def _empty_control_evidence() -> dict[str, Any]:
     }
 
 
-def _planned_request(attempt_id: str, database: str) -> dict[str, Any]:
+def _planned_request(
+    attempt_id: str, database: str, operation_id: str = OPERATION_ID
+) -> dict[str, Any]:
     return {
-        "request_id": f"{attempt_id}:{OPERATION_ID}:{database}",
+        "request_id": f"{attempt_id}:{operation_id}:{database}",
         "database": database,
         "adapter_entry_point": (
             "search_compendex.search_compendex"
@@ -283,11 +299,12 @@ def _planned_request(attempt_id: str, database: str) -> dict[str, Any]:
 
 
 def new_receipt(config: PairedDiagnosticConfig, query: QueryEvidence) -> dict[str, Any]:
+    operation_id = operation_id_for_attempt(config.attempt_id)
     return {
         "schema_version": "slr1-engineering-village-paired-diagnostic/v1",
         "mode": "source_action" if config.execute else "dry_run",
         "attempt_id": config.attempt_id,
-        "operation_id": OPERATION_ID,
+        "operation_id": operation_id,
         "endpoint_class": "explicit_loopback_cdp",
         "cdp_endpoint": DEFAULT_CDP_URL,
         "paired_event": True,
@@ -328,7 +345,10 @@ def new_receipt(config: PairedDiagnosticConfig, query: QueryEvidence) -> dict[st
             ),
         },
         "database_requests": [
-            _planned_request(config.attempt_id, database) for database in DATABASES
+            _planned_request(
+                config.attempt_id, database, operation_id
+            )
+            for database in DATABASES
         ],
         "totals": {
             "paired": None,
@@ -491,9 +511,12 @@ def _summarize_adapter_result(
 
 
 def _failure_request(
-    attempt_id: str, database: str, error: BaseException
+    attempt_id: str,
+    database: str,
+    error: BaseException,
+    operation_id: str = OPERATION_ID,
 ) -> dict[str, Any]:
-    request = _planned_request(attempt_id, database)
+    request = _planned_request(attempt_id, database, operation_id)
     request.update(
         {
             "status": "blocked",
@@ -517,8 +540,13 @@ def _failure_request(
     return request
 
 
-def _not_run_request(attempt_id: str, database: str, reason: str) -> dict[str, Any]:
-    request = _planned_request(attempt_id, database)
+def _not_run_request(
+    attempt_id: str,
+    database: str,
+    reason: str,
+    operation_id: str = OPERATION_ID,
+) -> dict[str, Any]:
+    request = _planned_request(attempt_id, database, operation_id)
     request["classification"] = reason
     return request
 
@@ -587,6 +615,7 @@ def run_paired_diagnostic(
             },
         }
 
+    operation_id = operation_id_for_attempt(config.attempt_id)
     receipt = new_receipt(config, query)
     try:
         reservation = reserve_output_path(config.output_path)
@@ -638,6 +667,7 @@ def run_paired_diagnostic(
                                 config.attempt_id,
                                 database,
                                 "pacing_failed_before_request",
+                                operation_id,
                             )
                             all_accepted = False
                             break
@@ -651,10 +681,12 @@ def run_paired_diagnostic(
                             database, adapter_result
                         )
                     except Exception as error:
-                        request = _failure_request(config.attempt_id, database, error)
+                        request = _failure_request(
+                            config.attempt_id, database, error, operation_id
+                        )
                         accepted = False
                     request["request_id"] = (
-                        f"{config.attempt_id}:{OPERATION_ID}:{database}"
+                        f"{config.attempt_id}:{operation_id}:{database}"
                     )
                     receipt["database_requests"][index] = request
                     receipt["totals"][database] = request.get("total")
@@ -665,6 +697,7 @@ def run_paired_diagnostic(
                                 config.attempt_id,
                                 DATABASES[1],
                                 "paired_event_stopped_after_first_request",
+                                operation_id,
                             )
                         break
 
