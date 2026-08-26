@@ -73,6 +73,24 @@ def edition_payload(**overrides: object) -> dict[str, object]:
     return payload
 
 
+class BasicControlsPage:
+    def __init__(self, payloads: list[dict[str, bool]]) -> None:
+        self.payloads = list(payloads)
+        self.projection_calls = 0
+
+    async def evaluate(self, script, *_args):
+        self.assert_projection(script)
+        self.projection_calls += 1
+        if not self.payloads:
+            raise AssertionError("unexpected basic-control projection")
+        return self.payloads.pop(0)
+
+    @staticmethod
+    def assert_projection(script) -> None:
+        if script != wos.BASIC_CONTROL_PROJECTION_SCRIPT:
+            raise AssertionError("hydration must remain a passive control projection")
+
+
 def result_payload(
     *,
     kind: str = "summary",
@@ -170,6 +188,59 @@ class TranslationArtifactTests(unittest.TestCase):
         self.assertEqual(bt2.count(" NEAR/6 "), len(dictionary["concepts"]["T2"]["left"]) * 4)
         for term in dictionary["concepts"]["P"]["terms"]:
             self.assertIn(f'"{term}"', a1)
+
+
+class BasicControlHydrationTests(unittest.TestCase):
+    def test_false_controls_are_polled_until_hydrated(self):
+        page = BasicControlsPage(
+            [
+                controls_payload(
+                    core_collection=False,
+                    all_editions_button=False,
+                    topic_field=False,
+                    publication_date_button=False,
+                    query_input=False,
+                    submit_button=False,
+                ),
+                controls_payload(),
+            ]
+        )
+        clock = FakeClock()
+        outcome = asyncio.run(
+            wos.wait_for_basic_controls(
+                page,
+                timeout_seconds=1.0,
+                poll_interval_seconds=0.25,
+                clock=clock,
+                sleeper=clock.sleep,
+            )
+        )
+        self.assertFalse(outcome.timed_out)
+        self.assertEqual(outcome.polls, 2)
+        self.assertIsNotNone(outcome.controls)
+        self.assertTrue(outcome.controls.hydrated)
+        self.assertEqual(page.projection_calls, 2)
+        self.assertEqual(clock.sleeps, [0.25])
+
+    def test_basic_control_hydration_timeout_is_passive_and_terminal(self):
+        page = BasicControlsPage(
+            [controls_payload(core_collection=False)] * 4
+        )
+        clock = FakeClock()
+        outcome = asyncio.run(
+            wos.wait_for_basic_controls(
+                page,
+                timeout_seconds=0.5,
+                poll_interval_seconds=0.25,
+                clock=clock,
+                sleeper=clock.sleep,
+            )
+        )
+        self.assertTrue(outcome.timed_out)
+        self.assertIsNone(outcome.controls)
+        self.assertEqual(outcome.polls, 2)
+        self.assertEqual(page.projection_calls, 2)
+        self.assertEqual(clock.sleeps, [0.25, 0.25])
 
 
 class ResultProjectionTests(unittest.TestCase):
@@ -416,6 +487,12 @@ class OwnershipAndOfflineLifecycleTests(unittest.TestCase):
         )
         hydration = wos.HydrationOutcome(result, "summary_observed", 2, 0, False)
         with tempfile.TemporaryDirectory() as directory, mock.patch.object(
+            wos,
+            "wait_for_basic_controls",
+            new=mock.AsyncMock(
+                return_value=wos.BasicControlHydrationOutcome(controls, 1, False)
+            ),
+        ), mock.patch.object(
             wos, "prepare_basic_controls", new=mock.AsyncMock(return_value=(controls, editions))
         ), mock.patch.object(
             wos, "submit_one_query", new=mock.AsyncMock()
@@ -439,6 +516,38 @@ class OwnershipAndOfflineLifecycleTests(unittest.TestCase):
         encoded = json.dumps(receipt)
         self.assertNotIn("owned-target", encoded)
         self.assertNotIn("TS=(", encoded)
+
+    def test_hydration_timeout_keeps_submit_zero_and_cleans_owned_page(self):
+        session = FakePlaywright()
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(
+            wos,
+            "wait_for_basic_controls",
+            new=mock.AsyncMock(
+                return_value=wos.BasicControlHydrationOutcome(None, 4, True)
+            ),
+        ) as wait_for_controls, mock.patch.object(
+            wos, "prepare_basic_controls", new=mock.AsyncMock()
+        ) as prepare, mock.patch.object(
+            wos, "submit_one_query", new=mock.AsyncMock()
+        ) as submit:
+            status, receipt = asyncio.run(
+                wos.run_probe(
+                    probe_config(Path(directory) / "receipt.json"),
+                    playwright_factory=lambda: session,
+                )
+            )
+        self.assertEqual(status, 1)
+        self.assertEqual(receipt["result"]["classification"], "basic_controls_not_ready")
+        self.assertEqual(receipt["submission"]["source_operation_count"], 0)
+        self.assertFalse(receipt["submission"]["native_submit_observed"])
+        self.assertEqual(receipt["controls"]["basic_hydration_polls"], 4)
+        self.assertTrue(receipt["controls"]["basic_hydration_timed_out"])
+        wait_for_controls.assert_awaited_once()
+        prepare.assert_not_awaited()
+        submit.assert_not_awaited()
+        self.assertTrue(receipt["ownership"]["owned_target_disappeared"])
+        self.assertTrue(receipt["ownership"]["baseline_target_set_preserved"])
+        self.assertEqual(session.browser.context.pages, session.browser.context.baseline)
 
     def test_wrong_endpoint_is_rejected_before_factory(self):
         with tempfile.TemporaryDirectory() as directory:

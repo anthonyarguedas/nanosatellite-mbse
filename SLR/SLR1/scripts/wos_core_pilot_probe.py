@@ -40,6 +40,8 @@ EXPECTED_PATH = "/wos/woscc/basic-search"
 SUMMARY_PATH_PREFIX = "/wos/woscc/summary/"
 DEFAULT_TIMEOUT_SECONDS = 60.0
 DEFAULT_POLL_INTERVAL_SECONDS = 0.25
+BASIC_CONTROL_HYDRATION_TIMEOUT_SECONDS = 60.0
+BASIC_CONTROL_HYDRATION_POLL_INTERVAL_SECONDS = 0.25
 CLEANUP_TIMEOUT_SECONDS = 5.0
 CLEANUP_POLL_INTERVAL_SECONDS = 0.05
 MAX_QUERY_CHARACTERS = 100_000
@@ -147,21 +149,37 @@ class BasicControlState:
     submit_button: bool
 
     @property
-    def ready(self) -> bool:
+    def hydrated(self) -> bool:
+        """Return the controls needed before any setup interaction."""
         return all(
             (
                 self.core_collection,
                 self.all_editions_button,
                 self.topic_field,
+                self.query_input,
+                self.submit_button,
+            )
+        )
+
+    @property
+    def ready(self) -> bool:
+        return all(
+            (
+                self.hydrated,
                 self.publication_date_button,
                 self.date_start_input,
                 self.date_end_input,
                 self.language_english,
                 self.document_type_absent,
-                self.query_input,
-                self.submit_button,
             )
         )
+
+
+@dataclass(frozen=True)
+class BasicControlHydrationOutcome:
+    controls: BasicControlState | None
+    polls: int
+    timed_out: bool
 
 
 @dataclass(frozen=True)
@@ -709,6 +727,43 @@ async def project_controls(page: Any) -> BasicControlState:
     return controls_from_payload(payload)
 
 
+async def wait_for_basic_controls(
+    page: Any,
+    *,
+    timeout_seconds: float = BASIC_CONTROL_HYDRATION_TIMEOUT_SECONDS,
+    poll_interval_seconds: float = BASIC_CONTROL_HYDRATION_POLL_INTERVAL_SECONDS,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> BasicControlHydrationOutcome:
+    """Passively wait for the initial Basic Search controls to hydrate.
+
+    This loop only evaluates the fixed boolean projection.  It does not click,
+    fill, reload, navigate, or submit; a timeout therefore leaves the source
+    operation count at zero while the caller can still clean up its owned page.
+    """
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    timeout = min(timeout_seconds, BASIC_CONTROL_HYDRATION_TIMEOUT_SECONDS)
+    interval = min(poll_interval_seconds, BASIC_CONTROL_HYDRATION_POLL_INTERVAL_SECONDS)
+    deadline = clock() + timeout
+    polls = 0
+    while True:
+        remaining = deadline - clock()
+        if remaining <= 0:
+            return BasicControlHydrationOutcome(None, polls, True)
+        try:
+            controls = await asyncio.wait_for(project_controls(page), timeout=remaining)
+        except asyncio.TimeoutError:
+            return BasicControlHydrationOutcome(None, polls, True)
+        except ProbeAbort:
+            controls = None
+        polls += 1
+        if controls is not None and controls.hydrated:
+            return BasicControlHydrationOutcome(controls, polls, False)
+        if not await _sleep_to_deadline(deadline, interval, clock, sleeper):
+            return BasicControlHydrationOutcome(None, polls, True)
+
+
 async def project_editions(page: Any) -> EditionState:
     try:
         payload = await page.evaluate(EDITION_DIALOG_PROJECTION_SCRIPT)
@@ -1076,6 +1131,8 @@ def new_receipt(config: ProbeConfig) -> dict[str, Any]:
             "baseline_target_set_preserved": None,
         },
         "controls": {
+            "basic_hydration_polls": 0,
+            "basic_hydration_timed_out": False,
             "core_collection": False,
             "all_editions_button": False,
             "all_current_editions_checked": False,
@@ -1284,6 +1341,21 @@ async def run_probe(
                     except Exception as error:
                         raise ProbeAbort("source_route_not_verified") from error
 
+                    hydration = await wait_for_basic_controls(
+                        owned_page,
+                        timeout_seconds=config.timeout_seconds,
+                        poll_interval_seconds=config.poll_interval_seconds,
+                        clock=clock,
+                        sleeper=sleeper,
+                    )
+                    receipt["controls"].update(
+                        {
+                            "basic_hydration_polls": hydration.polls,
+                            "basic_hydration_timed_out": hydration.timed_out,
+                        }
+                    )
+                    if hydration.controls is None:
+                        raise ProbeAbort("basic_controls_not_ready")
                     controls, editions = await prepare_basic_controls(owned_page, config)
                     apply_controls(receipt, controls, editions)
                     receipt["controls"]["date_start_readback"] = True
