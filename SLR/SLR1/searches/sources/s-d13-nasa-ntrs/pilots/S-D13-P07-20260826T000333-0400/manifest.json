@@ -1,0 +1,330 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D13-P07-20260826T000333-0400",
+  "task_id": "S-D13",
+  "source_id": "ntrs",
+  "method_type": "direct",
+  "status": "failed",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-26T00:03:33-04:00",
+  "ended_at": "2026-08-26T00:04:13-04:00",
+  "protocol_commit": "85aa9db9fdbbebadab0e5c6be2f4f42fa1c64c8f",
+  "operator": {
+    "type": "human_with_llm",
+    "model": "openai/gpt-5.6-sol",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "NASA Technical Reports Server normal rendered public search UI",
+    "url": "https://ntrs.nasa.gov/",
+    "access_route": "Canonical shared CfT lease client through the normal rendered first-party UI; anonymous",
+    "authenticated": false,
+    "database_or_collection": "full public technical-report database required by protocol",
+    "platform": "NASA Technical Reports Server",
+    "timezone": "America/New_York"
+  },
+  "executions": [
+    {
+      "execution_id": "NTRS-P07-SOURCE-HEALTH",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "One mandatory record-free rendered NTRS source-health precheck",
+      "started_at": "2026-08-26T00:04:01-04:00",
+      "status": "success",
+      "exact_query_or_operation": "One navigation to the public NTRS root through one owned page; no query or records.",
+      "query_file": null,
+      "fields": [],
+      "controls": {
+        "normal_rendered_ui_only": true,
+        "one_navigation": true,
+        "timeout_seconds": 30,
+        "stabilization_interval_seconds": 0.2,
+        "automatic_retries": 0,
+        "record_free": true
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches-d13-ntrs/S-D13-P07-20260826T000333-0400/op-01-source-health.json",
+        "source-health-gate.json"
+      ],
+      "notes": "Operational prerequisite; health passed and operation 2 was authorized."
+    },
+    {
+      "execution_id": "NTRS-P07-RENDERED-G01",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "One conditional exact minimal rendered count-only classification",
+      "started_at": "2026-08-26T00:04:08-04:00",
+      "status": "failed",
+      "exact_query_or_operation": "Exact nanosatellite once; count-only; limit=1; max-pages=1; skip abstracts; timeout=90; zero delays; no date.",
+      "query_file": "pilots/S-D13-P03-20260824T125840-0400/queries/G01-minimal-nanosatellite.txt",
+      "fields": [],
+      "controls": {
+        "normal_rendered_ui_only": true,
+        "count_only": true,
+        "skip_full_abstracts": true,
+        "date_filter_sent": false,
+        "limit": 1,
+        "max_pages": 1,
+        "timeout_seconds": 90,
+        "page_delay_seconds": 0,
+        "detail_delay_seconds": 0,
+        "automatic_retries": 0,
+        "fallback": false,
+        "api": false,
+        "failure_stage": "post_submit_changed_aggregate_reconciliation"
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches-d13-ntrs/S-D13-P07-20260826T000333-0400/op-02-rendered-g01.json",
+        "rendered-gate-failure.json"
+      ],
+      "notes": "Adapter published unchanged unfiltered total 646789 as if query-specific; frozen invariant requires null and return to exploration."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P07-FROZEN-PLAN",
+      "requirement": "X02 froze the two-operation route, exact sentinel, controls, changed-aggregate invariant, and implementation.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json",
+        "../../explorations/S-D13-X02-20260825T225903-0400/exploration.md"
+      ],
+      "notes": "Adapter SHA matched; no implementation patch occurred in P07."
+    },
+    {
+      "check_id": "P07-SOURCE-HEALTH",
+      "requirement": "Record-free normal rendered source health passes before the query.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "source-health-gate.json"
+      ],
+      "notes": "2xx route, source identity, visible search surface, stable samples, cleanup."
+    },
+    {
+      "check_id": "P07-RENDERED-NAVIGATION",
+      "requirement": "Exact query readback must reconcile to a changed aggregate or native zero.",
+      "status": "failed",
+      "basis": "observed",
+      "evidence_paths": [
+        "rendered-gate-failure.json"
+      ],
+      "notes": "Stale unfiltered aggregate 646789 was accepted by the adapter; evidence total is null."
+    },
+    {
+      "check_id": "P07-CLEANUP-LEASE",
+      "requirement": "Owned pages close, anchor remains intact, and lease release verifies.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "browser-cleanup-receipt.json",
+        "shared-lease-release-receipt.json",
+        "browser-postflight-sanitized.json"
+      ],
+      "notes": "Outer guardian reported released and verified-clean with one inert anchor and no orphan."
+    },
+    {
+      "check_id": "P07-POWER-SIDE-EFFECT",
+      "requirement": "Process sleep protection, Sleep/Wake, and macOS native-key side-effect checks pass for the exact phase window.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "browser-postflight-sanitized.json",
+        "macos-side-effect-process-window.txt",
+        "macos-side-effect-launch-window.log",
+        "sleep-wake-window.log"
+      ],
+      "notes": "AC power; no Sleep/Wake/DarkWake; no System Information/About This Mac process or launch."
+    },
+    {
+      "check_id": "P07-NO-SCREENING-IMPORT",
+      "requirement": "No records, screening, import, partial prefix, or final event occurs.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "rendered-gate-failure.json",
+        "observations.md"
+      ],
+      "notes": "All retained/imported record counts are zero."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "pilot-id.txt",
+      "role": "allocated immutable attempt identifier",
+      "sha256": "728cadf85b2f6ff2e5fd3feb6e91deb4f96c9d1803cc9f7b6694573300448642",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "started-at.txt",
+      "role": "attempt allocation timestamp",
+      "sha256": "15dbe1c63beb4bce9669b37c38645eaef9974cd511091676c19746215bc0100f",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "preflight.json",
+      "role": "minimum launch gate and frozen plan receipt",
+      "sha256": "0ee01aceb124fea02da75f0719a5020afdee0bb417fb4473b3abe7406dc4a92d",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "cli-startup-check.txt",
+      "role": "bounded CLI startup check",
+      "sha256": "3da14e6abd02308aaf997091de65ab76ff167494d67ee94226a24f36df4631ca",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-status-preflight.json",
+      "role": "sanitized canonical browser preflight status",
+      "sha256": "e2b6e5a9a95285a0dad33cd5f95114157bf490393bb251abafc84a66ed7fc834",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "power-preflight.txt",
+      "role": "preflight AC power receipt",
+      "sha256": "95a7d5632dbfaa5da8e296ec96e59410929e0406d78708ac58f79d83e562c569",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "p07-live-child.sh",
+      "role": "frozen attached two-operation child command",
+      "sha256": "c702fd1c52e28c230e3351bfdee7533d921cf01e20259f45b0157c8a77a94f00",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "source-health-gate.json",
+      "role": "record-free source-health summary",
+      "sha256": "955fe81c017d4c8dea36c4592e6067559a809f3eb443c9b4fb9e6f9db6851ddb",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "rendered-gate-failure.json",
+      "role": "record-free stale-aggregate failure summary",
+      "sha256": "b8a6fba26f745587bbbdb86d0a46a46ebbb6930fae8b46e573e9953c1b8494d1",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "observations.md",
+      "role": "safe evidence observations and disposition",
+      "sha256": "33efe257251f14e1eb6650d99cb4e51492ff2c61dfe1b3382d89bf9dbf1a31dd",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-live-phase-checklist.md",
+      "role": "completed browser phase checklist",
+      "sha256": "04a925f9d2ba0dedecd4b49fcb9e55778af1d4c9cab832a9f6c2e2c207365bb0",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-cleanup-receipt.json",
+      "role": "sanitized owned-page cleanup receipt",
+      "sha256": "10df3db67b02d519bdbfc62ef3c435e8fbc8527f7062372044e44c56c66a54d3",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "shared-lease-release-receipt.json",
+      "role": "sanitized lease release receipt",
+      "sha256": "0b1710466216a2eb64784ea93bda7e56d50484b32dda39b29d71166587888fdc",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-postflight-sanitized.json",
+      "role": "sanitized browser/power/side-effect postflight",
+      "sha256": "d3bc14e33135ba0bf41e547140c32564012c7b34c32c70c104bbdff9395f1f65",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "macos-side-effect-process-window.txt",
+      "role": "exact-window process check",
+      "sha256": "c7537d30d4c6c6f678ffd00709d2a07e83455d715b2b33ba2601fd490d21451d",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "macos-side-effect-launch-window.log",
+      "role": "exact-window launchservices check",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "sleep-wake-window.log",
+      "role": "exact-window Sleep/Wake/DarkWake check",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches-d13-ntrs/S-D13-P07-20260826T000333-0400/op-01-source-health.json",
+      "role": "restricted record-free source-health receipt",
+      "sha256": "dec80927001d9c392bda327fa41153c10c1d4e2a64af08ffee174af6d9da6df0",
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches-d13-ntrs/S-D13-P07-20260826T000333-0400"
+    },
+    {
+      "path": ".searches-d13-ntrs/S-D13-P07-20260826T000333-0400/op-02-rendered-g01.json",
+      "role": "restricted record-free adapter output",
+      "sha256": "b609468532132a318fd8af3b4a8f4a46f74bee94b08198a08cf8b2532f616fba",
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches-d13-ntrs/S-D13-P07-20260826T000333-0400"
+    },
+    {
+      "path": ".searches-d13-ntrs/S-D13-P07-20260826T000333-0400/browser-lease-receipt.json",
+      "role": "restricted authoritative canonical lease receipt",
+      "sha256": "f1c8d846a3e51667fb56255f9a3b98f3769dbd155b4957bcdf88c64809e9273d",
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches-d13-ntrs/S-D13-P07-20260826T000333-0400"
+    }
+  ],
+  "campaign": {
+    "campaign_id": "S-D13-C01-20260824T161325-0400",
+    "attempt_id": "S-D13-P07-20260826T000333-0400"
+  },
+  "attempt_terminal": {
+    "outcome": "failed",
+    "category": "technical",
+    "ended_at": "2026-08-26T00:04:13-04:00",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "browser_backed": true,
+    "cleanup_receipt": {
+      "path": "pilots/S-D13-P07-20260826T000333-0400/browser-cleanup-receipt.json",
+      "sha256": "10df3db67b02d519bdbfc62ef3c435e8fbc8527f7062372044e44c56c66a54d3"
+    },
+    "lease_receipt": {
+      "path": "pilots/S-D13-P07-20260826T000333-0400/shared-lease-release-receipt.json",
+      "sha256": "0b1710466216a2eb64784ea93bda7e56d50484b32dda39b29d71166587888fdc"
+    },
+    "cancelled_by": null,
+    "reason": "Source health passed, but the frozen rendered query gate failed because the adapter accepted the unchanged unfiltered aggregate after one exact submit. The accepted total is null; cleanup/release verified."
+  },
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "Preserve P07 once and return NTRS to exploration to repair and live-prove post-submit changed-aggregate reconciliation before any later evidence attempt.",
+    "semantic_change": false,
+    "human_verification_required": []
+  }
+}
