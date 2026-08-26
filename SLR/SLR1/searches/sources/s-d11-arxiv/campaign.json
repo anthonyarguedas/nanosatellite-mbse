@@ -22,7 +22,7 @@
   ],
   "status": "in_progress",
   "created_at": "2026-08-26T04:58:12Z",
-  "updated_at": "2026-08-26T08:35:44Z",
+  "updated_at": "2026-08-26T08:37:03.306562Z",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -107,6 +107,68 @@
         },
         "cancelled_by": null,
         "reason": "The exact frozen rendered health operation completed with total 470, exact controls, zero retained records, and verified cleanup/release.",
+        "terminal_verification": "verified"
+      }
+    },
+    {
+      "attempt_id": "S-D11-P02-20260826T083608+0000",
+      "sequence": 2,
+      "manifest_path": "pilots/S-D11-P02-20260826T083608+0000/manifest.json",
+      "manifest_sha256": "deda78b1a5ae0ab5a7835883bfd335863041c0ec74241df5405e1e518758d2af",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P02",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-26T08:36:08Z",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "ARXIV-P02-ZERO",
+            "operation_key": "ZERO",
+            "gate_ids": [
+              "G-FAILURE-BEHAVIOR"
+            ],
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P02-ZERO",
+          "gate_id": "G-FAILURE-BEHAVIOR",
+          "path": "pilots/S-D11-P02-20260826T083608+0000/observations.md",
+          "sha256": "3c781564c52f2218fe403a8766cb5422194a7f14d0b1061cd2c17b474aeaf126",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "completed",
+        "category": "completed",
+        "ended_at": "2026-08-26T08:37:03.306562Z",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "cleanup_receipt": {
+          "path": "pilots/S-D11-P02-20260826T083608+0000/cleanup.json",
+          "sha256": "e33461afe6a3254d3824d8c2e403dbf74e0566f13ca2b550eaa65af6013ab431"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D11-P02-20260826T083608+0000/release.json",
+          "sha256": "ec1d5e9198cabcad7728a4867c71e4407c2d8f4f159ba0f1aa464fcd695f74e2"
+        },
+        "cancelled_by": null,
+        "reason": "native zero passed",
         "terminal_verification": "verified"
       }
     }
@@ -363,31 +425,37 @@
     },
     {
       "gate_id": "G-FAILURE-BEHAVIOR",
-      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P01",
-      "attempt_id": "S-D11-P01-20260826T045812+0000",
+      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P02",
+      "attempt_id": "S-D11-P02-20260826T083608+0000",
       "requirement": "Establish G-FAILURE-BEHAVIOR with immutable current-interface evidence.",
       "depends_on": [],
-      "status": "untested",
-      "observed_basis": "untested",
-      "original_observed_basis": "untested",
-      "evidence": [],
-      "reusable": false,
+      "status": "passed",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D11-P02-20260826T083608+0000/observations.md",
+          "sha256": "3c781564c52f2218fe403a8766cb5422194a7f14d0b1061cd2c17b474aeaf126",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
-      "source_operation_count": 0,
+      "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "none",
+        "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "Not yet observed; no semantic change."
+        "rationale": "zero diagnostic"
       },
       "invalidation": null,
-      "notes": "Not exercised sufficiently by the narrow health attempt; later X-to-P evidence is required."
+      "notes": "native zero only"
     }
   ],
   "decisions": [
     {
       "decision_id": "D-TECH-NEXT-P02",
-      "attempt_id": null,
+      "attempt_id": "S-D11-P02-20260826T083608+0000",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,

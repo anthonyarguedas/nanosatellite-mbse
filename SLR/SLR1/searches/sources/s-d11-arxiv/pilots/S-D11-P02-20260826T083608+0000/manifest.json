@@ -1,0 +1,97 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D11-P02-20260826T083608+0000",
+  "task_id": "S-D11",
+  "source_id": "arxiv",
+  "method_type": "direct",
+  "status": "complete",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-26T08:36:08Z",
+  "ended_at": "2026-08-26T08:37:03.306562Z",
+  "protocol_commit": "ea4a3a824309f23796bea2d2e624a80d201bd748",
+  "operator": {
+    "type": "human_with_llm",
+    "model": "openai/gpt-5.6-sol",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "arXiv rendered Advanced Search",
+    "url": "https://arxiv.org/search/advanced",
+    "access_route": "canonical lease",
+    "authenticated": false
+  },
+  "executions": [
+    {
+      "execution_id": "ARXIV-P02-ZERO",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "native zero",
+      "started_at": "2026-08-26T08:37:03.306562Z",
+      "status": "explicit_zero",
+      "exact_query_or_operation": "exact non-review zero sentinel",
+      "query_file": null,
+      "fields": [
+        "all"
+      ],
+      "controls": {
+        "count_only": true,
+        "year_start": 2011,
+        "year_end": 2026
+      },
+      "source_reported_total": 0,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d11-arxiv-restricted/S-D11-P02-20260826T083608+0000/zero.json"
+      ],
+      "notes": "zero"
+    }
+  ],
+  "checks": [],
+  "artifacts": [
+    {
+      "path": "observations.md",
+      "role": "observations",
+      "sha256": "3c781564c52f2218fe403a8766cb5422194a7f14d0b1061cd2c17b474aeaf126",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d11-arxiv-restricted/S-D11-P02-20260826T083608+0000/zero.json",
+      "role": "restricted zero",
+      "sha256": "3591c32df756bf7da37ec855afc4f7cb8870a5bfbe3a05727bd79e2055db552d",
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches/s-d11-arxiv-restricted/S-D11-P02-20260826T083608+0000"
+    }
+  ],
+  "campaign": {
+    "campaign_id": "S-D11-C01-20260826T045812+0000",
+    "attempt_id": "S-D11-P02-20260826T083608+0000"
+  },
+  "attempt_terminal": {
+    "outcome": "completed",
+    "category": "completed",
+    "ended_at": "2026-08-26T08:37:03.306562Z",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "browser_backed": true,
+    "cleanup_receipt": {
+      "path": "pilots/S-D11-P02-20260826T083608+0000/cleanup.json",
+      "sha256": "e33461afe6a3254d3824d8c2e403dbf74e0566f13ca2b550eaa65af6013ab431"
+    },
+    "lease_receipt": {
+      "path": "pilots/S-D11-P02-20260826T083608+0000/release.json",
+      "sha256": "ec1d5e9198cabcad7728a4867c71e4407c2d8f4f159ba0f1aa464fcd695f74e2"
+    },
+    "cancelled_by": null,
+    "reason": "native zero passed"
+  },
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "remaining capabilities",
+    "semantic_change": false,
+    "human_verification_required": []
+  }
+}
