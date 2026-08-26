@@ -244,6 +244,7 @@ async def _live_probe(
     snapshot: set[str] | None = None
     selection_mutation_started = False
     selected_database: str | None = None
+    stage = "initializing"
     try:
         async with playwright_factory() as playwright:
             if source == "proquest-atai":
@@ -292,20 +293,27 @@ async def _live_probe(
                     chrome_executable=None,
                 )
                 try:
+                    stage = "database_selection_navigation"
                     await adapter.navigate(
                         lease.page, adapter.DATABASE_SELECTION_URL, timeout_seconds
                     )
+                    stage = "database_selection_ready"
                     database_payload = await adapter.wait_ready(
                         lease.page, adapter.PQDT_DATABASE_STATE_SCRIPT, None, timeout_seconds
                     )
+                    stage = "database_selection_parse"
                     selected_database = adapter.parse_database_state(database_payload)
+                    stage = "command_line_navigation"
                     await adapter.navigate(
                         lease.page, adapter.COMMAND_LINE_URL, timeout_seconds
                     )
+                    stage = "command_line_ready"
                     form_payload = await adapter.wait_ready(
                         lease.page, adapter.PQDT_FORM_STATE_SCRIPT, None, timeout_seconds
                     )
-                    adapter.parse_form_state(form_payload)
+                    stage = "command_line_parse"
+                    adapter.parse_form_state(form_payload, require_result_controls=False)
+                    stage = "probe_projection"
                     payload = await lease.page.evaluate(PROBE_STATE_SCRIPT)
                 finally:
                     await _close_owned_page_verified(adapter, lease)
@@ -315,8 +323,17 @@ async def _live_probe(
         # Preserve only the exception class for a safe bounded diagnostic. The
         # original exception may contain page text, URLs, or session details.
         error_class = type(error).__name__
+        selection = (
+            f"; selected_database={selected_database}"
+            if selected_database in {
+                "ProQuest Dissertations & Theses Global",
+                "ProQuest Dissertations & Theses Global Full Text Included",
+            }
+            else ""
+        )
         raise ProbeBrowserError(
-            f"The ProQuest field/thesaurus probe did not complete ({error_class})."
+            "The ProQuest field/thesaurus probe did not complete "
+            f"({error_class}; stage={stage}{selection})."
         ) from error
 
     result = parse_probe_state(payload, source=source)
