@@ -22,7 +22,7 @@
   ],
   "status": "in_progress",
   "created_at": "2026-08-26T00:34:15-04:00",
-  "updated_at": "2026-08-26T04:32:59-04:00",
+  "updated_at": "2026-08-26T08:34:15.034023Z",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -175,6 +175,68 @@
         },
         "cancelled_by": null,
         "reason": "Frozen repaired health publication completed with total 2132 and zero retained records/identities.",
+        "terminal_verification": "verified"
+      }
+    },
+    {
+      "attempt_id": "S-D06-P03-20260826T043324-0400",
+      "sequence": 3,
+      "manifest_path": "pilots/S-D06-P03-20260826T043324-0400/manifest.json",
+      "manifest_sha256": "5d57d6aaf8579f0643876260a75afbe79d4d8f08cf433fc4bcff6c206989961e",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P03",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-26T04:33:24-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "SPRINGER-P03-ZERO",
+            "operation_key": "ZERO",
+            "gate_ids": [
+              "G-FAILURE-BEHAVIOR"
+            ],
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P03-ZERO",
+          "gate_id": "G-FAILURE-BEHAVIOR",
+          "path": "pilots/S-D06-P03-20260826T043324-0400/observations.md",
+          "sha256": "cf67ff3b52fcf6d719f8fc50bd085e52a321cca33bfb1bb8967a28d0fac6aa85",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "completed",
+        "category": "completed",
+        "ended_at": "2026-08-26T08:34:15.034023Z",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "cleanup_receipt": {
+          "path": "pilots/S-D06-P03-20260826T043324-0400/cleanup.json",
+          "sha256": "c0d5df8f467472bcfa6be5d266912302f685583801de3a0ee4c7c4ee71a186ac"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D06-P03-20260826T043324-0400/release.json",
+          "sha256": "6d99610834a16ddd6ba8c7d2268fa1d5c950c0fa641e6edac60b800dfa406d31"
+        },
+        "cancelled_by": null,
+        "reason": "native zero passed",
         "terminal_verification": "verified"
       }
     }
@@ -431,25 +493,31 @@
     },
     {
       "gate_id": "G-FAILURE-BEHAVIOR",
-      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P01",
-      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P03",
+      "attempt_id": "S-D06-P03-20260826T043324-0400",
       "requirement": "Establish G-FAILURE-BEHAVIOR with immutable current-interface evidence.",
       "depends_on": [],
-      "status": "untested",
-      "observed_basis": "untested",
-      "original_observed_basis": "untested",
-      "evidence": [],
-      "reusable": false,
+      "status": "passed",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P03-20260826T043324-0400/observations.md",
+          "sha256": "cf67ff3b52fcf6d719f8fc50bd085e52a321cca33bfb1bb8967a28d0fac6aa85",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "none",
+        "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "Controller rejected the contradictory/nonminimal artifact, set accepted total null, imported nothing, and verified cleanup without retry."
+        "rationale": "zero diagnostic"
       },
       "invalidation": null,
-      "notes": "Controller rejected the contradictory/nonminimal artifact, set accepted total null, imported nothing, and verified cleanup without retry. Campaign validator requires gate-specific immutable evidence; this aggregate file is checkpointed only to its attempt-declared gate."
+      "notes": "native zero only"
     }
   ],
   "decisions": [
@@ -477,7 +545,7 @@
     },
     {
       "decision_id": "D-TECH-NEXT-P03",
-      "attempt_id": null,
+      "attempt_id": "S-D06-P03-20260826T043324-0400",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,
