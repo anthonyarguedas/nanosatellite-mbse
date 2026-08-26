@@ -23,6 +23,7 @@ import asyncio
 import json
 import math
 import os
+import secrets
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
@@ -41,7 +42,7 @@ DEFAULT_TIMEOUT_SECONDS = 30.0
 DEFAULT_POLL_INTERVAL_SECONDS = 0.2
 DEFAULT_BUSY_RETRIES = 2
 DEFAULT_BUSY_RETRY_DELAY_SECONDS = 30.0
-MAX_BUSY_RETRIES = 5
+MAX_BUSY_RETRIES = 2
 MIN_BUSY_RETRY_DELAY_SECONDS = 1.0
 MAX_BUSY_RETRY_DELAY_SECONDS = 3_600.0
 # A challenge is given one finite, passive-only window before the one native
@@ -166,6 +167,14 @@ def safe_probe_abort_classification(error: ProbeAbort) -> str:
 
 
 @dataclass(frozen=True)
+class FinalizeConfig:
+    """No-browser recovery inputs for a previously reserved execution."""
+
+    journal_path: Path
+    ledger_path: Path
+
+
+@dataclass(frozen=True)
 class ProbeConfig:
     """Validated invocation data; sensitive values are never serialized."""
 
@@ -180,6 +189,8 @@ class ProbeConfig:
     output_path: Path
     challenge_wait_seconds: float = DEFAULT_CHALLENGE_WAIT_SECONDS
     challenge_poll_interval_seconds: float = DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS
+    journal_path: Path | None = None
+    ledger_path: Path | None = None
 
 
 @dataclass
@@ -188,6 +199,316 @@ class OutputReservation:
 
     path: Path
     descriptor: int
+
+
+JOURNAL_SCHEMA_VERSION = "slr1-oatd-advanced-form-journal/v1"
+LEDGER_SCHEMA_VERSION = "slr1-oatd-advanced-form-ledger/v1"
+ACCOUNTING_OPERATION_IDS = ("O-001", "O-002", "O-003")
+ACCOUNTING_OPERATION_KINDS = ("native_submit", "busy_reissue", "busy_reissue")
+SAFE_ACCOUNTING_CLASSIFICATIONS = frozenset(
+    {
+        "not_started",
+        "dry_run",
+        "browser_connection_failed",
+        "guardian_interrupted",
+        "journal_unavailable",
+        "accounting_checkpoint_failed",
+        "accounting_publication_failed",
+        "busy_retry_checkpoint_failed",
+        "busy_retry_navigation_failed",
+        "busy_revalidation_failed",
+        "busy_after_submission",
+        "challenge_after_submission",
+        "post_submit_state_timeout",
+        "submission_not_observed_timeout",
+        "result_observed",
+        "zero_observed",
+        "access_after_submission",
+        "syntax_after_submission",
+        "challenge_before_submission",
+        "busy_before_submission",
+        "access_before_submission",
+        "syntax_before_submission",
+        "canonical_advanced_form_not_observed",
+        "advanced_form_control_mapping_failed",
+        "advanced_field_mapping_failed",
+        "native_submit_control_not_unique",
+        "advanced_form_projection_failed",
+        "advanced_retry_controls_not_prevalidated",
+        "advanced_control_readback_failed",
+        "native_submit_interaction_failed",
+        "pre_click_safety_projection_failed",
+        "pre_click_safety_not_verified",
+        "post_click_projection_failed",
+        "unexpected_browser_context_count",
+        "baseline_target_inventory_unavailable",
+        "owned_page_not_distinct",
+        "owned_target_not_verified",
+        "owned_page_cleanup_handoff_required",
+        "owned_page_operation_failed",
+        "cleanup_verification_failed",
+        "output_reservation_failed",
+        "accounting_reservation_failed",
+        "invalid_runtime_config",
+    }
+)
+
+
+def _write_all(descriptor: int, encoded: bytes) -> None:
+    """Write all bytes without reopening a reserved path."""
+    view = memoryview(encoded)
+    while view:
+        written = os.write(descriptor, view)
+        if written <= 0:
+            raise OSError("reserved accounting file made no progress")
+        view = view[written:]
+
+
+@dataclass
+class DurableJournal:
+    """Append-only, fsynced safe checkpoints for one execute-mode run."""
+
+    reservation: OutputReservation
+    reservation_id: str
+    sequence: int = 0
+
+    @property
+    def path(self) -> Path:
+        return self.reservation.path
+
+    def checkpoint(self, phase: str, snapshot: Mapping[str, Any]) -> None:
+        descriptor = self.reservation.descriptor
+        if descriptor < 0:
+            raise OSError("journal reservation is no longer writable")
+        self.sequence += 1
+        record = {
+            "schema_version": JOURNAL_SCHEMA_VERSION,
+            "reservation_id": self.reservation_id,
+            "sequence": self.sequence,
+            "phase": phase,
+            "snapshot": dict(snapshot),
+        }
+        _write_all(
+            descriptor,
+            (json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n").encode(
+                "utf-8"
+            ),
+        )
+        os.fsync(descriptor)
+
+    def close(self) -> None:
+        descriptor = self.reservation.descriptor
+        if descriptor >= 0:
+            self.reservation.descriptor = -1
+            os.close(descriptor)
+
+
+def _safe_accounting_classification(value: Any, default: str) -> str:
+    return (
+        value
+        if type(value) is str and value in SAFE_ACCOUNTING_CLASSIFICATIONS
+        else default
+    )
+
+
+def _safe_accounting_total(value: Any) -> int | None:
+    return _exact_nonnegative_int(value)
+
+
+@dataclass
+class ExecutionAccounting:
+    """In-memory operation state mirrored to the durable journal."""
+
+    reservation_id: str
+    operations: list[dict[str, Any]]
+    busy_retry_delays: list[float]
+
+    @classmethod
+    def create(cls, reservation_id: str, busy_retry_delay: float) -> "ExecutionAccounting":
+        return cls(
+            reservation_id=reservation_id,
+            operations=[
+                {
+                    "operation_id": operation_id,
+                    "kind": kind,
+                    "dispatch_status": "not_dispatched",
+                    "dispatched": False,
+                    "possibly_dispatched": False,
+                    "completed": False,
+                    "attempted": False,
+                    "wait_seconds": None,
+                }
+                for operation_id, kind in zip(
+                    ACCOUNTING_OPERATION_IDS, ACCOUNTING_OPERATION_KINDS
+                )
+            ],
+            busy_retry_delays=[
+                min(busy_retry_delay * (2**index), MAX_BUSY_RETRY_DELAY_SECONDS)
+                for index in range(MAX_BUSY_RETRIES)
+            ],
+        )
+
+    def _operation(self, operation_number: int) -> dict[str, Any]:
+        if not 1 <= operation_number <= len(self.operations):
+            raise ValueError("accounting operation number is outside the fixed cap")
+        return self.operations[operation_number - 1]
+
+    def mark_possibly_dispatched(
+        self, operation_number: int, *, wait_seconds: float | None = None
+    ) -> None:
+        operation = self._operation(operation_number)
+        operation["dispatch_status"] = "possibly_dispatched"
+        operation["possibly_dispatched"] = True
+        operation["attempted"] = True
+        if wait_seconds is not None:
+            operation["wait_seconds"] = wait_seconds
+
+    def mark_dispatched(self, operation_number: int) -> None:
+        operation = self._operation(operation_number)
+        operation["dispatch_status"] = "dispatched"
+        operation["dispatched"] = True
+        operation["possibly_dispatched"] = True
+        operation["attempted"] = True
+        operation["completed"] = True
+
+    def snapshot(
+        self,
+        *,
+        classification: str | None = None,
+        source_total: int | None = None,
+        interrupted: bool = False,
+        terminal: bool = False,
+    ) -> dict[str, Any]:
+        snapshot: dict[str, Any] = {
+            "reservation_id": self.reservation_id,
+            "busy_retry_policy": {
+                "maximum_retries": MAX_BUSY_RETRIES,
+                "wait_delays_seconds": list(self.busy_retry_delays),
+            },
+            "operations": [dict(operation) for operation in self.operations],
+            "interrupted": bool(interrupted),
+        }
+        if classification is not None:
+            safe_classification = _safe_accounting_classification(
+                classification, "owned_page_operation_failed"
+            )
+            safe_total = _safe_accounting_total(source_total)
+            accepted = (
+                safe_classification in {"result_observed", "zero_observed"}
+                and safe_total is not None
+            )
+            snapshot["terminal"] = {
+                "classification": safe_classification,
+                "source_total": safe_total if accepted else None,
+                "observations_accepted": accepted,
+                "interrupted": bool(interrupted),
+                "terminal_checkpoint": bool(terminal),
+            }
+        return snapshot
+
+    def checkpoint(
+        self,
+        journal: DurableJournal,
+        phase: str,
+        *,
+        classification: str | None = None,
+        source_total: int | None = None,
+        interrupted: bool = False,
+        terminal: bool = False,
+    ) -> None:
+        journal.checkpoint(
+            phase,
+            self.snapshot(
+                classification=classification,
+                source_total=source_total,
+                interrupted=interrupted,
+                terminal=terminal,
+            ),
+        )
+
+    def before_native_click(self, journal: DurableJournal) -> None:
+        # This checkpoint is deliberately before the awaitable click.  If a
+        # guardian stops the child after fsync, the finalizer must count this
+        # operation conservatively as possibly dispatched.
+        self.mark_possibly_dispatched(1)
+        self.checkpoint(journal, "before_native_click")
+
+    def after_native_click(self, journal: DurableJournal) -> None:
+        self.mark_dispatched(1)
+        self.checkpoint(journal, "after_native_click")
+
+    def before_busy_retry(
+        self, journal: DurableJournal, retry_number: int, delay: float
+    ) -> None:
+        self.mark_possibly_dispatched(retry_number + 1, wait_seconds=delay)
+        self.checkpoint(journal, f"before_busy_reissue_{retry_number}")
+
+    def after_busy_retry(self, journal: DurableJournal, retry_number: int) -> None:
+        self.mark_dispatched(retry_number + 1)
+        self.checkpoint(journal, f"after_busy_reissue_{retry_number}")
+
+    def terminal_ledger(
+        self,
+        classification: str,
+        source_total: int | None,
+        *,
+        interrupted: bool = False,
+        recovered: bool = False,
+    ) -> dict[str, Any]:
+        safe_classification = _safe_accounting_classification(
+            classification, "owned_page_operation_failed"
+        )
+        safe_total = _safe_accounting_total(source_total)
+        accepted = (
+            safe_classification in {"result_observed", "zero_observed"}
+            and safe_total is not None
+            and not interrupted
+            and all(
+                operation["completed"]
+                for operation in self.operations
+                if operation["possibly_dispatched"]
+            )
+        )
+        operations = [dict(operation) for operation in self.operations]
+        possibly_dispatched = sum(
+            bool(operation["possibly_dispatched"]) for operation in operations
+        )
+        dispatched = sum(bool(operation["dispatched"]) for operation in operations)
+        completed = sum(bool(operation["completed"]) for operation in operations)
+        return {
+            "schema_version": LEDGER_SCHEMA_VERSION,
+            "status": "terminal",
+            "reservation_id": self.reservation_id,
+            "recovered_after_interruption": bool(recovered),
+            "busy_retry_policy": {
+                "maximum_retries": MAX_BUSY_RETRIES,
+                "wait_delays_seconds": list(self.busy_retry_delays),
+            },
+            "operations": operations,
+            "counts": {
+                "source_operations_reserved": len(operations),
+                "source_operations_possibly_dispatched": possibly_dispatched,
+                "source_operations_dispatched": dispatched,
+                "source_operations_completed": completed,
+                "busy_retries_attempted": sum(
+                    operation["attempted"]
+                    for operation in operations
+                    if operation["kind"] == "busy_reissue"
+                ),
+                "busy_retries_completed": sum(
+                    operation["completed"]
+                    for operation in operations
+                    if operation["kind"] == "busy_reissue"
+                ),
+            },
+            "terminal": {
+                "classification": safe_classification,
+                "source_reported_total": safe_total if accepted else None,
+                "observations_accepted": accepted,
+                "interrupted": bool(interrupted),
+                "possibly_dispatched": possibly_dispatched > 0,
+            },
+        }
 
 
 @dataclass(frozen=True)
@@ -285,6 +606,11 @@ class BusyRetryBudget:
     recovery_attempts: int = 0
     attempted_retries: int = 0
     completed_retries: int = 0
+
+    def __post_init__(self) -> None:
+        # Keep the internal helper capped even when a direct test/caller does
+        # not pass through CLI validation.
+        self.max_retries = min(self.max_retries, MAX_BUSY_RETRIES)
 
     @property
     def performed_retries(self) -> int:
@@ -853,42 +1179,88 @@ def _validate_challenge_wait_policy(wait: Any, interval: Any) -> tuple[float, fl
     return parsed_wait, parsed_interval
 
 
-def validate_output_path(value: str) -> Path:
-    """Validate a prospective create-only destination before atomic reservation."""
+def _validate_create_only_path(value: Any, option: str) -> Path:
+    """Validate a prospective create-only destination before source work."""
     if not compact(value):
-        raise InputValidationError("--output-path must be nonblank")
+        raise InputValidationError(f"{option} must be nonblank")
     candidate = Path(value).expanduser()
     if candidate.is_symlink():
-        raise InputValidationError("--output-path must not be a symlink")
+        raise InputValidationError(f"{option} must not be a symlink")
     path = candidate.resolve(strict=False)
     if path.exists() or path.is_symlink():
-        raise InputValidationError("--output-path must not already exist")
+        raise InputValidationError(f"{option} must not already exist")
     path.parent.mkdir(parents=True, exist_ok=True)
     if not path.parent.is_dir():
-        raise InputValidationError("--output-path parent must be a directory")
+        raise InputValidationError(f"{option} parent must be a directory")
     return path
 
 
+def validate_output_path(value: str) -> Path:
+    """Validate a prospective create-only receipt destination."""
+    return _validate_create_only_path(value, "--output-path")
+
+
+def _derived_accounting_path(output_path: Path, suffix: str) -> Path:
+    return output_path.with_name(output_path.name + suffix)
+
+
 def reserve_output_path(path: Path) -> OutputReservation:
-    """Atomically claim the final receipt name before any source activity."""
+    """Atomically claim one create-only path before any source activity."""
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
     if hasattr(os, "O_NOFOLLOW"):
         flags |= os.O_NOFOLLOW
     return OutputReservation(path=path, descriptor=os.open(path, flags, 0o600))
 
 
+def reserve_ledger_path(
+    path: Path, *, reservation_id: str
+) -> OutputReservation:
+    """Claim and mark the ledger inode while retaining its descriptor."""
+    reservation = reserve_output_path(path)
+    marker = {
+        "schema_version": LEDGER_SCHEMA_VERSION,
+        "status": "reserved",
+        "reservation_id": reservation_id,
+    }
+    try:
+        _write_all(
+            reservation.descriptor,
+            (json.dumps(marker, sort_keys=True) + "\n").encode("utf-8"),
+        )
+        os.fsync(reservation.descriptor)
+    except Exception:
+        descriptor = reservation.descriptor
+        reservation.descriptor = -1
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
+        raise
+    return reservation
+
+
 def write_reserved_json(
-    reservation: OutputReservation, payload: Mapping[str, Any]
+    reservation: OutputReservation,
+    payload: Mapping[str, Any],
+    *,
+    truncate: bool = False,
 ) -> None:
-    """Write through a claimed descriptor without ever reopening its pathname."""
+    """Write through a claimed descriptor without reopening its pathname."""
     descriptor = reservation.descriptor
     if descriptor < 0:
         raise OSError("receipt reservation is no longer writable")
     reservation.descriptor = -1
     encoded = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
     try:
-        with os.fdopen(descriptor, "wb") as handle:
-            handle.write(encoded)
+        if truncate:
+            os.lseek(descriptor, 0, os.SEEK_SET)
+            os.ftruncate(descriptor, 0)
+            _write_all(descriptor, encoded)
+            os.fsync(descriptor)
+            os.close(descriptor)
+        else:
+            with os.fdopen(descriptor, "wb") as handle:
+                handle.write(encoded)
     except Exception:
         # A concurrent winner can replace the name after O_EXCL creation.
         # Never unlink the current pathname while unwinding a failed write.
@@ -927,6 +1299,22 @@ def validate_runtime_config(config: Any) -> ProbeConfig:
     challenge_wait, challenge_interval = _validate_challenge_wait_policy(
         config.challenge_wait_seconds, config.challenge_poll_interval_seconds
     )
+    output_path = validate_output_path(str(config.output_path))
+    journal_path: Path | None = None
+    ledger_path: Path | None = None
+    if config.execute:
+        journal_value = config.journal_path or _derived_accounting_path(
+            output_path, ".journal.jsonl"
+        )
+        ledger_value = config.ledger_path or _derived_accounting_path(
+            output_path, ".ledger.json"
+        )
+        journal_path = _validate_create_only_path(journal_value, "--journal-path")
+        ledger_path = _validate_create_only_path(ledger_value, "--ledger-path")
+        if len({output_path, journal_path, ledger_path}) != 3:
+            raise InputValidationError(
+                "--output-path, --journal-path, and --ledger-path must be distinct"
+            )
     return ProbeConfig(
         execute=config.execute,
         cdp_url=validate_loopback_cdp_endpoint(config.cdp_url),
@@ -938,9 +1326,11 @@ def validate_runtime_config(config: Any) -> ProbeConfig:
         poll_interval_seconds=interval,
         busy_retries=retries,
         busy_retry_delay_seconds=retry_delay,
-        output_path=validate_output_path(str(config.output_path)),
+        output_path=output_path,
         challenge_wait_seconds=challenge_wait,
         challenge_poll_interval_seconds=challenge_interval,
+        journal_path=journal_path,
+        ledger_path=ledger_path,
     )
 
 
@@ -1142,6 +1532,7 @@ async def prepare_native_submission(
     *,
     deadline: float | None = None,
     clock: Callable[[], float] | None = None,
+    before_native_click: Callable[[], None] | None = None,
 ) -> PreparedSubmission:
     """Fill, read back, and click exactly one visible native submit control."""
     if clock is None:
@@ -1212,6 +1603,10 @@ async def prepare_native_submission(
         if not math.isfinite(remaining) or remaining <= 0:
             raise ProbeAbort("native_submit_interaction_failed")
         try:
+            if before_native_click is not None:
+                # The durable callback runs immediately before the one native
+                # click and must complete before source dispatch is possible.
+                before_native_click()
             await asyncio.wait_for(
                 submitter.click(timeout=_milliseconds(remaining), no_wait_after=True),
                 timeout=remaining,
@@ -1459,6 +1854,8 @@ async def wait_for_post_click_state(
     clock: Callable[[], float] | None = None,
     sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
     deadline: float | None = None,
+    before_busy_retry: Callable[[int, float], None] | None = None,
+    after_busy_retry: Callable[[int], None] | None = None,
 ) -> PostClickOutcome:
     """Poll and retry under one absolute post-click deadline.
 
@@ -1643,8 +2040,23 @@ async def wait_for_post_click_state(
                 polls=polls,
                 budget=busy_budget,
             )
-        # Account before the await: transport failure can follow dispatch.
-        busy_budget.record_retry_attempt()
+        retry_number = busy_budget.attempted_retries + 1
+        # The checkpoint callback runs before accounting and before the
+        # awaitable goto call.  A guardian that stops the child after its
+        # fsync is therefore represented conservatively as possibly dispatched.
+        try:
+            if before_busy_retry is not None:
+                before_busy_retry(retry_number, delay)
+            busy_budget.record_retry_attempt()
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            return _outcome(
+                "busy_retry_checkpoint_failed",
+                source_total=None,
+                polls=polls,
+                budget=busy_budget,
+            )
         try:
             await asyncio.wait_for(
                 page.goto(
@@ -1655,6 +2067,8 @@ async def wait_for_post_click_state(
                 timeout=remaining,
             )
             busy_budget.record_retry_completion()
+            if after_busy_retry is not None:
+                after_busy_retry(retry_number)
         except asyncio.TimeoutError:
             return _post_click_timeout(
                 submission_observed=submission_observed,
@@ -1894,7 +2308,7 @@ async def cleanup_owned_page(
 def new_receipt(execute: bool) -> dict[str, Any]:
     """Create an output-safe receipt with no caller/source/browser identifiers."""
     return {
-        "schema_version": "slr1-oatd-advanced-form-probe/v4",
+        "schema_version": "slr1-oatd-advanced-form-probe/v5",
         "mode": "source_action" if execute else "dry_run",
         "endpoint_class": "explicit_loopback_cdp",
         "operation": "one_owned_page_one_native_advanced_get_submission",
@@ -1959,6 +2373,13 @@ def new_receipt(execute: bool) -> dict[str, Any]:
             "classification": "not_run",
             "source_reported_total": None,
             "observations_accepted": False,
+        },
+        "accounting": {
+            "journal_reserved": False,
+            "ledger_reserved": False,
+            "terminal_checkpoint_fsynced": False,
+            "terminal_ledger_published": False,
+            "possibly_dispatched": False,
         },
     }
 
@@ -2040,6 +2461,216 @@ def _record_challenge_wait(
     submission["challenge_wait_outcome"] = outcome.classification or "cleared"
 
 
+def _new_accounting_operations() -> list[dict[str, Any]]:
+    return [
+        dict(operation)
+        for operation in ExecutionAccounting.create(
+            "uninitialized", DEFAULT_BUSY_RETRY_DELAY_SECONDS
+        ).operations
+    ]
+
+
+def _read_journal_checkpoints(path: Path) -> tuple[list[dict[str, Any]], bool]:
+    """Read only complete, schema-valid journal lines; ignore a torn tail."""
+    try:
+        with path.open("rb") as handle:
+            raw_lines = handle.readlines()
+    except OSError:
+        return [], False
+    records: list[dict[str, Any]] = []
+    for raw in raw_lines:
+        try:
+            record = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            break
+        if not isinstance(record, Mapping):
+            break
+        if record.get("schema_version") != JOURNAL_SCHEMA_VERSION:
+            continue
+        if not isinstance(record.get("snapshot"), Mapping):
+            continue
+        sequence = record.get("sequence")
+        if not isinstance(sequence, int) or isinstance(sequence, bool) or sequence < 1:
+            continue
+        records.append(dict(record))
+    return records, bool(records)
+
+
+def _merge_journal_accounting(
+    records: list[dict[str, Any]],
+) -> tuple[ExecutionAccounting, Mapping[str, Any] | None]:
+    """Merge durable intent monotonically so interruption cannot erase work."""
+    reservation_id = "unknown"
+    if records and type(records[0].get("reservation_id")) is str:
+        reservation_id = records[0]["reservation_id"][:256]
+    accounting = ExecutionAccounting.create(
+        reservation_id, DEFAULT_BUSY_RETRY_DELAY_SECONDS
+    )
+    by_id = {operation["operation_id"]: operation for operation in accounting.operations}
+    terminal: Mapping[str, Any] | None = None
+    for record in records:
+        record_id = record.get("reservation_id")
+        if reservation_id == "unknown" and type(record_id) is str:
+            reservation_id = record_id[:256]
+            accounting.reservation_id = reservation_id
+        snapshot = record.get("snapshot")
+        if not isinstance(snapshot, Mapping):
+            continue
+        policy = snapshot.get("busy_retry_policy")
+        if isinstance(policy, Mapping):
+            delays = policy.get("wait_delays_seconds")
+            if isinstance(delays, list) and len(delays) == MAX_BUSY_RETRIES:
+                safe_delays: list[float] = []
+                for delay in delays:
+                    if isinstance(delay, (int, float)) and not isinstance(delay, bool):
+                        parsed = float(delay)
+                        if math.isfinite(parsed) and 0 < parsed <= MAX_BUSY_RETRY_DELAY_SECONDS:
+                            safe_delays.append(parsed)
+                if len(safe_delays) == MAX_BUSY_RETRIES:
+                    accounting.busy_retry_delays = safe_delays
+        operations = snapshot.get("operations")
+        if isinstance(operations, list):
+            for candidate in operations:
+                if not isinstance(candidate, Mapping):
+                    continue
+                operation = by_id.get(candidate.get("operation_id"))
+                if operation is None:
+                    continue
+                if candidate.get("kind") in {"native_submit", "busy_reissue"}:
+                    operation["kind"] = candidate["kind"]
+                if candidate.get("possibly_dispatched") is True:
+                    operation["possibly_dispatched"] = True
+                    operation["attempted"] = True
+                    operation["dispatch_status"] = "possibly_dispatched"
+                if candidate.get("dispatched") is True:
+                    operation["dispatched"] = True
+                    operation["possibly_dispatched"] = True
+                    operation["attempted"] = True
+                    operation["dispatch_status"] = "dispatched"
+                if candidate.get("completed") is True:
+                    operation["completed"] = True
+                    operation["dispatched"] = True
+                    operation["possibly_dispatched"] = True
+                    operation["attempted"] = True
+                    operation["dispatch_status"] = "dispatched"
+                wait_seconds = candidate.get("wait_seconds")
+                if isinstance(wait_seconds, (int, float)) and not isinstance(
+                    wait_seconds, bool
+                ):
+                    parsed_wait = float(wait_seconds)
+                    if math.isfinite(parsed_wait) and 0 < parsed_wait <= MAX_BUSY_RETRY_DELAY_SECONDS:
+                        operation["wait_seconds"] = parsed_wait
+        candidate_terminal = snapshot.get("terminal")
+        if isinstance(candidate_terminal, Mapping) and candidate_terminal.get(
+            "terminal_checkpoint"
+        ) is True:
+            terminal = dict(candidate_terminal)
+    accounting.reservation_id = reservation_id
+    return accounting, terminal
+
+
+def _read_existing_json(path: Path) -> Mapping[str, Any] | None:
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            value = json.load(handle)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return None
+    return value if isinstance(value, Mapping) else None
+
+
+def _write_existing_reserved_json(
+    path: Path, payload: Mapping[str, Any], *, reservation_id: str
+) -> None:
+    """Fill a previously reserved ledger inode without creating a replacement."""
+    if path.is_symlink() or not path.is_file():
+        raise OSError("ledger reservation is not a regular file")
+    existing = _read_existing_json(path)
+    if existing is not None:
+        if existing.get("status") == "terminal":
+            if existing.get("schema_version") != LEDGER_SCHEMA_VERSION:
+                raise OSError("ledger has an unexpected schema")
+            return
+        if existing.get("status") != "reserved" or existing.get(
+            "reservation_id"
+        ) != reservation_id:
+            raise OSError("ledger reservation does not match the journal")
+    elif path.stat().st_size != 0:
+        raise OSError("ledger reservation is not recoverable")
+    flags = os.O_WRONLY | os.O_TRUNC
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags)
+    try:
+        _write_all(
+            descriptor,
+            (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8"),
+        )
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def finalize_ledger(journal_path: Path, ledger_path: Path) -> dict[str, Any]:
+    """Reconstruct a terminal accounting ledger without opening a browser."""
+    journal_path = Path(journal_path).expanduser()
+    ledger_path = Path(ledger_path).expanduser()
+    if journal_path.is_symlink() or ledger_path.is_symlink():
+        raise OSError("finalizer paths must not be symlinks")
+    existing_terminal = _read_existing_json(ledger_path) if ledger_path.exists() else None
+    if (
+        isinstance(existing_terminal, Mapping)
+        and existing_terminal.get("schema_version") == LEDGER_SCHEMA_VERSION
+        and existing_terminal.get("status") == "terminal"
+    ):
+        return dict(existing_terminal)
+    records, journal_available = _read_journal_checkpoints(journal_path)
+    accounting, terminal = _merge_journal_accounting(records)
+    existing_ledger = _read_existing_json(ledger_path) if ledger_path.exists() else None
+    if (
+        accounting.reservation_id == "unknown"
+        and isinstance(existing_ledger, Mapping)
+        and type(existing_ledger.get("reservation_id")) is str
+    ):
+        accounting.reservation_id = existing_ledger["reservation_id"][:256]
+    incomplete_possible = any(
+        operation["possibly_dispatched"] and not operation["completed"]
+        for operation in accounting.operations
+    )
+    durable_terminal = bool(terminal is not None and not incomplete_possible)
+    if durable_terminal and isinstance(terminal, Mapping):
+        classification = _safe_accounting_classification(
+            terminal.get("classification"), "guardian_interrupted"
+        )
+        source_total = _safe_accounting_total(terminal.get("source_total"))
+        if classification not in {"result_observed", "zero_observed"}:
+            source_total = None
+        interrupted = False
+    else:
+        classification = (
+            "guardian_interrupted" if journal_available else "journal_unavailable"
+        )
+        source_total = None
+        interrupted = True
+    payload = accounting.terminal_ledger(
+        classification,
+        source_total,
+        interrupted=interrupted,
+        recovered=True,
+    )
+    payload["terminal"]["recovery_basis"] = (
+        "durable_terminal_checkpoint" if durable_terminal else "last_safe_checkpoint"
+    )
+    payload["terminal"]["journal_checkpoint_count"] = len(records)
+    if not ledger_path.exists():
+        reservation = reserve_output_path(ledger_path)
+        write_reserved_json(reservation, payload, truncate=True)
+    else:
+        _write_existing_reserved_json(
+            ledger_path, payload, reservation_id=accounting.reservation_id
+        )
+    return payload
+
+
 async def run_probe(
     config: ProbeConfig,
     *,
@@ -2065,12 +2696,52 @@ async def run_probe(
     receipt["challenge_wait_policy"]["poll_interval_seconds"] = (
         config.challenge_poll_interval_seconds
     )
+    reservation: OutputReservation | None = None
+    journal_reservation: OutputReservation | None = None
+    ledger_reservation: OutputReservation | None = None
+    journal: DurableJournal | None = None
+    accounting: ExecutionAccounting | None = None
     try:
-        # Claim the final name before importing or constructing Playwright so a
-        # concurrent winner prevents every source action, not merely the write.
+        # Claim every execute-mode artifact before importing or constructing
+        # Playwright.  A collision therefore prevents source activity rather
+        # than merely preventing the final write.
         reservation = reserve_output_path(config.output_path)
-    except OSError:
-        _set_result(receipt, "output_reservation_failed")
+        if config.execute:
+            assert config.journal_path is not None
+            assert config.ledger_path is not None
+            reservation_id = secrets.token_hex(16)
+            journal_reservation = reserve_output_path(config.journal_path)
+            ledger_reservation = reserve_ledger_path(
+                config.ledger_path, reservation_id=reservation_id
+            )
+            journal = DurableJournal(journal_reservation, reservation_id)
+            accounting = ExecutionAccounting.create(
+                reservation_id, config.busy_retry_delay_seconds
+            )
+            receipt["accounting"]["journal_reserved"] = True
+            receipt["accounting"]["ledger_reserved"] = True
+            accounting.checkpoint(journal, "reserved")
+    except Exception:
+        for held in (journal_reservation, ledger_reservation):
+            if held is not None and held.descriptor >= 0:
+                try:
+                    os.close(held.descriptor)
+                except OSError:
+                    pass
+                held.descriptor = -1
+        if reservation is not None and reservation.descriptor >= 0:
+            _set_result(
+                receipt,
+                "accounting_reservation_failed"
+                if config.execute
+                else "output_reservation_failed",
+            )
+            try:
+                write_reserved_json(reservation, receipt)
+            except Exception:
+                pass
+        else:
+            _set_result(receipt, "output_reservation_failed")
         return 1, receipt
 
     browser: Any | None = None
@@ -2085,7 +2756,9 @@ async def run_probe(
     baseline_target_ids: frozenset[str] | None = None
     primary_classification = "browser_connection_failed"
     primary_total: int | None = None
+    interrupted = False
     output_write_failed = False
+    ledger_write_failed = False
 
     try:
         if not config.execute:
@@ -2233,6 +2906,11 @@ async def run_probe(
                                     config.query,
                                     deadline=submission_deadline,
                                     clock=clock,
+                                    before_native_click=(
+                                        (lambda: accounting.before_native_click(journal))
+                                        if accounting is not None and journal is not None
+                                        else None
+                                    ),
                                 ),
                                 timeout=remaining,
                             )
@@ -2240,6 +2918,8 @@ async def run_probe(
                             raise ProbeAbort(
                                 "native_submit_interaction_failed"
                             ) from error
+                        if accounting is not None and journal is not None:
+                            accounting.after_native_click(journal)
                         submission["nonblank_control_readback"] = True
                         submission["visible_native_submit_count"] = (
                             prepared.visible_native_submit_count
@@ -2261,6 +2941,20 @@ async def run_probe(
                             clock=clock,
                             sleeper=sleeper,
                             deadline=submission_deadline,
+                            before_busy_retry=(
+                                (lambda retry_number, delay: accounting.before_busy_retry(
+                                    journal, retry_number, delay
+                                ))
+                                if accounting is not None and journal is not None
+                                else None
+                            ),
+                            after_busy_retry=(
+                                (lambda retry_number: accounting.after_busy_retry(
+                                    journal, retry_number
+                                ))
+                                if accounting is not None and journal is not None
+                                else None
+                            ),
                         )
                         submission["post_click_polls"] = outcome.polls
                         submission["busy_recovery_attempts"] = (
@@ -2282,6 +2976,10 @@ async def run_probe(
                         primary_classification = "pre_click_safety_not_verified"
                     except ProbeAbort as error:
                         primary_classification = safe_probe_abort_classification(error)
+                    except asyncio.CancelledError:
+                        interrupted = True
+                        primary_classification = "guardian_interrupted"
+                        primary_total = None
                     except Exception:
                         # Do not serialize browser exceptions: they can carry
                         # source URLs or query values in an implementation.
@@ -2368,6 +3066,10 @@ async def run_probe(
                                 ] = False
                                 primary_classification = "cleanup_verification_failed"
                                 primary_total = None
+            except asyncio.CancelledError:
+                interrupted = True
+                primary_classification = "guardian_interrupted"
+                primary_total = None
             except Exception:
                 # Do not downgrade a proven cleanup failure or explicit
                 # handoff to a transport category if Playwright stops poorly.
@@ -2378,15 +3080,61 @@ async def run_probe(
                     primary_classification = "browser_connection_failed"
                     primary_total = None
     finally:
+        if config.execute and accounting is not None and journal is not None:
+            try:
+                accounting.checkpoint(
+                    journal,
+                    "terminal",
+                    classification=primary_classification,
+                    source_total=primary_total,
+                    interrupted=interrupted,
+                    terminal=True,
+                )
+                receipt["accounting"]["terminal_checkpoint_fsynced"] = True
+            except Exception:
+                primary_classification = "accounting_checkpoint_failed"
+                primary_total = None
+            receipt["accounting"]["possibly_dispatched"] = any(
+                operation["possibly_dispatched"]
+                for operation in accounting.operations
+            )
+            if ledger_reservation is not None:
+                try:
+                    ledger_payload = accounting.terminal_ledger(
+                        primary_classification,
+                        primary_total,
+                        interrupted=interrupted,
+                    )
+                    write_reserved_json(
+                        ledger_reservation, ledger_payload, truncate=True
+                    )
+                    receipt["accounting"]["terminal_ledger_published"] = True
+                except Exception:
+                    ledger_write_failed = True
+                    primary_classification = "accounting_publication_failed"
+                    primary_total = None
         _set_result(receipt, primary_classification, primary_total)
         if not config.execute:
             receipt["result"]["status"] = "not_run"
-        try:
-            write_reserved_json(reservation, receipt)
-        except Exception:
-            output_write_failed = True
+        if reservation is not None:
+            try:
+                write_reserved_json(reservation, receipt)
+            except Exception:
+                output_write_failed = True
+        if journal is not None:
+            try:
+                journal.close()
+            except OSError:
+                pass
+        for held in (journal_reservation, ledger_reservation):
+            if held is not None and held.descriptor >= 0:
+                try:
+                    os.close(held.descriptor)
+                except OSError:
+                    pass
+                held.descriptor = -1
 
-    if output_write_failed:
+    if output_write_failed or ledger_write_failed:
         return 2, receipt
     return (
         0 if not config.execute or receipt["result"]["observations_accepted"] else 1,
@@ -2399,15 +3147,20 @@ def write_new_json(path: Path, payload: Mapping[str, Any]) -> None:
     write_reserved_json(reserve_output_path(path), payload)
 
 
-def parse_args(argv: list[str] | None = None) -> ProbeConfig:
-    """Validate every input and a prospective receipt destination."""
+def parse_args(argv: list[str] | None = None) -> ProbeConfig | FinalizeConfig:
+    """Validate a probe invocation or a no-browser finalizer invocation."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--execute", action="store_true", help="permit one source action"
     )
+    parser.add_argument(
+        "--finalize",
+        action="store_true",
+        help="reconstruct a terminal ledger without connecting to a browser",
+    )
     parser.add_argument("--cdp-url", default=DEFAULT_CDP_URL)
-    parser.add_argument("--query", required=True)
-    parser.add_argument("--field-label", required=True)
+    parser.add_argument("--query")
+    parser.add_argument("--field-label")
     parser.add_argument(
         "--timeout-seconds", type=float, default=DEFAULT_TIMEOUT_SECONDS
     )
@@ -2432,8 +3185,24 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
         default=DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS,
         help="fixed passive challenge poll cadence",
     )
-    parser.add_argument("--output-path", required=True)
+    parser.add_argument("--output-path")
+    parser.add_argument("--journal-path")
+    parser.add_argument("--ledger-path")
     args = parser.parse_args(argv)
+    if args.finalize:
+        if args.execute:
+            parser.error("--finalize cannot be combined with --execute")
+        if not compact(args.journal_path) or not compact(args.ledger_path):
+            parser.error("--finalize requires --journal-path and --ledger-path")
+        journal_path = Path(args.journal_path).expanduser()
+        ledger_path = Path(args.ledger_path).expanduser()
+        if journal_path.is_symlink() or ledger_path.is_symlink():
+            parser.error("finalizer paths must not be symlinks")
+        return FinalizeConfig(journal_path=journal_path, ledger_path=ledger_path)
+    if not compact(args.output_path):
+        parser.error("--output-path must be provided")
+    if not compact(args.query) or not compact(args.field_label):
+        parser.error("--query and --field-label must be provided")
     try:
         timeout = _finite_positive(args.timeout_seconds, "--timeout-seconds")
         interval = _finite_positive(
@@ -2449,6 +3218,24 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
         challenge_wait, challenge_interval = _validate_challenge_wait_policy(
             args.challenge_wait_seconds, args.challenge_poll_interval_seconds
         )
+        output_path = validate_output_path(args.output_path)
+        journal_path: Path | None = None
+        ledger_path: Path | None = None
+        if args.execute:
+            journal_value = args.journal_path or _derived_accounting_path(
+                output_path, ".journal.jsonl"
+            )
+            ledger_value = args.ledger_path or _derived_accounting_path(
+                output_path, ".ledger.json"
+            )
+            journal_path = _validate_create_only_path(
+                journal_value, "--journal-path"
+            )
+            ledger_path = _validate_create_only_path(ledger_value, "--ledger-path")
+            if len({output_path, journal_path, ledger_path}) != 3:
+                raise InputValidationError(
+                    "--output-path, --journal-path, and --ledger-path must be distinct"
+                )
         return ProbeConfig(
             execute=args.execute,
             cdp_url=validate_loopback_cdp_endpoint(args.cdp_url),
@@ -2460,9 +3247,11 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
             poll_interval_seconds=interval,
             busy_retries=retries,
             busy_retry_delay_seconds=retry_delay,
-            output_path=validate_output_path(args.output_path),
+            output_path=output_path,
             challenge_wait_seconds=challenge_wait,
             challenge_poll_interval_seconds=challenge_interval,
+            journal_path=journal_path,
+            ledger_path=ledger_path,
         )
     except InputValidationError as error:
         parser.error(str(error))
@@ -2471,6 +3260,12 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig:
 
 def main(argv: list[str] | None = None) -> int:
     config = parse_args(argv)
+    if isinstance(config, FinalizeConfig):
+        try:
+            finalize_ledger(config.journal_path, config.ledger_path)
+        except Exception:
+            return 1
+        return 0
     try:
         status, _ = asyncio.run(run_probe(config))
     except Exception:

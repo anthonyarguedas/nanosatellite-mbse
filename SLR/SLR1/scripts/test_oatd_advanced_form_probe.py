@@ -316,6 +316,8 @@ def config(tmp: Path, *, execute: bool = True, timeout_seconds: float = 1.0) -> 
         busy_retries=2,
         busy_retry_delay_seconds=1.0,
         output_path=tmp / "receipt.json",
+        journal_path=tmp / "journal.jsonl",
+        ledger_path=tmp / "ledger.json",
     )
 
 
@@ -477,6 +479,15 @@ class OATDPostClickStateMachineTests(unittest.TestCase):
         self.assertEqual(outcome.busy_retries_performed, 1)
         self.assertEqual(len(page.goto_calls), 1)
 
+    def test_busy_policy_is_capped_at_two_with_30_60_backoff(self):
+        self.assertEqual(oatd.MAX_BUSY_RETRIES, 2)
+        retry_budget = budget(retries=2, delay=30.0)
+        self.assertEqual(retry_budget.reserve_delay(), 30.0)
+        self.assertEqual(retry_budget.reserve_delay(), 60.0)
+        self.assertIsNone(retry_budget.reserve_delay())
+        with self.assertRaises(oatd.InputValidationError):
+            oatd._validate_busy_policy(3, 30.0)
+
     def test_busy_with_unverified_form_state_is_not_reissued(self):
         page = StatePage([busy_state(route=False, readback=False)])
         outcome, _ = self.run_wait(page)
@@ -579,6 +590,10 @@ class OATDChallengeWaitTests(unittest.TestCase):
                     {"source_state": terminal_state}
                 )
                 self.assertEqual(projected.source_state, "access")
+
+    def test_pre_submit_busy_is_terminal_without_a_default_wait(self):
+        inspection = oatd.inspect_form_payload(form_state("busy"))
+        self.assertEqual(oatd._pre_submit_abort(inspection), "busy_before_submission")
 
     def test_canonical_form_does_not_submit_before_the_passive_poll(self):
         session = LeasePlaywright()
@@ -1063,6 +1078,7 @@ process.stdout.write(JSON.stringify({{
 
         async def invoke():
             clock = asyncio.get_running_loop().time
+            checkpoints: list[str] = []
             with self.assertRaises(oatd.ProbeAbort) as raised:
                 await oatd.prepare_native_submission(
                     Page(),
@@ -1070,7 +1086,9 @@ process.stdout.write(JSON.stringify({{
                     "private query phrase",
                     deadline=clock() + 0.01,
                     clock=clock,
+                    before_native_click=lambda: checkpoints.append("before-click"),
                 )
+            self.assertEqual(checkpoints, ["before-click"])
             return raised.exception
 
         error = asyncio.run(invoke())
@@ -1117,6 +1135,141 @@ process.stdout.write(JSON.stringify({{
         source = (SCRIPTS / "oatd_advanced_form_probe.py").read_text(encoding="utf-8")
         self.assertNotIn("request" + "Submit", source)
         self.assertNotIn("expect_" + "navigation", source)
+
+
+class OATDAccountingTests(unittest.TestCase):
+    def test_execute_reserves_all_accounting_paths_before_factory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            cfg = config(root)
+            seen: list[bool] = []
+
+            def forbidden_factory():
+                seen.append(
+                    all(
+                        path.exists()
+                        for path in (
+                            cfg.output_path,
+                            cfg.journal_path,
+                            cfg.ledger_path,
+                        )
+                    )
+                )
+                raise AssertionError("the fake factory must not be used")
+
+            status, receipt = asyncio.run(
+                oatd.run_probe(cfg, playwright_factory=forbidden_factory)
+            )
+            self.assertEqual(status, 1)
+            self.assertEqual(seen, [True])
+            self.assertEqual(
+                receipt["result"]["classification"], "browser_connection_failed"
+            )
+            self.assertTrue(receipt["accounting"]["terminal_ledger_published"])
+            self.assertEqual(json.loads(cfg.ledger_path.read_text())["status"], "terminal")
+
+    def test_cancellation_after_busy_checkpoint_is_conservative(self):
+        class HangingGotoPage(StatePage):
+            def __init__(self, states):
+                super().__init__(states)
+                self.started = asyncio.Event()
+                self.release = asyncio.Event()
+
+            async def goto(self, *args, **kwargs):
+                self.started.set()
+                await self.release.wait()
+
+        async def invoke():
+            page = HangingGotoPage([busy_state(), busy_state()])
+            clock = FakeClock()
+            budget_value = budget(retries=2, delay=30.0)
+            before: list[tuple[int, float]] = []
+            after: list[int] = []
+            task = asyncio.create_task(
+                oatd.wait_for_post_click_state(
+                    page,
+                    query="private query phrase",
+                    field_value="title",
+                    retry_parameters=(
+                        ("box1", "private query phrase"),
+                        ("field1", "title"),
+                    ),
+                    timeout_seconds=120.0,
+                    poll_interval_seconds=0.1,
+                    busy_budget=budget_value,
+                    clock=clock,
+                    sleeper=clock.sleep,
+                    before_busy_retry=lambda number, delay: before.append(
+                        (number, delay)
+                    ),
+                    after_busy_retry=lambda number: after.append(number),
+                )
+            )
+            await asyncio.wait_for(page.started.wait(), timeout=1.0)
+            task.cancel()
+            with self.assertRaises(asyncio.CancelledError):
+                await task
+            return budget_value, before, after
+
+        budget_value, before, after = asyncio.run(invoke())
+        self.assertEqual(before, [(1, 30.0)])
+        self.assertEqual(after, [])
+        self.assertEqual(budget_value.attempted_retries, 1)
+        self.assertEqual(budget_value.completed_retries, 0)
+
+    def test_source_action_checkpoints_are_fsynced_before_click_and_reissue(self):
+        with tempfile.TemporaryDirectory() as directory:
+            journal_path = Path(directory) / "operation.journal.jsonl"
+            reservation = oatd.reserve_output_path(journal_path)
+            journal = oatd.DurableJournal(reservation, "fsync-test")
+            accounting = oatd.ExecutionAccounting.create("fsync-test", 30.0)
+            real_fsync = oatd.os.fsync
+            with mock.patch.object(
+                oatd.os, "fsync", side_effect=real_fsync
+            ) as fsync:
+                accounting.before_native_click(journal)
+                accounting.before_busy_retry(journal, 1, 30.0)
+            self.assertEqual(fsync.call_count, 2)
+            journal.close()
+
+    def test_no_browser_finalizer_reconstructs_a_possibly_dispatched_click(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            journal_path = root / "operation.journal.jsonl"
+            ledger_path = root / "operation.ledger.json"
+            reservation_id = "offline-test-reservation"
+            journal_reservation = oatd.reserve_output_path(journal_path)
+            ledger_reservation = oatd.reserve_ledger_path(
+                ledger_path, reservation_id=reservation_id
+            )
+            journal = oatd.DurableJournal(journal_reservation, reservation_id)
+            accounting = oatd.ExecutionAccounting.create(reservation_id, 30.0)
+            accounting.checkpoint(journal, "reserved")
+            accounting.before_native_click(journal)
+            journal.close()
+            os.close(ledger_reservation.descriptor)
+            ledger_reservation.descriptor = -1
+
+            with mock.patch.object(
+                oatd, "reserve_output_path", wraps=oatd.reserve_output_path
+            ) as reserve:
+                payload = oatd.finalize_ledger(journal_path, ledger_path)
+
+            self.assertEqual(payload["status"], "terminal")
+            self.assertEqual(
+                payload["terminal"]["classification"], "guardian_interrupted"
+            )
+            self.assertIsNone(payload["terminal"]["source_reported_total"])
+            self.assertTrue(payload["operations"][0]["possibly_dispatched"])
+            self.assertFalse(payload["operations"][0]["completed"])
+            self.assertEqual(payload["counts"]["source_operations_possibly_dispatched"], 1)
+            # An already reserved ledger is filled in place; the finalizer does
+            # not claim a new source/output path or instantiate a browser.
+            reserve.assert_not_called()
+            self.assertEqual(
+                json.loads(ledger_path.read_text())["terminal"]["recovery_basis"],
+                "last_safe_checkpoint",
+            )
 
 
 class OATDOwnershipAndCleanupTests(unittest.TestCase):
