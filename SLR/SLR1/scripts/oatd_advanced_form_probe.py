@@ -85,12 +85,18 @@ RETRY_CONTROL_NAMES = (
     "box1",
     "field1",
     "joiner1",
+    "op12",
     "box2",
     "field2",
     "joiner2",
+    "op23",
     "box3",
     "field3",
     "joiner3",
+    "op34",
+    "box4",
+    "field4",
+    "joiner4",
     "language",
     "country",
     "earliest",
@@ -1086,10 +1092,19 @@ FORM_CONTROL_INVENTORY_SCRIPT = r"""
   const unexpected = named.filter(element => !allowed.has(element.name));
   const entries = names.map(name => {
     const elements = named.filter(element => element.name === name);
-    const element = elements.length === 1 ? elements[0] : null;
+    const radios = elements.filter(
+      element => String(element.type || "").toLowerCase() === "radio"
+    );
+    const checkedRadios = radios.filter(element => Boolean(element.checked));
+    const radioGroup = radios.length === elements.length && radios.length > 0;
+    const element = radioGroup
+      ? (checkedRadios.length === 1 ? checkedRadios[0] : null)
+      : (elements.length === 1 ? elements[0] : null);
     return {
       name,
-      count: elements.length,
+      // A valid radio group is one semantic successful control even though it
+      // has multiple DOM inputs. Zero marks an ambiguous/unchecked group.
+      count: radioGroup ? (checkedRadios.length === 1 ? 1 : 0) : elements.length,
       tag: element ? String(element.tagName || "").toLowerCase() : "",
       type: element ? String(element.type || "").toLowerCase() : "",
       value: element ? String(element.value || "") : "",
