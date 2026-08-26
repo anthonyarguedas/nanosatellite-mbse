@@ -205,10 +205,10 @@ class FakeDateInput:
         return self
 
     async def count(self) -> int:
-        return int(self.page.publication_clicked)
+        return int(self.page.custom_clicked)
 
     async def is_visible(self) -> bool:
-        return self.page.publication_clicked
+        return self.page.custom_clicked
 
     async def fill(self, value: str) -> None:
         self.page.events.append(f"{self.side}={value}")
@@ -262,10 +262,30 @@ class FakeDateButtons:
         return self.page.buttons[index]
 
 
+class FakeCustomDateOption:
+    def __init__(self, page: "FakeDatePage") -> None:
+        self.page = page
+
+    @property
+    def first(self) -> "FakeCustomDateOption":
+        return self
+
+    async def count(self) -> int:
+        return int(self.page.publication_clicked)
+
+    async def is_visible(self) -> bool:
+        return self.page.publication_clicked and not self.page.custom_clicked
+
+    async def click(self, **_kwargs) -> None:
+        self.page.events.append("Custom")
+        self.page.custom_clicked = True
+
+
 class FakeDatePage:
     def __init__(self) -> None:
         self.add_clicked = False
         self.publication_clicked = False
+        self.custom_clicked = False
         self.values = {"start": "", "end": ""}
         self.events: list[str] = []
         self.buttons = [
@@ -278,6 +298,8 @@ class FakeDatePage:
             return FakeDateInput(self, "start")
         if selector == wos.DATE_END_SELECTOR:
             return FakeDateInput(self, "end")
+        if selector == wos.CUSTOM_DATE_OPTION_SELECTOR:
+            return FakeCustomDateOption(self)
         if selector == "button":
             return FakeDateButtons(self)
         raise AssertionError(f"unexpected selector: {selector}")
@@ -420,7 +442,13 @@ class ControlTimingTests(unittest.TestCase):
         )
         self.assertEqual(
             page.events,
-            ["Add Date Range", "Publication Date", "start=2011-01-01", "end=2026-08-25"],
+            [
+                "Add Date Range",
+                "Publication Date",
+                "Custom",
+                "start=2011-01-01",
+                "end=2026-08-25",
+            ],
         )
         self.assertEqual(page.values, {"start": "2011-01-01", "end": "2026-08-25"})
         self.assertEqual(clock.sleeps, [])

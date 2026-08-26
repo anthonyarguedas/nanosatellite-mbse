@@ -49,6 +49,7 @@ MAX_DATE_UPPER = 50
 EDITION_BUTTON_SELECTOR = "button[role='combobox'][aria-label^='selectEdition, All']"
 DATE_START_SELECTOR = "input[data-ta='search-timespan-start-input']"
 DATE_END_SELECTOR = "input[data-ta='search-timespan-end-input']"
+CUSTOM_DATE_OPTION_SELECTOR = "[role='option'][aria-label='Custom']"
 
 
 class InputValidationError(ValueError):
@@ -1054,10 +1055,32 @@ async def ensure_date_range(
                 clock=clock,
                 sleeper=sleeper,
             )
-        start = page.locator(DATE_START_SELECTOR)
-        end = page.locator(DATE_END_SELECTOR)
-        if await start.count() != 1 or await end.count() != 1:
-            raise ProbeAbort("date_control_setup_failed")
+            # X10's human demonstration showed that Publication Date opens a
+            # grouped timespan menu whose explicit Custom option must be
+            # selected before the two stable data-ta date inputs are usable.
+            await _click_exact_when_ready(
+                page,
+                CUSTOM_DATE_OPTION_SELECTOR,
+                "date_control_setup_failed",
+                timeout,
+                clock=clock,
+                sleeper=sleeper,
+            )
+        if clock is None:
+            clock = asyncio.get_running_loop().time
+        deadline = clock() + timeout
+        while True:
+            start = page.locator(DATE_START_SELECTOR)
+            end = page.locator(DATE_END_SELECTOR)
+            if (
+                await start.count() == 1
+                and await end.count() == 1
+                and await start.first.is_visible()
+                and await end.first.is_visible()
+            ):
+                break
+            if not await _sleep_to_deadline(deadline, 0.2, clock, sleeper):
+                raise ProbeAbort("date_control_setup_failed")
         await start.first.fill("2011-01-01")
         await end.first.fill(date_upper)
         if await start.first.input_value() != "2011-01-01" or await end.first.input_value() != date_upper:
@@ -1084,7 +1107,9 @@ async def prepare_basic_controls(
         clock=clock,
         sleeper=sleeper,
     )
-    await ensure_english_language(page, config.timeout_seconds)
+    # X10 demonstrated the current visible order: establish Publication Date
+    # and its Custom bounds first, then add the Language row.  The reverse
+    # order repeatedly failed before the date surface in X08.
     await ensure_date_range(
         page,
         config.date_upper,
@@ -1092,6 +1117,7 @@ async def prepare_basic_controls(
         clock=clock,
         sleeper=sleeper,
     )
+    await ensure_english_language(page, config.timeout_seconds)
     try:
         query = page.locator(
             "input[data-ta='search-criteria-input'][name='search-main-box'][aria-label^='Search box 1 Topic']"
