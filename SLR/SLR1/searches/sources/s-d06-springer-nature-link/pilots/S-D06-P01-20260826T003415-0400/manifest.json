@@ -1,0 +1,213 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D06-P01-20260826T003415-0400",
+  "task_id": "S-D06",
+  "source_id": "springer-nature-link",
+  "method_type": "direct",
+  "status": "failed",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-26T00:34:15-04:00",
+  "ended_at": "2026-08-26T00:34:39-04:00",
+  "protocol_commit": "252edf44ee6284cd2c18d9dfe394dbf319f4cbeb",
+  "operator": {
+    "type": "human_with_llm",
+    "model": "openai/gpt-5.6-sol",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "Springer Nature Link whole-platform rendered search",
+    "url": "https://link.springer.com/search",
+    "access_route": "canonical shared CfT lease; normal rendered Link Keywords GET",
+    "authenticated": false,
+    "database_or_collection": "full Springer Nature Link platform",
+    "platform": "Springer Nature Link",
+    "timezone": "America/New_York"
+  },
+  "executions": [
+    {
+      "execution_id": "SPRINGER-P01-HEALTH",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "One frozen whole-platform health count and control reconciliation",
+      "started_at": "2026-08-26T00:34:38-04:00",
+      "status": "failed",
+      "exact_query_or_operation": "Exact \"CubeSat\"; 2011-01-01 through 2026-08-26; En; relevance; count-only.",
+      "query_file": null,
+      "fields": [
+        "Link Keywords"
+      ],
+      "controls": {
+        "count_only": true,
+        "limit": 20,
+        "max_pages": 1,
+        "passes": 1,
+        "timeout_seconds": 90,
+        "page_delay_seconds": 1,
+        "source_operation_reissues": 0
+      },
+      "source_reported_total": null,
+      "total_is_exact": false,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d06-springer-nature-link-restricted/S-D06-P01-20260826T003415-0400/op-01-health.NON_MERGEABLE_DIAGNOSTIC.json",
+        "publication-failure.json"
+      ],
+      "notes": "Adapter observed 2132 but publication contradicted exact query echo and retained 20 canonical paths; accepted evidence total null."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P01-FROZEN-HEALTH-PLAN",
+      "requirement": "X01 froze one exact health route and implementation.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json",
+        "../../explorations/S-D06-X01-20260826T001901-0400/exploration.md"
+      ],
+      "notes": "No evidence-mode patch."
+    },
+    {
+      "check_id": "P01-PUBLICATION-CONTRACT",
+      "requirement": "Exact query readback is positively published and count-only retains no card identities.",
+      "status": "failed",
+      "basis": "observed",
+      "evidence_paths": [
+        "publication-failure.json"
+      ],
+      "notes": "Published contradiction and 20 restricted identity entries; total null."
+    },
+    {
+      "check_id": "P01-CLEANUP-LEASE",
+      "requirement": "Owned page cleanup, anchor preservation, and lease release verify.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "browser-cleanup-receipt.json",
+        "shared-lease-release-receipt.json",
+        "browser-postflight-sanitized.json"
+      ],
+      "notes": "Outer guardian verified clean release."
+    },
+    {
+      "check_id": "P01-NO-IMPORT-RETRY",
+      "requirement": "No source retry, screening, import, prefix, or final event.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "publication-failure.json",
+        "observations.md"
+      ],
+      "notes": "Restricted identity entries were not copied or used."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "preflight.json",
+      "role": "minimum launch gate",
+      "sha256": "fc74bfe4af11d750f21b1941c191d019fa934fd4a69f82ce89bab2482f34e28f",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "cli-startup-check.txt",
+      "role": "adapter startup check",
+      "sha256": "7f5ffead664c53bc3d7d5f14caa345f67f5dfcc2c3c281ff9db68e975cfa3719",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-status-preflight.json",
+      "role": "browser preflight status",
+      "sha256": "98f54ab4c8f9c9a37487bfbf289e7a9038004b01dc9bfb565b2e854a235b06b7",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "publication-failure.json",
+      "role": "safe publication-contract failure summary",
+      "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "observations.md",
+      "role": "safe evidence observations",
+      "sha256": "cd0bfd3231426ec5e9d2f53e6cde3bb401ab9998e27234a9d765bafa004dce55",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-live-phase-checklist.md",
+      "role": "completed browser checklist",
+      "sha256": "1695672aad171955abb47efd07ddf613c53cb43e2a8b7d3b836785da14c1b41b",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-cleanup-receipt.json",
+      "role": "sanitized cleanup receipt",
+      "sha256": "b7f218e5734a3e2d8056475947f1ad606779b090a42c648d1f09c1cdc6be55c5",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "shared-lease-release-receipt.json",
+      "role": "sanitized lease release receipt",
+      "sha256": "6aa2558dc9a0d4d9de46aedb17dc8eb8a05377316bd113b17d85d1732e4f5610",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-postflight-sanitized.json",
+      "role": "sanitized postflight",
+      "sha256": "ff95c430ede5844ca67ac72f2e007d7edab5e70353b95fda79543e8ef5bef7f6",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d06-springer-nature-link-restricted/S-D06-P01-20260826T003415-0400/op-01-health.NON_MERGEABLE_DIAGNOSTIC.json",
+      "role": "restricted adapter diagnostic containing record identity ledger",
+      "sha256": "beb3e6c546d12e6217f5266d0ef278f21c210843a962173c41f85de18d62f275",
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches/s-d06-springer-nature-link-restricted/S-D06-P01-20260826T003415-0400"
+    },
+    {
+      "path": ".searches/s-d06-springer-nature-link-restricted/S-D06-P01-20260826T003415-0400/browser-lease-receipt.json",
+      "role": "restricted authoritative lease receipt",
+      "sha256": "3179435f4f498b417326b5b01306160c6dae8630ad9f0ac76d59160dc63d4bf4",
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches/s-d06-springer-nature-link-restricted/S-D06-P01-20260826T003415-0400"
+    }
+  ],
+  "campaign": {
+    "campaign_id": "S-D06-C01-20260826T003415-0400",
+    "attempt_id": "S-D06-P01-20260826T003415-0400"
+  },
+  "attempt_terminal": {
+    "outcome": "failed",
+    "category": "technical",
+    "ended_at": "2026-08-26T00:34:39-04:00",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "browser_backed": true,
+    "cleanup_receipt": {
+      "path": "pilots/S-D06-P01-20260826T003415-0400/browser-cleanup-receipt.json",
+      "sha256": "b7f218e5734a3e2d8056475947f1ad606779b090a42c648d1f09c1cdc6be55c5"
+    },
+    "lease_receipt": {
+      "path": "pilots/S-D06-P01-20260826T003415-0400/shared-lease-release-receipt.json",
+      "sha256": "6aa2558dc9a0d4d9de46aedb17dc8eb8a05377316bd113b17d85d1732e4f5610"
+    },
+    "cancelled_by": null,
+    "reason": "The source interaction returned an aggregate, but deterministic evidence publication contradicted exact-query observation and retained canonical identities, violating the frozen count-only contract. Accepted total is null."
+  },
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "Preserve P01 once and return Springer to exploration to repair/live-prove count-only publication before another evidence attempt.",
+    "semantic_change": false,
+    "human_verification_required": []
+  }
+}

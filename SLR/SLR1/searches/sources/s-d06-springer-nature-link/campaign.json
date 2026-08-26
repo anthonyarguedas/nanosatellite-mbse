@@ -1,0 +1,454 @@
+{
+  "schema_version": "slr1-pilot-campaign/v1",
+  "campaign_id": "S-D06-C01-20260826T003415-0400",
+  "task_id": "S-D06",
+  "source_id": "springer-nature-link",
+  "method_type": "direct",
+  "protocol_fingerprint": "598838c7c40e692e6bdf001ef7f0574659a592b1945540df875a9c2e54e32f73",
+  "dictionary_fingerprint": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+  "capability_catalog": [
+    "G-SOURCE-BOUNDARY",
+    "G-QUERY-TRANSPORT",
+    "G-FIELD-BOUNDARY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-CONTENT-CONTROL",
+    "G-RETRIEVAL",
+    "G-PAGINATION-CONTROL",
+    "G-PAGE-IDENTITY",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR"
+  ],
+  "status": "technically_blocked",
+  "created_at": "2026-08-26T00:34:15-04:00",
+  "updated_at": "2026-08-26T00:34:39-04:00",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "candidate_records_imported": 0,
+  "retry_policy": {
+    "policy_id": "RP-D06-P01-NONE",
+    "maximum_retries": 0,
+    "passive_wait_delays_seconds": [],
+    "attempted": 0,
+    "completed": 0,
+    "preauthorized_same_tab_busy_reissue": false
+  },
+  "controller_authorization": {
+    "technical_corrective_attempts_authorized": true,
+    "maximum_additional_attempts": 2,
+    "maximum_technical_corrective_attempts": 2,
+    "maximum_methodological_revision_attempts": 0,
+    "maximum_source_operations_per_attempt": 1,
+    "rationale": "Permit bounded behavior-preserving repair after this health-capability attempt; later review capabilities require new X-to-P ladders."
+  },
+  "attempts": [
+    {
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "sequence": 1,
+      "manifest_path": "pilots/S-D06-P01-20260826T003415-0400/manifest.json",
+      "manifest_sha256": "35220f36a201fca67b0cb5f75d7035cc4e0c4d9a766f85905d580c0094cc1ba7",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "initial",
+        "authorized_by": "controller",
+        "authorization_decision_id": null,
+        "prospectively_authorized": false,
+        "allocated_at": "2026-08-26T00:34:15-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "SPRINGER-P01-HEALTH",
+            "operation_key": "HEALTH",
+            "gate_ids": [
+              "G-SOURCE-BOUNDARY",
+              "G-QUERY-TRANSPORT",
+              "G-DATE-CONTROL",
+              "G-LANGUAGE-CONTROL",
+              "G-CONTENT-CONTROL",
+              "G-PAGINATION-CONTROL",
+              "G-FAILURE-BEHAVIOR"
+            ],
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P01-PUBLICATION-FAILURE",
+          "gate_id": "G-QUERY-TRANSPORT",
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P01-FAILURE-BEHAVIOR",
+          "gate_id": "G-FAILURE-BEHAVIOR",
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-26T00:34:39-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/browser-cleanup-receipt.json",
+          "sha256": "b7f218e5734a3e2d8056475947f1ad606779b090a42c648d1f09c1cdc6be55c5"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/shared-lease-release-receipt.json",
+          "sha256": "6aa2558dc9a0d4d9de46aedb17dc8eb8a05377316bd113b17d85d1732e4f5610"
+        },
+        "cancelled_by": null,
+        "reason": "The adapter source interaction reported 2132, but evidence publication contradicted exact-query observation and retained 20 canonical identities. Frozen count-only contract failed; accepted total null."
+      }
+    }
+  ],
+  "gate_status_snapshots": [
+    {
+      "snapshot_id": "GS-P01-FAILURE-BEHAVIOR",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "manifest_path": "pilots/S-D06-P01-20260826T003415-0400/manifest.json",
+      "manifest_sha256": "35220f36a201fca67b0cb5f75d7035cc4e0c4d9a766f85905d580c0094cc1ba7",
+      "gate_id": "G-FAILURE-BEHAVIOR",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0"
+        }
+      ],
+      "immutable": true
+    }
+  ],
+  "capability_gates": [
+    {
+      "gate_id": "G-SOURCE-BOUNDARY",
+      "checkpoint_id": "CP-SOURCE-BOUNDARY-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-SOURCE-BOUNDARY with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Rendered whole-platform interaction occurred, but the contradictory publication contract prevents an immutable source-boundary checkpoint."
+      },
+      "invalidation": null,
+      "notes": "Rendered whole-platform interaction occurred, but the contradictory publication contract prevents an immutable source-boundary checkpoint."
+    },
+    {
+      "gate_id": "G-QUERY-TRANSPORT",
+      "checkpoint_id": "CP-QUERY-TRANSPORT-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-QUERY-TRANSPORT with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "failed",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The artifact explicitly published observed_exact_query_echo=false and blank executed_query, so exact transport cannot pass."
+      },
+      "invalidation": null,
+      "notes": "The artifact explicitly published observed_exact_query_echo=false and blank executed_query, so exact transport cannot pass."
+    },
+    {
+      "gate_id": "G-FIELD-BOUNDARY",
+      "checkpoint_id": "CP-FIELD-BOUNDARY-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-FIELD-BOUNDARY with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "Capability not yet observed; no semantic change."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow health operation; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-CONTROLLED-VOCABULARY",
+      "checkpoint_id": "CP-CONTROLLED-VOCABULARY-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-CONTROLLED-VOCABULARY with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "Capability not yet observed; no semantic change."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow health operation; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-DATE-CONTROL",
+      "checkpoint_id": "CP-DATE-CONTROL-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-DATE-CONTROL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "Requested source-year controls were present internally but cannot be checkpointed independently of the failed publication contract."
+      },
+      "invalidation": null,
+      "notes": "Requested source-year controls were present internally but cannot be checkpointed independently of the failed publication contract."
+    },
+    {
+      "gate_id": "G-LANGUAGE-CONTROL",
+      "checkpoint_id": "CP-LANGUAGE-CONTROL-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-LANGUAGE-CONTROL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "English control evidence remains blocked by the failed publication contract."
+      },
+      "invalidation": null,
+      "notes": "English control evidence remains blocked by the failed publication contract."
+    },
+    {
+      "gate_id": "G-CONTENT-CONTROL",
+      "checkpoint_id": "CP-CONTENT-CONTROL-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-CONTENT-CONTROL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "No-facet boundary remains blocked by the failed publication contract."
+      },
+      "invalidation": null,
+      "notes": "No-facet boundary remains blocked by the failed publication contract."
+    },
+    {
+      "gate_id": "G-RETRIEVAL",
+      "checkpoint_id": "CP-RETRIEVAL-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-RETRIEVAL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "Capability not yet observed; no semantic change."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow health operation; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-PAGINATION-CONTROL",
+      "checkpoint_id": "CP-PAGINATION-CONTROL-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-PAGINATION-CONTROL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "One-page arithmetic was observed internally but count-only retained prohibited canonical identity entries."
+      },
+      "invalidation": null,
+      "notes": "One-page arithmetic was observed internally but count-only retained prohibited canonical identity entries."
+    },
+    {
+      "gate_id": "G-PAGE-IDENTITY",
+      "checkpoint_id": "CP-PAGE-IDENTITY-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-PAGE-IDENTITY with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "Capability not yet observed; no semantic change."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow health operation; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-COMPLETENESS",
+      "checkpoint_id": "CP-COMPLETENESS-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-COMPLETENESS with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "Capability not yet observed; no semantic change."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow health operation; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-FAILURE-BEHAVIOR",
+      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P01",
+      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "requirement": "Establish G-FAILURE-BEHAVIOR with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
+          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "Controller rejected the contradictory/nonminimal artifact, set accepted total null, imported nothing, and verified cleanup without retry."
+      },
+      "invalidation": null,
+      "notes": "Controller rejected the contradictory/nonminimal artifact, set accepted total null, imported nothing, and verified cleanup without retry."
+    }
+  ],
+  "decisions": [],
+  "cancellation": null,
+  "acceptance": null
+}
