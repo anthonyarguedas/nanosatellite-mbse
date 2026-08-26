@@ -101,7 +101,7 @@ Do not execute a final OATD event until P-001, source-method approval, and R-002
 - **[blocked]** P03's terminal advanced-form navigation timeout leaves the required advanced-field, pair, controlled-vocabulary, controls, positive-detail, pagination, identity, strict-completeness, CSV, and all-cell source checks unresolved.
 - **[observed]** The version-3 basic count-only/marker path succeeded in P03 with no busy recovery. P03's separate permitted direct advanced probe had a timeout and initially left its owned page open; this does not demonstrate a defect in the pinned adapter because that adapter does not submit the advanced composer. Candidate-adapter `code_issue` is therefore **[unresolved]** rather than assumed false for the untested advanced/strict paths. Live strict two-pass, busy recovery, CSV, and no-clobber collision behavior remain untested.
 - **[protocol]** No protocol semantic change is proposed. OATD remains a separate required source, and pair-bearing partitions remain prohibited from final use.
-- **[planned]** The next action is `S-D09-X01` exploration on the real visible advanced composer. Exploration may inspect, patch, and retest live but cannot pass gates, screen/import records, or run a final search. Hold P05 until the route works.
+- **[planned]** The next action is a new exploration using the home page's visible **Advanced Search** transition, as specified in [`resume-plan.md`](resume-plan.md), rather than direct composer navigation. Exploration may inspect, patch, and retest live but cannot pass gates, screen/import records, or run a final search. Hold P05 until that route works.
 
 ## Future browser operations
 

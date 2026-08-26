@@ -16,7 +16,7 @@
 ## Next exploration session
 
 - Allocate `S-D09-X01-<timestamp>`, not another pilot attempt.
-- Use the normal visible advanced-search/composer route rather than trying to drive hidden home-page forms. In one owned page, inspect the visible form, title-field mapping, native submit control, loading/challenge state, and post-submit aggregate summary with restricted screenshots and bounded semantic DOM evidence.
+- Start at the normal OATD home page and activate its visible **Advanced Search** control on the same owned page; do not navigate directly to `/oatd/search-composer`. The review owner reported on 2026-08-26 that this source-owned transition reaches the usable composer while direct composer navigation often receives the ordinary overloaded/busy rendering. Treat that report as the next technical route hypothesis, not acceptance evidence. After the visible transition, inspect the composer, title-field mapping, native submit control, loading/challenge state, and post-submit aggregate summary with restricted screenshots and bounded semantic DOM evidence. Do not drive the hidden home-page advanced form directly.
 - Keep the finite 30-second untouched challenge wait and existing 30/60-second busy policy, but use a small sentinel count-only query and iteratively patch/retest selector/readback issues in the exploration session.
 - Do not visit Record Details, retain records, test pair-bearing cells, or claim gates.
 - When native submission and aggregate reconciliation work live, freeze the interaction recipe and implementation commit. Only then instantiate the held [`p05-execution-plan.md`](p05-execution-plan.md) as a deterministic evidence attempt.
