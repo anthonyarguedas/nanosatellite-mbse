@@ -22,7 +22,7 @@
   ],
   "status": "in_progress",
   "created_at": "2026-08-26T04:12:45Z",
-  "updated_at": "2026-08-26T07:43:40Z",
+  "updated_at": "2026-08-26T07:44:05Z",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -109,6 +109,62 @@
         "lease_receipt": null,
         "cancelled_by": null,
         "reason": "Exact frozen record-free health operation completed with full-library/no-event scope, exact sentinel echo, source total 2109, and zero retained records."
+      }
+    },
+    {
+      "attempt_id": "S-D12-P02-20260826T074403+0000",
+      "sequence": 2,
+      "manifest_path": "pilots/S-D12-P02-20260826T074403+0000/manifest.json",
+      "manifest_sha256": "31f022b4b328ff2209672344f2c750302a7a4f16e1686a6c64b1b0d9d43fc9f3",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P02",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-26T07:44:03Z",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "IAF-P02-ZERO",
+            "operation_key": "ZERO",
+            "gate_ids": [
+              "G-FAILURE-BEHAVIOR"
+            ],
+            "outcome": "explicit_zero",
+            "source_reported_total": 0,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P02-ZERO",
+          "gate_id": "G-FAILURE-BEHAVIOR",
+          "path": "pilots/S-D12-P02-20260826T074403+0000/zero.json",
+          "sha256": "e53029a13f4ac7a8f7b9e67aa161fc4f0ccfb893f04e0c864e45abb7e29404a3",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "completed",
+        "category": "completed",
+        "ended_at": "2026-08-26T07:44:05Z",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": false,
+        "terminal_verification": "not_applicable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "explicit zero passed"
       }
     }
   ],
@@ -405,31 +461,37 @@
     },
     {
       "gate_id": "G-FAILURE-BEHAVIOR",
-      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P01",
-      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P02",
+      "attempt_id": "S-D12-P02-20260826T074403+0000",
       "requirement": "Establish G-FAILURE-BEHAVIOR with immutable current-interface evidence.",
       "depends_on": [],
-      "status": "untested",
-      "observed_basis": "untested",
-      "original_observed_basis": "untested",
-      "evidence": [],
-      "reusable": false,
+      "status": "passed",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D12-P02-20260826T074403+0000/zero.json",
+          "sha256": "e53029a13f4ac7a8f7b9e67aa161fc4f0ccfb893f04e0c864e45abb7e29404a3",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
-      "source_operation_count": 0,
+      "source_operation_count": 1,
       "semantic_impact": {
         "classification": "none",
         "review_effect": false,
-        "rationale": "No semantic change; capability not yet observed."
+        "rationale": "native zero observed"
       },
       "invalidation": null,
-      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+      "notes": "explicit-zero diagnostic only"
     }
   ],
   "decisions": [
     {
       "decision_id": "D-TECH-NEXT-P02",
-      "attempt_id": null,
+      "attempt_id": "S-D12-P02-20260826T074403+0000",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,
