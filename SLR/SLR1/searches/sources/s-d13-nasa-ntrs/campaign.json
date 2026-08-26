@@ -20,9 +20,9 @@
     "G-COMPLETENESS",
     "G-FAILURE-BEHAVIOR"
   ],
-  "status": "technically_blocked",
+  "status": "in_progress",
   "created_at": "2026-08-24T16:13:25-04:00",
-  "updated_at": "2026-08-26T01:50:43-04:00",
+  "updated_at": "2026-08-26T01:51:52-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -581,6 +581,69 @@
         "cancelled_by": null,
         "reason": "The source-health prerequisite passed, but the exact rendered count-only operation accepted the unchanged unfiltered aggregate after submit. The frozen changed-aggregate invariant therefore failed with total=null; cleanup and release verified."
       }
+    },
+    {
+      "attempt_id": "S-D13-P08-20260826T015117-0400",
+      "sequence": 8,
+      "manifest_path": "pilots/S-D13-P08-20260826T015117-0400/manifest.json",
+      "manifest_sha256": "15ccf52d57fde78fd5d43cf034da235d7b896c8155e0cf19f0b20c7b5f05822d",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P08",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-26T01:51:17-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 2,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "NTRS-P08-RENDERED-G01",
+            "operation_key": "RENDERED-G01",
+            "gate_ids": [
+              "G-BROWSER-ADAPTER-SAFETY",
+              "G-RENDERED-NAVIGATION"
+            ],
+            "outcome": "success",
+            "source_reported_total": 134,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P08-RENDERED",
+          "gate_id": "G-RENDERED-NAVIGATION",
+          "path": "pilots/S-D13-P08-20260826T015117-0400/rendered-evidence.json",
+          "sha256": "a7f609a840808cb7a5955f6f6c421e0816c8b9cacbb88257f21e28f9e05355a2",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "completed",
+        "category": "completed",
+        "ended_at": "2026-08-26T01:51:52-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D13-P08-20260826T015117-0400/browser-cleanup-receipt.json",
+          "sha256": "d4f3da5b0b2e068157b89a443ba3ec5ad9f53be0899baaf7968a5b645eb03da8"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D13-P08-20260826T015117-0400/shared-lease-release-receipt.json",
+          "sha256": "0f13ea35a02c4f8e09af127c59cef9519492f8f66a7856dc249f5366e2dc5a5a"
+        },
+        "cancelled_by": null,
+        "reason": "health and changed aggregate total 134 passed"
+      }
     }
   ],
   "gate_status_snapshots": [
@@ -718,44 +781,44 @@
     },
     {
       "gate_id": "G-BROWSER-ADAPTER-SAFETY",
-      "checkpoint_id": "CP-BROWSER-ADAPTER-P07",
-      "attempt_id": "S-D13-P07-20260826T000333-0400",
+      "checkpoint_id": "CP-BROWSER-ADAPTER-SAFETY-P08",
+      "attempt_id": "S-D13-P08-20260826T015117-0400",
       "requirement": "The d872f59 rendered browser adapter's source-free guard and ordering projection remain valid.",
       "depends_on": [],
-      "status": "failed",
+      "status": "passed",
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D13-P07-20260826T000333-0400/rendered-gate-failure.json",
-          "sha256": "b8a6fba26f745587bbbdb86d0a46a46ebbb6930fae8b46e573e9953c1b8494d1",
+          "path": "pilots/S-D13-P08-20260826T015117-0400/rendered-evidence.json",
+          "sha256": "a7f609a840808cb7a5955f6f6c421e0816c8b9cacbb88257f21e28f9e05355a2",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "controller_technical",
+        "classification": "none",
         "review_effect": false,
-        "rationale": "The frozen adapter published an unchanged unfiltered aggregate as query-specific; this is a behavior-preserving technical safety failure."
+        "rationale": "repaired rendered route observed"
       },
       "invalidation": null,
-      "notes": "The frozen adapter published an unchanged unfiltered aggregate as query-specific; this is a behavior-preserving technical safety failure.",
+      "notes": "passed narrow rendered health/navigation only",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-SOURCE-HEALTH",
-      "checkpoint_id": "CP-SOURCE-HEALTH-P07",
-      "attempt_id": "S-D13-P07-20260826T000333-0400",
+      "checkpoint_id": "CP-SOURCE-HEALTH-P08",
+      "attempt_id": "S-D13-P08-20260826T015117-0400",
       "requirement": "A stable source-health precheck must precede any rendered reachability/navigation classification.",
       "depends_on": [],
       "status": "passed",
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D13-P07-20260826T000333-0400/source-health-gate.json",
-          "sha256": "955fe81c017d4c8dea36c4592e6067559a809f3eb443c9b4fb9e6f9db6851ddb",
+          "path": "pilots/S-D13-P08-20260826T015117-0400/rendered-evidence.json",
+          "sha256": "a7f609a840808cb7a5955f6f6c421e0816c8b9cacbb88257f21e28f9e05355a2",
           "validity": "valid"
         }
       ],
@@ -766,66 +829,66 @@
       "semantic_impact": {
         "classification": "none",
         "review_effect": false,
-        "rationale": "The separate record-free source-health probe passed and is unaffected by the adapter publication failure."
+        "rationale": "repaired rendered route observed"
       },
       "invalidation": null,
-      "notes": "The separate record-free source-health probe passed and is unaffected by the adapter publication failure.",
+      "notes": "passed narrow rendered health/navigation only",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-RENDERED-NAVIGATION",
-      "checkpoint_id": "CP-RENDERED-NAVIGATION-P07",
-      "attempt_id": "S-D13-P07-20260826T000333-0400",
+      "checkpoint_id": "CP-RENDERED-NAVIGATION-P08",
+      "attempt_id": "S-D13-P08-20260826T015117-0400",
       "requirement": "One shared-profile rendered reachability/navigation classification reaches a reconcilable state.",
       "depends_on": [
         "G-SOURCE-HEALTH",
         "G-BROWSER-ADAPTER-SAFETY"
       ],
-      "status": "failed",
+      "status": "passed",
       "observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D13-P07-20260826T000333-0400/rendered-gate-failure.json",
-          "sha256": "b8a6fba26f745587bbbdb86d0a46a46ebbb6930fae8b46e573e9953c1b8494d1",
+          "path": "pilots/S-D13-P08-20260826T015117-0400/rendered-evidence.json",
+          "sha256": "a7f609a840808cb7a5955f6f6c421e0816c8b9cacbb88257f21e28f9e05355a2",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "controller_technical",
+        "classification": "none",
         "review_effect": false,
-        "rationale": "Exact input readback did not reconcile to a changed aggregate or native zero; accepted total remains null."
+        "rationale": "repaired rendered route observed"
       },
       "invalidation": null,
-      "notes": "Exact input readback did not reconcile to a changed aggregate or native zero; accepted total remains null.",
+      "notes": "passed narrow rendered health/navigation only",
       "original_observed_basis": "observed"
     },
     {
       "gate_id": "G-PARTITION-TRANSPORT",
-      "checkpoint_id": "CP-PARTITION-TRANSPORT-P07",
-      "attempt_id": "S-D13-P07-20260826T000333-0400",
+      "checkpoint_id": "CP-PARTITION-TRANSPORT-P08",
+      "attempt_id": "S-D13-P08-20260826T015117-0400",
       "requirement": "Partition transport remains blocked until a stable source-health and rendered navigation path exists.",
       "depends_on": [
         "G-RENDERED-NAVIGATION"
       ],
       "status": "blocked",
-      "observed_basis": "observed",
+      "observed_basis": "untested",
       "evidence": [],
       "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 0,
       "semantic_impact": {
-        "classification": "controller_technical",
+        "classification": "none",
         "review_effect": false,
-        "rationale": "No partition operation was authorized after the minimal rendered gate failure."
+        "rationale": "no partition authorized"
       },
       "invalidation": null,
-      "notes": "No partition operation was authorized after the minimal rendered gate failure.",
-      "original_observed_basis": "observed"
+      "notes": "not run",
+      "original_observed_basis": "untested"
     }
   ],
   "decisions": [
@@ -937,7 +1000,7 @@
     },
     {
       "decision_id": "D-TECH-NEXT-P08",
-      "attempt_id": null,
+      "attempt_id": "S-D13-P08-20260826T015117-0400",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,
