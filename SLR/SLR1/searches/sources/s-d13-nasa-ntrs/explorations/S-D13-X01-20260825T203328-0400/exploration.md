@@ -22,6 +22,8 @@ The patched form projection was evaluated on the same page before submission. It
 
 The guardian stopped the attached child at the finite deadline. The lease runner closed the new target, preserved the broker anchor, reported no orphan, and released the lease with `cleanup=verified-clean`. The exact phase contained zero Sleep/Wake/DarkWake events under `caffeinate -dims`.
 
+A later controller review found that macOS System Information launched at 20:43:58, inside this phase, and remained open until the user closed it. The generic browser helper then in use populated CDP `nativeVirtualKeyCode` with Windows key values, the same defect class previously known to open About This Mac. The discarded Terra log prevents binding the launch to one recovered call, so this is a controller-technical side effect rather than a source claim. [`controller-side-effect-review.json`](controller-side-effect-review.json) records the repair commits and focused regression check.
+
 ## Iterations
 
 | Iteration | Visible action or observation | Source submit? | Technical change | Live result |
