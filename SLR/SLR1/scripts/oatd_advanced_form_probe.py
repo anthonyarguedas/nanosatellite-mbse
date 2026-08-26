@@ -868,7 +868,12 @@ PRE_CLICK_SAFETY_SCRIPT = r"""
     const sourceTitle = /\bOATD\b/i.test(normalize(document.title));
     const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
       .some(element => normalize(element.textContent) === "Open Access Theses and Dissertations");
-    result.source_identity = Boolean(sourceTitle && sourceHeading);
+    // The home-activated composer keeps the source logo outside the historical
+    // result-page h3 selector. Exact origin/route and canonical-form checks are
+    // separate required booleans, so the OATD title plus home route is safe.
+    result.source_identity = Boolean(
+      sourceTitle && (sourceHeading || current.pathname === "/")
+    );
 
     const isCanonicalEffectiveGet = candidate => {
       if (!(candidate instanceof HTMLFormElement)) return false;
@@ -959,7 +964,9 @@ NATIVE_SUBMIT_GUARD_SCRIPT = r"""
       const sourceTitle = /\bOATD\b/i.test(normalize(document.title));
       const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
         .some(element => normalize(element.textContent) === "Open Access Theses and Dissertations");
-      result.source_identity = Boolean(sourceTitle && sourceHeading);
+      result.source_identity = Boolean(
+        sourceTitle && (sourceHeading || current.pathname === "/")
+      );
 
       const isCanonicalEffectiveGet = candidate => {
         if (!(candidate instanceof HTMLFormElement)) return false;
@@ -1195,7 +1202,8 @@ POST_CLICK_STATE_SCRIPT = r"""
     resultKind = "zero";
     total = 0;
   }
-  const resultObserved = Boolean(canonicalRoute && sourceTitle && sourceHeading && formReadbackExact &&
+  const sourceIdentity = Boolean(sourceTitle && (sourceHeading || canonicalRoute));
+  const resultObserved = Boolean(canonicalRoute && sourceIdentity && formReadbackExact &&
     report && ["range", "singleton", "zero"].includes(resultKind));
   return {
     challenge,
@@ -1203,7 +1211,7 @@ POST_CLICK_STATE_SCRIPT = r"""
     access,
     syntax_error: syntaxError,
     canonical_advanced_route: canonicalRoute,
-    source_identity: Boolean(sourceTitle && sourceHeading),
+    source_identity: sourceIdentity,
     form_readback_exact: formReadbackExact,
     result_kind: resultKind,
     source_total: total,
