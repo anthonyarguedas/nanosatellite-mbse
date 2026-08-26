@@ -1241,13 +1241,15 @@ process.stdout.write(JSON.stringify({{
         result = json.loads(completed.stdout)
         self.assertTrue(all(result["safety"].values()))
         self.assertTrue(result["directSubmitBlocked"])
-        self.assertFalse(result["laterClickHandlerRan"])
+        self.assertTrue(result["laterClickHandlerRan"])
         self.assertEqual(result["directSubmits"], 0)
         self.assertFalse(result["clickDefaultPrevented"])
-        self.assertTrue(result["clickStopped"])
+        self.assertFalse(result["clickStopped"])
         self.assertTrue(result["foreignSubmitDefaultPrevented"])
         self.assertTrue(result["foreignSubmitStopped"])
-        self.assertFalse(result["expectedSubmitDefaultPrevented"])
+        # The simulated later handler mutates the form off-origin; the submit
+        # capture therefore detects the changed safety proof and cancels it.
+        self.assertTrue(result["expectedSubmitDefaultPrevented"])
         self.assertTrue(result["expectedSubmitStopped"])
 
     def test_native_click_timeout_cancels_the_hanging_operation(self):

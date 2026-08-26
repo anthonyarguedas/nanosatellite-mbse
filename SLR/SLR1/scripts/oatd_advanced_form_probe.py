@@ -1049,11 +1049,9 @@ NATIVE_SUBMIT_GUARD_SCRIPT = r"""
           return;
         }
         acceptedClick = true;
-        // Stop at the first capture boundary.  This prevents every later
-        // document/form/control click handler from mutating a form, invoking
-        // HTMLFormElement.prototype.submit(), or submitting another form.
-        // It does not cancel the one native default action.
-        event.stopImmediatePropagation();
+        // Let the trusted click reach its pinned target. Programmatic submit()
+        // is already locked, and the later submit event is revalidated before
+        // its native default action.
         return;
       }
 
@@ -1071,17 +1069,17 @@ NATIVE_SUBMIT_GUARD_SCRIPT = r"""
         return;
       }
       acceptedSubmit = true;
-      // Keep the proven native default action, but no later submit handler.
-      event.stopImmediatePropagation();
+      // Keep the proven native default action. A later duplicate submit is
+      // rejected by acceptedSubmit on this same capture listener.
     } catch (_) {
       // An unexpected event shape is never allowed to reach a native default.
       event.preventDefault();
       event.stopImmediatePropagation();
     }
   };
-  // The window capture listener runs before document/form/control handlers.
-  // It permits exactly one pinned click and exactly one matching submit event;
-  // every other click or submit is stopped and canceled while the guard lives.
+  // Window capture observes every competing submit, but accepted events must
+  // continue to their target/default action. Stopping an accepted click at
+  // window capture silently suppresses native form activation.
   window.addEventListener("click", block, true);
   window.addEventListener("submit", block, true);
   return safety;
