@@ -1,0 +1,219 @@
+{
+  "schema_version": "slr1-pilot-manifest/v1",
+  "pilot_id": "S-D11-P01-20260826T045812+0000",
+  "task_id": "S-D11",
+  "source_id": "arxiv",
+  "method_type": "direct",
+  "status": "complete",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "started_at": "2026-08-26T04:58:12Z",
+  "ended_at": "2026-08-26T04:58:37Z",
+  "protocol_commit": "f697361e20b7fdfe7c029a46ad367075cd15061f",
+  "operator": {
+    "type": "human_with_llm",
+    "model": "openai/gpt-5.6-sol",
+    "human_supervisor": null
+  },
+  "interface": {
+    "name": "arXiv normal rendered Advanced Search",
+    "url": "https://arxiv.org/search/advanced",
+    "access_route": "canonical shared CfT lease; rendered Advanced Search only",
+    "authenticated": false,
+    "database_or_collection": "full multidisciplinary arXiv repository",
+    "platform": "arXiv",
+    "timezone": "UTC"
+  },
+  "executions": [
+    {
+      "execution_id": "ARXIV-P01-HEALTH",
+      "partition_id": null,
+      "cell_id": null,
+      "purpose": "One simple-sentinel rendered source/control/count diagnostic",
+      "started_at": "2026-08-26T04:58:35Z",
+      "status": "success",
+      "exact_query_or_operation": "Exact CubeSat; All fields; submitted years 2011-2026; count-only.",
+      "query_file": null,
+      "fields": [
+        "all"
+      ],
+      "controls": {
+        "classification": "all",
+        "cross_list": "include",
+        "date_type": "submitted_date",
+        "year_start": 2011,
+        "year_end": 2026,
+        "abstracts": "show",
+        "native_page_size": 25,
+        "sort": "Relevance",
+        "count_only": true,
+        "limit": 1,
+        "max_pages": 1,
+        "timeout_seconds": 30,
+        "page_delay_seconds": 0.2,
+        "source_operation_reissues": 0
+      },
+      "source_reported_total": 470,
+      "total_is_exact": true,
+      "records_retrieved": 0,
+      "artifact_paths": [
+        ".searches/s-d11-arxiv-restricted/S-D11-P01-20260826T045812+0000/op-01-health.json",
+        "health-evidence.json"
+      ],
+      "notes": "Narrow health capability only; no review query cell or metadata retrieval."
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "P01-FROZEN-HEALTH-PLAN",
+      "requirement": "X01 froze one rendered health route and adapter.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "preflight.json",
+        "../../explorations/S-D11-X01-20260826T004909-0400/exploration.md"
+      ],
+      "notes": "No implementation patch."
+    },
+    {
+      "check_id": "P01-HEALTH-CONTROLS",
+      "requirement": "Normal route, exact sentinel, All fields, submitted-year controls, and aggregate reconcile.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "health-evidence.json"
+      ],
+      "notes": "Total 470; range/25-row first page; zero retained records."
+    },
+    {
+      "check_id": "P01-CLEANUP-LEASE",
+      "requirement": "Owned page cleanup, anchor preservation, and lease release verify.",
+      "status": "verified",
+      "basis": "observed",
+      "evidence_paths": [
+        "browser-cleanup-receipt.json",
+        "shared-lease-release-receipt.json",
+        "browser-postflight-sanitized.json"
+      ],
+      "notes": "Verified clean."
+    },
+    {
+      "check_id": "P01-REMAINING-CAPABILITIES",
+      "requirement": "Unexercised review-cell, metadata, identity, pagination-completeness, and failure capabilities remain unclaimed.",
+      "status": "untested",
+      "basis": "untested",
+      "evidence_paths": [
+        "observations.md"
+      ],
+      "notes": "Later X-to-P ladders required."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "preflight.json",
+      "role": "minimum launch gate",
+      "sha256": "b0b8ab7185f2fae7f9787c8fe085428b97f54ef2ff93fd82703a22e15e71cff4",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "cli-startup-check.txt",
+      "role": "adapter startup check",
+      "sha256": "c44028df343d026c5830573bd3ca05e3e92965fe9d56157a9cd265dcf4b762fd",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-status-preflight.json",
+      "role": "browser preflight status",
+      "sha256": "754dfd9d5e291384189c60bc35085796bf3dee941e2f86403426277a64c66930",
+      "access_classification": "metadata_only",
+      "secure_location_reference": null
+    },
+    {
+      "path": "health-evidence.json",
+      "role": "safe aggregate health evidence",
+      "sha256": "262c47db396f42e99be1829a3a6d06dee38cda6b878138e6f407582c088559d7",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "observations.md",
+      "role": "safe evidence observations",
+      "sha256": "f1840080abfe1b78d101270c0718212ae3d9c332259582a779f312436fa9d503",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-live-phase-checklist.md",
+      "role": "completed browser checklist",
+      "sha256": "58f4e544c81f90fa4623657a33f461d5bbb23713813ecff95c856d73a5b6a445",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-cleanup-receipt.json",
+      "role": "sanitized cleanup receipt",
+      "sha256": "10b9540f1c3b464176a0f65a576921a4081f8096578edda57731add5ad81f62f",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "shared-lease-release-receipt.json",
+      "role": "sanitized lease release receipt",
+      "sha256": "c0038caf4157f56fab75270deb7ace5972f10ffbe9e87480f29bd80caacd4ee5",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": "browser-postflight-sanitized.json",
+      "role": "sanitized postflight",
+      "sha256": "d5dddd733efa62c8690d6106ca7812c672c3ccd727c9f1b1a9eff662b230a076",
+      "access_classification": "public",
+      "secure_location_reference": null
+    },
+    {
+      "path": ".searches/s-d11-arxiv-restricted/S-D11-P01-20260826T045812+0000/op-01-health.json",
+      "role": "restricted record-free adapter output",
+      "sha256": "812d7e7837ab78cbefc0e767b11bc6efca7870d41b3e6d9ffe78f130359883c2",
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches/s-d11-arxiv-restricted/S-D11-P01-20260826T045812+0000"
+    },
+    {
+      "path": ".searches/s-d11-arxiv-restricted/S-D11-P01-20260826T045812+0000/browser-lease-receipt.json",
+      "role": "restricted authoritative lease receipt",
+      "sha256": "9d6e86b8eb511d436fee6d68a7ea068ecd4335622debf9c9e69080bae9944d68",
+      "access_classification": "restricted",
+      "secure_location_reference": ".searches/s-d11-arxiv-restricted/S-D11-P01-20260826T045812+0000"
+    }
+  ],
+  "campaign": {
+    "campaign_id": "S-D11-C01-20260826T045812+0000",
+    "attempt_id": "S-D11-P01-20260826T045812+0000"
+  },
+  "attempt_terminal": {
+    "outcome": "completed",
+    "category": "completed",
+    "ended_at": "2026-08-26T04:58:37Z",
+    "provider_failure": false,
+    "source_writing_stopped": true,
+    "browser_backed": true,
+    "cleanup_receipt": {
+      "path": "pilots/S-D11-P01-20260826T045812+0000/browser-cleanup-receipt.json",
+      "sha256": "10b9540f1c3b464176a0f65a576921a4081f8096578edda57731add5ad81f62f"
+    },
+    "lease_receipt": {
+      "path": "pilots/S-D11-P01-20260826T045812+0000/shared-lease-release-receipt.json",
+      "sha256": "c0038caf4157f56fab75270deb7ace5972f10ffbe9e87480f29bd80caacd4ee5"
+    },
+    "cancelled_by": null,
+    "reason": "The exact frozen rendered health operation completed with total 470, exact controls, zero retained records, and verified cleanup/release."
+  },
+  "disposition": {
+    "recommendation": "revise",
+    "reason": "Checkpoint only narrow health capabilities; continue remaining source validation through later X-to-P ladders.",
+    "semantic_change": false,
+    "human_verification_required": []
+  }
+}
