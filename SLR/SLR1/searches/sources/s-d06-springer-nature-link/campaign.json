@@ -20,9 +20,9 @@
     "G-COMPLETENESS",
     "G-FAILURE-BEHAVIOR"
   ],
-  "status": "technically_blocked",
+  "status": "in_progress",
   "created_at": "2026-08-26T00:34:15-04:00",
-  "updated_at": "2026-08-26T01:46:43-04:00",
+  "updated_at": "2026-08-26T01:47:40-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -119,6 +119,104 @@
         "cancelled_by": null,
         "reason": "The adapter source interaction reported 2132, but evidence publication contradicted exact-query observation and retained 20 canonical identities. Frozen count-only contract failed; accepted total null."
       }
+    },
+    {
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
+      "sequence": 2,
+      "manifest_path": "pilots/S-D06-P02-20260826T014718-0400/manifest.json",
+      "manifest_sha256": "98ba959d0def023da1650b754f9d89b5032d34e640c754935f5904c11fd89155",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P02",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-26T01:47:18-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "SPRINGER-P02-HEALTH",
+            "operation_key": "HEALTH",
+            "gate_ids": [
+              "G-SOURCE-BOUNDARY",
+              "G-QUERY-TRANSPORT",
+              "G-DATE-CONTROL",
+              "G-LANGUAGE-CONTROL",
+              "G-CONTENT-CONTROL"
+            ],
+            "outcome": "success",
+            "source_reported_total": 2132,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P02-SOURCE-BOUNDARY",
+          "gate_id": "G-SOURCE-BOUNDARY",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-QUERY-TRANSPORT",
+          "gate_id": "G-QUERY-TRANSPORT",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-DATE-CONTROL",
+          "gate_id": "G-DATE-CONTROL",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-LANGUAGE-CONTROL",
+          "gate_id": "G-LANGUAGE-CONTROL",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P02-CONTENT-CONTROL",
+          "gate_id": "G-CONTENT-CONTROL",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "completed",
+        "category": "completed",
+        "ended_at": "2026-08-26T01:47:40-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D06-P02-20260826T014718-0400/browser-cleanup-receipt.json",
+          "sha256": "25e22d7cfaa19568b74aba3bf9c9fe6467e57557d915725bc8c7ba14acf15b19"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D06-P02-20260826T014718-0400/shared-lease-release-receipt.json",
+          "sha256": "ec344f0ea113867dd28e68343ec4ef97837ed38f23af81e52ebe228e14662927"
+        },
+        "cancelled_by": null,
+        "reason": "Frozen repaired health publication completed with total 2132 and zero retained identities."
+      }
     }
   ],
   "gate_status_snapshots": [
@@ -138,64 +236,149 @@
         }
       ],
       "immutable": true
+    },
+    {
+      "snapshot_id": "GS-P02-SOURCE-BOUNDARY",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
+      "manifest_path": "pilots/S-D06-P02-20260826T014718-0400/manifest.json",
+      "manifest_sha256": "98ba959d0def023da1650b754f9d89b5032d34e640c754935f5904c11fd89155",
+      "gate_id": "G-SOURCE-BOUNDARY",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da"
+        }
+      ],
+      "immutable": true
+    },
+    {
+      "snapshot_id": "GS-P02-QUERY-TRANSPORT",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
+      "manifest_path": "pilots/S-D06-P02-20260826T014718-0400/manifest.json",
+      "manifest_sha256": "98ba959d0def023da1650b754f9d89b5032d34e640c754935f5904c11fd89155",
+      "gate_id": "G-QUERY-TRANSPORT",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da"
+        }
+      ],
+      "immutable": true
+    },
+    {
+      "snapshot_id": "GS-P02-DATE-CONTROL",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
+      "manifest_path": "pilots/S-D06-P02-20260826T014718-0400/manifest.json",
+      "manifest_sha256": "98ba959d0def023da1650b754f9d89b5032d34e640c754935f5904c11fd89155",
+      "gate_id": "G-DATE-CONTROL",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da"
+        }
+      ],
+      "immutable": true
+    },
+    {
+      "snapshot_id": "GS-P02-LANGUAGE-CONTROL",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
+      "manifest_path": "pilots/S-D06-P02-20260826T014718-0400/manifest.json",
+      "manifest_sha256": "98ba959d0def023da1650b754f9d89b5032d34e640c754935f5904c11fd89155",
+      "gate_id": "G-LANGUAGE-CONTROL",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da"
+        }
+      ],
+      "immutable": true
+    },
+    {
+      "snapshot_id": "GS-P02-CONTENT-CONTROL",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
+      "manifest_path": "pilots/S-D06-P02-20260826T014718-0400/manifest.json",
+      "manifest_sha256": "98ba959d0def023da1650b754f9d89b5032d34e640c754935f5904c11fd89155",
+      "gate_id": "G-CONTENT-CONTROL",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da"
+        }
+      ],
+      "immutable": true
     }
   ],
   "capability_gates": [
     {
       "gate_id": "G-SOURCE-BOUNDARY",
-      "checkpoint_id": "CP-SOURCE-BOUNDARY-P01",
-      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "checkpoint_id": "CP-SOURCE-BOUNDARY-P02",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
       "requirement": "Establish G-SOURCE-BOUNDARY with immutable current-interface evidence.",
       "depends_on": [],
-      "status": "blocked",
+      "status": "passed",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
-          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "controller_technical",
+        "classification": "none",
         "review_effect": false,
-        "rationale": "Rendered whole-platform interaction occurred, but the contradictory publication contract prevents an immutable source-boundary checkpoint."
+        "rationale": "Narrow observed capability; no semantic change."
       },
       "invalidation": null,
-      "notes": "Rendered whole-platform interaction occurred, but the contradictory publication contract prevents an immutable source-boundary checkpoint."
+      "notes": "Passed for exact health sentinel only; later source capabilities remain."
     },
     {
       "gate_id": "G-QUERY-TRANSPORT",
-      "checkpoint_id": "CP-QUERY-TRANSPORT-P01",
-      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "checkpoint_id": "CP-QUERY-TRANSPORT-P02",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
       "requirement": "Establish G-QUERY-TRANSPORT with immutable current-interface evidence.",
       "depends_on": [],
-      "status": "failed",
+      "status": "passed",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
-          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "controller_technical",
+        "classification": "none",
         "review_effect": false,
-        "rationale": "The artifact explicitly published observed_exact_query_echo=false and blank executed_query, so exact transport cannot pass."
+        "rationale": "Narrow observed capability; no semantic change."
       },
       "invalidation": null,
-      "notes": "The artifact explicitly published observed_exact_query_echo=false and blank executed_query, so exact transport cannot pass."
+      "notes": "Passed for exact health sentinel only; later source capabilities remain."
     },
     {
       "gate_id": "G-FIELD-BOUNDARY",
@@ -243,87 +426,87 @@
     },
     {
       "gate_id": "G-DATE-CONTROL",
-      "checkpoint_id": "CP-DATE-CONTROL-P01",
-      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "checkpoint_id": "CP-DATE-CONTROL-P02",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
       "requirement": "Establish G-DATE-CONTROL with immutable current-interface evidence.",
       "depends_on": [],
-      "status": "blocked",
+      "status": "passed",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
-          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "controller_technical",
+        "classification": "none",
         "review_effect": false,
-        "rationale": "Requested source-year controls were present internally but cannot be checkpointed independently of the failed publication contract."
+        "rationale": "Narrow observed capability; no semantic change."
       },
       "invalidation": null,
-      "notes": "Requested source-year controls were present internally but cannot be checkpointed independently of the failed publication contract."
+      "notes": "Passed for exact health sentinel only; later source capabilities remain."
     },
     {
       "gate_id": "G-LANGUAGE-CONTROL",
-      "checkpoint_id": "CP-LANGUAGE-CONTROL-P01",
-      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "checkpoint_id": "CP-LANGUAGE-CONTROL-P02",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
       "requirement": "Establish G-LANGUAGE-CONTROL with immutable current-interface evidence.",
       "depends_on": [],
-      "status": "blocked",
+      "status": "passed",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
-          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "controller_technical",
+        "classification": "none",
         "review_effect": false,
-        "rationale": "English control evidence remains blocked by the failed publication contract."
+        "rationale": "Narrow observed capability; no semantic change."
       },
       "invalidation": null,
-      "notes": "English control evidence remains blocked by the failed publication contract."
+      "notes": "Passed for exact health sentinel only; later source capabilities remain."
     },
     {
       "gate_id": "G-CONTENT-CONTROL",
-      "checkpoint_id": "CP-CONTENT-CONTROL-P01",
-      "attempt_id": "S-D06-P01-20260826T003415-0400",
+      "checkpoint_id": "CP-CONTENT-CONTROL-P02",
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
       "requirement": "Establish G-CONTENT-CONTROL with immutable current-interface evidence.",
       "depends_on": [],
-      "status": "blocked",
+      "status": "passed",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D06-P01-20260826T003415-0400/publication-failure.json",
-          "sha256": "18eeae2f8953311ea1b317b6231fce3941f7e065df4fc03b909845cbdf1cc7f0",
+          "path": "pilots/S-D06-P02-20260826T014718-0400/health-evidence.json",
+          "sha256": "e539edb0bb6d2ce51e87188883e8b24e67e4db3970f343ca6593cfa68b7478da",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "controller_technical",
+        "classification": "none",
         "review_effect": false,
-        "rationale": "No-facet boundary remains blocked by the failed publication contract."
+        "rationale": "Narrow observed capability; no semantic change."
       },
       "invalidation": null,
-      "notes": "No-facet boundary remains blocked by the failed publication contract."
+      "notes": "Passed for exact health sentinel only; later source capabilities remain."
     },
     {
       "gate_id": "G-RETRIEVAL",
@@ -451,7 +634,7 @@
   "decisions": [
     {
       "decision_id": "D-TECH-NEXT-P02",
-      "attempt_id": null,
+      "attempt_id": "S-D06-P02-20260826T014718-0400",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,
