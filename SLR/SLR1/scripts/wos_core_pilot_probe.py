@@ -314,13 +314,22 @@ EDITION_DIALOG_PROJECTION_SCRIPT = r"""
     individual_checked_count: 0
   };
   const text = element => String(
-    element.getAttribute("aria-label") || element.textContent || ""
+    element && (element.getAttribute("aria-label") || element.textContent) || ""
   ).replace(/\s+/g, " ").trim();
-  const all = Array.from(dialog.querySelectorAll("input[type='checkbox'], [role='checkbox']"))
-    .filter(visible).filter(element => /Select All/i.test(text(element)));
+  // The current picker exposes native checkbox inputs whose accessible names
+  // are supplied by wrapping/associated labels, not by the input itself.
+  // Resolve only that bounded control name; no label value leaves this page.
+  const checkboxText = element => {
+    const direct = text(element);
+    if (direct) return direct;
+    const labels = element && element.labels ? Array.from(element.labels) : [];
+    const wrapping = element ? element.closest("label") : null;
+    return [...labels, wrapping].map(text).filter(Boolean).join(" ");
+  };
   const boxes = Array.from(dialog.querySelectorAll("input[type='checkbox'], [role='checkbox']"))
     .filter(visible);
-  const individuals = boxes.filter(element => !/Select All/i.test(text(element)));
+  const all = boxes.filter(element => /Select All/i.test(checkboxText(element)));
+  const individuals = boxes.filter(element => !/Select All/i.test(checkboxText(element)));
   const checked = element => element.getAttribute("aria-checked") === "true" ||
     Boolean(element.checked);
   return {
