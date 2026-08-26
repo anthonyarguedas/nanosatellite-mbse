@@ -33,9 +33,9 @@ from urllib.parse import urlencode
 DEFAULT_CDP_URL = "http://127.0.0.1:9222"
 SOURCE_ORIGIN = "https://oatd.org"
 SOURCE_HOST = "oatd.org"
-HOME_URL = f"{SOURCE_ORIGIN}/"
 ADVANCED_PATH = "/oatd/search-composer"
 ADVANCED_ACTION = f"{SOURCE_ORIGIN}{ADVANCED_PATH}"
+COMPOSER_URL = ADVANCED_ACTION
 
 DEFAULT_TIMEOUT_SECONDS = 30.0
 DEFAULT_POLL_INTERVAL_SECONDS = 0.2
@@ -101,7 +101,7 @@ class ProbeAbort(RuntimeError):
 class PreClickSafety:
     """Boolean-only proof required immediately before native submission."""
 
-    current_canonical_home_route: bool
+    current_canonical_composer_route: bool
     source_identity: bool
     exact_https_origin: bool
     canonical_effective_get_action: bool
@@ -111,7 +111,7 @@ class PreClickSafety:
     @property
     def verified(self) -> bool:
         return bool(
-            self.current_canonical_home_route
+            self.current_canonical_composer_route
             and self.source_identity
             and self.exact_https_origin
             and self.canonical_effective_get_action
@@ -423,7 +423,7 @@ FORM_SELF_CHECK_SCRIPT = r"""
 PRE_CLICK_SAFETY_SCRIPT = r"""
 (form) => {
   const result = {
-    current_canonical_home_route: false,
+    current_canonical_composer_route: false,
     source_identity: false,
     exact_https_origin: false,
     canonical_effective_get_action: false,
@@ -453,8 +453,8 @@ PRE_CLICK_SAFETY_SCRIPT = r"""
     if (!(form instanceof HTMLFormElement)) return result;
     const current = new URL(window.location.href);
     result.exact_https_origin = exactOatdOrigin(current.href);
-    result.current_canonical_home_route = result.exact_https_origin &&
-      current.pathname === "/" && current.search === "" && current.hash === "";
+    result.current_canonical_composer_route = result.exact_https_origin &&
+      current.pathname === "/oatd/search-composer" && current.search === "" && current.hash === "";
 
     const sourceTitle = /\bOATD\b/i.test(normalize(document.title));
     const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
@@ -506,7 +506,7 @@ PRE_CLICK_SAFETY_SCRIPT = r"""
 NATIVE_SUBMIT_GUARD_SCRIPT = r"""
 (submitter) => {
   const empty = () => ({
-    current_canonical_home_route: false,
+    current_canonical_composer_route: false,
     source_identity: false,
     exact_https_origin: false,
     canonical_effective_get_action: false,
@@ -543,8 +543,8 @@ NATIVE_SUBMIT_GUARD_SCRIPT = r"""
       if (!(form instanceof HTMLFormElement)) return result;
       const current = new URL(window.location.href);
       result.exact_https_origin = exactOatdOrigin(current.href);
-      result.current_canonical_home_route = result.exact_https_origin &&
-        current.pathname === "/" && current.search === "" && current.hash === "";
+      result.current_canonical_composer_route = result.exact_https_origin &&
+        current.pathname === "/oatd/search-composer" && current.search === "" && current.hash === "";
 
       const sourceTitle = /\bOATD\b/i.test(normalize(document.title));
       const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
@@ -959,7 +959,7 @@ def _bool(value: Any) -> bool:
 
 
 PRE_CLICK_SAFETY_FIELDS = (
-    "current_canonical_home_route",
+    "current_canonical_composer_route",
     "source_identity",
     "exact_https_origin",
     "canonical_effective_get_action",
@@ -975,7 +975,7 @@ def pre_click_safety_from_payload(payload: Any) -> PreClickSafety:
     ):
         raise ProbeAbort("pre_click_safety_projection_failed")
     return PreClickSafety(
-        current_canonical_home_route=payload["current_canonical_home_route"],
+        current_canonical_composer_route=payload["current_canonical_composer_route"],
         source_identity=payload["source_identity"],
         exact_https_origin=payload["exact_https_origin"],
         canonical_effective_get_action=payload["canonical_effective_get_action"],
@@ -1894,7 +1894,7 @@ async def cleanup_owned_page(
 def new_receipt(execute: bool) -> dict[str, Any]:
     """Create an output-safe receipt with no caller/source/browser identifiers."""
     return {
-        "schema_version": "slr1-oatd-advanced-form-probe/v3",
+        "schema_version": "slr1-oatd-advanced-form-probe/v4",
         "mode": "source_action" if execute else "dry_run",
         "endpoint_class": "explicit_loopback_cdp",
         "operation": "one_owned_page_one_native_advanced_get_submission",
@@ -1930,7 +1930,7 @@ def new_receipt(execute: bool) -> dict[str, Any]:
             "exact_field_mapping": False,
             "nonblank_control_readback": False,
             "visible_native_submit_count": None,
-            "current_canonical_home_route": False,
+            "current_canonical_composer_route": False,
             "current_source_identity": False,
             "current_exact_https_origin": False,
             "canonical_effective_get_action": False,
@@ -1980,7 +1980,7 @@ def _apply_pre_click_safety(receipt: dict[str, Any], safety: Any) -> None:
     """Copy only final boolean submission-proof facts into the receipt."""
     safety = _boolean_pre_click_safety(safety)
     submission = receipt["submission"]
-    submission["current_canonical_home_route"] = safety.current_canonical_home_route
+    submission["current_canonical_composer_route"] = safety.current_canonical_composer_route
     submission["current_source_identity"] = safety.source_identity
     submission["current_exact_https_origin"] = safety.exact_https_origin
     submission["canonical_effective_get_action"] = safety.canonical_effective_get_action
@@ -2176,7 +2176,7 @@ async def run_probe(
                             raise ProbeAbort("owned_target_not_verified")
 
                         await owned_page.goto(
-                            HOME_URL,
+                            COMPOSER_URL,
                             wait_until="domcontentloaded",
                             timeout=_milliseconds(config.timeout_seconds),
                         )

@@ -876,7 +876,7 @@ class HTMLButtonElement extends Element {{
 class HTMLInputElement extends Element {{}}
 const listeners = {{ click: [], submit: [] }};
 const window = {{
-  location: {{ href: "https://oatd.org/" }},
+  location: {{ href: "https://oatd.org/oatd/search-composer" }},
   addEventListener(type, listener, capture) {{
     if (capture !== true) throw new Error("expected capture listener");
     listeners[type].push(listener);
@@ -1171,6 +1171,7 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
         self.assertTrue(all(not page.is_closed() for page in session.context.baselines))
         self.assertEqual(session.context.new_page_calls, 1)
         self.assertEqual(len(owned.goto_calls), 1)
+        self.assertEqual(owned.goto_calls[0][0][0], oatd.COMPOSER_URL)
         self.assertTrue(owned.close_while_live)
         serialized = json.dumps(receipt)
         self.assertNotIn("private query phrase", serialized)
