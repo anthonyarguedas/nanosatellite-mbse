@@ -32,6 +32,15 @@ oatd = load_module(
 )
 
 
+async def fake_advanced_entry(page, timeout_seconds: float) -> None:
+    """Stand in for the live home disclosure in lifecycle-only tests."""
+    await page.goto(
+        oatd.HOME_URL,
+        wait_until="domcontentloaded",
+        timeout=max(1, int(timeout_seconds * 1_000)),
+    )
+
+
 class FakeClock:
     def __init__(self) -> None:
         self.value = 0.0
@@ -627,6 +636,7 @@ class OATDChallengeWaitTests(unittest.TestCase):
                     oatd.run_probe(
                         config(receipt_path.parent),
                         playwright_factory=lambda: session,
+                        advanced_entry_opener=fake_advanced_entry,
                         clock=fake_clock,
                         sleeper=fake_clock.sleep,
                     )
@@ -710,6 +720,7 @@ class OATDPreSubmitBusyWaitTests(unittest.TestCase):
                     oatd.run_probe(
                         config(root),
                         playwright_factory=lambda: session,
+                        advanced_entry_opener=fake_advanced_entry,
                         clock=fake_clock,
                         sleeper=fake_clock.sleep,
                     )
@@ -800,6 +811,7 @@ class OATDPreSubmitBusyWaitTests(unittest.TestCase):
                             pre_submit_busy_wait_seconds=4.0,
                         ),
                         playwright_factory=lambda: session,
+                        advanced_entry_opener=fake_advanced_entry,
                         clock=fake_clock,
                         sleeper=fake_clock.sleep,
                     )
@@ -863,6 +875,7 @@ class OATDPreSubmitBusyWaitTests(unittest.TestCase):
                                 pre_submit_busy_wait_seconds=180.0,
                             ),
                             playwright_factory=lambda: session,
+                        advanced_entry_opener=fake_advanced_entry,
                             sleeper=sleeper,
                         )
                     )
@@ -1364,6 +1377,7 @@ process.stdout.write(JSON.stringify({{
 
     def test_post_click_route_requires_exact_canonical_origin(self):
         cases = [
+            "https://oatd.org/oatd/search?form=advanced&q=x",
             "https://oatd.org/oatd/search-composer?box1=x",
             "https://oatd.org:444/oatd/search-composer?box1=x",
             "https://oatd.org:443/oatd/search-composer?box1=x",
@@ -1379,13 +1393,80 @@ process.stdout.write(JSON.stringify({{
             ["node", "-e", program], check=True, capture_output=True, text=True
         )
         self.assertEqual(
-            json.loads(completed.stdout), [True, False, False, False, False]
+            json.loads(completed.stdout), [True, True, False, False, False, False]
         )
 
     def test_source_never_uses_programmatic_form_submission_or_navigation_wait(self):
         source = (SCRIPTS / "oatd_advanced_form_probe.py").read_text(encoding="utf-8")
         self.assertNotIn("request" + "Submit", source)
         self.assertNotIn("expect_" + "navigation", source)
+
+
+class OATDHomeEntryTests(unittest.TestCase):
+    def test_visible_home_disclosure_is_clicked_before_form_inspection(self):
+        class Candidate:
+            def __init__(self, text, area):
+                self.text = text
+                self.area = area
+                self.clicks = 0
+
+            async def is_visible(self):
+                return True
+
+            async def inner_text(self):
+                return self.text
+
+            async def bounding_box(self):
+                return {"width": self.area, "height": 1}
+
+            async def click(self, **_kwargs):
+                self.clicks += 1
+
+        class Candidates:
+            def __init__(self, values):
+                self.values = values
+
+            async def count(self):
+                return len(self.values)
+
+            def nth(self, index):
+                return self.values[index]
+
+        class Forms:
+            first = None
+
+            def __init__(self):
+                self.first = self
+
+            async def count(self):
+                return 1
+
+            async def is_visible(self):
+                return True
+
+        class Page:
+            def __init__(self):
+                self.large = Candidate(
+                    "Advanced search options Search history", 1000
+                )
+                self.exact = Candidate("Advanced search options", 200)
+                self.goto_calls = []
+
+            async def goto(self, *args, **kwargs):
+                self.goto_calls.append((args, kwargs))
+
+            def locator(self, selector):
+                if selector.startswith("xpath="):
+                    return Candidates([self.large, self.exact])
+                return Forms()
+
+        page = Page()
+        asyncio.run(
+            oatd.open_visible_advanced_search(page, timeout_seconds=1.0)
+        )
+        self.assertEqual(page.goto_calls[0][0][0], oatd.HOME_URL)
+        self.assertEqual(page.exact.clicks, 1)
+        self.assertEqual(page.large.clicks, 0)
 
 
 class OATDAccountingTests(unittest.TestCase):
@@ -1558,6 +1639,7 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
                     oatd.run_probe(
                         config(receipt_path.parent),
                         playwright_factory=lambda: session,
+                        advanced_entry_opener=fake_advanced_entry,
                         clock=fake_clock,
                         sleeper=fake_clock.sleep,
                     )
@@ -1575,7 +1657,7 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
         self.assertTrue(all(not page.is_closed() for page in session.context.baselines))
         self.assertEqual(session.context.new_page_calls, 1)
         self.assertEqual(len(owned.goto_calls), 1)
-        self.assertEqual(owned.goto_calls[0][0][0], oatd.COMPOSER_URL)
+        self.assertEqual(owned.goto_calls[0][0][0], oatd.HOME_URL)
         self.assertTrue(owned.close_while_live)
         serialized = json.dumps(receipt)
         self.assertNotIn("private query phrase", serialized)
@@ -1759,6 +1841,7 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
                     oatd.run_probe(
                         config(Path(directory), timeout_seconds=0.01),
                         playwright_factory=lambda: session,
+                        advanced_entry_opener=fake_advanced_entry,
                         clock=fake_clock,
                         sleeper=fake_clock.sleep,
                     )

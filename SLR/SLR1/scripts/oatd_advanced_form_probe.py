@@ -37,9 +37,12 @@ from urllib.parse import urlencode
 DEFAULT_CDP_URL = "http://127.0.0.1:9222"
 SOURCE_ORIGIN = "https://oatd.org"
 SOURCE_HOST = "oatd.org"
+HOME_PATH = "/"
+HOME_URL = f"{SOURCE_ORIGIN}{HOME_PATH}"
+ADVANCED_ENTRY_LABEL = "Advanced search options"
 ADVANCED_PATH = "/oatd/search-composer"
 ADVANCED_ACTION = f"{SOURCE_ORIGIN}{ADVANCED_PATH}"
-COMPOSER_URL = ADVANCED_ACTION
+RESULT_PATH = "/oatd/search"
 
 DEFAULT_TIMEOUT_SECONDS = 30.0
 DEFAULT_POLL_INTERVAL_SECONDS = 0.2
@@ -853,7 +856,8 @@ PRE_CLICK_SAFETY_SCRIPT = r"""
     const current = new URL(window.location.href);
     result.exact_https_origin = exactOatdOrigin(current.href);
     result.current_canonical_composer_route = result.exact_https_origin &&
-      current.pathname === "/oatd/search-composer" && current.search === "" && current.hash === "";
+      ["/", "/oatd/search-composer"].includes(current.pathname) &&
+      current.search === "" && current.hash === "";
 
     const sourceTitle = /\bOATD\b/i.test(normalize(document.title));
     const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
@@ -943,7 +947,8 @@ NATIVE_SUBMIT_GUARD_SCRIPT = r"""
       const current = new URL(window.location.href);
       result.exact_https_origin = exactOatdOrigin(current.href);
       result.current_canonical_composer_route = result.exact_https_origin &&
-        current.pathname === "/oatd/search-composer" && current.search === "" && current.hash === "";
+        ["/", "/oatd/search-composer"].includes(current.pathname) &&
+        current.search === "" && current.hash === "";
 
       const sourceTitle = /\bOATD\b/i.test(normalize(document.title));
       const sourceHeading = Array.from(document.querySelectorAll("h3.pageHeader a.inheader"))
@@ -1106,7 +1111,8 @@ CANONICAL_ADVANCED_ROUTE_SCRIPT = r"""
     return location.protocol === "https:" && location.origin === "https://oatd.org" &&
       location.hostname === "oatd.org" && location.port === "" &&
       location.username === "" && location.password === "" &&
-      location.pathname === "/oatd/search-composer" && location.hash === "";
+      ["/oatd/search", "/oatd/search-composer"].includes(location.pathname) &&
+      location.hash === "";
   } catch (_) {
     return false;
   }
@@ -1551,6 +1557,89 @@ def _pre_submit_abort(inspection: FormInspection) -> str | None:
     if inspection.visible_native_submit_count != 1:
         return "native_submit_control_not_unique"
     return None
+
+
+async def open_visible_advanced_search(
+    page: Any, *, timeout_seconds: float
+) -> None:
+    """Open OATD home and activate its visible advanced-search disclosure.
+
+    OATD renders the disclosure label as split/static text rather than a
+    dependable link/button accessibility role. Select the smallest visible
+    element whose normalized descendant text contains the exact public label,
+    then use Playwright's target-scoped visible click. Direct composer
+    navigation is intentionally not a fallback because it frequently reaches
+    the ordinary overloaded rendering.
+    """
+    timeout = _finite_positive(timeout_seconds, "advanced entry timeout")
+    await page.goto(
+        HOME_URL,
+        wait_until="domcontentloaded",
+        timeout=_milliseconds(timeout),
+    )
+    deadline = asyncio.get_running_loop().time() + timeout
+    selected: Any | None = None
+    while asyncio.get_running_loop().time() < deadline:
+        candidates = page.locator(
+            "xpath=//*[contains(translate(normalize-space(.), "
+            "'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), "
+            "'advanced search options')]"
+        )
+        visible_candidates: list[tuple[int, float, Any]] = []
+        try:
+            count = await candidates.count()
+        except Exception:
+            count = 0
+        for index in range(count):
+            item = candidates.nth(index)
+            try:
+                if not await item.is_visible():
+                    continue
+                text = compact(await item.inner_text()).casefold()
+                if ADVANCED_ENTRY_LABEL.casefold() not in text:
+                    continue
+                box = await item.bounding_box()
+                if not box or box.get("width", 0) <= 0 or box.get("height", 0) <= 0:
+                    continue
+                visible_candidates.append(
+                    (len(text), float(box["width"]) * float(box["height"]), item)
+                )
+            except Exception:
+                continue
+        if visible_candidates:
+            visible_candidates.sort(key=lambda value: (value[0], value[1]))
+            best = visible_candidates[0]
+            # An exact tie would make the target ambiguous; wait for the page
+            # to settle rather than choosing by DOM position.
+            if len(visible_candidates) == 1 or best[:2] != visible_candidates[1][:2]:
+                selected = best[2]
+                break
+        await asyncio.sleep(DEFAULT_POLL_INTERVAL_SECONDS)
+    if selected is None:
+        raise ProbeAbort("advanced_form_control_mapping_failed")
+    try:
+        await selected.click(
+            timeout=_milliseconds(max(0.001, deadline - asyncio.get_running_loop().time())),
+            no_wait_after=True,
+        )
+    except Exception as error:
+        raise ProbeAbort("advanced_form_control_mapping_failed") from error
+
+    forms = page.locator(
+        "form[action='/oatd/search-composer'], "
+        "form[action='https://oatd.org/oatd/search-composer']"
+    )
+    while asyncio.get_running_loop().time() < deadline:
+        try:
+            if (
+                await forms.count() == 1
+                and await forms.first.is_visible()
+            ):
+                return
+        except Exception:
+            pass
+        await asyncio.sleep(DEFAULT_POLL_INTERVAL_SECONDS)
+    raise ProbeAbort("canonical_advanced_form_not_observed")
 
 
 async def inspect_advanced_form(page: Any, field_label: str) -> FormInspection:
@@ -3004,6 +3093,7 @@ async def run_probe(
     config: ProbeConfig,
     *,
     playwright_factory: Callable[[], Any] | None = None,
+    advanced_entry_opener: Callable[[Any, float], Awaitable[None]] | None = None,
     clock: Callable[[], float] | None = None,
     sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
 ) -> tuple[int, dict[str, Any]]:
@@ -3210,11 +3300,14 @@ async def run_probe(
                         if not target_verified:
                             raise ProbeAbort("owned_target_not_verified")
 
-                        await owned_page.goto(
-                            COMPOSER_URL,
-                            wait_until="domcontentloaded",
-                            timeout=_milliseconds(config.timeout_seconds),
-                        )
+                        if advanced_entry_opener is None:
+                            await open_visible_advanced_search(
+                                owned_page, timeout_seconds=config.timeout_seconds
+                            )
+                        else:
+                            await advanced_entry_opener(
+                                owned_page, config.timeout_seconds
+                            )
                         # The challenge wait, native click, and all post-click
                         # work share one absolute operation deadline.  A
                         # cleared challenge therefore cannot restart the
