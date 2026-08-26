@@ -72,6 +72,53 @@ TOTAL_PATTERN = re.compile(r"^(\d[\d,]*)\s+results?$", re.IGNORECASE)
 YR_PATTERN = re.compile(r"\bYR\(\s*(\d{4})\s*-\s*(\d{4})\s*\)", re.IGNORECASE)
 LA_PATTERN = re.compile(r"\bLA\(\s*([^()]+?)\s*\)", re.IGNORECASE)
 
+# Project only bounded semantics for visible database-submit controls.  Raw
+# labels, text, IDs, form values, and URLs never leave the page evaluation.
+DATABASE_SELECTION_SUBMIT_STATE_SCRIPT = r"""
+() => {
+  const normalize = value => String(value || '').replace(/[\s\u200e\u200f]+/g, ' ').trim();
+  const visible = element => Boolean(
+    element && (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+  );
+  const semantics = value => {
+    const text = normalize(value).toLowerCase();
+    if (/\buse\s+(?:the\s+)?selected\s+databases?\b/.test(text)) return 'use_selected_databases';
+    if (/\bselected\s+databases?\b/.test(text)) return 'selected_databases';
+    if (/\bcontinue\b/.test(text)) return 'continue';
+    if (/\bsearch\b/.test(text)) return 'search';
+    if (/\b(?:submit|apply)\b/.test(text)) return 'submit_or_apply';
+    return 'other_or_empty';
+  };
+  const idCategory = id => {
+    if (/^submit[_-]\d+$/i.test(id)) return 'numeric_submit';
+    if (/submit/i.test(id)) return 'named_submit';
+    return id ? 'other_id' : 'no_id';
+  };
+  const nodes = Array.from(document.querySelectorAll(
+    "button, input[type='submit'], input[type='button'], [role='button']"
+  )).filter((node, index, all) => visible(node) && all.indexOf(node) === index);
+  return nodes.map(node => {
+    const tag = String(node.tagName || '').toLowerCase();
+    const id = String(node.id || '');
+    const type = String(node.getAttribute('type') || (tag === 'button' ? 'submit' : '')).toLowerCase();
+    const aria = `${node.getAttribute('aria-label') || ''} ${node.getAttribute('title') || ''}`;
+    const text = tag === 'input' ? String(node.value || '') : String(node.innerText || node.textContent || '');
+    const form = node.closest('form');
+    const context = normalize(form && (form.innerText || form.textContent)).toLowerCase();
+    return {
+      tag,
+      id,
+      idCategory: idCategory(id),
+      type: type === 'submit' ? 'submit' : (type === 'button' ? 'button' : 'other'),
+      ariaSemantics: semantics(aria),
+      textSemantics: semantics(text),
+      formDatabaseContext: /\bdatabase(?:s)?\b/.test(context),
+      enabled: !node.disabled && node.getAttribute('aria-disabled') !== 'true'
+    };
+  });
+}
+"""
+
 # These are intentionally finite and closed.  No exception text is permitted
 # to become a source receipt value.
 STAGES = frozenset(
@@ -130,6 +177,7 @@ class ExplorationConfig:
     cdp_url: str
     timeout_seconds: float
     output_path: Path
+    screenshot_dir: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -155,6 +203,33 @@ class DatabaseLabelState:
 class OutputReservation:
     path: Path
     descriptor: int
+
+
+@dataclass(frozen=True)
+class DatabaseSubmitControl:
+    """One visible submit-like control, projected without raw page text/ID."""
+
+    element_id: str
+    tag: str
+    id_category: str
+    id_sha256: str
+    control_type: str
+    aria_semantics: str
+    text_semantics: str
+    form_database_context: bool
+    enabled: bool
+
+    def receipt_projection(self) -> dict[str, Any]:
+        return {
+            "tag": self.tag,
+            "id_category": self.id_category,
+            "id_sha256": self.id_sha256,
+            "control_type": self.control_type,
+            "aria_semantics": self.aria_semantics,
+            "text_semantics": self.text_semantics,
+            "form_database_context": self.form_database_context,
+            "enabled": self.enabled,
+        }
 
 
 def _validate_fixed_query(value: str) -> str:
@@ -220,6 +295,24 @@ def validate_output_path(value: Any) -> Path:
     return resolved
 
 
+def validate_screenshot_dir(value: Any) -> Path | None:
+    if value is None:
+        return None
+    if not isinstance(value, Path):
+        raise InputValidationError("--screenshot-dir must be a path when supplied")
+    candidate = value.expanduser()
+    try:
+        resolved = candidate.resolve(strict=False)
+        if resolved.exists() and not resolved.is_dir():
+            raise InputValidationError("--screenshot-dir is not a directory")
+        resolved.mkdir(parents=True, exist_ok=True)
+    except InputValidationError:
+        raise
+    except (OSError, RuntimeError) as error:
+        raise InputValidationError("--screenshot-dir is unavailable") from error
+    return resolved
+
+
 def validate_config(config: Any) -> ExplorationConfig:
     if not isinstance(config, ExplorationConfig) or type(config.execute) is not bool:
         raise InputValidationError("runtime exploration configuration is invalid")
@@ -230,6 +323,7 @@ def validate_config(config: Any) -> ExplorationConfig:
         cdp_url=validate_cdp_url(config.cdp_url),
         timeout_seconds=validate_timeout(config.timeout_seconds),
         output_path=validate_output_path(config.output_path),
+        screenshot_dir=validate_screenshot_dir(config.screenshot_dir),
     )
 
 
@@ -304,6 +398,140 @@ def _state_summary(state: DatabaseLabelState | None) -> dict[str, Any]:
     }
 
 
+def _freeze_database_submit_controls(payload: Any) -> tuple[DatabaseSubmitControl, ...]:
+    if not isinstance(payload, list) or not payload or len(payload) > 12:
+        raise StageFailure("database_selection_submit")
+    allowed_categories = {"numeric_submit", "named_submit", "other_id", "no_id"}
+    allowed_types = {"submit", "button", "other"}
+    allowed_semantics = {
+        "use_selected_databases",
+        "selected_databases",
+        "continue",
+        "search",
+        "submit_or_apply",
+        "other_or_empty",
+    }
+    controls: list[DatabaseSubmitControl] = []
+    seen_ids: set[str] = set()
+    for raw in payload:
+        if not isinstance(raw, Mapping):
+            raise StageFailure("database_selection_submit")
+        element_id = raw.get("id")
+        tag = raw.get("tag")
+        id_category = raw.get("idCategory")
+        control_type = raw.get("type")
+        aria_semantics = raw.get("ariaSemantics")
+        text_semantics = raw.get("textSemantics")
+        form_context = raw.get("formDatabaseContext")
+        enabled = raw.get("enabled")
+        if (
+            type(element_id) is not str
+            or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]{0,127}", element_id)
+            or element_id in seen_ids
+            or tag not in {"button", "input", "a"}
+            or id_category not in allowed_categories
+            or control_type not in allowed_types
+            or aria_semantics not in allowed_semantics
+            or text_semantics not in allowed_semantics
+            or type(form_context) is not bool
+            or type(enabled) is not bool
+        ):
+            raise StageFailure("database_selection_submit")
+        seen_ids.add(element_id)
+        controls.append(
+            DatabaseSubmitControl(
+                element_id=element_id,
+                tag=tag,
+                id_category=id_category,
+                id_sha256=hashlib.sha256(element_id.encode("utf-8")).hexdigest(),
+                control_type=control_type,
+                aria_semantics=aria_semantics,
+                text_semantics=text_semantics,
+                form_database_context=form_context,
+                enabled=enabled,
+            )
+        )
+    return tuple(controls)
+
+
+def _is_database_selection_submit(control: DatabaseSubmitControl) -> bool:
+    explicit = "use_selected_databases" in {
+        control.aria_semantics,
+        control.text_semantics,
+    }
+    contextual = (
+        control.control_type == "submit"
+        and control.form_database_context
+        and (
+            control.aria_semantics
+            in {"selected_databases", "continue", "search", "submit_or_apply"}
+            or control.text_semantics
+            in {"selected_databases", "continue", "search", "submit_or_apply"}
+        )
+    )
+    return control.enabled and (explicit or contextual)
+
+
+async def _resolve_database_selection_submit(
+    page: Any, receipt: dict[str, Any]
+) -> Any:
+    try:
+        raw = await page.evaluate(DATABASE_SELECTION_SUBMIT_STATE_SCRIPT)
+        controls = _freeze_database_submit_controls(raw)
+        matches = tuple(control for control in controls if _is_database_selection_submit(control))
+        receipt["controls"]["database_selection_submit_inspection"] = {
+            "complete": True,
+            "visible_candidate_count": len(controls),
+            "matching_candidate_count": len(matches),
+            "candidates": [control.receipt_projection() for control in controls],
+        }
+        if len(matches) != 1:
+            raise StageFailure("database_selection_submit")
+        target = matches[0]
+        locator = page.locator(f"#{target.element_id}:visible")
+        if (
+            await locator.count() != 1
+            or not await locator.first.is_visible()
+            or not await locator.first.is_enabled()
+        ):
+            raise StageFailure("database_selection_submit")
+        return locator.first
+    except StageFailure:
+        raise
+    except Exception as error:
+        raise StageFailure("database_selection_submit") from error
+
+
+async def _capture_restricted_locator_screenshot(
+    locator: Any,
+    screenshot_dir: Path | None,
+    name: str,
+    receipt: dict[str, Any],
+    *,
+    stage: str,
+) -> None:
+    if screenshot_dir is None:
+        return
+    try:
+        image = await locator.screenshot(type="png")
+        if not isinstance(image, bytes) or not image:
+            raise OSError("empty screenshot")
+        path = screenshot_dir / f"{name}.png"
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(path, flags, 0o600)
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(image)
+            handle.flush()
+            os.fsync(handle.fileno())
+        receipt["artifacts"]["screenshot_sha256"][name] = hashlib.sha256(image).hexdigest()
+    except StageFailure:
+        raise
+    except Exception as error:
+        raise StageFailure(stage) from error
+
+
 def _empty_receipt(config: ExplorationConfig) -> dict[str, Any]:
     return {
         "schema_version": "slr1-proquest-atai-exploration/v1",
@@ -368,6 +596,10 @@ def _empty_receipt(config: ExplorationConfig) -> dict[str, Any]:
             "baseline_target_set_preserved": None,
             "cleanup_verified": False,
         },
+        "artifacts": {
+            "screenshot_dir_configured": config.screenshot_dir is not None,
+            "screenshot_sha256": {},
+        },
         "selection": {
             "database_route_verified": False,
             "snapshot_captured": False,
@@ -387,6 +619,12 @@ def _empty_receipt(config: ExplorationConfig) -> dict[str, Any]:
         "controls": {
             "database_selection_controls_validated": False,
             "database_selection_submit_control": False,
+            "database_selection_submit_inspection": {
+                "complete": False,
+                "visible_candidate_count": 0,
+                "matching_candidate_count": 0,
+                "candidates": [],
+            },
             "product_route_verified": False,
             "command_line_route_verified": False,
             "result_controls_validated": False,
@@ -766,22 +1004,20 @@ async def _submit_selection_and_enter_command_line(
     timeout_seconds: float,
     reassert_owned: Callable[[], Any],
     receipt: dict[str, Any],
+    screenshot_dir: Path | None,
 ) -> None:
     try:
-        selection_button = page.locator("#submit_2:visible, #submit_4:visible")
-        if (
-            await selection_button.count() != 1
-            or not await selection_button.first.is_visible()
-            or not await selection_button.first.is_enabled()
-        ):
-            raise StageFailure("database_selection_submit")
-        receipt["submission"]["database_selection_submit_count"] = 1
-        await adapter.submit_database_selection(
-            page,
-            timeout_seconds,
-            source_site=ENTRY_SITE,
-            ownership_reassertion=reassert_owned,
+        await reassert_owned()
+        selection_button = await _resolve_database_selection_submit(page, receipt)
+        await _capture_restricted_locator_screenshot(
+            selection_button,
+            screenshot_dir,
+            "database-selection-submit",
+            receipt,
+            stage="database_selection_submit",
         )
+        receipt["submission"]["database_selection_submit_count"] = 1
+        await selection_button.click()
     except StageFailure:
         raise
     except Exception as error:
@@ -848,6 +1084,7 @@ async def _validate_controls_and_submit(
     timeout_seconds: float,
     reassert_owned: Callable[[], Any],
     receipt: dict[str, Any],
+    screenshot_dir: Path | None,
 ) -> None:
     try:
         await reassert_owned()
@@ -896,6 +1133,13 @@ async def _validate_controls_and_submit(
             raise StageFailure("form_controls")
         receipt["controls"]["query_field_validated"] = True
         receipt["controls"]["native_submit_control_validated"] = True
+        await _capture_restricted_locator_screenshot(
+            button.first,
+            screenshot_dir,
+            "command-line-submit",
+            receipt,
+            stage="form_controls",
+        )
         await field.first.fill(command)
         readback = await field.first.input_value()
         if (
@@ -1308,6 +1552,25 @@ async def _execute_live(
                 )
                 if not receipt["selection"]["exact_target_selected"]:
                     raise StageFailure("database_selection")
+                target_options = [
+                    option
+                    for option in await adapter.read_database_options(
+                        page, timeout_seconds=config.timeout_seconds
+                    )
+                    if getattr(option, "label", None) == TARGET_DATABASE_LABEL
+                ]
+                if len(target_options) != 1:
+                    raise StageFailure("database_selection")
+                target_id = getattr(target_options[0], "element_id", None)
+                if type(target_id) is not str or not target_id.startswith("dbcb_"):
+                    raise StageFailure("database_selection")
+                await _capture_restricted_locator_screenshot(
+                    page.locator(f"#{target_id}:visible").first,
+                    config.screenshot_dir,
+                    "database-target-selected",
+                    receipt,
+                    stage="database_selection",
+                )
 
                 current_stage = "database_selection_submit"
                 await _submit_selection_and_enter_command_line(
@@ -1316,6 +1579,7 @@ async def _execute_live(
                     config.timeout_seconds,
                     reassert_owned,
                     receipt,
+                    config.screenshot_dir,
                 )
 
                 current_stage = "form_controls"
@@ -1325,12 +1589,25 @@ async def _execute_live(
                     config.timeout_seconds,
                     reassert_owned,
                     receipt,
+                    config.screenshot_dir,
                 )
 
                 current_stage = "result_state"
                 aggregate = await _wait_for_aggregate_result(
                     page, config.timeout_seconds, reassert_owned
                 )
+                if config.screenshot_dir is not None:
+                    await _capture_restricted_locator_screenshot(
+                        page.locator(
+                            ".pagingBoxNoResultMain .error_message:visible"
+                            if aggregate[1]
+                            else "#pqResultsCount:visible"
+                        ).first,
+                        config.screenshot_dir,
+                        "aggregate-result",
+                        receipt,
+                        stage="result_state",
+                    )
                 _mark_complete(receipt, aggregate[0], aggregate[1])
             except StageFailure as error:
                 primary_stage = error.stage
@@ -1461,6 +1738,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--output-path", required=True, help="new aggregate receipt path"
     )
+    parser.add_argument(
+        "--screenshot-dir", help="restricted create-only control screenshot directory"
+    )
     # Kept hidden so a copied command cannot accidentally select another port.
     parser.add_argument("--cdp-url", default=DEFAULT_CDP_URL, help=argparse.SUPPRESS)
     return parser
@@ -1476,6 +1756,11 @@ def main(argv: list[str] | None = None) -> int:
                 cdp_url=args.cdp_url,
                 timeout_seconds=args.timeout_seconds,
                 output_path=Path(args.output_path).expanduser(),
+                screenshot_dir=(
+                    Path(args.screenshot_dir).expanduser()
+                    if args.screenshot_dir is not None
+                    else None
+                ),
             )
         )
     except InputValidationError as error:

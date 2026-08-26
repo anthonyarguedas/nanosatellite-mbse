@@ -59,7 +59,7 @@ class FakePage:
         self.closed = False
         self.native_clicks = 0
         self.query_field = FakeLocator()
-        self.database_submit_button = FakeLocator()
+        self.database_submit_button = FakeLocator(click=self._submit_database_selection)
         self.submit_button = FakeLocator(click=self._submit_query)
 
     def is_closed(self) -> bool:
@@ -68,6 +68,9 @@ class FakePage:
     async def close(self) -> None:
         self.closed = True
         self.context.pages = [page for page in self.context.pages if page is not self]
+
+    def _submit_database_selection(self) -> None:
+        self.url = "https://www.proquest.com/ataindex/"
 
     def _submit_query(self) -> None:
         self.native_clicks += 1
@@ -78,7 +81,7 @@ class FakePage:
             return self.query_field
         if selector == "#submit_7":
             return self.submit_button
-        if selector == "#submit_2:visible, #submit_4:visible":
+        if selector in {"#submit_2:visible, #submit_4:visible", "#submit_2:visible"}:
             return self.database_submit_button
         if selector.endswith(":visible") and selector.startswith("#dbcb_"):
             return FakeLocator()
@@ -93,6 +96,19 @@ class FakePage:
                 "resultOptions": {},
                 "limiterState": {},
             }
+        if script == runner.DATABASE_SELECTION_SUBMIT_STATE_SCRIPT:
+            return [
+                {
+                    "tag": "input",
+                    "id": "submit_2",
+                    "idCategory": "numeric_submit",
+                    "type": "submit",
+                    "ariaSemantics": "other_or_empty",
+                    "textSemantics": "use_selected_databases",
+                    "formDatabaseContext": True,
+                    "enabled": True,
+                }
+            ]
         if script == runner.SENTINEL_RESULT_STATE_SCRIPT:
             return {
                 "protocol": "https:",
@@ -311,7 +327,7 @@ class ProQuestAtaiExplorationTests(unittest.TestCase):
             self.assertEqual(receipt["ownership"]["baseline_target_set_preserved"], True)
             self.assertEqual(receipt["ownership"]["owned_target_disappeared"], True)
             self.assertEqual(receipt["selection"]["restoration_status"], "attempted_verified")
-            self.assertEqual(adapter.selection_submits, 2)
+            self.assertEqual(adapter.selection_submits, 1)
             self.assertEqual(adapter.selected["Unrelated database"], True)
             self.assertTrue(output.is_file())
             saved = json.loads(output.read_text(encoding="utf-8"))
