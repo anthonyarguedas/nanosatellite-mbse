@@ -124,7 +124,7 @@ def _validate_output_path(value: Any) -> Path:
 def validate_config(config: Any) -> ExplorationConfig:
     if not isinstance(config, ExplorationConfig) or type(config.execute) is not bool:
         raise InputValidationError("runtime exploration configuration is invalid")
-    if type(config.output_path) is not Path:
+    if not isinstance(config.output_path, Path):
         raise InputValidationError("runtime exploration configuration is invalid")
     if type(config.cdp_url) is not str or config.cdp_url != DEFAULT_CDP_URL:
         raise InputValidationError(f"--cdp-url must be exactly {DEFAULT_CDP_URL}")
