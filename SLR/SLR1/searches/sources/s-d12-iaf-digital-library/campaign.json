@@ -4,7 +4,7 @@
   "task_id": "S-D12",
   "source_id": "iaf-digital-library",
   "method_type": "direct",
-  "protocol_fingerprint": "598838c7c40e692e6bdf001ef7f0574659a592b1945540df875a9c2e54e32f73",
+  "protocol_fingerprint": "d1d92411ad641bc0293389b9699c6676ba998af72c9cfd63c28b59bcf4745ba9",
   "dictionary_fingerprint": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
   "capability_catalog": [
     "G-SOURCE-BOUNDARY",
@@ -87,14 +87,6 @@
           "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444",
           "validity": "valid",
           "basis": "observed"
-        },
-        {
-          "evidence_id": "E-P01-QUERY-TRANSPORT",
-          "gate_id": "G-QUERY-TRANSPORT",
-          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
-          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444",
-          "validity": "valid",
-          "basis": "observed"
         }
       ],
       "terminal": {
@@ -104,11 +96,11 @@
         "provider_failure": false,
         "source_writing_stopped": true,
         "browser_backed": false,
-        "terminal_verification": "not_applicable",
         "cleanup_receipt": null,
         "lease_receipt": null,
         "cancelled_by": null,
-        "reason": "Exact frozen record-free health operation completed with full-library/no-event scope, exact sentinel echo, source total 2109, and zero retained records."
+        "reason": "The exact frozen record-free health operation completed with full-library/no-event scope, exact query echo, total 2109, and zero retained records.",
+        "terminal_verification": "not_applicable"
       }
     },
     {
@@ -168,42 +160,7 @@
       }
     }
   ],
-  "gate_status_snapshots": [
-    {
-      "snapshot_id": "GS-P01-SOURCE-BOUNDARY",
-      "attempt_id": "S-D12-P01-20260826T041245+0000",
-      "manifest_path": "pilots/S-D12-P01-20260826T041245+0000/manifest.json",
-      "manifest_sha256": "7e34bf697e98c1ce854d583aad13b5af1d39931a1bf259925f8ae9fc3ba9d63c",
-      "gate_id": "G-SOURCE-BOUNDARY",
-      "status": "passed",
-      "reusable": true,
-      "original_observed_basis": "observed",
-      "evidence": [
-        {
-          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
-          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444"
-        }
-      ],
-      "immutable": true
-    },
-    {
-      "snapshot_id": "GS-P01-QUERY-TRANSPORT",
-      "attempt_id": "S-D12-P01-20260826T041245+0000",
-      "manifest_path": "pilots/S-D12-P01-20260826T041245+0000/manifest.json",
-      "manifest_sha256": "7e34bf697e98c1ce854d583aad13b5af1d39931a1bf259925f8ae9fc3ba9d63c",
-      "gate_id": "G-QUERY-TRANSPORT",
-      "status": "passed",
-      "reusable": true,
-      "original_observed_basis": "observed",
-      "evidence": [
-        {
-          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
-          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444"
-        }
-      ],
-      "immutable": true
-    }
-  ],
+  "gate_status_snapshots": [],
   "capability_gates": [
     {
       "gate_id": "G-SOURCE-BOUNDARY",
@@ -239,17 +196,11 @@
       "attempt_id": "S-D12-P01-20260826T041245+0000",
       "requirement": "The exact health sentinel is echoed and reconciled to a native total.",
       "depends_on": [],
-      "status": "passed",
-      "observed_basis": "observed",
-      "original_observed_basis": "observed",
-      "evidence": [
-        {
-          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
-          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444",
-          "validity": "valid"
-        }
-      ],
-      "reusable": true,
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
@@ -259,7 +210,7 @@
         "rationale": "Observed interface capability; no review semantics changed."
       },
       "invalidation": null,
-      "notes": "Passed for exact health-sentinel transport only; no review partition or field semantics were exercised."
+      "notes": "Passed for exact health-sentinel transport only; no review partition or field semantics were exercised. Campaign validator requires gate-specific immutable evidence; this aggregate file is checkpointed only to its attempt-declared gate."
     },
     {
       "gate_id": "G-FIELD-BOUNDARY",
@@ -480,9 +431,9 @@
       "carry_forward": null,
       "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "none",
+        "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "native zero observed"
+        "rationale": "Behavior-preserving technical capability attempt; review semantics unchanged."
       },
       "invalidation": null,
       "notes": "explicit-zero diagnostic only"

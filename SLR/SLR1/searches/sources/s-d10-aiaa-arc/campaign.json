@@ -4,7 +4,7 @@
   "task_id": "S-D10",
   "source_id": "aiaa-arc",
   "method_type": "direct",
-  "protocol_fingerprint": "598838c7c40e692e6bdf001ef7f0574659a592b1945540df875a9c2e54e32f73",
+  "protocol_fingerprint": "d1d92411ad641bc0293389b9699c6676ba998af72c9cfd63c28b59bcf4745ba9",
   "dictionary_fingerprint": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
   "capability_catalog": [
     "G-SOURCE-BOUNDARY",
@@ -48,7 +48,7 @@
       "attempt_id": "S-D10-P01-20260826T062526+0000",
       "sequence": 1,
       "manifest_path": "pilots/S-D10-P01-20260826T062526+0000/manifest.json",
-      "manifest_sha256": "c98f36190f715be59821adcb1aa7db29c8d6c7f6106869dcb5c928a36b57ae73",
+      "manifest_sha256": "4153cb8f5323ec6a615b625330593696be02a3c31d32b33fbc6f3d7d74c28ea4",
       "immutable": true,
       "allocation": {
         "attempt_kind": "initial",
@@ -88,38 +88,6 @@
           "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
           "validity": "valid",
           "basis": "observed"
-        },
-        {
-          "evidence_id": "E-P01-QUERY-TRANSPORT",
-          "gate_id": "G-QUERY-TRANSPORT",
-          "path": "pilots/S-D10-P01-20260826T062526+0000/health-evidence.json",
-          "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
-          "validity": "valid",
-          "basis": "observed"
-        },
-        {
-          "evidence_id": "E-P01-FIELD-BOUNDARY",
-          "gate_id": "G-FIELD-BOUNDARY",
-          "path": "pilots/S-D10-P01-20260826T062526+0000/health-evidence.json",
-          "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
-          "validity": "valid",
-          "basis": "observed"
-        },
-        {
-          "evidence_id": "E-P01-DATE-CONTROL",
-          "gate_id": "G-DATE-CONTROL",
-          "path": "pilots/S-D10-P01-20260826T062526+0000/health-evidence.json",
-          "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
-          "validity": "valid",
-          "basis": "observed"
-        },
-        {
-          "evidence_id": "E-P01-CONTENT-CONTROL",
-          "gate_id": "G-CONTENT-CONTROL",
-          "path": "pilots/S-D10-P01-20260826T062526+0000/health-evidence.json",
-          "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
-          "validity": "valid",
-          "basis": "observed"
         }
       ],
       "terminal": {
@@ -129,17 +97,17 @@
         "provider_failure": false,
         "source_writing_stopped": true,
         "browser_backed": true,
-        "terminal_verification": "verified",
         "cleanup_receipt": {
           "path": "pilots/S-D10-P01-20260826T062526+0000/cleanup.json",
-          "sha256": "1e60bf4f59f6d5abf05386d6c5a03ee4afddd5d0e0aa1133781f8c1e880bf4e0"
+          "sha256": "15350b92b68b9b7f292f278d01474b3f96be84917c742a184c2366a4b51ede52"
         },
         "lease_receipt": {
           "path": "pilots/S-D10-P01-20260826T062526+0000/release.json",
-          "sha256": "44a14e7621546fb6a2e2b2833b7d1a4df348fb92cb1ca2be2ca120b7ab60bce1"
+          "sha256": "9d685795105503ded703a5178eb05923db378da67ce3375bdf99ee2afa8a5a4b"
         },
         "cancelled_by": null,
-        "reason": "health total 5748 passed"
+        "reason": "health total 5748 passed",
+        "terminal_verification": "verified"
       }
     }
   ],
@@ -179,17 +147,11 @@
       "attempt_id": "S-D10-P01-20260826T062526+0000",
       "requirement": "G-QUERY-TRANSPORT",
       "depends_on": [],
-      "status": "passed",
-      "observed_basis": "observed",
-      "original_observed_basis": "observed",
-      "evidence": [
-        {
-          "path": "pilots/S-D10-P01-20260826T062526+0000/health-evidence.json",
-          "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
-          "validity": "valid"
-        }
-      ],
-      "reusable": true,
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
@@ -199,7 +161,7 @@
         "rationale": "narrow observed health capability"
       },
       "invalidation": null,
-      "notes": "health sentinel only"
+      "notes": "health sentinel only Campaign validator requires gate-specific immutable evidence; this aggregate file is checkpointed only to its attempt-declared gate."
     },
     {
       "gate_id": "G-FIELD-BOUNDARY",
@@ -207,17 +169,11 @@
       "attempt_id": "S-D10-P01-20260826T062526+0000",
       "requirement": "G-FIELD-BOUNDARY",
       "depends_on": [],
-      "status": "passed",
-      "observed_basis": "observed",
-      "original_observed_basis": "observed",
-      "evidence": [
-        {
-          "path": "pilots/S-D10-P01-20260826T062526+0000/health-evidence.json",
-          "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
-          "validity": "valid"
-        }
-      ],
-      "reusable": true,
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
@@ -227,7 +183,7 @@
         "rationale": "narrow observed health capability"
       },
       "invalidation": null,
-      "notes": "health sentinel only"
+      "notes": "health sentinel only Campaign validator requires gate-specific immutable evidence; this aggregate file is checkpointed only to its attempt-declared gate."
     },
     {
       "gate_id": "G-CONTROLLED-VOCABULARY",
@@ -257,17 +213,11 @@
       "attempt_id": "S-D10-P01-20260826T062526+0000",
       "requirement": "G-DATE-CONTROL",
       "depends_on": [],
-      "status": "passed",
-      "observed_basis": "observed",
-      "original_observed_basis": "observed",
-      "evidence": [
-        {
-          "path": "pilots/S-D10-P01-20260826T062526+0000/health-evidence.json",
-          "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
-          "validity": "valid"
-        }
-      ],
-      "reusable": true,
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
@@ -277,7 +227,7 @@
         "rationale": "narrow observed health capability"
       },
       "invalidation": null,
-      "notes": "health sentinel only"
+      "notes": "health sentinel only Campaign validator requires gate-specific immutable evidence; this aggregate file is checkpointed only to its attempt-declared gate."
     },
     {
       "gate_id": "G-LANGUAGE-CONTROL",
@@ -307,17 +257,11 @@
       "attempt_id": "S-D10-P01-20260826T062526+0000",
       "requirement": "G-CONTENT-CONTROL",
       "depends_on": [],
-      "status": "passed",
-      "observed_basis": "observed",
-      "original_observed_basis": "observed",
-      "evidence": [
-        {
-          "path": "pilots/S-D10-P01-20260826T062526+0000/health-evidence.json",
-          "sha256": "1af0f38d2f02c72adf07aa2feace6366bd15d3aea061fe7bdb79f7ce533eff9a",
-          "validity": "valid"
-        }
-      ],
-      "reusable": true,
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
       "source_operation_count": 1,
@@ -327,7 +271,7 @@
         "rationale": "narrow observed health capability"
       },
       "invalidation": null,
-      "notes": "health sentinel only"
+      "notes": "health sentinel only Campaign validator requires gate-specific immutable evidence; this aggregate file is checkpointed only to its attempt-declared gate."
     },
     {
       "gate_id": "G-RETRIEVAL",
