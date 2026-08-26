@@ -79,6 +79,7 @@ def result_payload(
     total: int | None = 3,
     route_page: int | None = 1,
     current_page: int | None = 1,
+    relevance: bool = True,
     page_size: bool = True,
     cards: int = 3,
     expected: int | None = 3,
@@ -106,6 +107,7 @@ def result_payload(
         "source_total": total,
         "route_page": route_page,
         "current_page": current_page,
+        "relevance": relevance,
         "page_size_50": page_size,
         "card_count": cards,
         "expected_card_count": expected,
@@ -188,6 +190,8 @@ class ResultProjectionTests(unittest.TestCase):
         self.assertIsNone(wos._result_classification(summary))
         no_echo = wos.result_state_from_payload(result_payload(topic=False))
         self.assertEqual(wos._result_classification(no_echo), "summary_controls_unverified")
+        no_relevance = wos.result_state_from_payload(result_payload(relevance=False))
+        self.assertEqual(wos._result_classification(no_relevance), "summary_controls_unverified")
 
     def test_result_projection_keeps_only_aggregate_stable_id_and_export_facts(self):
         state = wos.result_state_from_payload(
@@ -399,6 +403,7 @@ class OwnershipAndOfflineLifecycleTests(unittest.TestCase):
             3,
             1,
             1,
+            True,
             True,
             3,
             3,

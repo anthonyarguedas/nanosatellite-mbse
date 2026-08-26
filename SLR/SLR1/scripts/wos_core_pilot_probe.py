@@ -190,6 +190,7 @@ class ResultState:
     source_total: int | None
     route_page: int | None
     current_page: int | None
+    relevance: bool
     page_size_50: bool
     card_count: int
     expected_card_count: int | None
@@ -209,6 +210,7 @@ class ResultState:
             and self.source_total > 0
             and self.summary_route
             and self.route_page == self.current_page == 1
+            and self.relevance
             and self.page_size_50
             and self.expected_card_count is not None
             and self.card_count == self.expected_card_count
@@ -362,6 +364,10 @@ POST_RESULT_PROJECTION_SCRIPT = r"""
   const pageInputs = Array.from(document.querySelectorAll("input[aria-label^='Top Page Number ']")).filter(visible);
   const currentPage = pageInputs.length === 1 && /^\d+$/.test(String(pageInputs[0].value || ""))
     ? Number(pageInputs[0].value) : null;
+  const relevance = Array.from(document.querySelectorAll("button[data-ta='selectSortOption']"))
+    .filter(visible).filter(element =>
+      String(element.getAttribute("aria-label") || "") === "Sort by Relevance"
+    ).length === 1;
   const pageSize = Array.from(document.querySelectorAll("button[role='combobox']"))
     .filter(visible).some(element => /^Page size,\s*50$/i.test(String(element.getAttribute("aria-label") || "")));
   const cards = Array.from(document.querySelectorAll("app-record")).filter(visible);
@@ -389,6 +395,7 @@ POST_RESULT_PROJECTION_SCRIPT = r"""
     source_total: total,
     route_page: routePage,
     current_page: currentPage,
+    relevance,
     page_size_50: pageSize,
     card_count: cardCount,
     expected_card_count: expected,
@@ -609,6 +616,7 @@ def result_state_from_payload(payload: Any) -> ResultState:
     bool_names = (
         "zero_alert",
         "summary_route",
+        "relevance",
         "page_size_50",
         "export_control_present",
         "challenge",
@@ -636,6 +644,7 @@ def result_state_from_payload(payload: Any) -> ResultState:
         source_total=total,
         route_page=route_page,
         current_page=current_page,
+        relevance=payload["relevance"],
         page_size_50=payload["page_size_50"],
         card_count=card_count,
         expected_card_count=expected,
@@ -664,7 +673,7 @@ def _result_classification(state: ResultState) -> str | None:
     if state.classification == "summary":
         if not (state.summary_route and state.route_page == state.current_page == 1):
             return "summary_page_identity_failed"
-        if not state.submitted_controls.verified:
+        if not state.submitted_controls.verified or not state.relevance or not state.page_size_50:
             return "summary_controls_unverified"
         if state.source_total is None or state.source_total < 1:
             return "summary_total_unavailable"
@@ -1095,6 +1104,7 @@ def new_receipt(config: ProbeConfig) -> dict[str, Any]:
             "summary_route_observed": False,
             "route_page": None,
             "current_page": None,
+            "relevance": False,
             "page_size_50": False,
             "card_count": None,
             "expected_card_count": None,
@@ -1145,6 +1155,7 @@ def apply_result(receipt: dict[str, Any], state: ResultState, outcome: Hydration
             "summary_route_observed": state.summary_route,
             "route_page": state.route_page,
             "current_page": state.current_page,
+            "relevance": state.relevance,
             "page_size_50": state.page_size_50,
             "card_count": state.card_count,
             "expected_card_count": state.expected_card_count,
