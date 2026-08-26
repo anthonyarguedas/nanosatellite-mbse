@@ -1,0 +1,432 @@
+{
+  "schema_version": "slr1-pilot-campaign/v1",
+  "campaign_id": "S-D12-C01-20260826T041245+0000",
+  "task_id": "S-D12",
+  "source_id": "iaf-digital-library",
+  "method_type": "direct",
+  "protocol_fingerprint": "598838c7c40e692e6bdf001ef7f0574659a592b1945540df875a9c2e54e32f73",
+  "dictionary_fingerprint": "61526b5d617a2af332aa3bb5d2a57b01dce60988c321d5c6deb807549fca076f",
+  "capability_catalog": [
+    "G-SOURCE-BOUNDARY",
+    "G-QUERY-TRANSPORT",
+    "G-FIELD-BOUNDARY",
+    "G-CONTROLLED-VOCABULARY",
+    "G-DATE-CONTROL",
+    "G-LANGUAGE-CONTROL",
+    "G-CONTENT-CONTROL",
+    "G-RETRIEVAL",
+    "G-PAGINATION-CONTROL",
+    "G-PAGE-IDENTITY",
+    "G-COMPLETENESS",
+    "G-FAILURE-BEHAVIOR"
+  ],
+  "status": "in_progress",
+  "created_at": "2026-08-26T04:12:45Z",
+  "updated_at": "2026-08-26T04:12:59Z",
+  "diagnostic_only": true,
+  "screening_performed": false,
+  "candidate_import_permitted": false,
+  "candidate_records_imported": 0,
+  "retry_policy": {
+    "policy_id": "RP-D12-P01-HTTP",
+    "maximum_retries": 1,
+    "passive_wait_delays_seconds": [
+      1
+    ],
+    "attempted": 0,
+    "completed": 0,
+    "preauthorized_same_tab_busy_reissue": false
+  },
+  "controller_authorization": {
+    "technical_corrective_attempts_authorized": true,
+    "maximum_additional_attempts": 2,
+    "maximum_technical_corrective_attempts": 2,
+    "maximum_methodological_revision_attempts": 0,
+    "maximum_source_operations_per_attempt": 1,
+    "rationale": "Permit only bounded behavior-preserving health-route repair after a technical failure; later capabilities require new X-to-P ladders."
+  },
+  "attempts": [
+    {
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "sequence": 1,
+      "manifest_path": "pilots/S-D12-P01-20260826T041245+0000/manifest.json",
+      "manifest_sha256": "7e34bf697e98c1ce854d583aad13b5af1d39931a1bf259925f8ae9fc3ba9d63c",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "initial",
+        "authorized_by": "controller",
+        "authorization_decision_id": null,
+        "prospectively_authorized": false,
+        "allocated_at": "2026-08-26T04:12:45Z",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "IAF-P01-HEALTH",
+            "operation_key": "HEALTH",
+            "gate_ids": [
+              "G-SOURCE-BOUNDARY",
+              "G-QUERY-TRANSPORT"
+            ],
+            "outcome": "success",
+            "source_reported_total": 2109,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P01-SOURCE-BOUNDARY",
+          "gate_id": "G-SOURCE-BOUNDARY",
+          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
+          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P01-QUERY-TRANSPORT",
+          "gate_id": "G-QUERY-TRANSPORT",
+          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
+          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "completed",
+        "category": "completed",
+        "ended_at": "2026-08-26T04:12:59Z",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": false,
+        "terminal_verification": "not_applicable",
+        "cleanup_receipt": null,
+        "lease_receipt": null,
+        "cancelled_by": null,
+        "reason": "Exact frozen record-free health operation completed with full-library/no-event scope, exact sentinel echo, source total 2109, and zero retained records."
+      }
+    }
+  ],
+  "gate_status_snapshots": [
+    {
+      "snapshot_id": "GS-P01-SOURCE-BOUNDARY",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "manifest_path": "pilots/S-D12-P01-20260826T041245+0000/manifest.json",
+      "manifest_sha256": "7e34bf697e98c1ce854d583aad13b5af1d39931a1bf259925f8ae9fc3ba9d63c",
+      "gate_id": "G-SOURCE-BOUNDARY",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
+          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444"
+        }
+      ],
+      "immutable": true
+    },
+    {
+      "snapshot_id": "GS-P01-QUERY-TRANSPORT",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "manifest_path": "pilots/S-D12-P01-20260826T041245+0000/manifest.json",
+      "manifest_sha256": "7e34bf697e98c1ce854d583aad13b5af1d39931a1bf259925f8ae9fc3ba9d63c",
+      "gate_id": "G-QUERY-TRANSPORT",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
+          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444"
+        }
+      ],
+      "immutable": true
+    }
+  ],
+  "capability_gates": [
+    {
+      "gate_id": "G-SOURCE-BOUNDARY",
+      "checkpoint_id": "CP-SOURCE-BOUNDARY-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "The normal public route proves the full-library boundary and absence of an event restriction.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
+          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "Observed interface capability; no review semantics changed."
+      },
+      "invalidation": null,
+      "notes": "Passed only for the visible full-library/no-event interface boundary; exhaustive collection coverage remains outside this attempt."
+    },
+    {
+      "gate_id": "G-QUERY-TRANSPORT",
+      "checkpoint_id": "CP-QUERY-TRANSPORT-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "The exact health sentinel is echoed and reconciled to a native total.",
+      "depends_on": [],
+      "status": "passed",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D12-P01-20260826T041245+0000/health-evidence.json",
+          "sha256": "776e035c85999aec7929efb4f05e2254e064df4cbb1712600203d64ce37cb444",
+          "validity": "valid"
+        }
+      ],
+      "reusable": true,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "Observed interface capability; no review semantics changed."
+      },
+      "invalidation": null,
+      "notes": "Passed for exact health-sentinel transport only; no review partition or field semantics were exercised."
+    },
+    {
+      "gate_id": "G-FIELD-BOUNDARY",
+      "checkpoint_id": "CP-FIELD-BOUNDARY-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-FIELD-BOUNDARY with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-CONTROLLED-VOCABULARY",
+      "checkpoint_id": "CP-CONTROLLED-VOCABULARY-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-CONTROLLED-VOCABULARY with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-DATE-CONTROL",
+      "checkpoint_id": "CP-DATE-CONTROL-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-DATE-CONTROL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-LANGUAGE-CONTROL",
+      "checkpoint_id": "CP-LANGUAGE-CONTROL-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-LANGUAGE-CONTROL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-CONTENT-CONTROL",
+      "checkpoint_id": "CP-CONTENT-CONTROL-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-CONTENT-CONTROL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-RETRIEVAL",
+      "checkpoint_id": "CP-RETRIEVAL-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-RETRIEVAL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-PAGINATION-CONTROL",
+      "checkpoint_id": "CP-PAGINATION-CONTROL-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-PAGINATION-CONTROL with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-PAGE-IDENTITY",
+      "checkpoint_id": "CP-PAGE-IDENTITY-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-PAGE-IDENTITY with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-COMPLETENESS",
+      "checkpoint_id": "CP-COMPLETENESS-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-COMPLETENESS with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    },
+    {
+      "gate_id": "G-FAILURE-BEHAVIOR",
+      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P01",
+      "attempt_id": "S-D12-P01-20260826T041245+0000",
+      "requirement": "Establish G-FAILURE-BEHAVIOR with immutable current-interface evidence.",
+      "depends_on": [],
+      "status": "untested",
+      "observed_basis": "untested",
+      "original_observed_basis": "untested",
+      "evidence": [],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 0,
+      "semantic_impact": {
+        "classification": "none",
+        "review_effect": false,
+        "rationale": "No semantic change; capability not yet observed."
+      },
+      "invalidation": null,
+      "notes": "Not exercised by the narrow P01 health capability attempt; later X-to-P evidence is required."
+    }
+  ],
+  "decisions": [],
+  "cancellation": null,
+  "acceptance": null
+}
