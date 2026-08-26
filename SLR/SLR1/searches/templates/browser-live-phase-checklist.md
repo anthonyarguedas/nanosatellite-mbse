@@ -5,7 +5,7 @@ Use this checklist for both exploration and evidence phases. Copy it into the se
 ## 1. Offline and authorization
 
 - [ ] Mode: `exploration` / `evidence`
-- [ ] Exploration session or pilot/phase ID: `REPLACE`
+- [ ] Exploration logical run plus current `X` session, or pilot/phase ID: `REPLACE`
 - [ ] Campaign and decision class: `not_applicable_for_exploration` / `REPLACE`
 - [ ] Offline reading complete.
 - [ ] Minimum launch gate complete: exact query, command startup, create-only outputs, manifest/receipt shape, and browser health. No broad suite required.
@@ -16,7 +16,7 @@ Use this checklist for both exploration and evidence phases. Copy it into the se
 - [ ] Global domain-pacing decision: `REPLACE`
 - [ ] Predeclared finite wait/readiness policy, or `none`: `REPLACE`
 
-Only source-free work may be concurrent. Require the minimum launch gate above, not a large fixture or regression suite. Patch a technical preflight failure with the smallest direct check and proceed to real-page validation. If an attempt ID was already allocated but no source phase began, record `allocation.source_phase_started=false`; it does not consume the enacted source-phase budget. Technical real-page observation, finite passive waits, and bounded logged retests are controller-authorized; only a methodological change affecting the review requires human authorization.
+Only source-free work may be concurrent. Require the minimum launch gate above, not a large fixture or regression suite. Patch a technical preflight failure with the smallest direct check and proceed to real-page validation. If an attempt ID was already allocated but no source phase began, record `allocation.source_phase_started=false`; it does not consume the enacted source-phase budget. Technical real-page observation, finite passive waits, patches, and bounded logged retests are controller-authorized; only a methodological change affecting the review requires human authorization. In exploration, a failed replay remains an iteration within the logical run. After cleanup/release, allocate another sequential `X` segment when plausible options remain; evidence-attempt retry ceilings do not terminate exploration.
 
 ## 2. Lease command and shared-browser boundary
 
@@ -67,9 +67,11 @@ A failed version, anchor, sleep, or profile/process health check stops source wo
 
 For **exploration**:
 
-- [ ] One concise exploration log records real-page states, screenshots/DOM references, patches, and what works.
+- [ ] The lightweight session ledger records source operations, aggregate/zero/`null`, patch/replay identifier, and verified cleanup/release.
 - [ ] No campaign gate or pilot acceptance is claimed.
-- [ ] A frozen interaction recipe, implementation commit, and proposed evidence plan are ready—or remaining unknowns are explicit.
+- [ ] If the replay failed and plausible options remain, the logical run stays active and the next bounded iteration is identified.
+- [ ] The run is labelled working only after the current automation succeeds live; deferred/exhausted/safety-stop labels satisfy the policy's explicit criteria.
+- [ ] A frozen interaction recipe, implementation commit, and proposed evidence plan exist only for a successful automated replay; otherwise remaining options or the terminal blocker are explicit.
 
 For **evidence**:
 
