@@ -17,9 +17,7 @@ searches/
 │   ├── queries/                       # exact UTF-8 source-native text
 │   ├── local-method-spec.json         # local-harvest sources
 │   ├── prior-diagnostics/             # explicitly non-accepted observations
-│   ├── explorations/<session-id>/     # iterative agent-driven interface discovery
-│   │   ├── exploration.md
-│   │   └── restricted-evidence-index.json
+│   ├── explorations/                  # historical/optional technical notes; not required for Mode 1 development
 │   └── pilots/<pilot-id>/             # deterministic evidence-mode attempts only
 │       ├── manifest.json
 │       ├── observations.md
@@ -27,17 +25,17 @@ searches/
 └── final-events/                       # untouched until R-002
 ```
 
-Directory names use lowercase task IDs, for example `s-d01-scopus` and `s-l02-esa-indico`. Exploration sessions use `<TASK>-X<NN>-<YYYYMMDDThhmmss-offset>` and never count as pilots. One logical exploration run may span several sequential `X` sessions for the same technical recipe. Preserve each lease receipt and minimum operation/cleanup ledger immediately; reconcile the session records and restricted indexes at a working, deferred, exhausted, safety-stop, or useful checkpoint rather than blocking live debugging on full prose after every failed selector. Campaign IDs use `<TASK>-C<NN>-<YYYYMMDDThhmmss-offset>` and immutable evidence-attempt IDs use `<TASK>-P<NN>-<YYYYMMDDThhmmss-offset>`.
+Directory names use lowercase task IDs, for example `s-d01-scopus` and `s-l02-esa-indico`. Mode 1 technical development uses a disposable ignored workspace under `.searches/` and needs no formal ID or source-packet record. Existing `X` records remain historical diagnostics, not a required pattern for future debugging. Campaign IDs use `<TASK>-C<NN>-<YYYYMMDDThhmmss-offset>` and immutable evidence-attempt IDs use `<TASK>-P<NN>-<YYYYMMDDThhmmss-offset>`.
 
 ## Separation rules
 
-1. Exploration and pilot work are diagnostic only. Exploration sessions have no campaign manifest; evidence-mode pilots set `diagnostic_only=true`, `screening_performed=false`, and `candidate_import_permitted=false`.
+1. Mode 1 development is not a review run and creates no campaign artifact. Evidence-mode pilots set `diagnostic_only=true`, `screening_performed=false`, and `candidate_import_permitted=false`.
 2. Never copy an exploration or pilot result into `final-events/`, screening data, or the candidate corpus.
 3. Keep exact queries in plain UTF-8 files. `translation-spec.json` maps each semantic partition to one or more source-native query cells and records lossless unions.
 4. `guideline.md` contains the reusable operating method, not a chronological narration.
-5. Exploration logs may guide implementation but cannot satisfy acceptance. Evidence-mode pilot manifests contain acceptance observations. Every behavioral claim must be labelled `observed`, `official_documentation`, `inferred`, or `untested`; inferred or untested behavior cannot satisfy acceptance.
+5. Temporary development logs cannot satisfy acceptance and need not be retained. Evidence-mode pilot manifests contain acceptance observations. Every evidence claim must be labelled `observed`, `official_documentation`, `inferred`, or `untested`; inferred or untested behavior cannot satisfy acceptance.
 6. Record explicit source zero as zero. Access, syntax, transport, pagination, reconciliation, or completeness failures use `null`; never import a partial prefix.
-7. Keep restricted or copyrighted captures outside Git when rights require it. Track a safe evidence index, checksum, access classification, and secure-location reference instead.
+7. Keep restricted or copyrighted captures outside Git. Formal evidence runs track a safe index, checksum, access classification, and secure-location reference; disposable Mode 1 captures are not evidence and may be deleted after debugging.
 8. `final-events/` remains empty until task `R-002` is authorized.
 
 ## Shared CfT browser live-phase contract
@@ -55,7 +53,7 @@ Because this CfT installation and profile are dedicated to these pilots, an assi
 
 ### Live-first validation, one leased live segment at a time
 
-Apply the normative [`two-mode source-interface policy`](two-mode-validation-policy.md); it supersedes broader offline-preflight language in older source plans. Pilot value comes from observed behavior on the current real interface. Before requesting a lease, do only the minimum source-free work needed to avoid a malformed or destructive run: read the exact plan; verify query bytes; ensure the command imports/starts; reserve create-only outputs; validate the manifest/receipt shape; and check browser health. Do **not** make a large focused or full regression suite, broad fixture expansion, repeated hash audit, lint run, or duplicate validator run a routine prerequisite for a live pilot or technical retry. Run only the smallest tests directly covering code changed for safety or the specific observed failure. Full suites are deferred until a live route is stable and the implementation is being accepted or merged.
+Apply the normative [`two-mode source-interface policy`](two-mode-validation-policy.md). For Mode 1, check command startup and browser health in memory, use a disposable output directory, and run the real test; do not create manifests, launch-gate files, preflight reports, or evidence indexes. For Mode 2, follow the frozen evidence plan's create-only and provenance requirements. Do **not** make a large suite, fixture expansion, repeated hash audit, lint run, or duplicate validator a routine prerequisite for technical debugging. Run the smallest changed-path test, then return to the live page.
 
 Only source-free work may run concurrently. Browser-backed live phases remain globally serialized: exactly one exclusive full-live-phase lease across all sources and domains.
 
@@ -65,11 +63,11 @@ A live phase includes browser health checks, source interaction, any prospective
 uv run ~/agent-tools/internet/skills/browser/scripts/run_with_browser_lease.py --owner OWNER --source SOURCE --receipt PATH [--wait SECONDS] [--lease-timeout SECONDS] -- COMMAND...
 ```
 
-`OWNER` identifies the supervised pilot/phase, `SOURCE` is the source ID, and `PATH` is a new immutable receipt path. `COMMAND...` is an adapter client command only. Do not substitute another wrapper, connect to another endpoint, or pass browser/profile/port overrides. The central `127.0.0.1:9222` CfT service is the only browser route.
+`OWNER` identifies the supervised phase, `SOURCE` is the source ID, and `PATH` is a new lease receipt path. In Mode 1, put it in the disposable ignored workspace and do not index it. In Mode 2, it is immutable evidence. `COMMAND...` is an adapter client command only. Do not substitute another wrapper, connect to another endpoint, or pass browser/profile/port overrides. The central `127.0.0.1:9222` CfT service is the only browser route.
 
 ### Health, provenance, and receipt
 
-Before source navigation and again at cleanup, the supervisor/controller records in the immutable receipt and pilot evidence index:
+The lease runner verifies the following operational facts for every browser phase. Mode 1 needs no copied checklist or evidence index; Mode 2 records them in its immutable receipt and evidence index:
 
 - lease owner/source/receipt, acquisition and verified release; global pacing decision; and any finite wait policy;
 - browser epoch, fixed profile identity/path, confirmation that one CfT process owns the profile, endpoint, and CfT provenance (bundle identity and runtime/on-disk versions);
@@ -88,7 +86,7 @@ Classify the condition rather than treating all failures alike:
 
 In either case preserve the same adapter-owned tab. A passive wait is allowed under a finite controller-recorded maximum and cadence. A transient challenge may be left untouched and passively polled on the same page; never click, reload, solve, or bypass it. A same-tab busy reissue remains bounded and auditable. Domain pacing is global across sources; a new lease or source ID never resets it. Never rotate profiles or use a fresh browser to escape a condition.
 
-A live technical failure triggers exploration mode. Prefer agent-driven observation of the owned page—screenshots, semantic DOM inspection, visible interaction, and bounded state polling—over guessing from a collapsed error class. Do not allocate successive evidence attempts to debug selectors. Keep one logical exploration run active until the automation works or the policy's deferred/exhausted/safety-stop criteria are met. Patch and retest on the same owned page when safe; otherwise verify cleanup/release and continue in the next sequential `X` session without treating the prior replay as terminal. Return to evidence mode only after the interaction recipe and current implementation replay successfully on the real page. Human authorization is required only for a `human_methodological` change affecting the review.
+A live technical failure triggers Mode 1 development. Inspect the owned page—screenshots, semantic DOM, visible interaction, bounded state polling, and stage-specific errors—rather than guessing from a collapsed class. Patch and retest on the same page when safe; otherwise verify cleanup/release and start another lease in the same disposable technical loop. Do not allocate evidence attempts to debug selectors. Return to evidence mode only after the current implementation replays successfully. Human authorization is required only for a `human_methodological` change affecting the review.
 
 A deterministic source-free setup or preflight failure is not a source result, a successful safe disposition, or a reason to abandon the pilot. Fix and retest it before source work. Complete these checks before allocating an attempt ID whenever possible. If an ID was already allocated, preserve that setup incident immutably with `allocation.source_phase_started=false`, zero source operations, no lease/browser claim, and no source-gate evidence. It does not consume the finite enacted source-phase attempt budget; the controller must patch the behavior-preserving defect and may prospectively allocate a new technical attempt. Never report a safe stop as satisfactory progress when the requested capability remains untested.
 
@@ -96,7 +94,7 @@ A deterministic source-free setup or preflight failure is not a source result, a
 
 A user/operator termination is `cancelled`, not a provider failure. A live executor must remain an attached, supervised child for the entire lease; it must never be detached or backgrounded. Detached subagents are allowed only for source-free offline work. On cancellation, the controller cancels and collects every child, stops source-writing, verifies closure of the adapter-owned target and preservation of the broker anchor, and verifies lease release from the receipt before ending supervision. If cleanup cannot yet be verified, keep supervision active and report that unresolved cleanup; never leave an orphan able to write to the source packet.
 
-Keep a unique immutable attempt receipt even when the terminal outcome is blocked, failed, or cancelled. Maintain `campaign.json` against [`schemas/pilot-campaign.schema.json`](schemas/pilot-campaign.schema.json): carry forward exact-hash evidence for unaffected passed gates, and invalidate only the failed gate and its declared dependents. Describe the terminal blocker precisely; a late optional or technical gate failure does not erase earlier successful gates or make the whole provider "inaccessible." Final searches remain fail-closed: a blocked, failed, or cancelled event imports no partial prefix.
+For Mode 2, keep a unique immutable attempt receipt even when the terminal outcome is blocked, failed, or cancelled. Maintain `campaign.json` against [`schemas/pilot-campaign.schema.json`](schemas/pilot-campaign.schema.json): carry forward exact-hash evidence for unaffected passed gates, and invalidate only the failed gate and its declared dependents. Describe the terminal blocker precisely; a late optional or technical gate failure does not erase earlier successful gates or make the whole provider "inaccessible." Final searches remain fail-closed: a blocked, failed, or cancelled event imports no partial prefix.
 
 ## Required guideline sections
 
@@ -107,7 +105,7 @@ Use [`templates/source-guideline.md`](templates/source-guideline.md). Direct-sou
 Controllers use [`templates/pilot-controller-prompt.md`](templates/pilot-controller-prompt.md); exploration agents use [`templates/browser-exploration-prompt.md`](templates/browser-exploration-prompt.md); evidence agents use [`templates/source-pilot-prompt.md`](templates/source-pilot-prompt.md). Exploration precedes the checkpointed campaign when the interface is unknown or technically failing. Browser-backed live phases additionally use the global lease above.
 
 1. **Choose mode:** use exploration for an unknown/failing interface; use evidence only for a route already demonstrated live.
-2. **Explore:** open one logical source/recipe debugging run. Allocate sequential create-only `X` sessions as needed, one lease/page at a time, and iteratively inspect, patch, and live-replay. A first failed replay is another iteration, not the run's terminal outcome. Keep a lightweight operation/cleanup ledger during the loop and reconcile concise exploration records at working/deferred/exhausted checkpoints. Do not update capability gates.
+2. **Explore:** use one disposable ignored workspace and iteratively inspect, patch, and live-replay one source recipe until it works or a real blocker remains. Do not allocate formal `X` sessions, write ledgers/indexes, or update capability gates.
 3. **Freeze:** only after the current automation replays successfully, pin the interaction recipe, adapter/helper commit, query/control semantics, expected evidence, and bounded evidence plan.
 4. **Evidence attempt:** allocate one immutable `P` attempt and execute the frozen deterministic plan. Preserve the attempt on any failure; a technical failure returns the source to exploration rather than spawning a chain of evidence attempts.
 5. **Checkpoint or decide:** update `campaign.json` only from evidence-mode observations. Carry forward unaffected passed gates by exact path/hash. Ask the review owner only for methodological changes affecting concepts, scope, limits, recall, identity/capture/completeness meaning, or PRISMA accounting.
@@ -119,7 +117,7 @@ When date controls need testing before `P-001`, use the pilot execution date as 
 
 The controller accepts a campaign only after:
 
-- any exploratory interface work is separately logged and the accepted campaign pins the frozen interaction recipe/implementation derived from it;
+- the campaign pins the working interaction recipe and implementation produced by Mode 1; temporary technical logs are not required;
 - the campaign and every immutable evidence attempt validate;
 - every required capability gate passes with evidence, including source boundary, interface, fields, controls, expansion, controlled/indexed terms, date/language handling, limits, retrieval, stable identity, completeness, and failure behavior;
 - every direct partition or local rule has an exact specification and evidence linkage;
@@ -132,4 +130,4 @@ The controller accepts a campaign only after:
 
 ## Subagent write boundary
 
-An exploration subagent may edit its assigned source packet, source-specific review scripts, and an explicitly assigned isolated `agent-tools` worktree; it records no campaign gate. An evidence-pilot subagent may edit only its assigned evidence packet and may not patch the implementation during the attempt. Neither role may edit `TASKS.md`, `search-log.md`, protocols, dictionaries, crosswalks, schemas, another source packet, or `final-events/`.
+A Mode 1 subagent may edit source-specific scripts and an explicitly assigned isolated `agent-tools` worktree; it edits the source packet only when explicitly requested and records no campaign gate. An evidence-pilot subagent may edit only its assigned evidence packet and may not patch the implementation during the attempt. Neither role may edit `TASKS.md`, `search-log.md`, protocols, dictionaries, crosswalks, schemas, another source packet, or `final-events/`.

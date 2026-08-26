@@ -1,38 +1,28 @@
-# Browser-exploration subagent contract
+# Browser-exploration technical-development contract
 
-You are assigned one source-interface **logical exploration run** for one bounded technical recipe. Read `SLR/SLR1/AGENTS.md`, `searches/README.md`, [`two-mode-validation-policy.md`](../two-mode-validation-policy.md), the browser live-phase checklist, the source guideline, and relevant browser domain notes. The run may span multiple sequential create-only `X` sessions; it never overlaps another live source phase.
+You are assigned one source and one technical recipe. Read the two-mode policy, shared browser rules, source guideline/latest failure, relevant domain note, adapter, and focused tests. Do not read or update unrelated source packets.
 
 ## Goal
 
-Make the current real interface work and understand it well enough to freeze a deterministic evidence attempt. You are not running an evidence pilot, final search, or screening.
+Make the current automation work on the real source. Mode 1 is technical development, not a review run, pilot, or evidence collection exercise.
 
 ## Operating method
 
-- Use one attached canonical browser lease and one owned page at a time. Reuse the same page/session for safe technical retests; if code reload or lease completion requires a new segment, verify cleanup/release and allocate the next source-local `X` session within this run.
-- Run only the minimum launch gate; do not run broad/full suites or build fixture matrices.
-- Create/use only pages owned by the session. Never touch the protected anchor or unrelated tabs.
-- Start with screenshots and semantic/accessibility inspection. Use visible source-owned navigation and controls. Treat SPA loading/hydration as bounded states, not immediate failures.
-- You may retain restricted screenshots and bounded DOM/control projections needed to reproduce a technical finding. Never retain cookies, credentials, session tokens, unrelated page content, or candidate/relevance data.
-- Use small sentinel/count-only queries. Record every source submit/reissue, but do not create a campaign attempt for each selector error.
-- If a technical defect appears, inspect the actual page, patch it immediately in the assigned source scripts or isolated `agent-tools` worktree, perform only a minimal import/changed-path check, and retest live. A failed replay is a diagnostic iteration; continue unless a deferred, exhausted, or safety-stop criterion in the policy is actually met.
-- Do not inherit evidence-attempt retry ceilings as exploration limits. Declare a finite rolling source-operation cap for each live segment, review the outcome before the next segment, and honor global domain pacing throughout.
-- Do not call the automation working until the current implementation completes a real-page replay with exact control/readback and terminal-state assertions plus verified cleanup.
-- A transient challenge may be left untouched and passively polled under a finite recorded deadline/cadence. Never click, reload, solve, evade, rotate profiles, or open another page to escape it.
-- Methodological changes stop for the review owner; routine technical changes do not.
+- Use one disposable ignored workspace under `.searches/`; do not create a formal `X` packet, manifest, ledger, launch-gate file, evidence index, or tracked exploration record.
+- Check command startup and canonical browser/lease health in memory. Use the lease runner's temporary receipt; do not copy or hash it.
+- Use one owned page and one source recipe at a time. Keep browser phases globally serialized.
+- Use a small sentinel/count-only query and retain no candidate records or relevance judgments.
+- Inspect screenshots, semantic DOM, visible controls, hydration states, and safe stage-specific errors.
+- Patch the assigned source script or isolated `agent-tools` worktree, run the smallest focused test, and replay immediately.
+- If a replay fails, diagnose and continue. Reuse the page when safe or cleanly release and start another lease. Evidence-attempt caps and formal session counts do not limit technical debugging.
+- Use a temporary human recorder only when it is the fastest way to learn the widget sequence. Analyze it and update automation; no formal demonstration record is required.
+- Prefer role/name, labels, stable `data-*`, and source-owned route/state assertions. Avoid positional selectors, arbitrary sleeps, opaque routes, challenge selectors, login actions, and bypass behavior.
+- Never interact with a CAPTCHA/challenge. Honor source busy/cooldown behavior and never use a new page/profile to escape it.
 
-## Deliverable
+## Completion
 
-Keep a lightweight restricted running journal during active debugging. For each live segment preserve immediately: session ID/time, source boundary and sentinel hash/bytes, source submits/reissues, aggregate/zero/`null`, challenge/busy intervals, patch/replay identifier, and verified cleanup/release. Do not pause a safe next iteration for campaign-grade prose, repeated hash inventories, or a commit after every selector error.
+Working means the current adapter completes a live replay with exact source/field/control readback, reconciled aggregate/zero/identity state, and verified owned-page/lease cleanup. A first failed replay is not a terminal outcome.
 
-When the logical run reaches a working, deferred, exhausted, or useful checkpoint, reconcile concise source-local records using [`browser-exploration-record.md`](browser-exploration-record.md), containing:
+Pause only for a persistent challenge/busy/cooldown, access or setup owner, methodological decision, operator cancellation, exhausted plausible technical options, or unresolved cleanup/browser safety.
 
-- logical run and session IDs, source, dates, and lease/cleanup receipts;
-- routes and visible interactions tested;
-- source operations, rolling caps, and finite waits;
-- observed state machine, robust selectors, and known transient states;
-- patches, focused checks, and live replay outcomes;
-- restricted screenshot/DOM evidence references;
-- what now works live or the specific deferred/exhausted blocker; and
-- a frozen proposed evidence-mode plan **only when the automated replay works**.
-
-Do not update `campaign.json`, pass capability gates, screen/import records, or create a final event.
+When working, commit the bounded adapter/helper and focused tests. Update a domain note only for a durable technical fact. Do not create source-packet documentation, update a campaign, pass a gate, screen/import records, or create a final event. Formal documentation begins with the later frozen evidence run.
