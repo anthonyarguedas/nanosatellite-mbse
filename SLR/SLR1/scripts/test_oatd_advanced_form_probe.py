@@ -305,7 +305,13 @@ class LeasePlaywright:
         return False
 
 
-def config(tmp: Path, *, execute: bool = True, timeout_seconds: float = 1.0) -> object:
+def config(
+    tmp: Path,
+    *,
+    execute: bool = True,
+    timeout_seconds: float = 1.0,
+    pre_submit_busy_wait_seconds: float = 0.0,
+) -> object:
     return oatd.ProbeConfig(
         execute=execute,
         cdp_url="http://127.0.0.1:9222",
@@ -316,6 +322,7 @@ def config(tmp: Path, *, execute: bool = True, timeout_seconds: float = 1.0) -> 
         busy_retries=2,
         busy_retry_delay_seconds=1.0,
         output_path=tmp / "receipt.json",
+        pre_submit_busy_wait_seconds=pre_submit_busy_wait_seconds,
         journal_path=tmp / "journal.jsonl",
         ledger_path=tmp / "ledger.json",
     )
@@ -645,6 +652,250 @@ class OATDChallengeWaitTests(unittest.TestCase):
         self.assertEqual(outcome.waited_seconds, 0.25)
         self.assertEqual(clock.value, 0.25)
         self.assertEqual(page.goto_calls, [])
+
+
+class OATDPreSubmitBusyWaitTests(unittest.TestCase):
+    def run_wait(self, page, *, maximum=4.0, deadline=None):
+        clock = FakeClock()
+        observations: list[tuple[int, str, float]] = []
+        outcome = asyncio.run(
+            oatd.wait_for_pre_submit_busy_clear(
+                page,
+                field_label="Title",
+                timeout_seconds=maximum,
+                poll_interval_seconds=2.0,
+                clock=clock,
+                sleeper=clock.sleep,
+                deadline=deadline,
+                initial_inspection=valid_inspection("busy"),
+                on_observation=lambda poll, state, waited: observations.append(
+                    (poll, state, waited)
+                ),
+            )
+        )
+        return outcome, clock, observations
+
+    def test_policy_is_default_off_and_has_fixed_safe_bounds(self):
+        self.assertEqual(oatd.DEFAULT_PRE_SUBMIT_BUSY_WAIT_SECONDS, 0.0)
+        self.assertEqual(oatd.DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS, 2.0)
+        self.assertEqual(oatd.MAX_PRE_SUBMIT_BUSY_WAIT_SECONDS, 180.0)
+        self.assertEqual(oatd._validate_pre_submit_busy_wait_policy(0), 0.0)
+        self.assertEqual(
+            oatd._validate_pre_submit_busy_wait_policy(180), 180.0
+        )
+        with self.assertRaises(oatd.InputValidationError):
+            oatd._validate_pre_submit_busy_wait_policy(-1)
+        with self.assertRaises(oatd.InputValidationError):
+            oatd._validate_pre_submit_busy_wait_policy(181)
+        self.assertEqual(
+            oatd._validate_pre_submit_busy_poll_interval(2), 2.0
+        )
+        with self.assertRaises(oatd.InputValidationError):
+            oatd._validate_pre_submit_busy_poll_interval(1)
+
+    def test_default_off_busy_path_does_not_add_a_pre_submit_wait(self):
+        session = LeasePlaywright()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            fake_clock = FakeClock()
+            inspect = mock.AsyncMock(return_value=valid_inspection("busy"))
+            prebusy = mock.AsyncMock()
+            with (
+                mock.patch.object(oatd, "inspect_advanced_form", new=inspect),
+                mock.patch.object(
+                    oatd, "wait_for_pre_submit_busy_clear", new=prebusy
+                ),
+            ):
+                status, receipt = asyncio.run(
+                    oatd.run_probe(
+                        config(root),
+                        playwright_factory=lambda: session,
+                        clock=fake_clock,
+                        sleeper=fake_clock.sleep,
+                    )
+                )
+        self.assertEqual(status, 1)
+        self.assertEqual(
+            receipt["result"]["classification"], "busy_before_submission"
+        )
+        prebusy.assert_not_awaited()
+        self.assertFalse(receipt["pre_submit_busy_wait_policy"]["enabled"])
+        self.assertEqual(
+            receipt["submission"]["busy_retries_attempted"], 0
+        )
+        self.assertEqual(len(session.context.created.goto_calls), 1)
+
+    def test_busy_clears_to_canonical_form_without_navigation_or_reissue(self):
+        page = StatePage([form_state(None)])
+        outcome, clock, observations = self.run_wait(page)
+        self.assertIsNone(outcome.classification)
+        self.assertIsNotNone(outcome.inspection)
+        self.assertIsNone(outcome.inspection.source_state)
+        self.assertEqual(outcome.polls, 1)
+        self.assertEqual(outcome.waited_seconds, 2.0)
+        self.assertEqual(clock.sleeps, [2.0])
+        self.assertEqual(observations, [(0, "busy", 0.0), (1, "clear", 2.0)])
+        self.assertEqual(page.goto_calls, [])
+
+    def test_persistent_busy_stops_at_the_exploration_cap(self):
+        page = StatePage(
+            [form_state("busy")], fallback=form_state("busy")
+        )
+        outcome, clock, observations = self.run_wait(page)
+        self.assertEqual(outcome.classification, "busy_before_submission")
+        self.assertIsNone(outcome.inspection)
+        self.assertEqual(outcome.polls, 1)
+        self.assertEqual(outcome.waited_seconds, 4.0)
+        self.assertEqual(clock.sleeps, [2.0, 2.0])
+        self.assertEqual(observations, [(0, "busy", 0.0), (1, "busy", 2.0)])
+        self.assertEqual(page.goto_calls, [])
+
+    def test_challenge_and_access_transitions_leave_separate_stop_policy_in_charge(self):
+        challenge_page = StatePage([form_state("challenge")])
+        challenge, _, challenge_observations = self.run_wait(challenge_page)
+        self.assertIsNone(challenge.classification)
+        self.assertEqual(challenge.inspection.source_state, "challenge")
+        self.assertEqual(challenge_observations, [(0, "busy", 0.0), (1, "challenge", 2.0)])
+
+        access_page = StatePage([form_state("access")])
+        access, _, access_observations = self.run_wait(access_page)
+        self.assertIsNone(access.classification)
+        self.assertEqual(access.inspection.source_state, "access")
+        self.assertEqual(access_observations, [(0, "busy", 0.0), (1, "access", 2.0)])
+        self.assertEqual(challenge_page.goto_calls, [])
+        self.assertEqual(access_page.goto_calls, [])
+
+    def test_cleared_busy_continues_one_native_submit_and_accounting(self):
+        session = LeasePlaywright()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            fake_clock = FakeClock()
+            inspect = mock.AsyncMock(
+                side_effect=[valid_inspection("busy"), valid_inspection()]
+            )
+
+            async def prepare_with_checkpoint(*_args, **kwargs):
+                kwargs["before_native_click"]()
+                return valid_prepared()
+
+            post_click = mock.AsyncMock(
+                return_value=oatd.PostClickOutcome("result_observed", 5, 1, 0, 0)
+            )
+            with (
+                mock.patch.object(oatd, "inspect_advanced_form", new=inspect),
+                mock.patch.object(
+                    oatd,
+                    "prepare_native_submission",
+                    new=prepare_with_checkpoint,
+                ),
+                mock.patch.object(
+                    oatd, "wait_for_post_click_state", new=post_click
+                ),
+            ):
+                status, receipt = asyncio.run(
+                    oatd.run_probe(
+                        config(
+                            root,
+                            timeout_seconds=10.0,
+                            pre_submit_busy_wait_seconds=4.0,
+                        ),
+                        playwright_factory=lambda: session,
+                        clock=fake_clock,
+                        sleeper=fake_clock.sleep,
+                    )
+                )
+            ledger = json.loads((root / "ledger.json").read_text())
+
+        self.assertEqual(status, 0)
+        self.assertEqual(inspect.await_count, 2)
+        post_click.assert_awaited_once()
+        self.assertEqual(
+            receipt["submission"]["pre_submit_busy_wait_polls"], 1
+        )
+        self.assertEqual(
+            receipt["submission"]["pre_submit_busy_wait_seconds"], 2.0
+        )
+        self.assertEqual(
+            receipt["submission"]["pre_submit_busy_wait_outcome"], "cleared"
+        )
+        self.assertTrue(receipt["submission"]["native_submit_clicked"])
+        self.assertEqual(receipt["submission"]["busy_retries_attempted"], 0)
+        self.assertEqual(
+            receipt["pre_submit_busy_wait_policy"]["observations"],
+            ["busy", "clear"],
+        )
+        self.assertEqual(len(session.context.created.goto_calls), 1)
+        self.assertTrue(ledger["operations"][0]["completed"])
+        self.assertEqual(ledger["counts"]["busy_retries_attempted"], 0)
+        self.assertEqual(
+            ledger["pre_submit_busy_observations"],
+            [
+                {"poll": 0, "state": "busy", "waited_seconds": 0.0},
+                {"poll": 1, "state": "clear", "waited_seconds": 2.0},
+            ],
+        )
+
+    def test_interruption_after_busy_observation_keeps_all_operations_not_dispatched(self):
+        class BlockingSleeper:
+            def __init__(self):
+                self.started = asyncio.Event()
+
+            async def __call__(self, _seconds):
+                self.started.set()
+                await asyncio.Event().wait()
+
+        async def invoke():
+            session = LeasePlaywright()
+            sleeper = BlockingSleeper()
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                inspect = mock.AsyncMock(
+                    return_value=valid_inspection("busy")
+                )
+                with mock.patch.object(
+                    oatd, "inspect_advanced_form", new=inspect
+                ):
+                    task = asyncio.create_task(
+                        oatd.run_probe(
+                            config(
+                                root,
+                                timeout_seconds=30.0,
+                                pre_submit_busy_wait_seconds=180.0,
+                            ),
+                            playwright_factory=lambda: session,
+                            sleeper=sleeper,
+                        )
+                    )
+                    await asyncio.wait_for(sleeper.started.wait(), timeout=1.0)
+                    task.cancel()
+                    status, receipt = await task
+                ledger = json.loads((root / "ledger.json").read_text())
+                journal = [
+                    json.loads(line)
+                    for line in (root / "journal.jsonl").read_text().splitlines()
+                ]
+            return status, receipt, ledger, journal, session
+
+        status, receipt, ledger, journal, session = asyncio.run(invoke())
+        self.assertEqual(status, 1)
+        self.assertEqual(receipt["result"]["classification"], "guardian_interrupted")
+        self.assertFalse(receipt["accounting"]["possibly_dispatched"])
+        self.assertEqual(
+            receipt["pre_submit_busy_wait_policy"]["observations"], ["busy"]
+        )
+        self.assertEqual(
+            ledger["counts"]["source_operations_possibly_dispatched"], 0
+        )
+        self.assertTrue(
+            all(not operation["possibly_dispatched"] for operation in ledger["operations"])
+        )
+        self.assertEqual(
+            ledger["pre_submit_busy_observations"][0]["state"], "busy"
+        )
+        self.assertTrue(
+            any(record["phase"] == "pre_submit_busy_observation_0" for record in journal)
+        )
+        self.assertEqual(len(session.context.created.goto_calls), 1)
 
 
 class OATDFormPreparationTests(unittest.TestCase):
@@ -1525,6 +1776,19 @@ class OATDOwnershipAndCleanupTests(unittest.TestCase):
 
 
 class OATDInputAndPrivacyTests(unittest.TestCase):
+    def test_cli_help_documents_the_default_off_exploration_wait(self):
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPTS / "oatd_advanced_form_probe.py"), "--help"],
+            check=True,
+            capture_output=True,
+            text=True,
+            env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
+        )
+        self.assertIn("--pre-submit-busy-wait-seconds", completed.stdout)
+        self.assertIn("0/off", completed.stdout)
+        self.assertIn("180 seconds", completed.stdout)
+        self.assertIn("2-second DOM", completed.stdout)
+
     def test_dry_run_does_not_instantiate_playwright(self):
         with tempfile.TemporaryDirectory() as directory:
             cfg = config(Path(directory), execute=False)

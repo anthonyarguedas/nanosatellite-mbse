@@ -10,7 +10,10 @@ through an explicit loopback CDP endpoint, creates one sibling page, passively
 waits through one finite transient challenge window when needed, submits one
 normal nonblank advanced GET form, and retains only a safe aggregate receipt.
 It never visits record/detail/full-text routes, serializes browser URLs or
-target IDs, or interacts with access controls.
+target IDs, or interacts with access controls. An explicit exploration-only
+``--pre-submit-busy-wait-seconds`` value enables a bounded same-page DOM wait
+for an ordinary pre-submit busy state; the default is off and the wait never
+reissues or navigates.
 
 Source action is opt-in with ``--execute``.  This makes the default CLI path
 safe for offline validation and for tests run by a browser-lease controller.
@@ -25,7 +28,7 @@ import math
 import os
 import secrets
 from collections.abc import Awaitable, Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
@@ -45,6 +48,19 @@ DEFAULT_BUSY_RETRY_DELAY_SECONDS = 30.0
 MAX_BUSY_RETRIES = 2
 MIN_BUSY_RETRY_DELAY_SECONDS = 1.0
 MAX_BUSY_RETRY_DELAY_SECONDS = 3_600.0
+# Exploration-only opt-in for an ordinary pre-submit busy page.  Zero keeps
+# the held P05 behavior unchanged; a positive value only adds same-page DOM
+# projections and never consumes a source-operation slot.
+DEFAULT_PRE_SUBMIT_BUSY_WAIT_SECONDS = 0.0
+DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS = 2.0
+MAX_PRE_SUBMIT_BUSY_WAIT_SECONDS = 180.0
+MAX_PRE_SUBMIT_BUSY_OBSERVATIONS = (
+    int(MAX_PRE_SUBMIT_BUSY_WAIT_SECONDS / DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS)
+    + 1
+)
+SAFE_PRE_SUBMIT_BUSY_OBSERVATION_STATES = frozenset(
+    {"busy", "clear", "challenge", "access", "syntax"}
+)
 # A challenge is given one finite, passive-only window before the one native
 # submission.  This is deliberately separate from the post-submit busy
 # reissue budget: challenge polls never consume a source-operation slot.
@@ -151,6 +167,7 @@ SAFE_PROBE_ABORT_CLASSIFICATIONS = frozenset(
         "pre_click_safety_projection_failed",
         "pre_click_safety_not_verified",
         "post_click_projection_failed",
+        "accounting_checkpoint_failed",
     }
 )
 
@@ -191,6 +208,7 @@ class ProbeConfig:
     challenge_poll_interval_seconds: float = DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS
     journal_path: Path | None = None
     ledger_path: Path | None = None
+    pre_submit_busy_wait_seconds: float = DEFAULT_PRE_SUBMIT_BUSY_WAIT_SECONDS
 
 
 @dataclass
@@ -322,6 +340,7 @@ class ExecutionAccounting:
     reservation_id: str
     operations: list[dict[str, Any]]
     busy_retry_delays: list[float]
+    pre_submit_busy_observations: list[dict[str, Any]] = field(default_factory=list)
 
     @classmethod
     def create(cls, reservation_id: str, busy_retry_delay: float) -> "ExecutionAccounting":
@@ -347,6 +366,38 @@ class ExecutionAccounting:
                 for index in range(MAX_BUSY_RETRIES)
             ],
         )
+
+    def record_pre_submit_busy_observation(
+        self,
+        journal: DurableJournal,
+        *,
+        poll: int,
+        state: str,
+        waited_seconds: float,
+    ) -> None:
+        """Fsync one allowlisted passive busy observation without source text."""
+        if (
+            type(poll) is not int
+            or poll < 0
+            or poll >= MAX_PRE_SUBMIT_BUSY_OBSERVATIONS
+        ):
+            raise ValueError("pre-submit busy observation poll is outside the cap")
+        if type(state) is not str or state not in SAFE_PRE_SUBMIT_BUSY_OBSERVATION_STATES:
+            raise ValueError("pre-submit busy observation state is not allowlisted")
+        if (
+            isinstance(waited_seconds, bool)
+            or not isinstance(waited_seconds, (int, float))
+            or not math.isfinite(float(waited_seconds))
+            or not 0 <= float(waited_seconds) <= MAX_PRE_SUBMIT_BUSY_WAIT_SECONDS
+        ):
+            raise ValueError("pre-submit busy observation time is unsafe")
+        observation = {
+            "poll": poll,
+            "state": state,
+            "waited_seconds": float(waited_seconds),
+        }
+        self.pre_submit_busy_observations.append(observation)
+        self.checkpoint(journal, f"pre_submit_busy_observation_{poll}")
 
     def _operation(self, operation_number: int) -> dict[str, Any]:
         if not 1 <= operation_number <= len(self.operations):
@@ -388,6 +439,11 @@ class ExecutionAccounting:
             "operations": [dict(operation) for operation in self.operations],
             "interrupted": bool(interrupted),
         }
+        if self.pre_submit_busy_observations:
+            snapshot["pre_submit_busy_observations"] = [
+                dict(observation)
+                for observation in self.pre_submit_busy_observations
+            ]
         if classification is not None:
             safe_classification = _safe_accounting_classification(
                 classification, "owned_page_operation_failed"
@@ -475,7 +531,7 @@ class ExecutionAccounting:
         )
         dispatched = sum(bool(operation["dispatched"]) for operation in operations)
         completed = sum(bool(operation["completed"]) for operation in operations)
-        return {
+        payload = {
             "schema_version": LEDGER_SCHEMA_VERSION,
             "status": "terminal",
             "reservation_id": self.reservation_id,
@@ -509,6 +565,12 @@ class ExecutionAccounting:
                 "possibly_dispatched": possibly_dispatched > 0,
             },
         }
+        if self.pre_submit_busy_observations:
+            payload["pre_submit_busy_observations"] = [
+                dict(observation)
+                for observation in self.pre_submit_busy_observations
+            ]
+        return payload
 
 
 @dataclass(frozen=True)
@@ -543,6 +605,17 @@ class ChallengeWaitOutcome:
     classification: str | None
     polls: int
     waited_seconds: float
+
+
+@dataclass(frozen=True)
+class PreSubmitBusyWaitOutcome:
+    """Passive ordinary-busy observation before the native submission."""
+
+    inspection: FormInspection | None
+    classification: str | None
+    polls: int
+    waited_seconds: float
+    observations: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -1179,6 +1252,41 @@ def _validate_challenge_wait_policy(wait: Any, interval: Any) -> tuple[float, fl
     return parsed_wait, parsed_interval
 
 
+def _validate_pre_submit_busy_wait_policy(value: Any) -> float:
+    """Validate the default-off exploration-only passive busy wait."""
+    if isinstance(value, bool):
+        raise InputValidationError(
+            "--pre-submit-busy-wait-seconds must be zero or a finite nonnegative number"
+        )
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError) as error:
+        raise InputValidationError(
+            "--pre-submit-busy-wait-seconds must be zero or a finite nonnegative number"
+        ) from error
+    if not math.isfinite(parsed) or parsed < 0:
+        raise InputValidationError(
+            "--pre-submit-busy-wait-seconds must be zero or a finite nonnegative number"
+        )
+    if parsed > MAX_PRE_SUBMIT_BUSY_WAIT_SECONDS:
+        raise InputValidationError(
+            "--pre-submit-busy-wait-seconds exceeds the finite 180-second bound"
+        )
+    return parsed
+
+
+def _validate_pre_submit_busy_poll_interval(value: Any) -> float:
+    """Keep the exploration busy observation cadence fixed at two seconds."""
+    parsed = _finite_positive(
+        value, "--pre-submit-busy-poll-interval-seconds"
+    )
+    if parsed != DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS:
+        raise InputValidationError(
+            "--pre-submit-busy-poll-interval-seconds is fixed at 2 seconds"
+        )
+    return parsed
+
+
 def _validate_create_only_path(value: Any, option: str) -> Path:
     """Validate a prospective create-only destination before source work."""
     if not compact(value):
@@ -1299,6 +1407,9 @@ def validate_runtime_config(config: Any) -> ProbeConfig:
     challenge_wait, challenge_interval = _validate_challenge_wait_policy(
         config.challenge_wait_seconds, config.challenge_poll_interval_seconds
     )
+    pre_submit_busy_wait = _validate_pre_submit_busy_wait_policy(
+        config.pre_submit_busy_wait_seconds
+    )
     output_path = validate_output_path(str(config.output_path))
     journal_path: Path | None = None
     ledger_path: Path | None = None
@@ -1329,6 +1440,7 @@ def validate_runtime_config(config: Any) -> ProbeConfig:
         output_path=output_path,
         challenge_wait_seconds=challenge_wait,
         challenge_poll_interval_seconds=challenge_interval,
+        pre_submit_busy_wait_seconds=pre_submit_busy_wait,
         journal_path=journal_path,
         ledger_path=ledger_path,
     )
@@ -1794,6 +1906,153 @@ async def wait_for_challenge_clear(
             polls=polls,
             waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
         )
+
+
+def _pre_submit_busy_observation_state(inspection: FormInspection) -> str:
+    """Map a form projection to a fixed safe journal state."""
+    state = inspection.source_state
+    return (
+        state
+        if type(state) is str and state in SAFE_PRE_SUBMIT_BUSY_OBSERVATION_STATES
+        else "clear"
+    )
+
+
+async def wait_for_pre_submit_busy_clear(
+    page: Any,
+    *,
+    field_label: str,
+    timeout_seconds: float = MAX_PRE_SUBMIT_BUSY_WAIT_SECONDS,
+    poll_interval_seconds: float = DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+    deadline: float | None = None,
+    initial_inspection: FormInspection | None = None,
+    on_observation: Callable[[int, str, float], None] | None = None,
+) -> PreSubmitBusyWaitOutcome:
+    """Passively wait for ordinary pre-submit busy to clear on one owned page.
+
+    This exploration-only window performs only the existing allowlisted DOM
+    projection.  It never reloads, navigates, requests, submits, or reissues.
+    A challenge or access transition is returned to the caller so the existing
+    separate challenge/access policy remains in control.
+    """
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    wait_seconds = _validate_pre_submit_busy_wait_policy(timeout_seconds)
+    poll_interval = _validate_pre_submit_busy_poll_interval(poll_interval_seconds)
+    started = clock()
+    busy_deadline = started + wait_seconds
+    if deadline is not None:
+        busy_deadline = min(busy_deadline, deadline)
+
+    inspection = initial_inspection
+    if inspection is None:
+        remaining = busy_deadline - clock()
+        if remaining <= 0:
+            return PreSubmitBusyWaitOutcome(
+                inspection=None,
+                classification="busy_before_submission",
+                polls=0,
+                waited_seconds=0.0,
+                observations=(),
+            )
+        try:
+            inspection = await asyncio.wait_for(
+                inspect_advanced_form(page, field_label), timeout=remaining
+            )
+        except asyncio.TimeoutError:
+            return PreSubmitBusyWaitOutcome(
+                inspection=None,
+                classification="advanced_form_projection_failed",
+                polls=0,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+                observations=(),
+            )
+        except ProbeAbort as error:
+            return PreSubmitBusyWaitOutcome(
+                inspection=None,
+                classification=safe_probe_abort_classification(error),
+                polls=0,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+                observations=(),
+            )
+
+    if wait_seconds <= 0 or inspection.source_state != "busy":
+        return PreSubmitBusyWaitOutcome(
+            inspection=inspection,
+            classification=None,
+            polls=0,
+            waited_seconds=0.0,
+            observations=(),
+        )
+
+    observations: list[str] = []
+
+    def note(current: FormInspection, poll: int) -> None:
+        state = _pre_submit_busy_observation_state(current)
+        observations.append(state)
+        if on_observation is not None:
+            on_observation(
+                poll,
+                state,
+                min(wait_seconds, max(0.0, clock() - started)),
+            )
+
+    # The initial busy projection is journaled before any passive sleep.  No
+    # O-001 operation has been marked possibly dispatched at this point.
+    note(inspection, 0)
+    polls = 0
+    while True:
+        if not await _sleep_to_deadline(
+            busy_deadline, poll_interval, clock, sleeper
+        ):
+            return PreSubmitBusyWaitOutcome(
+                inspection=None,
+                classification="busy_before_submission",
+                polls=polls,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+                observations=tuple(observations),
+            )
+        remaining = busy_deadline - clock()
+        if remaining <= 0:
+            return PreSubmitBusyWaitOutcome(
+                inspection=None,
+                classification="busy_before_submission",
+                polls=polls,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+                observations=tuple(observations),
+            )
+        try:
+            inspection = await asyncio.wait_for(
+                inspect_advanced_form(page, field_label), timeout=remaining
+            )
+        except asyncio.TimeoutError:
+            return PreSubmitBusyWaitOutcome(
+                inspection=None,
+                classification="advanced_form_projection_failed",
+                polls=polls,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+                observations=tuple(observations),
+            )
+        except ProbeAbort as error:
+            return PreSubmitBusyWaitOutcome(
+                inspection=None,
+                classification=safe_probe_abort_classification(error),
+                polls=polls,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+                observations=tuple(observations),
+            )
+        polls += 1
+        note(inspection, polls)
+        if inspection.source_state != "busy":
+            return PreSubmitBusyWaitOutcome(
+                inspection=inspection,
+                classification=None,
+                polls=polls,
+                waited_seconds=min(wait_seconds, max(0.0, clock() - started)),
+                observations=tuple(observations),
+            )
 
 
 def _outcome(
@@ -2308,7 +2567,7 @@ async def cleanup_owned_page(
 def new_receipt(execute: bool) -> dict[str, Any]:
     """Create an output-safe receipt with no caller/source/browser identifiers."""
     return {
-        "schema_version": "slr1-oatd-advanced-form-probe/v5",
+        "schema_version": "slr1-oatd-advanced-form-probe/v6",
         "mode": "source_action" if execute else "dry_run",
         "endpoint_class": "explicit_loopback_cdp",
         "operation": "one_owned_page_one_native_advanced_get_submission",
@@ -2355,6 +2614,9 @@ def new_receipt(execute: bool) -> dict[str, Any]:
             "challenge_wait_polls": 0,
             "challenge_wait_seconds": 0.0,
             "challenge_wait_outcome": "not_used",
+            "pre_submit_busy_wait_polls": 0,
+            "pre_submit_busy_wait_seconds": 0.0,
+            "pre_submit_busy_wait_outcome": "not_used",
             "post_click_polls": 0,
             "busy_recovery_attempts": 0,
             "busy_retries_attempted": 0,
@@ -2367,6 +2629,15 @@ def new_receipt(execute: bool) -> dict[str, Any]:
             "polls": 0,
             "waited_seconds": 0.0,
             "outcome": "not_used",
+        },
+        "pre_submit_busy_wait_policy": {
+            "enabled": False,
+            "maximum_seconds": DEFAULT_PRE_SUBMIT_BUSY_WAIT_SECONDS,
+            "poll_interval_seconds": DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS,
+            "polls": 0,
+            "waited_seconds": 0.0,
+            "outcome": "not_used",
+            "observations": [],
         },
         "result": {
             "status": "not_run",
@@ -2461,6 +2732,35 @@ def _record_challenge_wait(
     submission["challenge_wait_outcome"] = outcome.classification or "cleared"
 
 
+def _record_pre_submit_busy_wait(
+    receipt: dict[str, Any],
+    outcome: PreSubmitBusyWaitOutcome,
+    *,
+    maximum_seconds: float,
+) -> None:
+    """Record only fixed safe facts from the exploration busy window."""
+    policy = receipt["pre_submit_busy_wait_policy"]
+    policy["enabled"] = maximum_seconds > 0
+    policy["maximum_seconds"] = maximum_seconds
+    policy["poll_interval_seconds"] = DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS
+    policy["polls"] = outcome.polls
+    policy["waited_seconds"] = outcome.waited_seconds
+    policy["observations"] = list(outcome.observations)
+    if outcome.classification is not None:
+        label = outcome.classification
+    elif not outcome.observations:
+        label = "not_needed"
+    elif outcome.inspection is not None and outcome.inspection.source_state is None:
+        label = "cleared"
+    else:
+        label = "transitioned"
+    policy["outcome"] = label
+    submission = receipt["submission"]
+    submission["pre_submit_busy_wait_polls"] = outcome.polls
+    submission["pre_submit_busy_wait_seconds"] = outcome.waited_seconds
+    submission["pre_submit_busy_wait_outcome"] = label
+
+
 def _new_accounting_operations() -> list[dict[str, Any]]:
     return [
         dict(operation)
@@ -2507,6 +2807,7 @@ def _merge_journal_accounting(
         reservation_id, DEFAULT_BUSY_RETRY_DELAY_SECONDS
     )
     by_id = {operation["operation_id"]: operation for operation in accounting.operations}
+    observations_by_poll: dict[int, dict[str, Any]] = {}
     terminal: Mapping[str, Any] | None = None
     for record in records:
         record_id = record.get("reservation_id")
@@ -2560,11 +2861,39 @@ def _merge_journal_accounting(
                     parsed_wait = float(wait_seconds)
                     if math.isfinite(parsed_wait) and 0 < parsed_wait <= MAX_BUSY_RETRY_DELAY_SECONDS:
                         operation["wait_seconds"] = parsed_wait
+        observations = snapshot.get("pre_submit_busy_observations")
+        if isinstance(observations, list):
+            for candidate in observations:
+                if not isinstance(candidate, Mapping):
+                    continue
+                poll = candidate.get("poll")
+                state = candidate.get("state")
+                waited_seconds = candidate.get("waited_seconds")
+                if (
+                    type(poll) is not int
+                    or not 0 <= poll < MAX_PRE_SUBMIT_BUSY_OBSERVATIONS
+                    or type(state) is not str
+                    or state not in SAFE_PRE_SUBMIT_BUSY_OBSERVATION_STATES
+                    or isinstance(waited_seconds, bool)
+                    or not isinstance(waited_seconds, (int, float))
+                ):
+                    continue
+                parsed_waited = float(waited_seconds)
+                if not math.isfinite(parsed_waited) or not 0 <= parsed_waited <= MAX_PRE_SUBMIT_BUSY_WAIT_SECONDS:
+                    continue
+                observations_by_poll[poll] = {
+                    "poll": poll,
+                    "state": state,
+                    "waited_seconds": parsed_waited,
+                }
         candidate_terminal = snapshot.get("terminal")
         if isinstance(candidate_terminal, Mapping) and candidate_terminal.get(
             "terminal_checkpoint"
         ) is True:
             terminal = dict(candidate_terminal)
+    accounting.pre_submit_busy_observations = [
+        observations_by_poll[poll] for poll in sorted(observations_by_poll)
+    ]
     accounting.reservation_id = reservation_id
     return accounting, terminal
 
@@ -2696,6 +3025,15 @@ async def run_probe(
     receipt["challenge_wait_policy"]["poll_interval_seconds"] = (
         config.challenge_poll_interval_seconds
     )
+    receipt["pre_submit_busy_wait_policy"]["enabled"] = (
+        config.pre_submit_busy_wait_seconds > 0
+    )
+    receipt["pre_submit_busy_wait_policy"]["maximum_seconds"] = (
+        config.pre_submit_busy_wait_seconds
+    )
+    receipt["pre_submit_busy_wait_policy"]["poll_interval_seconds"] = (
+        DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS
+    )
     reservation: OutputReservation | None = None
     journal_reservation: OutputReservation | None = None
     ledger_reservation: OutputReservation | None = None
@@ -2759,6 +3097,30 @@ async def run_probe(
     interrupted = False
     output_write_failed = False
     ledger_write_failed = False
+
+    def journal_pre_submit_busy_observation(
+        poll: int, state: str, waited_seconds: float
+    ) -> None:
+        policy = receipt["pre_submit_busy_wait_policy"]
+        policy["observations"].append(state)
+        policy["polls"] = poll
+        policy["waited_seconds"] = waited_seconds
+        policy["outcome"] = "observing"
+        submission = receipt["submission"]
+        submission["pre_submit_busy_wait_polls"] = poll
+        submission["pre_submit_busy_wait_seconds"] = waited_seconds
+        submission["pre_submit_busy_wait_outcome"] = "observing"
+        if accounting is None or journal is None:
+            return
+        try:
+            accounting.record_pre_submit_busy_observation(
+                journal,
+                poll=poll,
+                state=state,
+                waited_seconds=waited_seconds,
+            )
+        except Exception as error:
+            raise ProbeAbort("accounting_checkpoint_failed") from error
 
     try:
         if not config.execute:
@@ -2863,6 +3225,46 @@ async def run_probe(
                         )
                         submission = receipt["submission"]
                         _record_form_inspection(receipt, inspection)
+                        if (
+                            inspection.source_state == "busy"
+                            and config.pre_submit_busy_wait_seconds > 0
+                        ):
+                            pre_submit_busy_wait = (
+                                await wait_for_pre_submit_busy_clear(
+                                    owned_page,
+                                    field_label=config.field_label,
+                                    timeout_seconds=(
+                                        config.pre_submit_busy_wait_seconds
+                                    ),
+                                    poll_interval_seconds=(
+                                        DEFAULT_PRE_SUBMIT_BUSY_POLL_INTERVAL_SECONDS
+                                    ),
+                                    clock=clock,
+                                    sleeper=sleeper,
+                                    deadline=submission_deadline,
+                                    initial_inspection=inspection,
+                                    on_observation=(
+                                        journal_pre_submit_busy_observation
+                                    ),
+                                )
+                            )
+                            _record_pre_submit_busy_wait(
+                                receipt,
+                                pre_submit_busy_wait,
+                                maximum_seconds=config.pre_submit_busy_wait_seconds,
+                            )
+                            if pre_submit_busy_wait.classification is not None:
+                                raise ProbeAbort(
+                                    pre_submit_busy_wait.classification
+                                )
+                            if pre_submit_busy_wait.inspection is None:
+                                raise ProbeAbort("busy_before_submission")
+                            inspection = pre_submit_busy_wait.inspection
+                            _record_form_inspection(receipt, inspection)
+
+                        # A busy page that becomes a challenge enters the
+                        # existing separate 30-second challenge policy; an
+                        # access transition remains an immediate terminal stop.
                         if inspection.source_state == "challenge":
                             challenge_wait = await wait_for_challenge_clear(
                                 owned_page,
@@ -3185,6 +3587,15 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig | FinalizeConfig:
         default=DEFAULT_CHALLENGE_POLL_INTERVAL_SECONDS,
         help="fixed passive challenge poll cadence",
     )
+    parser.add_argument(
+        "--pre-submit-busy-wait-seconds",
+        type=float,
+        default=DEFAULT_PRE_SUBMIT_BUSY_WAIT_SECONDS,
+        help=(
+            "exploration-only passive ordinary-busy wait; default 0/off, "
+            "maximum 180 seconds, fixed 2-second DOM cadence, no reissue"
+        ),
+    )
     parser.add_argument("--output-path")
     parser.add_argument("--journal-path")
     parser.add_argument("--ledger-path")
@@ -3218,6 +3629,9 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig | FinalizeConfig:
         challenge_wait, challenge_interval = _validate_challenge_wait_policy(
             args.challenge_wait_seconds, args.challenge_poll_interval_seconds
         )
+        pre_submit_busy_wait = _validate_pre_submit_busy_wait_policy(
+            args.pre_submit_busy_wait_seconds
+        )
         output_path = validate_output_path(args.output_path)
         journal_path: Path | None = None
         ledger_path: Path | None = None
@@ -3250,6 +3664,7 @@ def parse_args(argv: list[str] | None = None) -> ProbeConfig | FinalizeConfig:
             output_path=output_path,
             challenge_wait_seconds=challenge_wait,
             challenge_poll_interval_seconds=challenge_interval,
+            pre_submit_busy_wait_seconds=pre_submit_busy_wait,
             journal_path=journal_path,
             ledger_path=ledger_path,
         )
