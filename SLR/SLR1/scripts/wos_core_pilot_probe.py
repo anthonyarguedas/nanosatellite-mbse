@@ -46,6 +46,9 @@ CLEANUP_TIMEOUT_SECONDS = 5.0
 CLEANUP_POLL_INTERVAL_SECONDS = 0.05
 MAX_QUERY_CHARACTERS = 100_000
 MAX_DATE_UPPER = 50
+EDITION_BUTTON_SELECTOR = "button[role='combobox'][aria-label^='selectEdition, All']"
+DATE_START_SELECTOR = "input[data-ta='search-timespan-start-input']"
+DATE_END_SELECTOR = "input[data-ta='search-timespan-end-input']"
 
 
 class InputValidationError(ValueError):
@@ -781,15 +784,26 @@ async def project_editions(page: Any) -> EditionState:
     return edition_state_from_payload(payload)
 
 
-async def _wait_for_dialog(page: Any, *, timeout: float, interval: float) -> EditionState:
-    deadline = asyncio.get_running_loop().time() + timeout
+async def _wait_for_dialog(
+    page: Any,
+    *,
+    timeout: float,
+    interval: float,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> EditionState:
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    deadline = clock() + timeout
     while True:
-        state = await project_editions(page)
-        if state.dialog_present:
+        try:
+            state = await project_editions(page)
+        except ProbeAbort:
+            state = None
+        if state is not None and state.dialog_present:
             return state
-        if deadline - asyncio.get_running_loop().time() <= 0:
+        if not await _sleep_to_deadline(deadline, interval, clock, sleeper):
             raise ProbeAbort("edition_picker_not_observed")
-        await asyncio.sleep(min(interval, max(0.0, deadline - asyncio.get_running_loop().time())))
 
 
 async def _click_unique(locator: Any, classification: str, timeout: float) -> None:
@@ -804,12 +818,63 @@ async def _click_unique(locator: Any, classification: str, timeout: float) -> No
         raise ProbeAbort(classification) from error
 
 
-async def verify_all_editions(page: Any, timeout: float) -> EditionState:
-    button = page.locator(
-        "button[role='combobox'][aria-label^='selectEdition, All']"
+async def _click_exact_when_ready(
+    page: Any,
+    selector: str,
+    classification: str,
+    timeout: float,
+    *,
+    interval: float = 0.2,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> None:
+    """Wait for and click one exact visible control, retrying only its state."""
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    deadline = clock() + timeout
+    while True:
+        remaining = deadline - clock()
+        if remaining <= 0:
+            raise ProbeAbort(classification)
+        try:
+            locator = page.locator(selector)
+            if await locator.count() == 1 and await locator.first.is_visible():
+                await locator.first.click(
+                    timeout=_milliseconds(min(timeout, remaining)),
+                    no_wait_after=True,
+                )
+                return
+        except Exception:
+            # A SPA hydration pass can replace the visible node between the
+            # count/visibility check and the click.  Re-observe the same exact
+            # selector instead of broadening the control or navigating again.
+            pass
+        if not await _sleep_to_deadline(deadline, interval, clock, sleeper):
+            raise ProbeAbort(classification)
+
+
+async def verify_all_editions(
+    page: Any,
+    timeout: float,
+    *,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> EditionState:
+    await _click_exact_when_ready(
+        page,
+        EDITION_BUTTON_SELECTOR,
+        "edition_picker_not_observed",
+        timeout,
+        clock=clock,
+        sleeper=sleeper,
     )
-    await _click_unique(button, "edition_picker_not_observed", timeout)
-    state = await _wait_for_dialog(page, timeout=timeout, interval=0.2)
+    state = await _wait_for_dialog(
+        page,
+        timeout=timeout,
+        interval=0.2,
+        clock=clock,
+        sleeper=sleeper,
+    )
     if not state.select_all_present:
         raise ProbeAbort("edition_picker_not_observed")
     if not state.all_current_editions_checked:
@@ -818,7 +883,13 @@ async def verify_all_editions(page: Any, timeout: float) -> EditionState:
             await _click_unique(checkbox, "all_editions_not_checked", timeout)
         except AttributeError as error:
             raise ProbeAbort("all_editions_not_checked") from error
-        state = await _wait_for_dialog(page, timeout=timeout, interval=0.2)
+        state = await _wait_for_dialog(
+            page,
+            timeout=timeout,
+            interval=0.2,
+            clock=clock,
+            sleeper=sleeper,
+        )
     if not state.all_current_editions_checked:
         raise ProbeAbort("all_editions_not_checked")
     try:
@@ -850,6 +921,70 @@ async def _find_add_row_button(page: Any) -> Any | None:
         if "add" in accessible and any(word in accessible for word in ("search", "row", "field", "criteria")):
             matches.append(item)
     return matches[0] if len(matches) == 1 else None
+
+
+async def _find_visible_named_button(page: Any, name: str) -> Any | None:
+    """Find one visible button with the exact bounded accessible name."""
+    try:
+        semantic = page.get_by_role("button", name=name, exact=True)
+        if await semantic.count() == 1 and await semantic.first.is_visible():
+            return semantic.first
+    except Exception:
+        pass
+
+    buttons = page.locator("button")
+    try:
+        count = await buttons.count()
+    except Exception:
+        return None
+    target = compact(name).casefold()
+    matches = []
+    for index in range(count):
+        item = buttons.nth(index)
+        try:
+            if not await item.is_visible():
+                continue
+            values = (
+                compact(await item.get_attribute("aria-label")),
+                compact(await item.get_attribute("title")),
+                compact(await item.inner_text()),
+            )
+        except Exception:
+            continue
+        if any(value.casefold() == target for value in values if value):
+            matches.append(item)
+    return matches[0] if len(matches) == 1 else None
+
+
+async def _click_named_when_ready(
+    page: Any,
+    name: str,
+    classification: str,
+    timeout: float,
+    *,
+    interval: float = 0.2,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> None:
+    if clock is None:
+        clock = asyncio.get_running_loop().time
+    deadline = clock() + timeout
+    while True:
+        remaining = deadline - clock()
+        if remaining <= 0:
+            raise ProbeAbort(classification)
+        button = await _find_visible_named_button(page, name)
+        if button is not None:
+            try:
+                await button.click(
+                    timeout=_milliseconds(min(timeout, remaining)),
+                    no_wait_after=True,
+                )
+                return
+            except Exception:
+                pass
+        if not await _sleep_to_deadline(deadline, interval, clock, sleeper):
+            raise ProbeAbort(classification)
 
 
 async def ensure_english_language(page: Any, timeout: float) -> None:
@@ -885,15 +1020,42 @@ async def ensure_english_language(page: Any, timeout: float) -> None:
         raise ProbeAbort("language_control_setup_failed")
 
 
-async def ensure_date_range(page: Any, date_upper: str, timeout: float) -> None:
+async def ensure_date_range(
+    page: Any,
+    date_upper: str,
+    timeout: float,
+    *,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> None:
     try:
-        start = page.locator("input[data-ta='search-timespan-start-input']")
-        end = page.locator("input[data-ta='search-timespan-end-input']")
-        if await start.count() != 1 or await end.count() != 1 or not await start.first.is_visible() or not await end.first.is_visible():
-            button = page.locator("button[aria-label='Publication Date']")
-            await _click_unique(button, "date_control_setup_failed", timeout)
-        start = page.locator("input[data-ta='search-timespan-start-input']")
-        end = page.locator("input[data-ta='search-timespan-end-input']")
+        start = page.locator(DATE_START_SELECTOR)
+        end = page.locator(DATE_END_SELECTOR)
+        inputs_ready = (
+            await start.count() == 1
+            and await end.count() == 1
+            and await start.first.is_visible()
+            and await end.first.is_visible()
+        )
+        if not inputs_ready:
+            await _click_named_when_ready(
+                page,
+                "Add Date Range",
+                "date_control_setup_failed",
+                timeout,
+                clock=clock,
+                sleeper=sleeper,
+            )
+            await _click_named_when_ready(
+                page,
+                "Publication Date",
+                "date_control_setup_failed",
+                timeout,
+                clock=clock,
+                sleeper=sleeper,
+            )
+        start = page.locator(DATE_START_SELECTOR)
+        end = page.locator(DATE_END_SELECTOR)
         if await start.count() != 1 or await end.count() != 1:
             raise ProbeAbort("date_control_setup_failed")
         await start.first.fill("2011-01-01")
@@ -906,13 +1068,30 @@ async def ensure_date_range(page: Any, date_upper: str, timeout: float) -> None:
         raise ProbeAbort("date_control_setup_failed") from error
 
 
-async def prepare_basic_controls(page: Any, config: ProbeConfig) -> tuple[BasicControlState, EditionState]:
+async def prepare_basic_controls(
+    page: Any,
+    config: ProbeConfig,
+    *,
+    clock: Callable[[], float] | None = None,
+    sleeper: Callable[[float], Awaitable[None]] = asyncio.sleep,
+) -> tuple[BasicControlState, EditionState]:
     initial = await project_controls(page)
-    if not initial.core_collection or not initial.topic_field or not initial.all_editions_button:
+    if not initial.core_collection or not initial.topic_field:
         raise ProbeAbort("basic_controls_not_ready")
-    editions = await verify_all_editions(page, config.timeout_seconds)
+    editions = await verify_all_editions(
+        page,
+        config.timeout_seconds,
+        clock=clock,
+        sleeper=sleeper,
+    )
     await ensure_english_language(page, config.timeout_seconds)
-    await ensure_date_range(page, config.date_upper, config.timeout_seconds)
+    await ensure_date_range(
+        page,
+        config.date_upper,
+        config.timeout_seconds,
+        clock=clock,
+        sleeper=sleeper,
+    )
     try:
         query = page.locator(
             "input[data-ta='search-criteria-input'][name='search-main-box'][aria-label^='Search box 1 Topic']"
@@ -1365,7 +1544,12 @@ async def run_probe(
                     )
                     if hydration.controls is None:
                         raise ProbeAbort("basic_controls_not_ready")
-                    controls, editions = await prepare_basic_controls(owned_page, config)
+                    controls, editions = await prepare_basic_controls(
+                        owned_page,
+                        config,
+                        clock=clock,
+                        sleeper=sleeper,
+                    )
                     apply_controls(receipt, controls, editions)
                     receipt["controls"]["date_start_readback"] = True
                     receipt["controls"]["date_end_readback"] = True

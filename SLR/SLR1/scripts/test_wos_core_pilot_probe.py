@@ -138,6 +138,151 @@ def result_payload(
     }
 
 
+class FakeEditionLocator:
+    def __init__(self, page: "FakeEditionPage") -> None:
+        self.page = page
+
+    @property
+    def first(self) -> "FakeEditionLocator":
+        return self
+
+    async def count(self) -> int:
+        self.page.edition_locator_checks += 1
+        return 1 if self.page.edition_available else 0
+
+    async def is_visible(self) -> bool:
+        return self.page.edition_available
+
+    async def click(self, **_kwargs) -> None:
+        self.page.click_attempts += 1
+        if self.page.click_attempts == 1:
+            raise RuntimeError("hydration replaced edition node")
+        self.page.events.append("edition")
+        self.page.dialog_open = True
+
+
+class FakeEditionKeyboard:
+    def __init__(self, page: "FakeEditionPage") -> None:
+        self.page = page
+
+    async def press(self, key: str) -> None:
+        self.page.events.append(key)
+        if key != "Escape":
+            raise AssertionError(key)
+        self.page.dialog_open = False
+
+
+class FakeEditionPage:
+    def __init__(self) -> None:
+        self.edition_locator_checks = 0
+        self.click_attempts = 0
+        self.dialog_open = False
+        self.events: list[str] = []
+        self.keyboard = FakeEditionKeyboard(self)
+
+    @property
+    def edition_available(self) -> bool:
+        return self.edition_locator_checks >= 2
+
+    def locator(self, selector: str) -> FakeEditionLocator:
+        if selector != wos.EDITION_BUTTON_SELECTOR:
+            raise AssertionError(f"unexpected selector: {selector}")
+        return FakeEditionLocator(self)
+
+    async def evaluate(self, script, *_args):
+        if script != wos.EDITION_DIALOG_PROJECTION_SCRIPT:
+            raise AssertionError("unexpected projection")
+        return edition_payload(dialog_present=self.dialog_open)
+
+
+class FakeDateInput:
+    def __init__(self, page: "FakeDatePage", side: str) -> None:
+        self.page = page
+        self.side = side
+
+    @property
+    def first(self) -> "FakeDateInput":
+        return self
+
+    async def count(self) -> int:
+        return int(self.page.publication_clicked)
+
+    async def is_visible(self) -> bool:
+        return self.page.publication_clicked
+
+    async def fill(self, value: str) -> None:
+        self.page.events.append(f"{self.side}={value}")
+        self.page.values[self.side] = value
+
+    async def input_value(self) -> str:
+        return self.page.values[self.side]
+
+
+class FakeDateButton:
+    def __init__(self, page: "FakeDatePage", name: str) -> None:
+        self.page = page
+        self.name = name
+
+    @property
+    def first(self) -> "FakeDateButton":
+        return self
+
+    async def count(self) -> int:
+        return 1
+
+    async def is_visible(self) -> bool:
+        if self.name == "Add Date Range":
+            return not self.page.add_clicked
+        return self.page.add_clicked and not self.page.publication_clicked
+
+    async def get_attribute(self, attribute: str) -> str:
+        if attribute == "aria-label":
+            return self.name
+        return ""
+
+    async def inner_text(self) -> str:
+        return self.name
+
+    async def click(self, **_kwargs) -> None:
+        self.page.events.append(self.name)
+        if self.name == "Add Date Range":
+            self.page.add_clicked = True
+        else:
+            self.page.publication_clicked = True
+
+
+class FakeDateButtons:
+    def __init__(self, page: "FakeDatePage") -> None:
+        self.page = page
+
+    async def count(self) -> int:
+        return 2
+
+    def nth(self, index: int) -> FakeDateButton:
+        return self.page.buttons[index]
+
+
+class FakeDatePage:
+    def __init__(self) -> None:
+        self.add_clicked = False
+        self.publication_clicked = False
+        self.values = {"start": "", "end": ""}
+        self.events: list[str] = []
+        self.buttons = [
+            FakeDateButton(self, "Add Date Range"),
+            FakeDateButton(self, "Publication Date"),
+        ]
+
+    def locator(self, selector: str):
+        if selector == wos.DATE_START_SELECTOR:
+            return FakeDateInput(self, "start")
+        if selector == wos.DATE_END_SELECTOR:
+            return FakeDateInput(self, "end")
+        if selector == "button":
+            return FakeDateButtons(self)
+        raise AssertionError(f"unexpected selector: {selector}")
+
+
 class ResultPage:
     def __init__(self, states: list[dict[str, object]]) -> None:
         self.states = list(states)
@@ -241,6 +386,44 @@ class BasicControlHydrationTests(unittest.TestCase):
         self.assertEqual(outcome.polls, 2)
         self.assertEqual(page.projection_calls, 2)
         self.assertEqual(clock.sleeps, [0.25, 0.25])
+
+
+class ControlTimingTests(unittest.TestCase):
+    def test_edition_selector_waits_and_retries_same_exact_control(self):
+        page = FakeEditionPage()
+        clock = FakeClock()
+        state = asyncio.run(
+            wos.verify_all_editions(
+                page,
+                timeout=0.8,
+                clock=clock,
+                sleeper=clock.sleep,
+            )
+        )
+        self.assertTrue(state.all_current_editions_checked)
+        self.assertEqual(page.click_attempts, 2)
+        self.assertEqual(page.events, ["edition", "Escape"])
+        self.assertEqual(clock.sleeps, [0.2, 0.2])
+        self.assertGreaterEqual(page.edition_locator_checks, 3)
+
+    def test_date_setup_adds_range_then_publication_date_before_exact_inputs(self):
+        page = FakeDatePage()
+        clock = FakeClock()
+        asyncio.run(
+            wos.ensure_date_range(
+                page,
+                "2026-08-25",
+                timeout=0.8,
+                clock=clock,
+                sleeper=clock.sleep,
+            )
+        )
+        self.assertEqual(
+            page.events,
+            ["Add Date Range", "Publication Date", "start=2011-01-01", "end=2026-08-25"],
+        )
+        self.assertEqual(page.values, {"start": "2011-01-01", "end": "2026-08-25"})
+        self.assertEqual(clock.sleeps, [])
 
 
 class ResultProjectionTests(unittest.TestCase):
