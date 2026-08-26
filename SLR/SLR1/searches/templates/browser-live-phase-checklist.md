@@ -32,7 +32,8 @@ uv run ~/agent-tools/internet/skills/browser/scripts/run_with_browser_lease.py -
 - [ ] The supervisor asserts that exactly one CfT process uses that profile.
 - [ ] One protected broker anchor is healthy before the phase. It will not be mutated.
 - [ ] The runner creates/closes only its own page. It does not reuse or navigate a baseline page; generic `browser_harness new_tab` is not used.
-- [ ] On macOS, the controller records process-scoped `caffeinate -dims`, power state, and actual Sleep/Wake checks; the lid stays open.
+- [ ] Target-scoped key events omit `nativeVirtualKeyCode`; no OS-level/native key injection is used.
+- [ ] On macOS, the controller records process-scoped `caffeinate -dims`, power state, actual Sleep/Wake checks, and any exact-window About This Mac/System Information launch; the lid stays open.
 
 ## 3. Provenance and health record
 
