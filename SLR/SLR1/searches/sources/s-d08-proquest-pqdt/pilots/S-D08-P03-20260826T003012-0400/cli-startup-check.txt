@@ -1,0 +1,124 @@
+usage: search_pqdt.py [-h] --query QUERY [--limit LIMIT]
+                      [--max-pages MAX_PAGES] [--timeout TIMEOUT]
+                      [--page-delay-seconds PAGE_DELAY_SECONDS]
+                      [--detail-delay-seconds DETAIL_DELAY_SECONDS]
+                      [--count-only] [--require-complete] [--cdp-url CDP_URL]
+                      [--fresh-browser] [--headless]
+                      [--chrome-executable CHROME_EXECUTABLE]
+                      --output-path OUTPUT_PATH
+                      [--csv-output-path CSV_OUTPUT_PATH]
+                      [--prisma-run-id PRISMA_RUN_ID]
+                      [--prisma-review-id PRISMA_REVIEW_ID]
+                      [--prisma-strategy-reference PRISMA_STRATEGY_REFERENCE]
+                      [--prisma-strategy-version PRISMA_STRATEGY_VERSION]
+                      [--prisma-phase PRISMA_PHASE]
+                      [--prisma-coverage-scope {full_source,partition}]
+                      [--prisma-partition-id PRISMA_PARTITION_ID]
+                      [--prisma-partition-label PRISMA_PARTITION_LABEL]
+                      [--prisma-partition-description PRISMA_PARTITION_DESCRIPTION]
+                      [--prisma-started-at-utc PRISMA_STARTED_AT_UTC]
+                      [--prisma-source-id PRISMA_SOURCE_ID]
+                      [--prisma-source-category PRISMA_SOURCE_CATEGORY]
+                      [--prisma-resource-name PRISMA_RESOURCE_NAME]
+                      [--prisma-database-name PRISMA_DATABASE_NAME]
+                      [--prisma-platform-name PRISMA_PLATFORM_NAME]
+                      [--prisma-platform-url PRISMA_PLATFORM_URL]
+                      [--prisma-adapter-id PRISMA_ADAPTER_ID]
+                      [--prisma-adapter-version PRISMA_ADAPTER_VERSION]
+                      [--prisma-source-reported-total PRISMA_SOURCE_REPORTED_TOTAL |
+                      --prisma-source-total-not-reported]
+                      [--prisma-source-total-exact |
+                      --prisma-source-total-not-exact]
+                      [--prisma-source-total-scope PRISMA_SOURCE_TOTAL_SCOPE]
+                      [--prisma-raw-source-records PRISMA_RAW_SOURCE_RECORDS]
+                      [--prisma-client-side-exclusions PRISMA_CLIENT_SIDE_EXCLUSIONS]
+                      [--prisma-within-source-duplicates-removed PRISMA_WITHIN_SOURCE_DUPLICATES_REMOVED]
+                      [--prisma-malformed-records-dropped PRISMA_MALFORMED_RECORDS_DROPPED]
+                      [--prisma-staged-counts-json PRISMA_STAGED_COUNTS_JSON]
+
+Search PQDT Global through normal rendered ProQuest UI and collect bounded
+metadata plus abstracts. Requires normal institutional browser access when
+gated.
+
+options:
+  -h, --help            show this help message and exit
+  --query QUERY         ProQuest Command Line Search query, e.g. NOFT(CubeSat)
+  --limit LIMIT         Maximum records to collect (default: 20)
+  --max-pages MAX_PAGES
+  --timeout TIMEOUT
+  --page-delay-seconds PAGE_DELAY_SECONDS
+  --detail-delay-seconds DETAIL_DELAY_SECONDS
+  --count-only          Return the reconciled rendered PQDT total without
+                        retaining records; the diagnostic is never reportable
+                        or mergeable.
+  --require-complete    Require two complete rendered pagination passes with
+                        identical ordered numeric ProQuest document IDs;
+                        cannot be combined with --count-only.
+  --cdp-url CDP_URL     Loopback Chrome DevTools endpoint for the authorized
+                        local browser (default: http://127.0.0.1:9222)
+  --fresh-browser       Opt out of the default local Chrome session and launch
+                        a fresh browser.
+  --headless            Launch the explicit --fresh-browser instance
+                        headlessly.
+  --chrome-executable CHROME_EXECUTABLE
+                        Optional local Chrome binary or .app path for --fresh-
+                        browser.
+  --output-path OUTPUT_PATH
+  --csv-output-path CSV_OUTPUT_PATH
+                        Optional normalized merge-compatible CSV path
+
+PRISMA-S search-run provenance:
+  --prisma-run-id PRISMA_RUN_ID
+                        Stable identifier for this source search run
+  --prisma-review-id PRISMA_REVIEW_ID
+                        External review identifier; never inferred
+  --prisma-strategy-reference, --prisma-strategy-ref PRISMA_STRATEGY_REFERENCE
+                        External search-strategy reference; never inferred
+  --prisma-strategy-version PRISMA_STRATEGY_VERSION
+                        Optional external strategy version
+  --prisma-phase PRISMA_PHASE
+                        PRISMA phase, for example identification
+  --prisma-coverage-scope {full_source,partition}
+                        Declare this artifact as full-source coverage or one
+                        named partition
+  --prisma-partition-id PRISMA_PARTITION_ID
+                        Stable ID for a source partition
+  --prisma-partition-label PRISMA_PARTITION_LABEL
+                        Human-readable source partition label
+  --prisma-partition-description PRISMA_PARTITION_DESCRIPTION
+                        Safe description of the partition boundary
+  --prisma-started-at-utc PRISMA_STARTED_AT_UTC
+                        Observed UTC start timestamp (ISO-8601)
+  --prisma-source-id PRISMA_SOURCE_ID
+                        Override the registry source ID for a dynamic adapter
+  --prisma-source-category PRISMA_SOURCE_CATEGORY
+                        Override the PRISMA source category
+  --prisma-resource-name PRISMA_RESOURCE_NAME
+                        Override the resource name
+  --prisma-database-name PRISMA_DATABASE_NAME
+                        Override the database name
+  --prisma-platform-name PRISMA_PLATFORM_NAME
+                        Override the public platform name
+  --prisma-platform-url PRISMA_PLATFORM_URL
+                        Override the public platform URL
+  --prisma-adapter-id PRISMA_ADAPTER_ID
+                        Safe adapter identifier
+  --prisma-adapter-version PRISMA_ADAPTER_VERSION
+                        Safe adapter version
+  --prisma-source-reported-total PRISMA_SOURCE_REPORTED_TOTAL
+  --prisma-source-total-not-reported
+                        Declare explicitly that this source does not report a
+                        total
+  --prisma-source-total-exact
+                        Declare the source-reported total exact
+  --prisma-source-total-not-exact
+                        Declare the source-reported total inexact
+  --prisma-source-total-scope PRISMA_SOURCE_TOTAL_SCOPE
+                        Scope of the source-reported total
+  --prisma-raw-source-records PRISMA_RAW_SOURCE_RECORDS
+  --prisma-client-side-exclusions PRISMA_CLIENT_SIDE_EXCLUSIONS
+  --prisma-within-source-duplicates-removed PRISMA_WITHIN_SOURCE_DUPLICATES_REMOVED
+  --prisma-malformed-records-dropped PRISMA_MALFORMED_RECORDS_DROPPED
+  --prisma-staged-counts-json PRISMA_STAGED_COUNTS_JSON
+                        Inline JSON object for explicit staged counts (never a
+                        local file path)

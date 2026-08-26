@@ -22,7 +22,7 @@
   ],
   "status": "technically_blocked",
   "created_at": "2026-08-25T13:28:22-04:00",
-  "updated_at": "2026-08-26T00:29:19-04:00",
+  "updated_at": "2026-08-26T00:30:42-04:00",
   "diagnostic_only": true,
   "screening_performed": false,
   "candidate_import_permitted": false,
@@ -187,23 +187,124 @@
         "cancelled_by": null,
         "reason": "The bounded technical successor reran O01 only; the trusted PQDT adapter raised PQDTMetadataProtocolError before the allowlisted probe receipt. O02\u2013O16 were not run, no source operation was reissued, and cleanup/release were verified."
       }
+    },
+    {
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
+      "sequence": 3,
+      "manifest_path": "pilots/S-D08-P03-20260826T003012-0400/manifest.json",
+      "manifest_sha256": "d2eae9e256cc7778b2b80b1f2839190b612cf9a92b9363d377e4daee84d3aa66",
+      "immutable": true,
+      "allocation": {
+        "attempt_kind": "technical_corrective",
+        "authorized_by": "controller",
+        "authorization_decision_id": "D-TECH-NEXT-P03",
+        "prospectively_authorized": true,
+        "allocated_at": "2026-08-26T00:30:12-04:00",
+        "source_phase_started": true
+      },
+      "source_operations": {
+        "predeclared_maximum": 1,
+        "performed": 1,
+        "operations": [
+          {
+            "operation_id": "P03-TI-CUBESAT-COUNT",
+            "operation_key": "TI-CUBESAT-COUNT",
+            "gate_ids": [
+              "G-SOURCE-BOUNDARY",
+              "G-QUERY-TRANSPORT",
+              "G-FIELD-BOUNDARY",
+              "G-CONTENT-CONTROL",
+              "G-PAGINATION-CONTROL",
+              "G-FAILURE-BEHAVIOR"
+            ],
+            "outcome": "failed",
+            "source_reported_total": null,
+            "records_retrieved": 0,
+            "records_imported": 0,
+            "retry": null
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "evidence_id": "E-P03-SOURCE-BOUNDARY-FAILURE",
+          "gate_id": "G-SOURCE-BOUNDARY",
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P03-QUERY-BLOCKER",
+          "gate_id": "G-QUERY-TRANSPORT",
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
+          "validity": "valid",
+          "basis": "observed"
+        },
+        {
+          "evidence_id": "E-P03-FAILURE-BEHAVIOR",
+          "gate_id": "G-FAILURE-BEHAVIOR",
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
+          "validity": "valid",
+          "basis": "observed"
+        }
+      ],
+      "terminal": {
+        "outcome": "failed",
+        "category": "technical",
+        "ended_at": "2026-08-26T00:30:42-04:00",
+        "provider_failure": false,
+        "source_writing_stopped": true,
+        "browser_backed": true,
+        "terminal_verification": "verified",
+        "cleanup_receipt": {
+          "path": "pilots/S-D08-P03-20260826T003012-0400/browser-cleanup-receipt.json",
+          "sha256": "77662421186e58b3b428fb279500092180668e0e9a2ce79218628f38f63b3c81"
+        },
+        "lease_receipt": {
+          "path": "pilots/S-D08-P03-20260826T003012-0400/shared-lease-release-receipt.json",
+          "sha256": "ca50bfeddec41e322224537247e02bd6e3e6da1ddcbde0336dbeaaeccf056f51"
+        },
+        "cancelled_by": null,
+        "reason": "The sole frozen count-only adapter operation returned PQDTMetadataProtocolError before selected-database/query-echo evidence. Total is null; cleanup/release verified."
+      }
     }
   ],
-  "gate_status_snapshots": [],
+  "gate_status_snapshots": [
+    {
+      "snapshot_id": "GS-P03-FAILURE-BEHAVIOR",
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
+      "manifest_path": "pilots/S-D08-P03-20260826T003012-0400/manifest.json",
+      "manifest_sha256": "d2eae9e256cc7778b2b80b1f2839190b612cf9a92b9363d377e4daee84d3aa66",
+      "gate_id": "G-FAILURE-BEHAVIOR",
+      "status": "passed",
+      "reusable": true,
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73"
+        }
+      ],
+      "immutable": true
+    }
+  ],
   "capability_gates": [
     {
       "gate_id": "G-SOURCE-BOUNDARY",
-      "checkpoint_id": "CP-SOURCE-BOUNDARY-P01",
-      "attempt_id": "S-D08-P02-20260825T133843-0400",
+      "checkpoint_id": "CP-SOURCE-BOUNDARY-P03",
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
       "requirement": "Exactly one PQDT Global database and the normal ProQuest route are selected.",
       "depends_on": [],
-      "status": "blocked",
+      "status": "failed",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D08-P02-20260825T133843-0400/immutable-incident.json",
-          "sha256": "3c068ceda0861494a0df39814a87f7f0c022940e75fad3bea43461ec40bc401e",
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
           "validity": "valid"
         }
       ],
@@ -214,47 +315,29 @@
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "The bounded adapter protocol-error diagnosis and safe observability handling do not alter review semantics."
+        "rationale": "The frozen direct adapter did not publish the required sole PQDT selection; this is a technical route failure, not provider inaccessibility."
       },
       "invalidation": null,
-      "notes": "P02 O01 stopped on the trusted PQDT adapter protocol-error class before a safe allowlisted probe result; no source boundary, field, or descriptor claim is accepted."
+      "notes": "The frozen direct adapter did not publish the required sole PQDT selection; this is a technical route failure, not provider inaccessibility."
     },
     {
       "gate_id": "G-QUERY-TRANSPORT",
-      "checkpoint_id": "CP-QUERY-TRANSPORT-P01",
-      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "checkpoint_id": "CP-QUERY-TRANSPORT-P03",
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
       "requirement": "The exact reviewed query is accepted and echoed by the intended source field.",
       "depends_on": [
         "G-SOURCE-BOUNDARY"
       ],
-      "status": "untested",
-      "observed_basis": "untested",
-      "original_observed_basis": "untested",
-      "evidence": [],
-      "reusable": false,
-      "carried_forward": false,
-      "carry_forward": null,
-      "source_operation_count": 0,
-      "semantic_impact": {
-        "classification": "none",
-        "review_effect": false,
-        "rationale": "No source evidence has been checkpointed yet."
-      },
-      "invalidation": null,
-      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
-    },
-    {
-      "gate_id": "G-FIELD-BOUNDARY",
-      "checkpoint_id": "CP-FIELD-BOUNDARY-P01",
-      "attempt_id": "S-D08-P02-20260825T133843-0400",
-      "requirement": "The observed field implementation preserves the reviewed query meaning.",
-      "depends_on": [
-        "G-QUERY-TRANSPORT"
-      ],
       "status": "blocked",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
-      "evidence": [],
+      "evidence": [
+        {
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
+          "validity": "valid"
+        }
+      ],
       "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
@@ -262,10 +345,40 @@
       "semantic_impact": {
         "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "The bounded adapter protocol-error diagnosis and safe observability handling do not alter review semantics."
+        "rationale": "Exact query echo was not reached."
       },
       "invalidation": null,
-      "notes": "P02 O01 stopped on the trusted PQDT adapter protocol-error class before a safe allowlisted probe result; no source boundary, field, or descriptor claim is accepted."
+      "notes": "Exact query echo was not reached."
+    },
+    {
+      "gate_id": "G-FIELD-BOUNDARY",
+      "checkpoint_id": "CP-FIELD-BOUNDARY-P03",
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
+      "requirement": "The observed field implementation preserves the reviewed query meaning.",
+      "depends_on": [
+        "G-QUERY-TRANSPORT"
+      ],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
+          "validity": "valid"
+        }
+      ],
+      "reusable": false,
+      "carried_forward": false,
+      "carry_forward": null,
+      "source_operation_count": 1,
+      "semantic_impact": {
+        "classification": "controller_technical",
+        "review_effect": false,
+        "rationale": "The TI field operation was not reached as accepted source evidence."
+      },
+      "invalidation": null,
+      "notes": "The TI field operation was not reached as accepted source evidence."
     },
     {
       "gate_id": "G-CONTROLLED-VOCABULARY",
@@ -341,27 +454,33 @@
     },
     {
       "gate_id": "G-CONTENT-CONTROL",
-      "checkpoint_id": "CP-CONTENT-CONTROL-P01",
-      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "checkpoint_id": "CP-CONTENT-CONTROL-P03",
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
       "requirement": "No unapproved degree, full-text, publication-type, or access restriction is introduced.",
       "depends_on": [
         "G-SOURCE-BOUNDARY"
       ],
-      "status": "untested",
-      "observed_basis": "untested",
-      "original_observed_basis": "untested",
-      "evidence": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
+          "validity": "valid"
+        }
+      ],
       "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
-      "source_operation_count": 0,
+      "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "none",
+        "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "No source evidence has been checkpointed yet."
+        "rationale": "Result controls were not published by the failed operation."
       },
       "invalidation": null,
-      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+      "notes": "Result controls were not published by the failed operation."
     },
     {
       "gate_id": "G-RETRIEVAL",
@@ -390,27 +509,33 @@
     },
     {
       "gate_id": "G-PAGINATION-CONTROL",
-      "checkpoint_id": "CP-PAGINATION-CONTROL-P01",
-      "attempt_id": "S-D08-P01-20260825T132822-0400",
+      "checkpoint_id": "CP-PAGINATION-CONTROL-P03",
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
       "requirement": "Rendered pagination reconciles to the source-reported total.",
       "depends_on": [
         "G-QUERY-TRANSPORT"
       ],
-      "status": "untested",
-      "observed_basis": "untested",
-      "original_observed_basis": "untested",
-      "evidence": [],
+      "status": "blocked",
+      "observed_basis": "observed",
+      "original_observed_basis": "observed",
+      "evidence": [
+        {
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
+          "validity": "valid"
+        }
+      ],
       "reusable": false,
       "carried_forward": false,
       "carry_forward": null,
-      "source_operation_count": 0,
+      "source_operation_count": 1,
       "semantic_impact": {
-        "classification": "none",
+        "classification": "controller_technical",
         "review_effect": false,
-        "rationale": "No source evidence has been checkpointed yet."
+        "rationale": "No result range or Next state was accepted."
       },
       "invalidation": null,
-      "notes": "Runtime gate declared before source work; status will be checkpointed from immutable safe evidence."
+      "notes": "No result range or Next state was accepted."
     },
     {
       "gate_id": "G-PAGE-IDENTITY",
@@ -463,33 +588,33 @@
     },
     {
       "gate_id": "G-FAILURE-BEHAVIOR",
-      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P01",
-      "attempt_id": "S-D08-P02-20260825T133843-0400",
+      "checkpoint_id": "CP-FAILURE-BEHAVIOR-P03",
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
       "requirement": "Failures, busy, challenge, null totals, and no-reissue behavior fail closed.",
       "depends_on": [
         "G-QUERY-TRANSPORT"
       ],
-      "status": "blocked",
+      "status": "passed",
       "observed_basis": "observed",
       "original_observed_basis": "observed",
       "evidence": [
         {
-          "path": "pilots/S-D08-P02-20260825T133843-0400/operation-ledger.json",
-          "sha256": "0e7f86c20fb38c9d4b6827ce0504bba678b0769e7a3821b56df59405d2f15fe9",
+          "path": "pilots/S-D08-P03-20260826T003012-0400/gate-failure.json",
+          "sha256": "62e9f4375e6ab6ee75103b9e3f2d95b344921a37cebc521e6cafb75a14c72f73",
           "validity": "valid"
         }
       ],
-      "reusable": false,
+      "reusable": true,
       "carried_forward": false,
       "carry_forward": null,
-      "source_operation_count": 0,
+      "source_operation_count": 1,
       "semantic_impact": {
         "classification": "none",
         "review_effect": false,
-        "rationale": "No source evidence has been checkpointed yet."
+        "rationale": "The adapter failed closed with null total, zero records, no reissue, and verified cleanup; no source failure class beyond technical protocol error is inferred."
       },
       "invalidation": null,
-      "notes": "No-reissue stop and cleanup are observed. The trusted adapter protocol error is preserved; orchestrator patch is required in an isolated agent-tools worktree."
+      "notes": "The adapter failed closed with null total, zero records, no reissue, and verified cleanup; no source failure class beyond technical protocol error is inferred."
     }
   ],
   "decisions": [
@@ -522,7 +647,7 @@
     },
     {
       "decision_id": "D-TECH-NEXT-P03",
-      "attempt_id": null,
+      "attempt_id": "S-D08-P03-20260826T003012-0400",
       "decision_class": "controller_technical",
       "review_effect": false,
       "affects_underlying_literature_review": false,
