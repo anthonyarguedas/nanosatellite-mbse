@@ -87,6 +87,9 @@ class FakePage:
             return FakeLocator()
         raise AssertionError(f"unexpected fake selector: {selector}")
 
+    async def title(self) -> str:
+        return runner.SOURCE_LABEL
+
     async def evaluate(self, script, payload=None):
         if script == "options":
             return {
@@ -97,6 +100,8 @@ class FakePage:
                 "limiterState": {},
             }
         if script == runner.DATABASE_SELECTION_SUBMIT_STATE_SCRIPT:
+            if self.context.auto_apply:
+                return []
             return [
                 {
                     "tag": "input",
@@ -109,6 +114,18 @@ class FakePage:
                     "enabled": True,
                 }
             ]
+        if script == runner.COMMAND_LINE_PRODUCT_STATE_SCRIPT:
+            query_field_count = 1 if self.context.auto_apply_state else 0
+            return {
+                "protocol": "https:",
+                "host": "www.proquest.com",
+                "path": "/ataindex/commandline",
+                "titleExact": True,
+                "queryFieldCount": query_field_count,
+                "commandLineStateExact": query_field_count == 1,
+                "blocked": False,
+                "requiresAccess": False,
+            }
         if script == runner.SENTINEL_RESULT_STATE_SCRIPT:
             return {
                 "protocol": "https:",
@@ -133,7 +150,9 @@ class FakePage:
 
 
 class FakeContext:
-    def __init__(self):
+    def __init__(self, *, auto_apply: bool = False, auto_apply_state: bool = True):
+        self.auto_apply = auto_apply
+        self.auto_apply_state = auto_apply_state
         self.pages = []
         self.anchor = FakePage(
             self,
@@ -162,8 +181,11 @@ class FakeConnection:
 
 
 class FakeCommon:
-    def __init__(self):
-        self.context = FakeContext()
+    def __init__(self, *, auto_apply: bool = False, auto_apply_state: bool = True):
+        self.context = FakeContext(
+            auto_apply=auto_apply,
+            auto_apply_state=auto_apply_state,
+        )
         self.browser = FakeBrowser(self.context)
 
     async def open_chrome_connection(self, playwright, **kwargs):
@@ -191,8 +213,11 @@ class FakeAdapter:
     COMMAND_LINE_URL = runner.COMMAND_LINE_URL
     RESULT_OPTIONS_STATE_SCRIPT = "options"
 
-    def __init__(self):
-        self._common = FakeCommon()
+    def __init__(self, *, auto_apply: bool = False, auto_apply_state: bool = True):
+        self._common = FakeCommon(
+            auto_apply=auto_apply,
+            auto_apply_state=auto_apply_state,
+        )
         self.selected = {
             runner.TARGET_DATABASE_LABEL: False,
             "Unrelated database": True,
@@ -280,6 +305,32 @@ class ProQuestAtaiExplorationTests(unittest.TestCase):
         with self.assertRaises(runner.InputValidationError):
             runner._validate_fixed_query('NOFT("CubeSat") AND YR(2011-2026)')
 
+    def test_zero_visible_submit_projection_is_a_closed_empty_set(self):
+        self.assertEqual(runner._freeze_database_submit_controls([]), ())
+
+        class EmptySubmitPage:
+            async def evaluate(self, script):
+                if script != runner.DATABASE_SELECTION_SUBMIT_STATE_SCRIPT:
+                    raise AssertionError("unexpected submit projection")
+                return []
+
+        receipt = runner._empty_receipt(
+            runner.ExplorationConfig(
+                execute=True,
+                cdp_url=runner.DEFAULT_CDP_URL,
+                timeout_seconds=1.0,
+                output_path=Path("unused.json"),
+            )
+        )
+        controls = asyncio.run(
+            runner._resolve_database_selection_submit(EmptySubmitPage(), receipt)
+        )
+        self.assertIsNone(controls)
+        self.assertEqual(
+            receipt["controls"]["database_selection_submit_inspection"]["matching_candidate_count"],
+            0,
+        )
+
     def test_native_zero_is_accepted_only_with_zero_total_and_no_rows(self):
         payload = {
             "protocol": "https:",
@@ -337,6 +388,75 @@ class ProQuestAtaiExplorationTests(unittest.TestCase):
             self.assertNotIn("https://www.proquest.com", saved_text)
             self.assertNotIn("anchor-target", saved_text)
             self.assertNotIn("owned-target", saved_text)
+
+    def test_auto_applied_checkbox_branch_accepts_only_exact_command_line_state(self):
+        adapter = FakeAdapter(auto_apply=True)
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "auto-apply.json"
+            config = runner.ExplorationConfig(
+                execute=True,
+                cdp_url=runner.DEFAULT_CDP_URL,
+                timeout_seconds=1.0,
+                output_path=output,
+            )
+            status, receipt = runner.run_exploration(
+                config,
+                adapter=adapter,
+                playwright_factory=lambda: FakePlaywrightContext(adapter._common.browser),
+            )
+        self.assertEqual(status, 0)
+        self.assertEqual(receipt["result"]["total"], 3)
+        self.assertEqual(receipt["submission"]["database_selection_submit_count"], 0)
+        self.assertEqual(receipt["submission"]["native_submit_count"], 1)
+        self.assertFalse(receipt["controls"]["database_selection_submit_control"])
+        self.assertEqual(
+            receipt["selection"]["auto_applied_selection"],
+            {
+                "eligible": True,
+                "attempted": True,
+                "route_verified": True,
+                "title_verified": True,
+                "state_verified": True,
+                "accepted": True,
+                "returned_to_selector": False,
+                "status": "accepted",
+            },
+        )
+        self.assertEqual(receipt["selection"]["restoration_status"], "attempted_verified")
+        self.assertEqual(adapter.selection_submits, 1)
+
+    def test_auto_applied_checkbox_branch_rejects_unproven_state_and_restores(self):
+        adapter = FakeAdapter(auto_apply=True, auto_apply_state=False)
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "auto-apply-rejected.json"
+            config = runner.ExplorationConfig(
+                execute=True,
+                cdp_url=runner.DEFAULT_CDP_URL,
+                timeout_seconds=1.0,
+                output_path=output,
+            )
+            status, receipt = runner.run_exploration(
+                config,
+                adapter=adapter,
+                playwright_factory=lambda: FakePlaywrightContext(adapter._common.browser),
+            )
+        self.assertEqual(status, 1)
+        self.assertEqual(receipt["terminal"]["classification"], "command_line_route")
+        self.assertIsNone(receipt["result"]["total"])
+        self.assertEqual(receipt["submission"]["database_selection_submit_count"], 0)
+        self.assertEqual(receipt["submission"]["native_submit_count"], 0)
+        self.assertEqual(
+            receipt["selection"]["auto_applied_selection"]["status"],
+            "rejected",
+        )
+        self.assertTrue(
+            receipt["selection"]["auto_applied_selection"]["returned_to_selector"]
+        )
+        self.assertFalse(
+            receipt["selection"]["auto_applied_selection"]["accepted"]
+        )
+        self.assertEqual(receipt["selection"]["restoration_status"], "attempted_verified")
+        self.assertEqual(adapter.selection_submits, 1)
 
     def test_restoration_guard_does_not_overwrite_changed_selection(self):
         adapter = FakeAdapter()

@@ -119,6 +119,33 @@ DATABASE_SELECTION_SUBMIT_STATE_SCRIPT = r"""
 }
 """
 
+# This is a read-only proof for the no-submit hypothesis.  It deliberately
+# checks the normal visible Command Line surface, not a hidden form or a
+# source-specific transport route.  No query or result control is changed.
+COMMAND_LINE_PRODUCT_STATE_SCRIPT = r"""
+() => {
+  const visible = element => Boolean(
+    element && (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+  );
+  const body = String(document.body && document.body.innerText || '').toLowerCase();
+  const queryFields = Array.from(document.querySelectorAll('#searchTerm')).filter(visible);
+  const blocked = ['captcha', 'verify you are human', 'access denied', 'unusual traffic', 'cloudflare']
+    .some(marker => body.includes(marker));
+  const requiresAccess = /authentication error|institutional access required|session has expired/i.test(body) ||
+    /\/(?:login|signin)(?:\/|$)/i.test(window.location.pathname);
+  return {
+    protocol: window.location.protocol,
+    host: window.location.hostname,
+    path: window.location.pathname,
+    titleExact: document.title.includes('Advanced Technologies & Aerospace Index'),
+    queryFieldCount: queryFields.length,
+    commandLineStateExact: queryFields.length === 1,
+    blocked,
+    requiresAccess
+  };
+}
+"""
+
 # These are intentionally finite and closed.  No exception text is permitted
 # to become a source receipt value.
 STAGES = frozenset(
@@ -399,7 +426,10 @@ def _state_summary(state: DatabaseLabelState | None) -> dict[str, Any]:
 
 
 def _freeze_database_submit_controls(payload: Any) -> tuple[DatabaseSubmitControl, ...]:
-    if not isinstance(payload, list) or not payload or len(payload) > 12:
+    # An empty visible projection is meaningful: it is the only input to the
+    # guarded auto-applied-checkbox exploration branch.  Malformed or
+    # unbounded projections still fail closed.
+    if not isinstance(payload, list) or len(payload) > 12:
         raise StageFailure("database_selection_submit")
     allowed_categories = {"numeric_submit", "named_submit", "other_id", "no_id"}
     allowed_types = {"submit", "button", "other"}
@@ -474,7 +504,8 @@ def _is_database_selection_submit(control: DatabaseSubmitControl) -> bool:
 
 async def _resolve_database_selection_submit(
     page: Any, receipt: dict[str, Any]
-) -> Any:
+) -> Any | None:
+    """Return one visible submit control, or None for a complete zero set."""
     try:
         raw = await page.evaluate(DATABASE_SELECTION_SUBMIT_STATE_SCRIPT)
         controls = _freeze_database_submit_controls(raw)
@@ -485,8 +516,10 @@ async def _resolve_database_selection_submit(
             "matching_candidate_count": len(matches),
             "candidates": [control.receipt_projection() for control in controls],
         }
-        if len(matches) != 1:
+        if len(matches) > 1:
             raise StageFailure("database_selection_submit")
+        if not matches:
+            return None
         target = matches[0]
         locator = page.locator(f"#{target.element_id}:visible")
         if (
@@ -615,6 +648,16 @@ def _empty_receipt(config: ExplorationConfig) -> dict[str, Any]:
             "restoration_attempted": False,
             "restoration_verified": False,
             "restoration_status": "not_required",
+            "auto_applied_selection": {
+                "eligible": False,
+                "attempted": False,
+                "route_verified": False,
+                "title_verified": False,
+                "state_verified": False,
+                "accepted": False,
+                "returned_to_selector": False,
+                "status": "not_attempted",
+            },
         },
         "controls": {
             "database_selection_controls_validated": False,
@@ -998,9 +1041,147 @@ def _assert_command_line_route(page: Any) -> None:
         raise StageFailure("command_line_route")
 
 
+def _assert_normal_command_line_route(page: Any) -> None:
+    """Require the ordinary command-line path for the auto-apply probe."""
+    try:
+        current = urlsplit(str(page.url))
+        expected = urlsplit(COMMAND_LINE_URL)
+    except Exception as error:
+        raise StageFailure("command_line_route") from error
+    if (
+        current.scheme != "https"
+        or current.hostname != EXPECTED_HOST
+        or current.path != expected.path
+        or current.query
+        or current.fragment
+    ):
+        raise StageFailure("command_line_route")
+
+
+async def _return_to_selector_after_auto_apply_failure(
+    adapter: Any,
+    page: Any,
+    timeout_seconds: float,
+    reassert_owned: Callable[[], Any],
+    receipt: dict[str, Any],
+) -> None:
+    """Return without mutation so the normal equality guard can run."""
+    try:
+        await reassert_owned()
+        await adapter.navigate(page, DATABASE_SELECTION_URL, timeout_seconds)
+        await adapter.wait_for_database_selection_route(
+            page,
+            source_site=ENTRY_SITE,
+            timeout_seconds=timeout_seconds,
+            ownership_reassertion=reassert_owned,
+        )
+        await adapter.ensure_aerospace_hierarchy_expanded(
+            page,
+            timeout_seconds=timeout_seconds,
+            source_site=ENTRY_SITE,
+            ownership_reassertion=reassert_owned,
+        )
+        _assert_database_selection_route(page)
+        await _read_selection_state(
+            adapter, page, timeout_seconds, reassert_owned
+        )
+    except StageFailure:
+        raise
+    except Exception as error:
+        raise StageFailure("restoration") from error
+    receipt["selection"]["auto_applied_selection"]["returned_to_selector"] = True
+
+
+async def _enter_command_line_via_auto_applied_selection(
+    adapter: Any,
+    page: Any,
+    snapshot: DatabaseLabelState | None,
+    deliberate: DatabaseLabelState | None,
+    timeout_seconds: float,
+    reassert_owned: Callable[[], Any],
+    receipt: dict[str, Any],
+) -> None:
+    """Explore a zero-submit selector only after the exact state is proven."""
+    auto = receipt["selection"]["auto_applied_selection"]
+    inspection = receipt["controls"]["database_selection_submit_inspection"]
+    if (
+        snapshot is None
+        or deliberate is None
+        or not snapshot.complete
+        or not deliberate.complete
+        or deliberate.selected_labels != frozenset({TARGET_DATABASE_LABEL})
+        or inspection.get("complete") is not True
+        or inspection.get("matching_candidate_count") != 0
+    ):
+        auto["status"] = "ineligible"
+        raise StageFailure("database_selection_submit")
+
+    auto.update({"eligible": True, "attempted": True, "status": "attempted"})
+    failure: StageFailure | None = None
+    try:
+        await reassert_owned()
+        await adapter.navigate(page, COMMAND_LINE_URL, timeout_seconds)
+        await adapter.wait_for_exact_index_route(
+            page,
+            timeout_seconds=timeout_seconds,
+            ownership_reassertion=reassert_owned,
+        )
+        _assert_normal_command_line_route(page)
+        auto["route_verified"] = True
+        receipt["controls"]["product_route_verified"] = True
+        receipt["controls"]["command_line_route_verified"] = True
+
+        title = await page.title()
+        payload = await page.evaluate(COMMAND_LINE_PRODUCT_STATE_SCRIPT)
+        if not isinstance(payload, Mapping):
+            raise StageFailure("product_route")
+        title_verified = (
+            type(title) is str
+            and SOURCE_LABEL in title
+            and payload.get("titleExact") is True
+        )
+        auto["title_verified"] = title_verified
+        if not title_verified:
+            raise StageFailure("product_route")
+        state_verified = (
+            payload.get("protocol") == "https:"
+            and payload.get("host") == EXPECTED_HOST
+            and payload.get("path") == urlsplit(COMMAND_LINE_URL).path
+            and payload.get("queryFieldCount") == 1
+            and payload.get("commandLineStateExact") is True
+            and payload.get("blocked") is False
+            and payload.get("requiresAccess") is False
+        )
+        auto["state_verified"] = state_verified
+        if not state_verified:
+            raise StageFailure("command_line_route")
+        auto.update({"accepted": True, "status": "accepted"})
+    except asyncio.CancelledError:
+        raise
+    except StageFailure as error:
+        failure = error
+    except Exception:
+        failure = StageFailure("product_route")
+
+    if failure is None:
+        return
+
+    auto["status"] = "rejected"
+    try:
+        await _return_to_selector_after_auto_apply_failure(
+            adapter, page, timeout_seconds, reassert_owned, receipt
+        )
+    except StageFailure:
+        auto["status"] = "rejected_return_failed"
+        raise
+    raise failure
+
+
 async def _submit_selection_and_enter_command_line(
     adapter: Any,
     page: Any,
+    snapshot: DatabaseLabelState | None,
+    deliberate: DatabaseLabelState | None,
     timeout_seconds: float,
     reassert_owned: Callable[[], Any],
     receipt: dict[str, Any],
@@ -1009,6 +1190,17 @@ async def _submit_selection_and_enter_command_line(
     try:
         await reassert_owned()
         selection_button = await _resolve_database_selection_submit(page, receipt)
+        if selection_button is None:
+            await _enter_command_line_via_auto_applied_selection(
+                adapter,
+                page,
+                snapshot,
+                deliberate,
+                timeout_seconds,
+                reassert_owned,
+                receipt,
+            )
+            return
         await _capture_restricted_locator_screenshot(
             selection_button,
             screenshot_dir,
@@ -1576,6 +1768,8 @@ async def _execute_live(
                 await _submit_selection_and_enter_command_line(
                     adapter,
                     page,
+                    snapshot,
+                    deliberate,
                     config.timeout_seconds,
                     reassert_owned,
                     receipt,
