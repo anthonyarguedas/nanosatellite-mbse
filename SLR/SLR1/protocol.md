@@ -27,8 +27,6 @@ The following rules apply:
 - Consult an old extraction only in a later discrepancy audit. Do not copy old evidence into the new extraction.
 - Do not carry old counts or classifications into the new synthesis.
 
-The review may start only when `git status --porcelain -- 'SLR/SLR1/protocol*.md'` reports no uncommitted changes. **Task:** [`P-000`](TASKS.md). There is no protocol version number, freeze, separate approval, or additional pre-search authorization gate. Later changes must be dated, committed, and assessed for their effect on completed work.
-
 Track every unresolved action or deferred field stated in any `protocol*.md` file in [`TASKS.md`](TASKS.md) before committing it. Each task must name the protocol sections to review or update. Mark a task complete only after its outputs exist and those sections have been reconciled.
 
 ## Reporting framework
@@ -36,7 +34,7 @@ Track every unresolved action or deferred field stated in any `protocol*.md` fil
 Use the following guidance:
 
 - [PRISMA-P (2015) protocols and checklist](https://www.prisma-statement.org/protocols) for this protocol;
-- [PRISMA-S (2021) search reporting](https://www.prisma-statement.org/prisma-search) and [Rethlefsen et al. (2021)](https://doi.org/10.1186/s13643-020-01542-z) to design the strategy in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) and to run, save, and report every search in a new-run `search-log.md`;
+- [PRISMA-S (2021) search reporting](https://www.prisma-statement.org/prisma-search) and [Rethlefsen et al. (2021)](https://doi.org/10.1186/s13643-020-01542-z) to design the strategy in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) and to run, save, and report every search in a search log;
 - Kitchenham and Charters (2007), *Guidelines for performing Systematic Literature Reviews in Software Engineering*, as complementary engineering conduct guidance for PICOC framing, heterogeneous evidence, protocol and form piloting, selection and extraction consistency, duplicate-report handling, and descriptive or narrative synthesis; and
 - the [PRISMA 2020 statement](https://www.prisma-statement.org/prisma-2020-statement), [checklist](https://www.prisma-statement.org/prisma-2020-checklist), [abstract guidance](https://www.prisma-statement.org/abstracts), and [flow templates](https://www.prisma-statement.org/prisma-2020-flow-diagram) for the completed review.
 
@@ -369,7 +367,7 @@ Record source-supported family and lineage relationships, their reasons, evidenc
 
 PRISMA identification and selection counts remain at record and report level. Report separate denominators for families, reports, threads, artifact lineages and profiles, tailoring applications, inputs and assumptions, outcomes and burdens, and V&V records. A report count is not a count of independent implementations or transfers.
 
-Use linked new-run IDs such as `family_id`, `report_id:thread_id`, `artifact_lineage_id:genericity_profile_id`, `artifact_lineage_id:tailoring_application_id`, `report_id:thread_id:outcome_burden_id`, and `report_id:thread_id:vnv_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
+Use linked IDs such as `family_id`, `report_id:thread_id`, `artifact_lineage_id:genericity_profile_id`, `artifact_lineage_id:tailoring_application_id`, `report_id:thread_id:outcome_burden_id`, and `report_id:thread_id:vnv_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
 
 ---
 

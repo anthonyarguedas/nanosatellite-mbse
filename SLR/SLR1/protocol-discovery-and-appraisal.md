@@ -29,7 +29,7 @@ Search these sources:
 
 For PRISMA-S, name PQDT Global as a database on the ProQuest Platform and describe OATD as an indexed online resource. For the PRISMA 2020 flow diagram, count OATD under websites and other methods. OATD is still a required source and keeps its own total.
 
-As a rule specific to this review, count the other 14 bounded and structured collections in the databases/registers column as databases. This rule applies even when a source uses a browser-only workflow or an unusual export format. Do not call any source a study register, and do not count a source in both columns.
+As a rule specific to this review, count the other 14 bounded and structured collections in the databases/registers column as databases.
 
 Keep separate totals for all 15 sources or collections.
 
@@ -50,7 +50,7 @@ Use two complementary streams because an EPS thread inside a wider spacecraft mo
 - **Stream A — EPS-explicit:** Population × EPS × MBSE/system-model concepts.
 - **Stream B — embedded-thread recall:** Population × MBSE/system-model concepts and conservative artifact or tailoring expansions, without requiring an EPS term. Every Stream B candidate must be checked at full text for an eligible EPS thread.
 
-The 13 direct query families are Scopus, Web of Science Core Collection, IEEE Xplore, Engineering Village, Wiley Online Library, Springer Nature Link, Advanced Technologies & Aerospace Index, PQDT Global, OATD, AIAA ARC, IAF Digital Library, NASA Technical Reports Server (NTRS), and arXiv. Engineering Village covers two databases, Compendex and Inspec. ESA may use a broader source harvest followed by deterministic local matching when its interface cannot represent the direct queries without loss.
+The 13 direct query families are Scopus, Web of Science Core Collection, IEEE Xplore, Engineering Village, Wiley Online Library, Springer Nature Link, Advanced Technologies & Aerospace Index, PQDT Global, OATD, AIAA ARC, IAF Digital Library, NASA Technical Reports Server (NTRS), and arXiv. Engineering Village covers two databases, Compendex and Inspec.
 
 Use the following exact cross-source concept blocks. Source-native translations may change syntax, field wrappers, and validated wildcard use, but not the intended terms or Boolean relationships. At concept level, every multiword entry is an ordered phrase; a source may apply only validated punctuation or hyphen normalization. Acronyms must match standalone lexical tokens rather than substrings. Record and test the source-native implementation of these rules.
 
@@ -63,32 +63,12 @@ Use the following exact cross-source concept blocks. Source-native translations 
 
 #### MBSE and relationship blocks
 
-- **High-specificity MBSE (`M_H`):** `model-based systems engineering`, `model based systems engineering`, `model-based system engineering`, `model based system engineering`, `model-driven systems engineering`, `model driven systems engineering`, `model-driven system engineering`, `model driven system engineering`, `model-centric systems engineering`, `model centric systems engineering`, `model-centric system engineering`, `model centric system engineering`, `MBSE`, `SysML`, `systems modeling language`, `systems modelling language`, `system modeling language`, `system modelling language`, `object-process methodology`, `object process methodology`, `OPM`, `object-oriented systems engineering method`, `object oriented systems engineering method`, `OOSEM`, `object-oriented systems engineering`, `object oriented systems engineering`, `Arcadia`, and `Capella`.
-- **Broad structured model (`M_B`):** `system model`, `systems model`, `system modeling`, `systems modeling`, `system modelling`, `systems modelling`, `reference model`, `reference models`, `digital engineering`, `object-oriented systems model`, `object-oriented systems models`, `model-based system design`, `model based system design`, `model-based systems design`, `model based systems design`, `system architecture model`, `system architecture models`, `systems architecture model`, `systems architecture models`, `integrated system model`, `integrated system models`, `integrated systems model`, `integrated systems models`, `system-level model`, `system-level models`, `system level model`, and `system level models`.
+- **High-specificity MBSE (`M_H`):** `model-based systems engineering`, `model based systems engineering`, `model-based system engineering`, `model based system engineering`, `model-driven systems engineering`, `model driven systems engineering`, `model-driven system engineering`, `model driven system engineering`, `model-centric systems engineering`, `model centric systems engineering`, `model-centric system engineering`, `model centric system engineering`, `MBSE`, `SysML`, `systems modeling language`, `systems modelling language`, `system modeling language`, `system modelling language`, `object-process methodology`, `object process methodology`, `OPM`, `object-oriented systems engineering method`, `object oriented systems engineering method`, `OOSEM`, `object-oriented systems engineering`, `object oriented systems engineering`, `Arcadia`, `Capella`, `model-based engineering`, `model based engineering`, `model-driven engineering`, `model driven engineering`, `model-based design`, `model based design`, `model-driven design`, `model driven design`, `MBE`, `MDE`, `MBD`, `MagicGrid`, `Harmony-SE`, `Harmony SE`, `RFLP`, `Cameo Systems Modeler`, `MagicDraw`, `IBM Engineering Systems Design Rhapsody`, `Rational Rhapsody`, `Vitech CORE`, `Vitech GENESYS`, `OpenMBEE`, `Enterprise Architect`, `MATLAB System Composer`, `System Composer`, and `Modelio`.
+- **Broad structured model (`M_B`):** `system model`, `systems model`, `system modeling`, `systems modeling`, `system modelling`, `systems modelling`, `reference model`, `reference models`, `digital engineering`, `object-oriented systems model`, `object-oriented systems models`, `model-based system design`, `model based system design`, `model-based systems design`, `model based systems design`, `system architecture model`, `system architecture models`, `systems architecture model`, `systems architecture models`, `integrated system model`, `integrated system models`, `integrated systems model`, `integrated systems models`, `system-level model`, `system-level models`, `system level model`, `system level models`, `digital thread`, `digital threads`, `digital twin`, and `digital twins`.
 - **All MBSE/system-model terms (`M`):** `M_H ∪ M_B`.
 - **Systems-engineering relationship or concern (`R`):** `requirement`, `requirements`, `function`, `functions`, `functional`, `behavior`, `behaviors`, `behaviour`, `behaviours`, `behavioral`, `behavioural`, `architecture`, `architectures`, `architectural`, `interface`, `interfaces`, `traceability`, `trace`, `traceable`, `traced`, `allocation`, `allocate`, `allocated`, `constraint`, `constraints`, `parametric`, `parametrics`, `analysis`, `analyses`, `design`, `designs`, `designed`, `designing`, `decision`, `decisions`, `decision-making`, `decision making`, `trade study`, `trade studies`, `trade-off`, `trade-offs`, `tradeoff`, `tradeoffs`, `verification`, `verifications`, `verify`, `verifies`, `verified`, `verifying`, `validation`, `validations`, `validate`, `validates`, `validated`, and `validating`.
 
 `M_B` requires `R` in direct B2 queries because its terms are otherwise broad. Stream A does not require `R`: the EPS block supplies the additional precision.
-
-#### Candidate MBSE terminology test
-
-Before accepting the source-specific translations, complete task [`S-C01`](TASKS.md). The following are candidates for testing, not search terms unless the test supports them and a committed protocol change adds them to a named block:
-
-- broader labels and acronyms: `model-based engineering`, `model based engineering`, `model-driven engineering`, `model driven engineering`, `model-based design`, `model based design`, `model-driven design`, `model driven design`, `MBE`, `MDE`, and `MBD`;
-- connected-model labels: `digital thread`, `digital threads`, `digital twin`, and `digital twins`;
-- methods or frameworks: `MagicGrid`, `Harmony-SE`, `Harmony SE`, `RFLP`, and expanded requirements–functional–logical–physical wording; and
-- tools or platforms: `Cameo Systems Modeler`, `MagicDraw`, `IBM Engineering Systems Design Rhapsody`, `Rational Rhapsody`, `Vitech CORE`, `Vitech GENESYS`, `OpenMBEE`, `Enterprise Architect`, `MATLAB System Composer`, `System Composer`, and `Modelio`, plus the common short forms `Cameo`, `Rhapsody`, `CORE`, and `GENESYS` tested separately because they are ambiguous.
-
-Use this diagnostic procedure:
-
-1. Freeze a test register containing confirmed eligible known reports that represent Route A, Route B, reusable-artifact work, different publication types and years, and different modeling vocabularies. Add contrast records in which the candidate denotes only a stand-alone simulation, component model, software model, product name, or unrelated acronym. For each record, document the source in which it is indexed and the exact title, abstract, keyword, or indexed-term field containing the candidate; a query cannot be judged to miss an item when the item or term is absent from the fields searched.
-2. After validating interface behavior, run the current `B1 ∪ B2` union and one candidate family at a time in Scopus, Web of Science Core Collection, IEEE Xplore, and Compendex/Inspec. Use the same fields and limits. Test a potentially high-specificity form as `P AND candidate`; for each broad or ambiguous form, also test `P AND candidate AND R`. Test full names separately from acronyms or short forms, and verify phrase, punctuation, stemming, and standalone-token behavior.
-3. Deduplicate each candidate result against the current union. Inspect all unique records when there are 50 or fewer; otherwise inspect all known and contrast records plus a reproducible random sample of 50 unique records. This is a term-use audit, not review screening: code only whether the searchable context denotes a qualifying structured system model, a potentially qualifying but ambiguous use, or a nonqualifying use, and do not import pilot records into the review.
-4. Record the exact diagnostic queries, fields, dates, totals, unique-record counts, known-item recovery, term-use codes, false-positive mechanisms, and the identifiers and sampling method. Do not accept a term merely because a vendor or author labels a tool or activity as MBSE.
-5. Accept a candidate only when it retrieves an indexed, confirmed eligible known item missed by the current union, or the unique-record audit finds a source-locatable qualifying structured-system-model use missed by that union. Place a term in `M_H` only when its tested standalone meaning is sufficiently specific; otherwise require `R` through `M_B`, define a conservative paired or expansion construction, or reject it. An acronym or short tool name also requires validated token boundaries and a documented ambiguity assessment.
-6. Record accepted and rejected terms with reasons. Before any affected final search, update this protocol and the concept dictionary, commit the change, regenerate every affected source translation, and rerun its diagnostic checks. Pilot results remain diagnostic and can enter the review only if a later clean final event retrieves them.
-
-**Source-stage status.** The Scopus portion was completed on 2026-08-23 under pilots [`P13`](searches/sources/s-d01-scopus/pilots/S-D01-P13-20260823T145616-0400/) and [`P14`](searches/sources/s-d01-scopus/pilots/S-D01-P14-20260823T150131-0400/). Its prespecified complete-or-sampled unique-record audit supports carrying `model-driven engineering` / `model driven engineering` and `digital twin` / `digital twins` forward only for possible later placement in `M_B` with independent `R`; the other candidates received no Scopus support for addition. This is not cross-source acceptance: all candidates remain non-normative, the concept dictionary and Scopus final translations remain unchanged, and `S-C01` still requires Web of Science, IEEE Xplore, and Compendex/Inspec evidence and a committed cross-source decision.
 
 #### Artifact and tailoring blocks
 
@@ -137,12 +117,11 @@ Free-text searching remains mandatory. When a source provides a genuine controll
 
 Record every accepted descriptor, field, hierarchy or explosion setting, mapping to the cross-source block, and known-item effect in the source packet. Controlled terms supplement the normative text words; they neither replace them nor change scientific eligibility.
 
-### New-run source translations and search artifacts
+### Source translations and search artifacts
 
-No source-specific query, adapter assumption, search log, concept dictionary, source crosswalk, manifest schema, or failure schema from an earlier attempt governs this run. Before the first related pilot, create the following anew from this protocol and give each artifact new-run provenance:
+No source-specific query, adapter assumption, search log, concept dictionary, source crosswalk, manifest schema, or failure schema from an earlier attempt governs this run. Before the first related pilot, create the following anew from this protocol and give each artifact provenance:
 
-- `search-log.md`;
-- `searches/search-concept-dictionary.json`;
+- the search log schema;
 - the source/interface/PRISMA crosswalk;
 - the source-packet contract, templates, and pilot-manifest schema;
 - the final-run manifest schema; and
@@ -168,26 +147,9 @@ A syntax or transport change that preserves the semantic blocks is an implementa
 
 Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D13` and local-source task `S-L02` in [`TASKS.md`](TASKS.md). Store each accepted method as a version-controlled source packet under `searches/sources/`; its reusable guideline must state the validated source boundary, translation approach, fields and controls, controlled-vocabulary or indexed-term behavior where available, date and language handling, completeness and export method, limits, and failure rules. Store exact source-native translations outside Markdown where necessary to preserve them losslessly. Keep exact executed strings and dated pilot evidence in the packet's diagnostic-only `pilots/` area, and index the packet and each accepted pilot from the new search log. This section incorporates accepted source packets by reference; update its compact index when each method is accepted. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
 
-| Task | Source or method | Accepted source packet |
-|---|---|---|
-| `S-D01` | Scopus | Pending cross-source `S-C01`; [Scopus candidate stage complete](searches/sources/s-d01-scopus/pilots/S-D01-P14-20260823T150131-0400/candidate-terminology-conclusion.json) |
-| `S-D02` | Web of Science Core Collection | Pending |
-| `S-D03` | IEEE Xplore | Pending |
-| `S-D04` | Compendex and Inspec through Engineering Village | Pending |
-| `S-D05` | Wiley Online Library | Pending |
-| `S-D06` | Springer Nature Link | Pending |
-| `S-D07` | Advanced Technologies & Aerospace Index | Pending |
-| `S-D08` | PQDT Global | Pending |
-| `S-D09` | OATD | Pending |
-| `S-D10` | AIAA Aerospace Research Central | Pending |
-| `S-D11` | arXiv | Pending |
-| `S-D12` | IAF Digital Library | Pending |
-| `S-D13` | NASA Technical Reports Server | Pending |
-| `S-L02` | ESA Indico local harvest | Pending |
-
 ### Pilots and final search events
 
-Run small, focused, no-screening pilots to validate each current interface and translation under tasks `S-D01`–`S-D13` and `S-L02` in [`TASKS.md`](TASKS.md). Apply the [two-mode source-interface policy](searches/two-mode-validation-policy.md): use agent-driven exploration to understand and repair the current real interface, then run a separate frozen deterministic evidence attempt; exploration guides implementation but cannot itself satisfy acceptance; broad offline suites are deferred until a working implementation is being merged or accepted. Exploration sessions are preparatory implementation work and cannot satisfy an acceptance gate. Evidence-mode pilot records, identifiers, totals, and files are diagnostic only and can never become candidates or final discovery events. Keep exploration, pilot, and clean final-run storage separate.
+Run small, focused, no-screening pilots to validate each current interface and translation under tasks `S-D01`–`S-D13` and `S-L02` in [`TASKS.md`](TASKS.md).
 
 For every pilot and final event, record:
 
@@ -197,13 +159,12 @@ For every pilot and final event, record:
 - platform, interface, date, time, and time zone;
 - source-reported and retrieved totals;
 - pagination or harvest coverage;
-- refinements and failures;
 - deduplication and coverage checks; and
 - disposition and reason for stopping.
 
 Use the source's normal authorized interface or a prospectively validated source-native route. Save proof of the selected source and controls. Retrieve every record in a successful result set. Where the source exposes a stable order, require two complete passes with the same identifiers in the same order. Otherwise define and validate an equivalent completeness check before final execution.
 
-A rewritten query, stale or short page, changed or unreconciled total, duplicate or missing identifier, hidden cap, export mismatch, parse failure, or incomplete harvest makes the event a failure. Record its total as `null`, never zero or a partial count, and do not import any prefix. An explicit and reproducible source zero is valid. Access challenges must be handled through the normal interface without bypassing them; unresolved access is a recorded source failure.
+A rewritten query, stale or short page, changed or unreconciled total, duplicate or missing identifier, hidden cap, export mismatch, parse failure, or incomplete harvest makes the event a failure. Record its total as `null`, never zero or a partial count, and do not import any prefix. An explicit and reproducible source zero is valid.
 
 Keep duplicate discovery events when the same record is found by different sources or partitions. Deduplicate only after every successful event has been completely retrieved and normalized.
 
@@ -213,11 +174,11 @@ Create the read-only known-item registers under task [`R-001`](TASKS.md). A miss
 
 The evidence window begins on 2011-01-01 and ends on the common evidence cutoff stated in [Part 1](protocol.md). Set that exact cutoff under task [`P-001`](TASKS.md) before the first final search. Use it unchanged for every source and citation route, even when execution occurs later. When an interface cannot apply the exact window, preserve its unaltered total, apply the window locally, and report removed and unresolved records.
 
-The full report must be in English. Apply a native English limit only after the new-run source validation shows that it is reliable; otherwise determine language during screening. Do not apply a publication-type, access, peer-review, venue, or content-type discovery limit unless a source boundary inherently supplies it or a newly logged source limitation requires it. Source scope does not by itself prove final publication type or report language.
+The full report must be in English. Apply a native English limit only after the source validation shows that it is reliable; otherwise determine language during screening. Do not apply a publication-type, access, peer-review, venue, or content-type discovery limit unless a source boundary inherently supplies it or a newly logged source limitation requires it. Source scope does not by itself prove final publication type or report language.
 
 ### Local-harvest methods
 
-Regenerate the ESA method from the current interface under task [`S-L02`](TASKS.md). A local method may use a complete population or source harvest followed by deterministic matching when direct Boolean translation would lose records. Before final execution, its new-run specification must define:
+Regenerate the ESA method from the current interface under task [`S-L02`](TASKS.md). A local method may use a complete population or source harvest followed by deterministic matching when direct Boolean translation would lose records. Before final execution, its specification must define:
 
 - the source universe and how completeness is established;
 - metadata, text, or attachment fields included in each matching route;

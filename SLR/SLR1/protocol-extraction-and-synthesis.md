@@ -2,11 +2,11 @@
 
 > **Protocol parts:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · **3 — Extraction and synthesis** (this file) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
 >
-> **Definitions used here:** [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), and [unit-level evidence appraisal](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal).
+> **Canonical definitions and rules:** Part 1 governs the [operational definitions](protocol.md#operational-definitions), [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), [RQ2 outcome and burden eligibility](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs), [direct RQ3 eligibility](protocol.md#direct-eps-linked-pre-physical-vv), and [units and counting](protocol.md#units-of-evidence-and-counting). Part 2 governs [unit-level evidence appraisal](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal). This part operationalizes those provisions as extraction, validation, synthesis, and reporting instructions rather than redefining them.
 
 ## Extraction fields
 
-Before extracting any report, create a new `extraction_codebook.json` for this run from this protocol. Earlier codebooks and forms do not govern this run. Do not copy their contents into new-run fields. Create and calibrate it under task [`E-001`](TASKS.md), then perform full extraction and validation under [`R-005`](TASKS.md).
+Create a new run-specific `extraction_codebook.json` from this protocol and calibrate it under task [`E-001`](TASKS.md), in accordance with the [Part 1 restart policy](protocol.md#review-status-and-restart-policy). Then perform full extraction and validation under [`R-005`](TASKS.md).
 
 For every controlled code that matters to the synthesis, record:
 
@@ -54,9 +54,9 @@ A strong classification can apply to a narrow within-case fact and does not impl
 
 For each report, record:
 
-- the new-run report ID, optional old corpus ID, and extraction-file path;
+- the report ID, optional old corpus ID, and extraction-file path;
 - full citation, title, authors, year, venue or institutional report series, publication type and status, DOI, arXiv identifier or URL, publisher or issuing organization, source or report ID, version used for extraction, version dates, any later formal counterpart, and any reported peer or technical review;
-- every linked new-run discovery-event ID and source record ID; keep the exact query or citation route, date, rank, and raw-file provenance once in the new search log and manifest;
+- every linked discovery-event ID and source record ID; keep the exact query or citation route, date, rank, and raw-file provenance once in the new search log and manifest;
 - title and abstract screening tier and reason;
 - final full-text decision and exclusion reason, if excluded;
 - Route A or Route B and the supporting evidence;
@@ -129,7 +129,7 @@ Create one record for each qualifying EPS thread. Record:
 
 ### Reusable EPS artifact-lineage and genericity-profile record
 
-Register every identifiable EPS-linked artifact. Create a separate profile for each lineage, version, or scope that needs separate assessment to avoid hiding a material change.
+Register every [identifiable EPS-linked artifact under the Part 1 definition](protocol.md#reusable-artifact-and-artifact-lineage). Create a separate profile for each lineage, version, or scope that needs separate assessment to avoid hiding a material change.
 
 Record identity and provenance:
 
@@ -142,17 +142,15 @@ Record identity and provenance:
 - availability and licence when reported; and
 - lineage coding confidence and reason.
 
-A common tool, organization, term, or topic does not prove a shared lineage.
-
 Record the source's claim:
 
 - exact source terminology and claim wording;
 - the claimed object and the person or group making the claim;
 - claimed reuse or genericity scope;
 - whether the claim concerns the artifact, method or workflow, toolchain, language or profile, whole spacecraft, or is unclear; and
-- genericity disposition: `not_an_artifact_or_method_only`, `artifact_no_reuse_indication`, `genericity_or_reuse_claim`, `reported_reuse_without_bounded_specification`, `bounded_reuse_candidate`, or `unclear`.
+- genericity disposition under the [Part 1 controlled values](protocol.md#rq1-dispositions-and-evidence-gates).
 
-Record the declared applicability envelope as a declared setting tuple. Use `not_reported` separately for each missing dimension, preserve the source for every value, and record whether the minimum DAE in Part 1 is met.
+Record the [Part 1 declared applicability envelope](protocol.md#declared-applicability-envelope) as a declared setting tuple. Use `not_reported` separately for each missing dimension, preserve the source for every value, and record whether the canonical minimum DAE is met.
 
 Record the reusable design:
 
@@ -177,20 +175,20 @@ Record tailoring support:
 
 Record the evidence assessment:
 
-- status, reason, source location, and coding confidence for every A/E/C/T/P/I gate;
+- status, reason, source location, and coding confidence for every [Part 1 A/E/C/T/P/I gate](protocol.md#rq1-dispositions-and-evidence-gates);
 - failed condition or conditions;
-- highest tier: `NA`, `G0_artifact_only`, `G1_claimed_or_unbounded`, `G2_bounded_reuse_specified`, `G3_bounded_reuse_demonstrated`, or `G4_independently_corroborated`;
+- highest [Part 1 genericity evidence tier](protocol.md#genericity-evidence-tiers);
 - a locatable cumulative reason for that tier;
-- claim agreement: `not_evaluated`, `supported_in_tested_contexts`, `partially_supported`, `mixed`, `not_supported`, or `unclear`; and
+- claim agreement under the [Part 1 controlled values](protocol.md#genericity-evidence-tiers); and
 - failed and outside-envelope applications and other possible explanations.
 
 Finally, record profile limits, model and data availability, dependence between report families and within the lineage, evidence source, coding confidence, and first- and second-check history.
 
-Apply the gate rules in Part 1. Combine reports only after establishing a shared lineage, preserve report provenance for every combined field, and never transfer a result to another version or application without evidence.
+Combine reports only after establishing a shared lineage, preserve report provenance for every combined field, and never transfer a result to another version or application without evidence.
 
 ### Tailoring-application record
 
-Create one record for each application of an artifact lineage to a target setting. Include a justified unchanged adoption.
+Create one record for each [tailoring application defined in Part 1](protocol.md#reusable-core-variation-points-and-tailoring).
 
 Record identity:
 
@@ -230,8 +228,6 @@ Record post-tailoring assurance:
 - discrepancies and how they were handled; and
 - whether every P-gate condition is met.
 
-Link an RQ3 record only if the application separately passes the RQ3 eligibility rule.
-
 Record the adopter or evaluator relationship as one of:
 
 - originating or same team;
@@ -244,7 +240,7 @@ Also record overlap in personnel and control of the implementation; the independ
 
 Record the evidence source, coding confidence, methodological limitations, and extraction and second-check history.
 
-One application can inform RQ1 and link to an RQ2 outcome or burden or an RQ3 V&V record. It enters those direct syntheses only when it separately meets their attribution and linkage rules.
+An application can inform RQ1. Link it to direct RQ2 or RQ3 synthesis only under the [Part 1 RQ2 attribution rule](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs) or [Part 1 RQ3 linkage rule](protocol.md#direct-eps-linked-pre-physical-vv), respectively.
 
 ### Input and assumption record
 
@@ -275,7 +271,7 @@ Do not infer that an input is unnecessary because the source omits it. Use `not_
 
 ### EPS engineering outputs
 
-Keep technical outputs separate from MBSE outcome and burden records. For each output, record:
+Apply the [Part 1 distinction between EPS engineering outputs and MBSE outcomes or burdens](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs). For each engineering output, record:
 
 - output ID and thread ID;
 - linked measurement ID and the source-reported quantity or result in its original form, units, and time basis;
@@ -286,11 +282,11 @@ Keep technical outputs separate from MBSE outcome and burden records. For each o
 - any linked derived-value ID, without replacing the reported value; and
 - evidence reference and coding confidence.
 
-An engineering output can be a direct measure of its stated quantity while remaining a surrogate for reliability, assurance, schedule, cost, or another broader construct. Link it to RQ2 or RQ3 only under those questions' normal attribution, measurement, and support rules.
+Link an engineering output to RQ2 or RQ3 only under the [Part 1 RQ2](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs) or [RQ3](protocol.md#direct-eps-linked-pre-physical-vv) rules.
 
 ### RQ2 outcome and implementation-burden evidence record
 
-Create one atomic record for every candidate outcome or burden that is explicitly or plausibly linked to a qualifying EPS thread. Do not extract every general MBSE claim merely because it appears in an eligible report. Split a statement that reports several outcomes into separate records. Link records that share evidence through source IDs.
+Apply the [Part 1 RQ2 eligibility rule](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs) to determine which records enter direct synthesis. For auditability, create one atomic candidate record for every outcome or burden explicitly or plausibly linked to a qualifying EPS thread; retain candidates that fail or remain uncertain under that rule outside the direct synthesis. Split a statement that reports several outcomes into separate records, and link records that share evidence through source IDs.
 
 Record the claim and its scope:
 
@@ -322,7 +318,7 @@ For a burden, record:
 - mitigation; and
 - any linked benefit or trade-off.
 
-For reliability, use the relevant subtype: EPS reliability, system or mission reliability, process reliability, model consistency or reliability, mission assurance, defect or error reduction, generic reliability claim, or not applicable. A technical proxy such as margin, trace count, or successful execution remains a surrogate unless the source validates its relationship to the reliability or assurance construct claimed.
+For reliability, use the relevant subtype: EPS reliability, system or mission reliability, process reliability, model consistency or reliability, mission assurance, defect or error reduction, generic reliability claim, or not applicable. Apply the [Part 1 rules for reliability and technical proxies](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs).
 
 Record the proposed MBSE mechanism:
 
@@ -342,7 +338,7 @@ Record the proposed MBSE mechanism:
 
 Also record the linked artifact or process and lifecycle stage.
 
-Classify attribution as `explicit EPS-thread attribution`, `ambiguous attribution`, or `generic/not eligible`. Only explicit EPS-thread attribution enters direct RQ2 synthesis. Explicit attribution records what the authors attribute to MBSE; it does not by itself demonstrate association or causation. Record author attribution, observed association, and reviewer assessment of causal support separately.
+Classify attribution as `explicit EPS-thread attribution`, `ambiguous attribution`, or `generic/not eligible`, and determine direct-synthesis inclusion under the [Part 1 attribution rule](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs). Store author attribution, observed association, and reviewer assessment of causal support separately.
 
 Classify evidence type as:
 
@@ -373,11 +369,11 @@ Apply the canonical record-level claim-support classes defined under [shared ext
 - An experiential or burden claim can be strongly supported by transparent sampling, collection and analysis of traceable participant evidence or work records; it does not require a comparator unless comparative language is used.
 - A transfer or genericity claim remains governed by the A/E/C/T/P/I gates. Do not substitute this support label for a genericity tier.
 
-Record evidence references, coding confidence, possible alternative explanations, dependence and report-family or nesting notes. Null, adverse, and beneficial directions use the same support rules.
+Record evidence references, coding confidence, possible alternative explanations, dependence and report-family or nesting notes.
 
 ### RQ3 V&V record
 
-Create one atomic record for each candidate target–method–scenario activity or artifact. Keep plausible near misses so that exclusion from direct EPS-linked RQ3 synthesis can be audited. Do not extract every unrelated system-level V&V activity.
+Apply the [Part 1 direct RQ3 eligibility and scope rules](protocol.md#direct-eps-linked-pre-physical-vv) to determine which records enter direct synthesis. For auditability, create one atomic candidate record for each plausibly relevant target–method–scenario activity or artifact, including near misses, but not unrelated system-level V&V activities.
 
 Record linkage and classification:
 
@@ -386,8 +382,8 @@ Record linkage and classification:
 - target type and requirement or criterion ID when reported;
 - model element or artifact and explicit model-to-V&V bridge;
 - the source's words for verification, validation, V&V, checking, or analysis;
-- linkage scope: `eps_specific`, `system_wide_eps_linked`, `system_wide_cooccurrence`, or `unclear`, with evidence and reason;
-- normalized V&V object: model verification, model validation, system or design verification, system or design validation, multiple, or `unclear`, with a coding reason; and
+- linkage scope under the [Part 1 classification](protocol.md#direct-eps-linked-pre-physical-vv), with evidence and reason;
+- normalized V&V object under the [Part 1 classification](protocol.md#direct-eps-linked-pre-physical-vv), with a coding reason; and
 - eligibility disposition: analysis only, direct EPS-linked V&V, system-wide co-occurrence near miss, or `unclear`.
 
 Record the activity:
@@ -413,15 +409,7 @@ Record results and completeness:
 
 For every direct RQ3 record, link the methodological-appraisal object for the evaluation, or use `not_applicable` with a reason for a proposed or prepared activity with no evaluation to appraise. Link relevant confounder assessments and a comparator object only when a comparative or effectiveness claim requires one. Create at least one record-level claim-support object, and create separate objects when one V&V record is used to support more than one materially different claim, such as execution and validation.
 
-Apply claim-specific support rules:
-
-- target, explicit bridge, and V&V method or intent can support only the existence of an EPS-linked V&V activity;
-- a criterion, execution, and result are required to support an executed-check or verification-result claim;
-- model or design validation additionally requires a credible intended-use oracle or authoritative reference and an evaluation fit to that comparison;
-- model-to-test continuity requires a source-supported link to the later physical artifact or activity; and
-- closure requires compared results and reported handling of discrepancies.
-
-A physical, operational, or flight setting strengthens only a claim that the linked evidence actually tests. It does not automatically validate a model, establish causal effectiveness, or upgrade another V&V claim. Record evidence references, coding confidence, methodological limitations, record-level claim support, applicability, dependence, and report-family or nesting notes.
+Assign claim support only within the [claim-specific RQ3 boundaries defined in Part 1](protocol.md#direct-eps-linked-pre-physical-vv). Record evidence references, coding confidence, methodological limitations, record-level claim support, applicability, dependence, and report-family or nesting notes.
 
 ### Limitations and open extraction
 
@@ -512,11 +500,9 @@ Complete synthesis and reporting under task [`R-006`](TASKS.md). Use a structure
 
 Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE studies and reports published from 2011 through 2023. It maps methods, languages, tools, five MBSE phases, and general challenges across many kinds of space work.
 
-Treat Buruso et al. as one known item in the separate [prior-secondary-review search and CRD/DARE assessment](protocol-prior-secondary-reviews.md). It enters that supporting assessment only through a successful final Scopus or Web of Science search and normal screening. The resulting scope and methods assessment contributes to the need-for-review rationale, not to RQ1–RQ3 evidence.
+Apply the [Part 1 need-for-review provisions and evidence restrictions](protocol.md#need-for-this-review) and the [supporting prior-secondary-review protocol](protocol-prior-secondary-reviews.md) to Buruso et al. After the main independent baseline is complete, it may be used for context, terminology, a later primary-report recall check, and recorded citation searching under Part 2.
 
-After the main independent baseline is complete, Buruso et al. may also be used for context, terminology, a later primary-report recall check, and recorded citation searching under Part 2. Do not use it as primary evidence or let either role insert one of its cited reports directly.
-
-This review is not an update or replication of Buruso et al. It applies this protocol's narrower nanosatellite-EPS population, direct EPS linkage rule, and RQ1–RQ3 evidence structures. Do not treat system-wide MBSE or V&V as EPS evidence or compare the two reviews' counts as evidence of effectiveness.
+This review is not an update or replication of Buruso et al. The main synthesis applies this review's narrower nanosatellite-EPS population, direct EPS linkage rule, and RQ1–RQ3 evidence structures. Do not compare the two reviews' counts as evidence of effectiveness.
 
 For a descriptive view of currency and overlap, results may be split into 2011–2023, matching Buruso et al.'s evidence window, and 2024 through the common evidence cutoff set under task [`P-001`](TASKS.md). This split does not change eligibility or imply independence.
 
@@ -528,34 +514,23 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 - Use methodological appraisal and claim-specific support for evaluative RQ1 characterizations. Do not treat model maturity, physical use, publication type, or coding confidence as automatic evidential strength.
 - Compare author labels such as *lightweight* or *scalable* with the reported footprint; do not turn them into eligibility or tailoring categories.
 - Compare Route A with Route B without assuming that one route is more mature.
-- Synthesize artifact-lineage profiles and tailoring applications under the gate and tier definitions in Part 1; keep method or workflow reuse separate from artifact reuse.
-- Present tiers at artifact-lineage/profile level, with the full gate vector, DAE breadth, demonstrated coverage, claim agreement, and failures or conflicts kept separate.
-- Merge duplicate reports of one application and use artifacts and applications—not publication counts—as transfer denominators. Distinguish same-family, separate-team, and independent use.
-- Describe a tier only within the artifact scope and demonstrated settings. Do not call an artifact proven, universally generic, or generic without context.
-- Include a tailoring check or burden in RQ3 or RQ2 only when it separately meets that question's linkage or attribution rule.
+- Synthesize artifact-lineage profiles and tailoring applications under the [Part 1 bounded-genericity rules](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring) and [canonical unit and denominator rules](protocol.md#units-of-evidence-and-counting), preserving the profile- and application-level fields extracted above.
+- Include a tailoring check or burden in RQ3 or RQ2 only under the [Part 1 RQ3 linkage](protocol.md#direct-eps-linked-pre-physical-vv) or [RQ2 attribution](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs) rule, respectively.
 
 ### RQ2
 
-- Synthesize only outcomes and implementation burdens that the source explicitly attributes to a qualifying EPS thread.
-- Keep EPS engineering outputs separate from evidence about value or burden caused by MBSE.
+- Apply the [Part 1 RQ2 eligibility and engineering-output distinction](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs) to define the direct synthesis set.
 - Present together the claim kind and scope, record role, outcome category, author-claimed direction, evidence-supported direction, burden category, proposed mechanism, evidence type, measure role, comparator adequacy when applicable, material confounding, methodological appraisal, record-level claim support, applicability, and lifecycle stage.
 - Report direct measures separately from surrogates and intermediate or process measures. Do not restate a proxy as the broader construct unless its relationship was credibly justified or validated.
-- Present comparative and causal claims separately from descriptive, feasibility, and experiential claims. Do not infer causation from explicit author attribution, temporal order, a quantitative value, operational maturity, or flight use alone.
+- Present comparative and causal claims separately from descriptive, feasibility, and experiential claims.
 - Preserve source-reported quantitative values, denominators, uncertainty, and practical interpretation; label every reviewer-derived value and report sensitivity to material assumptions.
-- Treat an unsupported claim as evidence that the claim was made, not that an effect was demonstrated.
-- Never treat `not_reported` as a null result.
-- Do not infer net benefit by counting positive and negative records.
 
 ### RQ3
 
-- Map every EPS target-to-model-to-V&V chain.
-- Separate `eps_specific` from `system_wide_eps_linked` records.
-- Also organize evidence by V&V object, completeness of the criterion, execution before physical work, later model-to-test continuity, methodological appraisal, and record-level claim support.
+- Apply the [Part 1 direct-linkage, scope, and completeness rules](protocol.md#direct-eps-linked-pre-physical-vv). Map every EPS target-to-model-to-V&V chain, present the two eligible linkage scopes separately, and report near misses outside the direct synthesis.
+- Organize evidence by V&V object, completeness of the criterion, execution before physical work, later model-to-test continuity, methodological appraisal, and record-level claim support.
 - Report measurements, criteria and oracles in their stated scope. Distinguish a direct V&V measure from a surrogate for validity, assurance, or downstream performance.
 - Use a comparator and confounder assessment when a report makes a comparative V&V-effectiveness claim; neither is required merely to document that a linked activity existed.
-- Report analysis-only work, system-wide co-occurrence, and other missing-link near misses separately.
-- Treat a missing criterion as incomplete evidence. Do not silently discard an otherwise explicit EPS-linked V&V record.
-- Do not infer validation from successful execution, closure from continuity, causal effectiveness from physical maturity, or an EPS-specific verdict from a system-wide activity or from items that only appear in the same report.
 
 ### Cross-cutting safeguards
 
@@ -569,9 +544,9 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 - Keep `not_reported`, `none`, `not_applicable`, `uncertain`, and invalid or unmapped values separate.
 - Treat sparse direct evidence as a result of the review. Do not fill gaps with general whole-spacecraft MBSE claims.
 
-## Required new-run artifacts
+## Required artifacts
 
-After clean-start task [`P-000`](TASKS.md) is complete, create these artifacts anew with run provenance. Do not restore an earlier run's log, dictionary, schemas, decisions, or data. Track search infrastructure under [`S-001`](TASKS.md), extraction forms under `E-001`, and the remaining artifacts under [`A-001`](TASKS.md):
+Under the [Part 1 restart policy](protocol.md#review-status-and-restart-policy), create these artifacts with provenance after task [`P-000`](TASKS.md) is complete. Track search infrastructure under [`S-001`](TASKS.md), extraction forms under `E-001`, and the remaining artifacts under [`A-001`](TASKS.md):
 
 - a dated methods decision log;
 - a study or implementation report-family register;
@@ -579,8 +554,7 @@ After clean-start task [`P-000`](TASKS.md) is complete, create these artifacts a
 - a tailoring-application table;
 - read-only known-item registers for legacy reports and Buruso recall;
 - the separate prior-secondary-review search bundle required by its [supporting protocol](protocol-prior-secondary-reviews.md#required-artifacts-and-reporting), including its CRD/DARE and overlap matrices and need-for-review statement;
-- a new `search-log.md` meeting PRISMA-S requirements;
-- a new `searches/search-concept-dictionary.json` and matching code generated from Part 2;
+- a new search log meeting PRISMA-S requirements;
 - new source/interface crosswalk, source-packet templates, pilot and final-run manifest schemas, and failure-register schema;
 - raw source-specific search results and source-selection or interface proof;
 - a search manifest with dates, interface details, restrictions, rights, and access status;
@@ -598,7 +572,7 @@ Do not publish licensed exports, copyrighted abstracts, or full texts when right
 
 ## Completed-review reporting
 
-The final report will call itself a systematic review and evidence map and will follow the PRISMA 2020 checklist and 12-item abstract guidance. It will:
+The final report will satisfy the [Part 1 reporting framework](protocol.md#reporting-framework) and will:
 
 - name every source actually used, give its search date and the common evidence cutoff set under `P-001`, and distinguish failed or planned-but-unused sources;
 - link to the exact final source-native searches and PRISMA-S logs instead of showing only a cleaned example query;
@@ -607,15 +581,13 @@ The final report will call itself a systematic review and evidence map and will 
 - report the bounded prior-secondary-review search separately, including its two-source limitation, CRD/DARE assessment, overlap matrix, need disposition, and any resulting protocol change, without adding its records to the main PRISMA flow;
 - never call model-assisted checking independent human review; never call same-reviewer test–retest independent replication; never infer corpus-wide agreement from the small human audit; and never describe source pilots as formal PRESS review;
 - explain why no pooled effect estimate is planned;
-- label every count or proportion with its denominator: report family, report, thread, artifact lineage or profile, tailoring application, outcome or burden, or V&V record;
-- use the new-review PRISMA flow diagram for databases and other sources, with records and reports—not linked analytic units—in its boxes;
+- label every count or proportion under the [Part 1 unit and denominator rules](protocol.md#units-of-evidence-and-counting);
+- use the new-review PRISMA flow diagram specified in the [Part 1 reporting framework](protocol.md#reporting-framework);
 - cite apparently eligible reports excluded after full-text review and give source-located reasons;
 - present methodological appraisal, record-level claim support, reporting-bias, and conclusion-confidence results under the [appraisal framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence), without treating evidence type or maturity as a universal hierarchy; and
 - report access to all three main parts and the supporting prior-secondary-review protocol, every dated methods change or departure, limits of the review process and evidence, and availability of data, code, and materials.
 
-Complete the administrative declarations under task [`P-002`](TASKS.md) before publication, or clearly say that they are absent. The clean-document start condition does not imply that these declarations exist.
-
-Apply the [clean-document start and change policy](protocol.md#review-status-and-restart-policy).
+Complete the administrative declarations under task [`P-002`](TASKS.md) as required by the [Part 1 reporting framework](protocol.md#reporting-framework), or clearly say that they are absent.
 
 ---
 
