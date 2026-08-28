@@ -78,11 +78,36 @@ The formal questions and analytical dimensions below govern the review. Eligible
 - **RQ2:** claim kind and scope; outcome or burden category; reported and evidence-supported direction; explicit EPS attribution; mechanism; direct or surrogate measurement; comparator adequacy and confounding when applicable; evaluation design and methodological appraisal; evidence type; and record-level claim support.
 - **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and criterion or oracle; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design and methodological appraisal; claim-specific support; and later model-to-test continuity or closure.
 
-The three mapping areas are equally important. RQ1 is not an additional eligibility test. A report can be eligible without claiming that a model is generic or reusable.
+The three mapping areas are equally important.
 
-Within RQ2, reliability and mission assurance, reproducibility and reuse, and integration and interoperability are priority categories for presentation. They are not eligibility tests. Code all eligible outcomes and burdens without favoring a direction or hiding other categories after seeing the results.
+Within RQ2, reliability and mission assurance, reproducibility and reuse, and integration and interoperability are priority categories for presentation. Code all eligible outcomes and burdens without favoring a direction or hiding other categories after seeing the results.
+
+### Report eligibility versus question contribution
+
+An outcome, burden, V&V activity, reuse or genericity claim, demonstrated tailoring, particular RQ1 disposition, methodological-appraisal judgment, or claim-support result is never an additional report-level inclusion test. Every eligible EPS thread contributes to RQ1 and receives a disposition. Create direct RQ2 and RQ3 records only when their respective definitions are met. A question-contribution or appraisal code cannot make an otherwise ineligible report eligible.
 
 ## Operational definitions
+
+### Cross-cutting evidence statuses
+
+Use the following meanings wherever a field permits these values; a field-specific rule controls when it sets a stricter evidence requirement:
+
+- **`not_reported`:** the available source does not provide the information needed for the field;
+- **`none`:** the evidence establishes that the condition, item, result, or capability was absent or failed, rather than merely unreported;
+- **`not_applicable`:** the field or rule does not logically apply to the evidence unit, with a narrow reason; and
+- **`uncertain`:** relevant evidence exists, but it does not resolve the value or classification.
+
+`unclear` is a field-specific classification used where a controlled vocabulary expressly provides it; it is not a substitute for one of the statuses above when that field distinguishes them. Missing reporting does not prove absence or poor conduct, and coding confidence does not replace a controlled status. Within source-reported information, distinguish author-declared or planned content from source-observed results; keep both separate from reviewer-inferred and reviewer-derived information.
+
+### Report manifestations, dates, and review status
+
+Treat online-first and issue versions as manifestations of one work. Treat an arXiv preprint and a later formal version as candidate manifestations of the same report: merge them only when no difference material to this review is found; otherwise retain them as companion reports in the same family. Preserve version-level dates, provenance, and substantive differences.
+
+Use only report versions available by the common evidence cutoff for eligibility and extraction. For an arXiv preprint, use the submission date of the earliest version containing the substantial completed report. Record every version number and submission date; the versions available at the cutoff and used for extraction; any withdrawal, replacement, journal reference, DOI, or formal counterpart; and material differences among manifestations.
+
+For a completed thesis or dissertation, use the earliest date that can be verified as formal issue or publication of the completed work and preserve the source's date label and the basis for the decision. Record formal-publication or issue, defence, approval, award, repository-deposit, public-release, embargo-end, and indexing dates separately when reported.
+
+Keep preprint, peer-review, technical-review, and degree-examination statuses separate. An arXiv preprint can qualify with or without a peer-reviewed counterpart, and degree acceptance or examination does not establish peer or technical review. Interpret these statuses under the [unit-level appraisal framework](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal).
 
 ### Nanosatellite population
 
@@ -356,7 +381,7 @@ The RQ3 completeness stages are claim-specific descriptors, not a general eviden
 Use the following linked units. They do not form a simple hierarchy because report families and artifact lineages may cross reports and implementations.
 
 1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model or toolchain use represented by one or more reports. Require source-supported overlap; a shared topic, organization, or tool is not enough.
-2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Treat an arXiv preprint and a later formal version as candidate manifestations of the same report: merge them only when no difference material to this review is found, and otherwise retain them as companion reports in the same family. Preserve version-level dates, provenance, and substantive differences in either case.
+2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Apply the canonical [report-manifestation, date, and review-status rules](#report-manifestations-dates-and-review-status).
 3. **EPS model thread:** one qualifying EPS-primary or embedded chain within a report.
 4. **Reusable EPS artifact lineage and genericity profile:** one identifiable base artifact and its source-supported versions or derived instances. Split profiles when versions or scopes differ materially.
 5. **Tailoring application:** one use of an artifact lineage in one target setting, including a justified unchanged adoption. Merge repeated reporting of the same application.

@@ -2,7 +2,7 @@
 
 > **Protocol parts:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · **3 — Extraction and synthesis** (this file) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
 >
-> **Canonical definitions and rules:** Part 1 governs the [operational definitions](protocol.md#operational-definitions), [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), [RQ2 outcome and burden eligibility](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs), [direct RQ3 eligibility](protocol.md#direct-eps-linked-pre-physical-vv), and [units and counting](protocol.md#units-of-evidence-and-counting). Part 2 governs [unit-level evidence appraisal](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal). This part operationalizes those provisions as extraction, validation, synthesis, and reporting instructions rather than redefining them.
+> **Canonical definitions and rules:** Part 1 governs [report eligibility versus question contribution](protocol.md#report-eligibility-versus-question-contribution), the [operational definitions](protocol.md#operational-definitions), [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), [RQ2 outcome and burden eligibility](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs), [direct RQ3 eligibility](protocol.md#direct-eps-linked-pre-physical-vv), and [units and counting](protocol.md#units-of-evidence-and-counting). Part 2 governs [unit-level evidence appraisal](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal). This part operationalizes those provisions as extraction, validation, synthesis, and reporting instructions rather than redefining them.
 
 ## Extraction fields
 
@@ -14,14 +14,7 @@ For every controlled code that matters to the synthesis, record:
 - a direct quotation or source location when possible; and
 - a coding-confidence rating of `high`, `moderate`, or `low`.
 
-Coding confidence records how certain the extractor is that the source was located and interpreted correctly. Use `high` for explicit and unambiguous source support, `moderate` when a bounded interpretation or reconstruction is required but supported, and `low` when material ambiguity remains. A low coding-confidence value does not replace the controlled status `uncertain`; record both when appropriate. Coding confidence is not a judgment of methodological quality or evidential strength. Keep these four concepts distinct throughout the codebook and synthesis:
-
-- **coding confidence:** certainty in extraction or classification;
-- **methodological appraisal:** fitness and conduct of the evaluation used to support a claim;
-- **record-level claim support:** support supplied by one evidence unit for one bounded claim; and
-- **conclusion confidence:** confidence in a synthesis conclusion across contributing units.
-
-Keep these statuses separate: `not_reported`, `not_applicable`, `none`, and `uncertain`. Also distinguish what the authors report from what the extractor infers.
+Apply the [Part 2 judgment definitions and coding-confidence scale](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal) and the [Part 1 cross-cutting evidence statuses](protocol.md#cross-cutting-evidence-statuses).
 
 ### Shared extraction structures
 
@@ -37,9 +30,9 @@ Use shared structures rather than copying the same facts into several records:
 - A **verification-pass record** documents one check without treating the checker as another evidence source. Store its pass ID; linked report and extraction IDs; actor type (`sole_reviewer`, `supervisor`, `llm`, or `deterministic_code`); pass kind; date; scope; whether the canonical extraction and other audit outputs were hidden or visible; codebook, prompt or procedure, source-file, rendered-input, and extraction hashes; model provider, exact model or snapshot identifier, reasoning and generation settings, tools, and document-ingestion route when applicable; pages, figures, tables, fields and record types covered; completion or failure status; secure versioned output reference and hash; and linked discrepancy IDs. It is an audit structure, not an analytic evidence unit or denominator.
 - A **verification-discrepancy record** stores the linked pass, report, object and field; discrepancy type; original and proposed values; evidence references; whether the issue is material; final human disposition; final value; reason; affected linked objects; corrective or escalation action; and adjudication date. Preserve rejected model flags as well as accepted corrections so model behavior and human adjudication can be reported honestly.
 - A **methodological-appraisal object** implements the scoped design and domain appraisal defined in [Part 2](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal). Store its appraisal ID; linked report, family, thread, artifact or profile, application, measurement, outcome or burden, and V&V IDs; design classification; domain statuses, reasons, evidence references, and coding confidence; and no aggregate score or pass.
-- A **record-level claim-support object** stores the linked record and claim, claim kind and scope, relevant measurement, comparator, confounder and appraisal IDs, dependence and applicability, support classification of `unsupported`, `weak`, `moderate`, or `strong`, and a source-located reason. Evidence type and maturity are descriptors and cannot determine this classification by themselves.
+- A **record-level claim-support object** stores the linked record and claim, claim kind and scope, relevant measurement, comparator, confounder and appraisal IDs, dependence and applicability, support classification of `unsupported`, `weak`, `moderate`, or `strong`, and a source-located reason.
 
-Give each shared object an ID, scope, evidence reference, and coding confidence where interpretation is involved. Link it from report, thread, artifact, application, outcome, or V&V records as appropriate. Keep declared, planned, source-observed, and reviewer-derived values separate even when they use the same structure.
+Give each shared object an ID, scope, evidence reference, and coding confidence where interpretation is involved. Link it from report, thread, artifact, application, outcome, or V&V records as appropriate. Apply the [Part 1 status and provenance distinctions](protocol.md#cross-cutting-evidence-statuses).
 
 Use the claim-support classes consistently across questions, always within the recorded claim scope:
 
@@ -55,7 +48,7 @@ A strong classification can apply to a narrow within-case fact and does not impl
 For each report, record:
 
 - the report ID, optional old corpus ID, and extraction-file path;
-- full citation, title, authors, year, venue or institutional report series, publication type and status, DOI, arXiv identifier or URL, publisher or issuing organization, source or report ID, version used for extraction, version dates, any later formal counterpart, and any reported peer or technical review;
+- full citation, title, authors, year, venue or institutional report series, publication type and status, DOI, arXiv identifier or URL, publisher or issuing organization, and source or report ID, together with the canonical [manifestation, date, version, and review-status fields](protocol.md#report-manifestations-dates-and-review-status);
 - every linked discovery-event ID and source record ID; keep the exact query or citation route, date, rank, and raw-file provenance once in the new search log and manifest;
 - title and abstract screening tier and reason;
 - final full-text decision and exclusion reason, if excluded;
@@ -76,20 +69,11 @@ For a thesis or dissertation, also record:
 - institution, country, and department;
 - completion status;
 - persistent IDs from PQDT, OATD, and the repository;
-- formal publication or issue date and the basis for that date;
-- defence, approval, award, deposit, public-release, embargo, and indexing dates when reported;
-- repository and full-text version;
-- access, embargo, and licence status; and
-- degree-examination status, kept separate from peer review.
+- the canonical [manifestation, date, and review-status fields](protocol.md#report-manifestations-dates-and-review-status);
+- repository and full-text version; and
+- access, embargo, and licence status.
 
-For an arXiv preprint, also record:
-
-- arXiv identifier and subject category;
-- every version number and submission date;
-- the earliest version containing the substantial completed report;
-- the version available at the common evidence cutoff and the version used for extraction;
-- any withdrawal, replacement, journal reference, DOI, or formal publication counterpart; and
-- substantive differences among eligible manifestations when reported or observed.
+For an arXiv preprint, record its identifier and subject category together with the canonical [manifestation, date, version, and review-status fields](protocol.md#report-manifestations-dates-and-review-status).
 
 ### Report and implementation context and MBSE qualification
 
@@ -198,7 +182,7 @@ Record identity:
 - target model or configuration ID; and
 - reason for treating reports as the same or different application.
 
-Record one observed target-setting tuple for the application. Classify its relationship to the DAE as `inside`, `boundary case`, `outside`, `unclear`, or `DAE not reported`, and give the reason. State which material dimensions distinguish this application from other credited applications.
+Record one observed target-setting tuple for the application. Classify its relationship to the DAE as `inside`, `boundary case`, `outside`, `unclear`, or `not_reported`, and give the reason. State which material dimensions distinguish this application from other credited applications.
 
 Record what happened to the artifact:
 
@@ -296,7 +280,7 @@ Record the claim and its scope:
 - role: outcome, implementation burden, mixed trade-off, or another role;
 - scope, target, population or observational unit, and time horizon;
 - outcome category: EPS reliability; system or mission assurance; defect or error reduction; risk reduction; reproducibility or rerunnability; reuse or replication; integration or interoperability; interface consistency; traceability or requirements quality; completeness; continuity across the lifecycle; decision or trade support; cost; schedule; effort or automation; communication or knowledge; governance or value realization; or another category;
-- reported direction: `beneficial`, `null/no observed effect`, `mixed/conditional`, `adverse`, or `unclear/not reported`;
+- reported direction: `beneficial`, `null/no observed effect`, `mixed/conditional`, `adverse`, `unclear`, or `not_reported`;
 - author-claimed direction using the same codes; and
 - evidence-supported direction using `beneficial`, `null/no observed effect`, `mixed/conditional`, `adverse`, `unclear`, or `not_supported`, kept separate from the author's wording.
 
@@ -311,14 +295,14 @@ Record the basis for direction:
 
 For a burden, record:
 
-- category: time or effort; skills or training; staffing; tools, licences, or infrastructure; model or data preparation; computing; integration or interoperability; maintenance, configuration, or governance; schedule; cost or resource use; another category; none reported; or not reported;
+- category: time or effort; skills or training; staffing; tools, licences, or infrastructure; model or data preparation; computing; integration or interoperability; maintenance, configuration, or governance; schedule; cost or resource use; another category; `none`; or `not_reported`;
 - affected person or group;
 - whether it occurs during adoption or ongoing use;
 - measurement method, including logs, accounting data, observation, survey, interview, or assertion;
 - mitigation; and
 - any linked benefit or trade-off.
 
-For reliability, use the relevant subtype: EPS reliability, system or mission reliability, process reliability, model consistency or reliability, mission assurance, defect or error reduction, generic reliability claim, or not applicable. Apply the [Part 1 rules for reliability and technical proxies](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs).
+For reliability, use the relevant subtype: EPS reliability, system or mission reliability, process reliability, model consistency or reliability, mission assurance, defect or error reduction, generic reliability claim, or `not_applicable`. Apply the [Part 1 rules for reliability and technical proxies](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs).
 
 Record the proposed MBSE mechanism:
 
@@ -476,8 +460,7 @@ A candidate discrepancy is **confirmed** only when human source adjudication fin
 
 During calibration, make sure the reviewer, supervisor when involved, and model-assisted procedures can distinguish:
 
-- coding confidence from methodological appraisal, record-level claim support, and conclusion confidence;
-- evidence type and maturity from support for the particular claim;
+- the appraisal-judgment, coding-confidence, and evidence-strength distinctions defined in [Part 2](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal);
 - a direct measure from a surrogate or intermediate measure;
 - author attribution and observed association from reviewer assessment of causal support;
 - an absent comparator from `not_applicable`, and an identified comparator from an adequate one;
@@ -500,18 +483,18 @@ Complete synthesis and reporting under task [`R-006`](TASKS.md). Use a structure
 
 Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE studies and reports published from 2011 through 2023. It maps methods, languages, tools, five MBSE phases, and general challenges across many kinds of space work.
 
-Apply the [Part 1 need-for-review provisions and evidence restrictions](protocol.md#need-for-this-review) and the [supporting prior-secondary-review protocol](protocol-prior-secondary-reviews.md) to Buruso et al. After the main independent baseline is complete, it may be used for context, terminology, a later primary-report recall check, and recorded citation searching under Part 2.
+Use Buruso et al. only under the [Part 1 evidence restrictions](protocol.md#need-for-this-review), the [supporting prior-secondary-review protocol](protocol-prior-secondary-reviews.md), and the [Part 2 baseline and citation-search procedure](protocol-discovery-and-appraisal.md#completing-the-baseline-and-citation-searches).
 
-This review is not an update or replication of Buruso et al. The main synthesis applies this review's narrower nanosatellite-EPS population, direct EPS linkage rule, and RQ1–RQ3 evidence structures. Do not compare the two reviews' counts as evidence of effectiveness.
+This review is not an update or replication of Buruso et al. Do not compare the two reviews' counts as evidence of effectiveness.
 
 For a descriptive view of currency and overlap, results may be split into 2011–2023, matching Buruso et al.'s evidence window, and 2024 through the common evidence cutoff set under task [`P-001`](TASKS.md). This split does not change eligibility or imply independence.
 
 ### RQ1
 
 - Synthesize the report-and-implementation-context, EPS-thread, input-and-assumption, engineering-output, and implementation-footprint records defined above.
-- Keep reported inputs and implementation needs separate from reviewer inference and missing information. Keep source-reported values separate from reviewer-derived values.
+- Apply the [Part 1 status and provenance distinctions](protocol.md#cross-cutting-evidence-statuses) to inputs, implementation needs, and values.
 - Identify whether measures used to characterize implementation or performance are direct, surrogate, intermediate or process measures, or unclear for the stated construct.
-- Use methodological appraisal and claim-specific support for evaluative RQ1 characterizations. Do not treat model maturity, physical use, publication type, or coding confidence as automatic evidential strength.
+- Apply the [Part 2 appraisal framework](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal) to evaluative RQ1 characterizations.
 - Compare author labels such as *lightweight* or *scalable* with the reported footprint; do not turn them into eligibility or tailoring categories.
 - Compare Route A with Route B without assuming that one route is more mature.
 - Synthesize artifact-lineage profiles and tailoring applications under the [Part 1 bounded-genericity rules](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring) and [canonical unit and denominator rules](protocol.md#units-of-evidence-and-counting), preserving the profile- and application-level fields extracted above.
@@ -536,15 +519,14 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 
 - Apply the [canonical units, denominator, and dependence rules](protocol.md#units-of-evidence-and-counting).
 - Present Route A and Route B separately before combining them.
-- Separate arXiv preprints, institutional technical reports, master's theses, doctoral theses or dissertations, and other grey literature from peer-reviewed scholarly reports. Show sensitivity views by publication provenance when useful. Do not automatically give a report less weight merely because it lacks journal peer review.
-- Keep coding confidence, methodological appraisal, record-level claim support, and conclusion confidence separate in tables and prose.
-- Treat evidence type, publication provenance, model maturity, operational use, physical validation, and flight status as descriptors. Use them to strengthen only conclusions they directly bear on.
-- Use sensitivity views based on methodological concerns, record-level claim support, measure directness, comparator adequacy, material confounding, publication provenance, linkage and lineage coding confidence, and genericity gates. Useful subsets may include Route A only, records without serious methodological concerns, direct-measure records, adequately compared records where comparison is required, G3/G4 profiles, and available artifacts. Do not treat the genericity tier as a general evidence-quality score.
+- Separate arXiv preprints, institutional technical reports, master's theses, doctoral theses or dissertations, and other grey literature from peer-reviewed scholarly reports, and show sensitivity views by publication provenance when useful. Interpret these views under the [Part 2 appraisal framework](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal).
+- Apply the [Part 2 appraisal and conclusion-confidence framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence) in tables and prose.
+- Use sensitivity views based on methodological concerns, record-level claim support, measure directness, comparator adequacy, material confounding, publication provenance, linkage and lineage coding confidence, and genericity gates. Useful subsets may include Route A only, records without serious methodological concerns, direct-measure records, adequately compared records where comparison is required, G3/G4 profiles, and available artifacts.
 - Treat cross-tabulations as descriptive co-reporting unless extraction provides a direct link.
-- Keep `not_reported`, `none`, `not_applicable`, `uncertain`, and invalid or unmapped values separate.
+- Apply the [Part 1 evidence-status rules](protocol.md#cross-cutting-evidence-statuses) and keep invalid or unmapped values separate.
 - Treat sparse direct evidence as a result of the review. Do not fill gaps with general whole-spacecraft MBSE claims.
 
-## Required artifacts
+## Required new-run artifacts
 
 Under the [Part 1 restart policy](protocol.md#review-status-and-restart-policy), create these artifacts with provenance after task [`P-000`](TASKS.md) is complete. Track search infrastructure under [`S-001`](TASKS.md), extraction forms under `E-001`, and the remaining artifacts under [`A-001`](TASKS.md):
 
@@ -552,15 +534,8 @@ Under the [Part 1 restart policy](protocol.md#review-status-and-restart-policy),
 - a study or implementation report-family register;
 - a reusable EPS artifact-lineage register;
 - a tailoring-application table;
-- read-only known-item registers for legacy reports and Buruso recall;
-- the separate prior-secondary-review search bundle required by its [supporting protocol](protocol-prior-secondary-reviews.md#required-artifacts-and-reporting), including its CRD/DARE and overlap matrices and need-for-review statement;
-- a new search log meeting PRISMA-S requirements;
-- new source/interface crosswalk, source-packet templates, pilot and final-run manifest schemas, and failure-register schema;
-- raw source-specific search results and source-selection or interface proof;
-- a search manifest with dates, interface details, restrictions, rights, and access status;
-- a merged and deduplicated candidate set and deduplication report;
-- title and abstract screening, full-text screening, and retrieval logs;
-- the accessible report set and a table of cited full-text exclusions with one main reason per report;
+- the complete [Part 2 discovery and screening artifact bundle](protocol-discovery-and-appraisal.md#required-discovery-and-screening-artifacts);
+- the separate bundle required by the [supporting prior-secondary-review protocol](protocol-prior-secondary-reviews.md#required-artifacts-and-reporting);
 - the run-specific corpus, IDs, and extraction codebook;
 - per-report extraction files with links among threads, measurements, comparators, confounder assessments, derived values, methodological appraisals, claim-support objects, profiles, applications, outcomes or burdens, and V&V records;
 - versioned full blind model-extraction, canonical-audit, cross-report-challenge and reconciliation prompts and procedures; run manifests; complete model extraction and audit outputs where rights permit; verification-pass records; discrepancy and human-adjudication records; deterministic-validation results; and sole-reviewer test–retest and supervisor-audit files;
@@ -576,18 +551,14 @@ The final report will satisfy the [Part 1 reporting framework](protocol.md#repor
 
 - name every source actually used, give its search date and the common evidence cutoff set under `P-001`, and distinguish failed or planned-but-unused sources;
 - link to the exact final source-native searches and PRISMA-S logs instead of showing only a cleaned example query;
-- describe the sole-reviewer design, human and complete blind model extractions, canonical-audit and reconciliation sequence, test–retest sample selection and delay, requested and completed supervisor scope, discrepancies, escalation, and conflict handling exactly as performed;
-- identify each model or snapshot, provider and execution date, reasoning and generation settings, prompt and codebook version, document-ingestion route, full-extraction module coverage and failures, human-only and model-only units, split or merge candidates, field discrepancies, and the number and disposition of audit flags;
-- report the bounded prior-secondary-review search separately, including its two-source limitation, CRD/DARE assessment, overlap matrix, need disposition, and any resulting protocol change, without adding its records to the main PRISMA flow;
-- never call model-assisted checking independent human review; never call same-reviewer test–retest independent replication; never infer corpus-wide agreement from the small human audit; and never describe source pilots as formal PRESS review;
+- report extraction verification exactly as required under the [sole-reviewer extraction and verification procedure](#sole-reviewer-extraction-and-verification);
+- report the prior-secondary-review assessment separately under its [supporting protocol](protocol-prior-secondary-reviews.md#required-artifacts-and-reporting);
+- never describe source pilots as formal PRESS review;
 - explain why no pooled effect estimate is planned;
 - label every count or proportion under the [Part 1 unit and denominator rules](protocol.md#units-of-evidence-and-counting);
-- use the new-review PRISMA flow diagram specified in the [Part 1 reporting framework](protocol.md#reporting-framework);
 - cite apparently eligible reports excluded after full-text review and give source-located reasons;
-- present methodological appraisal, record-level claim support, reporting-bias, and conclusion-confidence results under the [appraisal framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence), without treating evidence type or maturity as a universal hierarchy; and
+- present methodological appraisal, record-level claim support, reporting-bias, and conclusion-confidence results under the [Part 2 appraisal framework](protocol-discovery-and-appraisal.md#appraisal-meaning-reporting-bias-assessment-and-conclusion-confidence); and
 - report access to all three main parts and the supporting prior-secondary-review protocol, every dated methods change or departure, limits of the review process and evidence, and availability of data, code, and materials.
-
-Complete the administrative declarations under task [`P-002`](TASKS.md) as required by the [Part 1 reporting framework](protocol.md#reporting-framework), or clearly say that they are absent.
 
 ---
 

@@ -39,7 +39,7 @@ The separate [prior-secondary-review need assessment](protocol-prior-secondary-r
 
 ### Supplementary discovery and citation searching
 
-Also use backward citation searching, forward citation searching in both Scopus and Web of Science Core Collection, and Buruso et al. (2026), *Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review* (https://doi.org/10.1002/sys.70051), as a secondary-review seed and later recall check. Follow the detailed procedure and stopping rule under [completing the baseline and citation searches](#completing-the-baseline-and-citation-searches). Buruso et al. is separately a known item for the [prior-secondary-review search](protocol-prior-secondary-reviews.md), where it can be assessed only if a final supporting-search event retrieves it. Neither role makes it primary evidence or permits it to insert a report directly into the main review.
+Also use backward citation searching, forward citation searching in both Scopus and Web of Science Core Collection, and Buruso et al. (2026), *Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review* (https://doi.org/10.1002/sys.70051), as a secondary-review seed and later recall check. Follow the [baseline and citation-search procedure](#completing-the-baseline-and-citation-searches), the [Part 1 evidence restrictions](protocol.md#need-for-this-review), and Buruso's separate role in the [prior-secondary-review search](protocol-prior-secondary-reviews.md).
 
 ## Search strategy
 
@@ -117,17 +117,11 @@ Free-text searching remains mandatory. When a source provides a genuine controll
 
 Record every accepted descriptor, field, hierarchy or explosion setting, mapping to the cross-source block, and known-item effect in the source packet. Controlled terms supplement the normative text words; they neither replace them nor change scientific eligibility.
 
-### Source translations and search artifacts
+### New-run source translations and search artifacts
 
-No source-specific query, adapter assumption, search log, concept dictionary, source crosswalk, manifest schema, or failure schema from an earlier attempt governs this run. Before the first related pilot, create the following anew from this protocol and give each artifact provenance:
+Under the [Part 1 restart policy](protocol.md#review-status-and-restart-policy), create the new-run search-infrastructure components in the [required discovery and screening artifact bundle](#required-discovery-and-screening-artifacts) before the first related pilot, and give each artifact provenance.
 
-- the search log schema;
-- the source/interface/PRISMA crosswalk;
-- the source-packet contract, templates, and pilot-manifest schema;
-- the final-run manifest schema; and
-- the failure-register schema.
-
-The protocol's concept blocks and Boolean schedule are normative. The new dictionary must reproduce them without adding or dropping a concept. Source-specific translations and controls must be regenerated and validated against the current interfaces rather than restored from Git history. **Task:** [`S-001`](TASKS.md).
+The protocol's concept blocks and Boolean schedule are normative. The new dictionary must reproduce them without adding or dropping a concept. Validate every source-specific translation and control against the current interface. **Task:** [`S-001`](TASKS.md).
 
 For each source or local method, the new log and the version-controlled source packet that it indexes must record before final execution:
 
@@ -187,13 +181,13 @@ Regenerate the ESA method from the current interface under task [`S-L02`](TASKS.
 - candidate partitions, tags, invariants, and overlap accounting; and
 - treatment of inaccessible, missing, or unparseable material.
 
-Do not combine required terms across records or across independently defined routes. A failed retrieval or parse is a coverage failure, not a zero. No result, matrix, dictionary, or local classification from an earlier attempt is part of this run.
+Do not combine required terms across records or across independently defined routes. A failed retrieval or parse is a coverage failure, not a zero.
 
 ### Completing the baseline and citation searches
 
 Execute and reconcile the electronic baseline under task [`R-002`](TASKS.md) and the recall and citation cycles under [`R-003`](TASKS.md). The independent baseline is complete only after all 15 planned sources or collections have either a complete, reconciled final run or a recorded final source or interface failure. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources. Keep every failure and reason in the new manifest and PRISMA counts.
 
-Only after that baseline and failure register are complete, use Buruso et al. (2026) and the retained-file cache for recall audits. A missed report may trigger a prospective concept-level refinement or enter through a recorded citation route; never add it directly.
+Only after that baseline and failure register are complete, use Buruso et al. (2026) and the retained-file cache for recall audits under the [Part 1 evidence restrictions](protocol.md#need-for-this-review). A missed report may trigger a prospective concept-level refinement or enter through a recorded citation route.
 
 Start backward and forward citation searching from every included full-text report and relevant secondary review:
 
@@ -218,31 +212,40 @@ Keep review methods, logs, controlled dictionaries, derived data, and analysis c
 
 Record the database interface actually used.
 
-Use UTF-8 JSON for derived machine-readable data. Use BibTeX for bibliographic transfer when available. Before every merge or synthesis, validate schemas, IDs, controlled values, and links between records.
+Use UTF-8 JSON for derived machine-readable data. Use BibTeX for bibliographic transfer when available. Before each discovery-data merge, validate the applicable schemas, IDs, controlled values, and links. Follow the [Part 3 extraction-validation procedure](protocol-extraction-and-synthesis.md#calibration-consistency-and-validation) before synthesis.
 
 Make deduplication reproducible. Review conflicts manually when identifiers disagree. Keep both the original metadata and the preferred normalized value, with the reason for choosing it.
 
 Use Git history as the audit trail for text, code, schemas, and derived non-sensitive data.
 
+### Required discovery and screening artifacts
+
+The discovery and screening artifact bundle comprises:
+
+- read-only known-item registers for legacy reports and Buruso recall;
+- a new search log meeting PRISMA-S requirements;
+- the source/interface/PRISMA crosswalk, source-packet contract and templates, pilot- and final-run manifest schemas, and failure-register schema;
+- raw source-specific results and source-selection or interface proof;
+- a search manifest with dates, interface details, restrictions, rights, and access status;
+- a merged and deduplicated candidate set and deduplication report;
+- title-and-abstract screening, full-text screening, and retrieval logs; and
+- the accessible report set and a table of cited full-text exclusions with one main reason per report.
+
+Part 3 incorporates this bundle by reference rather than listing its components again.
+
 ## Inclusion and exclusion criteria
 
 | Criterion | Plain-English rule | RQ(s) |
 |---|---|---|
-| Publication date | Include a report with an eligible version dated from 2011-01-01 through the common evidence cutoff in Part 1. Treat online-first and issue versions as manifestations of one work. For an arXiv preprint, use the submission date of the earliest version that contains a substantial completed report, and record every version and date. For a degree work, use the earliest date that can be verified as formal issue or publication of the completed thesis or dissertation, and keep the source's date label. Record formal-publication, defence, award, approval, repository-deposit, public-release, embargo-end, and indexing dates separately. Use only report versions available by the evidence cutoff for eligibility and extraction; do not silently substitute a later version or another date. | 1–3 |
+| Publication date | Include a report only when an eligible version is dated from 2011-01-01 through the common evidence cutoff in Part 1. Apply the canonical [report-manifestation and date rules](protocol.md#report-manifestations-dates-and-review-status). | 1–3 |
 | Language | The full report must be in English. English metadata does not prove that the report itself is in English. If the full text cannot be obtained, use `not_retrieved` instead of making a language assumption. | 1–3 |
-| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; research chapter in an edited scholarly book; institutional technical report; arXiv preprint with a stable arXiv identifier and a substantial completed report; completed master's thesis; or completed doctoral thesis or dissertation. A degree work needs stable institutional or authoritative dissertation-service provenance and substantial methods and results. An arXiv preprint is eligible with or without a peer-reviewed counterpart; record its preprint and review status without treating either as an eligibility or quality proxy. Empirical comparisons and experience reports may qualify. Record degree acceptance or examination separately from peer or technical review; do not infer one from the other. | 1–3 |
-| Population | The work must concern an actual or planned orbital CubeSat or nanosatellite-class mission, or a model tailored to that class. A generic SmallSat label is not enough. A mixed-platform report needs evidence that can be separated for CubeSats or nanosatellites. | 1–3 |
-| MBSE threshold | The work must meet the [structured-system-model definition](protocol.md#mbse-qualification). | 1–3 |
-| EPS threshold | At full text, the work must meet Route A or Route B. | 1–3 |
-| Mixed system scope | Include only if an EPS thread can be extracted separately. Describe other subsystems only as EPS dependencies or interfaces. | 1–3 |
-| Secondary studies | Exclude secondary studies, including Buruso et al. (2026), from primary evidence. Keep them separately for background, terminology, later recall checks, and citation searching. | 1–3 |
-| Non-MBSE EPS studies | Exclude stand-alone component, circuit, control, optimization, sizing, simulation, or hardware-performance studies unless they have an explicit link to a structured system model. | 1–3 |
-| Generic whole-spacecraft MBSE | Exclude a report without a qualifying EPS thread, even if it mentions an EPS or power budget. | 1–3 |
-| Other-subsystem studies | Exclude unless they contain a qualifying EPS thread. A subsystem's power consumption alone is not enough. | 1–3 |
-| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; incomplete degree work; undergraduate, bachelor's, or non-degree projects; presentation- or slide-only records; recordings; editorials; tutorials; advertisements; patents; and non-scholarly web material. | 1–3 |
+| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; research chapter in an edited scholarly book; institutional technical report; arXiv preprint with a stable arXiv identifier and a substantial completed report; completed master's thesis; or completed doctoral thesis or dissertation. A degree work needs stable institutional or authoritative dissertation-service provenance. Apply the canonical [manifestation and review-status rules](protocol.md#report-manifestations-dates-and-review-status). | 1–3 |
+| Scientific scope | The work must satisfy the canonical [nanosatellite population](protocol.md#nanosatellite-population), [EPS boundary](protocol.md#eps-boundary), [MBSE qualification](protocol.md#mbse-qualification), and [Route A or Route B](protocol.md#eligible-eps-evidence-routes) rules. | 1–3 |
+| Secondary studies | Exclude secondary studies from primary evidence; manage any background, recall, or citation role under [supplementary discovery](#supplementary-discovery-and-citation-searching). | 1–3 |
+| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; incomplete degree work; undergraduate, bachelor's, or non-degree projects; advertisements; and non-scholarly web material. | 1–3 |
 | Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. | 1–3 |
 
-Do not make an outcome, V&V activity, reuse, genericity claim, or demonstrated tailoring a report-level inclusion test. Every eligible thread contributes to RQ1 and receives a disposition; create direct RQ2 and RQ3 records only when the relevant definitions are met. These later contribution codes cannot make an ineligible report eligible.
+Apply the canonical distinction between [report eligibility and question contribution](protocol.md#report-eligibility-versus-question-contribution).
 
 For retrieval, follow the run's PDF workflow:
 
@@ -314,7 +317,7 @@ Keep four judgments distinct:
 3. **Record-level claim support** assesses how strongly one evidence unit supports one bounded claim.
 4. **Conclusion confidence** assesses a synthesis conclusion across contributing units.
 
-Coding confidence cannot substitute for methodological credibility, and an operational or flight setting cannot automatically upgrade support for a claim it was not designed to test.
+Assign coding confidence as `high` for explicit and unambiguous source support, `moderate` when a bounded but supported interpretation or reconstruction is required, and `low` when material ambiguity remains. Apply the [cross-cutting evidence statuses](protocol.md#cross-cutting-evidence-statuses) separately. Coding confidence cannot substitute for methodological credibility, and an operational or flight setting cannot automatically upgrade support for a claim it was not designed to test.
 
 Create a scoped methodological-appraisal object when a report makes an empirical or evaluative claim used for RQ1, RQ2, or RQ3. Link it to the existing report, thread, artifact or profile, application, outcome or burden, and V&V IDs that it appraises; it is an extraction structure, not another evidence unit or denominator. One object may support several records only when they use the same design, data, and analysis. Create separate objects when one report contains materially different evaluations, such as a simulation and an interview study.
 
@@ -340,7 +343,7 @@ Also apply design-specific domains:
 - **Case study or experience report:** case-selection rationale, context, chain of evidence, triangulation, rival explanations, and the evaluator's role.
 - **Survey:** sampling frame, representativeness, response and non-response, instrument validity, and analysis.
 - **Interview or qualitative evaluation:** participant selection, data-collection transparency, analytic procedure, diversity of perspectives, reflexivity, and traceability from source material to interpretation.
-- **Artifact or reuse demonstration:** artifact identity, distinction among applications, implementation-family dependence, independent adoption when claimed, post-tailoring assurance, and failed or conflicting applications. The A/E/C/T/P/I gates remain the authoritative bounded-reuse profile and are not duplicated as a generic quality score.
+- **Artifact or reuse demonstration:** artifact identity, distinction among applications, implementation-family dependence, independent adoption when claimed, post-tailoring assurance, and failed or conflicting applications. Apply the canonical [A/E/C/T/P/I bounded-reuse profile](protocol.md#rq1-dispositions-and-evidence-gates).
 
 Code each applicable appraisal domain as `adequate`, `some_concerns`, `inadequate`, `not_reported`, `unclear`, or `not_applicable`, with a reason, evidence reference, and coding confidence. Use `inadequate` only for a source-supported methodological deficiency; use `not_reported` when conduct cannot be assessed from the available report. Do not sum, average, or convert domain codes into a pass or numerical score.
 
@@ -351,11 +354,11 @@ Appraise evidence at the unit that supports a finding:
 - For RQ2, keep author attribution separate from reviewer assessment. Use claim kind, explicit EPS attribution, mechanism, measure directness, comparator adequacy when required, confounding, evaluation design and appraisal, dependence, and record-level claim support.
 - For RQ3, use linkage scope, target and bridge, V&V object, criterion completeness, execution and timing, result or verdict, oracle credibility when validation is claimed, model-to-test continuity, methodological appraisal, dependence, and record-level claim support.
 
-Keep `not_reported`, `none`, `not_applicable`, and `uncertain` distinct. Missing reporting limits what the review can conclude but does not prove that the underlying work was absent or poor. Methodological appraisal and claim support cannot make an otherwise ineligible report or record eligible and are not additional exclusion thresholds.
+Apply the canonical [cross-cutting evidence statuses](protocol.md#cross-cutting-evidence-statuses) and [report-eligibility versus question-contribution rule](protocol.md#report-eligibility-versus-question-contribution).
 
 ### Appraisal meaning, reporting-bias assessment, and conclusion confidence
 
-These unit-level structures assess directness, reporting completeness, and strength of support across varied engineering evidence. They are not a clinical risk-of-bias tool and must not be reduced to an unexplained “study quality” label.
+Interpret these unit-level structures under the [Part 1 engineering reporting framework](protocol.md#reporting-framework); do not reduce them to an unexplained “study quality” label.
 
 Do not make a funnel plot or run a statistical publication-bias test. The evidence does not share one effect measure and is too varied. Instead, assess and report the following for each research-question synthesis:
 
@@ -365,7 +368,7 @@ Do not make a funnel plot or run a statistical publication-bias test. The eviden
 - reports that could not be obtained and records that were only leads;
 - missing or selectively reported genericity claims, applicability limits, tailoring failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, confounders, criteria or oracles, null or adverse results, and limitations;
 - dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage or application;
-- the sole-reviewer extraction design; coverage and failures of model-assisted checks; sole-reviewer test–retest and any supervisor-audit scope; accepted corrections, rejected flags, unresolved discrepancies, and repeated error patterns; and
+- review-process limitations documented under the [Part 3 extraction-verification procedure](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification); and
 - protocol departures, search changes, and review-process limits that could affect interpretation.
 
 Treat the sole-reviewer and model-assistance items as review-process limitations, not as publication or selective-reporting bias in the primary studies.
@@ -391,7 +394,7 @@ Evidence type and maturity remain descriptive and do not determine confidence by
 - **Lower:** support is sparse, methodologically concerning, indirect, dependent, or importantly inconsistent.
 - **Insufficient:** there is no eligible direct evidence for the conclusion.
 
-These labels form an engineering-review framework. They are not GRADE.
+Use these labels only as the narrative engineering framework defined here, consistently with the [Part 1 reporting framework](protocol.md#reporting-framework).
 
 ---
 
