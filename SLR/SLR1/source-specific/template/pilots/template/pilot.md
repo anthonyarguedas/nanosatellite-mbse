@@ -1,31 +1,28 @@
-# Pilot Consecutive Number
+# Pilot NNN
 
 Required changes were applied in commit: NA
 
-Export method: `~/agent-tools/internet/skills/browser/scripts/search_template.py`
+Export method: `~/agent-tools/internet/skills/browser/scripts/search_<source>.py`
 
-Pilot searches are saved to `source-specific/template/pilots/template/searches/`.
-Name each search artifact with the cross-source query schedule ID being piloted (`A1.json`, `PSR1.json`), or seed paperID in the case of citation chasing pilots (`paperID.json`). For pilot searches that intentionally deviate from the query schedule and citation chasing strategy for testing purposes, name them with a consecutive test number (`test1.json`). The script will automatically record the exact query and filters you tested.
-
-The script above automatically saves the required search event metadata, including failures. A single search event failure does not warrant excluding the source from the review, only systematic failures that conflict with inclusion/exclusion criteria.
+Save diagnostic artifacts in `searches/`. Use a query ID (`A1.json`, `PSR1.json`), a citation seed report ID (`<paperID>.json`), or a consecutive test ID (`test1.json`). The script artifact is authoritative for query and event metadata.
 
 ## Objective
 
-Write the objective in one sentence.
+State one bounded objective.
+
+## Runs
+
+Link every artifact used for the conclusion.
 
 ## Result
 
-One or more of:
-- No protocol changes needed
-- Document source-specific limitation
-- Change source-specific filters or controlled vocabulary
-- Change source-specific concept blocks translations
-- Change source specific query schedule
-- Change cross-source concept blocks
-- Change cross-source query schedule
-- Change cross-source inclusion/exclusion criteria
-- Exclude source from review due to failure
+Choose one or more:
 
-Justify the result with an evidence-based paragraph that references the results of all tests.
+- No guideline change needed
+- Change source controls or controlled vocabulary
+- Change the source translation or schedule
+- Change the cross-source protocol
+- Document a source limitation
+- Exclude the source after systematic failure
 
-(mark this pilot done in `SLR/SLR1/source-specific/template/source-specific-guidelines.md` when the changes resulting from the pilot are commited, or if it ends without changes needed)
+Give one concise evidence-based justification. Update the source guideline and its pilot checklist. Do not treat a single search failure as grounds for source exclusion.
