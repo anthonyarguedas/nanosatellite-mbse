@@ -39,11 +39,8 @@ Unless this supporting protocol states otherwise, reuse the following provisions
 - the common evidence cutoff, restart rules, change recording, and legacy-material policy in [Part 1](protocol.md#review-status-and-restart-policy);
 - the definitions of `P`, `E_H`, `E_F`, `E`, `M_H`, `M_B`, `M`, `R`, `G_model`, `G_structure`, and `C1` in the [main search strategy](protocol-discovery-and-appraisal.md#search-streams-and-set-construction);
 - the Scopus and Web of Science Core Collection boundaries and the interface behavior validated under `S-D01` and `S-D02`;
-- the pilot-versus-final-event distinction, event documentation, retrieval-completeness, source-failure, zero-versus-null, and no-partial-import rules in [Pilots and final search events](protocol-discovery-and-appraisal.md#pilots-and-final-search-events);
-- the UTF-8 JSON, bibliographic transfer, reproducible deduplication, manifest, normalized-versus-original metadata, and Git audit-trail rules in [Data management and audit trail](protocol-discovery-and-appraisal.md#data-management-and-audit-trail);
-- the main review's full-text retrieval sequence and its treatment of `not_retrieved`, adapted only to the secondary-review eligibility criteria below;
-- the report-versus-record distinction and version-handling principles in [Units of evidence and counting](protocol.md#units-of-evidence-and-counting); and
-- coding confidence, evidence references, model-use safeguards, human adjudication, discrepancy recording, and rights-sensitive fallback principles in [Sole-reviewer extraction and verification](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification).
+- the pilot and final-event documentation rules in [New-run source translations and search artifacts](protocol-discovery-and-appraisal.md#new-run-source-translations-and-search-artifacts) and the completion and source-failure rules in [Completing the baseline and citation searches](protocol-discovery-and-appraisal.md#completing-the-baseline-and-citation-searches);
+- the main review's full-text retrieval sequence and its treatment of `not_retrieved`, adapted only to the secondary-review eligibility criteria below
 
 The supporting search has separate event IDs, records, reports, decisions, extractions, counts, and outputs. Common schemas and a common log file may be reused, but every row must carry a separate supporting-search namespace and supporting records must never be merged into the main primary-evidence candidate set, denominator, PRISMA flow, or analytic units. A DOI may be cross-referenced between the two processes without sharing a decision or extraction.
 
@@ -141,7 +138,7 @@ Assign one source-located full-text decision:
 
 Use one main exclusion reason. Preserve review-like excluded reports in a contextual list, but do not appraise or count them as included prior reviews.
 
-The sole human reviewer makes every final screening decision. Run a blind LLM screen of all normalized title-and-abstract records using the same criteria, followed by a source-based human adjudication of every disagreement. At full text, obtain a blind LLM eligibility decision and a separate audit of the human decision for every model-permitted candidate; otherwise use a delayed human recheck. Apply the authorization, document-coverage, technical-failure, rights, discrepancy, and no-independent-human-review language from the main verification protocol. Model output never determines eligibility automatically.
+The sole human reviewer makes every final screening decision. Use one focused LLM audit of normalized title-and-abstract decisions and full-text eligibility decisions when an authorized route is available. The audit may see the human decision and must flag disagreements or missing evidence for human adjudication. Use a delayed human recheck when no authorized model route is available. Apply the rights, document-coverage, technical-failure, discrepancy, and human-adjudication rules from the main verification protocol. Model output never determines eligibility automatically.
 
 ## Extraction form
 
@@ -245,18 +242,19 @@ The final need statement must distinguish:
 
 ## Verification and consistency
 
-The sole human reviewer performs the canonical extraction and all final CRD/DARE and overlap judgments. For every included model-permitted review, apply the complete blind LLM extraction, separate canonical-extraction audit, frozen-output reconciliation, human adjudication, rights assessment, and technical-failure rules from the main [sole-reviewer workflow](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification), using this supporting extraction form rather than the primary-evidence codebook.
+The sole human reviewer performs the canonical extraction and all final CRD, DARE, overlap, and need judgments. For each included review, use one focused audit under the main [sole-reviewer workflow](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification). An authorized LLM may perform the audit while seeing the extraction. Use a delayed human audit when no authorized route is available. Validate controlled values and dates deterministically, then adjudicate every issue against the source.
 
-Treat these as high-consequence supporting judgments:
+The focused audit must check:
 
-- full-text inclusion;
-- each DARE answer;
-- nanosatellite and EPS separability;
-- RQ1–RQ3 coverage;
-- the unsearched interval to the main cutoff; and
+- full-text inclusion.
+- each DARE answer.
+- nanosatellite and EPS separability.
+- RQ1–RQ3 coverage.
+- the unsearched interval to the main cutoff.
 - the final supporting-search disposition.
+- evidence locations and missing source support.
 
-Ask the supervisor to audit `min(2, N)` included prior reviews, where `N` is the number included, blind to the canonical extraction and model outputs where feasible. If `N = 0`, ask the supervisor to audit the search strategy and a reproducible sample of full-text exclusions rather than inventing an included-review check. Preserve requested and completed scope and never call an LLM pass independent human review. Supporting-search verification records and discrepancies remain separate from primary-review verification counts.
+Ask the supervisor to audit `min(2, N)` included prior reviews when available. If `N = 0`, ask the supervisor to audit the search strategy and a reproducible sample of full-text exclusions. Preserve requested and completed scope. Never call an LLM pass independent human review. Keep supporting-search audits and discrepancies separate from primary-review counts.
 
 ## Required artifacts and reporting
 
@@ -264,13 +262,12 @@ Create under a distinct supporting-search namespace:
 
 - the accepted Scopus and Web of Science source-native translations and pilot evidence;
 - a supporting-search section of the search log and manifest with `PSR*` event IDs;
-- the read-only Buruso known-item entry;
 - raw final exports and retrieval-completeness evidence;
 - normalized and deduplicated records with preserved discovery events;
 - title-and-abstract and full-text screening decisions;
 - the retrieval log and full-text exclusion table;
 - the supporting extraction codebook and per-review extractions;
-- model, supervisor, discrepancy, and adjudication records;
+- focused-audit, supervisor, discrepancy, and adjudication records;
 - the CRD answer table, DARE question matrix, and scope-overlap matrix; and
 - a dated need-for-review statement and methods limitation statement.
 

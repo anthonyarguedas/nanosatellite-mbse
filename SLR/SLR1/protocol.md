@@ -1,7 +1,10 @@
 # Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Working branch:** `slr1-1.1-restart`
-- **Common evidence cutoff:** **TBD.** Set one exact calendar date before the first final search and use it unchanged for every source and citation route. **Task:** [`P-001`](TASKS.md).
+- **Common evidence cutoff:** TBD.
+- **Final searches merged and deduplicated in commit:** NA
+- **Citation chasing finished in commit:** NA
+- **Full-text screening completed in commit**: NA
 
 > **Protocol parts:** **1 — Scope and definitions** (this file) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
 
@@ -9,7 +12,7 @@
 
 This work is a **systematic review with an evidence-map synthesis**. Throughout the protocol, *systematic review* names the overall method of identifying, selecting, appraising, and synthesizing evidence; *evidence map* names the structured descriptive output. Do not call the work a *systematic mapping study*: Kitchenham and Charters use that term for broad, high-level classification with deliberately limited extraction, whereas this review performs in-depth extraction and appraisal of linked evidence units.
 
-Use the evidence-unit terms in [Units of evidence and counting](#units-of-evidence-and-counting) rather than using *study* for every object. In particular, a **record** is a search result, a **report** is a document, and a **study or implementation report family** is the source-supported underlying investigation or implementation represented by one or more reports. EPS threads, artifact profiles, tailoring applications, outcome or burden records, and V&V records are analytic evidence units, not additional studies or PRISMA reports.
+Use the evidence-unit terms in [Units of evidence and counting](#units-of-evidence-and-counting) rather than using *study* for every object. In particular, a **record** is a search result, a **report** is a document, and a **study or implementation report family** is the source-supported underlying investigation or implementation represented by one or more reports. Extraction is report-level by default. Report families, artifact lineages, tailoring applications, RQ2 findings, and RQ3 activities are later linked units of analysis, not additional studies or PRISMA reports.
 
 ## Review status and restart policy
 
@@ -40,7 +43,7 @@ Use the following guidance:
 
 PRISMA supplies reporting guidance; Kitchenham and Charters supply complementary engineering-review conduct guidance. Neither proves that evidence is valid. This systematic review produces an engineering evidence map, so do not invent clinical effect measures, clinical risk-of-bias tools, or GRADE ratings.
 
-This is a new review, not an update. Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources. Count identification and selection at the record and report level. Other units—report families, EPS threads, reusable-artifact lineages, tailoring applications, outcome or burden records, and verification and validation (V&V) records—are linked units of analysis. Report a separate denominator for each one.
+This is a new review, not an update. Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources. Count identification and selection at the record and report level. Report families, reusable-artifact lineages, tailoring applications, RQ2 findings, and verification and validation (V&V) activities are linked analytic units. Report a separate denominator for each of these units.
 
 Registration and contact details, contributor and guarantor details, and declarations about funding, sponsors, and competing interests will be completed later. State clearly when any of these details are still absent. Do not claim that this protocol is administratively complete under PRISMA-P. **Task:** [`P-002`](TASKS.md).
 
@@ -60,7 +63,7 @@ The formal questions and analytical dimensions below govern the review. Eligible
 
 | Population | Intervention | Comparison | Outcome | Context | Related RQ(s) |
 |---|---|---|---|---|---|
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-primary MBSE or a clear embedded EPS model thread | Not required | How the EPS is represented; why the model is used; inputs and assumptions; level of abstraction; artifact identity and lineage; stated range of use; reusable core; variation points; tailoring and its effort; demonstrated uses and checks; evidence tier for bounded reuse; and required roles and resources | Nanosatellite systems engineering throughout the lifecycle | RQ1 |
+| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-primary MBSE or a clear embedded EPS model thread | Not required | How the EPS is represented; why the model is used; inputs and assumptions; level of abstraction; artifact identity and lineage; stated range of use; reusable core; variation points; tailoring and its effort; demonstrated uses and checks; reuse level; and required roles and resources | Nanosatellite systems engineering throughout the lifecycle | RQ1 |
 | EPSs for orbital CubeSat or nanosatellite-class missions | EPS-linked MBSE artifacts, analyses, and model-enabled work | When reported: document-based practice, manual analysis, another toolchain, an earlier mission or model, or another clear comparator | Beneficial, null, mixed, or adverse EPS-linked technical and process outcomes, plus implementation burdens. Priority topics are reliability and mission assurance, reproducibility and reuse, and integration and interoperability | Nanosatellite development and decision-making | RQ2 |
 | EPSs for orbital CubeSat or nanosatellite-class missions | EPS-specific or system-wide-but-EPS-linked model-based V&V before physical integration or test | When reported: separate or document-based V&V, manual checking, another method, or no comparator | V&V scope and object, links to V&V artifacts, executable checks, results, virtual integration, and continuity from model to test | Analysis and V&V before physical work, with later physical links recorded separately | RQ3 |
 
@@ -74,9 +77,9 @@ The formal questions and analytical dimensions below govern the review. Eligible
 
 ### Prespecified analytical dimensions
 
-- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; material inputs and assumptions; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. Artifact identity and lineage; declared applicability envelope; reusable core; variation points and dependencies; tailoring process and effort; materially distinct applications; post-tailoring assurance; the A/E/C/T/P/I evidence profile and resulting tier; and methodological appraisal and claim-specific support for evaluative characterizations.
-- **RQ2:** claim kind and scope; outcome or burden category; reported and evidence-supported direction; explicit EPS attribution; mechanism; direct or surrogate measurement; comparator adequacy and confounding when applicable; evaluation design and methodological appraisal; evidence type; and record-level claim support.
-- **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and pass/fail criterion; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design and methodological appraisal; claim-specific support; and later model-to-test continuity or closure.
+- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; grouped material inputs and assumptions; grouped engineering results; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. In the deferred cross-report pass, assess artifact identity and lineage, declared applicability, reusable core, variation points, tailoring process and effort, materially distinct applications, post-tailoring assurance, independence, and reuse level. Give evaluative RQ1 characterizations an inline evidence basis and support judgment.
+- **RQ2:** claim kind and scope; outcome or burden category; reported and evidence-supported direction; explicit EPS attribution; mechanism; direct or surrogate measurement; comparator adequacy and rival explanations when applicable; evaluation design; evidence basis; and inline support.
+- **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and pass/fail criterion; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design; evidence basis and inline support; and later model-to-test continuity or closure.
 
 The three mapping areas are equally important.
 
@@ -84,7 +87,7 @@ Within RQ2, reliability and mission assurance, reproducibility and reuse, and in
 
 ### Report eligibility versus question contribution
 
-An outcome, burden, V&V activity, reuse or genericity claim, demonstrated tailoring, particular RQ1 disposition, methodological-appraisal judgment, or claim-support result is never an additional report-level inclusion test. Every eligible EPS thread contributes to RQ1 and receives a disposition. Create direct RQ2 and RQ3 records only when their respective definitions are met. A question-contribution or appraisal code cannot make an otherwise ineligible report eligible.
+An outcome, burden, V&V activity, reuse claim, tailoring application, evidence-basis code, or support judgment is never an additional report-level inclusion test. Every eligible report contributes to RQ1 through its report-level extraction. Create direct RQ2 findings and RQ3 activities only when their respective definitions are met. A question-contribution or support code cannot make an otherwise ineligible report eligible.
 
 ## Operational definitions
 
@@ -204,8 +207,13 @@ For each application, record:
 - what stayed the same;
 - what changed, or why nothing changed;
 - why the choices were made;
-- the work and resources required; and
-- the result.
+- tailoring inputs and assumptions;
+- roles, staffing, skills, and training;
+- person-hours or person-days, elapsed duration, schedule effect, and cost when reported;
+- tools, licences, infrastructure, data preparation, model preparation, integration, migration, automation, governance, review, assurance, rework, and maintenance effort;
+- whether effort was measured, author-estimated, asserted, or not reported;
+- burdens and mitigations; and
+- the resulting artifact, supported use, and result.
 
 Two applications are **materially distinct** only if they differ on at least one DAE dimension in a way that exercises or tests the reuse claim. Two papers, scenarios, revisions, or names for the same implementation do not count as two applications.
 
@@ -220,71 +228,32 @@ Two applications are **materially distinct** only if they differ on at least one
 3. a check run after tailoring; and
 4. a reported result or verdict.
 
-A syntax, import, or build check is not enough unless that check is the artifact's stated intended use. An assurance activity can also link to RQ3, but it is a direct RQ3 record only if it separately meets the EPS target–model-to-V&V bridge–method/intent rule. Validation of a base model does not automatically validate a derived instance.
+A syntax, import, or build check is not enough unless that check is the artifact's stated intended use. An assurance activity can also link to RQ3, but it is a direct RQ3 activity only if it separately meets the EPS target–model-to-V&V bridge–method/intent rule. Validation of a base model does not automatically validate a derived instance.
 
-#### RQ1 dispositions and evidence gates
+#### Deferred lineage assessment and reuse levels
 
-Give every eligible EPS thread one of these RQ1 dispositions:
+The first extraction pass does not resolve artifact lineages. It records only a concise artifact lead: name, type, version or identifier, repository or location, owner, EPS scope, availability and licence, exact reuse claim, claimed applicability, stated parent or derived artifact, possible related reports, and whether the case concerns an artifact or only a method or workflow. Code `NA` or `R0_artifact_only` at report level when that status is clear.
 
-- `not_an_artifact_or_method_only`;
-- `artifact_no_reuse_indication`;
-- `genericity_or_reuse_claim`;
-- `reported_reuse_without_bounded_specification`;
-- `bounded_reuse_candidate`; or
-- `unclear`.
+After all reports have been extracted, review only leads marked `yes` or `uncertain` for possible lineage work. Form a lineage only when names, versions, repositories, package or model IDs, explicit derivation statements, transformation records, or reconstructable retained content support continuity. Record uncertain relationships without forcing a merge.
 
-When an EPS-linked artifact can be identified, assess the following gates at the artifact-lineage, version, and scope level. Method- or workflow-only cases receive `NA`; do not invent an artifact lineage for them. These gate letters apply only to this profile. They are not the Population block used in the search.
+Assign one highest reuse level to each lead or resolved lineage and scope:
 
-| Gate | Minimum evidence from the source |
-|---|---|
-| **A — artifact/lineage** | The EPS-relevant artifact is identifiable, and the source provides locatable lineage evidence for any claimed instances. |
-| **E — envelope** | The minimum DAE is reported, and the location of each part is recorded. |
-| **C — core and variation design** | The reusable core, variation points, tailoring rules, and prerequisites are identified. A clear, bounded rule for reuse without changes is an acceptable alternative. |
-| **T — transfer/tailoring** | The source reports actual target-setting applications, what core was retained, what changed or why it stayed unchanged, and why. Any settings credited as separate must be materially distinct. |
-| **P — post-tailoring assurance** | Every application credited as demonstrated reuse has an intended-use criterion, a post-tailoring check that was run, and a result or verdict. |
-| **I — independent transfer** | At least one credited application was separately adopted or tailored and assured by a team independent of the artifact's original implementation family. A report, artifact, or data record attributable to that independent adopter or evaluator must confirm both the adoption and the result; the originator's claim alone is not enough. An outside organization or team normally qualifies when lineage is established. A separate team in the same organization qualifies only if the source shows separate control of the implementation, no material work by the original implementation team, and a distinct assured application. Independent review of the originator's unchanged instance, different author lists, companion papers, a shared implementation, or an unclear relationship does not qualify. |
-
-Code each gate as one of:
-
-- `demonstrated`;
-- `partial`;
-- `not_reported`;
-- `uncertain`;
-- `none`; or
-- `not_applicable`, with a narrow justification.
-
-Record a source location and coding confidence for each gate. Only `demonstrated` satisfies a gate required for a tier. `not_applicable` may describe a gate that a lower tier does not require, but it cannot replace a required gate. Use `none` when the source clearly says that a condition was absent or failed. Use `not_reported` when the source does not provide enough information to assess it.
-
-`partial`, `not_reported`, `uncertain`, `none`, `not_applicable`, and evidence based only on reviewer inference all fail a required gate. Except for a source-supported `none`, however, these codes do not prove that the underlying capability is absent. Unchanged adoption can satisfy T only when the source reports its conditions, target setting, retained core, and reason. It never removes the need for E, C, or P.
-
-#### Genericity evidence tiers
-
-Assign the highest cumulative tier that the evidence supports:
-
-| Tier | Minimum conditions | Meaning |
+| Level | Minimum evidence | Meaning |
 |---|---|---|
-| **`NA`** | There is no identifiable EPS model artifact, or only a method or workflow is reused | Do not rate artifact genericity. Keep method or workflow reuse under RQ1. |
-| **`G0_artifact_only`** | An EPS-linked artifact is identified, but the source reports no genericity or reuse claim and no application | No genericity evidence was reported. This does not prove that the artifact cannot be reused. |
-| **`G1_claimed_or_unbounded`** | A is met, and the source claims genericity or reuse, or reports a traceable but unbounded sign of reuse | This is a claim or indication only. Bounded reuse is not established. |
-| **`G2_bounded_reuse_specified`** | A ∧ E ∧ C | The source specifies bounded reuse in advance. It does not have to show actual transfer. |
-| **`G3_bounded_reuse_demonstrated`** | G2, plus T for at least two materially distinct target settings, plus P for every credited setting | The source demonstrates bounded reuse. The applications may still belong to one dependent implementation family. |
-| **`G4_independently_corroborated`** | G3 plus I, and the independent application itself meets T and P | An independent team adopted or tailored the artifact and checked it. The finding still applies only to the demonstrated part of the DAE. |
+| **`NA`** | No identifiable reusable EPS model artifact, or only a method or workflow is reused | Keep the reuse description under report-level RQ1. |
+| **`R0_artifact_only`** | An EPS-linked artifact is identifiable, with no reuse claim or application reported | An artifact exists. Reuse has not been claimed or shown. |
+| **`R1_reuse_claimed`** | The source claims or suggests reuse for the identifiable artifact | Reuse is asserted. Its range and method are not sufficiently specified. |
+| **`R2_reuse_specified`** | The declared applicability envelope, reusable core, variation points or unchanged-use rule, tailoring process, and prerequisites are reported | Bounded reuse is specified. Transfer does not have to be demonstrated. |
+| **`R3_reuse_demonstrated`** | R2 is met, and at least one materially distinct target setting uses the identified core, reports what stayed the same and what changed, and reports a relevant post-tailoring check and result | Transfer is demonstrated in the reported setting. |
+| **`R4_independent_reuse_demonstrated`** | R3 is met by at least one adopter operationally independent of the originating implementation team | Independent transfer is demonstrated in the reported setting. |
 
-Apply these caps exactly:
+One assured application can reach R3. Repeated reports of one application count once. A scenario run in an unchanged model does not count as reuse. An original development case counts only under the tailoring-application rule above. R4 requires adopter-controlled implementation and adopter-attributable evidence of both adoption and assurance.
 
-- Missing A gives `NA`.
-- A without both E and C cannot rise above G1.
-- One assured application, several unassured applications, an original development case that was not presented as reuse, or repeated reports of one application cannot rise above G2.
-- Two materially distinct and assured applications of the reusable core can reach G3.
-- G4 requires a credited application that was independently adopted or tailored, independently confirmed, and assured.
+The levels are ordered evidence descriptions. They are not scores, quality ratings, benefit measures, prevalence estimates, or claims about untested settings. Record the applicability envelope, demonstrated coverage, tailoring effort, failed or outside-envelope applications, and conflicting evidence separately.
 
-A broad claimed envelope, a larger model, more parameters, public access, or strong evidence for another gate cannot make up for a missing gate.
+Give one source-located reason for the reuse level. Use the common inline `support` and `support_reason` fields to assess any broader reuse claim.
 
-The tiers are ordered evidence classes. They are not numeric scores, model-quality rankings, maturity levels, measures of benefit or prevalence, or promises that an artifact will suit an untested setting. Assign one highest tier only after checking every lower-tier requirement. Keep the gate vector so that two artifacts at the same tier are not assumed to be equal.
-
-Report claim agreement separately as `not_evaluated`, `supported_in_tested_contexts`, `partially_supported`, `mixed`, `not_supported`, or `unclear`. Also report the width of the envelope separately. Keep failed tailoring, uses outside the envelope, burdens, and conflicting evidence; do not average them into the tier.
-
-The exclusion term **generic whole-spacecraft MBSE** means whole-spacecraft evidence with no qualifying EPS thread. It says nothing about whether the model itself is generic. A reusable whole-spacecraft artifact can receive an RQ1 profile only for its EPS-linked content and only after it passes the normal Route A or Route B eligibility rules. Genericity status and tier never decide whether a report is eligible.
+The exclusion term **generic whole-spacecraft MBSE** means whole-spacecraft evidence with no qualifying EPS thread. It says nothing about whether the model itself is generic. A reusable whole-spacecraft artifact can receive a lineage and reuse level only for qualifying EPS-linked content after the report passes the normal Route A or Route B eligibility rules. Reuse status never decides report eligibility.
 
 ### Eligible EPS evidence routes
 
@@ -307,19 +276,19 @@ Support the anchors and bridge with text, a figure or table, a model extract, a 
 
 An **EPS engineering or model output** is a technical result such as minimum state of charge, power margin, battery capacity, solar-array area, voltage or current, energy balance, or a selected architecture. Extract these outputs for RQ1. They may also support RQ2 or RQ3, but they are not evidence of MBSE value on their own.
 
-An outcome or implementation-burden record is eligible for RQ2 only when it has all three of the following:
+An outcome or implementation-burden finding is eligible for RQ2 only when it has all three of the following:
 
 1. an eligible EPS thread or a named EPS-linked model artifact or activity;
 2. a reported beneficial, null, mixed, or adverse technical or process outcome, or an implementation burden, that the source explicitly attributes to that EPS artifact or activity rather than to a choice of EPS technology; and
 3. wording for the result or claim that can be extracted, together with any evidence the source gives.
 
-Record the proposed model-enabled mechanism when the source states it. Otherwise use `not_reported`. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed record.
+Record the proposed model-enabled mechanism when the source states it. Otherwise use `not_reported`. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed finding.
 
-Eligibility records the source's explicit attribution; it does not establish that MBSE caused the outcome. During extraction, classify the kind and scope of claim, the directness of each measure, comparator adequacy when a comparison or causal claim requires one, possible confounding, fitness and conduct of the evaluation design, and the resulting support for that specific claim. Keep author attribution, observed association, and reviewer assessment of causal support separate.
+Eligibility records the source's explicit attribution; it does not establish that MBSE caused the outcome. During extraction, classify the kind and scope of claim, the directness of each measure, and the evaluation design. For comparative or causal claims, also record the comparator, material differences, comparator adequacy, and major rival explanations. Give each finding an inline evidence basis, support code, and concise reason. Keep author attribution, observed association, and reviewer assessment of causal support separate.
 
 A general claim about MBSE is not EPS-specific evidence merely because the same report contains EPS material. Keep claims supported only by assertion, but label them unsupported rather than treating them as demonstrated effects.
 
-A null outcome means that an evaluation found no observed effect or difference. It does not mean `not_reported`, missing evidence, or no claim. Split benefits, adverse effects, null findings, and burdens into separate atomic records whenever possible. Use `mixed/conditional` only when directions cannot be separated by scenario, measure, actor, or condition.
+A null outcome means that an evaluation found no observed effect or difference. It does not mean `not_reported`, missing evidence, or no claim. Split benefits, adverse effects, null findings, and burdens into separate findings when direction, evidence, actor, scenario, or scope differs materially. Use `mixed/conditional` only when directions cannot be separated.
 
 A burden can exist alongside a benefit. Do not decide a net effect on the authors' behalf. General project-level MBSE burdens can be kept as RQ1 context. They enter direct RQ2 synthesis only when the source clearly links them to the qualifying EPS thread.
 
@@ -329,20 +298,20 @@ Classify measures as direct, surrogate, intermediate or process measures, or unc
 
 ### Direct EPS-linked pre-physical V&V
 
-A record is eligible for EPS-linked RQ3 synthesis only when it has all three of the following:
+An activity is eligible for EPS-linked RQ3 synthesis only when it has all three of the following:
 
 1. an **EPS target**: a named EPS requirement, model element, parameter, mode, interface, behavior, function, or hazard; or a wider system target that is clearly decomposed, allocated, or traced to named EPS content;
 2. an **explicit model-to-V&V bridge**: a reported trace, shared ID, binding, port or data mapping, transformation, generated artifact, allocation, or another clear link; and
 3. a **V&V method, intent, or artifact**: the source presents the work as verification, validation, compliance or requirement checking, virtual integration, a model-derived test activity, or another V&V function.
 
-Classify each candidate record by its **linkage scope**:
+Classify each candidate activity by its **linkage scope**:
 
 - **`eps_specific`:** both the target and the V&V activity are clearly about the EPS;
 - **`system_wide_eps_linked`:** a wider system activity includes a named EPS target and a bridge that can be reconstructed;
 - **`system_wide_cooccurrence`:** system-wide V&V and EPS content appear in the same report without the required direct link; or
 - **`unclear`:** the report does not make the scope clear.
 
-Both `eps_specific` and `system_wide_eps_linked` records can enter direct RQ3 synthesis. Always report them separately and keep the scope of any result or verdict. `system_wide_cooccurrence` is a near miss and cannot support an EPS-specific conclusion.
+Both `eps_specific` and `system_wide_eps_linked` activities can enter direct RQ3 synthesis. Always report them separately and keep the scope of any result or verdict. `system_wide_cooccurrence` is a near miss and cannot support an EPS-specific conclusion.
 
 Also classify the **object of V&V**, separately from scope and execution environment:
 
@@ -355,38 +324,40 @@ Also classify the **object of V&V**, separately from scope and execution environ
 
 Keep the source's own term as well as the reviewer's normalized code and reason. Running a method in a model does not automatically make it model verification or model validation. For example, a virtual requirement check can be system or design verification. Code execution settings such as MIL, SIL, PIL, HIL, and virtual testbeds separately from the V&V object.
 
-Classify completeness in stages. Do not discard an otherwise explicit linked record only because a later stage is missing:
+Classify completeness in stages. Do not discard an otherwise explicit linked activity only because a later stage is missing:
 
 - **EPS-linked V&V:** target, bridge, and V&V method, intent, or artifact are reported.
-- **Criterion-complete EPS-linked V&V:** the record also gives a requirement, threshold, expected behavior, formal property, or pass/fail criterion.
+- **Criterion-complete EPS-linked V&V:** the activity also gives a requirement, threshold, expected behavior, formal property, or pass/fail criterion.
 - **Executed pre-physical V&V:** the linked method was run before physical integration or testing of the target EPS, and the source reports a result or verdict.
 - **Model-to-test continuity/closure:** the source links a later physical artifact or activity. Reserve *closure* for cases that compare results and report how differences were handled.
 
-A simulation or trade study without a stated V&V or checking purpose and without a criterion is analysis, not V&V. If a source calls an activity verification but does not report its criterion, keep it as an EPS-linked record but do not call it criterion-complete. General system V&V that merely appears beside EPS content does not answer RQ3.
+A simulation or trade study without a stated V&V or checking purpose and without a criterion is analysis, not V&V. If a source calls an activity verification but does not report its criterion, keep it as an EPS-linked activity but do not call it criterion-complete. General system V&V that merely appears beside EPS content does not answer RQ3.
 
 For this review, **pre-physical V&V** is a model-based V&V artifact or activity prepared or run before physical integration or testing of the target EPS design. Preparation of a model-derived later physical test is included as preparation. MIL and SIL can qualify while the target EPS hardware remains virtual.
 
 Classify PIL and HIL according to the hardware actually used. They are not wholly pre-physical if target EPS hardware takes part. Representative hardware or hardware outside the target EPS does not turn an otherwise virtual target-EPS activity into a physical EPS test. Record bench, environmental, integration, operational, and flight evidence as later model-to-test continuity. If the timing or target hardware is unclear, code it `uncertain` and do not count it as demonstrated pre-physical execution.
 
-The RQ3 completeness stages are claim-specific descriptors, not a general evidence hierarchy. Target–bridge–method evidence supports the existence of an EPS-linked V&V activity; criterion, execution, and result support an executed-check claim; an appropiate pass/fail criterion is required for model or design validation; and linked physical evidence supports continuity only for the artifacts and comparisons actually traced. Operational or flight maturity does not automatically strengthen a different claim.
+The RQ3 completeness stages are claim-specific descriptors, not a general evidence hierarchy. Target–bridge–method evidence supports the existence of an EPS-linked V&V activity. Criterion, execution, and result support an executed-check claim. An appropriate pass/fail criterion is required for model or design validation. Linked physical evidence supports continuity only for the artifacts and comparisons actually traced. Give every direct activity an inline evidence basis, support code, and concise reason. Operational or flight maturity does not automatically strengthen a different claim.
 
 ## Units of evidence and counting
 
-Use the following linked units. They do not form a simple hierarchy because report families and artifact lineages may cross reports and implementations.
+Use the following linked units:
 
-1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model or toolchain use represented by one or more reports. Require source-supported overlap; a shared topic, organization, or tool is not enough.
-2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Apply the canonical [report-version, date, and review-status rules](#report-versions-dates-and-review-status).
-3. **EPS model thread:** one qualifying EPS-primary or embedded chain within a report.
-4. **Reusable EPS artifact lineage and genericity profile:** one identifiable base artifact and its source-supported versions or derived instances. Split profiles when versions or scopes differ materially.
+1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model or toolchain use represented by one or more reports. Require source-supported overlap.
+2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Apply the canonical [report-version, date, and review-status rules](#report-versions-dates-and-review-status). This is the default extraction unit.
+3. **EPS case section:** a nested section inside a report extraction. Use one section by default. Create another only when the report contains materially separate EPS models, implementations, or evaluations that cannot be represented clearly together. An eligibility thread does not automatically become a separate extraction unit.
+4. **Reusable EPS artifact lineage:** one identifiable base artifact and its source-supported versions or derived instances, resolved in the deferred cross-report pass.
 5. **Tailoring application:** one use of an artifact lineage in one target setting, including a justified unchanged adoption. Merge repeated reporting of the same application.
-6. **Outcome or implementation-burden record:** one atomic direction or burden linked, or possibly linked, to an EPS thread.
-7. **V&V record:** one target–method–scenario activity or artifact linked, or possibly linked, to an EPS thread.
+6. **RQ2 finding:** one materially distinct outcome, burden, trade-off, or direction. Split only when evidence, scope, actor, scenario, or direction differs materially.
+7. **RQ3 activity:** one target–method–scenario activity. Keep several criteria and verdicts together when method, scenario, and timing are shared.
 
-Record source-supported family and lineage relationships, their reasons, evidence locations, and relationship coding confidence. Do not move evidence silently between reports, versions, applications, or families. A report can belong to more than one family only when it genuinely covers separate implementations or evaluations.
+Inputs, assumptions, engineering outputs, criteria, and verdicts are grouped rows nested within the report or activity. They are not independent evidence units. Measurements, comparators, rival explanations, appraisal judgments, and support judgments are fields within the relevant row rather than separate linked objects.
 
-PRISMA identification and selection counts remain at record and report level. Report separate denominators for families, reports, threads, artifact lineages and profiles, tailoring applications, inputs and assumptions, outcomes and burdens, and V&V records. A report count is not a count of independent implementations or transfers.
+Resolve report families and artifact lineages only after the first report-level extraction pass. Record the source-supported basis, evidence locations, and coding confidence for each merge or split. Do not move evidence silently between reports, versions, applications, or families.
 
-Use linked IDs such as `family_id`, `report_id:thread_id`, `artifact_lineage_id:genericity_profile_id`, `artifact_lineage_id:tailoring_application_id`, `report_id:thread_id:outcome_burden_id`, and `report_id:thread_id:vnv_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
+PRISMA identification and selection counts remain at record and report level. Report separate analytic denominators for report families, reports, artifact lineages, tailoring applications, direct RQ2 findings, and direct RQ3 activities. A report count is not a count of independent implementations or transfers.
+
+Use simple linked IDs such as `report_id`, optional `report_id:eps_case_id`, `family_id`, `lineage_id`, `lineage_id:tailoring_application_id`, `report_id:rq2_finding_id`, and `report_id:rq3_activity_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
 
 External repositories, evolving models, and author-provided artifacts are not independently retrieved or inspected.
 

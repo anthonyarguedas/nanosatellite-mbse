@@ -83,7 +83,7 @@ For every construction described as *paired*, the left and right expressions mus
 
 #### RQ2 and RQ3 identification during extraction
 
-Do not use outcome, implementation-burden, or V&V terms as candidate-discovery blocks. Assess every included full text against the operational RQ2 and RQ3 definitions in [Part 1](protocol.md), regardless of the terminology used by the source. Automated keyword flags may be used only as optional quality-assurance aids; they cannot determine whether an outcome, burden, or V&V record is created.
+Do not use outcome, implementation-burden, or V&V terms as candidate-discovery blocks. Assess every included full text against the operational RQ2 and RQ3 definitions in [Part 1](protocol.md), regardless of the terminology used by the source. Automated keyword flags may be used only as optional quality-assurance aids. They cannot determine whether an RQ2 finding or RQ3 activity is created.
 
 #### Direct query schedule
 
@@ -113,7 +113,7 @@ Retain and screen every record returned by any planned partition while preservin
 
 Free-text searching remains mandatory. When a source provides a genuine controlled vocabulary or a distinct indexed-term field, construct the applicable concept as the union of its free-text block and validated source-specific descriptors. Inspect thesaurus scope notes, hierarchy, narrower terms, and terms assigned to known relevant records; use explosion only when every included narrower concept is in scope. A generic `systems engineering` descriptor cannot satisfy `M_H` by itself: pair it with a model or modeling descriptor unless the source supplies a specific MBSE descriptor. Do not impose major-topic restrictions, and do not emulate controlled vocabulary on sources that do not provide it.
 
-Record every accepted descriptor, field, hierarchy or explosion setting, mapping to the cross-source block, and known-item effect in the source packet. Controlled terms supplement the normative text words; they neither replace them nor change scientific eligibility.
+Record every accepted descriptor, field, hierarchy or explosion setting, mapping to the cross-source block. Controlled terms supplement the normative text words; they neither replace them nor change scientific eligibility.
 
 ### New-run source translations and search artifacts
 
@@ -124,18 +124,18 @@ The protocol's concept blocks and Boolean schedule are normative. The new dictio
 For each source or local method, record before final execution:
 
 - source, database or collection, and interface;
-- query or event IDs and the exact source-native translation of every planned partition;
-- fields, filters, limits, date and language handling, and visible controls;
+- exact source-native translation of every planned partition;
+- fields, filters, limits, date and language handling;
 - stemming, lemmatization, automatic expansion, wildcard behavior, and any controlled-vocabulary or indexed-term fields, descriptors, hierarchies, and explosion settings;
-- pagination, result ordering, stable identifiers, export or capture method, and source limits;
-- the relationship between source-native queries and the cross-source semantic blocks;
-- pilot refinements, failures, and the accepted final implementation
+- pagination, result ordering, stable identifiers, export method, and source limits;
+- pilot refinements
 
-### Completing the baseline and citation searches
+These source-specific guidelines will be recorded in `source-specific/`.
+For PRISMA-S reporting, search rationales and strategies are linked to the cross-source query schedule and citation chasing strategy, so they are not source-specific.
 
-The independent baseline is complete only after all 15 planned sources or collections have either a complete, reconciled final run or a recorded final source or failure. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources. Keep every failure and reason in the new manifest and PRISMA counts.
+### Finalizing searches and citation searches
 
-Only after that baseline and failure register are complete, use Buruso et al. (2026) and the known-item registers. A missed known-item may guide prospective query refinement, but it can enter the review only through a recorded final search or citation-search event and normal screening. Report known-item recall and unique inclusions by stream and source.
+Searches are finalized only after all 15 planned sources or collections have either a final run covering the entire source-specific schedule or a recorded final failure that excludes them from the review. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources.
 
 Start backward and forward citation searching from every included full-text report and relevant secondary review:
 
@@ -146,27 +146,11 @@ Start backward and forward citation searching from every included full-text repo
 
 For every citation event, record the seed, platform, direction, cycle, source and retrieved totals, candidates, duplicates, decisions, failures, and stopping result. Use `discovery_route=citation_chasing`; citation provenance never bypasses screening.
 
+Final searches are saved to `source-specific/*/final-searches/`, both for discovery and citation chasing (for Scopus and WoS only).
+
 ## Data management and audit trail
 
-Keep review methods, logs, controlled dictionaries, derived data, and analysis code in the Git-tracked `SLR/SLR1/` workspace.
-
-Make deduplication reproducible. Review conflicts manually when identifiers disagree. Keep both the original metadata and the preferred normalized value, with the reason for choosing it.
-
-Use Git history as the audit trail for text, code, schemas, and derived non-sensitive data.
-
-### Required discovery and screening artifacts
-
-The discovery and screening artifact bundle comprises:
-
-- known-item registers for legacy reports and Buruso recall;
-- a search log meeting PRISMA-S requirements;
-- source-specific guidelines, pilot- and final-run manifest schemas, and failure-register schema;
-- raw source-specific results];
-- a merged and deduplicated candidate set and deduplication metadata and rationale for decisions;
-- title-and-abstract screening, full-text screening, and retrieval logs; and
-- the accessible report set and a table of cited full-text exclusions with one main reason per report.
-
-Part 3 incorporates this bundle by reference rather than listing its components again.
+Make deduplication reproducible via a single `SLR/SLR1/deduplication.py`. Review conflicts manually when identifiers disagree. Keep both the original metadata and the preferred normalized value, with the reason for choosing it.
 
 ## Inclusion and exclusion criteria
 
@@ -212,67 +196,55 @@ If a plausible completed report is unavailable because of access rights, an emba
 
 ## Units and identifiers
 
-Use the canonical [units, counting rules, and ID structure](protocol.md#units-of-evidence-and-counting). During discovery and screening, preserve record-to-report identity, all discovery events, report-family evidence, and artifact-lineage evidence without moving facts between linked units. PRISMA flow counts remain at record and report level.
+Use the canonical [units, counting rules, and ID structure](protocol.md#units-of-evidence-and-counting). During discovery and screening, preserve record-to-report identity and all discovery events. PRISMA flow counts are done at record and report level.
 
-## Unit-level evidence appraisal
+## Finding-level evidence appraisal
 
-Appraisal will be executed after extraction.
-Keep four judgments distinct:
+Appraisal is embedded in the extracted finding. Do not create a separate methodological-appraisal object, domain matrix, numerical score, or general report-quality label.
 
-1. **Coding confidence** is the assessor's certainty that a source was located and interpreted correctly.
-2. **Methodological appraisal** assesses whether the design and conduct of the evaluation are fit for the particular claim.
-3. **Claim support** assesses how strongly one evidence unit supports one bounded claim.
-4. **Conclusion confidence** assesses a synthesis conclusion across contributing units.
+Keep three judgments distinct:
 
-Assign coding confidence as `high` for explicit and unambiguous source support, `moderate` when a bounded but supported interpretation or reconstruction is required, and `low` when material ambiguity remains. Apply the [evidence statuses](protocol.md#evidence-statuses) separately. Coding confidence cannot substitute for methodological credibility, and an operational or flight setting cannot automatically upgrade support for a claim it was not designed to test.
+1. **Coding confidence** is the assessor's certainty that the source was located and interpreted correctly.
+2. **Finding support** states how well the reported evidence supports one bounded evaluative claim or conclusion.
+3. **Conclusion confidence** assesses a synthesis conclusion across contributing reports, families, lineages, findings, and activities.
 
-Create a scoped methodological-appraisal object when a report makes an empirical or evaluative claim used for RQ1, RQ2, or RQ3. Link it to the existing report, thread, artifact or profile, application, outcome or burden, and V&V IDs that it appraises. One object may support several records only when they use the same design, data, and analysis. Create separate objects when one report contains materially different evaluations, such as a simulation and an interview study.
+Assign coding confidence as `high` for explicit and unambiguous source support, `moderate` when a bounded reconstruction is required, and `low` when material ambiguity remains. Apply the [evidence statuses](protocol.md#evidence-statuses) separately. Coding confidence does not measure evidential strength.
 
-Classify the evaluation design as one or more of: `model_or_simulation_evaluation`, `case_study_or_experience_report`, `comparative_observational`, `controlled_or_quasi_experimental`, `survey`, `interview_or_qualitative`, `mixed_methods`, `artifact_or_reuse_demonstration`, `other`, or `unclear`.
+Give every evaluative RQ1 characterization, direct RQ2 finding, direct RQ3 activity, and lineage reuse conclusion these inline fields:
 
-Appraise these common domains when applicable:
+- **`evidence_basis`**, using one or more of `assertion_only`, `worked_example`, `executed_result`, `comparison`, `stakeholder_evidence`, `physical_or_operational_check`, and `independent_transfer`;
+- **`support`**, using `supported`, `limited`, `unsupported`, or `unclear`; and
+- **`support_reason`**, one concise source-located sentence naming the strongest evidence and the main limitation.
 
-- clarity of the aim and fitness of the design to that aim;
-- description and selection of the mission, cases, participants, scenarios;
-- definition of the MBSE artifact or activity and any comparator;
-- provenance and validity of inputs, data sources, measures, pass/fail criteria;
-- execution fidelity, missing data, exclusions, failures, and adverse or null results;
-- appropriateness and transparency of the analysis;
-- treatment of confounders and credible rival explanations;
-- traceability from observations through analysis to the stated conclusion; and
-- limits on applicability outside the evaluated setting.
+Evidence basis is descriptive. It does not set support automatically.
 
-Also apply design-specific domains:
+Use the support codes as follows:
 
-- **Model or simulation evaluation:** model verification, validation against an authoritative reference when claimed, input and calibration provenance, uncertainty and sensitivity analysis, and scenario coverage.
-- **Comparative, controlled, or quasi-experimental evaluation:** case or group comparability, allocation or selection, treatment fidelity, outcome-measure validity, missingness or attrition, confounding, and appropriateness of statistical analysis.
-- **Case study or experience report:** case-selection rationale, context, chain of evidence, triangulation, rival explanations, and the evaluator's role.
-- **Survey:** sampling frame, representativeness, response and non-response, instrument validity, and analysis.
-- **Interview or qualitative evaluation:** participant selection, data-collection transparency, analytic procedure, diversity of perspectives, reflexivity, and traceability from source material to interpretation.
-- **Artifact or reuse demonstration:** artifact identity, distinction among applications, implementation-family dependence, independent adoption when claimed, post-tailoring assurance, and failed or conflicting applications. Apply the canonical [A/E/C/T/P/I bounded-reuse profile](protocol.md#rq1-dispositions-and-evidence-gates).
+- **`supported`:** direct or credibly justified evidence from a method fit for the bounded claim supports it, with no major unresolved limitation relevant to that claim.
+- **`limited`:** relevant evidence exists, but an important limitation in method, directness, comparison, precision, independence, or applicability remains.
+- **`unsupported`:** the source provides assertion only, no observation bearing on the claim, or a result that does not measure the claimed construct.
+- **`unclear`:** relevant evidence is reported, but ambiguity prevents a support judgment.
 
-Code each applicable appraisal domain as `adequate`, `some_concerns`, `inadequate`, `not_reported`, `unclear`, or `not_applicable`, with a reason, evidence reference, and coding confidence. Use `inadequate` only for a source-supported methodological deficiency; use `not_reported` when conduct cannot be assessed from the available report. Do not sum, average, or convert domain codes into a pass or numerical score.
+The report-level extraction captures evaluation design, context, inputs, data sources, execution, analysis, failures, exclusions, and limitations. Record additional appraisal fields only when the claim requires them:
 
-Appraise evidence at the unit that supports a finding:
+- For comparative or causal claims, record the comparator, material differences, comparator adequacy, and major rival explanations.
+- For model or design validation, record the criterion or oracle and why it is authoritative for the intended use.
+- For survey, interview, or experience claims, record participants or observational units, sampling or selection, collection method, and analysis.
+- For reuse claims, apply the deferred lineage and [reuse-level rules](protocol.md#deferred-lineage-assessment-and-reuse-levels), including tailoring effort, post-tailoring assurance, and adopter independence.
 
-- At report and EPS-thread level, use direct source support for mission context, MBSE qualification, anchors and bridges, inputs and assumptions, purpose, implementation footprint, availability, and limitations. Link a methodological appraisal when an evaluation supports a characterization or footprint claim.
-- For reusable artifacts and tailoring applications, use the A/E/C/T/P/I gate vector, tier, lineage and adopter coding confidence, demonstrated coverage, assurance, failed or conflicting applications, and the methodological appraisal of any evaluation used to claim benefit or transfer.
-- For RQ2, keep author attribution separate from reviewer assessment. Use claim kind, explicit EPS attribution, mechanism, measure directness, comparator adequacy when required, confounding, evaluation design and appraisal, dependence, and record-level claim support.
-- For RQ3, use linkage scope, target and bridge, V&V object, criterion completeness, execution and timing, result or verdict, pass/fail criteria credibility when validation is claimed, model-to-test continuity, methodological appraisal, dependence, and record-level claim support.
+An executed model is evidence of execution. It supports accuracy, validity, effectiveness, transferability, or benefit only when the source reports evidence fitted to that wider claim. Apply the canonical [evidence statuses](protocol.md#evidence-statuses) and [report-eligibility versus question-contribution rule](protocol.md#report-eligibility-versus-question-contribution).
 
-Apply the canonical [evidence statuses](protocol.md#evidence-statuses) and [report-eligibility versus question-contribution rule](protocol.md#report-eligibility-versus-question-contribution).
+### Finding support, reporting-bias assessment, and conclusion confidence
 
-### Appraisal meaning, reporting-bias assessment, and conclusion confidence
-
-Interpret these unit-level structures under the [Part 1 engineering reporting framework](protocol.md#reporting-framework); do not reduce them to an unexplained “study quality” label.
+Interpret the inline support fields under the [Part 1 engineering reporting framework](protocol.md#reporting-framework). Do not reduce a report to an unexplained “study quality” label.
 
 Do not make a funnel plot or run a statistical publication-bias test. The evidence does not share one effect measure and is too varied. Instead, assess and report the following for each research-question synthesis:
 
 - source and interface coverage, failures, and unique results across the 15 sources, 13 interfaces, and citation routes, with OATD in the website/other-methods channel;
 - the effects of language, date, population, publication-type, retrieval, and source-access limits;
-- specific access and coverage issues, geographic and institutional imbalance, embargoes, missing abstracts or metadata, uncertainty about degree status, and overlap between PQDT and OATD or between other ;
+- specific access and coverage issues, geographic and institutional imbalance, embargoes, missing abstracts or metadata, uncertainty about degree status, and overlap between PQDT and OATD or other platforms;
 - reports that could not be obtained and records that were only leads;
-- missing or selectively reported genericity claims, applicability limits, tailoring failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, confounders, pass/fail criteria, null or adverse results, and limitations;
+- missing or selectively reported reuse claims, applicability limits, tailoring effort, failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, rival explanations, pass/fail criteria, null or adverse results, and limitations;
 - dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage or application;
 - review-process limitations documented under the [Part 3 extraction-verification procedure](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification); and
 - protocol departures, search changes, and review-process limits that could affect interpretation.
@@ -283,19 +255,19 @@ Give each conclusion a narrative confidence label: `higher`, `moderate`, `lower`
 
 - the kind and scope of claim being synthesized;
 - directness to a qualifying EPS thread;
-- fitness and methodological appraisal of the contributing evaluation designs;
+- fitness of the contributing evaluation designs for the synthesized claim;
 - whether measures are direct or are justified surrogates;
-- comparator adequacy and treatment of confounding when the claim is comparative or causal;
-- record-level claim support and applicability to the stated conclusion;
-- the genericity profile and tier when relevant;
+- comparator adequacy and major rival explanations when the claim is comparative or causal;
+- finding-level evidence basis, support, and applicability;
+- the artifact lineage, reuse level, demonstrated coverage, and tailoring effort when relevant;
 - maturity, independence, or physical validation only when they bear directly on the claim;
 - consistency, including null, adverse, and failed-transfer evidence;
 - independence of report families and tailoring applications; and
 - limitations in the review process.
 
-Evidence type and maturity remain descriptive and do not determine confidence by themselves. Never convert a genericity tier, coding-confidence value, methodological domain, publication type, or record-support label automatically into a conclusion-confidence label. Do not use a numerical cutoff or mechanical average.
+Evidence basis and maturity remain descriptive and do not determine confidence by themselves. Never convert a reuse level, coding-confidence value, publication type, or finding-support label automatically into a conclusion-confidence label. Do not use a numerical cutoff or mechanical average.
 
-- **Higher:** several materially independent, directly linked, methodologically credible records support the bounded conclusion, all requirements relevant to that kind of claim are met, and there is no major unexplained disagreement.
+- **Higher:** several materially independent, directly linked, credible findings or activities support the bounded conclusion, all requirements relevant to that kind of claim are met, and there is no major unexplained disagreement.
 - **Moderate:** direct support exists, but there are important limitations in methodology, independence, precision, applicability, or consistency relevant to the conclusion.
 - **Lower:** support is sparse, methodologically concerning, indirect, dependent, or importantly inconsistent.
 - **Insufficient:** there is no eligible direct evidence for the conclusion.
