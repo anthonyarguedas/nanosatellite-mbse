@@ -37,6 +37,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: Use Topic rather than All Fields because proximity is unavailable in All Fields. Validate the `NEAR/6` no-loss fallback and complete query echo once.
+- Pilot 001 accepted the full `A1`, `BG1`, and `PSR1` raw expressions with exact query, Core Collection edition, year, and sort readback. Raw mode requires the date clause inside the query. The count-only runs did not establish pair no-loss, so check retained final records locally.
 
 ## Query schedule
 
@@ -69,4 +70,4 @@ PSR searches have no lower date limit and no language, document type, subject, a
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): `A1`, `BG1`, and supporting `PSR1` count-only diagnostics completed. Raw `PY` date clauses were required for the exact query mode.

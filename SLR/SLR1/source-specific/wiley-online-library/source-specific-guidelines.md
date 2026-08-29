@@ -37,6 +37,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: Wiley exposes no supported proximity operator. Apply exact pair checking to retained title and abstract text.
+- Pilot 001 accepted the complete `A1` and `BG1` Anywhere expressions with exact source query readback in two count-only passes. Source totals were `A1: 21` and `BG1: 8`. The run requested the diagnostic upper bound 2026-08-29, while Wiley applied the enclosing 2026-08 source month and retained no cards. Final collection must reconcile that source-month total with exact-day client exclusions. Exact pair checking remains required.
 
 ## Query schedule
 
@@ -56,4 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only diagnostics completed with exact query and date-control readback. Totals were `21` and `8`. No records were retained, so pair checking remains a final-run limitation.

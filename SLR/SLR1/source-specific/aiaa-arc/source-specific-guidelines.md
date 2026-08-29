@@ -20,7 +20,7 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://arc.aiaa.org/search/advanced
 - Search field or local route: One `Anywhere` (`AllField`) Advanced Search row.
 - Main evidence window: Use `--date-start 2011-01-01 --date-end <cutoff>`. The script applies source month bounds and checks exact retained dates.
-- Language: Apply no source language filter. Determine English full text during screening.
+- Language: ARC exposes no interface language filter. Determine English full text during screening.
 - Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
 - Database or collection selection: Full ARC collection with access set to all and no publication or Topic facet.
 - Other shared limits: None.
@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `(A(a) A(b))` in the same Anywhere row. This is the broader fallback candidate.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: ARC exposes no supported proximity operator. Apply exact pair checking to retained title, keyword, and abstract text.
+- Source limitation: ARC exposes no supported proximity operator. Apply exact pair checking to retained title, keyword, and abstract text. Pilot 001 accepted `BG1` with total `8,088`. A [100-row preview](diagnostics/BG1-first-100.md) found a population term in only 10 titles and an artifact phrase in none. `P` alone returned `9,358`, `G_model` alone returned `32,702`, and explicit `AND` left `BG1` at `8,088`. Anywhere searches hidden indexed content, so title inspection cannot prove false matches, but it confirms poor visible precision. Reconsider narrower fields or a lossless field union before the final search.
 
 ## Query schedule
 
@@ -56,4 +56,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): full `A1` and `BG1` count-only translations succeeded with diagnostic totals `492` and `8,088`. Final collection still requires source-month partitioning.

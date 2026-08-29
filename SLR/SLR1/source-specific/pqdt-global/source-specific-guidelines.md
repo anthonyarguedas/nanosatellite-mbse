@@ -36,7 +36,8 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `NOFT(L(a) NEAR/5 L(b))`. `NEAR/5` is unordered and counts intervening words.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: Do not filter by degree subtype, full-text availability, or completion status. Resolve those criteria during screening.
+- Source limitation: `NOFT` searches anywhere except full text. This reduces bias toward dissertations with searchable full text, while uneven bibliographic metadata can still affect retrieval. Validate `NOFT` field coverage and pair behavior. Resolve degree subtype, availability, and completion status during screening.
+- Pilot 001 accepted complete `A1` and `BG1` count-only expressions with the exact PQDT Global scope, 2011-2026 `YR` bounds, and frozen spelling/form variant controls. The totals were `1` and `1`. Count-only diagnostics do not test pair no-loss or complete capture.
 
 ## Query schedule
 
@@ -56,4 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only diagnostics succeeded with totals `1` and `1`. The adapter's uncommitted strict cap guard was tested before the live runs. These are not final searches.

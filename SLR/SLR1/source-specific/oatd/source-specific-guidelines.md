@@ -37,6 +37,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: The default field list is not fully enumerated. Validate the named-field two-order slop union once and apply exact pair checking to retained fields.
+- Pilot 001 accepted the complete `A1` count-only expression with total `1`. The complete `BG1` named-field two-order `~5` expression did not reach a ready result page within 60 seconds. The artifact records a route/readiness failure with no total, so no source syntax or zero-result conclusion is drawn.
 
 ## Query schedule
 
@@ -56,4 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): `A1` count-only succeeded with total `1`. `BG1` was a complete named-field translation, but OATD did not become ready within the bounded request. Do not treat it as zero or syntax success, and do not use the artifact as a final search.

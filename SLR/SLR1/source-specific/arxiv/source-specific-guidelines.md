@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: two `all` rows joined by `AND`. This is the broader fallback candidate.
 - Paired blocks: retain every fixed phrase and expand every declared pair into its own cell.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a category only after a pilot proves its mapping and assignment.
-- Source limitation: Materialize each partition as the Cartesian union of its block alternatives. Preserve every cell total and arXiv ID union. Apply exact pair checking to retained title and abstract text.
+- Source limitation: Materialize each partition as the Cartesian union of its block alternatives. Preserve every cell total and arXiv ID union. Apply exact pair checking to retained title and abstract text. Pilot 001 tested one structured-row `A1` cell and one `BG1` pair cell only. Both returned exact zero totals, so the pilot does not establish full partition coverage or pair no-loss.
 
 ## Query schedule
 
@@ -56,4 +56,4 @@ The table is semantic. Execute each row as the lossless union of structured-row 
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): one representative structured-row `A1` cell and one `BG1` pair cell returned exact zero totals. These are not full-partition or final-search results.

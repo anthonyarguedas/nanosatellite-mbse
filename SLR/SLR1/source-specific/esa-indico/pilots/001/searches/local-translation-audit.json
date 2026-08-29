@@ -1,0 +1,1735 @@
+{
+  "artifact_schema": "esa-indico-pilot-offline-translation-audit/v1",
+  "artifact_kind": "offline_translation_and_parser_audit",
+  "source_search_performed": false,
+  "source_search_substitution": false,
+  "evidence_role": "deterministic local expression materialization, parser, proximity, and wildcard coverage audit",
+  "generated_at_utc": "2026-08-29T20:55:39Z",
+  "guideline_commit": "5052113f6b86966f244e58aa427a9f14847cb6a6",
+  "source": "ESA Indico",
+  "adapter": {
+    "path": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_esa_indico.py",
+    "adapter_id": "search_esa_indico",
+    "adapter_version": "6",
+    "local_matcher_schema": "esa-indico-local-concept-matcher/v1"
+  },
+  "protocol": {
+    "reference": "SLR/SLR1/protocol-discovery-and-appraisal.md#search-streams-and-set-construction",
+    "partitions": {
+      "A1": "P AND E_H AND M_H",
+      "BG1": "P AND G_model"
+    },
+    "literal_form": "one straight double-quoted literal",
+    "pair_form": "L(a) NEAR/5 L(b)",
+    "pair_scope": "unordered same-field, maximum five intervening lexical tokens",
+    "control_language": "uppercase AND/OR with explicit parentheses"
+  },
+  "concept_membership": {
+    "P": [
+      "CubeSat",
+      "CubeSats",
+      "cube sat",
+      "cube sats",
+      "cube-sat",
+      "cube-sats",
+      "cube satellite",
+      "cube satellites",
+      "nanosat",
+      "nanosats",
+      "nanosatellite",
+      "nanosatellites",
+      "nano-sat",
+      "nano-sats",
+      "nano sat",
+      "nano sats",
+      "nano-satellite",
+      "nano-satellites",
+      "nano satellite",
+      "nano satellites",
+      "SmallSat",
+      "SmallSats",
+      "small satellite",
+      "small satellites",
+      "small sat",
+      "small sats"
+    ],
+    "E_H": [
+      "electrical power system",
+      "electrical power systems",
+      "electric power system",
+      "electric power systems",
+      "electrical power subsystem",
+      "electrical power subsystems",
+      "electric power subsystem",
+      "electric power subsystems",
+      "electrical energy subsystem",
+      "electrical energy subsystems",
+      "EPS",
+      "EPSs",
+      "power subsystem",
+      "power subsystems",
+      "power system",
+      "power systems",
+      "spacecraft power system",
+      "spacecraft power systems",
+      "power supply",
+      "power supplies",
+      "power distribution unit",
+      "power distribution units",
+      "PDU",
+      "PDUs",
+      "power processing unit",
+      "power processing units",
+      "power control and distribution",
+      "power management and distribution",
+      "electrical architecture",
+      "electrical architectures",
+      "power architecture",
+      "power architectures",
+      "DC power bus",
+      "DC power buses",
+      "PCDU",
+      "PCDUs",
+      "PMAD",
+      "PMADs"
+    ],
+    "M_H": [
+      "model-based systems engineering",
+      "model based systems engineering",
+      "model-based system engineering",
+      "model based system engineering",
+      "model-driven systems engineering",
+      "model driven systems engineering",
+      "model-driven system engineering",
+      "model driven system engineering",
+      "model-centric systems engineering",
+      "model centric systems engineering",
+      "model-centric system engineering",
+      "model centric system engineering",
+      "MBSE",
+      "SysML",
+      "systems modeling language",
+      "systems modelling language",
+      "system modeling language",
+      "system modelling language",
+      "object-process methodology",
+      "object process methodology",
+      "OPM",
+      "object-oriented systems engineering method",
+      "object oriented systems engineering method",
+      "OOSEM",
+      "object-oriented systems engineering",
+      "object oriented systems engineering",
+      "Arcadia",
+      "Capella",
+      "model-based engineering",
+      "model based engineering",
+      "model-driven engineering",
+      "model driven engineering",
+      "model-based design",
+      "model based design",
+      "model-driven design",
+      "model driven design",
+      "MBE",
+      "MDE",
+      "MBD",
+      "MagicGrid",
+      "Harmony-SE",
+      "Harmony SE",
+      "RFLP",
+      "Cameo Systems Modeler",
+      "MagicDraw",
+      "IBM Engineering Systems Design Rhapsody",
+      "Rational Rhapsody",
+      "Vitech CORE",
+      "Vitech GENESYS",
+      "OpenMBEE",
+      "Enterprise Architect",
+      "MATLAB System Composer",
+      "System Composer",
+      "Modelio"
+    ],
+    "G_model_fixed": [
+      "generic model",
+      "generic models",
+      "generic system model",
+      "generic system models",
+      "reusable model",
+      "reusable models",
+      "reusable system model",
+      "reusable system models",
+      "configurable model",
+      "configurable models",
+      "configurable system model",
+      "configurable system models",
+      "model template",
+      "model templates"
+    ],
+    "G_model_pair_left": [
+      "mission-agnostic",
+      "mission agnostic",
+      "mission-independent",
+      "mission independent"
+    ],
+    "G_model_pair_right": [
+      "model",
+      "models",
+      "architecture",
+      "architectures"
+    ],
+    "G_model_declared_pair_count": 16
+  },
+  "local_matcher_rules_observed": {
+    "schema": "esa-indico-local-concept-matcher/v1",
+    "fields_are_record_local": true,
+    "normalization": {
+      "unicode": "NFKC_then_casefold",
+      "html": "decoded_and_removed",
+      "word_boundaries": "Unicode lexical tokens; punctuation and hyphen variants are separators",
+      "stemming": "none",
+      "synonyms": "none"
+    },
+    "boolean": {
+      "operators": [
+        "AND",
+        "OR",
+        "NOT"
+      ],
+      "precedence": "NOT, proximity, AND, OR",
+      "adjacent_terms": "AND"
+    },
+    "phrase": {
+      "syntax": "double-quoted ordered lexical phrase",
+      "default_slop": 0,
+      "slop_syntax": "quoted phrase~N",
+      "cross_field": false
+    },
+    "proximity": {
+      "syntax": [
+        "NEAR/N",
+        "PRE/N",
+        "ONEAR/N",
+        "W/N"
+      ],
+      "distance": "maximum intervening lexical tokens in one field",
+      "max_distance": 100,
+      "near_order": "unordered",
+      "pre_order": "left expression before right expression"
+    },
+    "wildcard": {
+      "syntax": "trailing * only",
+      "meaning": "prefix of one lexical token",
+      "internal_or_leading": "rejected"
+    },
+    "acronym_boundary": "unstarred terms match complete lexical tokens only",
+    "source_q_not_reused": true,
+    "protocol_partition": "caller_supplied_exact_local_expression"
+  },
+  "expressions": {
+    "A1": {
+      "exact": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"electrical power system\" OR \"electrical power systems\" OR \"electric power system\" OR \"electric power systems\" OR \"electrical power subsystem\" OR \"electrical power subsystems\" OR \"electric power subsystem\" OR \"electric power subsystems\" OR \"electrical energy subsystem\" OR \"electrical energy subsystems\" OR \"EPS\" OR \"EPSs\" OR \"power subsystem\" OR \"power subsystems\" OR \"power system\" OR \"power systems\" OR \"spacecraft power system\" OR \"spacecraft power systems\" OR \"power supply\" OR \"power supplies\" OR \"power distribution unit\" OR \"power distribution units\" OR \"PDU\" OR \"PDUs\" OR \"power processing unit\" OR \"power processing units\" OR \"power control and distribution\" OR \"power management and distribution\" OR \"electrical architecture\" OR \"electrical architectures\" OR \"power architecture\" OR \"power architectures\" OR \"DC power bus\" OR \"DC power buses\" OR \"PCDU\" OR \"PCDUs\" OR \"PMAD\" OR \"PMADs\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")",
+      "wildcard_candidate": "(\"cubesat*\" OR \"cube sat*\" OR \"cube satellite*\" OR \"nanosat*\" OR \"nanosatellite*\" OR \"nano sat*\" OR \"nano satellite*\" OR \"smallsat*\" OR \"small satellite*\" OR \"small sat*\") AND (\"electrical power system*\" OR \"electric power system*\" OR \"electrical power subsystem*\" OR \"electric power subsystem*\" OR \"electrical energy subsystem*\" OR \"eps*\" OR \"power subsystem*\" OR \"power system*\" OR \"spacecraft power system*\" OR \"power distribution unit*\" OR \"pdu*\" OR \"power processing unit*\" OR \"electrical architecture*\" OR \"power architecture*\" OR \"pcdu*\" OR \"pmad*\" OR \"power supply\" OR \"power supplies\" OR \"power control and distribution\" OR \"power management and distribution\" OR \"DC power bus\" OR \"DC power buses\") AND (\"model based system* engineering\" OR \"model driven system* engineering\" OR \"model centric system* engineering\" OR \"system* modeling language\" OR \"system* modelling language\" OR \"MBSE\" OR \"SysML\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")",
+      "exact_audit": {
+        "expression_sha256": "51d735e837882a684cc179c8a2a4d255e7c7fd52bc2a82f5a224e52e8a9daebd",
+        "characters": 2770,
+        "utf8_bytes": 2770,
+        "parse": "success",
+        "ast_counts": {
+          "AND": 2,
+          "OR": 115,
+          "PHRASE": 118
+        },
+        "expected_ast_counts": {
+          "AND": 2,
+          "OR": 115,
+          "PHRASE": 118
+        },
+        "ast_counts_match": true,
+        "root_kind": "AND",
+        "phrase_count": 118
+      },
+      "wildcard_candidate_audit": {
+        "expression_sha256": "c1ab5cace2c7135dc638ea27afaa3dc369c8883fbc3ef32b75ca9233c3b50395",
+        "characters": 1745,
+        "utf8_bytes": 1745,
+        "parse": "success",
+        "ast_counts": {
+          "AND": 2,
+          "OR": 72,
+          "PHRASE": 75
+        },
+        "expected_ast_counts": {
+          "AND": 2,
+          "OR": 72
+        },
+        "ast_counts_match": true,
+        "root_kind": "AND",
+        "phrase_count": 75
+      },
+      "character_reduction": {
+        "exact_characters": 2770,
+        "candidate_characters": 1745,
+        "characters_reduced": 1025,
+        "character_reduction_percent": 37.0,
+        "exact_utf8_bytes": 2770,
+        "candidate_utf8_bytes": 1745,
+        "utf8_bytes_reduced": 1025
+      }
+    },
+    "BG1": {
+      "exact": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\" OR \"mission-agnostic\" NEAR/5 \"model\" OR \"mission-agnostic\" NEAR/5 \"models\" OR \"mission-agnostic\" NEAR/5 \"architecture\" OR \"mission-agnostic\" NEAR/5 \"architectures\" OR \"mission agnostic\" NEAR/5 \"model\" OR \"mission agnostic\" NEAR/5 \"models\" OR \"mission agnostic\" NEAR/5 \"architecture\" OR \"mission agnostic\" NEAR/5 \"architectures\" OR \"mission-independent\" NEAR/5 \"model\" OR \"mission-independent\" NEAR/5 \"models\" OR \"mission-independent\" NEAR/5 \"architecture\" OR \"mission-independent\" NEAR/5 \"architectures\" OR \"mission independent\" NEAR/5 \"model\" OR \"mission independent\" NEAR/5 \"models\" OR \"mission independent\" NEAR/5 \"architecture\" OR \"mission independent\" NEAR/5 \"architectures\")",
+      "wildcard_candidate": "(\"\\\"cubesat*\\\"\" OR \"\\\"cube sat*\\\"\" OR \"\\\"cube satellite*\\\"\" OR \"\\\"nanosat*\\\"\" OR \"\\\"nanosatellite*\\\"\" OR \"\\\"nano sat*\\\"\" OR \"\\\"nano satellite*\\\"\" OR \"\\\"smallsat*\\\"\" OR \"\\\"small satellite*\\\"\" OR \"\\\"small sat*\\\"\") AND (\"generic model*\" OR \"generic system model*\" OR \"reusable model*\" OR \"reusable system model*\" OR \"configurable model*\" OR \"configurable system model*\" OR \"model template*\" OR \"mission-agnostic\" NEAR/5 \"model*\" OR \"mission-agnostic\" NEAR/5 \"architecture*\" OR \"mission agnostic\" NEAR/5 \"model*\" OR \"mission agnostic\" NEAR/5 \"architecture*\" OR \"mission-independent\" NEAR/5 \"model*\" OR \"mission-independent\" NEAR/5 \"architecture*\" OR \"mission independent\" NEAR/5 \"model*\" OR \"mission independent\" NEAR/5 \"architecture*\")",
+      "exact_audit": {
+        "expression_sha256": "49f5fec0ff2e9176653710ff57b46366f8eb3383e37c32c94d172523ea5eeeef",
+        "characters": 1457,
+        "utf8_bytes": 1457,
+        "parse": "success",
+        "ast_counts": {
+          "AND": 1,
+          "OR": 54,
+          "PHRASE": 72,
+          "PROX": 16
+        },
+        "expected_ast_counts": {
+          "AND": 1,
+          "OR": 54,
+          "PHRASE": 72,
+          "PROX": 16
+        },
+        "ast_counts_match": true,
+        "root_kind": "AND",
+        "phrase_count": 72
+      },
+      "wildcard_candidate_audit": {
+        "expression_sha256": "a90aa8146682d331149c7fb6d0a740bad94a10fe865ec6d3a82fbd66c2f5dce2",
+        "characters": 732,
+        "utf8_bytes": 732,
+        "parse": "success",
+        "ast_counts": {
+          "AND": 1,
+          "OR": 23,
+          "PHRASE": 33,
+          "PROX": 8
+        },
+        "expected_ast_counts": {
+          "AND": 1,
+          "OR": 23,
+          "PHRASE": 33,
+          "PROX": 8
+        },
+        "ast_counts_match": true,
+        "root_kind": "AND",
+        "phrase_count": 33
+      },
+      "character_reduction": {
+        "exact_characters": 1457,
+        "candidate_characters": 732,
+        "characters_reduced": 725,
+        "character_reduction_percent": 49.76,
+        "exact_utf8_bytes": 1457,
+        "candidate_utf8_bytes": 732,
+        "utf8_bytes_reduced": 725
+      }
+    }
+  },
+  "wildcard_replacement_audit": {
+    "rule": "Only a trailing star on one lexical token was generated. The candidate may complete any token sharing that prefix.",
+    "coverage_checks": {
+      "A1": {
+        "P": [
+          {
+            "candidate_clause": "\"cubesat*\"",
+            "covered_literals": [
+              "CubeSat",
+              "CubeSats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "CubeSat",
+                "covered": true
+              },
+              {
+                "literal": "CubeSats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"cube sat*\"",
+            "covered_literals": [
+              "cube sat",
+              "cube-sat",
+              "cube sats",
+              "cube-sats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "cube sat",
+                "covered": true
+              },
+              {
+                "literal": "cube-sat",
+                "covered": true
+              },
+              {
+                "literal": "cube sats",
+                "covered": true
+              },
+              {
+                "literal": "cube-sats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"cube satellite*\"",
+            "covered_literals": [
+              "cube satellite",
+              "cube satellites"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "cube satellite",
+                "covered": true
+              },
+              {
+                "literal": "cube satellites",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"nanosat*\"",
+            "covered_literals": [
+              "nanosat",
+              "nanosats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "nanosat",
+                "covered": true
+              },
+              {
+                "literal": "nanosats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"nanosatellite*\"",
+            "covered_literals": [
+              "nanosatellite",
+              "nanosatellites"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "nanosatellite",
+                "covered": true
+              },
+              {
+                "literal": "nanosatellites",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"nano sat*\"",
+            "covered_literals": [
+              "nano-sat",
+              "nano sat",
+              "nano-sats",
+              "nano sats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "nano-sat",
+                "covered": true
+              },
+              {
+                "literal": "nano sat",
+                "covered": true
+              },
+              {
+                "literal": "nano-sats",
+                "covered": true
+              },
+              {
+                "literal": "nano sats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"nano satellite*\"",
+            "covered_literals": [
+              "nano-satellite",
+              "nano satellite",
+              "nano-satellites",
+              "nano satellites"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "nano-satellite",
+                "covered": true
+              },
+              {
+                "literal": "nano satellite",
+                "covered": true
+              },
+              {
+                "literal": "nano-satellites",
+                "covered": true
+              },
+              {
+                "literal": "nano satellites",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"smallsat*\"",
+            "covered_literals": [
+              "SmallSat",
+              "SmallSats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "SmallSat",
+                "covered": true
+              },
+              {
+                "literal": "SmallSats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"small satellite*\"",
+            "covered_literals": [
+              "small satellite",
+              "small satellites"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "small satellite",
+                "covered": true
+              },
+              {
+                "literal": "small satellites",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"small sat*\"",
+            "covered_literals": [
+              "small sat",
+              "small sats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "small sat",
+                "covered": true
+              },
+              {
+                "literal": "small sats",
+                "covered": true
+              }
+            ]
+          }
+        ],
+        "E_H": [
+          {
+            "candidate_clause": "\"electrical power system*\"",
+            "covered_literals": [
+              "electrical power system",
+              "electrical power systems"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "electrical power system",
+                "covered": true
+              },
+              {
+                "literal": "electrical power systems",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"electric power system*\"",
+            "covered_literals": [
+              "electric power system",
+              "electric power systems"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "electric power system",
+                "covered": true
+              },
+              {
+                "literal": "electric power systems",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"electrical power subsystem*\"",
+            "covered_literals": [
+              "electrical power subsystem",
+              "electrical power subsystems"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "electrical power subsystem",
+                "covered": true
+              },
+              {
+                "literal": "electrical power subsystems",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"electric power subsystem*\"",
+            "covered_literals": [
+              "electric power subsystem",
+              "electric power subsystems"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "electric power subsystem",
+                "covered": true
+              },
+              {
+                "literal": "electric power subsystems",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"electrical energy subsystem*\"",
+            "covered_literals": [
+              "electrical energy subsystem",
+              "electrical energy subsystems"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "electrical energy subsystem",
+                "covered": true
+              },
+              {
+                "literal": "electrical energy subsystems",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"eps*\"",
+            "covered_literals": [
+              "EPS",
+              "EPSs"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "EPS",
+                "covered": true
+              },
+              {
+                "literal": "EPSs",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"power subsystem*\"",
+            "covered_literals": [
+              "power subsystem",
+              "power subsystems"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "power subsystem",
+                "covered": true
+              },
+              {
+                "literal": "power subsystems",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"power system*\"",
+            "covered_literals": [
+              "power system",
+              "power systems"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "power system",
+                "covered": true
+              },
+              {
+                "literal": "power systems",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"spacecraft power system*\"",
+            "covered_literals": [
+              "spacecraft power system",
+              "spacecraft power systems"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "spacecraft power system",
+                "covered": true
+              },
+              {
+                "literal": "spacecraft power systems",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"power distribution unit*\"",
+            "covered_literals": [
+              "power distribution unit",
+              "power distribution units"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "power distribution unit",
+                "covered": true
+              },
+              {
+                "literal": "power distribution units",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"pdu*\"",
+            "covered_literals": [
+              "PDU",
+              "PDUs"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "PDU",
+                "covered": true
+              },
+              {
+                "literal": "PDUs",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"power processing unit*\"",
+            "covered_literals": [
+              "power processing unit",
+              "power processing units"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "power processing unit",
+                "covered": true
+              },
+              {
+                "literal": "power processing units",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"electrical architecture*\"",
+            "covered_literals": [
+              "electrical architecture",
+              "electrical architectures"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "electrical architecture",
+                "covered": true
+              },
+              {
+                "literal": "electrical architectures",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"power architecture*\"",
+            "covered_literals": [
+              "power architecture",
+              "power architectures"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "power architecture",
+                "covered": true
+              },
+              {
+                "literal": "power architectures",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"pcdu*\"",
+            "covered_literals": [
+              "PCDU",
+              "PCDUs"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "PCDU",
+                "covered": true
+              },
+              {
+                "literal": "PCDUs",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"pmad*\"",
+            "covered_literals": [
+              "PMAD",
+              "PMADs"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "PMAD",
+                "covered": true
+              },
+              {
+                "literal": "PMADs",
+                "covered": true
+              }
+            ]
+          }
+        ],
+        "M_H": [
+          {
+            "candidate_clause": "\"model based system* engineering\"",
+            "covered_literals": [
+              "model-based systems engineering",
+              "model based systems engineering",
+              "model-based system engineering",
+              "model based system engineering"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "model-based systems engineering",
+                "covered": true
+              },
+              {
+                "literal": "model based systems engineering",
+                "covered": true
+              },
+              {
+                "literal": "model-based system engineering",
+                "covered": true
+              },
+              {
+                "literal": "model based system engineering",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"model driven system* engineering\"",
+            "covered_literals": [
+              "model-driven systems engineering",
+              "model driven systems engineering",
+              "model-driven system engineering",
+              "model driven system engineering"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "model-driven systems engineering",
+                "covered": true
+              },
+              {
+                "literal": "model driven systems engineering",
+                "covered": true
+              },
+              {
+                "literal": "model-driven system engineering",
+                "covered": true
+              },
+              {
+                "literal": "model driven system engineering",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"model centric system* engineering\"",
+            "covered_literals": [
+              "model-centric systems engineering",
+              "model centric systems engineering",
+              "model-centric system engineering",
+              "model centric system engineering"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "model-centric systems engineering",
+                "covered": true
+              },
+              {
+                "literal": "model centric systems engineering",
+                "covered": true
+              },
+              {
+                "literal": "model-centric system engineering",
+                "covered": true
+              },
+              {
+                "literal": "model centric system engineering",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"system* modeling language\"",
+            "covered_literals": [
+              "systems modeling language",
+              "system modeling language"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "systems modeling language",
+                "covered": true
+              },
+              {
+                "literal": "system modeling language",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"system* modelling language\"",
+            "covered_literals": [
+              "systems modelling language",
+              "system modelling language"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "systems modelling language",
+                "covered": true
+              },
+              {
+                "literal": "system modelling language",
+                "covered": true
+              }
+            ]
+          }
+        ]
+      },
+      "BG1": {
+        "P": [
+          {
+            "candidate_clause": "\"cubesat*\"",
+            "covered_literals": [
+              "CubeSat",
+              "CubeSats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "CubeSat",
+                "covered": true
+              },
+              {
+                "literal": "CubeSats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"cube sat*\"",
+            "covered_literals": [
+              "cube sat",
+              "cube-sat",
+              "cube sats",
+              "cube-sats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "cube sat",
+                "covered": true
+              },
+              {
+                "literal": "cube-sat",
+                "covered": true
+              },
+              {
+                "literal": "cube sats",
+                "covered": true
+              },
+              {
+                "literal": "cube-sats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"cube satellite*\"",
+            "covered_literals": [
+              "cube satellite",
+              "cube satellites"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "cube satellite",
+                "covered": true
+              },
+              {
+                "literal": "cube satellites",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"nanosat*\"",
+            "covered_literals": [
+              "nanosat",
+              "nanosats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "nanosat",
+                "covered": true
+              },
+              {
+                "literal": "nanosats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"nanosatellite*\"",
+            "covered_literals": [
+              "nanosatellite",
+              "nanosatellites"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "nanosatellite",
+                "covered": true
+              },
+              {
+                "literal": "nanosatellites",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"nano sat*\"",
+            "covered_literals": [
+              "nano-sat",
+              "nano sat",
+              "nano-sats",
+              "nano sats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "nano-sat",
+                "covered": true
+              },
+              {
+                "literal": "nano sat",
+                "covered": true
+              },
+              {
+                "literal": "nano-sats",
+                "covered": true
+              },
+              {
+                "literal": "nano sats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"nano satellite*\"",
+            "covered_literals": [
+              "nano-satellite",
+              "nano satellite",
+              "nano-satellites",
+              "nano satellites"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "nano-satellite",
+                "covered": true
+              },
+              {
+                "literal": "nano satellite",
+                "covered": true
+              },
+              {
+                "literal": "nano-satellites",
+                "covered": true
+              },
+              {
+                "literal": "nano satellites",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"smallsat*\"",
+            "covered_literals": [
+              "SmallSat",
+              "SmallSats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 0,
+            "literal_checks": [
+              {
+                "literal": "SmallSat",
+                "covered": true
+              },
+              {
+                "literal": "SmallSats",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"small satellite*\"",
+            "covered_literals": [
+              "small satellite",
+              "small satellites"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "small satellite",
+                "covered": true
+              },
+              {
+                "literal": "small satellites",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"small sat*\"",
+            "covered_literals": [
+              "small sat",
+              "small sats"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "small sat",
+                "covered": true
+              },
+              {
+                "literal": "small sats",
+                "covered": true
+              }
+            ]
+          }
+        ],
+        "G_model_fixed": [
+          {
+            "candidate_clause": "\"generic model*\"",
+            "covered_literals": [
+              "generic model",
+              "generic models"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "generic model",
+                "covered": true
+              },
+              {
+                "literal": "generic models",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"generic system model*\"",
+            "covered_literals": [
+              "generic system model",
+              "generic system models"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "generic system model",
+                "covered": true
+              },
+              {
+                "literal": "generic system models",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"reusable model*\"",
+            "covered_literals": [
+              "reusable model",
+              "reusable models"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "reusable model",
+                "covered": true
+              },
+              {
+                "literal": "reusable models",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"reusable system model*\"",
+            "covered_literals": [
+              "reusable system model",
+              "reusable system models"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "reusable system model",
+                "covered": true
+              },
+              {
+                "literal": "reusable system models",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"configurable model*\"",
+            "covered_literals": [
+              "configurable model",
+              "configurable models"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "configurable model",
+                "covered": true
+              },
+              {
+                "literal": "configurable models",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"configurable system model*\"",
+            "covered_literals": [
+              "configurable system model",
+              "configurable system models"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 2,
+            "literal_checks": [
+              {
+                "literal": "configurable system model",
+                "covered": true
+              },
+              {
+                "literal": "configurable system models",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"model template*\"",
+            "covered_literals": [
+              "model template",
+              "model templates"
+            ],
+            "replacement_rule": "one differing lexical token, exact +s plural prefix; local hyphen/space token equivalence retained",
+            "wildcard_position": 1,
+            "literal_checks": [
+              {
+                "literal": "model template",
+                "covered": true
+              },
+              {
+                "literal": "model templates",
+                "covered": true
+              }
+            ]
+          }
+        ],
+        "G_model_pairs": [
+          {
+            "candidate_clause": "\"mission-agnostic\" NEAR/5 \"model*\"",
+            "covered_pairs": [
+              {
+                "left": "mission-agnostic",
+                "right": "model"
+              },
+              {
+                "left": "mission-agnostic",
+                "right": "models"
+              }
+            ],
+            "replaced_literals": [
+              "model",
+              "models"
+            ],
+            "replacement_rule": "paired right atom exact +s plural prefix",
+            "pair_checks": [
+              {
+                "left": "mission-agnostic",
+                "right": "model",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission-agnostic",
+                "right": "model",
+                "order": "right_left",
+                "covered": true
+              },
+              {
+                "left": "mission-agnostic",
+                "right": "models",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission-agnostic",
+                "right": "models",
+                "order": "right_left",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"mission-agnostic\" NEAR/5 \"architecture*\"",
+            "covered_pairs": [
+              {
+                "left": "mission-agnostic",
+                "right": "architecture"
+              },
+              {
+                "left": "mission-agnostic",
+                "right": "architectures"
+              }
+            ],
+            "replaced_literals": [
+              "architecture",
+              "architectures"
+            ],
+            "replacement_rule": "paired right atom exact +s plural prefix",
+            "pair_checks": [
+              {
+                "left": "mission-agnostic",
+                "right": "architecture",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission-agnostic",
+                "right": "architecture",
+                "order": "right_left",
+                "covered": true
+              },
+              {
+                "left": "mission-agnostic",
+                "right": "architectures",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission-agnostic",
+                "right": "architectures",
+                "order": "right_left",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"mission agnostic\" NEAR/5 \"model*\"",
+            "covered_pairs": [
+              {
+                "left": "mission agnostic",
+                "right": "model"
+              },
+              {
+                "left": "mission agnostic",
+                "right": "models"
+              }
+            ],
+            "replaced_literals": [
+              "model",
+              "models"
+            ],
+            "replacement_rule": "paired right atom exact +s plural prefix",
+            "pair_checks": [
+              {
+                "left": "mission agnostic",
+                "right": "model",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission agnostic",
+                "right": "model",
+                "order": "right_left",
+                "covered": true
+              },
+              {
+                "left": "mission agnostic",
+                "right": "models",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission agnostic",
+                "right": "models",
+                "order": "right_left",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"mission agnostic\" NEAR/5 \"architecture*\"",
+            "covered_pairs": [
+              {
+                "left": "mission agnostic",
+                "right": "architecture"
+              },
+              {
+                "left": "mission agnostic",
+                "right": "architectures"
+              }
+            ],
+            "replaced_literals": [
+              "architecture",
+              "architectures"
+            ],
+            "replacement_rule": "paired right atom exact +s plural prefix",
+            "pair_checks": [
+              {
+                "left": "mission agnostic",
+                "right": "architecture",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission agnostic",
+                "right": "architecture",
+                "order": "right_left",
+                "covered": true
+              },
+              {
+                "left": "mission agnostic",
+                "right": "architectures",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission agnostic",
+                "right": "architectures",
+                "order": "right_left",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"mission-independent\" NEAR/5 \"model*\"",
+            "covered_pairs": [
+              {
+                "left": "mission-independent",
+                "right": "model"
+              },
+              {
+                "left": "mission-independent",
+                "right": "models"
+              }
+            ],
+            "replaced_literals": [
+              "model",
+              "models"
+            ],
+            "replacement_rule": "paired right atom exact +s plural prefix",
+            "pair_checks": [
+              {
+                "left": "mission-independent",
+                "right": "model",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission-independent",
+                "right": "model",
+                "order": "right_left",
+                "covered": true
+              },
+              {
+                "left": "mission-independent",
+                "right": "models",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission-independent",
+                "right": "models",
+                "order": "right_left",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"mission-independent\" NEAR/5 \"architecture*\"",
+            "covered_pairs": [
+              {
+                "left": "mission-independent",
+                "right": "architecture"
+              },
+              {
+                "left": "mission-independent",
+                "right": "architectures"
+              }
+            ],
+            "replaced_literals": [
+              "architecture",
+              "architectures"
+            ],
+            "replacement_rule": "paired right atom exact +s plural prefix",
+            "pair_checks": [
+              {
+                "left": "mission-independent",
+                "right": "architecture",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission-independent",
+                "right": "architecture",
+                "order": "right_left",
+                "covered": true
+              },
+              {
+                "left": "mission-independent",
+                "right": "architectures",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission-independent",
+                "right": "architectures",
+                "order": "right_left",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"mission independent\" NEAR/5 \"model*\"",
+            "covered_pairs": [
+              {
+                "left": "mission independent",
+                "right": "model"
+              },
+              {
+                "left": "mission independent",
+                "right": "models"
+              }
+            ],
+            "replaced_literals": [
+              "model",
+              "models"
+            ],
+            "replacement_rule": "paired right atom exact +s plural prefix",
+            "pair_checks": [
+              {
+                "left": "mission independent",
+                "right": "model",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission independent",
+                "right": "model",
+                "order": "right_left",
+                "covered": true
+              },
+              {
+                "left": "mission independent",
+                "right": "models",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission independent",
+                "right": "models",
+                "order": "right_left",
+                "covered": true
+              }
+            ]
+          },
+          {
+            "candidate_clause": "\"mission independent\" NEAR/5 \"architecture*\"",
+            "covered_pairs": [
+              {
+                "left": "mission independent",
+                "right": "architecture"
+              },
+              {
+                "left": "mission independent",
+                "right": "architectures"
+              }
+            ],
+            "replaced_literals": [
+              "architecture",
+              "architectures"
+            ],
+            "replacement_rule": "paired right atom exact +s plural prefix",
+            "pair_checks": [
+              {
+                "left": "mission independent",
+                "right": "architecture",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission independent",
+                "right": "architecture",
+                "order": "right_left",
+                "covered": true
+              },
+              {
+                "left": "mission independent",
+                "right": "architectures",
+                "order": "left_right",
+                "covered": true
+              },
+              {
+                "left": "mission independent",
+                "right": "architectures",
+                "order": "right_left",
+                "covered": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "all_replaced_literals_covered": true,
+    "checks_run": 146,
+    "added_completions_are_broader_recall": true,
+    "candidate_status": "diagnostic_only_not_adopted",
+    "adoption_condition": "Do not replace exact literals in a final schedule without adequate source-set evidence comparing exact and wildcard results."
+  },
+  "same_field_near5_audit": {
+    "expression": "\"mission-agnostic\" NEAR/5 \"model\"",
+    "parse": "success",
+    "same_field": {
+      "left_then_right_with_five_intervening_tokens": true,
+      "right_then_left_with_five_intervening_tokens": true,
+      "six_intervening_tokens_rejected": true,
+      "split_across_fields_rejected": true
+    },
+    "distance_definition": "maximum intervening lexical tokens in one record field",
+    "pair_count_in_BG1_exact": 16
+  },
+  "decision": {
+    "exact_local_materialization": "passed",
+    "exact_parser": "passed for A1 and BG1",
+    "same_field_NEAR_5": "passed unordered and rejected cross-field or six-gap cases",
+    "wildcard_candidate": "generated and every replaced literal passed the local coverage checks",
+    "guideline_change": "Keep exact full expressions normative. Record wildcard candidate as broader-recall diagnostic only.",
+    "source_query": "No ESA request was made by this artifact."
+  }
+}

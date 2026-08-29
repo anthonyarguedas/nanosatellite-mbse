@@ -37,6 +37,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: The paired artifact covers both databases. Preserve its source-specific Compendex projection and never combine the two source totals.
+- Pilot 001 accepted the complete `A1` and `BG1` Expert expressions, the 2011-2026 Published range, and `Date (Oldest)` in one paired event. The paired Python API was used for the bounded diagnostic because the public CLI requires strict complete JSON/CSV publication and has no count-only option. The artifact retains separate rendered row counts for Compendex and Inspec. Its one-record export is partial and does not prove complete capture or pair no-loss.
 
 ## Query schedule
 
@@ -56,4 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` bounded diagnostics succeeded. Compendex projections were `A1: 5` and `BG1: 6` rendered rows. The paired CLI has no count-only mode, so the Python API used one-page, one-record diagnostics. These are not final searches.

@@ -37,6 +37,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: The paired artifact covers both databases. Preserve its source-specific Inspec projection and never combine the two source totals.
+- Pilot 001 used the paired event recorded under [Compendex Pilot 001](../compendex/pilots/001/pilot.md). The source echo accepted the complete `A1` and `BG1` expressions and the 2011-2026 Published range. The paired event exposed `A1: 3` and `BG1: 2` Inspec rows. The bounded one-record export is not a complete Inspec capture and does not prove pair no-loss.
 
 ## Query schedule
 
@@ -56,4 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): the paired `A1` and `BG1` diagnostics succeeded. Inspec projections were `A1: 3` and `BG1: 2` rendered rows. The bounded one-record export is diagnostic only and is not a final search.

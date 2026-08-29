@@ -37,6 +37,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: Link exposes no supported proximity operator. Apply exact pair checking where retained fields permit it and report body-text uncertainty.
+- Pilot 001 A1 count-only execution reached the two-pass identity check, then failed because the verification pass returned a different canonical-path order. The failure artifact has no total and must not be treated as zero. Stop before BG1 and retain the native `oldestFirst` and strict identity checks.
 
 ## Query schedule
 
@@ -56,4 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): A1 count-only diagnostic stopped on source canonical-path order drift. BG1 was not attempted under the stop rule. Do not use this artifact as a final search.

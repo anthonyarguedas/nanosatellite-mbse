@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `("a b"~5 | "b a"~5)`, substituting the complete lexical phrase for each operand. This tests both orders with at most five skipped positions.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: The general query includes full text. Apply exact pair checking where retained fields permit it and report full-text-only uncertainty.
+- Source limitation: The general query includes full text. Apply exact pair checking where retained fields permit it and report full-text-only uncertainty. Pilot 001 accepted complete `A1` and `BG1` `q` expressions with exact zero totals. Count-only retained no records, so pair no-loss and complete capture remain untested.
 
 ## Query schedule
 
@@ -56,4 +56,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only translations succeeded with totals `0` and `0`. These are not final searches.

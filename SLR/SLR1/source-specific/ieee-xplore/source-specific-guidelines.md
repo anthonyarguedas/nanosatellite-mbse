@@ -37,6 +37,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: Do not use a grouped field wrapper around a Boolean block. Expand every atom before combining it.
+- Pilot 001 accepted the complete `A1` All Metadata expression before submission, but the requested year range did not reconcile after Apply. The artifact records a range mismatch after three contradictory polls and no source total. This is an explicit source-control limitation. Do not replace it with an unbounded query or local date filtering. The exact publication-day window is unavailable in count-only mode because the adapter requires strict complete mode for that control.
 
 ## Query schedule
 
@@ -56,4 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): complete `A1` count-only attempt preserved an explicit year-control failure. `BG1` was stopped before execution. Do not use this source run as a final search until the control reconciles.

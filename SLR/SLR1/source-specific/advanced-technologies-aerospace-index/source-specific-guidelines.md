@@ -36,7 +36,8 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `NOFT(L(a) NEAR/5 L(b))`. `NEAR/5` is unordered and counts intervening words.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: Keep this source in an event separate from PQDT Global. Validate the exact product selection and one query readback.
+- Source limitation: Keep this source in an event separate from PQDT Global. `NOFT` searches anywhere except full text. This reduces bias toward records with searchable full text, while uneven titles, abstracts, and indexing can still affect retrieval. Validate `NOFT` field coverage and pair behavior before the final search.
+- Pilot 001 accepted complete `A1` and `BG1` count-only expressions with the exact Advanced Technologies & Aerospace Index scope and publication range. The totals were `0` and `2`. Count-only diagnostics do not test pair no-loss or complete capture.
 
 ## Query schedule
 
@@ -56,4 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only diagnostics succeeded with totals `0` and `2`. These are not final searches.

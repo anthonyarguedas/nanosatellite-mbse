@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `(A(a) A(b))` in the same Any keyword route. This is the broader fallback candidate.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: Split every partition into deterministic cells below the 500-character source limit. Run all cells and reconcile their stable paper-ID union. Apply exact pair checking to retained title and abstract text.
+- Source limitation: Split every partition into deterministic cells below the 500-character source limit. Run all cells and reconcile their stable paper-ID union. Apply exact pair checking to retained title and abstract text. Pilot 001 used 69-character and 38-character representative cells, both with exact zero totals. It did not validate full partition coverage.
 
 ## Query schedule
 
@@ -56,4 +56,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilots
 
-Create each pilot from [the pilot template](pilots/template/pilot.md). Start with one pilot. Use a second or third only for a specific unresolved issue. More may exist when justified. ESA Indico may start with up to three focused pilots.
+- [x] [Pilot 001](pilots/001/pilot.md): representative `A1` and broad pair cells stayed below 500 characters and returned exact zero totals. No complete partition route was used.
