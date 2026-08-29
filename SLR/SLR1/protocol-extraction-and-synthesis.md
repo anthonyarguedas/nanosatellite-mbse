@@ -6,7 +6,7 @@
 
 ## Extraction fields
 
-Create a new run-specific `extraction_codebook.json` from this protocol and calibrate it under task [`E-001`](TASKS.md), in accordance with the [Part 1 restart policy](protocol.md#review-status-and-restart-policy). Then perform full extraction and validation under [`R-005`](TASKS.md).
+Create an extraction codebook from this protocol and calibrate it. Then perform full extraction and validation under.
 
 For every controlled code that matters to the synthesis, record:
 
@@ -14,13 +14,13 @@ For every controlled code that matters to the synthesis, record:
 - a direct quotation or source location when possible; and
 - a coding-confidence rating of `high`, `moderate`, or `low`.
 
-Apply the [Part 2 judgment definitions and coding-confidence scale](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal) and the [Part 1 cross-cutting evidence statuses](protocol.md#cross-cutting-evidence-statuses).
+Apply the [Part 2 judgment definitions and coding-confidence scale](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal) and the [Part 1 evidence statuses](protocol.md#cross-cutting-evidence-statuses).
 
 ### Shared extraction structures
 
 Use shared structures rather than copying the same facts into several records:
 
-- An **evidence reference** stores report ID, page or section, figure or table when relevant, quotation or cautious paraphrase, and coding confidence.
+- An **evidence reference** stores report ID, page or section, figure or table when relevant, quotation, and coding confidence.
 - A **setting tuple** stores platform and form factor; mission purpose and domain; orbit and environment; lifecycle use and decision; EPS boundary, architecture, components and interfaces; modes and load profile; abstraction or fidelity; required inputs; language, tool and version; organization, team and process; prerequisites; and exclusions or failure boundaries.
 - An **implementation footprint** stores roles, skills and training; staffing; process and automation; tools, licences and infrastructure; model and data preparation; computing; integration and interoperability; governance and configuration control; effort, time, schedule and cost; maintenance; burdens; and mitigations.
 - A **measurement** stores the construct claimed, the actual measure and its definition, and whether it is `direct`, `surrogate`, `intermediate_or_process`, or `unclear` for that construct. Also store the author's justification or validation for a surrogate; observed versus expected status; setting, scenario, population or observational unit; unit and time basis; sample size and denominator; source-reported values; central tendency and dispersion; absolute and relative differences; effect estimate, standard error or confidence interval, exact p-value and statistical method when reported; missing observations and exclusions; and practical interpretation. A measure can be direct for one narrow claim and surrogate for a broader claim, so record the claim scope.
@@ -48,7 +48,7 @@ A strong classification can apply to a narrow within-case fact and does not impl
 For each report, record:
 
 - the report ID, optional old corpus ID, and extraction-file path;
-- full citation, title, authors, year, venue or institutional report series, publication type and status, DOI, arXiv identifier or URL, publisher or issuing organization, and source or report ID, together with the canonical [manifestation, date, version, and review-status fields](protocol.md#report-manifestations-dates-and-review-status);
+- full citation, title, authors, year, venue or institutional report series, publication type and status, DOI, arXiv identifier or URL, publisher or issuing organization, and source or report ID, together with the canonical [version, date, version, and review-status fields](protocol.md#report-versions-dates-and-review-status);
 - every linked discovery-event ID and source record ID; keep the exact query or citation route, date, rank, and raw-file provenance once in the new search log and manifest;
 - title and abstract screening tier and reason;
 - final full-text decision and exclusion reason, if excluded;
@@ -59,7 +59,7 @@ For each report, record:
 - the number of direct and near-miss RQ3 records;
 - study or implementation report-family ID or IDs;
 - linked artifact-lineage ID or IDs;
-- the report's relationship to each family or artifact: `same_report_manifestation`, `derivative_report`, `companion_report`, `overlap_uncertain`, or another controlled value;
+- the report's relationship to each family or artifact: `same_report_version`, `derivative_report`, `companion_report`, `overlap_uncertain`, or another controlled value;
 - the reason and evidence for family membership or artifact identity, overlap coding confidence, and notes on shared results; and
 - overall coding confidence, primary human assessor, linked verification-pass and discrepancy IDs, and review-pass history.
 
@@ -69,11 +69,11 @@ For a thesis or dissertation, also record:
 - institution, country, and department;
 - completion status;
 - persistent IDs from PQDT, OATD, and the repository;
-- the canonical [manifestation, date, and review-status fields](protocol.md#report-manifestations-dates-and-review-status);
+- the canonical [version, date, and review-status fields](protocol.md#report-versions-dates-and-review-status);
 - repository and full-text version; and
 - access, embargo, and licence status.
 
-For an arXiv preprint, record its identifier and subject category together with the canonical [manifestation, date, version, and review-status fields](protocol.md#report-manifestations-dates-and-review-status).
+For an arXiv preprint, record its identifier and subject category together with the canonical [version, date, version, and review-status fields](protocol.md#report-versions-dates-and-review-status).
 
 ### Report and implementation context and MBSE qualification
 

@@ -42,7 +42,7 @@ Unless this supporting protocol states otherwise, reuse the following provisions
 - the pilot-versus-final-event distinction, event documentation, retrieval-completeness, source-failure, zero-versus-null, and no-partial-import rules in [Pilots and final search events](protocol-discovery-and-appraisal.md#pilots-and-final-search-events);
 - the UTF-8 JSON, bibliographic transfer, reproducible deduplication, manifest, normalized-versus-original metadata, and Git audit-trail rules in [Data management and audit trail](protocol-discovery-and-appraisal.md#data-management-and-audit-trail);
 - the main review's full-text retrieval sequence and its treatment of `not_retrieved`, adapted only to the secondary-review eligibility criteria below;
-- the report-versus-record distinction and manifestation-handling principles in [Units of evidence and counting](protocol.md#units-of-evidence-and-counting); and
+- the report-versus-record distinction and version-handling principles in [Units of evidence and counting](protocol.md#units-of-evidence-and-counting); and
 - coding confidence, evidence references, model-use safeguards, human adjudication, discrepancy recording, and rights-sensitive fallback principles in [Sole-reviewer extraction and verification](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification).
 
 The supporting search has separate event IDs, records, reports, decisions, extractions, counts, and outputs. Common schemas and a common log file may be reused, but every row must carry a separate supporting-search namespace and supporting records must never be merged into the main primary-evidence candidate set, denominator, PRISMA flow, or analytic units. A DOI may be cross-referenced between the two processes without sharing a decision or extraction.
@@ -123,7 +123,7 @@ A review does not need to identify a qualifying EPS thread to enter this support
 
 ## Screening, retrieval, and decisions
 
-Deduplicate Scopus and Web of Science records using the main protocol's identifier and metadata rules. Preserve both discovery events. Treat preprint, online-first, conference, and journal manifestations according to the main report-identity principles; use all materially informative versions but count one report when no relevant substantive difference exists.
+Deduplicate Scopus and Web of Science records using the main protocol's identifier and metadata rules. Preserve both discovery events. Treat preprint, online-first, conference, and journal versions according to the main report-identity principles; use all materially informative versions but count one report when no relevant substantive difference exists.
 
 At title and abstract screening, interpret eligibility liberally. Retrieve the full text when the record plausibly describes a review of space-related MBSE, SysML, digital engineering, structured system models, reference models, or reference architectures. Do not require CubeSat, nanosatellite, or EPS terms in metadata.
 

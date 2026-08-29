@@ -56,9 +56,9 @@ Use the following exact cross-source concept blocks. Source-native translations 
 
 #### Population and EPS blocks
 
-- **Population (`P`):** `CubeSat`, `CubeSats`, `cube sat`, `cube sats`, `cube-sat`, `cube-sats`, `cube satellite`, `cube satellites`, `nanosat`, `nanosats`, `nanosatellite`, `nanosatellites`, `nano-sat`, `nano-sats`, `nano sat`, `nano sats`, `nano-satellite`, `nano-satellites`, `nano satellite`, and `nano satellites`. A source may use `nanosat*` for the contiguous `nanosat(s)` and `nanosatellite(s)` forms only after its corresponding `S-D*` or `S-L*` pilot in [`TASKS.md`](TASKS.md) confirms the behavior. Keep the separated and hyphenated forms unless the same pilot proves that source normalization retrieves them losslessly. A named mission can establish population eligibility during screening, but no unspecified mission-name list is part of the direct strategy. Do not use `SmallSat` or “small satellite” as a positive concept.
+- **Population (`P`):** `CubeSat`, `CubeSats`, `cube sat`, `cube sats`, `cube-sat`, `cube-sats`, `cube satellite`, `cube satellites`, `nanosat`, `nanosats`, `nanosatellite`, `nanosatellites`, `nano-sat`, `nano-sats`, `nano sat`, `nano sats`, `nano-satellite`, `nano-satellites`, `nano satellite`, and `nano satellites`, `SmallSat`, `SmallSats`, `small satellite`, `small satellites`, `small sat`, and `small sats`.
 - **High-specificity EPS (`E_H`):** `electrical power system`, `electrical power systems`, `electric power system`, `electric power systems`, `electrical power subsystem`, `electrical power subsystems`, `electric power subsystem`, `electric power subsystems`, `electrical energy subsystem`, `electrical energy subsystems`, `EPS`, `EPSs`, `power subsystem`, `power subsystems`, `power system`, `power systems`, `spacecraft power system`, `spacecraft power systems`, `power supply`, `power supplies`, `power distribution unit`, `power distribution units`, `PDU`, `PDUs`, `power processing unit`, `power processing units`, `power control and distribution`, `power management and distribution`, `electrical architecture`, `electrical architectures`, `power architecture`, `power architectures`, `DC power bus`, `DC power buses`, `PCDU`, `PCDUs`, `PMAD`, and `PMADs`.
-- **Functional or analytical EPS (`E_F`):** `power budget`, `power budgets`, `energy budget`, `energy budgets`, `energy balance`, `energy balances`, `power balance`, `power balances`, `power margin`, `power margins`, `power generation`, `photovoltaic generator`, `photovoltaic generators`, `solar array`, `solar arrays`, `solar panel`, `solar panels`, `battery`, `batteries`, `battery management`, `state of charge`, `states of charge`, `energy storage`, `power electronics`, `power conditioning`, `power distribution`, `power management`, `power interface`, `power interfaces`, `power mode`, `power modes`, `load profile`, and `load profiles`.
+- **Functional or analytical EPS (`E_F`):** `power budget`, `power budgets`, `energy budget`, `energy budgets`, `energy balance`, `energy balances`, `power balance`, `power balances`, `power margin`, `power margins`, `power generation`, `photovoltaic generator`, `photovoltaic generators`, `solar array`, `solar arrays`, `solar panel`, `solar panels`, `battery`, `batteries`, `battery management`, `state of charge`, `states of charge`, `energy storage`, `power electronics`, `power conditioning`, `power distribution`, `power management`, `power interface`, `power interfaces`, `power mode`, `power modes`, `load profile`, `load profiles`, `power consumption`, `power demand`, `power profile`, and `energy harvesting`.
 - **All EPS (`E`):** `E_H ∪ E_F`.
 
 #### MBSE and relationship blocks
@@ -109,8 +109,6 @@ Therefore:
 
 Retain and screen every record returned by any planned partition while preserving each discovery event. Report intersections and records unique to each stream and expansion after within-source and cross-source deduplication.
 
-For a local-harvest source, the minimum equivalent candidate logic is `P AND M` for core B, `P AND E AND M` for the Stream A tag, and separate `P AND G_model`, `P AND G_structure`, and `P AND C1` expansions. Apply T2 and independent R as separate tags. Terms may combine only within the source fields or document route prospectively defined for that local method. Local matching generates candidates; it does not establish scientific eligibility.
-
 ### Controlled vocabulary and indexed terms
 
 Free-text searching remains mandatory. When a source provides a genuine controlled vocabulary or a distinct indexed-term field, construct the applicable concept as the union of its free-text block and validated source-specific descriptors. Inspect thesaurus scope notes, hierarchy, narrower terms, and terms assigned to known relevant records; use explosion only when every included narrower concept is in scope. A generic `systems engineering` descriptor cannot satisfy `M_H` by itself: pair it with a model or modeling descriptor unless the source supplies a specific MBSE descriptor. Do not impose major-topic restrictions, and do not emulate controlled vocabulary on sources that do not provide it.
@@ -119,100 +117,38 @@ Record every accepted descriptor, field, hierarchy or explosion setting, mapping
 
 ### New-run source translations and search artifacts
 
-Under the [Part 1 restart policy](protocol.md#review-status-and-restart-policy), create the new-run search-infrastructure components in the [required discovery and screening artifact bundle](#required-discovery-and-screening-artifacts) before the first related pilot, and give each artifact provenance.
+Create the new-run search-infrastructure components in the [required discovery and screening artifact bundle](#required-discovery-and-screening-artifacts) before the first related pilot, and give each artifact provenance.
 
-The protocol's concept blocks and Boolean schedule are normative. The new dictionary must reproduce them without adding or dropping a concept. Validate every source-specific translation and control against the current interface. **Task:** [`S-001`](TASKS.md).
+The protocol's concept blocks and Boolean schedule are normative. The new dictionary must reproduce them without adding or dropping a concept.
 
-For each source or local method, the new log and the version-controlled source packet that it indexes must record before final execution:
+For each source or local method, record before final execution:
 
-- source, database or collection, platform, and interface;
+- source, database or collection, and interface;
 - query or event IDs and the exact source-native translation of every planned partition;
 - fields, filters, limits, date and language handling, and visible controls;
 - stemming, lemmatization, automatic expansion, wildcard behavior, and any controlled-vocabulary or indexed-term fields, descriptors, hierarchies, and explosion settings;
-- source boundaries and selected databases;
 - pagination, result ordering, stable identifiers, export or capture method, and source limits;
 - the relationship between source-native queries and the cross-source semantic blocks;
-- pilot refinements, failures, and the accepted final implementation; and
-- the files and schemas that will preserve the final event.
-
-A syntax or transport change that preserves the semantic blocks is an implementation refinement and belongs in the search log. A change to a concept, Boolean relationship, planned source, evidence window, or eligibility rule is a protocol change and must be committed before the affected final search is run.
-
-### Source-specific guidelines
-
-Source-specific guidelines are intentionally pending regeneration. Run the direct-source tasks `S-D01`–`S-D13` and local-source task `S-L02` in [`TASKS.md`](TASKS.md). Store each accepted method as a version-controlled source packet under `searches/sources/`; its reusable guideline must state the validated source boundary, translation approach, fields and controls, controlled-vocabulary or indexed-term behavior where available, date and language handling, completeness and export method, limits, and failure rules. Store exact source-native translations outside Markdown where necessary to preserve them losslessly. Keep exact executed strings and dated pilot evidence in the packet's diagnostic-only `pilots/` area, and index the packet and each accepted pilot from the new search log. This section incorporates accepted source packets by reference; update its compact index when each method is accepted. After all source tasks, complete reconciliation task [`S-002`](TASKS.md).
-
-### Pilots and final search events
-
-Run small, focused, no-screening pilots to validate each current interface and translation under tasks `S-D01`–`S-D13` and `S-L02` in [`TASKS.md`](TASKS.md).
-
-For every pilot and final event, record:
-
-- exact query or matching operation and fields;
-- tested controlled-vocabulary or indexed-term behavior and accepted mappings, or confirmation that none is available;
-- controls and restrictions;
-- platform, interface, date, time, and time zone;
-- source-reported and retrieved totals;
-- pagination or harvest coverage;
-- deduplication and coverage checks; and
-- disposition and reason for stopping.
-
-Use the source's normal authorized interface or a prospectively validated source-native route. Save proof of the selected source and controls. Retrieve every record in a successful result set. Where the source exposes a stable order, require two complete passes with the same identifiers in the same order. Otherwise define and validate an equivalent completeness check before final execution.
-
-A rewritten query, stale or short page, changed or unreconciled total, duplicate or missing identifier, hidden cap, export mismatch, parse failure, or incomplete harvest makes the event a failure. Record its total as `null`, never zero or a partial count, and do not import any prefix. An explicit and reproducible source zero is valid.
-
-Keep duplicate discovery events when the same record is found by different sources or partitions. Deduplicate only after every successful event has been completely retrieved and normalized.
-
-### Known items and common limits
-
-Create the read-only known-item registers under task [`R-001`](TASKS.md). A missed item may guide prospective query refinement, but it can enter the review only through a recorded final search or citation-search event and normal screening. Report known-item recall and unique inclusions by stream and source.
-
-The evidence window begins on 2011-01-01 and ends on the common evidence cutoff stated in [Part 1](protocol.md). Set that exact cutoff under task [`P-001`](TASKS.md) before the first final search. Use it unchanged for every source and citation route, even when execution occurs later. When an interface cannot apply the exact window, preserve its unaltered total, apply the window locally, and report removed and unresolved records.
-
-The full report must be in English. Apply a native English limit only after the source validation shows that it is reliable; otherwise determine language during screening. Do not apply a publication-type, access, peer-review, venue, or content-type discovery limit unless a source boundary inherently supplies it or a newly logged source limitation requires it. Source scope does not by itself prove final publication type or report language.
-
-### Local-harvest methods
-
-Regenerate the ESA method from the current interface under task [`S-L02`](TASKS.md). A local method may use a complete population or source harvest followed by deterministic matching when direct Boolean translation would lose records. Before final execution, its specification must define:
-
-- the source universe and how completeness is established;
-- metadata, text, or attachment fields included in each matching route;
-- normalization, phrase, wildcard, acronym-boundary, and field-combination rules;
-- exact implementation of P, E, M, `G_model`, `G_structure`, C1, R, and T2;
-- candidate partitions, tags, invariants, and overlap accounting; and
-- treatment of inaccessible, missing, or unparseable material.
-
-Do not combine required terms across records or across independently defined routes. A failed retrieval or parse is a coverage failure, not a zero.
+- pilot refinements, failures, and the accepted final implementation
 
 ### Completing the baseline and citation searches
 
-Execute and reconcile the electronic baseline under task [`R-002`](TASKS.md) and the recall and citation cycles under [`R-003`](TASKS.md). The independent baseline is complete only after all 15 planned sources or collections have either a complete, reconciled final run or a recorded final source or interface failure. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources. Keep every failure and reason in the new manifest and PRISMA counts.
+The independent baseline is complete only after all 15 planned sources or collections have either a complete, reconciled final run or a recorded final source or failure. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources. Keep every failure and reason in the new manifest and PRISMA counts.
 
-Only after that baseline and failure register are complete, use Buruso et al. (2026) and the retained-file cache for recall audits under the [Part 1 evidence restrictions](protocol.md#need-for-this-review). A missed report may trigger a prospective concept-level refinement or enter through a recorded citation route.
+Only after that baseline and failure register are complete, use Buruso et al. (2026) and the known-item registers. A missed known-item may guide prospective query refinement, but it can enter the review only through a recorded final search or citation-search event and normal screening. Report known-item recall and unique inclusions by stream and source.
 
 Start backward and forward citation searching from every included full-text report and relevant secondary review:
 
 - inspect each seed's complete reference list;
 - search forward citations in both Scopus and Web of Science Core Collection;
-- do not waive one forward source because the other returns zero or lacks the seed;
 - add each newly included report as a seed in the next numbered cycle; and
 - stop only after one complete cycle of backward searching and both forward searches finds no new eligible report.
 
-For every citation event, record the seed, platform, direction, exact route, cycle, source and retrieved totals, candidates, duplicates, decisions, failures, and stopping result. Use `discovery_route=citation_chasing`; citation provenance never bypasses screening.
-
-Stop electronic searching only when A1, A2, A3, B1, B2, BG1, BG2, BC1, and BT2 have completed or failed explicitly for every direct family, and every prospectively specified local equivalent has completed or failed without a partial import. Also complete all source coverage checks and citation cycles. Record the execution date of every strategy. Additional searches should by then yield mainly duplicates rather than being stopped merely because they are inconvenient.
+For every citation event, record the seed, platform, direction, cycle, source and retrieved totals, candidates, duplicates, decisions, failures, and stopping result. Use `discovery_route=citation_chasing`; citation provenance never bypasses screening.
 
 ## Data management and audit trail
 
-Keep review methods, logs, controlled dictionaries, derived data, and analysis code in the Git-tracked `SLR/SLR1/` workspace. List every file in a manifest with:
-
-- path;
-- query or event ID;
-- source;
-- timestamp
-
-Record the database interface actually used.
-
-Use UTF-8 JSON for derived machine-readable data. Use BibTeX for bibliographic transfer when available. Before each discovery-data merge, validate the applicable schemas, IDs, controlled values, and links. Follow the [Part 3 extraction-validation procedure](protocol-extraction-and-synthesis.md#calibration-consistency-and-validation) before synthesis.
+Keep review methods, logs, controlled dictionaries, derived data, and analysis code in the Git-tracked `SLR/SLR1/` workspace.
 
 Make deduplication reproducible. Review conflicts manually when identifiers disagree. Keep both the original metadata and the preferred normalized value, with the reason for choosing it.
 
@@ -222,12 +158,11 @@ Use Git history as the audit trail for text, code, schemas, and derived non-sens
 
 The discovery and screening artifact bundle comprises:
 
-- read-only known-item registers for legacy reports and Buruso recall;
-- a new search log meeting PRISMA-S requirements;
-- the source/interface/PRISMA crosswalk, source-packet contract and templates, pilot- and final-run manifest schemas, and failure-register schema;
-- raw source-specific results and source-selection or interface proof;
-- a search manifest with dates, interface details, restrictions, rights, and access status;
-- a merged and deduplicated candidate set and deduplication report;
+- known-item registers for legacy reports and Buruso recall;
+- a search log meeting PRISMA-S requirements;
+- source-specific guidelines, pilot- and final-run manifest schemas, and failure-register schema;
+- raw source-specific results];
+- a merged and deduplicated candidate set and deduplication metadata and rationale for decisions;
 - title-and-abstract screening, full-text screening, and retrieval logs; and
 - the accessible report set and a table of cited full-text exclusions with one main reason per report.
 
@@ -237,37 +172,24 @@ Part 3 incorporates this bundle by reference rather than listing its components 
 
 | Criterion | Plain-English rule | RQ(s) |
 |---|---|---|
-| Publication date | Include a report only when an eligible version is dated from 2011-01-01 through the common evidence cutoff in Part 1. Apply the canonical [report-manifestation and date rules](protocol.md#report-manifestations-dates-and-review-status). | 1–3 |
+| Publication date | Include a report only when an eligible version is dated from 2011-01-01 through the common evidence cutoff in Part 1. Apply the canonical [report-version and date rules](protocol.md#report-versions-dates-and-review-status). | 1–3 |
 | Language | The full report must be in English. English metadata does not prove that the report itself is in English. If the full text cannot be obtained, use `not_retrieved` instead of making a language assumption. | 1–3 |
-| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; research chapter in an edited scholarly book; institutional technical report; arXiv preprint with a stable arXiv identifier and a substantial completed report; completed master's thesis; or completed doctoral thesis or dissertation. A degree work needs stable institutional or authoritative dissertation-service provenance. Apply the canonical [manifestation and review-status rules](protocol.md#report-manifestations-dates-and-review-status). | 1–3 |
+| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; workshop presentation (for ESA Indico only); research chapter in an edited scholarly book; institutional technical report; arXiv preprint; completed master's thesis; or completed doctoral thesis or dissertation. Apply the canonical [version and review-status rules](protocol.md#report-versions-dates-and-review-status). | 1–3 |
 | Scientific scope | The work must satisfy the canonical [nanosatellite population](protocol.md#nanosatellite-population), [EPS boundary](protocol.md#eps-boundary), [MBSE qualification](protocol.md#mbse-qualification), and [Route A or Route B](protocol.md#eligible-eps-evidence-routes) rules. | 1–3 |
-| Secondary studies | Exclude secondary studies from primary evidence; manage any background, recall, or citation role under [supplementary discovery](#supplementary-discovery-and-citation-searching). | 1–3 |
+| Secondary studies | Exclude secondary studies. | 1–3 |
 | Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; incomplete degree work; undergraduate, bachelor's, or non-degree projects; advertisements; and non-scholarly web material. | 1–3 |
 | Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. | 1–3 |
 
 Apply the canonical distinction between [report eligibility and question contribution](protocol.md#report-eligibility-versus-question-contribution).
 
-For retrieval, follow the run's PDF workflow:
-
-1. try DOI and open-access routes, PQDT or OATD links, publisher pages, and authoritative institutional repositories;
-2. when needed, make one recorded institutional, library, or manual-download attempt; and
-3. record entitlement, repository link, embargo, licence, version, and broken-link status.
-
-An OATD record does not prove that the linked full text is still available. Keep unresolved reports in PRISMA and retrieval records as `not_retrieved`. They do not enter full-text evidence synthesis, but do not describe lack of access as a scientific exclusion reason.
-
 ## Screening and eligibility procedure
-
-Execute retrieval and screening under task [`R-004`](TASKS.md).
 
 ### Title and abstract screening
 
-Use these tiers to set retrieval priority. They are not final evidence classes.
+- **Candidate:** the title or abstract clearly suggests EPS-primary MBSE or a likely embedded EPS thread, or the record appears to meet the nanosatellite and MBSE rules, but the abstract cannot confirm an embedded EPS thread.
+- **Reject:** the record clearly has the wrong population, publication type, date, language, or is outside MBSE scope, or clearly has no qualifying EPS link.
 
-- **Core candidate:** the title or abstract clearly suggests EPS-primary MBSE or a likely embedded EPS thread.
-- **Supporting candidate:** the record appears to meet the nanosatellite and possible MBSE rules, but the abstract cannot confirm an embedded EPS thread.
-- **Rejected candidate:** the record clearly has the wrong population or publication type, is outside MBSE scope, or explicitly mentions EPS but clearly has no qualifying model link.
-
-Do not require an EPS or power term in a Stream B title or abstract. Embedded threads may be absent from metadata. If nanosatellite MBSE is plausible, retrieve the full text and resolve uncertainty there. Test the EPS anchor and bridge at full text.
+Do not require an EPS or power term in a Stream B title or abstract. Embedded threads may be absent from metadata. If nanosatellite MBSE is plausible, retrieve the full text and resolve uncertainty there.
 
 ### Full-text decision
 
@@ -282,25 +204,11 @@ Assign exactly one final decision and give a source-located reason:
 - `exclude_wrong_date`;
 - `exclude_wrong_language`;
 - `exclude_secondary_study`;
-- `exclude_insufficient_primary_report`; or
 - `not_retrieved`.
 
-When using `exclude_wrong_publication_type`, also record one subtype:
-
-- `undergraduate_or_bachelor`;
-- `non_degree_project`;
-- `proposal_or_prospectus`;
-- `incomplete_degree_work`;
-- `abstract_or_metadata_stub`; or
-- `other`, with an explanation.
-
-If completion status is unresolved, hold the record as `publication_type_unresolved` while looking for source-locatable clarification. If a record in the cutoff year gives only a year, or thesis dates conflict, hold it as `date_unresolved`. Do not silently turn either temporary status into an exclusion.
+If thesis or dissertation completion status is unresolved, hold the record as `publication_type_unresolved` while looking for source-locatable clarification. If a record in the cutoff year gives only a year, or thesis dates conflict, hold it as `date_unresolved`. Do not silently turn either temporary status into an exclusion.
 
 If a plausible completed report is unavailable because of access rights, an embargo, or a broken repository link, use `not_retrieved`. Do not call it the wrong publication type because it is unavailable.
-
-For every Route B inclusion, record the EPS anchor, model anchor, explicit bridge, and supporting location. Check these details again during extraction.
-
-Keep secondary reviews and general MBSE background sources outside the analytic denominator.
 
 ## Units and identifiers
 
@@ -308,31 +216,29 @@ Use the canonical [units, counting rules, and ID structure](protocol.md#units-of
 
 ## Unit-level evidence appraisal
 
-Do not calculate a report-level, evidence-unit-level, or aggregate numerical quality score. The review draws conclusions from linked evidence units inside heterogeneous reports; one grade would combine unrelated properties. Publication venue, peer-review status, technical review, degree examination, preprint status, evidence type, and project maturity are provenance or context, not automatic proxies for evidential quality.
-
+Appraisal will be executed after extraction.
 Keep four judgments distinct:
 
 1. **Coding confidence** is the assessor's certainty that a source was located and interpreted correctly.
 2. **Methodological appraisal** assesses whether the design and conduct of the evaluation are fit for the particular claim.
-3. **Record-level claim support** assesses how strongly one evidence unit supports one bounded claim.
+3. **Claim support** assesses how strongly one evidence unit supports one bounded claim.
 4. **Conclusion confidence** assesses a synthesis conclusion across contributing units.
 
-Assign coding confidence as `high` for explicit and unambiguous source support, `moderate` when a bounded but supported interpretation or reconstruction is required, and `low` when material ambiguity remains. Apply the [cross-cutting evidence statuses](protocol.md#cross-cutting-evidence-statuses) separately. Coding confidence cannot substitute for methodological credibility, and an operational or flight setting cannot automatically upgrade support for a claim it was not designed to test.
+Assign coding confidence as `high` for explicit and unambiguous source support, `moderate` when a bounded but supported interpretation or reconstruction is required, and `low` when material ambiguity remains. Apply the [evidence statuses](protocol.md#evidence-statuses) separately. Coding confidence cannot substitute for methodological credibility, and an operational or flight setting cannot automatically upgrade support for a claim it was not designed to test.
 
-Create a scoped methodological-appraisal object when a report makes an empirical or evaluative claim used for RQ1, RQ2, or RQ3. Link it to the existing report, thread, artifact or profile, application, outcome or burden, and V&V IDs that it appraises; it is an extraction structure, not another evidence unit or denominator. One object may support several records only when they use the same design, data, and analysis. Create separate objects when one report contains materially different evaluations, such as a simulation and an interview study.
+Create a scoped methodological-appraisal object when a report makes an empirical or evaluative claim used for RQ1, RQ2, or RQ3. Link it to the existing report, thread, artifact or profile, application, outcome or burden, and V&V IDs that it appraises. One object may support several records only when they use the same design, data, and analysis. Create separate objects when one report contains materially different evaluations, such as a simulation and an interview study.
 
 Classify the evaluation design as one or more of: `model_or_simulation_evaluation`, `case_study_or_experience_report`, `comparative_observational`, `controlled_or_quasi_experimental`, `survey`, `interview_or_qualitative`, `mixed_methods`, `artifact_or_reuse_demonstration`, `other`, or `unclear`.
 
 Appraise these common domains when applicable:
 
 - clarity of the aim and fitness of the design to that aim;
-- description and selection of the mission, cases, participants, scenarios, or other observational units;
+- description and selection of the mission, cases, participants, scenarios;
 - definition of the MBSE artifact or activity and any comparator;
-- provenance and validity of inputs, data sources, measures, criteria, and oracles;
+- provenance and validity of inputs, data sources, measures, pass/fail criteria;
 - execution fidelity, missing data, exclusions, failures, and adverse or null results;
 - appropriateness and transparency of the analysis;
 - treatment of confounders and credible rival explanations;
-- ethical handling and relevant approvals when human participants or sensitive data are involved;
 - traceability from observations through analysis to the stated conclusion; and
 - limits on applicability outside the evaluated setting.
 
@@ -352,9 +258,9 @@ Appraise evidence at the unit that supports a finding:
 - At report and EPS-thread level, use direct source support for mission context, MBSE qualification, anchors and bridges, inputs and assumptions, purpose, implementation footprint, availability, and limitations. Link a methodological appraisal when an evaluation supports a characterization or footprint claim.
 - For reusable artifacts and tailoring applications, use the A/E/C/T/P/I gate vector, tier, lineage and adopter coding confidence, demonstrated coverage, assurance, failed or conflicting applications, and the methodological appraisal of any evaluation used to claim benefit or transfer.
 - For RQ2, keep author attribution separate from reviewer assessment. Use claim kind, explicit EPS attribution, mechanism, measure directness, comparator adequacy when required, confounding, evaluation design and appraisal, dependence, and record-level claim support.
-- For RQ3, use linkage scope, target and bridge, V&V object, criterion completeness, execution and timing, result or verdict, oracle credibility when validation is claimed, model-to-test continuity, methodological appraisal, dependence, and record-level claim support.
+- For RQ3, use linkage scope, target and bridge, V&V object, criterion completeness, execution and timing, result or verdict, pass/fail criteria credibility when validation is claimed, model-to-test continuity, methodological appraisal, dependence, and record-level claim support.
 
-Apply the canonical [cross-cutting evidence statuses](protocol.md#cross-cutting-evidence-statuses) and [report-eligibility versus question-contribution rule](protocol.md#report-eligibility-versus-question-contribution).
+Apply the canonical [evidence statuses](protocol.md#evidence-statuses) and [report-eligibility versus question-contribution rule](protocol.md#report-eligibility-versus-question-contribution).
 
 ### Appraisal meaning, reporting-bias assessment, and conclusion confidence
 
@@ -364,9 +270,9 @@ Do not make a funnel plot or run a statistical publication-bias test. The eviden
 
 - source and interface coverage, failures, and unique results across the 15 sources, 13 interfaces, and citation routes, with OATD in the website/other-methods channel;
 - the effects of language, date, population, publication-type, retrieval, and source-access limits;
-- specific access and coverage issues, including PQDT entitlement, OATD's repository and participation limits, geographic and institutional imbalance, embargoes, missing abstracts or metadata, uncertainty about degree status, and overlap between PQDT and OATD;
+- specific access and coverage issues, geographic and institutional imbalance, embargoes, missing abstracts or metadata, uncertainty about degree status, and overlap between PQDT and OATD or between other ;
 - reports that could not be obtained and records that were only leads;
-- missing or selectively reported genericity claims, applicability limits, tailoring failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, confounders, criteria or oracles, null or adverse results, and limitations;
+- missing or selectively reported genericity claims, applicability limits, tailoring failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, confounders, pass/fail criteria, null or adverse results, and limitations;
 - dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage or application;
 - review-process limitations documented under the [Part 3 extraction-verification procedure](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification); and
 - protocol departures, search changes, and review-process limits that could affect interpretation.

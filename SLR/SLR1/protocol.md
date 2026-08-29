@@ -76,7 +76,7 @@ The formal questions and analytical dimensions below govern the review. Eligible
 
 - **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; material inputs and assumptions; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. Artifact identity and lineage; declared applicability envelope; reusable core; variation points and dependencies; tailoring process and effort; materially distinct applications; post-tailoring assurance; the A/E/C/T/P/I evidence profile and resulting tier; and methodological appraisal and claim-specific support for evaluative characterizations.
 - **RQ2:** claim kind and scope; outcome or burden category; reported and evidence-supported direction; explicit EPS attribution; mechanism; direct or surrogate measurement; comparator adequacy and confounding when applicable; evaluation design and methodological appraisal; evidence type; and record-level claim support.
-- **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and criterion or oracle; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design and methodological appraisal; claim-specific support; and later model-to-test continuity or closure.
+- **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and pass/fail criterion; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design and methodological appraisal; claim-specific support; and later model-to-test continuity or closure.
 
 The three mapping areas are equally important.
 
@@ -88,7 +88,7 @@ An outcome, burden, V&V activity, reuse or genericity claim, demonstrated tailor
 
 ## Operational definitions
 
-### Cross-cutting evidence statuses
+### Evidence statuses
 
 Use the following meanings wherever a field permits these values; a field-specific rule controls when it sets a stricter evidence requirement:
 
@@ -99,15 +99,9 @@ Use the following meanings wherever a field permits these values; a field-specif
 
 `unclear` is a field-specific classification used where a controlled vocabulary expressly provides it; it is not a substitute for one of the statuses above when that field distinguishes them. Missing reporting does not prove absence or poor conduct, and coding confidence does not replace a controlled status. Within source-reported information, distinguish author-declared or planned content from source-observed results; keep both separate from reviewer-inferred and reviewer-derived information.
 
-### Report manifestations, dates, and review status
+### Report versions, dates, and review status
 
-Treat online-first and issue versions as manifestations of one work. Treat an arXiv preprint and a later formal version as candidate manifestations of the same report: merge them only when no difference material to this review is found; otherwise retain them as companion reports in the same family. Preserve version-level dates, provenance, and substantive differences.
-
-Use only report versions available by the common evidence cutoff for eligibility and extraction. For an arXiv preprint, use the submission date of the earliest version containing the substantial completed report. Record every version number and submission date; the versions available at the cutoff and used for extraction; any withdrawal, replacement, journal reference, DOI, or formal counterpart; and material differences among manifestations.
-
-For a completed thesis or dissertation, use the earliest date that can be verified as formal issue or publication of the completed work and preserve the source's date label and the basis for the decision. Record formal-publication or issue, defence, approval, award, repository-deposit, public-release, embargo-end, and indexing dates separately when reported.
-
-Keep preprint, peer-review, technical-review, and degree-examination statuses separate. An arXiv preprint can qualify with or without a peer-reviewed counterpart, and degree acceptance or examination does not establish peer or technical review. Interpret these statuses under the [unit-level appraisal framework](protocol-discovery-and-appraisal.md#unit-level-evidence-appraisal).
+Treat online-first and issue versions as versions of one work. Treat an arXiv preprint and a later formal version as candidate versions of the same report: merge them only when no difference material to this review is found; otherwise retain them as companion reports in the same family. Preserve version dates, provenance, and substantive differences.
 
 ### Nanosatellite population
 
@@ -222,7 +216,7 @@ Two applications are **materially distinct** only if they differ on at least one
 **Post-tailoring assurance** requires all four of the following:
 
 1. an identifiable tailored configuration;
-2. a criterion or oracle relevant to its intended use;
+2. a pass/fail criterion relevant to its intended use;
 3. a check run after tailoring; and
 4. a reported result or verdict.
 
@@ -364,7 +358,7 @@ Keep the source's own term as well as the reviewer's normalized code and reason.
 Classify completeness in stages. Do not discard an otherwise explicit linked record only because a later stage is missing:
 
 - **EPS-linked V&V:** target, bridge, and V&V method, intent, or artifact are reported.
-- **Criterion-complete EPS-linked V&V:** the record also gives a requirement, threshold, expected behavior, formal property, acceptance criterion, or pass/fail oracle.
+- **Criterion-complete EPS-linked V&V:** the record also gives a requirement, threshold, expected behavior, formal property, or pass/fail criterion.
 - **Executed pre-physical V&V:** the linked method was run before physical integration or testing of the target EPS, and the source reports a result or verdict.
 - **Model-to-test continuity/closure:** the source links a later physical artifact or activity. Reserve *closure* for cases that compare results and report how differences were handled.
 
@@ -374,14 +368,14 @@ For this review, **pre-physical V&V** is a model-based V&V artifact or activity 
 
 Classify PIL and HIL according to the hardware actually used. They are not wholly pre-physical if target EPS hardware takes part. Representative hardware or hardware outside the target EPS does not turn an otherwise virtual target-EPS activity into a physical EPS test. Record bench, environmental, integration, operational, and flight evidence as later model-to-test continuity. If the timing or target hardware is unclear, code it `uncertain` and do not count it as demonstrated pre-physical execution.
 
-The RQ3 completeness stages are claim-specific descriptors, not a general evidence hierarchy. Target–bridge–method evidence supports the existence of an EPS-linked V&V activity; criterion, execution, and result support an executed-check claim; an appropriate oracle is required for model or design validation; and linked physical evidence supports continuity only for the artifacts and comparisons actually traced. Operational or flight maturity does not automatically strengthen a different claim.
+The RQ3 completeness stages are claim-specific descriptors, not a general evidence hierarchy. Target–bridge–method evidence supports the existence of an EPS-linked V&V activity; criterion, execution, and result support an executed-check claim; an appropiate pass/fail criterion is required for model or design validation; and linked physical evidence supports continuity only for the artifacts and comparisons actually traced. Operational or flight maturity does not automatically strengthen a different claim.
 
 ## Units of evidence and counting
 
 Use the following linked units. They do not form a simple hierarchy because report families and artifact lineages may cross reports and implementations.
 
 1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model or toolchain use represented by one or more reports. Require source-supported overlap; a shared topic, organization, or tool is not enough.
-2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Apply the canonical [report-manifestation, date, and review-status rules](#report-manifestations-dates-and-review-status).
+2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Apply the canonical [report-version, date, and review-status rules](#report-versions-dates-and-review-status).
 3. **EPS model thread:** one qualifying EPS-primary or embedded chain within a report.
 4. **Reusable EPS artifact lineage and genericity profile:** one identifiable base artifact and its source-supported versions or derived instances. Split profiles when versions or scopes differ materially.
 5. **Tailoring application:** one use of an artifact lineage in one target setting, including a justified unchanged adoption. Merge repeated reporting of the same application.
@@ -393,6 +387,8 @@ Record source-supported family and lineage relationships, their reasons, evidenc
 PRISMA identification and selection counts remain at record and report level. Report separate denominators for families, reports, threads, artifact lineages and profiles, tailoring applications, inputs and assumptions, outcomes and burdens, and V&V records. A report count is not a count of independent implementations or transfers.
 
 Use linked IDs such as `family_id`, `report_id:thread_id`, `artifact_lineage_id:genericity_profile_id`, `artifact_lineage_id:tailoring_application_id`, `report_id:thread_id:outcome_burden_id`, and `report_id:thread_id:vnv_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
+
+External repositories, evolving models, and author-provided artifacts are not independently retrieved or inspected.
 
 ---
 
