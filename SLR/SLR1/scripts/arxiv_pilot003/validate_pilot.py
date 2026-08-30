@@ -220,7 +220,11 @@ def main() -> int:
     check_links(GUIDELINE, errors)
     guideline = GUIDELINE.read_text(encoding="utf-8")
     require("Atom API" in guideline, "guideline does not document Atom route", errors)
-    require("never attribute it to a browser" in guideline, "guideline lacks transport boundary", errors)
+    require(
+        "never attribute it to a browser" in guideline.casefold(),
+        "guideline lacks transport boundary",
+        errors,
+    )
     require("Wildcards are unaccepted" in guideline, "guideline wildcard decision drift", errors)
     final_contents = sorted(path.name for path in (SLR1_ROOT / "source-specific" / "arxiv" / "final-searches").iterdir())
     require(final_contents == [".gitkeep"], "pilot altered final-search state", errors)
