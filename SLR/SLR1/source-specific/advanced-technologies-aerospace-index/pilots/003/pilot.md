@@ -10,11 +10,11 @@ Run the complete nine-partition ATAI schedule as a **pilot-only** stable-ID diag
 
 ## Method
 
-The [predeclared event plan](searches/event-plan.json) uses the shared [pilot schedule helper](../../../../scripts/pilot_schedule/queries.py). Every literal, declared pair, parenthesis, and Boolean relation is retained as an ATAI `NOFT` atom; pairs are unordered `NEAR/5`. The nine full expressions are 1,494–10,923 characters, below the adapter's validated 50,000-character limit, so no query cell was split and no wildcard was used.
+The [predeclared event plan](searches/event-plan.json) uses the shared [pilot schedule helper](../../../../scripts/pilot_schedule/queries.py). Every literal, declared pair, parenthesis, and Boolean relation is retained as an ATAI `NOFT` atom. Pairs are unordered `NEAR/5`. The nine full expressions are 1,494–10,923 characters, below the adapter's validated 50,000-character limit, so no query cell was split and no wildcard was used.
 
-Every run requested ATAI alone, `LA(English)`, the endpoint-inclusive Publication-date range, no type/peer-review/full-text/access filter, frozen spelling/form/display variants, and `DateAsc`/Oldest first. The source receipts record Full text and Access as unavailable. The English field is metadata only; full-text screening remains authoritative.
+Every run requested ATAI alone, `LA(English)`, the endpoint-inclusive Publication-date range, no type/peer-review/full-text/access filter, frozen spelling/form/display variants, and `DateAsc`/Oldest first. The source receipts record Full text and Access as unavailable. The English field is metadata only. Full-text screening remains authoritative.
 
-`A1` and `A2` passed the adapter's strict two-full-record-pass contract. The same strict contract returned null-total full-record-signature failures for `A3` and `B1`; both failures are retained. The same literal query and controls were then traversed twice with `limit=10000` and `max-pages=500`; each pair had a matching source total, every rendered row, canonical numeric ATAI ID, and identical ordered ID list. The observed strict-signature instability motivated the same two-pass stable-ID route for `B2`, `BG1`, `BG2`, `BC1`, and `BT2`. This is a capture repair, not a query refinement or final-search acceptance.
+`A1` and `A2` passed the adapter's strict two-full-record-pass contract. The same strict contract returned null-total full-record-signature failures for `A3` and `B1`. Both failures are retained. The same literal query and controls were then traversed twice with `limit=10000` and `max-pages=500`. Each pair had a matching source total, every rendered row, canonical numeric ATAI ID, and identical ordered ID list. The observed strict-signature instability motivated the same two-pass stable-ID route for `B2`, `BG1`, `BG2`, `BC1`, and `BT2`. This is a capture repair, not a query refinement or final-search acceptance.
 
 ## Runs and unions
 
@@ -30,7 +30,7 @@ Every run requested ATAI alone, `LA(English)`, the endpoint-inclusive Publicatio
 | BC1 | [pass 2](searches/BC1-stable-id-pass2.json) | 1 / 1 | [ID pair](searches/BC1-stable-id-reconciliation.json) |
 | BT2 | [pass 2](searches/BT2-stable-id-pass2.json) | 2 / 2 | [ID pair](searches/BT2-stable-id-reconciliation.json) |
 
-The [stable-ID union reconciliation](searches/stable-id-union-reconciliation.json) retains every ID in source order for every active cell and every partition union. It reports 65 partition discovery events and 49 deduplicated ATAI document IDs: Stream A 5, core Stream B 41, expanded Stream B 11. Stream-only/intersection counts remain in that artifact. No partition, stream, or all-schedule deduplicated union exceeded 100.
+The [stable-ID union reconciliation](searches/stable-id-union-reconciliation.json) retains every ID in source order for every active cell and every partition union. It reports 65 source record occurrences and 49 deduplicated ATAI document IDs: Stream A 5, core Stream B 41, expanded Stream B 11. Stream-only/intersection counts remain in that artifact. No partition, stream, or all-schedule deduplicated union exceeded 100.
 
 ## Noise, refinements, and limitations
 

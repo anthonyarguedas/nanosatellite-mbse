@@ -79,6 +79,8 @@ def load_plan() -> list[dict[str, Any]]:
             raise RuntimeError(f"Event plan repeats partition {partition!r}.")
         if partition not in PARTITIONS or event.get("source") != SOURCE_ID:
             raise RuntimeError("Event plan has an unexpected ATAI partition/source.")
+        if event.get("event_kind") != "pilot" or event.get("pilot_mode") != "strict":
+            raise RuntimeError("Event plan must use the standard strict pilot mode.")
         if "query_cells" in event:
             raise RuntimeError("Pilot 003 plan unexpectedly uses source query cells.")
         query = event.get("query")

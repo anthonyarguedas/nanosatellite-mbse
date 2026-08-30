@@ -93,6 +93,7 @@ def expected_schedule(errors: list[str]) -> tuple[dict[str, Any], Any, Any] | No
         query = partition_query("proquest_aerospace_index", partition)
         require(event.get("source") == "proquest_aerospace_index", f"{partition}: wrong source in plan", errors)
         require(event.get("event_kind") == "pilot", f"{partition}: plan is not a pilot event", errors)
+        require(event.get("pilot_mode") == "strict", f"{partition}: plan does not use the standard strict pilot mode", errors)
         require("query_cells" not in event, f"{partition}: unexpected query-cell split", errors)
         require(event.get("query") == query, f"{partition}: plan query differs from shared schedule", errors)
         require("*" not in query and "?" not in query, f"{partition}: wildcard present", errors)
