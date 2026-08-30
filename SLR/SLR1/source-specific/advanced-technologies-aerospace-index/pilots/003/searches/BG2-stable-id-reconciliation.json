@@ -1,0 +1,42 @@
+{
+  "schema_version": "atai-pilot-003-stable-id-pair/v1",
+  "source": "Advanced Technologies & Aerospace Index",
+  "pilot": "003",
+  "partition_id": "BG2",
+  "do_not_merge": true,
+  "initial_strict_failure": null,
+  "capture_reason": "proactive stable-ID two-pass capture after observed ATAI strict full-record-signature instability; no source query or control was relaxed",
+  "query": "(NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND (NOFT(\"reference architecture\") OR NOFT(\"reference architectures\") OR NOFT(\"domain model\") OR NOFT(\"domain models\") OR NOFT(\"metamodel\") OR NOFT(\"metamodels\") OR NOFT(\"meta-model\") OR NOFT(\"meta-models\") OR NOFT(\"product-line\" NEAR/5 \"model\") OR NOFT(\"product-line\" NEAR/5 \"models\") OR NOFT(\"product line\" NEAR/5 \"model\") OR NOFT(\"product line\" NEAR/5 \"models\") OR NOFT(\"product-family\" NEAR/5 \"model\") OR NOFT(\"product-family\" NEAR/5 \"models\") OR NOFT(\"product family\" NEAR/5 \"model\") OR NOFT(\"product family\" NEAR/5 \"models\") OR NOFT(\"variation point\" NEAR/5 \"model\") OR NOFT(\"variation point\" NEAR/5 \"models\") OR NOFT(\"variation point\" NEAR/5 \"architecture\") OR NOFT(\"variation point\" NEAR/5 \"architectures\") OR NOFT(\"variation points\" NEAR/5 \"model\") OR NOFT(\"variation points\" NEAR/5 \"models\") OR NOFT(\"variation points\" NEAR/5 \"architecture\") OR NOFT(\"variation points\" NEAR/5 \"architectures\"))",
+  "executed_query": "(NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND (NOFT(\"reference architecture\") OR NOFT(\"reference architectures\") OR NOFT(\"domain model\") OR NOFT(\"domain models\") OR NOFT(\"metamodel\") OR NOFT(\"metamodels\") OR NOFT(\"meta-model\") OR NOFT(\"meta-models\") OR NOFT(\"product-line\" NEAR/5 \"model\") OR NOFT(\"product-line\" NEAR/5 \"models\") OR NOFT(\"product line\" NEAR/5 \"model\") OR NOFT(\"product line\" NEAR/5 \"models\") OR NOFT(\"product-family\" NEAR/5 \"model\") OR NOFT(\"product-family\" NEAR/5 \"models\") OR NOFT(\"product family\" NEAR/5 \"model\") OR NOFT(\"product family\" NEAR/5 \"models\") OR NOFT(\"variation point\" NEAR/5 \"model\") OR NOFT(\"variation point\" NEAR/5 \"models\") OR NOFT(\"variation point\" NEAR/5 \"architecture\") OR NOFT(\"variation point\" NEAR/5 \"architectures\") OR NOFT(\"variation points\" NEAR/5 \"model\") OR NOFT(\"variation points\" NEAR/5 \"models\") OR NOFT(\"variation points\" NEAR/5 \"architecture\") OR NOFT(\"variation points\" NEAR/5 \"architectures\")) AND LA(English)",
+  "date_window": {
+    "start": "2011-01-01",
+    "end": "2026-08-29",
+    "basis": "publication",
+    "inclusive": "both"
+  },
+  "method": "Two same-query ordinary full traversals with limit 10,000 and max-pages 500. Both must report the full source total, retrieve every row, and have identical ordered numeric ATAI document IDs.",
+  "pass_artifacts": [
+    {
+      "artifact": "BG2-stable-id-pass1.json",
+      "sha256": "d04e173c9e20e462a9fd3573011843ce9a6f282950ca36e311716975b0ad5b25",
+      "source_total": 7
+    },
+    {
+      "artifact": "BG2-stable-id-pass2.json",
+      "sha256": "9bfa6775514e9869830e0fedef9bb150e8260c9a6d758bcd24bb130b1cce3da1",
+      "source_total": 7
+    }
+  ],
+  "ordered_stable_ids": [
+    "1721311269",
+    "3346991324",
+    "1762095042",
+    "1918723567",
+    "2331489829",
+    "2339214951",
+    "2494648056"
+  ],
+  "stable_id_count": 7,
+  "stable_id_equality": true,
+  "limitation": "Stable-ID equality establishes complete retained source identities for this diagnostic pair, not stable full-record metadata signatures or a final-search acceptance."
+}

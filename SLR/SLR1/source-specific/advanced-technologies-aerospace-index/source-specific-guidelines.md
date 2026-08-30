@@ -38,6 +38,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: Keep this source in an event separate from PQDT Global. `NOFT` searches anywhere except full text, reducing bias toward searchable full text while remaining sensitive to uneven metadata. Validate `NOFT` field coverage and pair behavior separately. Pilot 002's equal count-only wildcard total did not establish stable-ID equality or a superset, so compression is unaccepted.
 - Pilot 001 accepted complete `A1` and `BG1` count-only expressions with the exact Advanced Technologies & Aerospace Index scope and publication range. The totals were `0` and `2`. Count-only diagnostics do not test pair no-loss or complete capture.
+- Pilot 003 ran all nine literal schedule expressions in the labelled 2011-01-01–2026-08-29 diagnostic window. Each expression was below the adapter's validated 50,000-character limit, so no source cell split, wildcard, controlled-term supplement, type filter, access filter, or facet refinement was used. `P-001` remains unset: these non-mergeable pilot records are not final searches or an accepted final translation. Its complete stable-ID unions and retained strict-pass failures are documented in [Pilot 003](pilots/003/pilot.md).
 
 ## Query schedule
 
@@ -59,3 +60,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only diagnostics succeeded with totals `0` and `2`. These are not final searches.
 - [x] [Pilot 002](pilots/002/pilot.md): English literal/candidate `A1` count-only checks totaled `0`/`0`. Language read back, no type restriction was accepted, and the wildcard candidate was not adopted.
+- [Pilot 003 record](pilots/003/pilot.md): all nine exact literal partitions have pilot-only stable-ID reconciliations. `A3` and `B1` retain null-total strict full-record-pass failures; same-query two-pass source-total stable-ID repair preserves their IDs but does not replace final full-record stability validation. No deduplicated pilot union exceeded 100, and no noise refinement was applied.
