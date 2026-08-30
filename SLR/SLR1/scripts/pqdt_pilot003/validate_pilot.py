@@ -242,8 +242,6 @@ def validate_focused_diff(errors: list[str]) -> None:
 
 
 def main() -> int:
-    if REPORT_PATH.exists():
-        raise RuntimeError(f"Refusing to overwrite {REPORT_PATH}")
     errors: list[str] = []
     validate_all_json(errors)
     events = validate_standard_plan(errors)
@@ -270,7 +268,12 @@ def main() -> int:
         "cell_totals": {partition: cells.get(partition, {}).get("source_total") for partition in PARTITIONS},
         "errors": errors,
     }
-    runner.write_new_json(REPORT_PATH, report)
+    if REPORT_PATH.exists():
+        existing = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+        if existing != report:
+            raise RuntimeError(f"Existing validation report is stale: {REPORT_PATH}")
+    else:
+        runner.write_new_json(REPORT_PATH, report)
     print(json.dumps({"status": report["status"], "cell_totals": report["cell_totals"], "errors": errors}, indent=2))
     return 0 if not errors else 1
 

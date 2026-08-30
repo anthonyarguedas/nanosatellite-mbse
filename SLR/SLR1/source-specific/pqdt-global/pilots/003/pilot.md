@@ -1,6 +1,6 @@
 # Pilot 003
 
-Required changes were applied in commit: this pilot commit. This remains a pilot; it does not set a final-search or source-completion state.
+Required changes were applied in commit: this pilot commit. This remains a pilot. It does not set a final-search or source-completion state.
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_pqdt.py`
 
@@ -12,7 +12,7 @@ Run the complete nine-partition literal PQDT Global schedule as a pilot-only, tw
 
 The [standard event plan](searches/event-plan.json) uses the shared [pilot schedule helper](../../../../scripts/pilot_schedule/queries.py). Every literal, Boolean relation, and declared unordered `NEAR/5` pair is retained as a `NOFT` atom. No wildcard or controlled term was used. The full expressions are 1,494–10,923 characters, below the adapter's documented 50,000-character limit, so each partition has one lossless full-expression cell.
 
-Every event used `YR(2011-2026)`, `LA(English)`, frozen spelling/form/display variants and duplicate exclusion off, Full text off, and `DateAsc`/Oldest first. The adapter selected the PQDT Global scope alone and restored the prior ProQuest selection on each owned-tab event; compact marker-bound artifacts retain the source-scope readback `PQDT Global` rather than pre/post checkbox labels. The 2026-08-29 date is a diagnostic screening cutoff only: PQDT's `YR` control is year precision. No degree, completion, document-type, access, or full-text filter was applied. English report language and degree/completion status remain screening decisions.
+Every event used `YR(2011-2026)`, `LA(English)`, frozen spelling/form/display variants and duplicate exclusion off, Full text off, and `DateAsc`/Oldest first. The adapter selected the PQDT Global scope alone and restored the prior ProQuest selection on each owned-tab event. Compact marker-bound artifacts retain the source-scope readback `PQDT Global` rather than pre/post checkbox labels. The 2026-08-29 date is a diagnostic screening cutoff only: PQDT's `YR` control is year precision. No degree, completion, document-type, access, or full-text filter was applied. English report language and degree/completion status remain screening decisions.
 
 Each source artifact is a marker-bound strict run: the adapter completed two full rendered passes with reconciled ordered numeric PQDT document IDs, and every cell stayed at or below the fixed 10,000-result complete boundary.
 

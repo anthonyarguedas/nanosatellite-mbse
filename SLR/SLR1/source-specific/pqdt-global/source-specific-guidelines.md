@@ -59,4 +59,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only diagnostics succeeded with totals `1` and `1`. The adapter's uncommitted strict cap guard was tested before the live runs. These are not final searches.
 - [x] [Pilot 002](pilots/002/pilot.md): English literal/candidate `A1` count-only checks totaled `1`/`1`. Language read back, no type restriction was accepted, and the wildcard candidate was not adopted.
-- [x] [Pilot 003](pilots/003/pilot.md): pilot-only nine-partition literal schedule and stable-ID diagnostic; no final-search or source-completion decision is made.
+- [Pilot 003](pilots/003/pilot.md): pilot-only nine-partition literal schedule and stable-ID diagnostic. No final-search or source-completion decision is made.
