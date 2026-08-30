@@ -46,6 +46,14 @@ This is a **field/noise proposal, not a final translation**. Its A2 and BT2 audi
 
 ARC still exposes no Language control. Its Publication Types facets cannot be shown to be a lossless union of eligible journal, meeting-paper, and chapter records, so do not apply a type filter. Topic `ConceptID` has no exposed descriptor, scope, hierarchy, or explosion semantics. It cannot safely be used as an AND noise filter. Do not use the Pilot 002 wildcard candidate.
 
+### Prospective fielded route after Pilot 004 — not a final search
+
+[Pilot 004](pilots/004/pilot.md) records an observed known-eligible-item recall acceptance for the Pilot 003 metadata union. Its source-located sentinel, exact applicable partition set, normal-CLI field rows, all-cell DOI unions, and retained null failures are linked there. This changes neither the header completion state nor the final-search state above.
+
+For a later final execution, use complete `P` in Title, Keywords, and Abstract as a union. When that three-cell conservative sum exceeds 100, use all nine `P`/defining-block Title/Keywords/Abstract assignments and leave the third semantic block in Anywhere. For BT2, retain all four disjoint 56-pair T2 OR subcells wherever its full Anywhere row is unavailable. Reconcile every stable DOI union and investigate a DOI-first union over 100. The field route remains subject to the fixed no-language, no-lossy-type, no-Topic, no-access-restriction, and no-wildcard rules above.
+
+Pilot 004 is diagnostic only: its non-mergeable previews and count-only zero receipts cannot enter a final corpus. A final run still requires its own complete source-month partitioning, exact-day treatment, native export, and final-search artifacts under `final-searches/`.
+
 ## Query schedule
 
 The table uses `AND` and `OR` as semantic labels. Render them with the source operators above. `F(G_model)`, `F(G_structure)`, `F(C1)`, and `F(T2)` include fixed phrases and expanded pairs.
