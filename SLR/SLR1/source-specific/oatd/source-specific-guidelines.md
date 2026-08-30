@@ -20,7 +20,7 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://oatd.org/oatd/search
 - Search field or local route: Raw basic `q` across the source-advertised metadata scope.
 - Main evidence window: Use `--year-start 2011 --year-end <cutoff-year>`. The adapter expands years to calendar bounds. Screen the cutoff year against the exact cutoff if needed.
-- Language: A dated technical healthy-route check confirmed the native English metadata option `English` with source value `(en OR eng OR english)`. Apply it only when that event has an exact source-rendered route/query readback; otherwise leave the event unrun or failed rather than assuming the control applied. This metadata restriction does not prove report language. Full-text screening remains authoritative.
+- Language: A dated technical healthy-route check confirmed the native English metadata option `English` with source value `(en OR eng OR english)`. Apply it only when that event has an exact source-rendered route/query readback. Otherwise leave the event unrun or failed rather than assuming the control applied. This metadata restriction does not prove report language. Full-text screening remains authoritative.
 - Publication type: OATD is ETD-scoped, but apply no degree, level, completion, peer-review, availability, access, or full-text filter. Metadata can include incomplete, undergraduate, or abstract-only work. Resolve those statuses during screening.
 - Database or collection selection: Full OATD index with no country, university, degree, level, or Creative Commons restriction.
 - Other shared limits: None.
@@ -60,4 +60,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): `A1` count-only succeeded with total `1`. `BG1` was a complete named-field translation, but OATD did not become ready within the bounded request. Do not treat it as zero or syntax success, and do not use the artifact as a final search.
 - [x] [Pilot 002](pilots/002/pilot.md): the unchanged one-page `BG1` retry again failed readiness with no total. The stop rule left English `A1` and wildcard checks unrun.
-- [ ] [Pilot 003](pilots/003/pilot.md): the canonical shared browser completed a healthy route and exact English readback, then attempted the first lossless cell in every partition under a 20-invocation round-robin budget. Six cells completed strict capture and three had explicit source failures. All incomplete partition totals and unions remain null. This is not a final search.
+- [Pilot 003](pilots/003/pilot.md): the canonical shared browser completed a healthy route and exact English readback, then attempted the first lossless cell in every partition under a 20-invocation round-robin budget. Six cells completed strict capture and three had explicit source failures. All incomplete partition totals and unions remain null. This is not a final search.

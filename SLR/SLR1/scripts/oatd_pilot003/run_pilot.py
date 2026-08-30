@@ -10,7 +10,7 @@ partition total and Record-ID union null.
 
 Run source work only through the canonical shared browser wrapper, for example:
 
-  caffeinate -dims uv run /Users/antho/agent-tools/internet/skills/browser/scripts/run_with_browser.py -- \
+  caffeinate -dims uv run "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
     python3 SLR/SLR1/scripts/oatd_pilot003/run_pilot.py --execute
 
 Without ``--execute`` the runner writes/rechecks the exact offline plan only.
@@ -60,7 +60,7 @@ SCHEDULE_QUERIES_PATH = SLR1_ROOT / "scripts" / "pilot_schedule" / "queries.py"
 # The browser launcher must be the canonical main agent-tools copy.  The
 # integration worktree lacks its canonical browser .env and can therefore
 # falsely diagnose Chrome as unavailable before any source route is opened.
-CANONICAL_AGENT_TOOLS_ROOT = Path("/Users/antho/agent-tools")
+CANONICAL_AGENT_TOOLS_ROOT = Path.home() / "agent-tools"
 OATD_ADAPTER_PATH = (
     CANONICAL_AGENT_TOOLS_ROOT
     / "internet"

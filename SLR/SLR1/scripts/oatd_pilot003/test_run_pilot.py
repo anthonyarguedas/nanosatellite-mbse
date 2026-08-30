@@ -32,7 +32,7 @@ class OATDPilot003PlanTests(unittest.TestCase):
         cls.plan = cls.runner.build_plan(cls.modules)
 
     def test_uses_the_canonical_main_agent_tools_browser_stack(self):
-        root = Path("/Users/antho/agent-tools")
+        root = Path.home() / "agent-tools"
         self.assertEqual(root, self.runner.CANONICAL_AGENT_TOOLS_ROOT)
         self.assertEqual(
             root / "internet/skills/browser/scripts/search_oatd.py",

@@ -12,13 +12,13 @@ The pilot must preserve every protocol literal, every named-field two-order `~5`
 
 ## Method
 
-- The runner imports the shared `pilot_schedule` concept declarations and the repaired read-only OATD adapter; it does not copy or shorten either translation.
+- The runner imports the shared `pilot_schedule` concept declarations and the repaired read-only OATD adapter. It does not copy or shorten either translation.
 - It never navigates a complete oversized query. It uses the adapter's 8,000-character navigation guard and calls `plan_lossless_oatd_or_query_cells` for every emitted grouped cell. The planner must return that cell unchanged.
 - Each accepted source cell would use `English` (`(en OR eng OR english)`), `pub_dt` years 2011–2026, native 30-row pages, and source-rendered Relevance. The 2026 records still need screening against the exact 2026-08-29 cutoff.
-- Before applying English to a schedule cell, the runner requires a healthy `title:(microRNA)` route in the same 2011–2026 year window, followed by that same route with English and exact rendered query readback. English metadata would remain only a metadata restriction; full-text language screening remains authoritative.
+- Before applying English to a schedule cell, the runner requires a healthy `title:(microRNA)` route in the same 2011–2026 year window, followed by that same route with English and exact rendered query readback. English metadata would remain only a metadata restriction. Full-text language screening remains authoritative.
 - It applies no country, Creative Commons, degree, level, completion, access, full-text, publication-type, facet, controlled-term, or wildcard restriction.
 - The execution policy is sequential and rate-aware. It first count-checks a route, then runs strict two-pass capture only when its total is within the configured record cap. It uses OATD's bounded busy cooldown, distributes the request budget round-robin across the nine partitions, and leaves a total null rather than treating an unattempted/failing cell as zero.
-- A complete deduplicated Record-ID union over 100 would receive a local investigation artifact. It may be refined only by a demonstrated no-loss metadata/language/eligible-type/controlled-term control; no such refinement is preaccepted.
+- A complete deduplicated Record-ID union over 100 would receive a local investigation artifact. It may be refined only by a demonstrated no-loss metadata/language/eligible-type/controlled-term control. No such refinement is preaccepted.
 
 ## Exact cell plan
 
@@ -86,12 +86,12 @@ No deduplicated partition set was available, so the over-100 investigation thres
 - Native oldest-first Date ordering remains unavailable. Strict capture, when possible, retains labelled source-rendered Relevance rather than client-sorting a prefix.
 - OATD has no native article/document-type selector. Degree and level facets are not a lossless completed eligible-thesis filter.
 - OATD exposes no named controlled vocabulary, descriptor mapping, hierarchy, or explosion option.
-- The `"phrase"~N` form and the required named pair clauses are preserved, but true slop/token/direction semantics remain partly unknown; no local proximity approximation is made.
+- The `"phrase"~N` form and the required named pair clauses are preserved, but true slop/token/direction semantics remain partly unknown. No local proximity approximation is made.
 - OATD provides neither bulk download nor OAI-PMH export. Adapter-normalized strict capture is the only eligible record export route.
 
 ## Result
 
-- [x] Document canonical-browser source evidence, route-cell limits, and incomplete unions
-- [ ] Accept a final OATD translation or final search
+- Document canonical-browser source evidence, route-cell limits, and incomplete unions
+- Keep final OATD translation and final search acceptance open
 
 A later pilot may resume only through a healthy shared local browser, repeat the health-plus-English exact readback, and execute the saved cells without changing their literals, pairs, Boolean relations, controls, or cell IDs. It must retain any source/busy failure and keep the affected partition union null.
