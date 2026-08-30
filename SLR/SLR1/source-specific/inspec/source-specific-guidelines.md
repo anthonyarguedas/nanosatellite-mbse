@@ -59,3 +59,7 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): the paired `A1` and `BG1` diagnostics succeeded. Inspec projections were `A1: 3` and `BG1: 2` rendered rows. The bounded one-record export is diagnostic only and is not a final search.
 - [x] [Pilot 002](pilots/002/pilot.md): links the paired Compendex failure receipt. The shared event stopped before source submission when the start Published-year control was hidden. No Inspec count or wildcard comparison exists.
+
+## Pilot 003 record (pilot only; completion state unchanged)
+
+[Linked Pilot 003](pilots/003/pilot.md) preserves the Inspec projection of the same repaired paired Engineering Village events; it does not duplicate them. Eight strict two-pass captures succeeded and B2 remains an explicit null failure. Keep Inspec totals and accessions separate in the paired reconciliation, with no accepted wildcard, controlled-term supplement, or final-search claim.

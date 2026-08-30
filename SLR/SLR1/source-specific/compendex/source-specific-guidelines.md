@@ -59,3 +59,7 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` bounded diagnostics succeeded. Compendex projections were `A1: 5` and `BG1: 6` rendered rows. The paired CLI has no count-only mode, so the Python API used one-page, one-record diagnostics. These are not final searches.
 - [x] [Pilot 002](pilots/002/pilot.md): the paired literal A1 request added `English WN LA` but stopped before source submission when the start Published-year control was hidden without a visible Select2 trigger. No count or wildcard comparison was accepted.
+
+## Pilot 003 record (pilot only; completion state unchanged)
+
+[Paired Pilot 003](pilots/003/pilot.md) used the repaired visible Published controls and ran the literal nine-partition schedule in paired Compendex+Inspec events. Eight marker-gated strict two-pass captures succeeded; B2 is an explicit null failure with no count or accession inference. Keep the separate Compendex projection and accession union in the paired reconciliation, do not accept a wildcard or controlled-term supplement, and do not treat this as a final search.
