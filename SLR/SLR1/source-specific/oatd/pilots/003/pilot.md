@@ -40,25 +40,46 @@ The [lossless cell plan](searches/lossless-cell-plan.json) retains the exact que
 
 ## Execution result
 
-The [shared-browser preflight](searches/browser-preflight.json) at 2026-08-30 UTC found no usable local Chrome binary. No OATD page was opened and no source request was made. This is a local browser-availability failure, not an OATD zero, syntax result, or route/readiness observation.
+The [canonical-main shared-browser preflight](searches/browser-preflight.json) was healthy on 2026-08-30 UTC. The prior integration-worktree launcher did not load the canonical browser configuration and its local-binary finding is replaced by this source run.
 
-The [execution assessment](searches/execution-assessment.json) therefore records all 2,029 cells as unattempted and all nine outcomes/unions as null:
+### Healthy route and exact English readback
 
-| ID | Strict-complete cells | Record-ID union / total |
-|---|---:|---:|
-| A1 | 0 / 16 | null |
-| A2 | 0 / 20 | null |
-| A3 | 0 / 8 | null |
-| B1 | 0 / 3 | null |
-| B2 | 0 / 8 | null |
-| BG1 | 0 / 17 | null |
-| BG2 | 0 / 17 | null |
-| BC1 | 0 / 148 | null |
-| BT2 | 0 / 1,792 | null |
+The runner first accepted both count-only source events in the 2011 through 2026 window:
 
-The integration OATD note records dated technical evidence that a healthy route followed by English read back the native metadata clause. That evidence was not promoted to a Pilot 003 source event because this pilot could not obtain its own healthy route. No English-filtered schedule cell, count, record, or language conclusion is claimed here.
+| Route | Exact source-rendered query | Total |
+|---|---|---:|
+| Ordinary health route | `title:(microRNA) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]` | 1,733 |
+| English health route | `title:(microRNA) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]` | 999 |
 
-No deduplicated set was available, so the over-100 investigation threshold was not triggered. No refinement was applied.
+Both artifacts have an exact source query echo. The English route read back display label `English` and source value `(en OR eng OR english)`. This proves the metadata control for this pilot event only. It does not prove the language of a retained report.
+
+### Rate-aware first-cell round
+
+The run used a 20 adapter-invocation budget. Two invocations established the health routes. The remaining 18 were spent in round-robin order on the first cell of every partition, first for a count and then for strict capture. This gave all nine semantic partitions one attempted cell before any second cell could be sent.
+
+| ID | Attempted cell | Count-only source total | Strict outcome | Remaining unattempted cells |
+|---|---|---:|---|---:|
+| A1 | `A1-0001-of-0016` | 0 | complete with 0 | 15 |
+| A2 | `A2-0001-of-0020` | 0 | complete with 0 | 19 |
+| A3 | `A3-0001-of-0008` | 1 | complete with 1 | 7 |
+| B1 | `B1-0001-of-0003` | 13 | failed, OATD could not return from Record Details to search results | 2 |
+| B2 | `B2-0001-of-0008` | 6 | failed, OATD Record Details page had an ambiguous resource URL | 7 |
+| BG1 | `BG1-0001-of-0017` | 0 | complete with 0 | 16 |
+| BG2 | `BG2-0001-of-0017` | 3 | failed, OATD could not return from Record Details to search results | 16 |
+| BC1 | `BC1-0001-of-0148` | 1 | complete with 1 | 147 |
+| BT2 | `BT2-0001-of-1792` | 0 | complete with 0 | 1,791 |
+
+`B1` and `BG2` each recorded one bounded busy retry before the Record Details return failure. `B2` recorded no busy retry. The runner made no manual replay after those failures. The strict failures have null cell totals.
+
+Every partition remains incomplete, so every partition Record-ID union and total is **null**. The 2,020 unattempted cells are null, not zero. The six strict-complete cells are only cell evidence and cannot be summed or promoted to a partition outcome.
+
+### Request-size and rate-safe feasibility limit
+
+OATD publishes no route-size maximum. Its observed behavior imposes a practical limit. The historical 11,902-character BG1 route returned HTTP 520 after a healthy route and a 7,642-character subexpression returned no usable result state. The repaired adapter rejects routes at 8,000 encoded characters and this pilot sends only lossless cells at or below the conservative 1,500-character target.
+
+Strict capture requires two complete source-rendered Relevance traversals and ordered Record-ID reconciliation for every cell. The 100-record strict cell cap and the adapter's bounded busy policy of at most two retries after 30 and 60 seconds make a full 2,029-cell completion infeasible in this rate-safe diagnostic budget. No unattempted cell is inferred to have a source total. Completion remains open.
+
+No deduplicated partition set was available, so the over-100 investigation threshold was not triggered. No refinement was applied.
 
 ## Known source limits retained
 
@@ -70,7 +91,7 @@ No deduplicated set was available, so the over-100 investigation threshold was n
 
 ## Result
 
-- [x] Document route-cell and local-browser limitations
+- [x] Document canonical-browser source evidence, route-cell limits, and incomplete unions
 - [ ] Accept a final OATD translation or final search
 
 A later pilot may resume only through a healthy shared local browser, repeat the health-plus-English exact readback, and execute the saved cells without changing their literals, pairs, Boolean relations, controls, or cell IDs. It must retain any source/busy failure and keep the affected partition union null.

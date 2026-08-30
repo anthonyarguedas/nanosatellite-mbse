@@ -105,8 +105,44 @@ def main() -> int:
 
     add(errors, assessment.get("schema_version") == runner.ASSESSMENT_SCHEMA, "assessment schema differs")
     add(errors, assessment.get("plan_total_cells") == plan.get("total_planned_cells"), "assessment total cells does not bind plan")
-    add(errors, preflight.get("source_requests_attempted") == assessment.get("source_requests_attempted"), "preflight/source-request counts disagree")
+    add(errors, preflight.get("source_requests_attempted") == 0, "browser preflight made a source request")
+    add(errors, isinstance(assessment.get("source_requests_attempted"), int) and assessment.get("source_requests_attempted") >= 0, "assessment has an invalid source-request count")
     add(errors, "/Users/" not in json.dumps(preflight), "preflight retained a local path")
+    source_requests = assessment.get("source_requests_attempted")
+    health_evidence = assessment.get("health_route_evidence")
+    if isinstance(source_requests, int) and source_requests > 0:
+        add(errors, preflight.get("healthy") is True, "source run lacks a healthy browser preflight")
+        add(
+            errors,
+            preflight.get("launcher") == "canonical_main_shared_browser_runner_status",
+            "source run did not use the canonical main browser runner",
+        )
+        add(errors, assessment.get("source_route_attempted") is True, "source run is not marked attempted")
+        add(errors, isinstance(health_evidence, dict), "source run lacks health-route evidence")
+        if isinstance(health_evidence, dict):
+            add(
+                errors,
+                health_evidence.get("status") == "healthy_route_then_exact_english_readback_confirmed",
+                "health route and exact English readback were not both accepted",
+            )
+            health_artifacts = health_evidence.get("artifacts")
+            add(errors, isinstance(health_artifacts, list) and len(health_artifacts) == 2, "health evidence lacks plain and English artifacts")
+            if isinstance(health_artifacts, list) and len(health_artifacts) == 2:
+                plain, english = health_artifacts
+                expected_plain = "title:(microRNA) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]"
+                expected_english = "title:(microRNA) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]"
+                add(errors, plain.get("kind") == "plain" and plain.get("status") == "accepted", "plain health route was not accepted")
+                add(errors, plain.get("exact_source_rendered_query") == expected_plain, "plain health route lacks exact readback")
+                add(errors, english.get("kind") == "english" and english.get("status") == "accepted", "English health route was not accepted")
+                add(errors, english.get("exact_source_rendered_query") == expected_english, "English health route lacks exact native clause")
+                add(errors, english.get("observed_exact_query_echo") is True, "English health route lacks exact source echo")
+                language = english.get("language_filter")
+                add(errors, isinstance(language, dict) and language.get("display_label") == "English" and language.get("source_value") == "(en OR eng OR english)", "English health route lacks native language readback")
+        budget = assessment.get("source_budget")
+        add(errors, isinstance(budget, dict), "source run lacks rate-safe budget evidence")
+        if isinstance(budget, dict):
+            add(errors, isinstance(budget.get("configured_adapter_invocation_budget"), int), "source budget is not numeric")
+            add(errors, budget.get("round_robin_policy"), "source budget lacks round-robin policy")
     for partition_id, partition in plan.get("partitions", {}).items():
         observed = assessment.get("partitions", {}).get(partition_id)
         add(errors, isinstance(observed, dict), f"{partition_id}: assessment missing partition")
@@ -125,6 +161,11 @@ def main() -> int:
         else:
             add(errors, union.get("lossless") is True, f"{partition_id}: all strict cells lack a lossless union")
             add(errors, observed.get("total") == union.get("union_total"), f"{partition_id}: total does not bind union")
+        for cell in cells:
+            if cell.get("status") != "strict_complete":
+                add(errors, cell.get("total") is None, f"{partition_id}: non-strict cell was reported as a source total")
+        if isinstance(health_evidence, dict) and health_evidence.get("status") == "healthy_route_then_exact_english_readback_confirmed":
+            add(errors, bool(cells) and cells[0].get("status") != "not_attempted", f"{partition_id}: round-robin run did not attempt the first cell")
 
     pilot_md = root.parent / "pilot.md"
     guideline = SLR1_ROOT / "source-specific" / "oatd" / "source-specific-guidelines.md"

@@ -8,9 +8,9 @@ explicit distributive, route-guarded cell and uses the adapter's strict
 (two-pass Record-ID) mode.  A failed, over-cap, or unattempted cell leaves its
 partition total and Record-ID union null.
 
-Run source work only through the shared browser wrapper, for example:
+Run source work only through the canonical shared browser wrapper, for example:
 
-  caffeinate -dims uv run /Users/antho/agent-tools-worktrees/slr-integration/internet/skills/browser/scripts/run_with_browser.py -- \
+  caffeinate -dims uv run /Users/antho/agent-tools/internet/skills/browser/scripts/run_with_browser.py -- \
     python3 SLR/SLR1/scripts/oatd_pilot003/run_pilot.py --execute
 
 Without ``--execute`` the runner writes/rechecks the exact offline plan only.
@@ -57,19 +57,28 @@ SLR1_ROOT = SCRIPT_DIR.parents[1]
 PILOT_DIR = SLR1_ROOT / "source-specific" / "oatd" / "pilots" / PILOT
 DEFAULT_OUTPUT_DIR = PILOT_DIR / "searches"
 SCHEDULE_QUERIES_PATH = SLR1_ROOT / "scripts" / "pilot_schedule" / "queries.py"
-INTEGRATION_ROOT = Path(
-    os.environ.get(
-        "SLR_INTEGRATION_ROOT", "/Users/antho/agent-tools-worktrees/slr-integration"
-    )
-)
+# The browser launcher must be the canonical main agent-tools copy.  The
+# integration worktree lacks its canonical browser .env and can therefore
+# falsely diagnose Chrome as unavailable before any source route is opened.
+CANONICAL_AGENT_TOOLS_ROOT = Path("/Users/antho/agent-tools")
 OATD_ADAPTER_PATH = (
-    INTEGRATION_ROOT / "internet" / "skills" / "browser" / "scripts" / "search_oatd.py"
+    CANONICAL_AGENT_TOOLS_ROOT
+    / "internet"
+    / "skills"
+    / "browser"
+    / "scripts"
+    / "search_oatd.py"
 )
 EVENT_RUNNER_PATH = (
-    INTEGRATION_ROOT / "internet" / "skills" / "browser" / "scripts" / "run_search_events.py"
+    CANONICAL_AGENT_TOOLS_ROOT
+    / "internet"
+    / "skills"
+    / "browser"
+    / "scripts"
+    / "run_search_events.py"
 )
 BROWSER_RUNNER_PATH = (
-    INTEGRATION_ROOT
+    CANONICAL_AGENT_TOOLS_ROOT
     / "internet"
     / "skills"
     / "browser"
@@ -486,7 +495,7 @@ def build_plan(modules: AdapterModules) -> dict[str, Any]:
         "kind": "diagnostic_only_not_a_final_search",
         "created_at_utc": utc_now(),
         "adapter": {
-            "path_is_read_only_integration": True,
+            "origin": "read_only_canonical_main_agent_tools",
             "adapter_id": modules.oatd.ADAPTER_ID,
             "adapter_version": modules.oatd.ADAPTER_VERSION,
             "route_navigation_guard_characters": modules.oatd.MAX_OATD_SEARCH_ROUTE_CHARACTERS,
@@ -541,7 +550,7 @@ def browser_preflight() -> dict[str, Any]:
     result: dict[str, Any] = {
         "schema_version": PREFLIGHT_SCHEMA,
         "checked_at_utc": utc_now(),
-        "launcher": "shared_local_browser_runner_status",
+        "launcher": "canonical_main_shared_browser_runner_status",
         "source_requests_attempted": 0,
     }
     if not BROWSER_RUNNER_PATH.is_file():
@@ -598,6 +607,35 @@ def expected_language_readback(payload: Mapping[str, Any]) -> bool:
     )
 
 
+def expected_health_readback(payload: Mapping[str, Any], *, require_english: bool) -> bool:
+    """Require the exact source echo for the ordinary and English health routes."""
+    metadata = payload.get("output_metadata")
+    if not isinstance(metadata, Mapping):
+        return False
+    route_query = "title:(microRNA)"
+    if require_english:
+        route_query += " AND language:(en OR eng OR english)"
+    route_query += " AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]"
+    total = payload.get("total")
+    return (
+        payload.get("query") == "title:(microRNA)"
+        and payload.get("executed_query") == route_query
+        and metadata.get("executed_query") == route_query
+        and metadata.get("status") == "count_only"
+        and isinstance(total, int)
+        and total >= 0
+        and metadata.get("observed_exact_query_echo") is True
+        and metadata.get("earliest_year_filter") == SOURCE_YEAR_START
+        and metadata.get("latest_year_filter") == SOURCE_YEAR_END
+        and metadata.get("page_size") == 30
+        and (
+            expected_language_readback(payload)
+            if require_english
+            else metadata.get("language_filter") is None
+        )
+    )
+
+
 def expected_strict_cell(payload: Mapping[str, Any], cell: PlannedCell) -> tuple[bool, str | None]:
     metadata = payload.get("output_metadata")
     if not isinstance(metadata, Mapping):
@@ -626,6 +664,23 @@ def expected_strict_cell(payload: Mapping[str, Any], cell: PlannedCell) -> tuple
         expected_language_readback(payload),
     )
     return (True, None) if all(checks) else (False, "strict_control_or_record_reconciliation_failed")
+
+
+def strict_failure_reason(
+    payload: Mapping[str, Any],
+    validation_reason: str | None,
+    adapter_message: str,
+) -> str:
+    """Prefer the adapter's explicit source failure over a generic strict check."""
+    metadata = payload.get("output_metadata")
+    if isinstance(metadata, Mapping):
+        error = metadata.get("error")
+        error_type = metadata.get("error_type")
+        if isinstance(error, str) and error.strip():
+            if isinstance(error_type, str) and error_type.strip():
+                return safe_text(f"{error_type}: {error}")
+            return safe_text(error)
+    return validation_reason or adapter_message or "strict_adapter_failure"
 
 
 def adapter_command(
@@ -850,7 +905,13 @@ def execute_plan(
     # The first route must be a healthy ordinary query, then the same route
     # with the English metadata control.  No schedule cell is submitted until
     # both exact source readbacks have succeeded.
-    health: dict[str, Any] = {"status": "pending", "artifacts": []}
+    health: dict[str, Any] = {
+        "status": "pending",
+        "artifacts": [],
+        "configured_adapter_invocation_budget": source_request_budget,
+        "health_route_reservation": 2,
+        "round_robin_policy": "after the two health routes, visit cell ordinal one in every semantic partition before cell ordinal two",
+    }
     health_dir = output_dir / "health"
     health_queries = (
         ("plain", 'title:(microRNA)', False),
@@ -892,14 +953,36 @@ def execute_plan(
             payload = read_json_if_regular(path)
         remaining -= 1
         metadata = payload.get("output_metadata") if isinstance(payload, Mapping) else None
-        exact = bool(isinstance(metadata, Mapping) and metadata.get("observed_exact_query_echo") is True)
-        accepted = exact and (expected_language_readback(payload) if require_english else metadata.get("language_filter") is None)
+        accepted = (
+            return_code == 0
+            and isinstance(payload, Mapping)
+            and expected_health_readback(payload, require_english=require_english)
+        )
         health["artifacts"].append(
             {
                 "kind": label,
                 "artifact": path.relative_to(output_dir).as_posix() if path.exists() else None,
                 "adapter_exit_code": return_code,
                 "status": "accepted" if accepted else "failed",
+                "source_total": payload.get("total") if isinstance(payload, Mapping) else None,
+                "exact_source_rendered_query": (
+                    payload.get("executed_query") if isinstance(payload, Mapping) else None
+                ),
+                "observed_exact_query_echo": (
+                    metadata.get("observed_exact_query_echo")
+                    if isinstance(metadata, Mapping)
+                    else None
+                ),
+                "language_filter": (
+                    metadata.get("language_filter")
+                    if isinstance(metadata, Mapping)
+                    else None
+                ),
+                "busy_retries_performed": (
+                    metadata.get("busy_retries_performed")
+                    if isinstance(metadata, Mapping)
+                    else None
+                ),
                 "reason": None if accepted else message or "missing_exact_route_readback",
             }
         )
@@ -994,7 +1077,17 @@ def execute_plan(
             if strict_code == 0 and strict_ok:
                 states[partition_id].append(compact_cell_state(cell, status="strict_complete", artifact=strict_path, total=total))
             else:
-                states[partition_id].append(compact_cell_state(cell, status="strict_failed", reason=strict_reason or strict_message or "strict_adapter_failure", artifact=strict_path, total=None))
+                states[partition_id].append(
+                    compact_cell_state(
+                        cell,
+                        status="strict_failed",
+                        reason=strict_failure_reason(
+                            strict_payload or {}, strict_reason, strict_message
+                        ),
+                        artifact=strict_path,
+                        total=None,
+                    )
+                )
     return states, health, source_request_budget - remaining
 
 
@@ -1089,9 +1182,22 @@ def build_assessment(
         "browser_preflight": {
             "healthy": preflight.get("healthy"),
             "status": preflight.get("status"),
+            "launcher": preflight.get("launcher"),
             "artifact": "browser-preflight.json",
         },
         "source_requests_attempted": source_requests_attempted,
+        "source_budget": {
+            "configured_adapter_invocation_budget": health.get("configured_adapter_invocation_budget"),
+            "health_route_reservation": health.get("health_route_reservation"),
+            "round_robin_policy": health.get("round_robin_policy"),
+            "strict_cell_record_cap": 100,
+            "busy_policy": "the adapter permits at most two source-request retries after its explicit 30-second then 60-second busy cooldown",
+            "feasibility_limit": "This bounded diagnostic cannot establish a partition total unless every one of its lossless cells completes strict two-pass Record-ID reconciliation.",
+        },
+        "health_route_evidence": {
+            "status": health.get("status"),
+            "artifacts": health.get("artifacts", []),
+        },
         "source_route_attempted": source_attempted,
         "english_metadata_control": {
             "technical_evidence": "The dated adapter/source note records a successful native English readback after a healthy route.",

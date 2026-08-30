@@ -31,6 +31,66 @@ class OATDPilot003PlanTests(unittest.TestCase):
         cls.modules = cls.runner.load_modules()
         cls.plan = cls.runner.build_plan(cls.modules)
 
+    def test_uses_the_canonical_main_agent_tools_browser_stack(self):
+        root = Path("/Users/antho/agent-tools")
+        self.assertEqual(root, self.runner.CANONICAL_AGENT_TOOLS_ROOT)
+        self.assertEqual(
+            root / "internet/skills/browser/scripts/search_oatd.py",
+            self.runner.OATD_ADAPTER_PATH,
+        )
+        self.assertEqual(
+            root / "internet/skills/browser/scripts/run_search_events.py",
+            self.runner.EVENT_RUNNER_PATH,
+        )
+        self.assertEqual(
+            root / "internet/skills/browser/scripts/run_with_browser.py",
+            self.runner.BROWSER_RUNNER_PATH,
+        )
+
+    def test_health_readback_requires_the_exact_rendered_english_clause(self):
+        plain = "title:(microRNA) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]"
+        english = "title:(microRNA) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]"
+        payload = {
+            "query": "title:(microRNA)",
+            "executed_query": english,
+            "total": 1096,
+            "output_metadata": {
+                "executed_query": english,
+                "status": "count_only",
+                "observed_exact_query_echo": True,
+                "earliest_year_filter": 2011,
+                "latest_year_filter": 2026,
+                "page_size": 30,
+                "language_filter": {
+                    "display_label": "English",
+                    "source_value": "(en OR eng OR english)",
+                },
+            },
+        }
+        self.assertTrue(
+            self.runner.expected_health_readback(payload, require_english=True)
+        )
+        payload["executed_query"] = plain
+        self.assertFalse(
+            self.runner.expected_health_readback(payload, require_english=True)
+        )
+
+    def test_strict_failure_reason_retains_the_explicit_source_error(self):
+        reason = self.runner.strict_failure_reason(
+            {
+                "output_metadata": {
+                    "error_type": "OATDMetadataRequestError",
+                    "error": "OATD could not return from Record Details to search results.",
+                }
+            },
+            "missing_exact_total_or_rows",
+            "adapter failed",
+        )
+        self.assertEqual(
+            "OATDMetadataRequestError: OATD could not return from Record Details to search results.",
+            reason,
+        )
+
     def test_all_nine_partitions_have_exact_route_safe_cells(self):
         expected = {
             "A1": 16,
