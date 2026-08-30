@@ -24,17 +24,17 @@ Before every source use, [`preflight.json`](searches/preflight.json) regenerated
 | [BC1](searches/BC1.json) | 51 | 32 | 19 | strict two-pass capture |
 | [BT2](searches/BT2.json) | 17 | 8 | 9 | strict two-pass capture |
 
-The eight successful marker-gated JSON/CSV pairs were accepted only after the fixed adapter's internal two independent complete accession/RIS passes. Its compact public receipt retains the exact source-run controls and records; licensed raw RIS/manifests remain only in the owner-only export directory. B2 produced no public JSON/CSV/marker. Its receipt records that a private first pass started but strict completion failed, then retains null total/accession/RIS fields rather than calling it zero or partial; that private material is quarantined and unused.
+The eight successful marker-gated JSON/CSV pairs were accepted only after the fixed adapter's internal two independent complete accession/RIS passes. Its compact public receipt retains the exact source-run controls and records. Licensed raw RIS/manifests remain only in the owner-only export directory. B2 produced no public JSON/CSV/marker. Its receipt records that a private first pass started but strict completion failed, then retains null total/accession/RIS fields rather than calling it zero or partial. That private material is quarantined and unused.
 
 ## Reconciliation and threshold work
 
 - [`reconciliation.json`](searches/reconciliation.json) keeps each paired event and its separate Compendex/Inspec ordered accession projections.
-- [`over-100-investigation.json`](searches/over-100-investigation.json) deduplicates successful events only by database-scoped accession. Compendex is 206 unique records from 254 event occurrences; Inspec is 116 from 151. Both exceed 100, so every retained accession is listed with partition provenance. No post-hoc source narrowing, deletion, screening decision, or cross-database merge was made.
+- [`over-100-investigation.json`](searches/over-100-investigation.json) deduplicates successful events only by database-scoped accession. Compendex is 206 unique records from 254 event occurrences. Inspec is 116 from 151. Both exceed 100, so every retained accession is listed with partition provenance. No post-hoc source narrowing, deletion, screening decision, or cross-database merge was made.
 
 Exact DOI collisions between the two databases are a diagnostic only. Compendex and Inspec counts, accessions, and unions remain separate. The B2 null failure makes every successful-event union incomplete for the full schedule and unsuitable for final-search use.
 
 ## Limitations and decision
 
-The protocol common evidence cutoff is still TBD; Engineering Village supplies year-level Published bounds, so exact 2026 cutoff handling is deferred to screening. No descriptor was added because no candidate had both an exact normative-block mapping and a known eligible-record assignment in the paired projections. Free text was not replaced.
+The protocol common evidence cutoff is still TBD. Engineering Village supplies year-level Published bounds, so exact 2026 cutoff handling is deferred to screening. No descriptor was added because no candidate had both an exact normative-block mapping and a known eligible-record assignment in the paired projections. Free text was not replaced.
 
-No wildcard is accepted. No final-search artifact was created. A later pilot may diagnose B2 only with the same full literal expression and strict paired controls; it must not substitute a narrower query or infer the missing count.
+No wildcard is accepted. No final-search artifact was created. A later pilot may diagnose B2 only with the same full literal expression and strict paired controls. It must not substitute a narrower query or infer the missing count.
