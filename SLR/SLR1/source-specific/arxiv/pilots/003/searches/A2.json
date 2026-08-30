@@ -1,0 +1,257 @@
+{
+  "schema_version": "arxiv-atom-pilot003-event/v1",
+  "event_kind": "pilot",
+  "pilot_number": "003",
+  "merge_eligible": false,
+  "do_not_merge": true,
+  "source": "arXiv",
+  "platform": "arXiv Atom API",
+  "partition_id": "A2",
+  "diagnostic_window": {
+    "from": "2011-01-01",
+    "to": "2026-08-29",
+    "basis": "Atom submittedDate; observed v1/original-submission behavior",
+    "precision": "minute GMT source syntax with inclusive requested calendar endpoints",
+    "source_clause": "submittedDate:[201101010000 TO 202608292359]"
+  },
+  "controls": {
+    "language": {
+      "state": "unavailable",
+      "applied": null
+    },
+    "document_type": {
+      "state": "unavailable",
+      "applied": null
+    },
+    "subject_category": {
+      "state": "not_applied",
+      "value": "all arXiv classifications"
+    },
+    "cross_list": {
+      "state": "not_applicable_to_Atom_all_field_route",
+      "applied": null
+    },
+    "proximity": {
+      "state": "unavailable",
+      "pair_handling": "broader all:left AND all:right fallback; local title/abstract ≤5-token audit without candidate exclusion"
+    },
+    "controlled_vocabulary": {
+      "state": "not_applied",
+      "reason": "arXiv Category Taxonomy is not a content thesaurus supplement for this all-classifications route"
+    },
+    "wildcard": {
+      "state": "not_used",
+      "accepted": false
+    },
+    "sort": {
+      "sortBy": "submittedDate",
+      "sortOrder": "ascending"
+    },
+    "export": {
+      "state": "Atom XML capture",
+      "api_side_export_control": "unavailable",
+      "pagination": {
+        "start": "offset",
+        "max_results_per_call": 2000
+      }
+    }
+  },
+  "route": {
+    "transport": "Atom API",
+    "endpoint": "https://export.arxiv.org/api/query",
+    "literal": "all:<single-token> or all:\"multiword phrase\"",
+    "pair_fallback": "(all:left AND all:right)",
+    "cell_union": "one complete Atom Boolean expression except BT2's disjoint T2-pair cells",
+    "browser_transport_boundary": "No Atom API grammar is attributed to rendered Advanced Search rows."
+  },
+  "outcome": "complete",
+  "total": 0,
+  "cells": [
+    {
+      "cell_id": "M-01-of-02",
+      "query": "(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"power budget\" OR all:\"power budgets\" OR all:\"energy budget\" OR all:\"energy budgets\" OR all:\"energy balance\" OR all:\"energy balances\" OR all:\"power balance\" OR all:\"power balances\" OR all:\"power margin\" OR all:\"power margins\" OR all:\"power generation\" OR all:\"photovoltaic generator\" OR all:\"photovoltaic generators\" OR all:\"solar array\" OR all:\"solar arrays\" OR all:\"solar panel\" OR all:\"solar panels\" OR all:battery OR all:batteries OR all:\"battery management\" OR all:\"state of charge\" OR all:\"states of charge\" OR all:\"energy storage\" OR all:\"power electronics\" OR all:\"power conditioning\" OR all:\"power distribution\" OR all:\"power management\" OR all:\"power interface\" OR all:\"power interfaces\" OR all:\"power mode\" OR all:\"power modes\" OR all:\"load profile\" OR all:\"load profiles\" OR all:\"power consumption\" OR all:\"power demand\" OR all:\"power profile\" OR all:\"energy harvesting\") AND (all:\"model-based systems engineering\" OR all:\"model based systems engineering\" OR all:\"model-based system engineering\" OR all:\"model based system engineering\" OR all:\"model-driven systems engineering\" OR all:\"model driven systems engineering\" OR all:\"model-driven system engineering\" OR all:\"model driven system engineering\" OR all:\"model-centric systems engineering\" OR all:\"model centric systems engineering\" OR all:\"model-centric system engineering\" OR all:\"model centric system engineering\" OR all:MBSE OR all:SysML OR all:\"systems modeling language\" OR all:\"systems modelling language\" OR all:\"system modeling language\" OR all:\"system modelling language\" OR all:\"object-process methodology\" OR all:\"object process methodology\" OR all:OPM OR all:\"object-oriented systems engineering method\" OR all:\"object oriented systems engineering method\" OR all:OOSEM OR all:\"object-oriented systems engineering\" OR all:\"object oriented systems engineering\" OR all:Arcadia OR all:Capella OR all:\"model-based engineering\" OR all:\"model based engineering\" OR all:\"model-driven engineering\" OR all:\"model driven engineering\" OR all:\"model-based design\" OR all:\"model based design\" OR all:\"model-driven design\" OR all:\"model driven design\" OR all:MBE OR all:MDE OR all:MBD OR all:MagicGrid OR all:Harmony-SE OR all:\"Harmony SE\" OR all:RFLP OR all:\"Cameo Systems Modeler\" OR all:MagicDraw OR all:\"IBM Engineering Systems Design Rhapsody\" OR all:\"Rational Rhapsody\" OR all:\"Vitech CORE\" OR all:\"Vitech GENESYS\" OR all:OpenMBEE OR all:\"Enterprise Architect\" OR all:\"MATLAB System Composer\" OR all:\"System Composer\" OR all:Modelio) AND submittedDate:[201101010000 TO 202608292359]",
+      "source_native_alternative_counts": {
+        "P": 26,
+        "E_F": 37,
+        "M_H ∪ M_B": 85
+      },
+      "encoded_url_length": 3782,
+      "replaced_factor": "M_H OR M_B",
+      "factor_concepts": [
+        "M_H"
+      ],
+      "factor_alternative_count": 54,
+      "status": "complete",
+      "total": 0,
+      "capture": {
+        "source_reported_total": 0,
+        "first_pass": {
+          "source_reported_total": 0,
+          "records": [],
+          "versioned_ids_in_source_order": [],
+          "stable_ids_in_source_order": [],
+          "pages": [
+            {
+              "requested_start": 0,
+              "requested_max_results": 2000,
+              "source_start_index": 0,
+              "source_items_per_page": 2000,
+              "source_reported_total": 0,
+              "source_query_echo": "arXiv Query: search_query=(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"power budget\" OR all:\"power budgets\" OR all:\"energy budget\" OR all:\"energy budgets\" OR all:\"energy balance\" OR all:\"energy balances\" OR all:\"power balance\" OR all:\"power balances\" OR all:\"power margin\" OR all:\"power margins\" OR all:\"power generation\" OR all:\"photovoltaic generator\" OR all:\"photovoltaic generators\" OR all:\"solar array\" OR all:\"solar arrays\" OR all:\"solar panel\" OR all:\"solar panels\" OR all:battery OR all:batteries OR all:\"battery management\" OR all:\"state of charge\" OR all:\"states of charge\" OR all:\"energy storage\" OR all:\"power electronics\" OR all:\"power conditioning\" OR all:\"power distribution\" OR all:\"power management\" OR all:\"power interface\" OR all:\"power interfaces\" OR all:\"power mode\" OR all:\"power modes\" OR all:\"load profile\" OR all:\"load profiles\" OR all:\"power consumption\" OR all:\"power demand\" OR all:\"power profile\" OR all:\"energy harvesting\") AND (all:\"model-based systems engineering\" OR all:\"model based systems engineering\" OR all:\"model-based system engineering\" OR all:\"model based system engineering\" OR all:\"model-driven systems engineering\" OR all:\"model driven systems engineering\" OR all:\"model-driven system engineering\" OR all:\"model driven system engineering\" OR all:\"model-centric systems engineering\" OR all:\"model centric systems engineering\" OR all:\"model-centric system engineering\" OR all:\"model centric system engineering\" OR all:MBSE OR all:SysML OR all:\"systems modeling language\" OR all:\"systems modelling language\" OR all:\"system modeling language\" OR all:\"system modelling language\" OR all:\"object-process methodology\" OR all:\"object process methodology\" OR all:OPM OR all:\"object-oriented systems engineering method\" OR all:\"object oriented systems engineering method\" OR all:OOSEM OR all:\"object-oriented systems engineering\" OR all:\"object oriented systems engineering\" OR all:Arcadia OR all:Capella OR all:\"model-based engineering\" OR all:\"model based engineering\" OR all:\"model-driven engineering\" OR all:\"model driven engineering\" OR all:\"model-based design\" OR all:\"model based design\" OR all:\"model-driven design\" OR all:\"model driven design\" OR all:MBE OR all:MDE OR all:MBD OR all:MagicGrid OR all:Harmony-SE OR all:\"Harmony SE\" OR all:RFLP OR all:\"Cameo Systems Modeler\" OR all:MagicDraw OR all:\"IBM Engineering Systems Design Rhapsody\" OR all:\"Rational Rhapsody\" OR all:\"Vitech CORE\" OR all:\"Vitech GENESYS\" OR all:OpenMBEE OR all:\"Enterprise Architect\" OR all:\"MATLAB System Composer\" OR all:\"System Composer\" OR all:Modelio) AND submittedDate:\"201101010000 TO 202608292359\"&id_list=&start=0&max_results=2000",
+              "feed_updated": "2026-08-30T05:28:06Z",
+              "response_status": 200,
+              "response_sha256": "82e0051b04bc583e3afaeaf2c0e0e99b89b3973ffa435c8e4cb249b626116346",
+              "url_length": 3782,
+              "entry_count": 0,
+              "transient_attempt_failures": []
+            }
+          ],
+          "complete": true,
+          "date_window_check": {
+            "field_checked": "Atom <published> (v1 submission timestamp)",
+            "all_records_within_requested_calendar_window": true
+          },
+          "ordering_check": {
+            "requested": {
+              "sortBy": "submittedDate",
+              "sortOrder": "ascending"
+            },
+            "published_timestamps_nondecreasing": true
+          }
+        },
+        "second_pass": {
+          "source_reported_total": 0,
+          "versioned_ids_in_source_order": [],
+          "stable_ids_in_source_order": [],
+          "pages": [
+            {
+              "requested_start": 0,
+              "requested_max_results": 2000,
+              "source_start_index": 0,
+              "source_items_per_page": 2000,
+              "source_reported_total": 0,
+              "source_query_echo": "arXiv Query: search_query=(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"power budget\" OR all:\"power budgets\" OR all:\"energy budget\" OR all:\"energy budgets\" OR all:\"energy balance\" OR all:\"energy balances\" OR all:\"power balance\" OR all:\"power balances\" OR all:\"power margin\" OR all:\"power margins\" OR all:\"power generation\" OR all:\"photovoltaic generator\" OR all:\"photovoltaic generators\" OR all:\"solar array\" OR all:\"solar arrays\" OR all:\"solar panel\" OR all:\"solar panels\" OR all:battery OR all:batteries OR all:\"battery management\" OR all:\"state of charge\" OR all:\"states of charge\" OR all:\"energy storage\" OR all:\"power electronics\" OR all:\"power conditioning\" OR all:\"power distribution\" OR all:\"power management\" OR all:\"power interface\" OR all:\"power interfaces\" OR all:\"power mode\" OR all:\"power modes\" OR all:\"load profile\" OR all:\"load profiles\" OR all:\"power consumption\" OR all:\"power demand\" OR all:\"power profile\" OR all:\"energy harvesting\") AND (all:\"model-based systems engineering\" OR all:\"model based systems engineering\" OR all:\"model-based system engineering\" OR all:\"model based system engineering\" OR all:\"model-driven systems engineering\" OR all:\"model driven systems engineering\" OR all:\"model-driven system engineering\" OR all:\"model driven system engineering\" OR all:\"model-centric systems engineering\" OR all:\"model centric systems engineering\" OR all:\"model-centric system engineering\" OR all:\"model centric system engineering\" OR all:MBSE OR all:SysML OR all:\"systems modeling language\" OR all:\"systems modelling language\" OR all:\"system modeling language\" OR all:\"system modelling language\" OR all:\"object-process methodology\" OR all:\"object process methodology\" OR all:OPM OR all:\"object-oriented systems engineering method\" OR all:\"object oriented systems engineering method\" OR all:OOSEM OR all:\"object-oriented systems engineering\" OR all:\"object oriented systems engineering\" OR all:Arcadia OR all:Capella OR all:\"model-based engineering\" OR all:\"model based engineering\" OR all:\"model-driven engineering\" OR all:\"model driven engineering\" OR all:\"model-based design\" OR all:\"model based design\" OR all:\"model-driven design\" OR all:\"model driven design\" OR all:MBE OR all:MDE OR all:MBD OR all:MagicGrid OR all:Harmony-SE OR all:\"Harmony SE\" OR all:RFLP OR all:\"Cameo Systems Modeler\" OR all:MagicDraw OR all:\"IBM Engineering Systems Design Rhapsody\" OR all:\"Rational Rhapsody\" OR all:\"Vitech CORE\" OR all:\"Vitech GENESYS\" OR all:OpenMBEE OR all:\"Enterprise Architect\" OR all:\"MATLAB System Composer\" OR all:\"System Composer\" OR all:Modelio) AND submittedDate:\"201101010000 TO 202608292359\"&id_list=&start=0&max_results=2000",
+              "feed_updated": "2026-08-30T05:28:06Z",
+              "response_status": 200,
+              "response_sha256": "82e0051b04bc583e3afaeaf2c0e0e99b89b3973ffa435c8e4cb249b626116346",
+              "url_length": 3782,
+              "entry_count": 0,
+              "transient_attempt_failures": []
+            }
+          ],
+          "complete": true,
+          "date_window_check": {
+            "field_checked": "Atom <published> (v1 submission timestamp)",
+            "all_records_within_requested_calendar_window": true
+          },
+          "ordering_check": {
+            "requested": {
+              "sortBy": "submittedDate",
+              "sortOrder": "ascending"
+            },
+            "published_timestamps_nondecreasing": true
+          }
+        },
+        "cross_pass_reconciliation": {
+          "same_source_reported_total": true,
+          "same_versioned_ids_in_source_order": true,
+          "same_stable_ids_in_source_order": true,
+          "complete_stable_id_capture": true
+        }
+      }
+    },
+    {
+      "cell_id": "M-02-of-02",
+      "query": "(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"power budget\" OR all:\"power budgets\" OR all:\"energy budget\" OR all:\"energy budgets\" OR all:\"energy balance\" OR all:\"energy balances\" OR all:\"power balance\" OR all:\"power balances\" OR all:\"power margin\" OR all:\"power margins\" OR all:\"power generation\" OR all:\"photovoltaic generator\" OR all:\"photovoltaic generators\" OR all:\"solar array\" OR all:\"solar arrays\" OR all:\"solar panel\" OR all:\"solar panels\" OR all:battery OR all:batteries OR all:\"battery management\" OR all:\"state of charge\" OR all:\"states of charge\" OR all:\"energy storage\" OR all:\"power electronics\" OR all:\"power conditioning\" OR all:\"power distribution\" OR all:\"power management\" OR all:\"power interface\" OR all:\"power interfaces\" OR all:\"power mode\" OR all:\"power modes\" OR all:\"load profile\" OR all:\"load profiles\" OR all:\"power consumption\" OR all:\"power demand\" OR all:\"power profile\" OR all:\"energy harvesting\") AND (all:\"system model\" OR all:\"systems model\" OR all:\"system modeling\" OR all:\"systems modeling\" OR all:\"system modelling\" OR all:\"systems modelling\" OR all:\"reference model\" OR all:\"reference models\" OR all:\"digital engineering\" OR all:\"object-oriented systems model\" OR all:\"object-oriented systems models\" OR all:\"model-based system design\" OR all:\"model based system design\" OR all:\"model-based systems design\" OR all:\"model based systems design\" OR all:\"system architecture model\" OR all:\"system architecture models\" OR all:\"systems architecture model\" OR all:\"systems architecture models\" OR all:\"integrated system model\" OR all:\"integrated system models\" OR all:\"integrated systems model\" OR all:\"integrated systems models\" OR all:\"system-level model\" OR all:\"system-level models\" OR all:\"system level model\" OR all:\"system level models\" OR all:\"digital thread\" OR all:\"digital threads\" OR all:\"digital twin\" OR all:\"digital twins\") AND submittedDate:[201101010000 TO 202608292359]",
+      "source_native_alternative_counts": {
+        "P": 26,
+        "E_F": 37,
+        "M_H ∪ M_B": 85
+      },
+      "encoded_url_length": 3024,
+      "replaced_factor": "M_H OR M_B",
+      "factor_concepts": [
+        "M_B"
+      ],
+      "factor_alternative_count": 31,
+      "status": "complete",
+      "total": 0,
+      "capture": {
+        "source_reported_total": 0,
+        "first_pass": {
+          "source_reported_total": 0,
+          "records": [],
+          "versioned_ids_in_source_order": [],
+          "stable_ids_in_source_order": [],
+          "pages": [
+            {
+              "requested_start": 0,
+              "requested_max_results": 2000,
+              "source_start_index": 0,
+              "source_items_per_page": 2000,
+              "source_reported_total": 0,
+              "source_query_echo": "arXiv Query: search_query=(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"power budget\" OR all:\"power budgets\" OR all:\"energy budget\" OR all:\"energy budgets\" OR all:\"energy balance\" OR all:\"energy balances\" OR all:\"power balance\" OR all:\"power balances\" OR all:\"power margin\" OR all:\"power margins\" OR all:\"power generation\" OR all:\"photovoltaic generator\" OR all:\"photovoltaic generators\" OR all:\"solar array\" OR all:\"solar arrays\" OR all:\"solar panel\" OR all:\"solar panels\" OR all:battery OR all:batteries OR all:\"battery management\" OR all:\"state of charge\" OR all:\"states of charge\" OR all:\"energy storage\" OR all:\"power electronics\" OR all:\"power conditioning\" OR all:\"power distribution\" OR all:\"power management\" OR all:\"power interface\" OR all:\"power interfaces\" OR all:\"power mode\" OR all:\"power modes\" OR all:\"load profile\" OR all:\"load profiles\" OR all:\"power consumption\" OR all:\"power demand\" OR all:\"power profile\" OR all:\"energy harvesting\") AND (all:\"system model\" OR all:\"systems model\" OR all:\"system modeling\" OR all:\"systems modeling\" OR all:\"system modelling\" OR all:\"systems modelling\" OR all:\"reference model\" OR all:\"reference models\" OR all:\"digital engineering\" OR all:\"object-oriented systems model\" OR all:\"object-oriented systems models\" OR all:\"model-based system design\" OR all:\"model based system design\" OR all:\"model-based systems design\" OR all:\"model based systems design\" OR all:\"system architecture model\" OR all:\"system architecture models\" OR all:\"systems architecture model\" OR all:\"systems architecture models\" OR all:\"integrated system model\" OR all:\"integrated system models\" OR all:\"integrated systems model\" OR all:\"integrated systems models\" OR all:\"system-level model\" OR all:\"system-level models\" OR all:\"system level model\" OR all:\"system level models\" OR all:\"digital thread\" OR all:\"digital threads\" OR all:\"digital twin\" OR all:\"digital twins\") AND submittedDate:\"201101010000 TO 202608292359\"&id_list=&start=0&max_results=2000",
+              "feed_updated": "2026-08-30T05:28:12Z",
+              "response_status": 200,
+              "response_sha256": "3c2078b7dab272f36bca47def4bd79e5dce587aebd1304c071a16bdb81e013bb",
+              "url_length": 3024,
+              "entry_count": 0,
+              "transient_attempt_failures": []
+            }
+          ],
+          "complete": true,
+          "date_window_check": {
+            "field_checked": "Atom <published> (v1 submission timestamp)",
+            "all_records_within_requested_calendar_window": true
+          },
+          "ordering_check": {
+            "requested": {
+              "sortBy": "submittedDate",
+              "sortOrder": "ascending"
+            },
+            "published_timestamps_nondecreasing": true
+          }
+        },
+        "second_pass": {
+          "source_reported_total": 0,
+          "versioned_ids_in_source_order": [],
+          "stable_ids_in_source_order": [],
+          "pages": [
+            {
+              "requested_start": 0,
+              "requested_max_results": 2000,
+              "source_start_index": 0,
+              "source_items_per_page": 2000,
+              "source_reported_total": 0,
+              "source_query_echo": "arXiv Query: search_query=(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"power budget\" OR all:\"power budgets\" OR all:\"energy budget\" OR all:\"energy budgets\" OR all:\"energy balance\" OR all:\"energy balances\" OR all:\"power balance\" OR all:\"power balances\" OR all:\"power margin\" OR all:\"power margins\" OR all:\"power generation\" OR all:\"photovoltaic generator\" OR all:\"photovoltaic generators\" OR all:\"solar array\" OR all:\"solar arrays\" OR all:\"solar panel\" OR all:\"solar panels\" OR all:battery OR all:batteries OR all:\"battery management\" OR all:\"state of charge\" OR all:\"states of charge\" OR all:\"energy storage\" OR all:\"power electronics\" OR all:\"power conditioning\" OR all:\"power distribution\" OR all:\"power management\" OR all:\"power interface\" OR all:\"power interfaces\" OR all:\"power mode\" OR all:\"power modes\" OR all:\"load profile\" OR all:\"load profiles\" OR all:\"power consumption\" OR all:\"power demand\" OR all:\"power profile\" OR all:\"energy harvesting\") AND (all:\"system model\" OR all:\"systems model\" OR all:\"system modeling\" OR all:\"systems modeling\" OR all:\"system modelling\" OR all:\"systems modelling\" OR all:\"reference model\" OR all:\"reference models\" OR all:\"digital engineering\" OR all:\"object-oriented systems model\" OR all:\"object-oriented systems models\" OR all:\"model-based system design\" OR all:\"model based system design\" OR all:\"model-based systems design\" OR all:\"model based systems design\" OR all:\"system architecture model\" OR all:\"system architecture models\" OR all:\"systems architecture model\" OR all:\"systems architecture models\" OR all:\"integrated system model\" OR all:\"integrated system models\" OR all:\"integrated systems model\" OR all:\"integrated systems models\" OR all:\"system-level model\" OR all:\"system-level models\" OR all:\"system level model\" OR all:\"system level models\" OR all:\"digital thread\" OR all:\"digital threads\" OR all:\"digital twin\" OR all:\"digital twins\") AND submittedDate:\"201101010000 TO 202608292359\"&id_list=&start=0&max_results=2000",
+              "feed_updated": "2026-08-30T05:28:12Z",
+              "response_status": 200,
+              "response_sha256": "3c2078b7dab272f36bca47def4bd79e5dce587aebd1304c071a16bdb81e013bb",
+              "url_length": 3024,
+              "entry_count": 0,
+              "transient_attempt_failures": []
+            }
+          ],
+          "complete": true,
+          "date_window_check": {
+            "field_checked": "Atom <published> (v1 submission timestamp)",
+            "all_records_within_requested_calendar_window": true
+          },
+          "ordering_check": {
+            "requested": {
+              "sortBy": "submittedDate",
+              "sortOrder": "ascending"
+            },
+            "published_timestamps_nondecreasing": true
+          }
+        },
+        "cross_pass_reconciliation": {
+          "same_source_reported_total": true,
+          "same_versioned_ids_in_source_order": true,
+          "same_stable_ids_in_source_order": true,
+          "complete_stable_id_capture": true
+        }
+      }
+    }
+  ]
+}

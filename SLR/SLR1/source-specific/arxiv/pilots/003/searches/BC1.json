@@ -1,0 +1,315 @@
+{
+  "schema_version": "arxiv-atom-pilot003-event/v1",
+  "event_kind": "pilot",
+  "pilot_number": "003",
+  "merge_eligible": false,
+  "do_not_merge": true,
+  "source": "arXiv",
+  "platform": "arXiv Atom API",
+  "partition_id": "BC1",
+  "diagnostic_window": {
+    "from": "2011-01-01",
+    "to": "2026-08-29",
+    "basis": "Atom submittedDate; observed v1/original-submission behavior",
+    "precision": "minute GMT source syntax with inclusive requested calendar endpoints",
+    "source_clause": "submittedDate:[201101010000 TO 202608292359]"
+  },
+  "controls": {
+    "language": {
+      "state": "unavailable",
+      "applied": null
+    },
+    "document_type": {
+      "state": "unavailable",
+      "applied": null
+    },
+    "subject_category": {
+      "state": "not_applied",
+      "value": "all arXiv classifications"
+    },
+    "cross_list": {
+      "state": "not_applicable_to_Atom_all_field_route",
+      "applied": null
+    },
+    "proximity": {
+      "state": "unavailable",
+      "pair_handling": "broader all:left AND all:right fallback; local title/abstract ≤5-token audit without candidate exclusion"
+    },
+    "controlled_vocabulary": {
+      "state": "not_applied",
+      "reason": "arXiv Category Taxonomy is not a content thesaurus supplement for this all-classifications route"
+    },
+    "wildcard": {
+      "state": "not_used",
+      "accepted": false
+    },
+    "sort": {
+      "sortBy": "submittedDate",
+      "sortOrder": "ascending"
+    },
+    "export": {
+      "state": "Atom XML capture",
+      "api_side_export_control": "unavailable",
+      "pagination": {
+        "start": "offset",
+        "max_results_per_call": 2000
+      }
+    }
+  },
+  "route": {
+    "transport": "Atom API",
+    "endpoint": "https://export.arxiv.org/api/query",
+    "literal": "all:<single-token> or all:\"multiword phrase\"",
+    "pair_fallback": "(all:left AND all:right)",
+    "cell_union": "one complete Atom Boolean expression except BT2's disjoint T2-pair cells",
+    "browser_transport_boundary": "No Atom API grammar is attributed to rendered Advanced Search rows."
+  },
+  "outcome": "complete",
+  "total": 0,
+  "cells": [
+    {
+      "cell_id": "C1-01-of-02",
+      "query": "(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"reference model\" OR all:\"reference models\" OR all:\"system reference model\" OR all:\"system reference models\" OR all:\"model library\" OR all:\"model libraries\" OR all:\"system model library\" OR all:\"system model libraries\" OR all:\"model pattern\" OR all:\"model patterns\" OR all:\"modeling pattern\" OR all:\"modeling patterns\" OR all:\"modelling pattern\" OR all:\"modelling patterns\" OR all:\"system model pattern\" OR all:\"system model patterns\" OR all:\"systems model pattern\" OR all:\"systems model patterns\" OR all:\"model profile\" OR all:\"model profiles\" OR all:\"system model profile\" OR all:\"system model profiles\" OR all:\"systems model profile\" OR all:\"systems model profiles\" OR all:\"SysML profile\" OR all:\"SysML profiles\" OR (all:\"domain-specific modeling language\" AND all:\"model-based systems engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model based systems engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model-based system engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model based system engineering\") OR (all:\"domain-specific modeling language\" AND all:MBSE)) AND submittedDate:[201101010000 TO 202608292359]",
+      "source_native_alternative_counts": {
+        "P": 26,
+        "C1": 62
+      },
+      "encoded_url_length": 2148,
+      "replaced_factor": "C1",
+      "factor_alternative_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "factor_alternative_count": 31,
+      "status": "complete",
+      "total": 0,
+      "capture": {
+        "source_reported_total": 0,
+        "first_pass": {
+          "source_reported_total": 0,
+          "records": [],
+          "versioned_ids_in_source_order": [],
+          "stable_ids_in_source_order": [],
+          "pages": [
+            {
+              "requested_start": 0,
+              "requested_max_results": 2000,
+              "source_start_index": 0,
+              "source_items_per_page": 2000,
+              "source_reported_total": 0,
+              "source_query_echo": "arXiv Query: search_query=(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"reference model\" OR all:\"reference models\" OR all:\"system reference model\" OR all:\"system reference models\" OR all:\"model library\" OR all:\"model libraries\" OR all:\"system model library\" OR all:\"system model libraries\" OR all:\"model pattern\" OR all:\"model patterns\" OR all:\"modeling pattern\" OR all:\"modeling patterns\" OR all:\"modelling pattern\" OR all:\"modelling patterns\" OR all:\"system model pattern\" OR all:\"system model patterns\" OR all:\"systems model pattern\" OR all:\"systems model patterns\" OR all:\"model profile\" OR all:\"model profiles\" OR all:\"system model profile\" OR all:\"system model profiles\" OR all:\"systems model profile\" OR all:\"systems model profiles\" OR all:\"SysML profile\" OR all:\"SysML profiles\" OR (all:\"domain-specific modeling language\" AND all:\"model-based systems engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model based systems engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model-based system engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model based system engineering\") OR (all:\"domain-specific modeling language\" AND all:MBSE) ) AND submittedDate:\"201101010000 TO 202608292359\"&id_list=&start=0&max_results=2000",
+              "feed_updated": "2026-08-30T05:28:49Z",
+              "response_status": 200,
+              "response_sha256": "a83e03ad67b18128e4f55ab35d5fed34de5f1ec02e6d68680e56ea8d02d7fa6c",
+              "url_length": 2148,
+              "entry_count": 0,
+              "transient_attempt_failures": []
+            }
+          ],
+          "complete": true,
+          "date_window_check": {
+            "field_checked": "Atom <published> (v1 submission timestamp)",
+            "all_records_within_requested_calendar_window": true
+          },
+          "ordering_check": {
+            "requested": {
+              "sortBy": "submittedDate",
+              "sortOrder": "ascending"
+            },
+            "published_timestamps_nondecreasing": true
+          }
+        },
+        "second_pass": {
+          "source_reported_total": 0,
+          "versioned_ids_in_source_order": [],
+          "stable_ids_in_source_order": [],
+          "pages": [
+            {
+              "requested_start": 0,
+              "requested_max_results": 2000,
+              "source_start_index": 0,
+              "source_items_per_page": 2000,
+              "source_reported_total": 0,
+              "source_query_echo": "arXiv Query: search_query=(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND (all:\"reference model\" OR all:\"reference models\" OR all:\"system reference model\" OR all:\"system reference models\" OR all:\"model library\" OR all:\"model libraries\" OR all:\"system model library\" OR all:\"system model libraries\" OR all:\"model pattern\" OR all:\"model patterns\" OR all:\"modeling pattern\" OR all:\"modeling patterns\" OR all:\"modelling pattern\" OR all:\"modelling patterns\" OR all:\"system model pattern\" OR all:\"system model patterns\" OR all:\"systems model pattern\" OR all:\"systems model patterns\" OR all:\"model profile\" OR all:\"model profiles\" OR all:\"system model profile\" OR all:\"system model profiles\" OR all:\"systems model profile\" OR all:\"systems model profiles\" OR all:\"SysML profile\" OR all:\"SysML profiles\" OR (all:\"domain-specific modeling language\" AND all:\"model-based systems engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model based systems engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model-based system engineering\") OR (all:\"domain-specific modeling language\" AND all:\"model based system engineering\") OR (all:\"domain-specific modeling language\" AND all:MBSE) ) AND submittedDate:\"201101010000 TO 202608292359\"&id_list=&start=0&max_results=2000",
+              "feed_updated": "2026-08-30T05:28:49Z",
+              "response_status": 200,
+              "response_sha256": "a83e03ad67b18128e4f55ab35d5fed34de5f1ec02e6d68680e56ea8d02d7fa6c",
+              "url_length": 2148,
+              "entry_count": 0,
+              "transient_attempt_failures": []
+            }
+          ],
+          "complete": true,
+          "date_window_check": {
+            "field_checked": "Atom <published> (v1 submission timestamp)",
+            "all_records_within_requested_calendar_window": true
+          },
+          "ordering_check": {
+            "requested": {
+              "sortBy": "submittedDate",
+              "sortOrder": "ascending"
+            },
+            "published_timestamps_nondecreasing": true
+          }
+        },
+        "cross_pass_reconciliation": {
+          "same_source_reported_total": true,
+          "same_versioned_ids_in_source_order": true,
+          "same_stable_ids_in_source_order": true,
+          "complete_stable_id_capture": true
+        }
+      }
+    },
+    {
+      "cell_id": "C1-02-of-02",
+      "query": "(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND ((all:\"domain-specific modeling language\" AND all:SysML) OR (all:\"domain-specific modeling language\" AND all:\"systems modeling language\") OR (all:\"domain-specific modeling language\" AND all:\"system model\") OR (all:\"domain-specific modeling language\" AND all:\"systems model\") OR (all:\"domain specific modeling language\" AND all:\"model-based systems engineering\") OR (all:\"domain specific modeling language\" AND all:\"model based systems engineering\") OR (all:\"domain specific modeling language\" AND all:\"model-based system engineering\") OR (all:\"domain specific modeling language\" AND all:\"model based system engineering\") OR (all:\"domain specific modeling language\" AND all:MBSE) OR (all:\"domain specific modeling language\" AND all:SysML) OR (all:\"domain specific modeling language\" AND all:\"systems modeling language\") OR (all:\"domain specific modeling language\" AND all:\"system model\") OR (all:\"domain specific modeling language\" AND all:\"systems model\") OR (all:\"domain-specific modelling language\" AND all:\"model-based systems engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model based systems engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model-based system engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model based system engineering\") OR (all:\"domain-specific modelling language\" AND all:MBSE) OR (all:\"domain-specific modelling language\" AND all:SysML) OR (all:\"domain-specific modelling language\" AND all:\"systems modeling language\") OR (all:\"domain-specific modelling language\" AND all:\"system model\") OR (all:\"domain-specific modelling language\" AND all:\"systems model\") OR (all:\"domain specific modelling language\" AND all:\"model-based systems engineering\") OR (all:\"domain specific modelling language\" AND all:\"model based systems engineering\") OR (all:\"domain specific modelling language\" AND all:\"model-based system engineering\") OR (all:\"domain specific modelling language\" AND all:\"model based system engineering\") OR (all:\"domain specific modelling language\" AND all:MBSE) OR (all:\"domain specific modelling language\" AND all:SysML) OR (all:\"domain specific modelling language\" AND all:\"systems modeling language\") OR (all:\"domain specific modelling language\" AND all:\"system model\") OR (all:\"domain specific modelling language\" AND all:\"systems model\")) AND submittedDate:[201101010000 TO 202608292359]",
+      "source_native_alternative_counts": {
+        "P": 26,
+        "C1": 62
+      },
+      "encoded_url_length": 3595,
+      "replaced_factor": "C1",
+      "factor_alternative_indices": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "factor_alternative_count": 31,
+      "status": "complete",
+      "total": 0,
+      "capture": {
+        "source_reported_total": 0,
+        "first_pass": {
+          "source_reported_total": 0,
+          "records": [],
+          "versioned_ids_in_source_order": [],
+          "stable_ids_in_source_order": [],
+          "pages": [
+            {
+              "requested_start": 0,
+              "requested_max_results": 2000,
+              "source_start_index": 0,
+              "source_items_per_page": 2000,
+              "source_reported_total": 0,
+              "source_query_echo": "arXiv Query: search_query=(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND ( (all:\"domain-specific modeling language\" AND all:SysML) OR (all:\"domain-specific modeling language\" AND all:\"systems modeling language\") OR (all:\"domain-specific modeling language\" AND all:\"system model\") OR (all:\"domain-specific modeling language\" AND all:\"systems model\") OR (all:\"domain specific modeling language\" AND all:\"model-based systems engineering\") OR (all:\"domain specific modeling language\" AND all:\"model based systems engineering\") OR (all:\"domain specific modeling language\" AND all:\"model-based system engineering\") OR (all:\"domain specific modeling language\" AND all:\"model based system engineering\") OR (all:\"domain specific modeling language\" AND all:MBSE) OR (all:\"domain specific modeling language\" AND all:SysML) OR (all:\"domain specific modeling language\" AND all:\"systems modeling language\") OR (all:\"domain specific modeling language\" AND all:\"system model\") OR (all:\"domain specific modeling language\" AND all:\"systems model\") OR (all:\"domain-specific modelling language\" AND all:\"model-based systems engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model based systems engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model-based system engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model based system engineering\") OR (all:\"domain-specific modelling language\" AND all:MBSE) OR (all:\"domain-specific modelling language\" AND all:SysML) OR (all:\"domain-specific modelling language\" AND all:\"systems modeling language\") OR (all:\"domain-specific modelling language\" AND all:\"system model\") OR (all:\"domain-specific modelling language\" AND all:\"systems model\") OR (all:\"domain specific modelling language\" AND all:\"model-based systems engineering\") OR (all:\"domain specific modelling language\" AND all:\"model based systems engineering\") OR (all:\"domain specific modelling language\" AND all:\"model-based system engineering\") OR (all:\"domain specific modelling language\" AND all:\"model based system engineering\") OR (all:\"domain specific modelling language\" AND all:MBSE) OR (all:\"domain specific modelling language\" AND all:SysML) OR (all:\"domain specific modelling language\" AND all:\"systems modeling language\") OR (all:\"domain specific modelling language\" AND all:\"system model\") OR (all:\"domain specific modelling language\" AND all:\"systems model\") ) AND submittedDate:\"201101010000 TO 202608292359\"&id_list=&start=0&max_results=2000",
+              "feed_updated": "2026-08-30T05:28:56Z",
+              "response_status": 200,
+              "response_sha256": "ddf21142361834bb6b7c092383dd0c13e3303f87fbed1f9d56d41687fa394027",
+              "url_length": 3595,
+              "entry_count": 0,
+              "transient_attempt_failures": []
+            }
+          ],
+          "complete": true,
+          "date_window_check": {
+            "field_checked": "Atom <published> (v1 submission timestamp)",
+            "all_records_within_requested_calendar_window": true
+          },
+          "ordering_check": {
+            "requested": {
+              "sortBy": "submittedDate",
+              "sortOrder": "ascending"
+            },
+            "published_timestamps_nondecreasing": true
+          }
+        },
+        "second_pass": {
+          "source_reported_total": 0,
+          "versioned_ids_in_source_order": [],
+          "stable_ids_in_source_order": [],
+          "pages": [
+            {
+              "requested_start": 0,
+              "requested_max_results": 2000,
+              "source_start_index": 0,
+              "source_items_per_page": 2000,
+              "source_reported_total": 0,
+              "source_query_echo": "arXiv Query: search_query=(all:CubeSat OR all:CubeSats OR all:\"cube sat\" OR all:\"cube sats\" OR all:cube-sat OR all:cube-sats OR all:\"cube satellite\" OR all:\"cube satellites\" OR all:nanosat OR all:nanosats OR all:nanosatellite OR all:nanosatellites OR all:nano-sat OR all:nano-sats OR all:\"nano sat\" OR all:\"nano sats\" OR all:nano-satellite OR all:nano-satellites OR all:\"nano satellite\" OR all:\"nano satellites\" OR all:SmallSat OR all:SmallSats OR all:\"small satellite\" OR all:\"small satellites\" OR all:\"small sat\" OR all:\"small sats\") AND ( (all:\"domain-specific modeling language\" AND all:SysML) OR (all:\"domain-specific modeling language\" AND all:\"systems modeling language\") OR (all:\"domain-specific modeling language\" AND all:\"system model\") OR (all:\"domain-specific modeling language\" AND all:\"systems model\") OR (all:\"domain specific modeling language\" AND all:\"model-based systems engineering\") OR (all:\"domain specific modeling language\" AND all:\"model based systems engineering\") OR (all:\"domain specific modeling language\" AND all:\"model-based system engineering\") OR (all:\"domain specific modeling language\" AND all:\"model based system engineering\") OR (all:\"domain specific modeling language\" AND all:MBSE) OR (all:\"domain specific modeling language\" AND all:SysML) OR (all:\"domain specific modeling language\" AND all:\"systems modeling language\") OR (all:\"domain specific modeling language\" AND all:\"system model\") OR (all:\"domain specific modeling language\" AND all:\"systems model\") OR (all:\"domain-specific modelling language\" AND all:\"model-based systems engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model based systems engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model-based system engineering\") OR (all:\"domain-specific modelling language\" AND all:\"model based system engineering\") OR (all:\"domain-specific modelling language\" AND all:MBSE) OR (all:\"domain-specific modelling language\" AND all:SysML) OR (all:\"domain-specific modelling language\" AND all:\"systems modeling language\") OR (all:\"domain-specific modelling language\" AND all:\"system model\") OR (all:\"domain-specific modelling language\" AND all:\"systems model\") OR (all:\"domain specific modelling language\" AND all:\"model-based systems engineering\") OR (all:\"domain specific modelling language\" AND all:\"model based systems engineering\") OR (all:\"domain specific modelling language\" AND all:\"model-based system engineering\") OR (all:\"domain specific modelling language\" AND all:\"model based system engineering\") OR (all:\"domain specific modelling language\" AND all:MBSE) OR (all:\"domain specific modelling language\" AND all:SysML) OR (all:\"domain specific modelling language\" AND all:\"systems modeling language\") OR (all:\"domain specific modelling language\" AND all:\"system model\") OR (all:\"domain specific modelling language\" AND all:\"systems model\") ) AND submittedDate:\"201101010000 TO 202608292359\"&id_list=&start=0&max_results=2000",
+              "feed_updated": "2026-08-30T05:28:56Z",
+              "response_status": 200,
+              "response_sha256": "ddf21142361834bb6b7c092383dd0c13e3303f87fbed1f9d56d41687fa394027",
+              "url_length": 3595,
+              "entry_count": 0,
+              "transient_attempt_failures": []
+            }
+          ],
+          "complete": true,
+          "date_window_check": {
+            "field_checked": "Atom <published> (v1 submission timestamp)",
+            "all_records_within_requested_calendar_window": true
+          },
+          "ordering_check": {
+            "requested": {
+              "sortBy": "submittedDate",
+              "sortOrder": "ascending"
+            },
+            "published_timestamps_nondecreasing": true
+          }
+        },
+        "cross_pass_reconciliation": {
+          "same_source_reported_total": true,
+          "same_versioned_ids_in_source_order": true,
+          "same_stable_ids_in_source_order": true,
+          "complete_stable_id_capture": true
+        }
+      }
+    }
+  ]
+}
