@@ -1,0 +1,1461 @@
+{
+  "schema_version": "slr1-wos-pilot-003-near6-local-validation/v1",
+  "pilot": "003",
+  "do_not_merge": true,
+  "rule": "Protocol pairs require no more than five intervening lexical tokens. Native TS NEAR/6 is a conservative unordered fallback that can admit one extra token.",
+  "local_fields": [
+    "normalized result title",
+    "normalized visible result snippet only; it is not assumed to be a complete abstract, author-keyword, or Keywords Plus field"
+  ],
+  "states": {
+    "strict_pair_visible_within_five": "A declared pair was locally visible in one retained field with <=5 intervening normalized tokens.",
+    "fallback_only_gap_six_visible": "A locally visible declared pair had exactly six intervening normalized tokens; this may be an extra native-fallback candidate, not proof of the native match trigger.",
+    "fixed_literal_visible_pair_not_required": "A non-pair alternative in that paired block was locally visible.",
+    "not_verifiable_from_retained_title_or_snippet": "No conclusion about the source match; Topic can match unretained abstract/keyword/indexed fields or source-normalized text."
+  },
+  "overall_state_counts": {
+    "fixed_literal_visible_pair_not_required": 16,
+    "not_verifiable_from_retained_title_or_snippet": 43,
+    "strict_pair_visible_within_five": 2
+  },
+  "events": [
+    {
+      "namespace": "main",
+      "partition_id": "BG1",
+      "pair_blocks": [
+        "G_model"
+      ],
+      "records_examined": 3,
+      "state_counts": {
+        "fixed_literal_visible_pair_not_required": 2,
+        "not_verifiable_from_retained_title_or_snippet": 1
+      },
+      "records": [
+        {
+          "wos_id": "WOS:000303506207082",
+          "event_rank": 1,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "snippet",
+                  "literal": "generic model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000494480600012",
+          "event_rank": 2,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000558563800001",
+          "event_rank": 3,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "generic model"
+                },
+                {
+                  "field": "snippet",
+                  "literal": "generic model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "namespace": "main",
+      "partition_id": "BG2",
+      "pair_blocks": [
+        "G_structure"
+      ],
+      "records_examined": 8,
+      "state_counts": {
+        "not_verifiable_from_retained_title_or_snippet": 6,
+        "fixed_literal_visible_pair_not_required": 2
+      },
+      "records": [
+        {
+          "wos_id": "WOS:000362669300007",
+          "event_rank": 1,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000405434400009",
+          "event_rank": 2,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000411099800005",
+          "event_rank": 3,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000474397402061",
+          "event_rank": 4,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000632468300020",
+          "event_rank": 5,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000521732800010",
+          "event_rank": 6,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000858771800001",
+          "event_rank": 7,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_structure",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "reference architecture"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001264809500002",
+          "event_rank": 8,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_structure",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "snippet",
+                  "literal": "metamodel"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "namespace": "main",
+      "partition_id": "BC1",
+      "pair_blocks": [
+        "C1"
+      ],
+      "records_examined": 17,
+      "state_counts": {
+        "strict_pair_visible_within_five": 1,
+        "not_verifiable_from_retained_title_or_snippet": 9,
+        "fixed_literal_visible_pair_not_required": 7
+      },
+      "records": [
+        {
+          "wos_id": "WOS:000309105303059",
+          "event_rank": 1,
+          "state": "strict_pair_visible_within_five",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "strict_pair_visible_within_five",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [
+                {
+                  "field": "snippet",
+                  "left": "domain-specific modeling language",
+                  "right": "SysML",
+                  "minimum_separating_tokens": 2
+                },
+                {
+                  "field": "snippet",
+                  "left": "domain specific modeling language",
+                  "right": "SysML",
+                  "minimum_separating_tokens": 2
+                }
+              ],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000368435600014",
+          "event_rank": 2,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000380501300089",
+          "event_rank": 3,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "reference model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000388374901001",
+          "event_rank": 4,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "reference model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000405199503051",
+          "event_rank": 5,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000405199501071",
+          "event_rank": 6,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "reference model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000451039803214",
+          "event_rank": 7,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "snippet",
+                  "literal": "reference model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000681699104072",
+          "event_rank": 8,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000681699104038",
+          "event_rank": 9,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "reference model"
+                },
+                {
+                  "field": "title",
+                  "literal": "system reference model"
+                },
+                {
+                  "field": "snippet",
+                  "literal": "reference model"
+                },
+                {
+                  "field": "snippet",
+                  "literal": "system reference model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000853885000012",
+          "event_rank": 10,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000681710100039",
+          "event_rank": 11,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "reference model"
+                },
+                {
+                  "field": "title",
+                  "literal": "system reference model"
+                },
+                {
+                  "field": "snippet",
+                  "literal": "reference model"
+                },
+                {
+                  "field": "snippet",
+                  "literal": "system reference model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000999858400016",
+          "event_rank": 12,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000988089100001",
+          "event_rank": 13,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001106752200001",
+          "event_rank": 14,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001264809500002",
+          "event_rank": 15,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "snippet",
+                  "literal": "SysML profile"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001470427000001",
+          "event_rank": 16,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001836443900007",
+          "event_rank": 17,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "namespace": "main",
+      "partition_id": "BT2",
+      "pair_blocks": [
+        "T2"
+      ],
+      "records_examined": 6,
+      "state_counts": {
+        "not_verifiable_from_retained_title_or_snippet": 5,
+        "strict_pair_visible_within_five": 1
+      },
+      "records": [
+        {
+          "wos_id": "WOS:000356039102006",
+          "event_rank": 1,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "T2",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000388374901001",
+          "event_rank": 2,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "T2",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000405199501071",
+          "event_rank": 3,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "T2",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000872030000001",
+          "event_rank": 4,
+          "state": "strict_pair_visible_within_five",
+          "concept_observations": [
+            {
+              "concept": "T2",
+              "state": "strict_pair_visible_within_five",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [
+                {
+                  "field": "snippet",
+                  "left": "adapted",
+                  "right": "model",
+                  "minimum_separating_tokens": 4
+                }
+              ],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001128152200002",
+          "event_rank": 5,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "T2",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001557194600001",
+          "event_rank": 6,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "T2",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "namespace": "psr",
+      "partition_id": "PSR4",
+      "pair_blocks": [
+        "G_model",
+        "G_structure",
+        "C1"
+      ],
+      "records_examined": 27,
+      "state_counts": {
+        "not_verifiable_from_retained_title_or_snippet": 22,
+        "fixed_literal_visible_pair_not_required": 5
+      },
+      "records": [
+        {
+          "wos_id": "WOS:A1994PT47400003",
+          "event_rank": 1,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000073874600016",
+          "event_rank": 2,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000187969200018",
+          "event_rank": 3,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "snippet",
+                  "literal": "generic model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000220916700001",
+          "event_rank": 4,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000230440800160",
+          "event_rank": 5,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000234370300027",
+          "event_rank": 6,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "snippet",
+                  "literal": "reference model"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000265182000117",
+          "event_rank": 7,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "snippet",
+                  "literal": "reference models"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000256500800024",
+          "event_rank": 8,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000300517700013",
+          "event_rank": 9,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000347313600018",
+          "event_rank": 10,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000343092100033",
+          "event_rank": 11,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000365398300065",
+          "event_rank": 12,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000350802200001",
+          "event_rank": 13,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000414755500021",
+          "event_rank": 14,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000395821900033",
+          "event_rank": 15,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000438041900002",
+          "event_rank": 16,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000645605300001",
+          "event_rank": 17,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000634547600012",
+          "event_rank": 18,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000913220000007",
+          "event_rank": 19,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:000858771800001",
+          "event_rank": 20,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "reference architecture"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001489645400002",
+          "event_rank": 21,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001036277400001",
+          "event_rank": 22,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001122137200001",
+          "event_rank": 23,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001199894800001",
+          "event_rank": 24,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001607936300006",
+          "event_rank": 25,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001746950000040",
+          "event_rank": 26,
+          "state": "not_verifiable_from_retained_title_or_snippet",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        },
+        {
+          "wos_id": "WOS:001688419600001",
+          "event_rank": 27,
+          "state": "fixed_literal_visible_pair_not_required",
+          "concept_observations": [
+            {
+              "concept": "G_model",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "G_structure",
+              "state": "fixed_literal_visible_pair_not_required",
+              "fixed_literal_hits": [
+                {
+                  "field": "title",
+                  "literal": "reference architecture"
+                },
+                {
+                  "field": "snippet",
+                  "literal": "reference architecture"
+                }
+              ],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            },
+            {
+              "concept": "C1",
+              "state": "not_verifiable_from_retained_title_or_snippet",
+              "fixed_literal_hits": [],
+              "strict_pair_hits": [],
+              "gap_six_pair_hits": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "limitation": "This is a local no-loss/fallback audit where retained fields permit. It neither reclassifies records nor claims that an unobservable pair is absent from the source Topic fields."
+}

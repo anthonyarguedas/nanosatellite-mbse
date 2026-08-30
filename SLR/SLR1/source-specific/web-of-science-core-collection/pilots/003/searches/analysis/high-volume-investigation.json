@@ -1,0 +1,109 @@
+{
+  "schema_version": "slr1-wos-pilot-003-high-volume-investigation/v1",
+  "pilot": "003",
+  "do_not_merge": true,
+  "threshold": 100,
+  "threshold_rule": "Investigate a reconciled, deduplicated stable-ID set only when it exceeds 100; raw overlapping discovery-event totals are not substituted for deduplicated counts.",
+  "refinements": [
+    {
+      "scope": "main_core_stream_B",
+      "partitions": [
+        "B1",
+        "B2"
+      ],
+      "deduplicated_stable_id_total": 144,
+      "source_event_total": 171,
+      "duplicate_event_occurrences": 27,
+      "membership_pattern_counts": {
+        "B1": 66,
+        "B1 + B2": 27,
+        "B2": 51
+      },
+      "2026_cutoff_screening_counts_within_scope": {
+        "native_DOP_on_or_before_2026-08-29": 9,
+        "native_DOP_after_2026-08-29": 1
+      },
+      "investigation": {
+        "stable_id_reconciliation": "Complete event-ledger IDs were deduplicated in declared partition order; no prefix or count-only set was substituted.",
+        "query_refinement": "No type, subject, access, language, or candidate-DT narrowing was run. The raw planned partitions remain the evidence; this is a non-narrowing local membership investigation.",
+        "paired_term_audit": "See near6-local-validation.json for each observable retained-field pair check; missing visible text is not called a false match."
+      }
+    },
+    {
+      "scope": "main_all_nine_partitions",
+      "partitions": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "BG1",
+        "BG2",
+        "BC1",
+        "BT2"
+      ],
+      "deduplicated_stable_id_total": 155,
+      "source_event_total": 219,
+      "duplicate_event_occurrences": 64,
+      "membership_pattern_counts": {
+        "A1 + B1": 1,
+        "A2 + A3 + B2": 2,
+        "A2 + B1": 5,
+        "A2 + B2": 3,
+        "A2 + B2 + BC1": 1,
+        "B1": 60,
+        "B1 + B2": 15,
+        "B1 + B2 + BC1": 6,
+        "B1 + B2 + BC1 + BT2": 2,
+        "B1 + B2 + BG2 + BC1": 1,
+        "B1 + B2 + BT2": 3,
+        "B2": 38,
+        "B2 + BC1": 5,
+        "B2 + BG1": 1,
+        "B2 + BT2": 1,
+        "BC1": 2,
+        "BG1": 2,
+        "BG2": 7
+      },
+      "2026_cutoff_screening_counts_within_scope": {
+        "native_DOP_on_or_before_2026-08-29": 9,
+        "native_DOP_after_2026-08-29": 1
+      },
+      "investigation": {
+        "stable_id_reconciliation": "Complete event-ledger IDs were deduplicated in declared partition order; no prefix or count-only set was substituted.",
+        "query_refinement": "No type, subject, access, language, or candidate-DT narrowing was run. The raw planned partitions remain the evidence; this is a non-narrowing local membership investigation.",
+        "paired_term_audit": "See near6-local-validation.json for each observable retained-field pair check; missing visible text is not called a false match."
+      }
+    },
+    {
+      "scope": "supporting_PSR_union",
+      "partitions": [
+        "PSR1",
+        "PSR2",
+        "PSR3",
+        "PSR4"
+      ],
+      "deduplicated_stable_id_total": 102,
+      "source_event_total": 109,
+      "duplicate_event_occurrences": 7,
+      "membership_pattern_counts": {
+        "PSR1": 20,
+        "PSR1 + PSR2": 2,
+        "PSR2": 53,
+        "PSR2 + PSR4": 5,
+        "PSR4": 22
+      },
+      "2026_cutoff_screening_counts_within_scope": {
+        "native_DOP_on_or_before_2026-08-29": 20
+      },
+      "investigation": {
+        "stable_id_reconciliation": "Complete event-ledger IDs were deduplicated in declared partition order; no prefix or count-only set was substituted.",
+        "query_refinement": "No type, subject, access, language, or candidate-DT narrowing was run. The raw planned partitions remain the evidence; this is a non-narrowing local membership investigation.",
+        "paired_term_audit": "See near6-local-validation.json for each observable retained-field pair check; missing visible text is not called a false match."
+      }
+    }
+  ],
+  "near6_artifact": "near6-local-validation.json",
+  "cutoff_artifact": "cutoff-screening.json",
+  "limitation": "This investigation does not adjudicate scientific eligibility, screen title/abstract relevance, or authorize a narrower final translation."
+}

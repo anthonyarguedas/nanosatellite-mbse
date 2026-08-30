@@ -1,0 +1,4701 @@
+{
+  "schema_version": "slr1-wos-pilot-003-reconciliation/v1",
+  "pilot": "003",
+  "source": "Web of Science Core Collection",
+  "diagnostic_cutoff": "2026-08-29",
+  "do_not_merge": true,
+  "capture_contract": {
+    "runner": "scripts/wos_pilot003/run_pilot.py",
+    "require_complete": true,
+    "description": "Every event was invoked with --require-complete, which makes the adapter perform two complete ordered WOS-ID passes before publishing its normalized receipt.",
+    "public_artifact_boundary": "The adapter's normalized pilot artifact retains ordered ranked result IDs, exact source total, native RIS digest, and complete receipt; internal per-pass ledgers remain adapter-execution evidence rather than a licensed export."
+  },
+  "main": {
+    "partition_order": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ],
+    "events": [
+      {
+        "namespace": "main",
+        "partition_id": "A1",
+        "artifact": "searches/main/A1.json",
+        "artifact_sha256": "d0f888c58af476ae9b1ae8e883b13358473fa1c0fd2e68eaf4472f462a28a0e0",
+        "raw_query_sha256": "9ad96433d69992fc0634a91d7f7d65430edc5f74316da0041d555629ea425eba",
+        "raw_query": "(TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "Pilot 002 accepted 10-wildcard A1 population translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 1,
+        "ordered_wos_ids": [
+          "WOS:001027247800008"
+        ],
+        "ordered_wos_ids_sha256": "8020383deadc7a9d597a2fecc4afb331b6fa6363de495fb656dc0449727644e8",
+        "source_row_count": 1,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "eaf940d137b44378bcc047ba1f716c3527308560e0c1ad59e496903b4db020b4",
+          "byte_count": 407,
+          "record_count": 1,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "main",
+        "partition_id": "A2",
+        "artifact": "searches/main/A2.json",
+        "artifact_sha256": "0a57941f299277577da37c9420b650680b18aa05ac9fbdbf97fb473febcac185",
+        "raw_query_sha256": "b42dd1ba9ea8cc0ded08f80197abb2b367931e4b6f5cd6d3597fcd794df0187d",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"power budget\") OR TS=(\"power budgets\") OR TS=(\"energy budget\") OR TS=(\"energy budgets\") OR TS=(\"energy balance\") OR TS=(\"energy balances\") OR TS=(\"power balance\") OR TS=(\"power balances\") OR TS=(\"power margin\") OR TS=(\"power margins\") OR TS=(\"power generation\") OR TS=(\"photovoltaic generator\") OR TS=(\"photovoltaic generators\") OR TS=(\"solar array\") OR TS=(\"solar arrays\") OR TS=(\"solar panel\") OR TS=(\"solar panels\") OR TS=(\"battery\") OR TS=(\"batteries\") OR TS=(\"battery management\") OR TS=(\"state of charge\") OR TS=(\"states of charge\") OR TS=(\"energy storage\") OR TS=(\"power electronics\") OR TS=(\"power conditioning\") OR TS=(\"power distribution\") OR TS=(\"power management\") OR TS=(\"power interface\") OR TS=(\"power interfaces\") OR TS=(\"power mode\") OR TS=(\"power modes\") OR TS=(\"load profile\") OR TS=(\"load profiles\") OR TS=(\"power consumption\") OR TS=(\"power demand\") OR TS=(\"power profile\") OR TS=(\"energy harvesting\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\") OR TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 11,
+        "ordered_wos_ids": [
+          "WOS:000418391600075",
+          "WOS:000853885000012",
+          "WOS:000877804300006",
+          "WOS:001147132900001",
+          "WOS:001245804200001",
+          "WOS:001305791800001",
+          "WOS:001786492800054",
+          "WOS:001499693600007",
+          "WOS:001795835800009",
+          "WOS:001779877800020",
+          "WOS:001797570600001"
+        ],
+        "ordered_wos_ids_sha256": "d7b4cf2c2cfaf0c4ee9072775e5ded66015227806ba7cbc046b01453a782b20c",
+        "source_row_count": 11,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "e5c8f8653c5e556f9df8f85f195d9496b598ea28ce04f1e1b405a733b5dfdf59",
+          "byte_count": 4609,
+          "record_count": 11,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "main",
+        "partition_id": "A3",
+        "artifact": "searches/main/A3.json",
+        "artifact_sha256": "a1205371b09e1b6b152d266cd2763b2f27fbe2ea485fc79852ef3006a04d3536",
+        "raw_query_sha256": "076692150ee09ff64a6a3e2bc317704df5c349be13b48749948dac416611e0f5",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 2,
+        "ordered_wos_ids": [
+          "WOS:001305791800001",
+          "WOS:001786492800054"
+        ],
+        "ordered_wos_ids_sha256": "a87d2f1f2817a1dbaefb5d3b3a2972ae60595aa7a18d538dce4037469f8c84e0",
+        "source_row_count": 2,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "498894df876dd666d5333029646d5b0556a2eadef6e817e29e2e5b0234288fef",
+          "byte_count": 762,
+          "record_count": 2,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "main",
+        "partition_id": "B1",
+        "artifact": "searches/main/B1.json",
+        "artifact_sha256": "b72b02a91554c8f79365d4f50c76bd0eb7a1ea3346448aeb922da4fd2da04f15",
+        "raw_query_sha256": "56bd2e19a07e032c389c7e57fb3e2f0836f620e5ec6213e5e3cf725240b56b62",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 93,
+        "ordered_wos_ids": [
+          "WOS:000309105301100",
+          "WOS:000309105303059",
+          "WOS:000305905200012",
+          "WOS:000305905200011",
+          "WOS:000320123900081",
+          "WOS:000356039102032",
+          "WOS:000356039104001",
+          "WOS:000356039102006",
+          "WOS:000341949700077",
+          "WOS:000347021400033",
+          "WOS:000380501300089",
+          "WOS:000380537800033",
+          "WOS:000380537800106",
+          "WOS:000380501301003",
+          "WOS:000391537900040",
+          "WOS:000391209800022",
+          "WOS:000388374901001",
+          "WOS:000388374900068",
+          "WOS:000656460900005",
+          "WOS:000382412200011",
+          "WOS:000418391600075",
+          "WOS:000405199503051",
+          "WOS:000405199501071",
+          "WOS:000403403400006",
+          "WOS:000403403400092",
+          "WOS:000474397400072",
+          "WOS:000865767000086",
+          "WOS:000617940600065",
+          "WOS:000474397403038",
+          "WOS:000429782100007",
+          "WOS:000431948900003",
+          "WOS:000443049900091",
+          "WOS:000447575300003",
+          "WOS:000519270608112",
+          "WOS:000497002201013",
+          "WOS:001396984803022",
+          "WOS:001361729601006",
+          "WOS:000681699104072",
+          "WOS:000681699104038",
+          "WOS:000618045900101",
+          "WOS:001575608300047",
+          "WOS:000575138100014",
+          "WOS:000709094100026",
+          "WOS:000681710100039",
+          "WOS:001344632600009",
+          "WOS:001250139801187",
+          "WOS:001250139806085",
+          "WOS:001409485501060",
+          "WOS:000600957700001",
+          "WOS:000888580700001",
+          "WOS:001390888100001",
+          "WOS:000920916607015",
+          "WOS:000942487400060",
+          "WOS:000866278700024",
+          "WOS:000855669500032",
+          "WOS:000838702900020",
+          "WOS:000782416500023",
+          "WOS:000782416500040",
+          "WOS:000782416500045",
+          "WOS:000771711600010",
+          "WOS:000872030000001",
+          "WOS:001210606200031",
+          "WOS:001098971600050",
+          "WOS:001051001400014",
+          "WOS:001027247800008",
+          "WOS:001036371300001",
+          "WOS:001415226905170",
+          "WOS:001229648402064",
+          "WOS:001298157900021",
+          "WOS:001264809500002",
+          "WOS:001237656100001",
+          "WOS:001147132900001",
+          "WOS:001186855300002",
+          "WOS:001210253800001",
+          "WOS:001245804200001",
+          "WOS:001276531700001",
+          "WOS:001326203500001",
+          "WOS:001322857700001",
+          "WOS:001800653100016",
+          "WOS:001704609200476",
+          "WOS:001704613000344",
+          "WOS:001553229100093",
+          "WOS:001401309600001",
+          "WOS:001407668800001",
+          "WOS:001453418000001",
+          "WOS:001506331800001",
+          "WOS:001557117800001",
+          "WOS:001557194600001",
+          "WOS:001779877800020",
+          "WOS:001699806900001",
+          "WOS:001797570600001",
+          "WOS:001831652500001",
+          "WOS:001795013500001"
+        ],
+        "ordered_wos_ids_sha256": "775f7cd59a4561a8db0fb2a3c97dbd6672387837dca6fe604745a25b597805ea",
+        "source_row_count": 93,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "07ff37a7e1ae920d9ae230c691f23764647a8a1fb9d4e967a770672dd5858197",
+          "byte_count": 40076,
+          "record_count": 93,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 2,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "main",
+        "partition_id": "B2",
+        "artifact": "searches/main/B2.json",
+        "artifact_sha256": "d7ce40e19ca94956d6a8fd1f13d02f85a74f587b76208a567f7ee566c07001b6",
+        "raw_query_sha256": "574874cd3d7a09615dd2fd904646f3f489b32d77efc3c4828a881a073ee5bbee",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"requirement\") OR TS=(\"requirements\") OR TS=(\"function\") OR TS=(\"functions\") OR TS=(\"functional\") OR TS=(\"behavior\") OR TS=(\"behaviors\") OR TS=(\"behaviour\") OR TS=(\"behaviours\") OR TS=(\"behavioral\") OR TS=(\"behavioural\") OR TS=(\"architecture\") OR TS=(\"architectures\") OR TS=(\"architectural\") OR TS=(\"interface\") OR TS=(\"interfaces\") OR TS=(\"traceability\") OR TS=(\"trace\") OR TS=(\"traceable\") OR TS=(\"traced\") OR TS=(\"allocation\") OR TS=(\"allocate\") OR TS=(\"allocated\") OR TS=(\"constraint\") OR TS=(\"constraints\") OR TS=(\"parametric\") OR TS=(\"parametrics\") OR TS=(\"analysis\") OR TS=(\"analyses\") OR TS=(\"design\") OR TS=(\"designs\") OR TS=(\"designed\") OR TS=(\"designing\") OR TS=(\"decision\") OR TS=(\"decisions\") OR TS=(\"decision-making\") OR TS=(\"decision making\") OR TS=(\"trade study\") OR TS=(\"trade studies\") OR TS=(\"trade-off\") OR TS=(\"trade-offs\") OR TS=(\"tradeoff\") OR TS=(\"tradeoffs\") OR TS=(\"verification\") OR TS=(\"verifications\") OR TS=(\"verify\") OR TS=(\"verifies\") OR TS=(\"verified\") OR TS=(\"verifying\") OR TS=(\"validation\") OR TS=(\"validations\") OR TS=(\"validate\") OR TS=(\"validates\") OR TS=(\"validated\") OR TS=(\"validating\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 78,
+        "ordered_wos_ids": [
+          "WOS:000314989301020",
+          "WOS:000309105303059",
+          "WOS:000324335200216",
+          "WOS:000357105901003",
+          "WOS:000214906700002",
+          "WOS:000324991900030",
+          "WOS:000356039102032",
+          "WOS:000356039100047",
+          "WOS:000356039102006",
+          "WOS:000339412000377",
+          "WOS:000368435600014",
+          "WOS:000380501300089",
+          "WOS:000347767200010",
+          "WOS:000388374901001",
+          "WOS:000388374904018",
+          "WOS:000405199503051",
+          "WOS:000405199501071",
+          "WOS:000403403400006",
+          "WOS:000403403400092",
+          "WOS:000474397400072",
+          "WOS:000443049900091",
+          "WOS:000480428500003",
+          "WOS:001396984803022",
+          "WOS:000476782600037",
+          "WOS:000476919600001",
+          "WOS:000681699100008",
+          "WOS:000681699104072",
+          "WOS:000681699104038",
+          "WOS:000681699101027",
+          "WOS:000558563800001",
+          "WOS:000853885000012",
+          "WOS:000681710100039",
+          "WOS:000600957700001",
+          "WOS:000888580700001",
+          "WOS:001390888100001",
+          "WOS:000969061100014",
+          "WOS:000782416500040",
+          "WOS:000745722300001",
+          "WOS:000872030000001",
+          "WOS:000877804300006",
+          "WOS:001116704303150",
+          "WOS:001062143200058",
+          "WOS:001008282001077",
+          "WOS:001051001400014",
+          "WOS:000999858400016",
+          "WOS:001483980700010",
+          "WOS:000988089100001",
+          "WOS:000988842300003",
+          "WOS:001106921800001",
+          "WOS:001128152200002",
+          "WOS:001517243900028",
+          "WOS:001315638500279",
+          "WOS:001229648402064",
+          "WOS:001264809500002",
+          "WOS:001215536202001",
+          "WOS:001186855300002",
+          "WOS:001226402700019",
+          "WOS:001219908500001",
+          "WOS:001305791800001",
+          "WOS:001322857700001",
+          "WOS:001345024400001",
+          "WOS:001377589400001",
+          "WOS:001786492800054",
+          "WOS:001696874900014",
+          "WOS:001659587800228",
+          "WOS:001553229100093",
+          "WOS:001553229100335",
+          "WOS:001511207700058",
+          "WOS:001470427000001",
+          "WOS:001457470300001",
+          "WOS:001499693600007",
+          "WOS:001558282300001",
+          "WOS:001557194600001",
+          "WOS:001795835800009",
+          "WOS:001669614700001",
+          "WOS:001754027300001",
+          "WOS:001836443900007",
+          "WOS:001815355000004"
+        ],
+        "ordered_wos_ids_sha256": "f230e99454c81b75c362e3bd09ea79a796dba18129a5fc041de6dded28db3323",
+        "source_row_count": 78,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "ae1118b7c0845c7793c4c311599602058cc4d1dbad2fd3b2f9f1ffbbbed9f68c",
+          "byte_count": 31476,
+          "record_count": 78,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 2,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "main",
+        "partition_id": "BG1",
+        "artifact": "searches/main/BG1.json",
+        "artifact_sha256": "f767164238310006615bc15fd8120229d5cf2165c02e2838369cb9942c6aceab",
+        "raw_query_sha256": "51e1cb8a1ddb1a4276d1e334e4199d92830bfad82e7c16e90b77e707fa5f3fdd",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"generic model\") OR TS=(\"generic models\") OR TS=(\"generic system model\") OR TS=(\"generic system models\") OR TS=(\"reusable model\") OR TS=(\"reusable models\") OR TS=(\"reusable system model\") OR TS=(\"reusable system models\") OR TS=(\"configurable model\") OR TS=(\"configurable models\") OR TS=(\"configurable system model\") OR TS=(\"configurable system models\") OR TS=(\"model template\") OR TS=(\"model templates\") OR TS=(\"mission-agnostic\" NEAR/6 \"model\") OR TS=(\"mission-agnostic\" NEAR/6 \"models\") OR TS=(\"mission-agnostic\" NEAR/6 \"architecture\") OR TS=(\"mission-agnostic\" NEAR/6 \"architectures\") OR TS=(\"mission agnostic\" NEAR/6 \"model\") OR TS=(\"mission agnostic\" NEAR/6 \"models\") OR TS=(\"mission agnostic\" NEAR/6 \"architecture\") OR TS=(\"mission agnostic\" NEAR/6 \"architectures\") OR TS=(\"mission-independent\" NEAR/6 \"model\") OR TS=(\"mission-independent\" NEAR/6 \"models\") OR TS=(\"mission-independent\" NEAR/6 \"architecture\") OR TS=(\"mission-independent\" NEAR/6 \"architectures\") OR TS=(\"mission independent\" NEAR/6 \"model\") OR TS=(\"mission independent\" NEAR/6 \"models\") OR TS=(\"mission independent\" NEAR/6 \"architecture\") OR TS=(\"mission independent\" NEAR/6 \"architectures\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 3,
+        "ordered_wos_ids": [
+          "WOS:000303506207082",
+          "WOS:000494480600012",
+          "WOS:000558563800001"
+        ],
+        "ordered_wos_ids_sha256": "2d4f470f2c5bf102e48abfd93f8ab3cbadc8d5716cf24d40b83789d0e15fc16a",
+        "source_row_count": 3,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "eed90143aafc18c384bf3d1d5778c8fafd5f5008fe3ddca5a0f1453612e6ed5f",
+          "byte_count": 1173,
+          "record_count": 3,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "main",
+        "partition_id": "BG2",
+        "artifact": "searches/main/BG2.json",
+        "artifact_sha256": "03ab252740450283e3d4f75a92db0a5f057fd6dfc8db672efb1ab2fc6dfc1642",
+        "raw_query_sha256": "9e79a9474940ff519be11a08904f637cd9a39a9ba1d32fce9e2a87e339bf3321",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"reference architecture\") OR TS=(\"reference architectures\") OR TS=(\"domain model\") OR TS=(\"domain models\") OR TS=(\"metamodel\") OR TS=(\"metamodels\") OR TS=(\"meta-model\") OR TS=(\"meta-models\") OR TS=(\"product-line\" NEAR/6 \"model\") OR TS=(\"product-line\" NEAR/6 \"models\") OR TS=(\"product line\" NEAR/6 \"model\") OR TS=(\"product line\" NEAR/6 \"models\") OR TS=(\"product-family\" NEAR/6 \"model\") OR TS=(\"product-family\" NEAR/6 \"models\") OR TS=(\"product family\" NEAR/6 \"model\") OR TS=(\"product family\" NEAR/6 \"models\") OR TS=(\"variation point\" NEAR/6 \"model\") OR TS=(\"variation point\" NEAR/6 \"models\") OR TS=(\"variation point\" NEAR/6 \"architecture\") OR TS=(\"variation point\" NEAR/6 \"architectures\") OR TS=(\"variation points\" NEAR/6 \"model\") OR TS=(\"variation points\" NEAR/6 \"models\") OR TS=(\"variation points\" NEAR/6 \"architecture\") OR TS=(\"variation points\" NEAR/6 \"architectures\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 8,
+        "ordered_wos_ids": [
+          "WOS:000362669300007",
+          "WOS:000405434400009",
+          "WOS:000411099800005",
+          "WOS:000474397402061",
+          "WOS:000632468300020",
+          "WOS:000521732800010",
+          "WOS:000858771800001",
+          "WOS:001264809500002"
+        ],
+        "ordered_wos_ids_sha256": "a9fe5824ec0e81a9b3c527fffe7ddbfd95cf25c32df51ab5e669b93c773bc8e9",
+        "source_row_count": 8,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "c2bd5323682845abac5fbe27e5df7eb273ef2b3ec10a67c3976f702bad525218",
+          "byte_count": 3145,
+          "record_count": 8,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "main",
+        "partition_id": "BC1",
+        "artifact": "searches/main/BC1.json",
+        "artifact_sha256": "f2527e673fb5f784eb4d0c4eeeed727eaf71d01c1c33f081f072b27b45be8e96",
+        "raw_query_sha256": "7663905e943052c85e434ed4fe11d2f59ea4780e3c56ce23a1d810e17e0bdc48",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"system reference model\") OR TS=(\"system reference models\") OR TS=(\"model library\") OR TS=(\"model libraries\") OR TS=(\"system model library\") OR TS=(\"system model libraries\") OR TS=(\"model pattern\") OR TS=(\"model patterns\") OR TS=(\"modeling pattern\") OR TS=(\"modeling patterns\") OR TS=(\"modelling pattern\") OR TS=(\"modelling patterns\") OR TS=(\"system model pattern\") OR TS=(\"system model patterns\") OR TS=(\"systems model pattern\") OR TS=(\"systems model patterns\") OR TS=(\"model profile\") OR TS=(\"model profiles\") OR TS=(\"system model profile\") OR TS=(\"system model profiles\") OR TS=(\"systems model profile\") OR TS=(\"systems model profiles\") OR TS=(\"SysML profile\") OR TS=(\"SysML profiles\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"model-based systems engineering\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"model based systems engineering\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"model-based system engineering\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"model based system engineering\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"MBSE\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"SysML\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"systems modeling language\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"system model\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"systems model\") OR TS=(\"domain specific modeling language\" NEAR/6 \"model-based systems engineering\") OR TS=(\"domain specific modeling language\" NEAR/6 \"model based systems engineering\") OR TS=(\"domain specific modeling language\" NEAR/6 \"model-based system engineering\") OR TS=(\"domain specific modeling language\" NEAR/6 \"model based system engineering\") OR TS=(\"domain specific modeling language\" NEAR/6 \"MBSE\") OR TS=(\"domain specific modeling language\" NEAR/6 \"SysML\") OR TS=(\"domain specific modeling language\" NEAR/6 \"systems modeling language\") OR TS=(\"domain specific modeling language\" NEAR/6 \"system model\") OR TS=(\"domain specific modeling language\" NEAR/6 \"systems model\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"model-based systems engineering\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"model based systems engineering\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"model-based system engineering\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"model based system engineering\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"MBSE\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"SysML\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"systems modeling language\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"system model\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"systems model\") OR TS=(\"domain specific modelling language\" NEAR/6 \"model-based systems engineering\") OR TS=(\"domain specific modelling language\" NEAR/6 \"model based systems engineering\") OR TS=(\"domain specific modelling language\" NEAR/6 \"model-based system engineering\") OR TS=(\"domain specific modelling language\" NEAR/6 \"model based system engineering\") OR TS=(\"domain specific modelling language\" NEAR/6 \"MBSE\") OR TS=(\"domain specific modelling language\" NEAR/6 \"SysML\") OR TS=(\"domain specific modelling language\" NEAR/6 \"systems modeling language\") OR TS=(\"domain specific modelling language\" NEAR/6 \"system model\") OR TS=(\"domain specific modelling language\" NEAR/6 \"systems model\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 17,
+        "ordered_wos_ids": [
+          "WOS:000309105303059",
+          "WOS:000368435600014",
+          "WOS:000380501300089",
+          "WOS:000388374901001",
+          "WOS:000405199503051",
+          "WOS:000405199501071",
+          "WOS:000451039803214",
+          "WOS:000681699104072",
+          "WOS:000681699104038",
+          "WOS:000853885000012",
+          "WOS:000681710100039",
+          "WOS:000999858400016",
+          "WOS:000988089100001",
+          "WOS:001106752200001",
+          "WOS:001264809500002",
+          "WOS:001470427000001",
+          "WOS:001836443900007"
+        ],
+        "ordered_wos_ids_sha256": "2a933054218b7b3a4aaafee3773a4b52d1f1f6d690c914934986c8c71a76115d",
+        "source_row_count": 17,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "fd454dafd34653248eb95b09c76e271ad2cfe235c5bde549cd88b682c4737328",
+          "byte_count": 6974,
+          "record_count": 17,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "main",
+        "partition_id": "BT2",
+        "artifact": "searches/main/BT2.json",
+        "artifact_sha256": "9676923b08b2125cb3a075e3cce24fcb9d2766f51a645c2f63cbf3a1fd642235",
+        "raw_query_sha256": "5d7cf75a388aacf6488c4f02438a290c15d2d78617461038f9a734f067a6c056",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"reuse\" NEAR/6 \"model\") OR TS=(\"reuse\" NEAR/6 \"models\") OR TS=(\"reuse\" NEAR/6 \"architecture\") OR TS=(\"reuse\" NEAR/6 \"architectures\") OR TS=(\"reuses\" NEAR/6 \"model\") OR TS=(\"reuses\" NEAR/6 \"models\") OR TS=(\"reuses\" NEAR/6 \"architecture\") OR TS=(\"reuses\" NEAR/6 \"architectures\") OR TS=(\"reused\" NEAR/6 \"model\") OR TS=(\"reused\" NEAR/6 \"models\") OR TS=(\"reused\" NEAR/6 \"architecture\") OR TS=(\"reused\" NEAR/6 \"architectures\") OR TS=(\"reusable\" NEAR/6 \"model\") OR TS=(\"reusable\" NEAR/6 \"models\") OR TS=(\"reusable\" NEAR/6 \"architecture\") OR TS=(\"reusable\" NEAR/6 \"architectures\") OR TS=(\"reusing\" NEAR/6 \"model\") OR TS=(\"reusing\" NEAR/6 \"models\") OR TS=(\"reusing\" NEAR/6 \"architecture\") OR TS=(\"reusing\" NEAR/6 \"architectures\") OR TS=(\"tailor\" NEAR/6 \"model\") OR TS=(\"tailor\" NEAR/6 \"models\") OR TS=(\"tailor\" NEAR/6 \"architecture\") OR TS=(\"tailor\" NEAR/6 \"architectures\") OR TS=(\"tailors\" NEAR/6 \"model\") OR TS=(\"tailors\" NEAR/6 \"models\") OR TS=(\"tailors\" NEAR/6 \"architecture\") OR TS=(\"tailors\" NEAR/6 \"architectures\") OR TS=(\"tailored\" NEAR/6 \"model\") OR TS=(\"tailored\" NEAR/6 \"models\") OR TS=(\"tailored\" NEAR/6 \"architecture\") OR TS=(\"tailored\" NEAR/6 \"architectures\") OR TS=(\"tailoring\" NEAR/6 \"model\") OR TS=(\"tailoring\" NEAR/6 \"models\") OR TS=(\"tailoring\" NEAR/6 \"architecture\") OR TS=(\"tailoring\" NEAR/6 \"architectures\") OR TS=(\"customize\" NEAR/6 \"model\") OR TS=(\"customize\" NEAR/6 \"models\") OR TS=(\"customize\" NEAR/6 \"architecture\") OR TS=(\"customize\" NEAR/6 \"architectures\") OR TS=(\"customizes\" NEAR/6 \"model\") OR TS=(\"customizes\" NEAR/6 \"models\") OR TS=(\"customizes\" NEAR/6 \"architecture\") OR TS=(\"customizes\" NEAR/6 \"architectures\") OR TS=(\"customized\" NEAR/6 \"model\") OR TS=(\"customized\" NEAR/6 \"models\") OR TS=(\"customized\" NEAR/6 \"architecture\") OR TS=(\"customized\" NEAR/6 \"architectures\") OR TS=(\"customizing\" NEAR/6 \"model\") OR TS=(\"customizing\" NEAR/6 \"models\") OR TS=(\"customizing\" NEAR/6 \"architecture\") OR TS=(\"customizing\" NEAR/6 \"architectures\") OR TS=(\"customization\" NEAR/6 \"model\") OR TS=(\"customization\" NEAR/6 \"models\") OR TS=(\"customization\" NEAR/6 \"architecture\") OR TS=(\"customization\" NEAR/6 \"architectures\") OR TS=(\"customise\" NEAR/6 \"model\") OR TS=(\"customise\" NEAR/6 \"models\") OR TS=(\"customise\" NEAR/6 \"architecture\") OR TS=(\"customise\" NEAR/6 \"architectures\") OR TS=(\"customises\" NEAR/6 \"model\") OR TS=(\"customises\" NEAR/6 \"models\") OR TS=(\"customises\" NEAR/6 \"architecture\") OR TS=(\"customises\" NEAR/6 \"architectures\") OR TS=(\"customised\" NEAR/6 \"model\") OR TS=(\"customised\" NEAR/6 \"models\") OR TS=(\"customised\" NEAR/6 \"architecture\") OR TS=(\"customised\" NEAR/6 \"architectures\") OR TS=(\"customising\" NEAR/6 \"model\") OR TS=(\"customising\" NEAR/6 \"models\") OR TS=(\"customising\" NEAR/6 \"architecture\") OR TS=(\"customising\" NEAR/6 \"architectures\") OR TS=(\"customisation\" NEAR/6 \"model\") OR TS=(\"customisation\" NEAR/6 \"models\") OR TS=(\"customisation\" NEAR/6 \"architecture\") OR TS=(\"customisation\" NEAR/6 \"architectures\") OR TS=(\"configure\" NEAR/6 \"model\") OR TS=(\"configure\" NEAR/6 \"models\") OR TS=(\"configure\" NEAR/6 \"architecture\") OR TS=(\"configure\" NEAR/6 \"architectures\") OR TS=(\"configures\" NEAR/6 \"model\") OR TS=(\"configures\" NEAR/6 \"models\") OR TS=(\"configures\" NEAR/6 \"architecture\") OR TS=(\"configures\" NEAR/6 \"architectures\") OR TS=(\"configured\" NEAR/6 \"model\") OR TS=(\"configured\" NEAR/6 \"models\") OR TS=(\"configured\" NEAR/6 \"architecture\") OR TS=(\"configured\" NEAR/6 \"architectures\") OR TS=(\"configuring\" NEAR/6 \"model\") OR TS=(\"configuring\" NEAR/6 \"models\") OR TS=(\"configuring\" NEAR/6 \"architecture\") OR TS=(\"configuring\" NEAR/6 \"architectures\") OR TS=(\"configuration\" NEAR/6 \"model\") OR TS=(\"configuration\" NEAR/6 \"models\") OR TS=(\"configuration\" NEAR/6 \"architecture\") OR TS=(\"configuration\" NEAR/6 \"architectures\") OR TS=(\"parameterize\" NEAR/6 \"model\") OR TS=(\"parameterize\" NEAR/6 \"models\") OR TS=(\"parameterize\" NEAR/6 \"architecture\") OR TS=(\"parameterize\" NEAR/6 \"architectures\") OR TS=(\"parameterizes\" NEAR/6 \"model\") OR TS=(\"parameterizes\" NEAR/6 \"models\") OR TS=(\"parameterizes\" NEAR/6 \"architecture\") OR TS=(\"parameterizes\" NEAR/6 \"architectures\") OR TS=(\"parameterized\" NEAR/6 \"model\") OR TS=(\"parameterized\" NEAR/6 \"models\") OR TS=(\"parameterized\" NEAR/6 \"architecture\") OR TS=(\"parameterized\" NEAR/6 \"architectures\") OR TS=(\"parameterizing\" NEAR/6 \"model\") OR TS=(\"parameterizing\" NEAR/6 \"models\") OR TS=(\"parameterizing\" NEAR/6 \"architecture\") OR TS=(\"parameterizing\" NEAR/6 \"architectures\") OR TS=(\"parameterization\" NEAR/6 \"model\") OR TS=(\"parameterization\" NEAR/6 \"models\") OR TS=(\"parameterization\" NEAR/6 \"architecture\") OR TS=(\"parameterization\" NEAR/6 \"architectures\") OR TS=(\"parameterise\" NEAR/6 \"model\") OR TS=(\"parameterise\" NEAR/6 \"models\") OR TS=(\"parameterise\" NEAR/6 \"architecture\") OR TS=(\"parameterise\" NEAR/6 \"architectures\") OR TS=(\"parameterises\" NEAR/6 \"model\") OR TS=(\"parameterises\" NEAR/6 \"models\") OR TS=(\"parameterises\" NEAR/6 \"architecture\") OR TS=(\"parameterises\" NEAR/6 \"architectures\") OR TS=(\"parameterised\" NEAR/6 \"model\") OR TS=(\"parameterised\" NEAR/6 \"models\") OR TS=(\"parameterised\" NEAR/6 \"architecture\") OR TS=(\"parameterised\" NEAR/6 \"architectures\") OR TS=(\"parameterising\" NEAR/6 \"model\") OR TS=(\"parameterising\" NEAR/6 \"models\") OR TS=(\"parameterising\" NEAR/6 \"architecture\") OR TS=(\"parameterising\" NEAR/6 \"architectures\") OR TS=(\"parameterisation\" NEAR/6 \"model\") OR TS=(\"parameterisation\" NEAR/6 \"models\") OR TS=(\"parameterisation\" NEAR/6 \"architecture\") OR TS=(\"parameterisation\" NEAR/6 \"architectures\") OR TS=(\"instantiate\" NEAR/6 \"model\") OR TS=(\"instantiate\" NEAR/6 \"models\") OR TS=(\"instantiate\" NEAR/6 \"architecture\") OR TS=(\"instantiate\" NEAR/6 \"architectures\") OR TS=(\"instantiates\" NEAR/6 \"model\") OR TS=(\"instantiates\" NEAR/6 \"models\") OR TS=(\"instantiates\" NEAR/6 \"architecture\") OR TS=(\"instantiates\" NEAR/6 \"architectures\") OR TS=(\"instantiated\" NEAR/6 \"model\") OR TS=(\"instantiated\" NEAR/6 \"models\") OR TS=(\"instantiated\" NEAR/6 \"architecture\") OR TS=(\"instantiated\" NEAR/6 \"architectures\") OR TS=(\"instantiating\" NEAR/6 \"model\") OR TS=(\"instantiating\" NEAR/6 \"models\") OR TS=(\"instantiating\" NEAR/6 \"architecture\") OR TS=(\"instantiating\" NEAR/6 \"architectures\") OR TS=(\"instantiation\" NEAR/6 \"model\") OR TS=(\"instantiation\" NEAR/6 \"models\") OR TS=(\"instantiation\" NEAR/6 \"architecture\") OR TS=(\"instantiation\" NEAR/6 \"architectures\") OR TS=(\"variability\" NEAR/6 \"model\") OR TS=(\"variability\" NEAR/6 \"models\") OR TS=(\"variability\" NEAR/6 \"architecture\") OR TS=(\"variability\" NEAR/6 \"architectures\") OR TS=(\"variation point\" NEAR/6 \"model\") OR TS=(\"variation point\" NEAR/6 \"models\") OR TS=(\"variation point\" NEAR/6 \"architecture\") OR TS=(\"variation point\" NEAR/6 \"architectures\") OR TS=(\"specialize\" NEAR/6 \"model\") OR TS=(\"specialize\" NEAR/6 \"models\") OR TS=(\"specialize\" NEAR/6 \"architecture\") OR TS=(\"specialize\" NEAR/6 \"architectures\") OR TS=(\"specializes\" NEAR/6 \"model\") OR TS=(\"specializes\" NEAR/6 \"models\") OR TS=(\"specializes\" NEAR/6 \"architecture\") OR TS=(\"specializes\" NEAR/6 \"architectures\") OR TS=(\"specialized\" NEAR/6 \"model\") OR TS=(\"specialized\" NEAR/6 \"models\") OR TS=(\"specialized\" NEAR/6 \"architecture\") OR TS=(\"specialized\" NEAR/6 \"architectures\") OR TS=(\"specializing\" NEAR/6 \"model\") OR TS=(\"specializing\" NEAR/6 \"models\") OR TS=(\"specializing\" NEAR/6 \"architecture\") OR TS=(\"specializing\" NEAR/6 \"architectures\") OR TS=(\"specialization\" NEAR/6 \"model\") OR TS=(\"specialization\" NEAR/6 \"models\") OR TS=(\"specialization\" NEAR/6 \"architecture\") OR TS=(\"specialization\" NEAR/6 \"architectures\") OR TS=(\"specialise\" NEAR/6 \"model\") OR TS=(\"specialise\" NEAR/6 \"models\") OR TS=(\"specialise\" NEAR/6 \"architecture\") OR TS=(\"specialise\" NEAR/6 \"architectures\") OR TS=(\"specialises\" NEAR/6 \"model\") OR TS=(\"specialises\" NEAR/6 \"models\") OR TS=(\"specialises\" NEAR/6 \"architecture\") OR TS=(\"specialises\" NEAR/6 \"architectures\") OR TS=(\"specialised\" NEAR/6 \"model\") OR TS=(\"specialised\" NEAR/6 \"models\") OR TS=(\"specialised\" NEAR/6 \"architecture\") OR TS=(\"specialised\" NEAR/6 \"architectures\") OR TS=(\"specialising\" NEAR/6 \"model\") OR TS=(\"specialising\" NEAR/6 \"models\") OR TS=(\"specialising\" NEAR/6 \"architecture\") OR TS=(\"specialising\" NEAR/6 \"architectures\") OR TS=(\"specialisation\" NEAR/6 \"model\") OR TS=(\"specialisation\" NEAR/6 \"models\") OR TS=(\"specialisation\" NEAR/6 \"architecture\") OR TS=(\"specialisation\" NEAR/6 \"architectures\") OR TS=(\"adapt\" NEAR/6 \"model\") OR TS=(\"adapt\" NEAR/6 \"models\") OR TS=(\"adapt\" NEAR/6 \"architecture\") OR TS=(\"adapt\" NEAR/6 \"architectures\") OR TS=(\"adapts\" NEAR/6 \"model\") OR TS=(\"adapts\" NEAR/6 \"models\") OR TS=(\"adapts\" NEAR/6 \"architecture\") OR TS=(\"adapts\" NEAR/6 \"architectures\") OR TS=(\"adapted\" NEAR/6 \"model\") OR TS=(\"adapted\" NEAR/6 \"models\") OR TS=(\"adapted\" NEAR/6 \"architecture\") OR TS=(\"adapted\" NEAR/6 \"architectures\") OR TS=(\"adapting\" NEAR/6 \"model\") OR TS=(\"adapting\" NEAR/6 \"models\") OR TS=(\"adapting\" NEAR/6 \"architecture\") OR TS=(\"adapting\" NEAR/6 \"architectures\") OR TS=(\"adaptation\" NEAR/6 \"model\") OR TS=(\"adaptation\" NEAR/6 \"models\") OR TS=(\"adaptation\" NEAR/6 \"architecture\") OR TS=(\"adaptation\" NEAR/6 \"architectures\")) AND PY=(2011-2026) AND LA=(English)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 6,
+        "ordered_wos_ids": [
+          "WOS:000356039102006",
+          "WOS:000388374901001",
+          "WOS:000405199501071",
+          "WOS:000872030000001",
+          "WOS:001128152200002",
+          "WOS:001557194600001"
+        ],
+        "ordered_wos_ids_sha256": "b7cdb9490889512c2a392522aa1b195aa6720a9893780ef5e1f3a9d765906531",
+        "source_row_count": 6,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "3f04a7abf7f5f327a69690dda866b63ac60d51aad9db82648ff7e168f8f3c9e0",
+          "byte_count": 2163,
+          "record_count": 6,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      }
+    ],
+    "union": {
+      "status": "reconciled",
+      "ordering": {
+        "partition_order": [
+          "A1",
+          "A2",
+          "A3",
+          "B1",
+          "B2",
+          "BG1",
+          "BG2",
+          "BC1",
+          "BT2"
+        ],
+        "within_partition_order": "adapter-verified native Date: oldest first source rank",
+        "union_order": "first occurrence in the declared partition order, retaining within-partition source rank"
+      },
+      "incomplete_partitions": [],
+      "source_event_total": 219,
+      "deduplicated_total": 155,
+      "duplicate_event_occurrences": 64,
+      "ordered_wos_ids": [
+        "WOS:001027247800008",
+        "WOS:000418391600075",
+        "WOS:000853885000012",
+        "WOS:000877804300006",
+        "WOS:001147132900001",
+        "WOS:001245804200001",
+        "WOS:001305791800001",
+        "WOS:001786492800054",
+        "WOS:001499693600007",
+        "WOS:001795835800009",
+        "WOS:001779877800020",
+        "WOS:001797570600001",
+        "WOS:000309105301100",
+        "WOS:000309105303059",
+        "WOS:000305905200012",
+        "WOS:000305905200011",
+        "WOS:000320123900081",
+        "WOS:000356039102032",
+        "WOS:000356039104001",
+        "WOS:000356039102006",
+        "WOS:000341949700077",
+        "WOS:000347021400033",
+        "WOS:000380501300089",
+        "WOS:000380537800033",
+        "WOS:000380537800106",
+        "WOS:000380501301003",
+        "WOS:000391537900040",
+        "WOS:000391209800022",
+        "WOS:000388374901001",
+        "WOS:000388374900068",
+        "WOS:000656460900005",
+        "WOS:000382412200011",
+        "WOS:000405199503051",
+        "WOS:000405199501071",
+        "WOS:000403403400006",
+        "WOS:000403403400092",
+        "WOS:000474397400072",
+        "WOS:000865767000086",
+        "WOS:000617940600065",
+        "WOS:000474397403038",
+        "WOS:000429782100007",
+        "WOS:000431948900003",
+        "WOS:000443049900091",
+        "WOS:000447575300003",
+        "WOS:000519270608112",
+        "WOS:000497002201013",
+        "WOS:001396984803022",
+        "WOS:001361729601006",
+        "WOS:000681699104072",
+        "WOS:000681699104038",
+        "WOS:000618045900101",
+        "WOS:001575608300047",
+        "WOS:000575138100014",
+        "WOS:000709094100026",
+        "WOS:000681710100039",
+        "WOS:001344632600009",
+        "WOS:001250139801187",
+        "WOS:001250139806085",
+        "WOS:001409485501060",
+        "WOS:000600957700001",
+        "WOS:000888580700001",
+        "WOS:001390888100001",
+        "WOS:000920916607015",
+        "WOS:000942487400060",
+        "WOS:000866278700024",
+        "WOS:000855669500032",
+        "WOS:000838702900020",
+        "WOS:000782416500023",
+        "WOS:000782416500040",
+        "WOS:000782416500045",
+        "WOS:000771711600010",
+        "WOS:000872030000001",
+        "WOS:001210606200031",
+        "WOS:001098971600050",
+        "WOS:001051001400014",
+        "WOS:001036371300001",
+        "WOS:001415226905170",
+        "WOS:001229648402064",
+        "WOS:001298157900021",
+        "WOS:001264809500002",
+        "WOS:001237656100001",
+        "WOS:001186855300002",
+        "WOS:001210253800001",
+        "WOS:001276531700001",
+        "WOS:001326203500001",
+        "WOS:001322857700001",
+        "WOS:001800653100016",
+        "WOS:001704609200476",
+        "WOS:001704613000344",
+        "WOS:001553229100093",
+        "WOS:001401309600001",
+        "WOS:001407668800001",
+        "WOS:001453418000001",
+        "WOS:001506331800001",
+        "WOS:001557117800001",
+        "WOS:001557194600001",
+        "WOS:001699806900001",
+        "WOS:001831652500001",
+        "WOS:001795013500001",
+        "WOS:000314989301020",
+        "WOS:000324335200216",
+        "WOS:000357105901003",
+        "WOS:000214906700002",
+        "WOS:000324991900030",
+        "WOS:000356039100047",
+        "WOS:000339412000377",
+        "WOS:000368435600014",
+        "WOS:000347767200010",
+        "WOS:000388374904018",
+        "WOS:000480428500003",
+        "WOS:000476782600037",
+        "WOS:000476919600001",
+        "WOS:000681699100008",
+        "WOS:000681699101027",
+        "WOS:000558563800001",
+        "WOS:000969061100014",
+        "WOS:000745722300001",
+        "WOS:001116704303150",
+        "WOS:001062143200058",
+        "WOS:001008282001077",
+        "WOS:000999858400016",
+        "WOS:001483980700010",
+        "WOS:000988089100001",
+        "WOS:000988842300003",
+        "WOS:001106921800001",
+        "WOS:001128152200002",
+        "WOS:001517243900028",
+        "WOS:001315638500279",
+        "WOS:001215536202001",
+        "WOS:001226402700019",
+        "WOS:001219908500001",
+        "WOS:001345024400001",
+        "WOS:001377589400001",
+        "WOS:001696874900014",
+        "WOS:001659587800228",
+        "WOS:001553229100335",
+        "WOS:001511207700058",
+        "WOS:001470427000001",
+        "WOS:001457470300001",
+        "WOS:001558282300001",
+        "WOS:001669614700001",
+        "WOS:001754027300001",
+        "WOS:001836443900007",
+        "WOS:001815355000004",
+        "WOS:000303506207082",
+        "WOS:000494480600012",
+        "WOS:000362669300007",
+        "WOS:000405434400009",
+        "WOS:000411099800005",
+        "WOS:000474397402061",
+        "WOS:000632468300020",
+        "WOS:000521732800010",
+        "WOS:000858771800001",
+        "WOS:000451039803214",
+        "WOS:001106752200001"
+      ],
+      "ordered_wos_ids_sha256": "6a922c5bbbf8411da5d79bbd899147b4399b7f557fe5dfbf7ddab1619ebf71ad",
+      "membership": [
+        {
+          "wos_id": "WOS:001027247800008",
+          "partitions": [
+            "A1",
+            "B1"
+          ],
+          "first_partition": "A1"
+        },
+        {
+          "wos_id": "WOS:000418391600075",
+          "partitions": [
+            "A2",
+            "B1"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:000853885000012",
+          "partitions": [
+            "A2",
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:000877804300006",
+          "partitions": [
+            "A2",
+            "B2"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:001147132900001",
+          "partitions": [
+            "A2",
+            "B1"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:001245804200001",
+          "partitions": [
+            "A2",
+            "B1"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:001305791800001",
+          "partitions": [
+            "A2",
+            "A3",
+            "B2"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:001786492800054",
+          "partitions": [
+            "A2",
+            "A3",
+            "B2"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:001499693600007",
+          "partitions": [
+            "A2",
+            "B2"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:001795835800009",
+          "partitions": [
+            "A2",
+            "B2"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:001779877800020",
+          "partitions": [
+            "A2",
+            "B1"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:001797570600001",
+          "partitions": [
+            "A2",
+            "B1"
+          ],
+          "first_partition": "A2"
+        },
+        {
+          "wos_id": "WOS:000309105301100",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000309105303059",
+          "partitions": [
+            "B1",
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000305905200012",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000305905200011",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000320123900081",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000356039102032",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000356039104001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000356039102006",
+          "partitions": [
+            "B1",
+            "B2",
+            "BT2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000341949700077",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000347021400033",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000380501300089",
+          "partitions": [
+            "B1",
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000380537800033",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000380537800106",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000380501301003",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000391537900040",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000391209800022",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000388374901001",
+          "partitions": [
+            "B1",
+            "B2",
+            "BC1",
+            "BT2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000388374900068",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000656460900005",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000382412200011",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000405199503051",
+          "partitions": [
+            "B1",
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000405199501071",
+          "partitions": [
+            "B1",
+            "B2",
+            "BC1",
+            "BT2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000403403400006",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000403403400092",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000474397400072",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000865767000086",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000617940600065",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000474397403038",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000429782100007",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000431948900003",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000443049900091",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000447575300003",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000519270608112",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000497002201013",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001396984803022",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001361729601006",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000681699104072",
+          "partitions": [
+            "B1",
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000681699104038",
+          "partitions": [
+            "B1",
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000618045900101",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001575608300047",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000575138100014",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000709094100026",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000681710100039",
+          "partitions": [
+            "B1",
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001344632600009",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001250139801187",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001250139806085",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001409485501060",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000600957700001",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000888580700001",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001390888100001",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000920916607015",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000942487400060",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000866278700024",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000855669500032",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000838702900020",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000782416500023",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000782416500040",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000782416500045",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000771711600010",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000872030000001",
+          "partitions": [
+            "B1",
+            "B2",
+            "BT2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001210606200031",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001098971600050",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001051001400014",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001036371300001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001415226905170",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001229648402064",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001298157900021",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001264809500002",
+          "partitions": [
+            "B1",
+            "B2",
+            "BG2",
+            "BC1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001237656100001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001186855300002",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001210253800001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001276531700001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001326203500001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001322857700001",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001800653100016",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001704609200476",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001704613000344",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001553229100093",
+          "partitions": [
+            "B1",
+            "B2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001401309600001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001407668800001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001453418000001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001506331800001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001557117800001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001557194600001",
+          "partitions": [
+            "B1",
+            "B2",
+            "BT2"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001699806900001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001831652500001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:001795013500001",
+          "partitions": [
+            "B1"
+          ],
+          "first_partition": "B1"
+        },
+        {
+          "wos_id": "WOS:000314989301020",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000324335200216",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000357105901003",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000214906700002",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000324991900030",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000356039100047",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000339412000377",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000368435600014",
+          "partitions": [
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000347767200010",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000388374904018",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000480428500003",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000476782600037",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000476919600001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000681699100008",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000681699101027",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000558563800001",
+          "partitions": [
+            "B2",
+            "BG1"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000969061100014",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000745722300001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001116704303150",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001062143200058",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001008282001077",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000999858400016",
+          "partitions": [
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001483980700010",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000988089100001",
+          "partitions": [
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000988842300003",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001106921800001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001128152200002",
+          "partitions": [
+            "B2",
+            "BT2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001517243900028",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001315638500279",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001215536202001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001226402700019",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001219908500001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001345024400001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001377589400001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001696874900014",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001659587800228",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001553229100335",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001511207700058",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001470427000001",
+          "partitions": [
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001457470300001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001558282300001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001669614700001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001754027300001",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001836443900007",
+          "partitions": [
+            "B2",
+            "BC1"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:001815355000004",
+          "partitions": [
+            "B2"
+          ],
+          "first_partition": "B2"
+        },
+        {
+          "wos_id": "WOS:000303506207082",
+          "partitions": [
+            "BG1"
+          ],
+          "first_partition": "BG1"
+        },
+        {
+          "wos_id": "WOS:000494480600012",
+          "partitions": [
+            "BG1"
+          ],
+          "first_partition": "BG1"
+        },
+        {
+          "wos_id": "WOS:000362669300007",
+          "partitions": [
+            "BG2"
+          ],
+          "first_partition": "BG2"
+        },
+        {
+          "wos_id": "WOS:000405434400009",
+          "partitions": [
+            "BG2"
+          ],
+          "first_partition": "BG2"
+        },
+        {
+          "wos_id": "WOS:000411099800005",
+          "partitions": [
+            "BG2"
+          ],
+          "first_partition": "BG2"
+        },
+        {
+          "wos_id": "WOS:000474397402061",
+          "partitions": [
+            "BG2"
+          ],
+          "first_partition": "BG2"
+        },
+        {
+          "wos_id": "WOS:000632468300020",
+          "partitions": [
+            "BG2"
+          ],
+          "first_partition": "BG2"
+        },
+        {
+          "wos_id": "WOS:000521732800010",
+          "partitions": [
+            "BG2"
+          ],
+          "first_partition": "BG2"
+        },
+        {
+          "wos_id": "WOS:000858771800001",
+          "partitions": [
+            "BG2"
+          ],
+          "first_partition": "BG2"
+        },
+        {
+          "wos_id": "WOS:000451039803214",
+          "partitions": [
+            "BC1"
+          ],
+          "first_partition": "BC1"
+        },
+        {
+          "wos_id": "WOS:001106752200001",
+          "partitions": [
+            "BC1"
+          ],
+          "first_partition": "BC1"
+        }
+      ]
+    },
+    "semantic_unions": {
+      "stream_A": {
+        "status": "reconciled",
+        "ordering": {
+          "partition_order": [
+            "A1",
+            "A2",
+            "A3"
+          ],
+          "within_partition_order": "adapter-verified native Date: oldest first source rank",
+          "union_order": "first occurrence in the declared partition order, retaining within-partition source rank"
+        },
+        "incomplete_partitions": [],
+        "source_event_total": 14,
+        "deduplicated_total": 12,
+        "duplicate_event_occurrences": 2,
+        "ordered_wos_ids": [
+          "WOS:001027247800008",
+          "WOS:000418391600075",
+          "WOS:000853885000012",
+          "WOS:000877804300006",
+          "WOS:001147132900001",
+          "WOS:001245804200001",
+          "WOS:001305791800001",
+          "WOS:001786492800054",
+          "WOS:001499693600007",
+          "WOS:001795835800009",
+          "WOS:001779877800020",
+          "WOS:001797570600001"
+        ],
+        "ordered_wos_ids_sha256": "9dd228363549f8c12d858d43f3b5958e29f7b98aea8cc36433fc0017ecdfc617",
+        "membership": [
+          {
+            "wos_id": "WOS:001027247800008",
+            "partitions": [
+              "A1"
+            ],
+            "first_partition": "A1"
+          },
+          {
+            "wos_id": "WOS:000418391600075",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:000853885000012",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:000877804300006",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:001147132900001",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:001245804200001",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:001305791800001",
+            "partitions": [
+              "A2",
+              "A3"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:001786492800054",
+            "partitions": [
+              "A2",
+              "A3"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:001499693600007",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:001795835800009",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:001779877800020",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          },
+          {
+            "wos_id": "WOS:001797570600001",
+            "partitions": [
+              "A2"
+            ],
+            "first_partition": "A2"
+          }
+        ]
+      },
+      "core_stream_B": {
+        "status": "reconciled",
+        "ordering": {
+          "partition_order": [
+            "B1",
+            "B2"
+          ],
+          "within_partition_order": "adapter-verified native Date: oldest first source rank",
+          "union_order": "first occurrence in the declared partition order, retaining within-partition source rank"
+        },
+        "incomplete_partitions": [],
+        "source_event_total": 171,
+        "deduplicated_total": 144,
+        "duplicate_event_occurrences": 27,
+        "ordered_wos_ids": [
+          "WOS:000309105301100",
+          "WOS:000309105303059",
+          "WOS:000305905200012",
+          "WOS:000305905200011",
+          "WOS:000320123900081",
+          "WOS:000356039102032",
+          "WOS:000356039104001",
+          "WOS:000356039102006",
+          "WOS:000341949700077",
+          "WOS:000347021400033",
+          "WOS:000380501300089",
+          "WOS:000380537800033",
+          "WOS:000380537800106",
+          "WOS:000380501301003",
+          "WOS:000391537900040",
+          "WOS:000391209800022",
+          "WOS:000388374901001",
+          "WOS:000388374900068",
+          "WOS:000656460900005",
+          "WOS:000382412200011",
+          "WOS:000418391600075",
+          "WOS:000405199503051",
+          "WOS:000405199501071",
+          "WOS:000403403400006",
+          "WOS:000403403400092",
+          "WOS:000474397400072",
+          "WOS:000865767000086",
+          "WOS:000617940600065",
+          "WOS:000474397403038",
+          "WOS:000429782100007",
+          "WOS:000431948900003",
+          "WOS:000443049900091",
+          "WOS:000447575300003",
+          "WOS:000519270608112",
+          "WOS:000497002201013",
+          "WOS:001396984803022",
+          "WOS:001361729601006",
+          "WOS:000681699104072",
+          "WOS:000681699104038",
+          "WOS:000618045900101",
+          "WOS:001575608300047",
+          "WOS:000575138100014",
+          "WOS:000709094100026",
+          "WOS:000681710100039",
+          "WOS:001344632600009",
+          "WOS:001250139801187",
+          "WOS:001250139806085",
+          "WOS:001409485501060",
+          "WOS:000600957700001",
+          "WOS:000888580700001",
+          "WOS:001390888100001",
+          "WOS:000920916607015",
+          "WOS:000942487400060",
+          "WOS:000866278700024",
+          "WOS:000855669500032",
+          "WOS:000838702900020",
+          "WOS:000782416500023",
+          "WOS:000782416500040",
+          "WOS:000782416500045",
+          "WOS:000771711600010",
+          "WOS:000872030000001",
+          "WOS:001210606200031",
+          "WOS:001098971600050",
+          "WOS:001051001400014",
+          "WOS:001027247800008",
+          "WOS:001036371300001",
+          "WOS:001415226905170",
+          "WOS:001229648402064",
+          "WOS:001298157900021",
+          "WOS:001264809500002",
+          "WOS:001237656100001",
+          "WOS:001147132900001",
+          "WOS:001186855300002",
+          "WOS:001210253800001",
+          "WOS:001245804200001",
+          "WOS:001276531700001",
+          "WOS:001326203500001",
+          "WOS:001322857700001",
+          "WOS:001800653100016",
+          "WOS:001704609200476",
+          "WOS:001704613000344",
+          "WOS:001553229100093",
+          "WOS:001401309600001",
+          "WOS:001407668800001",
+          "WOS:001453418000001",
+          "WOS:001506331800001",
+          "WOS:001557117800001",
+          "WOS:001557194600001",
+          "WOS:001779877800020",
+          "WOS:001699806900001",
+          "WOS:001797570600001",
+          "WOS:001831652500001",
+          "WOS:001795013500001",
+          "WOS:000314989301020",
+          "WOS:000324335200216",
+          "WOS:000357105901003",
+          "WOS:000214906700002",
+          "WOS:000324991900030",
+          "WOS:000356039100047",
+          "WOS:000339412000377",
+          "WOS:000368435600014",
+          "WOS:000347767200010",
+          "WOS:000388374904018",
+          "WOS:000480428500003",
+          "WOS:000476782600037",
+          "WOS:000476919600001",
+          "WOS:000681699100008",
+          "WOS:000681699101027",
+          "WOS:000558563800001",
+          "WOS:000853885000012",
+          "WOS:000969061100014",
+          "WOS:000745722300001",
+          "WOS:000877804300006",
+          "WOS:001116704303150",
+          "WOS:001062143200058",
+          "WOS:001008282001077",
+          "WOS:000999858400016",
+          "WOS:001483980700010",
+          "WOS:000988089100001",
+          "WOS:000988842300003",
+          "WOS:001106921800001",
+          "WOS:001128152200002",
+          "WOS:001517243900028",
+          "WOS:001315638500279",
+          "WOS:001215536202001",
+          "WOS:001226402700019",
+          "WOS:001219908500001",
+          "WOS:001305791800001",
+          "WOS:001345024400001",
+          "WOS:001377589400001",
+          "WOS:001786492800054",
+          "WOS:001696874900014",
+          "WOS:001659587800228",
+          "WOS:001553229100335",
+          "WOS:001511207700058",
+          "WOS:001470427000001",
+          "WOS:001457470300001",
+          "WOS:001499693600007",
+          "WOS:001558282300001",
+          "WOS:001795835800009",
+          "WOS:001669614700001",
+          "WOS:001754027300001",
+          "WOS:001836443900007",
+          "WOS:001815355000004"
+        ],
+        "ordered_wos_ids_sha256": "99b071a8baff324c8c013d11e3cee4181ae2331bab5afa17d1eda6be80a89512",
+        "membership": [
+          {
+            "wos_id": "WOS:000309105301100",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000309105303059",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000305905200012",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000305905200011",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000320123900081",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000356039102032",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000356039104001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000356039102006",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000341949700077",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000347021400033",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000380501300089",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000380537800033",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000380537800106",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000380501301003",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000391537900040",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000391209800022",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000388374901001",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000388374900068",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000656460900005",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000382412200011",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000418391600075",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000405199503051",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000405199501071",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000403403400006",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000403403400092",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000474397400072",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000865767000086",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000617940600065",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000474397403038",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000429782100007",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000431948900003",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000443049900091",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000447575300003",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000519270608112",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000497002201013",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001396984803022",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001361729601006",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000681699104072",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000681699104038",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000618045900101",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001575608300047",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000575138100014",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000709094100026",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000681710100039",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001344632600009",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001250139801187",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001250139806085",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001409485501060",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000600957700001",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000888580700001",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001390888100001",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000920916607015",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000942487400060",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000866278700024",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000855669500032",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000838702900020",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000782416500023",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000782416500040",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000782416500045",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000771711600010",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000872030000001",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001210606200031",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001098971600050",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001051001400014",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001027247800008",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001036371300001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001415226905170",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001229648402064",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001298157900021",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001264809500002",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001237656100001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001147132900001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001186855300002",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001210253800001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001245804200001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001276531700001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001326203500001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001322857700001",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001800653100016",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001704609200476",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001704613000344",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001553229100093",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001401309600001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001407668800001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001453418000001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001506331800001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001557117800001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001557194600001",
+            "partitions": [
+              "B1",
+              "B2"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001779877800020",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001699806900001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001797570600001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001831652500001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:001795013500001",
+            "partitions": [
+              "B1"
+            ],
+            "first_partition": "B1"
+          },
+          {
+            "wos_id": "WOS:000314989301020",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000324335200216",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000357105901003",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000214906700002",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000324991900030",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000356039100047",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000339412000377",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000368435600014",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000347767200010",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000388374904018",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000480428500003",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000476782600037",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000476919600001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000681699100008",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000681699101027",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000558563800001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000853885000012",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000969061100014",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000745722300001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000877804300006",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001116704303150",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001062143200058",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001008282001077",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000999858400016",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001483980700010",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000988089100001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:000988842300003",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001106921800001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001128152200002",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001517243900028",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001315638500279",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001215536202001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001226402700019",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001219908500001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001305791800001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001345024400001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001377589400001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001786492800054",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001696874900014",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001659587800228",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001553229100335",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001511207700058",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001470427000001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001457470300001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001499693600007",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001558282300001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001795835800009",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001669614700001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001754027300001",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001836443900007",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          },
+          {
+            "wos_id": "WOS:001815355000004",
+            "partitions": [
+              "B2"
+            ],
+            "first_partition": "B2"
+          }
+        ]
+      },
+      "expanded_stream_B": {
+        "status": "reconciled",
+        "ordering": {
+          "partition_order": [
+            "BG1",
+            "BG2",
+            "BC1",
+            "BT2"
+          ],
+          "within_partition_order": "adapter-verified native Date: oldest first source rank",
+          "union_order": "first occurrence in the declared partition order, retaining within-partition source rank"
+        },
+        "incomplete_partitions": [],
+        "source_event_total": 34,
+        "deduplicated_total": 31,
+        "duplicate_event_occurrences": 3,
+        "ordered_wos_ids": [
+          "WOS:000303506207082",
+          "WOS:000494480600012",
+          "WOS:000558563800001",
+          "WOS:000362669300007",
+          "WOS:000405434400009",
+          "WOS:000411099800005",
+          "WOS:000474397402061",
+          "WOS:000632468300020",
+          "WOS:000521732800010",
+          "WOS:000858771800001",
+          "WOS:001264809500002",
+          "WOS:000309105303059",
+          "WOS:000368435600014",
+          "WOS:000380501300089",
+          "WOS:000388374901001",
+          "WOS:000405199503051",
+          "WOS:000405199501071",
+          "WOS:000451039803214",
+          "WOS:000681699104072",
+          "WOS:000681699104038",
+          "WOS:000853885000012",
+          "WOS:000681710100039",
+          "WOS:000999858400016",
+          "WOS:000988089100001",
+          "WOS:001106752200001",
+          "WOS:001470427000001",
+          "WOS:001836443900007",
+          "WOS:000356039102006",
+          "WOS:000872030000001",
+          "WOS:001128152200002",
+          "WOS:001557194600001"
+        ],
+        "ordered_wos_ids_sha256": "f3af7530e92910197066293d64d4856feea476ad00173eefe60f6d8fcb6f4818",
+        "membership": [
+          {
+            "wos_id": "WOS:000303506207082",
+            "partitions": [
+              "BG1"
+            ],
+            "first_partition": "BG1"
+          },
+          {
+            "wos_id": "WOS:000494480600012",
+            "partitions": [
+              "BG1"
+            ],
+            "first_partition": "BG1"
+          },
+          {
+            "wos_id": "WOS:000558563800001",
+            "partitions": [
+              "BG1"
+            ],
+            "first_partition": "BG1"
+          },
+          {
+            "wos_id": "WOS:000362669300007",
+            "partitions": [
+              "BG2"
+            ],
+            "first_partition": "BG2"
+          },
+          {
+            "wos_id": "WOS:000405434400009",
+            "partitions": [
+              "BG2"
+            ],
+            "first_partition": "BG2"
+          },
+          {
+            "wos_id": "WOS:000411099800005",
+            "partitions": [
+              "BG2"
+            ],
+            "first_partition": "BG2"
+          },
+          {
+            "wos_id": "WOS:000474397402061",
+            "partitions": [
+              "BG2"
+            ],
+            "first_partition": "BG2"
+          },
+          {
+            "wos_id": "WOS:000632468300020",
+            "partitions": [
+              "BG2"
+            ],
+            "first_partition": "BG2"
+          },
+          {
+            "wos_id": "WOS:000521732800010",
+            "partitions": [
+              "BG2"
+            ],
+            "first_partition": "BG2"
+          },
+          {
+            "wos_id": "WOS:000858771800001",
+            "partitions": [
+              "BG2"
+            ],
+            "first_partition": "BG2"
+          },
+          {
+            "wos_id": "WOS:001264809500002",
+            "partitions": [
+              "BG2",
+              "BC1"
+            ],
+            "first_partition": "BG2"
+          },
+          {
+            "wos_id": "WOS:000309105303059",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000368435600014",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000380501300089",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000388374901001",
+            "partitions": [
+              "BC1",
+              "BT2"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000405199503051",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000405199501071",
+            "partitions": [
+              "BC1",
+              "BT2"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000451039803214",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000681699104072",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000681699104038",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000853885000012",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000681710100039",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000999858400016",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000988089100001",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:001106752200001",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:001470427000001",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:001836443900007",
+            "partitions": [
+              "BC1"
+            ],
+            "first_partition": "BC1"
+          },
+          {
+            "wos_id": "WOS:000356039102006",
+            "partitions": [
+              "BT2"
+            ],
+            "first_partition": "BT2"
+          },
+          {
+            "wos_id": "WOS:000872030000001",
+            "partitions": [
+              "BT2"
+            ],
+            "first_partition": "BT2"
+          },
+          {
+            "wos_id": "WOS:001128152200002",
+            "partitions": [
+              "BT2"
+            ],
+            "first_partition": "BT2"
+          },
+          {
+            "wos_id": "WOS:001557194600001",
+            "partitions": [
+              "BT2"
+            ],
+            "first_partition": "BT2"
+          }
+        ]
+      }
+    }
+  },
+  "prior_secondary_reviews": {
+    "partition_order": [
+      "PSR1",
+      "PSR2",
+      "PSR3",
+      "PSR4"
+    ],
+    "events": [
+      {
+        "namespace": "psr",
+        "partition_id": "PSR1",
+        "artifact": "searches/psr/PSR1.json",
+        "artifact_sha256": "0ed3ffdbf7143075cc24098ed09058d61aab6f08016184734411e9520c26e97a",
+        "raw_query_sha256": "2075fc504ad8e026fa6b07d6cbdb4153fabef4c72095b469e8cda245fa9d1e7f",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\") OR TS=(\"spacecraft\") OR TS=(\"space system\") OR TS=(\"space systems\") OR TS=(\"space mission\") OR TS=(\"space missions\") OR TS=(\"space engineering\") OR TS=(\"space systems engineering\") OR TS=(\"space application\") OR TS=(\"space applications\") OR TS=(\"space sector\") OR TS=(\"space industry\") OR TS=(\"satellite\") OR TS=(\"satellites\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) AND (TS=(\"systematic review\") OR TS=(\"systematic literature review\") OR TS=(\"systematic mapping\") OR TS=(\"systematic mapping study\") OR TS=(\"mapping study\") OR TS=(\"scoping review\") OR TS=(\"literature review\") OR TS=(\"literature survey\") OR TS=(\"bibliometric review\") OR TS=(\"bibliometric analysis\") OR TS=(\"evidence synthesis\") OR TS=(\"secondary study\") OR TS=(\"state-of-the-art review\") OR TS=(\"state of the art review\") OR TS=(\"survey paper\") OR TS=(\"survey\")) AND PY=(1900-2026)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 22,
+        "ordered_wos_ids": [
+          "WOS:A1994NK03200027",
+          "WOS:A1996UP69400020",
+          "WOS:000178885000018",
+          "WOS:000325194400012",
+          "WOS:000380537800122",
+          "WOS:000360555500011",
+          "WOS:000406048600005",
+          "WOS:000419192500009",
+          "WOS:000429782100007",
+          "WOS:000467687300015",
+          "WOS:000681699105033",
+          "WOS:000622489600001",
+          "WOS:000639329800001",
+          "WOS:000782416500047",
+          "WOS:000995680600001",
+          "WOS:001036674300001",
+          "WOS:001079098500001",
+          "WOS:001237860700001",
+          "WOS:001492232200001",
+          "WOS:001583299700008",
+          "WOS:001705529700001",
+          "WOS:001826451400008"
+        ],
+        "ordered_wos_ids_sha256": "f3dcc1a6bbd62b40c50e47491adcba782712ae9391e4dbe2b4d20b4fb73e969d",
+        "source_row_count": 22,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "51b546cefc1eb3edfac46c7cd2dd136a79681610c35260dd92e52a1936ba734d",
+          "byte_count": 9244,
+          "record_count": 22,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "psr",
+        "partition_id": "PSR2",
+        "artifact": "searches/psr/PSR2.json",
+        "artifact_sha256": "fdb72bd427aca8932c9f71e21cc346c05846d1a341621466eb73638c417d7b20",
+        "raw_query_sha256": "bfdf11b7fdfb179fef386f242cdecb45e0ddaf67862784ca3bae0834836a3c2e",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\") OR TS=(\"spacecraft\") OR TS=(\"space system\") OR TS=(\"space systems\") OR TS=(\"space mission\") OR TS=(\"space missions\") OR TS=(\"space engineering\") OR TS=(\"space systems engineering\") OR TS=(\"space application\") OR TS=(\"space applications\") OR TS=(\"space sector\") OR TS=(\"space industry\") OR TS=(\"satellite\") OR TS=(\"satellites\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"requirement\") OR TS=(\"requirements\") OR TS=(\"function\") OR TS=(\"functions\") OR TS=(\"functional\") OR TS=(\"behavior\") OR TS=(\"behaviors\") OR TS=(\"behaviour\") OR TS=(\"behaviours\") OR TS=(\"behavioral\") OR TS=(\"behavioural\") OR TS=(\"architecture\") OR TS=(\"architectures\") OR TS=(\"architectural\") OR TS=(\"interface\") OR TS=(\"interfaces\") OR TS=(\"traceability\") OR TS=(\"trace\") OR TS=(\"traceable\") OR TS=(\"traced\") OR TS=(\"allocation\") OR TS=(\"allocate\") OR TS=(\"allocated\") OR TS=(\"constraint\") OR TS=(\"constraints\") OR TS=(\"parametric\") OR TS=(\"parametrics\") OR TS=(\"analysis\") OR TS=(\"analyses\") OR TS=(\"design\") OR TS=(\"designs\") OR TS=(\"designed\") OR TS=(\"designing\") OR TS=(\"decision\") OR TS=(\"decisions\") OR TS=(\"decision-making\") OR TS=(\"decision making\") OR TS=(\"trade study\") OR TS=(\"trade studies\") OR TS=(\"trade-off\") OR TS=(\"trade-offs\") OR TS=(\"tradeoff\") OR TS=(\"tradeoffs\") OR TS=(\"verification\") OR TS=(\"verifications\") OR TS=(\"verify\") OR TS=(\"verifies\") OR TS=(\"verified\") OR TS=(\"verifying\") OR TS=(\"validation\") OR TS=(\"validations\") OR TS=(\"validate\") OR TS=(\"validates\") OR TS=(\"validated\") OR TS=(\"validating\")) AND (TS=(\"systematic review\") OR TS=(\"systematic literature review\") OR TS=(\"systematic mapping\") OR TS=(\"systematic mapping study\") OR TS=(\"mapping study\") OR TS=(\"scoping review\") OR TS=(\"literature review\") OR TS=(\"literature survey\") OR TS=(\"bibliometric review\") OR TS=(\"bibliometric analysis\") OR TS=(\"evidence synthesis\") OR TS=(\"secondary study\") OR TS=(\"state-of-the-art review\") OR TS=(\"state of the art review\") OR TS=(\"survey paper\") OR TS=(\"survey\")) AND PY=(1900-2026)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 60,
+        "ordered_wos_ids": [
+          "WOS:000073874600016",
+          "WOS:000084534100006",
+          "WOS:000188540600017",
+          "WOS:000216349400011",
+          "WOS:000239683500012",
+          "WOS:000317796900017",
+          "WOS:000343092100033",
+          "WOS:000395821900033",
+          "WOS:000461314200155",
+          "WOS:000446770200122",
+          "WOS:000524757800006",
+          "WOS:000556995700001",
+          "WOS:000607376100006",
+          "WOS:000796444800015",
+          "WOS:000654905700017",
+          "WOS:000639329800001",
+          "WOS:001175836300035",
+          "WOS:000913220000007",
+          "WOS:000886932200009",
+          "WOS:000883157900001",
+          "WOS:000873889100001",
+          "WOS:000864155400001",
+          "WOS:001116078600001",
+          "WOS:001066018300007",
+          "WOS:001036277400001",
+          "WOS:001127292000001",
+          "WOS:001758341500023",
+          "WOS:001381377200033",
+          "WOS:001248216300007",
+          "WOS:001338415100001",
+          "WOS:001753795200008",
+          "WOS:001275636300001",
+          "WOS:001735745700042",
+          "WOS:001701407900008",
+          "WOS:001605291400001",
+          "WOS:001422962700007",
+          "WOS:001517350200003",
+          "WOS:001508291200011",
+          "WOS:001553752400005",
+          "WOS:001570139700001",
+          "WOS:001579791000001",
+          "WOS:001593905200001",
+          "WOS:001612592500001",
+          "WOS:001621282900001",
+          "WOS:001642169900001",
+          "WOS:001741054500034",
+          "WOS:001740761900001",
+          "WOS:001706437800001",
+          "WOS:001694310400001",
+          "WOS:001662321400001",
+          "WOS:001705529700001",
+          "WOS:001724936400001",
+          "WOS:001732809500001",
+          "WOS:001717293200001",
+          "WOS:001762421400001",
+          "WOS:001784947400001",
+          "WOS:001781813800001",
+          "WOS:001806028500001",
+          "WOS:001817941900001",
+          "WOS:001737631500001"
+        ],
+        "ordered_wos_ids_sha256": "4087a1c9ca4972fdf4931ed7b7d0a09aa5cfe72c8aecc9733bfb34c64e718883",
+        "source_row_count": 60,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "ff79c7a719e352c3bd3e14d553c064f430ab966094a4c99c8b57d718b292abd7",
+          "byte_count": 24489,
+          "record_count": 60,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 2,
+          "local_path_persisted": false
+        },
+        "errors": []
+      },
+      {
+        "namespace": "psr",
+        "partition_id": "PSR3",
+        "artifact": "searches/psr/PSR3.json",
+        "artifact_sha256": "6862bfb25be452eb74a70d5bfe569e454848a5c22a431ad467cff4e1dbd4f8fb",
+        "raw_query_sha256": "b2e6df84e177009bab970b514085cc0e8fc8baa909044fdd8231b27eb568b2db",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\") OR TS=(\"power budget\") OR TS=(\"power budgets\") OR TS=(\"energy budget\") OR TS=(\"energy budgets\") OR TS=(\"energy balance\") OR TS=(\"energy balances\") OR TS=(\"power balance\") OR TS=(\"power balances\") OR TS=(\"power margin\") OR TS=(\"power margins\") OR TS=(\"power generation\") OR TS=(\"photovoltaic generator\") OR TS=(\"photovoltaic generators\") OR TS=(\"solar array\") OR TS=(\"solar arrays\") OR TS=(\"solar panel\") OR TS=(\"solar panels\") OR TS=(\"battery\") OR TS=(\"batteries\") OR TS=(\"battery management\") OR TS=(\"state of charge\") OR TS=(\"states of charge\") OR TS=(\"energy storage\") OR TS=(\"power electronics\") OR TS=(\"power conditioning\") OR TS=(\"power distribution\") OR TS=(\"power management\") OR TS=(\"power interface\") OR TS=(\"power interfaces\") OR TS=(\"power mode\") OR TS=(\"power modes\") OR TS=(\"load profile\") OR TS=(\"load profiles\") OR TS=(\"power consumption\") OR TS=(\"power demand\") OR TS=(\"power profile\") OR TS=(\"energy harvesting\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\") OR TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"systematic review\") OR TS=(\"systematic literature review\") OR TS=(\"systematic mapping\") OR TS=(\"systematic mapping study\") OR TS=(\"mapping study\") OR TS=(\"scoping review\") OR TS=(\"literature review\") OR TS=(\"literature survey\") OR TS=(\"bibliometric review\") OR TS=(\"bibliometric analysis\") OR TS=(\"evidence synthesis\") OR TS=(\"secondary study\") OR TS=(\"state-of-the-art review\") OR TS=(\"state of the art review\") OR TS=(\"survey paper\") OR TS=(\"survey\")) AND PY=(1900-2026)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 0,
+        "ordered_wos_ids": [],
+        "ordered_wos_ids_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_row_count": 0,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": null,
+        "native_artifact": {},
+        "errors": []
+      },
+      {
+        "namespace": "psr",
+        "partition_id": "PSR4",
+        "artifact": "searches/psr/PSR4.json",
+        "artifact_sha256": "5e89b45ef5e8610fc856cbe0f125e1234f869307d32ac21c63dd5724490724b5",
+        "raw_query_sha256": "3aea17f8cdaa98078772667a4187e9210643432a31391fb3924ecbc3202b75dc",
+        "raw_query": "(TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\") OR TS=(\"spacecraft\") OR TS=(\"space system\") OR TS=(\"space systems\") OR TS=(\"space mission\") OR TS=(\"space missions\") OR TS=(\"space engineering\") OR TS=(\"space systems engineering\") OR TS=(\"space application\") OR TS=(\"space applications\") OR TS=(\"space sector\") OR TS=(\"space industry\") OR TS=(\"satellite\") OR TS=(\"satellites\")) AND (TS=(\"generic model\") OR TS=(\"generic models\") OR TS=(\"generic system model\") OR TS=(\"generic system models\") OR TS=(\"reusable model\") OR TS=(\"reusable models\") OR TS=(\"reusable system model\") OR TS=(\"reusable system models\") OR TS=(\"configurable model\") OR TS=(\"configurable models\") OR TS=(\"configurable system model\") OR TS=(\"configurable system models\") OR TS=(\"model template\") OR TS=(\"model templates\") OR TS=(\"mission-agnostic\" NEAR/6 \"model\") OR TS=(\"mission-agnostic\" NEAR/6 \"models\") OR TS=(\"mission-agnostic\" NEAR/6 \"architecture\") OR TS=(\"mission-agnostic\" NEAR/6 \"architectures\") OR TS=(\"mission agnostic\" NEAR/6 \"model\") OR TS=(\"mission agnostic\" NEAR/6 \"models\") OR TS=(\"mission agnostic\" NEAR/6 \"architecture\") OR TS=(\"mission agnostic\" NEAR/6 \"architectures\") OR TS=(\"mission-independent\" NEAR/6 \"model\") OR TS=(\"mission-independent\" NEAR/6 \"models\") OR TS=(\"mission-independent\" NEAR/6 \"architecture\") OR TS=(\"mission-independent\" NEAR/6 \"architectures\") OR TS=(\"mission independent\" NEAR/6 \"model\") OR TS=(\"mission independent\" NEAR/6 \"models\") OR TS=(\"mission independent\" NEAR/6 \"architecture\") OR TS=(\"mission independent\" NEAR/6 \"architectures\") OR TS=(\"reference architecture\") OR TS=(\"reference architectures\") OR TS=(\"domain model\") OR TS=(\"domain models\") OR TS=(\"metamodel\") OR TS=(\"metamodels\") OR TS=(\"meta-model\") OR TS=(\"meta-models\") OR TS=(\"product-line\" NEAR/6 \"model\") OR TS=(\"product-line\" NEAR/6 \"models\") OR TS=(\"product line\" NEAR/6 \"model\") OR TS=(\"product line\" NEAR/6 \"models\") OR TS=(\"product-family\" NEAR/6 \"model\") OR TS=(\"product-family\" NEAR/6 \"models\") OR TS=(\"product family\" NEAR/6 \"model\") OR TS=(\"product family\" NEAR/6 \"models\") OR TS=(\"variation point\" NEAR/6 \"model\") OR TS=(\"variation point\" NEAR/6 \"models\") OR TS=(\"variation point\" NEAR/6 \"architecture\") OR TS=(\"variation point\" NEAR/6 \"architectures\") OR TS=(\"variation points\" NEAR/6 \"model\") OR TS=(\"variation points\" NEAR/6 \"models\") OR TS=(\"variation points\" NEAR/6 \"architecture\") OR TS=(\"variation points\" NEAR/6 \"architectures\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"system reference model\") OR TS=(\"system reference models\") OR TS=(\"model library\") OR TS=(\"model libraries\") OR TS=(\"system model library\") OR TS=(\"system model libraries\") OR TS=(\"model pattern\") OR TS=(\"model patterns\") OR TS=(\"modeling pattern\") OR TS=(\"modeling patterns\") OR TS=(\"modelling pattern\") OR TS=(\"modelling patterns\") OR TS=(\"system model pattern\") OR TS=(\"system model patterns\") OR TS=(\"systems model pattern\") OR TS=(\"systems model patterns\") OR TS=(\"model profile\") OR TS=(\"model profiles\") OR TS=(\"system model profile\") OR TS=(\"system model profiles\") OR TS=(\"systems model profile\") OR TS=(\"systems model profiles\") OR TS=(\"SysML profile\") OR TS=(\"SysML profiles\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"model-based systems engineering\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"model based systems engineering\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"model-based system engineering\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"model based system engineering\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"MBSE\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"SysML\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"systems modeling language\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"system model\") OR TS=(\"domain-specific modeling language\" NEAR/6 \"systems model\") OR TS=(\"domain specific modeling language\" NEAR/6 \"model-based systems engineering\") OR TS=(\"domain specific modeling language\" NEAR/6 \"model based systems engineering\") OR TS=(\"domain specific modeling language\" NEAR/6 \"model-based system engineering\") OR TS=(\"domain specific modeling language\" NEAR/6 \"model based system engineering\") OR TS=(\"domain specific modeling language\" NEAR/6 \"MBSE\") OR TS=(\"domain specific modeling language\" NEAR/6 \"SysML\") OR TS=(\"domain specific modeling language\" NEAR/6 \"systems modeling language\") OR TS=(\"domain specific modeling language\" NEAR/6 \"system model\") OR TS=(\"domain specific modeling language\" NEAR/6 \"systems model\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"model-based systems engineering\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"model based systems engineering\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"model-based system engineering\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"model based system engineering\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"MBSE\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"SysML\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"systems modeling language\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"system model\") OR TS=(\"domain-specific modelling language\" NEAR/6 \"systems model\") OR TS=(\"domain specific modelling language\" NEAR/6 \"model-based systems engineering\") OR TS=(\"domain specific modelling language\" NEAR/6 \"model based systems engineering\") OR TS=(\"domain specific modelling language\" NEAR/6 \"model-based system engineering\") OR TS=(\"domain specific modelling language\" NEAR/6 \"model based system engineering\") OR TS=(\"domain specific modelling language\" NEAR/6 \"MBSE\") OR TS=(\"domain specific modelling language\" NEAR/6 \"SysML\") OR TS=(\"domain specific modelling language\" NEAR/6 \"systems modeling language\") OR TS=(\"domain specific modelling language\" NEAR/6 \"system model\") OR TS=(\"domain specific modelling language\" NEAR/6 \"systems model\")) AND (TS=(\"systematic review\") OR TS=(\"systematic literature review\") OR TS=(\"systematic mapping\") OR TS=(\"systematic mapping study\") OR TS=(\"mapping study\") OR TS=(\"scoping review\") OR TS=(\"literature review\") OR TS=(\"literature survey\") OR TS=(\"bibliometric review\") OR TS=(\"bibliometric analysis\") OR TS=(\"evidence synthesis\") OR TS=(\"secondary study\") OR TS=(\"state-of-the-art review\") OR TS=(\"state of the art review\") OR TS=(\"survey paper\") OR TS=(\"survey\")) AND PY=(1900-2026)",
+        "translation": "literal pilot_schedule translation",
+        "source_status": "complete_two_pass_requested",
+        "source_total": 27,
+        "ordered_wos_ids": [
+          "WOS:A1994PT47400003",
+          "WOS:000073874600016",
+          "WOS:000187969200018",
+          "WOS:000220916700001",
+          "WOS:000230440800160",
+          "WOS:000234370300027",
+          "WOS:000265182000117",
+          "WOS:000256500800024",
+          "WOS:000300517700013",
+          "WOS:000347313600018",
+          "WOS:000343092100033",
+          "WOS:000365398300065",
+          "WOS:000350802200001",
+          "WOS:000414755500021",
+          "WOS:000395821900033",
+          "WOS:000438041900002",
+          "WOS:000645605300001",
+          "WOS:000634547600012",
+          "WOS:000913220000007",
+          "WOS:000858771800001",
+          "WOS:001489645400002",
+          "WOS:001036277400001",
+          "WOS:001122137200001",
+          "WOS:001199894800001",
+          "WOS:001607936300006",
+          "WOS:001746950000040",
+          "WOS:001688419600001"
+        ],
+        "ordered_wos_ids_sha256": "684952303ddddfa64689f8683252b128891a8611f51e4f6cde672f7a67070dac",
+        "source_row_count": 27,
+        "receipt_completion_status": "complete",
+        "editions_requested": [
+          "All"
+        ],
+        "editions": [
+          "Science Citation Index Expanded (SCI-EXPANDED)--1900-present",
+          "Social Sciences Citation Index (SSCI)--1900-present",
+          "Arts & Humanities Citation Index (AHCI)--1975-present",
+          "Conference Proceedings Citation Index – Science (CPCI-S)--1990-present",
+          "Conference Proceedings Citation Index – Social Science & Humanities (CPCI-SSH)--1990-present",
+          "Book Citation Index – Science (BKCI-S)--2005-present",
+          "Book Citation Index – Social Sciences & Humanities (BKCI-SSH)--2005-present",
+          "Emerging Sources Citation Index (ESCI)--2005-present",
+          "Current Chemical Reactions (CCR-EXPANDED)--1985-present",
+          "Index Chemicus (IC)--1993-present"
+        ],
+        "source_sort": "Date: oldest first",
+        "native_artifact": {
+          "schema_version": "academic-search-native-artifact/v1",
+          "format": "RIS",
+          "digest_algorithm": "sha256",
+          "sha256": "16a9bdc27ce925f6b1d0a2e4b0678d43d9e3e5cf56c4c2912b971553329475cc",
+          "byte_count": 11964,
+          "record_count": 27,
+          "record_count_provenance": "framed_native_file_parse",
+          "pages_exported": 1,
+          "local_path_persisted": false
+        },
+        "errors": []
+      }
+    ],
+    "union": {
+      "status": "reconciled",
+      "ordering": {
+        "partition_order": [
+          "PSR1",
+          "PSR2",
+          "PSR3",
+          "PSR4"
+        ],
+        "within_partition_order": "adapter-verified native Date: oldest first source rank",
+        "union_order": "first occurrence in the declared partition order, retaining within-partition source rank"
+      },
+      "incomplete_partitions": [],
+      "source_event_total": 109,
+      "deduplicated_total": 102,
+      "duplicate_event_occurrences": 7,
+      "ordered_wos_ids": [
+        "WOS:A1994NK03200027",
+        "WOS:A1996UP69400020",
+        "WOS:000178885000018",
+        "WOS:000325194400012",
+        "WOS:000380537800122",
+        "WOS:000360555500011",
+        "WOS:000406048600005",
+        "WOS:000419192500009",
+        "WOS:000429782100007",
+        "WOS:000467687300015",
+        "WOS:000681699105033",
+        "WOS:000622489600001",
+        "WOS:000639329800001",
+        "WOS:000782416500047",
+        "WOS:000995680600001",
+        "WOS:001036674300001",
+        "WOS:001079098500001",
+        "WOS:001237860700001",
+        "WOS:001492232200001",
+        "WOS:001583299700008",
+        "WOS:001705529700001",
+        "WOS:001826451400008",
+        "WOS:000073874600016",
+        "WOS:000084534100006",
+        "WOS:000188540600017",
+        "WOS:000216349400011",
+        "WOS:000239683500012",
+        "WOS:000317796900017",
+        "WOS:000343092100033",
+        "WOS:000395821900033",
+        "WOS:000461314200155",
+        "WOS:000446770200122",
+        "WOS:000524757800006",
+        "WOS:000556995700001",
+        "WOS:000607376100006",
+        "WOS:000796444800015",
+        "WOS:000654905700017",
+        "WOS:001175836300035",
+        "WOS:000913220000007",
+        "WOS:000886932200009",
+        "WOS:000883157900001",
+        "WOS:000873889100001",
+        "WOS:000864155400001",
+        "WOS:001116078600001",
+        "WOS:001066018300007",
+        "WOS:001036277400001",
+        "WOS:001127292000001",
+        "WOS:001758341500023",
+        "WOS:001381377200033",
+        "WOS:001248216300007",
+        "WOS:001338415100001",
+        "WOS:001753795200008",
+        "WOS:001275636300001",
+        "WOS:001735745700042",
+        "WOS:001701407900008",
+        "WOS:001605291400001",
+        "WOS:001422962700007",
+        "WOS:001517350200003",
+        "WOS:001508291200011",
+        "WOS:001553752400005",
+        "WOS:001570139700001",
+        "WOS:001579791000001",
+        "WOS:001593905200001",
+        "WOS:001612592500001",
+        "WOS:001621282900001",
+        "WOS:001642169900001",
+        "WOS:001741054500034",
+        "WOS:001740761900001",
+        "WOS:001706437800001",
+        "WOS:001694310400001",
+        "WOS:001662321400001",
+        "WOS:001724936400001",
+        "WOS:001732809500001",
+        "WOS:001717293200001",
+        "WOS:001762421400001",
+        "WOS:001784947400001",
+        "WOS:001781813800001",
+        "WOS:001806028500001",
+        "WOS:001817941900001",
+        "WOS:001737631500001",
+        "WOS:A1994PT47400003",
+        "WOS:000187969200018",
+        "WOS:000220916700001",
+        "WOS:000230440800160",
+        "WOS:000234370300027",
+        "WOS:000265182000117",
+        "WOS:000256500800024",
+        "WOS:000300517700013",
+        "WOS:000347313600018",
+        "WOS:000365398300065",
+        "WOS:000350802200001",
+        "WOS:000414755500021",
+        "WOS:000438041900002",
+        "WOS:000645605300001",
+        "WOS:000634547600012",
+        "WOS:000858771800001",
+        "WOS:001489645400002",
+        "WOS:001122137200001",
+        "WOS:001199894800001",
+        "WOS:001607936300006",
+        "WOS:001746950000040",
+        "WOS:001688419600001"
+      ],
+      "ordered_wos_ids_sha256": "3478f533e51dfe8136b27218d3ec2026304c0f8d5d46c1aafa354b32a6c8d425",
+      "membership": [
+        {
+          "wos_id": "WOS:A1994NK03200027",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:A1996UP69400020",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000178885000018",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000325194400012",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000380537800122",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000360555500011",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000406048600005",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000419192500009",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000429782100007",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000467687300015",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000681699105033",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000622489600001",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000639329800001",
+          "partitions": [
+            "PSR1",
+            "PSR2"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000782416500047",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000995680600001",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:001036674300001",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:001079098500001",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:001237860700001",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:001492232200001",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:001583299700008",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:001705529700001",
+          "partitions": [
+            "PSR1",
+            "PSR2"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:001826451400008",
+          "partitions": [
+            "PSR1"
+          ],
+          "first_partition": "PSR1"
+        },
+        {
+          "wos_id": "WOS:000073874600016",
+          "partitions": [
+            "PSR2",
+            "PSR4"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000084534100006",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000188540600017",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000216349400011",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000239683500012",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000317796900017",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000343092100033",
+          "partitions": [
+            "PSR2",
+            "PSR4"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000395821900033",
+          "partitions": [
+            "PSR2",
+            "PSR4"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000461314200155",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000446770200122",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000524757800006",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000556995700001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000607376100006",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000796444800015",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000654905700017",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001175836300035",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000913220000007",
+          "partitions": [
+            "PSR2",
+            "PSR4"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000886932200009",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000883157900001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000873889100001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:000864155400001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001116078600001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001066018300007",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001036277400001",
+          "partitions": [
+            "PSR2",
+            "PSR4"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001127292000001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001758341500023",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001381377200033",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001248216300007",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001338415100001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001753795200008",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001275636300001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001735745700042",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001701407900008",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001605291400001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001422962700007",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001517350200003",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001508291200011",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001553752400005",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001570139700001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001579791000001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001593905200001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001612592500001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001621282900001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001642169900001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001741054500034",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001740761900001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001706437800001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001694310400001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001662321400001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001724936400001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001732809500001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001717293200001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001762421400001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001784947400001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001781813800001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001806028500001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001817941900001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:001737631500001",
+          "partitions": [
+            "PSR2"
+          ],
+          "first_partition": "PSR2"
+        },
+        {
+          "wos_id": "WOS:A1994PT47400003",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000187969200018",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000220916700001",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000230440800160",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000234370300027",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000265182000117",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000256500800024",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000300517700013",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000347313600018",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000365398300065",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000350802200001",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000414755500021",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000438041900002",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000645605300001",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000634547600012",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:000858771800001",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:001489645400002",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:001122137200001",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:001199894800001",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:001607936300006",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:001746950000040",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        },
+        {
+          "wos_id": "WOS:001688419600001",
+          "partitions": [
+            "PSR4"
+          ],
+          "first_partition": "PSR4"
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Pilot records are diagnostic only and do not form a final primary-evidence or supporting-search import.",
+    "Raw main events use PY=(2011-2026) and LA=(English); all 2026 records are retained pending the separate exact-date screening artifact.",
+    "PSR events use the Core Collection source-inception PY=(1900-2026) control, with no main-review lower bound and no language/type/subject/access/peer-review filter."
+  ]
+}
