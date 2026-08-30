@@ -18,13 +18,11 @@ from __future__ import annotations
 
 import importlib.util
 import sys
-from pathlib import Path
+
+from adapter_paths import configured_adapter_path
 
 
-REFERENCE_ADAPTER = Path(
-    "/Users/antho/agent-tools-worktrees/slr-integration/"
-    "internet/skills/browser/scripts/search_scopus.py"
-)
+REFERENCE_ADAPTER = configured_adapter_path()
 EDITOR_READBACK_SECONDS = 60.0
 
 

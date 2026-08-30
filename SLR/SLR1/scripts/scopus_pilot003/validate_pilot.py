@@ -12,6 +12,8 @@ from queries import MAIN_PARTITIONS, PSR_PARTITIONS, membership_audit
 
 
 SCHEMA = "slr1-scopus-pilot003-validation/v1"
+MACHINE_SPECIFIC_HOME_PREFIX = "/" + "Users/"
+TEXT_ARTIFACT_SUFFIXES = {".json", ".md", ".py"}
 
 
 def load(path: Path) -> dict[str, Any]:
@@ -41,6 +43,24 @@ def assert_psr_controls(path: Path) -> None:
     interval = strategy["limits"]["year_interval"]["value"]
     assert interval == {"start": None, "end": 2026, "inclusive": True}, path
     assert "DOCTYPE" not in value["requested_query"].upper(), path
+
+
+def assert_no_machine_specific_root(root: Path) -> None:
+    """Ensure committed Pilot 003 text does not retain a local home path."""
+    locations = (
+        root,
+        Path(__file__).parent,
+        root.parents[1] / "source-specific-guidelines.md",
+    )
+    offenders = []
+    for location in locations:
+        paths = location.rglob("*") if location.is_dir() else (location,)
+        for path in paths:
+            if not path.is_file() or path.suffix not in TEXT_ARTIFACT_SUFFIXES:
+                continue
+            if MACHINE_SPECIFIC_HOME_PREFIX in path.read_text(encoding="utf-8"):
+                offenders.append(str(path))
+    assert not offenders, f"Machine-specific home path in: {offenders}"
 
 
 def main() -> int:
@@ -97,6 +117,7 @@ def main() -> int:
     assert "Input.insertText" in focused and "REFERENCE_ADAPTER" in focused
     guideline = (root.parents[1] / "source-specific-guidelines.md").read_text(encoding="utf-8")
     assert "Pilot 003" in guideline and "no `DOCTYPE`" in guideline
+    assert_no_machine_specific_root(root)
 
     output = {
         "schema_version": SCHEMA,
@@ -109,6 +130,7 @@ def main() -> int:
         "safe_failures": safe_failures,
         "focused_adapter_checked": True,
         "source_guideline_checked": True,
+        "machine_specific_root_checked": True,
     }
     args.output_path.parent.mkdir(parents=True, exist_ok=True)
     args.output_path.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

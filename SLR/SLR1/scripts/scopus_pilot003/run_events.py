@@ -19,11 +19,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from adapter_paths import (
+    FOCUSED_ADAPTER_REFERENCE,
+    configured_adapter_path,
+    configured_adapter_reference,
+)
 from queries import MAIN_PARTITIONS, PSR_PARTITIONS, lossless_cells, membership_audit
 
 
-REFERENCE_ROOT = Path("/Users/antho/agent-tools-worktrees/slr-integration")
-ADAPTER = REFERENCE_ROOT / "internet/skills/browser/scripts/search_scopus.py"
+ADAPTER = configured_adapter_path()
 FOCUSED_ADAPTER = Path(__file__).with_name("focused_adapter.py")
 SCHEMA_VERSION = "slr1-scopus-pilot003-run-receipt/v1"
 
@@ -312,7 +316,11 @@ def main() -> int:
         "max_pages": args.max_pages,
         "skip_full_abstracts": args.skip_full_abstracts,
         "started_and_completed_on": now(),
-        "adapter": str(adapter),
+        "adapter": (
+            FOCUSED_ADAPTER_REFERENCE
+            if args.focused_adapter
+            else configured_adapter_reference()
+        ),
         "adapter_read_only": True,
         "focused_adapter_overlay": bool(args.focused_adapter),
         "results": rows,

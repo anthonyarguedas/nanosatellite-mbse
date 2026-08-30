@@ -19,6 +19,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from adapter_paths import FOCUSED_ADAPTER_REFERENCE
+
 
 ADAPTER = Path(__file__).with_name("focused_adapter.py")
 SCHEMA = "slr1-scopus-pilot003-two-pass-stable-id-recovery/v1"
@@ -141,7 +143,7 @@ def main() -> int:
         "schema_version": SCHEMA,
         "partition_id": args.partition,
         "cell_plan": str(args.cell_plan),
-        "adapter": str(ADAPTER),
+        "adapter": FOCUSED_ADAPTER_REFERENCE,
         "two_independent_fresh_runs": True,
         "requirements": "Both runs must reconcile source total, complete row count, unique publication IDs, and ordered stable-ID ledger.",
         "results": results,
