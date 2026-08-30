@@ -1,0 +1,202 @@
+{
+  "schema_version": "ntrs-pilot-003-pair-checks/v1",
+  "pilot": "003",
+  "source": "NASA Technical Reports Server (NTRS)",
+  "date_window": {
+    "start": "2011-01-01",
+    "end": "2026-08-29",
+    "precision": "inclusive publication calendar days"
+  },
+  "method": {
+    "source_pair_syntax": "(\"left right\"~5 | \"right left\"~5)",
+    "local_check": "case-folded lexical-token phrase matching in both orders, with no more than five intervening tokens",
+    "retained_fields_checked": [
+      "title",
+      "snippet"
+    ],
+    "not_an_eligibility_decision": true
+  },
+  "checks": {
+    "BG1": {
+      "partition_id": "BG1",
+      "declared_pair_count": 16,
+      "record_count": 0,
+      "records": [],
+      "observed_pair_hits": [],
+      "observed_pair_hit_count": 0
+    },
+    "BG2": {
+      "partition_id": "BG2",
+      "declared_pair_count": 16,
+      "record_count": 4,
+      "records": [
+        {
+          "paperId": "20130009188",
+          "fields": {
+            "title": {
+              "state": "checked",
+              "matching_pairs": []
+            },
+            "snippet": {
+              "state": "checked",
+              "matching_pairs": []
+            }
+          }
+        },
+        {
+          "paperId": "20180001888",
+          "fields": {
+            "title": {
+              "state": "checked",
+              "matching_pairs": []
+            },
+            "snippet": {
+              "state": "checked",
+              "matching_pairs": [
+                {
+                  "pair_index_1_based": 1,
+                  "left": "product-line",
+                  "right": "model",
+                  "order": "left_then_right",
+                  "intervening_lexical_tokens": 1
+                },
+                {
+                  "pair_index_1_based": 3,
+                  "left": "product line",
+                  "right": "model",
+                  "order": "left_then_right",
+                  "intervening_lexical_tokens": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "paperId": "20180001738",
+          "fields": {
+            "title": {
+              "state": "checked",
+              "matching_pairs": []
+            },
+            "snippet": {
+              "state": "checked",
+              "matching_pairs": [
+                {
+                  "pair_index_1_based": 1,
+                  "left": "product-line",
+                  "right": "model",
+                  "order": "left_then_right",
+                  "intervening_lexical_tokens": 1
+                },
+                {
+                  "pair_index_1_based": 3,
+                  "left": "product line",
+                  "right": "model",
+                  "order": "left_then_right",
+                  "intervening_lexical_tokens": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "paperId": "20180003537",
+          "fields": {
+            "title": {
+              "state": "checked",
+              "matching_pairs": []
+            },
+            "snippet": {
+              "state": "checked",
+              "matching_pairs": []
+            }
+          }
+        }
+      ],
+      "observed_pair_hits": [
+        {
+          "paperId": "20180001888",
+          "field": "snippet",
+          "pair_index_1_based": 1,
+          "left": "product-line",
+          "right": "model",
+          "order": "left_then_right",
+          "intervening_lexical_tokens": 1
+        },
+        {
+          "paperId": "20180001888",
+          "field": "snippet",
+          "pair_index_1_based": 3,
+          "left": "product line",
+          "right": "model",
+          "order": "left_then_right",
+          "intervening_lexical_tokens": 1
+        },
+        {
+          "paperId": "20180001738",
+          "field": "snippet",
+          "pair_index_1_based": 1,
+          "left": "product-line",
+          "right": "model",
+          "order": "left_then_right",
+          "intervening_lexical_tokens": 1
+        },
+        {
+          "paperId": "20180001738",
+          "field": "snippet",
+          "pair_index_1_based": 3,
+          "left": "product line",
+          "right": "model",
+          "order": "left_then_right",
+          "intervening_lexical_tokens": 1
+        }
+      ],
+      "observed_pair_hit_count": 4
+    },
+    "BC1": {
+      "partition_id": "BC1",
+      "declared_pair_count": 36,
+      "record_count": 0,
+      "records": [],
+      "observed_pair_hits": [],
+      "observed_pair_hit_count": 0
+    },
+    "BT2": {
+      "partition_id": "BT2",
+      "declared_pair_count": 224,
+      "record_count": 0,
+      "records": [],
+      "observed_pair_hits": [],
+      "observed_pair_hit_count": 0
+    }
+  },
+  "full_text_uncertainty": {
+    "status": "unresolved",
+    "reason": "NTRS general q includes metadata and document full text, while the terminal strict list captures retain title and rendered-list snippet only. Two exact BG2 --full-abstracts diagnostics failed before a usable complete result; their source totals remain null.",
+    "detail_failure_artifacts": [
+      {
+        "artifact": "BG2-pair-fields.json",
+        "artifact_sha256": "6e95704bccd31abdd12f9122c771179decf80ace7f0086ced7c1abb77e21f944",
+        "source_total": null,
+        "canonical_citation_ids": [],
+        "retrieval_complete": false,
+        "do_not_merge": true,
+        "requested_query_characters": 1536,
+        "executed_query_observed": false,
+        "interpretation": "Non-mergeable error; null is not a source zero."
+      },
+      {
+        "artifact": "BG2-pair-fields-retry1.json",
+        "artifact_sha256": "69a825d0aa92f2f994b5dd793bc545a1239f4e0958b20be1791e914dba46adb5",
+        "source_total": null,
+        "canonical_citation_ids": [],
+        "retrieval_complete": false,
+        "do_not_merge": true,
+        "requested_query_characters": 1536,
+        "executed_query_observed": false,
+        "interpretation": "Non-mergeable error; null is not a source zero."
+      }
+    ],
+    "absence_interpretation": "An absent local title/snippet match is not evidence that a source hit is false or lacks a pair in abstract or full text."
+  }
+}
