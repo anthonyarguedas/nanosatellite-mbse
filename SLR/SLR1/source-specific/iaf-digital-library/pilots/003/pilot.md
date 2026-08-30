@@ -37,11 +37,11 @@ Run every direct-schedule partition as deterministic, lossless IAF cells below t
 | BC1 | 23 | 11 | 9 | 6 |
 | BT2 | 575 | 39 | 15 | 13 |
 
-All 1,077 cells completed; no partition has a failure total. The table's raw total is the sum of overlapping source events; the two union columns are deduplicated stable paper-ID unions. Date exclusions were 1 (A2), 4 (B1), 9 (B2), 4 (BG2), 4 (BC1), and 4 (BT2); all other partitions had none. No union exceeded 100, so the required over-100 investigation trigger did not apply.
+All 1,077 cells completed. No partition has a failure total. The table's raw total is the sum of overlapping source events. The two union columns are deduplicated stable paper-ID unions. Date exclusions were 1 (A2), 4 (B1), 9 (B2), 4 (BG2), 4 (BC1), and 4 (BT2). All other partitions had none. No union exceeded 100, so the required over-100 investigation trigger did not apply.
 
 The local exact-pair check confirmed no pair-bearing metadata record in BG1 (0/5), three in BG2 (3/7), none in BC1 (0/6), and one in BT2 (1/13). A missing visible confirmation remains explicitly uncertain rather than a source false match, because the source's broader same-Any-keyword pair fallback can match other indexed text.
 
-- [x] No guideline change needed
-- [x] Document a source limitation
+- No guideline change needed
+- Document a source limitation
 
 The 500-character source cap requires the saved lossless cell plan. The adapter's compact persisted output omits repeated raw-ID/capture fields, so the pilot records a create-only, hash-bound complete-ID sidecar for each strict cell. This is an audit-output limitation, not a source-semantic or eligibility-filter change. The source guideline completion state and `final-searches/` remain unchanged.

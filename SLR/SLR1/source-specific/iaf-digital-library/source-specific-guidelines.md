@@ -58,3 +58,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): representative `A1` and broad pair cells stayed below 500 characters and returned exact zero totals. No complete partition route was used.
 - [x] [Pilot 002](pilots/002/pilot.md): the 68-character `CubeSat*` A1 cell was a count-only zero. The indexed language field is not an exhaustive filter, no type control was added, and the wildcard is unaccepted.
+- [Pilot 003](pilots/003/pilot.md): all 1,077 lossless cells completed with reconciled raw and diagnostic-window paper-ID unions. No wildcard or narrowing filter was used. This does not complete piloting or authorize a final search.

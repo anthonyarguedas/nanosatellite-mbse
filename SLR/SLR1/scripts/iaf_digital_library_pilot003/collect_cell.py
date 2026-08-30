@@ -29,9 +29,7 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 
-ADAPTER_PATH = Path(
-    "/Users/antho/agent-tools/internet/skills/browser/scripts/search_iaf_digital_library.py"
-)
+ADAPTER_PATH = Path.home() / "agent-tools/internet/skills/browser/scripts/search_iaf_digital_library.py"
 LEDGER_SCHEMA = "iaf-digital-library-complete-identity-ledger/v1"
 
 
