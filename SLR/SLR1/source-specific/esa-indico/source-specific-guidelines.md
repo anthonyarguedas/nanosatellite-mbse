@@ -10,7 +10,7 @@ Export method: `~/agent-tools/internet/skills/browser/scripts/search_esa_indico.
 
 Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`.
 
-The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed decisions and pilot conclusions.
+The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. A compact persisted failure may omit attachment or candidate-snapshot detail; a linked pilot receipt must distinguish that omission from a source value. This file records only fixed decisions and pilot conclusions.
 
 ## Fixed source configuration
 
@@ -36,7 +36,8 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `L(a) NEAR/5 L(b)`. The local matcher applies this unordered rule within one record field.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitations: Rendered `q` is a prefix-AND search and cannot express the Boolean schedule. ESA exposes no Language control, and event/contribution/material groups do not map losslessly to the shared eligible report types. Use the bounded local harvest for exact Boolean and same-field proximity matching. The category-0 event-universe export timed out in Pilots 003 and 004 with the 500-event safety boundary configured. This systematic endpoint evidence leaves coverage and the total unestablished, never zero.
+- Source limitations: Rendered `q` is a prefix-AND search and cannot express the Boolean schedule. ESA exposes no Language control, and event/contribution/material groups do not map losslessly to the shared eligible report types. Use the bounded local harvest for exact Boolean and same-field proximity matching. Pilots 003 and 004 timed out at the category-0 event-universe route with the 500-event safety boundary. Pilot 005's repaired 30-second root route reached attachment collection but failed before matching and before a confirming root snapshot. Its first snapshot remains a candidate, never a complete universe; coverage and every affected total remain unestablished, never zero.
+- Unavailable controls: ESA has no source-side date limiter, rendered phrase/proximity control, or lossless type/access/full-text filter. Its Category tree is an organizational scope rather than controlled vocabulary; no descriptor supplement, hierarchy explosion, or vocabulary restriction is applied. ESA has no native complete search export. The local public category/event/attachment export is used only under its two-root-snapshot and complete-attachment contract.
 
 ## Query schedule
 
@@ -60,3 +61,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 - [x] [Pilot 002](pilots/002/pilot.md): rendered `q` cannot express the Boolean schedule, and ESA exposes no Language filter.
 - [x] [Pilot 003](pilots/003/pilot.md): category-0 harvest timed out before event retrieval. Fixture checks passed but do not establish source coverage.
 - [x] [Pilot 004](pilots/004/pilot.md): the fresh category-0 event-universe retry timed out before an HTTP response. It is systematic endpoint evidence, not zero coverage.
+- [x] [Pilot 005](pilots/005/pilot.md): one repaired category-0 local attempt reached attachment collection but failed before local matching and root confirmation. All nine exact schedule expressions are bound to the same live failure through null receipts; this does not complete the source or a final search.

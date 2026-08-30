@@ -1,0 +1,101 @@
+{
+  "schema_version": "esa-indico-pilot-005-partition-null-failure-receipt/v1",
+  "artifact_kind": "exact_query_null_failure_receipt",
+  "source": "ESA Indico",
+  "pilot": "005",
+  "diagnostic_cutoff": "2026-08-29",
+  "partition_id": "BG2",
+  "semantic_form": "P AND G_structure",
+  "schedule_binding": {
+    "schedule_artifact": "schedule-plan.json",
+    "schedule_sha256": "113f59f1622062e07453c0c315f0f9351ac1e2168a403dada2eccb7807321b66",
+    "event_id": "pilot-main-BG2-esa_indico-005",
+    "source": "esa_indico",
+    "route": "category-0 deterministic local matcher"
+  },
+  "exact_local_expression": {
+    "expression": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"reference architecture\" OR \"reference architectures\" OR \"domain model\" OR \"domain models\" OR \"metamodel\" OR \"metamodels\" OR \"meta-model\" OR \"meta-models\" OR \"product-line\" NEAR/5 \"model\" OR \"product-line\" NEAR/5 \"models\" OR \"product line\" NEAR/5 \"model\" OR \"product line\" NEAR/5 \"models\" OR \"product-family\" NEAR/5 \"model\" OR \"product-family\" NEAR/5 \"models\" OR \"product family\" NEAR/5 \"model\" OR \"product family\" NEAR/5 \"models\" OR \"variation point\" NEAR/5 \"model\" OR \"variation point\" NEAR/5 \"models\" OR \"variation point\" NEAR/5 \"architecture\" OR \"variation point\" NEAR/5 \"architectures\" OR \"variation points\" NEAR/5 \"model\" OR \"variation points\" NEAR/5 \"models\" OR \"variation points\" NEAR/5 \"architecture\" OR \"variation points\" NEAR/5 \"architectures\")",
+    "sha256": "01f1800160f4d4d389820484be39c5c38e2b9f5cf9676a9412c2b2ec814a51bc",
+    "characters": 1194,
+    "wildcard_count": 0,
+    "near_5_pair_count": 16,
+    "factor_concepts": [
+      [
+        "P"
+      ],
+      [
+        "G_structure"
+      ]
+    ]
+  },
+  "execution": {
+    "status": "projected_null_after_shared_pre_match_failure",
+    "source_q_submitted": false,
+    "rendered_q_substitute": false,
+    "local_matcher_started": false,
+    "local_matcher_completed": false,
+    "stable_id_reconciliation_started": false,
+    "over_100_investigation": "not_started; no complete matcher result exists"
+  },
+  "totals": {
+    "source_reported_total": null,
+    "source_universe_total": null,
+    "source_export_total": null,
+    "local_match_total": null,
+    "matched_total": null,
+    "normalized_rows_written": null,
+    "stable_ids": null,
+    "zero_is_not_inferred": true
+  },
+  "shared_live_evidence": {
+    "artifact": "shared-root-failure-receipt.json",
+    "sha256": "e20d29f4fb2042d1a23cd071d9d58e0f1d5ac1eb7d6b1f10fbda00dcfbb896a3",
+    "adapter_artifact": "root-local-harvest-A1.json",
+    "adapter_artifact_sha256": "56a1f45d9eb9f46e34bb45421260bd82edcc8ed6b2fb83aee7ae755fc462d12d",
+    "failure_code": "attachment_content_retrieval_failed",
+    "failure_precedes_query_specific_matching": true,
+    "projection_allowed": true
+  },
+  "checkpoint": {
+    "artifact": "root-restart-checkpoint.json",
+    "sha256": "41315865029800487d00e462a7d6584f21d9fbce858b5523f625a9478003c763",
+    "state": "restart_universe_before_matching",
+    "expression_sha256_binding": "01f1800160f4d4d389820484be39c5c38e2b9f5cf9676a9412c2b2ec814a51bc"
+  },
+  "controls": {
+    "language": {
+      "state": "unavailable_not_applied",
+      "reason": "ESA exposes no Language control or parameter."
+    },
+    "date": {
+      "state": "unavailable_source_side_not_applied",
+      "reason": "No source date control was used; the 2026-08-29 cutoff is applied during later screening."
+    },
+    "publication_type": {
+      "state": "unavailable_lossless_filter_not_applied",
+      "reason": "Event/contribution/material groups do not map losslessly to eligible report types."
+    },
+    "access": {
+      "state": "not_applied",
+      "reason": "No access or full-text-availability filter was used."
+    },
+    "rendered_proximity": {
+      "state": "unavailable_not_used",
+      "reason": "Rendered q cannot report exact phrase/proximity semantics."
+    },
+    "local_proximity": {
+      "state": "declared_not_executed",
+      "reason": "Exact NEAR/5 pairs are retained in the local expression; matching did not start."
+    },
+    "controlled_vocabulary": {
+      "state": "unavailable_not_supplemented",
+      "reason": "No public controlled vocabulary or validated descriptor mapping is available."
+    },
+    "export": {
+      "state": "local_public_export_incomplete",
+      "reason": "The native search export/control is unavailable; the local category/event export did not complete its two-snapshot and attachment proof."
+    }
+  },
+  "do_not_merge": true,
+  "final_search_performed": false
+}
