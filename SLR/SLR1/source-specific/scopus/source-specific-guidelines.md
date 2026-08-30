@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://www.scopus.com/pages/search/publications?type=advanced
 - Search field or local route: Advanced Search `TITLE-ABS-KEY` topic field.
 - Main evidence window: Use `--year-start 2011 --year-end <cutoff-year>`. Screen records in the cutoff year against the exact common cutoff.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: Main-review direct searches use the exact visible `Language` facet label `English`. Confirm full-report English during screening. PSR searches remain all-language.
+- Publication type: Apply no type control. Pilot 002's source query accepted `DOCTYPE(ar OR cp OR ch OR rp)`, but retained record projections did not establish complete type assignment. Never apply peer-review, access, or full-text availability filters.
 - Database or collection selection: Documents result scope and the full Scopus database. Apply no subject area.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use literal expansions. Pilot 002's 10-wildcard A1 candidate is not accepted because the required literal comparison ended in error.
 
 - Literal `L(s)`: Use one straight double-quoted loose token or ordered phrase.
 - Atom `A(s)`: `TITLE-ABS-KEY(L(s))`.
@@ -71,3 +71,4 @@ PSR searches have no lower date limit and no language, document type, subject, a
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): `A1`, `BG1`, and supporting `PSR1` count-only diagnostics completed. No translation change. Pair checking remains a final-run limitation.
+- [x] [Pilot 002](pilots/002/pilot.md): exact `English` language control was read back. The proposed type union and wildcard A1 remain unaccepted. The literal comparison ended with `status: error` and no total.

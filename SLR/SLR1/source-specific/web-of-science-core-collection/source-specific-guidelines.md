@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://www.webofscience.com/wos/woscc/advanced-search
 - Search field or local route: Core Collection Query Builder `TS` Topic field across all current editions.
 - Main evidence window: Use `--year-start 2011 --year-end <cutoff-year>`. Screen records in the cutoff year against the exact common cutoff.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: Main-review raw queries include `LA=(English)`. Confirm full-report English during screening. PSR searches remain all-language.
+- Publication type: Apply no type control. Pilot 002 proved the candidate DT OR syntax, but not lossless assignment coverage for every shared eligible report type. Never apply peer-review, access, or full-text availability filters.
 - Database or collection selection: Web of Science Core Collection with all current editions selected.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Main-review A1 may use Pilot 002's accepted 10-wildcard candidate with `PY=(2011-2026) AND LA=(English)`. It covers 22 replaced literals and has a complete stable-ID superset. Other partitions retain literal expansions.
 
 - Literal `L(s)`: Use one straight double-quoted literal. Multiword literals remain ordered phrases.
 - Atom `A(s)`: `TS=(L(s))`.
@@ -71,3 +71,4 @@ PSR searches have no lower date limit and no language, document type, subject, a
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): `A1`, `BG1`, and supporting `PSR1` count-only diagnostics completed. Raw `PY` date clauses were required for the exact query mode.
+- [x] [Pilot 002](pilots/002/pilot.md): raw `LA=(English)` was read back. The proposed DT union was not accepted. The 10-wildcard A1 candidate was shorter and had a complete stable-ID superset, so it is accepted for A1 only.

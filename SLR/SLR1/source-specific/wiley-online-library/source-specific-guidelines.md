@@ -20,21 +20,22 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://onlinelibrary.wiley.com/search/advanced
 - Search field or local route: One Advanced Search `Anywhere` (`AllField`) row.
 - Main evidence window: Use `--date-start 2011-01-01 --date-end <cutoff>`. The script applies source month bounds and checks exact retained dates.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: Wiley exposes no Language field or facet on this route. Full-text screening must confirm English.
+- Publication type: `articlesChapters` is the source record-family boundary. Do not narrow with `PubType`. It cannot safely replace that route. Do not apply peer-review, access, or full-text-availability limits.
 - Database or collection selection: Full Wiley platform. Use the Articles & Chapters route for bibliographic records. Do not treat Collections as records.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair except the accepted A1 population compression below. Assume no unrequested stemming or variants.
 
-- Literal `L(s)`: Use one straight double-quoted literal.
+- Literal `L(s)`: Use one straight double-quoted literal except the three accepted unquoted trailing-`*` A1 population atoms below.
 - Atom `A(s)`: `L(s)` inside the single Anywhere row.
 - Boolean: Uppercase `AND` and `OR` with explicit parentheses.
 - Block `F(S)`: join `A(s)` for every ordinary member of `S` with source OR. Fully parenthesize the result.
 - Pair `PAIR(a,b)`: `(A(a) AND A(b))` in the same Anywhere row. This is the broader fallback candidate.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
+- Accepted A1 population compression only: replace `"CubeSat" OR "CubeSats"`, `"nanosat" OR "nanosats" OR "nanosatellite" OR "nanosatellites"`, and `"SmallSat" OR "SmallSats"` with `CubeSat*`, `nanosat*`, and `SmallSat*`, respectively. Preserve every other punctuation, spacing, phrase, and spelling literal. Re-test before applying this to another partition.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: Wiley exposes no supported proximity operator. Apply exact pair checking to retained title and abstract text.
 - Pilot 001 accepted the complete `A1` and `BG1` Anywhere expressions with exact source query readback in two count-only passes. Source totals were `A1: 21` and `BG1: 8`. The run requested the diagnostic upper bound 2026-08-29, while Wiley applied the enclosing 2026-08 source month and retained no cards. Final collection must reconcile that source-month total with exact-day client exclusions. Exact pair checking remains required.
@@ -58,3 +59,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only diagnostics completed with exact query and date-control readback. Totals were `21` and `8`. No records were retained, so pair checking remains a final-run limitation.
+- [x] [Pilot 002](pilots/002/pilot.md): literal and three-family wildcard A1 runs each returned 21 Articles & Chapters records with the same ordered 21 DOI IDs. The A1-only compression is accepted. No Language or `PubType` limiter was available or applied.

@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://ieeexplore.ieee.org/search/advanced
 - Search field or local route: Normal search with individually fielded `All Metadata` atoms.
 - Main evidence window: Use `--publication-date-start 2011-01-01 --publication-date-end <cutoff>` for final searches.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: No proved Language field or facet is available. Apply no language control and determine English full text during screening.
+- Publication type: Apply no type control. The current content taxonomy and assignment coverage do not prove a lossless eligible-report union. Never apply peer-review, access, or full-text availability filters.
 - Database or collection selection: Documents scope with all access states and no content type facet.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use literal expansions. Pilot 003's 10-wildcard A1 candidate meets the source cap but remains unaccepted without a date-controlled stable-ID comparison.
 
 - Literal `L(s)`: Use one straight double-quoted literal.
 - Atom `A(s)`: `("All Metadata":L(s))`.
@@ -37,7 +37,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
 - Source limitation: Do not use a grouped field wrapper around a Boolean block. Expand every atom before combining it.
-- Pilot 001 accepted the complete `A1` All Metadata expression before submission, but the requested year range did not reconcile after Apply. The artifact records a range mismatch after three contradictory polls and no source total. This is an explicit source-control limitation. Do not replace it with an unbounded query or local date filtering. The exact publication-day window is unavailable in count-only mode because the adapter requires strict complete mode for that control.
+- Pilots 001 and 002 accepted the complete `A1` All Metadata expression before submission. Pilot 001 records a requested-range mismatch after Apply and three contradictory polls. Pilot 002 repeats the same count-only diagnostic with the `2011` through `2026` year control. Its artifact records source-observed query and year-control readback, then ends with `status: error` and no source total. No reconciled date-controlled `A1` result exists. This leaves an unresolved source-control limitation. Do not replace it with an unbounded query or local date filtering. The exact publication-day window is unavailable in count-only mode because the adapter requires strict complete mode for that control.
 
 ## Query schedule
 
@@ -58,3 +58,5 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` count-only attempt preserved an explicit year-control failure. `BG1` was stopped before execution. Do not use this source run as a final search until the control reconciles.
+- [x] [Pilot 002](pilots/002/pilot.md): repeat count-only diagnostic used the same complete `A1` expression and `2011` through `2026` control. It ended with `status: error`, `total: null`, and no reconciled source result. `BG1` was not run. Do not use this source run as a final search.
+- [x] [Pilot 003](pilots/003/pilot.md): Language remains unavailable and no type union is accepted. The 10-wildcard candidate is shorter but has no date-controlled stable-ID comparison. No third year-control request was made.

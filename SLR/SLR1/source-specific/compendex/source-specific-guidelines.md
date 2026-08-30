@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://www.engineeringvillage.com/search/expert.url?database=1
 - Search field or local route: Expert Search `ALL` field in one paired Compendex and Inspec event.
 - Main evidence window: Use `--year-start 2011 --year-end <cutoff-year>`. Screen records in the cutoff year against the exact common cutoff.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: Append `(English WN LA)` with `AND` to each raw Expert expression. This metadata limiter does not replace English full-text screening.
+- Publication type: Apply no `DT`/facet limiter: conference article, journal article, preprint, conference proceeding, dissertation, and article in press can hold eligible reports, and assignment can be missing. Do not apply peer-review, access, or full-text-availability limits.
 - Database or collection selection: Select Compendex and Inspec together. Retain the Compendex records and count separately.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Keep source terms literal: Pilot 002's three-family A1 trailing-`*` proposal was not submitted after a date-control failure, so it is not accepted. Assume no unrequested stemming or variants.
 
 - Literal `L(s)`: Use one straight double-quoted token or ordered phrase.
 - Atom `A(s)`: `(L(s) WN ALL)`.
@@ -58,3 +58,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` bounded diagnostics succeeded. Compendex projections were `A1: 5` and `BG1: 6` rendered rows. The paired CLI has no count-only mode, so the Python API used one-page, one-record diagnostics. These are not final searches.
+- [x] [Pilot 002](pilots/002/pilot.md): the paired literal A1 request added `English WN LA` but stopped before source submission when the start Published-year control was hidden without a visible Select2 trigger. No count or wildcard comparison was accepted.

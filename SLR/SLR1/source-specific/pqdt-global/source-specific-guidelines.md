@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://www.proquest.com/pqdtglobal/commandline
 - Search field or local route: Command Line Search `NOFT` field.
 - Main evidence window: Use `--year-start 2011 --year-end <cutoff-year>`. Screen records in the cutoff year against the exact common cutoff.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: Apply exact `LA(English)` and record the source-query readback. This metadata restriction does not prove report language. Full-text screening remains authoritative.
+- Publication type: PQDT is thesis/dissertation-scoped, but apply no degree, completion, peer-review, access, or full-text-availability filter. Metadata can include incomplete, undergraduate, or abstract-only work. Resolve those statuses during screening.
 - Database or collection selection: Select exactly one PQDT Global database label. Do not select ATAI or another ProQuest database.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards in an accepted translation and assume no unrequested stemming or variants.
 
 - Literal `L(s)`: Use one straight double-quoted literal.
 - Atom `A(s)`: `NOFT(L(s))`.
@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `NOFT(L(a) NEAR/5 L(b))`. `NEAR/5` is unordered and counts intervening words.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: `NOFT` searches anywhere except full text. This reduces bias toward dissertations with searchable full text, while uneven bibliographic metadata can still affect retrieval. Validate `NOFT` field coverage and pair behavior. Resolve degree subtype, availability, and completion status during screening.
+- Source limitation: `NOFT` searches anywhere except full text, reducing bias toward searchable full text while remaining sensitive to uneven metadata. Validate `NOFT` field coverage and pair behavior separately. Resolve degree subtype, availability, and completion status during screening. Pilot 002's equal count-only wildcard total did not establish stable-ID equality or a superset, so compression is unaccepted.
 - Pilot 001 accepted complete `A1` and `BG1` count-only expressions with the exact PQDT Global scope, 2011-2026 `YR` bounds, and frozen spelling/form variant controls. The totals were `1` and `1`. Count-only diagnostics do not test pair no-loss or complete capture.
 
 ## Query schedule
@@ -58,3 +58,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only diagnostics succeeded with totals `1` and `1`. The adapter's uncommitted strict cap guard was tested before the live runs. These are not final searches.
+- [x] [Pilot 002](pilots/002/pilot.md): English literal/candidate `A1` count-only checks totaled `1`/`1`. Language read back, no type restriction was accepted, and the wildcard candidate was not adopted.

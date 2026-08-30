@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://link.springer.com/search
 - Search field or local route: Raw Keywords field over title, abstract, and body text.
 - Main evidence window: Use `--date-start 2011-01-01 --date-end <cutoff>`. The script applies source year bounds and checks exact retained dates.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: Apply the validated `En` Link language facet. This metadata limiter does not replace English full-text screening.
+- Publication type: Apply no content-type limiter: Link content-type facets overlap and card labels can differ from facet values, so Article plus Chapter is not a demonstrated complete eligible-report union. Do not apply peer-review, access, or full-text-availability limits.
 - Database or collection selection: Full Springer Nature Link platform with no content type, access, subject, or brand facet.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Keep A1 literal: Pilot 002's three-family trailing-`*` candidate was not submitted after a second A1 identity-order failure. Assume no unrequested stemming or variants.
 
 - Literal `L(s)`: Use one straight double-quoted literal.
 - Atom `A(s)`: `L(s)` inside the Keywords expression.
@@ -58,3 +58,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): A1 count-only diagnostic stopped on source canonical-path order drift. BG1 was not attempted under the stop rule. Do not use this artifact as a final search.
+- [x] [Pilot 002](pilots/002/pilot.md): a fresh literal A1 retry requested `En`, broad content, and `oldestFirst` in two-pass count-only identity mode, then failed again on canonical identity order. No total, wildcard candidate, or BG1 run was accepted.

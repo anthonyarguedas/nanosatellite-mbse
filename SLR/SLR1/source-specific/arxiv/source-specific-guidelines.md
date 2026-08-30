@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://arxiv.org/search/advanced
 - Search field or local route: Repeatable structured rows in the rendered Advanced Search form.
 - Main evidence window: Use submitted-date bounds from 2011-01-01 through the common cutoff with day precision. Preserve linked publication dates for later version decisions.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: No usable Language control is exposed. Apply no source language filter. Determine English from the full text during screening.
+- Publication type: This source is bounded to arXiv submissions/e-prints (preprints). Apply no additional type, peer-review, access, or full-text-availability filter.
 - Database or collection selection: All classifications with cross-lists included and no category restriction.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Exact literals remain normative. A trailing wildcard may be tested only as a labelled diagnostic cell. Preserve punctuation, spacing, phrase, and spelling forms outside its replacement, and do not accept it from totals alone.
 
 - Literal `L(s)`: Use one source term. Quote every multiword phrase.
 - Atom `A(s)`: one structured `all` field row containing `L(s)`.
@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: two `all` rows joined by `AND`. This is the broader fallback candidate.
 - Paired blocks: retain every fixed phrase and expand every declared pair into its own cell.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a category only after a pilot proves its mapping and assignment.
-- Source limitation: Materialize each partition as the Cartesian union of its block alternatives. Preserve every cell total and arXiv ID union. Apply exact pair checking to retained title and abstract text. Pilot 001 tested one structured-row `A1` cell and one `BG1` pair cell only. Both returned exact zero totals, so the pilot does not establish full partition coverage or pair no-loss.
+- Source limitation: Materialize each partition as the Cartesian union of its block alternatives. Preserve every cell total and arXiv ID union. Apply exact pair checking to retained title and abstract text. Pilot 001 tested one structured-row `A1` cell and one `BG1` pair cell only. Both returned exact zero totals. Pilot 002's `CubeSat*` A1 cell was also count-only zero. No stable-ID comparison or full-partition coverage exists, so wildcard use remains unaccepted.
 
 ## Query schedule
 
@@ -57,3 +57,4 @@ The table is semantic. Execute each row as the lossless union of structured-row 
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): one representative structured-row `A1` cell and one `BG1` pair cell returned exact zero totals. These are not full-partition or final-search results.
+- [x] [Pilot 002](pilots/002/pilot.md): the `CubeSat*` representative A1 cell was a count-only zero. Language and type controls remain unavailable, and the wildcard is unaccepted.

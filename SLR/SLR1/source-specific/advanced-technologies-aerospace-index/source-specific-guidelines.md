@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://www.proquest.com/ataindex/commandline
 - Search field or local route: Command Line Search `NOFT` field.
 - Main evidence window: Use exact `--date-start 2011-01-01 --date-end <cutoff>` publication-date bounds.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: Apply exact `LA(English)` and record the source-query readback. This metadata restriction does not prove report language. Full-text screening remains authoritative.
+- Publication type: Apply no type, peer-review, access, or full-text-availability filter. `DTYPE` and Document type vocabulary, including missing-type behavior, are tenant/corpus controlled. No lossless union for all shared eligible report types is proved.
 - Database or collection selection: Select only Advanced Technologies & Aerospace Index. Deselect every parent and other ProQuest database.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards in an accepted translation and assume no unrequested stemming or variants.
 
 - Literal `L(s)`: Use one straight double-quoted literal.
 - Atom `A(s)`: `NOFT(L(s))`.
@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `NOFT(L(a) NEAR/5 L(b))`. `NEAR/5` is unordered and counts intervening words.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: Keep this source in an event separate from PQDT Global. `NOFT` searches anywhere except full text. This reduces bias toward records with searchable full text, while uneven titles, abstracts, and indexing can still affect retrieval. Validate `NOFT` field coverage and pair behavior before the final search.
+- Source limitation: Keep this source in an event separate from PQDT Global. `NOFT` searches anywhere except full text, reducing bias toward searchable full text while remaining sensitive to uneven metadata. Validate `NOFT` field coverage and pair behavior separately. Pilot 002's equal count-only wildcard total did not establish stable-ID equality or a superset, so compression is unaccepted.
 - Pilot 001 accepted complete `A1` and `BG1` count-only expressions with the exact Advanced Technologies & Aerospace Index scope and publication range. The totals were `0` and `2`. Count-only diagnostics do not test pair no-loss or complete capture.
 
 ## Query schedule
@@ -58,3 +58,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only diagnostics succeeded with totals `0` and `2`. These are not final searches.
+- [x] [Pilot 002](pilots/002/pilot.md): English literal/candidate `A1` count-only checks totaled `0`/`0`. Language read back, no type restriction was accepted, and the wildcard candidate was not adopted.

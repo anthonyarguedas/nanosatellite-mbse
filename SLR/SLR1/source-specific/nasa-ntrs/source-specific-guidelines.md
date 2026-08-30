@@ -20,14 +20,14 @@ The script artifact is authoritative for per-event query, controls, source ident
 - URL: https://ntrs.nasa.gov/search
 - Search field or local route: General `q` over metadata fields and document full text in the rendered interface.
 - Main evidence window: Use exact `--date-start 2011-01-01 --date-end <cutoff>` publication-date bounds.
-- Language: Apply no source language filter. Determine English full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Language: No usable Language control is exposed. Apply no source language filter. Determine English from the full text during screening.
+- Publication type: The Type control accepts one exact option per run, but its vocabulary and missing-assignment behavior do not prove a lossless OR union of articles, conference papers, and technical reports. Apply no additional type, peer-review, access, or full-text-availability filter.
 - Database or collection selection: Full public NTRS database with no type, center, subject, collection, or distribution restriction.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards and assume no unrequested stemming or variants.
+Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Exact literals remain normative. A trailing wildcard may be tested only as a nonaccepted compression diagnostic. Preserve punctuation, spacing, phrase, and spelling forms outside each replacement, and do not accept it from totals alone.
 
 - Literal `L(s)`: Use one straight double-quoted literal.
 - Atom `A(s)`: `L(s)` in general `q`.
@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `("a b"~5 | "b a"~5)`, substituting the complete lexical phrase for each operand. This tests both orders with at most five skipped positions.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: The general query includes full text. Apply exact pair checking where retained fields permit it and report full-text-only uncertainty. Pilot 001 accepted complete `A1` and `BG1` `q` expressions with exact zero totals. Count-only retained no records, so pair no-loss and complete capture remain untested.
+- Source limitation: The general query includes full text. Apply exact pair checking where retained fields permit it and report full-text-only uncertainty. Pilot 001 accepted complete `A1` and `BG1` `q` expressions with exact zero totals. Pilot 002 shortened complete `A1` by 22 characters with `nanosatellit*` and also returned zero count-only. Count-only retained no records, so pair no-loss, wildcard equality/superset, and complete capture remain untested. Wildcard use is unaccepted.
 
 ## Query schedule
 
@@ -57,3 +57,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 ## Pilots
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only translations succeeded with totals `0` and `0`. These are not final searches.
+- [x] [Pilot 002](pilots/002/pilot.md): full-A1 wildcard compression was a count-only zero. Language and lossless eligible-type controls remain unavailable, and the wildcard is unaccepted.

@@ -1,0 +1,180 @@
+{
+  "schema_version": "slr1-pilot-wildcard-coverage-receipt/v1",
+  "source": "Scopus",
+  "pilot_id": "002",
+  "purpose": "Diagnostic control and wildcard receipt. It is not a final search artifact.",
+  "do_not_merge": true,
+  "diagnostic_cutoff": "2026-08-29",
+  "year_window": {
+    "source_control": "--year-start 2011 --year-end 2026",
+    "exact_cutoff_handling": "Screen records dated in 2026 against 2026-08-29."
+  },
+  "accepted_controls": {
+    "language": {
+      "status": "accepted_for_main_review",
+      "source_native_control": "visible Language facet: English",
+      "evidence_artifacts": [
+        "test1.json",
+        "test2.json"
+      ],
+      "source_readback": "test1.json completed with Language/English active. test2.json also records the active exact English facet before its later error."
+    },
+    "publication_type": {
+      "status": "not_accepted",
+      "reason": "The raw union was accepted, but normalized records expose blank documentType values. The available evidence does not prove complete source assignment for every eligible report type."
+    },
+    "peer_review": {
+      "status": "not_applied"
+    },
+    "access": {
+      "status": "not_applied"
+    }
+  },
+  "publication_type_test": {
+    "artifact": "test1.json",
+    "sha256": "746bea6706a4d9669ab061916e858e19b593e427fadbab2500f69c345f0b128c",
+    "candidate_union": "DOCTYPE(ar OR cp OR ch OR rp)",
+    "source_label_mapping": {
+      "ar": "Article",
+      "cp": "Conference Paper",
+      "ch": "Book Chapter",
+      "rp": "Report"
+    },
+    "or_readback": "The completed source-observed query retains DOCTYPE(ar OR cp OR ch OR rp).",
+    "total": 5,
+    "decision": "not_accepted"
+  },
+  "literal_a1": {
+    "artifact": "test2.json",
+    "sha256": "4349154b834c73cafc29d0a2d921bf3334e20cb30a8d1fd01c16235f4ccc7f49",
+    "source_query": "(TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"electrical power system\") OR TITLE-ABS-KEY(\"electrical power systems\") OR TITLE-ABS-KEY(\"electric power system\") OR TITLE-ABS-KEY(\"electric power systems\") OR TITLE-ABS-KEY(\"electrical power subsystem\") OR TITLE-ABS-KEY(\"electrical power subsystems\") OR TITLE-ABS-KEY(\"electric power subsystem\") OR TITLE-ABS-KEY(\"electric power subsystems\") OR TITLE-ABS-KEY(\"electrical energy subsystem\") OR TITLE-ABS-KEY(\"electrical energy subsystems\") OR TITLE-ABS-KEY(\"EPS\") OR TITLE-ABS-KEY(\"EPSs\") OR TITLE-ABS-KEY(\"power subsystem\") OR TITLE-ABS-KEY(\"power subsystems\") OR TITLE-ABS-KEY(\"power system\") OR TITLE-ABS-KEY(\"power systems\") OR TITLE-ABS-KEY(\"spacecraft power system\") OR TITLE-ABS-KEY(\"spacecraft power systems\") OR TITLE-ABS-KEY(\"power supply\") OR TITLE-ABS-KEY(\"power supplies\") OR TITLE-ABS-KEY(\"power distribution unit\") OR TITLE-ABS-KEY(\"power distribution units\") OR TITLE-ABS-KEY(\"PDU\") OR TITLE-ABS-KEY(\"PDUs\") OR TITLE-ABS-KEY(\"power processing unit\") OR TITLE-ABS-KEY(\"power processing units\") OR TITLE-ABS-KEY(\"power control and distribution\") OR TITLE-ABS-KEY(\"power management and distribution\") OR TITLE-ABS-KEY(\"electrical architecture\") OR TITLE-ABS-KEY(\"electrical architectures\") OR TITLE-ABS-KEY(\"power architecture\") OR TITLE-ABS-KEY(\"power architectures\") OR TITLE-ABS-KEY(\"DC power bus\") OR TITLE-ABS-KEY(\"DC power buses\") OR TITLE-ABS-KEY(\"PCDU\") OR TITLE-ABS-KEY(\"PCDUs\") OR TITLE-ABS-KEY(\"PMAD\") OR TITLE-ABS-KEY(\"PMADs\")) AND (TITLE-ABS-KEY(\"model-based systems engineering\") OR TITLE-ABS-KEY(\"model based systems engineering\") OR TITLE-ABS-KEY(\"model-based system engineering\") OR TITLE-ABS-KEY(\"model based system engineering\") OR TITLE-ABS-KEY(\"model-driven systems engineering\") OR TITLE-ABS-KEY(\"model driven systems engineering\") OR TITLE-ABS-KEY(\"model-driven system engineering\") OR TITLE-ABS-KEY(\"model driven system engineering\") OR TITLE-ABS-KEY(\"model-centric systems engineering\") OR TITLE-ABS-KEY(\"model centric systems engineering\") OR TITLE-ABS-KEY(\"model-centric system engineering\") OR TITLE-ABS-KEY(\"model centric system engineering\") OR TITLE-ABS-KEY(\"MBSE\") OR TITLE-ABS-KEY(\"SysML\") OR TITLE-ABS-KEY(\"systems modeling language\") OR TITLE-ABS-KEY(\"systems modelling language\") OR TITLE-ABS-KEY(\"system modeling language\") OR TITLE-ABS-KEY(\"system modelling language\") OR TITLE-ABS-KEY(\"object-process methodology\") OR TITLE-ABS-KEY(\"object process methodology\") OR TITLE-ABS-KEY(\"OPM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering method\") OR TITLE-ABS-KEY(\"object oriented systems engineering method\") OR TITLE-ABS-KEY(\"OOSEM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering\") OR TITLE-ABS-KEY(\"object oriented systems engineering\") OR TITLE-ABS-KEY(\"Arcadia\") OR TITLE-ABS-KEY(\"Capella\") OR TITLE-ABS-KEY(\"model-based engineering\") OR TITLE-ABS-KEY(\"model based engineering\") OR TITLE-ABS-KEY(\"model-driven engineering\") OR TITLE-ABS-KEY(\"model driven engineering\") OR TITLE-ABS-KEY(\"model-based design\") OR TITLE-ABS-KEY(\"model based design\") OR TITLE-ABS-KEY(\"model-driven design\") OR TITLE-ABS-KEY(\"model driven design\") OR TITLE-ABS-KEY(\"MBE\") OR TITLE-ABS-KEY(\"MDE\") OR TITLE-ABS-KEY(\"MBD\") OR TITLE-ABS-KEY(\"MagicGrid\") OR TITLE-ABS-KEY(\"Harmony-SE\") OR TITLE-ABS-KEY(\"Harmony SE\") OR TITLE-ABS-KEY(\"RFLP\") OR TITLE-ABS-KEY(\"Cameo Systems Modeler\") OR TITLE-ABS-KEY(\"MagicDraw\") OR TITLE-ABS-KEY(\"IBM Engineering Systems Design Rhapsody\") OR TITLE-ABS-KEY(\"Rational Rhapsody\") OR TITLE-ABS-KEY(\"Vitech CORE\") OR TITLE-ABS-KEY(\"Vitech GENESYS\") OR TITLE-ABS-KEY(\"OpenMBEE\") OR TITLE-ABS-KEY(\"Enterprise Architect\") OR TITLE-ABS-KEY(\"MATLAB System Composer\") OR TITLE-ABS-KEY(\"System Composer\") OR TITLE-ABS-KEY(\"Modelio\"))",
+    "source_query_character_count": 4540,
+    "controls": {
+      "year": "2011-2026",
+      "language": "English visible facet",
+      "publication_type": "not applied"
+    },
+    "status": "error",
+    "source_total": null,
+    "reason": "The artifact has source-readback English and year controls, then ends status:error with no total. The compact error artifact records no error stage."
+  },
+  "wildcard_candidate": {
+    "source_query": "(TITLE-ABS-KEY(\"CubeSat*\") OR TITLE-ABS-KEY(\"cube sat*\") OR TITLE-ABS-KEY(\"cube-sat*\") OR TITLE-ABS-KEY(\"cube satellite*\") OR TITLE-ABS-KEY(\"nanosat*\") OR TITLE-ABS-KEY(\"nano-sat*\") OR TITLE-ABS-KEY(\"nano sat*\") OR TITLE-ABS-KEY(\"nano-satellite*\") OR TITLE-ABS-KEY(\"nano satellite*\") OR TITLE-ABS-KEY(\"SmallSat*\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"electrical power system\") OR TITLE-ABS-KEY(\"electrical power systems\") OR TITLE-ABS-KEY(\"electric power system\") OR TITLE-ABS-KEY(\"electric power systems\") OR TITLE-ABS-KEY(\"electrical power subsystem\") OR TITLE-ABS-KEY(\"electrical power subsystems\") OR TITLE-ABS-KEY(\"electric power subsystem\") OR TITLE-ABS-KEY(\"electric power subsystems\") OR TITLE-ABS-KEY(\"electrical energy subsystem\") OR TITLE-ABS-KEY(\"electrical energy subsystems\") OR TITLE-ABS-KEY(\"EPS\") OR TITLE-ABS-KEY(\"EPSs\") OR TITLE-ABS-KEY(\"power subsystem\") OR TITLE-ABS-KEY(\"power subsystems\") OR TITLE-ABS-KEY(\"power system\") OR TITLE-ABS-KEY(\"power systems\") OR TITLE-ABS-KEY(\"spacecraft power system\") OR TITLE-ABS-KEY(\"spacecraft power systems\") OR TITLE-ABS-KEY(\"power supply\") OR TITLE-ABS-KEY(\"power supplies\") OR TITLE-ABS-KEY(\"power distribution unit\") OR TITLE-ABS-KEY(\"power distribution units\") OR TITLE-ABS-KEY(\"PDU\") OR TITLE-ABS-KEY(\"PDUs\") OR TITLE-ABS-KEY(\"power processing unit\") OR TITLE-ABS-KEY(\"power processing units\") OR TITLE-ABS-KEY(\"power control and distribution\") OR TITLE-ABS-KEY(\"power management and distribution\") OR TITLE-ABS-KEY(\"electrical architecture\") OR TITLE-ABS-KEY(\"electrical architectures\") OR TITLE-ABS-KEY(\"power architecture\") OR TITLE-ABS-KEY(\"power architectures\") OR TITLE-ABS-KEY(\"DC power bus\") OR TITLE-ABS-KEY(\"DC power buses\") OR TITLE-ABS-KEY(\"PCDU\") OR TITLE-ABS-KEY(\"PCDUs\") OR TITLE-ABS-KEY(\"PMAD\") OR TITLE-ABS-KEY(\"PMADs\")) AND (TITLE-ABS-KEY(\"model-based systems engineering\") OR TITLE-ABS-KEY(\"model based systems engineering\") OR TITLE-ABS-KEY(\"model-based system engineering\") OR TITLE-ABS-KEY(\"model based system engineering\") OR TITLE-ABS-KEY(\"model-driven systems engineering\") OR TITLE-ABS-KEY(\"model driven systems engineering\") OR TITLE-ABS-KEY(\"model-driven system engineering\") OR TITLE-ABS-KEY(\"model driven system engineering\") OR TITLE-ABS-KEY(\"model-centric systems engineering\") OR TITLE-ABS-KEY(\"model centric systems engineering\") OR TITLE-ABS-KEY(\"model-centric system engineering\") OR TITLE-ABS-KEY(\"model centric system engineering\") OR TITLE-ABS-KEY(\"MBSE\") OR TITLE-ABS-KEY(\"SysML\") OR TITLE-ABS-KEY(\"systems modeling language\") OR TITLE-ABS-KEY(\"systems modelling language\") OR TITLE-ABS-KEY(\"system modeling language\") OR TITLE-ABS-KEY(\"system modelling language\") OR TITLE-ABS-KEY(\"object-process methodology\") OR TITLE-ABS-KEY(\"object process methodology\") OR TITLE-ABS-KEY(\"OPM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering method\") OR TITLE-ABS-KEY(\"object oriented systems engineering method\") OR TITLE-ABS-KEY(\"OOSEM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering\") OR TITLE-ABS-KEY(\"object oriented systems engineering\") OR TITLE-ABS-KEY(\"Arcadia\") OR TITLE-ABS-KEY(\"Capella\") OR TITLE-ABS-KEY(\"model-based engineering\") OR TITLE-ABS-KEY(\"model based engineering\") OR TITLE-ABS-KEY(\"model-driven engineering\") OR TITLE-ABS-KEY(\"model driven engineering\") OR TITLE-ABS-KEY(\"model-based design\") OR TITLE-ABS-KEY(\"model based design\") OR TITLE-ABS-KEY(\"model-driven design\") OR TITLE-ABS-KEY(\"model driven design\") OR TITLE-ABS-KEY(\"MBE\") OR TITLE-ABS-KEY(\"MDE\") OR TITLE-ABS-KEY(\"MBD\") OR TITLE-ABS-KEY(\"MagicGrid\") OR TITLE-ABS-KEY(\"Harmony-SE\") OR TITLE-ABS-KEY(\"Harmony SE\") OR TITLE-ABS-KEY(\"RFLP\") OR TITLE-ABS-KEY(\"Cameo Systems Modeler\") OR TITLE-ABS-KEY(\"MagicDraw\") OR TITLE-ABS-KEY(\"IBM Engineering Systems Design Rhapsody\") OR TITLE-ABS-KEY(\"Rational Rhapsody\") OR TITLE-ABS-KEY(\"Vitech CORE\") OR TITLE-ABS-KEY(\"Vitech GENESYS\") OR TITLE-ABS-KEY(\"OpenMBEE\") OR TITLE-ABS-KEY(\"Enterprise Architect\") OR TITLE-ABS-KEY(\"MATLAB System Composer\") OR TITLE-ABS-KEY(\"System Composer\") OR TITLE-ABS-KEY(\"Modelio\"))",
+    "source_query_character_count": 4165,
+    "character_reduction": 375,
+    "character_reduction_percent": 8.26,
+    "wildcard_count": 10,
+    "controls_identical_to_literal": {
+      "year": "2011-2026",
+      "language": "English visible facet",
+      "publication_type": "not applied"
+    },
+    "deterministic_literal_coverage": {
+      "replaced_literal_count": 22,
+      "all_replaced_literals_covered": true,
+      "replacements": [
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"CubeSat*\")",
+          "replaced_normative_literals": [
+            "CubeSat",
+            "CubeSats"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"cube sat*\")",
+          "replaced_normative_literals": [
+            "cube sat",
+            "cube sats"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"cube-sat*\")",
+          "replaced_normative_literals": [
+            "cube-sat",
+            "cube-sats"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"cube satellite*\")",
+          "replaced_normative_literals": [
+            "cube satellite",
+            "cube satellites"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"nanosat*\")",
+          "replaced_normative_literals": [
+            "nanosat",
+            "nanosats",
+            "nanosatellite",
+            "nanosatellites"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"nano-sat*\")",
+          "replaced_normative_literals": [
+            "nano-sat",
+            "nano-sats"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"nano sat*\")",
+          "replaced_normative_literals": [
+            "nano sat",
+            "nano sats"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"nano-satellite*\")",
+          "replaced_normative_literals": [
+            "nano-satellite",
+            "nano-satellites"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"nano satellite*\")",
+          "replaced_normative_literals": [
+            "nano satellite",
+            "nano satellites"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        },
+        {
+          "source_native_candidate_atom": "TITLE-ABS-KEY(\"SmallSat*\")",
+          "replaced_normative_literals": [
+            "SmallSat",
+            "SmallSats"
+          ],
+          "literal_coverage": "all",
+          "punctuation_and_spacing_variant_handling": "This replacement covers only literals with the same punctuation and spacing. Other normative variants remain separate literals."
+        }
+      ]
+    },
+    "live_comparison": "not_run",
+    "status": "not_accepted",
+    "reason": "Stopped after the required language-controlled literal A1 run ended with a source/protocol error. No stable-ID superset comparison exists."
+  },
+  "psr_controls": {
+    "language": "all languages",
+    "publication_type": "not applied",
+    "peer_review": "not applied",
+    "access": "not applied"
+  }
+}

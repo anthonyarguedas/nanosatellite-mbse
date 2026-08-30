@@ -21,7 +21,7 @@ The script artifact is authoritative for per-event query, controls, source ident
 - Search field or local route: Complete bounded local harvest from category 0 with the deterministic local matcher. Do not use rendered `q` as a Boolean search.
 - Main evidence window: Do not restrict the harvest by event date. Apply the evidence window to candidate reports after retrieval.
 - Language: ESA exposes no Language filter or language parameter. Apply no source language filter and determine English from the full text during screening.
-- Publication type: Apply no publication type, peer review, access, or full-text availability filter beyond the stated source route.
+- Publication type: ESA exposes event, contribution, and material groups rather than a lossless eligible report type filter. Apply no type, peer-review, access, or full-text-availability filter.
 - Database or collection selection: Category 0 across events, contributions, and materials. Preserve all public attachment and owner routes required by complete mode.
 - Other shared limits: None.
 
@@ -36,7 +36,7 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `L(a) NEAR/5 L(b)`. The local matcher applies this unordered rule within one record field.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: Rendered `q` is a prefix-AND search and cannot express the Boolean schedule. ESA exposes no Language filter. Use the bounded local harvest for exact Boolean and same-field proximity matching, and use up to three focused pilots for parser, coverage, attachment, resume, and cutoff behavior before any final run.
+- Source limitations: Rendered `q` is a prefix-AND search and cannot express the Boolean schedule. ESA exposes no Language control, and event/contribution/material groups do not map losslessly to the shared eligible report types. Use the bounded local harvest for exact Boolean and same-field proximity matching. The category-0 event-universe export timed out in Pilots 003 and 004 with the 500-event safety boundary configured. This systematic endpoint evidence leaves coverage and the total unestablished, never zero.
 
 ## Query schedule
 
@@ -59,3 +59,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 - [x] [Pilot 001](pilots/001/pilot.md): exact local A1, BG1, and `NEAR/5` parsing passed. The shorter wildcard candidate remains unaccepted because it broadens recall.
 - [x] [Pilot 002](pilots/002/pilot.md): rendered `q` cannot express the Boolean schedule, and ESA exposes no Language filter.
 - [x] [Pilot 003](pilots/003/pilot.md): category-0 harvest timed out before event retrieval. Fixture checks passed but do not establish source coverage.
+- [x] [Pilot 004](pilots/004/pilot.md): the fresh category-0 event-universe retry timed out before an HTTP response. It is systematic endpoint evidence, not zero coverage.

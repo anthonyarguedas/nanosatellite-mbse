@@ -1,0 +1,46 @@
+{
+  "schema_version": "aiaa-arc-fielded-sampled-prefix/v1",
+  "source": "AIAA Aerospace Research Central (ARC)",
+  "pilot": "003",
+  "schedule_id": "A2",
+  "diagnostic_kind": "non_mergeable_deterministic_manifestation_prefix",
+  "do_not_merge": true,
+  "date_window": {
+    "requested_start": "2011-01-01",
+    "requested_end": "2026-08-29",
+    "source_month_start": "2011-01",
+    "source_month_end": "2026-08",
+    "count_scope": "source-month totals before exact-day exclusions"
+  },
+  "prefix_contract": {
+    "cell_order": [
+      "A2-P-title-MH-or-MB-title",
+      "A2-P-title-MH-or-MB-keyword",
+      "A2-P-title-MH-or-MB-abstract",
+      "A2-P-keyword-MH-or-MB-title",
+      "A2-P-keyword-MH-or-MB-keyword",
+      "A2-P-keyword-MH-or-MB-abstract",
+      "A2-P-abstract-MH-or-MB-title",
+      "A2-P-abstract-MH-or-MB-keyword",
+      "A2-P-abstract-MH-or-MB-abstract"
+    ],
+    "within_cell_order": "ARC rendered Date/Earliest source order, reconciled across two DOI passes",
+    "deduplication": "first raw ARC DOI-like manifestation ID wins; DOI-first identity is applied in the separate audit",
+    "maximum_unique_manifestation_ids": 100,
+    "stopped_after_unique_manifestation_ids": 0
+  },
+  "source_runs": [],
+  "source_failures": [
+    {
+      "cell_id": "A2-P-title-MH-or-MB-title",
+      "error_type": "AiaaArcProtocolError",
+      "error": "ARC citation form DOI did not match the requested record"
+    }
+  ],
+  "sampled_records": [],
+  "limitations": [
+    "The prefix is diagnostic and non-mergeable, not a final search.",
+    "Visible metadata confirmation cannot establish full-text eligibility or prove a source hit was false.",
+    "ARC record pages expose keywords as visible metadata; RIS preserves abstract and TY type but not a source-side language filter."
+  ]
+}
