@@ -72,3 +72,4 @@ PSR searches have no lower date limit and no language, document type, subject, a
 
 - [x] [Pilot 001](pilots/001/pilot.md): `A1`, `BG1`, and supporting `PSR1` count-only diagnostics completed. Raw `PY` date clauses were required for the exact query mode.
 - [x] [Pilot 002](pilots/002/pilot.md): raw `LA=(English)` was read back. The proposed DT union was not accepted. The 10-wildcard A1 candidate was shorter and had a complete stable-ID superset, so it is accepted for A1 only.
+- [Pilot 003](pilots/003/pilot.md): all nine main and four separate PSR pilot events completed. Complete ID unions, cutoff checks, known-item recall, pair audits, and the three sets over 100 are linked from the pilot. This does not complete piloting or authorize a final search.

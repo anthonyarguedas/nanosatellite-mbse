@@ -1,6 +1,6 @@
-# Pilot 003 — complete partition and supporting-search diagnostic
+# Pilot 003: complete partition and supporting-search diagnostic
 
-Required changes were applied in commit: NA — pilot-only evidence; no fixed source decision or completion state was changed.
+Required changes were applied in commit: NA. This is pilot-only evidence. No fixed source decision or completion state was changed.
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_web_of_science.py`, through the shared-browser wrapper.
 
