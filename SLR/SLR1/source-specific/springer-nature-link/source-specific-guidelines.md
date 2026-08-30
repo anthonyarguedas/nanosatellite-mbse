@@ -59,3 +59,9 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): A1 count-only diagnostic stopped on source canonical-path order drift. BG1 was not attempted under the stop rule. Do not use this artifact as a final search.
 - [x] [Pilot 002](pilots/002/pilot.md): a fresh literal A1 retry requested `En`, broad content, and `oldestFirst` in two-pass count-only identity mode, then failed again on canonical identity order. No total, wildcard candidate, or BG1 run was accepted.
+
+## Pilot 003 diagnostic note (no completion-state change)
+
+[Pilot 003](pilots/003/pilot.md) used the repaired two-pass canonical-path check and retained literal, broad-content `En`/`oldestFirst` pilot unions for A1–BC1. Its direct A2/B1/B2 routes were replaced only by documented lossless Boolean and exact-date source cells; the 9,013-character BT2 row was divided into explicit pair cells without a wildcard. No content-type, access, full-text, peer-review, or taxonomy limiter was added.
+
+The linked [canonical-union receipt](pilots/003/searches/canonical-unions.json) retains the nine outcomes. BT2 remains an explicit pilot failure: four 2017 records in the `("variability" AND "models")` cell had a canonical detail-route redirect on two attempts, so their identifiers are null rather than inferred. The >100 unions have a linked [visible Title/Abstract metadata noise investigation](pilots/003/searches/noise-investigation.json); its low-noise priority subsets do not replace the broad source union because Link has no independently validated Abstract-only field or supported proximity operator. No Pilot 003 output is a final search.
