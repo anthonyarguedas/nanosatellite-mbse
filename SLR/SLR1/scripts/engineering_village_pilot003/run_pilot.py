@@ -30,7 +30,7 @@ from preflight import (  # type: ignore[import-not-found]
 )
 
 SEARCH_DIR = PILOT_DIR / "searches"
-FIXED_BROWSER_SCRIPTS = Path("/Users/antho/agent-tools/internet/skills/browser/scripts")
+FIXED_BROWSER_SCRIPTS = Path.home() / "agent-tools/internet/skills/browser/scripts"
 BROWSER_RUNNER = FIXED_BROWSER_SCRIPTS / "run_with_browser.py"
 PAIRED_ADAPTER = FIXED_BROWSER_SCRIPTS / "search_compendex_inspec.py"
 DEFAULT_PRIVATE_RIS_DIR = Path.home() / ".cache" / "slr1-engineering-village-pilot003-ris"

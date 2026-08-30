@@ -36,7 +36,7 @@ from run_pilot import (  # type: ignore[import-not-found]
 
 SEARCH_DIR = PILOT_DIR / "searches"
 SLR1_ROOT = Path(__file__).resolve().parents[2]
-FIXED_ENGINE = Path("/Users/antho/agent-tools/internet/skills/browser/scripts/_engineering_village_search.py")
+FIXED_ENGINE = Path.home() / "agent-tools/internet/skills/browser/scripts/_engineering_village_search.py"
 DOCS = (
     PILOT_DIR / "pilot.md",
     SLR1_ROOT / "source-specific" / "inspec" / "pilots" / "003" / "pilot.md",
