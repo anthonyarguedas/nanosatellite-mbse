@@ -11,8 +11,8 @@ can expose only a contained result-refinement interval, whereas its own second
 route echoes the requested range token.  Each pass here starts from the normal
 rendered source query, visibly applies the native Year control, exhausts the
 source, and is independently saved.  The local receipt then requires matching
-source totals and ordered IEEE Article Numbers while preserving—not erasing—
-the two readback forms.
+source totals and ordered IEEE Article Numbers while preserving both
+readback forms.
 
 The fixed integration remains read-only.  As in ``run_strict.py``, only URL
 component encoding is changed from form-style ``+`` to percent encoding after
@@ -36,9 +36,7 @@ from urllib.parse import parse_qsl, quote, urlsplit, urlunsplit
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SCHEDULE = ROOT / "source-specific/ieee-xplore/pilots/004/searches/schedule.json"
 DEFAULT_OUTPUT_DIR = ROOT / "source-specific/ieee-xplore/pilots/004/searches/two-pass"
-FIXED_ADAPTER_DIR = Path(
-    "/Users/antho/agent-tools-worktrees/slr-integration/internet/skills/browser/scripts"
-)
+FIXED_ADAPTER_DIR = Path.home() / "agent-tools/internet/skills/browser/scripts"
 
 
 def _load_adapter() -> Any:

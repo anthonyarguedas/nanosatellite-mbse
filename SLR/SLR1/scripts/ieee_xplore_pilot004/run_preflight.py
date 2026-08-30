@@ -21,12 +21,8 @@ DEFAULT_SCHEDULE = (
     / "source-specific/ieee-xplore/pilots/004/searches/schedule.json"
 )
 DEFAULT_OUTPUT_DIR = ROOT / "source-specific/ieee-xplore/pilots/004/searches/preflight"
-FIXED_ADAPTER = Path(
-    "/Users/antho/agent-tools-worktrees/slr-integration/internet/skills/browser/scripts/search_ieee_xplore.py"
-)
-SHARED_BROWSER_RUNNER = Path(
-    "/Users/antho/agent-tools/internet/skills/browser/scripts/run_with_browser.py"
-)
+FIXED_ADAPTER = Path.home() / "agent-tools/internet/skills/browser/scripts/search_ieee_xplore.py"
+SHARED_BROWSER_RUNNER = Path.home() / "agent-tools/internet/skills/browser/scripts/run_with_browser.py"
 
 
 def _artifact_label(path: Path) -> str:

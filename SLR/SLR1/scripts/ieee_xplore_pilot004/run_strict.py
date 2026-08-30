@@ -32,9 +32,7 @@ DEFAULT_SCHEDULE = (
     ROOT / "source-specific/ieee-xplore/pilots/004/searches/schedule.json"
 )
 DEFAULT_OUTPUT_DIR = ROOT / "source-specific/ieee-xplore/pilots/004/searches/strict"
-FIXED_ADAPTER_DIR = Path(
-    "/Users/antho/agent-tools-worktrees/slr-integration/internet/skills/browser/scripts"
-)
+FIXED_ADAPTER_DIR = Path.home() / "agent-tools/internet/skills/browser/scripts"
 
 
 def _load_adapter() -> Any:
