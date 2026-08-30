@@ -26,10 +26,7 @@ from typing import Any
 import urllib.request
 
 
-ADAPTER_PATH = Path(
-    "/Users/antho/agent-tools/internet/skills/browser/scripts/"
-    "search_wiley_online_library.py"
-)
+ADAPTER_PATH = Path.home() / "agent-tools/internet/skills/browser/scripts/search_wiley_online_library.py"
 SOURCE_NAME = "Wiley Online Library"
 SOURCE_ID = "wiley_online_library"
 PAGE_SIZE = 20

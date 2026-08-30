@@ -27,10 +27,7 @@ from urllib.parse import quote
 import urllib.request
 
 
-ADAPTER_PATH = Path(
-    "/Users/antho/agent-tools/internet/skills/browser/scripts/"
-    "search_wiley_online_library.py"
-)
+ADAPTER_PATH = Path.home() / "agent-tools/internet/skills/browser/scripts/search_wiley_online_library.py"
 
 DETAIL_SNAPSHOT_JS = r"""
 () => {
