@@ -16,7 +16,7 @@ Each terminal cell used literal NTRS `q`, `--require-complete`, `Publication Dat
 - [`schedule-assessment.json`](searches/schedule-assessment.json) binds each terminal artifact hash, source total, canonical-ID union, cell proof, and null-total failure record.
 - [`pair-checks.json`](searches/pair-checks.json) checks declared pairs in retained title/list-snippet fields without treating a missing visible match as a false source hit.
 
-`BC1`'s 5,511-character full literal query failed twice before source query readback. It was replaced by four lossless `P AND C1` OR cells (largest 1,903 characters). `BT2`'s 14,027-character full literal query failed before readback. Its seven prospective `T2` cells were run; failed parents were replaced only by disjoint literal children. The ten terminal cells cover `T2` pair positions 1–224 exactly once and retain complete `P` and `M_B` blocks. These are prospective lossless execution cells, not narrowing filters or a claimed NTRS hard length limit.
+`BC1`'s 5,511-character full literal query failed twice before source query readback. It was replaced by four lossless `P AND C1` OR cells (largest 1,903 characters). `BT2`'s 14,027-character full literal query failed before readback. Its seven prospective `T2` cells were run. Failed parents were replaced only by disjoint literal children. The ten terminal cells cover `T2` pair positions 1–224 exactly once and retain complete `P` and `M_B` blocks. These are prospective lossless execution cells, not narrowing filters or a claimed NTRS hard length limit.
 
 ## Results
 
@@ -42,7 +42,7 @@ The retained-field pair check found four `BG2` snippet hits: both `product-line/
 - Its one-value Type control is not a proved lossless eligible-type union, so no type filter was used.
 - NTRS exposes no proved NASA Thesaurus term/explosion route. No descriptor supplement was applied.
 - The preserved pre-readback errors do not establish source zeros or a fixed query-length ceiling. The successful literal cell unions are pilot evidence only.
-- These pilot records stay under `pilots/003`; they are not final-search events or a final corpus.
+- These pilot records stay under `pilots/003`. They are not final-search events or a final corpus.
 
 ## Checks
 
