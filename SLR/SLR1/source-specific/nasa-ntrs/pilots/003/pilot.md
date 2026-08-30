@@ -1,6 +1,6 @@
 # Pilot 003: complete literal schedule and canonical-ID unions
 
-Required changes were applied in commit: NA. This is a diagnostic pilot only; it does not change the source guideline's completion state or create final searches.
+Required changes were applied in commit: NA. This is a diagnostic pilot only. It does not change the source guideline's completion state or create final searches.
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_ntrs.py` through the shared browser wrapper.
 
@@ -20,7 +20,7 @@ Each terminal cell used literal NTRS `q`, `--require-complete`, `Publication Dat
 
 ## Results
 
-| ID | Terminal cells | Successful source events | Deduplicated canonical-ID union |
+| ID | Terminal cells | Source record occurrences | Deduplicated canonical-ID union |
 |---|---:|---:|---:|
 | A1 | 1 | 0 | 0 |
 | A2 | 1 | 1 | 1 |
@@ -32,7 +32,7 @@ Each terminal cell used literal NTRS `q`, `--require-complete`, `Publication Dat
 | BC1 | 4 | 0 | 0 |
 | BT2 | 10 | 0 | 0 |
 
-The schedule produced 19 successful source events and a **15-ID** cross-partition canonical union. No partition union exceeded 10 IDs, so the 100-record investigation threshold did not trigger. No metadata, controlled-vocabulary, language, eligible-type, access, or other narrowing refinement was attempted.
+The schedule produced 19 source record occurrences and a **15-ID** cross-partition canonical union. No partition union exceeded 10 IDs, so the 100-record investigation threshold did not trigger. No metadata, controlled-vocabulary, language, eligible-type, access, or other narrowing refinement was attempted.
 
 The retained-field pair check found four `BG2` snippet hits: both `product-line/model` spelling variants for citations `20180001888` and `20180001738`, each with one intervening lexical token. This is only a local confirmation of retained visible text. NTRS general `q` also searches document full text. Two exact `BG2 --full-abstracts` diagnostic attempts failed before usable complete results, so full-text uncertainty remains explicit and every related failure total is `null`, not zero.
 

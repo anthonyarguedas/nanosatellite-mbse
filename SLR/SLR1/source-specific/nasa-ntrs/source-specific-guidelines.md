@@ -58,3 +58,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): complete `A1` and `BG1` count-only translations succeeded with totals `0` and `0`. These are not final searches.
 - [x] [Pilot 002](pilots/002/pilot.md): full-A1 wildcard compression was a count-only zero. Language and lossless eligible-type controls remain unavailable, and the wildcard is unaccepted.
+- [Pilot 003](pilots/003/pilot.md): all nine literal partitions have complete canonical-ID unions. BC1 and BT2 use linked lossless cells after preserved null failures. This does not complete piloting or authorize a final search.
