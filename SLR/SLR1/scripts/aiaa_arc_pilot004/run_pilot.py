@@ -26,6 +26,7 @@ from common import (
     KNOWN_TITLE,
     PRIMARY_DIR,
     RECALL_DIR,
+    ROOT,
     SEARCH_DIR,
     UNION_DIR,
     Cell,
@@ -47,14 +48,14 @@ from queries import SCHEDULE_IDS
 
 DEFAULT_ADAPTER = (
     Path.home()
-    / "agent-tools-worktrees"
-    / "slr-integration"
+    / "agent-tools"
     / "internet"
     / "skills"
     / "browser"
     / "scripts"
     / "search_aiaa_arc.py"
 )
+PROJECT_ROOT = ROOT.parents[1]
 
 
 def adapter_path(value: str | None) -> Path:
@@ -81,6 +82,16 @@ def short_output(completed: subprocess.CompletedProcess[str]) -> str:
     value = (completed.stdout or "") + (completed.stderr or "")
     value = value.strip()
     return value[-1600:] if value else "(no adapter output)"
+
+
+def receipt_output(completed: subprocess.CompletedProcess[str], saved_path: Path) -> str:
+    """Use a project-relative path in an aggregate failure receipt."""
+    value = short_output(completed)
+    try:
+        relative_path = saved_path.relative_to(PROJECT_ROOT)
+    except ValueError:
+        return value
+    return value.replace(str(saved_path), str(relative_path))
 
 
 def command_for(adapter: Path, output_path: Path, cell: Cell, mode: str) -> list[str]:
@@ -175,7 +186,7 @@ def run_one(adapter: Path, output_base: Path, cell: Cell, mode: str) -> dict[str
         "mode": mode,
         "artifact": str(failure.relative_to(SEARCH_DIR.parent)) if failure.exists() else None,
         "total": None,
-        "errors": [short_output(completed)],
+        "errors": [receipt_output(completed, failure)],
         "adapter_returncode": completed.returncode,
     }
 
@@ -456,7 +467,10 @@ def run_final(adapter: Path) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", choices=("index", "recall", "primary", "final", "all"), required=True)
-    parser.add_argument("--adapter", help="Read-only repaired search_aiaa_arc.py path; defaults to AIAA_ARC_ADAPTER or the integration worktree")
+    parser.add_argument(
+        "--adapter",
+        help="Read-only repaired search_aiaa_arc.py path. Defaults to AIAA_ARC_ADAPTER or $HOME/agent-tools.",
+    )
     args = parser.parse_args()
     ensure_directories()
     require_shared_browser()

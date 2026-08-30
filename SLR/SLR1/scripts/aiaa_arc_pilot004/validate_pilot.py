@@ -11,6 +11,7 @@ from common import (
     DATE_END,
     DATE_START,
     KNOWN_DOI,
+    PILOT_DIR,
     PRIMARY_DIR,
     RECALL_DIR,
     ROOT,
@@ -28,6 +29,10 @@ from common import (
     validate_zero_count_artifact,
 )
 from queries import BLOCKS, SCHEDULE_IDS, T2_PAIRS, T2_SUBBLOCKS
+
+
+MACHINE_SPECIFIC_PATH = re.compile(r"(?<![A-Za-z0-9])/(?:Users|home)/[^/\s]+")
+PILOT004_SCOPE = (PILOT_DIR, ROOT / "scripts" / "aiaa_arc_pilot004")
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -78,6 +83,22 @@ def local_markdown_links(markdown: Path, errors: list[str]) -> None:
             continue
         candidate = (markdown.parent / target).resolve()
         require(candidate.exists(), f"{markdown.name}: broken link {target}", errors)
+
+
+def machine_specific_paths(errors: list[str]) -> None:
+    for directory in PILOT004_SCOPE:
+        for path in sorted(directory.rglob("*")):
+            if not path.is_file():
+                continue
+            try:
+                text = path.read_text(encoding="utf-8")
+            except UnicodeDecodeError:
+                continue
+            require(
+                MACHINE_SPECIFIC_PATH.search(text) is None,
+                f"{path.relative_to(ROOT)}: machine-specific path",
+                errors,
+            )
 
 
 def main() -> int:
@@ -219,6 +240,7 @@ def main() -> int:
     guideline = ROOT / "source-specific" / "aiaa-arc" / "source-specific-guidelines.md"
     local_markdown_links(pilot_markdown, errors)
     local_markdown_links(guideline, errors)
+    machine_specific_paths(errors)
     if guideline.exists():
         text = guideline.read_text()
         require("Last pilot saved in commit: NA" in text, "guideline changed pilot completion state", errors)
