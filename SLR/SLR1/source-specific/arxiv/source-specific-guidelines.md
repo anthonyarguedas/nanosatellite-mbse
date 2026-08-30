@@ -74,4 +74,4 @@ The table is semantic. Implement each row as the full Atom Boolean expression or
 
 - [x] [Pilot 001](pilots/001/pilot.md): one representative structured-row `A1` cell and one `BG1` pair cell returned exact zero totals. These are not full-partition or final-search results.
 - [x] [Pilot 002](pilots/002/pilot.md): the `CubeSat*` representative A1 cell was a count-only zero. Language and type controls remain unavailable, and the wildcard is unaccepted.
-- [x] [Pilot 003](pilots/003/pilot.md): validated the separate Atom route, repaired overlong expressions with lossless cells, and captured all nine bounded partition unions. These are diagnostic pilot artifacts, not final searches.
+- [Pilot 003](pilots/003/pilot.md): validated the separate Atom route, repaired overlong expressions with lossless cells, and captured all nine bounded partition unions. These are diagnostic pilot artifacts, not final searches.

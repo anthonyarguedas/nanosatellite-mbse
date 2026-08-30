@@ -40,7 +40,7 @@ The one `BT2` candidate (`2507.22198`) had no locally verifiable declared pair i
 
 ## Result
 
-- [x] Change the source translation or schedule
-- [x] Document a source limitation
+- Change the source translation or schedule
+- Document a source limitation
 
 The prospective source translation is the documented Atom API route and its lossless cell plan in the [source guideline](../../source-specific-guidelines.md). It produced complete, low-volume diagnostic candidate unions for all nine partitions. No wildcard, language, type, category, access, peer-review, proximity, controlled-vocabulary, or API-side export filter was used. All artifacts are non-mergeable pilot evidence; no final search or screening decision was made.
