@@ -419,29 +419,28 @@ def validate_documentation(errors: list[str]) -> None:
 
 
 def write_report(errors: list[str], cell_totals: dict[str, Any]) -> None:
+    report = {
+        "schema_version": "atai-pilot-003-validation-report/v1",
+        "status": "ok" if not errors else "failed",
+        "checks": {
+            "json_artifacts": "parsed",
+            "shared_schedule_query_membership": "passed" if not errors else "see errors",
+            "source_controls_and_receipts": "passed" if not errors else "see errors",
+            "stable_id_unions": "passed" if not errors else "see errors",
+            "noise_investigation_threshold": "passed" if not errors else "see errors",
+            "source_documentation": "passed" if not errors else "see errors",
+            "local_markdown_links": "passed" if not errors else "see errors",
+        },
+        "cell_totals": cell_totals,
+        "errors": errors,
+    }
     if REPORT_PATH.exists():
-        raise RuntimeError(f"Refusing to overwrite {REPORT_PATH}")
+        existing = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+        if existing != report:
+            raise RuntimeError(f"Existing validation report is stale: {REPORT_PATH}")
+        return
     with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=REPORT_PATH.parent, delete=False) as stream:
-        json.dump(
-            {
-                "schema_version": "atai-pilot-003-validation-report/v1",
-                "status": "ok" if not errors else "failed",
-                "checks": {
-                    "json_artifacts": "parsed",
-                    "shared_schedule_query_membership": "passed" if not errors else "see errors",
-                    "source_controls_and_receipts": "passed" if not errors else "see errors",
-                    "stable_id_unions": "passed" if not errors else "see errors",
-                    "noise_investigation_threshold": "passed" if not errors else "see errors",
-                    "source_documentation": "passed" if not errors else "see errors",
-                    "local_markdown_links": "passed" if not errors else "see errors",
-                },
-                "cell_totals": cell_totals,
-                "errors": errors,
-            },
-            stream,
-            ensure_ascii=False,
-            indent=2,
-        )
+        json.dump(report, stream, ensure_ascii=False, indent=2)
         stream.write("\n")
         temporary = Path(stream.name)
     temporary.replace(REPORT_PATH)
