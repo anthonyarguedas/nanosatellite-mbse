@@ -1,6 +1,6 @@
 # Pilot 003: repaired literal schedule and canonical-ID union
 
-Required changes were applied in commit: NA (pilot-only; no final-search state change)
+Required changes were applied in commit: NA (pilot-only, with no final-search state change)
 
 Export method: the fixed `search_springer_link.py` adapter through the shared local-browser wrapper.
 
@@ -10,15 +10,15 @@ Run all nine literal schedule partitions with `En`, broad whole-platform content
 
 ## Method
 
-- Every literal and declared pair comes from `pilot_schedule`; [the query plan](searches/query-plan.json) records all direct rows and lossless cells. It contains no `*` or `?`.
-- No content-type, access, full-text, peer-review, subject, discipline, controlled-term, or publication-type filter was used. `En` is a metadata facet only; English full-text screening remains required.
+- Every literal and declared pair comes from `pilot_schedule`, and [the query plan](searches/query-plan.json) records all direct rows and lossless cells. It contains no `*` or `?`.
+- No content-type, access, full-text, peer-review, subject, discipline, controlled-term, or publication-type filter was used. `En` is a metadata facet only. English full-text screening remains required.
 - The direct 3,431-character A2 row had identity/route failures, so its two lossless Boolean cells were used. B1's direct full row repeated a canonical path across pages, so adjacent exact-date source-year cells were reconciled. B2 uses the same year cells and lossless Boolean cells for its failed 2021, 2022, and 2024 routes.
 - The 9,013-character BT2 row timed out. Its 224 explicit pairs were first divided into 11 `T2` OR cells (at most 1,994 characters), then only failed cells were subdivided without dropping a pair. All completed cells retained the adapter's two-pass proof.
 - The normal event outputs are pilot artifacts, not final searches. [Canonical unions](searches/canonical-unions.json) validates each normal-output marker, controls, artifact digest, and stable path before deduplication.
 
 ## Outcomes
 
-Counts are retained, exact-cutoff canonical-path unions after any detail-page date exclusion. “Complete” means every planned source cell in that row completed; it does not mean screened eligible evidence.
+Counts are retained, exact-cutoff canonical-path unions after any detail-page date exclusion. “Complete” means every planned source cell in that row completed. It does not mean screened eligible evidence.
 
 | ID | Retained canonical IDs | Outcome |
 |---|---:|---|
@@ -30,7 +30,7 @@ Counts are retained, exact-cutoff canonical-path unions after any detail-page da
 | BG1 | 33 | Complete direct literal row |
 | BG2 | 125 | Complete direct literal row after one pagination retry |
 | BC1 | 136 | Complete direct literal row |
-| BT2 | 465 retained | **Repaired-route failure:** all other lossless cells completed, but the 2017 `("variability" AND "models")` cell reported 4 records whose canonical detail route redirected on two attempts. Their stable IDs remain `null`; none were invented or merged. |
+| BT2 | 465 retained | **Repaired-route failure:** all other lossless cells completed, but the 2017 `("variability" AND "models")` cell reported 4 records whose canonical detail route redirected on two attempts. Their stable IDs remain `null`. None were invented or merged. |
 
 ## >100 noise investigation and no-loss refinement
 
@@ -42,7 +42,7 @@ This is a no-loss dual-lane refinement: those low-noise metadata subsets are lin
 
 - `En`, exact requested dates, `oldestFirst`, native broad content, and two-pass stable-identity checks were source-read back in every normal event.
 - No wildcard was submitted or accepted in any partition. A wildcard must be separately stable-ID validated before future use.
-- Date source controls are year-effective; the adapter retained unresolved dates and removed only records with a proved detail date outside the requested window.
+- Date source controls are year-effective. The adapter retained unresolved dates and removed only records with a proved detail date outside the requested window.
 - Link's Keywords field includes body text. The noise findings therefore do not classify metadata-negative records as false matches.
 - The BT2 2017 failure is a source/detail-route failure, not zero results. It prevents accepting a complete BT2 union or a final source translation.
 
