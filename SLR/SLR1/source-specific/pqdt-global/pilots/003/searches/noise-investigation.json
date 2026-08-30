@@ -1,0 +1,36 @@
+{
+  "schema_version": "pqdt-global-pilot-003-noise-investigation/v1",
+  "source": "ProQuest Dissertations & Theses Global",
+  "source_id": "proquest_dissertations_theses_global",
+  "pilot": "003",
+  "do_not_merge": true,
+  "investigation_threshold": {
+    "deduplicated_stable_records": 100,
+    "rule": "Every complete semantic-partition, stream, and all-schedule document-ID union above 100 is sampled and assessed below."
+  },
+  "triggered_unions": [],
+  "incomplete_unions_not_threshold_assessed": [],
+  "candidate_refinements": [
+    {
+      "control": "LA(English)",
+      "decision": "already_applied",
+      "reason": "The exact language metadata restriction is part of every frozen cell; full-report English remains a screening decision."
+    },
+    {
+      "control": "PQDT degree, completion, document type, full text, or access",
+      "decision": "not_applied",
+      "reason": "No lossless eligible-report union is established, and degree/completion status plus availability remain screening decisions rather than search filters."
+    },
+    {
+      "control": "PQ subject or Index-term browse strings",
+      "decision": "not_applied",
+      "reason": "PQDT exposes no validated protocol-block descriptor mapping, hierarchy, release, or no-loss expansion; a fielded controlled-term restriction would narrow recall."
+    },
+    {
+      "control": "Additional source/result facets",
+      "decision": "not_applied",
+      "reason": "No other source field or facet has a validated no-loss relationship to all eligible reports for this pilot."
+    }
+  ],
+  "outcome": "No query refinement was applied. The literal schedule, exact PQDT-only scope, and fixed controls remain unchanged."
+}
