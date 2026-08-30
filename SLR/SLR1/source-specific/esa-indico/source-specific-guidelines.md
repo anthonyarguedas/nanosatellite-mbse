@@ -61,4 +61,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 - [x] [Pilot 002](pilots/002/pilot.md): rendered `q` cannot express the Boolean schedule, and ESA exposes no Language filter.
 - [x] [Pilot 003](pilots/003/pilot.md): category-0 harvest timed out before event retrieval. Fixture checks passed but do not establish source coverage.
 - [x] [Pilot 004](pilots/004/pilot.md): the fresh category-0 event-universe retry timed out before an HTTP response. It is systematic endpoint evidence, not zero coverage.
-- [x] [Pilot 005](pilots/005/pilot.md): one repaired category-0 local attempt reached attachment collection but failed before local matching and root confirmation. All nine exact schedule expressions are bound to the same live failure through null receipts; this does not complete the source or a final search.
+- [Pilot 005](pilots/005/pilot.md): one repaired category-0 local attempt reached attachment collection but failed before local matching and root confirmation. All nine exact schedule expressions are bound to the same live failure through null receipts; this does not complete the source or a final search.

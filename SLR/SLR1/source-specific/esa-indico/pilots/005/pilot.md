@@ -18,8 +18,8 @@ Bind all nine direct partitions to the repaired category-0 deterministic local r
 
 ## Result
 
-- [x] Document a source limitation
-- [x] Bind every required partition
+- Document a source limitation
+- Bind every required partition
 
 The repaired root route passed its former timeout boundary far enough to reach attachment collection, then the live adapter ended with `attachment_content_retrieval_failed`. The saved compact adapter artifact has `total: null`, no records, and no local-match total. It does not retain the candidate snapshot's count, ID ledger, or attachment identity, so Pilot 005 does not infer any of them. In particular, the first snapshot is **not** called complete and the source total is not zero.
 
