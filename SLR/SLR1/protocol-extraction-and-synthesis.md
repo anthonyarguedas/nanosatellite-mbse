@@ -652,13 +652,13 @@ Record comparator adequacy only for comparative or causal claims. Record oracle 
 
 ## Calibration, consistency, and validation
 
-Before full extraction, complete calibration task [`E-001`](TASKS.md):
+Before full extraction:
 
-1. Test report-level eligibility and Route A or Route B coding on clear and borderline examples.
-2. Test the complete report form on a varied sample containing Route A and Route B reports, grouped inputs, grouped outputs, RQ2 findings, RQ3 activities, figures or tables, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded reuse levels. Include a report that can reach R3 or R4 by itself when available.
-3. Test cross-report family and lineage-identity resolution, immutable report-level records, separate lineage-level extraction, and separate consolidated application, effort, assurance, independence, and reuse-level fields on at least one multi-report example.
-4. Calibrate the difference between assertion, worked example, execution, comparison, physical or operational checking, and independent transfer.
-5. Calibrate `supported`, `limited`, `unsupported`, and `unclear` on narrow and broad claims from the same report.
+1. [ ] Test report-level eligibility and Route A or Route B coding on clear and borderline examples.
+2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, grouped inputs, grouped outputs, RQ2 findings, RQ3 activities, figures or tables, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded reuse levels. Include a report that can reach R3 or R4 by itself when available.
+3. [ ] Test cross-report family and lineage-identity resolution, immutable report-level records, separate lineage-level extraction, and separate consolidated application, effort, assurance, independence, and reuse-level fields on at least one multi-report example.
+4. [ ] Calibrate the difference between assertion, worked example, execution, comparison, physical or operational checking, and independent transfer.
+5. [ ] Calibrate `supported`, `limited`, `unsupported`, and `unclear` on narrow and broad claims from the same report.
 6. Revise and freeze the codebook, schema, audit procedure, and calibration decisions before full extraction.
 
 ### Sole-reviewer extraction and verification
@@ -689,7 +689,7 @@ Before synthesis, validate every report-level extraction and every separate fami
 
 ## Planned synthesis
 
-Complete synthesis and reporting under task [`R-006`](TASKS.md). Use a structured evidence map and narrative synthesis. Do not pool effect estimates because the models, outcomes, and evidence designs are expected to differ too much.
+Use a structured evidence map and narrative synthesis. Do not pool effect estimates because the models, outcomes, and evidence designs are expected to differ too much.
 
 ### Relationship to Buruso et al. (2026)
 
