@@ -323,7 +323,7 @@ Record:
 - future work.
 - source conflicts.
 - reviewer uncertainties.
-- missing information material to interpretation.
+- missing information relevant for interpretation.
 
 Derive simple synthesis flags from these fields during compilation. Do not duplicate every missing field in a manual limitation list.
 
@@ -487,7 +487,7 @@ Record independence:
 - adopter-attributable evidence for adoption.
 - adopter-attributable evidence for assurance.
 
-An outside team normally qualifies as independent when lineage, adoption, and assurance are established. A team in the same organization qualifies only when it controls the implementation, the originating team performs no material implementation work, and the assured application is distinct.
+An outside team normally qualifies as independent when lineage, adoption, and assurance are established. A team in the same organization qualifies only when it controls the implementation, the originating team performs no substantive implementation work, and the assured application is distinct.
 
 ## Simplified appraisal
 
@@ -526,7 +526,7 @@ Apply this sequence:
 4. **Human adjudication.** The reviewer resolves every audit or deterministic issue against the full source. No automated process writes directly to the canonical extraction.
 5. **Deferred cross-report pass.** After report extraction, the reviewer resolves report families, artifact lineages, and tailoring applications. Run one focused cross-report audit for every uncertain merge or split and every R3 or R4 assignment.
 
-A focused audit is complete only when the complete source sections, figures, and tables needed for its scope were available. Record the report or lineage, actor, date, scope, source and extraction hashes, completion status, issues raised, and human disposition. Record each accepted correction or unresolved ambiguity in a concise discrepancy log containing field, original value, proposed value, final value, evidence, materiality, and reason.
+A focused audit is complete only when the complete source sections, figures, and tables needed for its scope were available. Record the report or lineage, actor, date, scope, source and extraction hashes, completion status, issues raised, and human disposition. Record each accepted correction or unresolved ambiguity in a concise discrepancy log containing field, original value, proposed value, final value, evidence, impact, and reason.
 
 Use an LLM only after recording that transmission, processing, retention, storage, and publication handling are permitted for the source and provider route. If no authorized route is available or document ingestion is incomplete, use the delayed human audit. Model output is an error-detection aid, not an independent reviewer or evidence source.
 
@@ -534,7 +534,7 @@ After all first-pass report extractions are complete, select a reproducible test
 
 Ask the supervisor to audit up to two reports from the test–retest sample when available. Preserve the requested and completed scope. Do not replace a missing supervisor check with an LLM label.
 
-A discrepancy is material when it can change eligibility or route, a report family or lineage, a reuse level, a tailoring application, direct RQ2 or RQ3 status, outcome direction, support, a quantitative result, or a synthesis conclusion. A material issue that may recur triggers a targeted check of every report or lineage that could be affected. Record any codebook change, focused recalibration, and recheck scope.
+A discrepancy is impactful when it can change eligibility or route, a report family or lineage, a reuse level, a tailoring application, direct RQ2 or RQ3 status, outcome direction, support, a quantitative result, or a synthesis conclusion. An impactful issue that may recur triggers a targeted check of every report or lineage that could be affected. Record any codebook change, focused recalibration, and recheck scope.
 
 Do not calculate inter-rater reliability between the reviewer and an LLM. Report audit coverage, issues raised, accepted corrections, rejected flags, unresolved ambiguities, and test–retest differences with their denominators.
 

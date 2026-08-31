@@ -12,13 +12,11 @@
 
 This work is a **systematic review with an evidence-map synthesis**. Throughout the protocol, *systematic review* names the overall method of identifying, selecting, appraising, and synthesizing evidence; *evidence map* names the structured descriptive output. Do not call the work a *systematic mapping study*: Kitchenham and Charters use that term for broad, high-level classification with deliberately limited extraction, whereas this review performs in-depth extraction and appraisal of linked evidence units.
 
-Use the evidence-unit terms in [Units of evidence and counting](#units-of-evidence-and-counting) rather than using *study* for every object. In particular, a **record** is a search result, a **report** is a document, and a **study or implementation report family** is the source-supported underlying investigation or implementation represented by one or more reports. Extraction is report-level by default. Report families, artifact lineages, tailoring applications, RQ2 findings, and RQ3 activities are later linked units of analysis, not additional studies or PRISMA reports.
-
 ## Review status and restart policy
 
 This protocol defines a **new systematic review run** on model-based systems engineering (MBSE) for nanosatellite electrical power systems (EPSs). The work is on branch `slr1-1.1-restart`. It is not an amendment to or update of the earlier whole-nanosatellite/EPS review on the `main` branch.
 
-Treat all material from the earlier review as legacy or pilot material. This includes searches, screening decisions, the report set, extractions, the codebook, the synthesis, and the manuscript. An earlier restart attempt failed, and its search results were removed. Nothing from that attempt counts as a search event, record, decision, or item of evidence in this run.
+Treat all material from the earlier review as legacy or pilot material. This includes searches, screening decisions, the report set, extractions, the codebook, the synthesis, and the manuscript.
 
 The following rules apply:
 
@@ -26,11 +24,8 @@ The following rules apply:
 - Find every main-review primary-evidence record through a search defined in [Part 2](protocol-discovery-and-appraisal.md#search-strategy) or through a recorded citation search. Then screen it under this protocol. Supporting-search records follow their separate [prior-secondary-review protocol](protocol-prior-secondary-reviews.md).
 - Use `markdown/` and `pdfs/` only as a cache of source files. They are not part of the search evidence base.
 - Use reports found before this run only to check whether the applicable search can find known items.
-- Extract every included main-review report again from its full text, using a new codebook made for this run.
-- Consult an old extraction only in a later discrepancy audit. Do not copy old evidence into the new extraction.
+- Extract every included main-review report again from its full text, using the new codebook made for this run.
 - Do not carry old counts or classifications into the new synthesis.
-
-Track every unresolved action or deferred field stated in any `protocol*.md` file in [`TASKS.md`](TASKS.md) before committing it. Each task must name the protocol sections to review or update. Mark a task complete only after its outputs exist and those sections have been reconciled.
 
 ## Reporting framework
 
@@ -45,19 +40,15 @@ PRISMA supplies reporting guidance; Kitchenham and Charters supply complementary
 
 This is a new review, not an update. Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources. Count identification and selection at the record and report level. Report families, reusable-artifact lineages, tailoring applications, RQ2 findings, and verification and validation (V&V) activities are linked analytic units. Report a separate denominator for each of these units.
 
-Registration and contact details, contributor and guarantor details, and declarations about funding, sponsors, and competing interests will be completed later. State clearly when any of these details are still absent. Do not claim that this protocol is administratively complete under PRISMA-P. **Task:** [`P-002`](TASKS.md).
+Registration and contact details, contributor and guarantor details, and declarations about funding, sponsors, and competing interests will be completed later. State clearly when any of these details are still absent. Do not claim that this protocol is administratively complete under PRISMA-P until the above are reported.
 
 ## Need for this review
 
-Before the first final primary-evidence search, conduct the bounded [prior-secondary-review search and CRD/DARE assessment](protocol-prior-secondary-reviews.md). This supporting process uses only Scopus and Web of Science Core Collection, has separate records and counts, and is not a tertiary review. It will determine whether an existing review already covers the nanosatellite-EPS population, direct MBSE relationship, and RQ1–RQ3; identify scope, currency, or methodological gaps; and provide the source-located justification for proceeding. Complete tasks [`PR-001`](TASKS.md) and [`PR-002`](TASKS.md) before [`R-002`](TASKS.md).
-
-A prior review, including Buruso et al. (2026), cannot answer RQ1–RQ3 as evidence in this review and cannot insert its included reports into the primary corpus. If the supporting assessment identifies potential redundancy, reconsider and commit the rationale and any affected protocol scope before beginning the main final searches.
+Before the first final primary-evidence search, conduct the bounded [prior-secondary-review search and CRD/DARE assessment](protocol-prior-secondary-reviews.md). This supporting process uses only Scopus and Web of Science Core Collection, has separate records and counts, and is not a tertiary review. It will determine whether an existing review already covers the nanosatellite-EPS population, direct MBSE relationship, and RQ1–RQ3; identify scope, currency, or methodological gaps; and provide the source-located justification for proceeding.
 
 ## Review objective
 
 The review will map how MBSE represents and supports nanosatellite EPS work, including its purposes, inputs and assumptions, implementation, reuse and tailoring, reported outcomes and burdens, and links to V&V before physical integration or testing. For identifiable reusable artifacts, it will assess only source-supported reuse within stated limits; it will not certify universal or context-free genericity.
-
-The formal questions and analytical dimensions below govern the review. Eligible evidence may be EPS-primary or an embedded EPS model thread, but in either case the source must provide the direct EPS-to-model relationship defined under [eligible EPS evidence routes](#eligible-eps-evidence-routes).
 
 ## PICOC
 
@@ -71,15 +62,15 @@ The formal questions and analytical dimensions below govern the review. Eligible
 
 1. **RQ1 — representation, use, and implementation.** How are nanosatellite EPSs represented and used in MBSE approaches, and what inputs, assumptions, implementation needs and footprint, and bounded reuse or tailoring practices are reported? What evidence supports these characterizations?
 
-2. **RQ2 — EPS-linked outcomes and burdens.** What technical or process outcomes and implementation burdens are explicitly attributed to EPS-linked MBSE, and what mechanisms and evidence are reported for those attributions?
+2. **RQ2: EPS-linked outcomes and burdens.** What technical or process outcomes and implementation burdens do sources attribute to EPS-linked MBSE? For each attribution, how does the source say the MBSE artifact or activity led to the outcome or burden, and what evidence supports that claimed link?
 
-3. **RQ3 — EPS-linked pre-physical V&V.** How is EPS-linked MBSE connected to V&V before physical integration or testing, and what evidence is reported for its criteria, execution, results, and model-to-test continuity?
+3. **RQ3 — EPS-linked pre-physical V&V.** How is EPS-linked MBSE connected to V&V before physical integration or testing, and what evidence is reported for its pass/fail criteria, execution, results, and model-to-test continuity?
 
 ### Prespecified analytical dimensions
 
-- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; grouped material inputs and assumptions; grouped engineering results; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. In the deferred cross-report pass, assess artifact identity and lineage, declared applicability, reusable core, variation points, tailoring process and effort, materially distinct applications, post-tailoring assurance, independence, and reuse level. Give evaluative RQ1 characterizations an inline evidence basis and support judgment.
-- **RQ2:** claim kind and scope; outcome or burden category; reported and evidence-supported direction; explicit EPS attribution; mechanism; direct or surrogate measurement; comparator adequacy and rival explanations when applicable; evaluation design; evidence basis; and inline support.
-- **RQ3:** EPS target and model-to-V&V bridge; linkage scope; V&V object and pass/fail criterion; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design; evidence basis and inline support; and later model-to-test continuity or closure.
+- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; inputs and assumptions; engineering results; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. In the cross-report pass, assess artifact identity and lineage, declared applicability, reusable core, variation points, tailoring process and effort, materially distinct applications, post-tailoring assurance, independence, and reuse level. Give evaluative RQ1 characterizations an inline evidence basis and support judgment.
+- **RQ2:** claim kind and scope; outcome or burden category; reported direction; explicit EPS attribution; mechanism; direct or surrogate measurement; comparator adequacy and rival explanations when applicable; evaluation design; and evidence.
+- **RQ3:** EPS target and model-to-V&V bridge; scope of the EPS-to-V&V link; V&V object and pass/fail criterion; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design; evidence; and later model-to-test continuity or closure.
 
 The three mapping areas are equally important.
 
@@ -102,15 +93,9 @@ Use the following meanings wherever a field permits these values; a field-specif
 
 `unclear` is a field-specific classification used where a controlled vocabulary expressly provides it; it is not a substitute for one of the statuses above when that field distinguishes them. Missing reporting does not prove absence or poor conduct, and coding confidence does not replace a controlled status. Within source-reported information, distinguish author-declared or planned content from source-observed results; keep both separate from reviewer-inferred and reviewer-derived information.
 
-### Report versions, dates, and review status
-
-Treat online-first and issue versions as versions of one work. Treat an arXiv preprint and a later formal version as candidate versions of the same report: merge them only when no difference material to this review is found; otherwise retain them as companion reports in the same family. Preserve version dates, provenance, and substantive differences.
-
 ### Nanosatellite population
 
 An eligible platform is an actual or planned orbital spacecraft that the source calls a CubeSat or nanosatellite. Recognized CubeSat form factors are eligible even if a particular spacecraft is outside the strict 1–10 kg nanosatellite range. A reference, template, or early design model can be eligible without a named or built mission if it clearly targets orbital CubeSat or nanosatellite development.
-
-Do not treat `SmallSat` or “small satellite” as a synonym for CubeSat or nanosatellite. That label alone is not enough, even if the report is relevant to wider small-spacecraft engineering.
 
 Exclude:
 
@@ -176,11 +161,11 @@ A **declared applicability envelope (DAE)** states where the source says an arti
 - the target platform or mission setting;
 - the intended lifecycle use or decision;
 - the EPS and model boundary and level of abstraction;
-- material dependencies and required inputs;
+- dependencies and required inputs;
 - relevant architecture, interface, and tool assumptions; and
 - stated exclusions or limits.
 
-At a minimum, the source must report the target class or setting, the intended lifecycle use or decision, the EPS/model boundary and abstraction, and at least one material condition, dependency, required input, or exclusion.
+At a minimum, the source must report the target class or setting, the intended lifecycle use or decision, the EPS/model boundary and abstraction, and at least one condition, dependency, required input, or exclusion.
 
 Evidence can come from explicitly linked reports, but preserve the source for every field. Do not fill a missing envelope from a single observed mission, a broad phrase such as “for CubeSats,” or reviewer knowledge.
 
@@ -228,7 +213,7 @@ Two applications are **materially distinct** only if they differ on at least one
 3. a check run after tailoring; and
 4. a reported result or verdict.
 
-A syntax, import, or build check is not enough unless that check is the artifact's stated intended use. An assurance activity can also link to RQ3, but it is a direct RQ3 activity only if it separately meets the EPS target–model-to-V&V bridge–method/intent rule. Validation of a base model does not automatically validate a derived instance.
+An assurance activity can also link to RQ3, but it is a direct RQ3 activity only if it separately meets the EPS target–model-to-V&V bridge–method/intent rule. Validation of a base model does not automatically validate a derived instance.
 
 #### Deferred lineage assessment and reuse levels
 
@@ -282,7 +267,7 @@ An outcome or implementation-burden finding is eligible for RQ2 only when it has
 2. a reported beneficial, null, mixed, or adverse technical or process outcome, or an implementation burden, that the source explicitly attributes to that EPS artifact or activity rather than to a choice of EPS technology; and
 3. wording for the result or claim that can be extracted, together with any evidence the source gives.
 
-Record the proposed model-enabled mechanism when the source states it. Otherwise use `not_reported`. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed finding.
+When the source explains how an EPS-linked model artifact or activity led to a claimed outcome or burden, record that explanation as the **mechanism**. Do not infer a mechanism. Use `not_reported` when the source provides no explanation. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed finding.
 
 Eligibility records the source's explicit attribution; it does not establish that MBSE caused the outcome. During extraction, classify the kind and scope of claim, the directness of each measure, and the evaluation design. For comparative or causal claims, also record the comparator, material differences, comparator adequacy, and major rival explanations. Give each finding an inline evidence basis, support code, and concise reason. Keep author attribution, observed association, and reviewer assessment of causal support separate.
 

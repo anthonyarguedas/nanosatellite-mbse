@@ -6,7 +6,7 @@
 
 ## Purpose and relationship to the main review
 
-Before the first final primary-evidence search, identify prior secondary reviews that could overlap the main review and assess whether they already answer all or a material part of its questions. Use the assessment to state why a new systematic review of primary evidence is needed, whether its scope should change, or whether proceeding would be redundant.
+Before the first final primary-evidence search, identify prior secondary reviews that could overlap the main review and assess whether they already answer all or a substantial part of its questions. Use the assessment to state why a new systematic review of primary evidence is needed, whether its scope should change, or whether proceeding would be redundant.
 
 This supporting search does only the work needed for that decision. It will:
 
@@ -120,7 +120,7 @@ A review does not need to identify a qualifying EPS thread to enter this support
 
 ## Screening, retrieval, and decisions
 
-Deduplicate Scopus and Web of Science records using the main protocol's identifier and metadata rules. Preserve both discovery events. Treat preprint, online-first, conference, and journal versions according to the main report-identity principles; use all materially informative versions but count one report when no relevant substantive difference exists.
+Deduplicate Scopus and Web of Science records using the main protocol's identifier and metadata rules. Preserve both discovery events. Treat preprint, online-first, conference, and journal versions according to the main report-identity principles.
 
 At title and abstract screening, interpret eligibility liberally. Retrieve the full text when the record plausibly describes a review of space-related MBSE, SysML, digital engineering, structured system models, reference models, or reference architectures. Do not require CubeSat, nanosatellite, or EPS terms in metadata.
 
