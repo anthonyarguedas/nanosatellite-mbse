@@ -210,7 +210,7 @@ Keep three judgments distinct:
 
 Assign coding confidence as `high` for explicit and unambiguous source support, `moderate` when a bounded reconstruction is required, and `low` when material ambiguity remains. Apply the [evidence statuses](protocol.md#evidence-statuses) separately. Coding confidence does not measure evidential strength.
 
-Give every evaluative RQ1 characterization, direct RQ2 finding, direct RQ3 activity, and lineage reuse conclusion these inline fields:
+Give every evaluative RQ1 characterization, direct RQ2 finding, direct RQ3 activity, report-level reuse conclusion, and lineage-level reuse conclusion these inline fields:
 
 - **`evidence_basis`**, using one or more of `assertion_only`, `worked_example`, `executed_result`, `comparison`, `stakeholder_evidence`, `physical_or_operational_check`, and `independent_transfer`;
 - **`support`**, using `supported`, `limited`, `unsupported`, or `unclear`; and
@@ -230,7 +230,7 @@ The report-level extraction captures evaluation design, context, inputs, data so
 - For comparative or causal claims, record the comparator, material differences, comparator adequacy, and major rival explanations.
 - For model or design validation, record the criterion or oracle and why it is authoritative for the intended use.
 - For survey, interview, or experience claims, record participants or observational units, sampling or selection, collection method, and analysis.
-- For reuse claims, apply the deferred lineage and [reuse-level rules](protocol.md#deferred-lineage-assessment-and-reuse-levels), including tailoring effort, post-tailoring assurance, and adopter independence.
+- For reuse claims, apply the [report-level and consolidated lineage assessment and reuse-level rules](protocol.md#report-level-and-consolidated-lineage-assessment-and-reuse-levels), including tailoring effort, post-tailoring assurance, and adopter independence at the applicable scope.
 
 An executed model is evidence of execution. It supports accuracy, validity, effectiveness, transferability, or benefit only when the source reports evidence fitted to that wider claim. Apply the canonical [evidence statuses](protocol.md#evidence-statuses) and [report-eligibility versus question-contribution rule](protocol.md#report-eligibility-versus-question-contribution).
 

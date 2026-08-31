@@ -2,13 +2,15 @@
 
 > **Protocol parts:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · **3 — Extraction and synthesis** (this file) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
 >
-> **Canonical definitions and rules:** Part 1 governs [report eligibility versus question contribution](protocol.md#report-eligibility-versus-question-contribution), [evidence statuses](protocol.md#evidence-statuses), [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), [RQ2 eligibility](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs), [direct RQ3 eligibility](protocol.md#direct-eps-linked-pre-physical-vv), and [units and counting](protocol.md#units-of-evidence-and-counting). Part 2 governs [finding-level evidence appraisal](protocol-discovery-and-appraisal.md#finding-level-evidence-appraisal). This part defines the extraction fields, deferred lineage pass, validation, synthesis, and reporting.
+> **Canonical definitions and rules:** Part 1 governs [report eligibility versus question contribution](protocol.md#report-eligibility-versus-question-contribution), [evidence statuses](protocol.md#evidence-statuses), [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), [RQ2 eligibility](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs), [direct RQ3 eligibility](protocol.md#direct-eps-linked-pre-physical-vv), and [units and counting](protocol.md#units-of-evidence-and-counting). Part 2 governs [finding-level evidence appraisal](protocol-discovery-and-appraisal.md#finding-level-evidence-appraisal). This part defines the report-level extraction fields, cross-report lineage resolution and separate lineage-level extraction, validation, synthesis, and reporting.
 
 ## Extraction design
 
 Extraction is report-level by default. Create one extraction file for each included report. Use nested groups for EPS content, inputs, results, findings, and V&V activities. Create another EPS case section only when a report contains materially separate models, implementations, or evaluations that cannot be represented clearly together.
 
-Do not resolve report families or artifact lineages during the first report pass. Record concise family and artifact leads. Resolve them in the deferred cross-report pass after all report extractions are available.
+Keep report-family resolution and cross-report artifact identity pending during the first report pass. Record concise family leads. Fully extract every reusable artifact, reported lineage, reuse claim, and tailoring application described by each report, including a report-bounded reuse level. Resolve families and cross-report lineage identity after all report extractions are available, then create separate lineage-level and consolidated application records.
+
+Report-level records remain fixed during the cross-report pass. That pass may update only `lineage_id` from its first-pass state to a stable resolved ID or `unresolved_after_review`. It does not backfill or overwrite any other report-level field.
 
 Do not create separate analytic objects for individual measurements, comparators, rival explanations, appraisal domains, or claim-support judgments. Keep them as fields in the result, finding, activity, lineage, or tailoring row that uses them.
 
@@ -134,7 +136,7 @@ Record the report's general MBSE implementation footprint:
 - reported burdens.
 - burden mitigations.
 
-Keep measured values, author estimates, and unsupported characterizations distinct. Tailoring-specific effort is extracted later for each tailoring application.
+Keep measured values, author estimates, and unsupported characterizations distinct. Extract tailoring-specific effort in each report-level tailoring application and independently in each consolidated application.
 
 ### Input and assumption groups
 
@@ -292,28 +294,161 @@ Record:
 
 Record a comparator and major rival explanations only when the report makes a comparative or causal V&V-effectiveness claim. For validation, state why the criterion or oracle is authoritative for the intended use.
 
-### Artifact lineage lead
+### Reusable artifact and reported lineage
 
-The first report pass records a concise lead rather than resolving a lineage. Record:
+The first report pass creates a complete source-bounded extraction for every identifiable EPS-linked artifact assessed for reuse, reported artifact lineage, or method or workflow reuse case described in the report. Create more than one reuse record when the report describes materially distinct artifacts or lineages. Extract all evidence available in the report even when no companion report is known. Cross-report identity remains pending.
 
-- `artifact_lead_id`.
-- artifact name.
-- artifact type.
-- version or identifier.
+Record once for the report:
+
+- `lineage_mentioned`, using `yes`, `no`, or `uncertain`.
+- lineage-mention reason and evidence location.
+
+Use `yes` when the report explicitly identifies or provides sufficient source evidence for continuity between a base artifact and a version, derived instance, or adoption. The report does not have to use the word *lineage*. Use `uncertain` when continuity is plausible but unresolved. Use `no` for a reuse claim or stand-alone artifact without a reported continuity relationship. Similar diagrams, authors, organizations, tools, topics, or terminology do not establish continuity.
+
+For each report-level reuse record, record identity and provenance:
+
+- `report_reuse_record_id`.
+- `lineage_id`, using `pending_resolution` for a reported or uncertain lineage and `not_applicable` when no lineage relationship is reported.
+- artifact names and versions.
+- identity and derivation evidence contained in the report.
+- base-to-derived relationships.
 - repository or location.
 - owner or developer.
+- artifact type.
 - EPS scope.
 - availability and licence.
 - exact reuse claim.
 - claimed reuse object, such as artifact, method, workflow, toolchain, language, or unclear.
-- claimed applicability.
 - stated parent or derived artifact.
 - possible related reports or artifacts.
-- whether the evidence concerns only method or workflow reuse.
-- initial reuse level, using `NA` or `R0_artifact_only` when either is clear at report level.
-- `lineage_lead`, using `yes`, `no`, or `uncertain`.
+- whether reuse concerns the artifact or only a method or workflow.
 
-Use `yes` when the report states a reuse claim, derivation, related version, adoption, or another concrete relationship that needs cross-report review. Use `uncertain` when such a relationship is plausible but unresolved. An artifact with no reuse or relationship indication can use `no` and remain `R0_artifact_only` without a lineage record. A report can contain more than one lead. Similar diagrams, authors, organizations, tools, or terminology do not establish a lineage.
+Record the declared applicability envelope:
+
+- target platforms and missions.
+- lifecycle uses and decisions.
+- EPS boundary.
+- model boundary and abstraction.
+- architecture and interfaces.
+- environment, modes, and loads.
+- required inputs.
+- tools and versions.
+- organizational prerequisites.
+- exclusions and limits.
+
+Record the reuse design:
+
+- reusable core.
+- variation points.
+- allowed options, ranges, and defaults.
+- dependencies.
+- tailoring rules.
+- tailoring operations.
+- required roles and skills.
+- required tools and data.
+- automation.
+- governance and configuration control.
+
+Record the report-bounded reuse assessment:
+
+- linked `report_application_id` values.
+- `report_reuse_level`, using any level from `NA` through `R4_independent_reuse_demonstrated` under Part 1.
+- report-reuse-level reason.
+- demonstrated settings.
+- demonstrated coverage.
+- failed applications.
+- applications outside the declared envelope.
+- conflicting evidence within the report.
+- `evidence_basis`.
+- `support`.
+- `support_reason`.
+
+Assign `report_reuse_level` from evidence contained in this report only. A single report can support R3 or R4. Assign R3 or R4 only when the corresponding report-level application below is complete, includes post-tailoring assurance, and meets the required adopter condition.
+
+#### Report-level tailoring application
+
+Create one `report_application_id` row for each actual adoption or tailoring event described in the report. Merge repeated descriptions of the same event within the report. Keep an account of the same event in another report as a separate report-level row.
+
+Record identity and setting:
+
+- `report_application_id`.
+- linked `report_reuse_record_id`.
+- `lineage_id`, inherited from the linked reuse record until cross-report resolution.
+- target model or configuration.
+- adopting team.
+- relationship to the originator.
+- mission or platform.
+- lifecycle purpose.
+- EPS architecture and interfaces.
+- orbit, environment, modes, and loads.
+- model abstraction.
+- tools and versions.
+- organization and process.
+- relationship to the declared applicability envelope, using `inside`, `boundary`, `outside`, `unclear`, or `not_reported`.
+- material difference from other applications described in the report.
+
+Record tailoring performed:
+
+- base version.
+- retained core.
+- configured or changed content.
+- variation points used.
+- tailoring operations.
+- before-and-after trace.
+- reasons for changes or unchanged use.
+- tailoring inputs and assumptions.
+
+Record tailoring effort:
+
+- effort basis, using `measured`, `author_estimated`, `asserted`, or `not_reported`.
+- roles involved.
+- number of people.
+- skills and training.
+- person-hours or person-days.
+- elapsed duration.
+- schedule effect.
+- financial cost.
+- tools, licences, and infrastructure.
+- data preparation.
+- model preparation.
+- integration or migration work.
+- manual work.
+- automated work.
+- governance and configuration work.
+- review and assurance effort.
+- rework.
+- ongoing maintenance.
+- reported burdens.
+- mitigations.
+
+Do not infer low effort from parameterization, automation, a small mission, or the absence of a reported burden.
+
+Record result and assurance:
+
+- resulting artifact.
+- configuration identifier.
+- availability.
+- decisions or analyses supported.
+- success, failure, or partial result.
+- trade-offs.
+- post-tailoring criterion.
+- assurance method.
+- assurance timing.
+- assurance result.
+- discrepancies and resolution.
+- linked report-level result sets.
+- linked RQ2 findings.
+- linked RQ3 activities.
+
+Record independence:
+
+- adopter relationship, using `originating_team`, `same_organization_operationally_separate`, `outside_organization_or_team`, `independent_evaluation_of_originator_instance_only`, or `unclear`.
+- personnel overlap.
+- who controlled the implementation.
+- adopter-attributable evidence for adoption.
+- adopter-attributable evidence for assurance.
+
+An outside team normally qualifies as independent when lineage, adoption, and assurance are established. A team in the same organization qualifies only when it controls the implementation, the originating team performs no substantive implementation work, and the assured application is distinct.
 
 ### Limitations and open extraction
 
@@ -327,9 +462,13 @@ Record:
 
 Derive simple synthesis flags from these fields during compilation. Do not duplicate every missing field in a manual limitation list.
 
-## Deferred cross-report extraction
+## Cross-report resolution and lineage-level extraction
 
-Begin this pass only after all first-pass report extractions are complete and validated. Review report-family leads and artifact leads marked `yes` or `uncertain` across the corpus. Preserve report provenance for every combined field.
+Begin this pass only after all first-pass report extractions are complete and validated. Resolve report families first. Reports with `lineage_mentioned = yes` seed lineage resolution, and reports with `lineage_mentioned = uncertain` receive resolution review. Follow source-supported relationships to include every report in each candidate lineage, including linked reports with `lineage_mentioned = no`. Preserve report provenance for every lineage-level field.
+
+Report-level extractions remain fixed throughout this pass. Update only `lineage_id` on the relevant report reuse and application records. Assign a stable lineage ID to every matched record, including a record initially marked `not_applicable` that another report links to the lineage. Use `unresolved_after_review` when a candidate relationship cannot be resolved. A correction to any other report-level field follows the focused-audit and adjudication procedure outside this pass.
+
+Create lineage-level extractions and consolidated tailoring applications as separate records. Treat all linked reports in a resolved lineage as one evidence bundle when completing those records. Do not copy lineage-level values into a report-level extraction.
 
 ### Study or implementation report family
 
@@ -346,13 +485,16 @@ Record:
 
 A shared topic, institution, author, or tool is not enough. Keep unresolved relationships separate or uncertain.
 
-### Reusable artifact lineage
+### Lineage-level reusable artifact extraction
+
+Create one separate record for each resolved lineage. Extract the fields below at lineage scope from the complete set of linked reports. Record every report and source location contributing to each combined field, including disagreements and missing information.
 
 Record identity and provenance:
 
 - `lineage_id`.
-- artifact names and versions.
+- linked `report_reuse_record_id` values.
 - linked report and family IDs.
+- artifact names and versions.
 - identity and derivation evidence.
 - base-to-derived relationships.
 - owner or developer.
@@ -390,28 +532,33 @@ Record the reuse design:
 
 Record the reuse assessment:
 
-- linked tailoring-application IDs.
-- highest reuse level under Part 1.
-- reuse-level reason.
+- linked consolidated tailoring-application IDs.
+- contributing `report_reuse_level` values.
+- `lineage_reuse_level` under Part 1.
+- lineage-reuse-level reason.
 - demonstrated settings.
 - demonstrated coverage.
 - failed applications.
 - applications outside the declared envelope.
 - conflicting evidence.
+- lineage coding confidence.
 - `evidence_basis`.
 - `support`.
 - `support_reason`.
 
-Do not assign R3 or R4 until the corresponding tailoring application below is complete, includes post-tailoring assurance, and meets the required adopter condition.
+Assign `lineage_reuse_level` from the combined lineage evidence. Do not assign R3 or R4 until the corresponding consolidated tailoring application below is complete, includes post-tailoring assurance, and meets the required adopter condition.
 
-### Tailoring application
+After resolving the lineage, assign its `lineage_id` to each matching report-level reuse record and report-level application. This ID assignment is the only change made to those report-level records during the cross-report pass.
 
-Create one row for each actual adoption or tailoring event. Merge repeated reporting of the same event.
+### Consolidated tailoring application
+
+Create one separate row for each actual adoption or tailoring event represented across the lineage reports. Merge repeated reporting of the same event only in this consolidated row. Keep every contributing report-level application unchanged.
 
 Record identity and setting:
 
 - `tailoring_application_id`.
 - lineage ID.
+- linked `report_application_id` values.
 - linked report and family IDs.
 - target model or configuration.
 - adopting team.
@@ -493,7 +640,7 @@ An outside team normally qualifies as independent when lineage, adoption, and as
 
 Apply the inline appraisal defined in [Part 2](protocol-discovery-and-appraisal.md#finding-level-evidence-appraisal). Do not create a separate methodological-appraisal table or claim-support object.
 
-Every evaluative RQ1 claim, direct RQ2 finding, direct RQ3 activity, and lineage reuse conclusion receives:
+Every evaluative RQ1 claim, direct RQ2 finding, direct RQ3 activity, report-level reuse conclusion, and lineage-level reuse conclusion receives:
 
 - `evidence_basis`.
 - `support`.
@@ -508,8 +655,8 @@ Record comparator adequacy only for comparative or causal claims. Record oracle 
 Before full extraction, complete calibration task [`E-001`](TASKS.md):
 
 1. Test report-level eligibility and Route A or Route B coding on clear and borderline examples.
-2. Test the complete report form on a varied sample containing Route A and Route B reports, grouped inputs, grouped outputs, RQ2 findings, RQ3 activities, figures or tables, and at least one artifact lead.
-3. Test the deferred family, lineage, tailoring, tailoring-effort, assurance, and reuse-level fields on at least one multi-report example.
+2. Test the complete report form on a varied sample containing Route A and Route B reports, grouped inputs, grouped outputs, RQ2 findings, RQ3 activities, figures or tables, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded reuse levels. Include a report that can reach R3 or R4 by itself when available.
+3. Test cross-report family and lineage-identity resolution, immutable report-level records, separate lineage-level extraction, and separate consolidated application, effort, assurance, independence, and reuse-level fields on at least one multi-report example.
 4. Calibrate the difference between assertion, worked example, execution, comparison, physical or operational checking, and independent transfer.
 5. Calibrate `supported`, `limited`, `unsupported`, and `unclear` on narrow and broad claims from the same report.
 6. Revise and freeze the codebook, schema, audit procedure, and calibration decisions before full extraction.
@@ -521,10 +668,10 @@ One human reviewer performs the primary extraction and every final decision. Ver
 Apply this sequence:
 
 1. **Primary extraction.** The reviewer extracts the complete report into the frozen report-level form.
-2. **Focused audit.** For every included report, an authorized LLM or a delayed human check reviews eligibility and route, Route B anchors and bridge, omitted or duplicated groups, direct RQ2 attribution, direct RQ3 linkage, artifact leads, evidence locations, source-versus-inference distinctions, and reviewer-derived values. The audit may see the extraction because its purpose is error detection.
+2. **Focused audit.** For every included report, an authorized LLM or a delayed human check reviews eligibility and route, Route B anchors and bridge, omitted or duplicated groups, direct RQ2 attribution, direct RQ3 linkage, `lineage_mentioned`, complete report-level reuse and application coding, every report-level R3 or R4 assignment, evidence locations, source-versus-inference distinctions, and reviewer-derived values. The audit may see the extraction because its purpose is error detection.
 3. **Deterministic validation.** Validate schema, controlled values, IDs, required fields, links, units, and calculations that can be reproduced. Preserve source values and reviewer-derived values separately.
 4. **Human adjudication.** The reviewer resolves every audit or deterministic issue against the full source. No automated process writes directly to the canonical extraction.
-5. **Deferred cross-report pass.** After report extraction, the reviewer resolves report families, artifact lineages, and tailoring applications. Run one focused cross-report audit for every uncertain merge or split and every R3 or R4 assignment.
+5. **Cross-report pass.** After report extraction, the reviewer resolves report families and artifact-lineage identity, updates only report-level `lineage_id` values, and creates separate lineage-level and consolidated tailoring-application records. Run one focused cross-report audit for every uncertain merge or split and every lineage-level R3 or R4 assignment.
 
 A focused audit is complete only when the complete source sections, figures, and tables needed for its scope were available. Record the report or lineage, actor, date, scope, source and extraction hashes, completion status, issues raised, and human disposition. Record each accepted correction or unresolved ambiguity in a concise discrepancy log containing field, original value, proposed value, final value, evidence, impact, and reason.
 
@@ -538,7 +685,7 @@ A discrepancy is impactful when it can change eligibility or route, a report fam
 
 Do not calculate inter-rater reliability between the reviewer and an LLM. Report audit coverage, issues raised, accepted corrections, rejected flags, unresolved ambiguities, and test–retest differences with their denominators.
 
-Before synthesis, validate every extraction and cross-report table against the frozen schema. Confirm that every included report has a completed focused audit or human fallback, every discrepancy has a human disposition, every derived value is reproducible, and every lineage and tailoring application preserves report provenance.
+Before synthesis, validate every report-level extraction and every separate family, lineage, and consolidated application table against the frozen schema. Confirm that every included report has a completed focused audit or human fallback, every discrepancy has a human disposition, every derived value is reproducible, every lineage-level field preserves report provenance, and cross-report processing changed only report-level `lineage_id` values.
 
 ## Planned synthesis
 
@@ -559,7 +706,7 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 - Synthesize report context, EPS representation, grouped inputs and assumptions, grouped engineering results, implementation footprint, limitations, and evaluative RQ1 claims.
 - Present Route A and Route B separately before combining them.
 - Compare author labels such as *lightweight* or *scalable* with the extracted footprint and inline support.
-- Report `R0_artifact_only` leads at report level. Synthesize R1–R4 artifact lineages, applicability envelopes, reusable cores, variation points, tailoring methods, tailoring effort, assurance, independence, failures, and demonstrated coverage from the deferred pass.
+- Present all `report_reuse_level` values as source-bounded report-level results. Synthesize resolved artifact lineages, applicability envelopes, reusable cores, variation points, tailoring methods, tailoring effort, assurance, independence, failures, demonstrated coverage, and `lineage_reuse_level` from the separate lineage-level records. Use lineage and consolidated-application denominators for deduplicated conclusions, and keep unresolved report-level cases visible.
 - Keep method or workflow reuse separate from artifact reuse.
 
 ### RQ2
@@ -597,10 +744,11 @@ Under the Part 1 restart policy, create these artifacts with provenance after ta
 - frozen report-level extraction codebook and schema.
 - one extraction file per included report.
 - report-family table.
-- artifact-lead and artifact-lineage tables.
-- tailoring-application table including effort and assurance.
+- compiled report-level reuse-record and report-level application tables.
+- separate artifact-lineage extraction table.
+- separate consolidated tailoring-application table including effort and assurance.
 - focused-audit log, discrepancy and adjudication log, deterministic-validation report, test–retest files, and supervisor-audit files when applicable.
-- compiled report, RQ2, RQ3, lineage, and tailoring data.
+- compiled report, report-level reuse, RQ2, RQ3, lineage-level reuse, and consolidated tailoring data.
 - bibliography, analysis code, and derived-value scripts.
 - machine-readable PRISMA count reconciliation, official PRISMA 2020 flow diagram, synthesis outputs, and completed PRISMA-S and PRISMA 2020 checklists.
 

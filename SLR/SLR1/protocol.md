@@ -68,7 +68,7 @@ The review will map how MBSE represents and supports nanosatellite EPS work, inc
 
 ### Prespecified analytical dimensions
 
-- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; inputs and assumptions; engineering results; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. In the cross-report pass, assess artifact identity and lineage, declared applicability, reusable core, variation points, tailoring process and effort, materially distinct applications, post-tailoring assurance, independence, and reuse level. Give evaluative RQ1 characterizations an inline evidence basis and support judgment.
+- **RQ1:** EPS boundary and representation; purpose and supported decisions; abstraction; inputs and assumptions; engineering results; roles, skills, resources, and implementation footprint; and reported reuse or tailoring practices. At report level, fully extract artifact identity and reported lineage, declared applicability, reusable core, variation points, tailoring process and effort, materially distinct applications, post-tailoring assurance, independence, and reuse level. In the cross-report pass, resolve artifact lineages and create separate lineage-level extractions from the combined evidence. Give evaluative RQ1 characterizations an inline evidence basis and support judgment.
 - **RQ2:** claim kind and scope; outcome or burden category; reported direction; explicit EPS attribution; mechanism; direct or surrogate measurement; comparator adequacy and rival explanations when applicable; evaluation design; and evidence.
 - **RQ3:** EPS target and model-to-V&V bridge; scope of the EPS-to-V&V link; V&V object and pass/fail criterion; preparation and execution; result or verdict; direct or surrogate measurement; evaluation design; evidence; and later model-to-test continuity or closure.
 
@@ -215,13 +215,19 @@ Two applications are **materially distinct** only if they differ on at least one
 
 An assurance activity can also link to RQ3, but it is a direct RQ3 activity only if it separately meets the EPS target–model-to-V&V bridge–method/intent rule. Validation of a base model does not automatically validate a derived instance.
 
-#### Deferred lineage assessment and reuse levels
+#### Report-level and consolidated lineage assessment and reuse levels
 
-The first extraction pass does not resolve artifact lineages. It records only a concise artifact lead: name, type, version or identifier, repository or location, owner, EPS scope, availability and licence, exact reuse claim, claimed applicability, stated parent or derived artifact, possible related reports, and whether the case concerns an artifact or only a method or workflow. Code `NA` or `R0_artifact_only` at report level when that status is clear.
+The first extraction pass fully extracts each identifiable EPS-linked artifact assessed for reuse and each artifact lineage or tailoring application described in a report. For every report-bounded reuse record, capture artifact identity and provenance, lineage evidence, the declared applicability envelope, reusable core, variation points, tailoring process and prerequisites, every reported application, tailoring effort, post-tailoring assurance, adopter relationship, demonstrated coverage, failures, outside-envelope uses, conflicting evidence, and inline appraisal.
 
-After all reports have been extracted, review only leads marked `yes` or `uncertain` for possible lineage work. Form a lineage only when names, versions, repositories, package or model IDs, explicit derivation statements, transformation records, or reconstructable retained content support continuity. Record uncertain relationships without forcing a merge.
+Record `lineage_mentioned` as `yes`, `no`, or `uncertain`. Use `yes` when the report explicitly identifies or provides sufficient source evidence for continuity between a base artifact and a version, derived instance, or adoption. The report does not have to use the word *lineage*. Use `uncertain` when continuity is plausible but unresolved. A reuse claim or a stand-alone artifact without a continuity relationship uses `no`. Similar authors, organizations, tools, topics, terms, or diagrams do not establish continuity.
 
-Assign one highest reuse level to each lead or resolved lineage and scope:
+Cross-report identity remains pending during the first pass. Assign one `report_reuse_level` to each report-bounded artifact or lineage scope using all levels below and only evidence contained in that report. A single report can support `R4_independent_reuse_demonstrated` when it establishes the artifact lineage, a complete assured tailoring application, and independent implementation.
+
+After all report-level extractions are complete and validated, reports marked `yes` seed the cross-report pass and reports marked `uncertain` receive resolution review. Follow source-supported relationships to include every report in a candidate lineage, including a linked report that did not itself mention a lineage. Form a lineage only when names, versions, repositories, package or model IDs, explicit derivation statements, transformation records, or reconstructable retained content support continuity. Keep uncertain relationships separate rather than forcing a merge.
+
+Create a separate lineage-level extraction for each resolved lineage. Treat all linked reports as one evidence bundle, consolidate repeated applications, preserve source provenance for every field, and assign one `lineage_reuse_level` from the combined evidence. Report-level records remain fixed during this pass. The only report-level update is resolution of `lineage_id` to a stable lineage ID or `unresolved_after_review`. Lineage-level and consolidated tailoring-application extractions are separate records and never backfill report-level fields.
+
+Assign one highest reuse level at each report or lineage scope:
 
 | Level | Minimum evidence | Meaning |
 |---|---|---|
@@ -232,11 +238,11 @@ Assign one highest reuse level to each lead or resolved lineage and scope:
 | **`R3_reuse_demonstrated`** | R2 is met, and at least one materially distinct target setting uses the identified core, reports what stayed the same and what changed, and reports a relevant post-tailoring check and result | Transfer is demonstrated in the reported setting. |
 | **`R4_independent_reuse_demonstrated`** | R3 is met by at least one adopter operationally independent of the originating implementation team | Independent transfer is demonstrated in the reported setting. |
 
-One assured application can reach R3. Repeated reports of one application count once. A scenario run in an unchanged model does not count as reuse. An original development case counts only under the tailoring-application rule above. R4 requires adopter-controlled implementation and adopter-attributable evidence of both adoption and assurance.
+One assured application can reach R3. Evidence contained in one report can reach R3 or R4. Repeated reports of one application remain separate in report-level extractions and count once in the consolidated lineage-level extraction. A scenario run in an unchanged model does not count as reuse. An original development case counts only under the tailoring-application rule above. R4 requires adopter-controlled implementation and adopter-attributable evidence of both adoption and assurance.
 
 The levels are ordered evidence descriptions. They are not scores, quality ratings, benefit measures, prevalence estimates, or claims about untested settings. Record the applicability envelope, demonstrated coverage, tailoring effort, failed or outside-envelope applications, and conflicting evidence separately.
 
-Give one source-located reason for the reuse level. Use the common inline `support` and `support_reason` fields to assess any broader reuse claim.
+Give one source-located reason for each `report_reuse_level`. Give each `lineage_reuse_level` a provenance-linked reason that identifies its contributing reports. Use the common inline `support` and `support_reason` fields to assess any broader reuse claim.
 
 The exclusion term **generic whole-spacecraft MBSE** means whole-spacecraft evidence with no qualifying EPS thread. It says nothing about whether the model itself is generic. A reusable whole-spacecraft artifact can receive a lineage and reuse level only for qualifying EPS-linked content after the report passes the normal Route A or Route B eligibility rules. Reuse status never decides report eligibility.
 
@@ -331,18 +337,18 @@ Use the following linked units:
 1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model or toolchain use represented by one or more reports. Require source-supported overlap.
 2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Apply the canonical [report-version, date, and review-status rules](#report-versions-dates-and-review-status). This is the default extraction unit.
 3. **EPS case section:** a nested section inside a report extraction. Use one section by default. Create another only when the report contains materially separate EPS models, implementations, or evaluations that cannot be represented clearly together. An eligibility thread does not automatically become a separate extraction unit.
-4. **Reusable EPS artifact lineage:** one identifiable base artifact and its source-supported versions or derived instances, resolved in the deferred cross-report pass.
-5. **Tailoring application:** one use of an artifact lineage in one target setting, including a justified unchanged adoption. Merge repeated reporting of the same application.
+4. **Reusable EPS artifact lineage:** one identifiable base artifact and its source-supported versions or derived instances, resolved in the cross-report pass and represented by a separate lineage-level extraction.
+5. **Tailoring application:** one use of an artifact lineage in one target setting, including a justified unchanged adoption. The first pass keeps each report's account in a report-level application row. The cross-report pass creates a separate consolidated application row and merges repeated reporting of the same use.
 6. **RQ2 finding:** one materially distinct outcome, burden, trade-off, or direction. Split only when evidence, scope, actor, scenario, or direction differs materially.
 7. **RQ3 activity:** one target–method–scenario activity. Keep several criteria and verdicts together when method, scenario, and timing are shared.
 
 Inputs, assumptions, engineering outputs, criteria, and verdicts are grouped rows nested within the report or activity. They are not independent evidence units. Measurements, comparators, rival explanations, appraisal judgments, and support judgments are fields within the relevant row rather than separate linked objects.
 
-Resolve report families and artifact lineages only after the first report-level extraction pass. Record the source-supported basis, evidence locations, and coding confidence for each merge or split. Do not move evidence silently between reports, versions, applications, or families.
+Resolve report families and cross-report artifact identity only after the first report-level extraction pass. Record the source-supported basis, evidence locations, and coding confidence for each merge or split. Create separate lineage-level and consolidated application records. Keep report-level records unchanged except for resolving their `lineage_id`, and do not move evidence between reports, versions, applications, or families.
 
 PRISMA identification and selection counts remain at record and report level. Report separate analytic denominators for report families, reports, artifact lineages, tailoring applications, direct RQ2 findings, and direct RQ3 activities. A report count is not a count of independent implementations or transfers.
 
-Use simple linked IDs such as `report_id`, optional `report_id:eps_case_id`, `family_id`, `lineage_id`, `lineage_id:tailoring_application_id`, `report_id:rq2_finding_id`, and `report_id:rq3_activity_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
+Use simple linked IDs such as `report_id`, optional `report_id:eps_case_id`, `report_id:report_reuse_record_id`, `report_id:report_application_id`, `family_id`, `lineage_id`, `lineage_id:tailoring_application_id`, `report_id:rq2_finding_id`, and `report_id:rq3_activity_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
 
 External repositories, evolving models, and author-provided artifacts are not independently retrieved or inspected.
 
