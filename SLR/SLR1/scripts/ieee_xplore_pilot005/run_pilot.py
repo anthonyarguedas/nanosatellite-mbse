@@ -58,18 +58,24 @@ def artifact_status(artifact: dict[str, Any]) -> str | None:
 
 def artifact_matches_event(event: dict[str, Any], artifact: dict[str, Any]) -> bool:
     metadata = artifact.get("output_metadata", {})
-    requested = metadata.get("requested_query", artifact.get("query"))
+    status = artifact_status(artifact)
+    requested = (
+        artifact.get("requested_query")
+        or metadata.get("requested_query")
+        or artifact.get("query")
+        or artifact.get("executed_query")
+    )
     if requested != event["query"]:
         return False
-    status = artifact_status(artifact)
     if status == "error":
         return artifact.get("total") is None
+    if artifact.get("executed_query") != event["query"]:
+        return False
+    year_readback = metadata.get("publication_year_readback", {})
+    if year_readback.get("requested_search_window") != "2011_2026_Year":
+        return False
     if event["mode"] == "count":
-        return (
-            status == "count_only"
-            and isinstance(artifact.get("total"), int)
-            and metadata.get("observed_exact_query_echo") is True
-        )
+        return status == "count_only" and isinstance(artifact.get("total"), int)
     return (
         status == "success"
         and metadata.get("require_complete") is True
@@ -178,12 +184,14 @@ def outcome_for(
     artifact = load(output) if output.exists() else {}
     status = artifact_status(artifact)
     total = artifact.get("total")
-    success = (
-        return_code == 0
-        and marker_is_valid(output)
+    successful_status = status in {"count_only", "success"}
+    marker_valid = marker_is_valid(output)
+    retained = (
+        output.is_file()
         and artifact_matches_event(event, artifact)
-        and status in {"count_only", "success"}
+        and (marker_valid if successful_status else status == "error")
     )
+    success = return_code == 0 and retained and successful_status
     return {
         "event_id": event["event_id"],
         "schedule_id": event["schedule_id"],
@@ -194,7 +202,8 @@ def outcome_for(
         "output": str(output.relative_to(pilot_root)),
         "output_exists": output.exists(),
         "commit_marker": str(marker_path(output).relative_to(pilot_root)),
-        "commit_marker_valid": marker_is_valid(output),
+        "commit_marker_valid": marker_valid,
+        "artifact_retained": retained,
         "artifact_status": status,
         "source_total": total,
         "records": len(artifact.get("results", [])),
@@ -231,11 +240,13 @@ def run(
         if output.exists() or marker_path(output).exists():
             if not resume:
                 raise RuntimeError(f"Refusing to overwrite {output}")
-            if not output.exists() or not marker_is_valid(output):
-                raise RuntimeError(f"Existing event lacks a valid commit pair: {output}")
+            if not output.exists():
+                raise RuntimeError(f"Existing marker lacks its artifact: {output}")
             artifact = load(output)
             if not artifact_matches_event(event, artifact):
                 raise RuntimeError(f"Existing event is mismatched: {output}")
+            if artifact_status(artifact) != "error" and not marker_is_valid(output):
+                raise RuntimeError(f"Successful event lacks a valid commit pair: {output}")
             outcome = outcome_for(event, output, pilot_root, event_started, 0, True)
         else:
             print(f"Running {event['event_id']}", flush=True)
