@@ -4,7 +4,7 @@ Required changes were applied in commit: NA
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_arxiv.py`
 
-Save diagnostic artifacts in `searches/`. Use a query ID (`A1.json`, `PSR1.json`), a citation seed report ID (`<paperID>.json`), or a consecutive test ID (`test1.json`). The script artifact is authoritative for query and event metadata.
+Save diagnostic artifacts in `searches/`. Use a query ID (`A1.json`, `PSR1.json`), a citation seed report ID (`<paperID>.json`), or a consecutive test ID (`test1.json`). The adapter always saves matching `.search-page.png` and `.results-page.png` files beside each JSON. The script artifact is authoritative for query and event metadata.
 
 ## Objective
 

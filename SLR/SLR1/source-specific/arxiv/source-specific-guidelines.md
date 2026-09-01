@@ -6,72 +6,79 @@ Final searches saved in commit: NA
 Citation chasing searches saved in commit: NA (not applicable)
 Source excluded from review due to search failure in commit: NA
 
-Validated pilot route: [`../../scripts/arxiv_pilot003/atom_pilot.py`](../../scripts/arxiv_pilot003/atom_pilot.py), using the documented arXiv Atom API. It writes pilot-only, non-mergeable artifacts. Do not use its output as a final search.
+Export method: `~/agent-tools/internet/skills/browser/scripts/search_arxiv.py`
 
-Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`. A future final runner must retain the Atom API route, exact query/cell ledger, controls, source totals, complete stable-ID capture, and failures demonstrated by Pilot 003.
+Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`. The adapter always saves `A1.search-page.png` before search execution and `A1.results-page.png` after first-page result readback. Both PNGs are saved beside the JSON. There is no screenshot opt-out.
 
-The event artifact is authoritative for query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records fixed decisions and pilot conclusions.
+The script artifact is authoritative for each event's query, controls, source identity, timestamps, behavior, total, pagination, ordering, identifiers, capture, completeness, screenshots, and failures. This file records fixed decisions and pilot conclusions.
 
 ## Fixed source configuration
 
-- Source or collection: arXiv.
-- Interface and platform: documented arXiv Atom API on arXiv. The rendered Advanced Search route remains separately documented and is not assigned Atom grammar.
-- Endpoint and method: `GET https://export.arxiv.org/api/query` with `search_query`, `start`, `max_results`, `sortBy=submittedDate`, and `sortOrder=ascending`.
-- Search field: documented Atom `all:` field for every normative free-text literal. `all:` searches the API's fields. It is not a rendered Advanced Search row.
-- Main evidence window: encode the inclusive calendar window as `submittedDate:[YYYYMMDD0000 TO YYYYMMDD2359]` (minute GMT syntax). Pilot 003 observed a known record in its 2017 `<published>`/v1 interval despite a later `<updated>` timestamp, so this route is recorded as original-submission/v1 behavior. Preserve `<published>` and `<updated>` for later report-version decisions.
-- Ordering, pagination, and identity: use native `submittedDate` ascending order, `start` offsets, and no more than 2,000 records per API call. Exhaust every source total twice and require equal ordered bare and versioned arXiv-ID ledgers. Retain both the bare stable ID and the returned versioned manifestation ID.
-- Language: no usable API Language control. Apply no language filter. Determine English from full text during screening.
-- Publication type: this source is bounded to arXiv submissions/e-prints (preprints). No API document-type, peer-review, access, or full-text-availability filter is available or applied.
-- Database or collection selection: all arXiv classifications, with no category restriction. The Category Taxonomy is not a content thesaurus supplement for this route.
+- Source or collection: the full multidisciplinary arXiv repository.
+- Interface: Web.
+- Platform: arXiv Search.
+- URL: https://arxiv.org/search/advanced
+- Search field: rendered repeatable Advanced Search rows. Select `All fields` for every normative row.
+- Main evidence window: request 2011-01-01 through the common cutoff as inclusive calendar bounds. Select `Submission date (original)`. The adapter submits the following day as arXiv's upper-exclusive `US/Eastern` endpoint.
+- Ordering: select `Submission date (oldest first)`. Exhaust every cell twice and require equal totals and ordered arXiv ID ledgers.
+- Versions and identity: exclude older versions from discovery results. Retain the bare arXiv ID and any version suffix shown by the source. Preserve source submission metadata for later report-version decisions.
+- Language: the web interface has no language limiter. Apply no language filter. Determine English from the full text during screening.
+- Publication type: arXiv is bounded to submissions and e-prints. Apply no document-type, peer-review, access, or full-text-availability filter.
+- Database or collection selection: search all classifications. Select no subject root or category restriction. Include cross-listed papers.
 
-## Prospective Atom translation
+## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Exact literals remain normative. A trailing wildcard may be tested only as a labelled diagnostic cell. It is not accepted from totals alone.
+Use the exact concept membership and compound definitions in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed ordinary term. Use no Atom syntax, proximity operator, pair expansion, wildcard, or controlled-vocabulary supplement.
 
-- Literal `L(s)`: render `all:s` for a single token and `all:"s"` for a multiword phrase. Preserve the listed punctuation, spelling, and spacing in the source query.
-- Boolean: use documented Atom `AND`, `OR`, and parenthesized groups. This grammar is validated only for the Atom API. Never attribute it to a browser Advanced Search raw All-fields row.
-- Block `F(S)`: one parenthesized Atom OR group over all alternatives in `S`.
-- Pair `PAIR(a,b)`: `(all:a AND all:b)`. This is a deliberately broader candidate fallback for the unavailable same-field, either-order, no-more-than-five-token predicate. Check retained title and abstract locally for the exact pair where those fields permit it, but do **not** discard a broader API candidate on that local check.
-- Paired blocks: retain every fixed phrase and every declared pair. The pilot's transport control demonstrated the fallback on declared `reusable`/`model` pair evidence in the abstract of `1102.2933`. This does not turn the fallback into an API proximity feature.
-- Controlled vocabulary: add no supplement. The arXiv Category Taxonomy has textual classifications and editorial scope notes, not a proved controlled-vocabulary mapping for these concept blocks.
+- Literal `L(s)`: preserve the listed spelling, punctuation, and spacing inside straight double quotes.
+- Ordinary block `F(S)`: join every `L(s)` in `S` with homogeneous uppercase `OR` inside one rendered All-fields row. Do not add parentheses inside the row.
+- Conjunction: place each factor in a separate rendered All-fields row. Join rows with the source's outer `AND` control. The first row's ignored operator remains `AND` for exact readback.
+- Combined `M` row: join every `M_H` and `M_B` literal in one homogeneous OR row when the request fits.
+- Compound distribution: distribute one unchanged OR factor into separate source cells when the complete request is rejected. Preserve every cell total and reconcile the complete bare-ID union.
+- Controlled vocabulary: add no Category Taxonomy terms. It is a classification hierarchy with scope notes and exact IDs. It does not provide a proved discovery thesaurus mapping for these concept blocks.
+- Analyzer boundary: quoted phrases and homogeneous OR behavior are source-native. The adapter does not claim unrequested stemming, lemmatization, punctuation equivalence, acronym expansion, or cross-field equivalence.
 
-The direct full expressions for `A2`, `BC1`, and `BT2` exceeded the live proxy request-line limit and failed with `total: null` (`A2` and `BC1`: HTTP 400, `BT2`: HTTP 414). Pilot 003 replaced only one parenthesized OR factor at a time, which is a lossless distribution of the unchanged conjunction:
+Pilot 004 found that the direct `A2` request was rejected before a source total. Split only its unchanged `M_H OR M_B` factor. The identity is:
 
-| Partitions | Atom cell route |
-|---|---|
-| `A1`, `A3`, `B1`, `B2`, `BG1`, `BG2` | One complete parenthesized Atom expression. |
-| `A2` | Two cells: unchanged `P AND E_F`, with the final factor separately `M_H` and `M_B`. |
-| `BC1` | Two cells: unchanged `P`, with the 62 `C1` alternatives split as 1–31 and 32–62. |
-| `BT2` | Six cells: unchanged `P AND M_B`, with the 224 declared `T2` pairs split as 1–38, 39–76, 77–114, 115–152, 153–190, and 191–224. |
+```text
+P AND E_F AND (M_H OR M_B)
+=
+(P AND E_F AND M_H) OR (P AND E_F AND M_B)
+```
 
-Every replacement URI was at most 3,791 encoded characters. Preserve each cell total and reconcile its complete bare arXiv-ID union. A source failure remains `null`. It never becomes zero.
+`BG1` and `BG2` also use lossless distribution of their declared compound branches. All other partitions use one source cell.
 
 ## Query schedule
 
-The table is semantic. Implement each row as the full Atom Boolean expression or the documented lossless cell union above. `F(G_model)`, `F(G_structure)`, `F(C1)`, and `F(T2)` include fixed phrases and expanded pair fallbacks.
+Every `F(...)` below is one rendered All-fields OR row. Each `AND` separates rendered rows.
 
-| ID | Source construction |
+| ID | Browser cell construction |
 |---|---|
-| `A1` | `F(P) AND F(E_H) AND F(M_H)` |
-| `A2` | `F(P) AND F(E_F) AND (F(M_H) OR F(M_B))` |
-| `A3` | `F(P) AND F(E_H) AND F(M_B)` |
-| `B1` | `F(P) AND F(M_H)` |
-| `B2` | `F(P) AND F(M_B) AND F(R)` |
-| `BG1` | `F(P) AND F(G_model)` |
-| `BG2` | `F(P) AND F(G_structure)` |
-| `BC1` | `F(P) AND F(C1)` |
-| `BT2` | `F(P) AND F(M_B) AND F(T2)` |
+| `A1` | One cell: `F(P) AND F(E_H) AND F(M_H)` |
+| `A2` | Two cells: `F(P) AND F(E_F) AND F(M_H)`, then `F(P) AND F(E_F) AND F(M_B)` |
+| `A3` | One cell: `F(P) AND F(E_H) AND F(M_B)` |
+| `B1` | One cell: `F(P) AND F(M_H)` |
+| `B2` | One cell: `F(P) AND F(M_B) AND F(R)` |
+| `BG1` | Two cells: `F(P) AND (F(G_model_fixed) OR F(G_mission_exact))`, then `F(P) AND F(G_mission) AND F(M_B)` |
+| `BG2` | Two cells: `F(P) AND (F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation))`, then `F(P) AND F(G_product) AND F(M_B)` |
+| `BC1` | One cell: `F(P) AND (F(C1_fixed) OR F(G_DSL))` |
+| `BT2` | One cell: `F(P) AND F(M_B) AND F(T_precise)` |
+
+The parenthesized OR notation in the table describes membership within one homogeneous row. Do not type those parentheses into the rendered term field.
 
 ## Controls and limitations
 
-- No language, document-type, proximity, focus, major-topic, or API-side export-selection control is available. Atom XML is captured and normalized locally. Pagination is the available complete-capture control.
-- API `all:` matching and analyzer behavior remain source-native. Title/abstract local evidence is an audit aid, not a no-loss source filter.
-- No category, cross-list, access, or peer-review restriction was applied. Category Taxonomy aliases, hierarchy, and source scope notes do not establish a discovery-vocabulary mapping.
-- Wildcards are unaccepted for every partition. Pilots 001–002 gave no stable-ID equality/superset evidence, and Pilot 003 used none.
-- The direct Atom API route is validated separately from the browser route: fields, grouping, phrases, dates, ordering, pagination, stable IDs, and pair fallback are recorded in [Pilot 003](pilots/003/pilot.md). The official [API User's Manual](https://info.arxiv.org/help/api/user-manual.html) is the syntax reference.
+- Use the normal Advanced Search form for the first pass of every CLI event. Require exact configured-form and result-route readback.
+- Capture full records through rendered result cards and native `More` controls. Do not substitute Atom metadata into a browser event.
+- Use native 100-record pages when the planned limit requires them. A final cell must set `--limit` and `--max-pages` high enough to cover the exact source total.
+- A complete final cell must pass the adapter's strict two-pass ordered-ID reconciliation. A count-only or one-pass artifact is not final-search evidence.
+- Save the mandatory configured-search and first-results screenshots for every source cell. A screenshot failure makes the event fail.
+- A source or adapter failure keeps `total: null`. It never becomes zero. Preserve the failed artifact and rerun only the unchanged event or a documented lossless repair.
+- Space consecutive source events to respect live rate limits. Pilot 004 observed an HTTP 429 during an unchanged strict event. It was retained as a transient failure and was not treated as a source total.
 
 ## Pilots
 
-- [x] [Pilot 001](pilots/001/pilot.md): one representative structured-row `A1` cell and one `BG1` pair cell returned exact zero totals. These are not full-partition or final-search results.
-- [x] [Pilot 002](pilots/002/pilot.md): the `CubeSat*` representative A1 cell was a count-only zero. Language and type controls remain unavailable, and the wildcard is unaccepted.
-- [Pilot 003](pilots/003/pilot.md): validated the separate Atom route, repaired overlong expressions with lossless cells, and captured all nine bounded partition unions. These are diagnostic pilot artifacts, not final searches.
+- [x] [Pilot 001](pilots/001/pilot.md): one representative structured-row `A1` cell and one `BG1` marker/model cell returned exact zero totals. These were cell diagnostics.
+- [x] [Pilot 002](pilots/002/pilot.md): the `CubeSat*` representative cell returned zero. The wildcard remained unaccepted. Language and type controls remained unavailable.
+- [Pilot 003](pilots/003/pilot.md): the now-superseded Atom route demonstrated bounded API transport behavior and pilot-only partition unions. Its output remains historical diagnostic evidence. It is not the prospective search route.
+- [x] [Pilot 004](pilots/004/pilot.md): the rendered web translation completed all nine partitions through 12 lossless cells. The unions were `0`, `0`, `0`, `6`, `4`, `2`, `0`, `0`, and `2`. Every cell passed strict two-pass capture and retained both mandatory screenshots. The five unchanged core partitions matched the Atom Pilot 003 bare-ID sets exactly.
