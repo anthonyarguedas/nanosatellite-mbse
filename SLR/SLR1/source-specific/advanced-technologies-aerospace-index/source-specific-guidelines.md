@@ -8,17 +8,9 @@ Source excluded from review due to search failure in commit: NA
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_proquest_aerospace.py`
 
-Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`. The adapter automatically saves `A1.search-page.png` and `A1.results-page.png` beside the JSON.
+Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`. The adapter always saves `A1.search-page.png` and `A1.results-page.png` beside the JSON.
 
 The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed decisions and pilot conclusions.
-
-## Interface screenshots
-
-- [Command Line Search page](screenshots/command-line-search-page.png)
-- [First results page](screenshots/results-page.png)
-- [Capture receipt](screenshots/screenshot-receipt.json)
-
-These full-page screenshots use the representative query `NOFT("CubeSat") AND LA(English)` with All dates. They document the general ATAI interface and are not pilot or final-search artifacts.
 
 ## Fixed source configuration
 
@@ -26,29 +18,30 @@ These full-page screenshots use the representative query `NOFT("CubeSat") AND LA
 - Interface: Web
 - Platform: ProQuest
 - URL: https://www.proquest.com/ataindex/commandline
-- Search field or local route: Command Line Search `NOFT` field.
+- Search field or local route: Command Line Search `NOFT` and exact `IF` fields.
 - Main evidence window: Use exact `--date-start 2011-01-01 --date-end <cutoff>` publication-date bounds.
-- Language: Apply exact `LA(English)`. This metadata restriction does not prove report language. Full-text screening remains authoritative.
+- Language: Apply exact `LA(English)`. Pilot 006 compared the final indexed-term translation with and without this restriction twice. Only `B2` changed, from `36` to `34`. Both excluded records were source-labelled `Language of publication: Chinese`. This metadata restriction does not prove report language. Full-text screening remains authoritative for retrieved candidates.
 - Publication type: Apply no type, peer-review, access, or full-text-availability filter. `DTYPE` and Document type vocabulary, including missing-type behavior, are tenant/corpus controlled. No lossless union for all shared eligible report types is proved.
 - Database or collection selection: Select only Advanced Technologies & Aerospace Index. Deselect every parent and other ProQuest database.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Use no wildcards in an accepted translation and assume no unrequested stemming or variants.
+Use the exact concept membership and Boolean definitions in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed ordinary term. Use no proximity operators, pair expansions, or wildcards. Assume no unrequested stemming or variants.
 
 - Literal `L(s)`: Use one straight double-quoted literal.
-- Atom `A(s)`: `NOFT(L(s))`.
+- Atom `A(s)`: `(NOFT(L(s)) OR IF.EXACT(L(s)))`. Pilot 006 proved that `NOFT` can omit an exact `IF` indexed-keyword assignment. The supplement added nine stable IDs across `B1`, `B2`, `BC1`, and `BT2`, including six plausible review candidates.
 - Boolean: Uppercase `AND` and `OR` with explicit parentheses.
-- Block `F(S)`: join `A(s)` for every ordinary member of `S` with source OR. Fully parenthesize the result.
-- Pair `PAIR(a,b)`: `NOFT(L(a) NEAR/5 L(b))`. `NEAR/5` is unordered and counts intervening words.
-- Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
+- Ordinary block `F(S)`: Join `A(s)` for every member of `S` with source OR. Fully parenthesize the result.
+- Compound `G_model`: `(F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B)))`.
+- Compound `G_structure`: `(F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B)))`.
+- Compound `C1`: `(F(C1_fixed) OR F(G_DSL))`.
 - Controlled vocabulary: Add no Technology Thesaurus supplement. Free text remains mandatory. Pilot 004 verified six assigned `SUBJECT` labels as exact descriptors, then found the same ordered 19 IDs for fresh literal and descriptor-augmented `B1` runs, with no candidate-only ID. The candidate controlled MBSE construction matched only five of seven selected records, so controlled terms cannot replace free text and showed no marginal recall value.
-- Source limitation: Keep this source in an event separate from PQDT Global. `NOFT` searches anywhere except full text, reducing bias toward searchable full text while remaining sensitive to uneven metadata. Validate `NOFT` field coverage and pair behavior separately. Pilot 002's equal count-only wildcard total did not establish stable-ID equality or a superset, so compression is unaccepted.
+- Source limitation: Keep this source in an event separate from PQDT Global. Pilot 006 known-item contrasts retained the same IDs through explicit `TI`, `AB`, and `MAINSUBJECT` fields and through `NOFT`. A separate `IF.EXACT` known item was absent from `NOFT`, so every ordinary atom includes both fields. Pilot 007 accepted each complete schedule expression as one direct query. Pilot 002's equal count-only wildcard total did not establish stable-ID equality or a superset, so compression is unaccepted.
 
 ## Query schedule
 
-The table uses `AND` and `OR` as semantic labels. Render them with the source operators above. `F(G_model)`, `F(G_structure)`, `F(C1)`, and `F(T2)` include fixed phrases and expanded pairs.
+Render every row as one fully parenthesized source query. The four expansion rows preserve the shared compound Boolean definitions.
 
 | ID | Source construction |
 |---|---|
@@ -57,10 +50,10 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 | `A3` | `F(P) AND F(E_H) AND F(M_B)` |
 | `B1` | `F(P) AND F(M_H)` |
 | `B2` | `F(P) AND F(M_B) AND F(R)` |
-| `BG1` | `F(P) AND F(G_model)` |
-| `BG2` | `F(P) AND F(G_structure)` |
-| `BC1` | `F(P) AND F(C1)` |
-| `BT2` | `F(P) AND F(M_B) AND F(T2)` |
+| `BG1` | `F(P) AND (F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B)))` |
+| `BG2` | `F(P) AND (F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B)))` |
+| `BC1` | `F(P) AND (F(C1_fixed) OR F(G_DSL))` |
+| `BT2` | `F(P) AND F(M_B) AND F(T_precise)` |
 
 ## Pilots
 
@@ -69,3 +62,5 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 - [Pilot 003 record](pilots/003/pilot.md): all nine exact literal partitions have pilot-only stable-ID reconciliations. `A3` and `B1` retain their historical null-total adapter v3 strict failures. Their same-query stable-ID repairs did not establish full-record stability at that time. Pilot 005 records the repaired adapter v4 strict reruns. No deduplicated pilot union exceeded 100, and no noise refinement was applied.
 - [x] [Pilot 004](pilots/004/pilot.md): seven selected records supplied 58 assigned `SUBJECT` terms. Six candidates were exact Technology Thesaurus descriptors. A context-qualified `B1` supplement added no stable ID, so no descriptor was accepted.
 - [x] [Pilot 005](pilots/005/pilot.md): adapter v4 removed the transient terminal abstract `More` token, integrated exact restore-session dismissal and inventory-proven cleanup, and passed fresh strict two-full-record checks for A3 and B1. Historical and fresh abstract comparisons found no truncation.
+- [x] [Pilot 006](pilots/006/pilot.md): bounded known-item checks validated `NOFT` coverage of title, abstract, and controlled subjects. `NOFT` omitted an exact `IF` assignment, so ordinary atoms now add `IF.EXACT` with `OR`. The supplement added nine stable IDs, including six plausible candidates. Repeated final language comparisons excluded only two source-labelled Chinese publications, so `LA(English)` remains accepted.
+- [x] [Pilot 007](pilots/007/pilot.md): all nine complete schedule expressions ran directly without proximity operators, pair expansions, wildcards, or query splits. Two count passes agreed at `0`, `5`, `1`, `25`, `34`, `2`, `7`, `2`, and `2`. Strict complete captures passed for all four changed partitions. Every successful event retains both required full-page screenshots, so the direct Boolean translation is accepted.
