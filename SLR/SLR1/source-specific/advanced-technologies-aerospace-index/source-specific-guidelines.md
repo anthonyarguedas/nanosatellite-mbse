@@ -8,7 +8,7 @@ Source excluded from review due to search failure in commit: NA
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_proquest_aerospace.py`
 
-Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`.
+Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`. The adapter automatically saves `A1.search-page.png` and `A1.results-page.png` beside the JSON.
 
 The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed decisions and pilot conclusions.
 

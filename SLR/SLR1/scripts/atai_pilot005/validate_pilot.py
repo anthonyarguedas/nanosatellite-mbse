@@ -43,8 +43,8 @@ def validate(pilot_root: Path, guideline: Path) -> dict[str, Any]:
     b1 = load(searches / "B1.strict-v4.json")
     adapter = load_adapter()
 
-    if adapter.ADAPTER_VERSION != "4":
-        errors.append("General ATAI adapter is not version 4.")
+    if not adapter.ADAPTER_VERSION.isdigit() or int(adapter.ADAPTER_VERSION) < 4:
+        errors.append("General ATAI adapter predates version 4 repairs.")
     if not hasattr(adapter, "dismiss_restore_session_overlay"):
         errors.append("General ATAI adapter lacks restore-session handling.")
     if not hasattr(adapter.ProQuestBrowserLease, "__dataclass_fields__") or (
@@ -135,7 +135,10 @@ def validate(pilot_root: Path, guideline: Path) -> dict[str, Any]:
         "schema_version": "atai-pilot-005-validation-report/v1",
         "status": "ok" if not errors else "error",
         "checks": {
-            "adapter_version_4": adapter.ADAPTER_VERSION == "4",
+            "adapter_version_at_least_4": (
+                adapter.ADAPTER_VERSION.isdigit()
+                and int(adapter.ADAPTER_VERSION) >= 4
+            ),
             "abstract_canonicalization": "passed",
             "abstract_truncation_audit": "passed",
             "A3_strict_two_pass": "passed",

@@ -12,7 +12,7 @@ Repair and validate three adapter defects exposed by earlier ATAI pilots:
 
 ## Adapter v4 repairs
 
-`~/agent-tools/internet/skills/browser/scripts/search_proquest_aerospace.py` is now adapter version 4.
+The strict repair checks ran with adapter version 4. Current adapter version 5 retains these repairs and adds automatic sibling search-page and results-page screenshots for every CLI JSON output.
 
 - Abstract extraction removes only a terminal standalone `More` after sentence punctuation. Normal prose such as `learn more` remains unchanged. The JavaScript extractor and Python payload parser apply the same canonical rule.
 - The adapter recognizes only the exact `#restoresession_confirm` dialog with the expected “Restore your last ProQuest session” text. It clicks the exact `Dismiss` action on its owned page before blocked source actions. Cookie consent remains separate.
