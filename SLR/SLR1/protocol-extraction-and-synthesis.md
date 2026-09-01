@@ -16,9 +16,9 @@ Do not create separate analytic objects for individual measurements, comparators
 
 ### Common field rules
 
-Create a run-specific codebook and machine-readable schema from this protocol before full extraction. Every report and repeatable row must have a stable ID. Each repeatable row also records:
+Create a codebook and machine-readable schema from this protocol before full extraction. Every report and repeatable row must have a stable ID. Each repeatable row also records:
 
-- `evidence_location`, including report ID, page or section, and figure or table when relevant.
+- `evidence_location`, including report ID, page, section, and figure or table when relevant.
 - `coding_confidence`, using `high`, `moderate`, or `low` under Part 2.
 - `provenance`, using `source_reported`, `author_claimed_or_planned`, `reviewer_inferred`, or `reviewer_derived`.
 - `notes`, only when needed to explain ambiguity or a coding decision.
@@ -43,18 +43,12 @@ Record:
 - venue or issuing organization.
 - publication type and publication status.
 - DOI, arXiv ID, or other stable URL.
-- version used and its relationship to other known versions.
 - possible companion reports or shared implementations.
 - `family_lead`, using `yes`, `no`, or `uncertain`.
 - concise report-family lead reason, or `not_reported`.
 - source-file path.
-- final full-text decision.
-- Route A or Route B.
-- concise eligibility and route reason with evidence location.
-- extraction date and extractor.
-- verification status.
 
-For a thesis or dissertation, also record degree level and name, institution, country, department, completion status, persistent IDs, repository version, and access, embargo, and licence status.
+For a thesis or dissertation, also record degree level and name, institution, country, department, and completion status.
 
 For an arXiv preprint, record the identifier, subject category, version, and version date.
 
@@ -88,7 +82,6 @@ Record:
 - explicit relationships among concerns.
 - system boundary.
 - artifact availability.
-- licence when reported.
 
 ### EPS representation
 
@@ -110,9 +103,17 @@ For each report, record one EPS case section by default. Record:
 - EPS model maturity.
 - availability of the EPS model, profile, script, data, or documentation.
 
-EPS elements may include generation, storage, battery management, conversion, regulation, conditioning, distribution, protection, monitoring, control, bus, harness, loads, interfaces, modes, margins, degradation, faults, and another source-described element.
+For a list of EPS elements see [Part 1 - EPS boundary and elements](protocol.md#EPS boundary and elements)
 
 Purposes may include definition or sizing, requirements or traceability, trade study, interface management, executable analysis, V&V, communication, lifecycle continuity, and reuse or tailoring.
+
+- **EPS anchor**: a named EPS requirement, function, behavior, component, interface, mode, load or profile, budget, parameter, constraint, or hazard;
+- **model anchor**: an identifiable representation of that EPS content in a structured system-model artifact or a clearly connected analysis model; and
+- **EPS-to-model bridge**: a locatable relationship between the EPS anchor and a second concern, such as a requirement, behavior, architecture or interface, analysis, decision, output, or V&V artifact. Examples include allocation, trace, satisfy/refine/verify relations, interfaces or flows, parametric bindings, transformations, and data mappings.
+
+An EPS label, equipment-list entry, or place in a general spacecraft breakdown can show where an anchor appears, but it is not a bridge by itself. The source does not have to name a formal relationship type. Its endpoints and meaning must still be clear enough to reconstruct.
+
+Support the anchors and bridge with text, a figure or table, a model extract, a trace record, or another identifiable location in the source. Keywords, reviewer inference, or items that merely appear in the same report are not enough.
 
 ### General implementation footprint
 
@@ -213,7 +214,7 @@ Record:
 - `rq2_finding_id`.
 - `direct_synthesis`, using `yes`, `no`, or `uncertain`.
 - exclusion or uncertainty reason when not in direct synthesis.
-- exact claim wording or cautious paraphrase.
+- exact claim wording.
 - claim kind, using `descriptive_occurrence`, `feasibility_or_executed_result`, `technical_performance`, `comparative`, `causal_attribution`, `experiential_or_perceived`, `implementation_burden`, `transfer_or_generalization`, `other`, or `unclear`.
 - role, using `outcome`, `implementation_burden`, or `mixed_trade_off`.
 - target and scope.
@@ -221,7 +222,7 @@ Record:
 - author-claimed direction, using `beneficial`, `null/no observed effect`, `mixed/conditional`, `adverse`, `unclear`, or `not_reported`.
 - evidence-supported direction, using `beneficial`, `null/no observed effect`, `mixed/conditional`, `adverse`, `unclear`, or `unsupported`.
 - EPS attribution, using `explicit_eps_attribution`, `ambiguous_attribution`, or `generic_or_ineligible`.
-- proposed MBSE mechanism.
+- mechanism, which is the explanation given by the source of how an EPS-linked model artifact or activity led to a claimed outcome or burden. Do not infer a mechanism. Use `not_reported` when the source provides no explanation. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed finding.
 - linked model, activity, input group, or result set.
 - measure and value.
 - unit, denominator, and time basis.
@@ -296,6 +297,8 @@ Record a comparator and major rival explanations only when the report makes a co
 
 ### Reusable artifact and reported lineage
 
+See [Reusable artifact and artifact lineage](protocol.md#Reusable artifact and artifact lineage).
+
 The first report pass creates a complete source-bounded extraction for every identifiable EPS-linked artifact assessed for reuse, reported artifact lineage, or method or workflow reuse case described in the report. Create more than one reuse record when the report describes materially distinct artifacts or lineages. Extract all evidence available in the report even when no companion report is known. Cross-report identity remains pending.
 
 Record once for the report:
@@ -352,7 +355,7 @@ Record the reuse design:
 Record the report-bounded reuse assessment:
 
 - linked `report_application_id` values.
-- `report_reuse_level`, using any level from `NA` through `R4_independent_reuse_demonstrated` under Part 1.
+- `report_reuse_level`, using any level from `NA` through `R4_independent_reuse_demonstrated`
 - report-reuse-level reason.
 - demonstrated settings.
 - demonstrated coverage.
@@ -365,7 +368,29 @@ Record the report-bounded reuse assessment:
 
 Assign `report_reuse_level` from evidence contained in this report only. A single report can support R3 or R4. Assign R3 or R4 only when the corresponding report-level application below is complete, includes post-tailoring assurance, and meets the required adopter condition.
 
+A **reusable core** is the set of model elements, relationships, constraints, interfaces, meanings, or packaged assets that the source states or clearly shows remain across uses.
+
+A **variation point** is a source-described place, option, range, rule, or dependency through which that core can vary.
+
+**Tailoring** means using a source-described process to create or select a target-specific instance. It can involve configuration, parameterization, selection, specialization, extension, deletion or substitution, interface mapping, transformation or generation, or a clearly justified decision to use the artifact unchanged.
+
+A parameter sweep or scenario run in one unchanged mission model is analysis, not tailoring across settings. Rebuilding a model without structure may show reuse of a method. It shows reuse of an artifact only when the source establishes the artifact lineage and the retained core.
+
+Table of reuse level codes.
+| Level | Minimum evidence | Meaning |
+|---|---|---|
+| **`NA`** | No identifiable reusable EPS model artifact, or only a method or workflow is reused | Keep the reuse description under report-level RQ1. |
+| **`R0_artifact_only`** | An EPS-linked artifact is identifiable, with no reuse claim or application reported | An artifact exists. Reuse has not been claimed or shown. |
+| **`R1_reuse_claimed`** | The source claims or suggests reuse for the identifiable artifact | Reuse is asserted. Its range and method are not sufficiently specified. |
+| **`R2_reuse_specified`** | The declared applicability envelope, reusable core, variation points or unchanged-use rule, tailoring process, and prerequisites are reported | Bounded reuse is specified. Transfer does not have to be demonstrated. |
+| **`R3_reuse_demonstrated`** | R2 is met, and at least one materially distinct target setting uses the identified core, reports what stayed the same and what changed, and reports a relevant post-tailoring check and result | Transfer is demonstrated in the reported setting. |
+| **`R4_independent_reuse_demonstrated`** | R3 is met by at least one adopter operationally independent of the originating implementation team | Independent transfer is demonstrated in the reported setting. |
+
 #### Report-level tailoring application
+
+A **tailoring application** is one use of an artifact lineage in one target setting. The original development mission counts only if the source identifies it as an adoption or configuration of the same reusable core and reports what was kept and changed, or why it was used unchanged. The mission where an artifact happened to be created does not by itself show transfer.
+
+Two applications are **materially distinct** only if they differ on at least one DAE dimension in a way that exercises or tests the reuse claim. Two papers, scenarios, revisions, or names for the same implementation do not count as two applications.
 
 Create one `report_application_id` row for each actual adoption or tailoring event described in the report. Merge repeated descriptions of the same event within the report. Keep an account of the same event in another report as a separate report-level row.
 
@@ -663,23 +688,19 @@ Before full extraction:
 
 ### Sole-reviewer extraction and verification
 
-One human reviewer performs the primary extraction and every final decision. Verification uses one focused audit, deterministic validation, a delayed human test–retest sample, and an optional supervisor sample. It does not require two complete model extractions for every report.
+One human reviewer reviews the primary extraction and every final decision. Verification uses one focused audit, deterministic validation, a delayed human test–retest sample, and an optional supervisor sample. It does not require two complete model extractions for every report.
 
 Apply this sequence:
 
-1. **Primary extraction.** The reviewer extracts the complete report into the frozen report-level form.
-2. **Focused audit.** For every included report, an authorized LLM or a delayed human check reviews eligibility and route, Route B anchors and bridge, omitted or duplicated groups, direct RQ2 attribution, direct RQ3 linkage, `lineage_mentioned`, complete report-level reuse and application coding, every report-level R3 or R4 assignment, evidence locations, source-versus-inference distinctions, and reviewer-derived values. The audit may see the extraction because its purpose is error detection.
+1. **Primary extraction.** An LLM extracts the complete report into the frozen report-level form.
+2. **Focused audit.** For every included report, a human check reviews eligibility and route, Route B anchors and bridge, omitted or duplicated groups, direct RQ2 attribution, direct RQ3 linkage, `lineage_mentioned`, complete report-level reuse and application coding, every report-level R3 or R4 assignment, evidence locations, source-versus-inference distinctions, and reviewer-derived values. The audit may see the extraction because its purpose is error detection.
 3. **Deterministic validation.** Validate schema, controlled values, IDs, required fields, links, units, and calculations that can be reproduced. Preserve source values and reviewer-derived values separately.
 4. **Human adjudication.** The reviewer resolves every audit or deterministic issue against the full source. No automated process writes directly to the canonical extraction.
-5. **Cross-report pass.** After report extraction, the reviewer resolves report families and artifact-lineage identity, updates only report-level `lineage_id` values, and creates separate lineage-level and consolidated tailoring-application records. Run one focused cross-report audit for every uncertain merge or split and every lineage-level R3 or R4 assignment.
+5. **Cross-report pass.** After report extraction, an LLM resolves report families and artifact-lineage identity, updates only report-level `lineage_id` values, and creates separate lineage-level and consolidated tailoring-application records. Run one focused cross-report audit for every uncertain merge or split and every lineage-level R3 or R4 assignment.
 
 A focused audit is complete only when the complete source sections, figures, and tables needed for its scope were available. Record the report or lineage, actor, date, scope, source and extraction hashes, completion status, issues raised, and human disposition. Record each accepted correction or unresolved ambiguity in a concise discrepancy log containing field, original value, proposed value, final value, evidence, impact, and reason.
 
-Use an LLM only after recording that transmission, processing, retention, storage, and publication handling are permitted for the source and provider route. If no authorized route is available or document ingestion is incomplete, use the delayed human audit. Model output is an error-detection aid, not an independent reviewer or evidence source.
-
-After all first-pass report extractions are complete, select a reproducible test–retest sample of `n = min(5, max(2, ceil(0.10 × N)))` when `N > 0`. Include Route A and Route B when both are present and at least one report with complex RQ2, RQ3, or artifact content when available. Freeze the sampling frame, sorted IDs, selection rule, seed, and selected IDs. The reviewer re-extracts each sampled report after at least seven days while the original extraction and audit output are hidden. Compare and adjudicate all differences. Report this as sole-reviewer consistency, not independent agreement.
-
-Ask the supervisor to audit up to two reports from the test–retest sample when available. Preserve the requested and completed scope. Do not replace a missing supervisor check with an LLM label.
+After all first-pass report extractions are complete, select a reproducible test–retest sample of `n = min(5, max(2, ceil(0.10 × N)))` when `N > 0`. Include Route A and Route B when both are present and at least one report with complex RQ2, RQ3, or artifact content when available. Freeze the sampling frame, sorted IDs, selection rule, seed, and selected IDs. The LLM re-extracts each sampled report while the original extraction and audit output are hidden. Compare and adjudicate all differences. Report this as sole-reviewer consistency, not independent agreement.
 
 A discrepancy is impactful when it can change eligibility or route, a report family or lineage, a reuse level, a tailoring application, direct RQ2 or RQ3 status, outcome direction, support, a quantitative result, or a synthesis conclusion. An impactful issue that may recur triggers a targeted check of every report or lineage that could be affected. Record any codebook change, focused recalibration, and recheck scope.
 
