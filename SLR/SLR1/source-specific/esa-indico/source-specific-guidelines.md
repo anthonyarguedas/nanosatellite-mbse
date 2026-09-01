@@ -22,8 +22,80 @@ The script artifact is authoritative for per-event query, controls, source ident
 - Main evidence window: Do not restrict the harvest by event date. Apply the evidence window to candidate reports after retrieval.
 - Language: ESA exposes no Language filter or language parameter. Apply no source language filter and determine English from the full text during screening.
 - Publication type: ESA exposes event, contribution, and material groups rather than a lossless eligible report type filter. Apply no type, peer-review, access, or full-text-availability filter.
-- Database or collection selection: Category 0 across events, contributions, and materials. Preserve all public attachment and owner routes required by complete mode.
-- Other shared limits: None.
+- Database or collection selection: Category 0 across Events, Contributions, Subcontributions, and Materials. Preserve stable attachment IDs, parent scope, folder IDs, declared metadata, protection or access metadata, and exact public download URLs.
+- Other shared limits: The local-harvest deadline defaults to 180 seconds and must stay within the adapter's 5 to 300 second bound. Keep root and event exports sequential. The complete ledger accepts at most 10,000 events, 50,000 normalized metadata records, and 64 MB of canonical sidecar JSON. Source JSON stays under 100 MB. Standard local and complete mode makes no attachment body request.
+
+## Durable local-harvest recovery
+
+A complete metadata harvest requires two matching ordered category-0 event
+snapshots, every event export, and complete normalized Event, Contribution,
+Subcontribution, and Material metadata. Attachment metadata includes a stable
+attachment ID, parent event scope, folder ID, title, filename, description,
+MIME, size, checksum when supplied, modified date, protection or access
+metadata, and the exact public download URL. Attachment byte or text access is
+not a completion, merge, or matching condition. Notes and Categories are not
+covered by the local harvest. Do not use a successful Events, Contributions,
+and Materials run to claim Notes or Categories coverage.
+
+The local matcher uses only declared metadata. Events and Contributions use
+title, description, and keywords. Materials use title, filename, and
+description. Phrase and proximity matching stays within one declared field.
+It never uses attachment bytes, extracted text, a hash, MIME, or a retrieval
+status. A record with insufficient content remains a metadata candidate. The
+screening workflow decides full text access, language, and eligibility.
+
+A failed metadata harvest is not mergeable. Its compact JSON artifact has only
+a path-free checkpoint descriptor in `failure_diagnostics`. The durable sibling
+sidecar is published with the JSON and terminal marker as one create-only
+transaction. Staged JSON and CSV bytes are fsynced, the authorized output
+directory is fsynced after each required hard link, and the terminal marker is
+linked last. Resume only with `--resume-from` or `--resume-state-path` against
+the marker-bound failure artifact or sidecar. ESA adapter v8 requires its
+registered terminal marker. A markerless ESA artifact is not accepted for
+merge or resume. The adapter checks the sidecar hash and schema, deterministic
+sibling basename, exact bounded expression, category, effective controls,
+ordered candidate IDs, contiguous completed prefix, route and source ID
+linkage, and metadata digest before it retries work. It re-exports completed
+event metadata. It makes no attachment body request during resume.
+
+A successful v8 harvest publishes a separate marker-bound metadata ledger with
+the compact query result. The ledger retains every normalized Event,
+Contribution, Subcontribution, and Material record, including records that do
+not match the current expression. It retains stable identities, attachment
+parent and folder identity, public URLs, declared MIME, size, checksum, access
+state, both root snapshot ledgers and hashes, event-export witnesses, source
+ordering, controls, and matcher scope. It contains no attachment body or
+extracted content. Merge, report, source-union, and event gates recompute the
+ledger evidence and match compact result IDs against it.
+
+The sidecar retains bounded normalized metadata, source states, and the next
+event index. It never retains response bodies, attachment bytes, extracted
+attachment text, content cache entries, cookies, session data, raw headers,
+browser or CDP identifiers, local paths, or temporary filenames. A missing
+sidecar, changed marker, mismatched hash, changed query, changed category, or
+changed control set is a failure that is not mergeable. It is not a restart shortcut.
+
+Retry only public timeout or connection failures and HTTP 408, 429, 500, 502,
+503, and 504 for category and event metadata routes. Honor a bounded
+`Retry-After` and the shared source-wide 429 backoff. Do not infer a negative
+match from a protected, missing, redirected, oversized, unsupported, or
+unparseable attachment body. Retain its metadata and a downstream retrieval
+status when known. Malformed or contradictory attachment identity or metadata
+remains a strict metadata error. Optional bounded content extractors are
+outside search execution. They are diagnostic or downstream enrichment only.
+Their output and failure state cannot change source totals, candidate IDs,
+local matches, metadata completion, merge eligibility, or report readiness.
+
+Pilot 005 and every file beneath `pilots/005/` are immutable historical
+evidence. Do not edit, compact, or resume from its old embedded checkpoint.
+Pilot 005 records an overstrict v7 attachment-content failure. It does not
+prove a live platform coverage failure or zero results. See the
+[metadata-only contract supersession note](metadata-only-contract-supersession.md).
+Run
+`../../scripts/esa_indico_pilot005/validate_pilot.py` before relying on the
+historical receipt boundary. The validator is read-only. It checks `git diff
+HEAD` and porcelain status, including staged and untracked entries, for the
+Pilot 005 tree and rejects symlink or nonregular evidence before parsing it.
 
 ## Source translation
 
@@ -36,8 +108,8 @@ Use the exact concept membership and pair declarations in [the cross-source stra
 - Pair `PAIR(a,b)`: `L(a) NEAR/5 L(b)`. The local matcher applies this unordered rule within one record field.
 - Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitations: Rendered `q` is a prefix-AND search and cannot express the Boolean schedule. ESA exposes no Language control, and event/contribution/material groups do not map losslessly to the shared eligible report types. Use the bounded local harvest for exact Boolean and same-field proximity matching. Pilots 003 and 004 timed out at the category-0 event-universe route with the 500-event safety boundary. Pilot 005's repaired 30-second root route reached attachment collection but failed before matching and before a confirming root snapshot. Its first snapshot remains a candidate, never a complete universe. Coverage and every affected total remain unestablished, never zero.
-- Unavailable controls: ESA has no source-side date limiter, rendered phrase/proximity control, or lossless type/access/full-text filter. Its Category tree is an organizational scope rather than controlled vocabulary. No descriptor supplement, hierarchy explosion, or vocabulary restriction is applied. ESA has no native complete search export. The local public category/event/attachment export is used only under its two-root-snapshot and complete-attachment contract.
+- Source limitations: Rendered `q` is a prefix-AND search and cannot express the Boolean schedule. ESA exposes no Language control, and event/contribution/material groups do not map losslessly to the shared eligible report types. Use the bounded local metadata harvest for exact Boolean and same-field proximity matching. Pilots 003 and 004 timed out at the category-0 event-universe route with the 500-event safety boundary. Pilot 005's repaired 30-second root route reached attachment collection under the overstrict v7 attachment-content rule. It failed before matching and before a confirming root snapshot. Its first snapshot remains a candidate, never a complete universe. The record does not show live platform coverage failure or zero results. Coverage and every affected total remain unestablished.
+- Unavailable controls: ESA has no source-side date limiter, rendered phrase/proximity control, or lossless type/access/full-text filter. Its Category tree is an organizational scope rather than controlled vocabulary. No descriptor supplement, hierarchy explosion, or vocabulary restriction is applied. ESA has no native complete search export. The local public category and event metadata export is used only under its two-root-snapshot and complete-metadata contract. Attachment download routes are retained for downstream retrieval, not fetched for search execution.
 
 ## Query schedule
 
@@ -61,4 +133,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 - [x] [Pilot 002](pilots/002/pilot.md): rendered `q` cannot express the Boolean schedule, and ESA exposes no Language filter.
 - [x] [Pilot 003](pilots/003/pilot.md): category-0 harvest timed out before event retrieval. Fixture checks passed but do not establish source coverage.
 - [x] [Pilot 004](pilots/004/pilot.md): the fresh category-0 event-universe retry timed out before an HTTP response. It is systematic endpoint evidence, not zero coverage.
-- [Pilot 005](pilots/005/pilot.md): one repaired category-0 local attempt reached attachment collection but failed before local matching and root confirmation. All nine exact schedule expressions are bound to the same live failure through null receipts. This does not complete the source or a final search.
+- [Pilot 005](pilots/005/pilot.md): immutable evidence of an overstrict v7 attachment-content failure. One repaired category-0 local attempt reached attachment collection but failed before local matching and root confirmation. All nine exact schedule expressions are bound to the same historical failure through null receipts. This does not prove live platform coverage failure or zero results. It does not complete the source or a final search.

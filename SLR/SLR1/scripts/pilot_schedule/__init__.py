@@ -1,1 +1,0 @@
-"""Pilot query schedule helpers."""

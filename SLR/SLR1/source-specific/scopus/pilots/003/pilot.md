@@ -37,6 +37,45 @@ The main union is **327** unique Scopus publication IDs from 464 source-event re
 - [PSR strict artifacts](searches/psr/strict-ids/) and [lossless-cell attempts](searches/psr/strict-cells-2500-PSR2/)
 - [Safe failure and retry receipts](searches/main/strict/run-receipt.json), [PSR route receipts](searches/psr/strict-ids/run-receipt.json)
 
+## Recovery safeguards
+
+The historical Pilot 003 artifacts above are retained as historical evidence and
+are not rewritten by this recovery work. This repair makes no new unlinked live
+numeric claim about those historical cells. It requires a current positive page
+to reconcile native range, rows, IDs, sort, page size, and pagination; an
+explicit zero must instead prove zero rows and the absence of pagination, sort,
+page-size, and abstract controls before any control is called not applicable.
+
+The historical PSR2 cells 02, 03, and 08 and PSR4 cells 06 through 08 failed
+because a requested page size was treated as mandatory on an explicit zero
+page. Those failure artifacts do not establish a strict historical total or a
+union. The repaired adapter records zero-page sort, page size, and abstract
+retrieval as `not_applicable`, while positive pages remain strict.
+
+PSR2 cell 12 has a historical complete first-pass artifact but no matching
+second pass. That artifact remains diagnostic only. A future pass-two failure
+may retain an ID-free safe diagnostic, but it never publishes a top-level total,
+rows, or mergeable union. PSR2 and PSR4 remain incomplete.
+
+The archival counts of 216 main and 30 completed-PSR-subunion abstracts that
+were not recovered remain unresolved historical accounting, not a new live
+assertion. Future EID follow-up uses deterministic recursive bisection under an
+output-root lock and durable per-node action journal. It preserves every failed
+parent, never auto-replays an ambiguous delivery, and accepts only marker-bound
+compact strict two-pass leaves whose source/export totals and unique returned ID
+set exactly match the requested IDs. Current leaves bind the canonical EID-only
+executed query, the closed compact v3 two-pass receipt, the shared terminal
+commit-marker verifier, and matching publication/merge transaction bindings.
+The child receives only an adapter-private staging path outside the mutable
+caller root. After verification, descriptor-relative create-only publication
+writes into the originally opened root, so a late rename or symlink cannot
+redirect an artifact or receipt. Recovery settings, including the cumulative
+source-attempt cap, are sealed before any action. A changed setting is rejected
+before launch. A singleton failure remains unresolved and is not relabelled as
+no abstract. Immutable migration manifests bind accepted legacy leaves to their
+historical artifact and marker digests for rebuilds without pretending they are
+v3 recovery output.
+
 ## Large-set investigation
 
 B1, B2, their 298-ID union, the 327-ID main union, and PSR2's 237-result count triggered investigation. Only validated controls were retained. There was no lossless `DOCTYPE`, subject, access, or indexed-term restriction: Scopus has no searchable thesaurus or expansion switch, and observed document-type labels are incomplete. B1/B2 contain no declared paired block, so an exact local pair filter is not applicable. No local metadata observation was used to discard a source record. PSR2 was split only at existing OR factors, preserving all source atoms and Boolean factors. Its unresolved cells remain failures rather than a narrower replacement.

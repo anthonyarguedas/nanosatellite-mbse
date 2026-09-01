@@ -62,4 +62,4 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 ## Pilot 003 record (pilot only, completion state unchanged)
 
-[Linked Pilot 003](pilots/003/pilot.md) preserves the Inspec projection of the same repaired paired Engineering Village events. It does not duplicate them. Eight strict two-pass captures succeeded and B2 remains an explicit null failure. Keep Inspec totals and accessions separate in the paired reconciliation, with no accepted wildcard, controlled-term supplement, or final-search claim.
+[Linked Pilot 003](pilots/003/pilot.md) preserves the Inspec projection of the same repaired paired Engineering Village events. It does not duplicate them. Eight strict two-pass captures succeeded and B2 remains an explicit null failure. The historical pairs use marker v2. Any prospective paired rerun uses the reviewed v14 output namespace schema v2 and marker v3 under the [rerun guidance](../../scripts/engineering_village_pilot003/RERUN_GUIDANCE.md). Keep Inspec totals and accessions separate in the paired reconciliation, with no accepted wildcard, controlled-term supplement, or final-search claim.
