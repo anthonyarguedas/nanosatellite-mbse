@@ -23,7 +23,7 @@ The script artifact is authoritative for per-event query, controls, source ident
 - Language: ESA exposes no Language filter or language parameter. Apply no source language filter and determine English from the full text during screening.
 - Publication type: ESA exposes event, contribution, and material groups rather than a lossless eligible report type filter. Apply no type, peer-review, access, or full-text-availability filter.
 - Database or collection selection: Category 0 across Events, Contributions, Subcontributions, and Materials. Preserve stable attachment IDs, parent scope, folder IDs, declared metadata, protection or access metadata, and exact public download URLs.
-- Other shared limits: The local-harvest deadline defaults to 180 seconds and must stay within the adapter's 5 to 300 second bound. Keep root and event exports sequential. The complete ledger accepts at most 10,000 events, 50,000 normalized metadata records, and 64 MB of canonical sidecar JSON. Source JSON stays under 100 MB. Standard local and complete mode makes no attachment body request.
+- Other shared limits: The local-harvest deadline defaults to 1,200 seconds and must stay within the adapter's 5 to 1,800 second bound. Each browser request remains bounded to 300 seconds. Keep root and event exports sequential. The complete ledger accepts at most 10,000 events, 50,000 normalized metadata records, and 64 MB of canonical sidecar JSON. Source JSON stays under 100 MB. Standard local and complete mode makes no attachment body request.
 
 ## Durable local-harvest recovery
 
@@ -53,10 +53,11 @@ linked last. Resume only with `--resume-from` or `--resume-state-path` against
 the marker-bound failure artifact or sidecar. ESA adapter v8 requires its
 registered terminal marker. A markerless ESA artifact is not accepted for
 merge or resume. The adapter checks the sidecar hash and schema, deterministic
-sibling basename, exact bounded expression, category, effective controls,
-ordered candidate IDs, contiguous completed prefix, route and source ID
-linkage, and metadata digest before it retries work. It re-exports completed
-event metadata. It makes no attachment body request during resume.
+sibling basename, exact bounded expression, category, compatible effective
+controls, ordered candidate IDs, contiguous completed prefix, route and source
+ID linkage, and metadata digest before it retries work. Every non-deadline
+control must match. The total deadline may only increase. It re-exports
+completed event metadata. It makes no attachment body request during resume.
 
 A successful v8 harvest publishes a separate marker-bound metadata ledger with
 the compact query result. The ledger retains every normalized Event,
@@ -73,7 +74,9 @@ event index. It never retains response bodies, attachment bytes, extracted
 attachment text, content cache entries, cookies, session data, raw headers,
 browser or CDP identifiers, local paths, or temporary filenames. A missing
 sidecar, changed marker, mismatched hash, changed query, changed category, or
-changed control set is a failure that is not mergeable. It is not a restart shortcut.
+changed non-deadline control is a failure that is not mergeable. A shorter
+deadline also fails. An explicit deadline extension is the only compatible
+control change. It is not a restart shortcut.
 
 Retry only public timeout or connection failures and HTTP 408, 429, 500, 502,
 503, and 504 for category and event metadata routes. Honor a bounded
@@ -99,21 +102,20 @@ Pilot 005 tree and rejects symlink or nonregular evidence before parsing it.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Keep exact local expressions normative and use no wildcard in them. A diagnostic candidate may use only the local trailing one-token `*`, which adds broader recall and requires set evidence before adoption. Assume no unrequested stemming or variants.
+Use the exact concept membership and compound Boolean declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared compound. Keep exact local expressions normative and use no wildcard in them. A diagnostic candidate may use only the local trailing one-token `*`, which adds broader recall and requires set evidence before adoption. Assume no unrequested stemming or variants.
 
 - Literal `L(s)`: Use one straight double-quoted literal. The local matcher tokenizes it with NFKC, case folding, and lexical boundaries.
 - Atom `A(s)`: `L(s)` in the local matcher expression.
 - Boolean: Uppercase `AND` and `OR` with explicit parentheses.
 - Block `F(S)`: join `A(s)` for every ordinary member of `S` with source OR. Fully parenthesize the result.
-- Pair `PAIR(a,b)`: `L(a) NEAR/5 L(b)`. The local matcher applies this unordered rule within one record field.
-- Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
+- Compound blocks: Render `F(G_model)` as `F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B))`. Render `F(G_structure)` as `F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B))`. Render `F(C1)` as `F(C1_fixed) OR F(G_DSL)`. Fully parenthesize each compound. No proximity or pair expansion is used.
 - Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitations: Rendered `q` is a prefix-AND search and cannot express the Boolean schedule. ESA exposes no Language control, and event/contribution/material groups do not map losslessly to the shared eligible report types. Use the bounded local metadata harvest for exact Boolean and same-field proximity matching. Pilots 003 and 004 timed out at the category-0 event-universe route with the 500-event safety boundary. Pilot 005's repaired 30-second root route reached attachment collection under the overstrict v7 attachment-content rule. It failed before matching and before a confirming root snapshot. Its first snapshot remains a candidate, never a complete universe. The record does not show live platform coverage failure or zero results. Coverage and every affected total remain unestablished.
+- Source limitations: Rendered `q` is a prefix-AND search and cannot express the Boolean schedule. ESA exposes no Language control, and event/contribution/material groups do not map losslessly to the shared eligible report types. Use the bounded local metadata harvest for exact Boolean and phrase matching. Pilots 003 and 004 timed out at the category-0 event-universe route. Pilot 005 failed under the superseded v7 attachment-content rule. Pilot 006 completed the v8 metadata route with two matching 440-event snapshots and 16,517 normalized records. Its exact A1 expression matched zero records. Pilot 007 then executed all nine current expressions over that fixed ledger. The schedule returned 24 distinct metadata records. This establishes schedule behavior on the fixed corpus and does not complete the final search.
 - Unavailable controls: ESA has no source-side date limiter, rendered phrase/proximity control, or lossless type/access/full-text filter. Its Category tree is an organizational scope rather than controlled vocabulary. No descriptor supplement, hierarchy explosion, or vocabulary restriction is applied. ESA has no native complete search export. The local public category and event metadata export is used only under its two-root-snapshot and complete-metadata contract. Attachment download routes are retained for downstream retrieval, not fetched for search execution.
 
 ## Query schedule
 
-The table uses `AND` and `OR` as semantic labels. Render them with the source operators above. `F(G_model)`, `F(G_structure)`, `F(C1)`, and `F(T2)` include fixed phrases and expanded pairs.
+The table uses `AND` and `OR` as semantic labels. Render them with the source operators above. `F(G_model)`, `F(G_structure)`, and `F(C1)` use the exact compound definitions above. `F(T_precise)` is an ordinary literal block.
 
 | ID | Source construction |
 |---|---|
@@ -125,7 +127,7 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 | `BG1` | `F(P) AND F(G_model)` |
 | `BG2` | `F(P) AND F(G_structure)` |
 | `BC1` | `F(P) AND F(C1)` |
-| `BT2` | `F(P) AND F(M_B) AND F(T2)` |
+| `BT2` | `F(P) AND F(M_B) AND F(T_precise)` |
 
 ## Pilots
 
@@ -134,3 +136,5 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 - [x] [Pilot 003](pilots/003/pilot.md): category-0 harvest timed out before event retrieval. Fixture checks passed but do not establish source coverage.
 - [x] [Pilot 004](pilots/004/pilot.md): the fresh category-0 event-universe retry timed out before an HTTP response. It is systematic endpoint evidence, not zero coverage.
 - [Pilot 005](pilots/005/pilot.md): immutable evidence of an overstrict v7 attachment-content failure. One repaired category-0 local attempt reached attachment collection but failed before local matching and root confirmation. All nine exact schedule expressions are bound to the same historical failure through null receipts. This does not prove live platform coverage failure or zero results. It does not complete the source or a final search.
+- [x] [Pilot 006](pilots/006/pilot.md): the repaired v8 metadata route completed exact A1 over two matching 440-event snapshots and 16,517 normalized records. A1 returned a verified zero.
+- [x] [Pilot 007](pilots/007/pilot.md): all nine current expressions ran over the marker-bound Pilot 006 ledger. The partition totals were A1 0, A2 0, A3 0, B1 22, B2 2, BG1 0, BG2 1, BC1 2, and BT2 0. Their union contained 24 distinct metadata records. The final search remains unexecuted.
