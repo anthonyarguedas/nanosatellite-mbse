@@ -4,7 +4,7 @@ Required changes were applied in commit: NA
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_ntrs.py`
 
-Save diagnostic artifacts in `searches/`. Use a query ID (`A1.json`, `PSR1.json`), a citation seed report ID (`<paperID>.json`), or a consecutive test ID (`test1.json`). The script artifact is authoritative for query and event metadata.
+Save diagnostic artifacts in `searches/`. Use a query ID (`A1.json`, `PSR1.json`), a citation seed report ID (`<paperID>.json`), or a consecutive test ID (`test1.json`). The adapter automatically saves mandatory sibling search-page and results-page PNGs for every successful JSON. The script artifact is authoritative for query and event metadata.
 
 ## Objective
 
