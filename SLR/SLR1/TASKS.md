@@ -2,6 +2,7 @@
 
 ## Source pilots
 
+- [x] **WILEY-004: Update the schedule, screenshots, and wildcards.** Completed 2026-09-02. Adapter v12 now saves mandatory sibling Advanced Search and first-results PNGs. All 20 current-schedule literal and wildcard events completed. Every partition had identical complete ordered DOI unions, so `CubeSat*`, `nanosat*`, and `SmallSat*` are accepted and preferred across the Wiley schedule.
 - [x] **IEEE-008: Retest direct A2 unchanged.** Completed 2026-09-02. Two byte-identical retests exactly echoed the query and reproduced the unready result shell before Year handling. Direct A2 now has four independent `total: null` attempts and remains a documented source limitation.
 - [x] **IEEE-006/007: Investigate native Year and rendered-state failures.** Completed 2026-09-02. Proved disabled contained Year intervals were no-op controls, reconciled equivalent Year representations, recovered strict `BG1`, `BG2`, `BC1`, and `BT2`, and captured all 131 B2 records through native pagination. Exact publication-day and A2 readiness checks remain open.
 - [x] **IEEE-005: Pilot the schedule without proximity operators.** Completed 2026-09-01. All nine direct expressions from commit `3194156e90497186664260a8e86435e78d2e2aa1` received exact query echo. Native Year failures left six successful count events, 16 explicit failures, and no complete changed partition capture. The source guideline now records the current Boolean translation and unresolved control limit.
