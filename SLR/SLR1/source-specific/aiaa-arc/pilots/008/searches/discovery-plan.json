@@ -1,0 +1,521 @@
+{
+  "schema_version": "aiaa-arc-pilot008-topic-discovery-plan/v1",
+  "source": "AIAA Aerospace Research Central (ARC)",
+  "pilot": "008",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Resolve review-relevant exact Topic labels through the visible autocomplete, test known-item assignment, and measure each Topic's effect on complete BG1 yield.",
+  "date_window": {
+    "requested_start": "2011-01-01",
+    "requested_end": "2026-08-29",
+    "source_scope": "inclusive ARC months before exact-day exclusions"
+  },
+  "candidate_policy": {
+    "candidate_count": 9,
+    "candidates": [
+      {
+        "label": "Satellites",
+        "basis": "Visible Topic facet on the complete Pilot 007 BG1 result page."
+      },
+      {
+        "label": "Spacecrafts",
+        "basis": "Visible Topic facet on the complete Pilot 007 BG1 result page."
+      },
+      {
+        "label": "Space Systems and Vehicles",
+        "basis": "Visible Topic facet on the complete Pilot 007 BG1 result page."
+      },
+      {
+        "label": "Space Systems",
+        "basis": "Visible Topic facet on the complete Pilot 007 BG1 result page."
+      },
+      {
+        "label": "Spacecraft Design",
+        "basis": "Visible Topic facet on the complete Pilot 007 BG1 result page."
+      },
+      {
+        "label": "Systems Engineering",
+        "basis": "Protocol-aligned exact-label probe. Availability must be proved by visible autocomplete."
+      },
+      {
+        "label": "Small Satellites",
+        "basis": "Protocol-population exact-label probe. Availability must be proved by visible autocomplete."
+      },
+      {
+        "label": "CubeSats",
+        "basis": "Protocol-population exact-label probe. Availability must be proved by visible autocomplete."
+      },
+      {
+        "label": "Nanosatellites",
+        "basis": "Protocol-population exact-label probe. Availability must be proved by visible autocomplete."
+      }
+    ],
+    "no_candidate_is_assumed_to_be_a_preferred_term_or_exploded_heading": true,
+    "unavailable_or_ambiguous_labels_fail_closed": true,
+    "promotion_rule": "A separate extension plan may test accepted-corpus yield only for labels that resolve to one exact numeric ConceptID in both probes."
+  },
+  "controls": {
+    "access": "all",
+    "language": null,
+    "publication_type": null,
+    "wildcard": false,
+    "proximity": false
+  },
+  "capture": {
+    "mode": "non-mergeable rendered-card preview",
+    "limit": 100,
+    "max_pages": 5,
+    "automatic_screenshots_required": true
+  },
+  "acceptance_checks": [
+    "The unfiltered sentinel and BG1 repeats reproduce their expected source memberships.",
+    "Every accepted Topic resolves through the visible autocomplete to a numeric ConceptID.",
+    "The configured search reads back the exact Topic label and ConceptID.",
+    "Every successful event is completely captured and remains at most 100 records.",
+    "Every successful JSON has both mandatory sibling screenshots.",
+    "A Topic cannot become an AND filter if it loses the known eligible sentinel."
+  ],
+  "events": [
+    {
+      "event_id": "sentinel-baseline",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": null,
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-baseline.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-baseline.search-page.png",
+        "results_page": "searches/discovery/sentinel-baseline.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-satellites",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "Satellites",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-satellites.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-satellites.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-satellites.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-spacecrafts",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "Spacecrafts",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-spacecrafts.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-spacecrafts.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-spacecrafts.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-space-systems-and-vehicles",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "Space Systems and Vehicles",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-space-systems-and-vehicles.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-space-systems-and-vehicles.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-space-systems-and-vehicles.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-space-systems",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "Space Systems",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-space-systems.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-space-systems.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-space-systems.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-spacecraft-design",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "Spacecraft Design",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-spacecraft-design.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-spacecraft-design.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-spacecraft-design.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-systems-engineering",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "Systems Engineering",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-systems-engineering.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-systems-engineering.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-systems-engineering.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-small-satellites",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "Small Satellites",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-small-satellites.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-small-satellites.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-small-satellites.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-cubesats",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "CubeSats",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-cubesats.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-cubesats.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-cubesats.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "sentinel-topic-nanosatellites",
+      "phase": "candidate_discovery",
+      "probe": "known_eligible_sentinel",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "\"10.2514/6.2015-4474\""
+        }
+      ],
+      "serialized_query": "Anywhere=\"10.2514/6.2015-4474\"",
+      "serialized_query_sha256": "2acc88a856330e54e73c5a6f26a0cddd979ea69589c224c01361d96c9b777edd",
+      "topic_label": "Nanosatellites",
+      "mode": "card_preview",
+      "output": "searches/discovery/sentinel-topic-nanosatellites.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/sentinel-topic-nanosatellites.search-page.png",
+        "results_page": "searches/discovery/sentinel-topic-nanosatellites.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-baseline-repeat",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": null,
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-baseline-repeat.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-baseline-repeat.search-page.png",
+        "results_page": "searches/discovery/bg1-baseline-repeat.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-satellites",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "Satellites",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-satellites.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-satellites.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-satellites.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-spacecrafts",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "Spacecrafts",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-spacecrafts.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-spacecrafts.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-spacecrafts.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-space-systems-and-vehicles",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "Space Systems and Vehicles",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-space-systems-and-vehicles.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-space-systems-and-vehicles.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-space-systems-and-vehicles.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-space-systems",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "Space Systems",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-space-systems.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-space-systems.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-space-systems.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-spacecraft-design",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "Spacecraft Design",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-spacecraft-design.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-spacecraft-design.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-spacecraft-design.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-systems-engineering",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "Systems Engineering",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-systems-engineering.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-systems-engineering.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-systems-engineering.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-small-satellites",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "Small Satellites",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-small-satellites.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-small-satellites.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-small-satellites.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-cubesats",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "CubeSats",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-cubesats.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-cubesats.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-cubesats.results-page.png"
+      },
+      "do_not_merge": true
+    },
+    {
+      "event_id": "bg1-topic-nanosatellites",
+      "phase": "candidate_discovery",
+      "probe": "complete_bg1",
+      "field_rows": [
+        {
+          "field": "Anywhere",
+          "source_field": "AllField",
+          "text": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))"
+        }
+      ],
+      "serialized_query": "Anywhere=((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "serialized_query_sha256": "65c969132e4696f51adbd70931aa0034246a710af32ca6e7498efa605208fcc1",
+      "topic_label": "Nanosatellites",
+      "mode": "card_preview",
+      "output": "searches/discovery/bg1-topic-nanosatellites.json",
+      "screenshot_outputs": {
+        "search_page": "searches/discovery/bg1-topic-nanosatellites.search-page.png",
+        "results_page": "searches/discovery/bg1-topic-nanosatellites.results-page.png"
+      },
+      "do_not_merge": true
+    }
+  ]
+}

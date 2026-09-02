@@ -2,6 +2,7 @@
 
 ## Source pilots
 
+- [x] **ATAI-008: Pilot bounded wildcards across the current schedule.** Completed 2026-09-02. All 18 strict literal and wildcard events completed with 36 mandatory screenshots. Every partition had exact ordered stable ID equality, so the 128-family bounded `NOFT` map is accepted while every `IF.EXACT` alternative stays literal.
 - [x] **WILEY-004: Update the schedule, screenshots, and wildcards.** Completed 2026-09-02. Adapter v12 now saves mandatory sibling Advanced Search and first-results PNGs. All 20 current-schedule literal and wildcard events completed. Every partition had identical complete ordered DOI unions, so `CubeSat*`, `nanosat*`, and `SmallSat*` are accepted and preferred across the Wiley schedule.
 - [x] **IEEE-009: Repair literal A2 transport without wildcards.** Completed 2026-09-02. Adapter v10 reduced the byte-identical A2 request target from 9,319 to 7,477 bytes through equivalent compact encoding, rejects HTTP and rendered request failures, and accepts query echo only from ready results. Two predeclared literal A2 counts completed at 33 with exact Year and Oldest readback. IEEE's ten-wildcard cap rules out wildcard compression for this source.
 - [x] **IEEE-008: Retest direct A2 unchanged.** Completed 2026-09-02. Two byte-identical adapter v9 attempts retained HTTP 414 failures as `total: null`. Their URL echoes were misclassified as source observations. Pilot 009 supersedes the direct-A2 source-limitation diagnosis while preserving these historical artifacts.

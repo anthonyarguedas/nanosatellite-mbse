@@ -1,0 +1,2131 @@
+{
+  "schema_version": "atai-pilot-008-assessment/v1",
+  "status": "complete",
+  "source": "Advanced Technologies & Aerospace Index",
+  "pilot": "008",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "decision": "accept_bounded_wildcard_translation",
+  "decision_basis": "Every fresh wildcard partition retained every adjacent literal stable ID under strict complete capture. Every wildcard-only record, if any, was reviewed as an intended concept match. All events retained mandatory screenshots.",
+  "translation": {
+    "literal_atom": "(NOFT(quoted literal) OR IF.EXACT(quoted literal))",
+    "wildcard_family_atom": "NOFT(ordered phrase or token with the smallest bounded [*n]) OR every replaced IF.EXACT literal",
+    "wildcard_scope": "Every declared variant family with one common source stem. Singleton, punctuation, and unsafe-stem alternatives remain literal.",
+    "if_exact_policy": "Keep every IF.EXACT literal explicit because NOFT does not cover IF and wildcards inside the exact indexed-term operator are not assumed.",
+    "compound_blocks": {
+      "G_model": "G_model_fixed OR G_mission_exact OR (G_mission AND M_B)",
+      "G_structure": "G_structure_fixed OR G_product_exact OR G_variation OR (G_product AND M_B)",
+      "C1": "C1_fixed OR G_DSL",
+      "BT2": "P AND M_B AND T_precise"
+    },
+    "wildcard_family_count": 128,
+    "replaced_literal_occurrence_count_across_blocks": 292,
+    "wildcard_operators_by_block": {
+      "P": 12,
+      "E_H": 18,
+      "E_F": 13,
+      "M_H": 8,
+      "M_B": 15,
+      "R": 20,
+      "G_model_fixed": 7,
+      "G_mission": 0,
+      "G_mission_exact": 8,
+      "G_structure_fixed": 4,
+      "G_product": 0,
+      "G_product_exact": 4,
+      "G_variation": 1,
+      "C1_fixed": 13,
+      "G_DSL": 0,
+      "T_precise": 7
+    },
+    "wildcard_families": {
+      "P": [
+        {
+          "pattern": "CubeSat[*1]",
+          "explicit_terms": [
+            "CubeSat",
+            "CubeSats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"cube sat[*1]\"",
+          "explicit_terms": [
+            "cube sat",
+            "cube sats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"cube-sat[*1]\"",
+          "explicit_terms": [
+            "cube-sat",
+            "cube-sats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"cube satellite[*1]\"",
+          "explicit_terms": [
+            "cube satellite",
+            "cube satellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "nanosat[*7]",
+          "explicit_terms": [
+            "nanosat",
+            "nanosats",
+            "nanosatellite",
+            "nanosatellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"nano-sat[*1]\"",
+          "explicit_terms": [
+            "nano-sat",
+            "nano-sats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"nano sat[*1]\"",
+          "explicit_terms": [
+            "nano sat",
+            "nano sats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"nano-satellite[*1]\"",
+          "explicit_terms": [
+            "nano-satellite",
+            "nano-satellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"nano satellite[*1]\"",
+          "explicit_terms": [
+            "nano satellite",
+            "nano satellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "SmallSat[*1]",
+          "explicit_terms": [
+            "SmallSat",
+            "SmallSats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"small satellite[*1]\"",
+          "explicit_terms": [
+            "small satellite",
+            "small satellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"small sat[*1]\"",
+          "explicit_terms": [
+            "small sat",
+            "small sats"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "E_H": [
+        {
+          "pattern": "\"electrical power system[*1]\"",
+          "explicit_terms": [
+            "electrical power system",
+            "electrical power systems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electric power system[*1]\"",
+          "explicit_terms": [
+            "electric power system",
+            "electric power systems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electrical power subsystem[*1]\"",
+          "explicit_terms": [
+            "electrical power subsystem",
+            "electrical power subsystems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electric power subsystem[*1]\"",
+          "explicit_terms": [
+            "electric power subsystem",
+            "electric power subsystems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electrical energy subsystem[*1]\"",
+          "explicit_terms": [
+            "electrical energy subsystem",
+            "electrical energy subsystems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "EPS[*1]",
+          "explicit_terms": [
+            "EPS",
+            "EPSs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power subsystem[*1]\"",
+          "explicit_terms": [
+            "power subsystem",
+            "power subsystems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power system[*1]\"",
+          "explicit_terms": [
+            "power system",
+            "power systems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"spacecraft power system[*1]\"",
+          "explicit_terms": [
+            "spacecraft power system",
+            "spacecraft power systems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power suppl[*3]\"",
+          "explicit_terms": [
+            "power supply",
+            "power supplies"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power distribution unit[*1]\"",
+          "explicit_terms": [
+            "power distribution unit",
+            "power distribution units"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "PDU[*1]",
+          "explicit_terms": [
+            "PDU",
+            "PDUs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power processing unit[*1]\"",
+          "explicit_terms": [
+            "power processing unit",
+            "power processing units"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electrical architecture[*1]\"",
+          "explicit_terms": [
+            "electrical architecture",
+            "electrical architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power architecture[*1]\"",
+          "explicit_terms": [
+            "power architecture",
+            "power architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"DC power bus[*2]\"",
+          "explicit_terms": [
+            "DC power bus",
+            "DC power buses"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "PCDU[*1]",
+          "explicit_terms": [
+            "PCDU",
+            "PCDUs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "PMAD[*1]",
+          "explicit_terms": [
+            "PMAD",
+            "PMADs"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "E_F": [
+        {
+          "pattern": "\"power budget[*1]\"",
+          "explicit_terms": [
+            "power budget",
+            "power budgets"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"energy budget[*1]\"",
+          "explicit_terms": [
+            "energy budget",
+            "energy budgets"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"energy balance[*1]\"",
+          "explicit_terms": [
+            "energy balance",
+            "energy balances"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power balance[*1]\"",
+          "explicit_terms": [
+            "power balance",
+            "power balances"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power margin[*1]\"",
+          "explicit_terms": [
+            "power margin",
+            "power margins"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"photovoltaic generator[*1]\"",
+          "explicit_terms": [
+            "photovoltaic generator",
+            "photovoltaic generators"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"solar array[*1]\"",
+          "explicit_terms": [
+            "solar array",
+            "solar arrays"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"solar panel[*1]\"",
+          "explicit_terms": [
+            "solar panel",
+            "solar panels"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "batter[*3]",
+          "explicit_terms": [
+            "battery",
+            "batteries"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"state[*1] of charge\"",
+          "explicit_terms": [
+            "state of charge",
+            "states of charge"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power interface[*1]\"",
+          "explicit_terms": [
+            "power interface",
+            "power interfaces"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power mode[*1]\"",
+          "explicit_terms": [
+            "power mode",
+            "power modes"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"load profile[*1]\"",
+          "explicit_terms": [
+            "load profile",
+            "load profiles"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "M_H": [
+        {
+          "pattern": "\"model-based system[*1] engineering\"",
+          "explicit_terms": [
+            "model-based systems engineering",
+            "model-based system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model based system[*1] engineering\"",
+          "explicit_terms": [
+            "model based systems engineering",
+            "model based system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model-driven system[*1] engineering\"",
+          "explicit_terms": [
+            "model-driven systems engineering",
+            "model-driven system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model driven system[*1] engineering\"",
+          "explicit_terms": [
+            "model driven systems engineering",
+            "model driven system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model-centric system[*1] engineering\"",
+          "explicit_terms": [
+            "model-centric systems engineering",
+            "model-centric system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model centric system[*1] engineering\"",
+          "explicit_terms": [
+            "model centric systems engineering",
+            "model centric system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] modeling language\"",
+          "explicit_terms": [
+            "systems modeling language",
+            "system modeling language"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] modelling language\"",
+          "explicit_terms": [
+            "systems modelling language",
+            "system modelling language"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "M_B": [
+        {
+          "pattern": "\"system[*1] model\"",
+          "explicit_terms": [
+            "system model",
+            "systems model"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] modeling\"",
+          "explicit_terms": [
+            "system modeling",
+            "systems modeling"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] modelling\"",
+          "explicit_terms": [
+            "system modelling",
+            "systems modelling"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"reference model[*1]\"",
+          "explicit_terms": [
+            "reference model",
+            "reference models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"object-oriented systems model[*1]\"",
+          "explicit_terms": [
+            "object-oriented systems model",
+            "object-oriented systems models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model-based system[*1] design\"",
+          "explicit_terms": [
+            "model-based system design",
+            "model-based systems design"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model based system[*1] design\"",
+          "explicit_terms": [
+            "model based system design",
+            "model based systems design"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] architecture model[*1]\"",
+          "explicit_terms": [
+            "system architecture model",
+            "system architecture models",
+            "systems architecture model",
+            "systems architecture models"
+          ],
+          "wildcard_operators": 2
+        },
+        {
+          "pattern": "\"integrated system[*1] model[*1]\"",
+          "explicit_terms": [
+            "integrated system model",
+            "integrated system models",
+            "integrated systems model",
+            "integrated systems models"
+          ],
+          "wildcard_operators": 2
+        },
+        {
+          "pattern": "\"system-level model[*1]\"",
+          "explicit_terms": [
+            "system-level model",
+            "system-level models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system level model[*1]\"",
+          "explicit_terms": [
+            "system level model",
+            "system level models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"digital thread[*1]\"",
+          "explicit_terms": [
+            "digital thread",
+            "digital threads"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"digital twin[*1]\"",
+          "explicit_terms": [
+            "digital twin",
+            "digital twins"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "R": [
+        {
+          "pattern": "requirement[*1]",
+          "explicit_terms": [
+            "requirement",
+            "requirements"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "function[*2]",
+          "explicit_terms": [
+            "function",
+            "functions",
+            "functional"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "behavior[*2]",
+          "explicit_terms": [
+            "behavior",
+            "behaviors",
+            "behavioral"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "behaviour[*2]",
+          "explicit_terms": [
+            "behaviour",
+            "behaviours",
+            "behavioural"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "architectur[*2]",
+          "explicit_terms": [
+            "architecture",
+            "architectures",
+            "architectural"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "interface[*1]",
+          "explicit_terms": [
+            "interface",
+            "interfaces"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "trace[*7]",
+          "explicit_terms": [
+            "traceability",
+            "trace",
+            "traceable",
+            "traced"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "allocat[*3]",
+          "explicit_terms": [
+            "allocation",
+            "allocate",
+            "allocated"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "constraint[*1]",
+          "explicit_terms": [
+            "constraint",
+            "constraints"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "parametric[*1]",
+          "explicit_terms": [
+            "parametric",
+            "parametrics"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "analys[*2]",
+          "explicit_terms": [
+            "analysis",
+            "analyses"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "design[*3]",
+          "explicit_terms": [
+            "design",
+            "designs",
+            "designed",
+            "designing"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "decision[*1]",
+          "explicit_terms": [
+            "decision",
+            "decisions"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"trade stud[*3]\"",
+          "explicit_terms": [
+            "trade study",
+            "trade studies"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"trade-off[*1]\"",
+          "explicit_terms": [
+            "trade-off",
+            "trade-offs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "tradeoff[*1]",
+          "explicit_terms": [
+            "tradeoff",
+            "tradeoffs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "verification[*1]",
+          "explicit_terms": [
+            "verification",
+            "verifications"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "verif[*4]",
+          "explicit_terms": [
+            "verify",
+            "verifies",
+            "verified",
+            "verifying"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "validation[*1]",
+          "explicit_terms": [
+            "validation",
+            "validations"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "validat[*3]",
+          "explicit_terms": [
+            "validate",
+            "validates",
+            "validated",
+            "validating"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_model_fixed": [
+        {
+          "pattern": "\"generic model[*1]\"",
+          "explicit_terms": [
+            "generic model",
+            "generic models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"generic system model[*1]\"",
+          "explicit_terms": [
+            "generic system model",
+            "generic system models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"reusable model[*1]\"",
+          "explicit_terms": [
+            "reusable model",
+            "reusable models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"reusable system model[*1]\"",
+          "explicit_terms": [
+            "reusable system model",
+            "reusable system models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"configurable model[*1]\"",
+          "explicit_terms": [
+            "configurable model",
+            "configurable models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"configurable system model[*1]\"",
+          "explicit_terms": [
+            "configurable system model",
+            "configurable system models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model template[*1]\"",
+          "explicit_terms": [
+            "model template",
+            "model templates"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_mission": [],
+      "G_mission_exact": [
+        {
+          "pattern": "\"mission-agnostic model[*1]\"",
+          "explicit_terms": [
+            "mission-agnostic model",
+            "mission-agnostic models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission-agnostic architecture[*1]\"",
+          "explicit_terms": [
+            "mission-agnostic architecture",
+            "mission-agnostic architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission agnostic model[*1]\"",
+          "explicit_terms": [
+            "mission agnostic model",
+            "mission agnostic models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission agnostic architecture[*1]\"",
+          "explicit_terms": [
+            "mission agnostic architecture",
+            "mission agnostic architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission-independent model[*1]\"",
+          "explicit_terms": [
+            "mission-independent model",
+            "mission-independent models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission-independent architecture[*1]\"",
+          "explicit_terms": [
+            "mission-independent architecture",
+            "mission-independent architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission independent model[*1]\"",
+          "explicit_terms": [
+            "mission independent model",
+            "mission independent models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission independent architecture[*1]\"",
+          "explicit_terms": [
+            "mission independent architecture",
+            "mission independent architectures"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_structure_fixed": [
+        {
+          "pattern": "\"reference architecture[*1]\"",
+          "explicit_terms": [
+            "reference architecture",
+            "reference architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"domain model[*1]\"",
+          "explicit_terms": [
+            "domain model",
+            "domain models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "metamodel[*1]",
+          "explicit_terms": [
+            "metamodel",
+            "metamodels"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "meta-model[*1]",
+          "explicit_terms": [
+            "meta-model",
+            "meta-models"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_product": [],
+      "G_product_exact": [
+        {
+          "pattern": "\"product-line model[*1]\"",
+          "explicit_terms": [
+            "product-line model",
+            "product-line models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"product line model[*1]\"",
+          "explicit_terms": [
+            "product line model",
+            "product line models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"product-family model[*1]\"",
+          "explicit_terms": [
+            "product-family model",
+            "product-family models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"product family model[*1]\"",
+          "explicit_terms": [
+            "product family model",
+            "product family models"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_variation": [
+        {
+          "pattern": "\"variation point[*1]\"",
+          "explicit_terms": [
+            "variation point",
+            "variation points"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "C1_fixed": [
+        {
+          "pattern": "\"reference model[*1]\"",
+          "explicit_terms": [
+            "reference model",
+            "reference models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system reference model[*1]\"",
+          "explicit_terms": [
+            "system reference model",
+            "system reference models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model librar[*3]\"",
+          "explicit_terms": [
+            "model library",
+            "model libraries"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system model librar[*3]\"",
+          "explicit_terms": [
+            "system model library",
+            "system model libraries"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model pattern[*1]\"",
+          "explicit_terms": [
+            "model pattern",
+            "model patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"modeling pattern[*1]\"",
+          "explicit_terms": [
+            "modeling pattern",
+            "modeling patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"modelling pattern[*1]\"",
+          "explicit_terms": [
+            "modelling pattern",
+            "modelling patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system model pattern[*1]\"",
+          "explicit_terms": [
+            "system model pattern",
+            "system model patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"systems model pattern[*1]\"",
+          "explicit_terms": [
+            "systems model pattern",
+            "systems model patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model profile[*1]\"",
+          "explicit_terms": [
+            "model profile",
+            "model profiles"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system model profile[*1]\"",
+          "explicit_terms": [
+            "system model profile",
+            "system model profiles"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"systems model profile[*1]\"",
+          "explicit_terms": [
+            "systems model profile",
+            "systems model profiles"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"SysML profile[*1]\"",
+          "explicit_terms": [
+            "SysML profile",
+            "SysML profiles"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_DSL": [],
+      "T_precise": [
+        {
+          "pattern": "tailor[*3]",
+          "explicit_terms": [
+            "tailor",
+            "tailors",
+            "tailored",
+            "tailoring"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "customiz[*5]",
+          "explicit_terms": [
+            "customize",
+            "customizes",
+            "customized",
+            "customizing",
+            "customization"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "customis[*5]",
+          "explicit_terms": [
+            "customise",
+            "customises",
+            "customised",
+            "customising",
+            "customisation"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "parameteriz[*5]",
+          "explicit_terms": [
+            "parameterize",
+            "parameterizes",
+            "parameterized",
+            "parameterizing",
+            "parameterization"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "parameteris[*5]",
+          "explicit_terms": [
+            "parameterise",
+            "parameterises",
+            "parameterised",
+            "parameterising",
+            "parameterisation"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "instantiat[*3]",
+          "explicit_terms": [
+            "instantiate",
+            "instantiates",
+            "instantiated",
+            "instantiating",
+            "instantiation"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"variation point[*1]\"",
+          "explicit_terms": [
+            "variation point",
+            "variation points"
+          ],
+          "wildcard_operators": 1
+        }
+      ]
+    },
+    "literal_query_lengths": {
+      "A1": 7662,
+      "A2": 9528,
+      "A3": 6012,
+      "B1": 5177,
+      "B2": 6242,
+      "BG1": 6092,
+      "BG2": 4898,
+      "BC1": 3439,
+      "BT2": 5240
+    },
+    "wildcard_query_lengths": {
+      "A1": 6523,
+      "A2": 8038,
+      "A3": 4656,
+      "B1": 4541,
+      "B2": 4639,
+      "BG1": 4733,
+      "BG2": 3798,
+      "BC1": 2755,
+      "BT2": 3772
+    },
+    "character_reductions": {
+      "A1": 1139,
+      "A2": 1490,
+      "A3": 1356,
+      "B1": 636,
+      "B2": 1603,
+      "BG1": 1359,
+      "BG2": 1100,
+      "BC1": 684,
+      "BT2": 1468
+    },
+    "wildcard_operators_by_partition": {
+      "A1": 38,
+      "A2": 48,
+      "A3": 45,
+      "B1": 20,
+      "B2": 47,
+      "BG1": 42,
+      "BG2": 36,
+      "BC1": 25,
+      "BT2": 34
+    },
+    "literal_query_sha256": {
+      "A1": "8021727137f9e7e663285bcc0aa41f96c3ccadb64926d6b56e7d1f6fc2e15599",
+      "A2": "7d901c90d0e43fcc3f182faf1709c4680b01fbda21a019c9bcd46118b7153704",
+      "A3": "a6e575a6b2baf3cdd84d743c6a8e2e39c3d94c29509c49b8214c7f230067ebbe",
+      "B1": "a5a91231b6ac3203131be073547624def55ed961116e9a58c5ac54c4cc9d889d",
+      "B2": "e6b7a74d6893c705373bf5351e9d770032da38e272cf053c219e597013440346",
+      "BG1": "bc8da8c5902c58dcd1cd88ad749d34cc22a4e7b64aa518f162c48579f22ddb23",
+      "BG2": "e56dac0f9cfd7a5a82b4df5dc6fdd336b8df8c975595af68bf8a00c59261b9f4",
+      "BC1": "dba72ebacf5defa027e0e50e4a37d5b5f077bb64295ad8cebee9ab115ac4bcac",
+      "BT2": "46eb0192ea56abf2f6d6610125dce55764d34d0861824610e4d20e4fe5e9a7f2"
+    },
+    "wildcard_query_sha256": {
+      "A1": "81f3aa996b335742f228b3596fd7aedd4d56a422fb8d9a4a75105843ff8f8fe9",
+      "A2": "1541420fd2ffd29008f13f7fd55960487da84593938bbdcd9877ef35f47e8dcb",
+      "A3": "7fa9a563fd3d9cf435bc4f71f3f5f86b39638a57c4b4d88db794ea1de40d3f85",
+      "B1": "426ceb54fcb9a55c948e96df9baa7e19be42eb22449619becc8e6629ad2ee6d4",
+      "B2": "fc02182b896278b838ee4e5c1013d264464c40d6fc6cfdce0b466dd9ee3aa4da",
+      "BG1": "fb15815d24f06ffe00c8c4077c7b476c72ebe29a48fd02c2eb716d8e5fe8bf7d",
+      "BG2": "c3c999cde43b4b65b4ba8f82e9827749eebdf884d93cee3178ed7caa8ff0b17a",
+      "BC1": "0e35d1e1adb295009dd265feded13d2fa4b90a616c34bfc0b59891add329d3ea",
+      "BT2": "9581cbbd10c0ba8f5f4751a93cfdbddcf688cef002a10c9f52a6e793ff846bc6"
+    },
+    "validated_character_limit": 50000
+  },
+  "partition_comparisons": {
+    "A1": {
+      "literal_total": 0,
+      "wildcard_total": 0,
+      "literal_stable_ids_in_source_order": [],
+      "wildcard_stable_ids_in_source_order": [],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-A1.json",
+      "wildcard_artifact": "searches/events/wildcard-A1.json"
+    },
+    "A2": {
+      "literal_total": 5,
+      "wildcard_total": 5,
+      "literal_stable_ids_in_source_order": [
+        "2849356832",
+        "3097792411",
+        "3213930672",
+        "3346987723",
+        "3353351025"
+      ],
+      "wildcard_stable_ids_in_source_order": [
+        "2849356832",
+        "3097792411",
+        "3213930672",
+        "3346987723",
+        "3353351025"
+      ],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-A2.json",
+      "wildcard_artifact": "searches/events/wildcard-A2.json"
+    },
+    "A3": {
+      "literal_total": 1,
+      "wildcard_total": 1,
+      "literal_stable_ids_in_source_order": [
+        "3097792411"
+      ],
+      "wildcard_stable_ids_in_source_order": [
+        "3097792411"
+      ],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-A3.json",
+      "wildcard_artifact": "searches/events/wildcard-A3.json"
+    },
+    "B1": {
+      "literal_total": 25,
+      "wildcard_total": 25,
+      "literal_stable_ids_in_source_order": [
+        "1709719593",
+        "1660062261",
+        "1825532815",
+        "1825534236",
+        "1835576377",
+        "2035264195",
+        "2532106792",
+        "2444678311",
+        "2599217975",
+        "2486865210",
+        "2728408177",
+        "2843116209",
+        "2849356832",
+        "3110282684",
+        "3110282708",
+        "3062738113",
+        "3046967951",
+        "3110716244",
+        "3252320283",
+        "3181339955",
+        "3198981434",
+        "3243962233",
+        "3346987723",
+        "3307467895",
+        "3371247439"
+      ],
+      "wildcard_stable_ids_in_source_order": [
+        "1709719593",
+        "1660062261",
+        "1825532815",
+        "1825534236",
+        "1835576377",
+        "2035264195",
+        "2532106792",
+        "2444678311",
+        "2599217975",
+        "2486865210",
+        "2728408177",
+        "2843116209",
+        "2849356832",
+        "3110282684",
+        "3110282708",
+        "3062738113",
+        "3046967951",
+        "3110716244",
+        "3252320283",
+        "3181339955",
+        "3198981434",
+        "3243962233",
+        "3346987723",
+        "3307467895",
+        "3371247439"
+      ],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-B1.json",
+      "wildcard_artifact": "searches/events/wildcard-B1.json"
+    },
+    "B2": {
+      "literal_total": 34,
+      "wildcard_total": 34,
+      "literal_stable_ids_in_source_order": [
+        "2937270440",
+        "1475522514",
+        "1642287664",
+        "1642656614",
+        "1660063557",
+        "1825532815",
+        "1825533993",
+        "2269879641",
+        "2532106792",
+        "2429649929",
+        "2599217975",
+        "2486865210",
+        "2728408177",
+        "2640244769",
+        "2790324137",
+        "2896119954",
+        "3097792411",
+        "3110282684",
+        "3053156717",
+        "3147151315",
+        "3056021113",
+        "3110716244",
+        "3133440768",
+        "3182549598",
+        "3191429714",
+        "3213930672",
+        "3226497936",
+        "3244063447",
+        "3243962233",
+        "3313663683",
+        "3361937611",
+        "3353351025",
+        "3372652792",
+        "3380572349"
+      ],
+      "wildcard_stable_ids_in_source_order": [
+        "2937270440",
+        "1475522514",
+        "1642287664",
+        "1642656614",
+        "1660063557",
+        "1825532815",
+        "1825533993",
+        "2269879641",
+        "2532106792",
+        "2429649929",
+        "2599217975",
+        "2486865210",
+        "2728408177",
+        "2640244769",
+        "2790324137",
+        "2896119954",
+        "3097792411",
+        "3110282684",
+        "3053156717",
+        "3147151315",
+        "3056021113",
+        "3110716244",
+        "3133440768",
+        "3182549598",
+        "3191429714",
+        "3213930672",
+        "3226497936",
+        "3244063447",
+        "3243962233",
+        "3313663683",
+        "3361937611",
+        "3353351025",
+        "3372652792",
+        "3380572349"
+      ],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-B2.json",
+      "wildcard_artifact": "searches/events/wildcard-B2.json"
+    },
+    "BG1": {
+      "literal_total": 2,
+      "wildcard_total": 2,
+      "literal_stable_ids_in_source_order": [
+        "2545579279",
+        "2429649929"
+      ],
+      "wildcard_stable_ids_in_source_order": [
+        "2545579279",
+        "2429649929"
+      ],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-BG1.json",
+      "wildcard_artifact": "searches/events/wildcard-BG1.json"
+    },
+    "BG2": {
+      "literal_total": 7,
+      "wildcard_total": 7,
+      "literal_stable_ids_in_source_order": [
+        "1721311269",
+        "3346991324",
+        "1762095042",
+        "1918723567",
+        "2331489829",
+        "2339214951",
+        "2494648056"
+      ],
+      "wildcard_stable_ids_in_source_order": [
+        "1721311269",
+        "3346991324",
+        "1762095042",
+        "1918723567",
+        "2331489829",
+        "2339214951",
+        "2494648056"
+      ],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-BG2.json",
+      "wildcard_artifact": "searches/events/wildcard-BG2.json"
+    },
+    "BC1": {
+      "literal_total": 2,
+      "wildcard_total": 2,
+      "literal_stable_ids_in_source_order": [
+        "1825532815",
+        "3191429714"
+      ],
+      "wildcard_stable_ids_in_source_order": [
+        "1825532815",
+        "3191429714"
+      ],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-BC1.json",
+      "wildcard_artifact": "searches/events/wildcard-BC1.json"
+    },
+    "BT2": {
+      "literal_total": 2,
+      "wildcard_total": 2,
+      "literal_stable_ids_in_source_order": [
+        "2716309451",
+        "3110282684"
+      ],
+      "wildcard_stable_ids_in_source_order": [
+        "2716309451",
+        "3110282684"
+      ],
+      "literal_ids_missing_from_wildcard": [],
+      "wildcard_only_ids": [],
+      "sets_equal": true,
+      "orders_equal": true,
+      "literal_artifact": "searches/events/literal-BT2.json",
+      "wildcard_artifact": "searches/events/wildcard-BT2.json"
+    }
+  },
+  "union_comparison": {
+    "literal_distinct_ids": 60,
+    "wildcard_distinct_ids": 60,
+    "literal_ids_missing_from_wildcard": [],
+    "wildcard_only_ids": []
+  },
+  "wildcard_only_records": [],
+  "wildcard_only_review": null,
+  "controls": {
+    "database": "Advanced Technologies & Aerospace Index",
+    "language": "LA(English)",
+    "publication_type": null,
+    "peer_reviewed": false,
+    "full_text": false,
+    "access": false,
+    "spelling_variants": false,
+    "form_variants": false,
+    "show_expansions": false,
+    "sort": "DateAsc",
+    "passes_per_event": 2,
+    "proximity": false,
+    "pair_expansion": false,
+    "screenshots": "required automatic search-page and results-page PNGs beside every JSON"
+  },
+  "automatic_screenshots": {
+    "required_per_event": 2,
+    "successful_event_count": 18,
+    "successful_event_screenshot_file_count": 36,
+    "retained_failure_screenshot_file_count": 2,
+    "events": [
+      {
+        "event_id": "literal-A1",
+        "json": "searches/events/literal-A1.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-A1.search-page.png",
+          "sha256": "1470478f955a4b171dbfde81ca2cbe29d5d11d0d999b1202ddb38c67add7f746",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-A1.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-A1.results-page.png",
+          "sha256": "8e128bcbc1f667f82270ccbad338e7560ad349caa5f9a3ff63f85505793bc399",
+          "width": 2704,
+          "height": 6150,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-A1.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-A1",
+        "json": "searches/events/wildcard-A1.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-A1.search-page.png",
+          "sha256": "8ba90dd2fa56ee7cfc02fd968ae5409f9dfa2e410bc89f87f1c4d5d57ce2fefb",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-A1.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-A1.results-page.png",
+          "sha256": "def877f1b6a7f2914885d1563662727a0e32d17fef4de40e8d383875030f0d91",
+          "width": 2704,
+          "height": 5964,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-A1.results-page.png"
+        }
+      },
+      {
+        "event_id": "literal-A2",
+        "json": "searches/events/literal-A2.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-A2.search-page.png",
+          "sha256": "26151ea3fec3a91c695a0a3dbb687a1855150280a524fb420f28ba3a0c4c251c",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-A2.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-A2.results-page.png",
+          "sha256": "cf0550a073c3e1fcd9672ba334febd65d2d5f95d93e839d4b8afe5fb9b00a4e4",
+          "width": 2704,
+          "height": 3776,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-A2.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-A2",
+        "json": "searches/events/wildcard-A2.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-A2.search-page.png",
+          "sha256": "ef941054ba55deefe225ef27d4ec2c66a4fb29b612dcd6d07d4b53322bc6f7ad",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-A2.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-A2.results-page.png",
+          "sha256": "6ffc767f6bb747948c1805f1ece151f4c5493672c105f3f2dd148f497cc40df9",
+          "width": 2704,
+          "height": 3664,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-A2.results-page.png"
+        }
+      },
+      {
+        "event_id": "literal-A3",
+        "json": "searches/events/literal-A3.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-A3.search-page.png",
+          "sha256": "4e30d9116ecb92722644b899abffea6d5d1b2e4f2f0aeac311df4cf54d794af7",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-A3.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-A3.results-page.png",
+          "sha256": "5f0fa10b48aeeb0ea61718e2b4836f1a78fb8c9d67eab1e690200637f744b3de",
+          "width": 2704,
+          "height": 3370,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-A3.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-A3",
+        "json": "searches/events/wildcard-A3.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-A3.search-page.png",
+          "sha256": "21aedf055a4814133357130d177de1034295fb08883961b5b82544edbe20fcb6",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-A3.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-A3.results-page.png",
+          "sha256": "7461e4e3b7b89ea3b0bab97f25d4708e420ef5424b8ce72cc78a278e7d3b7e1b",
+          "width": 2704,
+          "height": 3370,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-A3.results-page.png"
+        }
+      },
+      {
+        "event_id": "literal-B1",
+        "json": "searches/events/literal-B1.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-B1.search-page.png",
+          "sha256": "62c356e1fac80924c5dd8278cdd3773a4e80eae8d2cc5bdf79066a16405032af",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-B1.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-B1.results-page.png",
+          "sha256": "f2a115c2582bfeb2886479a24a65f580d18ba4abe4ea99757f9e08bfecc83ce6",
+          "width": 2704,
+          "height": 12068,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-B1.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-B1",
+        "json": "searches/events/wildcard-B1.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-B1.search-page.png",
+          "sha256": "62c356e1fac80924c5dd8278cdd3773a4e80eae8d2cc5bdf79066a16405032af",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-B1.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-B1.results-page.png",
+          "sha256": "2baa36b99aecdbf0ffdc11e1bfe149b58455cf5ea14a522c7d925ca710385f5d",
+          "width": 2704,
+          "height": 11532,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-B1.results-page.png"
+        }
+      },
+      {
+        "event_id": "literal-B2",
+        "json": "searches/events/literal-B2.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-B2.search-page.png",
+          "sha256": "5eb9b8f8688c7201c1f97ac68e42beb34588497bf987abd102ce204f8f54c23e",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-B2.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-B2.results-page.png",
+          "sha256": "a9331aaac95a253849667df4f997d2543908dab5dd486e2a41dc8e879194935b",
+          "width": 2704,
+          "height": 12336,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-B2.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-B2",
+        "json": "searches/events/wildcard-B2.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-B2.search-page.png",
+          "sha256": "9c930cc4eb3b3be741d189fc103466a075dc37b7adcc1b9fc0e6d066854b1b19",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-B2.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-B2.results-page.png",
+          "sha256": "cf71827740b985c8e9315ce9faf38645d18a3b69df5c34dd64c9be4b93696dfe",
+          "width": 2704,
+          "height": 11886,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-B2.results-page.png"
+        }
+      },
+      {
+        "event_id": "literal-BG1",
+        "json": "searches/events/literal-BG1.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-BG1.search-page.png",
+          "sha256": "217fd0cd7fd3ecb64ed93417a7785df5b48e3fb0b7f13e9d58772d01a089039e",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-BG1.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-BG1.results-page.png",
+          "sha256": "279559fe6b0db33aaaf7dc4affa8293cc60bdf27c04fe49a75cf34a195cfe5cc",
+          "width": 2704,
+          "height": 3420,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-BG1.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-BG1",
+        "json": "searches/events/wildcard-BG1.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-BG1.search-page.png",
+          "sha256": "218ba0774ead5fbc3f8160302daacc73b9b9eddde693744a3f91d4b529ee0d32",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-BG1.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-BG1.results-page.png",
+          "sha256": "aedbc78e9eb6195f47af1571ce2122c3342816538da8ca58036a35b2f5b2ec38",
+          "width": 2704,
+          "height": 3420,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-BG1.results-page.png"
+        }
+      },
+      {
+        "event_id": "literal-BG2",
+        "json": "searches/events/literal-BG2.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-BG2.search-page.png",
+          "sha256": "05081fcae07d5d6d7b6c70a5408d30082901c299e118ecc1df6fefeaf3f47f8d",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-BG2.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-BG2.results-page.png",
+          "sha256": "0764422234762edab4344bde6269259c926c0b8a39aeefc8c88282208c61706f",
+          "width": 2704,
+          "height": 4622,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-BG2.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-BG2",
+        "json": "searches/events/wildcard-BG2.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-BG2.search-page.png",
+          "sha256": "f7b1f2fd67f622279fe04bf2fe7c8b7dd2a62e1b49980190f76ee2ecadd4be82",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-BG2.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-BG2.results-page.png",
+          "sha256": "d308f27af63f2f1791ce8f52ff620b4b1b5a59b5d32f2e751d920a5858fd5559",
+          "width": 2704,
+          "height": 4386,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-BG2.results-page.png"
+        }
+      },
+      {
+        "event_id": "literal-BC1",
+        "json": "searches/events/literal-BC1.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-BC1.search-page.png",
+          "sha256": "937ea3cbe062e3d5c7d549bbc0ed308fe341eb8e072b914dde342bacca551e10",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-BC1.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-BC1.results-page.png",
+          "sha256": "3af498892b129904b513749c5f7378e515e5904972ce043f593ad268e12a0580",
+          "width": 2704,
+          "height": 3176,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-BC1.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-BC1",
+        "json": "searches/events/wildcard-BC1.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-BC1.search-page.png",
+          "sha256": "ed0a3924a5ae05614b3d2b69213147ae3c270aefae43904ace57c152dc0d61f4",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-BC1.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-BC1.results-page.png",
+          "sha256": "cd03cd5805815fe3d4bbdd464214b352452fb252d9ac6091284f7edba80023ab",
+          "width": 2704,
+          "height": 3176,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-BC1.results-page.png"
+        }
+      },
+      {
+        "event_id": "literal-BT2",
+        "json": "searches/events/literal-BT2.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "literal-BT2.search-page.png",
+          "sha256": "c7253c70241ad780aa3d9f75c33a270b2c89f64e4916fa47c24ad3a185061eb1",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-BT2.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "literal-BT2.results-page.png",
+          "sha256": "d21f1f9fdf0c6e8882f749169af4409756686d78d40b764fdd651cffa93459a2",
+          "width": 2704,
+          "height": 3414,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/literal-BT2.results-page.png"
+        }
+      },
+      {
+        "event_id": "wildcard-BT2",
+        "json": "searches/events/wildcard-BT2.json",
+        "search_page": {
+          "page": "configured_search_form",
+          "path": "wildcard-BT2.search-page.png",
+          "sha256": "007f9bcdede7602aad51d5651db625a3c6753be4f245ff614b55a525df95caf4",
+          "width": 2704,
+          "height": 2588,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-BT2.search-page.png"
+        },
+        "results_page": {
+          "page": "first_results_page",
+          "path": "wildcard-BT2.results-page.png",
+          "sha256": "ae06b304a2d99898fd7edc8fa7a4bdb4e325a87bb3dca03d394fc76716df7346",
+          "width": 2704,
+          "height": 3414,
+          "email_elements_masked": 0,
+          "browser_chrome_captured": false,
+          "complete_page_url_retained": false,
+          "session_identifiers_retained": false,
+          "repository_path": "searches/events/wildcard-BT2.results-page.png"
+        }
+      }
+    ]
+  },
+  "retained_failure_history": {
+    "schema_version": "atai-pilot-008-failure-history/v1",
+    "pilot": "008",
+    "status": "complete",
+    "do_not_merge": true,
+    "attempt_count": 6,
+    "retained_source_failure_artifact_count": 5,
+    "retained_failure_screenshot_count": 2,
+    "successful_final_run_receipt": "searches/run-receipt.json",
+    "interpretation": "Fresh unchanged events completed after each retained failure. No failed attempt contributes a total, stable ID, or translation decision.",
+    "attempts": [
+      {
+        "attempt_receipt": "searches/run-receipt-attempt1.json",
+        "started_at_utc": "2026-09-02T16:05:03.503329+00:00",
+        "updated_at_utc": "2026-09-02T16:16:13.089349+00:00",
+        "status": "stopped_on_source_or_adapter_failure",
+        "completed_event_count_including_terminal_failure": 9,
+        "terminal_event_id": "literal-B2",
+        "classification": "source_record_detail_timeout_after_results_page",
+        "source_interaction_observed": true,
+        "contributes_records_or_totals": false,
+        "retained_failure_artifact": "searches/failures/literal-B2-attempt1.NON_MERGEABLE_FAILURE.json",
+        "retained_screenshots": [
+          {
+            "page": "search-page",
+            "path": "searches/failures/literal-B2-attempt1.NON_MERGEABLE_FAILURE.search-page.png",
+            "sha256": "5eb9b8f8688c7201c1f97ac68e42beb34588497bf987abd102ce204f8f54c23e",
+            "width": 2704,
+            "height": 2588,
+            "receipt_boundary": "The terminal error artifact has no successful screenshot receipt."
+          },
+          {
+            "page": "results-page",
+            "path": "searches/failures/literal-B2-attempt1.NON_MERGEABLE_FAILURE.results-page.png",
+            "sha256": "0e1642a678eecaec0f683b7f7f5f39ba359c26f9cdf1a7a7d46416657988fc4f",
+            "width": 2704,
+            "height": 12336,
+            "receipt_boundary": "The terminal error artifact has no successful screenshot receipt."
+          }
+        ]
+      },
+      {
+        "attempt_receipt": "searches/run-receipt-attempt2.json",
+        "started_at_utc": "2026-09-02T16:16:55.092077+00:00",
+        "updated_at_utc": "2026-09-02T16:25:45.712295+00:00",
+        "status": "stopped_on_source_or_adapter_failure",
+        "completed_event_count_including_terminal_failure": 14,
+        "terminal_event_id": "wildcard-BG2",
+        "classification": "shared_browser_target_identity_failure_before_source_execution",
+        "source_interaction_observed": false,
+        "contributes_records_or_totals": false,
+        "retained_failure_artifact": "searches/failures/wildcard-BG2-attempt1.NON_MERGEABLE_FAILURE.json",
+        "retained_screenshots": []
+      },
+      {
+        "attempt_receipt": "searches/run-receipt-attempt3.json",
+        "started_at_utc": "2026-09-02T16:26:19.046674+00:00",
+        "updated_at_utc": "2026-09-02T16:27:21.541550+00:00",
+        "status": "stopped_on_source_or_adapter_failure",
+        "completed_event_count_including_terminal_failure": 15,
+        "terminal_event_id": "literal-BC1",
+        "classification": "shared_browser_target_identity_failure_before_source_execution",
+        "source_interaction_observed": false,
+        "contributes_records_or_totals": false,
+        "retained_failure_artifact": "searches/failures/literal-BC1-attempt1.NON_MERGEABLE_FAILURE.json",
+        "retained_screenshots": []
+      },
+      {
+        "attempt_receipt": "searches/run-receipt-attempt4.json",
+        "started_at_utc": "2026-09-02T16:27:37.631787+00:00",
+        "updated_at_utc": "2026-09-02T16:27:42.338850+00:00",
+        "status": "stopped_on_source_or_adapter_failure",
+        "completed_event_count_including_terminal_failure": 15,
+        "terminal_event_id": "literal-BC1",
+        "classification": "shared_browser_target_identity_failure_before_source_execution",
+        "source_interaction_observed": false,
+        "contributes_records_or_totals": false,
+        "retained_failure_artifact": "searches/failures/literal-BC1-attempt2.NON_MERGEABLE_FAILURE.json",
+        "retained_screenshots": []
+      },
+      {
+        "attempt_receipt": "searches/run-receipt-attempt5.json",
+        "started_at_utc": "2026-09-02T16:28:55.515763+00:00",
+        "updated_at_utc": "2026-09-02T16:28:56.316736+00:00",
+        "status": "stopped_on_source_or_adapter_failure",
+        "completed_event_count_including_terminal_failure": 15,
+        "terminal_event_id": "literal-BC1",
+        "classification": "local_fresh_browser_executable_configuration_error_before_browser_start",
+        "source_interaction_observed": false,
+        "contributes_records_or_totals": false,
+        "retained_failure_artifact": null,
+        "retained_screenshots": []
+      },
+      {
+        "attempt_receipt": "searches/run-receipt-attempt6.json",
+        "started_at_utc": "2026-09-02T16:29:18.350223+00:00",
+        "updated_at_utc": "2026-09-02T16:29:24.105968+00:00",
+        "status": "stopped_on_source_or_adapter_failure",
+        "completed_event_count_including_terminal_failure": 15,
+        "terminal_event_id": "literal-BC1",
+        "classification": "fresh_browser_normal_proquest_page_timeout",
+        "source_interaction_observed": false,
+        "contributes_records_or_totals": false,
+        "retained_failure_artifact": "searches/failures/literal-BC1-fresh-attempt1.NON_MERGEABLE_FAILURE.json",
+        "retained_screenshots": []
+      }
+    ]
+  },
+  "successful_source_artifact_count": 18,
+  "retained_source_failure_artifact_count": 5,
+  "source_artifact_count": 23,
+  "errors": []
+}
