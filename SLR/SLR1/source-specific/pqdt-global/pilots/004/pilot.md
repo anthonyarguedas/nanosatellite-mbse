@@ -1,6 +1,6 @@
 # Pilot 004: current schedule and bounded wildcard adoption
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: ea207806e8398cac3befd50340c57c608b108e32
 
 Export method: adapter version 5 at `~/agent-tools/internet/skills/browser/scripts/search_pqdt.py`. This is a diagnostic pilot. It is not a final search. It uses source years 2011 through 2026 and the diagnostic cutoff 2026-08-29. The pilot plan, run receipt, assessment, and derived unions are nonmergeable.
 

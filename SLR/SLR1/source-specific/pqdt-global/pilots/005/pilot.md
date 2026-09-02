@@ -1,6 +1,6 @@
 # Pilot 005: PQ Subject and Index term value test
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: ea207806e8398cac3befd50340c57c608b108e32
 
 This is a diagnostic pilot. It creates no final-search union. The source events use the same 2011 through 2026 window and 2026-08-29 diagnostic cutoff as Pilot 004. PQDT applies year precision, so later screening must check records from 2026 against the exact cutoff.
 
