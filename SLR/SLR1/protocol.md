@@ -139,37 +139,7 @@ Assign each full-text report to one of two routes. The routes are mutually exclu
 - **Route A — EPS-primary MBSE:** The EPS, electrical-power viewpoint, or a defined EPS function or architecture is the main modeled boundary. The report identifies an EPS model artifact and at least one explicit relationship between that EPS content and another systems-engineering concern.
 - **Route B — embedded EPS model thread:** A wider nanosatellite MBSE report contains at least one EPS thread that meets all three tests below.
 
-### MBSE-enabled outcomes and implementation burdens versus EPS engineering outputs
-
-An **EPS engineering or model output** is a technical result such as minimum state of charge, power margin, battery capacity, solar-array area, voltage or current, energy balance, or a selected architecture. Extract these outputs for RQ1. They may also support RQ2 or RQ3, but they are not evidence of MBSE value on their own.
-
 ### Direct EPS-linked pre-physical V&V
-
-An activity is eligible for EPS-linked RQ3 synthesis only when it has all three of the following:
-
-1. an **EPS target**: a named EPS requirement, model element, parameter, mode, interface, behavior, function, or hazard; or a wider system target that is clearly decomposed, allocated, or traced to named EPS content;
-2. an **explicit model-to-V&V bridge**: a reported trace, shared ID, binding, port or data mapping, transformation, generated artifact, allocation, or another clear link; and
-3. a **V&V method, intent, or artifact**: the source presents the work as verification, validation, compliance or requirement checking, virtual integration, a model-derived test activity, or another V&V function.
-
-Classify each candidate activity by its **linkage scope**:
-
-- **`eps_specific`:** both the target and the V&V activity are clearly about the EPS;
-- **`system_wide_eps_linked`:** a wider system activity includes a named EPS target and a bridge that can be reconstructed;
-- **`system_wide_cooccurrence`:** system-wide V&V and EPS content appear in the same report without the required direct link; or
-- **`unclear`:** the report does not make the scope clear.
-
-Both `eps_specific` and `system_wide_eps_linked` activities can enter direct RQ3 synthesis. Always report them separately and keep the scope of any result or verdict. `system_wide_cooccurrence` is a near miss and cannot support an EPS-specific conclusion.
-
-Also classify the **object of V&V**, separately from scope and execution environment:
-
-- **model verification:** checking whether a model, transformation, or executable representation was implemented correctly against its specification or formulation;
-- **model validation:** checking whether a model is adequate or credible for its intended use against an authoritative reference, data, or expected behavior;
-- **system/design verification:** checking whether the EPS or wider design meets stated requirements or criteria;
-- **system/design validation:** checking whether the design meets stakeholder, operational, or mission needs;
-- **multiple:** the source clearly demonstrates more than one of these objects; or
-- **unclear.**
-
-Keep the source's own term as well as the reviewer's normalized code and reason. Running a method in a model does not automatically make it model verification or model validation. For example, a virtual requirement check can be system or design verification. Code execution settings such as MIL, SIL, PIL, HIL, and virtual testbeds separately from the V&V object.
 
 Classify completeness in stages. Do not discard an otherwise explicit linked activity only because a later stage is missing:
 
@@ -203,8 +173,6 @@ Inputs, assumptions, engineering outputs, criteria, and verdicts are grouped row
 Resolve report families and cross-report artifact identity only after the first report-level extraction pass. Record the source-supported basis, evidence locations, and coding confidence for each merge or split. Create separate lineage-level and consolidated application records. Keep report-level records unchanged except for resolving their `lineage_id`, and do not move evidence between reports, versions, applications, or families.
 
 PRISMA identification and selection counts remain at record and report level. Report separate analytic denominators for report families, reports, artifact lineages, tailoring applications, direct RQ2 findings, and direct RQ3 activities. A report count is not a count of independent implementations or transfers.
-
-Use simple linked IDs such as `report_id`, optional `report_id:eps_case_id`, `report_id:report_reuse_record_id`, `report_id:report_application_id`, `family_id`, `lineage_id`, `lineage_id:tailoring_application_id`, `report_id:rq2_finding_id`, and `report_id:rq3_activity_id`. Prefer normalized DOI for report identity, supplemented by source and report identifiers. Old IDs and discovery paths are provenance only.
 
 External repositories, evolving models, and author-provided artifacts are not independently retrieved or inspected.
 

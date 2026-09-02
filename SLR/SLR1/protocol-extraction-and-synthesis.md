@@ -1,9 +1,5 @@
 # Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Extraction and synthesis
 
-> **Protocol parts:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · **3 — Extraction and synthesis** (this file) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
->
-> **Canonical definitions and rules:** Part 1 governs [report eligibility versus question contribution](protocol.md#report-eligibility-versus-question-contribution), [evidence statuses](protocol.md#evidence-statuses), [eligible EPS evidence routes](protocol.md#eligible-eps-evidence-routes), [bounded genericity](protocol.md#bounded-genericity-reusable-artifacts-and-tailoring), [RQ2 eligibility](protocol.md#mbse-enabled-outcomes-and-implementation-burdens-versus-eps-engineering-outputs), [direct RQ3 eligibility](protocol.md#direct-eps-linked-pre-physical-vv), and [units and counting](protocol.md#units-of-evidence-and-counting). Part 2 governs [finding-level evidence appraisal](protocol-discovery-and-appraisal.md#finding-level-evidence-appraisal). This part defines the report-level extraction fields, cross-report lineage resolution and separate lineage-level extraction, validation, synthesis, and reporting.
-
 ## Extraction design
 
 Extraction is report-level by default. Create one extraction file for each included report. Use nested groups for EPS content, inputs, results, findings, and V&V activities. Create another EPS case section only when a report contains materially separate models, implementations, or evaluations that cannot be represented clearly together.
@@ -281,7 +277,7 @@ Record:
 - physicality relative to the target EPS.
 - lifecycle stage.
 - timing relative to physical realization, integration, and test.
-- criteria or oracles as a nested table containing criterion ID, target, threshold or expected behavior, source, and applicability.
+- criteria or pass/fail criteria as a nested table containing criterion ID, target, threshold or expected behavior, source, and applicability.
 - criterion sources.
 - status, using `proposed`, `prepared_or_generated`, `executed_virtual`, `result_reported`, `downstream_physical_link`, or `model_to_test_closure`.
 - results or verdicts as a nested table containing target, result, value, unit, scope, and observed or expected status.
@@ -294,6 +290,26 @@ Record:
 - `support_reason`.
 
 Record a comparator and major rival explanations only when the report makes a comparative or causal V&V-effectiveness claim. For validation, state why the criterion or oracle is authoritative for the intended use.
+
+- **EPS target**: a named EPS requirement, model element, parameter, mode, interface, behavior, function, or hazard; or a wider system target that is clearly decomposed, allocated, or traced to named EPS content;
+- **model-to-V&V bridge**: a reported trace, shared ID, binding, port or data mapping, transformation, generated artifact, allocation, or another clear link; and
+- **V&V method, intent, or artifact**: the source presents the work as verification, validation, compliance or requirement checking, virtual integration, a model-derived test activity, or another V&V function.
+
+- **`eps_specific`:** both the target and the V&V activity are clearly about the EPS;
+- **`system_wide_eps_linked`:** a wider system activity includes a named EPS target and a bridge that can be reconstructed;
+- **`system_wide_cooccurrence`:** system-wide V&V and EPS content appear in the same report without the required direct link; or
+- **`unclear`:** the report does not make the scope clear.
+
+- **model verification:** checking whether a model, transformation, or executable representation was implemented correctly against its specification or formulation;
+- **model validation:** checking whether a model is adequate or credible for its intended use against an authoritative reference, data, or expected behavior;
+- **system/design verification:** checking whether the EPS or wider design meets stated requirements or criteria;
+- **system/design validation:** checking whether the design meets stakeholder, operational, or mission needs;
+- **multiple:** the source clearly demonstrates more than one of these objects; or
+- **unclear.**
+
+Keep the source's own term as well as the reviewer's normalized code and reason. Running a method in a model does not automatically make it model verification or model validation. For example, a virtual requirement check can be system or design verification. Code execution settings such as MIL, SIL, PIL, HIL, and virtual testbeds separately from the V&V object.
+
+
 
 ### Reusable artifact and reported lineage
 
@@ -707,90 +723,3 @@ A discrepancy is impactful when it can change eligibility or route, a report fam
 Do not calculate inter-rater reliability between the reviewer and an LLM. Report audit coverage, issues raised, accepted corrections, rejected flags, unresolved ambiguities, and test–retest differences with their denominators.
 
 Before synthesis, validate every report-level extraction and every separate family, lineage, and consolidated application table against the frozen schema. Confirm that every included report has a completed focused audit or human fallback, every discrepancy has a human disposition, every derived value is reproducible, every lineage-level field preserves report provenance, and cross-report processing changed only report-level `lineage_id` values.
-
-## Planned synthesis
-
-Use a structured evidence map and narrative synthesis. Do not pool effect estimates because the models, outcomes, and evidence designs are expected to differ too much.
-
-### Relationship to Buruso et al. (2026)
-
-Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE studies and reports published from 2011 through 2023. It maps methods, languages, tools, five MBSE phases, and general challenges across many kinds of space work.
-
-Use Buruso et al. only under the [Part 1 evidence restrictions](protocol.md#need-for-this-review), the [supporting prior-secondary-review protocol](protocol-prior-secondary-reviews.md), and the [Part 2 baseline and citation-search procedure](protocol-discovery-and-appraisal.md#completing-the-baseline-and-citation-searches).
-
-This review is not an update or replication of Buruso et al. Do not compare the two reviews' counts as evidence of effectiveness.
-
-For a descriptive view of currency and overlap, results may be split into 2011–2023, matching Buruso et al.'s evidence window, and 2024 through the common evidence cutoff. This split does not change eligibility or imply independence.
-
-### RQ1
-
-- Synthesize report context, EPS representation, grouped inputs and assumptions, grouped engineering results, implementation footprint, limitations, and evaluative RQ1 claims.
-- Present Route A and Route B separately before combining them.
-- Compare author labels such as *lightweight* or *scalable* with the extracted footprint and inline support.
-- Present all `report_reuse_level` values as source-bounded report-level results. Synthesize resolved artifact lineages, applicability envelopes, reusable cores, variation points, tailoring methods, tailoring effort, assurance, independence, failures, demonstrated coverage, and `lineage_reuse_level` from the separate lineage-level records. Use lineage and consolidated-application denominators for deduplicated conclusions, and keep unresolved report-level cases visible.
-- Keep method or workflow reuse separate from artifact reuse.
-
-### RQ2
-
-- Use only findings with `direct_synthesis = yes` for direct conclusions. Present near misses separately.
-- Present claim kind and scope, role, category, author direction, evidence-supported direction, mechanism, measure directness, evidence basis, support, comparator adequacy and rival explanations when required, applicability, and lifecycle stage.
-- Present assertion-only findings separately from executed, comparative, stakeholder, physical, operational, and independent-transfer evidence.
-- Preserve source-reported values, units, denominators, uncertainty, and practical interpretation. Label reviewer-derived values.
-- Keep benefits, null findings, adverse findings, and burdens visible without calculating a reviewer-defined net effect.
-
-### RQ3
-
-- Use only activities with `direct_synthesis = yes` for direct conclusions. Present system-wide co-occurrence and other near misses separately.
-- Map target, bridge, V&V object, method, criterion, timing, execution, result, evidence basis, support, and later physical continuity.
-- Keep EPS-specific and system-wide EPS-linked activities separate.
-- Distinguish execution from validation and model-to-test closure.
-- Record comparator adequacy and rival explanations only for comparative or causal V&V-effectiveness claims.
-
-### Cross-cutting safeguards
-
-- Apply the canonical units, denominator, and dependence rules in Part 1.
-- Separate peer-reviewed reports from preprints, technical reports, and theses in descriptive or sensitivity views when useful.
-- Apply the Part 2 [finding-support and conclusion-confidence framework](protocol-discovery-and-appraisal.md#finding-support-reporting-bias-assessment-and-conclusion-confidence).
-- Use sensitivity views by route, evidence basis, support, measure directness, comparator adequacy when required, publication provenance, lineage confidence, reuse level, and artifact availability.
-- Treat cross-tabulations as descriptive co-reporting unless extraction establishes a direct link.
-- Treat sparse direct evidence as a result. Do not fill gaps with whole-spacecraft MBSE claims.
-
-## Required new-run artifacts
-
-Under the Part 1 restart policy, create these artifacts with provenance after task [`P-000`](TASKS.md) is complete. Track search infrastructure under [`S-001`](TASKS.md), extraction forms under `E-001`, and remaining artifacts under [`A-001`](TASKS.md):
-
-- dated methods decision log.
-- complete Part 2 discovery and screening artifact bundle.
-- separate prior-secondary-review bundle.
-- frozen report-level extraction codebook and schema.
-- one extraction file per included report.
-- report-family table.
-- compiled report-level reuse-record and report-level application tables.
-- separate artifact-lineage extraction table.
-- separate consolidated tailoring-application table including effort and assurance.
-- focused-audit log, discrepancy and adjudication log, deterministic-validation report, test–retest files, and supervisor-audit files when applicable.
-- compiled report, report-level reuse, RQ2, RQ3, lineage-level reuse, and consolidated tailoring data.
-- bibliography, analysis code, and derived-value scripts.
-- machine-readable PRISMA count reconciliation, official PRISMA 2020 flow diagram, synthesis outputs, and completed PRISMA-S and PRISMA 2020 checklists.
-
-Do not publish licensed exports, copyrighted abstracts, or full texts when rights prevent it. Publish or archive the methods, dates, schemas, decisions, derived counts, code, and a clear materials-availability statement.
-
-## Completed-review reporting
-
-The final report will:
-
-- name every source used, search date, and common evidence cutoff.
-- distinguish failed or planned-but-unused sources.
-- link to exact source-native searches and PRISMA-S logs.
-- report focused-audit, deterministic-validation, test–retest, and supervisor coverage exactly as performed.
-- report the prior-secondary-review assessment separately.
-- explain why no pooled effect estimate was used.
-- label every count with its analytic denominator.
-- cite apparently eligible full-text exclusions with source-located reasons.
-- present evidence basis, finding support, reporting-bias considerations, reuse levels, and conclusion confidence under Part 2.
-- report all protocol changes and departures.
-- state access to the protocol, data, code, and materials.
-
----
-
-**Previous:** [Part 2 — Discovery and appraisal](protocol-discovery-and-appraisal.md)
