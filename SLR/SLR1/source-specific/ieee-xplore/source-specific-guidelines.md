@@ -1,6 +1,6 @@
 # IEEE Xplore
 
-Last pilot saved in commit: 9ec7508b0bbd0ce7d499e48b53ce3dfa23f37ad4
+Last pilot saved in commit: ce6a8ce6716e6b9a0e4fdeb6b2b6ad1ffd2f1452
 PSR final searches saved in commit: NA (not applicable)
 Final searches saved in commit: NA
 Citation chasing searches saved in commit: NA (not applicable)
