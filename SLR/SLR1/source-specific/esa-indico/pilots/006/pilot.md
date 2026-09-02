@@ -1,6 +1,6 @@
 # Pilot 006
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: 61efaed6dee07616a3ca33bf30078098878e5eb8
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_esa_indico.py`, adapter v8, through `uv run` and an invocation-owned headless browser.
 

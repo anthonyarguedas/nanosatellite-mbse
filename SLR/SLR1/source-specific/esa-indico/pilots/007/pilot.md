@@ -1,6 +1,6 @@
 # Pilot 007
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: 61efaed6dee07616a3ca33bf30078098878e5eb8
 
 Export method: read-only execution with `~/agent-tools/internet/skills/browser/scripts/search_esa_indico.py`, adapter v8, over the marker-bound Pilot 006 metadata ledger.
 
