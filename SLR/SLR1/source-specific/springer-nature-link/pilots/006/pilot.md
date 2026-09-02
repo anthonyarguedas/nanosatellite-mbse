@@ -1,6 +1,6 @@
 # Pilot 006: shared-browser strict complete readiness
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: 49c0cca95b2f4d5551a0d1cb5ce24dc01a8ba7b8
 
 Export method: adapter version 12 at `~/agent-tools/internet/skills/browser/scripts/search_springer_link.py`. This is a readiness pilot. Its normal complete outputs remain pilot evidence and must not enter the review corpus.
 

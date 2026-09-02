@@ -1,6 +1,6 @@
 # Pilot 004: current schedule, wildcard adoption, and mandatory screenshots
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: 49c0cca95b2f4d5551a0d1cb5ce24dc01a8ba7b8
 
 Export method: adapter version 10 at `~/agent-tools/internet/skills/browser/scripts/search_springer_link.py`, plus the pilot collector for complete rendered card-path ledgers. This pilot is diagnostic. It is not a final search. It uses 2011-01-01 through 2026-08-29. Every JSON artifact is nonmergeable.
 

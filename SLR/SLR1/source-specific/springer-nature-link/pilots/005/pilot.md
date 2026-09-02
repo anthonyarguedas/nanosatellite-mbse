@@ -1,6 +1,6 @@
 # Pilot 005: Link to Nature canonical metadata mapping
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: 49c0cca95b2f4d5551a0d1cb5ce24dc01a8ba7b8
 
 Export method: adapter version 11 at `~/agent-tools/internet/skills/browser/scripts/search_springer_link.py`. This is a bounded detail-route diagnostic. It is not a search or final-search artifact.
 
