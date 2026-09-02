@@ -1,16 +1,10 @@
-# Planned synthesis
+# Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Synthesis
 
 Use a structured evidence map and narrative synthesis. Do not pool effect estimates because the models, outcomes, and evidence designs are expected to differ too much.
 
 ### Relationship to Buruso et al. (2026)
 
 Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE studies and reports published from 2011 through 2023. It maps methods, languages, tools, five MBSE phases, and general challenges across many kinds of space work.
-
-Use Buruso et al. only under the [Part 1 evidence restrictions](protocol.md#need-for-this-review), the [supporting prior-secondary-review protocol](protocol-prior-secondary-reviews.md), and the [Part 2 baseline and citation-search procedure](protocol-discovery-and-appraisal.md#completing-the-baseline-and-citation-searches).
-
-This review is not an update or replication of Buruso et al. Do not compare the two reviews' counts as evidence of effectiveness.
-
-For a descriptive view of currency and overlap, results may be split into 2011–2023, matching Buruso et al.'s evidence window, and 2024 through the common evidence cutoff. This split does not change eligibility or imply independence.
 
 ### RQ1
 
@@ -45,26 +39,6 @@ For a descriptive view of currency and overlap, results may be split into 2011�
 - Treat cross-tabulations as descriptive co-reporting unless extraction establishes a direct link.
 - Treat sparse direct evidence as a result. Do not fill gaps with whole-spacecraft MBSE claims.
 
-## Required new-run artifacts
-
-Under the Part 1 restart policy, create these artifacts with provenance after task [`P-000`](TASKS.md) is complete. Track search infrastructure under [`S-001`](TASKS.md), extraction forms under `E-001`, and remaining artifacts under [`A-001`](TASKS.md):
-
-- dated methods decision log.
-- complete Part 2 discovery and screening artifact bundle.
-- separate prior-secondary-review bundle.
-- frozen report-level extraction codebook and schema.
-- one extraction file per included report.
-- report-family table.
-- compiled report-level reuse-record and report-level application tables.
-- separate artifact-lineage extraction table.
-- separate consolidated tailoring-application table including effort and assurance.
-- focused-audit log, discrepancy and adjudication log, deterministic-validation report, test–retest files, and supervisor-audit files when applicable.
-- compiled report, report-level reuse, RQ2, RQ3, lineage-level reuse, and consolidated tailoring data.
-- bibliography, analysis code, and derived-value scripts.
-- machine-readable PRISMA count reconciliation, official PRISMA 2020 flow diagram, synthesis outputs, and completed PRISMA-S and PRISMA 2020 checklists.
-
-Do not publish licensed exports, copyrighted abstracts, or full texts when rights prevent it. Publish or archive the methods, dates, schemas, decisions, derived counts, code, and a clear materials-availability statement.
-
 ## Completed-review reporting
 
 The final report will:
@@ -80,3 +54,39 @@ The final report will:
 - present evidence basis, finding support, reporting-bias considerations, reuse levels, and conclusion confidence under Part 2.
 - report all protocol changes and departures.
 - state access to the protocol, data, code, and materials.
+
+## Finding support, reporting-bias assessment, and conclusion confidence
+
+Do not make a funnel plot or run a statistical publication-bias test. The evidence does not share one effect measure and is too varied. Instead, assess and report the following for each research-question synthesis:
+
+- source and interface coverage, failures, and unique results across the 15 sources, 13 interfaces, and citation routes, with OATD in the website/other-methods channel;
+- the effects of language, date, population, publication-type, retrieval, and source-access limits;
+- specific access and coverage issues, geographic and institutional imbalance, embargoes, missing abstracts or metadata, uncertainty about degree status, and overlap between PQDT and OATD or other platforms;
+- reports that could not be obtained and records that were only leads;
+- missing or selectively reported reuse claims, applicability limits, tailoring effort, failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, rival explanations, pass/fail criteria, null or adverse results, and limitations;
+- dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage or application;
+- review-process limitations documented under the [Part 3 extraction-verification procedure](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification); and
+- protocol departures, search changes, and review-process limits that could affect interpretation.
+
+Treat the sole-reviewer and model-assistance items as review-process limitations, not as publication or selective-reporting bias in the primary studies.
+
+Give each conclusion a narrative confidence label: `higher`, `moderate`, `lower`, or `insufficient`. Give a source-locatable reason. Consider:
+
+- the kind and scope of claim being synthesized;
+- directness to a qualifying EPS thread;
+- fitness of the contributing evaluation designs for the synthesized claim;
+- whether measures are direct or are justified surrogates;
+- comparator adequacy and major rival explanations when the claim is comparative or causal;
+- finding-level evidence basis, support, and applicability;
+- the artifact lineage, reuse level, demonstrated coverage, and tailoring effort when relevant;
+- maturity, independence, or physical validation only when they bear directly on the claim;
+- consistency, including null, adverse, and failed-transfer evidence;
+- independence of report families and tailoring applications; and
+- limitations in the review process.
+
+Evidence basis and maturity remain descriptive and do not determine confidence by themselves. Never convert a reuse level, coding-confidence value, publication type, or finding-support label automatically into a conclusion-confidence label. Do not use a numerical cutoff or mechanical average.
+
+- **Higher:** several materially independent, directly linked, credible findings or activities support the bounded conclusion, all requirements relevant to that kind of claim are met, and there is no major unexplained disagreement.
+- **Moderate:** direct support exists, but there are important limitations in methodology, independence, precision, applicability, or consistency relevant to the conclusion.
+- **Lower:** support is sparse, methodologically concerning, indirect, dependent, or importantly inconsistent.
+- **Insufficient:** there is no eligible direct evidence for the conclusion.

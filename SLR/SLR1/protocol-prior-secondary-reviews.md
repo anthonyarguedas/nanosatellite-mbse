@@ -24,8 +24,6 @@ It will not:
 - pool review results or correct for overlap among their primary-study sets; or
 - insert a primary report into the main review merely because a prior review cited it.
 
-Complete this supporting assessment under tasks [`PR-001`](TASKS.md) and [`PR-002`](TASKS.md) before task [`R-002`](TASKS.md). If it identifies a review that may make the main review redundant, do not begin `R-002` until the rationale and, where necessary, the main protocol have been reconsidered and committed.
-
 ## Supporting questions
 
 1. **PRQ1 — prior-review coverage.** Which completed secondary reviews identified in Scopus or Web of Science Core Collection have a scope that overlaps space-system MBSE and could include or answer questions about nanosatellite or CubeSat EPS evidence?
@@ -36,13 +34,10 @@ Complete this supporting assessment under tasks [`PR-001`](TASKS.md) and [`PR-00
 
 Unless this supporting protocol states otherwise, reuse the following provisions rather than defining parallel rules:
 
-- the common evidence cutoff, restart rules, change recording, and legacy-material policy in [Part 1](protocol.md#review-status-and-restart-policy);
-- the definitions of `P`, `E_H`, `E_F`, `E`, `M_H`, `M_B`, `M`, `R`, `G_model`, `G_structure`, and `C1` in the [main search strategy](protocol-discovery-and-appraisal.md#search-streams-and-set-construction);
-- the Scopus and Web of Science Core Collection boundaries and the interface behavior validated under `S-D01` and `S-D02`;
-- the pilot and final-event documentation rules in [New-run source translations and search artifacts](protocol-discovery-and-appraisal.md#new-run-source-translations-and-search-artifacts) and the completion and source-failure rules in [Completing the baseline and citation searches](protocol-discovery-and-appraisal.md#completing-the-baseline-and-citation-searches);
-- the main review's full-text retrieval sequence and its treatment of `not_retrieved`, adapted only to the secondary-review eligibility criteria below
+- the common evidence cutoff in [Part 1](protocol.md#review-status-and-restart-policy);
+- the definitions of `P`, `E_H`, `E_F`, `E`, `M_H`, `M_B`, `M`, `R`, `G_model`, `G_structure`, and `C1` in the [main search strategy](protocol-discovery-and-screening#search-streams-and-set-construction);
 
-The supporting search has separate event IDs, records, reports, decisions, extractions, counts, and outputs. Common schemas and a common log file may be reused, but every row must carry a separate supporting-search namespace and supporting records must never be merged into the main primary-evidence candidate set, denominator, PRISMA flow, or analytic units. A DOI may be cross-referenced between the two processes without sharing a decision or extraction.
+The supporting search has separate event IDs, records, reports, decisions, extractions, counts, and outputs.
 
 ## Information sources and limits
 
@@ -65,7 +60,7 @@ Do not use another database, website search, backward citation search, forward c
 
 Reuse the main search blocks named above exactly. Add these two blocks for this supporting search:
 
-- **Broad space context (`X`):** all terms in the main Population block `P`, plus `spacecraft`, `space system`, `space systems`, `space mission`, `space missions`, `space engineering`, `space systems engineering`, `space application`, `space applications`, `space sector`, `space industry`, `satellite`, `satellites`, `SmallSat`, `SmallSats`, `small satellite`, and `small satellites`. These broader terms are discovery terms only. They do not change the main review's nanosatellite population definition.
+- **Broad space context (`X`):** all terms in the main Population block `P`, plus `spacecraft`, `space system`, `space systems`, `space mission`, `space missions`, `space engineering`, `space systems engineering`, `space application`, `space applications`, `space sector`, `space industry`, `satellite`, and `satellites`.. These broader terms are discovery terms only. They do not change the main review's nanosatellite population definition.
 - **Secondary-review signal (`Q`):** `systematic review`, `systematic literature review`, `systematic mapping`, `systematic mapping study`, `mapping study`, `scoping review`, `literature review`, `literature survey`, `bibliometric review`, `bibliometric analysis`, `evidence synthesis`, `secondary study`, `state-of-the-art review`, `state of the art review`, `survey paper`, and `survey`. The broad `survey` term protects recall for engineering review papers; an empirical questionnaire survey remains ineligible.
 
 Source-native translations may change syntax, phrase delimiters, field wrappers, and validated wildcard use, but not the intended terms or Boolean relationships. Search title, abstract, and author-keyword or equivalent topic fields. Do not require a review document-type tag because conference reviews, mapping studies, and bibliometric studies may be classified differently by the databases.
@@ -82,14 +77,6 @@ Run all four semantic partitions in both sources:
 | `PSR4` | `X AND (G_model OR G_structure OR C1) AND Q` | Reviews centered on reusable models, reference architectures, or persistent model assets |
 
 The supporting candidate set is `PSR1 ∪ PSR2 ∪ PSR3 ∪ PSR4` across Scopus and Web of Science Core Collection. Retain every record returned by a successful final partition and preserve all source and partition discovery events until cross-source deduplication.
-
-### Piloting and final execution
-
-Under [`PR-001`](TASKS.md), validate the four source-native translations after the relevant Scopus and Web of Science interface behavior has been established under `S-D01` and `S-D02`. Record exact fields, phrase and Boolean behavior, automatic expansion, limits, date handling, result totals, export method, stable identifiers, and completeness checks in a clearly separated supporting-search section of the new-run search log.
-
-Use Buruso et al. as a read-only known item. For each source in which it is indexed and exposes searchable metadata containing the required concepts, the accepted query union must retrieve it. A source that does not index the report is not a query failure. A missed indexed known item requires prospective diagnosis and, if justified, a protocol-consistent translation correction before final execution; it cannot be inserted manually.
-
-Pilot records are diagnostic only. Execute clean final events after the translations are accepted. Apply the main protocol's final-event completeness and failure rules. The electronic search is complete when all four partitions have either completed successfully or failed explicitly in both sources, with no partial import.
 
 ## Eligibility criteria
 
@@ -120,7 +107,7 @@ A review does not need to identify a qualifying EPS thread to enter this support
 
 ## Screening, retrieval, and decisions
 
-Deduplicate Scopus and Web of Science records using the main protocol's identifier and metadata rules. Preserve both discovery events. Treat preprint, online-first, conference, and journal versions according to the main report-identity principles.
+Deduplicate Scopus and Web of Science records. Preserve both discovery events.
 
 At title and abstract screening, interpret eligibility liberally. Retrieve the full text when the record plausibly describes a review of space-related MBSE, SysML, digital engineering, structured system models, reference models, or reference architectures. Do not require CubeSat, nanosatellite, or EPS terms in metadata.
 
@@ -138,7 +125,7 @@ Assign one source-located full-text decision:
 
 Use one main exclusion reason. Preserve review-like excluded reports in a contextual list, but do not appraise or count them as included prior reviews.
 
-The sole human reviewer makes every final screening decision. Use one focused LLM audit of normalized title-and-abstract decisions and full-text eligibility decisions when an authorized route is available. The audit may see the human decision and must flag disagreements or missing evidence for human adjudication. Use a delayed human recheck when no authorized model route is available. Apply the rights, document-coverage, technical-failure, discrepancy, and human-adjudication rules from the main verification protocol. Model output never determines eligibility automatically.
+The sole LLM reviewer makes every final screening decision. Use one focused human audit of normalized title-and-abstract decisions and full-text eligibility decisions when an authorized route is available. The audit may see the LLM decision and must flag disagreements or missing evidence for human adjudication. Apply the rights, document-coverage, technical-failure, discrepancy, and human-adjudication rules from the main verification protocol. Model output never determines eligibility automatically.
 
 ## Extraction form
 
@@ -179,7 +166,7 @@ Create one compact extraction for each included prior-review report. Do not use 
 
 ### Findings needed only for overlap
 
-- which main-review RQ1, RQ2, and RQ3 dimensions the review explicitly sought or reported;
+- which main-review RQ1, RQ2, and RQ3 PICOC outcomes the review explicitly sought or reported;
 - whether nanosatellite-EPS evidence was directly extractable, only embedded in broader counts, mentioned without separable results, or absent;
 - whether the review used an MBSE and EPS relationship at least as specific as the main review's definitions;
 - findings or author conclusions needed solely to understand claimed coverage, without treating them as primary evidence; and
@@ -242,7 +229,7 @@ The final need statement must distinguish:
 
 ## Verification and consistency
 
-The sole human reviewer performs the canonical extraction and all final CRD, DARE, overlap, and need judgments. For each included review, use one focused audit under the main [sole-reviewer workflow](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification). An authorized LLM may perform the audit while seeing the extraction. Use a delayed human audit when no authorized route is available. Validate controlled values and dates deterministically, then adjudicate every issue against the source.
+The LLM reviewer performs the canonical extraction and all final CRD, DARE, overlap, and need judgments. For each included review, use one focused audit under the main [sole-reviewer workflow](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification). A human may performs the audit while seeing the extraction. Validate controlled values and dates deterministically, then adjudicate every issue against the source.
 
 The focused audit must check:
 
@@ -253,23 +240,6 @@ The focused audit must check:
 - the unsearched interval to the main cutoff.
 - the final supporting-search disposition.
 - evidence locations and missing source support.
-
-Ask the supervisor to audit `min(2, N)` included prior reviews when available. If `N = 0`, ask the supervisor to audit the search strategy and a reproducible sample of full-text exclusions. Preserve requested and completed scope. Never call an LLM pass independent human review. Keep supporting-search audits and discrepancies separate from primary-review counts.
-
-## Required artifacts and reporting
-
-Create under a distinct supporting-search namespace:
-
-- the accepted Scopus and Web of Science source-native translations and pilot evidence;
-- a supporting-search section of the search log and manifest with `PSR*` event IDs;
-- raw final exports and retrieval-completeness evidence;
-- normalized and deduplicated records with preserved discovery events;
-- title-and-abstract and full-text screening decisions;
-- the retrieval log and full-text exclusion table;
-- the supporting extraction codebook and per-review extractions;
-- focused-audit, supervisor, discrepancy, and adjudication records;
-- the CRD answer table, DARE question matrix, and scope-overlap matrix; and
-- a dated need-for-review statement and methods limitation statement.
 
 Report this supporting process separately from the main review. At minimum report:
 

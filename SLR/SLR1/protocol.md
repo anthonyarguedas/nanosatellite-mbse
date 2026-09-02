@@ -6,8 +6,6 @@
 - **Citation chasing finished in commit:** NA
 - **Full-text screening completed in commit**: NA
 
-> **Protocol parts:** **1 — Scope and definitions** (this file) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md) · [Supporting need assessment — Prior secondary reviews](protocol-prior-secondary-reviews.md)
-
 ## Review type and terminology
 
 This work is a **systematic review with an evidence-map synthesis**. Throughout the protocol, *systematic review* names the overall method of identifying, selecting, appraising, and synthesizing evidence; *evidence map* names the structured descriptive output. Do not call the work a *systematic mapping study*: Kitchenham and Charters use that term for broad, high-level classification with deliberately limited extraction, whereas this review performs in-depth extraction and appraisal of linked evidence units.
@@ -65,17 +63,6 @@ Within RQ2, reliability and mission assurance, reproducibility and reuse, and in
 
 ## Operational definitions
 
-### Evidence statuses
-
-Use the following meanings wherever a field permits these values; a field-specific rule controls when it sets a stricter evidence requirement:
-
-- **`not_reported`:** the available source does not provide the information needed for the field;
-- **`none`:** the evidence establishes that the condition, item, result, or capability was absent or failed, rather than merely unreported;
-- **`not_applicable`:** the field or rule does not logically apply to the evidence unit, with a narrow reason; and
-- **`uncertain`:** relevant evidence exists, but it does not resolve the value or classification.
-
-`unclear` is a field-specific classification used where a controlled vocabulary expressly provides it; it is not a substitute for one of the statuses above when that field distinguishes them. Missing reporting does not prove absence or poor conduct, and coding confidence does not replace a controlled status. Within source-reported information, distinguish author-declared or planned content from source-observed results; keep both separate from reviewer-inferred and reviewer-derived information.
-
 ### Nanosatellite population
 
 An eligible platform is an actual or planned orbital spacecraft that the source calls a CubeSat or nanosatellite. Recognized CubeSat form factors are eligible even if a particular spacecraft is outside the strict 1–10 kg nanosatellite range. A reference, template, or early design model can be eligible without a named or built mission if it clearly targets orbital CubeSat or nanosatellite development.
@@ -112,49 +99,12 @@ The relationships must involve the same EPS entity or thread that makes the repo
 
 Qualifying approaches may use SysML, Arcadia or Capella, object-oriented system models, reference models, or connected digital-engineering environments. A stand-alone circuit or battery model, SPICE/MATLAB/Simulink simulation, optimization, power-budget spreadsheet, or component-sizing calculation is not MBSE by itself. It qualifies only if the source explicitly binds, traces, transforms, or otherwise connects its inputs or outputs to a structured system model.
 
-### Bounded genericity, reusable artifacts, and tailoring
-
-#### What genericity means in this review
-
-For RQ1, **genericity means bounded transferability**. It asks whether teams can adopt or tailor the documented core of an identifiable EPS-linked MBSE artifact for stated target settings inside a declared range of use.
-
-Genericity is not an unlimited property of a paper, diagram, language, tool, repository, workflow, or model. A label such as *generic*, *reference*, *standard*, *template*, *reusable*, *configurable*, *modular*, *scalable*, *lightweight*, *open*, or *mission-agnostic* is not proof by itself.
-
-#### Reusable artifact and artifact lineage
-
-A **reusable EPS MBSE artifact** is a source-identifiable structured-model asset, or documented package of assets, that contains a qualifying EPS thread or is explicitly connected to one. It can be:
-
-- a reference or template model;
-- a metamodel or profile that carries EPS meaning;
-- a model library or pattern;
-- an interface contract;
-- a parametric-model package;
-- a transformation or generator with persistent model content; or
-- a larger reusable spacecraft model whose EPS part can be reconstructed separately.
-
 ### Eligible EPS evidence routes
 
 Assign each full-text report to one of two routes. The routes are mutually exclusive. Use Route A only when the report's objective, modeled viewpoint or boundary, and substantial methods or results focus on the EPS. Otherwise, use Route B if it has a qualifying embedded thread. A report can contain several EPS threads, but its report-level route does not change.
 
 - **Route A — EPS-primary MBSE:** The EPS, electrical-power viewpoint, or a defined EPS function or architecture is the main modeled boundary. The report identifies an EPS model artifact and at least one explicit relationship between that EPS content and another systems-engineering concern.
 - **Route B — embedded EPS model thread:** A wider nanosatellite MBSE report contains at least one EPS thread that meets all three tests below.
-
-### Direct EPS-linked pre-physical V&V
-
-Classify completeness in stages. Do not discard an otherwise explicit linked activity only because a later stage is missing:
-
-- **EPS-linked V&V:** target, bridge, and V&V method, intent, or artifact are reported.
-- **Criterion-complete EPS-linked V&V:** the activity also gives a requirement, threshold, expected behavior, formal property, or pass/fail criterion.
-- **Executed pre-physical V&V:** the linked method was run before physical integration or testing of the target EPS, and the source reports a result or verdict.
-- **Model-to-test continuity/closure:** the source links a later physical artifact or activity. Reserve *closure* for cases that compare results and report how differences were handled.
-
-A simulation or trade study without a stated V&V or checking purpose and without a criterion is analysis, not V&V. If a source calls an activity verification but does not report its criterion, keep it as an EPS-linked activity but do not call it criterion-complete. General system V&V that merely appears beside EPS content does not answer RQ3.
-
-For this review, **pre-physical V&V** is a model-based V&V artifact or activity prepared or run before physical integration or testing of the target EPS design. Preparation of a model-derived later physical test is included as preparation. MIL and SIL can qualify while the target EPS hardware remains virtual.
-
-Classify PIL and HIL according to the hardware actually used. They are not wholly pre-physical if target EPS hardware takes part. Representative hardware or hardware outside the target EPS does not turn an otherwise virtual target-EPS activity into a physical EPS test. Record bench, environmental, integration, operational, and flight evidence as later model-to-test continuity. If the timing or target hardware is unclear, code it `uncertain` and do not count it as demonstrated pre-physical execution.
-
-The RQ3 completeness stages are claim-specific descriptors, not a general evidence hierarchy. Target–bridge–method evidence supports the existence of an EPS-linked V&V activity. Criterion, execution, and result support an executed-check claim. An appropriate pass/fail criterion is required for model or design validation. Linked physical evidence supports continuity only for the artifacts and comparisons actually traced. Give every direct activity an inline evidence basis, support code, and concise reason. Operational or flight maturity does not automatically strengthen a different claim.
 
 ## Units of evidence and counting
 
@@ -168,14 +118,18 @@ Use the following linked units:
 6. **RQ2 finding:** one materially distinct outcome, burden, trade-off, or direction. Split only when evidence, scope, actor, scenario, or direction differs materially.
 7. **RQ3 activity:** one target–method–scenario activity. Keep several criteria and verdicts together when method, scenario, and timing are shared.
 
-Inputs, assumptions, engineering outputs, criteria, and verdicts are grouped rows nested within the report or activity. They are not independent evidence units. Measurements, comparators, rival explanations, appraisal judgments, and support judgments are fields within the relevant row rather than separate linked objects.
-
-Resolve report families and cross-report artifact identity only after the first report-level extraction pass. Record the source-supported basis, evidence locations, and coding confidence for each merge or split. Create separate lineage-level and consolidated application records. Keep report-level records unchanged except for resolving their `lineage_id`, and do not move evidence between reports, versions, applications, or families.
-
 PRISMA identification and selection counts remain at record and report level. Report separate analytic denominators for report families, reports, artifact lineages, tailoring applications, direct RQ2 findings, and direct RQ3 activities. A report count is not a count of independent implementations or transfers.
 
 External repositories, evolving models, and author-provided artifacts are not independently retrieved or inspected.
 
----
+## Inclusion and exclusion criteria
 
-**Next:** [Part 2 — Discovery and appraisal](protocol-discovery-and-appraisal.md)
+| Criterion | Plain-English rule | RQ(s) |
+|---|---|---|
+| Publication date | Include a report only when an eligible version is dated from 2011-01-01 through the common evidence cutoff. | 1–3 |
+| Language | The full report must be in English. English metadata does not prove that the report itself is in English. If the full text cannot be obtained, use `not_retrieved` instead of making a language assumption. | 1–3 |
+| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; workshop presentation (for ESA Indico only); research chapter in an edited scholarly book; institutional technical report; arXiv preprint; completed master's thesis; or completed doctoral thesis or dissertation. | 1–3 |
+| Scientific scope | The work must satisfy the canonical [nanosatellite population](protocol.md#nanosatellite-population), [EPS boundary](protocol.md#eps-boundary), [MBSE qualification](protocol.md#mbse-qualification), and [Route A or Route B](protocol.md#eligible-eps-evidence-routes) rules. | 1–3 |
+| Secondary studies | Exclude secondary studies. | 1–3 |
+| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; incomplete degree work; undergraduate, bachelor's, or non-degree projects; advertisements; and non-scholarly web material. | 1–3 |
+| Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. | 1–3 |

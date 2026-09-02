@@ -1,4 +1,4 @@
-# Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Extraction and synthesis
+# Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Extraction
 
 ## Extraction design
 
@@ -15,11 +15,18 @@ Do not create separate analytic objects for individual measurements, comparators
 Create a codebook and machine-readable schema from this protocol before full extraction. Every report and repeatable row must have a stable ID. Each repeatable row also records:
 
 - `evidence_location`, including report ID, page, section, and figure or table when relevant.
-- `coding_confidence`, using `high`, `moderate`, or `low` under Part 2.
+- `coding_confidence`, using `high`, `moderate`, or `low`. Assign coding confidence as `high` for explicit and unambiguous source support, `moderate` when a bounded reconstruction is required, and `low` when material ambiguity remains.
 - `provenance`, using `source_reported`, `author_claimed_or_planned`, `reviewer_inferred`, or `reviewer_derived`.
 - `notes`, only when needed to explain ambiguity or a coding decision.
 
-Apply the Part 1 statuses `not_reported`, `none`, `not_applicable`, and `uncertain` exactly. Do not use an empty value when one of these statuses applies. Keep source-observed results separate from author expectations and reviewer calculations.
+Apply the evidence statuses `not_reported`, `none`, `not_applicable`, and `uncertain` exactly. 
+
+- **`not_reported`:** the available source does not provide the information needed for the field;
+- **`none`:** the evidence establishes that the condition, item, result, or capability was absent or failed, rather than merely unreported;
+- **`not_applicable`:** the field or rule does not logically apply to the evidence unit, with a narrow reason; and
+- **`uncertain`:** relevant evidence exists, but it does not resolve the value or classification.
+
+`unclear` is a field-specific classification used where a controlled vocabulary expressly provides it; it is not a substitute for one of the statuses above when that field distinguishes them. Missing reporting does not prove absence or poor conduct, and coding confidence does not replace a controlled status. Within source-reported information, distinguish author-declared or planned content from source-observed results; keep both separate from reviewer-inferred and reviewer-derived information.
 
 A source location and coding confidence may cover a compact group of fields when they come from the same passage, figure, or table. Do not duplicate the same quotation for every field.
 
@@ -201,6 +208,17 @@ Record:
 
 Descriptive facts such as the tool used or diagrams present remain normal report fields and do not need a claim row.
 
+- **`evidence_basis`**, using one or more of `assertion_only`, `worked_example`, `executed_result`, `comparison`, `stakeholder_evidence`, `physical_or_operational_check`, and `independent_transfer`;
+- **`support`**, using `supported`, `limited`, `unsupported`, or `unclear`; and
+- **`support_reason`**, one concise source-located sentence naming the strongest evidence and the main limitation.
+
+Use the support codes as follows:
+
+- **`supported`:** direct or credibly justified evidence from a method fit for the bounded claim supports it, with no major unresolved limitation relevant to that claim.
+- **`limited`:** relevant evidence exists, but an important limitation in method, directness, comparison, precision, independence, or applicability remains.
+- **`unsupported`:** the source provides assertion only, no observation bearing on the claim, or a result that does not measure the claimed construct.
+- **`unclear`:** relevant evidence is reported, but ambiguity prevents a support judgment.
+
 ### RQ2 outcome and burden findings
 
 Create one row for each materially distinct EPS-attributed outcome, burden, or trade-off. Split a statement when direction, evidence, actor, scenario, or scope differs materially. Keep plausible near misses with `direct_synthesis = no` and one reason.
@@ -309,11 +327,24 @@ Record a comparator and major rival explanations only when the report makes a co
 
 Keep the source's own term as well as the reviewer's normalized code and reason. Running a method in a model does not automatically make it model verification or model validation. For example, a virtual requirement check can be system or design verification. Code execution settings such as MIL, SIL, PIL, HIL, and virtual testbeds separately from the V&V object.
 
+Classify status in stages.
 
+- `proposed`: target, bridge, and V&V method, intent, or artifact are reported.
+- `prepared_or_generated`: the activity also gives a requirement, threshold, expected behavior, formal property, or pass/fail criterion.
+- `executed_virtual`: the linked method was run before physical integration or testing of the target EPS, and the source reports a result or verdict (`result_reported`).
+- `model_to_test_closure`: the source links a later physical artifact or activity (`downstream_physical_link`). Reserve `model_to_test_closure` for cases that compare results and report how differences were handled.
 
 ### Reusable artifact and reported lineage
 
-See [Reusable artifact and artifact lineage](protocol.md#Reusable artifact and artifact lineage).
+A **reusable EPS MBSE artifact** is a source-identifiable structured-model asset, or documented package of assets, that contains a qualifying EPS thread or is explicitly connected to one. It can be:
+
+- a reference or template model;
+- a metamodel or profile that carries EPS meaning;
+- a model library or pattern;
+- an interface contract;
+- a parametric-model package;
+- a transformation or generator with persistent model content; or
+- a larger reusable spacecraft model whose EPS part can be reconstructed separately.
 
 The first report pass creates a complete source-bounded extraction for every identifiable EPS-linked artifact assessed for reuse, reported artifact lineage, or method or workflow reuse case described in the report. Create more than one reuse record when the report describes materially distinct artifacts or lineages. Extract all evidence available in the report even when no companion report is known. Cross-report identity remains pending.
 
@@ -704,7 +735,7 @@ Before full extraction:
 
 ### Sole-reviewer extraction and verification
 
-One human reviewer reviews the primary extraction and every final decision. Verification uses one focused audit, deterministic validation, a delayed human test–retest sample, and an optional supervisor sample. It does not require two complete model extractions for every report.
+One LLM reviewer reviews the primary extraction and every final decision. Verification uses one focused audit, deterministic validation, a delayed LLM test–retest sample.
 
 Apply this sequence:
 
@@ -722,4 +753,4 @@ A discrepancy is impactful when it can change eligibility or route, a report fam
 
 Do not calculate inter-rater reliability between the reviewer and an LLM. Report audit coverage, issues raised, accepted corrections, rejected flags, unresolved ambiguities, and test–retest differences with their denominators.
 
-Before synthesis, validate every report-level extraction and every separate family, lineage, and consolidated application table against the frozen schema. Confirm that every included report has a completed focused audit or human fallback, every discrepancy has a human disposition, every derived value is reproducible, every lineage-level field preserves report provenance, and cross-report processing changed only report-level `lineage_id` values.
+Before synthesis, validate every report-level extraction and every separate family, lineage, and consolidated application table against the frozen schema. Confirm that every included report has a completed focused audit, every discrepancy has a human disposition, every derived value is reproducible, every lineage-level field preserves report provenance, and cross-report processing changed only report-level `lineage_id` values.
