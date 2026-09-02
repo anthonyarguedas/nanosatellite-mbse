@@ -23,7 +23,7 @@ The JSON and its sibling screenshots are authoritative for per-event query, cont
 - Language: Apply the validated `En` Link language facet. This metadata limiter does not replace English full-text screening.
 - Publication type: Apply no content-type limiter: Link content-type facets overlap and card labels can differ from facet values, so Article plus Chapter is not a demonstrated complete eligible-report union. Do not apply peer-review, access, or full-text-availability limits.
 - Database or collection selection: Full Springer Nature Link platform with no content type, access, subject, or brand facet.
-- Discipline and Subdiscipline filters: Do not use either UI filter. Springer Nature Link classified the relevant paper *Magnetometer-only linear attitude estimation for bias momentum pico-satellite* under `Civil engineering`. This aerospace paper shows that those categories do not reliably represent subject scope for this review.
+- Discipline and Subdiscipline filters: Do not use either UI filter. A pilot search returned *Magnetometer-only linear attitude estimation for bias momentum pico-satellite*, which Springer Nature Link classified under `Civil engineering`. This example shows that those categories do not reliably represent aerospace subject scope. It makes no claim about the paper's review eligibility.
 - Other shared limits: None.
 
 ## Source translation
