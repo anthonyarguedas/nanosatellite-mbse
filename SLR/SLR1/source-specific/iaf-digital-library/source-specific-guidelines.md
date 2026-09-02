@@ -10,7 +10,7 @@ Export method: `~/agent-tools/internet/skills/browser/scripts/search_iaf_digital
 
 Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`.
 
-The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed decisions and pilot conclusions.
+The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed source decisions.
 
 ## Fixed source configuration
 
@@ -27,35 +27,44 @@ The script artifact is authoritative for per-event query, controls, source ident
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Exact literals remain normative. A trailing wildcard may be tested only as a labelled diagnostic cell. Preserve punctuation, spacing, phrase, and spelling forms outside its replacement, and do not accept it from totals alone.
+Use the exact concept membership and compound Boolean definitions in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Use no proximity operator, pair expansion, or local pair check. Use the trailing wildcard translation for the population block only. Keep every other ordinary term explicit.
 
-- Literal `L(s)`: Use one straight double-quoted literal.
-- Atom `A(s)`: `L(s)` in the Any keyword expression.
-- Boolean: Use uppercase `OR`, explicit parentheses, and whitespace for AND.
-- Block `F(S)`: join `A(s)` for every ordinary member of `S` with source OR. Fully parenthesize the result.
-- Pair `PAIR(a,b)`: `(A(a) A(b))` in the same Any keyword route. This is the broader fallback candidate.
-- Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
-- Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: Split every partition into deterministic cells below the 500-character source limit. Run all cells and reconcile their stable paper-ID union. Apply exact pair checking to retained title and abstract text. Pilot 001 used 69-character and 38-character representative cells, both with exact zero totals. Pilot 002's 68-character `CubeSat*` A1 cell was also count-only zero. It supplies no stable-ID evidence and does not validate full partition coverage. Wildcard use remains unaccepted.
+- Literal `L(s)`: Use one straight double-quoted token or ordered phrase.
+- Atom `A(s)`: Place `L(s)` in the unqualified Any keyword expression.
+- Wildcard population `F_W(P)`: `(CubeSat* OR "cube sat*" OR cube-sat* OR nanosat* OR nano-sat* OR "nano sat*" OR SmallSat* OR "small sat*")`. These eight atoms replace the 26 explicit `P` terms for IAF searches.
+- Boolean: Use uppercase `OR`, explicit parentheses, and whitespace conjunction for semantic `AND`.
+- Ordinary block `F(S)`: For every block other than `P`, join `A(s)` for every member of `S` with source `OR`, then fully parenthesize the result.
+- `G_model`: `F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B))`.
+- `G_structure`: `F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B))`.
+- `C1`: `F(C1_fixed) OR F(G_DSL)`.
+- `T_precise`: `F(T_precise)`.
+- Controlled vocabulary: Add no supplement. Free text remains mandatory. Add a descriptor only after its source mapping and assignment are proved.
+
+The source accepts at most 500 query characters. Distribute each compound outer `OR` into named conjunction branches. Pack each branch into deterministic cells below the cap. Each branch plan must cover every Cartesian alternative tuple exactly once. Run all cells and reconcile the stable paper-ID union across cells and branches.
+
+Use these expansion branches:
+
+| Partition | Source branches |
+|---|---|
+| `BG1` | `F_W(P) AND F(G_model_fixed)`; `F_W(P) AND F(G_mission_exact)`; `F_W(P) AND F(G_mission) AND F(M_B)` |
+| `BG2` | `F_W(P) AND F(G_structure_fixed)`; `F_W(P) AND F(G_product_exact)`; `F_W(P) AND F(G_variation)`; `F_W(P) AND F(G_product) AND F(M_B)` |
+| `BC1` | `F_W(P) AND F(C1_fixed)`; `F_W(P) AND F(G_DSL)` |
+| `BT2` | `F_W(P) AND F(M_B) AND F(T_precise)` |
+
+The complete wildcard schedule contains 158 cells. Keep the source unrestricted by event, language, type, access, peer review, and full-text availability. Apply the evidence window locally after every complete raw traversal.
 
 ## Query schedule
 
-The table uses `AND` and `OR` as semantic labels. Render them with the source operators above. `F(G_model)`, `F(G_structure)`, `F(C1)`, and `F(T2)` include fixed phrases and expanded pairs.
+The table uses `AND` and `OR` as semantic labels. Render them with the source operators, wildcard population block, and branch distribution above.
 
-| ID | Source construction |
-|---|---|
-| `A1` | `F(P) AND F(E_H) AND F(M_H)` |
-| `A2` | `F(P) AND F(E_F) AND (F(M_H) OR F(M_B))` |
-| `A3` | `F(P) AND F(E_H) AND F(M_B)` |
-| `B1` | `F(P) AND F(M_H)` |
-| `B2` | `F(P) AND F(M_B) AND F(R)` |
-| `BG1` | `F(P) AND F(G_model)` |
-| `BG2` | `F(P) AND F(G_structure)` |
-| `BC1` | `F(P) AND F(C1)` |
-| `BT2` | `F(P) AND F(M_B) AND F(T2)` |
-
-## Pilots
-
-- [x] [Pilot 001](pilots/001/pilot.md): representative `A1` and broad pair cells stayed below 500 characters and returned exact zero totals. No complete partition route was used.
-- [x] [Pilot 002](pilots/002/pilot.md): the 68-character `CubeSat*` A1 cell was a count-only zero. The indexed language field is not an exhaustive filter, no type control was added, and the wildcard is unaccepted.
-- [Pilot 003](pilots/003/pilot.md): all 1,077 lossless cells completed with reconciled raw and diagnostic-window paper-ID unions. No wildcard or narrowing filter was used. This does not complete piloting or authorize a final search.
+| ID | Source construction | Current cells |
+|---|---|---:|
+| `A1` | `F_W(P) AND F(E_H) AND F(M_H)` | 37 |
+| `A2` | `F_W(P) AND F(E_F) AND (F(M_H) OR F(M_B))` | 48 |
+| `A3` | `F_W(P) AND F(E_H) AND F(M_B)` | 21 |
+| `B1` | `F_W(P) AND F(M_H)` | 4 |
+| `B2` | `F_W(P) AND F(M_B) AND F(R)` | 20 |
+| `BG1` | `F_W(P) AND (F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B)))` | 6 |
+| `BG2` | `F_W(P) AND (F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B)))` | 6 |
+| `BC1` | `F_W(P) AND (F(C1_fixed) OR F(G_DSL))` | 3 |
+| `BT2` | `F_W(P) AND F(M_B) AND F(T_precise)` | 13 |
