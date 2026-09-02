@@ -1,0 +1,43 @@
+{
+  "schema_version": "ieee-xplore-pilot-009-adapter-validation/v1",
+  "source": "IEEE Xplore",
+  "validated_at_utc": "2026-09-02T16:06:13Z",
+  "adapter_version": "10",
+  "adapter_sha256": "c185c7609300e2ed91d975e4939cc1ddf493f2fa58978038d8b40d3bc624575b",
+  "repairs": [
+    "Keep percent-component encoding for validated request targets through 7800 bytes.",
+    "Use equivalent compact form encoding with RFC-safe parentheses only when the percent representation exceeds that bound.",
+    "Fail before source execution when the compact request target remains oversized.",
+    "Reject explicit HTTP navigation errors and rendered request-rejection pages.",
+    "Record a query echo only from a ready rendered result state."
+  ],
+  "query_change": false,
+  "wildcard_used": false,
+  "focused_test_command": "cd ~/agent-tools/academic-api-search/skills/academic-api-search/tests && PYTHONPATH=. python3 -m unittest test_search_ieee_xplore_browser.BrowserRouteTests test_search_ieee_xplore_browser.IEEEYearPostApplyStabilizationTests test_search_ieee_xplore_browser.IEEEYearControlObservabilityTests",
+  "focused_test_result": {
+    "status": "passed",
+    "tests_passed": 24,
+    "failures": 0,
+    "elapsed_seconds": 4.234
+  },
+  "lint_command": "cd ~/agent-tools && ruff check internet/skills/browser/scripts/search_ieee_xplore.py academic-api-search/skills/academic-api-search/tests/test_search_ieee_xplore_browser.py",
+  "lint_result": "passed",
+  "live_validation": {
+    "event_count": 2,
+    "status": "passed",
+    "query_sha256": "c089612db91c2dcecacc21f5c6d2aafad7ca54b13725c1e3eecc4baa6cd7f934",
+    "query_characters": 5947,
+    "wildcard_count": 0,
+    "former_request_target_bytes": 9319,
+    "repaired_request_target_bytes": 7477,
+    "source_totals": [
+      33,
+      33
+    ],
+    "exact_query_echo": true,
+    "exact_native_year_readback": true,
+    "oldest_sort_readback": true,
+    "terminal_markers_valid": true
+  },
+  "historical_pilot008_artifacts_immutable": true
+}

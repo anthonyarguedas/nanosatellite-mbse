@@ -42,7 +42,7 @@ The [raw run receipt](searches/run-receipt-raw.json) misclassified the six succe
 
 ## Query acceptance and totals
 
-IEEE produced an exact query echo for every complete direct expression at least once. This supports one direct source expression per partition. It does not establish a complete date-controlled result.
+Adapter v8 reported an exact query echo for every complete direct expression at least once. [Pilot 009](../009/pilot.md) later showed that A2's echo came only from a failed route URL. Ready result states support one direct source expression for the eight non-A2 partitions. Pilot 009 separately establishes direct literal A2 execution. None of this establishes a complete date-controlled result.
 
 | Partition | Pass 1 | Pass 2 | Repeated total |
 |---|---:|---:|---:|
@@ -82,6 +82,10 @@ Change the source translation and schedule.
 Use one direct All Metadata expression for each partition in the schedule without proximity operators. Render the shared compound blocks with nested `AND` and `OR`. Use no proximity operator, pair expansion, wildcard, or split based on results.
 
 Document the source control limitation. Pilot 005 did not validate a complete date-controlled schedule. Only `A3`, `B2`, and `BG1` returned repeated totals. All four changed strict events remain null. IEEE Xplore is unresolved and no Pilot 005 artifact belongs in `final-searches/`.
+
+## Later A2 reclassification
+
+[Pilot 009](../009/pilot.md) showed that both Pilot 005 A2 failures occurred on an oversized adapter route before source execution. Their exact query evidence came from the failed URL parameter. Adapter v10 preserved the byte-identical literal query in a compact route and completed two count events. The Pilot 005 artifacts remain immutable `total: null` evidence.
 
 ## Validation and reproduction
 

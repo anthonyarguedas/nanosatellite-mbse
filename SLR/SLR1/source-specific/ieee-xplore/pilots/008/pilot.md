@@ -54,6 +54,12 @@ P AND E_F AND (M_H OR M_B)
 
 IEEE Xplore remains unauthorized for final search execution.
 
+## Later adapter reclassification
+
+[Pilot 009](../009/pilot.md) identified this repeated state as an adapter v9 transport failure. The 9,319-byte request target received HTTP 414 before IEEE loaded its result application. Adapter v9 ignored that status and treated the failed route's query parameter as an exact source echo. Adapter v10 preserved the byte-identical literal query in a 7,477-byte request target and completed two count events with the same total.
+
+The Pilot 008 artifacts remain immutable failure evidence. Their direct-A2 source-limitation diagnosis is superseded. No Pilot 009 count is a final search result.
+
 ## Validation and reproduction
 
 The [assessment](searches/assessment.json) hashes both failures and verifies the Pilot 005 query identity. The [validation report](searches/validation-report.json) checks the predeclared plan, query bytes, controls, failure signatures, null totals, and source guideline.
