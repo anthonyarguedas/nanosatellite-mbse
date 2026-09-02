@@ -10,7 +10,9 @@ Export method: `~/agent-tools/internet/skills/browser/scripts/search_web_of_scie
 
 Save primary final searches and forward citation searches in `final-searches/`. Save PSR final searches in `psr-searches/`. Name artifacts with the query ID (`A1.json`, `PSR1.json`) or citation seed report ID (`<paperID>.json`).
 
-The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed decisions and pilot conclusions.
+Adapter version 2 always saves `<name>.search-page.png` and `<name>.results-page.png` beside each CLI JSON. The first image shows the configured Query Builder before Search. The second shows the first reconciled results page. There is no screenshot opt-out. A successful event requires both PNGs and records their filenames, hashes, dimensions, and privacy flags in the JSON.
+
+The JSON and its sibling screenshots are authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed decisions and pilot conclusions.
 
 ## Fixed source configuration
 
@@ -19,41 +21,65 @@ The script artifact is authoritative for per-event query, controls, source ident
 - Platform: Clarivate Web of Science
 - URL: https://www.webofscience.com/wos/woscc/advanced-search
 - Search field or local route: Core Collection Query Builder `TS` Topic field across all current editions.
-- Main evidence window: Use `--year-start 2011 --year-end <cutoff-year>`. Screen records in the cutoff year against the exact common cutoff.
+- Main evidence window: Add raw `PY=(2011-<cutoff-year>)`. Screen records in the cutoff year against the exact common cutoff.
 - Language: Main-review raw queries include `LA=(English)`. Confirm full-report English during screening. PSR searches remain all-language.
-- Publication type: Apply no type control. Pilot 002 proved the candidate DT OR syntax, but not lossless assignment coverage for every shared eligible report type. Never apply peer-review, access, or full-text availability filters.
+- Publication type: Apply no type control. Pilot 002 proved the candidate DT OR syntax. Lossless assignment coverage remains unproved for the shared eligible report types. Never apply peer-review, access, or full-text availability filters.
 - Database or collection selection: Web of Science Core Collection with all current editions selected.
 - Other shared limits: None.
 
 ## Source translation
 
-Use the exact concept membership and pair declarations in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed literal and declared pair. Main-review A1 may use Pilot 002's accepted 10-wildcard candidate with `PY=(2011-2026) AND LA=(English)`. It covers 22 replaced literals and has a complete stable-ID superset. Other partitions retain literal expansions.
+Use the exact concept membership and compound Boolean definitions in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction), as revised by commit `3194156e90497186664260a8e86435e78d2e2aa1`. Every listed term is an ordinary token or ordered phrase. Use no proximity operator, token-distance rule, same-field pair, pair expansion, or local pair filter.
 
 - Literal `L(s)`: Use one straight double-quoted literal. Multiword literals remain ordered phrases.
 - Atom `A(s)`: `TS=(L(s))`.
-- Boolean: Uppercase `AND` and `OR` with explicit parentheses.
-- Block `F(S)`: join `A(s)` for every ordinary member of `S` with source OR. Fully parenthesize the result.
-- Pair `PAIR(a,b)`: `TS=(L(a) NEAR/6 L(b))`. This conservative unordered fallback may admit one extra intervening word.
-- Paired blocks: retain every fixed phrase and replace every declared pair with `PAIR(a,b)`.
-- Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: Use Topic rather than All Fields because proximity is unavailable in All Fields. Validate the `NEAR/6` no-loss fallback and complete query echo once.
-- Pilot 001 accepted the full `A1`, `BG1`, and `PSR1` raw expressions with exact query, Core Collection edition, year, and sort readback. Raw mode requires the date clause inside the query. The count-only runs did not establish pair no-loss, so check retained final records locally.
+- Boolean: Use uppercase `AND` and `OR` with explicit parentheses.
+- Ordinary block `F(S)`: Join `A(s)` for every ordinary member of `S` with source `OR`. Fully parenthesize the result.
+- Compound `G_model^S`: `F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B))`.
+- Compound `G_structure^S`: `F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B))`.
+- Compound `C1^S`: `F(C1_fixed) OR F(G_DSL)`.
+- `T_precise`: Use the ordinary block `F(T_precise)`.
+- Controlled vocabulary: Add no supplement. The source exposes searchable classification fields, but no descriptor mapping has been accepted for this review.
+- Raw controls: Append `PY=(2011-<cutoff-year>) AND LA=(English)` to each main expression. Raw mode requires date and language clauses inside the query.
+
+### Accepted main-review population wildcard block
+
+Use `F*(P)` in every main partition. It contains these ten quoted trailing-wildcard atoms:
+
+- `TS=("CubeSat*")`
+- `TS=("cube sat*")`
+- `TS=("cube-sat*")`
+- `TS=("cube satellite*")`
+- `TS=("nanosat*")`
+- `TS=("nano-sat*")`
+- `TS=("nano sat*")`
+- `TS=("nano-satellite*")`
+- `TS=("nano satellite*")`
+- `TS=("SmallSat*")`
+
+Join those atoms with source `OR`, then add the four unchanged literal atoms for `small satellite`, `small satellites`, `small sat`, and `small sats`. Fully parenthesize the 14-atom result.
+
+The ten wildcards replace 22 declared population literals and shorten every affected query by 255 characters. Pilot 004 found exact literal-wildcard ordered WOS-ID equality in all nine main partitions. Use this shorter rendering for the main schedule. This main-search decision is bounded to the 2011 through 2026 English-controlled route.
+
+Pilot 006 found exact literal-wildcard ordered WOS-ID equality in all four PSR partitions. Use the same ten atoms for `P` and for the `P` members nested inside `X`. Keep every additional `X` term literal. This PSR decision is bounded to the source-inception through 2026 all-language route.
+
+Pilot 005 tested a broader map of 128 `$` and `*` variant families. Broad `A1` matched its literal set. Broad `A2` timed out at submit in three direct attempts, and its split `M_B` branch timed out in three more attempts. Keep all additional wildcard patterns unaccepted. The ten-atom map is the widest wildcard translation supported by complete schedule evidence.
 
 ## Query schedule
 
-The table uses `AND` and `OR` as semantic labels. Render them with the source operators above. `F(G_model)`, `F(G_structure)`, `F(C1)`, and `F(T2)` include fixed phrases and expanded pairs.
+The table uses `AND` and `OR` as semantic labels. Render ordinary and compound blocks with the source rules above.
 
 | ID | Source construction |
 |---|---|
-| `A1` | `F(P) AND F(E_H) AND F(M_H)` |
-| `A2` | `F(P) AND F(E_F) AND (F(M_H) OR F(M_B))` |
-| `A3` | `F(P) AND F(E_H) AND F(M_B)` |
-| `B1` | `F(P) AND F(M_H)` |
-| `B2` | `F(P) AND F(M_B) AND F(R)` |
-| `BG1` | `F(P) AND F(G_model)` |
-| `BG2` | `F(P) AND F(G_structure)` |
-| `BC1` | `F(P) AND F(C1)` |
-| `BT2` | `F(P) AND F(M_B) AND F(T2)` |
+| `A1` | `F*(P) AND F(E_H) AND F(M_H)` |
+| `A2` | `F*(P) AND F(E_F) AND (F(M_H) OR F(M_B))` |
+| `A3` | `F*(P) AND F(E_H) AND F(M_B)` |
+| `B1` | `F*(P) AND F(M_H)` |
+| `B2` | `F*(P) AND F(M_B) AND F(R)` |
+| `BG1` | `F*(P) AND G_model^S` |
+| `BG2` | `F*(P) AND G_structure^S` |
+| `BC1` | `F*(P) AND C1^S` |
+| `BT2` | `F*(P) AND F(M_B) AND F(T_precise)` |
 
 ### PSR query schedule
 
@@ -61,15 +87,28 @@ Use the same `L`, `A`, `F`, and Boolean rules for `X` and `Q` from [the supporti
 
 | ID | Source construction |
 |---|---|
-| `PSR1` | `F(X) AND F(M_H) AND F(Q)` |
-| `PSR2` | `F(X) AND F(M_B) AND F(R) AND F(Q)` |
-| `PSR3` | `F(P) AND (F(E_H) OR F(E_F)) AND (F(M_H) OR F(M_B)) AND F(Q)` |
-| `PSR4` | `F(X) AND (F(G_model) OR F(G_structure) OR F(C1)) AND F(Q)` |
+| `PSR1` | `F*(X) AND F(M_H) AND F(Q)` |
+| `PSR2` | `F*(X) AND F(M_B) AND F(R) AND F(Q)` |
+| `PSR3` | `F*(P) AND (F(E_H) OR F(E_F)) AND (F(M_H) OR F(M_B)) AND F(Q)` |
+| `PSR4` | `F*(X) AND (G_model^S OR G_structure^S OR C1^S) AND F(Q)` |
+
+For PSR, `F*(X)` applies the accepted ten population substitutions only to the `P` members within `X`. Every additional `X` term stays literal.
 
 PSR searches have no lower date limit and no language, document type, subject, access, or peer review filter. Apply the common upper cutoff without narrowing the source-native topic fields.
 
 ## Pilots
 
-- [x] [Pilot 001](pilots/001/pilot.md): `A1`, `BG1`, and supporting `PSR1` count-only diagnostics completed. Raw `PY` date clauses were required for the exact query mode.
-- [x] [Pilot 002](pilots/002/pilot.md): raw `LA=(English)` was read back. The proposed DT union was not accepted. The 10-wildcard A1 candidate was shorter and had a complete stable-ID superset, so it is accepted for A1 only.
-- [Pilot 003](pilots/003/pilot.md): all nine main and four separate PSR pilot events completed. Complete ID unions, cutoff checks, known-item recall, pair audits, and the three sets over 100 are linked from the pilot. This does not complete piloting or authorize a final search.
+- [x] [Pilot 001](pilots/001/pilot.md): historical `A1`, pair-based `BG1`, and supporting `PSR1` count diagnostics completed. Raw `PY` date clauses were required.
+- [x] [Pilot 002](pilots/002/pilot.md): raw `LA=(English)` was read back. No DT union was accepted. The ten-wildcard population candidate was accepted for historical `A1`.
+- [Pilot 003](pilots/003/pilot.md): all nine historical pair-based main events and four PSR events completed. Commit `3194156e90497186664260a8e86435e78d2e2aa1` superseded its `BG1`, `BG2`, `BC1`, and `BT2` translations. Its cutoff and known-item evidence remains diagnostic history.
+- [x] [Pilot 004](pilots/004/pilot.md): all 18 successful current-schedule literal and wildcard events completed strict two-pass capture with 36 mandatory screenshots. Every partition had exact ordered WOS-ID equality and no wildcard-only record. The ten-wildcard population block is accepted and preferred in all nine main partitions. One pre-query connection failure remains preserved with `total: null` and was recovered by an unchanged retry.
+- [x] [Pilot 005](pilots/005/pilot.md): the broader 128-family wildcard candidate stopped at `A2`. Broad `A1` and the split `A2` `M_H` cell succeeded. Six unchanged `A2` direct or `M_B` attempts timed out at submit with `total: null`. The broader map is rejected for schedule use. Ten screenshots document the two successes and pre-submit failure states.
+- [x] [Pilot 006](pilots/006/pilot.md): all eight PSR literal and population-wildcard events completed on their first attempt with 16 mandatory screenshots. Partition totals were 22, 60, 0, and 27. Every ordered WOS-ID set was equal, both unions contained 102 IDs, and Buruso et al. was retrieved by both versions of `PSR1` and `PSR2`. The ten population wildcard atoms are accepted and preferred across the PSR schedule.
+
+## Current source limitations
+
+`PY` is year-level. Screen cutoff-year records against the exact common cutoff. Clarivate does not universally document whether `DOP` follows Early Access or final publication.
+
+Topic can match title, abstract, author keywords, Keywords Plus, or source-normalized variants. The normalized JSON retains complete records and a native RIS receipt. The adapter keeps its internal two-pass ledger private under the shared compact-output policy.
+
+A screenshot failure makes the event fail. A source or adapter failure retains `total: null` and any screenshots captured before failure. Never treat a missing result state as zero.
