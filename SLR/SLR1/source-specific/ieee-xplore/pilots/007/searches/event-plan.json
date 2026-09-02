@@ -1,0 +1,80 @@
+{
+  "schema_version": "ieee-xplore-pilot-007-event-plan/v1",
+  "source": "IEEE Xplore",
+  "pilot": "007",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "pilot006_plan_commit": "3d06078",
+  "adapter": {
+    "version": "9",
+    "sha256": "f033f6edd8c1096dfb90dda1983e327ee9409b2026f9f84232837bf32d3025ed"
+  },
+  "objective": "Test the Pilot 006 rendered-state diagnosis that a strict page-size preference must not replace valid native pagination that already fits the caller's page bound.",
+  "controls": {
+    "publication_year": "2011_2026_Year inclusive",
+    "scope": "Documents",
+    "access": "All Results",
+    "sort": "Oldest",
+    "preferred_page_size": 100,
+    "max_pages": 20,
+    "strict_passes": 2,
+    "full_abstracts": false,
+    "language": null,
+    "publication_type": null,
+    "date_added": null,
+    "controlled_vocabulary": null
+  },
+  "repair_contract": [
+    "Keep the current validated native page size when it can exhaust the exact total within max_pages.",
+    "Use the preferred page-size control only when current native pagination cannot fit the bound.",
+    "Require both strict passes to reconcile total, semantic controls, contiguous pages, ordered Article Numbers, and normalized export.",
+    "Persist the compact strict receipt and each pass's native page size and year representation."
+  ],
+  "acceptance_checks": [
+    "BG2 and BC1 recover from their Pilot 006 rendered-state failures.",
+    "B2 captures all 131 records through contiguous native pages in both strict passes.",
+    "Every artifact has a valid terminal marker and compact strict receipt.",
+    "No event changes a query, date window, source scope, access state, or result refinement."
+  ],
+  "events": [
+    {
+      "event_id": "records-BG2",
+      "schedule_id": "BG2",
+      "mode": "complete",
+      "purpose": "Repeat the failed Pilot 006 BG2 strict event with workable native paging retained.",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND (((\"All Metadata\":\"reference architecture\") OR (\"All Metadata\":\"reference architectures\") OR (\"All Metadata\":\"domain model\") OR (\"All Metadata\":\"domain models\") OR (\"All Metadata\":\"metamodel\") OR (\"All Metadata\":\"metamodels\") OR (\"All Metadata\":\"meta-model\") OR (\"All Metadata\":\"meta-models\")) OR ((\"All Metadata\":\"product-line model\") OR (\"All Metadata\":\"product-line models\") OR (\"All Metadata\":\"product line model\") OR (\"All Metadata\":\"product line models\") OR (\"All Metadata\":\"product-family model\") OR (\"All Metadata\":\"product-family models\") OR (\"All Metadata\":\"product family model\") OR (\"All Metadata\":\"product family models\")) OR ((\"All Metadata\":\"variation point\") OR (\"All Metadata\":\"variation points\")) OR (((\"All Metadata\":\"product-line\") OR (\"All Metadata\":\"product line\") OR (\"All Metadata\":\"product-family\") OR (\"All Metadata\":\"product family\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\"))))",
+      "query_sha256": "92d29fc111ce16760c16470990fec9bd07af40c9938e5d838557ed26fad8eee0",
+      "query_characters": 3087,
+      "year_start": 2011,
+      "year_end": 2026,
+      "output": "records/BG2.json",
+      "do_not_merge": true
+    },
+    {
+      "event_id": "records-BC1",
+      "schedule_id": "BC1",
+      "mode": "complete",
+      "purpose": "Repeat the failed Pilot 006 BC1 strict event with workable native paging retained.",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND (((\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"system reference model\") OR (\"All Metadata\":\"system reference models\") OR (\"All Metadata\":\"model library\") OR (\"All Metadata\":\"model libraries\") OR (\"All Metadata\":\"system model library\") OR (\"All Metadata\":\"system model libraries\") OR (\"All Metadata\":\"model pattern\") OR (\"All Metadata\":\"model patterns\") OR (\"All Metadata\":\"modeling pattern\") OR (\"All Metadata\":\"modeling patterns\") OR (\"All Metadata\":\"modelling pattern\") OR (\"All Metadata\":\"modelling patterns\") OR (\"All Metadata\":\"system model pattern\") OR (\"All Metadata\":\"system model patterns\") OR (\"All Metadata\":\"systems model pattern\") OR (\"All Metadata\":\"systems model patterns\") OR (\"All Metadata\":\"model profile\") OR (\"All Metadata\":\"model profiles\") OR (\"All Metadata\":\"system model profile\") OR (\"All Metadata\":\"system model profiles\") OR (\"All Metadata\":\"systems model profile\") OR (\"All Metadata\":\"systems model profiles\") OR (\"All Metadata\":\"SysML profile\") OR (\"All Metadata\":\"SysML profiles\")) OR ((\"All Metadata\":\"domain-specific modeling language\") OR (\"All Metadata\":\"domain specific modeling language\") OR (\"All Metadata\":\"domain-specific modelling language\") OR (\"All Metadata\":\"domain specific modelling language\")))",
+      "query_sha256": "e2b977fd22a337763126e7b35d1c71f18a122b70325077a118408bb1fb27e56c",
+      "query_characters": 2169,
+      "year_start": 2011,
+      "year_end": 2026,
+      "output": "records/BC1.json",
+      "do_not_merge": true
+    },
+    {
+      "event_id": "records-B2",
+      "schedule_id": "B2",
+      "mode": "complete",
+      "purpose": "Test the historical over-100 partition through complete contiguous native pagination.",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\")) AND ((\"All Metadata\":\"requirement\") OR (\"All Metadata\":\"requirements\") OR (\"All Metadata\":\"function\") OR (\"All Metadata\":\"functions\") OR (\"All Metadata\":\"functional\") OR (\"All Metadata\":\"behavior\") OR (\"All Metadata\":\"behaviors\") OR (\"All Metadata\":\"behaviour\") OR (\"All Metadata\":\"behaviours\") OR (\"All Metadata\":\"behavioral\") OR (\"All Metadata\":\"behavioural\") OR (\"All Metadata\":\"architecture\") OR (\"All Metadata\":\"architectures\") OR (\"All Metadata\":\"architectural\") OR (\"All Metadata\":\"interface\") OR (\"All Metadata\":\"interfaces\") OR (\"All Metadata\":\"traceability\") OR (\"All Metadata\":\"trace\") OR (\"All Metadata\":\"traceable\") OR (\"All Metadata\":\"traced\") OR (\"All Metadata\":\"allocation\") OR (\"All Metadata\":\"allocate\") OR (\"All Metadata\":\"allocated\") OR (\"All Metadata\":\"constraint\") OR (\"All Metadata\":\"constraints\") OR (\"All Metadata\":\"parametric\") OR (\"All Metadata\":\"parametrics\") OR (\"All Metadata\":\"analysis\") OR (\"All Metadata\":\"analyses\") OR (\"All Metadata\":\"design\") OR (\"All Metadata\":\"designs\") OR (\"All Metadata\":\"designed\") OR (\"All Metadata\":\"designing\") OR (\"All Metadata\":\"decision\") OR (\"All Metadata\":\"decisions\") OR (\"All Metadata\":\"decision-making\") OR (\"All Metadata\":\"decision making\") OR (\"All Metadata\":\"trade study\") OR (\"All Metadata\":\"trade studies\") OR (\"All Metadata\":\"trade-off\") OR (\"All Metadata\":\"trade-offs\") OR (\"All Metadata\":\"tradeoff\") OR (\"All Metadata\":\"tradeoffs\") OR (\"All Metadata\":\"verification\") OR (\"All Metadata\":\"verifications\") OR (\"All Metadata\":\"verify\") OR (\"All Metadata\":\"verifies\") OR (\"All Metadata\":\"verified\") OR (\"All Metadata\":\"verifying\") OR (\"All Metadata\":\"validation\") OR (\"All Metadata\":\"validations\") OR (\"All Metadata\":\"validate\") OR (\"All Metadata\":\"validates\") OR (\"All Metadata\":\"validated\") OR (\"All Metadata\":\"validating\"))",
+      "query_sha256": "bf98ed2edd5eb39e04ccc602091c8aab8b773fda5dea3e5111551cb658789dfd",
+      "query_characters": 4018,
+      "year_start": 2011,
+      "year_end": 2026,
+      "output": "records/B2.json",
+      "do_not_merge": true
+    }
+  ]
+}
