@@ -1,6 +1,6 @@
 # Web of Science Core Collection
 
-Last pilot saved in commit: NA
+Last pilot saved in commit: 8f3cd7bd8adcb07f130cd9000c702f97e66c2861
 PSR final searches saved in commit: NA
 Final searches saved in commit: NA
 Citation chasing searches saved in commit: NA
