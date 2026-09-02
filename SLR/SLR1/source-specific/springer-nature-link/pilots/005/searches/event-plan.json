@@ -1,0 +1,25 @@
+{
+  "schema_version": "springer-nature-link-pilot005-event-plan/v1",
+  "pilot": "005",
+  "source": "Springer Nature Link",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Validate the exact Link 10.1038 article to Nature article canonical metadata mapping while keeping the Link card path as identity and detail source.",
+  "adapter_minimum_version": 11,
+  "source_card_path": "/article/10.1038/s44359-026-00173-2",
+  "source_card_title": "Taking perovskite photovoltaics from promise to product",
+  "expected_link_url": "https://link.springer.com/article/10.1038/s44359-026-00173-2",
+  "expected_canonical_link": "https://www.nature.com/articles/s44359-026-00173-2",
+  "expected_redirect_count": 0,
+  "require_visible_abstract": true,
+  "navigate_to_nature": false,
+  "check_final_response_status": false,
+  "acceptance_checks": [
+    "The owned page remains on the exact Link card URL with zero redirects.",
+    "The visible H1 matches the search-card title.",
+    "The Link page exposes one visible abstract.",
+    "The canonical link is the exact www.nature.com/articles/<DOI suffix> mapping.",
+    "No request is made to the Nature canonical URL.",
+    "The adapter ignores final response status and relies on rendered page state."
+  ]
+}

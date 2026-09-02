@@ -1,0 +1,158 @@
+{
+  "schema_version": "springer-nature-link-pilot006-assessment/v1",
+  "pilot": "006",
+  "source": "Springer Nature Link",
+  "status": "complete",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "decisions": {
+    "target_scoped_shared_browser": "accepted_as_default_rendered_transport",
+    "strict_complete_publication": "accepted",
+    "nature_canonical_mapping": "accepted_end_to_end",
+    "exact_day_inclusion": "accepted",
+    "unresolved_day_retention": "accepted",
+    "post_cutoff_exclusion": "accepted",
+    "source_final_search_readiness": "accepted"
+  },
+  "concurrency_finding": {
+    "root_cause": "Playwright browser-level CDP attachment waits for every existing page to initialize. One active foreign tab blocked new connections before Springer policy or page allocation ran.",
+    "repair": "Adapter version 12 uses an invocation-local browser-harness daemon that creates, attaches, and closes only its own shared-Chrome target.",
+    "native_capture_boundary": "Native CSV requests retain the Playwright transport because download handling is outside the target-scoped rendered backend."
+  },
+  "events": {
+    "nature-included-shared": {
+      "artifact": "events/nature-included-shared.json",
+      "sha256": "aadc0d9ae5f12f0953e2f444868482289aa9e32d85b95c46adcad39d7ed95da1",
+      "source_total": 1,
+      "results_retrieved": 1,
+      "browser_transport": "target_scoped_shared_cdp",
+      "canonical_link": "https://www.nature.com/articles/s44359-026-00173-2",
+      "date_status": "included",
+      "resolved_date": "2026-05-26",
+      "prisma_report_ready": true
+    },
+    "unresolved-retained-shared": {
+      "artifact": "events/unresolved-retained-shared.json",
+      "sha256": "fdf48f8a2f92404faa44f80145ec394c7d4e49f189a8f65a06986e84464319b9",
+      "source_total": 1,
+      "results_retrieved": 1,
+      "browser_transport": "target_scoped_shared_cdp",
+      "canonical_link": "https://link.springer.com/referencework/10.1007/978-3-319-23519-6",
+      "date_status": "unresolved",
+      "resolved_date": null,
+      "prisma_report_ready": true
+    },
+    "post-cutoff-excluded-shared": {
+      "artifact": "events/post-cutoff-excluded-shared.json",
+      "sha256": "9b5fc5303b43fd7b55c97e140ec6c64ca231818afc6fb65c539c2ab9351ab2c0",
+      "source_total": 1,
+      "results_retrieved": 0,
+      "browser_transport": "target_scoped_shared_cdp",
+      "canonical_link": "https://link.springer.com/article/10.1007/s42423-026-00225-6",
+      "date_status": "excluded",
+      "resolved_date": "2026-09-01",
+      "prisma_report_ready": true
+    }
+  },
+  "screenshots": {
+    "validated_png_count": 6,
+    "all_sibling_paths": true,
+    "receipts": [
+      {
+        "json": "nature-included-shared.json",
+        "kind": "search_page",
+        "file_name": "nature-included-shared.search-page.png",
+        "sha256": "652751d0ff0f25646f06854d58ad5cb14034d80b624f698cae1c431c22fe2ae9",
+        "width": 2704,
+        "height": 3802
+      },
+      {
+        "json": "nature-included-shared.json",
+        "kind": "results_page",
+        "file_name": "nature-included-shared.results-page.png",
+        "sha256": "d9605114d333697bc3f174343ccbfff3b665593bb917f01597c97667400f9b7e",
+        "width": 2704,
+        "height": 5946
+      },
+      {
+        "json": "unresolved-retained-shared.json",
+        "kind": "search_page",
+        "file_name": "unresolved-retained-shared.search-page.png",
+        "sha256": "031be1f90a629ff8096729f3e64169ed0361807eb35942c0ecd476b354fabc57",
+        "width": 2704,
+        "height": 3802
+      },
+      {
+        "json": "unresolved-retained-shared.json",
+        "kind": "results_page",
+        "file_name": "unresolved-retained-shared.results-page.png",
+        "sha256": "400dd343636b6a7218209df6749ead93be6ea065900fac406dd1512bd9eef0cf",
+        "width": 2704,
+        "height": 5978
+      },
+      {
+        "json": "post-cutoff-excluded-shared.json",
+        "kind": "search_page",
+        "file_name": "post-cutoff-excluded-shared.search-page.png",
+        "sha256": "28b7334d9e1ecc6506a76f53e6c5abe59bed7e94193290df81379230dd5fd16a",
+        "width": 2704,
+        "height": 3802
+      },
+      {
+        "json": "post-cutoff-excluded-shared.json",
+        "kind": "results_page",
+        "file_name": "post-cutoff-excluded-shared.results-page.png",
+        "sha256": "14b9877280a38e99d766b3bce0499e8f36092edfc90c9c8bb56014e550bf2eb9",
+        "width": 2704,
+        "height": 5800
+      }
+    ]
+  },
+  "adapter": {
+    "adapter_version": "12",
+    "adapter_script_sha256": "b5b4a25215af72263a7f909aeeedb67866c947807cd916cf825a865670c6f14e",
+    "concurrent_helper_sha256": "886be2845960bfa92ba1718f9768b117edabc5a470b31545340f2ebae0f20e81"
+  },
+  "retained_failed_attempts": [
+    {
+      "artifact": "searches/failures/nature-included-fresh.json",
+      "event_id": "nature-included-fresh",
+      "returncode": 1,
+      "stderr": "Error: Could not configure the Springer Advanced Search screenshot page. # Saved to: /Users/antho/nanosatellite-mbse/SLR/SLR1/source-specific/springer-nature-link/pilots/006/searches/events/nature-included-fresh.NON_MERGEABLE_DIAGNOSTIC.json"
+    },
+    {
+      "artifact": "searches/failures/nature-included-inprocess.json",
+      "event_id": "nature-included-inprocess",
+      "returncode": 1,
+      "stderr": "Error: Could not attach to local Chrome. Use a valid loopback --cdp-url or --chrome-executable. # Saved to: /Users/antho/nanosatellite-mbse/SLR/SLR1/source-specific/springer-nature-link/pilots/006/searches/events/nature-included-inprocess.NON_MERGEABLE_DIAGNOSTIC.json"
+    },
+    {
+      "artifact": "searches/failures/nature-included.attempt-02.json",
+      "event_id": "nature-included",
+      "returncode": 1,
+      "stderr": "Error: Could not attach to local Chrome. Use a valid loopback --cdp-url or --chrome-executable. Error: Could not save non-mergeable diagnostic: Refusing to overwrite existing Springer failure diagnostic: /Users/antho/nanosatellite-mbse/SLR/SLR1/source-specific/springer-nature-link/pilots/006/searches/events/nature-included.NON_MERGEABLE_DIAGNOSTIC.json"
+    },
+    {
+      "artifact": "searches/failures/nature-included.json",
+      "event_id": "nature-included",
+      "returncode": 1,
+      "stderr": "Error: Could not attach to local Chrome. Use a valid loopback --cdp-url or --chrome-executable. # Saved to: /Users/antho/nanosatellite-mbse/SLR/SLR1/source-specific/springer-nature-link/pilots/006/searches/events/nature-included.NON_MERGEABLE_DIAGNOSTIC.json"
+    }
+  ],
+  "retained_failed_attempt_count": 4,
+  "failed_attempt_interpretation": "Four null attempts record browser transport setup failures. They reached no accepted source query and supplied no source total or record.",
+  "plans": {
+    "final": {
+      "artifact": "searches/event-plan-v4.json",
+      "sha256": "2224f8f4b6dd1181ddb923e39f99e9380ec7bedbd424a15710d553cc02be865c"
+    },
+    "attached_subprocess": "searches/event-plan.json",
+    "fresh_visible": "searches/event-plan-v2.json",
+    "dedicated_attached": "searches/event-plan-v3.json"
+  },
+  "run_receipt": {
+    "artifact": "searches/run-receipt.json",
+    "sha256": "eb357ecac38bc746847237fc230dc09a6c34e122c870966ea5152fa5388373de"
+  },
+  "errors": []
+}
