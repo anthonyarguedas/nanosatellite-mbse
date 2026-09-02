@@ -10,7 +10,7 @@ Export method: `~/agent-tools/internet/skills/browser/scripts/search_compendex_i
 
 Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`.
 
-The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed decisions and pilot conclusions.
+The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, screenshots, and failures. This file records only fixed decisions and pilot conclusions.
 
 ## Fixed source configuration
 
@@ -24,6 +24,7 @@ The script artifact is authoritative for per-event query, controls, source ident
 - Publication type: Apply no `DT`/facet limiter: conference article, journal article, preprint, conference proceeding, dissertation, and article in press can hold eligible reports, and assignment can be missing. Do not apply peer-review, access, or full-text-availability limits.
 - Database or collection selection: Select Compendex and Inspec together. Retain the Inspec records and count separately.
 - Other shared limits: None.
+- Screenshots: Adapter v16 automatically saves `<query-id>.search-page.png` and `<query-id>.results-page.png` beside each JSON artifact with no opt-out. A bounded strict paired check retained both PNG receipts and a usable marker-gated result pair. See the shared [adapter validation](../compendex/pilots/005/searches/adapter-v16-screenshot-validation.json).
 
 ## Source translation
 
@@ -59,7 +60,8 @@ The table uses `AND` and `OR` as semantic labels. Render them with the source op
 
 - [x] [Pilot 001](pilots/001/pilot.md): the paired `A1` and `BG1` diagnostics succeeded. Inspec projections were `A1: 3` and `BG1: 2` rendered rows. The bounded one-record export is diagnostic only and is not a final search.
 - [x] [Pilot 002](pilots/002/pilot.md): links the paired Compendex failure receipt. The shared event stopped before source submission when the start Published-year control was hidden. No Inspec count or wildcard comparison exists.
+- [x] [Linked Compendex Pilot 008](../compendex/pilots/008/pilot.md): all nine current no-proximity events completed through the paired adapter v16 route. The diagnostic Inspec projections contain 162 unique accessions from 236 partition occurrences, with strict two-pass and screenshot evidence. The queries use the Compendex-approved population wildcards. This linked evidence does not approve those wildcards for an Inspec final search.
 
 ## Pilot 003 record (pilot only, completion state unchanged)
 
-[Linked Pilot 003](pilots/003/pilot.md) preserves the Inspec projection of the same repaired paired Engineering Village events. It does not duplicate them. Eight strict two-pass captures succeeded and B2 remains an explicit null failure. The historical pairs use marker v2. Any prospective paired rerun uses the reviewed v14 output namespace schema v2 and marker v3 under the [rerun guidance](../../scripts/engineering_village_pilot003/RERUN_GUIDANCE.md). Keep Inspec totals and accessions separate in the paired reconciliation, with no accepted wildcard, controlled-term supplement, or final-search claim.
+[Linked Pilot 003](pilots/003/pilot.md) preserves the Inspec projection of the same repaired paired Engineering Village events. It does not duplicate them. Eight strict two-pass captures succeeded and its B2 remains an explicit null failure. The historical pairs use marker v2. Linked Compendex Pilot 008 supplies a fresh current-query B2 projection without changing the historical artifact. Keep Inspec totals and accessions separate in every paired reconciliation, with no accepted Inspec wildcard, controlled-term supplement, or final-search claim.

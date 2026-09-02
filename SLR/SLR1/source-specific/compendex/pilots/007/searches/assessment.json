@@ -1,0 +1,223 @@
+{
+  "schema_version": "engineering-village-readiness-pilot-assessment/v1",
+  "pilot": "007",
+  "source": "Compendex with a retained paired Inspec projection",
+  "created_at_utc": "2026-09-02T17:10:17.975144Z",
+  "status": "failed",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "plan": {
+    "path": "SLR/SLR1/source-specific/compendex/pilots/007/searches/event-plan.json",
+    "sha256": "d14f476e6ff250e6623aa898a6f083450ae1530e274e83ef8847ac10bb047610"
+  },
+  "run_receipt": {
+    "path": "SLR/SLR1/source-specific/compendex/pilots/007/searches/run-receipt.json",
+    "sha256": "22a252a3005cd8528dac2099b2fd473afa9e22e2e40215616210f40a1810b927"
+  },
+  "checks": {
+    "all_nine_current_partitions": false,
+    "approved_population_wildcards_in_every_query": true,
+    "no_proximity_operator_in_any_query": true,
+    "adapter_v16": true,
+    "strict_paired_source_passes": 6,
+    "expected_strict_paired_source_passes": 18,
+    "mandatory_screenshots": 6,
+    "expected_mandatory_screenshots": 18,
+    "B2_current_strict_capture": true,
+    "changed_definitions_live": false,
+    "separate_database_reconciliation": true
+  },
+  "events": [
+    {
+      "partition_id": "B2",
+      "status": "passed",
+      "boolean_form": "F(P) AND F(M_B) AND F(R)",
+      "changed_definition_since_pilot003": false,
+      "query_sha256": "0fc0e2a709aa051491afb974d7bec016acc056e4d16257c1e9ad1896b4ad748f",
+      "paired_source_total": 263,
+      "compendex_total": 173,
+      "inspec_total": 90,
+      "strict_passes": 2,
+      "mandatory_screenshots": 2,
+      "errors": []
+    },
+    {
+      "partition_id": "BG1",
+      "status": "passed",
+      "boolean_form": "F(P) AND F(G_model)",
+      "changed_definition_since_pilot003": true,
+      "query_sha256": "2deba5bc9ff35ff2abfa9e7cc2b83061aec237651f680921032b438cf99dcbe0",
+      "paired_source_total": 8,
+      "compendex_total": 6,
+      "inspec_total": 2,
+      "strict_passes": 2,
+      "mandatory_screenshots": 2,
+      "errors": []
+    },
+    {
+      "partition_id": "BG2",
+      "status": "passed",
+      "boolean_form": "F(P) AND F(G_structure)",
+      "changed_definition_since_pilot003": true,
+      "query_sha256": "943fbbeaa7342e4ce76d0b7c6f1b36f05c797e29630ae0fcdaf8c70f8f1abc81",
+      "paired_source_total": 21,
+      "compendex_total": 13,
+      "inspec_total": 8,
+      "strict_passes": 2,
+      "mandatory_screenshots": 2,
+      "errors": []
+    },
+    {
+      "partition_id": "BC1",
+      "status": "missing",
+      "errors": [
+        "artifact_missing"
+      ]
+    },
+    {
+      "partition_id": "BT2",
+      "status": "missing",
+      "errors": [
+        "artifact_missing"
+      ]
+    },
+    {
+      "partition_id": "A1",
+      "status": "missing",
+      "errors": [
+        "artifact_missing"
+      ]
+    },
+    {
+      "partition_id": "A2",
+      "status": "missing",
+      "errors": [
+        "artifact_missing"
+      ]
+    },
+    {
+      "partition_id": "A3",
+      "status": "missing",
+      "errors": [
+        "artifact_missing"
+      ]
+    },
+    {
+      "partition_id": "B1",
+      "status": "missing",
+      "errors": [
+        "artifact_missing"
+      ]
+    }
+  ],
+  "B2_resolution": {
+    "historical_pilot003": {
+      "artifact": "SLR/SLR1/source-specific/compendex/pilots/003/searches/B2.NON_MERGEABLE_FAILURE.json",
+      "status": "explicit_null_failure",
+      "query_sha256": "20441fe0833ef00fac00cc3228444e04326821b79a34b3d4ae6faea042aad1fc"
+    },
+    "immediate_prior_pilot006": {
+      "artifact": "SLR/SLR1/source-specific/compendex/pilots/006/searches/cells/B2.NON_MERGEABLE_FAILURE.json",
+      "artifact_sha256": "57dc00dffd3d3113ea5be2bd5af6a6346189436a6b1a491ff01f2c4edad106fe",
+      "status": "error",
+      "source_total": null,
+      "error": "Engineering Village next-page transition could not be verified."
+    },
+    "current_pilot007": {
+      "query_sha256": "0fc0e2a709aa051491afb974d7bec016acc056e4d16257c1e9ad1896b4ad748f",
+      "status": "passed",
+      "paired_source_total": 263,
+      "compendex_total": 173,
+      "inspec_total": 90,
+      "strict_passes": 2,
+      "mandatory_screenshots": 2
+    },
+    "resolved_for_current_readiness": true,
+    "historical_artifact_changed": false
+  },
+  "changed_definition_checks": {
+    "BG1": {
+      "boolean_form": "F(P) AND F(G_model)",
+      "compound_definition": "F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B))",
+      "pilot003_query_sha256": "67f3f6d211c021f9010d52b68441d2b134278b02825b50f07bf3a06d3fb78ba1",
+      "pilot007_query_sha256": "2deba5bc9ff35ff2abfa9e7cc2b83061aec237651f680921032b438cf99dcbe0",
+      "query_changed": true,
+      "live_status": "passed",
+      "paired_source_total": 8,
+      "compendex_total": 6,
+      "inspec_total": 2,
+      "strict_passes": 2,
+      "mandatory_screenshots": 2
+    },
+    "BG2": {
+      "boolean_form": "F(P) AND F(G_structure)",
+      "compound_definition": "F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B))",
+      "pilot003_query_sha256": "c5e4aadb6dbf0119d591021ea833be9f818478c8a6485ab53f3cd382b337ed4b",
+      "pilot007_query_sha256": "943fbbeaa7342e4ce76d0b7c6f1b36f05c797e29630ae0fcdaf8c70f8f1abc81",
+      "query_changed": true,
+      "live_status": "passed",
+      "paired_source_total": 21,
+      "compendex_total": 13,
+      "inspec_total": 8,
+      "strict_passes": 2,
+      "mandatory_screenshots": 2
+    },
+    "BC1": {
+      "boolean_form": "F(P) AND F(C1)",
+      "compound_definition": "F(C1_fixed) OR F(G_DSL)",
+      "pilot003_query_sha256": "d3231bd50b992303c21a0ab9b5d634bad852a518e7de1188be07aea86e4df5ea",
+      "pilot007_query_sha256": "e8ec0e16fc7362c1a2e622590de6d680a490ae42b3785987b13dddd355618b1f",
+      "query_changed": true,
+      "live_status": "missing",
+      "paired_source_total": null,
+      "compendex_total": null,
+      "inspec_total": null,
+      "strict_passes": null,
+      "mandatory_screenshots": null
+    },
+    "BT2": {
+      "boolean_form": "F(P) AND F(M_B) AND F(T_precise)",
+      "compound_definition": "ordinary union of all 32 precise tailoring terms",
+      "pilot003_query_sha256": "270e321ecf4f79b9d6092996f3857ca62c779e8f940df9fc321d8100a7a4988e",
+      "pilot007_query_sha256": "fb79b5604f1ea5d244b0a56332964b697828a6222d5fed527f51fcc534318357",
+      "query_changed": true,
+      "live_status": "missing",
+      "paired_source_total": null,
+      "compendex_total": null,
+      "inspec_total": null,
+      "strict_passes": null,
+      "mandatory_screenshots": null
+    }
+  },
+  "database_unions": {
+    "compendex": {
+      "source_label": "Compendex (Engineering Village)",
+      "event_occurrences": 192,
+      "unique_stable_accession_count": 189,
+      "exceeds_100": true,
+      "ordered_union_sha256": "be529f99b3bbcf6a3c7fc51b6a3591138a530a1fb9468e0925cc1ecba244fce3"
+    },
+    "inspec": {
+      "source_label": "Inspec (Engineering Village)",
+      "event_occurrences": 100,
+      "unique_stable_accession_count": 99,
+      "exceeds_100": false,
+      "ordered_union_sha256": "5f5dc7d122676af30de92b89921030d9b4275e7aa1014bde3b6b95866fca8f9e"
+    }
+  },
+  "inspec_boundary": "The paired Inspec projection is retained separately. This Compendex readiness pilot does not approve the wildcard translation for Inspec.",
+  "decision": "Compendex is not ready for a final search from this pilot.",
+  "errors": [
+    "run_event_coverage",
+    "run_incomplete",
+    "BC1:artifact_missing",
+    "BT2:artifact_missing",
+    "A1:artifact_missing",
+    "A2:artifact_missing",
+    "A3:artifact_missing",
+    "B1:artifact_missing",
+    "BC1:live_validation",
+    "BT2:live_validation"
+  ]
+}

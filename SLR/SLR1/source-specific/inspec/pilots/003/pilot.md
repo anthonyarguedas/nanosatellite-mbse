@@ -26,7 +26,7 @@ The authoritative paired event, exact expressions, controls, strict-capture stat
 
 Inspec's successful-event stable-accession union is 116 from 151 event occurrences. It is above 100 and is fully retained with partition provenance in the paired [over-100 investigation](../../../compendex/pilots/003/searches/over-100-investigation.json). It is not a final or full-schedule total because B2 has no strict capture.
 
-The linked historical pairs use the captured v2 marker protocol. A prospective paired rerun uses the v14 output namespace schema v2 and marker v3 in the shared [rerun guidance](../../../../scripts/engineering_village_pilot003/RERUN_GUIDANCE.md). It remains one paired event and does not create a separate Inspec capture.
+The linked historical pairs use the captured v2 marker protocol. [Compendex Pilot 008](../../../compendex/pilots/008/pilot.md) later completed the fresh current-query B2 event with adapter v16, strict paired capture, and both mandatory screenshots. Its Inspec projection contains 90 records. That diagnostic result leaves this historical null failure unchanged and does not approve an Inspec wildcard translation.
 
 ## Decision
 

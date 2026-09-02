@@ -1,0 +1,64 @@
+{
+  "schema_version": "compendex-wildcard-source-translation-approval/v1",
+  "source": "Compendex",
+  "platform": "Engineering Village",
+  "pilot": "005",
+  "status": "approved",
+  "do_not_merge": true,
+  "decided_at_utc": "2026-09-02T16:01:53Z",
+  "decision_authority": "reviewer instruction after Pilot 005",
+  "decision": "approve_three_family_population_wildcards_for_all_schedule_entries",
+  "basis": {
+    "source_contract": "Engineering Village documents terminal * as zero-or-more-character truncation.",
+    "pilot_assessment": "assessment.json",
+    "pilot_assessment_sha256": "5d52e6a73267c263d32d0983206e785a5bb0bfe9c5775d6d8bfde9dfe5fd66f1",
+    "pilot_result": "Literal and wildcard A1 produced equal complete six-accession Compendex sets across four strict source passes.",
+    "scope_note": "The assessment preserves its predeclared A1 evidence scope. This later reviewer decision extends the validated population translation to every schedule entry."
+  },
+  "approved_schedule_entries": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "BG1",
+    "BG2",
+    "BC1",
+    "BT2"
+  ],
+  "approved_population_replacements": [
+    {
+      "wildcard_atom": "(CubeSat* WN ALL)",
+      "replaced_literals": [
+        "CubeSat",
+        "CubeSats"
+      ]
+    },
+    {
+      "wildcard_atom": "(nanosat* WN ALL)",
+      "replaced_literals": [
+        "nanosat",
+        "nanosats",
+        "nanosatellite",
+        "nanosatellites"
+      ]
+    },
+    {
+      "wildcard_atom": "(SmallSat* WN ALL)",
+      "replaced_literals": [
+        "SmallSat",
+        "SmallSats"
+      ]
+    }
+  ],
+  "translation_rule": "Use the same wildcard-compressed F(P) block in all nine schedule entries. Preserve every other literal, phrase, field wrapper, and Boolean relationship.",
+  "boundaries": {
+    "other_asterisk_forms": "not approved",
+    "question_mark_wildcard": "not approved",
+    "manual_dollar_stemming": "not approved",
+    "autostemming": "off",
+    "database_scope": "Compendex only",
+    "inspec_projection": "retained separately without an Inspec translation decision",
+    "final_search": false
+  }
+}

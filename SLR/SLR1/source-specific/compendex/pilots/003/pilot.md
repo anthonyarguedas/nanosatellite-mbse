@@ -26,7 +26,7 @@ Before every source use, [`preflight.json`](searches/preflight.json) regenerated
 
 The eight successful marker-gated JSON/CSV pairs were accepted only after the fixed adapter's internal two independent complete accession/RIS passes. Its compact public receipt retains the exact source-run controls and records. Licensed raw RIS/manifests remain only in the owner-only export directory. B2 produced no public JSON/CSV/marker. Its receipt records that a private first pass started but strict completion failed, then retains null total/accession/RIS fields rather than calling it zero or partial. That private material is quarantined and unused.
 
-These historical pairs use the captured v2 marker protocol and remain read-only evidence. A prospective B2 rerun uses the reviewed v14 adapter, output namespace schema v2, and marker v3 under the separate [rerun guidance](../../../../scripts/engineering_village_pilot003/RERUN_GUIDANCE.md). Its sentinel-bound pair stays in its fresh attempt directory.
+These historical pairs use the captured v2 marker protocol and remain read-only evidence. [Pilot 008](../008/pilot.md) later completed the fresh current-query B2 event with adapter v16, strict paired capture, and both mandatory screenshots. That result confirms current readiness and leaves this historical null failure unchanged.
 
 ## Reconciliation and threshold work
 
