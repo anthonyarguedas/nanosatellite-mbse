@@ -118,11 +118,11 @@ Final searches are saved to `source-specific/*/final-searches/`, both for discov
 
 ## Data management and audit trail
 
-Make deduplication reproducible via a single `SLR/SLR1/deduplication.py`. Review conflicts manually when identifiers disagree. Keep both the original metadata and the preferred normalized value, with the reason for choosing it.
+Make deduplication reproducible via a single `SLR/SLR1/deduplication.py`, with a toggle for PSR, citation chasing (Scopus and WoS only), and review searches.
 
 ### Publication and degree metadata
 
-Store publication and degree metadata in the screening record. Report-level extractions link to these values through `screening_record_id` and do not copy them.
+Store publication and degree metadata in the screening record if not already present in the output from `SLR/SLR1/deduplication.py`. Report-level extractions link to these values through `screening_record_id` and do not copy them.
 
 Record `publication_type` using:
 
@@ -161,16 +161,7 @@ Record `completion_status` using:
 
 ## Screening and eligibility procedure
 
-### Title and abstract screening
-
-- **Candidate:** the title or abstract clearly suggests EPS-primary MBSE or a likely embedded EPS thread, or the record appears to meet the nanosatellite and MBSE rules, but the abstract cannot confirm an embedded EPS thread.
-- **Reject:** the record clearly has the wrong population, publication type, date, language, or is outside MBSE scope, or clearly has no qualifying EPS link.
-
-Do not require an EPS or power term in a Stream B title or abstract. Embedded threads may be absent from metadata. If nanosatellite MBSE is plausible, retrieve the full text and resolve uncertainty there.
-
-### Full-text decision
-
-Assign exactly one final decision and give a source-located reason:
+Assign one source-located `screening_decision`, which is initialized to `none` by `SLR/SLR1/deduplication.py`:
 
 - `include_route_A_eps_primary`;
 - `include_route_B_embedded_eps`;
@@ -181,7 +172,10 @@ Assign exactly one final decision and give a source-located reason:
 - `exclude_wrong_date`;
 - `exclude_wrong_language`;
 - `exclude_secondary_study`;
+- `full_text_needed`; or
 - `not_retrieved`.
+
+Do not require an EPS or power term in a Stream B title or abstract. Embedded threads may be absent from metadata. If nanosatellite MBSE is plausible, retrieve the full text and resolve uncertainty there.
 
 If thesis or dissertation completion status is unresolved, hold the record as `publication_type_unresolved` while looking for source-locatable clarification. If a record in the cutoff year gives only a year, or thesis dates conflict, hold it as `date_unresolved`. Do not silently turn either temporary status into an exclusion.
 

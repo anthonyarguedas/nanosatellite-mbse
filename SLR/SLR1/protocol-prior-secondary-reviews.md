@@ -111,7 +111,7 @@ Deduplicate Scopus and Web of Science records. Preserve both discovery events.
 
 At title and abstract screening, interpret eligibility liberally. Retrieve the full text when the record plausibly describes a review of space-related MBSE, SysML, digital engineering, structured system models, reference models, or reference architectures. Do not require CubeSat, nanosatellite, or EPS terms in metadata.
 
-Assign one source-located full-text decision:
+Assign one source-located `screening_decision`:
 
 - `include_prior_secondary_review`;
 - `exclude_not_secondary_review`;
@@ -120,7 +120,8 @@ Assign one source-located full-text decision:
 - `exclude_no_mbse_or_structured_system_model_scope`;
 - `exclude_insufficient_completed_report`;
 - `exclude_wrong_date`;
-- `exclude_wrong_language`; or
+- `exclude_wrong_language`;
+- `full_text_needed`; or
 - `not_retrieved`.
 
 Use one main exclusion reason. Preserve review-like excluded reports in a contextual list, but do not appraise or count them as included prior reviews.
