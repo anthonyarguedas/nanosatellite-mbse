@@ -1,6 +1,6 @@
 # Pilot 007: bounded union hydration and confirmation
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: 38aedc3de4731e0da5f063a053e92ebd88a84db0
 
 Export method: the read-only card and Record Details functions in `~/agent-tools/internet/skills/browser/scripts/search_oatd.py`, invoked by the [Pilot 007 runner](../../../../scripts/oatd_pilot007/run_pilot.py).
 

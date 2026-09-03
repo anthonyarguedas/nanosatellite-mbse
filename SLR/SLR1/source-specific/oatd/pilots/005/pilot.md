@@ -1,6 +1,6 @@
 # Pilot 005: exact candidate-union gate counts
 
-Required changes were applied in commit: NA
+Required changes were applied in commit: 38aedc3de4731e0da5f063a053e92ebd88a84db0
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_oatd.py`
 
