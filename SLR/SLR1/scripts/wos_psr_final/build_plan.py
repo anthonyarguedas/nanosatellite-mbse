@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Predeclare the four final Web of Science prior-secondary-review events."""
+"""Predeclare corrective Web of Science prior-secondary-review events."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "slr1-wos-final-psr-plan/v1"
+SCHEMA = "slr1-wos-final-psr-plan/v2"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 SCRIPT_ROOT = Path(__file__).resolve().parent
 QUERY_SNAPSHOT = SCRIPT_ROOT / "queries.py"
@@ -23,6 +23,10 @@ ADAPTER = Path.home() / "agent-tools/internet/skills/browser/scripts/search_web_
 SOURCE_GUIDELINE = (
     REPOSITORY_ROOT
     / "SLR/SLR1/source-specific/web-of-science-core-collection/source-specific-guidelines.md"
+)
+SUPERSEDED_ASSESSMENT = (
+    REPOSITORY_ROOT
+    / "SLR/SLR1/source-specific/web-of-science-core-collection/psr-searches/assessment.json"
 )
 SUPPORTING_PROTOCOL = REPOSITORY_ROOT / "SLR/SLR1/protocol-prior-secondary-reviews.md"
 DISCOVERY_PROTOCOL = REPOSITORY_ROOT / "SLR/SLR1/protocol-discovery-and-screening.md"
@@ -93,7 +97,7 @@ def load_queries() -> Any:
 
 def event(partition_id: str, query: str, strategy_version: str) -> dict[str, Any]:
     return {
-        "event_id": f"final-psr-{partition_id}-web-of-science-core-collection-001",
+        "event_id": f"final-psr-{partition_id}-web-of-science-core-collection-002",
         "partition_id": partition_id,
         "query": query,
         "query_sha256": digest_text(query),
@@ -128,8 +132,16 @@ def build() -> dict[str, Any]:
         "review_namespace": "prior_secondary_reviews",
         "review_id": "slr1-1.1-restart",
         "phase": "identification",
-        "strategy_reference": "slr1-wos-prior-secondary-review-v1",
+        "strategy_reference": "slr1-wos-prior-secondary-review-v2",
         "concept_schedule_commit": queries.CONCEPT_SCHEDULE_COMMIT,
+        "corrective_run": {
+            "sequence": 2,
+            "reason": "The first final run exported RIS without abstract content.",
+            "superseded_assessment": str(
+                SUPERSEDED_ASSESSMENT.relative_to(REPOSITORY_ROOT)
+            ),
+            "superseded_assessment_sha256": digest(SUPERSEDED_ASSESSMENT),
+        },
         "cutoff": {
             "exact_common_cutoff": CUTOFF_DATE,
             "source_year_upper_bound": CUTOFF_YEAR,
@@ -156,6 +168,7 @@ def build() -> dict[str, Any]:
             "full_text_filter": None,
             "controlled_vocabulary": None,
             "native_ris": "RIS (other reference software), persisted for positive final events",
+            "native_ris_record_content": "Author, Title, Source, Abstract",
         },
         "translation": {
             "population_wildcards_accepted_for_psr": True,
@@ -181,6 +194,7 @@ def build() -> dict[str, Any]:
                 "all current editions",
                 "Date: oldest first",
                 "native RIS reconciliation",
+                "Author, Title, Source, Abstract export readback",
             ],
             "automatic_screenshots_required": True,
         },
@@ -191,8 +205,9 @@ def build() -> dict[str, Any]:
             "fresh_authorized_target_per_partition": True,
             "close_ephemeral_target_after_partition": True,
             "target_identifiers_retained": False,
-            "retry_policy": "none_after_final-plan execution begins",
+            "retry_policy": "one user-authorized corrective run after the abstract export defect",
             "native_ris_sidecar_for_positive_event": True,
+            "native_ris_record_content": "Author, Title, Source, Abstract",
         },
         "adapter": {
             "id": "search_web_of_science",
@@ -256,8 +271,20 @@ def validate(plan: dict[str, Any]) -> list[str]:
         or controls.get("peer_review_filter") is not None
         or controls.get("full_text_filter") is not None
         or controls.get("controlled_vocabulary") is not None
+        or controls.get("native_ris_record_content")
+        != "Author, Title, Source, Abstract"
     ):
         errors.append("controls")
+    execution = plan.get("execution_policy", {})
+    corrective = plan.get("corrective_run", {})
+    if (
+        plan.get("strategy_reference")
+        != "slr1-wos-prior-secondary-review-v2"
+        or corrective.get("sequence") != 2
+        or execution.get("native_ris_record_content")
+        != "Author, Title, Source, Abstract"
+    ):
+        errors.append("corrective_execution")
     events = plan.get("events")
     if not isinstance(events, list) or [item.get("partition_id") for item in events] != list(EVENT_ORDER):
         errors.append("event_order")
@@ -267,7 +294,7 @@ def validate(plan: dict[str, Any]) -> list[str]:
         query = item.get("query", "")
         if (
             item.get("event_id")
-            != f"final-psr-{partition}-web-of-science-core-collection-001"
+            != f"final-psr-{partition}-web-of-science-core-collection-002"
             or item.get("output_filename") != f"{partition}.json"
             or item.get("native_ris_filename") != f"{partition}.ris"
             or item.get("query_sha256") != digest_text(query)

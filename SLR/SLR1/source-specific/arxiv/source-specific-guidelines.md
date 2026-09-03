@@ -31,4 +31,6 @@ Use the concepts, compound definitions, and nine partitions in [the discovery pr
 
 ## Execution
 
+`--skip-full-abstracts`, `--no-full-abstracts`, and `--abstracts hide` are for pilots and diagnostics only. Do not use them for final or corrective searches.
+
 Run `A1`, `A3`, `B1`, `B2`, `BC1`, and `BT2` as one cell each. Split `A2` into its unchanged `M_H` and `M_B` branches. Split `BG1` and `BG2` by their declared compound branches. This gives 12 cells. Capture complete rendered records through native More controls. Exhaust every cell twice and require equal totals and ordered bare ID ledgers. A failure retains `total: null`. See [the readiness audit](../readiness-audit.md) for the result bound.

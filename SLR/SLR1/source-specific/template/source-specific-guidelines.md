@@ -38,4 +38,6 @@ Use the concept membership, compound definitions, and nine direct partitions in 
 
 ## Execution
 
+Treat any option that skips or hides abstracts as pilot-only. Require abstract capture for final and corrective searches.
+
 Describe only the accepted source cells, controls, capture contract, and reconciliation steps. Keep run history in the numbered evidence directories and [the readiness audit](../readiness-audit.md).

@@ -29,6 +29,8 @@ Use the concepts and compounds in [the discovery protocol](../../protocol-discov
 
 ## Execution
 
+`--skip-full-abstracts` and `--no-full-abstracts` are for pilots and diagnostics only. Do not use them for final or corrective searches.
+
 Run the nine [direct partitions](../../protocol-discovery-and-screening.md#direct-query-schedule) and four [prior review partitions](../../protocol-prior-secondary-reviews.md#additional-concept-blocks) as complete expressions. Final events require two exhaustive fresh page passes with equal totals, page accounting, controls, and stable ID sets. Preserve both source order hashes. A changed order is audit evidence. A changed set fails.
 
 Recover abstracts only through canonical EID queries bound to accepted strict leaves. Do not carry discovery date, language, title, or facet clauses into identity recovery. An unresolved singleton remains unresolved. See the [final PSR assessment](psr-searches/assessment.json) for final PSR result bounds.

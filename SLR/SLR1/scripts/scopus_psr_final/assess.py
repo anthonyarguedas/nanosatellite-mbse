@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assess the final Scopus prior-secondary-review search artifacts."""
+"""Assess the corrective final Scopus prior-secondary-review artifacts."""
 
 from __future__ import annotations
 
@@ -12,9 +12,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "slr1-scopus-final-psr-assessment/v1"
-PLAN_SCHEMA = "slr1-scopus-final-psr-plan/v1"
-RUN_SCHEMA = "slr1-scopus-final-psr-run/v1"
+SCHEMA = "slr1-scopus-final-psr-assessment/v2"
+PLAN_SCHEMA = "slr1-scopus-final-psr-plan/v2"
+RUN_SCHEMA = "slr1-scopus-final-psr-run/v2"
+ENRICHMENT_SCHEMA = "slr1-scopus-final-psr-abstract-enrichment/v1"
 PARTITIONS = ("PSR1", "PSR2", "PSR3", "PSR4")
 KNOWN_ID = "SCOPUS-PUBLICATION:105032155734"
 KNOWN_TITLE = "Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review"
@@ -80,6 +81,7 @@ def main() -> int:
     parser.add_argument("--run-receipt", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--source-union", type=Path, required=True)
+    parser.add_argument("--abstract-enrichment", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.output.exists() or args.output.is_symlink():
@@ -88,6 +90,7 @@ def main() -> int:
     plan = load(args.plan)
     run = load(args.run_receipt)
     source_union = load(args.source_union)
+    enrichment = load(args.abstract_enrichment)
     runner = load_runner()
     errors: list[str] = []
     if plan.get("schema_version") != PLAN_SCHEMA:
@@ -117,6 +120,7 @@ def main() -> int:
     known_item_partitions: list[str] = []
     screenshot_count = 0
     cutoff_year_records = 0
+    abstracts_by_id: dict[str, str] = {}
     for partition in PARTITIONS:
         event = events.get(partition)
         outcome = outcomes.get(partition)
@@ -146,6 +150,14 @@ def main() -> int:
             if isinstance(row, dict) and isinstance(row.get("paperId"), str)
         }
         id_sets[partition] = stable_ids
+        for row in records:
+            if not isinstance(row, dict) or not isinstance(row.get("paperId"), str):
+                continue
+            abstract = row.get("abstract")
+            if isinstance(abstract, str) and len(abstract) > len(
+                abstracts_by_id.get(row["paperId"], "")
+            ):
+                abstracts_by_id[row["paperId"]] = abstract
         if summary.get("valid") is not True:
             errors.append(f"strict_evidence:{partition}")
         if outcome.get("artifact_sha256") != digest(path):
@@ -165,7 +177,8 @@ def main() -> int:
         if known_rows:
             known_item_partitions.append(partition)
             if any(
-                row.get("title") != KNOWN_TITLE or row.get("year") != 2026
+                row.get("title") != KNOWN_TITLE
+                or row.get("year") != 2026
                 for row in known_rows
             ):
                 errors.append(f"known_item_identity:{partition}")
@@ -191,15 +204,69 @@ def main() -> int:
                 "two_pass_order_verified": strict.get("two_pass_order_verified"),
                 "order_difference_count": strict.get("order_difference_count"),
                 "screenshots": summary.get("screenshots", []),
-                "abstracts_recovered_in_discovery_event": sum(
-                    bool(row.get("abstract"))
-                    for row in records
-                    if isinstance(row, dict)
+                "direct_run_full_abstract_count": summary.get(
+                    "full_abstract_count"
+                ),
+                "blank_abstract_count_before_follow_up": summary.get(
+                    "verified_missing_abstract_count"
+                ),
+                "abstract_capture_observed": summary.get(
+                    "abstract_capture_observed"
                 ),
             }
         )
 
     all_ids = set().union(*id_sets.values()) if id_sets else set()
+    direct_missing_ids = {
+        identifier for identifier in all_ids if not abstracts_by_id.get(identifier)
+    }
+    enrichment_rows = enrichment.get("records")
+    enrichment_ids: set[str] = set()
+    verified_missing_ids: set[str] = set()
+    if (
+        enrichment.get("schema_version") != ENRICHMENT_SCHEMA
+        or enrichment.get("source") != "Scopus"
+        or enrichment.get("review_namespace") != "prior_secondary_reviews"
+        or enrichment.get("complete") is not True
+        or not isinstance(enrichment_rows, list)
+    ):
+        errors.append("abstract_enrichment_contract")
+        enrichment_rows = []
+    for row in enrichment_rows:
+        if not isinstance(row, dict) or not isinstance(row.get("paper_id"), str):
+            errors.append("abstract_enrichment_row")
+            continue
+        identifier = row["paper_id"]
+        if identifier in enrichment_ids:
+            errors.append("abstract_enrichment_duplicate")
+            continue
+        enrichment_ids.add(identifier)
+        abstract = row.get("abstract")
+        valid = bool(
+            (
+                isinstance(abstract, str)
+                and abstract
+                and row.get("abstract_source") == "native_scopus_result_page"
+                and row.get("abstract_detail_verified") is True
+                and row.get("abstract_not_available") is False
+            )
+            or (
+                abstract is None
+                and row.get("abstract_source") == "not_rendered"
+                and row.get("abstract_not_available") is True
+            )
+        )
+        if not valid:
+            errors.append("abstract_enrichment_row")
+            continue
+        if isinstance(abstract, str):
+            abstracts_by_id[identifier] = abstract
+        else:
+            verified_missing_ids.add(identifier)
+    if enrichment_ids != direct_missing_ids:
+        errors.append("abstract_enrichment_coverage")
+    if not abstracts_by_id.get(KNOWN_ID):
+        errors.append("known_item_abstract")
     raw_event_count = sum(len(values) for values in id_sets.values())
     pair_overlaps = {
         f"{left}_{right}": len(id_sets.get(left, set()) & id_sets.get(right, set()))
@@ -233,6 +300,10 @@ def main() -> int:
         "run_receipt_sha256": digest(args.run_receipt),
         "source_union": args.source_union.name,
         "source_union_sha256": digest(args.source_union),
+        "abstract_enrichment": str(
+            args.abstract_enrichment.resolve().relative_to(args.output_dir.resolve())
+        ),
+        "abstract_enrichment_sha256": digest(args.abstract_enrichment),
         "adapter": plan.get("adapter"),
         "accepted_source_event_count": len(evidence),
         "verified_screenshot_file_count": screenshot_count,
@@ -253,13 +324,17 @@ def main() -> int:
             "status": "pending_screening",
         },
         "abstract_recovery": {
-            "discovery_events_used_skip_full_abstracts": all(
-                event.get("abstracts_recovered_in_discovery_event") == 0
-                for event in evidence
+            "discovery_events_requested_full_abstracts": True,
+            "unique_records_with_full_abstract": sum(
+                bool(abstracts_by_id.get(identifier)) for identifier in all_ids
             ),
-            "required_route": "canonical EID-only query bound to accepted strict leaves",
-            "status": "pending",
-            "unresolved_singleton_rule": "remain unresolved",
+            "unique_records_without_native_abstract": len(verified_missing_ids),
+            "follow_up_record_count": len(enrichment_ids),
+            "follow_up_coverage_complete": enrichment_ids == direct_missing_ids,
+            "missing_abstract_interpretation": (
+                "verified absent from a one-page canonical EID follow-up"
+            ),
+            "status": "complete" if complete else "failed",
         },
         "known_item": {
             "citation": plan.get("known_item", {}).get("citation"),

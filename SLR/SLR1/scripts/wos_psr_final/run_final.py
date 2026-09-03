@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the predeclared final Web of Science prior-secondary-review events once."""
+"""Run corrective Web of Science prior-secondary-review events once."""
 
 from __future__ import annotations
 
@@ -17,8 +17,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "slr1-wos-final-psr-run/v1"
-PLAN_SCHEMA = "slr1-wos-final-psr-plan/v1"
+SCHEMA = "slr1-wos-final-psr-run/v2"
+PLAN_SCHEMA = "slr1-wos-final-psr-plan/v2"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 ADAPTER = Path.home() / "agent-tools/internet/skills/browser/scripts/search_web_of_science.py"
 WOS_ADVANCED_URL = "https://www.webofscience.com/wos/woscc/advanced-search"
@@ -239,6 +239,18 @@ def summarize(path: Path, event: dict[str, Any], plan: dict[str, Any]) -> dict[s
         and screenshots.get("complete") is True
         and screenshot_valid
     )
+    abstract_capture_ok = bool(
+        isinstance(records, list)
+        and all(
+            isinstance(row, dict)
+            and row.get("abstract_detail_verified") is True
+            and (
+                not row.get("snippet")
+                or bool(row.get("abstract"))
+            )
+            for row in records
+        )
+    )
     return {
         "valid": bool(
             controls_ok
@@ -247,6 +259,7 @@ def summarize(path: Path, event: dict[str, Any], plan: dict[str, Any]) -> dict[s
             and native_ok
             and screenshot_receipt_ok
             and marker_ok
+            and abstract_capture_ok
         ),
         "artifact_written": True,
         "artifact_sha256": digest(path),
@@ -264,6 +277,17 @@ def summarize(path: Path, event: dict[str, Any], plan: dict[str, Any]) -> dict[s
         "native_ris": native_row,
         "screenshots_valid": screenshot_receipt_ok,
         "terminal_marker_valid": marker_ok,
+        "abstract_capture_valid": abstract_capture_ok,
+        "full_abstract_count": sum(
+            bool(record.get("abstract"))
+            for record in records
+            if isinstance(record, dict)
+        ),
+        "verified_missing_abstract_count": sum(
+            not record.get("abstract")
+            for record in records
+            if isinstance(record, dict)
+        ),
         "screenshots": image_rows,
     }
 

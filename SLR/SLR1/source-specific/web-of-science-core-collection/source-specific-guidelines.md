@@ -28,4 +28,6 @@ Use the concepts and compounds in [the discovery protocol](../../protocol-discov
 
 ## Execution
 
+For retained records, select and verify RIS content `Author, Title, Source, Abstract`. A result-card abstract snippet requires a nonempty native `AB` or `N2` field.
+
 Run the nine [direct partitions](../../protocol-discovery-and-screening.md#direct-query-schedule) and four [prior review partitions](../../protocol-prior-secondary-reviews.md#additional-concept-blocks) as complete raw expressions. In `X`, apply the ten substitutions only to its population members. Require two complete passes, native RIS reconciliation, and exact query and control readback. Treat `PY` as year precision and screen cutoff year records against the exact date. A screenshot or source failure keeps `total: null`. See the [final PSR assessment](psr-searches/assessment.json) for final PSR result bounds.

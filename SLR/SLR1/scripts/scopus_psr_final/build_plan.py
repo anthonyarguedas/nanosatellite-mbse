@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Predeclare the four final Scopus prior-secondary-review events."""
+"""Predeclare the corrective final Scopus prior-secondary-review events."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "slr1-scopus-final-psr-plan/v1"
+SCHEMA = "slr1-scopus-final-psr-plan/v2"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 SCRIPT_ROOT = Path(__file__).resolve().parent
 QUERY_SNAPSHOT = SCRIPT_ROOT / "queries.py"
@@ -22,6 +22,9 @@ RUNNER = SCRIPT_ROOT / "run_final.py"
 ADAPTER = Path.home() / "agent-tools/internet/skills/browser/scripts/search_scopus.py"
 SOURCE_GUIDELINE = (
     REPOSITORY_ROOT / "SLR/SLR1/source-specific/scopus/source-specific-guidelines.md"
+)
+SUPERSEDED_ASSESSMENT = (
+    REPOSITORY_ROOT / "SLR/SLR1/source-specific/scopus/psr-searches/assessment.json"
 )
 SUPPORTING_PROTOCOL = REPOSITORY_ROOT / "SLR/SLR1/protocol-prior-secondary-reviews.md"
 DISCOVERY_PROTOCOL = REPOSITORY_ROOT / "SLR/SLR1/protocol-discovery-and-screening.md"
@@ -94,7 +97,7 @@ def load_queries() -> Any:
 
 def event(partition_id: str, query: str, strategy_version: str) -> dict[str, Any]:
     return {
-        "event_id": f"final-psr-{partition_id}-scopus-001",
+        "event_id": f"final-psr-{partition_id}-scopus-002",
         "partition_id": partition_id,
         "query": query,
         "query_sha256": digest_text(query),
@@ -128,8 +131,16 @@ def build() -> dict[str, Any]:
         "review_namespace": "prior_secondary_reviews",
         "review_id": "slr1-1.1-restart",
         "phase": "identification",
-        "strategy_reference": "slr1-scopus-prior-secondary-review-v1",
+        "strategy_reference": "slr1-scopus-prior-secondary-review-v2",
         "concept_schedule_commit": queries.CONCEPT_SCHEDULE_COMMIT,
+        "corrective_run": {
+            "sequence": 2,
+            "reason": "The first final run intentionally skipped full abstracts.",
+            "superseded_assessment": str(
+                SUPERSEDED_ASSESSMENT.relative_to(REPOSITORY_ROOT)
+            ),
+            "superseded_assessment_sha256": digest(SUPERSEDED_ASSESSMENT),
+        },
         "cutoff": {
             "exact_common_cutoff": CUTOFF_DATE,
             "source_year_upper_bound": CUTOFF_YEAR,
@@ -151,10 +162,10 @@ def build() -> dict[str, Any]:
             "access_facets": [],
             "peer_review_filter": None,
             "search_within": None,
-            "full_abstracts": False,
+            "full_abstracts": True,
             "abstract_recovery": (
-                "Use only canonical EID queries bound to accepted strict leaves. "
-                "Do not carry discovery date, language, title, or facet clauses."
+                "Use native Show all abstracts during the first strict pass. "
+                "Keep a missing native abstract explicit."
             ),
         },
         "translation": {
@@ -178,6 +189,7 @@ def build() -> dict[str, Any]:
                 "page size",
                 "scope",
                 "Date (oldest) control",
+                "native abstract expansion on the first strict pass",
             ],
             "order_handling": (
                 "Preserve both pass-order hashes and changed-position count. "
@@ -192,8 +204,8 @@ def build() -> dict[str, Any]:
             "fresh_authorized_target_per_partition": True,
             "close_ephemeral_target_after_partition": True,
             "target_identifiers_retained": False,
-            "retry_policy": "none_after_final-plan execution begins",
-            "skip_full_abstracts": True,
+            "retry_policy": "one user-authorized corrective run after the abstract capture defect",
+            "skip_full_abstracts": False,
         },
         "adapter": {
             "id": "search_scopus",
@@ -243,6 +255,8 @@ def validate(plan: dict[str, Any]) -> list[str]:
     ):
         errors.append("cutoff")
     controls = plan.get("source_configuration", {})
+    execution = plan.get("execution_policy", {})
+    corrective = plan.get("corrective_run", {})
     if (
         controls.get("result_scope") != "Documents"
         or controls.get("field") != "TITLE-ABS-KEY"
@@ -254,9 +268,15 @@ def validate(plan: dict[str, Any]) -> list[str]:
         or controls.get("access_facets") != []
         or controls.get("peer_review_filter") is not None
         or controls.get("search_within") is not None
-        or controls.get("full_abstracts") is not False
+        or controls.get("full_abstracts") is not True
     ):
         errors.append("controls")
+    if (
+        plan.get("strategy_reference") != "slr1-scopus-prior-secondary-review-v2"
+        or corrective.get("sequence") != 2
+        or execution.get("skip_full_abstracts") is not False
+    ):
+        errors.append("corrective_execution")
     events = plan.get("events")
     if not isinstance(events, list) or [item.get("partition_id") for item in events] != list(EVENT_ORDER):
         errors.append("event_order")
@@ -265,7 +285,7 @@ def validate(plan: dict[str, Any]) -> list[str]:
         partition = item["partition_id"]
         query = item.get("query", "")
         if (
-            item.get("event_id") != f"final-psr-{partition}-scopus-001"
+            item.get("event_id") != f"final-psr-{partition}-scopus-002"
             or item.get("output_filename") != f"{partition}.json"
             or item.get("query_sha256") != digest_text(query)
             or item.get("query_characters") != len(query)

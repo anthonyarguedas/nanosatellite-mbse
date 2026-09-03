@@ -30,6 +30,8 @@ Use the concepts, compounds, and nine partitions in [the discovery protocol](../
 
 ## Execution
 
+`--skip-full-abstracts` and `--no-full-abstracts` are for pilots and diagnostics only. Do not use them for final or corrective searches.
+
 Run one expression per partition. Keep each request within the validated 7,800 byte target envelope. Use compact space encoding and safe parentheses only when percent component encoding would exceed that envelope. Preserve the decoded parameter sequence.
 
 Before changing a Year widget, accept a disabled interval only when its complete available range lies inside the requested window. Record the requested range and contained source interval separately. Any real narrowing, ambiguous widget, or changed token fails with `total: null`.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the predeclared final Scopus prior-secondary-review events once."""
+"""Run the predeclared corrective Scopus prior-secondary-review events once."""
 
 from __future__ import annotations
 
@@ -17,8 +17,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "slr1-scopus-final-psr-run/v1"
-PLAN_SCHEMA = "slr1-scopus-final-psr-plan/v1"
+SCHEMA = "slr1-scopus-final-psr-run/v2"
+PLAN_SCHEMA = "slr1-scopus-final-psr-plan/v2"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 ADAPTER = Path.home() / "agent-tools/internet/skills/browser/scripts/search_scopus.py"
 SCOPUS_ADVANCED_URL = "https://www.scopus.com/pages/search/publications?type=advanced"
@@ -244,12 +244,23 @@ def summarize(path: Path, event: dict[str, Any], plan: dict[str, Any]) -> dict[s
         and screenshot_valid
     )
     records = value.get("results", [])
-    abstract_skip_observed = bool(
+    abstract_capture_observed = bool(
         isinstance(records, list)
         and all(
             isinstance(row, dict)
-            and row.get("abstract") in ("", None)
-            and row.get("abstract_source") == "not_rendered"
+            and (
+                (
+                    bool(row.get("abstract"))
+                    and row.get("abstract_source") == "native_scopus_result_page"
+                    and row.get("abstract_not_available") is False
+                    and row.get("abstract_detail_verified") is True
+                )
+                or (
+                    row.get("abstract") in ("", None)
+                    and row.get("abstract_source") == "not_rendered"
+                    and row.get("abstract_not_available") is True
+                )
+            )
             for row in records
         )
     )
@@ -260,7 +271,7 @@ def summarize(path: Path, event: dict[str, Any], plan: dict[str, Any]) -> dict[s
             and adapter_ok
             and screenshot_receipt_ok
             and marker_ok
-            and abstract_skip_observed
+            and abstract_capture_observed
         ),
         "artifact_written": True,
         "artifact_sha256": digest(path),
@@ -289,7 +300,17 @@ def summarize(path: Path, event: dict[str, Any], plan: dict[str, Any]) -> dict[s
         "adapter_binding_valid": adapter_ok,
         "screenshots_valid": screenshot_receipt_ok,
         "terminal_marker_valid": marker_ok,
-        "abstract_skip_observed": abstract_skip_observed,
+        "abstract_capture_observed": abstract_capture_observed,
+        "full_abstract_count": sum(
+            bool(record.get("abstract"))
+            for record in records
+            if isinstance(record, dict)
+        ),
+        "verified_missing_abstract_count": sum(
+            record.get("abstract") in ("", None)
+            for record in records
+            if isinstance(record, dict)
+        ),
         "screenshots": image_rows,
     }
 
@@ -315,7 +336,6 @@ def command(event: dict[str, Any], output: Path, cdp_url: str, target_id: str, p
         str(event["timeout_seconds"]),
         "--page-delay-seconds",
         str(event["page_delay_seconds"]),
-        "--skip-full-abstracts",
         "--require-complete",
         "--cdp-url",
         cdp_url,

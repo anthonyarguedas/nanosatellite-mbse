@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assess the final Web of Science prior-secondary-review search artifacts."""
+"""Assess corrective Web of Science prior-secondary-review artifacts."""
 
 from __future__ import annotations
 
@@ -12,9 +12,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "slr1-wos-final-psr-assessment/v1"
-PLAN_SCHEMA = "slr1-wos-final-psr-plan/v1"
-RUN_SCHEMA = "slr1-wos-final-psr-run-reconciled/v1"
+SCHEMA = "slr1-wos-final-psr-assessment/v2"
+PLAN_SCHEMA = "slr1-wos-final-psr-plan/v2"
+RUN_SCHEMA = "slr1-wos-final-psr-run/v2"
 PARTITIONS = ("PSR1", "PSR2", "PSR3", "PSR4")
 KNOWN_ID = "WOS:001705529700001"
 KNOWN_DOI = "10.1002/sys.70051"
@@ -102,10 +102,6 @@ def main() -> int:
         errors.append("run_event_kind")
     if run.get("target_identifier_retained") is not False:
         errors.append("target_privacy")
-    if run.get("source_execution_replayed") is not False:
-        errors.append("source_execution_replayed")
-    if not isinstance(run.get("initial_run_receipt_sha256"), str):
-        errors.append("initial_run_receipt_binding")
 
     events = {event["partition_id"]: event for event in plan.get("events", [])}
     outcomes = {
@@ -122,6 +118,7 @@ def main() -> int:
     screenshot_count = 0
     cutoff_year_records = 0
     native_ris_count = 0
+    abstracts_by_id: dict[str, str] = {}
     for partition in PARTITIONS:
         event = events.get(partition)
         outcome = outcomes.get(partition)
@@ -149,6 +146,14 @@ def main() -> int:
             if isinstance(row, dict) and isinstance(row.get("paperId"), str)
         }
         id_sets[partition] = stable_ids
+        for row in records:
+            if not isinstance(row, dict) or not isinstance(row.get("paperId"), str):
+                continue
+            abstract = row.get("abstract")
+            if isinstance(abstract, str) and len(abstract) > len(
+                abstracts_by_id.get(row["paperId"], "")
+            ):
+                abstracts_by_id[row["paperId"]] = abstract
         if summary.get("valid") is not True:
             errors.append(f"strict_evidence:{partition}")
         if outcome.get("artifact_sha256") != digest(path):
@@ -173,6 +178,8 @@ def main() -> int:
         ]
         if known_rows:
             known_item_partitions.append(partition)
+            if any(not row.get("abstract") for row in known_rows):
+                errors.append(f"known_item_abstract:{partition}")
         screenshot_count += len(summary.get("screenshots", []))
         cutoff_year_records += sum(
             isinstance(row, dict) and row.get("year") == 2026 for row in records
@@ -190,6 +197,11 @@ def main() -> int:
                 "stable_id_count": len(stable_ids),
                 "ordered_wos_ids_sha256": summary.get("ordered_wos_ids_sha256"),
                 "native_ris": summary.get("native_ris"),
+                "full_abstract_count": summary.get("full_abstract_count"),
+                "verified_missing_abstract_count": summary.get(
+                    "verified_missing_abstract_count"
+                ),
+                "abstract_capture_valid": summary.get("abstract_capture_valid"),
                 "screenshots": summary.get("screenshots", []),
             }
         )
@@ -210,7 +222,6 @@ def main() -> int:
         or run.get("accepted_event_count") != 4
         or run.get("source_command_attempt_count") != 4
         or run.get("all_partitions_attempted") is not True
-        or run.get("source_execution_replayed") is not False
     ):
         errors.append("run_summary")
     union_ok = source_union_valid(source_union, all_ids, raw_event_count, plan)
@@ -249,6 +260,16 @@ def main() -> int:
             "source_precision": "year",
             "records_in_cutoff_year_requiring_exact_date_screening": cutoff_year_records,
             "status": "pending_screening",
+        },
+        "abstract_recovery": {
+            "native_ris_record_content": "Author, Title, Source, Abstract",
+            "unique_records_with_full_abstract": sum(
+                bool(abstracts_by_id.get(identifier)) for identifier in all_ids
+            ),
+            "unique_records_without_native_abstract": sum(
+                not abstracts_by_id.get(identifier) for identifier in all_ids
+            ),
+            "status": "complete" if complete else "failed",
         },
         "known_item": {
             "citation": plan.get("known_item", {}).get("citation"),

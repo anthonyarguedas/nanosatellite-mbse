@@ -47,16 +47,68 @@ DEFAULT_OUTPUTS = {
 }
 PSR_PARTITIONS = ("PSR1", "PSR2", "PSR3", "PSR4")
 PSR_SOURCES = {
-    "scopus": SOURCE_SPECIFIC_DIR / "scopus/psr-searches",
+    "scopus": SOURCE_SPECIFIC_DIR / "scopus/psr-searches/corrective-002",
     "web_of_science_core_collection": (
-        SOURCE_SPECIFIC_DIR / "web-of-science-core-collection/psr-searches"
+        SOURCE_SPECIFIC_DIR
+        / "web-of-science-core-collection/psr-searches/corrective-002"
     ),
 }
+PSR_SCOPUS_ABSTRACT_ENRICHMENT = (
+    PSR_SOURCES["scopus"] / "abstract-follow-up/abstract-enrichment.json"
+)
+PSR_SCOPUS_ABSTRACT_ENRICHMENT_SCHEMA = (
+    "slr1-scopus-final-psr-abstract-enrichment/v1"
+)
 CITATION_SOURCE_DIRS = {
     "scopus": SOURCE_SPECIFIC_DIR / "scopus/final-searches",
     "web_of_science_core_collection": (
         SOURCE_SPECIFIC_DIR / "web-of-science-core-collection/final-searches"
     ),
+}
+PSR_IDENTITY_LINKS_PATH = SLR1_DIR / "psr-deduplication-links.json"
+PSR_IDENTITY_LINKS_SCHEMA = "slr1-psr-deduplication-links/v1"
+SCREENING_DECISIONS = {
+    "psr": {
+        "none",
+        "include_prior_secondary_review",
+        "exclude_not_secondary_review",
+        "exclude_narrative_or_no_identifiable_search",
+        "exclude_no_space_or_satellite_scope",
+        "exclude_no_mbse_or_structured_system_model_scope",
+        "exclude_insufficient_completed_report",
+        "exclude_wrong_date",
+        "exclude_wrong_language",
+        "full_text_needed",
+        "not_retrieved",
+    },
+    "citation-chasing": {
+        "none",
+        "include_route_A_eps_primary",
+        "include_route_B_embedded_eps",
+        "exclude_no_qualifying_eps_thread",
+        "exclude_not_mbse",
+        "exclude_wrong_population",
+        "exclude_wrong_publication_type",
+        "exclude_wrong_date",
+        "exclude_wrong_language",
+        "exclude_secondary_study",
+        "full_text_needed",
+        "not_retrieved",
+    },
+    "review-searches": {
+        "none",
+        "include_route_A_eps_primary",
+        "include_route_B_embedded_eps",
+        "exclude_no_qualifying_eps_thread",
+        "exclude_not_mbse",
+        "exclude_wrong_population",
+        "exclude_wrong_publication_type",
+        "exclude_wrong_date",
+        "exclude_wrong_language",
+        "exclude_secondary_study",
+        "full_text_needed",
+        "not_retrieved",
+    },
 }
 
 
@@ -139,7 +191,98 @@ def preferred_text(values: list[str]) -> str | None:
     values = list({value for value in values if value})
     if not values:
         return None
-    return max(values, key=lambda value: (len(value), value.casefold()))
+    return max(values, key=lambda value: (len(value), value.casefold(), value))
+
+
+def load_psr_identity_links() -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    require_regular(PSR_IDENTITY_LINKS_PATH)
+    payload = load_json(PSR_IDENTITY_LINKS_PATH)
+    if (
+        payload.get("schema_version") != PSR_IDENTITY_LINKS_SCHEMA
+        or payload.get("review_namespace") != "prior_secondary_reviews"
+    ):
+        raise ValueError("The PSR identity-link declaration has an unexpected scope")
+    links = payload.get("links")
+    if not isinstance(links, list) or not links:
+        raise ValueError("The PSR identity-link declaration has no links")
+    identity_ids: set[str] = set()
+    references: set[tuple[str, str]] = set()
+    normalized: list[dict[str, Any]] = []
+    for link in links:
+        if not isinstance(link, Mapping):
+            raise ValueError("A PSR identity link is malformed")
+        identity_id = text(link.get("identity_id"))
+        basis = text(link.get("basis"))
+        records = link.get("records")
+        if not identity_id or identity_id in identity_ids or not basis:
+            raise ValueError("A PSR identity link has an invalid identity or basis")
+        if not isinstance(records, list) or len(records) < 2:
+            raise ValueError(f"PSR identity link {identity_id} has fewer than two records")
+        link_references: list[tuple[str, str]] = []
+        for record in records:
+            if not isinstance(record, Mapping):
+                raise ValueError(f"PSR identity link {identity_id} has a malformed record")
+            reference = (text(record.get("source")), text(record.get("record_id")))
+            if not all(reference) or reference in references:
+                raise ValueError(f"PSR identity link {identity_id} reuses an invalid record")
+            references.add(reference)
+            link_references.append(reference)
+        identity_ids.add(identity_id)
+        normalized.append(
+            {
+                "identity_id": identity_id,
+                "basis": basis,
+                "references": link_references,
+            }
+        )
+    return normalized, {
+        "path": relative(PSR_IDENTITY_LINKS_PATH),
+        "sha256": digest(PSR_IDENTITY_LINKS_PATH),
+        "link_count": len(normalized),
+    }
+
+
+def load_psr_abstract_enrichment() -> tuple[dict[tuple[str, str], str], dict[str, Any]]:
+    require_regular(PSR_SCOPUS_ABSTRACT_ENRICHMENT)
+    payload = load_json(PSR_SCOPUS_ABSTRACT_ENRICHMENT)
+    records = payload.get("records")
+    if (
+        payload.get("schema_version") != PSR_SCOPUS_ABSTRACT_ENRICHMENT_SCHEMA
+        or payload.get("source") != "Scopus"
+        or payload.get("review_namespace") != "prior_secondary_reviews"
+        or payload.get("complete") is not True
+        or not isinstance(records, list)
+    ):
+        raise ValueError("The Scopus PSR abstract enrichment is incomplete")
+    result: dict[tuple[str, str], str] = {}
+    for record in records:
+        if not isinstance(record, Mapping):
+            raise ValueError("A Scopus PSR abstract enrichment row is malformed")
+        paper_id = text(record.get("paper_id"))
+        abstract = text(record.get("abstract"))
+        reference = ("scopus", paper_id)
+        if (
+            not paper_id.startswith("SCOPUS-PUBLICATION:")
+            or not abstract
+            or record.get("abstract_source") != "native_scopus_result_page"
+            or record.get("abstract_detail_verified") is not True
+            or record.get("abstract_not_available") is not False
+            or reference in result
+        ):
+            raise ValueError("A Scopus PSR abstract enrichment row is invalid")
+        result[reference] = abstract
+    if len(result) != payload.get("requested_record_count"):
+        raise ValueError("The Scopus PSR abstract enrichment count changed")
+    assessment = load_json(PSR_SOURCES["scopus"] / "assessment.json")
+    if assessment.get("abstract_enrichment_sha256") != digest(
+        PSR_SCOPUS_ABSTRACT_ENRICHMENT
+    ):
+        raise ValueError("The Scopus PSR assessment does not bind its enrichment")
+    return result, {
+        "path": relative(PSR_SCOPUS_ABSTRACT_ENRICHMENT),
+        "sha256": digest(PSR_SCOPUS_ABSTRACT_ENRICHMENT),
+        "record_count": len(result),
+    }
 
 
 def psr_input_paths() -> list[Path]:
@@ -211,9 +354,12 @@ def validate_psr_sources(merger: Any) -> None:
         assessment_path = assessments[source_id]
         require_regular(assessment_path)
         assessment = load_json(assessment_path)
+        abstract_recovery = assessment.get("abstract_recovery", {})
         if (
             assessment.get("status") != "passed"
             or assessment.get("final_search_partitions_complete") is not True
+            or not isinstance(abstract_recovery, Mapping)
+            or abstract_recovery.get("status") != "complete"
         ):
             raise ValueError(f"The final PSR assessment did not pass for {source_id}")
         receipt = directory / "source-union-receipt-prior_secondary_reviews.json"
@@ -227,8 +373,12 @@ def validate_psr_sources(merger: Any) -> None:
         )
 
 
-def direct_manifestations(merger: Any, paths: list[Path]) -> tuple[dict[str, list[dict[str, Any]]], int]:
-    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+def direct_manifestations(
+    merger: Any,
+    paths: list[Path],
+    abstract_enrichment: Mapping[tuple[str, str], str] | None = None,
+) -> tuple[list[dict[str, Any]], int]:
+    manifestations: list[dict[str, Any]] = []
     raw_count = 0
     for path in paths:
         data = load_json(path)
@@ -248,8 +398,10 @@ def direct_manifestations(merger: Any, paths: list[Path]) -> tuple[dict[str, lis
                 "title": merger.clean_text(row.get("title")),
                 "year": row.get("year"),
             }
-            key = merger.make_dedup_key(record, source=source_id)
-            groups[key].append(
+            enriched_abstract = (abstract_enrichment or {}).get(
+                (source_id, record["paperId"]), ""
+            )
+            manifestations.append(
                 {
                     "source_id": source_id,
                     "partition": partition,
@@ -261,7 +413,7 @@ def direct_manifestations(merger: Any, paths: list[Path]) -> tuple[dict[str, lis
                     "publication_date": text(
                         row.get("publicationDate", row.get("publication_date", row.get("date")))
                     ),
-                    "abstract": text(row.get("abstract")),
+                    "abstract": text(row.get("abstract")) or enriched_abstract,
                     "abstract_snippet": text(row.get("snippet")),
                     "keywords": [
                         keyword
@@ -281,10 +433,92 @@ def direct_manifestations(merger: Any, paths: list[Path]) -> tuple[dict[str, lis
                     "document_type": text(
                         row.get("documentType", row.get("document_type"))
                     ),
+                    "manual_identity_link_id": None,
                 }
             )
             raw_count += 1
-    return dict(groups), raw_count
+    return manifestations, raw_count
+
+
+def cluster_manifestations(
+    merger: Any,
+    manifestations: list[dict[str, Any]],
+    manual_links: list[dict[str, Any]],
+) -> dict[str, list[dict[str, Any]]]:
+    """Form report identities from every available exact identity signal.
+
+    A DOI-first exclusive key cannot join a DOI-bearing manifestation to the
+    same report in a source that omitted its DOI. Connected components let DOI,
+    normalized title and year, and source-native IDs reinforce each other.
+    """
+
+    rows = [copy.deepcopy(row) for row in manifestations]
+    parent = list(range(len(rows)))
+
+    def find(index: int) -> int:
+        while parent[index] != index:
+            parent[index] = parent[parent[index]]
+            index = parent[index]
+        return index
+
+    def union(left: int, right: int) -> None:
+        left_root = find(left)
+        right_root = find(right)
+        if left_root != right_root:
+            parent[right_root] = left_root
+
+    token_owner: dict[str, int] = {}
+    reference_rows: dict[tuple[str, str], list[int]] = defaultdict(list)
+    for index, row in enumerate(rows):
+        tokens: list[str] = []
+        source_id = row["source_id"]
+        source_record_id = row["source_record_id"]
+        if source_record_id:
+            reference = (source_id, source_record_id)
+            reference_rows[reference].append(index)
+            tokens.append(f"record:{source_id}:{source_record_id.casefold()}")
+        if row["doi"]:
+            tokens.append(f"doi:{row['doi']}")
+        normalized_year = merger.normalize_year(row["year"])
+        if row["normalized_title"] and normalized_year:
+            tokens.append(
+                f"title:{row['normalized_title']}|year:{normalized_year}"
+            )
+        for token in tokens:
+            owner = token_owner.setdefault(token, index)
+            union(index, owner)
+
+    for link in manual_links:
+        indexes: list[int] = []
+        for reference in link["references"]:
+            matched = reference_rows.get(reference, [])
+            if not matched:
+                raise ValueError(
+                    f"Manual identity link {link['identity_id']} references a missing record"
+                )
+            indexes.extend(matched)
+        for index in indexes:
+            rows[index]["manual_identity_link_id"] = link["identity_id"]
+            union(indexes[0], index)
+
+    grouped: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for index, row in enumerate(rows):
+        grouped[find(index)].append(row)
+
+    result: dict[str, list[dict[str, Any]]] = {}
+    for position, group_rows in enumerate(grouped.values()):
+        references = sorted(
+            f"{row['source_id']}:{row['source_record_id']}"
+            for row in group_rows
+            if row["source_record_id"]
+        )
+        identity_material = references or [
+            json.dumps(group_rows, ensure_ascii=False, sort_keys=True, default=str)
+        ]
+        serialized = "\n".join(identity_material).encode("utf-8")
+        key = f"cluster:{position}:" + hashlib.sha256(serialized).hexdigest()
+        result[key] = group_rows
+    return result
 
 
 def citation_manifestations(merger: Any, paths: list[Path]) -> tuple[dict[str, list[dict[str, Any]]], int]:
@@ -340,7 +574,9 @@ def assert_no_identifier_conflicts(groups: Mapping[str, list[dict[str, Any]]]) -
             continue
         dois = {row["doi"] for row in rows if row["doi"]}
         title_years = {(row["normalized_title"], row["year"]) for row in rows}
-        if len(dois) > 1 or len(title_years) > 1:
+        manual_ids = {row.get("manual_identity_link_id") for row in rows}
+        manually_reviewed = len(manual_ids) == 1 and None not in manual_ids
+        if len(dois) > 1 or (len(title_years) > 1 and not manually_reviewed):
             conflicts.append(key)
     if conflicts:
         raise ValueError(
@@ -379,12 +615,35 @@ def unique_keywords(rows: list[dict[str, Any]]) -> list[str]:
 
 
 def merged_authors(preferred: Mapping[str, Any], rows: list[dict[str, Any]]) -> list[str]:
-    values = author_names(preferred.get("authors"))
-    for row in rows:
-        for name in row["authors"]:
-            if name.casefold() not in {value.casefold() for value in values}:
-                values.append(name)
-    return values
+    candidates = [author_names(preferred.get("authors"))]
+    candidates.extend(author_names(row.get("authors")) for row in rows)
+    return max(
+        candidates,
+        key=lambda values: (
+            len(values),
+            sum(len(value) for value in values),
+            tuple(value.casefold() for value in values),
+            tuple(values),
+        ),
+        default=[],
+    )
+
+
+def preferred_manifestation(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    return max(
+        rows,
+        key=lambda row: (
+            bool(row["doi"]),
+            len(row["abstract"]),
+            len(row["abstract_snippet"]),
+            bool(row["publication_date"]),
+            bool(row["document_type"]),
+            len(row["authors"]),
+            len(row["publication_title"]),
+            row["source_id"],
+            row["source_record_id"],
+        ),
+    )
 
 
 def compact_record(
@@ -425,24 +684,49 @@ def compact_record(
     }
 
 
-def direct_candidates(merger: Any, paths: list[Path]) -> tuple[list[dict[str, Any]], int, int]:
+def direct_candidates(
+    merger: Any,
+    paths: list[Path],
+    manual_links: list[dict[str, Any]] | None = None,
+    abstract_enrichment: Mapping[tuple[str, str], str] | None = None,
+) -> tuple[list[dict[str, Any]], int, int]:
     corpus = merger.merge_records(paths)
     if corpus.get("report_ready") is not True:
         raise ValueError("The direct-search merge is not report-ready")
-    groups, raw_count = direct_manifestations(merger, paths)
+    manifestations, raw_count = direct_manifestations(
+        merger, paths, abstract_enrichment
+    )
+    groups = cluster_manifestations(merger, manifestations, manual_links or [])
     assert_no_identifier_conflicts(groups)
     results = corpus.get("results")
-    if not isinstance(results, list) or len(results) != len(groups):
-        raise ValueError("The direct-search deduplication did not reconcile")
-    candidates: list[dict[str, Any]] = []
-    for index, preferred in enumerate(results, start=1):
-        if not isinstance(preferred, Mapping):
-            raise ValueError("The direct-search merge returned a malformed record")
-        key = text(preferred.get("dedup_key"))
-        rows = groups.get(key)
-        if not rows:
-            raise ValueError("A merged record has no source manifestations")
-        candidates.append(compact_record(f"candidate-{index:04d}", preferred, rows))
+    if not isinstance(results, list):
+        raise ValueError("The direct-search merge returned no results list")
+    if raw_count != corpus.get("dedup_summary", {}).get("raw_results"):
+        raise ValueError("Raw record accounting disagrees with the validated merge")
+    if len(groups) > len(results):
+        raise ValueError("Project identity clustering lost a validated merge relation")
+    ordered = sorted(
+        groups.items(),
+        key=lambda item: (
+            -max(
+                (row["year"] for row in item[1] if isinstance(row["year"], int)),
+                default=0,
+            ),
+            min(
+                (row["normalized_title"] for row in item[1] if row["normalized_title"]),
+                default="",
+            ),
+            item[0],
+        ),
+    )
+    candidates = [
+        compact_record(
+            f"candidate-{index:04d}",
+            preferred_manifestation(rows),
+            rows,
+        )
+        for index, (_key, rows) in enumerate(ordered, start=1)
+    ]
     duplicates_removed = raw_count - len(candidates)
     return candidates, raw_count, duplicates_removed
 
@@ -469,10 +753,18 @@ def citation_candidates(merger: Any, paths: list[Path]) -> tuple[list[dict[str, 
 
 def build(mode: str) -> dict[str, Any]:
     merger = load_merger()
+    identity_link_receipt: dict[str, Any] | None = None
+    abstract_enrichment_receipt: dict[str, Any] | None = None
     if mode == "psr":
         validate_psr_sources(merger)
         paths = psr_input_paths()
-        candidates, raw_count, duplicates_removed = direct_candidates(merger, paths)
+        manual_links, identity_link_receipt = load_psr_identity_links()
+        abstract_enrichment, abstract_enrichment_receipt = (
+            load_psr_abstract_enrichment()
+        )
+        candidates, raw_count, duplicates_removed = direct_candidates(
+            merger, paths, manual_links, abstract_enrichment
+        )
         namespace = "prior_secondary_reviews"
     elif mode == "review-searches":
         paths = final_direct_input_paths()
@@ -491,10 +783,32 @@ def build(mode: str) -> dict[str, Any]:
         "generated_at": now(),
         "common_evidence_cutoff": COMMON_CUTOFF,
         "screening_decision_initial_value": "none",
+        "metadata_enrichment": {
+            "scopus_abstracts": abstract_enrichment_receipt,
+        },
+        "deduplication": {
+            "algorithm": (
+                "connected components over source-qualified record ID, normalized DOI, "
+                "and normalized title plus publication year"
+                if mode != "citation-chasing"
+                else "shared merger identity key"
+            ),
+            "manual_identity_links": identity_link_receipt,
+        },
         "counts": {
             "source_record_occurrences": raw_count,
             "deduplicated_candidates": len(candidates),
             "duplicate_occurrences_removed": duplicates_removed,
+            "candidates_with_full_abstract": sum(
+                bool(candidate["abstract"]) for candidate in candidates
+            ),
+            "candidates_with_abstract_snippet": sum(
+                bool(candidate["abstract_snippet"]) for candidate in candidates
+            ),
+            "candidates_without_abstract_or_snippet": sum(
+                not candidate["abstract"] and not candidate["abstract_snippet"]
+                for candidate in candidates
+            ),
         },
         "records": candidates,
     }
@@ -512,18 +826,89 @@ def write_create_only(path: Path, payload: Mapping[str, Any]) -> None:
         os.fsync(handle.fileno())
 
 
+def record_references(record: Mapping[str, Any]) -> set[tuple[str, str]]:
+    references: set[tuple[str, str]] = set()
+    source_values = record.get("source_records")
+    if not isinstance(source_values, list):
+        return references
+    for source_record in source_values:
+        if not isinstance(source_record, Mapping):
+            continue
+        source = text(source_record.get("source"))
+        record_ids = source_record.get("record_ids")
+        if not source or not isinstance(record_ids, list):
+            continue
+        references.update(
+            (source, text(record_id)) for record_id in record_ids if text(record_id)
+        )
+    return references
+
+
+def apply_screening_decisions(
+    payload: dict[str, Any], prior: Mapping[str, Any], mode: str
+) -> int:
+    if prior.get("schema_version") != CANDIDATE_SCHEMA or prior.get("mode") != mode:
+        raise ValueError("The screening-decision source has an incompatible scope")
+    allowed = SCREENING_DECISIONS[mode]
+    decisions_by_reference: dict[tuple[str, str], str] = {}
+    old_records = prior.get("records")
+    if not isinstance(old_records, list):
+        raise ValueError("The screening-decision source has no records list")
+    for record in old_records:
+        if not isinstance(record, Mapping):
+            raise ValueError("The screening-decision source contains a malformed record")
+        decision = text(record.get("screening_decision"))
+        if decision not in allowed:
+            raise ValueError(f"Unexpected screening decision: {decision}")
+        references = record_references(record)
+        if not references:
+            raise ValueError("A prior screening record has no source identifier")
+        for reference in references:
+            existing = decisions_by_reference.setdefault(reference, decision)
+            if existing != decision:
+                raise ValueError("One source identifier has conflicting prior decisions")
+
+    transferred = 0
+    used_references: set[tuple[str, str]] = set()
+    for record in payload["records"]:
+        references = record_references(record)
+        decisions = {
+            decisions_by_reference[reference]
+            for reference in references
+            if reference in decisions_by_reference
+        }
+        if not decisions:
+            raise ValueError("A rebuilt candidate has no prior screening decision")
+        if len(decisions) != 1:
+            raise ValueError(
+                "Merged duplicate candidates have conflicting screening decisions"
+            )
+        record["screening_decision"] = decisions.pop()
+        used_references.update(references)
+        transferred += 1
+    if used_references != set(decisions_by_reference):
+        raise ValueError("The rebuilt candidate set changed the source identifier ledger")
+    return transferred
+
+
 def check(path: Path, mode: str) -> None:
     require_regular(path)
     persisted = load_json(path)
     expected = build(mode)
+    if persisted.get("screening_decision_initial_value") != "none":
+        raise ValueError("Candidate records do not initialize screening_decision")
+    records = persisted.get("records")
+    if not isinstance(records, list):
+        raise ValueError("Candidate records are missing")
+    allowed = SCREENING_DECISIONS[mode]
+    for record in records:
+        if not isinstance(record, dict) or record.get("screening_decision") not in allowed:
+            raise ValueError("Candidate records contain an invalid screening decision")
+        record["screening_decision"] = "none"
     persisted.pop("generated_at", None)
     expected.pop("generated_at", None)
     if persisted != expected:
         raise ValueError("Candidate records are not reproducible")
-    if persisted.get("screening_decision_initial_value") != "none":
-        raise ValueError("Candidate records do not initialize screening_decision")
-    if any(record.get("screening_decision") != "none" for record in persisted["records"]):
-        raise ValueError("Candidate records contain a non-initial screening decision")
 
 
 def main() -> int:
@@ -531,6 +916,11 @@ def main() -> int:
     parser.add_argument("--mode", choices=MODES, default="psr")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument(
+        "--screening-decisions-from",
+        type=Path,
+        help="transfer decisions by source record ID while rebuilding a candidate file",
+    )
     args = parser.parse_args()
     output = (args.output or DEFAULT_OUTPUTS[args.mode]).resolve(strict=False)
     try:
@@ -538,16 +928,26 @@ def main() -> int:
     except ValueError as error:
         raise SystemExit("The candidate file must be inside this repository") from error
     if args.check:
+        if args.screening_decisions_from is not None:
+            raise SystemExit("--check cannot transfer screening decisions")
         check(output, args.mode)
         print(json.dumps({"status": "ok", "output": relative(output)}))
         return 0
     payload = build(args.mode)
+    transferred = 0
+    if args.screening_decisions_from is not None:
+        source_path = args.screening_decisions_from.resolve(strict=False)
+        require_regular(source_path)
+        transferred = apply_screening_decisions(
+            payload, load_json(source_path), args.mode
+        )
     write_create_only(output, payload)
     print(
         json.dumps(
             {
                 "status": "saved",
                 "output": relative(output),
+                "screening_decisions_transferred": transferred,
                 **payload["counts"],
             }
         )
