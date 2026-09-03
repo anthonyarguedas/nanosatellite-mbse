@@ -14,7 +14,7 @@ from typing import Any
 
 SCHEMA = "slr1-wos-final-psr-assessment/v1"
 PLAN_SCHEMA = "slr1-wos-final-psr-plan/v1"
-RUN_SCHEMA = "slr1-wos-final-psr-run/v1"
+RUN_SCHEMA = "slr1-wos-final-psr-run-reconciled/v1"
 PARTITIONS = ("PSR1", "PSR2", "PSR3", "PSR4")
 KNOWN_ID = "WOS:001705529700001"
 KNOWN_DOI = "10.1002/sys.70051"
@@ -102,6 +102,10 @@ def main() -> int:
         errors.append("run_event_kind")
     if run.get("target_identifier_retained") is not False:
         errors.append("target_privacy")
+    if run.get("source_execution_replayed") is not False:
+        errors.append("source_execution_replayed")
+    if not isinstance(run.get("initial_run_receipt_sha256"), str):
+        errors.append("initial_run_receipt_binding")
 
     events = {event["partition_id"]: event for event in plan.get("events", [])}
     outcomes = {
@@ -206,6 +210,7 @@ def main() -> int:
         or run.get("accepted_event_count") != 4
         or run.get("source_command_attempt_count") != 4
         or run.get("all_partitions_attempted") is not True
+        or run.get("source_execution_replayed") is not False
     ):
         errors.append("run_summary")
     union_ok = source_union_valid(source_union, all_ids, raw_event_count, plan)

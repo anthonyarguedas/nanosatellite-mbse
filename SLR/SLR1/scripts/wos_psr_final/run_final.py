@@ -153,7 +153,9 @@ def native_ris_valid(path: Path, value: dict[str, Any], event: dict[str, Any]) -
         and native.get("record_count") == total
         and native.get("record_count_provenance") == "framed_native_file_parse"
         and native.get("pages_exported") == math.ceil(total / 50)
-        and native.get("local_path_persisted") is True
+        # The adapter deliberately keeps its normalized receipt path-free.
+        # A verified caller-side RIS file proves this sidecar was retained.
+        and native.get("local_path_persisted") is False
     )
     return valid, {
         "path": ris_path.name,
