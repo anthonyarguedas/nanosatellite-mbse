@@ -1,6 +1,6 @@
 # Scopus
 
-PSR final searches saved in commit: NA
+PSR final searches saved in commit: 8803bd5061a49a3c8c6a26bb10aaeb8ee1b43372
 Final searches saved in commit: NA
 Citation chasing searches saved in commit: NA
 Source excluded from review due to search failure in commit: NA
@@ -31,4 +31,4 @@ Use the concepts and compounds in [the discovery protocol](../../protocol-discov
 
 Run the nine [direct partitions](../../protocol-discovery-and-screening.md#direct-query-schedule) and four [prior review partitions](../../protocol-prior-secondary-reviews.md#additional-concept-blocks) as complete expressions. Final events require two exhaustive fresh page passes with equal totals, page accounting, controls, and stable ID sets. Preserve both source order hashes. A changed order is audit evidence. A changed set fails.
 
-Recover abstracts only through canonical EID queries bound to accepted strict leaves. Do not carry discovery date, language, title, or facet clauses into identity recovery. An unresolved singleton remains unresolved. See [the readiness audit](../readiness-audit.md) for main and prior review result bounds.
+Recover abstracts only through canonical EID queries bound to accepted strict leaves. Do not carry discovery date, language, title, or facet clauses into identity recovery. An unresolved singleton remains unresolved. See the [final PSR assessment](psr-searches/assessment.json) for final PSR result bounds.
