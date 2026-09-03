@@ -1,6 +1,6 @@
 # Web of Science Core Collection
 
-PSR final searches saved in commit: NA
+PSR final searches saved in commit: a7487b041c3865527eb0515a1fabf17ead56dcd0
 Final searches saved in commit: NA
 Citation chasing searches saved in commit: NA
 Source excluded from review due to search failure in commit: NA
@@ -28,4 +28,4 @@ Use the concepts and compounds in [the discovery protocol](../../protocol-discov
 
 ## Execution
 
-Run the nine [direct partitions](../../protocol-discovery-and-screening.md#direct-query-schedule) and four [prior review partitions](../../protocol-prior-secondary-reviews.md#additional-concept-blocks) as complete raw expressions. In `X`, apply the ten substitutions only to its population members. Require two complete passes, native RIS reconciliation, and exact query and control readback. Treat `PY` as year precision and screen cutoff year records against the exact date. A screenshot or source failure keeps `total: null`. See [the readiness audit](../readiness-audit.md) for main and prior review result bounds.
+Run the nine [direct partitions](../../protocol-discovery-and-screening.md#direct-query-schedule) and four [prior review partitions](../../protocol-prior-secondary-reviews.md#additional-concept-blocks) as complete raw expressions. In `X`, apply the ten substitutions only to its population members. Require two complete passes, native RIS reconciliation, and exact query and control readback. Treat `PY` as year precision and screen cutoff year records against the exact date. A screenshot or source failure keeps `total: null`. See the [final PSR assessment](psr-searches/assessment.json) for final PSR result bounds.
