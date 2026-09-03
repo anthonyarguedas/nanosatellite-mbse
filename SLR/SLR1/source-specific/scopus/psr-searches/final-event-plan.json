@@ -1,0 +1,191 @@
+{
+  "schema_version": "slr1-scopus-final-psr-plan/v1",
+  "created_at_utc": "2026-09-03T14:43:43.511899Z",
+  "repository_head_at_predeclaration": "d6809fd9bfbb235f16f23176b6813da46a4a81dc",
+  "source": "Scopus",
+  "review_namespace": "prior_secondary_reviews",
+  "review_id": "slr1-1.1-restart",
+  "phase": "identification",
+  "strategy_reference": "slr1-scopus-prior-secondary-review-v1",
+  "concept_schedule_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "cutoff": {
+    "exact_common_cutoff": "2026-08-24",
+    "source_year_upper_bound": 2026,
+    "source_precision": "year",
+    "lower_date_bound": null,
+    "screening_requirement": "Screen every 2026 record against the exact common cutoff. The Scopus discovery query can apply only the inclusive year bound."
+  },
+  "source_configuration": {
+    "result_scope": "Documents",
+    "field": "TITLE-ABS-KEY",
+    "sort": "Date (oldest)",
+    "page_size": 50,
+    "language_facets": [],
+    "document_type_facets": [],
+    "subject_area_controls": [],
+    "access_facets": [],
+    "peer_review_filter": null,
+    "search_within": null,
+    "full_abstracts": false,
+    "abstract_recovery": "Use only canonical EID queries bound to accepted strict leaves. Do not carry discovery date, language, title, or facet clauses."
+  },
+  "translation": {
+    "literal_only_for_psr_population_and_context": true,
+    "wildcards": false,
+    "proximity_operators": false,
+    "local_pair_filter": false,
+    "term_counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32,
+      "X": 39,
+      "Q": 16
+    },
+    "query_character_counts": {
+      "PSR1": 4151,
+      "PSR2": 4877,
+      "PSR3": 7754,
+      "PSR4": 8020
+    },
+    "query_sha256": {
+      "PSR1": "9b1edfc3dc21ec0ad0376b9d32991858bfb28fdd09b4ca69683988f671d2a503",
+      "PSR2": "5b63e7b2e0da9069cf59110527d220c24de1368966d104f0d86bd3e0242dcc11",
+      "PSR3": "04bd61d531d250c27b9ff89d678cd2d40d826e293de8c6f810fcc641afa38cfe",
+      "PSR4": "139510662b578fdcb8ba3a7b1edf81824cbee0f4f5a83101dbdbad525d9c6488"
+    },
+    "pilot_021_query_hashes_match_current_translation": true
+  },
+  "strict_contract": {
+    "receipt_schema": "academic-search-scopus-strict-two-pass/v2",
+    "membership_gate": "equal complete unique stable-ID sets",
+    "required_equal_controls": [
+      "source total",
+      "page count",
+      "page size",
+      "scope",
+      "Date (oldest) control"
+    ],
+    "order_handling": "Preserve both pass-order hashes and changed-position count. An order change is audit evidence. A changed stable-ID set fails.",
+    "automatic_screenshots_required": true
+  },
+  "known_item": {
+    "citation": "Buruso et al. (2026), Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review",
+    "doi": "10.1002/sys.70051",
+    "stable_id": "SCOPUS-PUBLICATION:105032155734",
+    "title": "Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review"
+  },
+  "execution_policy": {
+    "one_source_execution_per_partition": true,
+    "continue_after_partition_failure": true,
+    "fresh_authorized_target_per_partition": true,
+    "close_ephemeral_target_after_partition": true,
+    "target_identifiers_retained": false,
+    "retry_policy": "none_after_final-plan execution begins",
+    "skip_full_abstracts": true
+  },
+  "adapter": {
+    "id": "search_scopus",
+    "version": "3",
+    "sha256": "f966f1d31c8a50796d015ce03cc1ad47648f1ffeb48c297d1344b4fe7a617476",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_scopus.py"
+  },
+  "bindings": {
+    "query_snapshot": {
+      "path": "SLR/SLR1/scripts/scopus_psr_final/queries.py",
+      "sha256": "c718b672ec5ebf447782af69f4ab8da920e98b7c59ddac5eb9234153d75aea86"
+    },
+    "source_guideline": {
+      "path": "SLR/SLR1/source-specific/scopus/source-specific-guidelines.md",
+      "sha256": "1ad028c745fd0d6fb4ac82e7be6651a7f156a32b3c600e2c99e1643e86618f71"
+    },
+    "protocols": {
+      "SLR/SLR1/protocol.md": "dff8b40cd838437b1d829d224db028944bb979faa353b112956bcfd0cd1883ff",
+      "SLR/SLR1/protocol-discovery-and-screening.md": "660b2cb623bc1445fedf14c8d19bce36b96f39ff3b5dcae923d66d152276cfda",
+      "SLR/SLR1/protocol-prior-secondary-reviews.md": "d6f28bf8f81154a86f2723fe7dabd32859c25f130d13fbfe7d88cd4f0af99292"
+    },
+    "source_affecting_scripts": {
+      "SLR/SLR1/scripts/scopus_psr_final/queries.py": "c718b672ec5ebf447782af69f4ab8da920e98b7c59ddac5eb9234153d75aea86",
+      "SLR/SLR1/scripts/scopus_psr_final/build_plan.py": "48e0625df54082ea3bfda1dc4500df212c40ca32d62ed01b97656929e1f36d9b",
+      "SLR/SLR1/scripts/scopus_psr_final/run_final.py": "451c0867ef54b1c35e38f3ffce6ef14cecc0b604870ba4e9eba4386d77a66521"
+    }
+  },
+  "events": [
+    {
+      "event_id": "final-psr-PSR1-scopus-001",
+      "partition_id": "PSR1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\") OR TITLE-ABS-KEY(\"spacecraft\") OR TITLE-ABS-KEY(\"space system\") OR TITLE-ABS-KEY(\"space systems\") OR TITLE-ABS-KEY(\"space mission\") OR TITLE-ABS-KEY(\"space missions\") OR TITLE-ABS-KEY(\"space engineering\") OR TITLE-ABS-KEY(\"space systems engineering\") OR TITLE-ABS-KEY(\"space application\") OR TITLE-ABS-KEY(\"space applications\") OR TITLE-ABS-KEY(\"space sector\") OR TITLE-ABS-KEY(\"space industry\") OR TITLE-ABS-KEY(\"satellite\") OR TITLE-ABS-KEY(\"satellites\")) AND (TITLE-ABS-KEY(\"model-based systems engineering\") OR TITLE-ABS-KEY(\"model based systems engineering\") OR TITLE-ABS-KEY(\"model-based system engineering\") OR TITLE-ABS-KEY(\"model based system engineering\") OR TITLE-ABS-KEY(\"model-driven systems engineering\") OR TITLE-ABS-KEY(\"model driven systems engineering\") OR TITLE-ABS-KEY(\"model-driven system engineering\") OR TITLE-ABS-KEY(\"model driven system engineering\") OR TITLE-ABS-KEY(\"model-centric systems engineering\") OR TITLE-ABS-KEY(\"model centric systems engineering\") OR TITLE-ABS-KEY(\"model-centric system engineering\") OR TITLE-ABS-KEY(\"model centric system engineering\") OR TITLE-ABS-KEY(\"MBSE\") OR TITLE-ABS-KEY(\"SysML\") OR TITLE-ABS-KEY(\"systems modeling language\") OR TITLE-ABS-KEY(\"systems modelling language\") OR TITLE-ABS-KEY(\"system modeling language\") OR TITLE-ABS-KEY(\"system modelling language\") OR TITLE-ABS-KEY(\"object-process methodology\") OR TITLE-ABS-KEY(\"object process methodology\") OR TITLE-ABS-KEY(\"OPM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering method\") OR TITLE-ABS-KEY(\"object oriented systems engineering method\") OR TITLE-ABS-KEY(\"OOSEM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering\") OR TITLE-ABS-KEY(\"object oriented systems engineering\") OR TITLE-ABS-KEY(\"Arcadia\") OR TITLE-ABS-KEY(\"Capella\") OR TITLE-ABS-KEY(\"model-based engineering\") OR TITLE-ABS-KEY(\"model based engineering\") OR TITLE-ABS-KEY(\"model-driven engineering\") OR TITLE-ABS-KEY(\"model driven engineering\") OR TITLE-ABS-KEY(\"model-based design\") OR TITLE-ABS-KEY(\"model based design\") OR TITLE-ABS-KEY(\"model-driven design\") OR TITLE-ABS-KEY(\"model driven design\") OR TITLE-ABS-KEY(\"MBE\") OR TITLE-ABS-KEY(\"MDE\") OR TITLE-ABS-KEY(\"MBD\") OR TITLE-ABS-KEY(\"MagicGrid\") OR TITLE-ABS-KEY(\"Harmony-SE\") OR TITLE-ABS-KEY(\"Harmony SE\") OR TITLE-ABS-KEY(\"RFLP\") OR TITLE-ABS-KEY(\"Cameo Systems Modeler\") OR TITLE-ABS-KEY(\"MagicDraw\") OR TITLE-ABS-KEY(\"IBM Engineering Systems Design Rhapsody\") OR TITLE-ABS-KEY(\"Rational Rhapsody\") OR TITLE-ABS-KEY(\"Vitech CORE\") OR TITLE-ABS-KEY(\"Vitech GENESYS\") OR TITLE-ABS-KEY(\"OpenMBEE\") OR TITLE-ABS-KEY(\"Enterprise Architect\") OR TITLE-ABS-KEY(\"MATLAB System Composer\") OR TITLE-ABS-KEY(\"System Composer\") OR TITLE-ABS-KEY(\"Modelio\")) AND (TITLE-ABS-KEY(\"systematic review\") OR TITLE-ABS-KEY(\"systematic literature review\") OR TITLE-ABS-KEY(\"systematic mapping\") OR TITLE-ABS-KEY(\"systematic mapping study\") OR TITLE-ABS-KEY(\"mapping study\") OR TITLE-ABS-KEY(\"scoping review\") OR TITLE-ABS-KEY(\"literature review\") OR TITLE-ABS-KEY(\"literature survey\") OR TITLE-ABS-KEY(\"bibliometric review\") OR TITLE-ABS-KEY(\"bibliometric analysis\") OR TITLE-ABS-KEY(\"evidence synthesis\") OR TITLE-ABS-KEY(\"secondary study\") OR TITLE-ABS-KEY(\"state-of-the-art review\") OR TITLE-ABS-KEY(\"state of the art review\") OR TITLE-ABS-KEY(\"survey paper\") OR TITLE-ABS-KEY(\"survey\")))",
+      "query_sha256": "9b1edfc3dc21ec0ad0376b9d32991858bfb28fdd09b4ca69683988f671d2a503",
+      "query_characters": 4151,
+      "output_filename": "PSR1.json",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 50,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.75,
+      "require_complete": true,
+      "strict_passes": 2,
+      "strategy_version": "d6809fd9bfbb235f16f23176b6813da46a4a81dc"
+    },
+    {
+      "event_id": "final-psr-PSR2-scopus-001",
+      "partition_id": "PSR2",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\") OR TITLE-ABS-KEY(\"spacecraft\") OR TITLE-ABS-KEY(\"space system\") OR TITLE-ABS-KEY(\"space systems\") OR TITLE-ABS-KEY(\"space mission\") OR TITLE-ABS-KEY(\"space missions\") OR TITLE-ABS-KEY(\"space engineering\") OR TITLE-ABS-KEY(\"space systems engineering\") OR TITLE-ABS-KEY(\"space application\") OR TITLE-ABS-KEY(\"space applications\") OR TITLE-ABS-KEY(\"space sector\") OR TITLE-ABS-KEY(\"space industry\") OR TITLE-ABS-KEY(\"satellite\") OR TITLE-ABS-KEY(\"satellites\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")) AND (TITLE-ABS-KEY(\"requirement\") OR TITLE-ABS-KEY(\"requirements\") OR TITLE-ABS-KEY(\"function\") OR TITLE-ABS-KEY(\"functions\") OR TITLE-ABS-KEY(\"functional\") OR TITLE-ABS-KEY(\"behavior\") OR TITLE-ABS-KEY(\"behaviors\") OR TITLE-ABS-KEY(\"behaviour\") OR TITLE-ABS-KEY(\"behaviours\") OR TITLE-ABS-KEY(\"behavioral\") OR TITLE-ABS-KEY(\"behavioural\") OR TITLE-ABS-KEY(\"architecture\") OR TITLE-ABS-KEY(\"architectures\") OR TITLE-ABS-KEY(\"architectural\") OR TITLE-ABS-KEY(\"interface\") OR TITLE-ABS-KEY(\"interfaces\") OR TITLE-ABS-KEY(\"traceability\") OR TITLE-ABS-KEY(\"trace\") OR TITLE-ABS-KEY(\"traceable\") OR TITLE-ABS-KEY(\"traced\") OR TITLE-ABS-KEY(\"allocation\") OR TITLE-ABS-KEY(\"allocate\") OR TITLE-ABS-KEY(\"allocated\") OR TITLE-ABS-KEY(\"constraint\") OR TITLE-ABS-KEY(\"constraints\") OR TITLE-ABS-KEY(\"parametric\") OR TITLE-ABS-KEY(\"parametrics\") OR TITLE-ABS-KEY(\"analysis\") OR TITLE-ABS-KEY(\"analyses\") OR TITLE-ABS-KEY(\"design\") OR TITLE-ABS-KEY(\"designs\") OR TITLE-ABS-KEY(\"designed\") OR TITLE-ABS-KEY(\"designing\") OR TITLE-ABS-KEY(\"decision\") OR TITLE-ABS-KEY(\"decisions\") OR TITLE-ABS-KEY(\"decision-making\") OR TITLE-ABS-KEY(\"decision making\") OR TITLE-ABS-KEY(\"trade study\") OR TITLE-ABS-KEY(\"trade studies\") OR TITLE-ABS-KEY(\"trade-off\") OR TITLE-ABS-KEY(\"trade-offs\") OR TITLE-ABS-KEY(\"tradeoff\") OR TITLE-ABS-KEY(\"tradeoffs\") OR TITLE-ABS-KEY(\"verification\") OR TITLE-ABS-KEY(\"verifications\") OR TITLE-ABS-KEY(\"verify\") OR TITLE-ABS-KEY(\"verifies\") OR TITLE-ABS-KEY(\"verified\") OR TITLE-ABS-KEY(\"verifying\") OR TITLE-ABS-KEY(\"validation\") OR TITLE-ABS-KEY(\"validations\") OR TITLE-ABS-KEY(\"validate\") OR TITLE-ABS-KEY(\"validates\") OR TITLE-ABS-KEY(\"validated\") OR TITLE-ABS-KEY(\"validating\")) AND (TITLE-ABS-KEY(\"systematic review\") OR TITLE-ABS-KEY(\"systematic literature review\") OR TITLE-ABS-KEY(\"systematic mapping\") OR TITLE-ABS-KEY(\"systematic mapping study\") OR TITLE-ABS-KEY(\"mapping study\") OR TITLE-ABS-KEY(\"scoping review\") OR TITLE-ABS-KEY(\"literature review\") OR TITLE-ABS-KEY(\"literature survey\") OR TITLE-ABS-KEY(\"bibliometric review\") OR TITLE-ABS-KEY(\"bibliometric analysis\") OR TITLE-ABS-KEY(\"evidence synthesis\") OR TITLE-ABS-KEY(\"secondary study\") OR TITLE-ABS-KEY(\"state-of-the-art review\") OR TITLE-ABS-KEY(\"state of the art review\") OR TITLE-ABS-KEY(\"survey paper\") OR TITLE-ABS-KEY(\"survey\")))",
+      "query_sha256": "5b63e7b2e0da9069cf59110527d220c24de1368966d104f0d86bd3e0242dcc11",
+      "query_characters": 4877,
+      "output_filename": "PSR2.json",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 50,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.75,
+      "require_complete": true,
+      "strict_passes": 2,
+      "strategy_version": "d6809fd9bfbb235f16f23176b6813da46a4a81dc"
+    },
+    {
+      "event_id": "final-psr-PSR3-scopus-001",
+      "partition_id": "PSR3",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND ((TITLE-ABS-KEY(\"electrical power system\") OR TITLE-ABS-KEY(\"electrical power systems\") OR TITLE-ABS-KEY(\"electric power system\") OR TITLE-ABS-KEY(\"electric power systems\") OR TITLE-ABS-KEY(\"electrical power subsystem\") OR TITLE-ABS-KEY(\"electrical power subsystems\") OR TITLE-ABS-KEY(\"electric power subsystem\") OR TITLE-ABS-KEY(\"electric power subsystems\") OR TITLE-ABS-KEY(\"electrical energy subsystem\") OR TITLE-ABS-KEY(\"electrical energy subsystems\") OR TITLE-ABS-KEY(\"EPS\") OR TITLE-ABS-KEY(\"EPSs\") OR TITLE-ABS-KEY(\"power subsystem\") OR TITLE-ABS-KEY(\"power subsystems\") OR TITLE-ABS-KEY(\"power system\") OR TITLE-ABS-KEY(\"power systems\") OR TITLE-ABS-KEY(\"spacecraft power system\") OR TITLE-ABS-KEY(\"spacecraft power systems\") OR TITLE-ABS-KEY(\"power supply\") OR TITLE-ABS-KEY(\"power supplies\") OR TITLE-ABS-KEY(\"power distribution unit\") OR TITLE-ABS-KEY(\"power distribution units\") OR TITLE-ABS-KEY(\"PDU\") OR TITLE-ABS-KEY(\"PDUs\") OR TITLE-ABS-KEY(\"power processing unit\") OR TITLE-ABS-KEY(\"power processing units\") OR TITLE-ABS-KEY(\"power control and distribution\") OR TITLE-ABS-KEY(\"power management and distribution\") OR TITLE-ABS-KEY(\"electrical architecture\") OR TITLE-ABS-KEY(\"electrical architectures\") OR TITLE-ABS-KEY(\"power architecture\") OR TITLE-ABS-KEY(\"power architectures\") OR TITLE-ABS-KEY(\"DC power bus\") OR TITLE-ABS-KEY(\"DC power buses\") OR TITLE-ABS-KEY(\"PCDU\") OR TITLE-ABS-KEY(\"PCDUs\") OR TITLE-ABS-KEY(\"PMAD\") OR TITLE-ABS-KEY(\"PMADs\")) OR (TITLE-ABS-KEY(\"power budget\") OR TITLE-ABS-KEY(\"power budgets\") OR TITLE-ABS-KEY(\"energy budget\") OR TITLE-ABS-KEY(\"energy budgets\") OR TITLE-ABS-KEY(\"energy balance\") OR TITLE-ABS-KEY(\"energy balances\") OR TITLE-ABS-KEY(\"power balance\") OR TITLE-ABS-KEY(\"power balances\") OR TITLE-ABS-KEY(\"power margin\") OR TITLE-ABS-KEY(\"power margins\") OR TITLE-ABS-KEY(\"power generation\") OR TITLE-ABS-KEY(\"photovoltaic generator\") OR TITLE-ABS-KEY(\"photovoltaic generators\") OR TITLE-ABS-KEY(\"solar array\") OR TITLE-ABS-KEY(\"solar arrays\") OR TITLE-ABS-KEY(\"solar panel\") OR TITLE-ABS-KEY(\"solar panels\") OR TITLE-ABS-KEY(\"battery\") OR TITLE-ABS-KEY(\"batteries\") OR TITLE-ABS-KEY(\"battery management\") OR TITLE-ABS-KEY(\"state of charge\") OR TITLE-ABS-KEY(\"states of charge\") OR TITLE-ABS-KEY(\"energy storage\") OR TITLE-ABS-KEY(\"power electronics\") OR TITLE-ABS-KEY(\"power conditioning\") OR TITLE-ABS-KEY(\"power distribution\") OR TITLE-ABS-KEY(\"power management\") OR TITLE-ABS-KEY(\"power interface\") OR TITLE-ABS-KEY(\"power interfaces\") OR TITLE-ABS-KEY(\"power mode\") OR TITLE-ABS-KEY(\"power modes\") OR TITLE-ABS-KEY(\"load profile\") OR TITLE-ABS-KEY(\"load profiles\") OR TITLE-ABS-KEY(\"power consumption\") OR TITLE-ABS-KEY(\"power demand\") OR TITLE-ABS-KEY(\"power profile\") OR TITLE-ABS-KEY(\"energy harvesting\"))) AND ((TITLE-ABS-KEY(\"model-based systems engineering\") OR TITLE-ABS-KEY(\"model based systems engineering\") OR TITLE-ABS-KEY(\"model-based system engineering\") OR TITLE-ABS-KEY(\"model based system engineering\") OR TITLE-ABS-KEY(\"model-driven systems engineering\") OR TITLE-ABS-KEY(\"model driven systems engineering\") OR TITLE-ABS-KEY(\"model-driven system engineering\") OR TITLE-ABS-KEY(\"model driven system engineering\") OR TITLE-ABS-KEY(\"model-centric systems engineering\") OR TITLE-ABS-KEY(\"model centric systems engineering\") OR TITLE-ABS-KEY(\"model-centric system engineering\") OR TITLE-ABS-KEY(\"model centric system engineering\") OR TITLE-ABS-KEY(\"MBSE\") OR TITLE-ABS-KEY(\"SysML\") OR TITLE-ABS-KEY(\"systems modeling language\") OR TITLE-ABS-KEY(\"systems modelling language\") OR TITLE-ABS-KEY(\"system modeling language\") OR TITLE-ABS-KEY(\"system modelling language\") OR TITLE-ABS-KEY(\"object-process methodology\") OR TITLE-ABS-KEY(\"object process methodology\") OR TITLE-ABS-KEY(\"OPM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering method\") OR TITLE-ABS-KEY(\"object oriented systems engineering method\") OR TITLE-ABS-KEY(\"OOSEM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering\") OR TITLE-ABS-KEY(\"object oriented systems engineering\") OR TITLE-ABS-KEY(\"Arcadia\") OR TITLE-ABS-KEY(\"Capella\") OR TITLE-ABS-KEY(\"model-based engineering\") OR TITLE-ABS-KEY(\"model based engineering\") OR TITLE-ABS-KEY(\"model-driven engineering\") OR TITLE-ABS-KEY(\"model driven engineering\") OR TITLE-ABS-KEY(\"model-based design\") OR TITLE-ABS-KEY(\"model based design\") OR TITLE-ABS-KEY(\"model-driven design\") OR TITLE-ABS-KEY(\"model driven design\") OR TITLE-ABS-KEY(\"MBE\") OR TITLE-ABS-KEY(\"MDE\") OR TITLE-ABS-KEY(\"MBD\") OR TITLE-ABS-KEY(\"MagicGrid\") OR TITLE-ABS-KEY(\"Harmony-SE\") OR TITLE-ABS-KEY(\"Harmony SE\") OR TITLE-ABS-KEY(\"RFLP\") OR TITLE-ABS-KEY(\"Cameo Systems Modeler\") OR TITLE-ABS-KEY(\"MagicDraw\") OR TITLE-ABS-KEY(\"IBM Engineering Systems Design Rhapsody\") OR TITLE-ABS-KEY(\"Rational Rhapsody\") OR TITLE-ABS-KEY(\"Vitech CORE\") OR TITLE-ABS-KEY(\"Vitech GENESYS\") OR TITLE-ABS-KEY(\"OpenMBEE\") OR TITLE-ABS-KEY(\"Enterprise Architect\") OR TITLE-ABS-KEY(\"MATLAB System Composer\") OR TITLE-ABS-KEY(\"System Composer\") OR TITLE-ABS-KEY(\"Modelio\")) OR (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\"))) AND (TITLE-ABS-KEY(\"systematic review\") OR TITLE-ABS-KEY(\"systematic literature review\") OR TITLE-ABS-KEY(\"systematic mapping\") OR TITLE-ABS-KEY(\"systematic mapping study\") OR TITLE-ABS-KEY(\"mapping study\") OR TITLE-ABS-KEY(\"scoping review\") OR TITLE-ABS-KEY(\"literature review\") OR TITLE-ABS-KEY(\"literature survey\") OR TITLE-ABS-KEY(\"bibliometric review\") OR TITLE-ABS-KEY(\"bibliometric analysis\") OR TITLE-ABS-KEY(\"evidence synthesis\") OR TITLE-ABS-KEY(\"secondary study\") OR TITLE-ABS-KEY(\"state-of-the-art review\") OR TITLE-ABS-KEY(\"state of the art review\") OR TITLE-ABS-KEY(\"survey paper\") OR TITLE-ABS-KEY(\"survey\")))",
+      "query_sha256": "04bd61d531d250c27b9ff89d678cd2d40d826e293de8c6f810fcc641afa38cfe",
+      "query_characters": 7754,
+      "output_filename": "PSR3.json",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 50,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.75,
+      "require_complete": true,
+      "strict_passes": 2,
+      "strategy_version": "d6809fd9bfbb235f16f23176b6813da46a4a81dc"
+    },
+    {
+      "event_id": "final-psr-PSR4-scopus-001",
+      "partition_id": "PSR4",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\") OR TITLE-ABS-KEY(\"spacecraft\") OR TITLE-ABS-KEY(\"space system\") OR TITLE-ABS-KEY(\"space systems\") OR TITLE-ABS-KEY(\"space mission\") OR TITLE-ABS-KEY(\"space missions\") OR TITLE-ABS-KEY(\"space engineering\") OR TITLE-ABS-KEY(\"space systems engineering\") OR TITLE-ABS-KEY(\"space application\") OR TITLE-ABS-KEY(\"space applications\") OR TITLE-ABS-KEY(\"space sector\") OR TITLE-ABS-KEY(\"space industry\") OR TITLE-ABS-KEY(\"satellite\") OR TITLE-ABS-KEY(\"satellites\")) AND (((TITLE-ABS-KEY(\"generic model\") OR TITLE-ABS-KEY(\"generic models\") OR TITLE-ABS-KEY(\"generic system model\") OR TITLE-ABS-KEY(\"generic system models\") OR TITLE-ABS-KEY(\"reusable model\") OR TITLE-ABS-KEY(\"reusable models\") OR TITLE-ABS-KEY(\"reusable system model\") OR TITLE-ABS-KEY(\"reusable system models\") OR TITLE-ABS-KEY(\"configurable model\") OR TITLE-ABS-KEY(\"configurable models\") OR TITLE-ABS-KEY(\"configurable system model\") OR TITLE-ABS-KEY(\"configurable system models\") OR TITLE-ABS-KEY(\"model template\") OR TITLE-ABS-KEY(\"model templates\")) OR (TITLE-ABS-KEY(\"mission-agnostic model\") OR TITLE-ABS-KEY(\"mission-agnostic models\") OR TITLE-ABS-KEY(\"mission-agnostic architecture\") OR TITLE-ABS-KEY(\"mission-agnostic architectures\") OR TITLE-ABS-KEY(\"mission agnostic model\") OR TITLE-ABS-KEY(\"mission agnostic models\") OR TITLE-ABS-KEY(\"mission agnostic architecture\") OR TITLE-ABS-KEY(\"mission agnostic architectures\") OR TITLE-ABS-KEY(\"mission-independent model\") OR TITLE-ABS-KEY(\"mission-independent models\") OR TITLE-ABS-KEY(\"mission-independent architecture\") OR TITLE-ABS-KEY(\"mission-independent architectures\") OR TITLE-ABS-KEY(\"mission independent model\") OR TITLE-ABS-KEY(\"mission independent models\") OR TITLE-ABS-KEY(\"mission independent architecture\") OR TITLE-ABS-KEY(\"mission independent architectures\")) OR ((TITLE-ABS-KEY(\"mission-agnostic\") OR TITLE-ABS-KEY(\"mission agnostic\") OR TITLE-ABS-KEY(\"mission-independent\") OR TITLE-ABS-KEY(\"mission independent\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")))) OR ((TITLE-ABS-KEY(\"reference architecture\") OR TITLE-ABS-KEY(\"reference architectures\") OR TITLE-ABS-KEY(\"domain model\") OR TITLE-ABS-KEY(\"domain models\") OR TITLE-ABS-KEY(\"metamodel\") OR TITLE-ABS-KEY(\"metamodels\") OR TITLE-ABS-KEY(\"meta-model\") OR TITLE-ABS-KEY(\"meta-models\")) OR (TITLE-ABS-KEY(\"product-line model\") OR TITLE-ABS-KEY(\"product-line models\") OR TITLE-ABS-KEY(\"product line model\") OR TITLE-ABS-KEY(\"product line models\") OR TITLE-ABS-KEY(\"product-family model\") OR TITLE-ABS-KEY(\"product-family models\") OR TITLE-ABS-KEY(\"product family model\") OR TITLE-ABS-KEY(\"product family models\")) OR (TITLE-ABS-KEY(\"variation point\") OR TITLE-ABS-KEY(\"variation points\")) OR ((TITLE-ABS-KEY(\"product-line\") OR TITLE-ABS-KEY(\"product line\") OR TITLE-ABS-KEY(\"product-family\") OR TITLE-ABS-KEY(\"product family\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")))) OR ((TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"system reference model\") OR TITLE-ABS-KEY(\"system reference models\") OR TITLE-ABS-KEY(\"model library\") OR TITLE-ABS-KEY(\"model libraries\") OR TITLE-ABS-KEY(\"system model library\") OR TITLE-ABS-KEY(\"system model libraries\") OR TITLE-ABS-KEY(\"model pattern\") OR TITLE-ABS-KEY(\"model patterns\") OR TITLE-ABS-KEY(\"modeling pattern\") OR TITLE-ABS-KEY(\"modeling patterns\") OR TITLE-ABS-KEY(\"modelling pattern\") OR TITLE-ABS-KEY(\"modelling patterns\") OR TITLE-ABS-KEY(\"system model pattern\") OR TITLE-ABS-KEY(\"system model patterns\") OR TITLE-ABS-KEY(\"systems model pattern\") OR TITLE-ABS-KEY(\"systems model patterns\") OR TITLE-ABS-KEY(\"model profile\") OR TITLE-ABS-KEY(\"model profiles\") OR TITLE-ABS-KEY(\"system model profile\") OR TITLE-ABS-KEY(\"system model profiles\") OR TITLE-ABS-KEY(\"systems model profile\") OR TITLE-ABS-KEY(\"systems model profiles\") OR TITLE-ABS-KEY(\"SysML profile\") OR TITLE-ABS-KEY(\"SysML profiles\")) OR (TITLE-ABS-KEY(\"domain-specific modeling language\") OR TITLE-ABS-KEY(\"domain specific modeling language\") OR TITLE-ABS-KEY(\"domain-specific modelling language\") OR TITLE-ABS-KEY(\"domain specific modelling language\")))) AND (TITLE-ABS-KEY(\"systematic review\") OR TITLE-ABS-KEY(\"systematic literature review\") OR TITLE-ABS-KEY(\"systematic mapping\") OR TITLE-ABS-KEY(\"systematic mapping study\") OR TITLE-ABS-KEY(\"mapping study\") OR TITLE-ABS-KEY(\"scoping review\") OR TITLE-ABS-KEY(\"literature review\") OR TITLE-ABS-KEY(\"literature survey\") OR TITLE-ABS-KEY(\"bibliometric review\") OR TITLE-ABS-KEY(\"bibliometric analysis\") OR TITLE-ABS-KEY(\"evidence synthesis\") OR TITLE-ABS-KEY(\"secondary study\") OR TITLE-ABS-KEY(\"state-of-the-art review\") OR TITLE-ABS-KEY(\"state of the art review\") OR TITLE-ABS-KEY(\"survey paper\") OR TITLE-ABS-KEY(\"survey\")))",
+      "query_sha256": "139510662b578fdcb8ba3a7b1edf81824cbee0f4f5a83101dbdbad525d9c6488",
+      "query_characters": 8020,
+      "output_filename": "PSR4.json",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 50,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.75,
+      "require_complete": true,
+      "strict_passes": 2,
+      "strategy_version": "d6809fd9bfbb235f16f23176b6813da46a4a81dc"
+    }
+  ]
+}
