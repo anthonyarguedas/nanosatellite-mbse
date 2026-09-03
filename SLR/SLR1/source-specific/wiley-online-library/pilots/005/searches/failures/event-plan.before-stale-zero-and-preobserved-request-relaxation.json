@@ -1,0 +1,395 @@
+{
+  "schema_version": "wiley-online-library-pilot005-event-plan/v1",
+  "event_schema_version": "wiley-online-library-pilot005-native-ris-event/v1",
+  "pilot": "005",
+  "source": "Wiley Online Library",
+  "created_at_utc": "2026-09-02T23:37:19.515149Z",
+  "repository_head_at_predeclaration": "d66cf10f480b6dc496ff288fc960002a0bc82df5",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Validate the adopted ten-cell current Wiley schedule with the production page-scoped native RIS route, two complete ordered DOI passes, exact-date accounting, and both mandatory screenshots.",
+  "scope": {
+    "schedule_partitions": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ],
+    "source_cell_count": 10,
+    "A2_cells": [
+      "A2-mh",
+      "A2-mb"
+    ],
+    "larger_set_checks": [
+      "B2",
+      "BT2"
+    ],
+    "pilot004_boundary": "Pilot 004 supplied rendered DOI ledgers only. No Pilot 004 RIS, page, browser, screenshot, or attempt state enters this pilot."
+  },
+  "date_window": {
+    "start": "2011-01-01",
+    "end": "2026-08-29",
+    "inclusive": true,
+    "source_control": "enclosing source months",
+    "record_accounting": "visible First published exact-day status",
+    "common_evidence_cutoff": "TBD",
+    "purpose": "fixed diagnostic window, not a final review search"
+  },
+  "controls": {
+    "source_route": "articlesChapters/default",
+    "field": "one Anywhere/AllField row",
+    "sort": "Date / sortBy=Earliest (observed newest-first)",
+    "page_size": 20,
+    "passes": 2,
+    "language": null,
+    "publication_type_facet": null,
+    "access_filter": null,
+    "controlled_vocabulary": null,
+    "proximity": false,
+    "pair_expansion": false,
+    "population_wildcards": [
+      "CubeSat*",
+      "nanosat*",
+      "SmallSat*"
+    ],
+    "native_ris": "Every first-pass source page is exported through Wiley's visible page-scoped RIS-with-abstracts flow and reconciled one-to-one and in order.",
+    "raw_ris_persistence": false,
+    "screenshots": "configured Advanced Search and hydrated first results page"
+  },
+  "adapter": {
+    "id": "search_wiley_online_library",
+    "version": "12",
+    "sha256": "64f59a4c4d50f82e9c25c309dc207d61084919313fc8130e8dff0f261479d527",
+    "required_interfaces": [
+      "open_authorized_wiley_attached_page",
+      "collect_wiley_results",
+      "reconcile_ris_batch",
+      "configure_wiley_advanced_search_for_screenshot",
+      "_capture_wiley_full_page_screenshot_payload",
+      "_publish_wiley_screenshot_bundle"
+    ]
+  },
+  "dependencies": {
+    "accepted_pilot004_query_module": {
+      "path": "SLR/SLR1/scripts/wiley_online_library_pilot004/queries.py",
+      "sha256": "a133cf65d8e76acc89d1fdfdecd6dcfa236d27c9944acfb6fbf333a86c3e7ab1"
+    },
+    "source_affecting_scripts": {
+      "SLR/SLR1/scripts/wiley_online_library_pilot005/queries.py": "d29bf27c0dd31941c66eef438203c7f2e7d564ad43736ae78dc4577119104ca9",
+      "SLR/SLR1/scripts/wiley_online_library_pilot005/build_plan.py": "de6888719700e8249b2719d9a70373c40b2d1048dc30a25cee7776cffb1bc3bd",
+      "SLR/SLR1/scripts/wiley_online_library_pilot005/run_pilot.py": "de3d6446f23d71e2f8b2fd0a23f83e7df4312898b3c86a6cd9d6d793a32c7330"
+    }
+  },
+  "authorization": {
+    "mode": "exact caller-authorized Wiley target",
+    "target_id_persisted": false,
+    "owned_page_per_attempt": true,
+    "user_target_navigated_or_closed": false
+  },
+  "acceptance_checks": [
+    "All ten predeclared source cells complete from fresh page-zero state.",
+    "A2-mh and A2-mb both complete and form the adopted lossless A2 union.",
+    "B2 and BT2 complete across every native result page.",
+    "Each event has two equal complete ordered DOI passes and a stable source total.",
+    "Every source DOI has exactly one first-pass normalized native RIS record in the same order.",
+    "Every native RIS page batch reconciles its record count and DOI order to that rendered page.",
+    "Every source record receives included, excluded, or unresolved exact-date accounting from visible First published evidence.",
+    "Every event saves and hashes both mandatory sibling screenshots.",
+    "No prior pilot state, source limit, language limit, type facet, access filter, Subject term, proximity operator, or pair expansion is used."
+  ],
+  "stop_rules": [
+    "Retry only a fresh isolated source-total or ordered-ID snapshot change, up to two attempts.",
+    "Stop on access, challenge, query, control, card, RIS, DOI, date, screenshot, output, or cleanup failure.",
+    "A failed attempt contributes no DOI, record, count, screenshot, or native export to a successful event.",
+    "Never overwrite an event, screenshot, failure receipt, assessment, or validation report."
+  ],
+  "conditional_future_pilots": {
+    "additional_wildcards": {
+      "active": false,
+      "trigger": "More than the three accepted wildcard atoms are proposed."
+    },
+    "controlled_vocabulary": {
+      "active": false,
+      "trigger": "A Wiley Subject descriptor is proposed as a free-text supplement."
+    }
+  },
+  "event_count": 10,
+  "events": [
+    {
+      "event_id": "A1",
+      "partition_id": "A1",
+      "cell_id": "direct",
+      "branch": "A1",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"electrical power system\" OR \"electrical power systems\" OR \"electric power system\" OR \"electric power systems\" OR \"electrical power subsystem\" OR \"electrical power subsystems\" OR \"electric power subsystem\" OR \"electric power subsystems\" OR \"electrical energy subsystem\" OR \"electrical energy subsystems\" OR \"EPS\" OR \"EPSs\" OR \"power subsystem\" OR \"power subsystems\" OR \"power system\" OR \"power systems\" OR \"spacecraft power system\" OR \"spacecraft power systems\" OR \"power supply\" OR \"power supplies\" OR \"power distribution unit\" OR \"power distribution units\" OR \"PDU\" OR \"PDUs\" OR \"power processing unit\" OR \"power processing units\" OR \"power control and distribution\" OR \"power management and distribution\" OR \"electrical architecture\" OR \"electrical architectures\" OR \"power architecture\" OR \"power architectures\" OR \"DC power bus\" OR \"DC power buses\" OR \"PCDU\" OR \"PCDUs\" OR \"PMAD\" OR \"PMADs\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")",
+      "pilot004_reference_total": 21,
+      "query_characters": 2685,
+      "query_sha256": "22a3a360e99fd8d801ea80723d54bd9c88119e867f7a6a35ac6a6783be29e572",
+      "output": "events/A1.json",
+      "screenshots": {
+        "search_page": "events/A1.search-page.png",
+        "results_page": "events/A1.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "A2-mh",
+      "partition_id": "A2",
+      "cell_id": "mh",
+      "branch": "P AND E_F AND M_H",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"power budget\" OR \"power budgets\" OR \"energy budget\" OR \"energy budgets\" OR \"energy balance\" OR \"energy balances\" OR \"power balance\" OR \"power balances\" OR \"power margin\" OR \"power margins\" OR \"power generation\" OR \"photovoltaic generator\" OR \"photovoltaic generators\" OR \"solar array\" OR \"solar arrays\" OR \"solar panel\" OR \"solar panels\" OR \"battery\" OR \"batteries\" OR \"battery management\" OR \"state of charge\" OR \"states of charge\" OR \"energy storage\" OR \"power electronics\" OR \"power conditioning\" OR \"power distribution\" OR \"power management\" OR \"power interface\" OR \"power interfaces\" OR \"power mode\" OR \"power modes\" OR \"load profile\" OR \"load profiles\" OR \"power consumption\" OR \"power demand\" OR \"power profile\" OR \"energy harvesting\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")",
+      "pilot004_reference_total": 34,
+      "query_characters": 2532,
+      "query_sha256": "a0268299ad40cc93a287f0f1ccd4755879a98df0b22af80f1db2abad13a2b240",
+      "output": "events/A2-mh.json",
+      "screenshots": {
+        "search_page": "events/A2-mh.search-page.png",
+        "results_page": "events/A2-mh.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "A2-mb",
+      "partition_id": "A2",
+      "cell_id": "mb",
+      "branch": "P AND E_F AND M_B",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"power budget\" OR \"power budgets\" OR \"energy budget\" OR \"energy budgets\" OR \"energy balance\" OR \"energy balances\" OR \"power balance\" OR \"power balances\" OR \"power margin\" OR \"power margins\" OR \"power generation\" OR \"photovoltaic generator\" OR \"photovoltaic generators\" OR \"solar array\" OR \"solar arrays\" OR \"solar panel\" OR \"solar panels\" OR \"battery\" OR \"batteries\" OR \"battery management\" OR \"state of charge\" OR \"states of charge\" OR \"energy storage\" OR \"power electronics\" OR \"power conditioning\" OR \"power distribution\" OR \"power management\" OR \"power interface\" OR \"power interfaces\" OR \"power mode\" OR \"power modes\" OR \"load profile\" OR \"load profiles\" OR \"power consumption\" OR \"power demand\" OR \"power profile\" OR \"energy harvesting\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")",
+      "pilot004_reference_total": 106,
+      "query_characters": 1914,
+      "query_sha256": "70546395bb28b7ee2e732683aa5231d3223d9ae6149f375d4dcbe7a80101f6d4",
+      "output": "events/A2-mb.json",
+      "screenshots": {
+        "search_page": "events/A2-mb.search-page.png",
+        "results_page": "events/A2-mb.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "A3",
+      "partition_id": "A3",
+      "cell_id": "direct",
+      "branch": "A3",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"electrical power system\" OR \"electrical power systems\" OR \"electric power system\" OR \"electric power systems\" OR \"electrical power subsystem\" OR \"electrical power subsystems\" OR \"electric power subsystem\" OR \"electric power subsystems\" OR \"electrical energy subsystem\" OR \"electrical energy subsystems\" OR \"EPS\" OR \"EPSs\" OR \"power subsystem\" OR \"power subsystems\" OR \"power system\" OR \"power systems\" OR \"spacecraft power system\" OR \"spacecraft power systems\" OR \"power supply\" OR \"power supplies\" OR \"power distribution unit\" OR \"power distribution units\" OR \"PDU\" OR \"PDUs\" OR \"power processing unit\" OR \"power processing units\" OR \"power control and distribution\" OR \"power management and distribution\" OR \"electrical architecture\" OR \"electrical architectures\" OR \"power architecture\" OR \"power architectures\" OR \"DC power bus\" OR \"DC power buses\" OR \"PCDU\" OR \"PCDUs\" OR \"PMAD\" OR \"PMADs\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")",
+      "pilot004_reference_total": 60,
+      "query_characters": 2067,
+      "query_sha256": "ad804652d04efbdcfa5ad9c67b16c3398a2f3b2af5737684b7b7b0625692f2a0",
+      "output": "events/A3.json",
+      "screenshots": {
+        "search_page": "events/A3.search-page.png",
+        "results_page": "events/A3.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "B1",
+      "partition_id": "B1",
+      "cell_id": "direct",
+      "branch": "B1",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")",
+      "pilot004_reference_total": 86,
+      "query_characters": 1783,
+      "query_sha256": "caa35cfd409b950db101024729f920379eb42a2de5d35f747d4a36769c46c0f5",
+      "output": "events/B1.json",
+      "screenshots": {
+        "search_page": "events/B1.search-page.png",
+        "results_page": "events/B1.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "B2",
+      "partition_id": "B2",
+      "cell_id": "direct",
+      "branch": "B2",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"requirement\" OR \"requirements\" OR \"function\" OR \"functions\" OR \"functional\" OR \"behavior\" OR \"behaviors\" OR \"behaviour\" OR \"behaviours\" OR \"behavioral\" OR \"behavioural\" OR \"architecture\" OR \"architectures\" OR \"architectural\" OR \"interface\" OR \"interfaces\" OR \"traceability\" OR \"trace\" OR \"traceable\" OR \"traced\" OR \"allocation\" OR \"allocate\" OR \"allocated\" OR \"constraint\" OR \"constraints\" OR \"parametric\" OR \"parametrics\" OR \"analysis\" OR \"analyses\" OR \"design\" OR \"designs\" OR \"designed\" OR \"designing\" OR \"decision\" OR \"decisions\" OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR \"tradeoff\" OR \"tradeoffs\" OR \"verification\" OR \"verifications\" OR \"verify\" OR \"verifies\" OR \"verified\" OR \"verifying\" OR \"validation\" OR \"validations\" OR \"validate\" OR \"validates\" OR \"validated\" OR \"validating\")",
+      "pilot004_reference_total": 236,
+      "query_characters": 2029,
+      "query_sha256": "1d877587b0f12c8a3fb5526755387ab069d28c4d5fe9993bcc748bf9114a6fb0",
+      "output": "events/B2.json",
+      "screenshots": {
+        "search_page": "events/B2.search-page.png",
+        "results_page": "events/B2.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BG1",
+      "partition_id": "BG1",
+      "cell_id": "direct",
+      "branch": "BG1",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")))",
+      "pilot004_reference_total": 8,
+      "query_characters": 2147,
+      "query_sha256": "4dbcd2786c91187cb6a2bb0e3b32f7a88f71471e7ed74f1843c455570cc43ad5",
+      "output": "events/BG1.json",
+      "screenshots": {
+        "search_page": "events/BG1.search-page.png",
+        "results_page": "events/BG1.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BG2",
+      "partition_id": "BG2",
+      "cell_id": "direct",
+      "branch": "BG2",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"reference architecture\" OR \"reference architectures\" OR \"domain model\" OR \"domain models\" OR \"metamodel\" OR \"metamodels\" OR \"meta-model\" OR \"meta-models\") OR (\"product-line model\" OR \"product-line models\" OR \"product line model\" OR \"product line models\" OR \"product-family model\" OR \"product-family models\" OR \"product family model\" OR \"product family models\") OR (\"variation point\" OR \"variation points\") OR ((\"product-line\" OR \"product line\" OR \"product-family\" OR \"product family\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")))",
+      "pilot004_reference_total": 32,
+      "query_characters": 1659,
+      "query_sha256": "5e0aaee4266d1f461a5d2e3058b15b180a5779d5ae7dd51fa28e8494056a20f4",
+      "output": "events/BG2.json",
+      "screenshots": {
+        "search_page": "events/BG2.search-page.png",
+        "results_page": "events/BG2.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BC1",
+      "partition_id": "BC1",
+      "cell_id": "direct",
+      "branch": "BC1",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"reference model\" OR \"reference models\" OR \"system reference model\" OR \"system reference models\" OR \"model library\" OR \"model libraries\" OR \"system model library\" OR \"system model libraries\" OR \"model pattern\" OR \"model patterns\" OR \"modeling pattern\" OR \"modeling patterns\" OR \"modelling pattern\" OR \"modelling patterns\" OR \"system model pattern\" OR \"system model patterns\" OR \"systems model pattern\" OR \"systems model patterns\" OR \"model profile\" OR \"model profiles\" OR \"system model profile\" OR \"system model profiles\" OR \"systems model profile\" OR \"systems model profiles\" OR \"SysML profile\" OR \"SysML profiles\") OR (\"domain-specific modeling language\" OR \"domain specific modeling language\" OR \"domain-specific modelling language\" OR \"domain specific modelling language\"))",
+      "pilot004_reference_total": 60,
+      "query_characters": 1132,
+      "query_sha256": "5ffc314ddc34c7a87f589992403805fca80b0e33f6bcbdb91c0da3d7b54610d4",
+      "output": "events/BC1.json",
+      "screenshots": {
+        "search_page": "events/BC1.search-page.png",
+        "results_page": "events/BC1.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BT2",
+      "partition_id": "BT2",
+      "cell_id": "direct",
+      "branch": "BT2",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"tailor\" OR \"tailors\" OR \"tailored\" OR \"tailoring\" OR \"customize\" OR \"customizes\" OR \"customized\" OR \"customizing\" OR \"customization\" OR \"customise\" OR \"customises\" OR \"customised\" OR \"customising\" OR \"customisation\" OR \"parameterize\" OR \"parameterizes\" OR \"parameterized\" OR \"parameterizing\" OR \"parameterization\" OR \"parameterise\" OR \"parameterises\" OR \"parameterised\" OR \"parameterising\" OR \"parameterisation\" OR \"instantiate\" OR \"instantiates\" OR \"instantiated\" OR \"instantiating\" OR \"instantiation\" OR \"variability\" OR \"variation point\" OR \"variation points\")",
+      "pilot004_reference_total": 137,
+      "query_characters": 1735,
+      "query_sha256": "735af88ba56852a324de884b0fb9910091145820ed24d710dd0d3c2f266d0295",
+      "output": "events/BT2.json",
+      "screenshots": {
+        "search_page": "events/BT2.search-page.png",
+        "results_page": "events/BT2.results-page.png"
+      },
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-29",
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "passes": 2,
+      "sort": "Earliest",
+      "content": "articlesChapters",
+      "native_ris": "visible page scoped export with abstracts",
+      "raw_ris_persisted": false,
+      "diagnostic_only": true,
+      "do_not_merge": true
+    }
+  ]
+}
