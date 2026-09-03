@@ -1,0 +1,197 @@
+{
+  "schema_version": "slr1-wos-final-psr-plan/v1",
+  "created_at_utc": "2026-09-03T15:00:16.637186Z",
+  "repository_head_at_predeclaration": "6eed4e2a78c5c32cb3f653ae4ea8672dbae723c0",
+  "source": "Web of Science Core Collection",
+  "source_id": "web_of_science_core_collection",
+  "review_namespace": "prior_secondary_reviews",
+  "review_id": "slr1-1.1-restart",
+  "phase": "identification",
+  "strategy_reference": "slr1-wos-prior-secondary-review-v1",
+  "concept_schedule_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "cutoff": {
+    "exact_common_cutoff": "2026-08-24",
+    "source_year_upper_bound": 2026,
+    "source_precision": "year",
+    "lower_date_bound": null,
+    "native_query_clause": "PY=(1900-2026)",
+    "screening_requirement": "Screen every 2026 record against the exact common cutoff. The Web of Science discovery query can apply only the inclusive year bound."
+  },
+  "source_configuration": {
+    "database": "Web of Science Core Collection",
+    "editions": "All currently exposed editions",
+    "field": "TS Topic",
+    "query_mode": "raw",
+    "sort": "Date: oldest first",
+    "page_size": 50,
+    "language": "All languages",
+    "document_type_controls": [],
+    "subject_controls": [],
+    "access_controls": [],
+    "peer_review_filter": null,
+    "full_text_filter": null,
+    "controlled_vocabulary": null,
+    "native_ris": "RIS (other reference software), persisted for positive final events"
+  },
+  "translation": {
+    "population_wildcards_accepted_for_psr": true,
+    "wildcard_count": 10,
+    "wildcards_only_replace_population_members": true,
+    "x_additions_literal": true,
+    "proximity_operators": false,
+    "local_pair_filter": false,
+    "term_counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32,
+      "X": 39,
+      "Q": 16
+    },
+    "query_character_counts": {
+      "PSR1": 2825,
+      "PSR2": 3231,
+      "PSR3": 5498,
+      "PSR4": 5754
+    },
+    "query_sha256": {
+      "PSR1": "44b69368f6362fe93b9ac91678275085dee55cf6d94d6fc158b7cf7fa85044dc",
+      "PSR2": "65c6ff8f583b1d9aadcdbd1dbe3f3dc9bb6dc4109971068eb4849d539e0f62e6",
+      "PSR3": "ed3001408f77cee598339cb071d67fb390123ba6d2995bb22d18fe4d982512f5",
+      "PSR4": "ae25a71f837089712dadfa4a4d07c6df2a15adf6ec3f684cea62ec8549dc2a07"
+    },
+    "pilot_006_query_hashes_match_current_translation": true
+  },
+  "strict_contract": {
+    "strict_mode": "--require-complete",
+    "membership_gate": "equal complete ordered WOS-ID sequences",
+    "required_equal_controls": [
+      "source total",
+      "page count",
+      "Web of Science Core Collection scope",
+      "all current editions",
+      "Date: oldest first",
+      "native RIS reconciliation"
+    ],
+    "automatic_screenshots_required": true
+  },
+  "known_item": {
+    "citation": "Buruso et al. (2026), Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review",
+    "doi": "10.1002/sys.70051",
+    "stable_id": "WOS:001705529700001",
+    "title": "Model-Based Systems Engineering in Space Applications: A Comprehensive Literature Review"
+  },
+  "execution_policy": {
+    "one_source_execution_per_partition": true,
+    "continue_after_partition_failure": true,
+    "fresh_authorized_target_per_partition": true,
+    "close_ephemeral_target_after_partition": true,
+    "target_identifiers_retained": false,
+    "retry_policy": "none_after_final-plan execution begins",
+    "native_ris_sidecar_for_positive_event": true
+  },
+  "adapter": {
+    "id": "search_web_of_science",
+    "version": "2",
+    "sha256": "f2794c2c0aa17872f5f26976e52d547e17fd733e4a9d7d82bc34e34822910fa8",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_web_of_science.py"
+  },
+  "bindings": {
+    "query_snapshot": {
+      "path": "SLR/SLR1/scripts/wos_psr_final/queries.py",
+      "sha256": "b44e4f44212d51e5200ccedcee5178d69b4a01d625183b77a5d821235802b9e4"
+    },
+    "source_guideline": {
+      "path": "SLR/SLR1/source-specific/web-of-science-core-collection/source-specific-guidelines.md",
+      "sha256": "ca2ea18de1f473c067e9aa6e93f919ac9cc9b1805deb999c46fcde483d6793e0"
+    },
+    "protocols": {
+      "SLR/SLR1/protocol.md": "dff8b40cd838437b1d829d224db028944bb979faa353b112956bcfd0cd1883ff",
+      "SLR/SLR1/protocol-discovery-and-screening.md": "660b2cb623bc1445fedf14c8d19bce36b96f39ff3b5dcae923d66d152276cfda",
+      "SLR/SLR1/protocol-prior-secondary-reviews.md": "d6f28bf8f81154a86f2723fe7dabd32859c25f130d13fbfe7d88cd4f0af99292"
+    },
+    "source_affecting_scripts": {
+      "SLR/SLR1/scripts/wos_psr_final/queries.py": "b44e4f44212d51e5200ccedcee5178d69b4a01d625183b77a5d821235802b9e4",
+      "SLR/SLR1/scripts/wos_psr_final/build_plan.py": "b36116f63c73406d617ece4754443353bdc686127b95146ff814e975b3571309",
+      "SLR/SLR1/scripts/wos_psr_final/run_final.py": "0f6a31cbd1c52f401770ca836e429eba709258e0535015a4c4df293c7874ee1e"
+    }
+  },
+  "events": [
+    {
+      "event_id": "final-psr-PSR1-web-of-science-core-collection-001",
+      "partition_id": "PSR1",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\") OR TS=(\"spacecraft\") OR TS=(\"space system\") OR TS=(\"space systems\") OR TS=(\"space mission\") OR TS=(\"space missions\") OR TS=(\"space engineering\") OR TS=(\"space systems engineering\") OR TS=(\"space application\") OR TS=(\"space applications\") OR TS=(\"space sector\") OR TS=(\"space industry\") OR TS=(\"satellite\") OR TS=(\"satellites\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) AND (TS=(\"systematic review\") OR TS=(\"systematic literature review\") OR TS=(\"systematic mapping\") OR TS=(\"systematic mapping study\") OR TS=(\"mapping study\") OR TS=(\"scoping review\") OR TS=(\"literature review\") OR TS=(\"literature survey\") OR TS=(\"bibliometric review\") OR TS=(\"bibliometric analysis\") OR TS=(\"evidence synthesis\") OR TS=(\"secondary study\") OR TS=(\"state-of-the-art review\") OR TS=(\"state of the art review\") OR TS=(\"survey paper\") OR TS=(\"survey\"))) AND PY=(1900-2026)",
+      "query_sha256": "44b69368f6362fe93b9ac91678275085dee55cf6d94d6fc158b7cf7fa85044dc",
+      "query_characters": 2825,
+      "output_filename": "PSR1.json",
+      "native_ris_filename": "PSR1.ris",
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "strategy_version": "6eed4e2a78c5c32cb3f653ae4ea8672dbae723c0"
+    },
+    {
+      "event_id": "final-psr-PSR2-web-of-science-core-collection-001",
+      "partition_id": "PSR2",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\") OR TS=(\"spacecraft\") OR TS=(\"space system\") OR TS=(\"space systems\") OR TS=(\"space mission\") OR TS=(\"space missions\") OR TS=(\"space engineering\") OR TS=(\"space systems engineering\") OR TS=(\"space application\") OR TS=(\"space applications\") OR TS=(\"space sector\") OR TS=(\"space industry\") OR TS=(\"satellite\") OR TS=(\"satellites\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"requirement\") OR TS=(\"requirements\") OR TS=(\"function\") OR TS=(\"functions\") OR TS=(\"functional\") OR TS=(\"behavior\") OR TS=(\"behaviors\") OR TS=(\"behaviour\") OR TS=(\"behaviours\") OR TS=(\"behavioral\") OR TS=(\"behavioural\") OR TS=(\"architecture\") OR TS=(\"architectures\") OR TS=(\"architectural\") OR TS=(\"interface\") OR TS=(\"interfaces\") OR TS=(\"traceability\") OR TS=(\"trace\") OR TS=(\"traceable\") OR TS=(\"traced\") OR TS=(\"allocation\") OR TS=(\"allocate\") OR TS=(\"allocated\") OR TS=(\"constraint\") OR TS=(\"constraints\") OR TS=(\"parametric\") OR TS=(\"parametrics\") OR TS=(\"analysis\") OR TS=(\"analyses\") OR TS=(\"design\") OR TS=(\"designs\") OR TS=(\"designed\") OR TS=(\"designing\") OR TS=(\"decision\") OR TS=(\"decisions\") OR TS=(\"decision-making\") OR TS=(\"decision making\") OR TS=(\"trade study\") OR TS=(\"trade studies\") OR TS=(\"trade-off\") OR TS=(\"trade-offs\") OR TS=(\"tradeoff\") OR TS=(\"tradeoffs\") OR TS=(\"verification\") OR TS=(\"verifications\") OR TS=(\"verify\") OR TS=(\"verifies\") OR TS=(\"verified\") OR TS=(\"verifying\") OR TS=(\"validation\") OR TS=(\"validations\") OR TS=(\"validate\") OR TS=(\"validates\") OR TS=(\"validated\") OR TS=(\"validating\")) AND (TS=(\"systematic review\") OR TS=(\"systematic literature review\") OR TS=(\"systematic mapping\") OR TS=(\"systematic mapping study\") OR TS=(\"mapping study\") OR TS=(\"scoping review\") OR TS=(\"literature review\") OR TS=(\"literature survey\") OR TS=(\"bibliometric review\") OR TS=(\"bibliometric analysis\") OR TS=(\"evidence synthesis\") OR TS=(\"secondary study\") OR TS=(\"state-of-the-art review\") OR TS=(\"state of the art review\") OR TS=(\"survey paper\") OR TS=(\"survey\"))) AND PY=(1900-2026)",
+      "query_sha256": "65c6ff8f583b1d9aadcdbd1dbe3f3dc9bb6dc4109971068eb4849d539e0f62e6",
+      "query_characters": 3231,
+      "output_filename": "PSR2.json",
+      "native_ris_filename": "PSR2.ris",
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "strategy_version": "6eed4e2a78c5c32cb3f653ae4ea8672dbae723c0"
+    },
+    {
+      "event_id": "final-psr-PSR3-web-of-science-core-collection-001",
+      "partition_id": "PSR3",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) OR (TS=(\"power budget\") OR TS=(\"power budgets\") OR TS=(\"energy budget\") OR TS=(\"energy budgets\") OR TS=(\"energy balance\") OR TS=(\"energy balances\") OR TS=(\"power balance\") OR TS=(\"power balances\") OR TS=(\"power margin\") OR TS=(\"power margins\") OR TS=(\"power generation\") OR TS=(\"photovoltaic generator\") OR TS=(\"photovoltaic generators\") OR TS=(\"solar array\") OR TS=(\"solar arrays\") OR TS=(\"solar panel\") OR TS=(\"solar panels\") OR TS=(\"battery\") OR TS=(\"batteries\") OR TS=(\"battery management\") OR TS=(\"state of charge\") OR TS=(\"states of charge\") OR TS=(\"energy storage\") OR TS=(\"power electronics\") OR TS=(\"power conditioning\") OR TS=(\"power distribution\") OR TS=(\"power management\") OR TS=(\"power interface\") OR TS=(\"power interfaces\") OR TS=(\"power mode\") OR TS=(\"power modes\") OR TS=(\"load profile\") OR TS=(\"load profiles\") OR TS=(\"power consumption\") OR TS=(\"power demand\") OR TS=(\"power profile\") OR TS=(\"energy harvesting\"))) AND ((TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) OR (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))) AND (TS=(\"systematic review\") OR TS=(\"systematic literature review\") OR TS=(\"systematic mapping\") OR TS=(\"systematic mapping study\") OR TS=(\"mapping study\") OR TS=(\"scoping review\") OR TS=(\"literature review\") OR TS=(\"literature survey\") OR TS=(\"bibliometric review\") OR TS=(\"bibliometric analysis\") OR TS=(\"evidence synthesis\") OR TS=(\"secondary study\") OR TS=(\"state-of-the-art review\") OR TS=(\"state of the art review\") OR TS=(\"survey paper\") OR TS=(\"survey\"))) AND PY=(1900-2026)",
+      "query_sha256": "ed3001408f77cee598339cb071d67fb390123ba6d2995bb22d18fe4d982512f5",
+      "query_characters": 5498,
+      "output_filename": "PSR3.json",
+      "native_ris_filename": "PSR3.ris",
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "strategy_version": "6eed4e2a78c5c32cb3f653ae4ea8672dbae723c0"
+    },
+    {
+      "event_id": "final-psr-PSR4-web-of-science-core-collection-001",
+      "partition_id": "PSR4",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\") OR TS=(\"spacecraft\") OR TS=(\"space system\") OR TS=(\"space systems\") OR TS=(\"space mission\") OR TS=(\"space missions\") OR TS=(\"space engineering\") OR TS=(\"space systems engineering\") OR TS=(\"space application\") OR TS=(\"space applications\") OR TS=(\"space sector\") OR TS=(\"space industry\") OR TS=(\"satellite\") OR TS=(\"satellites\")) AND (((TS=(\"generic model\") OR TS=(\"generic models\") OR TS=(\"generic system model\") OR TS=(\"generic system models\") OR TS=(\"reusable model\") OR TS=(\"reusable models\") OR TS=(\"reusable system model\") OR TS=(\"reusable system models\") OR TS=(\"configurable model\") OR TS=(\"configurable models\") OR TS=(\"configurable system model\") OR TS=(\"configurable system models\") OR TS=(\"model template\") OR TS=(\"model templates\")) OR (TS=(\"mission-agnostic model\") OR TS=(\"mission-agnostic models\") OR TS=(\"mission-agnostic architecture\") OR TS=(\"mission-agnostic architectures\") OR TS=(\"mission agnostic model\") OR TS=(\"mission agnostic models\") OR TS=(\"mission agnostic architecture\") OR TS=(\"mission agnostic architectures\") OR TS=(\"mission-independent model\") OR TS=(\"mission-independent models\") OR TS=(\"mission-independent architecture\") OR TS=(\"mission-independent architectures\") OR TS=(\"mission independent model\") OR TS=(\"mission independent models\") OR TS=(\"mission independent architecture\") OR TS=(\"mission independent architectures\")) OR ((TS=(\"mission-agnostic\") OR TS=(\"mission agnostic\") OR TS=(\"mission-independent\") OR TS=(\"mission independent\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")))) OR ((TS=(\"reference architecture\") OR TS=(\"reference architectures\") OR TS=(\"domain model\") OR TS=(\"domain models\") OR TS=(\"metamodel\") OR TS=(\"metamodels\") OR TS=(\"meta-model\") OR TS=(\"meta-models\")) OR (TS=(\"product-line model\") OR TS=(\"product-line models\") OR TS=(\"product line model\") OR TS=(\"product line models\") OR TS=(\"product-family model\") OR TS=(\"product-family models\") OR TS=(\"product family model\") OR TS=(\"product family models\")) OR (TS=(\"variation point\") OR TS=(\"variation points\")) OR ((TS=(\"product-line\") OR TS=(\"product line\") OR TS=(\"product-family\") OR TS=(\"product family\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")))) OR ((TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"system reference model\") OR TS=(\"system reference models\") OR TS=(\"model library\") OR TS=(\"model libraries\") OR TS=(\"system model library\") OR TS=(\"system model libraries\") OR TS=(\"model pattern\") OR TS=(\"model patterns\") OR TS=(\"modeling pattern\") OR TS=(\"modeling patterns\") OR TS=(\"modelling pattern\") OR TS=(\"modelling patterns\") OR TS=(\"system model pattern\") OR TS=(\"system model patterns\") OR TS=(\"systems model pattern\") OR TS=(\"systems model patterns\") OR TS=(\"model profile\") OR TS=(\"model profiles\") OR TS=(\"system model profile\") OR TS=(\"system model profiles\") OR TS=(\"systems model profile\") OR TS=(\"systems model profiles\") OR TS=(\"SysML profile\") OR TS=(\"SysML profiles\")) OR (TS=(\"domain-specific modeling language\") OR TS=(\"domain specific modeling language\") OR TS=(\"domain-specific modelling language\") OR TS=(\"domain specific modelling language\")))) AND (TS=(\"systematic review\") OR TS=(\"systematic literature review\") OR TS=(\"systematic mapping\") OR TS=(\"systematic mapping study\") OR TS=(\"mapping study\") OR TS=(\"scoping review\") OR TS=(\"literature review\") OR TS=(\"literature survey\") OR TS=(\"bibliometric review\") OR TS=(\"bibliometric analysis\") OR TS=(\"evidence synthesis\") OR TS=(\"secondary study\") OR TS=(\"state-of-the-art review\") OR TS=(\"state of the art review\") OR TS=(\"survey paper\") OR TS=(\"survey\"))) AND PY=(1900-2026)",
+      "query_sha256": "ae25a71f837089712dadfa4a4d07c6df2a15adf6ec3f684cea62ec8549dc2a07",
+      "query_characters": 5754,
+      "output_filename": "PSR4.json",
+      "native_ris_filename": "PSR4.ris",
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "strategy_version": "6eed4e2a78c5c32cb3f653ae4ea8672dbae723c0"
+    }
+  ]
+}
