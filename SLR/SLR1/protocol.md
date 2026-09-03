@@ -1,7 +1,7 @@
 # Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
 - **Working branch:** `slr1-1.1-restart`
-- [ ] **Common evidence cutoff:** TBD.
+- **Common evidence cutoff:** 2026-08-24
 - **Final searches merged and deduplicated in commit:** NA
 - **Citation chasing finished in commit:** NA
 - **Full-text screening completed in commit**: NA
