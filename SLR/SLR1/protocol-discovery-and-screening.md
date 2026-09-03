@@ -120,6 +120,45 @@ Final searches are saved to `source-specific/*/final-searches/`, both for discov
 
 Make deduplication reproducible via a single `SLR/SLR1/deduplication.py`. Review conflicts manually when identifiers disagree. Keep both the original metadata and the preferred normalized value, with the reason for choosing it.
 
+### Publication and degree metadata
+
+Store publication and degree metadata in the screening record. Report-level extractions link to these values through `screening_record_id` and do not copy them.
+
+Record `publication_type` using:
+
+- **`journal_article`:** a full primary-research article in a journal.
+- **`conference_paper`:** a full conference, proceedings, or workshop paper.
+- **`workshop_presentation`:** an eligible substantial ESA Indico workshop presentation.
+- **`edited_book_research_chapter`:** a primary-research chapter in an edited scholarly book.
+- **`institutional_technical_report`:** a technical report formally issued by an institution or organization.
+- **`arxiv_preprint`:** a report version posted on arXiv.
+- **`masters_thesis`:** a thesis completed for a master's degree.
+- **`doctoral_thesis_or_dissertation`:** a thesis or dissertation completed for a doctoral degree.
+
+Record `publication_status` using:
+
+- **`published`:** a formal version of record was published.
+- **`accepted_or_in_press`:** accepted for publication without a final published version.
+- **`issued`:** formally released as a report or presentation.
+- **`preprint`:** publicly posted without formal publication status.
+- **`completed_degree`:** accepted or deposited as completed degree work.
+- **`withdrawn`:** formally withdrawn.
+- **`retracted`:** formally retracted.
+- **`unclear`:** current status cannot be established.
+
+For a thesis or dissertation, also record degree name, institution, country, department, `degree_level`, and `completion_status`.
+
+Record `degree_level` using:
+
+- **`masters`:** a master's degree.
+- **`doctoral`:** a doctoral degree.
+
+Record `completion_status` using:
+
+- **`completed`:** the institution identifies the thesis or dissertation as accepted, deposited, or awarded.
+- **`in_progress_or_incomplete`:** the work is explicitly unfinished.
+- **`unclear`:** completion cannot be established.
+
 ## Screening and eligibility procedure
 
 ### Title and abstract screening

@@ -1,6 +1,6 @@
 # Supporting protocol for identifying and assessing prior secondary reviews
 
-> **Main review protocol:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and appraisal](protocol-discovery-and-appraisal.md) · [3 — Extraction and synthesis](protocol-extraction-and-synthesis.md)
+> **Main review protocol:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and screening](protocol-discovery-and-screening.md) · [3 — Extraction](protocol-extraction.md) · [4 — Synthesis](protocol-synthesis.md)
 >
 > This is a bounded supporting search used to establish the need for the main systematic review. It is not a tertiary review and does not answer RQ1–RQ3 from secondary-review findings.
 
@@ -229,7 +229,7 @@ The final need statement must distinguish:
 
 ## Verification and consistency
 
-The LLM reviewer performs the canonical extraction and all final CRD, DARE, overlap, and need judgments. For each included review, use one focused audit under the main [sole-reviewer workflow](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification). A human may performs the audit while seeing the extraction. Validate controlled values and dates deterministically, then adjudicate every issue against the source.
+The LLM reviewer performs the extraction and all final CRD, DARE, overlap, and need judgments. For each included review, the human auditor performs one focused audit under the main [sole-reviewer workflow](protocol-extraction.md#sole-reviewer-extraction-and-verification) while seeing the extraction. Validate controlled values and dates deterministically. The LLM reviewer adjudicates every issue against the source, and the human auditor records the dispositions and applies accepted changes to the canonical extraction.
 
 The focused audit must check:
 

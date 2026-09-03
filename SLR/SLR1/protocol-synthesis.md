@@ -12,7 +12,7 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 - Present Route A and Route B separately before combining them.
 - Compare author labels such as *lightweight* or *scalable* with the extracted footprint and inline support.
 - Present all `report_reuse_level` values as source-bounded report-level results. Synthesize resolved artifact lineages, applicability envelopes, reusable cores, variation points, tailoring methods, tailoring effort, assurance, independence, failures, demonstrated coverage, and `lineage_reuse_level` from the separate lineage-level records. Use lineage and consolidated-application denominators for deduplicated conclusions, and keep unresolved report-level cases visible.
-- Keep method or workflow reuse separate from artifact reuse.
+- Present `M0_method_or_workflow_reuse` separately from the R0–R4 artifact-reuse progression.
 
 ### RQ2
 
@@ -34,7 +34,7 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 
 - Apply the canonical units, denominator, and dependence rules in Part 1.
 - Separate peer-reviewed reports from preprints, technical reports, and theses in descriptive or sensitivity views when useful.
-- Apply the Part 2 [finding-support and conclusion-confidence framework](protocol-discovery-and-appraisal.md#finding-support-reporting-bias-assessment-and-conclusion-confidence).
+- Apply the [finding-support and conclusion-confidence framework](#finding-support-reporting-bias-assessment-and-conclusion-confidence) below.
 - Use sensitivity views by route, evidence basis, support, measure directness, comparator adequacy when required, publication provenance, lineage confidence, reuse level, and artifact availability.
 - Treat cross-tabulations as descriptive co-reporting unless extraction establishes a direct link.
 - Treat sparse direct evidence as a result. Do not fill gaps with whole-spacecraft MBSE claims.
@@ -51,7 +51,7 @@ The final report will:
 - explain why no pooled effect estimate was used.
 - label every count with its analytic denominator.
 - cite apparently eligible full-text exclusions with source-located reasons.
-- present evidence basis, finding support, reporting-bias considerations, reuse levels, and conclusion confidence under Part 2.
+- present evidence basis, finding support, reporting-bias considerations, reuse levels, and conclusion confidence under the framework below.
 - report all protocol changes and departures.
 - state access to the protocol, data, code, and materials.
 
@@ -65,7 +65,7 @@ Do not make a funnel plot or run a statistical publication-bias test. The eviden
 - reports that could not be obtained and records that were only leads;
 - missing or selectively reported reuse claims, applicability limits, tailoring effort, failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, rival explanations, pass/fail criteria, null or adverse results, and limitations;
 - dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage or application;
-- review-process limitations documented under the [Part 3 extraction-verification procedure](protocol-extraction-and-synthesis.md#sole-reviewer-extraction-and-verification); and
+- review-process limitations documented under the [extraction-verification procedure](protocol-extraction.md#sole-reviewer-extraction-and-verification); and
 - protocol departures, search changes, and review-process limits that could affect interpretation.
 
 Treat the sole-reviewer and model-assistance items as review-process limitations, not as publication or selective-reporting bias in the primary studies.
