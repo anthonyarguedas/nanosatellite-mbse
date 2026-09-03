@@ -1,0 +1,5540 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "protocol-extraction.schema.json",
+  "title": "SLR1 extraction schema",
+  "description": "Machine-readable schema for protocol-extraction.md. This schema is being defined incrementally.",
+  "$ref": "#/$defs/reportExtraction",
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "codingConfidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "moderate",
+        "low"
+      ]
+    },
+    "provenance": {
+      "type": "string",
+      "enum": [
+        "source_reported",
+        "author_claimed_or_planned",
+        "reviewer_inferred",
+        "reviewer_derived"
+      ]
+    },
+    "evidenceStatus": {
+      "type": "string",
+      "enum": [
+        "not_reported",
+        "none",
+        "not_applicable",
+        "uncertain"
+      ]
+    },
+    "citationIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/stableId"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "evidencedValueMetadata": {
+      "type": "object",
+      "properties": {
+        "citation_ids": {
+          "$ref": "#/$defs/citationIds"
+        },
+        "coding_confidence": {
+          "$ref": "#/$defs/codingConfidence"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "coding_confidence",
+        "provenance"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provenance": {
+                "enum": [
+                  "source_reported",
+                  "author_claimed_or_planned",
+                  "reviewer_inferred"
+                ]
+              }
+            },
+            "required": [
+              "provenance"
+            ]
+          },
+          "then": {
+            "properties": {
+              "citation_ids": true
+            },
+            "required": [
+              "citation_ids"
+            ]
+          }
+        }
+      ]
+    },
+    "evidencedStringValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "statusWithoutSourceEvidence": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "not_reported",
+            "not_applicable"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "status",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "statusWithSourceEvidence": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "none",
+            "uncertain"
+          ]
+        },
+        "citation_ids": {
+          "$ref": "#/$defs/citationIds"
+        },
+        "coding_confidence": {
+          "$ref": "#/$defs/codingConfidence"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "citation_ids",
+        "coding_confidence",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "evidenceStatusValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/statusWithoutSourceEvidence"
+        },
+        {
+          "$ref": "#/$defs/statusWithSourceEvidence"
+        }
+      ]
+    },
+    "evidencedString": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/evidencedStringValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "evidencedIntegerValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "evidencedInteger": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/evidencedIntegerValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "evidencedStringArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "evidencedStringArray": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/evidencedStringArrayValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "otherArrayCoding": {
+      "type": "object",
+      "properties": {
+        "other_source_term": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "if": {
+        "properties": {
+          "value": {
+            "type": "array",
+            "contains": {
+              "const": "other"
+            }
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "then": {
+        "properties": {
+          "other_source_term": true,
+          "notes": true
+        },
+        "required": [
+          "other_source_term",
+          "notes"
+        ]
+      }
+    },
+    "organizationTypeArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "academic",
+                  "civil_space_agency",
+                  "other_government_or_defence",
+                  "industry",
+                  "nonprofit_or_independent_research",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "organizationType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/organizationTypeArrayValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "developmentSettingArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "academic_project",
+                  "agency_program",
+                  "industrial_project",
+                  "distributed",
+                  "agile_or_iterative",
+                  "concurrent_engineering",
+                  "rapid_development",
+                  "resource_constrained",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "developmentSetting": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/developmentSettingArrayValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "lifecycleStageCode": {
+      "type": "string",
+      "enum": [
+        "concept_and_feasibility",
+        "requirements",
+        "architecture_and_design",
+        "implementation",
+        "integration",
+        "verification",
+        "validation",
+        "deployment_and_commissioning",
+        "operations",
+        "maintenance_and_sustainment",
+        "retirement_or_disposal",
+        "cross_lifecycle",
+        "other",
+        "unclear"
+      ]
+    },
+    "lifecycleStageArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/lifecycleStageCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "lifecycleStages": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lifecycleStageArrayValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "lifecycleStageValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/lifecycleStageCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "lifecycleStage": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lifecycleStageValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "projectMaturityArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "conceptual_framework",
+                  "reference_or_template",
+                  "prototype",
+                  "executable",
+                  "used_on_project",
+                  "physically_checked",
+                  "operational",
+                  "flight"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "projectMaturity": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/projectMaturityArrayValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "availabilityCode": {
+      "type": "string",
+      "enum": [
+        "public_complete",
+        "public_partial",
+        "available_on_request",
+        "restricted",
+        "described_only",
+        "unavailable",
+        "unclear"
+      ]
+    },
+    "availabilityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/availabilityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "availability": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/availabilityValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "familyLeadValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "uncertain"
+              ]
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "contributingReportIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/stableId"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "crossReportEvidenceMetadata": {
+      "type": "object",
+      "properties": {
+        "contributing_report_ids": {
+          "$ref": "#/$defs/contributingReportIds"
+        },
+        "citation_ids": {
+          "$ref": "#/$defs/citationIds"
+        },
+        "coding_confidence": {
+          "$ref": "#/$defs/codingConfidence"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "contributing_report_ids",
+        "coding_confidence",
+        "provenance"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provenance": {
+                "enum": [
+                  "source_reported",
+                  "author_claimed_or_planned",
+                  "reviewer_inferred"
+                ]
+              }
+            },
+            "required": [
+              "provenance"
+            ]
+          },
+          "then": {
+            "properties": {
+              "citation_ids": true
+            },
+            "required": [
+              "citation_ids"
+            ]
+          }
+        }
+      ]
+    },
+    "crossStatusWithoutSourceEvidence": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "not_reported",
+            "not_applicable"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contributing_report_ids": {
+          "$ref": "#/$defs/contributingReportIds"
+        }
+      },
+      "required": [
+        "status",
+        "reason",
+        "contributing_report_ids"
+      ],
+      "additionalProperties": false
+    },
+    "crossStatusWithSourceEvidence": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "none",
+            "uncertain"
+          ]
+        },
+        "contributing_report_ids": {
+          "$ref": "#/$defs/contributingReportIds"
+        },
+        "citation_ids": {
+          "$ref": "#/$defs/citationIds"
+        },
+        "coding_confidence": {
+          "$ref": "#/$defs/codingConfidence"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "contributing_report_ids",
+        "citation_ids",
+        "coding_confidence",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "crossEvidenceStatusValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossStatusWithoutSourceEvidence"
+        },
+        {
+          "$ref": "#/$defs/crossStatusWithSourceEvidence"
+        }
+      ]
+    },
+    "crossEvidencedStringValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossEvidencedString": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossEvidencedStringValue"
+        },
+        {
+          "$ref": "#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "crossEvidencedStringArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossEvidencedStringArray": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossEvidencedStringArrayValue"
+        },
+        {
+          "$ref": "#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "crossCodedRowMetadata": {
+      "$ref": "#/$defs/crossReportEvidenceMetadata"
+    },
+    "codedRowMetadata": {
+      "$ref": "#/$defs/evidencedValueMetadata"
+    },
+    "repeatableFieldStatus": {
+      "$ref": "#/$defs/evidenceStatusValue"
+    },
+    "statusWithRowEvidence": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "none",
+            "uncertain"
+          ]
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "notApplicableStatus": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "const": "not_applicable"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "status",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "rowFieldStatus": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/statusWithoutSourceEvidence"
+        },
+        {
+          "$ref": "#/$defs/statusWithRowEvidence"
+        }
+      ]
+    },
+    "rowString": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "rowStringArray": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "generationMethodTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "named_mbse_method",
+                  "author_defined_process",
+                  "manual_model_construction",
+                  "reference_or_template_instantiation",
+                  "configuration_or_parameterization",
+                  "model_transformation",
+                  "automated_generation",
+                  "import_or_reverse_engineering",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "generationMethodTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/generationMethodTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "modelGenerationMethod": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "model_generation_method_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "eps_case_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "source_method_name_or_description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "generation_method_types": {
+              "$ref": "#/$defs/generationMethodTypes"
+            }
+          },
+          "required": [
+            "model_generation_method_id",
+            "eps_case_ids",
+            "source_method_name_or_description",
+            "generation_method_types"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelArtifact": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "model_artifact_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "name_or_description": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "model_artifact_id",
+            "name_or_description"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelArtifacts": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/modelArtifact"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "modelGenerationMethods": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/modelGenerationMethod"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "rowId": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/stableId"
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "rowIdArray": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stableId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "otherScalarCoding": {
+      "type": "object",
+      "properties": {
+        "other_source_term": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "if": {
+        "properties": {
+          "value": {
+            "const": "other"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "then": {
+        "properties": {
+          "other_source_term": true,
+          "notes": true
+        },
+        "required": [
+          "other_source_term",
+          "notes"
+        ]
+      }
+    },
+    "exchangeTypeCode": {
+      "type": "string",
+      "enum": [
+        "energy",
+        "information_or_control",
+        "material_or_other_resource",
+        "mixed",
+        "other",
+        "unclear"
+      ]
+    },
+    "exchangeTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/exchangeTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "exchangeType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/exchangeTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "exchangeScopeCode": {
+      "type": "string",
+      "enum": [
+        "within_eps",
+        "cross_subsystem",
+        "spacecraft_environment",
+        "external_system",
+        "unclear"
+      ]
+    },
+    "exchangeScopeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/exchangeScopeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "exchangeScope": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/exchangeScopeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsExchange": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eps_exchange_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_endpoint": {
+              "$ref": "#/$defs/rowString"
+            },
+            "destination_endpoint": {
+              "$ref": "#/$defs/rowString"
+            },
+            "named_eps_interface": {
+              "$ref": "#/$defs/rowString"
+            },
+            "exchanged_item": {
+              "$ref": "#/$defs/rowString"
+            },
+            "direction": {
+              "$ref": "#/$defs/rowString"
+            },
+            "exchange_type": {
+              "$ref": "#/$defs/exchangeType"
+            },
+            "exchange_scope": {
+              "$ref": "#/$defs/exchangeScope"
+            }
+          },
+          "required": [
+            "eps_exchange_id",
+            "source_endpoint",
+            "destination_endpoint",
+            "named_eps_interface",
+            "exchanged_item",
+            "direction",
+            "exchange_type",
+            "exchange_scope"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsExchanges": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/epsExchange"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "dependencyTypeCode": {
+      "type": "string",
+      "enum": [
+        "electrical_power",
+        "information_or_control",
+        "thermal_or_environmental",
+        "mechanical_or_structural",
+        "functional_or_behavioral",
+        "operational_or_mode",
+        "requirement_or_constraint",
+        "shared_resource",
+        "other",
+        "unclear"
+      ]
+    },
+    "dependencyTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/dependencyTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "dependencyType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/dependencyTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "dependencyScopeCode": {
+      "type": "string",
+      "enum": [
+        "within_eps",
+        "cross_subsystem",
+        "spacecraft_environment",
+        "external_system",
+        "unclear"
+      ]
+    },
+    "dependencyScopeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/dependencyScopeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "dependencyScope": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/dependencyScopeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsDependency": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eps_dependency_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "dependent_endpoint": {
+              "$ref": "#/$defs/rowString"
+            },
+            "provider_or_driver_endpoint": {
+              "$ref": "#/$defs/rowString"
+            },
+            "description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "linked_eps_exchange_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "dependency_type": {
+              "$ref": "#/$defs/dependencyType"
+            },
+            "dependency_scope": {
+              "$ref": "#/$defs/dependencyScope"
+            }
+          },
+          "required": [
+            "eps_dependency_id",
+            "dependent_endpoint",
+            "provider_or_driver_endpoint",
+            "description",
+            "linked_eps_exchange_ids",
+            "dependency_type",
+            "dependency_scope"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsDependencies": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/epsDependency"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "modeledDisciplinaryViewpointsValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "electrical_or_electronic",
+                  "thermal",
+                  "software_or_algorithmic",
+                  "mechanical_or_structural",
+                  "operational",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modeledDisciplinaryViewpoints": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/modeledDisciplinaryViewpointsValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsModelBridge": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eps_model_bridge_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "eps_anchor_endpoint": {
+              "$ref": "#/$defs/rowString"
+            },
+            "model_or_second_concern_endpoint": {
+              "$ref": "#/$defs/rowString"
+            },
+            "relationship_or_mapping": {
+              "$ref": "#/$defs/rowString"
+            },
+            "reconstructed_meaning": {
+              "$ref": "#/$defs/evidencedString"
+            }
+          },
+          "required": [
+            "eps_model_bridge_id",
+            "eps_anchor_endpoint",
+            "model_or_second_concern_endpoint",
+            "relationship_or_mapping",
+            "reconstructed_meaning"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsAbstractionCode": {
+      "type": "string",
+      "enum": [
+        "conceptual",
+        "logical",
+        "physical_design",
+        "implementation",
+        "mixed",
+        "unclear"
+      ]
+    },
+    "epsAbstractionValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/epsAbstractionCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsAbstraction": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsAbstractionValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsDecompositionVisibilityCode": {
+      "type": "string",
+      "enum": [
+        "black_box",
+        "white_box",
+        "mixed",
+        "unclear"
+      ]
+    },
+    "epsDecompositionVisibilityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/epsDecompositionVisibilityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsDecompositionVisibility": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsDecompositionVisibilityValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsFidelityCode": {
+      "type": "string",
+      "enum": [
+        "qualitative",
+        "idealized_quantitative",
+        "engineering_representative",
+        "implementation_representative",
+        "as_built_or_calibrated",
+        "mixed",
+        "unclear"
+      ]
+    },
+    "epsFidelityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/epsFidelityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsFidelity": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsFidelityValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsPurposesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "definition_or_sizing",
+                  "requirements_or_traceability",
+                  "trade_study",
+                  "interface_management",
+                  "executable_analysis",
+                  "verification_and_validation",
+                  "communication",
+                  "lifecycle_continuity",
+                  "reuse_or_tailoring",
+                  "other"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsPurposes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsPurposesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsCase": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eps_case_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "eps_anchor": {
+              "$ref": "#/$defs/rowString"
+            },
+            "model_anchor_for_route_b": {
+              "$ref": "#/$defs/rowString"
+            },
+            "eps_boundary": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "eps_elements": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "eps_architecture": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "eps_exchanges": {
+              "$ref": "#/$defs/epsExchanges"
+            },
+            "eps_dependencies": {
+              "$ref": "#/$defs/epsDependencies"
+            },
+            "eps_modes_and_operations": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "eps_model_representations": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "modeled_disciplinary_viewpoints": {
+              "$ref": "#/$defs/modeledDisciplinaryViewpoints"
+            },
+            "eps_model_bridges": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/epsModelBridge"
+              },
+              "minItems": 1
+            },
+            "eps_abstraction": {
+              "$ref": "#/$defs/epsAbstraction"
+            },
+            "eps_decomposition_visibility": {
+              "$ref": "#/$defs/epsDecompositionVisibility"
+            },
+            "eps_fidelity": {
+              "$ref": "#/$defs/epsFidelity"
+            },
+            "purposes": {
+              "$ref": "#/$defs/epsPurposes"
+            },
+            "supported_decisions": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "scope_deliberately_omitted": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "eps_model_maturity": {
+              "$ref": "#/$defs/projectMaturity"
+            },
+            "eps_model_availability": {
+              "$ref": "#/$defs/availability"
+            }
+          },
+          "required": [
+            "eps_case_id",
+            "eps_anchor",
+            "model_anchor_for_route_b",
+            "eps_boundary",
+            "eps_elements",
+            "eps_architecture",
+            "eps_exchanges",
+            "eps_dependencies",
+            "eps_modes_and_operations",
+            "eps_model_representations",
+            "modeled_disciplinary_viewpoints",
+            "eps_model_bridges",
+            "eps_abstraction",
+            "eps_decomposition_visibility",
+            "eps_fidelity",
+            "purposes",
+            "supported_decisions",
+            "scope_deliberately_omitted",
+            "eps_model_maturity",
+            "eps_model_availability"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "effortBasisCode": {
+      "type": "string",
+      "enum": [
+        "measured",
+        "author_estimated",
+        "asserted"
+      ]
+    },
+    "effortBasisValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/effortBasisCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "effortBasis": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/effortBasisValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "burdenCategoriesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "effort",
+                  "schedule_or_time",
+                  "financial_cost",
+                  "staffing",
+                  "skills_or_training",
+                  "tools_or_licensing",
+                  "infrastructure",
+                  "model_preparation",
+                  "data_preparation",
+                  "computing",
+                  "integration_or_migration",
+                  "governance_or_configuration",
+                  "maintenance",
+                  "rework",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "burdenCategories": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/burdenCategoriesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "burdenPhaseCode": {
+      "type": "string",
+      "enum": [
+        "adoption",
+        "ongoing_use",
+        "both",
+        "unclear"
+      ]
+    },
+    "burdenPhaseValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/burdenPhaseCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "burdenPhase": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/burdenPhaseValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "implementationRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "implementation_record_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "scope": {
+              "$ref": "#/$defs/rowString"
+            },
+            "roles_and_affected_teams": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "skills_and_training": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "staffing_and_number_of_people": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "workflow": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "automation": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "tools_licences_and_infrastructure": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "model_preparation": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "data_preparation": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "computing_requirements": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "integration_or_migration_work_and_interoperability": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "governance_and_configuration_control": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "effort_basis": {
+              "$ref": "#/$defs/effortBasis"
+            },
+            "person_hours_or_person_days": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "elapsed_duration": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "schedule_effect": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "financial_cost": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "manual_and_automated_work": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "review_and_assurance_effort": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "rework": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "ongoing_maintenance": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "burden_categories": {
+              "$ref": "#/$defs/burdenCategories"
+            },
+            "burden_phase": {
+              "$ref": "#/$defs/burdenPhase"
+            },
+            "reported_burden": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "measurement_method": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "mitigation": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "linked_benefit_or_trade_off": {
+              "$ref": "#/$defs/evidencedString"
+            }
+          },
+          "required": [
+            "implementation_record_id",
+            "scope",
+            "roles_and_affected_teams",
+            "skills_and_training",
+            "staffing_and_number_of_people",
+            "workflow",
+            "automation",
+            "tools_licences_and_infrastructure",
+            "model_preparation",
+            "data_preparation",
+            "computing_requirements",
+            "integration_or_migration_work_and_interoperability",
+            "governance_and_configuration_control",
+            "effort_basis",
+            "person_hours_or_person_days",
+            "elapsed_duration",
+            "schedule_effect",
+            "financial_cost",
+            "manual_and_automated_work",
+            "review_and_assurance_effort",
+            "rework",
+            "ongoing_maintenance",
+            "burden_categories",
+            "burden_phase",
+            "reported_burden",
+            "measurement_method",
+            "mitigation",
+            "linked_benefit_or_trade_off"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "inputCategoryCode": {
+      "type": "string",
+      "enum": [
+        "mission_requirements",
+        "base_assumptions",
+        "scenario_inputs",
+        "model_formulation",
+        "vv_configuration",
+        "tool_prerequisites",
+        "other"
+      ]
+    },
+    "inputCategoryValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/inputCategoryCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "inputCategory": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/inputCategoryValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "inputSourceTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "requirement",
+                  "standard",
+                  "vendor_data",
+                  "test_data",
+                  "flight_data",
+                  "heritage",
+                  "literature",
+                  "tool_default",
+                  "analyst_assumption",
+                  "calculation",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "inputSourceTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/inputSourceTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "inputGroup": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "input_group_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "category": {
+              "$ref": "#/$defs/inputCategory"
+            },
+            "eps_case_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "scenario_or_configuration": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_report_reuse_record_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "parameters_or_constructs": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "material_source_reported_values_or_descriptions": {
+              "description": "Preserve material source values or descriptions with units, time basis, and nominal, worst-case, range, or distribution basis when reported.",
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "input_source_types": {
+              "$ref": "#/$defs/inputSourceTypes"
+            },
+            "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "rationale": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "linked_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_criterion_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_rq3_activity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_report_application_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "decisions": {
+              "$ref": "#/$defs/evidencedStringArray"
+            }
+          },
+          "required": [
+            "input_group_id",
+            "category",
+            "eps_case_id",
+            "scenario_or_configuration",
+            "linked_model_generation_method_ids",
+            "linked_report_reuse_record_ids",
+            "parameters_or_constructs",
+            "material_source_reported_values_or_descriptions",
+            "input_source_types",
+            "material_uncertainty_variability_margin_sensitivity_or_degradation_handling",
+            "rationale",
+            "linked_result_output_ids",
+            "linked_result_criterion_ids",
+            "linked_rq3_activity_ids",
+            "linked_report_application_ids",
+            "decisions"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "observationStatusCode": {
+      "type": "string",
+      "enum": [
+        "observed",
+        "expected"
+      ]
+    },
+    "observationStatusValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/observationStatusCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "observationStatus": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/observationStatusValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "statisticalEvaluation": {
+      "type": "object",
+      "properties": {
+        "central_tendency": {
+          "$ref": "#/$defs/rowString"
+        },
+        "dispersion": {
+          "$ref": "#/$defs/rowString"
+        },
+        "absolute_or_relative_difference": {
+          "$ref": "#/$defs/rowString"
+        },
+        "effect_estimate": {
+          "$ref": "#/$defs/rowString"
+        },
+        "confidence_interval": {
+          "$ref": "#/$defs/rowString"
+        },
+        "exact_p_value": {
+          "$ref": "#/$defs/rowString"
+        },
+        "statistical_method": {
+          "$ref": "#/$defs/rowString"
+        }
+      },
+      "required": [
+        "central_tendency",
+        "dispersion",
+        "absolute_or_relative_difference",
+        "effect_estimate",
+        "confidence_interval",
+        "exact_p_value",
+        "statistical_method"
+      ],
+      "additionalProperties": false
+    },
+    "resultOutput": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "result_output_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "quantity_or_construct": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_reported_value": {
+              "$ref": "#/$defs/rowString"
+            },
+            "unit": {
+              "$ref": "#/$defs/rowString"
+            },
+            "time_basis": {
+              "$ref": "#/$defs/rowString"
+            },
+            "denominator": {
+              "$ref": "#/$defs/rowString"
+            },
+            "observed_or_expected_status": {
+              "$ref": "#/$defs/observationStatus"
+            },
+            "output_specific_missing_observations_or_exclusions": {
+              "$ref": "#/$defs/rowString"
+            },
+            "statistical_evaluation": {
+              "$ref": "#/$defs/statisticalEvaluation"
+            }
+          },
+          "required": [
+            "result_output_id",
+            "quantity_or_construct",
+            "source_reported_value",
+            "unit",
+            "time_basis",
+            "denominator",
+            "observed_or_expected_status",
+            "output_specific_missing_observations_or_exclusions"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "resultOutputs": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resultOutput"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "criterionApplicabilityCode": {
+      "type": "string",
+      "enum": [
+        "applicable_as_stated",
+        "applicable_with_conditions",
+        "partially_applicable",
+        "superseded_or_inactive",
+        "unclear"
+      ]
+    },
+    "criterionApplicabilityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/criterionApplicabilityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "criterionApplicability": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/criterionApplicabilityValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "resultCriterion": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "result_criterion_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_criterion_or_requirement_id": {
+              "$ref": "#/$defs/rowString"
+            },
+            "target": {
+              "$ref": "#/$defs/rowString"
+            },
+            "threshold_or_expected_behavior": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source": {
+              "$ref": "#/$defs/rowString"
+            },
+            "criterion_applicability": {
+              "$ref": "#/$defs/criterionApplicability"
+            },
+            "result_or_verdict": {
+              "$ref": "#/$defs/rowString"
+            },
+            "linked_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "scope": {
+              "$ref": "#/$defs/rowString"
+            },
+            "observed_or_expected_status": {
+              "$ref": "#/$defs/observationStatus"
+            },
+            "why_criterion_or_oracle_is_authoritative_for_intended_use": {
+              "$ref": "#/$defs/evidencedString"
+            }
+          },
+          "required": [
+            "result_criterion_id",
+            "source_criterion_or_requirement_id",
+            "target",
+            "threshold_or_expected_behavior",
+            "source",
+            "criterion_applicability",
+            "result_or_verdict",
+            "linked_result_output_ids",
+            "scope",
+            "observed_or_expected_status",
+            "why_criterion_or_oracle_is_authoritative_for_intended_use"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "resultCriteria": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resultCriterion"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "rivalExplanationOriginCode": {
+      "type": "string",
+      "enum": [
+        "author_identified",
+        "reviewer_noted"
+      ]
+    },
+    "rivalExplanationOriginValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/rivalExplanationOriginCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "rivalExplanationOrigin": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/rivalExplanationOriginValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "rivalExplanation": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "rival_explanation_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "origin": {
+              "$ref": "#/$defs/rivalExplanationOrigin"
+            },
+            "explanation": {
+              "$ref": "#/$defs/rowString"
+            },
+            "how_the_source_handled_it": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "rival_explanation_id",
+            "origin",
+            "explanation",
+            "how_the_source_handled_it"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "rivalExplanations": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rivalExplanation"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "comparatorTypeCode": {
+      "type": "string",
+      "enum": [
+        "usual_or_existing_practice",
+        "document_based_practice",
+        "manual_analysis_or_check",
+        "alternative_model_or_method",
+        "alternative_toolchain",
+        "alternative_design_or_configuration",
+        "prior_mission_or_model",
+        "no_intervention_or_unassisted",
+        "external_benchmark_or_reference",
+        "other",
+        "unclear"
+      ]
+    },
+    "comparatorTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/comparatorTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "comparatorType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/comparatorTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "comparatorAdequacyCode": {
+      "type": "string",
+      "enum": [
+        "adequate",
+        "partial",
+        "inadequate",
+        "unclear"
+      ]
+    },
+    "comparatorAdequacyValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/comparatorAdequacyCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "comparatorAdequacy": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/comparatorAdequacyValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "resultComparator": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "comparator_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "comparator_type": {
+              "$ref": "#/$defs/comparatorType"
+            },
+            "material_differences": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "comparator_adequacy": {
+              "$ref": "#/$defs/comparatorAdequacy"
+            },
+            "rival_explanations": {
+              "$ref": "#/$defs/rivalExplanations"
+            }
+          },
+          "required": [
+            "comparator_id",
+            "description",
+            "comparator_type",
+            "material_differences",
+            "comparator_adequacy",
+            "rival_explanations"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "resultComparators": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resultComparator"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "reviewerDerivedValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "reviewer_derived_value_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "linked_input_group_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "source_values_used": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "formula_or_transformation": {
+              "$ref": "#/$defs/rowString"
+            },
+            "unit_conversion": {
+              "$ref": "#/$defs/rowString"
+            },
+            "assumptions": {
+              "$ref": "#/$defs/rowString"
+            },
+            "missing_data_handling": {
+              "$ref": "#/$defs/rowString"
+            },
+            "analysis_script_path": {
+              "$ref": "#/$defs/rowString"
+            },
+            "reviewer_derived_result": {
+              "$ref": "#/$defs/rowString"
+            },
+            "sensitivity_to_reasonable_alternatives": {
+              "$ref": "#/$defs/rowString"
+            },
+            "provenance": {
+              "const": "reviewer_derived"
+            }
+          },
+          "required": [
+            "reviewer_derived_value_id",
+            "linked_input_group_ids",
+            "linked_result_output_ids",
+            "source_values_used",
+            "formula_or_transformation",
+            "unit_conversion",
+            "assumptions",
+            "missing_data_handling",
+            "analysis_script_path",
+            "reviewer_derived_result",
+            "sensitivity_to_reasonable_alternatives"
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "linked_input_group_ids": {
+                  "type": "array"
+                }
+              },
+              "required": [
+                "linked_input_group_ids"
+              ]
+            },
+            {
+              "properties": {
+                "linked_result_output_ids": {
+                  "type": "array"
+                }
+              },
+              "required": [
+                "linked_result_output_ids"
+              ]
+            }
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "reviewerDerivedValues": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reviewerDerivedValue"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "evaluationDesignCode": {
+      "type": "string",
+      "enum": [
+        "model_or_simulation_evaluation",
+        "case_or_experience_report",
+        "comparative_observational",
+        "controlled_or_quasi_experimental",
+        "survey",
+        "interview_or_qualitative",
+        "mixed_methods",
+        "artifact_or_reuse_demonstration",
+        "other",
+        "unclear"
+      ]
+    },
+    "evaluationDesignValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/evaluationDesignCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "evaluationDesign": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/evaluationDesignValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "executionStatusCode": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "prepared",
+        "executed_complete",
+        "executed_partial",
+        "attempted_failed",
+        "unclear"
+      ]
+    },
+    "executionStatusValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/executionStatusCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "executionStatus": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/executionStatusValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "resultSet": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "result_set_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "eps_case_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "evaluation_design": {
+              "$ref": "#/$defs/evaluationDesign"
+            },
+            "scenario_or_configuration": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "linked_input_group_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "cases_participants_or_observational_units": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "data_sources": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "method": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "execution_status": {
+              "$ref": "#/$defs/executionStatus"
+            },
+            "analysis_method": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "evaluation_level_missing_data_failures_exclusions_uncertainty_and_sensitivity": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "outputs": {
+              "$ref": "#/$defs/resultOutputs"
+            },
+            "criteria": {
+              "$ref": "#/$defs/resultCriteria"
+            },
+            "comparators": {
+              "$ref": "#/$defs/resultComparators"
+            },
+            "decision_informed": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "physical_or_operational_link": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "reviewer_derived_values": {
+              "$ref": "#/$defs/reviewerDerivedValues"
+            }
+          },
+          "required": [
+            "result_set_id",
+            "eps_case_id",
+            "evaluation_design",
+            "scenario_or_configuration",
+            "linked_input_group_ids",
+            "cases_participants_or_observational_units",
+            "data_sources",
+            "method",
+            "execution_status",
+            "analysis_method",
+            "evaluation_level_missing_data_failures_exclusions_uncertainty_and_sensitivity",
+            "outputs",
+            "criteria",
+            "comparators",
+            "decision_informed",
+            "physical_or_operational_link",
+            "reviewer_derived_values"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "evidenceBasisCode": {
+      "type": "string",
+      "enum": [
+        "assertion_only",
+        "worked_example",
+        "executed_result",
+        "comparison",
+        "stakeholder_evidence",
+        "physical_or_operational_check",
+        "independent_transfer"
+      ]
+    },
+    "evidenceBasisValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/evidenceBasisCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "value": {
+                "type": "array",
+                "contains": {
+                  "const": "assertion_only"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "array",
+                "maxItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "supportCode": {
+      "type": "string",
+      "enum": [
+        "supported",
+        "limited",
+        "unsupported",
+        "unclear"
+      ]
+    },
+    "supportValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/supportCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "supportReasonValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "citation_ids": true
+          },
+          "required": [
+            "value",
+            "citation_ids"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "artifactRelationship": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "artifact_relationship_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "parent_artifact_name": {
+              "$ref": "#/$defs/rowString"
+            },
+            "parent_artifact_version": {
+              "$ref": "#/$defs/rowString"
+            },
+            "derived_artifact_name": {
+              "$ref": "#/$defs/rowString"
+            },
+            "derived_artifact_version": {
+              "$ref": "#/$defs/rowString"
+            },
+            "relationship_or_derivation": {
+              "$ref": "#/$defs/rowString"
+            },
+            "identity_and_derivation_evidence": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "artifact_relationship_id",
+            "parent_artifact_name",
+            "parent_artifact_version",
+            "derived_artifact_name",
+            "derived_artifact_version",
+            "relationship_or_derivation",
+            "identity_and_derivation_evidence"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "artifactRelationships": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifactRelationship"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "artifactTypeCode": {
+      "type": "string",
+      "enum": [
+        "reference_or_template_model",
+        "metamodel_or_profile",
+        "model_library_or_pattern",
+        "interface_contract",
+        "parametric_model_package",
+        "transformation_or_generator",
+        "spacecraft_model_with_separable_eps_thread",
+        "other",
+        "unclear"
+      ]
+    },
+    "artifactTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/artifactTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "artifactType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/artifactTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "claimedReuseObjectCode": {
+      "type": "string",
+      "enum": [
+        "artifact",
+        "method",
+        "workflow",
+        "toolchain",
+        "language",
+        "other",
+        "unclear"
+      ]
+    },
+    "claimedReuseObjectValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/claimedReuseObjectCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "claimedReuseObject": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/claimedReuseObjectValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "declaredApplicabilityEnvelope": {
+      "type": "object",
+      "properties": {
+        "target_platforms_and_missions": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "lifecycle_uses_and_decisions": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "eps_boundary": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "model_boundary_and_abstraction": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "architecture_and_interfaces": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "environment_modes_and_loads": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "required_inputs": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "tools_and_versions": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "organizational_prerequisites": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "exclusions_and_limits": {
+          "$ref": "#/$defs/evidencedStringArray"
+        }
+      },
+      "required": [
+        "target_platforms_and_missions",
+        "lifecycle_uses_and_decisions",
+        "eps_boundary",
+        "model_boundary_and_abstraction",
+        "architecture_and_interfaces",
+        "environment_modes_and_loads",
+        "required_inputs",
+        "tools_and_versions",
+        "organizational_prerequisites",
+        "exclusions_and_limits"
+      ],
+      "additionalProperties": false
+    },
+    "reuseDesign": {
+      "type": "object",
+      "properties": {
+        "reusable_core": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "variation_points": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "allowed_options_ranges_and_defaults": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "dependencies": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "tailoring_rules": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "tailoring_operations": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "required_roles_and_skills": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "required_tools_and_data": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "automation": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "governance_and_configuration_control": {
+          "$ref": "#/$defs/evidencedString"
+        }
+      },
+      "required": [
+        "reusable_core",
+        "variation_points",
+        "allowed_options_ranges_and_defaults",
+        "dependencies",
+        "tailoring_rules",
+        "tailoring_operations",
+        "required_roles_and_skills",
+        "required_tools_and_data",
+        "automation",
+        "governance_and_configuration_control"
+      ],
+      "additionalProperties": false
+    },
+    "customOtherScalarCoding": {
+      "type": "object",
+      "properties": {
+        "other_source_term": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "if": {
+        "properties": {
+          "value": {
+            "const": "custom_other"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "then": {
+        "properties": {
+          "other_source_term": true,
+          "notes": true
+        },
+        "required": [
+          "other_source_term",
+          "notes"
+        ]
+      }
+    },
+    "licenseCategoryCode": {
+      "type": "string",
+      "enum": [
+        "open_permissive",
+        "open_copyleft",
+        "public_domain",
+        "research_or_noncommercial",
+        "proprietary_or_commercial",
+        "custom_other",
+        "no_license_declared",
+        "unclear"
+      ]
+    },
+    "licenseCategoryValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/licenseCategoryCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/customOtherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "licenseCategory": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/licenseCategoryValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "artifactReuseLevelCode": {
+      "type": "string",
+      "enum": [
+        "NA",
+        "R0_artifact_only",
+        "R1_reuse_claimed",
+        "R2_reuse_specified",
+        "R3_reuse_demonstrated",
+        "R4_independent_reuse_demonstrated"
+      ]
+    },
+    "artifactReuseLevelValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/artifactReuseLevelCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "methodReuseLevelCode": {
+      "type": "string",
+      "enum": [
+        "NA",
+        "M0_method_identified",
+        "M1_method_reuse_claimed",
+        "M2_method_reuse_specified",
+        "M3_method_reuse_demonstrated",
+        "M4_independent_method_reuse_demonstrated"
+      ]
+    },
+    "methodReuseLevelValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/methodReuseLevelCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "reuseAssessment": {
+      "type": "object",
+      "properties": {
+        "linked_report_application_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "report_reuse_level": {
+          "$ref": "#/$defs/artifactReuseLevelValue"
+        },
+        "report_reuse_level_reason": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "method_reuse_level": {
+          "$ref": "#/$defs/methodReuseLevelValue"
+        },
+        "method_reuse_level_reason": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "conflicting_evidence_within_report": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "evidence_basis": {
+          "$ref": "#/$defs/evidenceBasisValue"
+        },
+        "support": {
+          "$ref": "#/$defs/supportValue"
+        },
+        "support_reason": {
+          "$ref": "#/$defs/supportReasonValue"
+        }
+      },
+      "required": [
+        "linked_report_application_ids",
+        "report_reuse_level",
+        "report_reuse_level_reason",
+        "method_reuse_level",
+        "method_reuse_level_reason",
+        "conflicting_evidence_within_report",
+        "evidence_basis",
+        "support",
+        "support_reason"
+      ],
+      "additionalProperties": false
+    },
+    "reportReuseRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "report_reuse_record_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "lineage_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "artifact_names_and_versions": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "artifact_relationships": {
+              "$ref": "#/$defs/artifactRelationships"
+            },
+            "repository_or_location": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "owner_or_developer": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "artifact_type": {
+              "$ref": "#/$defs/artifactType"
+            },
+            "eps_scope": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "availability": {
+              "$ref": "#/$defs/availability"
+            },
+            "license_category": {
+              "$ref": "#/$defs/licenseCategory"
+            },
+            "exact_reuse_claim": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "claimed_reuse_object": {
+              "$ref": "#/$defs/claimedReuseObject"
+            },
+            "possible_related_reports_or_artifacts": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "declared_applicability_envelope": {
+              "$ref": "#/$defs/declaredApplicabilityEnvelope"
+            },
+            "reuse_design": {
+              "$ref": "#/$defs/reuseDesign"
+            },
+            "reuse_assessment": {
+              "$ref": "#/$defs/reuseAssessment"
+            }
+          },
+          "required": [
+            "report_reuse_record_id",
+            "lineage_id",
+            "linked_model_generation_method_ids",
+            "artifact_names_and_versions",
+            "artifact_relationships",
+            "repository_or_location",
+            "owner_or_developer",
+            "artifact_type",
+            "eps_scope",
+            "availability",
+            "license_category",
+            "exact_reuse_claim",
+            "claimed_reuse_object",
+            "possible_related_reports_or_artifacts",
+            "declared_applicability_envelope",
+            "reuse_design",
+            "reuse_assessment"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "reportReuseRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportReuseRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "applicationObjectCode": {
+      "type": "string",
+      "enum": [
+        "artifact",
+        "method",
+        "artifact_and_method",
+        "unclear"
+      ]
+    },
+    "applicationObjectValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/applicationObjectCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "originatorRelationshipCode": {
+      "type": "string",
+      "enum": [
+        "originating_team",
+        "same_organization_operationally_separate",
+        "outside_originating_organization",
+        "independent_evaluation_only",
+        "unclear"
+      ]
+    },
+    "originatorRelationshipValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/originatorRelationshipCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "daeRelationshipCode": {
+      "type": "string",
+      "enum": [
+        "inside",
+        "boundary",
+        "outside",
+        "unclear"
+      ]
+    },
+    "daeRelationshipValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/daeRelationshipCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "applicationResultCode": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failure",
+        "unclear"
+      ]
+    },
+    "applicationResultValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/applicationResultCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "applicationSetting": {
+      "type": "object",
+      "properties": {
+        "linked_eps_case_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stableId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "target_model_or_configuration": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "adopting_team": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "relationship_to_originator": {
+          "$ref": "#/$defs/originatorRelationshipValue"
+        },
+        "lifecycle_purpose": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "relationship_to_declared_applicability_envelope": {
+          "$ref": "#/$defs/daeRelationshipValue"
+        },
+        "material_setting_differences": {
+          "$ref": "#/$defs/evidencedString"
+        }
+      },
+      "required": [
+        "linked_eps_case_ids",
+        "target_model_or_configuration",
+        "adopting_team",
+        "relationship_to_originator",
+        "lifecycle_purpose",
+        "relationship_to_declared_applicability_envelope",
+        "material_setting_differences"
+      ],
+      "additionalProperties": false
+    },
+    "tailoringOrAdaptation": {
+      "type": "object",
+      "properties": {
+        "base_artifact_or_method_and_version": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "retained_artifact_core_or_method_steps_and_rules": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "configured_or_changed_artifact_content_or_method_steps": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "variation_points_used": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "tailoring_or_adaptation_operations": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "before_and_after_trace": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "reasons_for_changes_or_unchanged_use": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "tailoring_or_adaptation_inputs_and_assumptions": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "linked_implementation_record_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stableId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "base_artifact_or_method_and_version",
+        "retained_artifact_core_or_method_steps_and_rules",
+        "configured_or_changed_artifact_content_or_method_steps",
+        "variation_points_used",
+        "tailoring_or_adaptation_operations",
+        "before_and_after_trace",
+        "reasons_for_changes_or_unchanged_use",
+        "tailoring_or_adaptation_inputs_and_assumptions",
+        "linked_implementation_record_ids"
+      ],
+      "additionalProperties": false
+    },
+    "applicationResultAndAssurance": {
+      "type": "object",
+      "properties": {
+        "resulting_artifact": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "configuration_identifier": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "availability": {
+          "$ref": "#/$defs/availability"
+        },
+        "decisions_or_analyses_supported": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "application_result": {
+          "$ref": "#/$defs/applicationResultValue"
+        },
+        "trade_offs": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "post_tailoring_or_application_criterion": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "assurance_method": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "assurance_timing": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "assurance_result": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "discrepancies_and_resolution": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "linked_result_set_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_rq2_finding_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_rq3_activity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        }
+      },
+      "required": [
+        "resulting_artifact",
+        "configuration_identifier",
+        "availability",
+        "decisions_or_analyses_supported",
+        "application_result",
+        "trade_offs",
+        "post_tailoring_or_application_criterion",
+        "assurance_method",
+        "assurance_timing",
+        "assurance_result",
+        "discrepancies_and_resolution",
+        "linked_result_set_ids",
+        "linked_rq2_finding_ids",
+        "linked_rq3_activity_ids"
+      ],
+      "additionalProperties": false
+    },
+    "applicationIndependence": {
+      "type": "object",
+      "properties": {
+        "personnel_overlap": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "implementation_control": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "adopter_attributable_evidence_for_adoption": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "adopter_attributable_evidence_for_assurance": {
+          "$ref": "#/$defs/evidencedString"
+        }
+      },
+      "required": [
+        "personnel_overlap",
+        "implementation_control",
+        "adopter_attributable_evidence_for_adoption",
+        "adopter_attributable_evidence_for_assurance"
+      ],
+      "additionalProperties": false
+    },
+    "reportApplication": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "report_application_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "linked_report_reuse_record_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "application_object": {
+              "$ref": "#/$defs/applicationObjectValue"
+            },
+            "lineage_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "setting": {
+              "$ref": "#/$defs/applicationSetting"
+            },
+            "tailoring_or_adaptation": {
+              "$ref": "#/$defs/tailoringOrAdaptation"
+            },
+            "result_and_assurance": {
+              "$ref": "#/$defs/applicationResultAndAssurance"
+            },
+            "independence": {
+              "$ref": "#/$defs/applicationIndependence"
+            }
+          },
+          "required": [
+            "report_application_id",
+            "linked_report_reuse_record_ids",
+            "application_object",
+            "lineage_id",
+            "linked_model_generation_method_ids",
+            "setting",
+            "tailoring_or_adaptation",
+            "result_and_assurance",
+            "independence"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "application_object": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "const": "method"
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "application_object"
+            ]
+          },
+          "then": {
+            "properties": {
+              "lineage_id": {
+                "const": "not_applicable"
+              },
+              "linked_model_generation_method_ids": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "application_object": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "const": "artifact_and_method"
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "application_object"
+            ]
+          },
+          "then": {
+            "properties": {
+              "linked_model_generation_method_ids": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "reportApplications": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reportApplication"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "lineageMentionedValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "uncertain"
+              ]
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "reportReuse": {
+      "type": "object",
+      "properties": {
+        "lineage_mentioned": {
+          "$ref": "#/$defs/lineageMentionedValue"
+        },
+        "lineage_mention_reason": {
+          "$ref": "#/$defs/supportReasonValue"
+        },
+        "report_reuse_records": {
+          "$ref": "#/$defs/reportReuseRecords"
+        },
+        "report_applications": {
+          "$ref": "#/$defs/reportApplications"
+        }
+      },
+      "required": [
+        "lineage_mentioned",
+        "lineage_mention_reason",
+        "report_reuse_records",
+        "report_applications"
+      ],
+      "additionalProperties": false
+    },
+    "directSynthesisValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "uncertain"
+              ]
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "claimKindCode": {
+      "type": "string",
+      "enum": [
+        "descriptive_occurrence",
+        "feasibility_or_executed_result",
+        "technical_performance",
+        "comparative",
+        "causal_attribution",
+        "experiential_or_perceived",
+        "implementation_burden",
+        "transfer_or_generalization",
+        "other",
+        "unclear"
+      ]
+    },
+    "claimKindValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/claimKindCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "claimKind": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/claimKindValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "findingRoleCode": {
+      "type": "string",
+      "enum": [
+        "outcome",
+        "implementation_burden",
+        "mixed_trade_off"
+      ]
+    },
+    "findingRoleValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/findingRoleCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "findingRole": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/findingRoleValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "outcomeCategoryCode": {
+      "type": "string",
+      "enum": [
+        "eps_reliability",
+        "mission_or_system_assurance",
+        "defect_or_error_reduction",
+        "risk_reduction",
+        "reproducibility",
+        "reuse",
+        "integration_or_interoperability",
+        "interface_consistency",
+        "traceability_or_requirements_quality",
+        "completeness",
+        "lifecycle_continuity",
+        "decision_support",
+        "cost",
+        "schedule",
+        "effort_or_automation",
+        "communication_or_knowledge",
+        "governance",
+        "value_realization",
+        "other"
+      ]
+    },
+    "outcomeCategoryValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/outcomeCategoryCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "outcomeCategory": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/outcomeCategoryValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "reliabilitySubtypeCode": {
+      "type": "string",
+      "enum": [
+        "eps_reliability",
+        "system_or_mission_reliability",
+        "process_reliability",
+        "model_consistency",
+        "mission_assurance",
+        "defect_or_error_reduction",
+        "generic_reliability_claim",
+        "unclear"
+      ]
+    },
+    "reliabilitySubtypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/reliabilitySubtypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "reliabilitySubtype": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/reliabilitySubtypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "authorClaimedDirectionCode": {
+      "type": "string",
+      "enum": [
+        "beneficial",
+        "null_or_no_observed_effect",
+        "mixed_or_conditional",
+        "adverse",
+        "unclear"
+      ]
+    },
+    "authorClaimedDirectionValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/authorClaimedDirectionCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "authorClaimedDirection": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/authorClaimedDirectionValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "evidenceSupportedDirectionCode": {
+      "type": "string",
+      "enum": [
+        "beneficial",
+        "null_or_no_observed_effect",
+        "mixed_or_conditional",
+        "adverse",
+        "unclear",
+        "unsupported"
+      ]
+    },
+    "evidenceSupportedDirectionValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/evidenceSupportedDirectionCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "evidenceSupportedDirection": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/evidenceSupportedDirectionValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsAttributionCode": {
+      "type": "string",
+      "enum": [
+        "explicit_eps_attribution",
+        "ambiguous_attribution",
+        "generic_or_ineligible"
+      ]
+    },
+    "epsAttributionValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/epsAttributionCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsAttribution": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsAttributionValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "measureDirectnessCode": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "surrogate",
+        "intermediate_or_process",
+        "unclear"
+      ]
+    },
+    "measureDirectnessValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/measureDirectnessCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "measureDirectness": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/measureDirectnessValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "applicabilityCode": {
+      "type": "string",
+      "enum": [
+        "reported_case_only",
+        "bounded_conditions",
+        "declared_envelope",
+        "broader_claim",
+        "unclear"
+      ]
+    },
+    "applicabilityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/applicabilityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "applicability": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/applicabilityValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "reportedMechanism": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/evidencedStringValue"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "provenance": {
+                  "enum": [
+                    "source_reported",
+                    "author_claimed_or_planned"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "rq1Claim": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "rq1_claim_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "claim_wording": {
+              "$ref": "#/$defs/rowString"
+            },
+            "claimed_characteristic": {
+              "$ref": "#/$defs/rowString"
+            },
+            "claim_scope_and_object": {
+              "$ref": "#/$defs/rowString"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_case_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_report_reuse_record_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_set_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_criterion_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_comparator_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_implementation_record_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "evidence_basis": {
+              "$ref": "#/$defs/evidenceBasisValue"
+            },
+            "support": {
+              "$ref": "#/$defs/supportValue"
+            },
+            "support_reason": {
+              "$ref": "#/$defs/supportReasonValue"
+            }
+          },
+          "required": [
+            "rq1_claim_id",
+            "claim_wording",
+            "claimed_characteristic",
+            "claim_scope_and_object",
+            "linked_model_artifact_ids",
+            "linked_model_generation_method_ids",
+            "linked_eps_case_ids",
+            "linked_report_reuse_record_ids",
+            "linked_result_set_ids",
+            "linked_result_output_ids",
+            "linked_result_criterion_ids",
+            "linked_comparator_ids",
+            "linked_implementation_record_ids",
+            "evidence_basis",
+            "support",
+            "support_reason"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "rq3TargetTypeCode": {
+      "type": "string",
+      "enum": [
+        "eps_requirement_or_criterion",
+        "eps_model_element",
+        "eps_parameter_or_constraint",
+        "eps_mode_or_scenario",
+        "eps_interface_or_flow",
+        "eps_behavior_or_function",
+        "eps_component_or_architecture",
+        "eps_hazard_or_risk_control",
+        "system_target_traced_to_eps",
+        "multiple",
+        "other",
+        "unclear"
+      ]
+    },
+    "rq3TargetTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/rq3TargetTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "rq3TargetType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/rq3TargetTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "linkageScopeCode": {
+      "type": "string",
+      "enum": [
+        "eps_specific",
+        "system_wide_eps_linked",
+        "system_wide_cooccurrence",
+        "unclear"
+      ]
+    },
+    "linkageScopeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/linkageScopeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "linkageScope": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/linkageScopeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "normalizedVvObjectCode": {
+      "type": "string",
+      "enum": [
+        "model_verification",
+        "model_validation",
+        "system_or_design_verification",
+        "system_or_design_validation",
+        "multiple",
+        "unclear"
+      ]
+    },
+    "normalizedVvObjectValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/normalizedVvObjectCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "normalizedVvObject": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/normalizedVvObjectValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "executionSettingsValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "mil",
+                  "sil",
+                  "pil",
+                  "hil",
+                  "virtual_testbed",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "executionSettings": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/executionSettingsValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "hardwarePresenceCode": {
+      "type": "string",
+      "enum": [
+        "no_hardware",
+        "support_hardware_only",
+        "representative_target_hardware",
+        "actual_target_component",
+        "actual_target_eps",
+        "integrated_spacecraft_hardware",
+        "unclear"
+      ]
+    },
+    "hardwarePresenceValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/hardwarePresenceCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "hardwarePresence": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/hardwarePresenceValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "rq3Status": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "proposed",
+          "prepared_or_generated",
+          "result_reported",
+          "executed_virtual",
+          "downstream_physical_link",
+          "model_to_test_closure"
+        ]
+      },
+      "uniqueItems": true,
+      "allOf": [
+        {
+          "if": {
+            "contains": {
+              "enum": [
+                "prepared_or_generated",
+                "result_reported",
+                "executed_virtual",
+                "downstream_physical_link",
+                "model_to_test_closure"
+              ]
+            }
+          },
+          "then": {
+            "contains": {
+              "const": "proposed"
+            }
+          }
+        },
+        {
+          "if": {
+            "contains": {
+              "const": "executed_virtual"
+            }
+          },
+          "then": {
+            "contains": {
+              "const": "result_reported"
+            }
+          }
+        },
+        {
+          "if": {
+            "contains": {
+              "const": "model_to_test_closure"
+            }
+          },
+          "then": {
+            "contains": {
+              "const": "downstream_physical_link"
+            }
+          }
+        }
+      ]
+    },
+    "rq3Activity": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "rq3_activity_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "direct_synthesis": {
+              "$ref": "#/$defs/directSynthesisValue"
+            },
+            "failed_eligibility_condition_or_uncertainty_reason": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "eps_target": {
+              "$ref": "#/$defs/rowString"
+            },
+            "target_type": {
+              "$ref": "#/$defs/rq3TargetType"
+            },
+            "source_requirement_or_criterion_id": {
+              "$ref": "#/$defs/rowString"
+            },
+            "model_artifact_id": {
+              "$ref": "#/$defs/rowId"
+            },
+            "explicit_model_to_vv_bridge": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_vv_terminology": {
+              "$ref": "#/$defs/rowString"
+            },
+            "linkage_scope": {
+              "$ref": "#/$defs/linkageScope"
+            },
+            "normalized_vv_object": {
+              "$ref": "#/$defs/normalizedVvObject"
+            },
+            "normalized_vv_object_reason": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "method": {
+              "$ref": "#/$defs/rowString"
+            },
+            "execution_settings": {
+              "$ref": "#/$defs/executionSettings"
+            },
+            "hardware_present": {
+              "$ref": "#/$defs/hardwarePresence"
+            },
+            "lifecycle_stage": {
+              "$ref": "#/$defs/lifecycleStage"
+            },
+            "linked_result_set_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_criterion_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_comparator_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "status": {
+              "$ref": "#/$defs/rq3Status"
+            },
+            "measure_directness": {
+              "$ref": "#/$defs/measureDirectness"
+            },
+            "discrepancies_and_resolution": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "later_physical_link": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "model_to_test_closure": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "evidence_basis": {
+              "$ref": "#/$defs/evidenceBasisValue"
+            },
+            "support": {
+              "$ref": "#/$defs/supportValue"
+            },
+            "support_reason": {
+              "$ref": "#/$defs/supportReasonValue"
+            }
+          },
+          "required": [
+            "rq3_activity_id",
+            "direct_synthesis",
+            "failed_eligibility_condition_or_uncertainty_reason",
+            "eps_target",
+            "target_type",
+            "source_requirement_or_criterion_id",
+            "model_artifact_id",
+            "explicit_model_to_vv_bridge",
+            "source_vv_terminology",
+            "linkage_scope",
+            "normalized_vv_object",
+            "normalized_vv_object_reason",
+            "method",
+            "execution_settings",
+            "hardware_present",
+            "lifecycle_stage",
+            "linked_result_set_ids",
+            "linked_result_criterion_ids",
+            "linked_result_output_ids",
+            "linked_comparator_ids",
+            "status",
+            "measure_directness",
+            "discrepancies_and_resolution",
+            "later_physical_link",
+            "model_to_test_closure",
+            "evidence_basis",
+            "support",
+            "support_reason"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "direct_synthesis": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "enum": [
+                      "no",
+                      "uncertain"
+                    ]
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "direct_synthesis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "failed_eligibility_condition_or_uncertainty_reason": {
+                "$ref": "#/$defs/evidencedStringValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "direct_synthesis": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "const": "yes"
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "direct_synthesis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "failed_eligibility_condition_or_uncertainty_reason": {
+                "$ref": "#/$defs/notApplicableStatus"
+              },
+              "status": {
+                "type": "array",
+                "contains": {
+                  "const": "proposed"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "rq2Finding": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "rq2_finding_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "direct_synthesis": {
+              "$ref": "#/$defs/directSynthesisValue"
+            },
+            "exclusion_or_uncertainty_reason": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "exact_claim_wording": {
+              "$ref": "#/$defs/rowString"
+            },
+            "claim_kind": {
+              "$ref": "#/$defs/claimKind"
+            },
+            "role": {
+              "$ref": "#/$defs/findingRole"
+            },
+            "target": {
+              "$ref": "#/$defs/rowString"
+            },
+            "scope": {
+              "$ref": "#/$defs/rowString"
+            },
+            "outcome_category": {
+              "$ref": "#/$defs/outcomeCategory"
+            },
+            "reliability_subtype": {
+              "$ref": "#/$defs/reliabilitySubtype"
+            },
+            "author_claimed_direction": {
+              "$ref": "#/$defs/authorClaimedDirection"
+            },
+            "evidence_supported_direction": {
+              "$ref": "#/$defs/evidenceSupportedDirection"
+            },
+            "eps_attribution": {
+              "$ref": "#/$defs/epsAttribution"
+            },
+            "mechanism": {
+              "$ref": "#/$defs/reportedMechanism"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_rq3_activity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_input_group_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_set_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_criterion_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_comparator_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_report_reuse_record_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_implementation_record_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "measure_directness": {
+              "$ref": "#/$defs/measureDirectness"
+            },
+            "lifecycle_stage": {
+              "$ref": "#/$defs/lifecycleStage"
+            },
+            "applicability": {
+              "$ref": "#/$defs/applicability"
+            },
+            "evidence_basis": {
+              "$ref": "#/$defs/evidenceBasisValue"
+            },
+            "support": {
+              "$ref": "#/$defs/supportValue"
+            },
+            "support_reason": {
+              "$ref": "#/$defs/supportReasonValue"
+            }
+          },
+          "required": [
+            "rq2_finding_id",
+            "direct_synthesis",
+            "exclusion_or_uncertainty_reason",
+            "exact_claim_wording",
+            "claim_kind",
+            "role",
+            "target",
+            "scope",
+            "outcome_category",
+            "reliability_subtype",
+            "author_claimed_direction",
+            "evidence_supported_direction",
+            "eps_attribution",
+            "mechanism",
+            "linked_model_artifact_ids",
+            "linked_model_generation_method_ids",
+            "linked_rq3_activity_ids",
+            "linked_input_group_ids",
+            "linked_result_set_ids",
+            "linked_result_output_ids",
+            "linked_result_criterion_ids",
+            "linked_comparator_ids",
+            "linked_report_reuse_record_ids",
+            "linked_implementation_record_ids",
+            "measure_directness",
+            "lifecycle_stage",
+            "applicability",
+            "evidence_basis",
+            "support",
+            "support_reason"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "direct_synthesis": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "enum": [
+                      "no",
+                      "uncertain"
+                    ]
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "direct_synthesis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "exclusion_or_uncertainty_reason": {
+                "$ref": "#/$defs/evidencedStringValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "direct_synthesis": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "const": "yes"
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "direct_synthesis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "exclusion_or_uncertainty_reason": {
+                "$ref": "#/$defs/notApplicableStatus"
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "studyFamily": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "family_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "linked_report_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "shared_investigation_or_implementation": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "relationship_among_reports": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "shared_data_models_methods_scenarios_or_results": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "preferred_or_most_complete_version_for_overlapping_content": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "dependence_reason": {
+              "$ref": "#/$defs/evidencedString"
+            }
+          },
+          "required": [
+            "family_id",
+            "linked_report_ids",
+            "shared_investigation_or_implementation",
+            "relationship_among_reports",
+            "shared_data_models_methods_scenarios_or_results",
+            "preferred_or_most_complete_version_for_overlapping_content",
+            "dependence_reason"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "citation": {
+      "type": "object",
+      "properties": {
+        "citation_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "report_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "graphic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "graphic_quote_description": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "citation_id",
+        "report_id",
+        "page",
+        "quote"
+      ],
+      "additionalProperties": false
+    },
+    "citationTable": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/citation"
+      }
+    },
+    "reportIdentity": {
+      "description": "Extraction identity and review-management fields. Bibliographic metadata is read through screening_record_id.",
+      "type": "object",
+      "properties": {
+        "report_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "screening_record_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "possible_companion_reports_or_shared_implementations": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "family_lead": {
+          "$ref": "#/$defs/familyLeadValue"
+        },
+        "report_family_lead_reason": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "source_file_path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "report_id",
+        "screening_record_id",
+        "possible_companion_reports_or_shared_implementations",
+        "family_lead",
+        "report_family_lead_reason",
+        "source_file_path"
+      ],
+      "additionalProperties": false
+    },
+    "reportContext": {
+      "type": "object",
+      "properties": {
+        "mission_or_platform": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "form_factor_or_mass": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "mission_purpose_or_domain": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "orbit_and_environment": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "organization_type": {
+          "$ref": "#/$defs/organizationType"
+        },
+        "development_setting": {
+          "$ref": "#/$defs/developmentSetting"
+        },
+        "lifecycle_stages_demonstrated": {
+          "$ref": "#/$defs/lifecycleStages"
+        },
+        "lifecycle_stages_claimed_or_planned": {
+          "$ref": "#/$defs/lifecycleStages"
+        },
+        "project_maturity": {
+          "$ref": "#/$defs/projectMaturity"
+        }
+      },
+      "required": [
+        "mission_or_platform",
+        "form_factor_or_mass",
+        "mission_purpose_or_domain",
+        "orbit_and_environment",
+        "organization_type",
+        "development_setting",
+        "lifecycle_stages_demonstrated",
+        "lifecycle_stages_claimed_or_planned",
+        "project_maturity"
+      ],
+      "additionalProperties": false
+    },
+    "mbseApproach": {
+      "type": "object",
+      "properties": {
+        "problem_addressed": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "intended_decision": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "reason_for_using_mbse": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "model_generation_methods": {
+          "$ref": "#/$defs/modelGenerationMethods"
+        },
+        "modeling_languages": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "tools_and_versions": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "toolchain_and_data_flow": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "model_artifacts": {
+          "$ref": "#/$defs/modelArtifacts"
+        },
+        "modeled_systems_engineering_concerns": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "explicit_relationships_among_concerns": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "system_boundary": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "artifact_availability": {
+          "$ref": "#/$defs/availability"
+        }
+      },
+      "required": [
+        "problem_addressed",
+        "intended_decision",
+        "reason_for_using_mbse",
+        "model_generation_methods",
+        "modeling_languages",
+        "tools_and_versions",
+        "toolchain_and_data_flow",
+        "model_artifacts",
+        "modeled_systems_engineering_concerns",
+        "explicit_relationships_among_concerns",
+        "system_boundary",
+        "artifact_availability"
+      ],
+      "additionalProperties": false
+    },
+    "limitations": {
+      "type": "object",
+      "properties": {
+        "author_stated_limitations": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "future_work": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "source_conflicts": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "reviewer_uncertainties": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "missing_information_relevant_for_interpretation": {
+          "$ref": "#/$defs/evidencedStringArray"
+        }
+      },
+      "required": [
+        "author_stated_limitations",
+        "future_work",
+        "source_conflicts",
+        "reviewer_uncertainties",
+        "missing_information_relevant_for_interpretation"
+      ],
+      "additionalProperties": false
+    },
+    "reportExtraction": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/reportIdentity"
+        },
+        "context": {
+          "$ref": "#/$defs/reportContext"
+        },
+        "mbse_approach": {
+          "$ref": "#/$defs/mbseApproach"
+        },
+        "eps_cases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/epsCase"
+          },
+          "minItems": 1
+        },
+        "implementation_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/implementationRecord"
+          },
+          "minItems": 1
+        },
+        "input_groups": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/inputGroup"
+              },
+              "minItems": 1
+            },
+            {
+              "$ref": "#/$defs/repeatableFieldStatus"
+            }
+          ]
+        },
+        "result_sets": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/resultSet"
+              },
+              "minItems": 1
+            },
+            {
+              "$ref": "#/$defs/repeatableFieldStatus"
+            }
+          ]
+        },
+        "rq1_claims": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/rq1Claim"
+              },
+              "minItems": 1
+            },
+            {
+              "$ref": "#/$defs/repeatableFieldStatus"
+            }
+          ]
+        },
+        "rq2_findings": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/rq2Finding"
+              },
+              "minItems": 1
+            },
+            {
+              "$ref": "#/$defs/repeatableFieldStatus"
+            }
+          ]
+        },
+        "rq3_activities": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/rq3Activity"
+              },
+              "minItems": 1
+            },
+            {
+              "$ref": "#/$defs/repeatableFieldStatus"
+            }
+          ]
+        },
+        "reuse": {
+          "$ref": "#/$defs/reportReuse"
+        },
+        "limitations": {
+          "$ref": "#/$defs/limitations"
+        },
+        "citations": {
+          "$ref": "#/$defs/citationTable"
+        }
+      },
+      "required": [
+        "identity",
+        "context",
+        "mbse_approach",
+        "eps_cases",
+        "implementation_records",
+        "input_groups",
+        "result_sets",
+        "rq1_claims",
+        "rq2_findings",
+        "rq3_activities",
+        "reuse",
+        "limitations",
+        "citations"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -12,7 +12,7 @@ Record each source fact once at its most detailed applicable location. Store mea
 
 ### Common field rules
 
-Create a codebook and machine-readable schema from this protocol before full extraction. Every report, repeatable coded record, and nested coded row must have a stable ID.
+Create a codebook and machine-readable schema from this protocol before full extraction. The canonical property names, types, cardinalities, and evidence-status encoding are defined in the [report schema](protocol-extraction.schema.json), [family schema](protocol-extraction-family.schema.json), [lineage schema](protocol-extraction-lineage.schema.json), [consolidated tailoring-application schema](protocol-extraction-tailoring-application.schema.json), and [audit schema](protocol-extraction-audit.schema.json). Every report, repeatable coded record, and nested coded row must have a stable ID. Each stable ID is unique within its ID type across the review. Citation IDs are also review-wide unique as stated below.
 
 Each report extraction contains a `citations` table. Each citation row records:
 
@@ -23,7 +23,7 @@ Each report extraction contains a `citations` table. Each citation row records:
 - optional `graphic`, identifying a figure, table, diagram, or other graphic containing the quote.
 - optional `graphic_quote_description`, briefly describing where the quote appears in the graphic and how it supports the coding.
 
-A citation containing `graphic` or `graphic_quote_description` is excluded from deterministic quote matching. The human auditor verifies its quote, graphic reference, and description against the cited page. Store each citation once and reuse its ID. Split a quotation that crosses pages into one citation per page. Every source-backed field or compact group of fields records the applicable `citation_ids`. Each repeatable coded record and nested coded row also records:
+A citation containing `graphic` or `graphic_quote_description` is excluded from deterministic quote matching. The human auditor verifies its quote, graphic reference, and description against the cited page. For deterministic matching, normalize the quote and frozen page text to Unicode NFC, remove soft hyphens, collapse line endings and other whitespace to single spaces, and preserve case, punctuation, and visible hyphens. Split stored page text on `<!-- PDF_PAGE: n -->` markers. Store each citation once and reuse its ID. Split a quotation that crosses pages into one citation per page. Every source-backed field or compact group of fields records the applicable `citation_ids`. Each repeatable coded record and nested coded row also records:
 
 - `coding_confidence`, using `high`, `moderate`, or `low`. Assign coding confidence as `high` for explicit and unambiguous source support, `moderate` when a bounded reconstruction is required, and `low` when material ambiguity remains.
 - `provenance`, using `source_reported`, `author_claimed_or_planned`, `reviewer_inferred`, or `reviewer_derived`.
@@ -59,16 +59,12 @@ Record:
 
 - `report_id`.
 - `screening_record_id`.
-- title and authors.
-- year and full publication date when available.
-- venue or issuing organization.
-- DOI, arXiv ID, or other stable URL.
 - possible companion reports or shared implementations, derived as the union of possible related reports or artifacts in the report-level reuse records.
 - `family_lead`, using `yes`, `no`, or `uncertain`.
 - concise report-family lead reason, or `not_reported`.
 - source-file path.
 
-Read publication type, publication status, and degree metadata through `screening_record_id`. Do not copy them into the extraction.
+Read title, authors, year, full publication date, venue or issuing organization, DOI, arXiv metadata, other stable URLs, publication type, publication status, and degree metadata through `screening_record_id`. Do not copy them into the extraction. Add bibliographic metadata recovered during retrieval or full-text review to the screening record and its audit trail.
 
 Use `family_lead` as follows:
 
@@ -76,7 +72,7 @@ Use `family_lead` as follows:
 - **`no`:** no candidate lead was found during complete source review. This does not prove that no companion exists.
 - **`uncertain`:** a possible relationship exists, but the candidate cannot be identified or bounded reliably.
 
-For an arXiv preprint, also record the version and version date. Use the arXiv ID recorded with the other stable identifiers.
+For an arXiv preprint, retain the version and version date with its arXiv ID in the screening record.
 
 ### Report and implementation context
 
@@ -154,7 +150,7 @@ Record:
 - `modeling_languages`, preserving source-reported names and versions.
 - tools and versions.
 - toolchain and data flow.
-- model artifacts.
+- `model_artifacts` as nested rows containing `model_artifact_id` and the source name or description.
 - modeled systems-engineering concerns.
 - explicit relationships among concerns.
 - system boundary.
@@ -170,7 +166,7 @@ Use these availability codes for report artifacts, EPS assets, reusable artifact
 - **`unavailable`:** the source states that it is unavailable.
 - **`unclear`:** the reported access condition cannot be classified.
 
-A model generation method is a reported procedure used to construct, populate, configure, transform, or generate the EPS MBSE model. A modeling language or tool alone is not a generation method. The common evidence fields apply to every method row.
+A model generation method is a reported procedure used to construct, populate, configure, transform, or generate the EPS MBSE model. A modeling language or tool alone is not a generation method. The common evidence fields apply to every method and model-artifact row.
 
 Use generation method types as follows:
 
@@ -483,7 +479,7 @@ Each comparator can contain nested rows for material rival explanations that bea
 
 The common evidence fields apply to every output, criterion, comparator, and rival-explanation row. An EPS engineering output is not an MBSE benefit by itself. Link it to RQ2 or RQ3 only when the Part 1 rules are met.
 
-If the reviewer calculates or converts a value, keep it in a `reviewer_derived_values` table within the result set. Record `reviewer_derived_value_id`, linked `input_group_id` or `result_output_id` values, the source values used, formula or transformation, unit conversion, assumptions, missing-data handling, analysis script path and version, reviewer-derived result, and sensitivity to reasonable alternatives. Never overwrite or copy a source-reported value.
+If the reviewer calculates or converts a value, keep it in a `reviewer_derived_values` table within the result set. Record `reviewer_derived_value_id`, linked `input_group_id` or `result_output_id` values, the source values used, formula or transformation, unit conversion, assumptions, missing-data handling, analysis script path, reviewer-derived result, and sensitivity to reasonable alternatives. Never overwrite or copy a source-reported value.
 
 ### RQ1 evaluative characterizations
 
@@ -495,7 +491,7 @@ Record:
 - claim wording.
 - claimed characteristic.
 - claim scope and object.
-- linked model generation method, EPS case, report reuse record, result set, result output, result criterion, comparator, or implementation record when relevant.
+- linked model artifact, model generation method, EPS case, report reuse record, result set, result output, result criterion, comparator, or implementation record IDs when relevant.
 - `evidence_basis`.
 - `support`.
 - `support_reason`.
@@ -544,7 +540,7 @@ Record:
 - `evidence_supported_direction`, using `beneficial`, `null_or_no_observed_effect`, `mixed_or_conditional`, `adverse`, `unclear`, or `unsupported`.
 - `eps_attribution`, using `explicit_eps_attribution`, `ambiguous_attribution`, or `generic_or_ineligible`.
 - mechanism, which is the explanation given by the source of how an EPS-linked model artifact or activity led to a claimed outcome or burden. Do not infer a mechanism. Use `not_reported` when the source provides no explanation. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed finding.
-- linked model, model generation method, RQ3 activity, input group, result set, result output, result criterion, comparator, report reuse record, or implementation record IDs.
+- linked model artifact, model generation method, RQ3 activity, input group, result set, result output, result criterion, comparator, report reuse record, or implementation record IDs.
 - `measure_directness`, using `direct`, `surrogate`, `intermediate_or_process`, or `unclear`.
 - lifecycle stage, using the shared lifecycle-stage codes.
 - `applicability`, using `reported_case_only`, `bounded_conditions`, `declared_envelope`, `broader_claim`, or `unclear`.
@@ -658,7 +654,7 @@ Record:
 - EPS target.
 - `target_type`, using `eps_requirement_or_criterion`, `eps_model_element`, `eps_parameter_or_constraint`, `eps_mode_or_scenario`, `eps_interface_or_flow`, `eps_behavior_or_function`, `eps_component_or_architecture`, `eps_hazard_or_risk_control`, `system_target_traced_to_eps`, `multiple`, `other`, or `unclear`.
 - requirement or criterion ID when present.
-- model artifact.
+- linked `model_artifact_id`.
 - explicit model-to-V&V bridge.
 - source terminology for verification, validation, V&V, checking, or analysis.
 - linkage scope, using `eps_specific`, `system_wide_eps_linked`, `system_wide_cooccurrence`, or `unclear`.

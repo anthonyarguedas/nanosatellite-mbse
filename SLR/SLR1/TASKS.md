@@ -8,3 +8,4 @@
 - [x] Add abstract coverage checks to both corrective source assessments.
 - [x] Rebuild and recheck `psr-candidates.json` with full abstracts and preserved decisions.
 - [ ] Recheck the preserved screening decisions against the recovered abstracts.
+- [ ] Calibrate and freeze the extraction schemas and semantic validation before full extraction.

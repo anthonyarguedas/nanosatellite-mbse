@@ -1,0 +1,537 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "protocol-extraction-lineage.schema.json",
+  "title": "SLR1 lineage-level reusable artifact schema",
+  "$ref": "#/$defs/lineageRecord",
+  "$defs": {
+    "crossArtifactRelationship": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossCodedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "artifact_relationship_id": {
+              "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+            },
+            "parent_artifact_name": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "parent_artifact_version": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "derived_artifact_name": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "derived_artifact_version": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "relationship_or_derivation": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "identity_and_derivation_evidence": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            }
+          },
+          "required": [
+            "artifact_relationship_id",
+            "parent_artifact_name",
+            "parent_artifact_version",
+            "derived_artifact_name",
+            "derived_artifact_version",
+            "relationship_or_derivation",
+            "identity_and_derivation_evidence"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossArtifactRelationships": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/crossArtifactRelationship"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "crossArtifactTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/artifactTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossArtifactType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossArtifactTypeValue"
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "crossAvailabilityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/availabilityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossAvailability": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossAvailabilityValue"
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "crossLicenseCategoryValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/licenseCategoryCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/customOtherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossLicenseCategory": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossLicenseCategoryValue"
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "crossClaimedReuseObjectValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/claimedReuseObjectCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossClaimedReuseObject": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossClaimedReuseObjectValue"
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "crossArtifactReuseLevelValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/artifactReuseLevelCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossEvidenceBasisValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/evidenceBasisCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "value": {
+                "type": "array",
+                "contains": {
+                  "const": "assertion_only"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "array",
+                "maxItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossSupportValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/supportCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossSupportReasonValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "citation_ids": true
+          },
+          "required": [
+            "value",
+            "citation_ids"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossDeclaredApplicabilityEnvelope": {
+      "type": "object",
+      "properties": {
+        "target_platforms_and_missions": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "lifecycle_uses_and_decisions": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "eps_boundary": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "model_boundary_and_abstraction": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "architecture_and_interfaces": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "environment_modes_and_loads": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "required_inputs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "tools_and_versions": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "organizational_prerequisites": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "exclusions_and_limits": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        }
+      },
+      "required": [
+        "target_platforms_and_missions",
+        "lifecycle_uses_and_decisions",
+        "eps_boundary",
+        "model_boundary_and_abstraction",
+        "architecture_and_interfaces",
+        "environment_modes_and_loads",
+        "required_inputs",
+        "tools_and_versions",
+        "organizational_prerequisites",
+        "exclusions_and_limits"
+      ],
+      "additionalProperties": false
+    },
+    "crossReuseDesign": {
+      "type": "object",
+      "properties": {
+        "reusable_core": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "variation_points": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "allowed_options_ranges_and_defaults": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "dependencies": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "tailoring_rules": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "tailoring_operations": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "required_roles_and_skills": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "required_tools_and_data": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "automation": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "governance_and_configuration_control": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        }
+      },
+      "required": [
+        "reusable_core",
+        "variation_points",
+        "allowed_options_ranges_and_defaults",
+        "dependencies",
+        "tailoring_rules",
+        "tailoring_operations",
+        "required_roles_and_skills",
+        "required_tools_and_data",
+        "automation",
+        "governance_and_configuration_control"
+      ],
+      "additionalProperties": false
+    },
+    "lineageReuseAssessment": {
+      "type": "object",
+      "properties": {
+        "linked_tailoring_application_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "lineage_reuse_level": {
+          "$ref": "#/$defs/crossArtifactReuseLevelValue"
+        },
+        "lineage_reuse_level_reason": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "conflicting_evidence": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "evidence_basis": {
+          "$ref": "#/$defs/crossEvidenceBasisValue"
+        },
+        "support": {
+          "$ref": "#/$defs/crossSupportValue"
+        },
+        "support_reason": {
+          "$ref": "#/$defs/crossSupportReasonValue"
+        }
+      },
+      "required": [
+        "linked_tailoring_application_ids",
+        "lineage_reuse_level",
+        "lineage_reuse_level_reason",
+        "conflicting_evidence",
+        "evidence_basis",
+        "support",
+        "support_reason"
+      ],
+      "additionalProperties": false
+    },
+    "lineageRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossCodedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "lineage_id": {
+              "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+            },
+            "linked_report_reuse_record_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "linked_report_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "linked_family_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "artifact_names_and_versions": {
+              "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+            },
+            "artifact_relationships": {
+              "$ref": "#/$defs/crossArtifactRelationships"
+            },
+            "owner_or_developer": {
+              "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+            },
+            "artifact_type": {
+              "$ref": "#/$defs/crossArtifactType"
+            },
+            "eps_scope": {
+              "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+            },
+            "availability": {
+              "$ref": "#/$defs/crossAvailability"
+            },
+            "license_category": {
+              "$ref": "#/$defs/crossLicenseCategory"
+            },
+            "exact_reuse_claim": {
+              "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+            },
+            "claimed_reuse_object": {
+              "$ref": "#/$defs/crossClaimedReuseObject"
+            },
+            "declared_applicability_envelope": {
+              "$ref": "#/$defs/crossDeclaredApplicabilityEnvelope"
+            },
+            "reuse_design": {
+              "$ref": "#/$defs/crossReuseDesign"
+            },
+            "reuse_assessment": {
+              "$ref": "#/$defs/lineageReuseAssessment"
+            }
+          },
+          "required": [
+            "lineage_id",
+            "linked_report_reuse_record_ids",
+            "linked_report_ids",
+            "linked_family_ids",
+            "artifact_names_and_versions",
+            "artifact_relationships",
+            "owner_or_developer",
+            "artifact_type",
+            "eps_scope",
+            "availability",
+            "license_category",
+            "exact_reuse_claim",
+            "claimed_reuse_object",
+            "declared_applicability_envelope",
+            "reuse_design",
+            "reuse_assessment"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

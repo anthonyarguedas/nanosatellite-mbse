@@ -118,11 +118,15 @@ Final searches are saved to `source-specific/*/final-searches/`, both for discov
 
 ## Data management and audit trail
 
-Make deduplication reproducible via a single `SLR/SLR1/deduplication.py`, with a toggle for PSR, citation chasing (Scopus and WoS only), and review searches.
+Make deduplication reproducible via a single `SLR/SLR1/deduplication.py`, with a toggle for PSR, citation chasing (Scopus and WoS only), and review searches. Use mode-qualified screening IDs with the prefixes `psr-candidate-`, `review-candidate-`, and `citation-candidate-`.
 
-### Publication and degree metadata
+### Bibliographic, publication, and degree metadata
 
-Store publication and degree metadata in the screening record if not already present in the output from `SLR/SLR1/deduplication.py`. Report-level extractions link to these values through `screening_record_id` and do not copy them.
+Export title, authors, publication year and full date, venue or issuing organization, DOI, arXiv ID, arXiv version and version date, other stable URLs, and source-native record identifiers from `SLR/SLR1/deduplication.py` when available. Store bibliographic metadata recovered later during retrieval or full-text review in the screening record and its audit trail. Report-level extractions link to these values through `screening_record_id` and do not copy them.
+
+Normalize a full `publication_date` to `YYYY-MM-DD` and retain its source string in `publication_date_source_value`. Use `null` for the normalized date when the source gives only a year or month. Each `arxiv_records` row retains `arxiv_id`, version, normalized `version_date`, and `version_date_source_value`. `stable_urls` contains source-supplied report landing URLs.
+
+Store publication and degree metadata in the screening record when it is absent from the deduplication output.
 
 Record `publication_type` using:
 

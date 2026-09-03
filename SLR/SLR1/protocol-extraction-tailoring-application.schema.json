@@ -1,0 +1,403 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "protocol-extraction-tailoring-application.schema.json",
+  "title": "SLR1 consolidated tailoring application schema",
+  "$ref": "#/$defs/consolidatedTailoringApplication",
+  "$defs": {
+    "crossConsolidatedApplicationObjectValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "artifact",
+                "artifact_and_method"
+              ]
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossOriginatorRelationshipValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/originatorRelationshipCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossDaeRelationshipValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/daeRelationshipCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossApplicationResultValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/applicationResultCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossAvailabilityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "protocol-extraction.schema.json#/$defs/availabilityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossAvailability": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossAvailabilityValue"
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "consolidatedApplicationSetting": {
+      "type": "object",
+      "properties": {
+        "target_model_or_configuration": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "adopting_team": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "relationship_to_originator": {
+          "$ref": "#/$defs/crossOriginatorRelationshipValue"
+        },
+        "lifecycle_purpose": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "relationship_to_declared_applicability_envelope": {
+          "$ref": "#/$defs/crossDaeRelationshipValue"
+        },
+        "material_setting_differences": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        }
+      },
+      "required": [
+        "target_model_or_configuration",
+        "adopting_team",
+        "relationship_to_originator",
+        "lifecycle_purpose",
+        "relationship_to_declared_applicability_envelope",
+        "material_setting_differences"
+      ],
+      "additionalProperties": false
+    },
+    "crossTailoringOrAdaptation": {
+      "type": "object",
+      "properties": {
+        "base_artifact_or_method_and_version": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "retained_artifact_core_or_method_steps_and_rules": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "configured_or_changed_artifact_content_or_method_steps": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "variation_points_used": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "tailoring_or_adaptation_operations": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "before_and_after_trace": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "reasons_for_changes_or_unchanged_use": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "tailoring_or_adaptation_inputs_and_assumptions": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "linked_implementation_record_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "base_artifact_or_method_and_version",
+        "retained_artifact_core_or_method_steps_and_rules",
+        "configured_or_changed_artifact_content_or_method_steps",
+        "variation_points_used",
+        "tailoring_or_adaptation_operations",
+        "before_and_after_trace",
+        "reasons_for_changes_or_unchanged_use",
+        "tailoring_or_adaptation_inputs_and_assumptions",
+        "linked_implementation_record_ids"
+      ],
+      "additionalProperties": false
+    },
+    "crossApplicationResultAndAssurance": {
+      "type": "object",
+      "properties": {
+        "resulting_artifact": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "configuration_identifier": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "availability": {
+          "$ref": "#/$defs/crossAvailability"
+        },
+        "decisions_or_analyses_supported": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "application_result": {
+          "$ref": "#/$defs/crossApplicationResultValue"
+        },
+        "trade_offs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "post_tailoring_or_application_criterion": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "assurance_method": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "assurance_timing": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "assurance_result": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "discrepancies_and_resolution": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "linked_result_set_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "linked_rq2_finding_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "linked_rq3_activity_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        }
+      },
+      "required": [
+        "resulting_artifact",
+        "configuration_identifier",
+        "availability",
+        "decisions_or_analyses_supported",
+        "application_result",
+        "trade_offs",
+        "post_tailoring_or_application_criterion",
+        "assurance_method",
+        "assurance_timing",
+        "assurance_result",
+        "discrepancies_and_resolution",
+        "linked_result_set_ids",
+        "linked_rq2_finding_ids",
+        "linked_rq3_activity_ids"
+      ],
+      "additionalProperties": false
+    },
+    "crossApplicationIndependence": {
+      "type": "object",
+      "properties": {
+        "personnel_overlap": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "implementation_control": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "adopter_attributable_evidence_for_adoption": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "adopter_attributable_evidence_for_assurance": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        }
+      },
+      "required": [
+        "personnel_overlap",
+        "implementation_control",
+        "adopter_attributable_evidence_for_adoption",
+        "adopter_attributable_evidence_for_assurance"
+      ],
+      "additionalProperties": false
+    },
+    "consolidatedTailoringApplication": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossCodedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tailoring_application_id": {
+              "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+            },
+            "lineage_id": {
+              "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+            },
+            "linked_report_application_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "application_object": {
+              "$ref": "#/$defs/crossConsolidatedApplicationObjectValue"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "linked_report_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "linked_family_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "linked_eps_case_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "setting": {
+              "$ref": "#/$defs/consolidatedApplicationSetting"
+            },
+            "tailoring_or_adaptation": {
+              "$ref": "#/$defs/crossTailoringOrAdaptation"
+            },
+            "result_and_assurance": {
+              "$ref": "#/$defs/crossApplicationResultAndAssurance"
+            },
+            "independence": {
+              "$ref": "#/$defs/crossApplicationIndependence"
+            }
+          },
+          "required": [
+            "tailoring_application_id",
+            "lineage_id",
+            "linked_report_application_ids",
+            "application_object",
+            "linked_model_generation_method_ids",
+            "linked_report_ids",
+            "linked_family_ids",
+            "linked_eps_case_ids",
+            "setting",
+            "tailoring_or_adaptation",
+            "result_and_assurance",
+            "independence"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "application_object": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "const": "artifact_and_method"
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "application_object"
+            ]
+          },
+          "then": {
+            "properties": {
+              "linked_model_generation_method_ids": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

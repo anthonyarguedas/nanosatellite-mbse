@@ -37,7 +37,11 @@ MERGER_COMPONENTS = {
     "_merge_contract.py": "676f899a6281bac6060582d625a939e8324cf88a0b82bae58399b1beb8d34b22",
     "_prisma_search_run.py": "a888e75294d368469ace3ff0041d904cc830b36b4bc30389ea9d5e67adc3205d",
 }
-CANDIDATE_SCHEMA = "slr1-screening-candidates/v1"
+CANDIDATE_SCHEMA = "slr1-screening-candidates/v2"
+MIGRATABLE_CANDIDATE_SCHEMAS = {
+    "slr1-screening-candidates/v1",
+    CANDIDATE_SCHEMA,
+}
 COMMON_CUTOFF = "2026-08-24"
 MODES = ("psr", "citation-chasing", "review-searches")
 DEFAULT_OUTPUTS = {
@@ -192,6 +196,132 @@ def preferred_text(values: list[str]) -> str | None:
     if not values:
         return None
     return max(values, key=lambda value: (len(value), value.casefold(), value))
+
+
+def report_landing_url(row: Mapping[str, Any]) -> str:
+    value = text(row.get("url"))
+    return value if value.startswith(("https://", "http://")) else ""
+
+
+def normalized_full_date(value: Any) -> str | None:
+    candidate = text(value)
+    if not candidate:
+        return None
+    iso_prefix = candidate[:10]
+    if len(candidate) >= 10:
+        try:
+            return datetime.strptime(iso_prefix, "%Y-%m-%d").date().isoformat()
+        except ValueError:
+            pass
+    normalized = " ".join(candidate.replace(",", " ").split())
+    for date_format in (
+        "%b %d %Y",
+        "%B %d %Y",
+        "%Y %b %d",
+        "%Y %B %d",
+        "%d %b %Y",
+        "%d %B %Y",
+    ):
+        try:
+            return datetime.strptime(normalized, date_format).date().isoformat()
+        except ValueError:
+            continue
+    return None
+
+
+def merged_publication_date(
+    rows: list[dict[str, Any]],
+) -> tuple[str | None, str | None]:
+    source_values = sorted(
+        {text(row.get("publication_date")) for row in rows if text(row.get("publication_date"))},
+        key=lambda value: (value.casefold(), value),
+    )
+    full_dates = [
+        (normalized, source_value)
+        for source_value in source_values
+        if (normalized := normalized_full_date(source_value)) is not None
+    ]
+    if full_dates:
+        normalized, source_value = max(
+            full_dates,
+            key=lambda item: (
+                len(item[1]),
+                item[1].casefold(),
+                item[1],
+                item[0],
+            ),
+        )
+        return normalized, source_value
+    return None, preferred_text(source_values)
+
+
+def arxiv_record(source_id: str, row: Mapping[str, Any]) -> dict[str, str | None] | None:
+    if source_id != "arxiv":
+        return None
+    arxiv_id = (
+        text(row.get("sourceRecordStableId"))
+        or text(row.get("sourceRecordId"))
+        or text(row.get("paperId"))
+    )
+    if not arxiv_id:
+        return None
+    version = text(row.get("sourceRecordVersion")) or None
+    version_date_source_value = (
+        text(row.get("sourceRecordVersionDate"))
+        or text(row.get("sourceVersionDate"))
+        or text(row.get("versionDate"))
+        or text(row.get("version_date"))
+        or text(row.get("updated"))
+        or None
+    )
+    return {
+        "arxiv_id": arxiv_id,
+        "version": version,
+        "version_date": normalized_full_date(version_date_source_value),
+        "version_date_source_value": version_date_source_value,
+    }
+
+
+def merged_arxiv_records(rows: list[dict[str, Any]]) -> list[dict[str, str | None]]:
+    records: list[dict[str, str | None]] = []
+    seen: set[tuple[str | None, str | None, str | None, str | None]] = set()
+    for row in rows:
+        record = row.get("arxiv_record")
+        if not isinstance(record, Mapping):
+            continue
+        key = (
+            text(record.get("arxiv_id")) or None,
+            text(record.get("version")) or None,
+            text(record.get("version_date")) or None,
+            text(record.get("version_date_source_value")) or None,
+        )
+        if key[0] is None or key in seen:
+            continue
+        seen.add(key)
+        records.append(
+            {
+                "arxiv_id": key[0],
+                "version": key[1],
+                "version_date": key[2],
+                "version_date_source_value": key[3],
+            }
+        )
+    return sorted(
+        records,
+        key=lambda record: (
+            record["arxiv_id"] or "",
+            record["version"] or "",
+            record["version_date"] or "",
+            record["version_date_source_value"] or "",
+        ),
+    )
+
+
+def merged_stable_urls(rows: list[dict[str, Any]]) -> list[str]:
+    return sorted(
+        {row["stable_url"] for row in rows if text(row.get("stable_url"))},
+        key=lambda value: (value.casefold(), value),
+    )
 
 
 def load_psr_identity_links() -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -433,6 +563,8 @@ def direct_manifestations(
                     "document_type": text(
                         row.get("documentType", row.get("document_type"))
                     ),
+                    "arxiv_record": arxiv_record(source_id, row),
+                    "stable_url": report_landing_url(row),
                     "manual_identity_link_id": None,
                 }
             )
@@ -561,6 +693,8 @@ def citation_manifestations(merger: Any, paths: list[Path]) -> tuple[dict[str, l
                     "authors": author_names(row.get("authors")),
                     "publication_title": text(row.get("publication_title")),
                     "document_type": text(row.get("document_type")),
+                    "arxiv_record": arxiv_record(source_id, row),
+                    "stable_url": report_landing_url(row),
                 }
             )
             raw_count += 1
@@ -657,7 +791,7 @@ def compact_record(
     if not isinstance(year, int):
         values = [row["year"] for row in rows if isinstance(row["year"], int)]
         year = max(values) if values else None
-    publication_date = preferred_text([row["publication_date"] for row in rows])
+    publication_date, publication_date_source_value = merged_publication_date(rows)
     abstract = preferred_text([text(preferred.get("abstract"))] + [row["abstract"] for row in rows])
     snippet = preferred_text(
         [text(preferred.get("snippet"))] + [row["abstract_snippet"] for row in rows]
@@ -668,9 +802,12 @@ def compact_record(
         "authors": merged_authors(preferred, rows),
         "publication_year": year,
         "publication_date": publication_date,
+        "publication_date_source_value": publication_date_source_value,
         "publication_title": preferred_text([row["publication_title"] for row in rows]),
         "document_type": preferred_text([row["document_type"] for row in rows]),
         "doi": doi,
+        "arxiv_records": merged_arxiv_records(rows),
+        "stable_urls": merged_stable_urls(rows),
         "abstract": abstract,
         "abstract_snippet": snippet,
         "keywords": unique_keywords(rows),
@@ -687,6 +824,7 @@ def compact_record(
 def direct_candidates(
     merger: Any,
     paths: list[Path],
+    candidate_prefix: str,
     manual_links: list[dict[str, Any]] | None = None,
     abstract_enrichment: Mapping[tuple[str, str], str] | None = None,
 ) -> tuple[list[dict[str, Any]], int, int]:
@@ -721,7 +859,7 @@ def direct_candidates(
     )
     candidates = [
         compact_record(
-            f"candidate-{index:04d}",
+            f"{candidate_prefix}-candidate-{index:04d}",
             preferred_manifestation(rows),
             rows,
         )
@@ -731,7 +869,11 @@ def direct_candidates(
     return candidates, raw_count, duplicates_removed
 
 
-def citation_candidates(merger: Any, paths: list[Path]) -> tuple[list[dict[str, Any]], int, int]:
+def citation_candidates(
+    merger: Any,
+    paths: list[Path],
+    candidate_prefix: str,
+) -> tuple[list[dict[str, Any]], int, int]:
     groups, raw_count = citation_manifestations(merger, paths)
     assert_no_identifier_conflicts(groups)
     ordered = sorted(
@@ -745,7 +887,7 @@ def citation_candidates(merger: Any, paths: list[Path]) -> tuple[list[dict[str, 
         ),
     )
     candidates = [
-        compact_record(f"candidate-{index:04d}", rows[0], rows)
+        compact_record(f"{candidate_prefix}-candidate-{index:04d}", rows[0], rows)
         for index, (_key, rows) in enumerate(ordered, start=1)
     ]
     return candidates, raw_count, raw_count - len(candidates)
@@ -763,16 +905,28 @@ def build(mode: str) -> dict[str, Any]:
             load_psr_abstract_enrichment()
         )
         candidates, raw_count, duplicates_removed = direct_candidates(
-            merger, paths, manual_links, abstract_enrichment
+            merger,
+            paths,
+            "psr",
+            manual_links,
+            abstract_enrichment,
         )
         namespace = "prior_secondary_reviews"
     elif mode == "review-searches":
         paths = final_direct_input_paths()
-        candidates, raw_count, duplicates_removed = direct_candidates(merger, paths)
+        candidates, raw_count, duplicates_removed = direct_candidates(
+            merger,
+            paths,
+            "review",
+        )
         namespace = "main"
     elif mode == "citation-chasing":
         paths = citation_input_paths()
-        candidates, raw_count, duplicates_removed = citation_candidates(merger, paths)
+        candidates, raw_count, duplicates_removed = citation_candidates(
+            merger,
+            paths,
+            "citation",
+        )
         namespace = "citation_chasing"
     else:  # pragma: no cover - argparse guards this
         raise ValueError(f"Unknown mode: {mode}")
@@ -847,7 +1001,10 @@ def record_references(record: Mapping[str, Any]) -> set[tuple[str, str]]:
 def apply_screening_decisions(
     payload: dict[str, Any], prior: Mapping[str, Any], mode: str
 ) -> int:
-    if prior.get("schema_version") != CANDIDATE_SCHEMA or prior.get("mode") != mode:
+    if (
+        prior.get("schema_version") not in MIGRATABLE_CANDIDATE_SCHEMAS
+        or prior.get("mode") != mode
+    ):
         raise ValueError("The screening-decision source has an incompatible scope")
     allowed = SCREENING_DECISIONS[mode]
     decisions_by_reference: dict[tuple[str, str], str] = {}
