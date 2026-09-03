@@ -125,7 +125,7 @@ Assign one source-located full-text decision:
 
 Use one main exclusion reason. Preserve review-like excluded reports in a contextual list, but do not appraise or count them as included prior reviews.
 
-The sole LLM reviewer makes every final screening decision. Use one focused human audit of normalized title-and-abstract decisions and full-text eligibility decisions when an authorized route is available. The audit may see the LLM decision and must flag disagreements or missing evidence for human adjudication. Apply the rights, document-coverage, technical-failure, discrepancy, and human-adjudication rules from the main verification protocol. Model output never determines eligibility automatically.
+The sole LLM reviewer makes every final screening decision. Use one focused human audit of normalized title-and-abstract decisions and full-text eligibility decisions when an authorized route is available. The audit may see the LLM decision and must flag disagreements or missing evidence for human adjudication. Apply the rights, document-coverage, technical-failure, issue-resolution, and human-adjudication rules from the main verification protocol. Model output never determines eligibility automatically.
 
 ## Extraction form
 

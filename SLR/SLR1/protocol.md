@@ -27,7 +27,7 @@ Use the following guidance:
 
 PRISMA supplies reporting guidance; Kitchenham and Charters supply complementary engineering-review conduct guidance. Neither proves that evidence is valid. This systematic review produces an engineering evidence map, so do not invent clinical effect measures, clinical risk-of-bias tools, or GRADE ratings.
 
-This is a new review, not an update. Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources. Count identification and selection at the record and report level. Report families, reusable-artifact lineages, tailoring applications, RQ2 findings, and verification and validation (V&V) activities are linked analytic units. Report a separate denominator for each of these units.
+This is a new review, not an update. Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources. Count identification and selection at the record and report level. Report families, model generation methods, reusable-artifact lineages, reuse or tailoring applications, RQ2 findings, and verification and validation (V&V) activities are linked analytic units. Report a separate denominator for each of these units.
 
  [ ] Registration and contact details, contributor and guarantor details, and declarations about funding, sponsors, and competing interests will be completed later. State clearly when any of these details are still absent. Do not claim that this protocol is administratively complete under PRISMA-P until the above are reported.
 
@@ -37,13 +37,13 @@ Before the first final primary-evidence search, conduct the bounded [prior-secon
 
 ## Review objective
 
-The review will map how MBSE represents and supports nanosatellite EPS work, including its purposes, inputs and assumptions, implementation, reuse and tailoring, reported outcomes and burdens, and links to V&V before physical integration or testing.
+The review will map how MBSE represents and supports nanosatellite EPS work, including EPS functions, exchanges, dependencies, viewpoints and abstraction, model generation methods, inputs and assumptions, implementation, artifact and method reuse or tailoring, reported outcomes and burdens, and links to V&V before physical integration or testing.
 
 ## PICOC
 
 | Population | Intervention | Comparison | Outcome | Context | Related RQ(s) |
 |---|---|---|---|---|---|
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-primary MBSE or a clear embedded EPS model thread | Not required | How the EPS is represented; why the model is used; inputs and assumptions; level of abstraction; artifact identity and lineage; stated range of use; reusable core; variation points; tailoring; demonstrated uses and checks; reuse level; and required roles and resources | Nanosatellite systems engineering throughout the lifecycle | RQ1 |
+| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-primary MBSE or a clear embedded EPS model thread | Not required | EPS functions, exchanges, dependencies, viewpoints, boundaries, architecture, decomposition visibility, and abstraction; model generation method and modeling language; why the model is used; method and model inputs and assumptions; artifact identity and lineage; artifact and method applicability, reusable core, variation points, tailoring or adaptation, demonstrated uses and checks, reuse levels, and required roles and resources | Nanosatellite systems engineering throughout the lifecycle | RQ1 |
 | EPSs for orbital CubeSat or nanosatellite-class missions | EPS-linked MBSE artifacts, analyses, and model-enabled work | When reported: document-based practice, manual analysis, another toolchain, an earlier mission or model, or another clear comparator | Beneficial, null, mixed, or adverse EPS-linked technical and process outcomes, plus implementation burdens. Priority topics are reliability and mission assurance, reproducibility and reuse, and integration and interoperability | Nanosatellite development and decision-making | RQ2 |
 | EPSs for orbital CubeSat or nanosatellite-class missions | EPS-specific or system-wide but EPS-linked model-based V&V before physical integration or test | When reported: separate or document-based V&V, manual checking, another method, or no comparator | V&V scope and object, links to V&V artifacts, executable checks, results, virtual integration, and continuity from model to test | Analysis and V&V before physical work, with later physical links recorded separately | RQ3 |
 
@@ -57,7 +57,7 @@ The review will map how MBSE represents and supports nanosatellite EPS work, inc
 
 ### Report eligibility versus question contribution
 
-An outcome, burden, V&V activity, reuse claim, tailoring application, evidence-basis code, or support judgment is never an additional report-level inclusion test. Every eligible report contributes to RQ1 through its report-level extraction. Create direct RQ2 findings and RQ3 activities only when their respective definitions are met. A question-contribution or support code cannot make an otherwise ineligible report eligible.
+An outcome, burden, V&V activity, reuse claim, reuse or tailoring application, evidence-basis code, or support judgment is never an additional report-level inclusion test. Every eligible report contributes to RQ1 through its report-level extraction. Create direct RQ2 findings and RQ3 activities only when their respective definitions are met. A question-contribution or support code cannot make an otherwise ineligible report eligible.
 
 Within RQ2, reliability and mission assurance, reproducibility and reuse, and integration and interoperability are priority categories for presentation. Code all eligible outcomes and burdens without favoring a direction or hiding other categories after seeing the results.
 
@@ -110,15 +110,16 @@ Assign each full-text report to one of two routes. The routes are mutually exclu
 
 Use the following linked units:
 
-1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model or toolchain use represented by one or more reports. Require source-supported overlap.
+1. **Study or implementation report family:** one underlying investigation, mission or design implementation, artifact release, or substantially shared model, method, or toolchain use represented by one or more reports. Require source-supported overlap.
 2. **Report:** one distinct publication, preprint, institutional report, or completed thesis or dissertation. Apply the canonical [report-version, date, and review-status rules](#report-versions-dates-and-review-status). This is the default extraction unit.
 3. **EPS case section:** a nested section inside a report extraction. Use one section by default. Create another only when the report contains materially separate EPS models, implementations, or evaluations that cannot be represented clearly together. An eligibility thread does not automatically become a separate extraction unit.
-4. **Reusable EPS artifact lineage:** one identifiable base artifact and its source-supported versions or derived instances, resolved in the cross-report pass and represented by a separate lineage-level extraction.
-5. **Tailoring application:** one use of an artifact lineage in one target setting, including a justified unchanged adoption. The first pass keeps each report's account in a report-level application row. The cross-report pass creates a separate consolidated application row and merges repeated reporting of the same use.
-6. **RQ2 finding:** one materially distinct outcome, burden, trade-off, or direction. Split only when evidence, scope, actor, scenario, or direction differs materially.
-7. **RQ3 activity:** one target–method–scenario activity. Keep several criteria and verdicts together when method, scenario, and timing are shared.
+4. **Model generation method:** one source-identifiable method or process used to construct, populate, configure, transform, or generate an EPS MBSE model. Keep it as a report-level nested record. Do not resolve method identity across reports during the artifact-lineage pass.
+5. **Reusable EPS artifact lineage:** one identifiable base artifact and its source-supported versions or derived instances, resolved in the cross-report pass and represented by a separate lineage-level extraction.
+6. **Reuse or tailoring application:** one use of an artifact lineage, model generation method, or both in one target setting, including a justified unchanged adoption. The first pass keeps each report's account in a report-level application row. The cross-report pass consolidates repeated reports of artifact applications. Method-only applications remain source-bounded report-level records.
+7. **RQ2 finding:** one materially distinct outcome, burden, trade-off, or direction. Split only when evidence, scope, actor, scenario, or direction differs materially.
+8. **RQ3 activity:** one target–method–scenario activity. Keep several criteria and verdicts together when method and scenario are shared.
 
-PRISMA identification and selection counts remain at record and report level. Report separate analytic denominators for report families, reports, artifact lineages, tailoring applications, direct RQ2 findings, and direct RQ3 activities. A report count is not a count of independent implementations or transfers.
+PRISMA identification and selection counts remain at record and report level. Report separate analytic denominators for report families, reports, model generation methods, artifact lineages, report-level applications by application object, consolidated artifact applications, direct RQ2 findings, and direct RQ3 activities. A report count is not a count of independent implementations or transfers.
 
 External repositories, evolving models, and author-provided artifacts are not independently retrieved or inspected.
 
