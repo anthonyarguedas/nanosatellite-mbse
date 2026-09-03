@@ -1,0 +1,157 @@
+{
+  "schema_version": "oatd-pilot-005-gate-count-assessment/v1",
+  "source": "Open Access Theses and Dissertations (OATD)",
+  "pilot": "005",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "plan": {
+    "path": "searches/split-continuation-plan.json",
+    "sha256": "eb9084c22bd485f97b3ef4dfc3cb1073226bb21dc061e3cc61ebeba050d43462"
+  },
+  "run": {
+    "path": "searches/split-continuation-run-receipt.json",
+    "sha256": "6b0eb579e9025a801f426c925575cad55174087b5f01952cb8c5124e91a8051c"
+  },
+  "algebraic_candidate_union": {
+    "identity": "(P AND M_H) OR (P AND M_B AND E_F) OR (P AND M_B AND E_H) OR (P AND M_B AND R) OR (P AND M_B AND T_precise) OR (P AND G_model) OR (P AND G_structure) OR (P AND C1)",
+    "relationship_to_original_schedule": "exact_union_equality",
+    "partition_branch_coverage": {
+      "A1": [
+        "G1-MH"
+      ],
+      "A2": [
+        "G1-MH",
+        "G2A-MB-EF"
+      ],
+      "A3": [
+        "G2B-MB-EH"
+      ],
+      "B1": [
+        "G1-MH"
+      ],
+      "B2": [
+        "G2C-MB-R"
+      ],
+      "BG1": [
+        "G3-GMODEL"
+      ],
+      "BG2": [
+        "G4-GSTRUCTURE"
+      ],
+      "BC1": [
+        "G5-C1"
+      ],
+      "BT2": [
+        "G2D-MB-T"
+      ]
+    },
+    "wildcards": false,
+    "proximity": false,
+    "new_terms": false,
+    "source_refinement_from_results": false
+  },
+  "baseline": {
+    "P_only_source_total": 1249,
+    "partially_hydrated_P_records": 338
+  },
+  "gate_counts": {
+    "G1-MH": 16,
+    "G2A-MB-EF": 2,
+    "G2B-MB-EH": 2,
+    "G2C-MB-R": 10,
+    "G2D-MB-T": 0,
+    "G3-GMODEL": 0,
+    "G4-GSTRUCTURE": 3,
+    "G5-C1": 1
+  },
+  "gate_evidence": [
+    {
+      "event_id": "G1-MH",
+      "artifact": "searches/G1-MH.json",
+      "sha256": "1d857f0d432ea0b593521be682687cd5b4810d7bf958b5380d12f402581c21dd",
+      "total": 16,
+      "reduction_from_p_count": 1233,
+      "reduction_percent": 98.719
+    },
+    {
+      "event_id": "G2A-MB-EF",
+      "artifact": "searches/G2A-MB-EF.json",
+      "sha256": "bb4a3285ff9f0745cbb3424a80a33b27a596433fbdd9e11ada187bb8c75be1e2",
+      "total": 2,
+      "reduction_from_p_count": 1247,
+      "reduction_percent": 99.8399
+    },
+    {
+      "event_id": "G2B-MB-EH",
+      "artifact": "searches/G2B-MB-EH.json",
+      "sha256": "965c88a14818026b56d00e71b79132bda9eded278814507973472cbf58c0b89e",
+      "total": 2,
+      "reduction_from_p_count": 1247,
+      "reduction_percent": 99.8399
+    },
+    {
+      "event_id": "G2C-MB-R",
+      "artifact": "searches/G2C-MB-R.json",
+      "sha256": "3c7dd099d14ae7c579b15f9cbba88440a568dee709750fbb4854d83deab2f110",
+      "total": 10,
+      "reduction_from_p_count": 1239,
+      "reduction_percent": 99.1994
+    },
+    {
+      "event_id": "G2D-MB-T",
+      "artifact": "searches/G2D-MB-T.json",
+      "sha256": "994a605d6777118402b27b9ecfac7cb5f778d47fa3cdf851ea3f2d9ac55b33f1",
+      "total": 0,
+      "reduction_from_p_count": 1249,
+      "reduction_percent": 100.0
+    },
+    {
+      "event_id": "G3-GMODEL",
+      "artifact": "searches/G3-GMODEL.json",
+      "sha256": "85232333101efcdb1735184e75b1ebbc1a7314eb4401e2d60fa37ec6c53edd69",
+      "total": 0,
+      "reduction_from_p_count": 1249,
+      "reduction_percent": 100.0
+    },
+    {
+      "event_id": "G4-GSTRUCTURE",
+      "artifact": "searches/G4-GSTRUCTURE.json",
+      "sha256": "b99e8dfa5ef0a63ffbf0f4787ca0b7d21703ebb2b57552f923d2f644ff588325",
+      "total": 3,
+      "reduction_from_p_count": 1246,
+      "reduction_percent": 99.7598
+    },
+    {
+      "event_id": "G5-C1",
+      "artifact": "searches/G5-C1.json",
+      "sha256": "137f64e22bd51671184199227aeaa76c9189709ea285ba9c83d8076f6170b1dd",
+      "total": 1,
+      "reduction_from_p_count": 1248,
+      "reduction_percent": 99.9199
+    }
+  ],
+  "accounting": {
+    "complete_gate_count": 8,
+    "largest_gate_total": 16,
+    "gate_occurrence_total": 34,
+    "candidate_union_upper_bound": 34,
+    "candidate_union_exact_total": null,
+    "candidate_union_exact_total_reason": "Count-only events do not expose stable IDs for cross-gate deduplication.",
+    "minimum_candidate_reduction_from_P": 1215,
+    "minimum_candidate_reduction_percent": 97.2778
+  },
+  "superseded_combined_gate": {
+    "event_id": "G2-MB",
+    "total": null,
+    "failure": "OATD page did not become ready in time.",
+    "interpretation": "The four exact split branches replace this null event. The null is not a zero and contributes no count evidence."
+  },
+  "conclusion": {
+    "decision": "accept_eight_exact_gates_for_card_id_union_pilot",
+    "broad_P_detail_harvest": "retire",
+    "reason": "All eight exact gates completed count-only source readback. Their largest total was 16 and their summed upper bound was 34, compared with 1,249 records for P alone.",
+    "final_search_ready": false,
+    "next_required_evidence": "Collect and reconcile complete stable-ID snapshots for every gate, deduplicate the union, and hydrate each union ID once."
+  }
+}

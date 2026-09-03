@@ -1,0 +1,121 @@
+{
+  "schema_version": "oatd-pilot-006-card-id-assessment/v1",
+  "source": "Open Access Theses and Dissertations (OATD)",
+  "pilot": "006",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "plan": {
+    "path": "searches/event-plan.json",
+    "sha256": "94d9bdba856ac791d848a3b590a7c67f27b5cbe3a6f0e9409a68940ddd83e037"
+  },
+  "run": {
+    "path": "searches/run-receipt.json",
+    "sha256": "0775a654234f0f511003cd54b7b6860f06fa5d2f539979c132c7f0b29a1fc0eb"
+  },
+  "reconciliation": {
+    "path": "searches/reconciliation.json",
+    "sha256": "6fec8794f797944499d35e0b602088dcf528e984520092d328d6a512aa90eaad"
+  },
+  "gate_evidence": [
+    {
+      "event_id": "G1-MH",
+      "artifact": "searches/gates/G1-MH.json",
+      "sha256": "2fa3f4bbb7585425632d758a757dee5c63b42d3e1c1e036190a9ac974c8c978f",
+      "source_total": 16,
+      "two_pass_set_reconciled": true,
+      "native_order_drift_observed": false,
+      "busy_retries_performed": 0
+    },
+    {
+      "event_id": "G2A-MB-EF",
+      "artifact": "searches/gates/G2A-MB-EF.json",
+      "sha256": "4ea5eddaab78b2f667d469782482feb19615b2fb66066da19c586f9df5015b17",
+      "source_total": 2,
+      "two_pass_set_reconciled": true,
+      "native_order_drift_observed": false,
+      "busy_retries_performed": 0
+    },
+    {
+      "event_id": "G2B-MB-EH",
+      "artifact": "searches/gates/G2B-MB-EH.json",
+      "sha256": "ae98092123dbee1e4d4adeb1330a5427cac4082ec9ec44f3f0091f2576f4db20",
+      "source_total": 2,
+      "two_pass_set_reconciled": true,
+      "native_order_drift_observed": false,
+      "busy_retries_performed": 0
+    },
+    {
+      "event_id": "G2C-MB-R",
+      "artifact": "searches/gates/G2C-MB-R.json",
+      "sha256": "6aa3e2e2005a2e3ccd0e5ed1dab1dbaf29ba9d17915959d56d40f9188d437cd8",
+      "source_total": 10,
+      "two_pass_set_reconciled": true,
+      "native_order_drift_observed": false,
+      "busy_retries_performed": 0
+    },
+    {
+      "event_id": "G2D-MB-T",
+      "artifact": "searches/gates/G2D-MB-T.json",
+      "sha256": "4160633c698e9341b86d86450df8d6a79985d71b06449bea43ab913f267e4338",
+      "source_total": 0,
+      "two_pass_set_reconciled": true,
+      "native_order_drift_observed": false,
+      "busy_retries_performed": 0
+    },
+    {
+      "event_id": "G3-GMODEL",
+      "artifact": "searches/gates/G3-GMODEL.json",
+      "sha256": "7ffba62632123e572c5c66b900aeb713396214185a0940c465da57e91fcdba5c",
+      "source_total": 0,
+      "two_pass_set_reconciled": true,
+      "native_order_drift_observed": false,
+      "busy_retries_performed": 0
+    },
+    {
+      "event_id": "G4-GSTRUCTURE",
+      "artifact": "searches/gates/G4-GSTRUCTURE.json",
+      "sha256": "866e2cd347fe275f87caeee6d96943fc27dffdc4635fbc196c7908ee1c88ffb0",
+      "source_total": 3,
+      "two_pass_set_reconciled": true,
+      "native_order_drift_observed": false,
+      "busy_retries_performed": 0
+    },
+    {
+      "event_id": "G5-C1",
+      "artifact": "searches/gates/G5-C1.json",
+      "sha256": "d162baf96da2e262bc6b509ddcf887954b276510a7ea96324f4c1f4077205105",
+      "source_total": 1,
+      "two_pass_set_reconciled": true,
+      "native_order_drift_observed": false,
+      "busy_retries_performed": 0
+    }
+  ],
+  "accounting": {
+    "complete_gate_count": 8,
+    "complete_source_pass_count": 16,
+    "source_detail_requests": 0,
+    "gate_occurrence_total": 34,
+    "exact_deduplicated_union_total": 26,
+    "cross_gate_duplicate_occurrences": 8,
+    "P_only_baseline_total": 1249,
+    "candidate_reduction_from_P": 1223,
+    "candidate_reduction_percent": 97.9183,
+    "pilot004_validated_details_in_union": 9,
+    "union_ids_without_pilot004_details": 17
+  },
+  "stability": {
+    "all_gate_totals_equal_pilot005": true,
+    "all_two_pass_stable_id_sets_equal": true,
+    "native_order_drift_gate_count": 0,
+    "busy_retry_count": 0
+  },
+  "conclusion": {
+    "decision": "accept_exact_gate_id_union_for_detail_hydration_pilot",
+    "exact_source_candidate_total": 26,
+    "reason": "All eight gates completed two source-rendered card-ID passes with equal stable-ID sets. Their 34 occurrences deduplicated to 26 IDs without requesting any Record Details page.",
+    "final_search_ready": false,
+    "next_required_evidence": "Hydrate each of the 26 stable IDs once under a predeclared bounded detail route, then obtain fresh confirming gate snapshots.",
+    "pilot004_detail_reuse_approved_for_final_search": false
+  }
+}
