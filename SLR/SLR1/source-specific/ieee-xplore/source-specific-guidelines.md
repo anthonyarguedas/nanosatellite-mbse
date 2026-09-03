@@ -1,80 +1,37 @@
 # IEEE Xplore
 
-Last pilot saved in commit: db98ebacd5ed832cb22c48ec77133a4a0d47b58a
-PSR final searches saved in commit: NA (not applicable)
 Final searches saved in commit: NA
-Citation chasing searches saved in commit: NA (not applicable)
 Source excluded from review due to search failure in commit: NA
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_ieee_xplore.py`
 
-Save primary final searches in `final-searches/` and name each artifact with its query ID, such as `A1.json`.
-
-The script artifact is authoritative for per-event query, controls, source identity, timestamps, behavior, totals, pagination, ordering, identifiers, export, completeness, and failures. This file records only fixed decisions and pilot conclusions.
+Save final JSON files in `final-searches/` by query ID. Every CLI event automatically saves sibling `.search-page.png` and `.results-page.png` files. No option disables them. A successful event requires both images and their receipt in the JSON.
 
 ## Fixed source configuration
 
-- Source or collection: IEEE Xplore
-- Interface: Web
-- Platform: IEEE Xplore
+- Source or collection: IEEE Xplore Documents
 - URL: https://ieeexplore.ieee.org/search/advanced
-- Search field or local route: Normal search with individually fielded `All Metadata` atoms.
-- Main evidence window: Use `--publication-date-start 2011-01-01 --publication-date-end <cutoff>` for final searches.
-- Language: No proved Language field or facet is available. Apply no language control and determine English full text during screening.
-- Publication type: Apply no type control. The current content taxonomy and assignment coverage do not prove a lossless eligible-report union. Never apply peer-review, access, or full-text availability filters.
-- Database or collection selection: Documents scope with all access states and no content type facet.
-- Other shared limits: Keep each rendered request target within the adapter's validated 7,800-byte envelope.
+- Field: Individually fielded All Metadata atoms
+- Evidence window: Use `--publication-date-start 2011-01-01 --publication-date-end <cutoff>`. The adapter applies the native year envelope and reconciles exact visible publication dates.
+- Language: Apply no source filter. No reliable language field or facet is available. Confirm English during screening.
+- Publication type: Apply no type, peer review, access, or full text filter. The content taxonomy does not prove complete assignment to a lossless eligible union.
+- Scope and ordering: Documents, All Results, blank Search Within, and Oldest.
 
 ## Source translation
 
-Use the exact concept membership and compound Boolean definitions in [the cross-source strategy](../../protocol-discovery-and-appraisal.md#search-streams-and-set-construction). Expand every listed ordinary term. Use no proximity operator, pair expansion, or wildcard. IEEE permits only ten wildcards per search, so wildcard compression is excluded for this source. Pilot 003's candidate is retired.
+Use the concepts, compounds, and nine partitions in [the discovery protocol](../../protocol-discovery-and-screening.md#direct-query-schedule).
 
-- Literal `L(s)`: Use one straight double-quoted literal.
+- Literal `L(s)`: One straight double quoted literal.
 - Atom `A(s)`: `("All Metadata":L(s))`.
-- Boolean: Use uppercase `AND` and `OR` with explicit parentheses.
-- Ordinary block `F(S)`: Join `A(s)` for every member of `S` with source OR. Fully parenthesize the result.
-- Compound `G_model`: `(F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B)))`.
-- Compound `G_structure`: `(F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B)))`.
-- Compound `C1`: `(F(C1_fixed) OR F(G_DSL))`.
-- Controlled vocabulary: Add no supplement initially. Free text remains mandatory. Add a descriptor only after a pilot proves its source mapping and assignment.
-- Source limitation: Do not use a grouped field wrapper around a Boolean block. Expand every atom before combining it.
-- Pilots 001 and 002 accepted the complete `A1` All Metadata expression before submission. Pilot 001 records a requested-range mismatch after Apply and three contradictory polls. Pilot 002 repeats the same count-only diagnostic with the `2011` through `2026` year control. Its artifact records source-observed query and year-control readback, then ends with `status: error` and no source total. No reconciled date-controlled `A1` result exists. This leaves an unresolved source-control limitation. Do not replace it with an unbounded query or local date filtering. The exact publication-day window is unavailable in count-only mode because the adapter requires strict complete mode for that control.
-- Pilot 004 reran the complete literal schedule as a **pilot only**. Its native-Year control receipts distinguish the requested `2011_2026_Year` window from a contained result-page refinement interval. The latter is never relabelled as the applied search window. Some cells have reconciled Article Number captures, while failures remain `total: null`. See [Pilot 004](pilots/004/pilot.md). The pilot used no wildcard, language, type, access, Date Added, or controlled-vocabulary supplement. The historical Pilot 004 evidence is immutable. It does not alter this source configuration or authorize a final search.
-- Adapter v10 keeps percent-component encoding for request targets through 7,800 bytes. Longer routes use `+` for spaces and retain RFC-safe parentheses while preserving the same ordered decoded parameters. A route that remains oversized fails before execution. It also rejects HTTP errors and request-rejection pages, and it records query echo only from a ready result state. The unchanged literal A2 target fell from 9,319 to 7,477 bytes. Pilot 009 completed two exact A2 count events at 33 with no wildcard or query change.
-- The adapter reads one active native page choice under one visible Items Per Page host. Page size is a preference. Keep the current validated native size when it can exhaust a strict event within `--max-pages`. Pilot 007 captured B2's 131 records through six contiguous 25-row pages in each pass. This current evidence does not reinterpret the historical Pilot 004 artifact.
-- Before filling a native Year input, inspect the one visible disabled widget. If its complete available result interval lies inside the requested inclusive window, Apply would be a no-op. Perform no Year interaction. Record the requested window and contained result interval separately, then validate the complete rendered state. Pilot 006 accepted intervals from `2011_2026_Year` through `2015_2026_Year` under the requested `2011_2026_Year` window.
-- A real Year narrowing remains fail closed. An uncontained interval, enabled staged control, ambiguous widget, retained-value mismatch, or changed token such as `2011_2025_Year` is fatal with `total: null`. Do not retry Apply, force a DOM value, or use a URL-only year substitution.
-- Strict passes compare semantic controls after each pass validates its native evidence. An exact requested Year token and a disabled contained result interval can represent the same requested window. Preserve both representations in the strict receipt. Pilots 006 and 007 proved this behavior with complete `BG1`, `BG2`, and `BC1` captures.
-- Pilot 005 submitted one complete expression per partition from the schedule without proximity operators. Its ready result states established exact echo for the eight non-A2 expressions. Adapter v8 misclassified A2's failed-route URL parameter as a source-observed echo. The null artifacts remain historical evidence. See [Pilot 005](pilots/005/pilot.md).
-- Pilot 006 identified the Year failures as unnecessary interactions with contained result intervals. It completed five repaired counts, strict `BG1`, and strict `BT2`. Its A1 rendered-state artifact occurred before source navigation and is now classified as `browser_open`. See [Pilot 006](pilots/006/pilot.md).
-- Pilot 007 retained valid 25-row native pagination and completed strict `BG2` at 11, `BC1` at 28, and `B2` at 131. Each event reconciled two complete passes and retained a compact strict receipt. See [Pilot 007](pilots/007/pilot.md). These year-precision diagnostic runs do not authorize a final search.
-- Pilot 008 retested the byte-identical direct A2 expression twice and retained two adapter v9 failures with `total: null`. Later transport evidence showed that the 9,319-byte route received HTTP 414 before source execution. Its exact echo was only the failed URL parameter. Keep the artifacts immutable and treat their source-limitation diagnosis as superseded. See [Pilot 008](pilots/008/pilot.md).
-- Pilot 009 used adapter v10 and the byte-identical direct A2 expression with no wildcard. Two predeclared count events completed with exact query, Year, sort, and repeated total 33. This repairs A2 readiness. The events remain diagnostic and do not authorize a final search. See [Pilot 009](pilots/009/pilot.md).
+- Ordinary block `F(S)`: Join every atom with uppercase `OR` and full parentheses.
+- Compounds: Expand every nested `AND` and `OR` before submission. Do not use a grouped field wrapper.
+- Controlled vocabulary decision: Add no supplement. IEEE exposes several indexed vocabularies, but this review has no complete concept mapping, assignment proof, or marginal recall comparison for them. Free text remains mandatory.
+- Wildcard decision: Use no wildcard. IEEE permits only ten wildcards per search. The candidate would consume the full allowance and has no complete stable ID no loss comparison. The complete literal route is accepted.
 
-## Query schedule
+## Execution
 
-Render every row as one explicit source expression. Fully parenthesize each ordinary and compound block. The four expansion rows preserve the shared compound Boolean definitions.
+Run one expression per partition. Keep each request within the validated 7,800 byte target envelope. Use compact space encoding and safe parentheses only when percent component encoding would exceed that envelope. Preserve the decoded parameter sequence.
 
-| ID | Source construction |
-|---|---|
-| `A1` | `F(P) AND F(E_H) AND F(M_H)` |
-| `A2` | `F(P) AND F(E_F) AND (F(M_H) OR F(M_B))` |
-| `A3` | `F(P) AND F(E_H) AND F(M_B)` |
-| `B1` | `F(P) AND F(M_H)` |
-| `B2` | `F(P) AND F(M_B) AND F(R)` |
-| `BG1` | `F(P) AND (F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B)))` |
-| `BG2` | `F(P) AND (F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B)))` |
-| `BC1` | `F(P) AND (F(C1_fixed) OR F(G_DSL))` |
-| `BT2` | `F(P) AND F(M_B) AND F(T_precise)` |
+Before changing a Year widget, accept a disabled interval only when its complete available range lies inside the requested window. Record the requested range and contained source interval separately. Any real narrowing, ambiguous widget, or changed token fails with `total: null`.
 
-## Pilots
-
-- [x] [Pilot 001](pilots/001/pilot.md): complete `A1` count-only attempt preserved an explicit year-control failure. `BG1` was stopped before execution. Do not use this source run as a final search until the control reconciles.
-- [x] [Pilot 002](pilots/002/pilot.md): repeat count-only diagnostic used the same complete `A1` expression and `2011` through `2026` control. It ended with `status: error`, `total: null`, and no reconciled source result. `BG1` was not run. Do not use this source run as a final search.
-- [x] [Pilot 003](pilots/003/pilot.md): Language remains unavailable and no type union is accepted. The historical 10-wildcard candidate is retired. IEEE's ten-wildcard cap rules out wildcard compression for this source.
-- [Pilot 004](pilots/004/pilot.md): all nine superseded pair-based partitions and cells were attempted with native inclusive `2011`–`2026` Year Apply. Complete unions are limited to reconciled cells. Incomplete unions remain null, including the B2 >100 investigation. This historical evidence remains immutable.
-- [x] [Pilot 005](pilots/005/pilot.md): eight non-A2 expressions reached ready states with exact query echo. A2's failed-route URL echo was later reclassified. Native Year and rendered-state failures were retained for investigation.
-- [x] [Pilot 006](pilots/006/pilot.md): disabled contained Year intervals resolved the former start resets and disabled Apply state without Year control interaction. Strict `BG1` and `BT2` completed. The A1 rendered-state failure occurred before source navigation. `BG2` and `BC1` exposed a separate page-size preference failure.
-- [x] [Pilot 007](pilots/007/pilot.md): native 25-row pagination completed strict `BG2`, `BC1`, and all 131 B2 records in two passes. BG2 and BC1 reconciled contained and exact Year representations. Pilot 009 later repaired A2 readiness. The exact publication-day cutoff remains unresolved.
-- [x] [Pilot 008](pilots/008/pilot.md): two byte-identical direct A2 retests retained adapter v9 HTTP 414 failures as `total: null`. Their URL echoes did not establish source execution. Pilot 009 supersedes the source-limitation diagnosis.
-- [x] [Pilot 009](pilots/009/pilot.md): adapter v10 completed two unchanged literal A2 count events at 33 through the bounded compact route. No wildcard, split, filter, or Boolean change was used.
+Use the active native page size when it can exhaust the event within `--max-pages`. Final events require two complete passes with equal totals, controls, and stable ID sets. Order differences are audit evidence and do not replace set equality. See [the readiness audit](../readiness-audit.md) for the result bound.
