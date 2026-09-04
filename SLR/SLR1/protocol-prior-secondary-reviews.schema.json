@@ -1,10 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-prior-secondary-reviews.schema.json",
-  "title": "SLR1 prior secondary review extraction schema",
-  "description": "Machine-readable schema for one included prior-review report extraction under protocol-prior-secondary-reviews.md. It reuses the main extraction evidence, citation, availability, and audit definitions.",
+  "title": "SLR1 prior secondary review extraction schema, version 2",
+  "description": "Machine-readable schema for one included prior review report extraction under protocol-prior-secondary-reviews.md. Version 2 expands RQ1 scope and overlap coding. It reuses the main extraction evidence, citation, availability, and audit definitions.",
   "$ref": "#/$defs/priorReviewExtraction",
   "$defs": {
+    "schemaVersion": {
+      "const": "slr1-prior-secondary-review-extraction/v2"
+    },
     "stableId": {
       "$ref": "protocol-extraction.schema.json#/$defs/stableId"
     },
@@ -344,7 +347,7 @@
       ]
     },
     "supportingSearchDispositionCode": {
-      "description": "Apply per prior-review report. no_substantial_overlap_identified means overlap is absent or adjacent only. partial_overlap_main_review_still_needed means some direct overlap exists with material coverage missing. substantial_overlap_but_scope_or_update_gap_remains means substantial coverage exists with a scope or currency gap. substantial_overlap_but_methodological_gap_remains means scope and currency are substantial but known methodological limitations prevent reliance on the review. potential_redundancy_requires_protocol_reconsideration means the nanosatellite population, direct EPS-MBSE relationship, all RQs, and currency are substantially covered. insufficient_information_to_decide means reporting prevents a reliable decision.",
+      "description": "Apply per prior review report. no_substantial_overlap_identified means overlap is absent or adjacent only. partial_overlap_main_review_still_needed means some direct overlap exists with material coverage missing. substantial_overlap_but_scope_or_update_gap_remains means substantial coverage exists with a scope or currency gap. substantial_overlap_but_methodological_gap_remains means scope and currency are substantial but known methodological limitations prevent reliance on the review. potential_redundancy_requires_protocol_reconsideration means the nanosatellite population, direct EPS-MBSE relationship, every material RQ1 element, RQ2, RQ3, and currency are substantially covered. insufficient_information_to_decide means reporting prevents a reliable decision.",
       "type": "string",
       "enum": [
         "no_substantial_overlap_identified",
@@ -994,13 +997,42 @@
         "lifecycle_scope": {
           "$ref": "#/$defs/evidencedString"
         },
+        "model_generation_method_scope": {
+          "$ref": "#/$defs/evidencedString",
+          "description": "Review level coverage of model generation method purposes, origins, construction sources, steps, inputs, outputs, decision logic, checks, and supporting materials."
+        },
+        "generic_or_reference_model_construction_scope": {
+          "$ref": "#/$defs/evidencedString",
+          "description": "Review level coverage of how generic, reference, or template models are constructed, including source selection, synthesis, abstraction, traceability, and genericity checks."
+        },
+        "engineering_workflow_scope": {
+          "$ref": "#/$defs/evidencedString",
+          "description": "Review level coverage of engineering workflow boundaries, activities, order, handoffs, linked methods and artifacts, roles, tools, governance, and checks."
+        },
+        "procedure_reporting_scope": {
+          "$ref": "#/$defs/evidencedString",
+          "description": "Review level coverage of procedural detail and supporting materials for model construction, engineering workflows, and tailoring."
+        },
+        "generic_model_procedural_evidence_scope": {
+          "$ref": "#/$defs/evidencedString",
+          "description": "Review level coverage that links generic or reference models to actionable construction or tailoring procedures, worked tailoring examples, and post-tailoring assurance."
+        },
+        "artifact_reuse_and_tailoring_scope": {
+          "$ref": "#/$defs/evidencedString",
+          "description": "Review level coverage of bounded artifact reuse, lineages, applicability, reusable cores, variation points, tailoring rules and steps, applications, assurance, independence, and levels."
+        },
+        "method_reuse_and_adaptation_scope": {
+          "$ref": "#/$defs/evidencedString",
+          "description": "Review level coverage of bounded model generation method reuse, stable method cores, variation points, adaptation, applications, assurance, independence, and levels."
+        },
+        "workflow_reuse_and_adaptation_scope": {
+          "$ref": "#/$defs/evidencedString",
+          "description": "Review level coverage of bounded engineering workflow reuse, stable activities and handoffs, variation points, adaptation, applications, assurance, independence, and levels."
+        },
         "outcome_scope": {
           "$ref": "#/$defs/evidencedString"
         },
         "burden_scope": {
-          "$ref": "#/$defs/evidencedString"
-        },
-        "reuse_scope": {
           "$ref": "#/$defs/evidencedString"
         },
         "verification_and_validation_scope": {
@@ -1050,9 +1082,16 @@
         "tool_scope",
         "artifact_scope",
         "lifecycle_scope",
+        "model_generation_method_scope",
+        "generic_or_reference_model_construction_scope",
+        "engineering_workflow_scope",
+        "procedure_reporting_scope",
+        "generic_model_procedural_evidence_scope",
+        "artifact_reuse_and_tailoring_scope",
+        "method_reuse_and_adaptation_scope",
+        "workflow_reuse_and_adaptation_scope",
         "outcome_scope",
         "burden_scope",
-        "reuse_scope",
         "verification_and_validation_scope",
         "review_search_dates",
         "last_search_date",
@@ -1066,6 +1105,7 @@
       "additionalProperties": false
     },
     "rqOutcomeCoverage": {
+      "description": "What the prior review explicitly sought and what it reported for one main review question or question element. Use evidence-status objects when either part is absent or unclear.",
       "type": "object",
       "properties": {
         "explicitly_sought": {
@@ -1081,11 +1121,68 @@
       ],
       "additionalProperties": false
     },
+    "rq1ElementFindings": {
+      "description": "Source located findings for every RQ1 analytic element under the current main protocol and extraction specification. These remain review level summaries and never become primary evidence.",
+      "type": "object",
+      "properties": {
+        "eps_representation_and_use": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "generic_or_reference_model_construction": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "model_generation_methods": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "engineering_workflows": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "procedural_reporting_detail": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "generic_model_with_actionable_construction_or_tailoring": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "inputs_and_assumptions": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "implementation_needs_and_footprint": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "bounded_artifact_reuse_and_tailoring": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "bounded_method_reuse_and_adaptation": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "bounded_workflow_reuse_and_adaptation": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        },
+        "evidence_support_for_characterizations": {
+          "$ref": "#/$defs/rqOutcomeCoverage"
+        }
+      },
+      "required": [
+        "eps_representation_and_use",
+        "generic_or_reference_model_construction",
+        "model_generation_methods",
+        "engineering_workflows",
+        "procedural_reporting_detail",
+        "generic_model_with_actionable_construction_or_tailoring",
+        "inputs_and_assumptions",
+        "implementation_needs_and_footprint",
+        "bounded_artifact_reuse_and_tailoring",
+        "bounded_method_reuse_and_adaptation",
+        "bounded_workflow_reuse_and_adaptation",
+        "evidence_support_for_characterizations"
+      ],
+      "additionalProperties": false
+    },
     "overlapFindings": {
       "type": "object",
       "properties": {
-        "rq1_outcomes": {
-          "$ref": "#/$defs/rqOutcomeCoverage"
+        "rq1_elements": {
+          "$ref": "#/$defs/rq1ElementFindings"
         },
         "rq2_outcomes": {
           "$ref": "#/$defs/rqOutcomeCoverage"
@@ -1110,7 +1207,7 @@
         }
       },
       "required": [
-        "rq1_outcomes",
+        "rq1_elements",
         "rq2_outcomes",
         "rq3_outcomes",
         "nanosatellite_eps_evidence_extractability",
@@ -1236,6 +1333,63 @@
       ],
       "additionalProperties": false
     },
+    "rq1ElementAssessments": {
+      "description": "Coverage judgments for each RQ1 element. Judge directness against the nanosatellite EPS population and qualifying MBSE relationship. Evidence that does not connect the element to both is adjacent at most.",
+      "type": "object",
+      "properties": {
+        "eps_representation_and_use": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "generic_or_reference_model_construction": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "model_generation_methods": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "engineering_workflows": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "procedural_reporting_detail": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "generic_model_with_actionable_construction_or_tailoring": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "inputs_and_assumptions": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "implementation_needs_and_footprint": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "bounded_artifact_reuse_and_tailoring": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "bounded_method_reuse_and_adaptation": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "bounded_workflow_reuse_and_adaptation": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        },
+        "evidence_support_for_characterizations": {
+          "$ref": "#/$defs/rqCoverageAssessment"
+        }
+      },
+      "required": [
+        "eps_representation_and_use",
+        "generic_or_reference_model_construction",
+        "model_generation_methods",
+        "engineering_workflows",
+        "procedural_reporting_detail",
+        "generic_model_with_actionable_construction_or_tailoring",
+        "inputs_and_assumptions",
+        "implementation_needs_and_footprint",
+        "bounded_artifact_reuse_and_tailoring",
+        "bounded_method_reuse_and_adaptation",
+        "bounded_workflow_reuse_and_adaptation",
+        "evidence_support_for_characterizations"
+      ],
+      "additionalProperties": false
+    },
     "overlapAndNeedAssessment": {
       "type": "object",
       "properties": {
@@ -1248,8 +1402,12 @@
         "mbse_definition_overlap": {
           "$ref": "#/$defs/mbseDefinitionOverlapAssessment"
         },
+        "rq1_element_coverage": {
+          "$ref": "#/$defs/rq1ElementAssessments"
+        },
         "rq1_coverage": {
-          "$ref": "#/$defs/rqCoverageAssessment"
+          "$ref": "#/$defs/rqCoverageAssessment",
+          "description": "Overall RQ1 coverage derived narratively from rq1_element_coverage. Do not calculate an aggregate score."
         },
         "rq2_coverage": {
           "$ref": "#/$defs/rqCoverageAssessment"
@@ -1268,6 +1426,7 @@
         "population_overlap",
         "eps_overlap",
         "mbse_definition_overlap",
+        "rq1_element_coverage",
         "rq1_coverage",
         "rq2_coverage",
         "rq3_coverage",
@@ -1416,6 +1575,9 @@
     "priorReviewExtraction": {
       "type": "object",
       "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
         "identity": {
           "$ref": "#/$defs/identity"
         },
@@ -1442,6 +1604,7 @@
         }
       },
       "required": [
+        "schema_version",
         "identity",
         "scope_and_currency",
         "review_methods",

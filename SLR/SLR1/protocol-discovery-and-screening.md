@@ -66,7 +66,7 @@ Every term below is an ordinary token or ordered phrase. Compound definitions us
 
 The `M_B` context clauses limit noise from standalone mission and product markers. `B1` independently retrieves records that contain `P` and `M_H`.
 
-`G_model`, `G_structure`, C1, and `T_precise` are recall concepts, not eligibility tests or evidence of reuse. An `architecture` occurrence inside an artifact phrase cannot also satisfy an independent R tag through the same text span.
+`G_model`, `G_structure`, C1, and `T_precise` are recall concepts, not eligibility tests or evidence of reuse. `T_precise` contains metadata level retrieval cues for the broader tailoring and adaptation construct. During full text extraction, code the specific source identifiable operations using the tailoring operation taxonomy, whether or not those operations appeared in the searched metadata. An `architecture` occurrence inside an artifact phrase cannot also satisfy an independent R tag through the same text span.
 
 #### Direct query schedule
 

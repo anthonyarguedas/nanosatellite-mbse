@@ -60,7 +60,7 @@ Do not use another database, website search, backward citation search, forward c
 
 Reuse the main search blocks named above exactly. Add these two blocks for this supporting search:
 
-- **Broad space context (`X`):** all terms in the main Population block `P`, plus `spacecraft`, `space system`, `space systems`, `space mission`, `space missions`, `space engineering`, `space systems engineering`, `space application`, `space applications`, `space sector`, `space industry`, `satellite`, and `satellites`.. These broader terms are discovery terms only. They do not change the main review's nanosatellite population definition.
+- **Broad space context (`X`):** all terms in the main Population block `P`, plus `spacecraft`, `space system`, `space systems`, `space mission`, `space missions`, `space engineering`, `space systems engineering`, `space application`, `space applications`, `space sector`, `space industry`, `satellite`, and `satellites`. These broader terms are discovery terms only. They do not change the main review's nanosatellite population definition.
 - **Secondary-review signal (`Q`):** `systematic review`, `systematic literature review`, `systematic mapping`, `systematic mapping study`, `mapping study`, `scoping review`, `literature review`, `literature survey`, `bibliometric review`, `bibliometric analysis`, `evidence synthesis`, `secondary study`, `state-of-the-art review`, `state of the art review`, `survey paper`, and `survey`. The broad `survey` term protects recall for engineering review papers; an empirical questionnaire survey remains ineligible.
 
 Source-native translations may change syntax, phrase delimiters, field wrappers, and validated wildcard use, but not the intended terms or Boolean relationships. Search title, abstract, and author-keyword or equivalent topic fields. Do not require a review document-type tag because conference reviews, mapping studies, and bibliometric studies may be classified differently by the databases.
@@ -130,6 +130,8 @@ The sole LLM reviewer makes every final screening decision. Use one focused huma
 
 ## Extraction form
 
+The expanded RQ1 coding changes extraction only. Retain the completed search, deduplication, and screening records. Re-extract every included prior review from the source with this revised form, then repeat deterministic validation and the focused audit.
+
 Create one compact extraction for each included prior-review report. Do not use the primary-evidence extraction form. The canonical property names, types, cardinalities, evidence encoding, and controlled-value definitions are in the [prior-review extraction schema](protocol-prior-secondary-reviews.schema.json). Start each extraction from the [prior-review extraction template](protocol-prior-secondary-reviews.template.json). Replace every angle bracket placeholder and the exemplar `psr-candidate-0024` ID. Set `screening_record_id` to the report's `candidate_id` in [the deduplicated candidate set](psr-candidates.json). Review every illustrative controlled value, date, and count. Add, remove, or replace repeatable rows as the evidence requires. Use an allowed evidence-status object in place of an array only when the schema permits it. Record:
 
 ### Identity and provenance
@@ -148,7 +150,13 @@ Keep the full citation, DOI, other stable identifiers, report version, discovery
 - stated objective and research questions;
 - populations, systems, mission classes, and application domains;
 - whether space systems, SmallSats, CubeSats, nanosatellites, and EPS are included and whether their findings are separable;
-- MBSE, structured-model, language, tool, artifact, lifecycle, outcome, burden, reuse, and V&V scope;
+- MBSE, structured model, modeling language, tool, artifact, and lifecycle scope;
+- model generation methods, including origins, construction sources, steps, inputs, outputs, decisions, checks, and generic model derivation;
+- engineering workflows, including boundaries, activities, handoffs, linked methods and artifacts, roles, tools, governance, and checks;
+- procedural reporting detail and supporting materials for model construction, workflows, and tailoring;
+- whether generic or reference models are linked to actionable construction or tailoring procedures, worked tailoring examples, and post-tailoring assurance;
+- artifact reuse and tailoring, method reuse and adaptation, and workflow reuse and adaptation, including applicability, stable cores, variation points, rules or steps, applications, assurance, independence, and reported levels;
+- outcome, burden, and V&V scope;
 - review search dates and evidence-window start and end;
 - number of records, included reports, and underlying studies as reported, keeping their labels and denominators distinct; and
 - author-stated limitations and update status.
@@ -168,13 +176,18 @@ Keep the full citation, DOI, other stable identifiers, report version, discovery
 
 ### Findings needed only for overlap
 
-- which main-review RQ1, RQ2, and RQ3 PICOC outcomes the review explicitly sought or reported;
+- for RQ1, what the review explicitly sought and reported for EPS representation and use, generic or reference model construction, model generation methods, engineering workflows, procedural reporting detail, generic models linked to actionable construction or tailoring, inputs and assumptions, implementation needs and footprint, bounded artifact reuse and tailoring, bounded method reuse and adaptation, bounded workflow reuse and adaptation, and evidence supporting the characterizations;
+- which main-review RQ2 and RQ3 PICOC outcomes the review explicitly sought or reported;
 - whether nanosatellite-EPS evidence was directly extractable, only embedded in broader counts, mentioned without separable results, or absent;
 - whether the review used an MBSE and EPS relationship at least as specific as the main review's definitions;
 - findings or author conclusions needed solely to understand claimed coverage, without treating them as primary evidence; and
 - author-identified and reviewer-identified gaps relevant to the need for the main review, kept separate.
 
-Do not extract every included primary report, recompute the prior review's synthesis, or use its report count as a main-review denominator.
+For every RQ1 element, code `explicitly_sought` separately from `reported`. Use an allowed evidence-status object when the prior review does not seek or report the element. Apply the main review's definitions. Treat model generation methods, engineering workflows, and tailoring procedures as subjects covered by the prior review. Record the methods used to conduct the secondary review under `review_methods`. Generic or reference model construction concerns engineering models. Record construction of the prior review's taxonomy under its synthesis method.
+
+Code an RQ element as `partial` or `substantial` only when extractable results connect that element to the main nanosatellite-EPS population and qualifying MBSE relationship. Broad space, general MBSE, separate nanosatellite and EPS mentions, or nonseparable evidence can provide `adjacent` coverage at most. Explain the overall RQ1 judgment from the element judgments without calculating a score.
+
+Do not extract every included primary report, recompute the prior review's synthesis, or use its report count as a main review denominator.
 
 ## CRD and DARE assessment
 
@@ -207,7 +220,8 @@ For each included review, create an overlap matrix containing:
 - **population overlap:** `broad_space_only`, `smallsat_in_scope`, `cubesat_or_nanosatellite_in_scope`, `separable_nanosatellite_evidence`, or `none`;
 - **EPS overlap:** `direct_and_separable`, `embedded_but_separable`, `mentioned_not_separable`, `absent`, or `unclear`;
 - **MBSE-definition overlap:** `at_least_as_specific`, `broader_than_main_review`, `adjacent_only`, or `unclear`;
-- **RQ1, RQ2, and RQ3 coverage:** independently code `substantial`, `partial`, `adjacent`, `none`, or `unclear`, with reasons;
+- **RQ1 element coverage:** independently code each required RQ1 element as `substantial`, `partial`, `adjacent`, `none`, or `unclear`, with a reason;
+- **overall RQ1, RQ2, and RQ3 coverage:** independently code `substantial`, `partial`, `adjacent`, `none`, or `unclear`, with reasons. Derive overall RQ1 from the element assessments and explain any difference from them;
 - **currency:** last search date, evidence-window end, and the unsearched interval to the common cutoff; and
 - **methodological and reporting limitations relevant to relying on that review.**
 
@@ -220,7 +234,7 @@ Then assign one supporting-search disposition, with a narrative justification ra
 - `potential_redundancy_requires_protocol_reconsideration`; or
 - `insufficient_information_to_decide`.
 
-A prior review is potentially redundant only when its actual methods and extractable results substantially cover the main nanosatellite population, direct EPS–MBSE relationship, and all three current research questions with adequate currency. A broad space-MBSE review, a shared keyword, or a high DARE profile alone is not enough. Conversely, poor reporting alone does not prove that no overlap exists; preserve uncertainty.
+A prior review is potentially redundant only when its actual methods and extractable results substantially cover the main nanosatellite population, direct EPS–MBSE relationship, and all three current research questions with adequate currency. Its RQ1 coverage must leave no material gap in generic or reference model construction, model generation methods, engineering workflows, procedural detail, links between generic models and actionable construction or tailoring, or bounded artifact, method, and workflow reuse and tailoring. A broad space-MBSE review, a shared keyword, or a high DARE profile alone is not enough. Conversely, poor reporting alone does not prove that no overlap exists; preserve uncertainty.
 
 The final need statement must distinguish:
 
@@ -239,7 +253,9 @@ The focused audit must check:
 - full-text inclusion.
 - each DARE answer.
 - nanosatellite and EPS separability.
-- RQ1–RQ3 coverage.
+- every RQ1 element assessment and overall RQ1 coverage.
+- RQ2 and RQ3 coverage.
+- the recorded schema version.
 - the unsearched interval to the main cutoff.
 - the final supporting-search disposition.
 - evidence locations and missing source support.
@@ -251,7 +267,8 @@ Report this supporting process separately from the main review. At minimum repor
 - common evidence cutoff and absence of a lower date limit;
 - source-reported, retrieved, deduplicated, screened, full-text, included, excluded, and not-retrieved counts;
 - one main reason for each full-text exclusion;
-- each included review's CRD/DARE and overlap assessment;
+- each included review's CRD/DARE, RQ1 element, and overall overlap assessment;
+- the retained screening records, full extraction rerun, and schema version;
 - verification actually performed;
 - the final disposition and its effect on the main protocol; and
 - limitations arising from using only Scopus and Web of Science, English full text, and no supplementary discovery.
