@@ -32,4 +32,8 @@ Use the concepts, compound definitions, and nine partitions in [the discovery pr
 
 ## Execution
 
-Run each direct partition as one complete expression. Record the exact accepted family map in the event plan. Reject spelling variants, form variants, hierarchy expansion, focus, and major topic controls. Keep this event separate from PQDT Global. See [the readiness audit](../readiness-audit.md) for the accepted map evidence and result bound.
+Run each direct partition as one complete expression. Record the exact accepted family map in the event plan. Reject spelling variants, form variants, hierarchy expansion, focus, and major topic controls. Keep this event separate from PQDT Global.
+
+Require the full source abstract from each record's normal Abstract/Details page. A result snippet is not an abstract. Require a nonempty source `documentType` for every returned record. Preserve this source value as publication type metadata and defer reviewer `publication_type` coding to screening.
+
+See [the readiness audit](../readiness-audit.md) for the accepted map evidence and result bound.
