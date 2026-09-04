@@ -7,6 +7,10 @@ Export method: `~/agent-tools/internet/skills/browser/scripts/search_pqdt.py`
 
 Save final JSON files in `final-searches/` by query ID. Every CLI event automatically saves sibling `.search-page.png` and `.results-page.png` files. No option disables them. A successful event requires both images and their receipt in the JSON.
 
+## Record capture
+
+Each retained row must save the complete rendered Abstract/Details text in `abstract`, with `abstract_source`, `abstract_detail_verified`, `abstract_is_truncated`, and `abstract_not_available` states. A source that renders no abstract must remain explicit. Each row must also save the visible source-native type in `sourcePublicationType` and `documentType`, with source and availability fields. These are source metadata. Do not infer the reviewer `publication_type` screening code.
+
 ## Fixed source configuration
 
 - Source or collection: ProQuest Dissertations & Theses Global
