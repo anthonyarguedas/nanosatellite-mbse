@@ -17,7 +17,9 @@
               "type": "string",
               "enum": [
                 "artifact",
-                "artifact_and_method"
+                "artifact_and_method",
+                "artifact_and_workflow",
+                "artifact_method_and_workflow"
               ]
             }
           },
@@ -150,23 +152,166 @@
       ],
       "additionalProperties": false
     },
+    "crossTailoringOperationTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/tailoringOperationTypeCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossTailoringOperationTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossTailoringOperationTypesValue"
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "crossApplicationOperation": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossCodedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "application_operation_id": {
+              "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+            },
+            "linked_report_application_operation_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "sequence_label": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "predecessor_application_operation_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "linked_variation_point_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "linked_tailoring_rule_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "linked_tailoring_step_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "operation_types": {
+              "$ref": "#/$defs/crossTailoringOperationTypes"
+            },
+            "target": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "before_state": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "after_state": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "reason": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "inputs_and_assumptions": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowStringArray"
+            },
+            "responsible_role": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "tools_and_automation": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowStringArray"
+            },
+            "operation_check_and_result": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            }
+          },
+          "required": [
+            "application_operation_id",
+            "linked_report_application_operation_ids",
+            "sequence_label",
+            "predecessor_application_operation_ids",
+            "linked_variation_point_ids",
+            "linked_tailoring_rule_ids",
+            "linked_tailoring_step_ids",
+            "operation_types",
+            "target",
+            "before_state",
+            "after_state",
+            "reason",
+            "inputs_and_assumptions",
+            "responsible_role",
+            "tools_and_automation",
+            "operation_check_and_result"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossApplicationOperations": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/crossApplicationOperation"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
     "crossTailoringOrAdaptation": {
       "type": "object",
       "properties": {
-        "base_artifact_or_method_and_version": {
+        "base_artifact_method_or_workflow_and_version": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
         },
-        "retained_artifact_core_or_method_steps_and_rules": {
+        "retained_artifact_core_method_steps_or_workflow_activities": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
         },
-        "configured_or_changed_artifact_content_or_method_steps": {
+        "configured_or_changed_artifact_content_method_steps_or_workflow_activities": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
         },
-        "variation_points_used": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        "linked_variation_point_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
         },
-        "tailoring_or_adaptation_operations": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        "linked_tailoring_rule_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "linked_tailoring_step_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "executed_operations": {
+          "$ref": "#/$defs/crossApplicationOperations"
         },
         "before_and_after_trace": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
@@ -187,11 +332,13 @@
         }
       },
       "required": [
-        "base_artifact_or_method_and_version",
-        "retained_artifact_core_or_method_steps_and_rules",
-        "configured_or_changed_artifact_content_or_method_steps",
-        "variation_points_used",
-        "tailoring_or_adaptation_operations",
+        "base_artifact_method_or_workflow_and_version",
+        "retained_artifact_core_method_steps_or_workflow_activities",
+        "configured_or_changed_artifact_content_method_steps_or_workflow_activities",
+        "linked_variation_point_ids",
+        "linked_tailoring_rule_ids",
+        "linked_tailoring_step_ids",
+        "executed_operations",
         "before_and_after_trace",
         "reasons_for_changes_or_unchanged_use",
         "tailoring_or_adaptation_inputs_and_assumptions",
@@ -316,6 +463,9 @@
             "linked_model_generation_method_ids": {
               "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
             },
+            "linked_workflow_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
             "linked_report_ids": {
               "type": "array",
               "items": {
@@ -359,6 +509,7 @@
             "linked_report_application_ids",
             "application_object",
             "linked_model_generation_method_ids",
+            "linked_workflow_ids",
             "linked_report_ids",
             "linked_family_ids",
             "linked_eps_case_ids",
@@ -375,7 +526,10 @@
                 "type": "object",
                 "properties": {
                   "value": {
-                    "const": "artifact_and_method"
+                    "enum": [
+                      "artifact_and_method",
+                      "artifact_method_and_workflow"
+                    ]
                   }
                 },
                 "required": [
@@ -390,6 +544,37 @@
           "then": {
             "properties": {
               "linked_model_generation_method_ids": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "application_object": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "enum": [
+                      "artifact_and_workflow",
+                      "artifact_method_and_workflow"
+                    ]
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "application_object"
+            ]
+          },
+          "then": {
+            "properties": {
+              "linked_workflow_ids": {
                 "type": "array",
                 "minItems": 1
               }

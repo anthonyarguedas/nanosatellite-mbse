@@ -40,6 +40,29 @@ LINEAGE_SENTINELS = {
     "not_applicable",
     "unresolved_after_review",
 }
+ARTIFACT_APPLICATION_OBJECTS = {
+    "artifact",
+    "artifact_and_method",
+    "artifact_and_workflow",
+    "artifact_method_and_workflow",
+}
+METHOD_APPLICATION_OBJECTS = {
+    "method",
+    "artifact_and_method",
+    "method_and_workflow",
+    "artifact_method_and_workflow",
+}
+WORKFLOW_APPLICATION_OBJECTS = {
+    "workflow",
+    "artifact_and_workflow",
+    "method_and_workflow",
+    "artifact_method_and_workflow",
+}
+NON_ARTIFACT_APPLICATION_OBJECTS = {
+    "method",
+    "workflow",
+    "method_and_workflow",
+}
 PAGE_MARKER = re.compile(r"<!--\s*PDF_PAGE:\s*([1-9][0-9]*)\s*-->")
 SCREENING_SCHEMA = "slr1-screening-candidates/v2"
 SCREENING_ID_PREFIXES = {
@@ -108,6 +131,29 @@ def has_ordinary_value(value: Any) -> bool:
     return isinstance(value, Mapping) and "value" in value
 
 
+def application_object_for(
+    has_artifact: bool,
+    has_method: bool,
+    has_workflow: bool,
+    fallback: Any = None,
+) -> Any:
+    if has_artifact and has_method and has_workflow:
+        return "artifact_method_and_workflow"
+    if has_artifact and has_method:
+        return "artifact_and_method"
+    if has_artifact and has_workflow:
+        return "artifact_and_workflow"
+    if has_artifact:
+        return "artifact"
+    if has_method and has_workflow:
+        return "method_and_workflow"
+    if has_method:
+        return "method"
+    if has_workflow:
+        return "workflow"
+    return fallback
+
+
 def has_resolved_evidence(value: Any) -> bool:
     if has_ordinary_value(value):
         return True
@@ -121,6 +167,10 @@ def has_resolved_dimension(value: Any) -> bool:
         "none",
         "not_applicable",
     }
+
+
+def has_resolved_component(value: Any) -> bool:
+    return has_resolved_dimension(value)
 
 
 def has_recorded_content(value: Any) -> bool:
@@ -396,15 +446,61 @@ def index_report(
     mbse = data.get("mbse_approach", {})
     if isinstance(mbse, Mapping):
         for index, row in enumerate(rows(mbse.get("model_generation_methods"))):
+            method_pointer = f"/mbse_approach/model_generation_methods/{index}"
             register(
                 indexes,
                 "model_generation_method",
                 row.get("model_generation_method_id"),
                 document,
-                f"/mbse_approach/model_generation_methods/{index}/model_generation_method_id",
+                f"{method_pointer}/model_generation_method_id",
                 row,
                 issues,
             )
+            for source_index, source in enumerate(rows(row.get("construction_sources"))):
+                register(
+                    indexes,
+                    "construction_source",
+                    source.get("construction_source_id"),
+                    document,
+                    f"{method_pointer}/construction_sources/{source_index}/"
+                    "construction_source_id",
+                    source,
+                    issues,
+                )
+            for step_index, step in enumerate(rows(row.get("method_steps"))):
+                register(
+                    indexes,
+                    "method_step",
+                    step.get("method_step_id"),
+                    document,
+                    f"{method_pointer}/method_steps/{step_index}/method_step_id",
+                    step,
+                    issues,
+                )
+        for index, row in enumerate(rows(mbse.get("workflows"))):
+            workflow_pointer = f"/mbse_approach/workflows/{index}"
+            register(
+                indexes,
+                "workflow",
+                row.get("workflow_id"),
+                document,
+                f"{workflow_pointer}/workflow_id",
+                row,
+                issues,
+            )
+            for activity_index, activity in enumerate(
+                rows(row.get("workflow_activities"))
+            ):
+                register(
+                    indexes,
+                    "workflow_activity",
+                    activity.get("workflow_activity_id"),
+                    document,
+                    f"{workflow_pointer}/workflow_activities/{activity_index}/"
+                    "workflow_activity_id",
+                    activity,
+                    issues,
+                )
         for index, row in enumerate(rows(mbse.get("model_artifacts"))):
             register(
                 indexes,
@@ -543,18 +639,56 @@ def index_report(
                     relationship,
                     issues,
                 )
+            design = record.get("reuse_design", {})
+            if isinstance(design, Mapping):
+                for table_name, id_name, id_kind in (
+                    ("variation_points", "variation_point_id", "variation_point"),
+                    ("tailoring_rules", "tailoring_rule_id", "tailoring_rule"),
+                    (
+                        "tailoring_procedure_steps",
+                        "tailoring_step_id",
+                        "tailoring_step",
+                    ),
+                ):
+                    for row_index, design_row in enumerate(rows(design.get(table_name))):
+                        register(
+                            indexes,
+                            id_kind,
+                            design_row.get(id_name),
+                            document,
+                            f"{record_pointer}/reuse_design/{table_name}/"
+                            f"{row_index}/{id_name}",
+                            design_row,
+                            issues,
+                        )
         for application_index, application in enumerate(
             rows(reuse.get("report_applications"))
         ):
+            application_pointer = f"/reuse/report_applications/{application_index}"
             register(
                 indexes,
                 "report_application",
                 application.get("report_application_id"),
                 document,
-                f"/reuse/report_applications/{application_index}/report_application_id",
+                f"{application_pointer}/report_application_id",
                 application,
                 issues,
             )
+            tailoring = application.get("tailoring_or_adaptation", {})
+            if isinstance(tailoring, Mapping):
+                for operation_index, operation in enumerate(
+                    rows(tailoring.get("executed_operations"))
+                ):
+                    register(
+                        indexes,
+                        "application_operation",
+                        operation.get("application_operation_id"),
+                        document,
+                        f"{application_pointer}/tailoring_or_adaptation/"
+                        f"executed_operations/{operation_index}/application_operation_id",
+                        operation,
+                        issues,
+                    )
 
 
 def build_indexes(
@@ -564,6 +698,10 @@ def build_indexes(
         "report",
         "citation",
         "model_generation_method",
+        "construction_source",
+        "method_step",
+        "workflow",
+        "workflow_activity",
         "model_artifact",
         "eps_case",
         "eps_exchange",
@@ -581,6 +719,10 @@ def build_indexes(
         "rq2_finding",
         "rq3_activity",
         "artifact_relationship",
+        "variation_point",
+        "tailoring_rule",
+        "tailoring_step",
+        "application_operation",
         "report_reuse_record",
         "report_application",
         "family",
@@ -625,6 +767,27 @@ def build_indexes(
                     row,
                     issues,
                 )
+            design = document.data.get("reuse_design", {})
+            if isinstance(design, Mapping):
+                for table_name, id_name, id_kind in (
+                    ("variation_points", "variation_point_id", "variation_point"),
+                    ("tailoring_rules", "tailoring_rule_id", "tailoring_rule"),
+                    (
+                        "tailoring_procedure_steps",
+                        "tailoring_step_id",
+                        "tailoring_step",
+                    ),
+                ):
+                    for row_index, row in enumerate(rows(design.get(table_name))):
+                        register(
+                            indexes,
+                            id_kind,
+                            row.get(id_name),
+                            document,
+                            f"/reuse_design/{table_name}/{row_index}/{id_name}",
+                            row,
+                            issues,
+                        )
         elif document.kind == "tailoring_application":
             register(
                 indexes,
@@ -635,6 +798,21 @@ def build_indexes(
                 document.data,
                 issues,
             )
+            tailoring = document.data.get("tailoring_or_adaptation", {})
+            if isinstance(tailoring, Mapping):
+                for operation_index, operation in enumerate(
+                    rows(tailoring.get("executed_operations"))
+                ):
+                    register(
+                        indexes,
+                        "application_operation",
+                        operation.get("application_operation_id"),
+                        document,
+                        "/tailoring_or_adaptation/executed_operations/"
+                        f"{operation_index}/application_operation_id",
+                        operation,
+                        issues,
+                    )
         elif document.kind == "audit":
             register(
                 indexes,
@@ -696,6 +874,135 @@ def check_field_references(
             )
 
 
+def reuse_design_reference_issues(
+    document: Document,
+    base: str,
+    design: Mapping[str, Any],
+    indexes: Mapping[str, Mapping[str, Location]],
+) -> list[Issue]:
+    issues: list[Issue] = []
+    for index, variation in enumerate(rows(design.get("variation_points"))):
+        check_field_references(
+            document,
+            f"{base}/variation_points/{index}",
+            variation,
+            (
+                ("linked_report_variation_point_ids", "variation_point"),
+                ("linked_model_artifact_ids", "model_artifact"),
+                ("linked_model_generation_method_ids", "model_generation_method"),
+                ("linked_workflow_ids", "workflow"),
+            ),
+            indexes,
+            issues,
+        )
+    for index, rule in enumerate(rows(design.get("tailoring_rules"))):
+        check_field_references(
+            document,
+            f"{base}/tailoring_rules/{index}",
+            rule,
+            (
+                ("linked_report_tailoring_rule_ids", "tailoring_rule"),
+                ("linked_variation_point_ids", "variation_point"),
+            ),
+            indexes,
+            issues,
+        )
+    steps = rows(design.get("tailoring_procedure_steps"))
+    local_step_ids = {
+        step.get("tailoring_step_id")
+        for step in steps
+        if isinstance(step.get("tailoring_step_id"), str)
+    }
+    for index, step in enumerate(steps):
+        step_base = f"{base}/tailoring_procedure_steps/{index}"
+        check_field_references(
+            document,
+            step_base,
+            step,
+            (
+                ("linked_report_tailoring_step_ids", "tailoring_step"),
+                ("linked_variation_point_ids", "variation_point"),
+                ("linked_tailoring_rule_ids", "tailoring_rule"),
+            ),
+            indexes,
+            issues,
+        )
+        predecessors = step.get("predecessor_tailoring_step_ids")
+        if isinstance(predecessors, list):
+            for predecessor_index, identifier in enumerate(predecessors):
+                if identifier not in local_step_ids:
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"{step_base}/predecessor_tailoring_step_ids/"
+                            f"{predecessor_index}",
+                            f"tailoring step ID {identifier!r} is not in the same "
+                            "reuse design",
+                        )
+                    )
+    return issues
+
+
+def tailoring_adaptation_reference_issues(
+    document: Document,
+    base: str,
+    tailoring: Mapping[str, Any],
+    indexes: Mapping[str, Mapping[str, Location]],
+) -> list[Issue]:
+    issues: list[Issue] = []
+    check_field_references(
+        document,
+        base,
+        tailoring,
+        (
+            ("linked_variation_point_ids", "variation_point"),
+            ("linked_tailoring_rule_ids", "tailoring_rule"),
+            ("linked_tailoring_step_ids", "tailoring_step"),
+            ("linked_implementation_record_ids", "implementation_record"),
+        ),
+        indexes,
+        issues,
+    )
+    operations = rows(tailoring.get("executed_operations"))
+    local_operation_ids = {
+        operation.get("application_operation_id")
+        for operation in operations
+        if isinstance(operation.get("application_operation_id"), str)
+    }
+    for index, operation in enumerate(operations):
+        operation_base = f"{base}/executed_operations/{index}"
+        check_field_references(
+            document,
+            operation_base,
+            operation,
+            (
+                (
+                    "linked_report_application_operation_ids",
+                    "application_operation",
+                ),
+                ("linked_variation_point_ids", "variation_point"),
+                ("linked_tailoring_rule_ids", "tailoring_rule"),
+                ("linked_tailoring_step_ids", "tailoring_step"),
+            ),
+            indexes,
+            issues,
+        )
+        predecessors = operation.get("predecessor_application_operation_ids")
+        if isinstance(predecessors, list):
+            for predecessor_index, identifier in enumerate(predecessors):
+                if identifier not in local_operation_ids:
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"{operation_base}/predecessor_application_operation_ids/"
+                            f"{predecessor_index}",
+                            f"application operation ID {identifier!r} is not in the "
+                            "same application",
+                        )
+                    )
+    return issues
+
+
 def report_reference_issues(
     document: Document,
     indexes: Mapping[str, Mapping[str, Location]],
@@ -705,14 +1012,115 @@ def report_reference_issues(
     mbse = data.get("mbse_approach", {})
     if isinstance(mbse, Mapping):
         for index, row in enumerate(rows(mbse.get("model_generation_methods"))):
+            method_base = f"/mbse_approach/model_generation_methods/{index}"
             check_field_references(
                 document,
-                f"/mbse_approach/model_generation_methods/{index}",
+                method_base,
                 row,
-                (("eps_case_ids", "eps_case"),),
+                (
+                    ("eps_case_ids", "eps_case"),
+                    ("linked_input_group_ids", "input_group"),
+                    ("linked_source_model_artifact_ids", "model_artifact"),
+                    ("linked_output_model_artifact_ids", "model_artifact"),
+                ),
                 indexes,
                 issues,
             )
+            for source_index, source in enumerate(rows(row.get("construction_sources"))):
+                check_field_references(
+                    document,
+                    f"{method_base}/construction_sources/{source_index}",
+                    source,
+                    (
+                        ("linked_input_group_ids", "input_group"),
+                        ("linked_model_artifact_ids", "model_artifact"),
+                    ),
+                    indexes,
+                    issues,
+                )
+            method_steps = rows(row.get("method_steps"))
+            local_step_ids = {
+                step.get("method_step_id")
+                for step in method_steps
+                if isinstance(step.get("method_step_id"), str)
+            }
+            for step_index, step in enumerate(method_steps):
+                step_base = f"{method_base}/method_steps/{step_index}"
+                check_field_references(
+                    document,
+                    step_base,
+                    step,
+                    (
+                        ("linked_input_group_ids", "input_group"),
+                        ("linked_model_artifact_ids", "model_artifact"),
+                    ),
+                    indexes,
+                    issues,
+                )
+                predecessors = step.get("predecessor_method_step_ids")
+                if isinstance(predecessors, list):
+                    for predecessor_index, identifier in enumerate(predecessors):
+                        if identifier not in local_step_ids:
+                            issues.append(
+                                Issue(
+                                    str(document.path),
+                                    f"{step_base}/predecessor_method_step_ids/"
+                                    f"{predecessor_index}",
+                                    f"method step ID {identifier!r} is not in the "
+                                    "same method",
+                                )
+                            )
+        for index, workflow in enumerate(rows(mbse.get("workflows"))):
+            workflow_base = f"/mbse_approach/workflows/{index}"
+            check_field_references(
+                document,
+                workflow_base,
+                workflow,
+                (
+                    ("eps_case_ids", "eps_case"),
+                    ("linked_model_generation_method_ids", "model_generation_method"),
+                    ("linked_model_artifact_ids", "model_artifact"),
+                ),
+                indexes,
+                issues,
+            )
+            activities = rows(workflow.get("workflow_activities"))
+            local_activity_ids = {
+                activity.get("workflow_activity_id")
+                for activity in activities
+                if isinstance(activity.get("workflow_activity_id"), str)
+            }
+            for activity_index, activity in enumerate(activities):
+                activity_base = (
+                    f"{workflow_base}/workflow_activities/{activity_index}"
+                )
+                check_field_references(
+                    document,
+                    activity_base,
+                    activity,
+                    (
+                        (
+                            "linked_model_generation_method_ids",
+                            "model_generation_method",
+                        ),
+                        ("linked_model_artifact_ids", "model_artifact"),
+                    ),
+                    indexes,
+                    issues,
+                )
+                predecessors = activity.get("predecessor_workflow_activity_ids")
+                if isinstance(predecessors, list):
+                    for predecessor_index, identifier in enumerate(predecessors):
+                        if identifier not in local_activity_ids:
+                            issues.append(
+                                Issue(
+                                    str(document.path),
+                                    f"{activity_base}/predecessor_workflow_activity_ids/"
+                                    f"{predecessor_index}",
+                                    f"workflow activity ID {identifier!r} is not in "
+                                    "the same workflow",
+                                )
+                            )
 
     for case_index, case in enumerate(rows(data.get("eps_cases"))):
         case_pointer = f"/eps_cases/{case_index}"
@@ -739,9 +1147,13 @@ def report_reference_issues(
 
     reuse = data.get("reuse", {})
     common_specs = {
+        "implementation_records": (
+            ("linked_workflow_ids", "workflow"),
+        ),
         "input_groups": (
             ("eps_case_id", "eps_case"),
             ("linked_model_generation_method_ids", "model_generation_method"),
+            ("linked_workflow_ids", "workflow"),
             ("linked_report_reuse_record_ids", "report_reuse_record"),
             ("linked_result_output_ids", "result_output"),
             ("linked_result_criterion_ids", "result_criterion"),
@@ -751,6 +1163,7 @@ def report_reference_issues(
         "rq1_claims": (
             ("linked_model_artifact_ids", "model_artifact"),
             ("linked_model_generation_method_ids", "model_generation_method"),
+            ("linked_workflow_ids", "workflow"),
             ("linked_eps_case_ids", "eps_case"),
             ("linked_report_reuse_record_ids", "report_reuse_record"),
             ("linked_result_set_ids", "result_set"),
@@ -762,6 +1175,7 @@ def report_reference_issues(
         "rq2_findings": (
             ("linked_model_artifact_ids", "model_artifact"),
             ("linked_model_generation_method_ids", "model_generation_method"),
+            ("linked_workflow_ids", "workflow"),
             ("linked_rq3_activity_ids", "rq3_activity"),
             ("linked_input_group_ids", "input_group"),
             ("linked_result_set_ids", "result_set"),
@@ -773,6 +1187,7 @@ def report_reference_issues(
         ),
         "rq3_activities": (
             ("model_artifact_id", "model_artifact"),
+            ("linked_workflow_ids", "workflow"),
             ("linked_result_set_ids", "result_set"),
             ("linked_result_criterion_ids", "result_criterion"),
             ("linked_result_output_ids", "result_output"),
@@ -843,10 +1258,24 @@ def report_reference_issues(
                 document,
                 base,
                 record,
-                (("linked_model_generation_method_ids", "model_generation_method"),),
+                (
+                    ("linked_model_artifact_ids", "model_artifact"),
+                    ("linked_model_generation_method_ids", "model_generation_method"),
+                    ("linked_workflow_ids", "workflow"),
+                ),
                 indexes,
                 issues,
             )
+            design = record.get("reuse_design", {})
+            if isinstance(design, Mapping):
+                issues.extend(
+                    reuse_design_reference_issues(
+                        document,
+                        f"{base}/reuse_design",
+                        design,
+                        indexes,
+                    )
+                )
             assessment = record.get("reuse_assessment", {})
             if isinstance(assessment, Mapping):
                 check_field_references(
@@ -878,6 +1307,7 @@ def report_reference_issues(
                 (
                     ("linked_report_reuse_record_ids", "report_reuse_record"),
                     ("linked_model_generation_method_ids", "model_generation_method"),
+                    ("linked_workflow_ids", "workflow"),
                 ),
                 indexes,
                 issues,
@@ -905,13 +1335,13 @@ def report_reference_issues(
                     issues,
                 )
             if isinstance(tailoring, Mapping):
-                check_field_references(
-                    document,
-                    f"{base}/tailoring_or_adaptation",
-                    tailoring,
-                    (("linked_implementation_record_ids", "implementation_record"),),
-                    indexes,
-                    issues,
+                issues.extend(
+                    tailoring_adaptation_reference_issues(
+                        document,
+                        f"{base}/tailoring_or_adaptation",
+                        tailoring,
+                        indexes,
+                    )
                 )
             if isinstance(result, Mapping):
                 check_field_references(
@@ -926,6 +1356,40 @@ def report_reference_issues(
                     indexes,
                     issues,
                 )
+
+    profile = data.get("procedural_evidence_profile", {})
+    if isinstance(profile, Mapping):
+        allowed_profile_kinds = {
+            "generic_or_reference_model_reported": {"report_reuse_record"},
+            "actionable_model_construction_procedure_reported": {
+                "model_generation_method",
+                "model_artifact",
+                "report_reuse_record",
+            },
+            "actionable_tailoring_procedure_reported": {"report_reuse_record"},
+            "worked_tailoring_example_reported": {"report_application"},
+            "post_tailoring_assurance_reported": {"report_application"},
+            "generic_model_with_actionable_construction_or_tailoring": {
+                "model_generation_method",
+                "model_artifact",
+                "report_reuse_record",
+            },
+        }
+        for field, allowed_kinds in allowed_profile_kinds.items():
+            flag = profile.get(field, {})
+            if not isinstance(flag, Mapping):
+                continue
+            for index, identifier in enumerate(flag.get("basis_ids", [])):
+                if not isinstance(identifier, str):
+                    continue
+                if not any(identifier in indexes[kind] for kind in allowed_kinds):
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"/procedural_evidence_profile/{field}/basis_ids/{index}",
+                            f"unresolved or ineligible profile basis ID {identifier!r}",
+                        )
+                    )
     return issues
 
 
@@ -957,6 +1421,16 @@ def cross_record_reference_issues(
             indexes,
             issues,
         )
+        design = data.get("reuse_design", {})
+        if isinstance(design, Mapping):
+            issues.extend(
+                reuse_design_reference_issues(
+                    document,
+                    "/reuse_design",
+                    design,
+                    indexes,
+                )
+            )
         assessment = data.get("reuse_assessment", {})
         if isinstance(assessment, Mapping):
             check_field_references(
@@ -976,6 +1450,7 @@ def cross_record_reference_issues(
                 ("lineage_id", "lineage"),
                 ("linked_report_application_ids", "report_application"),
                 ("linked_model_generation_method_ids", "model_generation_method"),
+                ("linked_workflow_ids", "workflow"),
                 ("linked_report_ids", "report"),
                 ("linked_family_ids", "family"),
                 ("linked_eps_case_ids", "eps_case"),
@@ -986,13 +1461,13 @@ def cross_record_reference_issues(
         tailoring = data.get("tailoring_or_adaptation", {})
         result = data.get("result_and_assurance", {})
         if isinstance(tailoring, Mapping):
-            check_field_references(
-                document,
-                "/tailoring_or_adaptation",
-                tailoring,
-                (("linked_implementation_record_ids", "implementation_record"),),
-                indexes,
-                issues,
+            issues.extend(
+                tailoring_adaptation_reference_issues(
+                    document,
+                    "/tailoring_or_adaptation",
+                    tailoring,
+                    indexes,
+                )
             )
         if isinstance(result, Mapping):
             check_field_references(
@@ -1191,7 +1666,7 @@ def first_pass_lineage_issues(
                     Issue(
                         str(document.path),
                         value_pointer,
-                        "method-only reuse record must use not_applicable lineage_id",
+                        "reuse record without an artifact must use not_applicable lineage_id",
                     )
                 )
         for index, application in enumerate(applications):
@@ -1237,7 +1712,35 @@ def report_application_lineage_issues(
         return issues
     for index, application in enumerate(rows(reuse.get("report_applications"))):
         application_object = coded_value(application.get("application_object"))
-        if application_object not in {"artifact", "artifact_and_method"}:
+        has_artifact = application_object in ARTIFACT_APPLICATION_OBJECTS
+        method_ids = application.get("linked_model_generation_method_ids")
+        workflow_ids = application.get("linked_workflow_ids")
+        has_method = isinstance(method_ids, list) and bool(method_ids)
+        has_workflow = isinstance(workflow_ids, list) and bool(workflow_ids)
+        expected_object = application_object_for(
+            has_artifact,
+            has_method,
+            has_workflow,
+            application_object,
+        )
+        if application_object != "unclear" and application_object != expected_object:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"/reuse/report_applications/{index}/application_object/value",
+                    "application object does not match its method and workflow links",
+                )
+            )
+        if not has_artifact:
+            if application.get("lineage_id") != "not_applicable":
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"/reuse/report_applications/{index}/lineage_id",
+                        "application without an artifact must use not_applicable "
+                        "lineage_id",
+                    )
+                )
             continue
         linked_records = linked_locations(
             application.get("linked_report_reuse_record_ids"),
@@ -1365,6 +1868,8 @@ def consolidation_issues(
             continue
         expected_report_ids: set[str] = set()
         expected_eps_case_ids: set[str] = set()
+        expected_method_ids: set[str] = set()
+        expected_workflow_ids: set[str] = set()
         for index, identifier in enumerate(linked_application_ids):
             if not isinstance(identifier, str):
                 continue
@@ -1373,7 +1878,7 @@ def consolidation_issues(
             if location is None:
                 continue
             application_object = coded_value(location.node.get("application_object"))
-            if application_object not in {"artifact", "artifact_and_method"}:
+            if application_object not in ARTIFACT_APPLICATION_OBJECTS:
                 issues.append(
                     Issue(
                         str(document.path),
@@ -1385,6 +1890,16 @@ def consolidation_issues(
             containing_report_id = report_id(location.document)
             if containing_report_id is not None:
                 expected_report_ids.add(containing_report_id)
+            method_ids = location.node.get("linked_model_generation_method_ids", [])
+            if isinstance(method_ids, list):
+                expected_method_ids.update(
+                    item for item in method_ids if isinstance(item, str)
+                )
+            workflow_ids = location.node.get("linked_workflow_ids", [])
+            if isinstance(workflow_ids, list):
+                expected_workflow_ids.update(
+                    item for item in workflow_ids if isinstance(item, str)
+                )
             setting = location.node.get("setting", {})
             if isinstance(setting, Mapping):
                 linked_eps_case_ids = setting.get("linked_eps_case_ids", [])
@@ -1417,13 +1932,51 @@ def consolidation_issues(
                     "application union",
                 )
             )
+        linked_method_ids = document.data.get("linked_model_generation_method_ids")
+        if isinstance(linked_method_ids, list) and (
+            set(linked_method_ids) != expected_method_ids
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    "/linked_model_generation_method_ids",
+                    "linked method IDs do not equal the contributing report "
+                    "application union",
+                )
+            )
+        linked_workflow_ids = document.data.get("linked_workflow_ids")
+        if isinstance(linked_workflow_ids, list) and (
+            set(linked_workflow_ids) != expected_workflow_ids
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    "/linked_workflow_ids",
+                    "linked workflow IDs do not equal the contributing report "
+                    "application union",
+                )
+            )
+        expected_object = application_object_for(
+            True,
+            bool(expected_method_ids),
+            bool(expected_workflow_ids),
+        )
+        if coded_value(document.data.get("application_object")) != expected_object:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    "/application_object/value",
+                    "application object does not match the contributing method and "
+                    "workflow links",
+                )
+            )
 
     for identifier, location in indexes["report_application"].items():
         application_object = coded_value(location.node.get("application_object"))
         lineage_id = location.node.get("lineage_id")
         count = len(memberships.get(identifier, []))
         if (
-            application_object in {"artifact", "artifact_and_method"}
+            application_object in ARTIFACT_APPLICATION_OBJECTS
             and isinstance(lineage_id, str)
             and lineage_id not in LINEAGE_SENTINELS
             and count != 1
@@ -1436,12 +1989,12 @@ def consolidation_issues(
                     f"{count} consolidated applications; exactly one is required",
                 )
             )
-        if application_object == "method" and count:
+        if application_object in NON_ARTIFACT_APPLICATION_OBJECTS and count:
             issues.append(
                 Issue(
                     str(location.document.path),
                     location.pointer,
-                    f"method-only application {identifier!r} appears in a "
+                    f"application without an artifact {identifier!r} appears in a "
                     "consolidated artifact application",
                 )
             )
@@ -1888,6 +2441,293 @@ def rq3_semantic_issues(
     return issues
 
 
+def procedure_reporting_deficiencies(
+    reporting: Mapping[str, Any],
+    structured_steps: list[dict[str, Any]],
+) -> list[str]:
+    level = coded_value(reporting.get("procedure_detail_level"))
+    deficiencies: list[str] = []
+    if isinstance(level, str) and not has_ordinary_value(
+        reporting.get("detail_level_reason")
+    ):
+        deficiencies.append("detail-level reason")
+    if level not in {"actionable_procedure", "reproduction_ready"}:
+        return deficiencies
+
+    if not structured_steps:
+        deficiencies.append("structured steps or activities")
+    for field, label, requires_ordinary in (
+        ("ordered_or_connected_steps", "ordered or connected steps", True),
+        ("material_inputs", "resolved material inputs", False),
+        ("outputs", "outputs", True),
+        ("roles_and_responsibilities", "resolved roles", False),
+        ("tools_and_settings", "resolved tools and settings", False),
+        ("decision_rules", "resolved decision rules", False),
+        ("branching_and_iteration", "resolved branching and iteration", False),
+        ("quality_or_completion_checks", "quality or completion checks", True),
+    ):
+        value = reporting.get(field)
+        complete = (
+            has_ordinary_value(value)
+            if requires_ordinary
+            else has_resolved_component(value)
+        )
+        if not complete:
+            deficiencies.append(label)
+    if level == "reproduction_ready" and not has_ordinary_value(
+        reporting.get("supporting_materials")
+    ):
+        deficiencies.append("accessible supporting materials")
+    return deficiencies
+
+
+def procedural_detail_issues(
+    documents: Iterable[Document],
+) -> list[Issue]:
+    issues: list[Issue] = []
+    for document in documents:
+        candidates: list[tuple[str, Mapping[str, Any], list[dict[str, Any]]]] = []
+        if document.kind == "report":
+            mbse = document.data.get("mbse_approach", {})
+            if isinstance(mbse, Mapping):
+                for index, method in enumerate(
+                    rows(mbse.get("model_generation_methods"))
+                ):
+                    reporting = method.get("procedure_reporting", {})
+                    if isinstance(reporting, Mapping):
+                        candidates.append(
+                            (
+                                (
+                                    f"/mbse_approach/model_generation_methods/{index}/"
+                                    "procedure_reporting/procedure_detail_level"
+                                ),
+                                reporting,
+                                rows(method.get("method_steps")),
+                            )
+                        )
+                for index, workflow in enumerate(rows(mbse.get("workflows"))):
+                    reporting = workflow.get("procedure_reporting", {})
+                    if isinstance(reporting, Mapping):
+                        candidates.append(
+                            (
+                                (
+                                    f"/mbse_approach/workflows/{index}/"
+                                    "procedure_reporting/procedure_detail_level"
+                                ),
+                                reporting,
+                                rows(workflow.get("workflow_activities")),
+                            )
+                        )
+            reuse = document.data.get("reuse", {})
+            if isinstance(reuse, Mapping):
+                for index, record in enumerate(rows(reuse.get("report_reuse_records"))):
+                    design = record.get("reuse_design", {})
+                    if not isinstance(design, Mapping):
+                        continue
+                    reporting = design.get("tailoring_procedure_reporting", {})
+                    if isinstance(reporting, Mapping):
+                        steps = rows(design.get("tailoring_procedure_steps"))
+                        if not steps:
+                            steps = rows(design.get("tailoring_rules"))
+                        candidates.append(
+                            (
+                                (
+                                    f"/reuse/report_reuse_records/{index}/reuse_design/"
+                                    "tailoring_procedure_reporting/"
+                                    "procedure_detail_level"
+                                ),
+                                reporting,
+                                steps,
+                            )
+                        )
+        elif document.kind == "lineage":
+            design = document.data.get("reuse_design", {})
+            if isinstance(design, Mapping):
+                reporting = design.get("tailoring_procedure_reporting", {})
+                if isinstance(reporting, Mapping):
+                    steps = rows(design.get("tailoring_procedure_steps"))
+                    if not steps:
+                        steps = rows(design.get("tailoring_rules"))
+                    candidates.append(
+                        (
+                            (
+                                "/reuse_design/tailoring_procedure_reporting/"
+                                "procedure_detail_level"
+                            ),
+                            reporting,
+                            steps,
+                        )
+                    )
+
+        for base, reporting, steps in candidates:
+            deficiencies = procedure_reporting_deficiencies(reporting, steps)
+            if deficiencies:
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        base,
+                        f"{coded_value(reporting.get('procedure_detail_level'))} lacks "
+                        + ", ".join(deficiencies),
+                    )
+                )
+    return issues
+
+
+def procedural_profile_issues(document: Document) -> list[Issue]:
+    if document.kind != "report":
+        return []
+    issues: list[Issue] = []
+    reuse = document.data.get("reuse", {})
+    profile = document.data.get("procedural_evidence_profile", {})
+    mbse = document.data.get("mbse_approach", {})
+    if not all(isinstance(item, Mapping) for item in (reuse, profile, mbse)):
+        return issues
+
+    records = rows(reuse.get("report_reuse_records"))
+    generic_records: list[Mapping[str, Any]] = []
+    for record in records:
+        generality = coded_value(record.get("artifact_generality"))
+        artifact_type = coded_value(record.get("artifact_type"))
+        if generality in {
+            "product_family",
+            "mission_class_reference",
+            "platform_agnostic",
+        } or artifact_type == "reference_or_template_model":
+            generic_records.append(record)
+    generic_record_ids = {
+        item.get("report_reuse_record_id")
+        for item in generic_records
+        if isinstance(item.get("report_reuse_record_id"), str)
+    }
+    generic_artifact_ids = {
+        identifier
+        for record in generic_records
+        for identifier in (
+            record.get("linked_model_artifact_ids")
+            if isinstance(record.get("linked_model_artifact_ids"), list)
+            else []
+        )
+        if isinstance(identifier, str)
+    }
+    linked_generic_method_ids = {
+        identifier
+        for record in generic_records
+        for identifier in (
+            record.get("linked_model_generation_method_ids")
+            if isinstance(record.get("linked_model_generation_method_ids"), list)
+            else []
+        )
+        if isinstance(identifier, str)
+    }
+    actionable_methods: list[Mapping[str, Any]] = []
+    for method in rows(mbse.get("model_generation_methods")):
+        reporting = method.get("procedure_reporting", {})
+        level = coded_value(reporting.get("procedure_detail_level")) if isinstance(
+            reporting, Mapping
+        ) else None
+        output_ids = method.get("linked_output_model_artifact_ids", [])
+        method_id = method.get("model_generation_method_id")
+        linked_to_generic = (
+            isinstance(method_id, str) and method_id in linked_generic_method_ids
+        ) or (
+            isinstance(output_ids, list)
+            and bool(generic_artifact_ids.intersection(output_ids))
+        )
+        if level in {"actionable_procedure", "reproduction_ready"} and linked_to_generic:
+            actionable_methods.append(method)
+
+    actionable_tailoring_records = []
+    for record in generic_records:
+        design = record.get("reuse_design", {})
+        reporting = (
+            design.get("tailoring_procedure_reporting", {})
+            if isinstance(design, Mapping)
+            else {}
+        )
+        if isinstance(reporting, Mapping) and coded_value(
+            reporting.get("procedure_detail_level")
+        ) in {"actionable_procedure", "reproduction_ready"}:
+            actionable_tailoring_records.append(record)
+
+    generic_applications: list[Mapping[str, Any]] = []
+    for application in rows(reuse.get("report_applications")):
+        linked = application.get("linked_report_reuse_record_ids", [])
+        if isinstance(linked, list) and generic_record_ids.intersection(linked):
+            generic_applications.append(application)
+    worked_applications = []
+    assured_applications = []
+    for application in generic_applications:
+        tailoring = application.get("tailoring_or_adaptation", {})
+        result = application.get("result_and_assurance", {})
+        setting = application.get("setting", {})
+        if not isinstance(tailoring, Mapping):
+            tailoring = {}
+        if not isinstance(result, Mapping):
+            result = {}
+        if not isinstance(setting, Mapping):
+            setting = {}
+        resulting_application_identified = has_ordinary_value(
+            result.get("resulting_artifact")
+        ) or has_ordinary_value(setting.get("target_model_or_configuration"))
+        if resulting_application_identified and (
+            bool(rows(tailoring.get("executed_operations")))
+            or has_ordinary_value(tailoring.get("reasons_for_changes_or_unchanged_use"))
+        ):
+            worked_applications.append(application)
+        if all(
+            has_ordinary_value(result.get(field))
+            for field in (
+                "post_tailoring_or_application_criterion",
+                "assurance_method",
+                "assurance_timing",
+                "assurance_result",
+            )
+        ):
+            assured_applications.append(application)
+
+    expected = {
+        "generic_or_reference_model_reported": bool(generic_records),
+        "actionable_model_construction_procedure_reported": bool(actionable_methods),
+        "actionable_tailoring_procedure_reported": bool(
+            actionable_tailoring_records
+        ),
+        "worked_tailoring_example_reported": bool(worked_applications),
+        "post_tailoring_assurance_reported": bool(assured_applications),
+        "generic_model_with_actionable_construction_or_tailoring": bool(
+            generic_records and (actionable_methods or actionable_tailoring_records)
+        ),
+    }
+    for field, condition in expected.items():
+        flag = profile.get(field, {})
+        value = flag.get("value") if isinstance(flag, Mapping) else None
+        basis_ids = flag.get("basis_ids") if isinstance(flag, Mapping) else None
+        if value == "yes" and not (isinstance(basis_ids, list) and basis_ids):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"/procedural_evidence_profile/{field}/basis_ids",
+                    "derived yes flag has no basis IDs",
+                )
+            )
+        if value == "yes" and not condition:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"/procedural_evidence_profile/{field}/value",
+                    "derived flag is yes without qualifying linked evidence",
+                )
+            )
+        if value == "no" and condition:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"/procedural_evidence_profile/{field}/value",
+                    "derived flag is no despite qualifying linked evidence",
+                )
+            )
+    return issues
+
+
 def reuse_specification_deficiencies(
     record: Mapping[str, Any],
 ) -> list[str]:
@@ -1916,15 +2756,17 @@ def reuse_specification_deficiencies(
 
     if not has_ordinary_value(design.get("reusable_core")):
         deficiencies.append("reusable core")
-    variation_points = design.get("variation_points")
-    tailoring_rules = design.get("tailoring_rules")
-    if not has_ordinary_value(variation_points) and not has_ordinary_value(
-        tailoring_rules
-    ):
+    variation_points = rows(design.get("variation_points"))
+    tailoring_rules = rows(design.get("tailoring_rules"))
+    tailoring_steps = rows(design.get("tailoring_procedure_steps"))
+    unchanged_use_rule = design.get("unchanged_use_rule")
+    if not variation_points and not has_ordinary_value(unchanged_use_rule):
         deficiencies.append("variation points or explicit unchanged-use rule")
-    if not has_ordinary_value(
-        design.get("tailoring_operations")
-    ) and not has_ordinary_value(tailoring_rules):
+    if (
+        not tailoring_rules
+        and not tailoring_steps
+        and not has_ordinary_value(unchanged_use_rule)
+    ):
         deficiencies.append("tailoring or adaptation process")
     if not has_resolved_dimension(design.get("required_roles_and_skills")):
         deficiencies.append("resolved required roles and skills")
@@ -1959,13 +2801,19 @@ def application_deficiencies(
     if not has_ordinary_value(setting.get("material_setting_differences")):
         deficiencies.append("material setting differences")
     if not has_ordinary_value(
-        tailoring.get("retained_artifact_core_or_method_steps_and_rules")
+        tailoring.get(
+            "retained_artifact_core_method_steps_or_workflow_activities"
+        )
     ):
-        deficiencies.append("retained core or method steps")
-    changed = tailoring.get("configured_or_changed_artifact_content_or_method_steps")
+        deficiencies.append("retained core, method steps, or workflow activities")
+    changed = tailoring.get(
+        "configured_or_changed_artifact_content_method_steps_or_workflow_activities"
+    )
     unchanged_reason = tailoring.get("reasons_for_changes_or_unchanged_use")
     if not has_ordinary_value(changed) and not has_ordinary_value(unchanged_reason):
         deficiencies.append("changed content or justified unchanged use")
+    if has_ordinary_value(changed) and not rows(tailoring.get("executed_operations")):
+        deficiencies.append("structured executed operation")
 
     if not has_ordinary_value(result.get("post_tailoring_or_application_criterion")):
         deficiencies.append("post-application criterion")
@@ -2057,6 +2905,27 @@ def reuse_level_issues(
                     continue
                 application_ids = assessment.get("linked_report_application_ids")
                 base = f"/reuse/report_reuse_records/{index}/reuse_assessment"
+                for level_field, link_field, label in (
+                    ("report_reuse_level", "linked_model_artifact_ids", "artifact"),
+                    (
+                        "method_reuse_level",
+                        "linked_model_generation_method_ids",
+                        "method",
+                    ),
+                    ("workflow_reuse_level", "linked_workflow_ids", "workflow"),
+                ):
+                    level = coded_value(assessment.get(level_field))
+                    links = record.get(link_field)
+                    if level not in {None, "NA"} and not (
+                        isinstance(links, list) and links
+                    ):
+                        issues.append(
+                            Issue(
+                                str(document.path),
+                                f"{base}/{level_field}",
+                                f"{level} has no linked {label}",
+                            )
+                        )
                 for (
                     field,
                     specified_levels,
@@ -2075,7 +2944,7 @@ def reuse_level_issues(
                             "R3_reuse_demonstrated",
                             "R4_independent_reuse_demonstrated",
                         },
-                        {"artifact", "artifact_and_method"},
+                        ARTIFACT_APPLICATION_OBJECTS,
                         "artifact",
                     ),
                     (
@@ -2089,8 +2958,22 @@ def reuse_level_issues(
                             "M3_method_reuse_demonstrated",
                             "M4_independent_method_reuse_demonstrated",
                         },
-                        {"method", "artifact_and_method"},
+                        METHOD_APPLICATION_OBJECTS,
                         "method",
+                    ),
+                    (
+                        "workflow_reuse_level",
+                        {
+                            "W2_workflow_reuse_specified",
+                            "W3_workflow_reuse_demonstrated",
+                            "W4_independent_workflow_reuse_demonstrated",
+                        },
+                        {
+                            "W3_workflow_reuse_demonstrated",
+                            "W4_independent_workflow_reuse_demonstrated",
+                        },
+                        WORKFLOW_APPLICATION_OBJECTS,
+                        "workflow",
                     ),
                 ):
                     level = coded_value(assessment.get(field))
@@ -2108,7 +2991,7 @@ def reuse_level_issues(
                                 )
                             )
                     if level in high_levels:
-                        independent = level.startswith(("R4_", "M4_"))
+                        independent = level.startswith(("R4_", "M4_", "W4_"))
                         valid, deficiencies = qualifying_application_exists(
                             application_ids,
                             indexes["report_application"],
@@ -2154,7 +3037,7 @@ def reuse_level_issues(
                 valid, deficiencies = qualifying_application_exists(
                     assessment.get("linked_tailoring_application_ids"),
                     indexes["tailoring_application"],
-                    {"artifact", "artifact_and_method"},
+                    ARTIFACT_APPLICATION_OBJECTS,
                     level == "R4_independent_reuse_demonstrated",
                 )
                 if not valid:
@@ -2415,6 +3298,7 @@ def main() -> int:
             issues.extend(reviewer_derived_script_issues(document))
             issues.extend(rq2_semantic_issues(document, indexes))
             issues.extend(rq3_semantic_issues(document, indexes))
+            issues.extend(procedural_profile_issues(document))
         else:
             issues.extend(cross_record_reference_issues(document, indexes))
         issues.extend(evidence_issues(document, indexes))
@@ -2428,6 +3312,7 @@ def main() -> int:
     issues.extend(consolidation_issues(documents, indexes))
     issues.extend(family_consistency_issues(documents, indexes))
     issues.extend(audit_coverage_issues(documents, indexes))
+    issues.extend(procedural_detail_issues(documents))
     issues.extend(reuse_level_issues(documents, indexes))
     issues.extend(
         citation_quote_issues(

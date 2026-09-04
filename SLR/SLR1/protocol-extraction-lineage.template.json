@@ -71,6 +71,17 @@
     ],
     "value": "unclear"
   },
+  "artifact_generality": {
+    "contributing_report_ids": [
+      "<report-id>"
+    ],
+    "coding_confidence": "high",
+    "provenance": "source_reported",
+    "citation_ids": [
+      "<citation-id>"
+    ],
+    "value": "unclear"
+  },
   "eps_scope": {
     "contributing_report_ids": [
       "<report-id>"
@@ -264,7 +275,52 @@
       ],
       "value": "<reusable core>"
     },
-    "variation_points": {
+    "variation_points": [
+      {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "variation_point_id": "<lineage-variation-point-id>",
+        "linked_report_variation_point_ids": [
+          "<variation-point-id>"
+        ],
+        "name_or_target": "<variation point name or target>",
+        "target_type": {
+          "contributing_report_ids": [
+            "<report-id>"
+          ],
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": "unclear"
+        },
+        "linked_model_artifact_ids": [
+          "<model-artifact-id>"
+        ],
+        "linked_model_generation_method_ids": [
+          "<model-generation-method-id>"
+        ],
+        "linked_workflow_ids": [
+          "<workflow-id>"
+        ],
+        "allowed_options_ranges_and_defaults": [
+          "<allowed option range or default>"
+        ],
+        "dependencies_and_constraints": [
+          "<variation point dependency or constraint>"
+        ],
+        "selection_trigger_or_condition": "<selection trigger or condition>",
+        "unchanged_use_allowed_and_when": "<unchanged use allowed and when>"
+      }
+    ],
+    "unchanged_use_rule": {
       "contributing_report_ids": [
         "<report-id>"
       ],
@@ -273,22 +329,7 @@
       "citation_ids": [
         "<citation-id>"
       ],
-      "value": [
-        "<variation points item>"
-      ]
-    },
-    "allowed_options_ranges_and_defaults": {
-      "contributing_report_ids": [
-        "<report-id>"
-      ],
-      "coding_confidence": "high",
-      "provenance": "source_reported",
-      "citation_ids": [
-        "<citation-id>"
-      ],
-      "value": [
-        "<allowed options ranges and defaults item>"
-      ]
+      "value": "<unchanged use rule>"
     },
     "dependencies": {
       "contributing_report_ids": [
@@ -303,32 +344,95 @@
         "<dependencies item>"
       ]
     },
-    "tailoring_rules": {
-      "contributing_report_ids": [
-        "<report-id>"
-      ],
-      "coding_confidence": "high",
-      "provenance": "source_reported",
-      "citation_ids": [
-        "<citation-id>"
-      ],
-      "value": [
-        "<tailoring rules item>"
-      ]
-    },
-    "tailoring_operations": {
-      "contributing_report_ids": [
-        "<report-id>"
-      ],
-      "coding_confidence": "high",
-      "provenance": "source_reported",
-      "citation_ids": [
-        "<citation-id>"
-      ],
-      "value": [
-        "<tailoring operations item>"
-      ]
-    },
+    "tailoring_rules": [
+      {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "tailoring_rule_id": "<lineage-tailoring-rule-id>",
+        "linked_report_tailoring_rule_ids": [
+          "<tailoring-rule-id>"
+        ],
+        "linked_variation_point_ids": [
+          "<lineage-variation-point-id>"
+        ],
+        "trigger_or_condition": "<tailoring rule trigger or condition>",
+        "operation_types": {
+          "contributing_report_ids": [
+            "<report-id>"
+          ],
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": [
+            "unclear"
+          ]
+        },
+        "required_inputs": [
+          "<tailoring rule required input>"
+        ],
+        "responsible_roles": [
+          "<tailoring rule responsible role>"
+        ],
+        "tools_and_automation": [
+          "<tailoring rule tool or automation>"
+        ],
+        "resulting_output": "<tailoring rule resulting output>",
+        "constraints_and_exceptions": [
+          "<tailoring rule constraint or exception>"
+        ],
+        "acceptance_check": "<tailoring rule acceptance check>",
+        "rationale": "<tailoring rule rationale>"
+      }
+    ],
+    "tailoring_procedure_steps": [
+      {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "tailoring_step_id": "<lineage-tailoring-step-id>",
+        "linked_report_tailoring_step_ids": [
+          "<tailoring-step-id>"
+        ],
+        "sequence_label": "<tailoring step sequence label>",
+        "predecessor_tailoring_step_ids": {
+          "status": "none"
+        },
+        "linked_variation_point_ids": [
+          "<lineage-variation-point-id>"
+        ],
+        "linked_tailoring_rule_ids": [
+          "<lineage-tailoring-rule-id>"
+        ],
+        "action": "<tailoring step action>",
+        "inputs": [
+          "<tailoring step input>"
+        ],
+        "outputs": [
+          "<tailoring step output>"
+        ],
+        "responsible_role": "<tailoring step responsible role>",
+        "tools_and_settings": [
+          "<tailoring step tool and setting>"
+        ],
+        "automation": "<tailoring step automation>",
+        "decision_rule": "<tailoring step decision rule>",
+        "quality_or_exit_check": "<tailoring step quality or exit check>",
+        "branching_or_iteration": "<tailoring step branching or iteration>"
+      }
+    ],
     "required_roles_and_skills": {
       "contributing_report_ids": [
         "<report-id>"
@@ -376,6 +480,140 @@
         "<citation-id>"
       ],
       "value": "<governance and configuration control>"
+    },
+    "tailoring_procedure_reporting": {
+      "procedure_detail_level": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "unclear"
+      },
+      "ordered_or_connected_steps": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<ordered or connected tailoring steps>"
+      },
+      "material_inputs": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring material inputs>"
+      },
+      "outputs": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring outputs>"
+      },
+      "roles_and_responsibilities": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring roles and responsibilities>"
+      },
+      "tools_and_settings": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring tools and settings>"
+      },
+      "decision_rules": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring decision rules>"
+      },
+      "branching_and_iteration": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring branching and iteration>"
+      },
+      "quality_or_completion_checks": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring quality or completion checks>"
+      },
+      "worked_example": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring worked example>"
+      },
+      "supporting_materials": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring supporting materials>"
+      },
+      "detail_level_reason": {
+        "contributing_report_ids": [
+          "<report-id>"
+        ],
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "<tailoring detail level reason>"
+      }
     }
   },
   "reuse_assessment": {

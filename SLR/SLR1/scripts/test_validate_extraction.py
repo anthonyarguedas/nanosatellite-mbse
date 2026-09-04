@@ -12,8 +12,10 @@ from validate_extraction import (
     Location,
     application_deficiencies,
     audit_coverage_issues,
+    build_indexes,
     citation_quote_issues,
     consolidation_issues,
+    cross_record_reference_issues,
     evidence_issues,
     family_consistency_issues,
     family_lead_issues,
@@ -23,7 +25,11 @@ from validate_extraction import (
     load_object,
     load_schemas,
     normalize_quote_text,
+    procedural_detail_issues,
+    procedural_profile_issues,
     report_application_lineage_issues,
+    report_reference_issues,
+    reuse_level_issues,
     reuse_specification_deficiencies,
     rq2_semantic_issues,
     rq3_semantic_issues,
@@ -47,6 +53,27 @@ class TemplateTests(unittest.TestCase):
             documents.append(Document(kind, template_path, load_object(template_path)))
 
         self.assertEqual(schema_issues(documents, schemas, registry), [])
+
+    def test_templates_have_coherent_cross_references(self) -> None:
+        documents = []
+        for kind, schema_path in SCHEMA_PATHS.items():
+            if kind == "audit":
+                continue
+            template_path = schema_path.with_name(
+                schema_path.name.replace(".schema.json", ".template.json")
+            )
+            documents.append(Document(kind, template_path, load_object(template_path)))
+        indexes, issues = build_indexes(documents)
+        for document in documents:
+            if document.kind == "report":
+                issues.extend(report_reference_issues(document, indexes))
+            else:
+                issues.extend(cross_record_reference_issues(document, indexes))
+        issues.extend(lineage_consistency_issues(documents, indexes))
+        issues.extend(consolidation_issues(documents, indexes))
+        issues.extend(reuse_level_issues(documents, indexes))
+        issues.extend(procedural_detail_issues(documents))
+        self.assertEqual(issues, [])
 
     def test_rq3_status_is_not_treated_as_an_evidence_status(self) -> None:
         report = Document(
@@ -176,10 +203,13 @@ class ReuseTests(unittest.TestCase):
                 "relationship_to_originator": value("outside_originating_organization"),
             },
             "tailoring_or_adaptation": {
-                "retained_artifact_core_or_method_steps_and_rules": value("core"),
-                "configured_or_changed_artifact_content_or_method_steps": value(
+                "retained_artifact_core_method_steps_or_workflow_activities": value(
+                    "core"
+                ),
+                "configured_or_changed_artifact_content_method_steps_or_workflow_activities": value(
                     "loads"
                 ),
+                "executed_operations": [{"application_operation_id": "operation-1"}],
                 "reasons_for_changes_or_unchanged_use": value("mission loads differ"),
             },
             "result_and_assurance": {
@@ -202,9 +232,12 @@ class ReuseTests(unittest.TestCase):
             "declared_applicability_envelope": self.envelope,
             "reuse_design": {
                 "reusable_core": value("core"),
-                "variation_points": value(["loads"]),
+                "variation_points": [{"variation_point_id": "variation-1"}],
+                "unchanged_use_rule": {"status": "not_reported"},
                 "tailoring_rules": {"status": "not_reported"},
-                "tailoring_operations": value(["configure"]),
+                "tailoring_procedure_steps": [
+                    {"tailoring_step_id": "tailoring-step-1"}
+                ],
                 "required_roles_and_skills": {"status": "none"},
                 "required_tools_and_data": {
                     "status": "not_applicable",
@@ -237,6 +270,87 @@ class ReuseTests(unittest.TestCase):
             "assurance result",
             application_deficiencies(self.application, {"artifact"}, True),
         )
+
+    def test_actionable_procedure_requires_structured_and_complete_reporting(self) -> None:
+        reporting = {
+            "procedure_detail_level": value("actionable_procedure"),
+            "ordered_or_connected_steps": value("step 1"),
+            "material_inputs": value("requirements"),
+            "outputs": {"status": "not_reported"},
+            "roles_and_responsibilities": value("modeler"),
+            "tools_and_settings": value("tool v1"),
+            "decision_rules": {"status": "none"},
+            "branching_and_iteration": {"status": "none"},
+            "quality_or_completion_checks": value("review"),
+            "detail_level_reason": value("all required components are reported"),
+        }
+        report = Document(
+            "report",
+            Path("report.json"),
+            {
+                "mbse_approach": {
+                    "model_generation_methods": [
+                        {"procedure_reporting": reporting, "method_steps": [{}]}
+                    ]
+                }
+            },
+        )
+        self.assertTrue(procedural_detail_issues([report]))
+        reporting["outputs"] = value("reference model")
+        self.assertEqual(procedural_detail_issues([report]), [])
+
+    def test_procedural_profile_checks_generic_actionable_method(self) -> None:
+        report = Document(
+            "report",
+            Path("report.json"),
+            {
+                "mbse_approach": {
+                    "model_generation_methods": [
+                        {
+                            "model_generation_method_id": "method-1",
+                            "linked_output_model_artifact_ids": ["artifact-1"],
+                            "procedure_reporting": {
+                                "procedure_detail_level": value(
+                                    "actionable_procedure"
+                                )
+                            },
+                        }
+                    ]
+                },
+                "reuse": {
+                    "report_reuse_records": [
+                        {
+                            "report_reuse_record_id": "reuse-1",
+                            "linked_model_artifact_ids": ["artifact-1"],
+                            "artifact_generality": value("mission_class_reference"),
+                        }
+                    ],
+                    "report_applications": [],
+                },
+                "procedural_evidence_profile": {
+                    "generic_or_reference_model_reported": {
+                        "value": "yes",
+                        "basis_ids": ["reuse-1"],
+                    },
+                    "actionable_model_construction_procedure_reported": {
+                        "value": "yes",
+                        "basis_ids": ["method-1", "reuse-1"],
+                    },
+                    "actionable_tailoring_procedure_reported": {"value": "no"},
+                    "worked_tailoring_example_reported": {"value": "no"},
+                    "post_tailoring_assurance_reported": {"value": "no"},
+                    "generic_model_with_actionable_construction_or_tailoring": {
+                        "value": "yes",
+                        "basis_ids": ["method-1", "reuse-1"],
+                    },
+                },
+            },
+        )
+        self.assertEqual(procedural_profile_issues(report), [])
+        report.data["procedural_evidence_profile"][
+            "actionable_model_construction_procedure_reported"
+        ]["value"] = "no"
+        self.assertTrue(procedural_profile_issues(report))
 
 
 class RqTests(unittest.TestCase):
@@ -349,6 +463,9 @@ class CrossRecordTests(unittest.TestCase):
             Path("consolidated.json"),
             {
                 "linked_report_application_ids": ["application-1"],
+                "application_object": value("artifact"),
+                "linked_model_generation_method_ids": {"status": "not_reported"},
+                "linked_workflow_ids": {"status": "not_reported"},
                 "linked_report_ids": ["report-1"],
                 "linked_eps_case_ids": ["eps-1"],
             },

@@ -9,11 +9,13 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 ### RQ1
 
 - Synthesize report context, EPS functions and elements, exchanges, dependencies, disciplinary viewpoints, boundaries, architecture, decomposition visibility, abstraction, fidelity, grouped inputs and assumptions, grouped engineering results, implementation footprint, limitations, and evaluative RQ1 claims.
-- Synthesize model generation methods separately from modeling languages. Map generation method types and their linked inputs and assumptions.
+- Synthesize model generation methods and engineering workflows separately from modeling languages. Map method origins, construction sources, generic-model derivation, ordered method steps, workflow activities, linked inputs and outputs, and procedural-detail levels.
 - Present Route A and Route B separately before combining them.
 - Compare author labels such as *lightweight* or *scalable* with the extracted footprint and inline support.
-- Present all `report_reuse_level` values as source-bounded report-level artifact results. Synthesize resolved artifact lineages, applicability envelopes, reusable cores, variation points, tailoring methods, tailoring effort, assurance, independence, failures, demonstrated coverage, and `lineage_reuse_level` from the separate lineage-level records. Use lineage and consolidated-application denominators for deduplicated artifact conclusions, and keep unresolved report-level cases visible.
+- Present all `report_reuse_level` values as source-bounded report-level artifact results. Synthesize resolved artifact lineages, artifact generality, applicability envelopes, reusable cores, structured variation points, tailoring rules and procedure steps, tailoring effort, assurance, independence, failures, demonstrated coverage, and `lineage_reuse_level` from the separate lineage-level records. Use lineage and consolidated-application denominators for deduplicated artifact conclusions, and keep unresolved report-level cases visible.
 - Present all `method_reuse_level` values from M0 through M4 as source-bounded report-level results, separately from the R0–R4 artifact progression. Synthesize method applicability envelopes, stable cores, variation points, adaptation, effort, assurance, independence, failures, and demonstrated settings. Use model generation method and report-level method application denominators and account for report-family dependence. A single report can support M4 when it contains the required independent application and assurance evidence.
+- Present all `workflow_reuse_level` values from W0 through W4 separately. Synthesize workflow boundaries, stable activities and handoffs, variation points, adaptation, effort, assurance, independence, failures, and demonstrated settings. Use workflow and report-level workflow application denominators.
+- Cross-tabulate procedural-detail levels with reuse levels without treating either as a substitute for the other. Report the procedural-evidence profile flags and identify reports that combine a generic or reference model with an actionable construction or tailoring procedure. Treat `reproduction_ready` as reported procedural readiness, not as evidence that the review reproduced the procedure.
 
 ### RQ2
 
@@ -64,7 +66,7 @@ Do not make a funnel plot or run a statistical publication-bias test. The eviden
 - the effects of language, date, population, publication-type, retrieval, and source-access limits;
 - specific access and coverage issues, geographic and institutional imbalance, embargoes, missing abstracts or metadata, uncertainty about degree status, and overlap between PQDT and OATD or other platforms;
 - reports that could not be obtained and records that were only leads;
-- missing or selectively reported generation methods, method inputs and assumptions, reuse claims, applicability limits, tailoring or adaptation effort, failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, rival explanations, pass/fail criteria, null or adverse results, and limitations;
+- missing or selectively reported generation methods, workflows, method inputs and assumptions, construction sources, generic-model derivation, procedural components, reuse claims, applicability limits, tailoring or adaptation effort, failures and burdens, outcomes and burdens, direct and surrogate measures, comparators, rival explanations, pass/fail criteria, null or adverse results, and limitations;
 - dependence caused by reports from the same study or implementation family and repeated reports of the same artifact lineage, method, or application;
 - review-process limitations documented under the [extraction-verification procedure](protocol-extraction.md#sole-reviewer-extraction-and-verification); and
 - protocol departures, search changes, and review-process limits that could affect interpretation.
@@ -79,7 +81,7 @@ Give each conclusion a narrative confidence label: `higher`, `moderate`, `lower`
 - whether measures are direct or are justified surrogates;
 - comparator adequacy and major rival explanations when the claim is comparative or causal;
 - finding-level evidence basis, support, and applicability;
-- the artifact lineage or generation method, applicable reuse level, demonstrated coverage, and tailoring or adaptation effort when relevant;
+- the artifact lineage, generation method, or workflow, applicable reuse and procedural-detail levels, demonstrated coverage, and tailoring or adaptation effort when relevant;
 - maturity, independence, or physical validation only when they bear directly on the claim;
 - consistency, including null, adverse, and failed-transfer evidence;
 - independence of report families and reuse or tailoring applications; and

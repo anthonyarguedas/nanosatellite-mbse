@@ -891,6 +891,385 @@
         }
       ]
     },
+    "methodOriginTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "named_method_adoption",
+                  "requirements_or_standards_synthesis",
+                  "literature_synthesis",
+                  "heritage_generalization",
+                  "expert_or_stakeholder_elicitation",
+                  "empirical_or_operational_derivation",
+                  "metamodel_or_ontology_driven",
+                  "manual_author_construction",
+                  "model_transformation",
+                  "reverse_engineering",
+                  "mixed",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "methodOriginTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/methodOriginTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "constructionSourceTypeCode": {
+      "type": "string",
+      "enum": [
+        "requirement",
+        "standard",
+        "literature",
+        "heritage_model_or_mission",
+        "expert_or_stakeholder_input",
+        "test_data",
+        "flight_or_operational_data",
+        "vendor_data",
+        "metamodel_or_ontology",
+        "tool_or_library",
+        "other",
+        "unclear"
+      ]
+    },
+    "constructionSourceTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/constructionSourceTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "constructionSourceType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/constructionSourceTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "constructionSource": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "construction_source_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_type": {
+              "$ref": "#/$defs/constructionSourceType"
+            },
+            "source_identification": {
+              "$ref": "#/$defs/rowString"
+            },
+            "selection_or_inclusion_basis": {
+              "$ref": "#/$defs/rowString"
+            },
+            "contribution_to_model": {
+              "$ref": "#/$defs/rowString"
+            },
+            "linked_input_group_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "construction_source_id",
+            "source_type",
+            "source_identification",
+            "selection_or_inclusion_basis",
+            "contribution_to_model",
+            "linked_input_group_ids",
+            "linked_model_artifact_ids"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "constructionSources": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constructionSource"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "procedureDetailLevelCode": {
+      "type": "string",
+      "enum": [
+        "named_only",
+        "narrative_outline",
+        "actionable_procedure",
+        "reproduction_ready",
+        "unclear"
+      ]
+    },
+    "procedureDetailLevelValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/procedureDetailLevelCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "procedureDetailLevel": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/procedureDetailLevelValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "procedureReporting": {
+      "type": "object",
+      "properties": {
+        "procedure_detail_level": {
+          "$ref": "#/$defs/procedureDetailLevel"
+        },
+        "ordered_or_connected_steps": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "material_inputs": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "outputs": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "roles_and_responsibilities": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "tools_and_settings": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "decision_rules": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "branching_and_iteration": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "quality_or_completion_checks": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "worked_example": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "supporting_materials": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "detail_level_reason": {
+          "$ref": "#/$defs/evidencedString"
+        }
+      },
+      "required": [
+        "procedure_detail_level",
+        "ordered_or_connected_steps",
+        "material_inputs",
+        "outputs",
+        "roles_and_responsibilities",
+        "tools_and_settings",
+        "decision_rules",
+        "branching_and_iteration",
+        "quality_or_completion_checks",
+        "worked_example",
+        "supporting_materials",
+        "detail_level_reason"
+      ],
+      "additionalProperties": false
+    },
+    "methodStep": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "method_step_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "sequence_label": {
+              "$ref": "#/$defs/rowString"
+            },
+            "predecessor_method_step_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "action": {
+              "$ref": "#/$defs/rowString"
+            },
+            "material_inputs": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "outputs": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "linked_input_group_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "responsible_roles": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "tools_and_settings": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "automation": {
+              "$ref": "#/$defs/rowString"
+            },
+            "decision_rules": {
+              "$ref": "#/$defs/rowString"
+            },
+            "quality_or_exit_checks": {
+              "$ref": "#/$defs/rowString"
+            },
+            "branching_iteration_or_rework": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "method_step_id",
+            "sequence_label",
+            "predecessor_method_step_ids",
+            "action",
+            "material_inputs",
+            "outputs",
+            "linked_input_group_ids",
+            "linked_model_artifact_ids",
+            "responsible_roles",
+            "tools_and_settings",
+            "automation",
+            "decision_rules",
+            "quality_or_exit_checks",
+            "branching_iteration_or_rework"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "methodSteps": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/methodStep"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "genericModelDerivation": {
+      "type": "object",
+      "properties": {
+        "generic_model_target": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "selection_and_exclusion_rules": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "synthesis_and_generalization_operations": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "abstraction_and_normalization_rules": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "conflicts_and_resolution": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "trace_from_sources_to_model_content": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "genericity_validation": {
+          "$ref": "#/$defs/evidencedString"
+        }
+      },
+      "required": [
+        "generic_model_target",
+        "selection_and_exclusion_rules",
+        "synthesis_and_generalization_operations",
+        "abstraction_and_normalization_rules",
+        "conflicts_and_resolution",
+        "trace_from_sources_to_model_content",
+        "genericity_validation"
+      ],
+      "additionalProperties": false
+    },
     "modelGenerationMethod": {
       "type": "object",
       "allOf": [
@@ -914,15 +1293,71 @@
             "source_method_name_or_description": {
               "$ref": "#/$defs/rowString"
             },
+            "method_purpose_and_scope": {
+              "$ref": "#/$defs/evidencedString"
+            },
             "generation_method_types": {
               "$ref": "#/$defs/generationMethodTypes"
+            },
+            "method_origin_types": {
+              "$ref": "#/$defs/methodOriginTypes"
+            },
+            "construction_sources": {
+              "$ref": "#/$defs/constructionSources"
+            },
+            "linked_input_group_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_source_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_output_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "entry_conditions": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "method_steps": {
+              "$ref": "#/$defs/methodSteps"
+            },
+            "branching_and_iteration": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "completion_conditions": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "generic_model_derivation": {
+              "$ref": "#/$defs/genericModelDerivation"
+            },
+            "supporting_material_location": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "supporting_material_availability": {
+              "$ref": "#/$defs/availability"
+            },
+            "procedure_reporting": {
+              "$ref": "#/$defs/procedureReporting"
             }
           },
           "required": [
             "model_generation_method_id",
             "eps_case_ids",
             "source_method_name_or_description",
-            "generation_method_types"
+            "method_purpose_and_scope",
+            "generation_method_types",
+            "method_origin_types",
+            "construction_sources",
+            "linked_input_group_ids",
+            "linked_source_model_artifact_ids",
+            "linked_output_model_artifact_ids",
+            "entry_conditions",
+            "method_steps",
+            "branching_and_iteration",
+            "completion_conditions",
+            "generic_model_derivation",
+            "supporting_material_location",
+            "supporting_material_availability",
+            "procedure_reporting"
           ]
         }
       ],
@@ -972,6 +1407,249 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/modelGenerationMethod"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "workflowScopeTypeCode": {
+      "type": "string",
+      "enum": [
+        "model_generation",
+        "model_tailoring",
+        "analysis_or_decision",
+        "verification_or_validation",
+        "lifecycle_integration",
+        "end_to_end_engineering",
+        "other",
+        "unclear"
+      ]
+    },
+    "workflowScopeTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/workflowScopeTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "workflowScopeType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/workflowScopeTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "workflowActivity": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "workflow_activity_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "sequence_label": {
+              "$ref": "#/$defs/rowString"
+            },
+            "predecessor_workflow_activity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "action": {
+              "$ref": "#/$defs/rowString"
+            },
+            "inputs": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "outputs": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "responsible_roles": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "tools_and_settings": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "automation": {
+              "$ref": "#/$defs/rowString"
+            },
+            "decision_rules": {
+              "$ref": "#/$defs/rowString"
+            },
+            "quality_or_exit_checks": {
+              "$ref": "#/$defs/rowString"
+            },
+            "branching_iteration_or_rework": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "workflow_activity_id",
+            "sequence_label",
+            "predecessor_workflow_activity_ids",
+            "action",
+            "inputs",
+            "outputs",
+            "linked_model_generation_method_ids",
+            "linked_model_artifact_ids",
+            "responsible_roles",
+            "tools_and_settings",
+            "automation",
+            "decision_rules",
+            "quality_or_exit_checks",
+            "branching_iteration_or_rework"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "workflowActivities": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workflowActivity"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "workflowRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "workflow_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "eps_case_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "source_workflow_name_and_version": {
+              "$ref": "#/$defs/rowString"
+            },
+            "workflow_scope_type": {
+              "$ref": "#/$defs/workflowScopeType"
+            },
+            "purpose_and_boundary": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "entry_conditions": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "workflow_activities": {
+              "$ref": "#/$defs/workflowActivities"
+            },
+            "branching_and_iteration": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "exit_conditions": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "handoffs_and_data_flow": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "roles_and_responsibilities": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "tools_and_versions": {
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "automation": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "governance_and_configuration_control": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "supporting_material_location": {
+              "$ref": "#/$defs/evidencedString"
+            },
+            "supporting_material_availability": {
+              "$ref": "#/$defs/availability"
+            },
+            "procedure_reporting": {
+              "$ref": "#/$defs/procedureReporting"
+            }
+          },
+          "required": [
+            "workflow_id",
+            "eps_case_ids",
+            "source_workflow_name_and_version",
+            "workflow_scope_type",
+            "purpose_and_boundary",
+            "linked_model_generation_method_ids",
+            "linked_model_artifact_ids",
+            "entry_conditions",
+            "workflow_activities",
+            "branching_and_iteration",
+            "exit_conditions",
+            "handoffs_and_data_flow",
+            "roles_and_responsibilities",
+            "tools_and_versions",
+            "automation",
+            "governance_and_configuration_control",
+            "supporting_material_location",
+            "supporting_material_availability",
+            "procedure_reporting"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "workflowRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workflowRecord"
           },
           "minItems": 1
         },
@@ -1838,7 +2516,10 @@
             "staffing_and_number_of_people": {
               "$ref": "#/$defs/evidencedString"
             },
-            "workflow": {
+            "linked_workflow_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "workflow_execution_and_deviations": {
               "$ref": "#/$defs/evidencedString"
             },
             "automation": {
@@ -1914,7 +2595,8 @@
             "roles_and_affected_teams",
             "skills_and_training",
             "staffing_and_number_of_people",
-            "workflow",
+            "linked_workflow_ids",
+            "workflow_execution_and_deviations",
             "automation",
             "tools_licences_and_infrastructure",
             "model_preparation",
@@ -2063,6 +2745,9 @@
             "linked_model_generation_method_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_workflow_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_report_reuse_record_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -2104,6 +2789,7 @@
             "eps_case_id",
             "scenario_or_configuration",
             "linked_model_generation_method_ids",
+            "linked_workflow_ids",
             "linked_report_reuse_record_ids",
             "parameters_or_constructs",
             "material_source_reported_values_or_descriptions",
@@ -3087,6 +3773,47 @@
         }
       ]
     },
+    "artifactGeneralityCode": {
+      "type": "string",
+      "enum": [
+        "single_target",
+        "product_family",
+        "mission_class_reference",
+        "platform_agnostic",
+        "mixed",
+        "unclear"
+      ]
+    },
+    "artifactGeneralityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/artifactGeneralityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "artifactGenerality": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/artifactGeneralityValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
     "claimedReuseObjectCode": {
       "type": "string",
       "enum": [
@@ -3185,6 +3912,345 @@
       ],
       "additionalProperties": false
     },
+    "variationPointTargetCode": {
+      "type": "string",
+      "enum": [
+        "artifact_content",
+        "method_step",
+        "workflow_activity",
+        "multiple",
+        "other",
+        "unclear"
+      ]
+    },
+    "variationPointTargetValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/variationPointTargetCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "variationPointTarget": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/variationPointTargetValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "variationPoint": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "variation_point_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "name_or_target": {
+              "$ref": "#/$defs/rowString"
+            },
+            "target_type": {
+              "$ref": "#/$defs/variationPointTarget"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_workflow_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "allowed_options_ranges_and_defaults": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "dependencies_and_constraints": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "selection_trigger_or_condition": {
+              "$ref": "#/$defs/rowString"
+            },
+            "unchanged_use_allowed_and_when": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "variation_point_id",
+            "name_or_target",
+            "target_type",
+            "linked_model_artifact_ids",
+            "linked_model_generation_method_ids",
+            "linked_workflow_ids",
+            "allowed_options_ranges_and_defaults",
+            "dependencies_and_constraints",
+            "selection_trigger_or_condition",
+            "unchanged_use_allowed_and_when"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "variationPoints": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variationPoint"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "tailoringOperationTypeCode": {
+      "type": "string",
+      "enum": [
+        "unchanged_use",
+        "configuration",
+        "parameterization",
+        "selection",
+        "specialization",
+        "extension",
+        "deletion",
+        "substitution",
+        "interface_mapping",
+        "transformation",
+        "generation",
+        "add_method_step",
+        "remove_method_step",
+        "reorder_method_steps",
+        "substitute_method_step",
+        "add_workflow_activity",
+        "remove_workflow_activity",
+        "reorder_workflow_activities",
+        "substitute_workflow_activity",
+        "tool_or_format_migration",
+        "other",
+        "unclear"
+      ]
+    },
+    "tailoringOperationTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/tailoringOperationTypeCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "tailoringOperationTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/tailoringOperationTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "tailoringRule": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tailoring_rule_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "linked_variation_point_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "trigger_or_condition": {
+              "$ref": "#/$defs/rowString"
+            },
+            "operation_types": {
+              "$ref": "#/$defs/tailoringOperationTypes"
+            },
+            "required_inputs": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "responsible_roles": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "tools_and_automation": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "resulting_output": {
+              "$ref": "#/$defs/rowString"
+            },
+            "constraints_and_exceptions": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "acceptance_check": {
+              "$ref": "#/$defs/rowString"
+            },
+            "rationale": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "tailoring_rule_id",
+            "linked_variation_point_ids",
+            "trigger_or_condition",
+            "operation_types",
+            "required_inputs",
+            "responsible_roles",
+            "tools_and_automation",
+            "resulting_output",
+            "constraints_and_exceptions",
+            "acceptance_check",
+            "rationale"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "tailoringRules": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tailoringRule"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "tailoringProcedureStep": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tailoring_step_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "sequence_label": {
+              "$ref": "#/$defs/rowString"
+            },
+            "predecessor_tailoring_step_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_variation_point_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tailoring_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "action": {
+              "$ref": "#/$defs/rowString"
+            },
+            "inputs": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "outputs": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "responsible_role": {
+              "$ref": "#/$defs/rowString"
+            },
+            "tools_and_settings": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "automation": {
+              "$ref": "#/$defs/rowString"
+            },
+            "decision_rule": {
+              "$ref": "#/$defs/rowString"
+            },
+            "quality_or_exit_check": {
+              "$ref": "#/$defs/rowString"
+            },
+            "branching_or_iteration": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "tailoring_step_id",
+            "sequence_label",
+            "predecessor_tailoring_step_ids",
+            "linked_variation_point_ids",
+            "linked_tailoring_rule_ids",
+            "action",
+            "inputs",
+            "outputs",
+            "responsible_role",
+            "tools_and_settings",
+            "automation",
+            "decision_rule",
+            "quality_or_exit_check",
+            "branching_or_iteration"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "tailoringProcedureSteps": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tailoringProcedureStep"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
     "reuseDesign": {
       "type": "object",
       "properties": {
@@ -3192,19 +4258,19 @@
           "$ref": "#/$defs/evidencedString"
         },
         "variation_points": {
-          "$ref": "#/$defs/evidencedStringArray"
+          "$ref": "#/$defs/variationPoints"
         },
-        "allowed_options_ranges_and_defaults": {
-          "$ref": "#/$defs/evidencedStringArray"
+        "unchanged_use_rule": {
+          "$ref": "#/$defs/evidencedString"
         },
         "dependencies": {
           "$ref": "#/$defs/evidencedStringArray"
         },
         "tailoring_rules": {
-          "$ref": "#/$defs/evidencedStringArray"
+          "$ref": "#/$defs/tailoringRules"
         },
-        "tailoring_operations": {
-          "$ref": "#/$defs/evidencedStringArray"
+        "tailoring_procedure_steps": {
+          "$ref": "#/$defs/tailoringProcedureSteps"
         },
         "required_roles_and_skills": {
           "$ref": "#/$defs/evidencedStringArray"
@@ -3217,19 +4283,23 @@
         },
         "governance_and_configuration_control": {
           "$ref": "#/$defs/evidencedString"
+        },
+        "tailoring_procedure_reporting": {
+          "$ref": "#/$defs/procedureReporting"
         }
       },
       "required": [
         "reusable_core",
         "variation_points",
-        "allowed_options_ranges_and_defaults",
+        "unchanged_use_rule",
         "dependencies",
         "tailoring_rules",
-        "tailoring_operations",
+        "tailoring_procedure_steps",
         "required_roles_and_skills",
         "required_tools_and_data",
         "automation",
-        "governance_and_configuration_control"
+        "governance_and_configuration_control",
+        "tailoring_procedure_reporting"
       ],
       "additionalProperties": false
     },
@@ -3370,6 +4440,37 @@
       ],
       "unevaluatedProperties": false
     },
+    "workflowReuseLevelCode": {
+      "type": "string",
+      "enum": [
+        "NA",
+        "W0_workflow_identified",
+        "W1_workflow_reuse_claimed",
+        "W2_workflow_reuse_specified",
+        "W3_workflow_reuse_demonstrated",
+        "W4_independent_workflow_reuse_demonstrated"
+      ]
+    },
+    "workflowReuseLevelValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/workflowReuseLevelCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
     "reuseAssessment": {
       "type": "object",
       "properties": {
@@ -3386,6 +4487,12 @@
           "$ref": "#/$defs/methodReuseLevelValue"
         },
         "method_reuse_level_reason": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "workflow_reuse_level": {
+          "$ref": "#/$defs/workflowReuseLevelValue"
+        },
+        "workflow_reuse_level_reason": {
           "$ref": "#/$defs/evidencedString"
         },
         "conflicting_evidence_within_report": {
@@ -3407,6 +4514,8 @@
         "report_reuse_level_reason",
         "method_reuse_level",
         "method_reuse_level_reason",
+        "workflow_reuse_level",
+        "workflow_reuse_level_reason",
         "conflicting_evidence_within_report",
         "evidence_basis",
         "support",
@@ -3429,7 +4538,13 @@
             "lineage_id": {
               "$ref": "#/$defs/stableId"
             },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_model_generation_method_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_workflow_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
             "artifact_names_and_versions": {
@@ -3446,6 +4561,9 @@
             },
             "artifact_type": {
               "$ref": "#/$defs/artifactType"
+            },
+            "artifact_generality": {
+              "$ref": "#/$defs/artifactGenerality"
             },
             "eps_scope": {
               "$ref": "#/$defs/evidencedString"
@@ -3478,12 +4596,15 @@
           "required": [
             "report_reuse_record_id",
             "lineage_id",
+            "linked_model_artifact_ids",
             "linked_model_generation_method_ids",
+            "linked_workflow_ids",
             "artifact_names_and_versions",
             "artifact_relationships",
             "repository_or_location",
             "owner_or_developer",
             "artifact_type",
+            "artifact_generality",
             "eps_scope",
             "availability",
             "license_category",
@@ -3517,7 +4638,11 @@
       "enum": [
         "artifact",
         "method",
+        "workflow",
         "artifact_and_method",
+        "artifact_and_workflow",
+        "method_and_workflow",
+        "artifact_method_and_workflow",
         "unclear"
       ]
     },
@@ -3670,23 +4795,119 @@
       ],
       "additionalProperties": false
     },
+    "applicationOperation": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "application_operation_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "sequence_label": {
+              "$ref": "#/$defs/rowString"
+            },
+            "predecessor_application_operation_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_variation_point_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tailoring_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tailoring_step_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "operation_types": {
+              "$ref": "#/$defs/tailoringOperationTypes"
+            },
+            "target": {
+              "$ref": "#/$defs/rowString"
+            },
+            "before_state": {
+              "$ref": "#/$defs/rowString"
+            },
+            "after_state": {
+              "$ref": "#/$defs/rowString"
+            },
+            "reason": {
+              "$ref": "#/$defs/rowString"
+            },
+            "inputs_and_assumptions": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "responsible_role": {
+              "$ref": "#/$defs/rowString"
+            },
+            "tools_and_automation": {
+              "$ref": "#/$defs/rowStringArray"
+            },
+            "operation_check_and_result": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "application_operation_id",
+            "sequence_label",
+            "predecessor_application_operation_ids",
+            "linked_variation_point_ids",
+            "linked_tailoring_rule_ids",
+            "linked_tailoring_step_ids",
+            "operation_types",
+            "target",
+            "before_state",
+            "after_state",
+            "reason",
+            "inputs_and_assumptions",
+            "responsible_role",
+            "tools_and_automation",
+            "operation_check_and_result"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "applicationOperations": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/applicationOperation"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
     "tailoringOrAdaptation": {
       "type": "object",
       "properties": {
-        "base_artifact_or_method_and_version": {
+        "base_artifact_method_or_workflow_and_version": {
           "$ref": "#/$defs/evidencedString"
         },
-        "retained_artifact_core_or_method_steps_and_rules": {
+        "retained_artifact_core_method_steps_or_workflow_activities": {
           "$ref": "#/$defs/evidencedString"
         },
-        "configured_or_changed_artifact_content_or_method_steps": {
+        "configured_or_changed_artifact_content_method_steps_or_workflow_activities": {
           "$ref": "#/$defs/evidencedString"
         },
-        "variation_points_used": {
-          "$ref": "#/$defs/evidencedStringArray"
+        "linked_variation_point_ids": {
+          "$ref": "#/$defs/rowIdArray"
         },
-        "tailoring_or_adaptation_operations": {
-          "$ref": "#/$defs/evidencedStringArray"
+        "linked_tailoring_rule_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_tailoring_step_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "executed_operations": {
+          "$ref": "#/$defs/applicationOperations"
         },
         "before_and_after_trace": {
           "$ref": "#/$defs/evidencedString"
@@ -3707,11 +4928,13 @@
         }
       },
       "required": [
-        "base_artifact_or_method_and_version",
-        "retained_artifact_core_or_method_steps_and_rules",
-        "configured_or_changed_artifact_content_or_method_steps",
-        "variation_points_used",
-        "tailoring_or_adaptation_operations",
+        "base_artifact_method_or_workflow_and_version",
+        "retained_artifact_core_method_steps_or_workflow_activities",
+        "configured_or_changed_artifact_content_method_steps_or_workflow_activities",
+        "linked_variation_point_ids",
+        "linked_tailoring_rule_ids",
+        "linked_tailoring_step_ids",
+        "executed_operations",
         "before_and_after_trace",
         "reasons_for_changes_or_unchanged_use",
         "tailoring_or_adaptation_inputs_and_assumptions",
@@ -3836,6 +5059,9 @@
             "linked_model_generation_method_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_workflow_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "setting": {
               "$ref": "#/$defs/applicationSetting"
             },
@@ -3855,6 +5081,7 @@
             "application_object",
             "lineage_id",
             "linked_model_generation_method_ids",
+            "linked_workflow_ids",
             "setting",
             "tailoring_or_adaptation",
             "result_and_assurance",
@@ -3868,7 +5095,11 @@
                 "type": "object",
                 "properties": {
                   "value": {
-                    "const": "method"
+                    "enum": [
+                      "method",
+                      "workflow",
+                      "method_and_workflow"
+                    ]
                   }
                 },
                 "required": [
@@ -3884,10 +5115,6 @@
             "properties": {
               "lineage_id": {
                 "const": "not_applicable"
-              },
-              "linked_model_generation_method_ids": {
-                "type": "array",
-                "minItems": 1
               }
             }
           }
@@ -3899,7 +5126,12 @@
                 "type": "object",
                 "properties": {
                   "value": {
-                    "const": "artifact_and_method"
+                    "enum": [
+                      "method",
+                      "artifact_and_method",
+                      "method_and_workflow",
+                      "artifact_method_and_workflow"
+                    ]
                   }
                 },
                 "required": [
@@ -3914,6 +5146,39 @@
           "then": {
             "properties": {
               "linked_model_generation_method_ids": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "application_object": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "enum": [
+                      "workflow",
+                      "artifact_and_workflow",
+                      "method_and_workflow",
+                      "artifact_method_and_workflow"
+                    ]
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "application_object"
+            ]
+          },
+          "then": {
+            "properties": {
+              "linked_workflow_ids": {
                 "type": "array",
                 "minItems": 1
               }
@@ -3983,6 +5248,68 @@
         "lineage_mention_reason",
         "report_reuse_records",
         "report_applications"
+      ],
+      "additionalProperties": false
+    },
+    "derivedProfileFlag": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "uncertain"
+          ]
+        },
+        "basis_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stableId"
+          },
+          "uniqueItems": true
+        },
+        "derivation_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "value",
+        "basis_ids",
+        "derivation_reason"
+      ],
+      "additionalProperties": false
+    },
+    "proceduralEvidenceProfile": {
+      "type": "object",
+      "properties": {
+        "generic_or_reference_model_reported": {
+          "$ref": "#/$defs/derivedProfileFlag"
+        },
+        "actionable_model_construction_procedure_reported": {
+          "$ref": "#/$defs/derivedProfileFlag"
+        },
+        "actionable_tailoring_procedure_reported": {
+          "$ref": "#/$defs/derivedProfileFlag"
+        },
+        "worked_tailoring_example_reported": {
+          "$ref": "#/$defs/derivedProfileFlag"
+        },
+        "post_tailoring_assurance_reported": {
+          "$ref": "#/$defs/derivedProfileFlag"
+        },
+        "generic_model_with_actionable_construction_or_tailoring": {
+          "$ref": "#/$defs/derivedProfileFlag"
+        }
+      },
+      "required": [
+        "generic_or_reference_model_reported",
+        "actionable_model_construction_procedure_reported",
+        "actionable_tailoring_procedure_reported",
+        "worked_tailoring_example_reported",
+        "post_tailoring_assurance_reported",
+        "generic_model_with_actionable_construction_or_tailoring"
       ],
       "additionalProperties": false
     },
@@ -4447,6 +5774,9 @@
             "linked_model_generation_method_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_workflow_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_eps_case_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -4485,6 +5815,7 @@
             "claim_scope_and_object",
             "linked_model_artifact_ids",
             "linked_model_generation_method_ids",
+            "linked_workflow_ids",
             "linked_eps_case_ids",
             "linked_report_reuse_record_ids",
             "linked_result_set_ids",
@@ -4808,6 +6139,9 @@
             "model_artifact_id": {
               "$ref": "#/$defs/rowId"
             },
+            "linked_workflow_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "explicit_model_to_vv_bridge": {
               "$ref": "#/$defs/rowString"
             },
@@ -4880,6 +6214,7 @@
             "target_type",
             "source_requirement_or_criterion_id",
             "model_artifact_id",
+            "linked_workflow_ids",
             "explicit_model_to_vv_bridge",
             "source_vv_terminology",
             "linkage_scope",
@@ -5026,6 +6361,9 @@
             "linked_model_generation_method_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_workflow_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_rq3_activity_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -5086,6 +6424,7 @@
             "mechanism",
             "linked_model_artifact_ids",
             "linked_model_generation_method_ids",
+            "linked_workflow_ids",
             "linked_rq3_activity_ids",
             "linked_input_group_ids",
             "linked_result_set_ids",
@@ -5344,6 +6683,9 @@
         "model_generation_methods": {
           "$ref": "#/$defs/modelGenerationMethods"
         },
+        "workflows": {
+          "$ref": "#/$defs/workflowRecords"
+        },
         "modeling_languages": {
           "$ref": "#/$defs/evidencedStringArray"
         },
@@ -5374,6 +6716,7 @@
         "intended_decision",
         "reason_for_using_mbse",
         "model_generation_methods",
+        "workflows",
         "modeling_languages",
         "tools_and_versions",
         "toolchain_and_data_flow",
@@ -5512,6 +6855,9 @@
         "reuse": {
           "$ref": "#/$defs/reportReuse"
         },
+        "procedural_evidence_profile": {
+          "$ref": "#/$defs/proceduralEvidenceProfile"
+        },
         "limitations": {
           "$ref": "#/$defs/limitations"
         },
@@ -5531,6 +6877,7 @@
         "rq2_findings",
         "rq3_activities",
         "reuse",
+        "procedural_evidence_profile",
         "limitations",
         "citations"
       ],

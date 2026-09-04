@@ -4,11 +4,11 @@
 
 Extraction is report-level by default. Create one extraction file for each included report. Use nested groups for EPS content, inputs, results, findings, and V&V activities. Create another EPS case section only when a report contains materially separate models, implementations, or evaluations that cannot be represented clearly together.
 
-Keep report-family resolution and cross-report artifact identity pending during the first report pass. Record concise family leads. Fully extract every model generation method, reusable artifact, reported lineage, reuse claim, and reuse or tailoring application described by each report, including report-bounded artifact and method reuse levels. Resolve families and cross-report artifact-lineage identity after all report extractions are available, then create separate lineage-level and consolidated artifact application records.
+Keep report-family resolution and cross-report artifact identity pending during the first report pass. Record concise family leads. Fully extract every model generation method, engineering workflow, reusable artifact, reported lineage, reuse claim, and reuse or tailoring application described by each report, including procedural reporting detail and report-bounded artifact, method, and workflow reuse levels. Resolve families and cross-report artifact-lineage identity after all report extractions are available, then create separate lineage-level and consolidated artifact-containing application records.
 
 Report-level records remain fixed during the cross-report pass. That pass may update only `lineage_id` from its first-pass state to a stable resolved ID or `unresolved_after_review`. It does not backfill or overwrite any other report-level field.
 
-Record each source fact once at its most detailed applicable location. Store measurements, criteria and verdicts, comparators and rival explanations in the result set that reports them. Store implementation effort and burdens in implementation records. Store reuse and tailoring evidence in report-level applications. Give each nested row a stable ID, then link later findings, activities, reuse assessments, and consolidated records to those IDs instead of copying the content. Do not create separate top-level analytic objects for individual measurements, comparators, rival explanations, appraisal domains, or claim-support judgments.
+Record each source fact once at its most detailed applicable location. Store method definitions and steps in model generation methods. Store workflow definitions and activities in workflow records. Store actual workflow execution and deviations in implementation records. Store measurements, criteria and verdicts, comparators and rival explanations in the result set that reports them. Store implementation effort and burdens in implementation records. Store reuse and tailoring evidence in report-level applications. Give each nested row a stable ID, then link later findings, activities, reuse assessments, and consolidated records to those IDs instead of copying the content. Do not create separate top-level analytic objects for individual measurements, comparators, rival explanations, appraisal domains, or claim-support judgments.
 
 ### Common field rules
 
@@ -150,7 +150,8 @@ Record:
 - problem addressed.
 - intended decision.
 - reason for using MBSE.
-- `model_generation_methods` as nested rows containing `model_generation_method_id`, linked `eps_case_id` values, the source method name or description, and `generation_method_types`, using one or more of `named_mbse_method`, `author_defined_process`, `manual_model_construction`, `reference_or_template_instantiation`, `configuration_or_parameterization`, `model_transformation`, `automated_generation`, `import_or_reverse_engineering`, `other`, or `unclear`.
+- `model_generation_methods` using the structured method records below.
+- `workflows` using the structured workflow records below.
 - `modeling_languages`, preserving source-reported names and versions.
 - tools and versions.
 - toolchain and data flow.
@@ -160,7 +161,7 @@ Record:
 - system boundary.
 - artifact availability, using the shared availability codes below.
 
-Use these availability codes for report artifacts, EPS assets, reusable artifacts, and resulting tailored artifacts:
+Use these availability codes for report artifacts, EPS assets, reusable artifacts, procedure materials, workflows, and resulting tailored artifacts:
 
 - **`public_complete`:** the source identifies public access to the complete asset.
 - **`public_partial`:** only extracts, documentation, or part of the asset are public.
@@ -170,7 +171,24 @@ Use these availability codes for report artifacts, EPS assets, reusable artifact
 - **`unavailable`:** the source states that it is unavailable.
 - **`unclear`:** the reported access condition cannot be classified.
 
-A model generation method is a reported procedure used to construct, populate, configure, transform, or generate the EPS MBSE model. A modeling language or tool alone is not a generation method. The common evidence fields apply to every method and model-artifact row.
+#### Model generation methods
+
+A model generation method is a reported procedure used to construct, populate, configure, transform, or generate the EPS MBSE model. A modeling language or tool alone is not a generation method. Create one row for each materially distinct method. Record:
+
+- `model_generation_method_id` and linked `eps_case_id` values.
+- source method name or description.
+- method purpose and scope.
+- `generation_method_types`, using one or more of the codes below.
+- `method_origin_types`, using one or more of `named_method_adoption`, `requirements_or_standards_synthesis`, `literature_synthesis`, `heritage_generalization`, `expert_or_stakeholder_elicitation`, `empirical_or_operational_derivation`, `metamodel_or_ontology_driven`, `manual_author_construction`, `model_transformation`, `reverse_engineering`, `mixed`, `other`, or `unclear`.
+- `construction_sources` as nested rows containing `construction_source_id`, source type, source identification, selection or inclusion basis, contribution to the model, and linked input-group and model-artifact IDs. Use source types `requirement`, `standard`, `literature`, `heritage_model_or_mission`, `expert_or_stakeholder_input`, `test_data`, `flight_or_operational_data`, `vendor_data`, `metamodel_or_ontology`, `tool_or_library`, `other`, or `unclear`.
+- linked input-group IDs, source model-artifact IDs, and output model-artifact IDs.
+- entry conditions.
+- `method_steps` as nested rows containing `method_step_id`, sequence label, predecessor step IDs, action, material inputs, outputs, linked input-group and model-artifact IDs, responsible roles, tools and settings, automation, decision rules, quality or exit checks, and branching, iteration, or rework.
+- overall branching and iteration.
+- completion conditions.
+- `generic_model_derivation`, recording the generic-model target, selection and exclusion rules, synthesis and generalization operations, abstraction and normalization rules, conflict resolution, source-to-model trace, and genericity validation. Use `not_applicable` for each field when the method does not create a generic, reference, template, product-family, or mission-class model.
+- supporting-material location and availability.
+- `procedure_reporting` using the common procedural-detail fields below.
 
 Use generation method types as follows:
 
@@ -184,6 +202,76 @@ Use generation method types as follows:
 - **`import_or_reverse_engineering`:** existing data, documents, software, or hardware descriptions are imported or reconstructed into the model.
 - **`other`:** another identified generation method.
 - **`unclear`:** the generation method cannot be classified.
+
+Use method origin types as follows:
+
+- **`named_method_adoption`:** an existing named method supplies the construction process.
+- **`requirements_or_standards_synthesis`:** requirements or standards are selected and combined to form model content or rules.
+- **`literature_synthesis`:** published literature is selected and combined.
+- **`heritage_generalization`:** one or more prior missions or models are generalized into reusable content.
+- **`expert_or_stakeholder_elicitation`:** expert or stakeholder input materially determines the method or model content.
+- **`empirical_or_operational_derivation`:** test, flight, operational, or other observed data materially determines the method or model content.
+- **`metamodel_or_ontology_driven`:** a metamodel, ontology, or formal conceptual structure governs construction.
+- **`manual_author_construction`:** the authors formulate the method or model directly without another reported derivation basis.
+- **`model_transformation`:** transformation from another model or structured representation supplies the content.
+- **`reverse_engineering`:** existing documents, data, software, or hardware are reconstructed into model content.
+- **`mixed`:** several origins are reported but cannot be separated reliably.
+- **`other`:** another identified origin applies.
+- **`unclear`:** the origin cannot be classified.
+
+The method-origin code identifies how the authors obtained or formulated the method and its model content. Record every separable origin instead of `mixed` when the report permits it. Preserve the source description in the construction-source rows and generic-model-derivation fields. Construction-source types identify the concrete requirement, standard, publication, heritage model or mission, person or group, dataset, metamodel or ontology, tool or library, or other source used. Use links to input groups for detailed values and assumptions instead of copying them into a construction-source row. `unclear` means that relevant source evidence cannot be classified.
+
+#### Engineering workflows
+
+An engineering workflow is a source-identifiable sequence or network of activities, handoffs, decisions, and checks through which EPS-linked models, data, or engineering artifacts move. A workflow can contain model generation methods. A tool list, data-flow statement, lifecycle label, or unordered set of activities alone is not a workflow.
+
+Create one workflow row for each materially distinct workflow. Record:
+
+- `workflow_id`, linked EPS case IDs, and the source workflow name and version.
+- `workflow_scope_type`, using `model_generation`, `model_tailoring`, `analysis_or_decision`, `verification_or_validation`, `lifecycle_integration`, `end_to_end_engineering`, `other`, or `unclear`.
+- purpose and boundary.
+- linked model-generation-method and model-artifact IDs.
+- entry conditions.
+- `workflow_activities` as nested rows containing `workflow_activity_id`, sequence label, predecessor activity IDs, action, inputs, outputs, linked method and artifact IDs, responsible roles, tools and settings, automation, decision rules, quality or exit checks, and branching, iteration, or rework.
+- overall branching and iteration, exit conditions, handoffs and data flow, roles and responsibilities, tools and versions, automation, and governance and configuration control.
+- supporting-material location and availability.
+- `procedure_reporting` using the common procedural-detail fields below.
+
+Use workflow scope types as follows:
+
+- **`model_generation`:** the workflow constructs, populates, transforms, or generates a model.
+- **`model_tailoring`:** the workflow configures or adapts reusable model content.
+- **`analysis_or_decision`:** the workflow uses model content for analysis, trade studies, or decisions.
+- **`verification_or_validation`:** the workflow connects model content to checking, verification, or validation.
+- **`lifecycle_integration`:** the workflow carries model content across lifecycle stages or engineering functions.
+- **`end_to_end_engineering`:** the workflow integrates several of the above scopes as one connected process.
+- **`other`:** another identified workflow scope applies.
+- **`unclear`:** workflow scope cannot be classified.
+
+#### Procedural reporting detail
+
+Apply the same procedural reporting assessment to each model generation method, workflow, and reusable tailoring procedure. Keep this assessment separate from the M0–M4 and W0–W4 reuse levels. Record source evidence for:
+
+- ordered or otherwise connected steps.
+- material inputs.
+- outputs.
+- roles and responsibilities.
+- tools and settings.
+- decision rules.
+- branching and iteration.
+- quality or completion checks.
+- a worked example.
+- supporting materials and their access route.
+
+Assign `procedure_detail_level` as follows and give a concise reason:
+
+- **`named_only`:** the procedure is identified without a usable account of its activities.
+- **`narrative_outline`:** major activities are described, but missing sequence, inputs, outputs, decision rules, settings, or checks require material reconstruction.
+- **`actionable_procedure`:** connected actions and the inputs, outputs, roles, tools, decision rules, and checks that matter in the reported setting are sufficiently specified for another qualified team to follow.
+- **`reproduction_ready`:** the actionable procedure also identifies all material settings and accessible supporting materials needed to reproduce it without material reconstruction. This code assesses reported readiness. It does not establish independent reproduction.
+- **`unclear`:** relevant procedural information exists, but its detail cannot be classified.
+
+Do not infer an actionable procedure from a flowchart title, a named method, a tool script, or a successful result. Record missing components explicitly. The common evidence fields apply to every method, source, step, workflow, activity, reporting-detail field, and model-artifact row.
 
 ### EPS representation
 
@@ -321,7 +409,8 @@ For each implementation record, record:
 - roles and affected teams.
 - skills and training.
 - staffing and number of people.
-- workflow.
+- linked `workflow_id` values.
+- workflow execution and deviations from the defined workflow.
 - automation.
 - tools, licences, and infrastructure.
 - model preparation.
@@ -360,7 +449,7 @@ Use burden phase as follows:
 
 The burden-category codes identify labor, elapsed time, money, people, competence, tools, infrastructure, preparation, computing, integration, governance, maintenance, or rework burdens according to their labels.
 
-Keep measured values, author estimates, and unsupported characterizations distinct. Link RQ2 burden findings and reuse or tailoring applications to these records instead of copying the implementation details.
+Keep measured values, author estimates, and unsupported characterizations distinct. Link each implementation record to every applicable workflow. Use workflow execution and deviations for what happened in this implementation. Keep the reusable workflow definition and procedural detail in the linked workflow record. Link RQ2 burden findings and reuse or tailoring applications to these records instead of copying the implementation details.
 
 ### Input and assumption groups
 
@@ -372,7 +461,8 @@ For each group, record:
 - `category`, using `mission_requirements`, `base_assumptions`, `scenario_inputs`, `model_formulation`, `vv_configuration`, `tool_prerequisites`, or `other`.
 - linked EPS case and scenario or configuration.
 - linked `model_generation_method_id` values when the input or assumption applies to a generation method.
-- linked `report_reuse_record_id` values when the input or assumption applies to reuse of a method or artifact.
+- linked `workflow_id` values when the input or assumption applies to a workflow.
+- linked `report_reuse_record_id` values when the input or assumption applies to reuse of an artifact, method, or workflow.
 - parameters or constructs.
 - material source-reported values or descriptions, with units and time basis when needed for interpretation. State whether a material value is nominal, worst case, a range, or a distribution when the source provides that basis.
 - `input_source_types`, using one or more of `requirement`, `standard`, `vendor_data`, `test_data`, `flight_data`, `heritage`, `literature`, `tool_default`, `analyst_assumption`, `calculation`, `other`, or `unclear`.
@@ -495,7 +585,7 @@ Record:
 - claim wording.
 - claimed characteristic.
 - claim scope and object.
-- linked model artifact, model generation method, EPS case, report reuse record, result set, result output, result criterion, comparator, or implementation record IDs when relevant.
+- linked model artifact, model generation method, workflow, EPS case, report reuse record, result set, result output, result criterion, comparator, or implementation record IDs when relevant.
 - `evidence_basis`.
 - `support`.
 - `support_reason`.
@@ -544,7 +634,7 @@ Record:
 - `evidence_supported_direction`, using `beneficial`, `null_or_no_observed_effect`, `mixed_or_conditional`, `adverse`, `unclear`, or `unsupported`.
 - `eps_attribution`, using `explicit_eps_attribution`, `ambiguous_attribution`, or `generic_or_ineligible`.
 - mechanism, which is the explanation given by the source of how an EPS-linked model artifact or activity led to a claimed outcome or burden. Do not infer a mechanism. Use `not_reported` when the source provides no explanation. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed finding.
-- linked model artifact, model generation method, RQ3 activity, input group, result set, result output, result criterion, comparator, report reuse record, or implementation record IDs.
+- linked model artifact, model generation method, workflow, RQ3 activity, input group, result set, result output, result criterion, comparator, report reuse record, or implementation record IDs.
 - `measure_directness`, using `direct`, `surrogate`, `intermediate_or_process`, or `unclear`.
 - lifecycle stage, using the shared lifecycle-stage codes.
 - `applicability`, using `reported_case_only`, `bounded_conditions`, `declared_envelope`, `broader_claim`, or `unclear`.
@@ -606,7 +696,7 @@ Use outcome category as follows:
 - **`defect_or_error_reduction`:** reduction in faults, defects, inconsistencies, or errors.
 - **`risk_reduction`:** reduction in identified likelihood, consequence, or uncertainty.
 - **`reproducibility`:** ability to reproduce a model, process, analysis, or result.
-- **`reuse`:** repeated use of an artifact or method across settings.
+- **`reuse`:** repeated use of an artifact, method, or workflow across settings.
 - **`integration_or_interoperability`:** ability to combine systems, models, tools, or data.
 - **`interface_consistency`:** agreement and compatibility across interfaces.
 - **`traceability_or_requirements_quality`:** trace coverage or improved requirement quality.
@@ -659,6 +749,7 @@ Record:
 - `target_type`, using `eps_requirement_or_criterion`, `eps_model_element`, `eps_parameter_or_constraint`, `eps_mode_or_scenario`, `eps_interface_or_flow`, `eps_behavior_or_function`, `eps_component_or_architecture`, `eps_hazard_or_risk_control`, `system_target_traced_to_eps`, `multiple`, `other`, or `unclear`.
 - requirement or criterion ID when present.
 - linked `model_artifact_id`.
+- linked `workflow_id` values when the activity is part of a reported workflow.
 - explicit model-to-V&V bridge.
 - source terminology for verification, validation, V&V, checking, or analysis.
 - linkage scope, using `eps_specific`, `system_wide_eps_linked`, `system_wide_cooccurrence`, or `unclear`.
@@ -742,7 +833,7 @@ A **reusable EPS MBSE artifact** is a source-identifiable structured-model asset
 - a transformation or generator with persistent model content; or
 - a larger reusable spacecraft model whose EPS part can be reconstructed separately.
 
-The first report pass creates a complete source-bounded extraction for every identifiable EPS-linked artifact assessed for reuse and every model generation method. Create a reuse record for each generation method even when the source makes no reuse claim. Also capture every reported artifact lineage and each workflow, toolchain, or language reuse case. Create more than one reuse record when the report describes materially distinct artifacts, methods, or lineages. Create separate artifact and method records when their reuse evidence or levels differ. Extract all evidence available in the report even when no companion report is known. Cross-report artifact identity remains pending.
+The first report pass creates a complete source-bounded extraction for every identifiable EPS-linked artifact assessed for reuse, every model generation method, and every engineering workflow. Create a reuse record for each method and workflow even when the source makes no reuse claim. Also capture every reported artifact lineage and each toolchain or language reuse case. Create more than one reuse record when the report describes materially distinct artifacts, methods, workflows, or lineages. Create separate artifact, method, and workflow records when their reuse evidence or levels differ. Extract all evidence available in the report even when no companion report is known. Cross-report artifact identity remains pending.
 
 An artifact relationship is one source-supported parent-to-derived connection. Store it as a nested row containing `artifact_relationship_id`, parent artifact name and version, derived artifact name and version, relationship or derivation, and identity and derivation evidence. The common evidence fields apply to every relationship row.
 
@@ -757,18 +848,23 @@ For each report-level reuse record, record identity and provenance:
 
 - `report_reuse_record_id`.
 - `lineage_id`, using `pending_resolution` for a reported or uncertain artifact lineage and `not_applicable` when no artifact-lineage relationship is reported.
+- linked `model_artifact_id` values when the record assesses an artifact.
 - linked `model_generation_method_id` values when the record assesses a generation method.
+- linked `workflow_id` values when the record assesses a workflow.
 - artifact names and versions.
 - artifact relationships using the structured rows defined above.
 - repository or location.
 - owner or developer.
 - `artifact_type`, using `reference_or_template_model`, `metamodel_or_profile`, `model_library_or_pattern`, `interface_contract`, `parametric_model_package`, `transformation_or_generator`, `spacecraft_model_with_separable_eps_thread`, `other`, or `unclear`.
+- `artifact_generality`, using `single_target`, `product_family`, `mission_class_reference`, `platform_agnostic`, `mixed`, or `unclear`.
 - EPS scope.
 - availability, using the shared availability codes.
 - `license_category`, using `open_permissive`, `open_copyleft`, `public_domain`, `research_or_noncommercial`, `proprietary_or_commercial`, `custom_other`, `no_license_declared`, or `unclear`.
 - exact reuse claim.
 - `claimed_reuse_object`, using one or more of `artifact`, `method`, `workflow`, `toolchain`, `language`, `other`, or `unclear`.
 - possible related reports or artifacts.
+
+For a method-only or workflow-only record, use `not_applicable` for linked model artifacts, artifact names and relationships, repository or location, artifact type, artifact generality, EPS artifact scope, artifact availability, and licence. Keep method and workflow identity, supporting-material location, and availability in their linked records. Use the reuse record for the DAE, reusable procedural core, adaptation design, level, and support.
 
 Use artifact type as follows:
 
@@ -781,6 +877,15 @@ Use artifact type as follows:
 - **`spacecraft_model_with_separable_eps_thread`:** a larger spacecraft model whose EPS part can be reconstructed separately.
 - **`other`:** another qualifying reusable artifact type.
 - **`unclear`:** artifact type cannot be classified.
+
+Use artifact generality as follows:
+
+- **`single_target`:** the artifact is intended only for one named mission, platform, or configuration.
+- **`product_family`:** the artifact covers a defined family of related platform variants.
+- **`mission_class_reference`:** the artifact is a generic or reference representation for a mission or platform class, such as CubeSats.
+- **`platform_agnostic`:** the artifact is intended to apply without a specific target platform or mission class.
+- **`mixed`:** materially different parts have different generality.
+- **`unclear`:** the intended generality cannot be classified.
 
 Use licence category as follows:
 
@@ -819,15 +924,43 @@ Record the declared applicability envelope (DAE). Its dimensions are:
 Record the reuse design:
 
 - reusable core.
-- variation points.
-- allowed options, ranges, and defaults.
-- dependencies.
-- tailoring rules.
-- tailoring operations.
+- `variation_points` as nested rows containing `variation_point_id`, name or target, `target_type` using `artifact_content`, `method_step`, `workflow_activity`, `multiple`, `other`, or `unclear`, linked artifact, method, and workflow IDs, allowed options, ranges, and defaults, dependencies and constraints, selection trigger or condition, and whether unchanged use is allowed.
+- an overall unchanged-use rule when one is reported.
+- overall dependencies.
+- `tailoring_rules` as nested rows containing `tailoring_rule_id`, linked variation-point IDs, trigger or condition, operation types, required inputs, responsible roles, tools and automation, resulting output, constraints and exceptions, acceptance check, and rationale.
+- `tailoring_procedure_steps` as nested rows containing `tailoring_step_id`, sequence label, predecessor step IDs, linked variation-point and tailoring-rule IDs, action, inputs, outputs, responsible role, tools and settings, automation, decision rule, quality or exit check, and branching or iteration.
 - required roles and skills.
 - required tools and data.
 - automation.
 - governance and configuration control.
+- `tailoring_procedure_reporting`, using the procedural-detail fields and levels defined under MBSE approach.
+
+Use one or more tailoring-operation types for each rule or executed application operation:
+
+- **`unchanged_use`:** select the reusable content or procedure without changing it, based on a reported rule.
+- **`configuration`:** choose or set a defined configuration.
+- **`parameterization`:** assign target-specific parameter values.
+- **`selection`:** choose among optional elements, variants, or paths.
+- **`specialization`:** refine a general element or rule for the target.
+- **`extension`:** add target-specific content while retaining the base content.
+- **`deletion`:** remove base content for the target.
+- **`substitution`:** replace base content with target-specific content.
+- **`interface_mapping`:** map base interfaces, ports, flows, or identifiers to target interfaces.
+- **`transformation`:** transform content into another model structure or representation.
+- **`generation`:** generate persistent target model content or an application artifact.
+- **`add_method_step`:** add a step to the reused method.
+- **`remove_method_step`:** remove a step from the reused method.
+- **`reorder_method_steps`:** change method-step order or dependencies.
+- **`substitute_method_step`:** replace a method step.
+- **`add_workflow_activity`:** add an activity to the reused workflow.
+- **`remove_workflow_activity`:** remove an activity from the reused workflow.
+- **`reorder_workflow_activities`:** change workflow-activity order or dependencies.
+- **`substitute_workflow_activity`:** replace a workflow activity.
+- **`tool_or_format_migration`:** change a required tool, integration, representation, or data format.
+- **`other`:** another reported tailoring operation applies.
+- **`unclear`:** the reported operation cannot be classified.
+
+A variation point or tailoring rule must remain source identifiable. Do not split a broad source statement into several invented rules. Link each rule to every variation point it governs when the source supports the link.
 
 Record the report-bounded reuse assessment:
 
@@ -836,24 +969,26 @@ Record the report-bounded reuse assessment:
 - report-reuse-level reason.
 - `method_reuse_level`, using `NA` or one level from `M0_method_identified` through `M4_independent_method_reuse_demonstrated`.
 - method-reuse-level reason.
+- `workflow_reuse_level`, using `NA` or one level from `W0_workflow_identified` through `W4_independent_workflow_reuse_demonstrated`.
+- workflow-reuse-level reason.
 - conflicting evidence within the report.
 - `evidence_basis`.
 - `support`.
 - `support_reason`.
 
-Use `report_reuse_level` only for artifact reuse and `method_reuse_level` only for a model generation method or a workflow that defines how the model is generated. Toolchain or language reuse alone remains described through `claimed_reuse_object` and receives `method_reuse_level = NA`. Create separate reuse records when artifact and method conclusions require different evidence-basis or support judgments.
+Use `report_reuse_level` only for artifact reuse, `method_reuse_level` only for a model generation method, and `workflow_reuse_level` only for an engineering workflow. Toolchain or language reuse alone remains described through `claimed_reuse_object` and receives all three reuse levels as `NA`. Create separate reuse records when artifact, method, or workflow conclusions require different evidence-basis or support judgments.
 
-Derive artifact demonstrated settings, coverage, failed applications, and applications outside the declared envelope from linked applications whose `application_object` is `artifact` or `artifact_and_method`. Derive the corresponding method results from applications whose object is `method` or `artifact_and_method`. Do not copy these details into the reuse assessment.
+Derive artifact demonstrated settings, coverage, failed applications, and applications outside the declared envelope from linked artifact-containing applications. Derive method results from applications containing `method`. Derive workflow results from applications containing `workflow`. Do not copy these details into the reuse assessment.
 
-Assign both reuse levels from evidence contained in this report only. A single report can support R3 or R4 and can support M3 or M4. Assign R3 or R4 only when the corresponding artifact application below is complete, includes post-tailoring assurance, and meets the required adopter condition. Assign M3 or M4 only when the corresponding method application is complete, identifies what stayed the same and what changed, reports a relevant post-application check and result, and meets the required adopter condition. A companion report is not required for any report-bounded level.
+Assign all reuse levels from evidence contained in this report only. A single report can support R3 or R4, M3 or M4, and W3 or W4. Assign a level of 3 or 4 only when the corresponding application below is complete, identifies what stayed the same and what changed, reports a relevant post-application check and result, and meets the required adopter condition. A companion report is not required for any report-bounded level.
 
-A **reusable core** is the content that the source states or clearly shows remains across uses. For an artifact, it can include model elements, relationships, constraints, interfaces, meanings, or packaged assets. For a method, it can include stable steps, decision rules, roles, inputs, outputs, or assurance activities.
+A **reusable core** is the content that the source states or clearly shows remains across uses. For an artifact, it can include model elements, relationships, constraints, interfaces, meanings, or packaged assets. For a method, it can include stable steps, decision rules, roles, inputs, outputs, or assurance activities. For a workflow, it can include stable activities, order or dependencies, handoffs, roles, artifacts, decision gates, and checks.
 
-A **variation point** is a source-described place, option, range, rule, dependency, or method step through which that core can vary.
+A **variation point** is a source-described place, option, range, rule, dependency, method step, or workflow activity through which that core can vary.
 
-**Tailoring** means using a source-described process to create or select a target-specific artifact instance or to adapt a generation method to a target setting. It can involve configuration, parameterization, selection, specialization, extension, deletion or substitution, interface mapping, transformation or generation, adding, removing, or reordering method steps, or a clearly justified decision to use the artifact or method unchanged.
+**Tailoring or adaptation** means using a source-described process to create or select a target-specific artifact instance or to adapt a method or workflow to a target setting. It can involve configuration, parameterization, selection, specialization, extension, deletion or substitution, interface mapping, transformation or generation, changing method steps or workflow activities, tool or format migration, or a clearly justified decision to use the artifact, method, or workflow unchanged.
 
-A parameter sweep or scenario run in one unchanged mission model is analysis, not tailoring across settings. Rebuilding a model without structure may show reuse of a method. It shows reuse of an artifact only when the source establishes the artifact lineage and the retained core.
+A parameter sweep or scenario run in one unchanged mission model is analysis, not tailoring across settings. Rebuilding a model without retained structure may show reuse of a method or workflow. It shows reuse of an artifact only when the source establishes the artifact lineage and retained core.
 
 Table of artifact reuse level codes.
 | Level | Minimum evidence | Meaning |
@@ -877,9 +1012,21 @@ Table of method reuse level codes.
 
 Method levels are cumulative. A report can establish M4 entirely with evidence reported in that single report when it documents the method, specification, materially distinct application, post-application check and result, and operationally independent adopter.
 
+Table of workflow reuse level codes.
+| Level | Minimum evidence | Meaning |
+|---|---|---|
+| **`NA`** | The record does not identify an engineering workflow | Workflow reuse does not apply to this record. |
+| **`W0_workflow_identified`** | An engineering workflow is identified, with no reuse claim or materially distinct application reported | A workflow exists. Reuse has not been claimed or shown. |
+| **`W1_workflow_reuse_claimed`** | The source claims or suggests that the identified workflow is reusable | Workflow reuse is asserted. Its range and adaptation process are not sufficiently specified. |
+| **`W2_workflow_reuse_specified`** | The declared applicability envelope, stable workflow core, variation points or unchanged-use rule, adaptation process, and prerequisites are reported | Bounded workflow reuse is specified. Transfer does not have to be demonstrated. |
+| **`W3_workflow_reuse_demonstrated`** | W2 is met, and at least one materially distinct target setting applies the identified workflow, reports what stayed the same and what changed, and reports a relevant post-application check and result | Workflow transfer is demonstrated in the reported setting. |
+| **`W4_independent_workflow_reuse_demonstrated`** | W3 is met by at least one adopter operationally independent of the originating workflow team | Independent workflow transfer is demonstrated in the reported setting. |
+
+Workflow levels are cumulative. Procedural detail and reuse evidence remain separate. An actionable procedure can remain at M0 or W0 when no reuse is claimed or demonstrated. A high reuse level requires the applicable reuse evidence even when the procedure is reproduction ready.
+
 #### Report-level reuse or tailoring application
 
-A **report-level application** is one use of an artifact lineage, model generation method, or both in one target setting. For an artifact, the original development mission counts only if the source identifies it as an adoption or configuration of the same reusable core and reports what was kept and changed, or why it was used unchanged. For a method, the originating use counts only if the source identifies it as an application of an already defined method and reports what was retained and adapted, or why it was used unchanged. Initial creation of an artifact or formulation of a method does not by itself show transfer.
+A **report-level application** is one use of an artifact lineage, model generation method, engineering workflow, or reported combination in one target setting. For an artifact, the original development mission counts only if the source identifies it as an adoption or configuration of the same reusable core and reports what was kept and changed, or why it was used unchanged. For a method or workflow, the originating use counts only if the source identifies it as an application of an already defined procedure and reports what was retained and adapted, or why it was used unchanged. Initial creation of an artifact or formulation of a method or workflow does not by itself show transfer.
 
 Two applications are **materially distinct** only if they differ on at least one DAE dimension in a way that exercises or tests the reuse claim. Two papers, scenarios, revisions, or names for the same implementation do not count as two applications.
 
@@ -889,9 +1036,10 @@ Record identity and setting:
 
 - `report_application_id`.
 - linked `report_reuse_record_id` values.
-- `application_object`, using `artifact`, `method`, `artifact_and_method`, or `unclear`.
-- `lineage_id`, inherited from the linked artifact reuse record until cross-report resolution, or `not_applicable` for a method-only application.
+- `application_object`, using `artifact`, `method`, `workflow`, `artifact_and_method`, `artifact_and_workflow`, `method_and_workflow`, `artifact_method_and_workflow`, or `unclear`.
+- `lineage_id`, inherited from the linked artifact reuse record until cross-report resolution, or `not_applicable` for an application without an artifact.
 - linked `model_generation_method_id` values when applicable.
+- linked `workflow_id` values when applicable.
 - linked `eps_case_id` values.
 - target model or configuration.
 - adopting team.
@@ -906,20 +1054,24 @@ Use application object as follows:
 
 - **`artifact`:** the application reuses or tailors an identifiable artifact.
 - **`method`:** the application reuses or adapts an identifiable model generation method.
-- **`artifact_and_method`:** the application inseparably reuses both an artifact and its generation method.
+- **`workflow`:** the application reuses or adapts an identifiable engineering workflow.
+- **`artifact_and_method`:** the application inseparably reuses an artifact and a method.
+- **`artifact_and_workflow`:** the application inseparably reuses an artifact and a workflow.
+- **`method_and_workflow`:** the application inseparably reuses a method and a workflow without an identifiable artifact lineage.
+- **`artifact_method_and_workflow`:** the application inseparably reuses all three objects.
 - **`unclear`:** the application object cannot be classified.
 
-Each `artifact` or `artifact_and_method` application links an artifact reuse record. Each `method` or `artifact_and_method` application links at least one `model_generation_method_id` and its method reuse record.
+Each artifact-containing application links an artifact reuse record. Each method-containing application links at least one `model_generation_method_id` and its method reuse record. Each workflow-containing application links at least one `workflow_id` and its workflow reuse record.
 
 Use relationship to the originator as follows:
 
-- **`originating_team`:** the team that originated the artifact or method controls the application.
+- **`originating_team`:** the team that originated the artifact, method, or workflow controls the application.
 - **`same_organization_operationally_separate`:** a separate team in the same organization controls the application without substantive implementation or adaptation work by the originating team.
 - **`outside_originating_organization`:** a team outside the originating organization controls the application.
-- **`independent_evaluation_only`:** an independent party evaluates an originator-built artifact or originator-applied method without adopting or implementing it.
+- **`independent_evaluation_only`:** an independent party evaluates an originator-built artifact or originator-applied method or workflow without adopting or implementing it.
 - **`unclear`:** control or team separation cannot be established.
 
-`independent_evaluation_only` does not satisfy R4 or M4 because the independent party does not control the adoption or implementation.
+`independent_evaluation_only` does not satisfy R4, M4, or W4 because the independent party does not control the adoption or implementation.
 
 Use relationship to the DAE as follows:
 
@@ -930,12 +1082,12 @@ Use relationship to the DAE as follows:
 
 Record tailoring or adaptation performed:
 
-- base artifact or method and version.
-- retained artifact core or method steps and rules.
-- configured or changed artifact content or method steps.
-- variation points used.
-- tailoring or adaptation operations.
-- before-and-after trace.
+- base artifact, method, or workflow and version.
+- retained artifact core, method steps and rules, or workflow activities and handoffs.
+- configured or changed artifact content, method steps, or workflow activities.
+- linked variation-point, tailoring-rule, and tailoring-procedure-step IDs.
+- `executed_operations` as nested rows containing `application_operation_id`, sequence label, predecessor operation IDs, linked variation-point, rule, and procedure-step IDs, operation types, target, before state, after state, reason, inputs and assumptions, responsible role, tools and automation, and operation check and result.
+- an overall before-and-after trace.
 - reasons for changes or unchanged use.
 - tailoring or adaptation inputs and assumptions.
 
@@ -958,7 +1110,7 @@ Record result and assurance:
 - linked RQ2 findings.
 - linked RQ3 activities.
 
-For a method-only application, use `not_applicable` for resulting-artifact and configuration fields unless the method application produces an identifiable artifact. The post-tailoring criterion, assurance, and discrepancy fields then refer to the check performed after applying the method.
+For an application without a reused artifact, use `not_applicable` for resulting-artifact and configuration fields unless the applied method or workflow produces an identifiable artifact. The post-tailoring criterion, assurance, and discrepancy fields then refer to the check performed after applying the method or workflow.
 
 Use application result as follows:
 
@@ -974,7 +1126,29 @@ Record independence:
 - adopter-attributable evidence for adoption.
 - adopter-attributable evidence for assurance.
 
-An outside team normally qualifies as independent when the artifact lineage or method identity, adoption, and assurance are established. A team in the same organization qualifies only when it controls the implementation or adaptation, the originating team performs no substantive implementation or adaptation work, and the assured application is distinct.
+An outside team normally qualifies as independent when the artifact lineage, method identity, or workflow identity, adoption, and assurance are established. A team in the same organization qualifies only when it controls the implementation or adaptation, the originating team performs no substantive implementation or adaptation work, and the assured application is distinct.
+
+### Procedural evidence profile
+
+After completing and validating the report extraction, derive the following report-level flags. Each flag records `yes`, `no`, or `uncertain`, the IDs used as its basis, and a concise derivation reason. Do not attach new source claims to these flags.
+
+- `generic_or_reference_model_reported`.
+- `actionable_model_construction_procedure_reported`.
+- `actionable_tailoring_procedure_reported`.
+- `worked_tailoring_example_reported`.
+- `post_tailoring_assurance_reported`.
+- `generic_model_with_actionable_construction_or_tailoring`.
+
+Derive the flags as follows:
+
+- A generic or reference model is reported when an artifact reuse record identifies `product_family`, `mission_class_reference`, or `platform_agnostic` generality, or explicitly identifies a generic, reference, or template model. Use `uncertain` when genericity remains unresolved.
+- An actionable construction procedure is reported when a model generation method has `actionable_procedure` or `reproduction_ready` detail and is linked as an output-producing method for the generic or reference model. A detailed one-off method for another artifact does not satisfy this flag.
+- An actionable tailoring procedure is reported when the reuse design for the generic or reference model has `actionable_procedure` or `reproduction_ready` tailoring detail.
+- A worked tailoring example is reported when an application of the generic or reference model records executed operations, or a justified unchanged use, and identifies the resulting application.
+- Post-tailoring assurance is reported when that application records a criterion, assurance method, timing, and result.
+- The target-report flag is `yes` when a generic or reference model and at least one actionable construction or tailoring procedure are reported. Propagate material uncertainty instead of forcing `no`.
+
+These flags support retrieval within the included report set. They do not replace the detailed fields or reuse levels.
 
 ### Limitations and open extraction
 
@@ -992,9 +1166,9 @@ Derive simple synthesis flags from these fields during compilation. Do not dupli
 
 Begin this pass only after all first-pass report extractions are complete and validated. Resolve report families first. Reports with `lineage_mentioned = yes` seed lineage resolution, and reports with `lineage_mentioned = uncertain` receive resolution review. Follow source-supported relationships to include every report in each candidate lineage, including linked reports with `lineage_mentioned = no`. Preserve report provenance for every lineage-level field.
 
-Report-level extractions remain fixed throughout this pass. Update only `lineage_id` on the relevant artifact reuse records and artifact-containing application records. Assign a stable lineage ID to every matched artifact record, including a record initially marked `not_applicable` that another report links to the lineage. Keep `lineage_id = not_applicable` for method-only records and applications. Use `unresolved_after_review` when a candidate artifact relationship cannot be resolved. A correction to any other report-level field follows the focused-audit and adjudication procedure outside this pass.
+Report-level extractions remain fixed throughout this pass. Update only `lineage_id` on the relevant artifact reuse records and artifact-containing application records. Assign a stable lineage ID to every matched artifact record, including a record initially marked `not_applicable` that another report links to the lineage. Keep `lineage_id = not_applicable` for method-only, workflow-only, and method-and-workflow records and applications. Use `unresolved_after_review` when a candidate artifact relationship cannot be resolved. A correction to any other report-level field follows the focused-audit and adjudication procedure outside this pass.
 
-Create lineage-level extractions and consolidated artifact application records. Treat all linked reports in a resolved artifact lineage as one evidence bundle when completing those records. Method reuse levels and method-only applications remain fixed, source-bounded report-level results. Do not merge method identities or method-only applications during the artifact-lineage pass. Do not copy lineage-level values into a report-level extraction.
+Create lineage-level extractions and consolidated artifact-containing application records. Treat all linked reports in a resolved artifact lineage as one evidence bundle when completing those records. Method and workflow reuse levels and applications without an artifact remain fixed, source-bounded report-level results. Do not merge method or workflow identities or applications without an artifact during the artifact-lineage pass. Do not copy lineage-level values into a report-level extraction.
 
 ### Study or implementation report family
 
@@ -1023,6 +1197,7 @@ Record identity and provenance:
 - artifact relationships using the structured rows defined above.
 - owner or developer.
 - artifact type, using the artifact-type codes defined above.
+- artifact generality, using the artifact-generality codes defined above.
 - EPS scope.
 - availability, using the shared availability codes.
 - `license_category`, using the licence-category codes defined above.
@@ -1045,15 +1220,18 @@ Record the declared applicability envelope:
 Record the reuse design:
 
 - reusable core.
-- variation points.
-- allowed options, ranges, and defaults.
+- structured variation points, including linked report-level variation-point IDs and all report and citation provenance.
+- unchanged-use rule.
 - dependencies.
-- tailoring rules.
-- tailoring operations.
+- structured tailoring rules with linked report-level tailoring-rule IDs.
+- structured tailoring-procedure steps with linked report-level tailoring-step IDs.
 - required roles and skills.
 - required tools and data.
 - automation.
 - governance and configuration control.
+- tailoring-procedure reporting detail, including the combined detail level and component evidence.
+
+Use the report-level variation-point, tailoring-rule, operation-type, procedure-step, and procedural-detail definitions. Merge duplicate definitions only when source-supported identity is clear. Preserve disagreements and report provenance.
 
 Record the reuse assessment:
 
@@ -1073,15 +1251,16 @@ After resolving the lineage, assign its `lineage_id` to each matching report-lev
 
 ### Consolidated tailoring application
 
-Create one separate row for each actual artifact adoption or tailoring event represented across the lineage reports. Include report-level applications whose `application_object` is `artifact` or `artifact_and_method`. Method-only applications are not consolidated in the artifact-lineage pass. Merge repeated reporting of the same event only in this consolidated row. Keep every contributing report-level application unchanged.
+Create one separate row for each actual artifact adoption or tailoring event represented across the lineage reports. Include every report-level application whose `application_object` contains `artifact`. Applications without an artifact are not consolidated in the artifact-lineage pass. Merge repeated reporting of the same event only in this consolidated row. Keep every contributing report-level application unchanged.
 
 Record identity and setting:
 
 - `tailoring_application_id`.
 - `lineage_id`.
 - linked `report_application_id` values.
-- `application_object`, using `artifact` or `artifact_and_method`.
+- `application_object`, using `artifact`, `artifact_and_method`, `artifact_and_workflow`, or `artifact_method_and_workflow`.
 - linked `model_generation_method_id` values when applicable.
+- linked `workflow_id` values when applicable.
 - linked report IDs, family IDs, and `eps_case_id` values.
 - target model or configuration.
 - adopting team.
@@ -1096,12 +1275,12 @@ Use the relationship-to-originator and relationship-to-DAE codes defined for rep
 
 Record tailoring or adaptation performed:
 
-- base artifact or method and version.
-- retained artifact core or method steps and rules.
-- configured or changed artifact content or method steps.
-- variation points used.
-- tailoring or adaptation operations.
-- before-and-after trace.
+- base artifact, method, or workflow and version.
+- retained artifact core, method steps and rules, or workflow activities and handoffs.
+- configured or changed artifact content, method steps, or workflow activities.
+- linked report-level variation-point, tailoring-rule, and tailoring-procedure-step IDs.
+- consolidated executed-operation rows with linked report-level application-operation IDs, the same operational fields as report-level rows, and full contributing-report provenance.
+- an overall before-and-after trace.
 - reasons for changes or unchanged use.
 - tailoring or adaptation inputs and assumptions.
 
@@ -1131,13 +1310,13 @@ Record independence:
 - adopter-attributable evidence for adoption.
 - adopter-attributable evidence for assurance.
 
-An outside team normally qualifies as independent when the artifact lineage or method identity, adoption, and assurance are established. A team in the same organization qualifies only when it controls the implementation or adaptation, the originating team performs no substantive implementation or adaptation work, and the assured application is distinct.
+An outside team normally qualifies as independent when the artifact lineage, method identity, or workflow identity, adoption, and assurance are established. A team in the same organization qualifies only when it controls the implementation or adaptation, the originating team performs no substantive implementation or adaptation work, and the assured application is distinct.
 
 ## Simplified appraisal
 
 Apply the inline appraisal defined in this section. Do not create a separate methodological-appraisal table or claim-support object.
 
-Every evaluative RQ1 claim, every RQ2 finding, every RQ3 activity, every report-level artifact or method reuse conclusion, and every lineage-level artifact reuse conclusion receives:
+Every evaluative RQ1 claim, every RQ2 finding, every RQ3 activity, every report-level artifact, method, or workflow reuse conclusion, and every lineage-level artifact reuse conclusion receives:
 
 - `evidence_basis`.
 - `support`.
@@ -1152,11 +1331,12 @@ Record comparator adequacy only for comparative or causal claims. Record relatio
 Before full extraction:
 
 1. [ ] Test report-level eligibility and Route A or Route B coding on clear and borderline examples.
-2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, model generation methods, EPS exchanges, dependencies, disciplinary viewpoints, decomposition visibility, grouped inputs, grouped outputs, RQ2 findings, RQ3 activities, figures or tables, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded artifact and method reuse levels. Include a report that can reach R3 or R4 by itself and a report that can reach M3 or M4 by itself when available.
+2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, model generation methods, engineering workflows, construction sources, ordered method steps and workflow activities, generic-model derivation, procedural-detail assessments, EPS exchanges, dependencies, disciplinary viewpoints, decomposition visibility, grouped inputs, grouped outputs, RQ2 findings, RQ3 activities, figures or tables, structured variation points, tailoring rules and procedure steps, executed tailoring operations, procedural-evidence flags, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded artifact, method, and workflow reuse levels. Include a report that can reach R3 or R4, M3 or M4, or W3 or W4 by itself when available.
 3. [ ] Test cross-report family and lineage-identity resolution, immutable report-level records, separate lineage-level extraction, and separate consolidated application, effort, assurance, independence, and reuse-level fields on at least one multi-report example.
-4. [ ] Calibrate the difference between assertion, worked example, execution, comparison, physical or operational checking, and independent transfer.
-5. [ ] Calibrate `supported`, `limited`, `unsupported`, and `unclear` on narrow and broad claims from the same report.
-6. Revise and freeze the codebook, schema, audit procedure, and calibration decisions before full extraction.
+4. [ ] Calibrate `named_only`, `narrative_outline`, `actionable_procedure`, `reproduction_ready`, and `unclear` on model generation, workflow, and tailoring examples. Confirm that procedural detail remains separate from reuse level.
+5. [ ] Calibrate the difference between assertion, worked example, execution, comparison, physical or operational checking, and independent transfer.
+6. [ ] Calibrate `supported`, `limited`, `unsupported`, and `unclear` on narrow and broad claims from the same report.
+7. Revise and freeze the codebook, schema, audit procedure, and calibration decisions before full extraction.
 
 ### Sole-reviewer extraction and verification
 
@@ -1165,8 +1345,8 @@ One LLM reviewer performs the primary extraction, cross-report extraction, test�
 Apply this sequence:
 
 1. **Primary extraction.** The LLM reviewer extracts the complete report into the frozen report-level form.
-2. **Focused audit.** For every included report, the human auditor checks eligibility and route, Route B anchors and bridge, omitted or duplicated groups, direct RQ2 attribution, direct RQ3 linkage, `lineage_mentioned`, complete report-level reuse and application coding, every report-level R3/R4 or M3/M4 assignment, citations, source-versus-inference distinctions, and reviewer-derived values. The auditor may see the extraction because the audit's purpose is error detection.
-3. **Deterministic validation.** Validate schema, controlled values, IDs, required fields, links, units, and calculations that can be reproduced. Confirm each citation's report and page range. For citations without `graphic` or `graphic_quote_description`, confirm the verbatim quotation against the stored source using the frozen page-text extraction and normalization rule. Preserve source values and reviewer-derived values separately.
+2. **Focused audit.** For every included report, the human auditor checks eligibility and route, Route B anchors and bridge, omitted or duplicated groups, method steps, workflow activities, generic-model derivation, procedural-detail levels, direct RQ2 attribution, direct RQ3 linkage, `lineage_mentioned`, complete report-level reuse and application coding, structured tailoring evidence, every report-level R3/R4, M3/M4, or W3/W4 assignment, procedural-evidence flags, citations, source-versus-inference distinctions, and reviewer-derived values. The auditor may see the extraction because the audit's purpose is error detection.
+3. **Deterministic validation.** Validate schema, controlled values, IDs, required fields, links, procedure-level prerequisites, reuse-level prerequisites, procedural-evidence flags, units, and calculations that can be reproduced. Confirm each citation's report and page range. For citations without `graphic` or `graphic_quote_description`, confirm the verbatim quotation against the stored source using the frozen page-text extraction and normalization rule. Preserve source values and reviewer-derived values separately.
 4. **Adjudication.** The LLM reviewer resolves every audit or deterministic issue against the full source and gives the final review judgment. The human auditor records the disposition in the relevant Git commit and applies accepted changes. No automated process writes directly to the canonical extraction.
 5. **Cross-report pass.** After report extraction, the LLM reviewer resolves report families and artifact-lineage identity, updates only report-level `lineage_id` values, and creates separate lineage-level and consolidated tailoring-application records. The human auditor performs one focused cross-report audit for every uncertain merge or split and every lineage-level R3 or R4 assignment.
 
@@ -1182,7 +1362,7 @@ Use audit completion status as follows:
 
 After all first-pass report extractions are complete, select a reproducible test–retest sample of `n = min(5, max(2, ceil(0.10 × N)))` when `N > 0`. Include Route A and Route B when both are present and at least one report with complex RQ2, RQ3, or artifact content when available. Freeze the sampling frame, sorted IDs, selection rule, seed, and selected IDs. The LLM reviewer re-extracts each sampled report while the original extraction and audit output are hidden, then compares and adjudicates all differences. The human auditor records dispositions in the relevant Git commits and applies accepted changes. Report this as sole-reviewer consistency, not independent agreement.
 
-An issue is impactful when it can change eligibility or route, a report family or lineage, an artifact or method reuse level, a reuse or tailoring application, direct RQ2 or RQ3 status, outcome direction, support, a quantitative result, or a synthesis conclusion. An impactful issue that may recur triggers a targeted check of every report or lineage that could be affected. Record any codebook change, focused recalibration, and recheck scope.
+An issue is impactful when it can change eligibility or route, a report family or lineage, an artifact, method, or workflow reuse level, a procedural-detail level or profile flag, a reuse or tailoring application, direct RQ2 or RQ3 status, outcome direction, support, a quantitative result, or a synthesis conclusion. An impactful issue that may recur triggers a targeted check of every report or lineage that could be affected. Record any codebook change, focused recalibration, and recheck scope.
 
 Do not calculate inter-rater reliability between the reviewer and an LLM. Report audit coverage, issues raised, accepted corrections, rejected flags, unresolved ambiguities, and test–retest differences with their denominators.
 
