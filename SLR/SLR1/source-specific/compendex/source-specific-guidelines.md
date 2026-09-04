@@ -1,6 +1,6 @@
 # Compendex
 
-Final searches saved in commit: NA
+Final searches saved in commit: cbc2550116e3c9c530729361bd4b153506f74fbc
 Source excluded from review due to search failure in commit: NA
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_compendex_inspec.py`
@@ -29,4 +29,4 @@ Use the concepts, compound definitions, and nine partitions in [the discovery pr
 
 ## Execution
 
-Run each partition as one paired expression. Require two complete passes and reconcile source rows, native exports, and accessions. Publish only the Compendex projection here. Never combine its total with Inspec. See [the readiness audit](../readiness-audit.md) for current result bounds.
+Run each partition as one paired expression. Require two complete passes and reconcile source rows, native exports, and accessions. Save every Compendex record's full native RIS abstract in `abstract` and source type in `documentType`. Reject an event when either field is missing. Publish only the Compendex projection here. Never combine its total with Inspec. See [the readiness audit](../readiness-audit.md) for current result bounds.
