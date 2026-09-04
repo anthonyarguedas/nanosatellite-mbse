@@ -651,6 +651,7 @@
       "minItems": 1
     },
     "identity": {
+      "description": "Extraction identity and review-management fields. Bibliographic, version, discovery-event, and source-record metadata are read through screening_record_id.",
       "type": "object",
       "properties": {
         "report_id": {
@@ -661,18 +662,6 @@
           "$ref": "#/$defs/screeningRecordId",
           "description": "The candidate_id of the included report in psr-candidates.json."
         },
-        "full_citation": {
-          "$ref": "#/$defs/evidencedString"
-        },
-        "doi": {
-          "$ref": "#/$defs/evidencedString"
-        },
-        "other_stable_identifiers": {
-          "$ref": "#/$defs/evidencedStringArray"
-        },
-        "report_version_used": {
-          "$ref": "#/$defs/evidencedString"
-        },
         "report_date_used": {
           "$ref": "#/$defs/evidencedSourceDate"
         },
@@ -682,26 +671,7 @@
         "review_type_normalized": {
           "$ref": "#/$defs/evidencedNormalizedReviewType"
         },
-        "discovery_event_ids": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/stableId"
-          },
-          "minItems": 1,
-          "uniqueItems": true
-        },
-        "source_record_ids": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/stableId"
-          },
-          "minItems": 1,
-          "uniqueItems": true
-        },
         "duplicate_or_companion_report_relationship": {
-          "$ref": "#/$defs/evidencedString"
-        },
-        "version_chosen_for_assessment": {
           "$ref": "#/$defs/evidencedString"
         },
         "extractor": {
@@ -720,17 +690,10 @@
       "required": [
         "report_id",
         "screening_record_id",
-        "full_citation",
-        "doi",
-        "other_stable_identifiers",
-        "report_version_used",
         "report_date_used",
         "review_type_as_stated",
         "review_type_normalized",
-        "discovery_event_ids",
-        "source_record_ids",
         "duplicate_or_companion_report_relationship",
-        "version_chosen_for_assessment",
         "extractor",
         "source_file_path",
         "verification_passes"

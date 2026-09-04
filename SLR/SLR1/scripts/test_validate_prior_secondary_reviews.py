@@ -8,15 +8,11 @@ import unittest
 from pathlib import Path
 
 from validate_prior_secondary_reviews import (
-    DEFAULT_DISCOVERY_RECEIPTS,
     CandidateLocation,
     Document,
-    EventLocation,
     build_indexes,
     candidate_reference_issues,
     citation_reference_issues,
-    discovery_event_reference_issues,
-    load_discovery_receipts,
     load_object,
     load_schemas,
     matching_report_id_issues,
@@ -39,8 +35,6 @@ def document(
     linked_route_id: str | None = None,
     nested_report_id: str | None = None,
     screening_record_id: str = "psr-candidate-0001",
-    source_record_ids: tuple[str, ...] = ("source-record-1",),
-    discovery_event_ids: tuple[str, ...] = ("event-1",),
 ) -> Document:
     return Document(
         Path(name),
@@ -48,8 +42,6 @@ def document(
             "identity": {
                 "report_id": report_id,
                 "screening_record_id": screening_record_id,
-                "source_record_ids": list(source_record_ids),
-                "discovery_event_ids": list(discovery_event_ids),
                 "verification_passes": [
                     {
                         "audit_id": audit_id,
@@ -96,6 +88,32 @@ class SchemaTests(unittest.TestCase):
 
         self.assertEqual(schema_issues([extraction], schema, registry), [])
 
+    def test_screening_derived_identity_fields_are_rejected(self) -> None:
+        schema, registry = load_schemas()
+        template_path = (
+            Path(__file__).resolve().parents[1]
+            / "protocol-prior-secondary-reviews.template.json"
+        )
+        extraction = Document(template_path, load_object(template_path))
+        derived_fields = {
+            "full_citation",
+            "doi",
+            "other_stable_identifiers",
+            "report_version_used",
+            "discovery_event_ids",
+            "source_record_ids",
+            "version_chosen_for_assessment",
+        }
+        extraction.data["identity"].update(
+            {field: "derived through screening_record_id" for field in derived_fields}
+        )
+
+        messages = "\n".join(
+            issue.message for issue in schema_issues([extraction], schema, registry)
+        )
+        for field in derived_fields:
+            self.assertIn(field, messages)
+
 
 class CandidateTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -107,14 +125,12 @@ class CandidateTests(unittest.TestCase):
             search_date_id="date-1",
             count_id="count-1",
             audit_id="audit-1",
-            source_record_ids=("SCOPUS-PUBLICATION:1", "WOS:1"),
         )
 
     def candidate(
         self,
         *,
         decision: str = "include_prior_secondary_review",
-        record_ids: tuple[str, ...] = ("SCOPUS-PUBLICATION:1", "WOS:1"),
     ) -> CandidateLocation:
         return CandidateLocation(
             Path("psr-candidates.json"),
@@ -122,13 +138,10 @@ class CandidateTests(unittest.TestCase):
             {
                 "candidate_id": "psr-candidate-0001",
                 "screening_decision": decision,
-                "source_records": [
-                    {"source": "test", "record_ids": list(record_ids)}
-                ],
             },
         )
 
-    def test_candidate_and_source_records_match(self) -> None:
+    def test_candidate_link_resolves(self) -> None:
         candidates = {"psr-candidate-0001": self.candidate()}
         self.assertEqual(candidate_reference_issues([self.extraction], candidates), [])
         self.assertNotEqual(
@@ -147,12 +160,9 @@ class CandidateTests(unittest.TestCase):
             {"/identity/screening_record_id"},
         )
 
-    def test_candidate_must_be_included_and_match_source_records(self) -> None:
+    def test_candidate_must_be_included(self) -> None:
         candidates = {
-            "psr-candidate-0001": self.candidate(
-                decision="full_text_needed",
-                record_ids=("SCOPUS-PUBLICATION:2",),
-            )
+            "psr-candidate-0001": self.candidate(decision="full_text_needed")
         }
         messages = {
             issue.message
@@ -163,90 +173,6 @@ class CandidateTests(unittest.TestCase):
                 "expected 'include_prior_secondary_review'" in item
                 for item in messages
             )
-        )
-        self.assertTrue(
-            any(
-                "source_record_ids do not match the candidate" in item
-                for item in messages
-            )
-        )
-
-
-class DiscoveryEventTests(unittest.TestCase):
-    def extraction(
-        self,
-        *,
-        source_record_ids: tuple[str, ...] = ("SCOPUS-PUBLICATION:1",),
-        discovery_event_ids: tuple[str, ...] = ("event-1",),
-    ) -> Document:
-        return document(
-            "extraction.json",
-            "psr-candidate-0001",
-            citation_id="citation-1",
-            route_id="route-1",
-            search_date_id="date-1",
-            count_id="count-1",
-            audit_id="audit-1",
-            source_record_ids=source_record_ids,
-            discovery_event_ids=discovery_event_ids,
-        )
-
-    def event(
-        self,
-        event_id: str,
-        record_ids: tuple[str, ...],
-    ) -> EventLocation:
-        return EventLocation(
-            Path("receipt.json"),
-            "/events/0",
-            {
-                "event_id": event_id,
-                "event_kind": "final",
-                "stable_record_ids": list(record_ids),
-            },
-        )
-
-    def test_current_discovery_receipts_load(self) -> None:
-        events, issues = load_discovery_receipts(DEFAULT_DISCOVERY_RECEIPTS)
-        self.assertEqual(issues, [])
-        self.assertEqual(len(events), 8)
-
-    def test_discovery_events_match_receipts(self) -> None:
-        extraction = self.extraction()
-        events = {
-            "event-1": self.event("event-1", ("SCOPUS-PUBLICATION:1",))
-        }
-        self.assertEqual(
-            discovery_event_reference_issues([extraction], events),
-            [],
-        )
-
-    def test_every_retrieving_event_is_required(self) -> None:
-        extraction = self.extraction()
-        events = {
-            "event-1": self.event("event-1", ("SCOPUS-PUBLICATION:1",)),
-            "event-2": self.event("event-2", ("SCOPUS-PUBLICATION:1",)),
-        }
-        messages = {
-            issue.message
-            for issue in discovery_event_reference_issues([extraction], events)
-        }
-        self.assertTrue(any("missing ['event-2']" in item for item in messages))
-
-    def test_source_records_must_occur_in_receipts(self) -> None:
-        extraction = self.extraction(
-            source_record_ids=("SCOPUS-PUBLICATION:missing",),
-            discovery_event_ids=("event-1",),
-        )
-        events = {
-            "event-1": self.event("event-1", ("SCOPUS-PUBLICATION:1",))
-        }
-        messages = {
-            issue.message
-            for issue in discovery_event_reference_issues([extraction], events)
-        }
-        self.assertTrue(
-            any("absent from the discovery receipts" in item for item in messages)
         )
 
 

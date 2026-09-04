@@ -122,13 +122,9 @@ Make deduplication reproducible via a single `SLR/SLR1/deduplication.py`, with a
 
 ### Bibliographic, publication, and degree metadata
 
-Export title, authors, publication year and full date, venue or issuing organization, DOI, arXiv ID, arXiv version and version date, other stable URLs, and source-native record identifiers from `SLR/SLR1/deduplication.py` when available. Store bibliographic metadata recovered later during retrieval or full-text review in the screening record and its audit trail. Report-level extractions link to these values through `screening_record_id` and do not copy them.
+Export title, authors, publication year and full date, venue or issuing organization, DOI, arXiv ID, arXiv version and version date, other stable URLs, and source-native record identifiers from `SLR/SLR1/deduplication.py` when available. Report-level extractions link to these values through `screening_record_id` and do not copy them.
 
-Normalize a full `publication_date` to `YYYY-MM-DD` and retain its source string in `publication_date_source_value`. Use `null` for the normalized date when the source gives only a year or month. Each `arxiv_records` row retains `arxiv_id`, version, normalized `version_date`, and `version_date_source_value`. `stable_urls` contains source-supplied report landing URLs.
-
-Store publication and degree metadata in the screening record when it is absent from the deduplication output.
-
-Record `publication_type` using:
+During full-text screening, record `publication_type` only after determining that no other exclusion criterion applies. Store it in the screening record. Source-specific adapters and `SLR/SLR1/deduplication.py` provide source metadata without inferring this reviewer coding. Deduplication transfers existing reviewer coding when rebuilding candidates. Use:
 
 - **`journal_article`:** a full primary-research article in a journal.
 - **`conference_paper`:** a full conference, proceedings, or workshop paper.
@@ -136,8 +132,8 @@ Record `publication_type` using:
 - **`edited_book_research_chapter`:** a primary-research chapter in an edited scholarly book.
 - **`institutional_technical_report`:** a technical report formally issued by an institution or organization.
 - **`arxiv_preprint`:** a report version posted on arXiv.
-- **`masters_thesis`:** a thesis completed for a master's degree.
-- **`doctoral_thesis_or_dissertation`:** a thesis or dissertation completed for a doctoral degree.
+- **`masters_thesis`:** a thesis for a master's degree.
+- **`doctoral_thesis_or_dissertation`:** a thesis or dissertation for a doctoral degree.
 
 Record `publication_status` using:
 
@@ -150,7 +146,7 @@ Record `publication_status` using:
 - **`retracted`:** formally retracted.
 - **`unclear`:** current status cannot be established.
 
-For a thesis or dissertation, also record degree name, institution, country, department, `degree_level`, and `completion_status`.
+When the remaining report is a thesis or dissertation, also record `degree_level` and `completion_status` in the screening record during full-text screening. Degree name, institution, country, and department are outside the screening data. The two retained degree fields apply only to theses and dissertations.
 
 Record `degree_level` using:
 
@@ -163,6 +159,8 @@ Record `completion_status` using:
 - **`in_progress_or_incomplete`:** the work is explicitly unfinished.
 - **`unclear`:** completion cannot be established.
 
+Assign `exclude_wrong_completion_status` when a thesis or dissertation reaches this step and its `completion_status` is `in_progress_or_incomplete` or `unclear`.
+
 ## Screening and eligibility procedure
 
 Assign one source-located `screening_decision`, which is initialized to `none` by `SLR/SLR1/deduplication.py`:
@@ -173,6 +171,7 @@ Assign one source-located `screening_decision`, which is initialized to `none` b
 - `exclude_not_mbse`;
 - `exclude_wrong_population`;
 - `exclude_wrong_publication_type`;
+- `exclude_wrong_completion_status`;
 - `exclude_wrong_date`;
 - `exclude_wrong_language`;
 - `exclude_secondary_study`;
@@ -181,6 +180,4 @@ Assign one source-located `screening_decision`, which is initialized to `none` b
 
 Do not require an EPS or power term in a Stream B title or abstract. Embedded threads may be absent from metadata. If nanosatellite MBSE is plausible, retrieve the full text and resolve uncertainty there.
 
-If thesis or dissertation completion status is unresolved, hold the record as `publication_type_unresolved` while looking for source-locatable clarification. If a record in the cutoff year gives only a year, or thesis dates conflict, hold it as `date_unresolved`. Do not silently turn either temporary status into an exclusion.
-
-If a plausible completed report is unavailable because of access rights, an embargo, or a broken repository link, use `not_retrieved`. Do not call it the wrong publication type because it is unavailable.
+If a plausible completed report is unavailable because of access rights, an embargo, or a broken repository link, use `not_retrieved`. Do not call it the wrong publication type because it is unavailable. `not_retrieved` can only be used if the previous value was `full_text_needed` (meaning that a non-conclusive metadata-only pass had already been made, and the full text was not retrieved for a second pass).

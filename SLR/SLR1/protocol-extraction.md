@@ -68,7 +68,7 @@ Record:
 - concise report-family lead reason, or `not_reported`.
 - source-file path.
 
-Read title, authors, year, full publication date, venue or issuing organization, DOI, arXiv metadata, other stable URLs, publication type, publication status, and degree metadata through `screening_record_id`. Do not copy them into the extraction. Add bibliographic metadata recovered during retrieval or full-text review to the screening record and its audit trail.
+Read title, authors, year, full publication date, venue or issuing organization, DOI, arXiv metadata, other stable URLs, publication type, and publication status through `screening_record_id`. For a thesis or dissertation, also read degree level and completion status through that link. Do not copy these values into the extraction.
 
 Use `family_lead` as follows:
 

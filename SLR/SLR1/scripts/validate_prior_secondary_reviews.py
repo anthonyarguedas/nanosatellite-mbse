@@ -1,4 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["jsonschema==4.25.1"]
+# ///
+
 """Validate prior secondary review extraction records and their links."""
 
 from __future__ import annotations
@@ -28,16 +33,7 @@ SCHEMA_PATHS = (
 )
 TARGET_SCHEMA_ID = "protocol-prior-secondary-reviews.schema.json"
 DEFAULT_SCREENING_CANDIDATES = SLR1_DIR / "psr-candidates.json"
-DEFAULT_DISCOVERY_RECEIPTS = (
-    SLR1_DIR
-    / "source-specific/scopus/psr-searches/corrective-002/"
-    "source-union-receipt-prior_secondary_reviews.json",
-    SLR1_DIR
-    / "source-specific/web-of-science-core-collection/psr-searches/corrective-002/"
-    "source-union-receipt-prior_secondary_reviews.json",
-)
 SCREENING_SCHEMA = "slr1-screening-candidates/v2"
-DISCOVERY_RECEIPT_SCHEMA = "academic-search-source-union-receipt/v1"
 
 
 @dataclass(frozen=True)
@@ -58,13 +54,6 @@ class CandidateLocation:
     path: Path
     pointer: str
     record: Mapping[str, Any]
-
-
-@dataclass(frozen=True)
-class EventLocation:
-    path: Path
-    pointer: str
-    event: Mapping[str, Any]
 
 
 @dataclass(frozen=True)
@@ -101,87 +90,6 @@ def load_object(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError("the document root must be an object")
     return value
-
-
-def load_discovery_receipts(
-    paths: Iterable[Path],
-) -> tuple[dict[str, EventLocation], list[Issue]]:
-    events: dict[str, EventLocation] = {}
-    issues: list[Issue] = []
-    for path in paths:
-        try:
-            payload = load_object(path)
-        except (OSError, ValueError, json.JSONDecodeError) as error:
-            issues.append(Issue(str(path), "/", str(error)))
-            continue
-        if payload.get("schema_version") != DISCOVERY_RECEIPT_SCHEMA:
-            issues.append(
-                Issue(
-                    str(path),
-                    "/schema_version",
-                    f"expected {DISCOVERY_RECEIPT_SCHEMA!r}",
-                )
-            )
-        if payload.get("review_namespace") != "prior_secondary_reviews":
-            issues.append(
-                Issue(
-                    str(path),
-                    "/review_namespace",
-                    "expected 'prior_secondary_reviews'",
-                )
-            )
-        event_rows = payload.get("events")
-        if not isinstance(event_rows, list):
-            issues.append(Issue(str(path), "/events", "events must be an array"))
-            continue
-        for index, event in enumerate(event_rows):
-            event_pointer = f"/events/{index}"
-            if not isinstance(event, Mapping):
-                issues.append(
-                    Issue(str(path), event_pointer, "discovery event must be an object")
-                )
-                continue
-            identifier = event.get("event_id")
-            identifier_pointer = f"{event_pointer}/event_id"
-            if not isinstance(identifier, str) or not identifier:
-                issues.append(
-                    Issue(str(path), identifier_pointer, "event_id must be a string")
-                )
-                continue
-            if event.get("event_kind") != "final":
-                issues.append(
-                    Issue(
-                        str(path),
-                        f"{event_pointer}/event_kind",
-                        f"event {identifier!r} is not final",
-                    )
-                )
-                continue
-            stable_record_ids = event.get("stable_record_ids")
-            if not isinstance(stable_record_ids, list) or not all(
-                isinstance(value, str) and value for value in stable_record_ids
-            ):
-                issues.append(
-                    Issue(
-                        str(path),
-                        f"{event_pointer}/stable_record_ids",
-                        "stable_record_ids must be an array of strings",
-                    )
-                )
-                continue
-            existing = events.get(identifier)
-            if existing is not None:
-                issues.append(
-                    Issue(
-                        str(path),
-                        identifier_pointer,
-                        f"duplicate discovery event ID {identifier!r}; first defined "
-                        f"at {existing.path}{existing.pointer}",
-                    )
-                )
-                continue
-            events[identifier] = EventLocation(path, event_pointer, event)
-    return events, issues
 
 
 def load_screening_candidates(
@@ -238,15 +146,6 @@ def load_screening_candidates(
     return records, issues
 
 
-def candidate_source_record_ids(record: Mapping[str, Any]) -> set[str]:
-    identifiers: set[str] = set()
-    for source in rows(record.get("source_records")):
-        values = source.get("record_ids")
-        if isinstance(values, list):
-            identifiers.update(value for value in values if isinstance(value, str))
-    return identifiers
-
-
 def candidate_reference_issues(
     documents: Iterable[Document],
     candidates: Mapping[str, CandidateLocation],
@@ -274,100 +173,6 @@ def candidate_reference_issues(
                     "/identity/screening_record_id",
                     f"candidate {identifier!r} has screening decision {decision!r}, "
                     "expected 'include_prior_secondary_review'",
-                )
-            )
-
-        identity = document.data.get("identity")
-        if not isinstance(identity, Mapping):
-            continue
-        values = identity.get("source_record_ids")
-        if not isinstance(values, list) or not all(
-            isinstance(value, str) for value in values
-        ):
-            continue
-        actual = set(values)
-        expected = candidate_source_record_ids(location.record)
-        if actual != expected:
-            missing = sorted(expected - actual)
-            unexpected = sorted(actual - expected)
-            details: list[str] = []
-            if missing:
-                details.append(f"missing {missing!r}")
-            if unexpected:
-                details.append(f"unexpected {unexpected!r}")
-            issues.append(
-                Issue(
-                    str(document.path),
-                    "/identity/source_record_ids",
-                    "source_record_ids do not match the candidate: "
-                    + ", ".join(details),
-                )
-            )
-    return issues
-
-
-def event_record_ids(event: Mapping[str, Any]) -> set[str]:
-    values = event.get("stable_record_ids")
-    if not isinstance(values, list):
-        return set()
-    return {value for value in values if isinstance(value, str)}
-
-
-def discovery_event_reference_issues(
-    documents: Iterable[Document],
-    events: Mapping[str, EventLocation],
-) -> list[Issue]:
-    issues: list[Issue] = []
-    event_records = {
-        identifier: event_record_ids(location.event)
-        for identifier, location in events.items()
-    }
-    all_receipt_records = set().union(*event_records.values()) if events else set()
-    for document in documents:
-        identity = document.data.get("identity")
-        if not isinstance(identity, Mapping):
-            continue
-        source_values = identity.get("source_record_ids")
-        event_values = identity.get("discovery_event_ids")
-        if not isinstance(source_values, list) or not all(
-            isinstance(value, str) for value in source_values
-        ):
-            continue
-        if not isinstance(event_values, list) or not all(
-            isinstance(value, str) for value in event_values
-        ):
-            continue
-        source_ids = set(source_values)
-        actual_event_ids = set(event_values)
-        expected_event_ids = {
-            identifier
-            for identifier, record_ids in event_records.items()
-            if source_ids & record_ids
-        }
-        if actual_event_ids != expected_event_ids:
-            missing = sorted(expected_event_ids - actual_event_ids)
-            unexpected = sorted(actual_event_ids - expected_event_ids)
-            details: list[str] = []
-            if missing:
-                details.append(f"missing {missing!r}")
-            if unexpected:
-                details.append(f"unexpected {unexpected!r}")
-            issues.append(
-                Issue(
-                    str(document.path),
-                    "/identity/discovery_event_ids",
-                    "discovery_event_ids do not match the receipts: "
-                    + ", ".join(details),
-                )
-            )
-        missing_source_ids = sorted(source_ids - all_receipt_records)
-        if missing_source_ids:
-            issues.append(
-                Issue(
-                    str(document.path),
-                    "/identity/source_record_ids",
-                    "source record IDs absent from the discovery receipts: "
-                    f"{missing_source_ids!r}",
                 )
             )
     return issues
@@ -741,13 +546,6 @@ def parse_args() -> argparse.Namespace:
         help="PSR screening candidate JSON file",
     )
     parser.add_argument(
-        "--discovery-receipt",
-        action="append",
-        type=Path,
-        default=None,
-        help="authoritative final source-union receipt; repeat for each source",
-    )
-    parser.add_argument(
         "--schemas-only",
         action="store_true",
         help="compile the schemas without validating extraction records",
@@ -784,16 +582,11 @@ def main() -> int:
             issues.append(Issue(str(path), "/", str(error)))
 
     candidates: dict[str, CandidateLocation] = {}
-    events: dict[str, EventLocation] = {}
-    discovery_receipts: tuple[Path, ...] | list[Path] = ()
     if documents:
         candidates, candidate_load_issues = load_screening_candidates(
             args.screening_candidates
         )
         issues.extend(candidate_load_issues)
-        discovery_receipts = args.discovery_receipt or DEFAULT_DISCOVERY_RECEIPTS
-        events, receipt_load_issues = load_discovery_receipts(discovery_receipts)
-        issues.extend(receipt_load_issues)
 
     issues.extend(schema_issues(documents, schema, registry))
     indexes, index_issues = build_indexes(documents)
@@ -803,7 +596,6 @@ def main() -> int:
     issues.extend(citation_reference_issues(documents, indexes))
     issues.extend(source_route_reference_issues(documents, indexes))
     issues.extend(candidate_reference_issues(documents, candidates))
-    issues.extend(discovery_event_reference_issues(documents, events))
 
     unique_issues = sorted(
         set(issues),
@@ -814,8 +606,6 @@ def main() -> int:
         "schemas_compiled": len(SCHEMA_PATHS),
         "extractions": len(documents),
         "screening_candidates": len(candidates),
-        "discovery_receipts": len(discovery_receipts),
-        "discovery_events": len(events),
         "issue_count": len(unique_issues),
         "issues": [issue.as_dict() for issue in unique_issues],
     }

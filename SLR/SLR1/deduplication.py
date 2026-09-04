@@ -8,7 +8,8 @@ Modes:
 
 Source-event validation remains with the source-specific artifacts. This script
 uses it internally, then writes only report metadata and minimal discovery
-provenance needed for screening.
+provenance needed for screening. It transfers reviewer-coded publication fields
+when rebuilding candidates but never infers them from source metadata.
 """
 
 from __future__ import annotations
@@ -93,6 +94,7 @@ SCREENING_DECISIONS = {
         "exclude_not_mbse",
         "exclude_wrong_population",
         "exclude_wrong_publication_type",
+        "exclude_wrong_completion_status",
         "exclude_wrong_date",
         "exclude_wrong_language",
         "exclude_secondary_study",
@@ -107,12 +109,44 @@ SCREENING_DECISIONS = {
         "exclude_not_mbse",
         "exclude_wrong_population",
         "exclude_wrong_publication_type",
+        "exclude_wrong_completion_status",
         "exclude_wrong_date",
         "exclude_wrong_language",
         "exclude_secondary_study",
         "full_text_needed",
         "not_retrieved",
     },
+}
+PUBLICATION_TYPES = frozenset(
+    {
+        "journal_article",
+        "conference_paper",
+        "workshop_presentation",
+        "edited_book_research_chapter",
+        "institutional_technical_report",
+        "arxiv_preprint",
+        "masters_thesis",
+        "doctoral_thesis_or_dissertation",
+    }
+)
+DEGREE_LEVELS = frozenset({"masters", "doctoral"})
+DEGREE_COMPLETION_STATUSES = frozenset(
+    {"completed", "in_progress_or_incomplete", "unclear"}
+)
+THESIS_PUBLICATION_TYPES = frozenset(
+    {"masters_thesis", "doctoral_thesis_or_dissertation"}
+)
+SCREENING_CODING_FIELDS = (
+    "publication_type",
+    "degree_level",
+    "completion_status",
+)
+INCLUDED_REVIEW_DECISIONS = frozenset(
+    {"include_route_A_eps_primary", "include_route_B_embedded_eps"}
+)
+PUBLICATION_CODING_DECISIONS = INCLUDED_REVIEW_DECISIONS | {
+    "exclude_wrong_publication_type",
+    "exclude_wrong_completion_status",
 }
 
 
@@ -980,6 +1014,85 @@ def write_create_only(path: Path, payload: Mapping[str, Any]) -> None:
         os.fsync(handle.fileno())
 
 
+def reviewer_screening_coding(
+    record: Mapping[str, Any], mode: str
+) -> dict[str, str]:
+    """Validate and return fields assigned during full-text screening."""
+    if mode not in MODES:
+        raise ValueError(f"Unknown screening mode: {mode}")
+
+    allowed_values = {
+        "publication_type": PUBLICATION_TYPES,
+        "degree_level": DEGREE_LEVELS,
+        "completion_status": DEGREE_COMPLETION_STATUSES,
+    }
+    coding: dict[str, str] = {}
+    for field in SCREENING_CODING_FIELDS:
+        if field not in record:
+            continue
+        value = record[field]
+        if not isinstance(value, str) or value not in allowed_values[field]:
+            raise ValueError(f"Invalid reviewer-coded {field}: {value!r}")
+        coding[field] = value
+
+    if mode == "psr":
+        if coding:
+            raise ValueError("PSR candidates cannot contain main-review publication coding")
+        return coding
+
+    decision = text(record.get("screening_decision"))
+    if coding and decision not in PUBLICATION_CODING_DECISIONS:
+        raise ValueError(
+            "Reviewer-coded publication fields require an inclusion or "
+            "publication-related exclusion decision"
+        )
+    if decision in INCLUDED_REVIEW_DECISIONS and "publication_type" not in coding:
+        raise ValueError("An included report requires reviewer-coded publication_type")
+
+    publication_type = coding.get("publication_type")
+    degree_fields = {"degree_level", "completion_status"} & coding.keys()
+    if degree_fields and publication_type not in THESIS_PUBLICATION_TYPES:
+        raise ValueError(
+            "degree_level and completion_status are allowed only for a thesis or "
+            "dissertation"
+        )
+    if publication_type in THESIS_PUBLICATION_TYPES and degree_fields != {
+        "degree_level",
+        "completion_status",
+    }:
+        raise ValueError(
+            "A reviewer-coded thesis or dissertation requires degree_level and "
+            "completion_status"
+        )
+
+    degree_level = coding.get("degree_level")
+    if publication_type == "masters_thesis" and degree_level != "masters":
+        raise ValueError("masters_thesis requires degree_level 'masters'")
+    if (
+        publication_type == "doctoral_thesis_or_dissertation"
+        and degree_level != "doctoral"
+    ):
+        raise ValueError(
+            "doctoral_thesis_or_dissertation requires degree_level 'doctoral'"
+        )
+    if (
+        decision in INCLUDED_REVIEW_DECISIONS
+        and publication_type in THESIS_PUBLICATION_TYPES
+        and coding.get("completion_status") != "completed"
+    ):
+        raise ValueError("An included thesis or dissertation must be completed")
+    if decision == "exclude_wrong_completion_status":
+        if publication_type not in THESIS_PUBLICATION_TYPES:
+            raise ValueError(
+                "exclude_wrong_completion_status requires a thesis or dissertation"
+            )
+        if coding.get("completion_status") == "completed":
+            raise ValueError(
+                "exclude_wrong_completion_status requires a non-completed status"
+            )
+    return coding
+
+
 def record_references(record: Mapping[str, Any]) -> set[tuple[str, str]]:
     references: set[tuple[str, str]] = set()
     source_values = record.get("source_records")
@@ -1007,7 +1120,9 @@ def apply_screening_decisions(
     ):
         raise ValueError("The screening-decision source has an incompatible scope")
     allowed = SCREENING_DECISIONS[mode]
-    decisions_by_reference: dict[tuple[str, str], str] = {}
+    coding_by_reference: dict[
+        tuple[str, str], tuple[str, tuple[tuple[str, str], ...]]
+    ] = {}
     old_records = prior.get("records")
     if not isinstance(old_records, list):
         raise ValueError("The screening-decision source has no records list")
@@ -1017,33 +1132,37 @@ def apply_screening_decisions(
         decision = text(record.get("screening_decision"))
         if decision not in allowed:
             raise ValueError(f"Unexpected screening decision: {decision}")
+        coding = reviewer_screening_coding(record, mode)
+        screening_state = (decision, tuple(sorted(coding.items())))
         references = record_references(record)
         if not references:
             raise ValueError("A prior screening record has no source identifier")
         for reference in references:
-            existing = decisions_by_reference.setdefault(reference, decision)
-            if existing != decision:
-                raise ValueError("One source identifier has conflicting prior decisions")
+            existing = coding_by_reference.setdefault(reference, screening_state)
+            if existing != screening_state:
+                raise ValueError("One source identifier has conflicting prior screening coding")
 
     transferred = 0
     used_references: set[tuple[str, str]] = set()
     for record in payload["records"]:
         references = record_references(record)
-        decisions = {
-            decisions_by_reference[reference]
+        screening_states = {
+            coding_by_reference[reference]
             for reference in references
-            if reference in decisions_by_reference
+            if reference in coding_by_reference
         }
-        if not decisions:
+        if not screening_states:
             raise ValueError("A rebuilt candidate has no prior screening decision")
-        if len(decisions) != 1:
+        if len(screening_states) != 1:
             raise ValueError(
-                "Merged duplicate candidates have conflicting screening decisions"
+                "Merged duplicate candidates have conflicting screening coding"
             )
-        record["screening_decision"] = decisions.pop()
+        decision, coding_items = screening_states.pop()
+        record["screening_decision"] = decision
+        record.update(coding_items)
         used_references.update(references)
         transferred += 1
-    if used_references != set(decisions_by_reference):
+    if used_references != set(coding_by_reference):
         raise ValueError("The rebuilt candidate set changed the source identifier ledger")
     return transferred
 
@@ -1061,7 +1180,10 @@ def check(path: Path, mode: str) -> None:
     for record in records:
         if not isinstance(record, dict) or record.get("screening_decision") not in allowed:
             raise ValueError("Candidate records contain an invalid screening decision")
+        reviewer_screening_coding(record, mode)
         record["screening_decision"] = "none"
+        for field in SCREENING_CODING_FIELDS:
+            record.pop(field, None)
     persisted.pop("generated_at", None)
     expected.pop("generated_at", None)
     if persisted != expected:
@@ -1076,7 +1198,10 @@ def main() -> int:
     parser.add_argument(
         "--screening-decisions-from",
         type=Path,
-        help="transfer decisions by source record ID while rebuilding a candidate file",
+        help=(
+            "transfer decisions and reviewer-coded publication fields by source "
+            "record ID while rebuilding a candidate file"
+        ),
     )
     args = parser.parse_args()
     output = (args.output or DEFAULT_OUTPUTS[args.mode]).resolve(strict=False)

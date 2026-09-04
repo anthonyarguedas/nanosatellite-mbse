@@ -136,12 +136,12 @@ Create one compact extraction for each included prior-review report. Do not use 
 
 - stable report ID;
 - `screening_record_id`, equal to the report's `candidate_id` in `psr-candidates.json`;
-- full citation, DOI and other stable identifiers;
-- report version and date used;
+- report date used;
 - review type as stated by the authors and as normalized by the reviewer;
-- every Scopus and Web of Science discovery-event and source-record ID;
-- duplicate or companion-report relationship and the version chosen for assessment; and
-- extractor, verification passes, evidence references, and coding confidence.
+- duplicate or companion-report relationship; and
+- extractor, source-file path, verification passes, evidence references, and coding confidence.
+
+Keep the full citation, DOI, other stable identifiers, report version, discovery-event IDs, source-record IDs, and version chosen for assessment in the search and screening data. The extraction links to them through `screening_record_id` and does not copy them.
 
 ### Scope and currency
 
