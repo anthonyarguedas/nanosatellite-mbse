@@ -1,0 +1,71 @@
+{
+  "schema_version": "slr1-esa-indico-final-direct-validation/v1",
+  "source": "ESA Indico",
+  "status": "pass",
+  "validated_at_utc": "2026-09-04T17:33:21.837266Z",
+  "checks": {
+    "plan_and_file_bindings": "pass",
+    "adapter_identity": "pass",
+    "nine_partition_transactions": "pass",
+    "nine_terminal_markers": "pass",
+    "nine_full_metadata_ledgers": "pass",
+    "mandatory_screenshot_pairs": "pass",
+    "equal_root_snapshots": "pass",
+    "all_event_export_witnesses": "pass",
+    "fixed_record_order_and_digest": "pass",
+    "exact_local_match_rebuilds": "pass",
+    "full_abstract_projection": "pass",
+    "publication_type_projection": "pass",
+    "no_attachment_bodies": "pass",
+    "no_search_date_filter": "pass",
+    "persisted_requested_query_alias": "pass"
+  },
+  "partition_totals": {
+    "A1": 0,
+    "A2": 0,
+    "A3": 0,
+    "B1": 22,
+    "B2": 2,
+    "BG1": 0,
+    "BG2": 1,
+    "BC1": 2,
+    "BT2": 0
+  },
+  "schedule_union_records": 24,
+  "fixed_source_corpus": {
+    "category_id": 0,
+    "root_event_count": 441,
+    "normalized_metadata_record_count": 16521,
+    "records_sha256": "58ae5970f54002d18168459d790315a5d0aabd69f46ecf2955107c800f3d7833",
+    "ordered_event_ids_sha256": "f539476e5a002b107e25798409db6ea7dc0c019fddf2774cd1969c67de3ed8b4",
+    "root_snapshots_equal": true
+  },
+  "artifacts": {
+    "A1.json": "f92fb87a20f673b34458beec0fbceeb38b1b67fb13502e3ea304d5e21c717ed0",
+    "A2.json": "2d0abfe996521cc8862809ed1027b78c3274580278c455177753f0c59cc0a680",
+    "A3.json": "551b52a58a3a45a22926e2e001c8456668762c0c41fc7b3f3ac2c37982a9fa30",
+    "B1.json": "f8834189cbc65eb3ec638186d8c1d1ff21bec6dfee4f468d727d4b39299a4f67",
+    "B2.json": "b1cd9c9f6d12913708eef455449ec039af5b7eb6a608f5d497cf4bb37c5a7e7a",
+    "BG1.json": "09e03046d1a53b736cbadde791669de90bfd424b0df7340f94e60f13a2a77924",
+    "BG2.json": "7442b00db77e8928b0d46ab48783b282a0c5dc3ccc6100dd3d64e7fb4174a10e",
+    "BC1.json": "a7d061f11819c53c3c20fefa97e102e6abd0849946ed8810a64b1c3bca1fab9f",
+    "BT2.json": "e409cdf8844438498f90b3078e9e533308eac1394f78ecd0d3860b82b92415a8"
+  },
+  "validation_correction": {
+    "schema_version": "slr1-esa-indico-persisted-query-alias-correction/v1",
+    "reason": "The shared normalizer persists requested_query and omits the legacy query alias. Validation reads requested_query as the authoritative requested value.",
+    "changes_to_source_artifacts": false,
+    "changes_to_queries": false,
+    "changes_to_matches": false,
+    "script": "SLR/SLR1/scripts/esa_indico_final_direct/finalize.py",
+    "script_sha256": "1c96d51cf5bed894a2e9c58363531a2b7ece6c5ade2868f7a2cc7bcfd768b153",
+    "pinned_runner_sha256": "f6bc2381347c58a368d3e87ea85427327061f34ae27340e948903df772a7fdf4",
+    "protocol_drift": {
+      "state": "post_execution_prose_change_with_search_blocks_declared_unchanged",
+      "path": "SLR/SLR1/protocol-discovery-and-screening.md",
+      "predeclared_sha256": "7eb8a9ff8e78a50082a7984d095e45343b083a726da51a1335787ecbad65f55b",
+      "current_sha256": "075b748f70a763eae8544ff8502b8696d3bebd80d1ad58fd9530f725557f0422",
+      "query_snapshot_unchanged": true
+    }
+  }
+}
