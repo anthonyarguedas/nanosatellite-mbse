@@ -130,7 +130,7 @@ The sole LLM reviewer makes every final screening decision. Use one focused huma
 
 ## Extraction form
 
-Create one compact extraction for each included prior-review report. Do not use the primary-evidence extraction form. Record:
+Create one compact extraction for each included prior-review report. Do not use the primary-evidence extraction form. The canonical property names, types, cardinalities, evidence encoding, and controlled-value definitions are in the [prior-review extraction schema](protocol-prior-secondary-reviews.schema.json). Record:
 
 ### Identity and provenance
 
@@ -215,6 +215,7 @@ Then assign one supporting-search disposition, with a narrative justification ra
 - `no_substantial_overlap_identified`;
 - `partial_overlap_main_review_still_needed`;
 - `substantial_overlap_but_scope_or_update_gap_remains`;
+- `substantial_overlap_but_methodological_gap_remains`;
 - `potential_redundancy_requires_protocol_reconsideration`; or
 - `insufficient_information_to_decide`.
 
