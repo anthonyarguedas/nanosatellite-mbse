@@ -1,0 +1,424 @@
+{
+  "schema_version": "slr1-wos-final-direct-plan/v1",
+  "created_at_utc": "2026-09-04T18:46:35.711342Z",
+  "repository_head_at_predeclaration": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+  "source": "Web of Science Core Collection",
+  "source_id": "web_of_science_core_collection",
+  "review_namespace": "main",
+  "review_id": "slr1-1.1-restart",
+  "phase": "identification",
+  "strategy_reference": "slr1-wos-main-direct-v1",
+  "concept_schedule_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "source_union_expected_partitions": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "BG1",
+    "BG2",
+    "BC1",
+    "BT2"
+  ],
+  "source_union_expected_sources": [
+    "web_of_science_core_collection"
+  ],
+  "cutoff": {
+    "exact_common_cutoff": "2026-08-24",
+    "source_year_start": 2011,
+    "source_year_upper_bound": 2026,
+    "source_precision": "year",
+    "native_query_clauses": [
+      "PY=(2011-2026)",
+      "LA=(English)"
+    ],
+    "screening_requirement": "Screen every 2026 record against the exact common cutoff. The Web of Science discovery query applies an inclusive year bound."
+  },
+  "source_configuration": {
+    "database": "Web of Science Core Collection",
+    "editions": "All currently exposed editions",
+    "advanced_search_url": "https://www.webofscience.com/wos/woscc/advanced-search",
+    "field": "TS Topic",
+    "query_mode": "raw",
+    "sort": "Date: oldest first",
+    "page_size": 50,
+    "language": "English through the raw LA=(English) clause",
+    "document_type_controls": [],
+    "subject_controls": [],
+    "access_controls": [],
+    "peer_review_filter": null,
+    "full_text_filter": null,
+    "controlled_vocabulary": null,
+    "native_ris": "RIS (other reference software)",
+    "native_ris_record_content": "Author, Title, Source, Abstract"
+  },
+  "capture_contract": {
+    "full_abstracts": {
+      "required": true,
+      "normalized_field": "abstract",
+      "source_method": "native RIS selected as Author, Title, Source, Abstract",
+      "source_tags": [
+        "AB",
+        "N2"
+      ],
+      "require_nonempty_for_every_retained_record": true,
+      "normalized_source": "native_web_of_science_abstract_inclusive_ris",
+      "snippet_is_not_a_substitute": true
+    },
+    "publication_types": {
+      "required": true,
+      "normalized_field": "documentType",
+      "source_tag": "TY",
+      "require_nonempty_for_every_retained_record": true,
+      "filter_applied": null,
+      "reviewer_publication_type_coding": "deferred to screening"
+    },
+    "native_ris_sidecar_for_positive_event": true,
+    "automatic_screenshots": true
+  },
+  "translation": {
+    "population_wildcards": true,
+    "wildcard_count": 10,
+    "replaced_population_literals": 22,
+    "literal_small_satellite_atoms": 4,
+    "proximity_operators": false,
+    "pair_expansion": false,
+    "local_pair_filter": false,
+    "controlled_vocabulary_supplement": null,
+    "term_counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32
+    },
+    "query_character_counts": {
+      "A1": 3143,
+      "A2": 3958,
+      "A3": 2410,
+      "B1": 2051,
+      "B2": 2457,
+      "BG1": 2470,
+      "BG2": 1922,
+      "BC1": 1280,
+      "BT2": 2048
+    },
+    "query_sha256": {
+      "A1": "de54fc809834de4fc22ca3ec7625dfad4366cad3c059643935d5f57ff271365c",
+      "A2": "25a9202d264394d5de48f1f06d714321fdc99d5083384433dd567870ec0f32f7",
+      "A3": "edbe73711006dd7d57a3a310dc3773c9e0a3329ae596880012d1917cae188227",
+      "B1": "3016dbf800cd83ff3cac25618e70641074d59f14ea4dcb721b803407237f4239",
+      "B2": "ce4ffc12c1ef828a13d2bb56d061cd2f60b4920a602632ccae996fc78415bea3",
+      "BG1": "77eaf62bbff61ef4a47cb05e1a4a8ae51c2370860e05c22c4ad2b0d9c2594b19",
+      "BG2": "a4ff5a03f8c3059be048f4bd4c4bc409bb03841b47b081eb824fa2706027e98e",
+      "BC1": "587b3effe42a2644500b13785e40966f31592fc4a42ce47fa3451c2c6f5c6a4e",
+      "BT2": "71a2b77e9b33ff9efde70f6fe961d18199d7245cc8775ecb287fe3979db2963d"
+    },
+    "accepted_pilot_snapshot": "SLR/SLR1/scripts/wos_pilot004/queries.py",
+    "accepted_pilot_snapshot_sha256": "5f4b3e47f6e775eb34ed8fcfb68cd8b80eebd22f3698275381aeac2d82ac623e",
+    "accepted_wildcard_replacements": [
+      {
+        "candidate": "CubeSat*",
+        "replaced_literals": [
+          "CubeSat",
+          "CubeSats"
+        ]
+      },
+      {
+        "candidate": "cube sat*",
+        "replaced_literals": [
+          "cube sat",
+          "cube sats"
+        ]
+      },
+      {
+        "candidate": "cube-sat*",
+        "replaced_literals": [
+          "cube-sat",
+          "cube-sats"
+        ]
+      },
+      {
+        "candidate": "cube satellite*",
+        "replaced_literals": [
+          "cube satellite",
+          "cube satellites"
+        ]
+      },
+      {
+        "candidate": "nanosat*",
+        "replaced_literals": [
+          "nanosat",
+          "nanosats",
+          "nanosatellite",
+          "nanosatellites"
+        ]
+      },
+      {
+        "candidate": "nano-sat*",
+        "replaced_literals": [
+          "nano-sat",
+          "nano-sats"
+        ]
+      },
+      {
+        "candidate": "nano sat*",
+        "replaced_literals": [
+          "nano sat",
+          "nano sats"
+        ]
+      },
+      {
+        "candidate": "nano-satellite*",
+        "replaced_literals": [
+          "nano-satellite",
+          "nano-satellites"
+        ]
+      },
+      {
+        "candidate": "nano satellite*",
+        "replaced_literals": [
+          "nano satellite",
+          "nano satellites"
+        ]
+      },
+      {
+        "candidate": "SmallSat*",
+        "replaced_literals": [
+          "SmallSat",
+          "SmallSats"
+        ]
+      }
+    ]
+  },
+  "strict_contract": {
+    "strict_mode": "--require-complete",
+    "membership_gate": "equal complete ordered WOS-ID sequences",
+    "required_equal_controls": [
+      "source total",
+      "page count",
+      "Web of Science Core Collection scope",
+      "all current editions",
+      "Date: oldest first",
+      "native RIS reconciliation",
+      "Author, Title, Source, Abstract export readback"
+    ],
+    "automatic_screenshots_required": true,
+    "full_abstracts_required": true,
+    "source_publication_types_required": true
+  },
+  "execution_policy": {
+    "one_source_execution_per_partition": true,
+    "continue_after_partition_failure": true,
+    "fresh_authorized_target_per_partition": true,
+    "close_ephemeral_target_after_partition": true,
+    "target_identifiers_retained": false,
+    "retry_policy": "none_after_final_plan_execution_begins",
+    "skip_full_abstracts": false,
+    "publication_type_filter": null
+  },
+  "adapter": {
+    "id": "search_web_of_science",
+    "version": "3",
+    "sha256": "bc52bd2b52b18ee5c1470016dedb63c879404dfb81d62ae67b3144adaf3f80b5",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_web_of_science.py",
+    "normalized_record_fields": {
+      "abstract": "full native RIS AB or N2 content",
+      "documentType": "native RIS TY publication type"
+    }
+  },
+  "bindings": {
+    "files": {
+      "SLR/SLR1/scripts/wos_final_direct/run.py": "b809f85a8a46bf5328fc2e285d8760a21f186f7523c547913ac17781d1c2500c",
+      "SLR/SLR1/scripts/wos_final_direct/queries.py": "3447c5b269ad5aea3645b98861b1a5cfacba16b1f88ef8aea7b5227234f66331",
+      "SLR/SLR1/scripts/wos_pilot004/queries.py": "5f4b3e47f6e775eb34ed8fcfb68cd8b80eebd22f3698275381aeac2d82ac623e",
+      "SLR/SLR1/source-specific/web-of-science-core-collection/source-specific-guidelines.md": "3c68fea3ebd5045065265c47ab540b1cc1b8282ebd36b39014d4eb8047b25944",
+      "SLR/SLR1/protocol.md": "d2055142e25b294d8a32848eba8ae181cbe04d023a50ee18bad025b2328b1b76",
+      "SLR/SLR1/protocol-discovery-and-screening.md": "075b748f70a763eae8544ff8502b8696d3bebd80d1ad58fd9530f725557f0422"
+    }
+  },
+  "events": [
+    {
+      "event_id": "final-main-A1-web-of-science-core-collection-001",
+      "partition_id": "A1",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "de54fc809834de4fc22ca3ec7625dfad4366cad3c059643935d5f57ff271365c",
+      "query_characters": 3143,
+      "output_filename": "A1.json",
+      "native_ris_filename": "A1.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    },
+    {
+      "event_id": "final-main-A2-web-of-science-core-collection-001",
+      "partition_id": "A2",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"power budget\") OR TS=(\"power budgets\") OR TS=(\"energy budget\") OR TS=(\"energy budgets\") OR TS=(\"energy balance\") OR TS=(\"energy balances\") OR TS=(\"power balance\") OR TS=(\"power balances\") OR TS=(\"power margin\") OR TS=(\"power margins\") OR TS=(\"power generation\") OR TS=(\"photovoltaic generator\") OR TS=(\"photovoltaic generators\") OR TS=(\"solar array\") OR TS=(\"solar arrays\") OR TS=(\"solar panel\") OR TS=(\"solar panels\") OR TS=(\"battery\") OR TS=(\"batteries\") OR TS=(\"battery management\") OR TS=(\"state of charge\") OR TS=(\"states of charge\") OR TS=(\"energy storage\") OR TS=(\"power electronics\") OR TS=(\"power conditioning\") OR TS=(\"power distribution\") OR TS=(\"power management\") OR TS=(\"power interface\") OR TS=(\"power interfaces\") OR TS=(\"power mode\") OR TS=(\"power modes\") OR TS=(\"load profile\") OR TS=(\"load profiles\") OR TS=(\"power consumption\") OR TS=(\"power demand\") OR TS=(\"power profile\") OR TS=(\"energy harvesting\")) AND ((TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) OR (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "25a9202d264394d5de48f1f06d714321fdc99d5083384433dd567870ec0f32f7",
+      "query_characters": 3958,
+      "output_filename": "A2.json",
+      "native_ris_filename": "A2.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    },
+    {
+      "event_id": "final-main-A3-web-of-science-core-collection-001",
+      "partition_id": "A3",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "edbe73711006dd7d57a3a310dc3773c9e0a3329ae596880012d1917cae188227",
+      "query_characters": 2410,
+      "output_filename": "A3.json",
+      "native_ris_filename": "A3.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    },
+    {
+      "event_id": "final-main-B1-web-of-science-core-collection-001",
+      "partition_id": "B1",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "3016dbf800cd83ff3cac25618e70641074d59f14ea4dcb721b803407237f4239",
+      "query_characters": 2051,
+      "output_filename": "B1.json",
+      "native_ris_filename": "B1.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    },
+    {
+      "event_id": "final-main-B2-web-of-science-core-collection-001",
+      "partition_id": "B2",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"requirement\") OR TS=(\"requirements\") OR TS=(\"function\") OR TS=(\"functions\") OR TS=(\"functional\") OR TS=(\"behavior\") OR TS=(\"behaviors\") OR TS=(\"behaviour\") OR TS=(\"behaviours\") OR TS=(\"behavioral\") OR TS=(\"behavioural\") OR TS=(\"architecture\") OR TS=(\"architectures\") OR TS=(\"architectural\") OR TS=(\"interface\") OR TS=(\"interfaces\") OR TS=(\"traceability\") OR TS=(\"trace\") OR TS=(\"traceable\") OR TS=(\"traced\") OR TS=(\"allocation\") OR TS=(\"allocate\") OR TS=(\"allocated\") OR TS=(\"constraint\") OR TS=(\"constraints\") OR TS=(\"parametric\") OR TS=(\"parametrics\") OR TS=(\"analysis\") OR TS=(\"analyses\") OR TS=(\"design\") OR TS=(\"designs\") OR TS=(\"designed\") OR TS=(\"designing\") OR TS=(\"decision\") OR TS=(\"decisions\") OR TS=(\"decision-making\") OR TS=(\"decision making\") OR TS=(\"trade study\") OR TS=(\"trade studies\") OR TS=(\"trade-off\") OR TS=(\"trade-offs\") OR TS=(\"tradeoff\") OR TS=(\"tradeoffs\") OR TS=(\"verification\") OR TS=(\"verifications\") OR TS=(\"verify\") OR TS=(\"verifies\") OR TS=(\"verified\") OR TS=(\"verifying\") OR TS=(\"validation\") OR TS=(\"validations\") OR TS=(\"validate\") OR TS=(\"validates\") OR TS=(\"validated\") OR TS=(\"validating\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "ce4ffc12c1ef828a13d2bb56d061cd2f60b4920a602632ccae996fc78415bea3",
+      "query_characters": 2457,
+      "output_filename": "B2.json",
+      "native_ris_filename": "B2.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    },
+    {
+      "event_id": "final-main-BG1-web-of-science-core-collection-001",
+      "partition_id": "BG1",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"generic model\") OR TS=(\"generic models\") OR TS=(\"generic system model\") OR TS=(\"generic system models\") OR TS=(\"reusable model\") OR TS=(\"reusable models\") OR TS=(\"reusable system model\") OR TS=(\"reusable system models\") OR TS=(\"configurable model\") OR TS=(\"configurable models\") OR TS=(\"configurable system model\") OR TS=(\"configurable system models\") OR TS=(\"model template\") OR TS=(\"model templates\")) OR (TS=(\"mission-agnostic model\") OR TS=(\"mission-agnostic models\") OR TS=(\"mission-agnostic architecture\") OR TS=(\"mission-agnostic architectures\") OR TS=(\"mission agnostic model\") OR TS=(\"mission agnostic models\") OR TS=(\"mission agnostic architecture\") OR TS=(\"mission agnostic architectures\") OR TS=(\"mission-independent model\") OR TS=(\"mission-independent models\") OR TS=(\"mission-independent architecture\") OR TS=(\"mission-independent architectures\") OR TS=(\"mission independent model\") OR TS=(\"mission independent models\") OR TS=(\"mission independent architecture\") OR TS=(\"mission independent architectures\")) OR ((TS=(\"mission-agnostic\") OR TS=(\"mission agnostic\") OR TS=(\"mission-independent\") OR TS=(\"mission independent\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "77eaf62bbff61ef4a47cb05e1a4a8ae51c2370860e05c22c4ad2b0d9c2594b19",
+      "query_characters": 2470,
+      "output_filename": "BG1.json",
+      "native_ris_filename": "BG1.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    },
+    {
+      "event_id": "final-main-BG2-web-of-science-core-collection-001",
+      "partition_id": "BG2",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"reference architecture\") OR TS=(\"reference architectures\") OR TS=(\"domain model\") OR TS=(\"domain models\") OR TS=(\"metamodel\") OR TS=(\"metamodels\") OR TS=(\"meta-model\") OR TS=(\"meta-models\")) OR (TS=(\"product-line model\") OR TS=(\"product-line models\") OR TS=(\"product line model\") OR TS=(\"product line models\") OR TS=(\"product-family model\") OR TS=(\"product-family models\") OR TS=(\"product family model\") OR TS=(\"product family models\")) OR (TS=(\"variation point\") OR TS=(\"variation points\")) OR ((TS=(\"product-line\") OR TS=(\"product line\") OR TS=(\"product-family\") OR TS=(\"product family\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "a4ff5a03f8c3059be048f4bd4c4bc409bb03841b47b081eb824fa2706027e98e",
+      "query_characters": 1922,
+      "output_filename": "BG2.json",
+      "native_ris_filename": "BG2.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    },
+    {
+      "event_id": "final-main-BC1-web-of-science-core-collection-001",
+      "partition_id": "BC1",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"system reference model\") OR TS=(\"system reference models\") OR TS=(\"model library\") OR TS=(\"model libraries\") OR TS=(\"system model library\") OR TS=(\"system model libraries\") OR TS=(\"model pattern\") OR TS=(\"model patterns\") OR TS=(\"modeling pattern\") OR TS=(\"modeling patterns\") OR TS=(\"modelling pattern\") OR TS=(\"modelling patterns\") OR TS=(\"system model pattern\") OR TS=(\"system model patterns\") OR TS=(\"systems model pattern\") OR TS=(\"systems model patterns\") OR TS=(\"model profile\") OR TS=(\"model profiles\") OR TS=(\"system model profile\") OR TS=(\"system model profiles\") OR TS=(\"systems model profile\") OR TS=(\"systems model profiles\") OR TS=(\"SysML profile\") OR TS=(\"SysML profiles\")) OR (TS=(\"domain-specific modeling language\") OR TS=(\"domain specific modeling language\") OR TS=(\"domain-specific modelling language\") OR TS=(\"domain specific modelling language\")))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "587b3effe42a2644500b13785e40966f31592fc4a42ce47fa3451c2c6f5c6a4e",
+      "query_characters": 1280,
+      "output_filename": "BC1.json",
+      "native_ris_filename": "BC1.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    },
+    {
+      "event_id": "final-main-BT2-web-of-science-core-collection-001",
+      "partition_id": "BT2",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"tailor\") OR TS=(\"tailors\") OR TS=(\"tailored\") OR TS=(\"tailoring\") OR TS=(\"customize\") OR TS=(\"customizes\") OR TS=(\"customized\") OR TS=(\"customizing\") OR TS=(\"customization\") OR TS=(\"customise\") OR TS=(\"customises\") OR TS=(\"customised\") OR TS=(\"customising\") OR TS=(\"customisation\") OR TS=(\"parameterize\") OR TS=(\"parameterizes\") OR TS=(\"parameterized\") OR TS=(\"parameterizing\") OR TS=(\"parameterization\") OR TS=(\"parameterise\") OR TS=(\"parameterises\") OR TS=(\"parameterised\") OR TS=(\"parameterising\") OR TS=(\"parameterisation\") OR TS=(\"instantiate\") OR TS=(\"instantiates\") OR TS=(\"instantiated\") OR TS=(\"instantiating\") OR TS=(\"instantiation\") OR TS=(\"variability\") OR TS=(\"variation point\") OR TS=(\"variation points\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "71a2b77e9b33ff9efde70f6fe961d18199d7245cc8775ecb287fe3979db2963d",
+      "query_characters": 2048,
+      "output_filename": "BT2.json",
+      "native_ris_filename": "BT2.ris",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 40,
+      "timeout_seconds": 300,
+      "page_delay_seconds": 0.25,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208"
+    }
+  ]
+}
