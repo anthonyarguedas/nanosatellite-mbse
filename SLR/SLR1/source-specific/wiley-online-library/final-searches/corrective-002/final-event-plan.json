@@ -1,0 +1,184 @@
+{
+  "schema_version": "slr1-wiley-online-library-final-direct-corrective-plan/v1",
+  "created_at_utc": "2026-09-04T16:59:23.001957Z",
+  "source": "Wiley Online Library",
+  "source_id": "wiley_online_library",
+  "review_namespace": "main",
+  "review_id": "slr1-1.1-restart",
+  "phase": "identification",
+  "strategy_reference": "slr1-wiley-online-library-main-direct-v1",
+  "strategy_version": "2d7569893e596a226eb6292173472607f5862626",
+  "corrective_sequence": 2,
+  "reason": "The initial final A2-mb and B2 commands ended with null, nonmergeable failure artifacts. They contributed no source total, stable ID, record, RIS file, or screenshot to the final union. This corrective plan runs fresh unchanged source cells and reuses no browser or source state.",
+  "initial_final_plan": {
+    "path": "SLR/SLR1/source-specific/wiley-online-library/final-searches/final-event-plan.json",
+    "sha256": "c79e25c3aa71acaccd5d8efbddc4a1e42f55e882ea0e8993971129a2dd8d6bf6"
+  },
+  "initial_final_run_receipt": {
+    "path": "SLR/SLR1/source-specific/wiley-online-library/final-searches/run-receipt.json",
+    "sha256": "24538ea68a120d7b5e6ea8cd9721d42fffb620162493f5f60c115a2f6325f46a"
+  },
+  "post_predeclaration_protocol_drift": {
+    "path": "SLR/SLR1/protocol.md",
+    "planned_sha256": "b51abfe56194b82f3dea9dd6b7fa9887e3416c7a5ff729dd2a254ef5e7d02bc4",
+    "current_sha256": "d2055142e25b294d8a32848eba8ae181cbe04d023a50ee18bad025b2328b1b76",
+    "source_affecting": false,
+    "basis": "The intervening protocol change concerns extraction and synthesis units. The cutoff, discovery schedule, Wiley translation, and adopted queries are unchanged."
+  },
+  "source_configuration": {
+    "route": "Full Wiley Online Library Articles & Chapters",
+    "advanced_search_url": "https://onlinelibrary.wiley.com/search/advanced",
+    "field": "One Anywhere row (AllField)",
+    "content": "articlesChapters",
+    "sort": "Date / sortBy=Earliest",
+    "language_filter": null,
+    "publication_type_filter": null,
+    "peer_review_filter": null,
+    "access_filter": null,
+    "collections_filter": null,
+    "full_text_filter": null,
+    "controlled_vocabulary_supplement": null,
+    "proximity_operators": false,
+    "pair_expansion": false,
+    "population_wildcards": [
+      "CubeSat*",
+      "nanosat*",
+      "SmallSat*"
+    ]
+  },
+  "capture_contract": {
+    "passes": 2,
+    "full_abstracts": {
+      "required": true,
+      "source_method": "visible page-scoped native RIS export with abstracts",
+      "normalized_field": "abstract",
+      "source_tags": [
+        "N2",
+        "AB"
+      ],
+      "source_omission_policy": "Retain an empty abstract only when Wiley's native RIS omits the abstract. Do not replace it with a result-card snippet."
+    },
+    "publication_types": {
+      "required": true,
+      "normalized_field": "documentType",
+      "source_tag": "TY",
+      "filter_applied": null
+    },
+    "native_ris": "Preserve reconciled page-scoped RIS files for every final source cell.",
+    "screenshots": "Automatic configured Advanced Search and first results PNGs."
+  },
+  "cutoff": {
+    "exact_common_cutoff": "2026-08-24",
+    "source_date_start": "2011-01-01",
+    "source_month_start": "2011-01",
+    "source_month_end": "2026-08",
+    "source_precision": "month_with_visible_first_published_exact_day_accounting",
+    "screening_requirement": "Retain unresolved visible First published days. Exclude only a date proved outside the inclusive common evidence window."
+  },
+  "execution_policy": {
+    "one_fresh_owned_page_per_source_cell": true,
+    "fresh_authorized_wiley_target_per_source_cell": true,
+    "target_identifiers_retained": false,
+    "two_complete_ordered_doi_passes": true,
+    "retry_policy": "at most two fresh attempts, only for an isolated source snapshot change",
+    "continue_after_source_cell_failure": true,
+    "reuse_prior_pilot_state": false,
+    "selected_null_failure_cells_only": true,
+    "reuse_initial_source_state": false
+  },
+  "adapter": {
+    "id": "search_wiley_online_library",
+    "version": "12",
+    "sha256": "672a128ac96c30a2020a47f75d099b4a1a25add47c819d54abd6bee6ca7255ae",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_wiley_online_library.py"
+  },
+  "bindings": {
+    "files": {
+      "SLR/SLR1/scripts/wiley_final_direct/corrective.py": "799721ee612b0195bbdd78b586c382ab498b226ad17a36dd628eaff42cf09a9a",
+      "SLR/SLR1/scripts/wiley_final_direct/run.py": "1a80bb0e3c49244346549101e723f03efdcdb4529494c4752e549ec1c1b721fe",
+      "SLR/SLR1/scripts/wiley_online_library_pilot005/queries.py": "d29bf27c0dd31941c66eef438203c7f2e7d564ad43736ae78dc4577119104ca9",
+      "SLR/SLR1/source-specific/wiley-online-library/source-specific-guidelines.md": "c417fee7a346900129fbff3e6cea259d41b2b6a18aea641f99601bf03c69a053",
+      "SLR/SLR1/protocol-discovery-and-screening.md": "7eb8a9ff8e78a50082a7984d095e45343b083a726da51a1335787ecbad65f55b"
+    }
+  },
+  "events": [
+    {
+      "parent_event_id": "final-main-A2-wiley-online-library-001",
+      "partition_id": "A2",
+      "cell_id": "mb",
+      "branch": "P AND E_F AND M_B",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"power budget\" OR \"power budgets\" OR \"energy budget\" OR \"energy budgets\" OR \"energy balance\" OR \"energy balances\" OR \"power balance\" OR \"power balances\" OR \"power margin\" OR \"power margins\" OR \"power generation\" OR \"photovoltaic generator\" OR \"photovoltaic generators\" OR \"solar array\" OR \"solar arrays\" OR \"solar panel\" OR \"solar panels\" OR \"battery\" OR \"batteries\" OR \"battery management\" OR \"state of charge\" OR \"states of charge\" OR \"energy storage\" OR \"power electronics\" OR \"power conditioning\" OR \"power distribution\" OR \"power management\" OR \"power interface\" OR \"power interfaces\" OR \"power mode\" OR \"power modes\" OR \"load profile\" OR \"load profiles\" OR \"power consumption\" OR \"power demand\" OR \"power profile\" OR \"energy harvesting\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")",
+      "query_sha256": "70546395bb28b7ee2e732683aa5231d3223d9ae6149f375d4dcbe7a80101f6d4",
+      "query_characters": 1914,
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-24",
+      "field": "AllField",
+      "content": "articlesChapters",
+      "sort": "Earliest",
+      "passes": 2,
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "max_snapshot_attempts": 2,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.05,
+      "require_complete": true,
+      "native_ris_with_abstracts": true,
+      "normalized_record_fields": {
+        "abstract": "full native RIS N2/AB content",
+        "documentType": "native RIS TY publication type"
+      },
+      "event_id": "final-main-A2-mb-wiley-online-library-002",
+      "output_filename": "A2-mb.json",
+      "native_ris_directory": "native-ris/A2-mb",
+      "superseded_event_id": "final-main-A2-mb-wiley-online-library-001",
+      "superseded_failure_artifact": {
+        "path": "SLR/SLR1/source-specific/wiley-online-library/final-searches/A2-mb.json",
+        "sha256": "992a41514d94c13fff1c15c2532b07f554b0271bd963470c12d30262d44d5ef1",
+        "bytes": 13522,
+        "source_total": null,
+        "stable_ids": [],
+        "merge_eligible": false
+      }
+    },
+    {
+      "parent_event_id": "final-main-B2-wiley-online-library-001",
+      "partition_id": "B2",
+      "cell_id": "direct",
+      "branch": "B2",
+      "query": "(CubeSat* OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR nanosat* OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR SmallSat* OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"requirement\" OR \"requirements\" OR \"function\" OR \"functions\" OR \"functional\" OR \"behavior\" OR \"behaviors\" OR \"behaviour\" OR \"behaviours\" OR \"behavioral\" OR \"behavioural\" OR \"architecture\" OR \"architectures\" OR \"architectural\" OR \"interface\" OR \"interfaces\" OR \"traceability\" OR \"trace\" OR \"traceable\" OR \"traced\" OR \"allocation\" OR \"allocate\" OR \"allocated\" OR \"constraint\" OR \"constraints\" OR \"parametric\" OR \"parametrics\" OR \"analysis\" OR \"analyses\" OR \"design\" OR \"designs\" OR \"designed\" OR \"designing\" OR \"decision\" OR \"decisions\" OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR \"tradeoff\" OR \"tradeoffs\" OR \"verification\" OR \"verifications\" OR \"verify\" OR \"verifies\" OR \"verified\" OR \"verifying\" OR \"validation\" OR \"validations\" OR \"validate\" OR \"validates\" OR \"validated\" OR \"validating\")",
+      "query_sha256": "1d877587b0f12c8a3fb5526755387ab069d28c4d5fe9993bcc748bf9114a6fb0",
+      "query_characters": 2029,
+      "date_start": "2011-01-01",
+      "date_end": "2026-08-24",
+      "field": "AllField",
+      "content": "articlesChapters",
+      "sort": "Earliest",
+      "passes": 2,
+      "limit": 5000,
+      "max_pages": 20,
+      "max_source_total": 5000,
+      "max_snapshot_attempts": 2,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.05,
+      "require_complete": true,
+      "native_ris_with_abstracts": true,
+      "normalized_record_fields": {
+        "abstract": "full native RIS N2/AB content",
+        "documentType": "native RIS TY publication type"
+      },
+      "event_id": "final-main-B2-wiley-online-library-002",
+      "output_filename": "B2.json",
+      "native_ris_directory": "native-ris/B2",
+      "superseded_event_id": "final-main-B2-wiley-online-library-001",
+      "superseded_failure_artifact": {
+        "path": "SLR/SLR1/source-specific/wiley-online-library/final-searches/B2.json",
+        "sha256": "606f55015777dcdb19827d1483e641f9337a43b9ca250378272ddba14052809d",
+        "bytes": 13976,
+        "source_total": null,
+        "stable_ids": [],
+        "merge_eligible": false
+      }
+    }
+  ]
+}
