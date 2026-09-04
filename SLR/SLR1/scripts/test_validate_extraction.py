@@ -7,28 +7,56 @@ import unittest
 from pathlib import Path
 
 from validate_extraction import (
+    SCHEMA_PATHS,
     Document,
     Location,
     application_deficiencies,
     audit_coverage_issues,
     citation_quote_issues,
     consolidation_issues,
+    evidence_issues,
     family_consistency_issues,
     family_lead_issues,
     first_pass_lineage_issues,
     immutability_issues,
     lineage_consistency_issues,
+    load_object,
+    load_schemas,
     normalize_quote_text,
     report_application_lineage_issues,
     reuse_specification_deficiencies,
     rq2_semantic_issues,
     rq3_semantic_issues,
+    schema_issues,
     split_page_text,
 )
 
 
 def value(item: object, **metadata: object) -> dict[str, object]:
     return {"value": item, **metadata}
+
+
+class TemplateTests(unittest.TestCase):
+    def test_each_extraction_schema_has_a_valid_template(self) -> None:
+        schemas, registry = load_schemas()
+        documents = []
+        for kind, schema_path in SCHEMA_PATHS.items():
+            template_path = schema_path.with_name(
+                schema_path.name.replace(".schema.json", ".template.json")
+            )
+            documents.append(Document(kind, template_path, load_object(template_path)))
+
+        self.assertEqual(schema_issues(documents, schemas, registry), [])
+
+    def test_rq3_status_is_not_treated_as_an_evidence_status(self) -> None:
+        report = Document(
+            "report",
+            Path("report.json"),
+            {"rq3_activities": [{"status": ["proposed"]}]},
+        )
+        indexes = {"report": {}, "citation": {}}
+
+        self.assertEqual(evidence_issues(report, indexes), [])
 
 
 class QuoteTests(unittest.TestCase):

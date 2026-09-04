@@ -12,7 +12,11 @@ Record each source fact once at its most detailed applicable location. Store mea
 
 ### Common field rules
 
-Create a codebook and machine-readable schema from this protocol before full extraction. The canonical property names, types, cardinalities, and evidence-status encoding are defined in the [report schema](protocol-extraction.schema.json), [family schema](protocol-extraction-family.schema.json), [lineage schema](protocol-extraction-lineage.schema.json), [consolidated tailoring-application schema](protocol-extraction-tailoring-application.schema.json), and [audit schema](protocol-extraction-audit.schema.json). Every report, repeatable coded record, and nested coded row must have a stable ID. Each stable ID is unique within its ID type across the review. Citation IDs are also review-wide unique as stated below.
+Create a codebook and machine-readable schema from this protocol before full extraction. The canonical property names, types, cardinalities, and evidence-status encoding are defined in the [report schema](protocol-extraction.schema.json), [family schema](protocol-extraction-family.schema.json), [lineage schema](protocol-extraction-lineage.schema.json), [consolidated tailoring-application schema](protocol-extraction-tailoring-application.schema.json), and [audit schema](protocol-extraction-audit.schema.json).
+
+Start each record from its [report template](protocol-extraction.template.json), [family template](protocol-extraction-family.template.json), [lineage template](protocol-extraction-lineage.template.json), [consolidated tailoring-application template](protocol-extraction-tailoring-application.template.json), or [audit template](protocol-extraction-audit.template.json). Each template includes one illustrative row for every repeatable structure required to show the complete record shape. Replace every angle bracket placeholder and review every illustrative controlled value. Add, remove, or replace repeatable rows as the evidence requires. Use an allowed evidence-status object in place of an array only when the schema permits it. The audit template targets a report. Replace `report_id` with `lineage_id` for a lineage audit.
+
+Every report, repeatable coded record, and nested coded row must have a stable ID. Each stable ID is unique within its ID type across the review. Citation IDs are also review-wide unique as stated below.
 
 Each report extraction contains a `citations` table. Each citation row records:
 

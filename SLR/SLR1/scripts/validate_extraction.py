@@ -1059,7 +1059,11 @@ def evidence_issues(
                 else inherited_citations
             )
             status = node.get("status")
-            if status in {"none", "uncertain"} and not active_citations:
+            if (
+                isinstance(status, str)
+                and status in {"none", "uncertain"}
+                and not active_citations
+            ):
                 issues.append(
                     Issue(
                         str(document.path),
