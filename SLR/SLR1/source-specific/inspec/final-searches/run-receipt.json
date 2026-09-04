@@ -1,0 +1,174 @@
+{
+  "schema_version": "slr1-inspec-final-direct-run/v1",
+  "source": "Inspec (Engineering Village)",
+  "source_id": "inspec",
+  "review_namespace": "main",
+  "event_kind": "final",
+  "plan": "SLR/SLR1/source-specific/inspec/final-searches/final-event-plan.json",
+  "plan_sha256": "83719119a52fb46b7d2dfb2a7fe8715122892de7fb52185320a55ed61e55550b",
+  "adapter": {
+    "id": "engineering_village_search",
+    "version": "16",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_compendex_inspec.py",
+    "entrypoint_sha256": "c8c38f8751e9b51e03dff8b1a0386b95997f4bbdbae70a3511a319ffe458268a",
+    "implementation": "/Users/antho/agent-tools/internet/skills/browser/scripts/_engineering_village_search.py",
+    "implementation_sha256": "382426551fcbf0ce27b1a53ef5080dfd83b02e338e7d7ba469d688887d1529a3",
+    "execution_route": "strict paired search_compendex_inspec Python API"
+  },
+  "execution_policy": {
+    "one_paired_source_execution_per_partition": true,
+    "continue_after_partition_failure": true,
+    "retry_policy": "none_after_final_plan_execution_begins",
+    "corrective_run_required_after_any_failure": true,
+    "skip_full_abstracts": false,
+    "source_publication_type_capture": true,
+    "private_native_ris_retention": true
+  },
+  "private_native_ris_root_persisted": false,
+  "started_at_utc": "2026-09-04T17:22:21.679574Z",
+  "completed_at_utc": "2026-09-04T17:56:10.110685Z",
+  "planned_partition_count": 9,
+  "attempted_partition_count": 5,
+  "source_command_attempt_count": 5,
+  "accepted_event_count": 0,
+  "all_partitions_attempted": false,
+  "success": false,
+  "interruption": {
+    "kind": "local_execution_harness_timeout",
+    "reason": "The execution harness ended the process before the remaining four predeclared partitions could be attempted. Each retained attempted event failed before Chrome attachment, so no query, record, native RIS export, or screenshot was captured from Engineering Village.",
+    "unattempted_partition_ids": [
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ],
+    "disposition": "A fresh corrective final run must execute all nine partitions."
+  },
+  "outcomes": [
+    {
+      "event_id": "final-main-A1-inspec-001",
+      "partition_id": "A1",
+      "success": false,
+      "artifact": null,
+      "failure_artifact": "A1.NON_MERGEABLE_FAILURE.json",
+      "source_command_attempt_count": 1,
+      "started_at_utc": "2026-09-04T17:22:21.679574Z",
+      "completed_at_utc": "2026-09-04T17:27:24.567399Z",
+      "error_type": "CompendexBrowserError",
+      "error_code": null,
+      "error": "Could not attach to local Chrome. Use a valid loopback --cdp-url or --chrome-executable.",
+      "screenshots": {
+        "search_page": {
+          "file_name": "A1.search-page.png",
+          "exists": false,
+          "sha256": null
+        },
+        "results_page": {
+          "file_name": "A1.results-page.png",
+          "exists": false,
+          "sha256": null
+        }
+      }
+    },
+    {
+      "event_id": "final-main-A2-inspec-001",
+      "partition_id": "A2",
+      "success": false,
+      "artifact": null,
+      "failure_artifact": "A2.NON_MERGEABLE_FAILURE.json",
+      "source_command_attempt_count": 1,
+      "started_at_utc": "2026-09-04T17:27:34.572765Z",
+      "completed_at_utc": "2026-09-04T17:32:34.798699Z",
+      "error_type": "CompendexBrowserError",
+      "error_code": null,
+      "error": "Could not attach to local Chrome. Use a valid loopback --cdp-url or --chrome-executable.",
+      "screenshots": {
+        "search_page": {
+          "file_name": "A2.search-page.png",
+          "exists": false,
+          "sha256": null
+        },
+        "results_page": {
+          "file_name": "A2.results-page.png",
+          "exists": false,
+          "sha256": null
+        }
+      }
+    },
+    {
+      "event_id": "final-main-A3-inspec-001",
+      "partition_id": "A3",
+      "success": false,
+      "artifact": null,
+      "failure_artifact": "A3.NON_MERGEABLE_FAILURE.json",
+      "source_command_attempt_count": 1,
+      "started_at_utc": "2026-09-04T17:32:44.805543Z",
+      "completed_at_utc": "2026-09-04T17:37:45.192048Z",
+      "error_type": "CompendexBrowserError",
+      "error_code": null,
+      "error": "Could not attach to local Chrome. Use a valid loopback --cdp-url or --chrome-executable.",
+      "screenshots": {
+        "search_page": {
+          "file_name": "A3.search-page.png",
+          "exists": false,
+          "sha256": null
+        },
+        "results_page": {
+          "file_name": "A3.results-page.png",
+          "exists": false,
+          "sha256": null
+        }
+      }
+    },
+    {
+      "event_id": "final-main-B1-inspec-001",
+      "partition_id": "B1",
+      "success": false,
+      "artifact": null,
+      "failure_artifact": "B1.NON_MERGEABLE_FAILURE.json",
+      "source_command_attempt_count": 1,
+      "started_at_utc": "2026-09-04T17:37:55.198155Z",
+      "completed_at_utc": "2026-09-04T17:42:55.431501Z",
+      "error_type": "CompendexBrowserError",
+      "error_code": null,
+      "error": "Could not attach to local Chrome. Use a valid loopback --cdp-url or --chrome-executable.",
+      "screenshots": {
+        "search_page": {
+          "file_name": "B1.search-page.png",
+          "exists": false,
+          "sha256": null
+        },
+        "results_page": {
+          "file_name": "B1.results-page.png",
+          "exists": false,
+          "sha256": null
+        }
+      }
+    },
+    {
+      "event_id": "final-main-B2-inspec-001",
+      "partition_id": "B2",
+      "success": false,
+      "artifact": null,
+      "failure_artifact": "B2.NON_MERGEABLE_FAILURE.json",
+      "source_command_attempt_count": 1,
+      "started_at_utc": "2026-09-04T17:43:05.438385Z",
+      "completed_at_utc": "2026-09-04T17:48:05.692190Z",
+      "error_type": "CompendexBrowserError",
+      "error_code": null,
+      "error": "Could not attach to local Chrome. Use a valid loopback --cdp-url or --chrome-executable.",
+      "screenshots": {
+        "search_page": {
+          "file_name": "B2.search-page.png",
+          "exists": false,
+          "sha256": null
+        },
+        "results_page": {
+          "file_name": "B2.results-page.png",
+          "exists": false,
+          "sha256": null
+        }
+      }
+    }
+  ]
+}
