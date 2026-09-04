@@ -8,7 +8,7 @@
     "stableId": {
       "$ref": "protocol-extraction.schema.json#/$defs/stableId"
     },
-    "supportingReportId": {
+    "screeningRecordId": {
       "allOf": [
         {
           "$ref": "#/$defs/stableId"
@@ -634,7 +634,7 @@
           "type": "object",
           "properties": {
             "report_id": {
-              "$ref": "#/$defs/supportingReportId"
+              "$ref": "#/$defs/stableId"
             }
           },
           "required": [
@@ -654,8 +654,12 @@
       "type": "object",
       "properties": {
         "report_id": {
-          "$ref": "#/$defs/supportingReportId",
-          "description": "The existing deduplicated psr-candidate identifier for the included report."
+          "$ref": "#/$defs/stableId",
+          "description": "The stable identifier for this included prior-review report extraction."
+        },
+        "screening_record_id": {
+          "$ref": "#/$defs/screeningRecordId",
+          "description": "The candidate_id of the included report in psr-candidates.json."
         },
         "full_citation": {
           "$ref": "#/$defs/evidencedString"
@@ -715,6 +719,7 @@
       },
       "required": [
         "report_id",
+        "screening_record_id",
         "full_citation",
         "doi",
         "other_stable_identifiers",

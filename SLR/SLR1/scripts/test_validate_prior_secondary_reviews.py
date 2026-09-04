@@ -17,8 +17,10 @@ from validate_prior_secondary_reviews import (
     citation_reference_issues,
     discovery_event_reference_issues,
     load_discovery_receipts,
+    load_object,
     load_schemas,
     matching_report_id_issues,
+    schema_issues,
     source_citation_issues,
     source_route_reference_issues,
 )
@@ -36,6 +38,7 @@ def document(
     cited_id: str | None = None,
     linked_route_id: str | None = None,
     nested_report_id: str | None = None,
+    screening_record_id: str = "psr-candidate-0001",
     source_record_ids: tuple[str, ...] = ("source-record-1",),
     discovery_event_ids: tuple[str, ...] = ("event-1",),
 ) -> Document:
@@ -44,6 +47,7 @@ def document(
         {
             "identity": {
                 "report_id": report_id,
+                "screening_record_id": screening_record_id,
                 "source_record_ids": list(source_record_ids),
                 "discovery_event_ids": list(discovery_event_ids),
                 "verification_passes": [
@@ -82,12 +86,22 @@ class SchemaTests(unittest.TestCase):
         schema, _registry = load_schemas()
         self.assertEqual(schema["$id"], "protocol-prior-secondary-reviews.schema.json")
 
+    def test_template_validates_against_schema(self) -> None:
+        schema, registry = load_schemas()
+        template_path = (
+            Path(__file__).resolve().parents[1]
+            / "protocol-prior-secondary-reviews.template.json"
+        )
+        extraction = Document(template_path, load_object(template_path))
+
+        self.assertEqual(schema_issues([extraction], schema, registry), [])
+
 
 class CandidateTests(unittest.TestCase):
     def setUp(self) -> None:
         self.extraction = document(
             "extraction.json",
-            "psr-candidate-0001",
+            "prior-review-report-1",
             citation_id="citation-1",
             route_id="route-1",
             search_date_id="date-1",
@@ -117,15 +131,20 @@ class CandidateTests(unittest.TestCase):
     def test_candidate_and_source_records_match(self) -> None:
         candidates = {"psr-candidate-0001": self.candidate()}
         self.assertEqual(candidate_reference_issues([self.extraction], candidates), [])
+        self.assertNotEqual(
+            self.extraction.data["identity"]["report_id"],
+            self.extraction.data["identity"]["screening_record_id"],
+        )
 
     def test_candidate_must_exist(self) -> None:
-        messages = {
-            issue.message
-            for issue in candidate_reference_issues([self.extraction], {})
-        }
+        issues = candidate_reference_issues([self.extraction], {})
         self.assertIn(
             "unresolved PSR candidate ID 'psr-candidate-0001'",
-            messages,
+            {issue.message for issue in issues},
+        )
+        self.assertEqual(
+            {issue.pointer for issue in issues},
+            {"/identity/screening_record_id"},
         )
 
     def test_candidate_must_be_included_and_match_source_records(self) -> None:

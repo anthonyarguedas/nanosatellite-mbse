@@ -130,11 +130,12 @@ The sole LLM reviewer makes every final screening decision. Use one focused huma
 
 ## Extraction form
 
-Create one compact extraction for each included prior-review report. Do not use the primary-evidence extraction form. The canonical property names, types, cardinalities, evidence encoding, and controlled-value definitions are in the [prior-review extraction schema](protocol-prior-secondary-reviews.schema.json). Record:
+Create one compact extraction for each included prior-review report. Do not use the primary-evidence extraction form. The canonical property names, types, cardinalities, evidence encoding, and controlled-value definitions are in the [prior-review extraction schema](protocol-prior-secondary-reviews.schema.json). Start each extraction from the [prior-review extraction template](protocol-prior-secondary-reviews.template.json). Replace every angle bracket placeholder and the exemplar `psr-candidate-0024` ID. Set `screening_record_id` to the report's `candidate_id` in [the deduplicated candidate set](psr-candidates.json). Review every illustrative controlled value, date, and count. Add, remove, or replace repeatable rows as the evidence requires. Use an allowed evidence-status object in place of an array only when the schema permits it. Record:
 
 ### Identity and provenance
 
-- supporting-search report ID;
+- stable report ID;
+- `screening_record_id`, equal to the report's `candidate_id` in `psr-candidates.json`;
 - full citation, DOI and other stable identifiers;
 - report version and date used;
 - review type as stated by the authors and as normalized by the reviewer;

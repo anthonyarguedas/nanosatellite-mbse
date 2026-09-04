@@ -253,7 +253,7 @@ def candidate_reference_issues(
 ) -> list[Issue]:
     issues: list[Issue] = []
     for document in documents:
-        identifier = report_id(document)
+        identifier = screening_record_id(document)
         if identifier is None:
             continue
         location = candidates.get(identifier)
@@ -261,7 +261,7 @@ def candidate_reference_issues(
             issues.append(
                 Issue(
                     str(document.path),
-                    "/identity/report_id",
+                    "/identity/screening_record_id",
                     f"unresolved PSR candidate ID {identifier!r}",
                 )
             )
@@ -271,7 +271,7 @@ def candidate_reference_issues(
             issues.append(
                 Issue(
                     str(document.path),
-                    "/identity/report_id",
+                    "/identity/screening_record_id",
                     f"candidate {identifier!r} has screening decision {decision!r}, "
                     "expected 'include_prior_secondary_review'",
                 )
@@ -419,12 +419,20 @@ def schema_issues(
     return issues
 
 
-def report_id(document: Document) -> str | None:
+def identity_id(document: Document, field: str) -> str | None:
     identity = document.data.get("identity")
     if not isinstance(identity, Mapping):
         return None
-    value = identity.get("report_id")
+    value = identity.get(field)
     return value if isinstance(value, str) and value else None
+
+
+def report_id(document: Document) -> str | None:
+    return identity_id(document, "report_id")
+
+
+def screening_record_id(document: Document) -> str | None:
+    return identity_id(document, "screening_record_id")
 
 
 def register(
