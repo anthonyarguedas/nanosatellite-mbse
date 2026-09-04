@@ -1,7 +1,7 @@
 # Scopus
 
 PSR final searches saved in commit: 8803bd5061a49a3c8c6a26bb10aaeb8ee1b43372
-Final searches saved in commit: NA
+Final searches saved in commit: c93080e5fe9d7e55166f6e0ad4962f3f109be64d
 Citation chasing searches saved in commit: NA
 Source excluded from review due to search failure in commit: NA
 
@@ -18,6 +18,7 @@ Save direct and citation searches in `final-searches/`. Save prior review search
 - Main language: Apply the exact English facet and confirm report language during screening.
 - Prior review searches: Apply the common upper cutoff with no lower date, language, type, subject, access, or peer review filter.
 - Publication type: Apply no type or full text filter. Complete eligible type assignment is not proved.
+- DOCTYPE membership: The final direct run did not test `DOCTYPE` membership. Candidate source types could all be eligible under the review criteria, so no `DOCTYPE` class was used as a discovery limiter. Confirm eligibility and assign the review `publication_type` during full-text screening.
 - Ordering: Date, oldest first.
 
 ## Source translation
