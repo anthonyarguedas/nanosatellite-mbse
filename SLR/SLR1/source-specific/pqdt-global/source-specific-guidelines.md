@@ -1,6 +1,6 @@
 # ProQuest Dissertations & Theses Global
 
-Final searches saved in commit: NA
+Final searches saved in commit: b04d85b6b46ec6fc211863a543048525ba1f6a0f
 Source excluded from review due to search failure in commit: NA
 
 Export method: `~/agent-tools/internet/skills/browser/scripts/search_pqdt.py`
