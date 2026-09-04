@@ -1,7 +1,7 @@
 # Web of Science Core Collection
 
 PSR final searches saved in commit: a7487b041c3865527eb0515a1fabf17ead56dcd0
-Final searches saved in commit: NA
+Final searches saved in commit: 37c118e7a56d3d8526007aba57167d5439e68939
 Citation chasing searches saved in commit: NA
 Source excluded from review due to search failure in commit: NA
 
