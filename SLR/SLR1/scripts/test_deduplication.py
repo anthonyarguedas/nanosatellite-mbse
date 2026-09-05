@@ -18,6 +18,8 @@ from deduplication import (  # noqa: E402
     FINAL_ARTIFACT_SELECTION_SCHEMA,
     accepted_final_direct_input_paths,
     apply_screening_decisions,
+    author_names,
+    cluster_manifestations,
     reviewer_screening_coding,
 )
 
@@ -79,6 +81,117 @@ class FinalArtifactSelectionTests(unittest.TestCase):
             artifact.write_text("{}", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "Changed selected"):
                 accepted_final_direct_input_paths(directory)
+
+
+class ConservativeClusteringTests(unittest.TestCase):
+    class Merger:
+        @staticmethod
+        def normalize_year(value: object) -> str:
+            return str(value) if isinstance(value, int) else ""
+
+    @staticmethod
+    def manifestation(
+        source: str,
+        record_id: str,
+        *,
+        doi: str = "",
+        title: str = "shared title",
+        year: int = 2025,
+        document_type: str = "Article",
+    ) -> dict[str, object]:
+        return {
+            "source_id": source,
+            "source_record_id": record_id,
+            "doi": doi,
+            "normalized_title": title,
+            "year": year,
+            "document_type": document_type,
+            "manual_identity_link_id": None,
+        }
+
+    def test_title_year_does_not_override_conflicting_dois(self) -> None:
+        rows = [
+            self.manifestation("source-a", "one", doi="10.1/one"),
+            self.manifestation("source-b", "two", doi="10.1/two"),
+        ]
+        self.assertEqual(
+            len(
+                cluster_manifestations(
+                    self.Merger(), rows, [], guarded_title_year=True
+                )
+            ),
+            2,
+        )
+
+    def test_title_year_does_not_merge_repeated_source_records(self) -> None:
+        rows = [
+            self.manifestation("source-a", "one", doi=""),
+            self.manifestation("source-a", "two", doi=""),
+        ]
+        self.assertEqual(
+            len(
+                cluster_manifestations(
+                    self.Merger(), rows, [], guarded_title_year=True
+                )
+            ),
+            2,
+        )
+
+    def test_title_year_does_not_merge_thesis_and_conference_paper(self) -> None:
+        rows = [
+            self.manifestation(
+                "proquest_dissertations_theses_global",
+                "thesis",
+                doi="",
+                document_type="Dissertation or Thesis",
+            ),
+            self.manifestation(
+                "ieee_xplore",
+                "paper",
+                doi="10.1/paper",
+                document_type="Conference Paper",
+            ),
+        ]
+        self.assertEqual(
+            len(
+                cluster_manifestations(
+                    self.Merger(), rows, [], guarded_title_year=True
+                )
+            ),
+            2,
+        )
+
+    def test_reviewed_link_can_join_distinct_dois(self) -> None:
+        rows = [
+            self.manifestation("source-a", "one", doi="10.1/one"),
+            self.manifestation("source-b", "two", doi="10.1/two", year=2024),
+        ]
+        links = [
+            {
+                "identity_id": "reviewed-report",
+                "references": [("source-a", "one"), ("source-b", "two")],
+            }
+        ]
+        groups = cluster_manifestations(
+            self.Merger(), rows, links, guarded_title_year=True
+        )
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(
+            {row["manual_identity_link_id"] for row in next(iter(groups.values()))},
+            {"reviewed-report"},
+        )
+
+    def test_author_roles_and_placeholders_are_removed(self) -> None:
+        self.assertEqual(
+            author_names(
+                [
+                    {"name": "Kiselyov, Igor (author)"},
+                    {"name": "Reising, Steve, committee member"},
+                    {"name": "View all authors"},
+                ]
+            ),
+            ["Kiselyov, Igor"],
+        )
 
 
 class ReviewerScreeningCodingTests(unittest.TestCase):

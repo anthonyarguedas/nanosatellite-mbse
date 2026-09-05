@@ -20,6 +20,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -38,6 +39,11 @@ MERGER_COMPONENTS = {
     "_merge_contract.py": "676f899a6281bac6060582d625a939e8324cf88a0b82bae58399b1beb8d34b22",
     "_prisma_search_run.py": "a888e75294d368469ace3ff0041d904cc830b36b4bc30389ea9d5e67adc3205d",
 }
+REVIEW_MERGER_COMPONENTS = {
+    "merge_search_results.py": "7931f04941466b65ebec74f385211c5c370058d6fc1f176184903cc2cc124625",
+    "_merge_contract.py": "e210b8046fa2d9380b2d405d61490d60b93134589fe592038cab86f7025a577e",
+    "_prisma_search_run.py": "a888e75294d368469ace3ff0041d904cc830b36b4bc30389ea9d5e67adc3205d",
+}
 CANDIDATE_SCHEMA = "slr1-screening-candidates/v2"
 MIGRATABLE_CANDIDATE_SCHEMAS = {
     "slr1-screening-candidates/v1",
@@ -47,6 +53,48 @@ COMMON_CUTOFF = "2026-08-24"
 MODES = ("psr", "citation-chasing", "review-searches")
 FINAL_ARTIFACT_SELECTION_FILENAME = "accepted-final-artifacts.json"
 FINAL_ARTIFACT_SELECTION_SCHEMA = "slr1-final-direct-artifact-selection/v1"
+FINAL_SOURCE_UNION_RECEIPTS = {
+    "advanced-technologies-aerospace-index": (
+        "proquest_aerospace_index",
+        "source-union-receipt.json",
+    ),
+    "arxiv": ("arxiv", "corrective-002/source-union-receipt.json"),
+    "compendex": ("compendex", "corrective-003/source-union-receipt.json"),
+    "esa-indico": ("esa_indico", "corrective-006/source-union-receipt-main.json"),
+    "iaf-digital-library": (
+        "iaf_digital_library",
+        "corrective-002/source-union-receipt.json",
+    ),
+    "inspec": ("inspec", "corrective-002/source-union-receipt.json"),
+    "nasa-ntrs": ("nasa_ntrs", "source-union-receipt.json"),
+    "pqdt-global": (
+        "proquest_dissertations_theses_global",
+        "source-union-receipt.json",
+    ),
+    "scopus": ("scopus", "corrective-004/source-union-receipt-main.json"),
+    "web-of-science-core-collection": (
+        "web_of_science_core_collection",
+        "source-union-receipt.json",
+    ),
+    "wiley-online-library": (
+        "wiley_online_library",
+        "source-union-receipt.json",
+    ),
+}
+FINAL_ACCEPTED_SELECTION_SOURCES = {
+    "aiaa-arc": "aiaa_arc",
+    "ieee-xplore": "ieee_xplore",
+    "springer-nature-link": "springer_nature_link",
+}
+EXPECTED_FINAL_DIRECT_SOURCES = frozenset(
+    source_id for source_id, _receipt in FINAL_SOURCE_UNION_RECEIPTS.values()
+) | frozenset(FINAL_ACCEPTED_SELECTION_SOURCES.values()) | {"oatd"}
+OATD_FINAL_OUTCOME_PATH = (
+    SOURCE_SPECIFIC_DIR / "oatd/final-searches/final-outcome.json"
+)
+OATD_FINAL_OUTCOME_SCHEMA = "slr1-oatd-final-outcome/v1"
+REVIEW_IDENTITY_LINKS_PATH = SLR1_DIR / "review-deduplication-links.json"
+REVIEW_IDENTITY_LINKS_SCHEMA = "slr1-review-deduplication-links/v1"
 DEFAULT_OUTPUTS = {
     "psr": SLR1_DIR / "psr-candidates.json",
     "citation-chasing": SLR1_DIR / "citation-candidates.json",
@@ -176,8 +224,11 @@ def now() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
-def load_merger() -> Any:
-    for name, expected in MERGER_COMPONENTS.items():
+def load_merger(mode: str | None = None) -> Any:
+    components = (
+        REVIEW_MERGER_COMPONENTS if mode == "review-searches" else MERGER_COMPONENTS
+    )
+    for name, expected in components.items():
         path = MERGER_DIR / name
         require_regular(path)
         if digest(path) != expected:
@@ -218,10 +269,18 @@ def normalized_keywords(value: Any) -> list[str]:
 def author_names(value: Any) -> list[str]:
     values = value if isinstance(value, list) else []
     result: list[str] = []
+    placeholders = {
+        "[no authors found]",
+        "no authors found",
+        "view all authors",
+        "et al",
+    }
     for item in values:
         name = text(item.get("name")) if isinstance(item, Mapping) else text(item)
-        if name.casefold() in {"[no authors found]", "no authors found"}:
+        lowered = name.casefold()
+        if lowered in placeholders or "committee member" in lowered:
             continue
+        name = re.sub(r"\s*\(author\)\s*$", "", name, flags=re.IGNORECASE).strip()
         if name and name.casefold() not in {value.casefold() for value in result}:
             result.append(name)
     return result
@@ -237,6 +296,26 @@ def preferred_text(values: list[str]) -> str | None:
 def report_landing_url(row: Mapping[str, Any]) -> str:
     value = text(row.get("url"))
     return value if value.startswith(("https://", "http://")) else ""
+
+
+def discovery_partitions(row: Mapping[str, Any], fallback: str) -> list[str]:
+    local_matching = row.get("localMatching")
+    expressions = (
+        local_matching.get("expressions")
+        if isinstance(local_matching, Mapping)
+        else None
+    )
+    matched = []
+    if isinstance(expressions, list):
+        matched = [
+            text(expression.get("id"))
+            for expression in expressions
+            if isinstance(expression, Mapping)
+            and expression.get("status") == "matched"
+            and text(expression.get("id"))
+        ]
+    values = matched or ([fallback] if fallback else [])
+    return sorted(set(values))
 
 
 def normalized_full_date(value: Any) -> str | None:
@@ -263,6 +342,35 @@ def normalized_full_date(value: Any) -> str | None:
         except ValueError:
             continue
     return None
+
+
+def source_publication_date(row: Mapping[str, Any]) -> str:
+    values = [
+        text(row.get("publicationDate")),
+        text(row.get("publication_date")),
+        text(row.get("date")),
+    ]
+    detail = row.get("oatdDetail")
+    fields = detail.get("fields") if isinstance(detail, Mapping) else None
+    issued_dates = fields.get("issued_date") if isinstance(fields, Mapping) else None
+    if isinstance(issued_dates, list):
+        values.extend(
+            text(item.get("value"))
+            for item in issued_dates
+            if isinstance(item, Mapping)
+        )
+    candidates = [value for value in values if value]
+    if not candidates:
+        return ""
+    return max(
+        candidates,
+        key=lambda value: (
+            normalized_full_date(value) is not None,
+            len(value),
+            value.casefold(),
+            value,
+        ),
+    )
 
 
 def merged_publication_date(
@@ -408,6 +516,83 @@ def load_psr_identity_links() -> tuple[list[dict[str, Any]], dict[str, Any]]:
     }
 
 
+def load_review_identity_links() -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    require_regular(REVIEW_IDENTITY_LINKS_PATH)
+    payload = load_json(REVIEW_IDENTITY_LINKS_PATH)
+    if (
+        payload.get("schema_version") != REVIEW_IDENTITY_LINKS_SCHEMA
+        or payload.get("review_namespace") != "main"
+        or not text(payload.get("manual_review_scope"))
+    ):
+        raise ValueError("The review identity-link declaration has an unexpected scope")
+    links = payload.get("links")
+    reviewed_non_links = payload.get("reviewed_non_link")
+    if not isinstance(links, list) or not links:
+        raise ValueError("The review identity-link declaration has no links")
+    if not isinstance(reviewed_non_links, list):
+        raise ValueError("The review identity-link declaration has no non-link ledger")
+
+    identity_ids: set[str] = set()
+    references: set[tuple[str, str]] = set()
+    normalized: list[dict[str, Any]] = []
+    for link in links:
+        if not isinstance(link, Mapping):
+            raise ValueError("A review identity link is malformed")
+        identity_id = text(link.get("identity_id"))
+        basis = text(link.get("basis"))
+        records = link.get("records")
+        if not identity_id or identity_id in identity_ids or not basis:
+            raise ValueError("A review identity link has an invalid identity or basis")
+        if not isinstance(records, list) or len(records) < 2:
+            raise ValueError(
+                f"Review identity link {identity_id} has fewer than two records"
+            )
+        link_references: list[tuple[str, str]] = []
+        for record in records:
+            if not isinstance(record, Mapping):
+                raise ValueError(
+                    f"Review identity link {identity_id} has a malformed record"
+                )
+            reference = (text(record.get("source")), text(record.get("record_id")))
+            if not all(reference) or reference in references:
+                raise ValueError(
+                    f"Review identity link {identity_id} reuses an invalid record"
+                )
+            references.add(reference)
+            link_references.append(reference)
+        identity_ids.add(identity_id)
+        normalized.append(
+            {
+                "identity_id": identity_id,
+                "basis": basis,
+                "references": link_references,
+            }
+        )
+
+    for item in reviewed_non_links:
+        if not isinstance(item, Mapping) or not text(item.get("basis")):
+            raise ValueError("A reviewed non-link is malformed")
+        records = item.get("records")
+        if not isinstance(records, list) or len(records) < 2:
+            raise ValueError("A reviewed non-link has fewer than two records")
+        item_references = [
+            (text(record.get("source")), text(record.get("record_id")))
+            for record in records
+            if isinstance(record, Mapping)
+        ]
+        if len(item_references) != len(records) or not all(
+            all(reference) for reference in item_references
+        ):
+            raise ValueError("A reviewed non-link has an invalid record")
+
+    return normalized, {
+        "path": relative(REVIEW_IDENTITY_LINKS_PATH),
+        "sha256": digest(REVIEW_IDENTITY_LINKS_PATH),
+        "link_count": len(normalized),
+        "reviewed_non_link_count": len(reviewed_non_links),
+    }
+
+
 def load_psr_abstract_enrichment() -> tuple[dict[tuple[str, str], str], dict[str, Any]]:
     require_regular(PSR_SCOPUS_ABSTRACT_ENRICHMENT)
     payload = load_json(PSR_SCOPUS_ABSTRACT_ENRICHMENT)
@@ -461,6 +646,21 @@ def psr_input_paths() -> list[Path]:
     return paths
 
 
+def validate_final_direct_artifact(path: Path) -> dict[str, Any]:
+    require_regular(path)
+    value = load_json(path)
+    metadata = value.get("output_metadata")
+    if (
+        value.get("schema_version") != "academic-search-result/v1"
+        or not isinstance(metadata, Mapping)
+        or metadata.get("merge_eligible") is not True
+        or metadata.get("retrieval_complete") is not True
+        or not isinstance(value.get("results"), list)
+    ):
+        raise ValueError(f"Selected final artifact is not merge eligible: {path}")
+    return value
+
+
 def accepted_final_direct_input_paths(directory: Path) -> list[Path] | None:
     """Resolve one source's explicit selection of non-superseded final events."""
     selection_path = directory / FINAL_ARTIFACT_SELECTION_FILENAME
@@ -496,44 +696,157 @@ def accepted_final_direct_input_paths(directory: Path) -> list[Path] | None:
             or item.get("byte_count") != path.stat().st_size
         ):
             raise ValueError(f"Changed selected final artifact: {path}")
-        value = load_json(path)
-        metadata = value.get("output_metadata")
-        if (
-            value.get("schema_version") != "academic-search-result/v1"
-            or not isinstance(metadata, Mapping)
-            or metadata.get("merge_eligible") is not True
-            or metadata.get("retrieval_complete") is not True
-        ):
-            raise ValueError(f"Selected final artifact is not merge eligible: {path}")
+        validate_final_direct_artifact(path)
         seen.add(path)
         selected.append(path)
     return selected
 
 
+def source_union_final_direct_input_paths(
+    directory: Path,
+    source_id: str,
+    receipt_relative_path: str,
+) -> list[Path]:
+    """Resolve the exact final events bound by one source-union receipt."""
+    receipt_path = directory / receipt_relative_path
+    require_regular(receipt_path)
+    receipt = load_json(receipt_path)
+    events = receipt.get("events")
+    if (
+        receipt.get("schema_version") != "academic-search-source-union-receipt/v1"
+        or receipt.get("review_namespace") != "main"
+        or receipt.get("expected_sources") != [source_id]
+        or not isinstance(events, list)
+        or receipt.get("event_count") != len(events)
+        or not events
+    ):
+        raise ValueError(f"Invalid final source-union receipt: {receipt_path}")
+
+    requirements: list[tuple[str, int, Mapping[str, Any]]] = []
+    for event in events:
+        if not isinstance(event, Mapping):
+            raise ValueError(f"Malformed final source-union event: {receipt_path}")
+        artifact = event.get("artifact")
+        sha256 = text(event.get("artifact_sha256"))
+        byte_count = event.get("artifact_byte_count")
+        if (
+            event.get("review_namespace") != "main"
+            or event.get("source_id") != source_id
+            or event.get("completion_status") != "complete"
+            or event.get("report_ready") is not True
+            or not isinstance(artifact, Mapping)
+            or artifact.get("sha256") != sha256
+            or artifact.get("byte_count") != byte_count
+            or not re.fullmatch(r"[0-9a-f]{64}", sha256)
+            or not isinstance(byte_count, int)
+            or byte_count < 0
+        ):
+            raise ValueError(f"Invalid final source-union event: {receipt_path}")
+        requirements.append((sha256, byte_count, event))
+
+    required_sizes = {byte_count for _sha256, byte_count, _event in requirements}
+    matches: dict[tuple[str, int], list[Path]] = defaultdict(list)
+    for path in sorted(directory.rglob("*.json")):
+        if path.is_symlink() or not path.is_file():
+            continue
+        byte_count = path.stat().st_size
+        if byte_count not in required_sizes:
+            continue
+        key = (digest(path), byte_count)
+        if any(key[:2] == requirement[:2] for requirement in requirements):
+            matches[key].append(path.resolve())
+
+    selected: list[Path] = []
+    seen: set[Path] = set()
+    for sha256, byte_count, event in requirements:
+        candidates = matches.get((sha256, byte_count), [])
+        if len(candidates) != 1:
+            raise ValueError(
+                f"Final source-union artifact has {len(candidates)} matches: "
+                f"{source_id} {event.get('event_id')}"
+            )
+        path = candidates[0]
+        value = validate_final_direct_artifact(path)
+        if isinstance(event.get("raw_count"), int) and event.get("raw_count") != len(
+            value["results"]
+        ):
+            raise ValueError(f"Final source-union count changed: {path}")
+        if path in seen:
+            raise ValueError(f"Final source-union receipt reuses an artifact: {path}")
+        seen.add(path)
+        selected.append(path)
+    return selected
+
+
+def oatd_final_direct_input_paths() -> list[Path]:
+    require_regular(OATD_FINAL_OUTCOME_PATH)
+    outcome = load_json(OATD_FINAL_OUTCOME_PATH)
+    if (
+        outcome.get("schema_version") != OATD_FINAL_OUTCOME_SCHEMA
+        or outcome.get("source_id") != "oatd"
+        or outcome.get("status") != "complete"
+        or outcome.get("source_disposition") != "include_complete_source_union"
+    ):
+        raise ValueError("The final OATD outcome is not a completed source union")
+
+    outcome_root = OATD_FINAL_OUTCOME_PATH.parent.resolve()
+    evidence: dict[str, Path] = {}
+    for field in (
+        "source_union",
+        "source_validation",
+        "full_abstracts",
+        "full_abstracts_validation",
+    ):
+        item = outcome.get(field)
+        if not isinstance(item, Mapping):
+            raise ValueError(f"The final OATD outcome has no {field} evidence")
+        raw_path = item.get("path")
+        if not isinstance(raw_path, str) or not raw_path or Path(raw_path).is_absolute():
+            raise ValueError(f"The final OATD outcome has an unsafe {field} path")
+        path = (outcome_root / raw_path).resolve(strict=False)
+        if not path.is_relative_to(outcome_root):
+            raise ValueError(f"The final OATD outcome has an unsafe {field} path")
+        require_regular(path)
+        if item.get("sha256") != digest(path):
+            raise ValueError(f"The final OATD {field} evidence changed")
+        evidence[field] = path
+
+    validation = load_json(evidence["source_validation"])
+    if (
+        validation.get("status") != "valid"
+        or validation.get("merge_eligible_hydrated_union") is not True
+    ):
+        raise ValueError("The final OATD validation did not pass")
+    artifact = validate_final_direct_artifact(evidence["source_union"])
+    if outcome.get("records") != len(artifact["results"]):
+        raise ValueError("The final OATD source-union count changed")
+    return [evidence["source_union"]]
+
+
 def final_direct_input_paths() -> list[Path]:
     paths: list[Path] = []
-    for directory in sorted(SOURCE_SPECIFIC_DIR.glob("*/final-searches")):
+    for source_directory, (source_id, receipt_path) in sorted(
+        FINAL_SOURCE_UNION_RECEIPTS.items()
+    ):
+        directory = SOURCE_SPECIFIC_DIR / source_directory / "final-searches"
+        paths.extend(
+            source_union_final_direct_input_paths(directory, source_id, receipt_path)
+        )
+    for source_directory, source_id in sorted(FINAL_ACCEPTED_SELECTION_SOURCES.items()):
+        directory = SOURCE_SPECIFIC_DIR / source_directory / "final-searches"
         selected = accepted_final_direct_input_paths(directory)
-        if selected is not None:
-            paths.extend(selected)
-            continue
-        for path in sorted(directory.rglob("*.json")):
-            if path.is_symlink() or not path.is_file():
-                continue
-            try:
-                value = load_json(path)
-            except (OSError, ValueError, json.JSONDecodeError):
-                continue
-            metadata = value.get("output_metadata", {})
-            if (
-                value.get("schema_version") == "academic-search-result/v1"
-                and isinstance(metadata, Mapping)
-                and metadata.get("merge_eligible") is True
-            ):
-                paths.append(path)
+        if selected is None:
+            raise ValueError(f"Missing final artifact selection for {source_id}")
+        selection = load_json(directory / FINAL_ARTIFACT_SELECTION_FILENAME)
+        if selection.get("source_id") != source_id:
+            raise ValueError(f"Final artifact selection has the wrong source: {source_id}")
+        paths.extend(selected)
+    paths.extend(oatd_final_direct_input_paths())
+    if len(paths) != len(set(paths)):
+        raise ValueError("A final direct-review artifact was selected more than once")
     if not paths:
         raise ValueError("No final direct-review search artifacts are available")
-    return paths
+    return sorted(paths)
 
 
 def citation_input_paths() -> list[Path]:
@@ -624,14 +937,13 @@ def direct_manifestations(
                 {
                     "source_id": source_id,
                     "partition": partition,
+                    "partitions": discovery_partitions(row, partition),
                     "source_record_id": record["paperId"],
                     "doi": record["doi"],
                     "title": record["title"],
                     "normalized_title": merger.normalize_text(record["title"]),
                     "year": record["year"],
-                    "publication_date": text(
-                        row.get("publicationDate", row.get("publication_date", row.get("date")))
-                    ),
+                    "publication_date": source_publication_date(row),
                     "abstract": text(row.get("abstract")) or enriched_abstract,
                     "abstract_snippet": text(row.get("snippet")),
                     "keywords": [
@@ -665,12 +977,15 @@ def cluster_manifestations(
     merger: Any,
     manifestations: list[dict[str, Any]],
     manual_links: list[dict[str, Any]],
+    *,
+    guarded_title_year: bool = False,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Form report identities from every available exact identity signal.
+    """Form conservative report identities from exact and reviewed signals.
 
-    A DOI-first exclusive key cannot join a DOI-bearing manifestation to the
-    same report in a source that omitted its DOI. Connected components let DOI,
-    normalized title and year, and source-native IDs reinforce each other.
+    DOI and source-native identifiers are joined first. For review candidates,
+    exact title and year joins are accepted only when they introduce no DOI
+    conflict, repeated source identity, or thesis versus non-thesis conflict.
+    Reviewed links then resolve known variants and manifestation aliases.
     """
 
     rows = [copy.deepcopy(row) for row in manifestations]
@@ -690,27 +1005,73 @@ def cluster_manifestations(
 
     token_owner: dict[str, int] = {}
     reference_rows: dict[tuple[str, str], list[int]] = defaultdict(list)
+    title_year_rows: dict[tuple[str, str], list[int]] = defaultdict(list)
     for index, row in enumerate(rows):
-        tokens: list[str] = []
         source_id = row["source_id"]
         source_record_id = row["source_record_id"]
+        tokens: list[str] = []
         if source_record_id:
             reference = (source_id, source_record_id)
             reference_rows[reference].append(index)
             tokens.append(f"record:{source_id}:{source_record_id.casefold()}")
         if row["doi"]:
             tokens.append(f"doi:{row['doi']}")
-        normalized_year = merger.normalize_year(row["year"])
-        if row["normalized_title"] and normalized_year:
-            tokens.append(
-                f"title:{row['normalized_title']}|year:{normalized_year}"
-            )
         for token in tokens:
             owner = token_owner.setdefault(token, index)
             union(index, owner)
+        normalized_year = merger.normalize_year(row["year"])
+        if row["normalized_title"] and normalized_year:
+            title_year_rows[(row["normalized_title"], normalized_year)].append(index)
 
+    def report_class(row: Mapping[str, Any]) -> str | None:
+        source_id = text(row.get("source_id"))
+        document_type = text(row.get("document_type")).casefold()
+        if source_id in {"oatd", "proquest_dissertations_theses_global"}:
+            return "thesis"
+        if "thes" in document_type or "diss" in document_type:
+            return "thesis"
+        return "non_thesis" if document_type else None
+
+    for _title_year, indexes in sorted(title_year_rows.items()):
+        roots = {find(index) for index in indexes}
+        if len(roots) < 2:
+            continue
+        component_rows: dict[int, list[dict[str, Any]]] = defaultdict(list)
+        for index, row in enumerate(rows):
+            root = find(index)
+            if root in roots:
+                component_rows[root].append(row)
+        dois = {
+            row["doi"]
+            for group_rows in component_rows.values()
+            for row in group_rows
+            if row["doi"]
+        }
+        source_counts: dict[str, int] = defaultdict(int)
+        for group_rows in component_rows.values():
+            for source_id in {row["source_id"] for row in group_rows}:
+                source_counts[source_id] += 1
+        repeated_sources = {
+            source_id for source_id, count in source_counts.items() if count > 1
+        }
+        report_classes = {
+            value
+            for group_rows in component_rows.values()
+            for row in group_rows
+            if (value := report_class(row)) is not None
+        }
+        incompatible_report_classes = report_classes == {"thesis", "non_thesis"}
+        if guarded_title_year and (
+            len(dois) > 1 or repeated_sources or incompatible_report_classes
+        ):
+            continue
+        ordered_roots = sorted(roots)
+        for root in ordered_roots[1:]:
+            union(ordered_roots[0], root)
+
+    manual_ids_by_index: dict[int, str] = {}
     for link in manual_links:
-        indexes: list[int] = []
+        indexes = []
         for reference in link["references"]:
             matched = reference_rows.get(reference, [])
             if not matched:
@@ -719,15 +1080,29 @@ def cluster_manifestations(
                 )
             indexes.extend(matched)
         for index in indexes:
-            rows[index]["manual_identity_link_id"] = link["identity_id"]
+            manual_ids_by_index[index] = link["identity_id"]
             union(indexes[0], index)
 
-    grouped: dict[int, list[dict[str, Any]]] = defaultdict(list)
-    for index, row in enumerate(rows):
-        grouped[find(index)].append(row)
+    grouped_indexes: dict[int, list[int]] = defaultdict(list)
+    for index in range(len(rows)):
+        grouped_indexes[find(index)].append(index)
 
     result: dict[str, list[dict[str, Any]]] = {}
-    for position, group_rows in enumerate(grouped.values()):
+    for position, indexes in enumerate(grouped_indexes.values()):
+        manual_ids = {
+            manual_ids_by_index[index]
+            for index in indexes
+            if index in manual_ids_by_index
+        }
+        if len(manual_ids) > 1:
+            raise ValueError(
+                "Multiple manual identity links resolved to one report: "
+                + ", ".join(sorted(manual_ids))
+            )
+        manual_id = next(iter(manual_ids), None)
+        group_rows = [rows[index] for index in indexes]
+        for row in group_rows:
+            row["manual_identity_link_id"] = manual_id
         references = sorted(
             f"{row['source_id']}:{row['source_record_id']}"
             for row in group_rows
@@ -770,12 +1145,13 @@ def citation_manifestations(merger: Any, paths: list[Path]) -> tuple[dict[str, l
                 {
                     "source_id": source_id,
                     "partition": partition,
+                    "partitions": [partition],
                     "source_record_id": stable_id,
                     "doi": record["doi"],
                     "title": record["title"],
                     "normalized_title": merger.normalize_text(record["title"]),
                     "year": record["year"],
-                    "publication_date": text(row.get("publication_date", row.get("date"))),
+                    "publication_date": source_publication_date(row),
                     "abstract": text(row.get("abstract")),
                     "abstract_snippet": text(row.get("snippet")),
                     "keywords": normalized_keywords(row.get("keywords")),
@@ -796,14 +1172,16 @@ def assert_no_identifier_conflicts(groups: Mapping[str, list[dict[str, Any]]]) -
         if len(rows) < 2:
             continue
         dois = {row["doi"] for row in rows if row["doi"]}
-        title_years = {(row["normalized_title"], row["year"]) for row in rows}
-        manual_ids = {row.get("manual_identity_link_id") for row in rows}
-        manually_reviewed = len(manual_ids) == 1 and None not in manual_ids
-        if len(dois) > 1 or (len(title_years) > 1 and not manually_reviewed):
+        manual_ids = {
+            text(row.get("manual_identity_link_id"))
+            for row in rows
+            if text(row.get("manual_identity_link_id"))
+        }
+        if len(dois) > 1 and len(manual_ids) != 1:
             conflicts.append(key)
     if conflicts:
         raise ValueError(
-            "Identifier conflicts require manual review before deduplication: "
+            "Conflicting DOIs require a reviewed identity link: "
             + ", ".join(sorted(conflicts)[:10])
         )
 
@@ -816,7 +1194,12 @@ def source_records(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         )
         if row["source_record_id"]:
             item["record_ids"].add(row["source_record_id"])
-        if row["partition"]:
+        partitions = row.get("partitions")
+        if isinstance(partitions, list):
+            item["partitions"].update(
+                text(partition) for partition in partitions if text(partition)
+            )
+        elif row["partition"]:
             item["partitions"].add(row["partition"])
     return [
         {
@@ -923,7 +1306,12 @@ def direct_candidates(
     manifestations, raw_count = direct_manifestations(
         merger, paths, abstract_enrichment
     )
-    groups = cluster_manifestations(merger, manifestations, manual_links or [])
+    groups = cluster_manifestations(
+        merger,
+        manifestations,
+        manual_links or [],
+        guarded_title_year=candidate_prefix == "review",
+    )
     assert_no_identifier_conflicts(groups)
     results = corpus.get("results")
     if not isinstance(results, list):
@@ -983,7 +1371,7 @@ def citation_candidates(
 
 
 def build(mode: str) -> dict[str, Any]:
-    merger = load_merger()
+    merger = load_merger(mode)
     identity_link_receipt: dict[str, Any] | None = None
     abstract_enrichment_receipt: dict[str, Any] | None = None
     if mode == "psr":
@@ -1003,10 +1391,20 @@ def build(mode: str) -> dict[str, Any]:
         namespace = "prior_secondary_reviews"
     elif mode == "review-searches":
         paths = final_direct_input_paths()
+        actual_sources = {
+            merger.infer_source(path, load_json(path)) for path in paths
+        }
+        if actual_sources != EXPECTED_FINAL_DIRECT_SOURCES:
+            raise ValueError(
+                "Final direct-review source coverage changed: "
+                + ", ".join(sorted(actual_sources ^ EXPECTED_FINAL_DIRECT_SOURCES))
+            )
+        manual_links, identity_link_receipt = load_review_identity_links()
         candidates, raw_count, duplicates_removed = direct_candidates(
             merger,
             paths,
             "review",
+            manual_links,
         )
         namespace = "main"
     elif mode == "citation-chasing":
@@ -1031,10 +1429,16 @@ def build(mode: str) -> dict[str, Any]:
         },
         "deduplication": {
             "algorithm": (
-                "connected components over source-qualified record ID, normalized DOI, "
-                "and normalized title plus publication year"
-                if mode != "citation-chasing"
-                else "shared merger identity key"
+                "shared merger identity key"
+                if mode == "citation-chasing"
+                else (
+                    "connected components over source-qualified record ID, normalized "
+                    "DOI, guarded normalized title plus publication year, and reviewed "
+                    "identity links"
+                    if mode == "review-searches"
+                    else "connected components over source-qualified record ID, "
+                    "normalized DOI, and normalized title plus publication year"
+                )
             ),
             "manual_identity_links": identity_link_receipt,
         },
