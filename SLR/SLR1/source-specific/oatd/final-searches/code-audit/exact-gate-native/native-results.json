@@ -1,0 +1,757 @@
+{
+  "title": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z] – OATD",
+  "challenge": false,
+  "navigation_status": 200,
+  "forms": [
+    {
+      "id": "simpleForm",
+      "method": "get",
+      "action_path": "/oatd/search",
+      "controls": [
+        {
+          "tag": "INPUT",
+          "id": "main-search",
+          "name": "q",
+          "type": "search",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "",
+          "type": "submit",
+          "value": "Search",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "form",
+          "type": "hidden",
+          "value": "basic",
+          "options": null
+        }
+      ]
+    },
+    {
+      "id": "advForm",
+      "method": "get",
+      "action_path": "/oatd/search-composer",
+      "controls": [
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "joiner1",
+          "type": "select-one",
+          "value": "AND",
+          "options": [
+            {
+              "label": "All of these words",
+              "value": "AND"
+            },
+            {
+              "label": "Any of these words",
+              "value": "OR"
+            },
+            {
+              "label": "This exact phrase",
+              "value": "PHRASE"
+            },
+            {
+              "label": "None of these words",
+              "value": "NOT"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "box1",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "field1",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any field",
+              "value": ""
+            },
+            {
+              "label": "title",
+              "value": "title"
+            },
+            {
+              "label": "author name",
+              "value": "author"
+            },
+            {
+              "label": "abstract",
+              "value": "abstract"
+            },
+            {
+              "label": "university/publisher",
+              "value": "publisher"
+            },
+            {
+              "label": "subjects/keywords",
+              "value": "subject"
+            },
+            {
+              "label": "department/discipline",
+              "value": "discipline"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool12And",
+          "name": "op12",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool12Or",
+          "name": "op12",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "joiner2",
+          "type": "select-one",
+          "value": "OR",
+          "options": [
+            {
+              "label": "All of these words",
+              "value": "AND"
+            },
+            {
+              "label": "Any of these words",
+              "value": "OR"
+            },
+            {
+              "label": "This exact phrase",
+              "value": "PHRASE"
+            },
+            {
+              "label": "None of these words",
+              "value": "NOT"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "box2",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "field2",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any field",
+              "value": ""
+            },
+            {
+              "label": "title",
+              "value": "title"
+            },
+            {
+              "label": "author name",
+              "value": "author"
+            },
+            {
+              "label": "abstract",
+              "value": "abstract"
+            },
+            {
+              "label": "university/publisher",
+              "value": "publisher"
+            },
+            {
+              "label": "subjects/keywords",
+              "value": "subject"
+            },
+            {
+              "label": "department/discipline",
+              "value": "discipline"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool23And",
+          "name": "op23",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool23Or",
+          "name": "op23",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "joiner3",
+          "type": "select-one",
+          "value": "PHRASE",
+          "options": [
+            {
+              "label": "All of these words",
+              "value": "AND"
+            },
+            {
+              "label": "Any of these words",
+              "value": "OR"
+            },
+            {
+              "label": "This exact phrase",
+              "value": "PHRASE"
+            },
+            {
+              "label": "None of these words",
+              "value": "NOT"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "box3",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "field3",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any field",
+              "value": ""
+            },
+            {
+              "label": "title",
+              "value": "title"
+            },
+            {
+              "label": "author name",
+              "value": "author"
+            },
+            {
+              "label": "abstract",
+              "value": "abstract"
+            },
+            {
+              "label": "university/publisher",
+              "value": "publisher"
+            },
+            {
+              "label": "subjects/keywords",
+              "value": "subject"
+            },
+            {
+              "label": "department/discipline",
+              "value": "discipline"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool34And",
+          "name": "op34",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool34Or",
+          "name": "op34",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "joiner4",
+          "type": "select-one",
+          "value": "NOT",
+          "options": [
+            {
+              "label": "All of these words",
+              "value": "AND"
+            },
+            {
+              "label": "Any of these words",
+              "value": "OR"
+            },
+            {
+              "label": "This exact phrase",
+              "value": "PHRASE"
+            },
+            {
+              "label": "None of these words",
+              "value": "NOT"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "box4",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "field4",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any field",
+              "value": ""
+            },
+            {
+              "label": "title",
+              "value": "title"
+            },
+            {
+              "label": "author name",
+              "value": "author"
+            },
+            {
+              "label": "abstract",
+              "value": "abstract"
+            },
+            {
+              "label": "university/publisher",
+              "value": "publisher"
+            },
+            {
+              "label": "subjects/keywords",
+              "value": "subject"
+            },
+            {
+              "label": "department/discipline",
+              "value": "discipline"
+            }
+          ]
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "language",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any language",
+              "value": ""
+            },
+            {
+              "label": "English",
+              "value": "(en OR eng OR english)"
+            },
+            {
+              "label": "Portuguese",
+              "value": "(pt OR por OR portuguese)"
+            },
+            {
+              "label": "French",
+              "value": "(fr OR fre OR french)"
+            },
+            {
+              "label": "German",
+              "value": "(de OR ger OR german OR deutsch)"
+            },
+            {
+              "label": "Spanish",
+              "value": "(es OR esp OR espanol OR spanish)"
+            },
+            {
+              "label": "Swedish",
+              "value": "(sv OR swe OR swedish)"
+            },
+            {
+              "label": "Lithuanian",
+              "value": "(lt OR lithuanian)"
+            },
+            {
+              "label": "Dutch",
+              "value": "(nl OR dut OR dutch)"
+            },
+            {
+              "label": "Italian",
+              "value": "(it OR ita OR italian)"
+            },
+            {
+              "label": "Chinese",
+              "value": "(zh OR chi OR chinese)"
+            },
+            {
+              "label": "Finnish",
+              "value": "(fi OR fin OR finnish)"
+            },
+            {
+              "label": "Greek",
+              "value": "(gr OR gre OR greek)"
+            }
+          ]
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "country",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any country",
+              "value": ""
+            },
+            {
+              "label": "US or Canada",
+              "value": "(us OR ca)"
+            },
+            {
+              "label": "Argentina",
+              "value": "ar"
+            },
+            {
+              "label": "Australia",
+              "value": "au"
+            },
+            {
+              "label": "Austria",
+              "value": "at"
+            },
+            {
+              "label": "Belgium",
+              "value": "be"
+            },
+            {
+              "label": "Bolivia",
+              "value": "bo"
+            },
+            {
+              "label": "Brazil",
+              "value": "br"
+            },
+            {
+              "label": "Canada",
+              "value": "ca"
+            },
+            {
+              "label": "Chile",
+              "value": "cl"
+            },
+            {
+              "label": "China",
+              "value": "cn"
+            },
+            {
+              "label": "Colombia",
+              "value": "co"
+            },
+            {
+              "label": "Czech Republic",
+              "value": "cz"
+            },
+            {
+              "label": "Denmark",
+              "value": "dk"
+            },
+            {
+              "label": "Estonia",
+              "value": "ee"
+            },
+            {
+              "label": "Finland",
+              "value": "fi"
+            },
+            {
+              "label": "France",
+              "value": "fr"
+            },
+            {
+              "label": "Germany",
+              "value": "de"
+            },
+            {
+              "label": "Greece",
+              "value": "gr"
+            },
+            {
+              "label": "Hong Kong",
+              "value": "hk"
+            },
+            {
+              "label": "Hungary",
+              "value": "hu"
+            },
+            {
+              "label": "Iceland",
+              "value": "is"
+            },
+            {
+              "label": "India",
+              "value": "in"
+            },
+            {
+              "label": "Indonesia",
+              "value": "id"
+            },
+            {
+              "label": "Ireland",
+              "value": "ie"
+            },
+            {
+              "label": "Italy",
+              "value": "it"
+            },
+            {
+              "label": "Japan",
+              "value": "jp"
+            },
+            {
+              "label": "Kenya",
+              "value": "ke"
+            },
+            {
+              "label": "Latvia",
+              "value": "lv"
+            },
+            {
+              "label": "Lithuania",
+              "value": "lt"
+            },
+            {
+              "label": "Malaysia",
+              "value": "my"
+            },
+            {
+              "label": "Mexico",
+              "value": "mx"
+            },
+            {
+              "label": "Netherlands",
+              "value": "nl"
+            },
+            {
+              "label": "New Zealand",
+              "value": "nz"
+            },
+            {
+              "label": "Norway",
+              "value": "no"
+            },
+            {
+              "label": "Peru",
+              "value": "pe"
+            },
+            {
+              "label": "Portugal",
+              "value": "pt"
+            },
+            {
+              "label": "Russia",
+              "value": "ru"
+            },
+            {
+              "label": "Singapore",
+              "value": "sg"
+            },
+            {
+              "label": "South Africa",
+              "value": "za"
+            },
+            {
+              "label": "South Korea",
+              "value": "kr"
+            },
+            {
+              "label": "Spain",
+              "value": "es"
+            },
+            {
+              "label": "Sweden",
+              "value": "se"
+            },
+            {
+              "label": "Switzerland",
+              "value": "ch"
+            },
+            {
+              "label": "Taiwan",
+              "value": "tw"
+            },
+            {
+              "label": "Tanzania",
+              "value": "tz"
+            },
+            {
+              "label": "Thailand",
+              "value": "th"
+            },
+            {
+              "label": "UK",
+              "value": "uk"
+            },
+            {
+              "label": "US",
+              "value": "us"
+            },
+            {
+              "label": "Zimbabwe",
+              "value": "zw"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "earliest",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "latest",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "sortby",
+          "type": "select-one",
+          "value": "relevanace",
+          "options": [
+            {
+              "label": "Relevance",
+              "value": "relevanace"
+            },
+            {
+              "label": "Author",
+              "value": "author"
+            },
+            {
+              "label": "University",
+              "value": "publisher"
+            },
+            {
+              "label": "Date",
+              "value": "pub_dt"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "cc_only_box",
+          "name": "cc_only",
+          "type": "checkbox",
+          "value": "y",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "pagesize",
+          "type": "select-one",
+          "value": "30",
+          "options": [
+            {
+              "label": "30",
+              "value": "30"
+            },
+            {
+              "label": "60",
+              "value": "60"
+            },
+            {
+              "label": "100",
+              "value": "100"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "",
+          "type": "submit",
+          "value": "Search",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "form",
+          "type": "hidden",
+          "value": "advanced",
+          "options": null
+        }
+      ]
+    },
+    {
+      "id": "",
+      "method": "get",
+      "action_path": "/oatd/search",
+      "controls": [
+        {
+          "tag": "INPUT",
+          "id": "sbGo",
+          "name": "",
+          "type": "submit",
+          "value": "Go",
+          "options": null
+        }
+      ]
+    }
+  ],
+  "report": "You searched for ((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]. Showing records 1 – 17 of 17 total matches.",
+  "detail_link_count": 34,
+  "visible_page_text": "Open Access Theses and Dissertations Advanced search options Sorted by: relevance · author · university · date | New search Search history You searched for ((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]. Showing records 1 – 17 of 17 total matches. Search Limiters Last 2 Years | English Only No search limiters apply to these results. University of Arizona 1. Lutfi, Mostafa. A Standard Methodology Enabling Execution of Models Described in Sysml Demonstrated in a Model Based Systems Engineering Approach Toward Developing a Space Situational Awareness System Implemented in Cubesats. Degree: MS, Systems and Industrial Engineering, 2020, University of Arizona URL: http://hdl.handle.net/10150/648677 ► As systems grow in complexity, Systems Engineers have embraced Model-Based Systems Engineering (MBSE) to tackle this complexity. The Systems Modeling Language (SysML) is the most… (more) Subjects/Keywords: Architecture; CubeSats; Executable Modeling; MBSE; Space Situational Awareness; SysML Record Details Cite Delft University of Technology 2. Kiselyov, Igor (author). Model-Based Reliability Engineering: A methodology to enhance reliability analysis in student-based CubeSat design projects. Degree: 2020, Delft University of Technology URL: http://resolver.tudelft.nl/uuid:3083351a-dcd1-4bb7-8169-d13055a95388 ► This thesis work proposes an approach to integrate design and reliability assessment, based on a single modeling environment by deployment of Systems Modeling Language (SysML).… (more) Subjects/Keywords: Model-Based Systems Engineering; Risk Analysis; Reliability; CubeSat Record Details Cite California State Polytechnic University – Pomona 3. Jaworski, Steve. Development of A Standard Model Based System Architecture for Cubesat Missions. Degree: 2021, California State Polytechnic University – Pomona URL: http://hdl.handle.net/20.500.12680/cv43p269q ► The increased usage of CubeSats in industry and research communities has led to the exponential growth in its associative technologies, alongside the gradual increase in… (more) Subjects/Keywords: Model Based System Architecture of a CubeSat; Application of MBSE to a CubeSat Project; Improvement of CubeSat reliability from Academia Record Details Cite Université de Strasbourg 4. Buruso, Rehobot Bekele. Measurable agile model-based systems engineering for small satellites : a value-driven approach for newspace : L'Ingénierie système par les modèles au service du newspace : une approche agile, mesurable et orientée valeur pour les petits satellites. Degree: Docteur es, Génie industriel, 2026, Université de Strasbourg URL: https://theses.fr/2026STRAD011; https://doi.org/10.70675/693c8cf8zaa4az4794zaebczd845d3d7a88f ► L'ingénierie système basée sur les modèles (MBSE) est largement adoptée dans le domaine spatial, mais sa valeur est plus souvent affirmée que mesurée. À partir… (more) Subjects/Keywords: Ingénierie système basée sur les modèles; Petits satellites; NewSpace; Agilité; Mesure de performance; Valeur d'ingénierie; Model-based systems engineering; Small satellites; NewSpace; Agile systems engineering; Performance measurement; Value engineering; 629.46 Record Details Cite Colorado State University 5. Yalin, Azer, committee member. A tailored systems engineering process for developing student-built CubeSat class satellites. Degree: PhD, Systems Engineering, 2025, Colorado State University URL: https://doi.org/10.25675/3.025669 ► This research seeks to develop a novel model-based systems engineering approach that is informed by students, subject matter experts, and instructors through an iterative process.… (more) Subjects/Keywords: engineering education; systems engineering; CubeSat; tailored; MBSE Record Details Cite Colorado State University 6. Reising, Steven, committee member. Scalable system architecture for CubeSat test & evaluation for enhanced mission success. Degree: PhD, Systems Engineering, 2025, Colorado State University URL: https://doi.org/10.25675/3.02163 ► CubeSats, as small, low-cost satellites, are the next generation of uncrewed space missions, however, the failure rate of University-class CubeSats is high. The failure rate… (more) Subjects/Keywords: evaluation; test; optimization; CubeSat Record Details Cite Colorado State University 7. Reising, Steve, committee member. Analysis of a cybersecurity architecture for satellites using model-based systems engineering (MBSE) approaches. Degree: Doctor of Engineering (Eng.D.), Systems Engineering, 2025, Colorado State University URL: http://hdl.handle.net/10217/241075 ► Historically, satellites have been relatively isolated from cybersecurity threats. However, during the 2020s, cyberattacks on critical ground-based infrastructure became more common and prevalent, and with… (more) Record Details Cite Colorado State University 8. Reising, Steve, committee member. Analysis of a cybersecurity architecture for satellites using model-based systems engineering (MBSE) approaches. Degree: Doctor of Engineering (Eng.D.), Systems Engineering, 2025, Colorado State University URL: https://doi.org/10.25675/3.05112 ► Historically, satellites have been relatively isolated from cybersecurity threats. However, during the 2020s, cyberattacks on critical ground-based infrastructure became more common and prevalent, and with… (more) Record Details Cite Universitat Politècnica de Catalunya 9. Buitrago Leiva, Jeimmy Nataly. Contributions to eco-friendly satellite lean design for a sustainable space environment. Degree: DOCTORAT EN CIÈNCIA I TECNOLOGIA AEROESPACIALS (Pla 2013), Departament de Física, 2024, Universitat Politècnica de Catalunya URL: http://hdl.handle.net/10803/692361 ► (Español) Actualmente, la mitad de los satélites no alcanzan el 20% de su vida útil esperada. La posibilidad de reciclar estos \"satélites zombis\" (ZS) con… (more) Subjects/Keywords: Àrees temàtiques de la UPC::Aeronàutica i espai; Àrees temàtiques de la UPC::Desenvolupament humà i sostenible; 502; 52 Record Details Cite MIT 10. Nag, Sreeja. Design and evaluation of distributed spacecraft missions for multi-angular Earth observation. Degree: PhD, Massachusetts Institute of Technology. Department of Aeronautics and Astronautics, 2015, MIT URL: http://hdl.handle.net/1721.1/98586 ► Distributed Spacecraft Missions (DSMs) are gaining momentum in their application to Earth science missions owing to their ability to increase observation sampling in spatial, spectral… (more) Subjects/Keywords: Aeronautics and Astronautics. Record Details Cite Colorado State University 11. Fields, David, committee member. Using an ontology and metamodels to evaluate systems engineering (SE) domain-specific modeling languages (DSML). Degree: Doctor of Engineering (Eng.D.), Systems Engineering, 2026, Colorado State University URL: https://doi.org/10.25675/3.027263 ► Advances in the technologies available to systems engineering (SE) have led to an increase in domain-specific modeling languages (DSML). These define concepts and the relationships… (more) Subjects/Keywords: metamodels; systems engineering; ontology; domain-specific modeling languages Record Details Cite 12. Spangelo, Sara C. Modeling and Optimizing Space Networks for Improved Communication Capacity. Degree: PhD, Aerospace Engineering, 2013, University of Michigan URL: http://hdl.handle.net/2027.42/97912 ► There are a growing number of individual and constellation small-satellite missions seeking to download large quantities of science, observation, and surveillance data. The existing ground… (more) Subjects/Keywords: Small Spacecraft; Ground Networks; Modeling Framework; Scheduling Optimization; Model-based Systems Engineering; Simulation Environment; Aerospace Engineering; Engineering …Systems Engineering The concept of Model Based Systems Engineering (MBSE) is… …Council on Systems Engineering (INCOSE) defines Model-Based Systems Engineering (… …Unified Modeling Language (UML) and Systems Modeling Language (SysML), are… …Based Systems Engineering MDS The Mission Data System MIP Mixed Integer Program MOS 2.0… …Operational Scheduling Problem SNR Signal-to-Noise Ratio STK System Tool Kit SysML Systems Modeling… 1 more image… Record Details Cite 13. Nguyen, Son Duong. Design of Reusable Software for Attitude Determination System of Micro/Nano Satellites in Consideration of Modularity and Extensibility using SysML. Degree: 2015, Keio University / 慶應義塾大学 URL: http://koara.lib.keio.ac.jp/xoonips/modules/xoonips/detail.php?koara_id=KO40002001-00002015-0007 Record Details Cite University of Wollongong 14. Thomas, Andrew Oliver. Sustainability Studies on Water Quality Control Ponds in Urban Development Areas. Degree: Theses, 2024, University of Wollongong URL: http://hdl.handle.net/10779/uow.27655986.v1 ► Urban development is known to significantly impact on catchment hydrology and stormwater runoff quality. Constructed wetlands have been in use since at least the 1960s… (more) Subjects/Keywords: constructed wetlands; water sensitive urban design; WSUD; water treatment; water quality; wetlands Record Details Cite Colorado State University 15. Kummerow, Christian, committee member. Optimizing remote sensing data for actual crop evapotranspiration mapping at different resolutions. Degree: PhD, Civil and Environmental Engineering, 2024, Colorado State University URL: http://hdl.handle.net/10217/239213 ► This study aimed to advance irrigation water management by developing and evaluating a procedure to improve the multispectral data from sub-optimal remote sensing sensors when… (more) Subjects/Keywords: evapotranspiration; irrigation water management; remote sensing; hydrology; environmental biophysics; machine-learning Record Details Cite Colorado State University 16. Kummerow, Christian, committee member. Optimizing remote sensing data for actual crop evapotranspiration mapping at different resolutions. Degree: PhD, Civil and Environmental Engineering, 2024, Colorado State University URL: https://doi.org/10.25675/3.04038 ► This study aimed to advance irrigation water management by developing and evaluati",
+  "stage": "native-results",
+  "captured_at_utc": "2026-09-05T03:23:54.851045Z",
+  "origin": "https://oatd.org",
+  "path": "/oatd/search",
+  "query_exact": true,
+  "screenshot": {
+    "file": "native-results.png",
+    "bytes": 3021517,
+    "sha256": "0060991f80c52025d3513adcd18d5a8e301ea1eaf72ac3f8b9f5581d5db6397b"
+  }
+}

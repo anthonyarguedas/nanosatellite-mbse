@@ -1,0 +1,745 @@
+{
+  "title": "OATD – Open Access Theses and Dissertations",
+  "challenge": false,
+  "navigation_status": 200,
+  "forms": [
+    {
+      "id": "simpleForm",
+      "method": "get",
+      "action_path": "/oatd/search",
+      "controls": [
+        {
+          "tag": "INPUT",
+          "id": "main-search",
+          "name": "q",
+          "type": "search",
+          "value": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")))) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "",
+          "type": "submit",
+          "value": "Search",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "form",
+          "type": "hidden",
+          "value": "basic",
+          "options": null
+        }
+      ]
+    },
+    {
+      "id": "advForm",
+      "method": "get",
+      "action_path": "/oatd/search-composer",
+      "controls": [
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "joiner1",
+          "type": "select-one",
+          "value": "AND",
+          "options": [
+            {
+              "label": "All of these words",
+              "value": "AND"
+            },
+            {
+              "label": "Any of these words",
+              "value": "OR"
+            },
+            {
+              "label": "This exact phrase",
+              "value": "PHRASE"
+            },
+            {
+              "label": "None of these words",
+              "value": "NOT"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "box1",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "field1",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any field",
+              "value": ""
+            },
+            {
+              "label": "title",
+              "value": "title"
+            },
+            {
+              "label": "author name",
+              "value": "author"
+            },
+            {
+              "label": "abstract",
+              "value": "abstract"
+            },
+            {
+              "label": "university/publisher",
+              "value": "publisher"
+            },
+            {
+              "label": "subjects/keywords",
+              "value": "subject"
+            },
+            {
+              "label": "department/discipline",
+              "value": "discipline"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool12And",
+          "name": "op12",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool12Or",
+          "name": "op12",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "joiner2",
+          "type": "select-one",
+          "value": "OR",
+          "options": [
+            {
+              "label": "All of these words",
+              "value": "AND"
+            },
+            {
+              "label": "Any of these words",
+              "value": "OR"
+            },
+            {
+              "label": "This exact phrase",
+              "value": "PHRASE"
+            },
+            {
+              "label": "None of these words",
+              "value": "NOT"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "box2",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "field2",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any field",
+              "value": ""
+            },
+            {
+              "label": "title",
+              "value": "title"
+            },
+            {
+              "label": "author name",
+              "value": "author"
+            },
+            {
+              "label": "abstract",
+              "value": "abstract"
+            },
+            {
+              "label": "university/publisher",
+              "value": "publisher"
+            },
+            {
+              "label": "subjects/keywords",
+              "value": "subject"
+            },
+            {
+              "label": "department/discipline",
+              "value": "discipline"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool23And",
+          "name": "op23",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool23Or",
+          "name": "op23",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "joiner3",
+          "type": "select-one",
+          "value": "PHRASE",
+          "options": [
+            {
+              "label": "All of these words",
+              "value": "AND"
+            },
+            {
+              "label": "Any of these words",
+              "value": "OR"
+            },
+            {
+              "label": "This exact phrase",
+              "value": "PHRASE"
+            },
+            {
+              "label": "None of these words",
+              "value": "NOT"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "box3",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "field3",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any field",
+              "value": ""
+            },
+            {
+              "label": "title",
+              "value": "title"
+            },
+            {
+              "label": "author name",
+              "value": "author"
+            },
+            {
+              "label": "abstract",
+              "value": "abstract"
+            },
+            {
+              "label": "university/publisher",
+              "value": "publisher"
+            },
+            {
+              "label": "subjects/keywords",
+              "value": "subject"
+            },
+            {
+              "label": "department/discipline",
+              "value": "discipline"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool34And",
+          "name": "op34",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "Bool34Or",
+          "name": "op34",
+          "type": "radio",
+          "value": "on",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "joiner4",
+          "type": "select-one",
+          "value": "NOT",
+          "options": [
+            {
+              "label": "All of these words",
+              "value": "AND"
+            },
+            {
+              "label": "Any of these words",
+              "value": "OR"
+            },
+            {
+              "label": "This exact phrase",
+              "value": "PHRASE"
+            },
+            {
+              "label": "None of these words",
+              "value": "NOT"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "box4",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "field4",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any field",
+              "value": ""
+            },
+            {
+              "label": "title",
+              "value": "title"
+            },
+            {
+              "label": "author name",
+              "value": "author"
+            },
+            {
+              "label": "abstract",
+              "value": "abstract"
+            },
+            {
+              "label": "university/publisher",
+              "value": "publisher"
+            },
+            {
+              "label": "subjects/keywords",
+              "value": "subject"
+            },
+            {
+              "label": "department/discipline",
+              "value": "discipline"
+            }
+          ]
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "language",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any language",
+              "value": ""
+            },
+            {
+              "label": "English",
+              "value": "(en OR eng OR english)"
+            },
+            {
+              "label": "Portuguese",
+              "value": "(pt OR por OR portuguese)"
+            },
+            {
+              "label": "French",
+              "value": "(fr OR fre OR french)"
+            },
+            {
+              "label": "German",
+              "value": "(de OR ger OR german OR deutsch)"
+            },
+            {
+              "label": "Spanish",
+              "value": "(es OR esp OR espanol OR spanish)"
+            },
+            {
+              "label": "Swedish",
+              "value": "(sv OR swe OR swedish)"
+            },
+            {
+              "label": "Lithuanian",
+              "value": "(lt OR lithuanian)"
+            },
+            {
+              "label": "Dutch",
+              "value": "(nl OR dut OR dutch)"
+            },
+            {
+              "label": "Italian",
+              "value": "(it OR ita OR italian)"
+            },
+            {
+              "label": "Chinese",
+              "value": "(zh OR chi OR chinese)"
+            },
+            {
+              "label": "Finnish",
+              "value": "(fi OR fin OR finnish)"
+            },
+            {
+              "label": "Greek",
+              "value": "(gr OR gre OR greek)"
+            }
+          ]
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "country",
+          "type": "select-one",
+          "value": "",
+          "options": [
+            {
+              "label": "any country",
+              "value": ""
+            },
+            {
+              "label": "US or Canada",
+              "value": "(us OR ca)"
+            },
+            {
+              "label": "Argentina",
+              "value": "ar"
+            },
+            {
+              "label": "Australia",
+              "value": "au"
+            },
+            {
+              "label": "Austria",
+              "value": "at"
+            },
+            {
+              "label": "Belgium",
+              "value": "be"
+            },
+            {
+              "label": "Bolivia",
+              "value": "bo"
+            },
+            {
+              "label": "Brazil",
+              "value": "br"
+            },
+            {
+              "label": "Canada",
+              "value": "ca"
+            },
+            {
+              "label": "Chile",
+              "value": "cl"
+            },
+            {
+              "label": "China",
+              "value": "cn"
+            },
+            {
+              "label": "Colombia",
+              "value": "co"
+            },
+            {
+              "label": "Czech Republic",
+              "value": "cz"
+            },
+            {
+              "label": "Denmark",
+              "value": "dk"
+            },
+            {
+              "label": "Estonia",
+              "value": "ee"
+            },
+            {
+              "label": "Finland",
+              "value": "fi"
+            },
+            {
+              "label": "France",
+              "value": "fr"
+            },
+            {
+              "label": "Germany",
+              "value": "de"
+            },
+            {
+              "label": "Greece",
+              "value": "gr"
+            },
+            {
+              "label": "Hong Kong",
+              "value": "hk"
+            },
+            {
+              "label": "Hungary",
+              "value": "hu"
+            },
+            {
+              "label": "Iceland",
+              "value": "is"
+            },
+            {
+              "label": "India",
+              "value": "in"
+            },
+            {
+              "label": "Indonesia",
+              "value": "id"
+            },
+            {
+              "label": "Ireland",
+              "value": "ie"
+            },
+            {
+              "label": "Italy",
+              "value": "it"
+            },
+            {
+              "label": "Japan",
+              "value": "ja"
+            },
+            {
+              "label": "Latvia",
+              "value": "lv"
+            },
+            {
+              "label": "Lithuania",
+              "value": "lt"
+            },
+            {
+              "label": "Malaysia",
+              "value": "my"
+            },
+            {
+              "label": "Mexico",
+              "value": "mx"
+            },
+            {
+              "label": "Netherlands",
+              "value": "nl"
+            },
+            {
+              "label": "New Zealand",
+              "value": "nz"
+            },
+            {
+              "label": "Norway",
+              "value": "no"
+            },
+            {
+              "label": "Peru",
+              "value": "pe"
+            },
+            {
+              "label": "Portugal",
+              "value": "pt"
+            },
+            {
+              "label": "Russia",
+              "value": "ru"
+            },
+            {
+              "label": "Singapore",
+              "value": "sg"
+            },
+            {
+              "label": "South Africa",
+              "value": "za"
+            },
+            {
+              "label": "South Korea",
+              "value": "kr"
+            },
+            {
+              "label": "Spain",
+              "value": "es"
+            },
+            {
+              "label": "Sweden",
+              "value": "se"
+            },
+            {
+              "label": "Switzerland",
+              "value": "ch"
+            },
+            {
+              "label": "Taiwan",
+              "value": "tw"
+            },
+            {
+              "label": "Thailand",
+              "value": "th"
+            },
+            {
+              "label": "UK",
+              "value": "uk"
+            },
+            {
+              "label": "US",
+              "value": "us"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "earliest",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "latest",
+          "type": "text",
+          "value": "",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "sortby",
+          "type": "select-one",
+          "value": "relevanace",
+          "options": [
+            {
+              "label": "Relevance",
+              "value": "relevanace"
+            },
+            {
+              "label": "Author",
+              "value": "author"
+            },
+            {
+              "label": "University",
+              "value": "publisher"
+            },
+            {
+              "label": "Date",
+              "value": "pub_dt"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "cc_only_box",
+          "name": "cc_only",
+          "type": "checkbox",
+          "value": "y",
+          "options": null
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "name": "pagesize",
+          "type": "select-one",
+          "value": "30",
+          "options": [
+            {
+              "label": "30",
+              "value": "30"
+            },
+            {
+              "label": "60",
+              "value": "60"
+            },
+            {
+              "label": "100",
+              "value": "100"
+            }
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "",
+          "type": "submit",
+          "value": "Search",
+          "options": null
+        },
+        {
+          "tag": "INPUT",
+          "id": "",
+          "name": "form",
+          "type": "hidden",
+          "value": "advanced",
+          "options": null
+        }
+      ]
+    },
+    {
+      "id": "",
+      "method": "get",
+      "action_path": "/oatd/search",
+      "controls": [
+        {
+          "tag": "INPUT",
+          "id": "sbGo",
+          "name": "",
+          "type": "submit",
+          "value": "Go",
+          "options": null
+        }
+      ]
+    }
+  ],
+  "report": "",
+  "detail_link_count": 0,
+  "visible_page_text": "Open Access Theses and Dissertations Advanced research and scholarship. Theses and dissertations, free to find, free to use. Advanced search options Search history Recent Additions See all of this week’s new additions. The Driving Factors of Canada's Foreign Policy and History Concerning Israel and Palestine. Shureih, Layal. University of Ottawa. Sustained Triptolide Release from Silicone Matrices. Ívar Örn Jónsson 2001-. University of Iceland. Anaemia and iron deficiency anaemia during pregnancy in Nigeria : risk factors, treatment options and impact on maternal and perinatal outcomes. Babah, Ochuwa. Karolinska Institutet. Support-Free Process of Laser Powder Bed Fusion for Overhanging Structures. Zhang, Hongyuan. Monash University. Rôle des protéines de liaison à l'ARN et des microARNs dans le contrôle post-transcriptionnel de l'expression du Récepteur Minéralocorticoïde en période périnatale : Role of RNA Binding Proteins and microRNAs in the post-transcriptional control of Mineralocorticoid Receptor expression in the perinatal period. Hani, Imene. université Paris-Saclay. Facilitating Analytics-based Adaptive Scaffolding for Self-regulated Learning. Li, Tongguang. Monash University. Skólafélagsráðgjöf. Hvernig geta skólafélagsráðgjafar stutt við innleiðingu farsældarlaga í grunnskólum? Arndís Anna Björgvinsdóttir 2002-. University of Iceland. Börn í skugga áfengis : Áhrif áfengisröskunar foreldra á börn. Wiktoria Smyk 2002-. University of Iceland. Börn fanga: Áhrif og úrræði. Tinna Björk Hall Bjarkadóttir 2000-. University of Iceland. Dispossession, violence, resistance: First Nations and Mapuche women in the face of settler colonial patriarchy. Nunez, Piaroa. University of Manitoba. Gagnrýnin hugsun og sköpun í félagsþjónustu: Hvar eru tækifærin og hvar eru áskoranirnar? Jenný Magnúsdóttir 1988-. University of Iceland. Exploring Management Options for Expedition Cruise Tourism in the Canadian Arctic. Orawiec, Andrew Karl. University of Ottawa. Don't Point at Me \"To what extent does actual access to treatment resources for children with complex needs in Iceland fulfill the obligations set forth by public legislation and policy frameworks?\" Steinunn Björk Halldórsdóttir 1977-. University of Iceland. Fourier transform infrared spectroscopy of twisted bilayer graphene. Li, Geng. Universitat Politècnica de Catalunya. A visão de professores e gestores escolares sobre finalidades educativas escolares e as proposições oficiais: repercussão nas políticas e ações de formação continuada na escola: Teachers‘ and managers’ views on aims of school education and official proposals: repercussions on policies and actions of continuing education in schools. Sentoma, Thays Roberta de Abreu Gonzaga. Pontifical Catholic University of São Paulo. Biofilm development and comparative genomic analysis on biofilm formation in Salmonella Enteritidis and Salmonella Kentucky strains isolated from poultry. Zhang, Jiayi (Alice). University of Manitoba. Computational Techniques for Voice Intelligence: Deducing Psychological Factors from Human Voice. Dhamyal, Hira. Carnegie Mellon University. Sterkari út í lífið: Áhrif tómstunda á eflingu félagsfærni. Rebekka Lind Daníelsdóttir 2002-. University of Iceland. Democracia constitucional liberal em crise: o custo de se tolerar o intolerável. Pinheiro, Igor Vieira. Pontifical Catholic University of São Paulo. Desafios e diálogos econômico-políticos e socioambientais em matéria de exploração minerária. Geib, Daniela. Pontifical Catholic University of São Paulo. Riftun vinnusamninga: Skilyrði og framkvæmd. María Lovísa Jónasdóttir 2003-. University of Iceland. Collective Insulators in the Integer and Fractional Quantum Hall Regimes in the Limit of Low Disorder. Huang, Haoyun. Purdue University. Tjáningarfrelsi opinberra starfsmanna. Með sérstakri áherslu á starfsfólk lögreglu. Björn Gunnar Jónsson 2002-. University of Iceland. Áhættuhegðun barna og unglinga: Mikilvægi snemmtækrar íhlutunar. Karen Glóey Guðnadóttir 2002-. University of Iceland. Supporting Students in Their Self-Regulated Use of Effective Cognitive Learning Strategies in Higher Education. Broeren, Marloes. Erasmus University Rotterdam (EUR). Computational Optimal Transport for Learning from Geometrically Structured Data. Kothapalli, Abihith. Vanderbilt University. Do Sumak Kawsay ao Buen Vivir: tradução e traição epistemológica nas lutas antiparadigmáticas do movimento indígena equatoriano (1992-2012). Zaeslin, Mariana Martins. Pontifical Catholic University of São Paulo. Improving Leadership Strategies among Future Sector Leaders in a Governmental Organization using a Motivational Framework. Al Romaihi, Ali M.I. University of Bradford. Takmarkanir á tjáningarfrelsi kennara. Er munur á tjáningarfrelsi kennara eftir skólastigum? Helga Margrét Ólafsdóttir 2003-. University of Iceland. Cross-Domain Recommender Systems in Cold-Start Problem. Omidvar, Sepehr. University of Ottawa. Desenvolvimento local sustentável: economia criativa e inclusão socioprodutiva. Medeiros, William de. Pontifical Catholic University of São Paulo. Estratégias de videofeedback e videmodelação aplicados a intervenções mediadas por pares para o ensino de comportamentos sociais a crianças com Transtorno do Espectro Autista: Video feedback and video modeling strategies applied to peer-mediated interventions for teaching social behaviors to children with Autism Spectrum Disorder. Silva, Edcleia Santos Angelo da. Pontifical Catholic University of São Paulo. Enzyme-mediated radical polymerization for intracellular and solution reactions. Ornati, Eleonora. Technische Universität Darmstadt. Hvað telst til riftanlegrar gjafar í skilningi 131. gr. laga nr. 21/1991. Ólafur Helgi Örvarsson 2003-. University of Iceland. A Proposal: Gap Analysis on Novice Advanced Practice Provider Role Transition within the Inpatient Setting. Cornelius, Erin. Otterbein University. Designing a Privacy-Aware Framework for Ethical Disclosure of Sensitive Data. Popoola, Olusogo Joshua. Sheffield Hallam University. D/H ratios of identified proteins from Control pair 1, Control pair 2, and Exp pair. Do, Quynh-Trang. Figshare. Tjáningarfrelsi opinberra starfsmanna. Hvenær verður tjáning skoðana skaðleg? Tjáningarfrelsi opinberra starfsmanna í viðkvæmum málaflokkum. Emilíanna Rut Mikaelsdóttir 2002-. University of Iceland. How nurses manage the transition to comfort-focused care for dying people in the acute hospital setting - A focused ethnography. Colquhoun-Flannery, Elizabeth; Walshe, Catherine. Faculty of Health and Medicine. Planos de texto e argumentatividade: dificuldades na produção e perspectivas para o ensino de textos dissertativo-argumentativos no Ensino Médio. Moraes, Jéssica de Almeida Fernandes. Pontifical Catholic University of São Paulo. L’écologie domestiquée : zéro déchet, engagement féminin et écologisation du quotidien. : Domesticated Ecology : zero Waste, Women’s Commitment and the Ecologisation of Everyday Life. Sipan, Océane. Paris, EHESS. O hospital como sala de aula: ensino de morte e luto nas residências médica e multiprofissional. Ares, Thais Fonseca. Pontifical Catholic University of São Paulo. \"Da musst du dann irgendwo Prioritäten setzen\" : Theorie pflegerischer Verteilungsentscheidungen in der stationären Langzeitpflege. Greiner, Agnes-Dorothee. Universität Bremen. O pensamento heideggeriano como fio condutor para pensar situações-limite e angústia: modos de correspondência: Heideggerian thought as a guiding thread for reflecting on limit-situations and anguish: modes of correspondence. Muniz, Rosane de Miranda. Pontifical Catholic University of São Paulo. Hermenêutica aplicada ao processo do trabalho: concretização de direitos sociais: Hermeneutics and labor procedure: social rights. Bruno, Flavia Dringoli. Pontifical Catholic University of São Paulo. Multi-Omics Analysis of Bariatric Surgery's Impact on Type 2 Diabetes and Prediabetes. Almazrouei, Balqees; Mousa, Mira; Barreiros, Andre; Marzouka, Nour al-dain; Olbrich, Michael; Ramachandran, Sanjay; Sreedharan, Sreejisha; Azzam, Sarah. Figshare. <b>ECONOMIC FEASIBILITY OF APHID BIOLOGICAL CONTROL IN HIGH TUNNEL SPINACH PRODUCTION: EVIDENCE FROM A FARM-LEVEL FINANCIAL TOOL</b>. Varela, Jean Pierre Zavala. Purdue University. Presença dos Carmelitas na Bahia Colonial: contributo na compreensão das raízes da fé no Brasil. Silva, Renê Augusto Vilela da. Pontifical Catholic University of São Paulo. Misnotkun gervigreindar. Er Prompt Injection ólöglegt samkvæmt hegningarlögum? Ylfa Rán Hjaltadóttir 2003-. University of Iceland. Participación de la señalización noradrenérgica fronto-cerebelosa en la adquisición y extinción de la preferencia de lugar condicionada inducida por cocaína. Rodríguez Borillo, Olga. Universitat Jaume I. Litigância abusiva: efetividade das ferramentas de enfrentamento do sistema processual civil. Alves, Catarina Bezerra. Pontifical Catholic University of São Paulo. Individual Identity Development of Adolescents and Peer Social Support: Utilizing am Combination of Narrative Identity Development Framework and Marcia's Identity Status Theory in a Hybrid Reality. Nelson, Andrea. Kent State University. Final Scholarly Project: Diabetes Self-Management Education for Older Adults in PrimaryCare. Furlan, Makilah Rae. Otterbein University. Coreografias da branquitude: civilidade e racismo na formação do ‘corpo ideal’ no balé. Teixeira, Ana Cristina Echevenguá. Pontifical Catholic University of São Paulo. \"Ég ætlaði að gera allt sjálf, en gat það ekki.\" Aðstandendur einstaklinga með vímuefnaröskun. Konný Ósk Önnudóttir 2001-. University of Iceland. Ofbeldi gagnvart starfsfólki í velferðarþjónustu. Ágústa Friðfinnsdóttir 1969-. University of Iceland. Como a mídia elege e dissemina o inimigo social a influência dos veículos de comunicação no processo penal brasileiro. Branco, Fernando Castelo. Pontifical Catholic University of São Paulo. [en] AN ANALYSIS OF THE VARIABILITY OF THE INHIBITORY CONTROL PERFORMANCE IN CHILDREN AND ADOLESCENTS WITH AUTISM SPECTRUM DISORDER (ASD). LOUISE DO NASCIMENTO MARQUES. Pontifical Catholic University of Rio de Janeiro. Anxiety disorders in children of anxious parents : risk and prevention. Elfström, Sigrid. Karolinska Institutet. [pt] RECUPERAÇÃO DE ÁREA DEGRADADA EM TRECHOS DA FAIXA MARGINAL DE PROTEÇÃO (FMP) DA LAGOA DE MARAPENDI. RODRIGO SIMAS DE OLIVEIRA. Pontifical Catholic University of Rio de Janeiro. <b>DECISION-MAKING IN INDOOR AIR QUALITY: EVALUATING ASHRAE 241 STANDARD FOR INFECTIOUS AEROSOL CONTROL</b>. Shadab, Mohd Bilal. Purdue University. Enhancing Advanced Practice Nursing: Implementing a Simulation-Based Point-of-CareUltrasound Training Program. Younge, Brandy. Otterbein University. Cryptographic Applications of the Quantum No-Cloning Principle for Messages, Programs, and Advice. Lord, Sébastien. University of Ottawa. Preparing for Precision: Neutral-Current Neutral Pion Production in the Short-Baseline Near Detector. Lay, Henry. Physics. Knowledge Discovery Through Spoken Dialog. Kumar Pappu, Aasish. Carnegie Mellon University. CIHR Frederick Banting and Charles Best Canada Graduate Scholarship – Master’s. Shvartsman, Elinor. University of Manitoba. Trabalho sexual e exploração de mulheres de baixa renda na sociedade hetero-patriarcal-racista capitalista: Sex work and exploitation of low-income women in a hetero-patriarchal-racist capitalist society. Moreira, Fernanda Picinin. Pontifical Catholic University of São Paulo. <b>UNDERSTANDING PSYCHOLOGICAL EFFECTS OF REAL-TIME TRAVEL INFORMATION ON ROUTE CHOICE BEHAVIOR AND TRAVEL SATISFACTION</b>. Song, Dong Yoon. Purdue University. Manifold-Based Approaches for Action and Gesture Recognition : Approches basées sur les variétés pour la reconnaissance des actions et des gestes. Akremi, Mohamed. université Paris-Saclay. Venire contra factum proprium e os recursos cíveis: Venire contra factum proprium and civil appeals. Raguza, Carlos Henrique. Pontifical Catholic University ",
+  "stage": "configured-search",
+  "captured_at_utc": "2026-09-05T03:50:51.580324Z",
+  "origin": "https://oatd.org",
+  "path": "/",
+  "query_exact": false,
+  "screenshot": {
+    "file": "configured-search.png",
+    "bytes": 721104,
+    "sha256": "6c6c0fa380b26e452d8251664d72c37f6071a118e0e3864cebb618c6e0948c20"
+  }
+}

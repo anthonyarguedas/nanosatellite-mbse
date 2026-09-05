@@ -1,0 +1,269 @@
+                                               Title              Design of Reusable Software for Attitude Determination System of Micro/Nano Satellites in
+                                                                  Consideration of Modularity and Extensibility using SysML
+                                            Sub Title
+                                             Author               Nguyen, Son Duong(Nishimura, Hidekazu)
+                                                                  西村, 秀和
+                                         Publisher                慶應義塾大学大学院システムデザイン・マネジメント研究科
+                                       Publication year           2015
+                                             Jtitle
+                                         JaLC DOI
+                                          Abstract
+                                            Notes                 修士学位論文. 2015年度システムエンジニアリング学 第179号
+                                            Genre                 Thesis or Dissertation
+                                             URL                  https://koara.lib.keio.ac.jp/xoonips/modules/xoonips/detail.php?koara_id=KO40002001-00002015-
+                                                                  0007
+                                   慶應義塾大学学術情報リポジトリ(KOARA)に掲載されているコンテンツの著作権は、それぞれの著作者、学会または出版社/発行者に帰属し、その権利は著作権法によって
+                                   保護されています。引用にあたっては、著作権法を遵守してご利用ください。
+
+                                   The copyrights of content available on the KeiO Associated Repository of Academic resources (KOARA) belong to the respective authors, academic societies, or
+                                   publishers/issuers, and these rights are protected by the Japanese Copyright Act. When quoting the content, please follow the Japanese copyright act.
+
+
+
+
+Powered by TCPDF (www.tcpdf.org)
+Master's Dissertation                                       2015
+
+
+
+
+                    Design of Reusable Software
+     for Attitude Determination System of Micro/Nano Satellites
+   in Consideration of Modularity and Extensibility using SysML
+
+
+                         Nguyen Son Duong
+                   (Student ID Number: 81334561)
+
+
+
+
+                Supervisor: Prof. Hidekazu Nishimura
+
+
+
+
+                          September 2015
+
+
+
+        Graduate School of System Design and Management,
+                         Keio University
+             Major in System Design and Management
+                       SUMMARY OF MASTER'S DISSERTATION
+
+  Student Identification         81334561                Name                 Nguyen Son
+         Number                                                                DUONG
+
+Title
+Design of Reusable Software for Attitude Determination System of Micro/Nano Satellites
+in Consideration of Modularity and Extensibility using SysML
+Abstract
+      Today, micro and nano satellites are being widely used for Earth observation, remote
+sensing, technology demonstration and scientific purposes with lower cost and shorter time
+development in compare with larger satellites. The micro/nano satellites projects are usually
+varied according to missions and hardware constraints. Among on-board software
+components, attitude determination software is one of the most difficult parts when coding
+because it requires complicated calculations, especially for the micro/nano satellites. The
+ratio of the attitude determination software can be estimated about 40% in total on-board
+software of satellites. Therefore, design of the reusable attitude determination software
+which can be reused for many types of the micro/nano satellite projects to save time and
+cost for satellite development is the objective of this research.
+       NASA has already realized software reusability viewpoint in NASA Reuse Readiness
+Levels (RRLs). NASA RRLs is a method to measure the potential of reuse of general
+software and has 9 topic areas including documentation, modularity, extensibility, etc. After
+analyzing the context of attitude determination software reuse between micro/nano satellites
+projects, the modularity and extensibility are critical and therefore selected in this research.
+       Model-based systems engineering (MBSE) is a powerful approach to model complex
+systems such as the satellites. Systems Modeling Language (SysML) is a standardized
+language to enable MBSE. Applying SysML to design the satellite and the on-board
+software has outstanding benefits and is now very promising. By using SysML, not only the
+software itself is designed but also the whole system can be modeled as well. This point is
+very important when reuse software because the attitude determination software has
+constraints and relationships with other systems of the satellite. Besides, by using SysML,
+not only the modularity and extensibility but also the documentation is well supported.
+       In brief, by using SysML and utilizing the viewpoint of modularity and extensibility
+from NASA RRLs, the highly modular and extensible attitude determination software has
+been designed in this research in order to maximize the potential of reuse for micro/nano
+satellites. For future works, the necessary of applying SysML for designing satellites should
+be more persuaded to the satellite developers.
+
+Key Words (5 words): SysML, micro/nano satellites, attitude determination software,
+design reusable software, NASA RRLs.
+Acknowledgements
+       I would like to thank my supervisor, Prof. Nishimura Hidekazu, without his supports
+and guidance during my 2 years at Keio SDM, this thesis could not be finished. He has
+provided us many professional software tools to practice SysML such as Rhapsody and
+Cameo Enterprise Architecture. I will apply knowledge about model-based system
+engineering (MBSE) and SysML learning from him to design satellites when I come back to
+my country.
+
+       I would like to thank Prof. Seiko Shirasaka for his regular meetings to improve the
+quality of my research. I also would like to thank Prof. Makoto Ioki for his useful advices and
+comments to my thesis.
+
+       I also would like to thank Shusaku Yamaura-sensei, Takashi Hiramatsu-sensei and
+Ayumu Tokaji-sensei, who have continuously help me to do this research as well as to finish
+my study at Keio SDM.
+
+       Lastly, I would like to thank my organization, Vietnam National Satellite Center, and
+my family who gave me a great deal of encouragement.
+Table of Contents
+I. Introduction .......................................................................................................................................... 1
+
+I.1. Problem background ......................................................................................................................... 1
+I.2. Definition of software reuse .............................................................................................................. 3
+I.3. The software reusability viewpoint from NASA RRLs....................................................................... 3
+I.4. The benefits of applying MBSE and SysML to design software for complex systems ....................... 6
+I.5. Research objective and approach ..................................................................................................... 7
+I.6. Structure of the Thesis....................................................................................................................... 8
+II. Overview of attitude determination system and constraints of design reusable attitude determination
+software ................................................................................................................................................. 10
+
+II.1. Overview of attitude determination and control system of satellite .............................................. 10
+II.2. The modes of attitude determination ............................................................................................. 12
+II.3.The constraints of design reusable attitude determination software for micro/nano satellites ...... 15
+III. Design of reusable attitude determination software for micro/nano satellites using SysML .......... 16
+
+III.1. Software architecture ................................................................................................................... 16
+III.2. Design of software modules ......................................................................................................... 24
+III.3. Design of software components of sensors processing module .................................................... 33
+III.4. Design of software components of reference vectors estimation module ..................................... 51
+III.5.Design of software components of attitude estimation module ..................................................... 53
+III.6. The modularity and extensibility in design ................................................................................... 55
+IV. Verification and Validation ............................................................................................................. 58
+
+IV.1.Verification .................................................................................................................................... 58
+IV.2. Validation ..................................................................................................................................... 60
+V. Conclusion ........................................................................................................................................ 62
+
+V.1. Summary ........................................................................................................................................ 62
+V.2. Future works .................................................................................................................................. 62
+References ............................................................................................................................................. 63
+
+List of Figures ....................................................................................................................................... 65
+
+List of Tables ......................................................................................................................................... 67
+
+Appendices ............................................................................................................................................ 68
+I. Introduction
+
+I.1. Problem background
+        The weight of micro satellites is in the range of 10-100 kg and that of nano satellites is
+in the range of 2-10 kg [1]. The micro and nano satellites are now becoming a new trend.
+There are more and more companies and organizations who are interested in developing these
+types of satellites [1], [2]. In 2014, there were 158 micro/nano satellites launched globally,
+this showed an increase of nearly 72% compared to 2013 [3]. The characteristics of
+micro/nano satellites are low cost, short time development, varied on mission requirements
+and limited on calculation capability compare with larger satellites.
+       Software coding is always the difficult task in satellite development because it
+requires a lot of time for developing and testing, especially for the micro/nano satellite
+projects. For each project, developers need to design and implement software for satellite's
+on-board computer including attitude determination software. The attitude determination
+software is one of the most complicated parts of the on-board software because it involves
+complex calculations [4] [5].
+       In the Table I.1.1, the estimating software components of a typical satellite are showed
+[6]. Form the Table I.1.1, the software components related to the attitude determination and
+control are the main part of the satellite on-board software, and nearly 40% is the attitude
+determination software. Therefore, development of the attitude determination software is
+more expensive and time consuming than other software components.
+
+
+           Table I.1.1. Estimating source lines of code for typical satellite functions
+
+                    Software Component                        Source Lines of Code
+        Executive                                                                    1,000
+        Communication                                                                5,500
+        Attitude/Orbit Sensors Processing                                            8,100
+        Attitude Determination and Control                                 29,800-33,800
+          Kalman Filter                                                      6,000-10,000
+        Attitude Actuator Processing                                                 3,900
+        Mathematic Utilities                                                         5,700
+        Fault Detection                                                            11,500
+        Other Functions                                                              5,000
+
+
+
+                                                1
+        Software reuse for the attitude determination system is expected as a solution to save
+time and cost of satellite development, especially for organizations like Vietnam National
+Satellite Center (VNSC), who need to develop not only one but several micro/nano satellites
+for different type of applications. Software reuse can help save time and cost for coding and
+testing as well as increase software reliability.
+        However, according to Ref. [7], research on on-board software reusability is still low
+and its realization is urgently desired. The main reasons are the difficulties of software reuse
+in terms of the difference in CPU type, interfaces and mission requirement of the micro/nano
+satellites.
+        The constraints which lead to the difficulties of software reuse between micro and
+nano satellite projects can be showed in an example in Table I.1.2. As can be shown in the
+Table I.1.2, each of the satellite projects has the different mission as well as the determination
+accuracy requirement, the calculation performance of the on-board computer and the model of
+used sensors. Therefore, in order to be reused, the attitude determination software need to be
+designed to deal with the variety of each satellite projects. For example, it is difficult to reuse
+the attitude determination software from the first satellite project (Micro Dragon) to the
+second satellite project (Nano satellite) because the second satellite does not have the Star
+Tracker as the first satellite and the performance of the on-board computer is lower.
+
+
+        Table I.1.2. Example of the different mission requirements and hardware constraints
+between micro/nano satellites projects
+    Satellite         Mission         Determination        On-board                Sensors
+    Projects                            Accuracy           Computer                Model
+                                                          Performance
+ MicroDragon        Ocean color           ~0.05º           48 MIPS              1 Star Tracker
+   (50 kg)          observation                         64 MB SDRAM             6 Sun Sensors
+                                                                             High Accuracy Gyro
+     Nano         Communication            ~3º             16 MIPS             0 Star Tracker
+    Satellite                                            8MB SDRAM             3 Sun Sensors
+     (3 kg)                                                                  Low Accuracy Gyro
+     Micro           Astronomy           ~0.003º           96 MIPS             2 Star Trackers
+    Satellite                                           64 MB SDRAM             6 Sun Sensors
+    (100 kg)                                                                 High Accuracy Gyro
+
+
+
+
+                                                    2
+I.2. Definition of software reuse
+       The purpose of software reuse is to improve software quality and productivity.
+Software reuse is the use of existing software or software knowledge to construct new
+software. Reusable assets can be either reusable software or software knowledge. Reusability
+is a property of a software asset that indicates its probability of reuse [8]. A software artifact
+is any item which is created during the software development life cycle. A software asset is an
+artifact which has a particular value. A software component is a clearly delineated piece of
+software that performs a useful function within a software system [9].
+       Reusable software artifacts are not limited to just code. These assets may include
+algorithms and models, architectures and design patterns, systems modules and scripts,
+technical documentation and test results, and use metrics as well as other artifacts produced
+during the software development life cycle [10]. Therefore, the software developers can reuse
+requirements documents, design structures and any other development artifact.
+       The potentially reusable aspects of software projects are shown in Table I.2.1 [11].
+
+
+                       Table I.2.1. Reusable aspects of software projects
+
+                  1. Architectures             6. Templates
+
+                  2. Source code               7. Human Interfaces
+
+                  3. Data                      8. Plans
+
+                  4. Designs                   9. Requirements
+
+                  5. Documentation             10. Test Cases
+
+
+I.3. The software reusability viewpoint from NASA RRLs
+       In order to design highly reusable software, it is necessary to know how the reusability
+of software can be evaluated. This information will be utilized as a viewpoint when design
+reusable software.
+       The NASA Earth Science Data Systems – Software Reuse Working Group has been
+developed Reuse Readiness Levels (RRLs) since 2008 for use as a measure to evaluate the
+potential reusability of software. Initially developed for the Earth science domain, but it is
+applicable to general. The RRLs are being developed to offer capabilities for developers and
+reusers of software to measure the reusability of software [12].
+
+
+
+                                                3
+
