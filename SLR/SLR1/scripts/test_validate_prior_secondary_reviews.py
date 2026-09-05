@@ -88,6 +88,62 @@ class SchemaTests(unittest.TestCase):
 
         self.assertEqual(schema_issues([extraction], schema, registry), [])
 
+    def test_rq1_element_sets_match_across_schema_and_template(self) -> None:
+        schema, _registry = load_schemas()
+        template_path = (
+            Path(__file__).resolve().parents[1]
+            / "protocol-prior-secondary-reviews.template.json"
+        )
+        template = load_object(template_path)
+        expected = {
+            "eps_representation_and_use",
+            "generic_or_reference_model_construction",
+            "model_generation_methods",
+            "engineering_workflows",
+            "procedural_reporting_detail",
+            "generic_model_with_actionable_construction_or_tailoring",
+            "inputs_and_assumptions",
+            "implementation_needs_and_footprint",
+            "bounded_artifact_reuse_and_tailoring",
+            "bounded_method_reuse_and_adaptation",
+            "bounded_workflow_reuse_and_adaptation",
+            "evidence_support_for_characterizations",
+        }
+
+        self.assertEqual(
+            set(schema["$defs"]["rq1ElementFindings"]["required"]), expected
+        )
+        self.assertEqual(
+            set(schema["$defs"]["rq1ElementAssessments"]["required"]), expected
+        )
+        self.assertEqual(set(template["overlap_findings"]["rq1_elements"]), expected)
+        self.assertEqual(
+            set(template["overlap_and_need_assessment"]["rq1_element_coverage"]),
+            expected,
+        )
+
+    def test_schema_version_and_expanded_sections_are_required(self) -> None:
+        schema, _registry = load_schemas()
+        template = load_object(
+            Path(__file__).resolve().parents[1]
+            / "protocol-prior-secondary-reviews.template.json"
+        )
+
+        self.assertEqual(
+            template["schema_version"],
+            schema["$defs"]["schemaVersion"]["const"],
+        )
+        self.assertIn(
+            "schema_version", schema["$defs"]["priorReviewExtraction"]["required"]
+        )
+        self.assertIn(
+            "rq1_elements", schema["$defs"]["overlapFindings"]["required"]
+        )
+        self.assertIn(
+            "rq1_element_coverage",
+            schema["$defs"]["overlapAndNeedAssessment"]["required"],
+        )
+
     def test_screening_derived_identity_fields_are_rejected(self) -> None:
         schema, registry = load_schemas()
         template_path = (
