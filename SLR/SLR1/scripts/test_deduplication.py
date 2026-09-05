@@ -3,7 +3,10 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -11,6 +14,9 @@ SLR1_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SLR1_DIR))
 
 from deduplication import (  # noqa: E402
+    FINAL_ARTIFACT_SELECTION_FILENAME,
+    FINAL_ARTIFACT_SELECTION_SCHEMA,
+    accepted_final_direct_input_paths,
     apply_screening_decisions,
     reviewer_screening_coding,
 )
@@ -28,6 +34,51 @@ def record(decision: str, **coding: str) -> dict[str, object]:
         ],
         **coding,
     }
+
+
+class FinalArtifactSelectionTests(unittest.TestCase):
+    def test_explicit_selection_excludes_superseded_normal_outputs(self) -> None:
+        repository_root = SLR1_DIR.parents[1]
+        with tempfile.TemporaryDirectory(dir=SLR1_DIR) as temporary:
+            directory = Path(temporary) / "source" / "final-searches"
+            artifact = directory / "corrective" / "A1.json"
+            superseded = directory / "attempt" / "A1.json"
+            artifact.parent.mkdir(parents=True)
+            superseded.parent.mkdir(parents=True)
+            payload = {
+                "schema_version": "academic-search-result/v1",
+                "results": [],
+                "output_metadata": {
+                    "merge_eligible": True,
+                    "retrieval_complete": True,
+                },
+            }
+            encoded = json.dumps(payload).encode("utf-8")
+            artifact.write_bytes(encoded)
+            superseded.write_bytes(encoded)
+            selection = {
+                "schema_version": FINAL_ARTIFACT_SELECTION_SCHEMA,
+                "status": "complete",
+                "review_namespace": "main",
+                "artifact_count": 1,
+                "artifacts": [
+                    {
+                        "path": str(artifact.relative_to(repository_root)),
+                        "sha256": hashlib.sha256(encoded).hexdigest(),
+                        "byte_count": len(encoded),
+                    }
+                ],
+            }
+            (directory / FINAL_ARTIFACT_SELECTION_FILENAME).write_text(
+                json.dumps(selection), encoding="utf-8"
+            )
+            self.assertEqual(
+                accepted_final_direct_input_paths(directory), [artifact.resolve()]
+            )
+
+            artifact.write_text("{}", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Changed selected"):
+                accepted_final_direct_input_paths(directory)
 
 
 class ReviewerScreeningCodingTests(unittest.TestCase):

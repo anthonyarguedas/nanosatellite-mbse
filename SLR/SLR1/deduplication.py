@@ -45,6 +45,8 @@ MIGRATABLE_CANDIDATE_SCHEMAS = {
 }
 COMMON_CUTOFF = "2026-08-24"
 MODES = ("psr", "citation-chasing", "review-searches")
+FINAL_ARTIFACT_SELECTION_FILENAME = "accepted-final-artifacts.json"
+FINAL_ARTIFACT_SELECTION_SCHEMA = "slr1-final-direct-artifact-selection/v1"
 DEFAULT_OUTPUTS = {
     "psr": SLR1_DIR / "psr-candidates.json",
     "citation-chasing": SLR1_DIR / "citation-candidates.json",
@@ -459,9 +461,62 @@ def psr_input_paths() -> list[Path]:
     return paths
 
 
+def accepted_final_direct_input_paths(directory: Path) -> list[Path] | None:
+    """Resolve one source's explicit selection of non-superseded final events."""
+    selection_path = directory / FINAL_ARTIFACT_SELECTION_FILENAME
+    if not selection_path.exists() and not selection_path.is_symlink():
+        return None
+    require_regular(selection_path)
+    selection = load_json(selection_path)
+    artifacts = selection.get("artifacts")
+    if (
+        selection.get("schema_version") != FINAL_ARTIFACT_SELECTION_SCHEMA
+        or selection.get("status") != "complete"
+        or selection.get("review_namespace") != "main"
+        or not isinstance(artifacts, list)
+        or selection.get("artifact_count") != len(artifacts)
+        or not artifacts
+    ):
+        raise ValueError(f"Invalid final artifact selection in {selection_path}")
+    root = directory.resolve()
+    selected: list[Path] = []
+    seen: set[Path] = set()
+    for item in artifacts:
+        if not isinstance(item, Mapping):
+            raise ValueError(f"Malformed final artifact selection in {selection_path}")
+        raw_path = item.get("path")
+        if not isinstance(raw_path, str) or not raw_path or Path(raw_path).is_absolute():
+            raise ValueError(f"Unsafe final artifact path in {selection_path}")
+        path = (REPOSITORY_ROOT / raw_path).resolve(strict=False)
+        if not path.is_relative_to(root) or path in seen:
+            raise ValueError(f"Out-of-scope final artifact path in {selection_path}")
+        require_regular(path)
+        if (
+            item.get("sha256") != digest(path)
+            or item.get("byte_count") != path.stat().st_size
+        ):
+            raise ValueError(f"Changed selected final artifact: {path}")
+        value = load_json(path)
+        metadata = value.get("output_metadata")
+        if (
+            value.get("schema_version") != "academic-search-result/v1"
+            or not isinstance(metadata, Mapping)
+            or metadata.get("merge_eligible") is not True
+            or metadata.get("retrieval_complete") is not True
+        ):
+            raise ValueError(f"Selected final artifact is not merge eligible: {path}")
+        seen.add(path)
+        selected.append(path)
+    return selected
+
+
 def final_direct_input_paths() -> list[Path]:
     paths: list[Path] = []
     for directory in sorted(SOURCE_SPECIFIC_DIR.glob("*/final-searches")):
+        selected = accepted_final_direct_input_paths(directory)
+        if selected is not None:
+            paths.extend(selected)
+            continue
         for path in sorted(directory.rglob("*.json")):
             if path.is_symlink() or not path.is_file():
                 continue
