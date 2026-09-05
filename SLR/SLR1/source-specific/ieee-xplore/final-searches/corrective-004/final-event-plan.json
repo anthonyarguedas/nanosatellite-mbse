@@ -1,0 +1,496 @@
+{
+  "schema_version": "slr1-ieee-xplore-final-direct-corrective-hydration-plan/v1",
+  "created_at_utc": "2026-09-04T18:29:53.883009Z",
+  "repository_head_at_predeclaration": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+  "source": "IEEE Xplore",
+  "source_id": "ieee_xplore",
+  "review_namespace": "main",
+  "review_id": "slr1-1.1-restart",
+  "phase": "identification",
+  "strategy_reference": "slr1-ieee-xplore-main-direct-v4",
+  "concept_schedule_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "source_union_expected_partitions": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "BG1",
+    "BG2",
+    "BC1",
+    "BT2"
+  ],
+  "source_union_expected_sources": [
+    "ieee_xplore"
+  ],
+  "date_window": {
+    "publication_date_start": "2011-01-01",
+    "publication_date_end": "2026-08-24",
+    "inclusive": true,
+    "source_year_envelope": "2011_2026_Year",
+    "source_precision": "year_envelope_with_rendered_exact_publication_date_accounting",
+    "screening_requirement": "Retain unresolved rendered Date of Publication values. Exclude only records proved outside the inclusive common evidence window."
+  },
+  "source_configuration": {
+    "collection": "IEEE Xplore Documents",
+    "advanced_search_url": "https://ieeexplore.ieee.org/search/advanced",
+    "field": "Individually fielded All Metadata atoms",
+    "scope": "Documents",
+    "access_scope": "All Results",
+    "search_within": null,
+    "sort": "Oldest",
+    "language_filter": null,
+    "publication_type_filter": null,
+    "peer_review_filter": null,
+    "full_text_filter": null,
+    "controlled_vocabulary_supplement": null,
+    "wildcard": false,
+    "proximity": false,
+    "pair_expansion": false,
+    "full_abstracts": true,
+    "publication_types": {
+      "required": true,
+      "normalized_field": "documentType",
+      "source_method": "visible rendered result-card document type",
+      "filter_applied": null
+    },
+    "abstracts": {
+      "required": true,
+      "normalized_field": "abstract",
+      "source_method": "matching rendered IEEE document page",
+      "source_omission_policy": "Retain an empty abstract only when the matching rendered document page has no abstract. Do not retain a result snippet as a full abstract."
+    }
+  },
+  "translation": {
+    "literal": "one straight double-quoted literal",
+    "ordinary_atom": "(\"All Metadata\":\"literal\")",
+    "ordinary_block": "atoms joined by uppercase OR and full parentheses",
+    "compound_block": "expanded nested AND and OR without a grouped field wrapper",
+    "one_source_expression_per_partition": true,
+    "term_counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32
+    },
+    "query_character_counts": {
+      "A1": 4776,
+      "A2": 5947,
+      "A3": 3767,
+      "B1": 3228,
+      "B2": 4018,
+      "BG1": 3779,
+      "BG2": 3087,
+      "BC1": 2169,
+      "BT2": 3333
+    },
+    "query_sha256": {
+      "A1": "6060cde34f89f3bce66d2f718e0ede1bef61c25e45f0ba2b9d1a603a070db3e0",
+      "A2": "c089612db91c2dcecacc21f5c6d2aafad7ca54b13725c1e3eecc4baa6cd7f934",
+      "A3": "5d9647a3724a3c1d334350a27896d426e66df8e9ddf39de10e417cc20fce1d8e",
+      "B1": "a98909791e3b1e3e1bd638fe9c853a42ca3aa10f790e6fa15e0cc419acb21473",
+      "B2": "bf98ed2edd5eb39e04ccc602091c8aab8b773fda5dea3e5111551cb658789dfd",
+      "BG1": "d91cd914dacabefc8481e23be2991cb095ac95d79c289eb430d0e8c45d12dfeb",
+      "BG2": "92d29fc111ce16760c16470990fec9bd07af40c9938e5d838557ed26fad8eee0",
+      "BC1": "e2b977fd22a337763126e7b35d1c71f18a122b70325077a118408bb1fb27e56c",
+      "BT2": "d35ca9f762b74211a77b32613c26b1e49ff8f0d1adf81eec008b4849db40f064"
+    },
+    "accepted_pilot_snapshot": "SLR/SLR1/scripts/ieee_xplore_pilot005/queries.py",
+    "accepted_pilot_snapshot_sha256": "03e205bff7defb4f4faec597027d4d35a9869fc579fc0b597a97ff20d7a78627",
+    "no_controlled_vocabulary_supplement": true,
+    "wildcard_count": 0,
+    "proximity_operators": false,
+    "pair_expansion": false,
+    "transport": {
+      "validated_request_target_bound_bytes": 7800,
+      "compact_encoding_rule": "Use compact spaces and safe parentheses only when equivalent percent-component encoding exceeds the bound."
+    }
+  },
+  "strict_contract": {
+    "complete_rendered_passes": 2,
+    "membership_gate": "equal complete ordered stable Article Number and retained export ID ledgers",
+    "required_equal_controls": [
+      "source total",
+      "native page size",
+      "scope",
+      "access scope",
+      "Search Within",
+      "Publication Year envelope",
+      "Oldest sort",
+      "exact date-accounting statuses"
+    ],
+    "automatic_screenshots_required": true,
+    "full_abstract_detail_page_required": true,
+    "source_publication_type_required": true
+  },
+  "execution_policy": {
+    "one_source_execution_per_partition": true,
+    "continue_after_partition_failure": true,
+    "attached_shared_cdp_owned_page_per_partition": true,
+    "target_identifiers_retained": false,
+    "inter_event_settle_seconds": 45.0,
+    "retry_policy": "none_after_card_hydration_corrective_plan_execution_begins",
+    "skip_full_abstracts": false,
+    "publication_type_filter": null
+  },
+  "adapter": {
+    "id": "search_ieee_xplore",
+    "version": "13",
+    "sha256": "25bf003ad4afa923ed99796f5942a2bfa519eb484e07dd1cf1561074f0124733",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_ieee_xplore.py",
+    "detail_projection": {
+      "abstract_field": "abstract",
+      "publication_type_field": "documentType"
+    }
+  },
+  "bindings": {
+    "files": {
+      "SLR/SLR1/scripts/ieee_xplore_final_direct/corrective_hydration.py": "870eec9f53db20b735cf001fcb124aafd1730cb24e3e6277c887dffd00efce27",
+      "SLR/SLR1/scripts/ieee_xplore_final_direct/run.py": "abb7d4c3f50fb6e9be43ed2c3223dabf084bec1c83651bb89e79ec76d464e184",
+      "SLR/SLR1/scripts/ieee_xplore_final_direct/corrective_shared.py": "d59895ea9bc980e76ed73fdf5e32f45fc2e77cf9a6c80667c9c5ecf47e4f455c",
+      "SLR/SLR1/scripts/ieee_xplore_pilot005/queries.py": "03e205bff7defb4f4faec597027d4d35a9869fc579fc0b597a97ff20d7a78627",
+      "SLR/SLR1/source-specific/ieee-xplore/source-specific-guidelines.md": "cff07789b979f673c028658ff3cc0a762a62b743e46d5e284b90d949507c8951",
+      "SLR/SLR1/protocol.md": "d2055142e25b294d8a32848eba8ae181cbe04d023a50ee18bad025b2328b1b76",
+      "SLR/SLR1/protocol-discovery-and-screening.md": "075b748f70a763eae8544ff8502b8696d3bebd80d1ad58fd9530f725557f0422"
+    }
+  },
+  "events": [
+    {
+      "event_id": "final-main-A1-ieee-xplore-004",
+      "partition_id": "A1",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"electrical power system\") OR (\"All Metadata\":\"electrical power systems\") OR (\"All Metadata\":\"electric power system\") OR (\"All Metadata\":\"electric power systems\") OR (\"All Metadata\":\"electrical power subsystem\") OR (\"All Metadata\":\"electrical power subsystems\") OR (\"All Metadata\":\"electric power subsystem\") OR (\"All Metadata\":\"electric power subsystems\") OR (\"All Metadata\":\"electrical energy subsystem\") OR (\"All Metadata\":\"electrical energy subsystems\") OR (\"All Metadata\":\"EPS\") OR (\"All Metadata\":\"EPSs\") OR (\"All Metadata\":\"power subsystem\") OR (\"All Metadata\":\"power subsystems\") OR (\"All Metadata\":\"power system\") OR (\"All Metadata\":\"power systems\") OR (\"All Metadata\":\"spacecraft power system\") OR (\"All Metadata\":\"spacecraft power systems\") OR (\"All Metadata\":\"power supply\") OR (\"All Metadata\":\"power supplies\") OR (\"All Metadata\":\"power distribution unit\") OR (\"All Metadata\":\"power distribution units\") OR (\"All Metadata\":\"PDU\") OR (\"All Metadata\":\"PDUs\") OR (\"All Metadata\":\"power processing unit\") OR (\"All Metadata\":\"power processing units\") OR (\"All Metadata\":\"power control and distribution\") OR (\"All Metadata\":\"power management and distribution\") OR (\"All Metadata\":\"electrical architecture\") OR (\"All Metadata\":\"electrical architectures\") OR (\"All Metadata\":\"power architecture\") OR (\"All Metadata\":\"power architectures\") OR (\"All Metadata\":\"DC power bus\") OR (\"All Metadata\":\"DC power buses\") OR (\"All Metadata\":\"PCDU\") OR (\"All Metadata\":\"PCDUs\") OR (\"All Metadata\":\"PMAD\") OR (\"All Metadata\":\"PMADs\")) AND ((\"All Metadata\":\"model-based systems engineering\") OR (\"All Metadata\":\"model based systems engineering\") OR (\"All Metadata\":\"model-based system engineering\") OR (\"All Metadata\":\"model based system engineering\") OR (\"All Metadata\":\"model-driven systems engineering\") OR (\"All Metadata\":\"model driven systems engineering\") OR (\"All Metadata\":\"model-driven system engineering\") OR (\"All Metadata\":\"model driven system engineering\") OR (\"All Metadata\":\"model-centric systems engineering\") OR (\"All Metadata\":\"model centric systems engineering\") OR (\"All Metadata\":\"model-centric system engineering\") OR (\"All Metadata\":\"model centric system engineering\") OR (\"All Metadata\":\"MBSE\") OR (\"All Metadata\":\"SysML\") OR (\"All Metadata\":\"systems modeling language\") OR (\"All Metadata\":\"systems modelling language\") OR (\"All Metadata\":\"system modeling language\") OR (\"All Metadata\":\"system modelling language\") OR (\"All Metadata\":\"object-process methodology\") OR (\"All Metadata\":\"object process methodology\") OR (\"All Metadata\":\"OPM\") OR (\"All Metadata\":\"object-oriented systems engineering method\") OR (\"All Metadata\":\"object oriented systems engineering method\") OR (\"All Metadata\":\"OOSEM\") OR (\"All Metadata\":\"object-oriented systems engineering\") OR (\"All Metadata\":\"object oriented systems engineering\") OR (\"All Metadata\":\"Arcadia\") OR (\"All Metadata\":\"Capella\") OR (\"All Metadata\":\"model-based engineering\") OR (\"All Metadata\":\"model based engineering\") OR (\"All Metadata\":\"model-driven engineering\") OR (\"All Metadata\":\"model driven engineering\") OR (\"All Metadata\":\"model-based design\") OR (\"All Metadata\":\"model based design\") OR (\"All Metadata\":\"model-driven design\") OR (\"All Metadata\":\"model driven design\") OR (\"All Metadata\":\"MBE\") OR (\"All Metadata\":\"MDE\") OR (\"All Metadata\":\"MBD\") OR (\"All Metadata\":\"MagicGrid\") OR (\"All Metadata\":\"Harmony-SE\") OR (\"All Metadata\":\"Harmony SE\") OR (\"All Metadata\":\"RFLP\") OR (\"All Metadata\":\"Cameo Systems Modeler\") OR (\"All Metadata\":\"MagicDraw\") OR (\"All Metadata\":\"IBM Engineering Systems Design Rhapsody\") OR (\"All Metadata\":\"Rational Rhapsody\") OR (\"All Metadata\":\"Vitech CORE\") OR (\"All Metadata\":\"Vitech GENESYS\") OR (\"All Metadata\":\"OpenMBEE\") OR (\"All Metadata\":\"Enterprise Architect\") OR (\"All Metadata\":\"MATLAB System Composer\") OR (\"All Metadata\":\"System Composer\") OR (\"All Metadata\":\"Modelio\"))",
+      "query_sha256": "6060cde34f89f3bce66d2f718e0ede1bef61c25e45f0ba2b9d1a603a070db3e0",
+      "query_characters": 4776,
+      "wildcard_count": 0,
+      "output_filename": "A1.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 7480,
+        "compact_equivalent_request_target_bytes": 6006,
+        "selected_encoding": "percent_component",
+        "selected_request_target_bytes": 7480,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    },
+    {
+      "event_id": "final-main-A2-ieee-xplore-004",
+      "partition_id": "A2",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"power budget\") OR (\"All Metadata\":\"power budgets\") OR (\"All Metadata\":\"energy budget\") OR (\"All Metadata\":\"energy budgets\") OR (\"All Metadata\":\"energy balance\") OR (\"All Metadata\":\"energy balances\") OR (\"All Metadata\":\"power balance\") OR (\"All Metadata\":\"power balances\") OR (\"All Metadata\":\"power margin\") OR (\"All Metadata\":\"power margins\") OR (\"All Metadata\":\"power generation\") OR (\"All Metadata\":\"photovoltaic generator\") OR (\"All Metadata\":\"photovoltaic generators\") OR (\"All Metadata\":\"solar array\") OR (\"All Metadata\":\"solar arrays\") OR (\"All Metadata\":\"solar panel\") OR (\"All Metadata\":\"solar panels\") OR (\"All Metadata\":\"battery\") OR (\"All Metadata\":\"batteries\") OR (\"All Metadata\":\"battery management\") OR (\"All Metadata\":\"state of charge\") OR (\"All Metadata\":\"states of charge\") OR (\"All Metadata\":\"energy storage\") OR (\"All Metadata\":\"power electronics\") OR (\"All Metadata\":\"power conditioning\") OR (\"All Metadata\":\"power distribution\") OR (\"All Metadata\":\"power management\") OR (\"All Metadata\":\"power interface\") OR (\"All Metadata\":\"power interfaces\") OR (\"All Metadata\":\"power mode\") OR (\"All Metadata\":\"power modes\") OR (\"All Metadata\":\"load profile\") OR (\"All Metadata\":\"load profiles\") OR (\"All Metadata\":\"power consumption\") OR (\"All Metadata\":\"power demand\") OR (\"All Metadata\":\"power profile\") OR (\"All Metadata\":\"energy harvesting\")) AND ((\"All Metadata\":\"model-based systems engineering\") OR (\"All Metadata\":\"model based systems engineering\") OR (\"All Metadata\":\"model-based system engineering\") OR (\"All Metadata\":\"model based system engineering\") OR (\"All Metadata\":\"model-driven systems engineering\") OR (\"All Metadata\":\"model driven systems engineering\") OR (\"All Metadata\":\"model-driven system engineering\") OR (\"All Metadata\":\"model driven system engineering\") OR (\"All Metadata\":\"model-centric systems engineering\") OR (\"All Metadata\":\"model centric systems engineering\") OR (\"All Metadata\":\"model-centric system engineering\") OR (\"All Metadata\":\"model centric system engineering\") OR (\"All Metadata\":\"MBSE\") OR (\"All Metadata\":\"SysML\") OR (\"All Metadata\":\"systems modeling language\") OR (\"All Metadata\":\"systems modelling language\") OR (\"All Metadata\":\"system modeling language\") OR (\"All Metadata\":\"system modelling language\") OR (\"All Metadata\":\"object-process methodology\") OR (\"All Metadata\":\"object process methodology\") OR (\"All Metadata\":\"OPM\") OR (\"All Metadata\":\"object-oriented systems engineering method\") OR (\"All Metadata\":\"object oriented systems engineering method\") OR (\"All Metadata\":\"OOSEM\") OR (\"All Metadata\":\"object-oriented systems engineering\") OR (\"All Metadata\":\"object oriented systems engineering\") OR (\"All Metadata\":\"Arcadia\") OR (\"All Metadata\":\"Capella\") OR (\"All Metadata\":\"model-based engineering\") OR (\"All Metadata\":\"model based engineering\") OR (\"All Metadata\":\"model-driven engineering\") OR (\"All Metadata\":\"model driven engineering\") OR (\"All Metadata\":\"model-based design\") OR (\"All Metadata\":\"model based design\") OR (\"All Metadata\":\"model-driven design\") OR (\"All Metadata\":\"model driven design\") OR (\"All Metadata\":\"MBE\") OR (\"All Metadata\":\"MDE\") OR (\"All Metadata\":\"MBD\") OR (\"All Metadata\":\"MagicGrid\") OR (\"All Metadata\":\"Harmony-SE\") OR (\"All Metadata\":\"Harmony SE\") OR (\"All Metadata\":\"RFLP\") OR (\"All Metadata\":\"Cameo Systems Modeler\") OR (\"All Metadata\":\"MagicDraw\") OR (\"All Metadata\":\"IBM Engineering Systems Design Rhapsody\") OR (\"All Metadata\":\"Rational Rhapsody\") OR (\"All Metadata\":\"Vitech CORE\") OR (\"All Metadata\":\"Vitech GENESYS\") OR (\"All Metadata\":\"OpenMBEE\") OR (\"All Metadata\":\"Enterprise Architect\") OR (\"All Metadata\":\"MATLAB System Composer\") OR (\"All Metadata\":\"System Composer\") OR (\"All Metadata\":\"Modelio\") OR (\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\"))",
+      "query_sha256": "c089612db91c2dcecacc21f5c6d2aafad7ca54b13725c1e3eecc4baa6cd7f934",
+      "query_characters": 5947,
+      "wildcard_count": 0,
+      "output_filename": "A2.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 9319,
+        "compact_equivalent_request_target_bytes": 7477,
+        "selected_encoding": "compact_space_and_safe_parentheses",
+        "selected_request_target_bytes": 7477,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    },
+    {
+      "event_id": "final-main-A3-ieee-xplore-004",
+      "partition_id": "A3",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"electrical power system\") OR (\"All Metadata\":\"electrical power systems\") OR (\"All Metadata\":\"electric power system\") OR (\"All Metadata\":\"electric power systems\") OR (\"All Metadata\":\"electrical power subsystem\") OR (\"All Metadata\":\"electrical power subsystems\") OR (\"All Metadata\":\"electric power subsystem\") OR (\"All Metadata\":\"electric power subsystems\") OR (\"All Metadata\":\"electrical energy subsystem\") OR (\"All Metadata\":\"electrical energy subsystems\") OR (\"All Metadata\":\"EPS\") OR (\"All Metadata\":\"EPSs\") OR (\"All Metadata\":\"power subsystem\") OR (\"All Metadata\":\"power subsystems\") OR (\"All Metadata\":\"power system\") OR (\"All Metadata\":\"power systems\") OR (\"All Metadata\":\"spacecraft power system\") OR (\"All Metadata\":\"spacecraft power systems\") OR (\"All Metadata\":\"power supply\") OR (\"All Metadata\":\"power supplies\") OR (\"All Metadata\":\"power distribution unit\") OR (\"All Metadata\":\"power distribution units\") OR (\"All Metadata\":\"PDU\") OR (\"All Metadata\":\"PDUs\") OR (\"All Metadata\":\"power processing unit\") OR (\"All Metadata\":\"power processing units\") OR (\"All Metadata\":\"power control and distribution\") OR (\"All Metadata\":\"power management and distribution\") OR (\"All Metadata\":\"electrical architecture\") OR (\"All Metadata\":\"electrical architectures\") OR (\"All Metadata\":\"power architecture\") OR (\"All Metadata\":\"power architectures\") OR (\"All Metadata\":\"DC power bus\") OR (\"All Metadata\":\"DC power buses\") OR (\"All Metadata\":\"PCDU\") OR (\"All Metadata\":\"PCDUs\") OR (\"All Metadata\":\"PMAD\") OR (\"All Metadata\":\"PMADs\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\"))",
+      "query_sha256": "5d9647a3724a3c1d334350a27896d426e66df8e9ddf39de10e417cc20fce1d8e",
+      "query_characters": 3767,
+      "wildcard_count": 0,
+      "output_filename": "A3.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 5951,
+        "compact_equivalent_request_target_bytes": 4767,
+        "selected_encoding": "percent_component",
+        "selected_request_target_bytes": 5951,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    },
+    {
+      "event_id": "final-main-B1-ieee-xplore-004",
+      "partition_id": "B1",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"model-based systems engineering\") OR (\"All Metadata\":\"model based systems engineering\") OR (\"All Metadata\":\"model-based system engineering\") OR (\"All Metadata\":\"model based system engineering\") OR (\"All Metadata\":\"model-driven systems engineering\") OR (\"All Metadata\":\"model driven systems engineering\") OR (\"All Metadata\":\"model-driven system engineering\") OR (\"All Metadata\":\"model driven system engineering\") OR (\"All Metadata\":\"model-centric systems engineering\") OR (\"All Metadata\":\"model centric systems engineering\") OR (\"All Metadata\":\"model-centric system engineering\") OR (\"All Metadata\":\"model centric system engineering\") OR (\"All Metadata\":\"MBSE\") OR (\"All Metadata\":\"SysML\") OR (\"All Metadata\":\"systems modeling language\") OR (\"All Metadata\":\"systems modelling language\") OR (\"All Metadata\":\"system modeling language\") OR (\"All Metadata\":\"system modelling language\") OR (\"All Metadata\":\"object-process methodology\") OR (\"All Metadata\":\"object process methodology\") OR (\"All Metadata\":\"OPM\") OR (\"All Metadata\":\"object-oriented systems engineering method\") OR (\"All Metadata\":\"object oriented systems engineering method\") OR (\"All Metadata\":\"OOSEM\") OR (\"All Metadata\":\"object-oriented systems engineering\") OR (\"All Metadata\":\"object oriented systems engineering\") OR (\"All Metadata\":\"Arcadia\") OR (\"All Metadata\":\"Capella\") OR (\"All Metadata\":\"model-based engineering\") OR (\"All Metadata\":\"model based engineering\") OR (\"All Metadata\":\"model-driven engineering\") OR (\"All Metadata\":\"model driven engineering\") OR (\"All Metadata\":\"model-based design\") OR (\"All Metadata\":\"model based design\") OR (\"All Metadata\":\"model-driven design\") OR (\"All Metadata\":\"model driven design\") OR (\"All Metadata\":\"MBE\") OR (\"All Metadata\":\"MDE\") OR (\"All Metadata\":\"MBD\") OR (\"All Metadata\":\"MagicGrid\") OR (\"All Metadata\":\"Harmony-SE\") OR (\"All Metadata\":\"Harmony SE\") OR (\"All Metadata\":\"RFLP\") OR (\"All Metadata\":\"Cameo Systems Modeler\") OR (\"All Metadata\":\"MagicDraw\") OR (\"All Metadata\":\"IBM Engineering Systems Design Rhapsody\") OR (\"All Metadata\":\"Rational Rhapsody\") OR (\"All Metadata\":\"Vitech CORE\") OR (\"All Metadata\":\"Vitech GENESYS\") OR (\"All Metadata\":\"OpenMBEE\") OR (\"All Metadata\":\"Enterprise Architect\") OR (\"All Metadata\":\"MATLAB System Composer\") OR (\"All Metadata\":\"System Composer\") OR (\"All Metadata\":\"Modelio\"))",
+      "query_sha256": "a98909791e3b1e3e1bd638fe9c853a42ca3aa10f790e6fa15e0cc419acb21473",
+      "query_characters": 3228,
+      "wildcard_count": 0,
+      "output_filename": "B1.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 5064,
+        "compact_equivalent_request_target_bytes": 4078,
+        "selected_encoding": "percent_component",
+        "selected_request_target_bytes": 5064,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    },
+    {
+      "event_id": "final-main-B2-ieee-xplore-004",
+      "partition_id": "B2",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\")) AND ((\"All Metadata\":\"requirement\") OR (\"All Metadata\":\"requirements\") OR (\"All Metadata\":\"function\") OR (\"All Metadata\":\"functions\") OR (\"All Metadata\":\"functional\") OR (\"All Metadata\":\"behavior\") OR (\"All Metadata\":\"behaviors\") OR (\"All Metadata\":\"behaviour\") OR (\"All Metadata\":\"behaviours\") OR (\"All Metadata\":\"behavioral\") OR (\"All Metadata\":\"behavioural\") OR (\"All Metadata\":\"architecture\") OR (\"All Metadata\":\"architectures\") OR (\"All Metadata\":\"architectural\") OR (\"All Metadata\":\"interface\") OR (\"All Metadata\":\"interfaces\") OR (\"All Metadata\":\"traceability\") OR (\"All Metadata\":\"trace\") OR (\"All Metadata\":\"traceable\") OR (\"All Metadata\":\"traced\") OR (\"All Metadata\":\"allocation\") OR (\"All Metadata\":\"allocate\") OR (\"All Metadata\":\"allocated\") OR (\"All Metadata\":\"constraint\") OR (\"All Metadata\":\"constraints\") OR (\"All Metadata\":\"parametric\") OR (\"All Metadata\":\"parametrics\") OR (\"All Metadata\":\"analysis\") OR (\"All Metadata\":\"analyses\") OR (\"All Metadata\":\"design\") OR (\"All Metadata\":\"designs\") OR (\"All Metadata\":\"designed\") OR (\"All Metadata\":\"designing\") OR (\"All Metadata\":\"decision\") OR (\"All Metadata\":\"decisions\") OR (\"All Metadata\":\"decision-making\") OR (\"All Metadata\":\"decision making\") OR (\"All Metadata\":\"trade study\") OR (\"All Metadata\":\"trade studies\") OR (\"All Metadata\":\"trade-off\") OR (\"All Metadata\":\"trade-offs\") OR (\"All Metadata\":\"tradeoff\") OR (\"All Metadata\":\"tradeoffs\") OR (\"All Metadata\":\"verification\") OR (\"All Metadata\":\"verifications\") OR (\"All Metadata\":\"verify\") OR (\"All Metadata\":\"verifies\") OR (\"All Metadata\":\"verified\") OR (\"All Metadata\":\"verifying\") OR (\"All Metadata\":\"validation\") OR (\"All Metadata\":\"validations\") OR (\"All Metadata\":\"validate\") OR (\"All Metadata\":\"validates\") OR (\"All Metadata\":\"validated\") OR (\"All Metadata\":\"validating\"))",
+      "query_sha256": "bf98ed2edd5eb39e04ccc602091c8aab8b773fda5dea3e5111551cb658789dfd",
+      "query_characters": 4018,
+      "wildcard_count": 0,
+      "output_filename": "B2.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 6444,
+        "compact_equivalent_request_target_bytes": 5188,
+        "selected_encoding": "percent_component",
+        "selected_request_target_bytes": 6444,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    },
+    {
+      "event_id": "final-main-BG1-ieee-xplore-004",
+      "partition_id": "BG1",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND (((\"All Metadata\":\"generic model\") OR (\"All Metadata\":\"generic models\") OR (\"All Metadata\":\"generic system model\") OR (\"All Metadata\":\"generic system models\") OR (\"All Metadata\":\"reusable model\") OR (\"All Metadata\":\"reusable models\") OR (\"All Metadata\":\"reusable system model\") OR (\"All Metadata\":\"reusable system models\") OR (\"All Metadata\":\"configurable model\") OR (\"All Metadata\":\"configurable models\") OR (\"All Metadata\":\"configurable system model\") OR (\"All Metadata\":\"configurable system models\") OR (\"All Metadata\":\"model template\") OR (\"All Metadata\":\"model templates\")) OR ((\"All Metadata\":\"mission-agnostic model\") OR (\"All Metadata\":\"mission-agnostic models\") OR (\"All Metadata\":\"mission-agnostic architecture\") OR (\"All Metadata\":\"mission-agnostic architectures\") OR (\"All Metadata\":\"mission agnostic model\") OR (\"All Metadata\":\"mission agnostic models\") OR (\"All Metadata\":\"mission agnostic architecture\") OR (\"All Metadata\":\"mission agnostic architectures\") OR (\"All Metadata\":\"mission-independent model\") OR (\"All Metadata\":\"mission-independent models\") OR (\"All Metadata\":\"mission-independent architecture\") OR (\"All Metadata\":\"mission-independent architectures\") OR (\"All Metadata\":\"mission independent model\") OR (\"All Metadata\":\"mission independent models\") OR (\"All Metadata\":\"mission independent architecture\") OR (\"All Metadata\":\"mission independent architectures\")) OR (((\"All Metadata\":\"mission-agnostic\") OR (\"All Metadata\":\"mission agnostic\") OR (\"All Metadata\":\"mission-independent\") OR (\"All Metadata\":\"mission independent\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\"))))",
+      "query_sha256": "d91cd914dacabefc8481e23be2991cb095ac95d79c289eb430d0e8c45d12dfeb",
+      "query_characters": 3779,
+      "wildcard_count": 0,
+      "output_filename": "BG1.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 5887,
+        "compact_equivalent_request_target_bytes": 4739,
+        "selected_encoding": "percent_component",
+        "selected_request_target_bytes": 5887,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    },
+    {
+      "event_id": "final-main-BG2-ieee-xplore-004",
+      "partition_id": "BG2",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND (((\"All Metadata\":\"reference architecture\") OR (\"All Metadata\":\"reference architectures\") OR (\"All Metadata\":\"domain model\") OR (\"All Metadata\":\"domain models\") OR (\"All Metadata\":\"metamodel\") OR (\"All Metadata\":\"metamodels\") OR (\"All Metadata\":\"meta-model\") OR (\"All Metadata\":\"meta-models\")) OR ((\"All Metadata\":\"product-line model\") OR (\"All Metadata\":\"product-line models\") OR (\"All Metadata\":\"product line model\") OR (\"All Metadata\":\"product line models\") OR (\"All Metadata\":\"product-family model\") OR (\"All Metadata\":\"product-family models\") OR (\"All Metadata\":\"product family model\") OR (\"All Metadata\":\"product family models\")) OR ((\"All Metadata\":\"variation point\") OR (\"All Metadata\":\"variation points\")) OR (((\"All Metadata\":\"product-line\") OR (\"All Metadata\":\"product line\") OR (\"All Metadata\":\"product-family\") OR (\"All Metadata\":\"product family\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\"))))",
+      "query_sha256": "92d29fc111ce16760c16470990fec9bd07af40c9938e5d838557ed26fad8eee0",
+      "query_characters": 3087,
+      "wildcard_count": 0,
+      "output_filename": "BG2.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 4907,
+        "compact_equivalent_request_target_bytes": 3927,
+        "selected_encoding": "percent_component",
+        "selected_request_target_bytes": 4907,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    },
+    {
+      "event_id": "final-main-BC1-ieee-xplore-004",
+      "partition_id": "BC1",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND (((\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"system reference model\") OR (\"All Metadata\":\"system reference models\") OR (\"All Metadata\":\"model library\") OR (\"All Metadata\":\"model libraries\") OR (\"All Metadata\":\"system model library\") OR (\"All Metadata\":\"system model libraries\") OR (\"All Metadata\":\"model pattern\") OR (\"All Metadata\":\"model patterns\") OR (\"All Metadata\":\"modeling pattern\") OR (\"All Metadata\":\"modeling patterns\") OR (\"All Metadata\":\"modelling pattern\") OR (\"All Metadata\":\"modelling patterns\") OR (\"All Metadata\":\"system model pattern\") OR (\"All Metadata\":\"system model patterns\") OR (\"All Metadata\":\"systems model pattern\") OR (\"All Metadata\":\"systems model patterns\") OR (\"All Metadata\":\"model profile\") OR (\"All Metadata\":\"model profiles\") OR (\"All Metadata\":\"system model profile\") OR (\"All Metadata\":\"system model profiles\") OR (\"All Metadata\":\"systems model profile\") OR (\"All Metadata\":\"systems model profiles\") OR (\"All Metadata\":\"SysML profile\") OR (\"All Metadata\":\"SysML profiles\")) OR ((\"All Metadata\":\"domain-specific modeling language\") OR (\"All Metadata\":\"domain specific modeling language\") OR (\"All Metadata\":\"domain-specific modelling language\") OR (\"All Metadata\":\"domain specific modelling language\")))",
+      "query_sha256": "e2b977fd22a337763126e7b35d1c71f18a122b70325077a118408bb1fb27e56c",
+      "query_characters": 2169,
+      "wildcard_count": 0,
+      "output_filename": "BC1.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 3471,
+        "compact_equivalent_request_target_bytes": 2779,
+        "selected_encoding": "percent_component",
+        "selected_request_target_bytes": 3471,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    },
+    {
+      "event_id": "final-main-BT2-ieee-xplore-004",
+      "partition_id": "BT2",
+      "query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\")) AND ((\"All Metadata\":\"tailor\") OR (\"All Metadata\":\"tailors\") OR (\"All Metadata\":\"tailored\") OR (\"All Metadata\":\"tailoring\") OR (\"All Metadata\":\"customize\") OR (\"All Metadata\":\"customizes\") OR (\"All Metadata\":\"customized\") OR (\"All Metadata\":\"customizing\") OR (\"All Metadata\":\"customization\") OR (\"All Metadata\":\"customise\") OR (\"All Metadata\":\"customises\") OR (\"All Metadata\":\"customised\") OR (\"All Metadata\":\"customising\") OR (\"All Metadata\":\"customisation\") OR (\"All Metadata\":\"parameterize\") OR (\"All Metadata\":\"parameterizes\") OR (\"All Metadata\":\"parameterized\") OR (\"All Metadata\":\"parameterizing\") OR (\"All Metadata\":\"parameterization\") OR (\"All Metadata\":\"parameterise\") OR (\"All Metadata\":\"parameterises\") OR (\"All Metadata\":\"parameterised\") OR (\"All Metadata\":\"parameterising\") OR (\"All Metadata\":\"parameterisation\") OR (\"All Metadata\":\"instantiate\") OR (\"All Metadata\":\"instantiates\") OR (\"All Metadata\":\"instantiated\") OR (\"All Metadata\":\"instantiating\") OR (\"All Metadata\":\"instantiation\") OR (\"All Metadata\":\"variability\") OR (\"All Metadata\":\"variation point\") OR (\"All Metadata\":\"variation points\"))",
+      "query_sha256": "d35ca9f762b74211a77b32613c26b1e49ff8f0d1adf81eec008b4849db40f064",
+      "query_characters": 3333,
+      "wildcard_count": 0,
+      "output_filename": "BT2.json",
+      "page_size": 100,
+      "limit": 10000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.0,
+      "detail_delay_seconds": 0.0,
+      "require_complete": true,
+      "strict_passes": 2,
+      "full_abstracts": true,
+      "source_publication_types": true,
+      "transport": {
+        "decoded_parameter_sequence": [
+          "newsearch=true",
+          "queryText=<exact query>"
+        ],
+        "percent_component_request_target_bytes": 5297,
+        "compact_equivalent_request_target_bytes": 4273,
+        "selected_encoding": "percent_component",
+        "selected_request_target_bytes": 5297,
+        "validated_request_target_bound_bytes": 7800,
+        "decoded_query_changed": false
+      },
+      "strategy_version": "28c47b4990b7c1844990f52d3dc0c0850812f208",
+      "browser_execution": "attached_shared_cdp_owned_page",
+      "rendered_card_hydration": "content_visibility_aware"
+    }
+  ],
+  "corrective_run": {
+    "sequence": 4,
+    "reason": "The prior A2 and B2 source states had exact query, scope, access, Year, and Oldest readback. Their full-page screenshots showed 25 cards, while the live card projection counted only 8 offscreen cards. IEEE now uses content-visibility below the viewport. Adapter v13 accepts connected non-hidden result cards without requiring client rects.",
+    "superseded_plan": "SLR/SLR1/source-specific/ieee-xplore/final-searches/corrective-003/final-event-plan.json",
+    "superseded_plan_sha256": "843e283fdae1981db7448fb4cfe0123b2e6c0f0e86f058554f430ffc9b3859a7",
+    "superseded_run_receipt": "SLR/SLR1/source-specific/ieee-xplore/final-searches/corrective-003/run-receipt.json",
+    "superseded_run_receipt_sha256": "eba51118fa57f8ef0ef01ca256f279a53235cc134612618fe7ffb146142fc40f",
+    "scientific_query_changed": false,
+    "adapter_repair": {
+      "prior_adapter_version": "12",
+      "prior_adapter_sha256": "89c81849aa2503b2247d80e8e3f250fa4f1cdeb76fa314dbdcba530c92894be6",
+      "repaired_behavior": "Offscreen IEEE result cards governed by content-visibility are included when connected and not hidden.",
+      "focused_tests": {
+        "test_count": 35,
+        "status": "passed",
+        "lint": "passed"
+      }
+    }
+  }
+}

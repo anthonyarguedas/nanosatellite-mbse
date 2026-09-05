@@ -1,0 +1,276 @@
+{
+  "schema_version": "academic-search-result/v1",
+  "source": "IEEE Xplore",
+  "executed_query": "",
+  "total": null,
+  "results": [],
+  "output_metadata": {
+    "status": "error",
+    "error_stage": "browser_open",
+    "error_reason": "unknown",
+    "merge_contract": "academic-search-merge/v1",
+    "merge_eligible": false,
+    "prisma_search_run": {
+      "schema_version": "academic-search-prisma-search-run/v2",
+      "run_id": "final-main-B2-ieee-xplore-005",
+      "run_id_provenance": "explicitly_supplied",
+      "review_id": "slr1-1.1-restart",
+      "strategy_reference": "slr1-ieee-xplore-main-direct-v1",
+      "strategy_version": "59cffa11a888b4503645133c7e97ed26e82d4b9b",
+      "phase": "identification",
+      "coverage": {
+        "coverage_scope": "partition",
+        "is_full_source_coverage": false,
+        "partition_id": "B2",
+        "partition_label": "B2",
+        "partition_description": "IEEE Xplore final direct discovery partition B2"
+      },
+      "source_descriptor": {
+        "source_id": "ieee_xplore",
+        "source_label": "IEEE Xplore",
+        "prisma_category": "database",
+        "resource_name": "IEEE Xplore Digital Library",
+        "database_name": "IEEE Xplore",
+        "platform_name": "IEEE Xplore",
+        "platform_url": "https://ieeexplore.ieee.org/"
+      },
+      "adapter": {
+        "adapter_id": "search_ieee_xplore",
+        "adapter_version": "11",
+        "script_sha256": "5f237523a80652573fabaa6a04a65c12e5fb7385fda67bcb8d9fa3d599f59bc3",
+        "script_hash_provenance": "sha256_regular_file"
+      },
+      "strategy": {
+        "query_fields": [],
+        "search_scope": "documents",
+        "query_syntax": "IEEE Xplore native query processing",
+        "limits": {
+          "publication_year": {
+            "state": "unknown",
+            "requested": "2011_2026_Year",
+            "provenance": "caller"
+          },
+          "publication_date": {
+            "state": "applied",
+            "value": {
+              "state": "exact_dates",
+              "field": "Date of Publication",
+              "requested_start": "2011-01-01",
+              "requested_end": "2026-08-24",
+              "source_year_range": "2011_2026_Year",
+              "source_filter": "Publication Year",
+              "source_precision": "year",
+              "local_filter_applied": true,
+              "local_filter_required": true,
+              "inclusive": true,
+              "timezone": "not_exposed_date_only",
+              "date_added_is_not_publication_date": true,
+              "local_filter_stage": "after_complete_source_retrieval",
+              "unresolved_policy": "retain_and_report"
+            },
+            "provenance": "derived"
+          },
+          "date_added": {
+            "state": "unknown",
+            "provenance": "caller"
+          },
+          "content_types": {
+            "state": "unknown",
+            "provenance": "caller"
+          },
+          "scope": {
+            "state": "unknown",
+            "requested": "documents",
+            "provenance": "derived"
+          },
+          "access_scope": {
+            "state": "unknown",
+            "requested": "all",
+            "provenance": "derived"
+          },
+          "search_within": {
+            "state": "unknown",
+            "provenance": "caller"
+          },
+          "content_type_refinements": {
+            "state": "unknown",
+            "provenance": "caller"
+          },
+          "result_facets": {
+            "state": "unknown",
+            "provenance": "caller"
+          },
+          "year_start": null,
+          "year_end": null
+        },
+        "sort": {
+          "state": "unknown",
+          "requested": "Oldest",
+          "provenance": "derived"
+        },
+        "requested_query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\")) AND ((\"All Metadata\":\"requirement\") OR (\"All Metadata\":\"requirements\") OR (\"All Metadata\":\"function\") OR (\"All Metadata\":\"functions\") OR (\"All Metadata\":\"functional\") OR (\"All Metadata\":\"behavior\") OR (\"All Metadata\":\"behaviors\") OR (\"All Metadata\":\"behaviour\") OR (\"All Metadata\":\"behaviours\") OR (\"All Metadata\":\"behavioral\") OR (\"All Metadata\":\"behavioural\") OR (\"All Metadata\":\"architecture\") OR (\"All Metadata\":\"architectures\") OR (\"All Metadata\":\"architectural\") OR (\"All Metadata\":\"interface\") OR (\"All Metadata\":\"interfaces\") OR (\"All Metadata\":\"traceability\") OR (\"All Metadata\":\"trace\") OR (\"All Metadata\":\"traceable\") OR (\"All Metadata\":\"traced\") OR (\"All Metadata\":\"allocation\") OR (\"All Metadata\":\"allocate\") OR (\"All Metadata\":\"allocated\") OR (\"All Metadata\":\"constraint\") OR (\"All Metadata\":\"constraints\") OR (\"All Metadata\":\"parametric\") OR (\"All Metadata\":\"parametrics\") OR (\"All Metadata\":\"analysis\") OR (\"All Metadata\":\"analyses\") OR (\"All Metadata\":\"design\") OR (\"All Metadata\":\"designs\") OR (\"All Metadata\":\"designed\") OR (\"All Metadata\":\"designing\") OR (\"All Metadata\":\"decision\") OR (\"All Metadata\":\"decisions\") OR (\"All Metadata\":\"decision-making\") OR (\"All Metadata\":\"decision making\") OR (\"All Metadata\":\"trade study\") OR (\"All Metadata\":\"trade studies\") OR (\"All Metadata\":\"trade-off\") OR (\"All Metadata\":\"trade-offs\") OR (\"All Metadata\":\"tradeoff\") OR (\"All Metadata\":\"tradeoffs\") OR (\"All Metadata\":\"verification\") OR (\"All Metadata\":\"verifications\") OR (\"All Metadata\":\"verify\") OR (\"All Metadata\":\"verifies\") OR (\"All Metadata\":\"verified\") OR (\"All Metadata\":\"verifying\") OR (\"All Metadata\":\"validation\") OR (\"All Metadata\":\"validations\") OR (\"All Metadata\":\"validate\") OR (\"All Metadata\":\"validates\") OR (\"All Metadata\":\"validated\") OR (\"All Metadata\":\"validating\"))",
+        "executed_query_provenance": "not_observed"
+      },
+      "completed_at_utc": "2026-09-04T18:07:11.843815Z",
+      "staged_counts": {
+        "source_reported_total": null,
+        "source_reported_total_status": "unknown",
+        "source_reported_total_exact": null,
+        "source_reported_total_scope": "requested IEEE Xplore query; exact rendered query echo was not observed",
+        "source_universe_total": null,
+        "source_export_total": null,
+        "local_match_count": null,
+        "matched_total": null,
+        "raw_source_records": null,
+        "client_side_exclusions": null,
+        "within_source_duplicates_removed": null,
+        "malformed_records_dropped": null,
+        "records_exported": 0
+      },
+      "completion_status": "error",
+      "report_ready": false,
+      "report_readiness_reasons": [
+        "missing_effective_executed_query",
+        "source_run_not_complete",
+        "staged_record_accounting_incomplete"
+      ]
+    },
+    "ieee_observation_receipt": {
+      "schema_version": "ieee-xplore-control-observation/v1",
+      "initial_form_readiness": {
+        "state": "not_observed"
+      },
+      "query_submit": {
+        "state": "not_attempted",
+        "exact_echo": "not_observed"
+      },
+      "controlled_vocabulary": {
+        "state": "not_requested",
+        "requested_count": 0,
+        "echoed_count": 0,
+        "query_echo": "not_observed",
+        "apply_readback": "not_applicable",
+        "expansion": "not_requested"
+      },
+      "relevance_control": {
+        "state": "not_attempted",
+        "visible": null,
+        "verified": null
+      },
+      "sort_control": {
+        "state": "not_attempted",
+        "requested": "not_observed",
+        "effective": "not_observed",
+        "visible": null,
+        "verified": null
+      },
+      "scope_control": {
+        "state": "not_attempted",
+        "requested": "not_observed",
+        "effective": "not_observed",
+        "visible": null,
+        "verified": null
+      },
+      "access_control": {
+        "state": "not_attempted",
+        "requested": "not_observed",
+        "effective": "not_observed",
+        "visible": null,
+        "verified": null,
+        "transition_count": 0
+      },
+      "search_within_control": {
+        "state": "not_attempted",
+        "requested": "blank",
+        "effective": "not_observed",
+        "visible": null,
+        "verified": null,
+        "fill": "not_attempted",
+        "submit": "not_attempted"
+      },
+      "date_added_control": {
+        "state": "not_attempted",
+        "from_fill": "not_attempted",
+        "to_fill": "not_attempted",
+        "from_readback": null,
+        "to_readback": null,
+        "date_selector_checked": null,
+        "apply_activation": "not_attempted",
+        "transition_count": 0
+      },
+      "content_type_control": {
+        "state": "not_attempted",
+        "requested_count": 0,
+        "applied_count": 0,
+        "apply_transition_count": 0
+      },
+      "result_facets": {
+        "state": "not_attempted",
+        "requested_count": 0,
+        "applied_count": 0,
+        "apply_transition_count": 0
+      },
+      "year_control": {
+        "state": "not_attempted",
+        "attempt_count": 0,
+        "context_replacement_retry_count": 0,
+        "start_locator_count": null,
+        "end_locator_count": null,
+        "apply_locator_count": null,
+        "start_visible": null,
+        "end_visible": null,
+        "apply_visible": null,
+        "start_enabled": null,
+        "end_enabled": null,
+        "apply_enabled_before_fill": null,
+        "apply_enabled_after_fill": null,
+        "start_fill": "not_attempted",
+        "end_fill": "not_attempted",
+        "start_readback_matches_requested": null,
+        "end_readback_matches_requested": null,
+        "apply_activation": "not_attempted",
+        "apply_transition_count": 0
+      },
+      "post_click_stabilization": {
+        "state": "not_attempted",
+        "passive_poll_count": 0,
+        "transitional_poll_count": 0,
+        "contradictory_poll_count": 0,
+        "stable_reconciled_poll_count": 0
+      },
+      "strict_completion": {
+        "state": "unresolved",
+        "passes_requested": 2,
+        "passes_completed": 0,
+        "total_reconciled": false,
+        "controls_reconciled": false,
+        "ordered_ids_reconciled": false,
+        "retrieval_complete": false,
+        "export_complete": false
+      },
+      "rendered_state": {
+        "query_echo": "not_observed",
+        "range_echo": "not_observed",
+        "summary": "not_observed",
+        "loading": null,
+        "card_count": null,
+        "page_size_control_count": null,
+        "active_page_control_count": null,
+        "sort": "not_observed",
+        "scope": "not_observed",
+        "access_scope": "not_observed",
+        "search_within": "not_observed"
+      },
+      "syntax_access_state": {
+        "route": "not_observed",
+        "access": "not_observed",
+        "ready": null
+      },
+      "cleanup": {
+        "state": "not_needed"
+      }
+    }
+  },
+  "do_not_merge": true,
+  "requested_query": "((\"All Metadata\":\"CubeSat\") OR (\"All Metadata\":\"CubeSats\") OR (\"All Metadata\":\"cube sat\") OR (\"All Metadata\":\"cube sats\") OR (\"All Metadata\":\"cube-sat\") OR (\"All Metadata\":\"cube-sats\") OR (\"All Metadata\":\"cube satellite\") OR (\"All Metadata\":\"cube satellites\") OR (\"All Metadata\":\"nanosat\") OR (\"All Metadata\":\"nanosats\") OR (\"All Metadata\":\"nanosatellite\") OR (\"All Metadata\":\"nanosatellites\") OR (\"All Metadata\":\"nano-sat\") OR (\"All Metadata\":\"nano-sats\") OR (\"All Metadata\":\"nano sat\") OR (\"All Metadata\":\"nano sats\") OR (\"All Metadata\":\"nano-satellite\") OR (\"All Metadata\":\"nano-satellites\") OR (\"All Metadata\":\"nano satellite\") OR (\"All Metadata\":\"nano satellites\") OR (\"All Metadata\":\"SmallSat\") OR (\"All Metadata\":\"SmallSats\") OR (\"All Metadata\":\"small satellite\") OR (\"All Metadata\":\"small satellites\") OR (\"All Metadata\":\"small sat\") OR (\"All Metadata\":\"small sats\")) AND ((\"All Metadata\":\"system model\") OR (\"All Metadata\":\"systems model\") OR (\"All Metadata\":\"system modeling\") OR (\"All Metadata\":\"systems modeling\") OR (\"All Metadata\":\"system modelling\") OR (\"All Metadata\":\"systems modelling\") OR (\"All Metadata\":\"reference model\") OR (\"All Metadata\":\"reference models\") OR (\"All Metadata\":\"digital engineering\") OR (\"All Metadata\":\"object-oriented systems model\") OR (\"All Metadata\":\"object-oriented systems models\") OR (\"All Metadata\":\"model-based system design\") OR (\"All Metadata\":\"model based system design\") OR (\"All Metadata\":\"model-based systems design\") OR (\"All Metadata\":\"model based systems design\") OR (\"All Metadata\":\"system architecture model\") OR (\"All Metadata\":\"system architecture models\") OR (\"All Metadata\":\"systems architecture model\") OR (\"All Metadata\":\"systems architecture models\") OR (\"All Metadata\":\"integrated system model\") OR (\"All Metadata\":\"integrated system models\") OR (\"All Metadata\":\"integrated systems model\") OR (\"All Metadata\":\"integrated systems models\") OR (\"All Metadata\":\"system-level model\") OR (\"All Metadata\":\"system-level models\") OR (\"All Metadata\":\"system level model\") OR (\"All Metadata\":\"system level models\") OR (\"All Metadata\":\"digital thread\") OR (\"All Metadata\":\"digital threads\") OR (\"All Metadata\":\"digital twin\") OR (\"All Metadata\":\"digital twins\")) AND ((\"All Metadata\":\"requirement\") OR (\"All Metadata\":\"requirements\") OR (\"All Metadata\":\"function\") OR (\"All Metadata\":\"functions\") OR (\"All Metadata\":\"functional\") OR (\"All Metadata\":\"behavior\") OR (\"All Metadata\":\"behaviors\") OR (\"All Metadata\":\"behaviour\") OR (\"All Metadata\":\"behaviours\") OR (\"All Metadata\":\"behavioral\") OR (\"All Metadata\":\"behavioural\") OR (\"All Metadata\":\"architecture\") OR (\"All Metadata\":\"architectures\") OR (\"All Metadata\":\"architectural\") OR (\"All Metadata\":\"interface\") OR (\"All Metadata\":\"interfaces\") OR (\"All Metadata\":\"traceability\") OR (\"All Metadata\":\"trace\") OR (\"All Metadata\":\"traceable\") OR (\"All Metadata\":\"traced\") OR (\"All Metadata\":\"allocation\") OR (\"All Metadata\":\"allocate\") OR (\"All Metadata\":\"allocated\") OR (\"All Metadata\":\"constraint\") OR (\"All Metadata\":\"constraints\") OR (\"All Metadata\":\"parametric\") OR (\"All Metadata\":\"parametrics\") OR (\"All Metadata\":\"analysis\") OR (\"All Metadata\":\"analyses\") OR (\"All Metadata\":\"design\") OR (\"All Metadata\":\"designs\") OR (\"All Metadata\":\"designed\") OR (\"All Metadata\":\"designing\") OR (\"All Metadata\":\"decision\") OR (\"All Metadata\":\"decisions\") OR (\"All Metadata\":\"decision-making\") OR (\"All Metadata\":\"decision making\") OR (\"All Metadata\":\"trade study\") OR (\"All Metadata\":\"trade studies\") OR (\"All Metadata\":\"trade-off\") OR (\"All Metadata\":\"trade-offs\") OR (\"All Metadata\":\"tradeoff\") OR (\"All Metadata\":\"tradeoffs\") OR (\"All Metadata\":\"verification\") OR (\"All Metadata\":\"verifications\") OR (\"All Metadata\":\"verify\") OR (\"All Metadata\":\"verifies\") OR (\"All Metadata\":\"verified\") OR (\"All Metadata\":\"verifying\") OR (\"All Metadata\":\"validation\") OR (\"All Metadata\":\"validations\") OR (\"All Metadata\":\"validate\") OR (\"All Metadata\":\"validates\") OR (\"All Metadata\":\"validated\") OR (\"All Metadata\":\"validating\"))"
+}

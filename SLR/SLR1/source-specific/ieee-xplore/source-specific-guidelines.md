@@ -30,9 +30,9 @@ Use the concepts, compounds, and nine partitions in [the discovery protocol](../
 
 ## Execution
 
-`--skip-full-abstracts` and `--no-full-abstracts` are for pilots and diagnostics only. Do not use them for final or corrective searches.
+`--skip-full-abstracts` and `--no-full-abstracts` are for pilots and diagnostics only. Do not use them for final or corrective searches. On each rendered document page, activate a visible **Show More** abstract control before capture. Record `abstract_full_text_status` and fail if the collapsed 2,003 character preview remains. Record the visible result card publication type in `documentType`.
 
-Run one expression per partition. Keep each request within the validated 7,800 byte target envelope. Use compact space encoding and safe parentheses only when percent component encoding would exceed that envelope. Preserve the decoded parameter sequence.
+Run one expression per partition. Keep each request within the validated 7,800 byte target envelope. Use compact space encoding and safe parentheses only when percent component encoding would exceed that envelope. Preserve the decoded parameter sequence. Use 20 second page and detail delays for final runs. This cadence keeps rendered document requests within the source observed challenge free window, including page and pass transitions.
 
 Before changing a Year widget, accept a disabled interval only when its complete available range lies inside the requested window. Record the requested range and contained source interval separately. Any real narrowing, ambiguous widget, or changed token fails with `total: null`.
 
