@@ -20,6 +20,7 @@ from deduplication import (  # noqa: E402
     apply_screening_decisions,
     author_names,
     cluster_manifestations,
+    direct_manifestations,
     reviewer_screening_coding,
 )
 
@@ -88,6 +89,22 @@ class ConservativeClusteringTests(unittest.TestCase):
         @staticmethod
         def normalize_year(value: object) -> str:
             return str(value) if isinstance(value, int) else ""
+
+        @staticmethod
+        def infer_source(_path: Path, _data: object) -> str:
+            return "source-a"
+
+        @staticmethod
+        def clean_text(value: object) -> str:
+            return value if isinstance(value, str) else ""
+
+        @staticmethod
+        def normalize_doi(value: object) -> str:
+            return value if isinstance(value, str) else ""
+
+        @staticmethod
+        def normalize_text(value: object) -> str:
+            return value.casefold() if isinstance(value, str) else ""
 
     @staticmethod
     def manifestation(
@@ -188,10 +205,37 @@ class ConservativeClusteringTests(unittest.TestCase):
                     {"name": "Kiselyov, Igor (author)"},
                     {"name": "Reising, Steve, committee member"},
                     {"name": "View all authors"},
+                    {"name": "IEEE"},
                 ]
             ),
             ["Kiselyov, Igor"],
         )
+
+    def test_saved_abstract_enrichment_replaces_source_text(self) -> None:
+        payload = {
+            "results": [
+                {
+                    "paperId": "one",
+                    "doi": "",
+                    "title": "Title",
+                    "year": 2025,
+                    "abstract": "truncated source text",
+                }
+            ],
+            "output_metadata": {
+                "prisma_search_run": {"coverage": {"partition_id": "B1"}}
+            },
+        }
+        with tempfile.TemporaryDirectory(dir=SLR1_DIR) as temporary:
+            path = Path(temporary) / "source.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            rows, raw_count = direct_manifestations(
+                self.Merger(),
+                [path],
+                {("source-a", "one"): "complete saved abstract"},
+            )
+        self.assertEqual(raw_count, 1)
+        self.assertEqual(rows[0]["abstract"], "complete saved abstract")
 
 
 class ReviewerScreeningCodingTests(unittest.TestCase):

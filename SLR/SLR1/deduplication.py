@@ -274,6 +274,8 @@ def author_names(value: Any) -> list[str]:
         "no authors found",
         "view all authors",
         "et al",
+        "aiaa",
+        "ieee",
     }
     for item in values:
         name = text(item.get("name")) if isinstance(item, Mapping) else text(item)
@@ -778,7 +780,7 @@ def source_union_final_direct_input_paths(
     return selected
 
 
-def oatd_final_direct_input_paths() -> list[Path]:
+def load_oatd_final_evidence() -> tuple[dict[str, Any], dict[str, Path]]:
     require_regular(OATD_FINAL_OUTCOME_PATH)
     outcome = load_json(OATD_FINAL_OUTCOME_PATH)
     if (
@@ -810,7 +812,11 @@ def oatd_final_direct_input_paths() -> list[Path]:
         if item.get("sha256") != digest(path):
             raise ValueError(f"The final OATD {field} evidence changed")
         evidence[field] = path
+    return outcome, evidence
 
+
+def oatd_final_direct_input_paths() -> list[Path]:
+    outcome, evidence = load_oatd_final_evidence()
     validation = load_json(evidence["source_validation"])
     if (
         validation.get("status") != "valid"
@@ -847,6 +853,182 @@ def final_direct_input_paths() -> list[Path]:
     if not paths:
         raise ValueError("No final direct-review search artifacts are available")
     return sorted(paths)
+
+
+def load_aiaa_abstract_enrichment(
+    paths: list[Path],
+) -> tuple[dict[tuple[str, str], str], dict[str, Any]]:
+    directory = SOURCE_SPECIFIC_DIR / "aiaa-arc/final-searches"
+    selection_path = directory / FINAL_ARTIFACT_SELECTION_FILENAME
+    require_regular(selection_path)
+    selection = load_json(selection_path)
+    raw_union_path = selection.get("record_union")
+    if (
+        selection.get("schema_version") != FINAL_ARTIFACT_SELECTION_SCHEMA
+        or selection.get("source_id") != "aiaa_arc"
+        or selection.get("full_abstract_capture_complete") is not True
+        or not isinstance(raw_union_path, str)
+        or not raw_union_path
+        or Path(raw_union_path).is_absolute()
+    ):
+        raise ValueError("The AIAA abstract enrichment selection is invalid")
+    union_path = (REPOSITORY_ROOT / raw_union_path).resolve(strict=False)
+    if not union_path.is_relative_to(directory.resolve()):
+        raise ValueError("The AIAA abstract enrichment path is outside its source")
+    require_regular(union_path)
+    if selection.get("record_union_sha256") != digest(union_path):
+        raise ValueError("The AIAA abstract enrichment changed")
+
+    payload = load_json(union_path)
+    records = payload.get("records")
+    if (
+        payload.get("schema_version")
+        != "slr1-aiaa-arc-final-direct-record-union/v1"
+        or payload.get("source_id") != "aiaa_arc"
+        or payload.get("review_namespace") != "main"
+        or payload.get("complete") is not True
+        or not isinstance(records, list)
+        or payload.get("unique_canonical_doi_count") != len(records)
+        or selection.get("unique_canonical_doi_count") != len(records)
+    ):
+        raise ValueError("The AIAA abstract enrichment is incomplete")
+
+    source_root = directory.resolve()
+    selected_ids = {
+        text(row.get("paperId"))
+        for path in paths
+        if path.is_relative_to(source_root)
+        for row in load_json(path).get("results", [])
+        if isinstance(row, Mapping) and text(row.get("paperId"))
+    }
+    enrichment: dict[tuple[str, str], str] = {}
+    union_ids: set[str] = set()
+    unavailable_count = 0
+    for item in records:
+        if not isinstance(item, Mapping):
+            raise ValueError("An AIAA abstract enrichment row is malformed")
+        paper_id = text(item.get("paper_id"))
+        record = item.get("record")
+        if not paper_id or paper_id in union_ids or not isinstance(record, Mapping):
+            raise ValueError("An AIAA abstract enrichment identity is invalid")
+        abstract = text(record.get("abstract"))
+        unavailable = record.get("abstract_not_available")
+        status = record.get("abstract_capture_status")
+        if text(record.get("paperId")) != paper_id or (
+            abstract
+            and (unavailable is not False or status != "full_source_abstract")
+        ):
+            raise ValueError("An AIAA abstract enrichment row is inconsistent")
+        if not abstract:
+            if unavailable is not True or status != "source_abstract_not_available":
+                raise ValueError("An AIAA unavailable abstract state is inconsistent")
+            unavailable_count += 1
+        else:
+            enrichment[("aiaa_arc", paper_id)] = abstract
+        union_ids.add(paper_id)
+
+    if (
+        union_ids != selected_ids
+        or payload.get("records_with_full_abstract") != len(enrichment)
+        or payload.get("records_with_source_abstract_unavailable")
+        != unavailable_count
+    ):
+        raise ValueError("The AIAA abstract enrichment identifier ledger changed")
+    return enrichment, {
+        "path": relative(union_path),
+        "sha256": digest(union_path),
+        "record_count": len(records),
+        "full_abstract_count": len(enrichment),
+        "source_abstract_unavailable_count": unavailable_count,
+    }
+
+
+def load_oatd_abstract_enrichment(
+    paths: list[Path],
+) -> tuple[dict[tuple[str, str], str], dict[str, Any]]:
+    outcome, evidence = load_oatd_final_evidence()
+    source_union = validate_final_direct_artifact(evidence["source_union"])
+    if paths.count(evidence["source_union"]) != 1:
+        raise ValueError("The enriched OATD source union is not selected exactly once")
+
+    payload = load_json(evidence["full_abstracts"])
+    validation = load_json(evidence["full_abstracts_validation"])
+    records = payload.get("records")
+    summary = payload.get("summary")
+    source_receipt = payload.get("source_union")
+    if (
+        payload.get("schema_version") != "slr1-oatd-full-abstract-enrichment/v1"
+        or payload.get("merge_eligible") is not False
+        or payload.get("additional_discovery_event") is not False
+        or not isinstance(records, list)
+        or not isinstance(summary, Mapping)
+        or not isinstance(source_receipt, Mapping)
+        or source_receipt.get("sha256") != digest(evidence["source_union"])
+        or source_receipt.get("records") != len(source_union["results"])
+        or validation.get("schema_version")
+        != "slr1-oatd-full-abstract-enrichment-validation/v1"
+        or validation.get("status") != "valid"
+        or validation.get("artifact_sha256") != digest(evidence["full_abstracts"])
+        or validation.get("repository_evidence_hashes_verified") is not True
+        or validation.get("additional_discovery_event") is not False
+    ):
+        raise ValueError("The OATD abstract enrichment is incomplete")
+
+    source_ids = [text(row.get("paperId")) for row in source_union["results"]]
+    enrichment: dict[tuple[str, str], str] = {}
+    enriched_ids: list[str] = []
+    for record in records:
+        if not isinstance(record, Mapping):
+            raise ValueError("An OATD abstract enrichment row is malformed")
+        paper_id = text(record.get("paperId"))
+        abstract = text(record.get("abstract"))
+        if (
+            not paper_id
+            or paper_id in enriched_ids
+            or not abstract
+            or record.get("abstract_not_available") is not False
+            or record.get("abstractCompleteness")
+            != "complete_as_provided_by_cited_source"
+        ):
+            raise ValueError("An OATD abstract enrichment row is inconsistent")
+        enrichment[("oatd", paper_id)] = abstract
+        enriched_ids.append(paper_id)
+
+    if (
+        enriched_ids != source_ids
+        or outcome.get("records") != len(enrichment)
+        or summary.get("records_with_full_abstracts") != len(enrichment)
+        or validation.get("full_abstracts") != len(enrichment)
+    ):
+        raise ValueError("The OATD abstract enrichment identifier ledger changed")
+    repository_enriched_ids = summary.get("repository_enriched_ids")
+    if (
+        not isinstance(repository_enriched_ids, list)
+        or summary.get("repository_enriched_records") != len(repository_enriched_ids)
+        or not set(repository_enriched_ids).issubset(enriched_ids)
+    ):
+        raise ValueError("The OATD repository enrichment ledger changed")
+    return enrichment, {
+        "path": relative(evidence["full_abstracts"]),
+        "sha256": digest(evidence["full_abstracts"]),
+        "record_count": len(enrichment),
+        "repository_enriched_record_count": len(repository_enriched_ids),
+        "validation_path": relative(evidence["full_abstracts_validation"]),
+        "validation_sha256": digest(evidence["full_abstracts_validation"]),
+    }
+
+
+def load_review_abstract_enrichment(
+    paths: list[Path],
+) -> tuple[dict[tuple[str, str], str], dict[str, Any]]:
+    aiaa, aiaa_receipt = load_aiaa_abstract_enrichment(paths)
+    oatd, oatd_receipt = load_oatd_abstract_enrichment(paths)
+    if set(aiaa) & set(oatd):
+        raise ValueError("Review abstract enrichments reuse a source record")
+    return {**aiaa, **oatd}, {
+        "aiaa_arc_abstracts": aiaa_receipt,
+        "oatd_abstracts": oatd_receipt,
+    }
 
 
 def citation_input_paths() -> list[Path]:
@@ -944,7 +1126,7 @@ def direct_manifestations(
                     "normalized_title": merger.normalize_text(record["title"]),
                     "year": record["year"],
                     "publication_date": source_publication_date(row),
-                    "abstract": text(row.get("abstract")) or enriched_abstract,
+                    "abstract": enriched_abstract or text(row.get("abstract")),
                     "abstract_snippet": text(row.get("snippet")),
                     "keywords": [
                         keyword
@@ -1373,7 +1555,7 @@ def citation_candidates(
 def build(mode: str) -> dict[str, Any]:
     merger = load_merger(mode)
     identity_link_receipt: dict[str, Any] | None = None
-    abstract_enrichment_receipt: dict[str, Any] | None = None
+    metadata_enrichment: dict[str, Any] = {"scopus_abstracts": None}
     if mode == "psr":
         validate_psr_sources(merger)
         paths = psr_input_paths()
@@ -1381,6 +1563,7 @@ def build(mode: str) -> dict[str, Any]:
         abstract_enrichment, abstract_enrichment_receipt = (
             load_psr_abstract_enrichment()
         )
+        metadata_enrichment["scopus_abstracts"] = abstract_enrichment_receipt
         candidates, raw_count, duplicates_removed = direct_candidates(
             merger,
             paths,
@@ -1400,11 +1583,16 @@ def build(mode: str) -> dict[str, Any]:
                 + ", ".join(sorted(actual_sources ^ EXPECTED_FINAL_DIRECT_SOURCES))
             )
         manual_links, identity_link_receipt = load_review_identity_links()
+        abstract_enrichment, enrichment_receipts = load_review_abstract_enrichment(
+            paths
+        )
+        metadata_enrichment.update(enrichment_receipts)
         candidates, raw_count, duplicates_removed = direct_candidates(
             merger,
             paths,
             "review",
             manual_links,
+            abstract_enrichment,
         )
         namespace = "main"
     elif mode == "citation-chasing":
@@ -1424,9 +1612,7 @@ def build(mode: str) -> dict[str, Any]:
         "generated_at": now(),
         "common_evidence_cutoff": COMMON_CUTOFF,
         "screening_decision_initial_value": "none",
-        "metadata_enrichment": {
-            "scopus_abstracts": abstract_enrichment_receipt,
-        },
+        "metadata_enrichment": metadata_enrichment,
         "deduplication": {
             "algorithm": (
                 "shared merger identity key"
