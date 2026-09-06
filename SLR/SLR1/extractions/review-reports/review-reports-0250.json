@@ -1,0 +1,4837 @@
+{
+  "identity": {
+    "report_id": "review-report-0250",
+    "screening_record_id": "review-candidate-0250",
+    "possible_companion_reports_or_shared_implementations": {
+      "status": "not_reported",
+      "reason": "No possible related report or shared implementation was identified in the report-level reuse records."
+    },
+    "family_lead": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-001",
+        "citation-0250-027"
+      ],
+      "value": "no"
+    },
+    "report_family_lead_reason": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-001",
+        "citation-0250-027"
+      ],
+      "value": "Complete review identified no named companion report or source-supported shared investigation outside this report."
+    },
+    "source_file_path": "SLR/SLR1/pdfs/review-reports/review-report-0250.md"
+  },
+  "context": {
+    "mission_or_platform": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-004"
+      ],
+      "value": "University of Würzburg Experimental Satellite 5 (UWE-5), a mission with two CubeSats"
+    },
+    "form_factor_or_mass": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-004"
+      ],
+      "value": "Two 3U CubeSats"
+    },
+    "mission_purpose_or_domain": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-004"
+      ],
+      "value": "Demonstration of a K-/KA-band communications payload"
+    },
+    "orbit_and_environment": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-004"
+      ],
+      "value": "Low Earth Orbit. Launch was estimated for 2027."
+    },
+    "organization_type": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-004"
+      ],
+      "value": [
+        "academic",
+        "civil_space_agency"
+      ],
+      "notes": "Three university groups conduct the work, and DLR supports the project."
+    },
+    "development_setting": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-002",
+        "citation-0250-004"
+      ],
+      "value": [
+        "academic_project",
+        "distributed",
+        "resource_constrained"
+      ],
+      "notes": "The project spans three university groups and explicitly operates under strict memory, power, and computational constraints."
+    },
+    "lifecycle_stages_demonstrated": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-018",
+        "citation-0250-019",
+        "citation-0250-020",
+        "citation-0250-022",
+        "citation-0250-023"
+      ],
+      "value": [
+        "architecture_and_design",
+        "implementation",
+        "integration",
+        "verification",
+        "validation"
+      ]
+    },
+    "lifecycle_stages_claimed_or_planned": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-003",
+        "citation-0250-004"
+      ],
+      "value": [
+        "validation",
+        "deployment_and_commissioning"
+      ],
+      "notes": "Power-consumption evaluation and launch are future activities."
+    },
+    "project_maturity": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-001",
+        "citation-0250-018",
+        "citation-0250-019",
+        "citation-0250-020",
+        "citation-0250-022",
+        "citation-0250-023"
+      ],
+      "value": [
+        "prototype",
+        "executable",
+        "used_on_project",
+        "physically_checked"
+      ],
+      "notes": "The UWE-5 framework is a project proof of concept that runs on the OBC and has reported hardware-based tests."
+    }
+  },
+  "mbse_approach": {
+    "problem_addressed": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-002",
+        "citation-0250-005",
+        "citation-0250-010",
+        "citation-0250-011"
+      ],
+      "value": "Design and test modular, fault-tolerant real-time CubeSat software that manages concurrent tasks and limited memory, processor time, and EPS power without losing critical functions."
+    },
+    "intended_decision": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-010",
+        "citation-0250-013",
+        "citation-0250-014",
+        "citation-0250-015",
+        "citation-0250-016"
+      ],
+      "value": "Define task priorities, interfaces, resource trigger behavior, and recovery actions so the flight-software design can preserve critical service and reach a stable state under faults or resource shortage."
+    },
+    "reason_for_using_mbse": {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-0250-017",
+        "citation-0250-018",
+        "citation-0250-024",
+        "citation-0250-025"
+      ],
+      "value": "Use structured models to clarify task interactions and interfaces, expose concurrency hazards during design, and connect the design to verification and validation before late debugging."
+    },
+    "model_generation_methods": {
+      "status": "not_reported",
+      "reason": "The report presents system and behavior models but does not report a procedure used to construct, populate, configure, transform, or generate them."
+    },
+    "workflows": {
+      "status": "not_reported",
+      "reason": "No source-identifiable engineering workflow moves EPS-linked models or engineering artifacts through connected engineering activities. The reported flowcharts describe runtime behavior, and the executed tests do not contain an EPS-linked engineering handoff."
+    },
+    "modeling_languages": {
+      "status": "uncertain",
+      "citation_ids": [
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-028",
+        "citation-0250-029",
+        "citation-0250-034"
+      ],
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "notes": "The report names UML and Systems Modelling Language as general options, and its diagrams use structured notation, but it does not identify the language used for the UWE-5 artifacts or give a version."
+    },
+    "tools_and_versions": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-007",
+        "citation-0250-010",
+        "citation-0250-019",
+        "citation-0250-030"
+      ],
+      "value": [
+        "KronOS shared library and Task Manager (version not reported)",
+        "FreeRTOS (version not reported)",
+        "POSIX pthreads operating-system abstraction (version not reported)",
+        "Windows PC development platform",
+        "MSP430F5438A OBC microcontroller",
+        "ATSAMV71Q20CB AODS microcontroller"
+      ]
+    },
+    "toolchain_and_data_flow": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-007",
+        "citation-0250-010",
+        "citation-0250-014",
+        "citation-0250-029",
+        "citation-0250-030"
+      ],
+      "value": "Application and mission code use KronOS sender, receiver, services, and Task Manager functions. KronOS uses a POSIX abstraction over FreeRTOS, which executes on the development or target hardware. EPS reports enter the shared software path and inform Task Manager trigger decisions."
+    },
+    "model_artifacts": [
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-006",
+          "citation-0250-028",
+          "citation-0250-029"
+        ],
+        "model_artifact_id": "model-artifact-0250-01",
+        "name_or_description": "UWE-5 system context and onboard-computer subsystem architecture models in Figures 1 and 2"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-007",
+          "citation-0250-030"
+        ],
+        "model_artifact_id": "model-artifact-0250-02",
+        "name_or_description": "KronOS software-layer architecture model in Figure 3"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-012",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-016",
+          "citation-0250-031",
+          "citation-0250-032",
+          "citation-0250-033"
+        ],
+        "model_artifact_id": "model-artifact-0250-03",
+        "name_or_description": "Task Manager load-balancing and health-check behavior models in Figures 4, 5, and 6"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-017",
+          "citation-0250-034"
+        ],
+        "model_artifact_id": "model-artifact-0250-04",
+        "name_or_description": "Thread-safe transmitter data-flow model in Figure 7"
+      }
+    ],
+    "modeled_systems_engineering_concerns": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-005",
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-010",
+        "citation-0250-011",
+        "citation-0250-014",
+        "citation-0250-016",
+        "citation-0250-018"
+      ],
+      "value": [
+        "system and subsystem architecture",
+        "hardware and software interfaces and data flow",
+        "task behavior, priority, and resource constraints",
+        "fault detection and recovery behavior",
+        "power-aware operating behavior",
+        "verification and validation targets"
+      ]
+    },
+    "explicit_relationships_among_concerns": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-014",
+        "citation-0250-015",
+        "citation-0250-016",
+        "citation-0250-018",
+        "citation-0250-020",
+        "citation-0250-022",
+        "citation-0250-023",
+        "citation-0250-028",
+        "citation-0250-029",
+        "citation-0250-030",
+        "citation-0250-031",
+        "citation-0250-032",
+        "citation-0250-033"
+      ],
+      "value": [
+        "The system architecture connects satellite subsystems and external systems through data-flow interfaces.",
+        "The software architecture maps application logic through KronOS, POSIX, and FreeRTOS to target hardware.",
+        "EPS state of charge, consumption, and charging-current reports drive Task Manager suspend, shutdown, and resume behavior.",
+        "Task priority and timeout state determine fault-recovery actions.",
+        "The validation tests check named watchdog, timeout, and decoder mechanisms against expected failsafe behavior."
+      ]
+    },
+    "system_boundary": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-008",
+        "citation-0250-028",
+        "citation-0250-029",
+        "citation-0250-030"
+      ],
+      "value": "The model spans the two UWE-5 satellites, their internal subsystems, software layers, target processors, developer interfaces, intersatellite radio link, and ground station. Detailed internal subsystem implementations, including internal EPS design, are outside the shown boundary."
+    },
+    "artifact_availability": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-031",
+        "citation-0250-032",
+        "citation-0250-033",
+        "citation-0250-034"
+      ],
+      "value": "described_only"
+    }
+  },
+  "eps_cases": [
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-011",
+        "citation-0250-014",
+        "citation-0250-015",
+        "citation-0250-029",
+        "citation-0250-032"
+      ],
+      "eps_case_id": "eps-case-0250-01",
+      "eps_anchor": "Regular EPS reports containing state of charge, overall power consumption, and battery charging current, plus critical EPS trigger points",
+      "model_anchor_for_route_b": "The UWE-5 onboard-computer system model and the Task Manager EPS-report load-balancer behavior in Figures 2 and 5",
+      "eps_boundary": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-029",
+          "citation-0250-032"
+        ],
+        "value": "The EPS is represented as a black-box spacecraft subsystem and provider of power-status reports to onboard software. Its batteries are named through state-of-charge and charging-current parameters. Internal generation, storage, conversion, and distribution architecture is not decomposed."
+      },
+      "eps_elements": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-011",
+          "citation-0250-014"
+        ],
+        "value": [
+          "EPS monitoring and reporting function",
+          "batteries",
+          "power availability and consumption"
+        ]
+      },
+      "eps_architecture": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-029"
+        ],
+        "value": "Figure 2 shows the EPS as a spacecraft subsystem connected by an I2C data path to shared-library and process-logic elements. The report does not show internal EPS decomposition."
+      },
+      "eps_exchanges": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-0250-014",
+            "citation-0250-029",
+            "citation-0250-032"
+          ],
+          "eps_exchange_id": "eps-exchange-0250-01",
+          "source_endpoint": "EPS monitoring and reporting function",
+          "destination_endpoint": "KronOS Task Manager and process logic",
+          "named_eps_interface": "I2C data path shown in Figure 2; no interface identifier is reported",
+          "exchanged_item": "Current state of charge, overall power consumption, and battery charging current reports",
+          "direction": "EPS to Task Manager",
+          "exchange_type": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-014",
+              "citation-0250-029"
+            ],
+            "value": "information_or_control"
+          },
+          "exchange_scope": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-014",
+              "citation-0250-029"
+            ],
+            "value": "cross_subsystem"
+          }
+        }
+      ],
+      "eps_dependencies": [
+        {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-011",
+            "citation-0250-014",
+            "citation-0250-015",
+            "citation-0250-032"
+          ],
+          "eps_dependency_id": "eps-dependency-0250-01",
+          "dependent_endpoint": "Task scheduling and spacecraft software operating state",
+          "provider_or_driver_endpoint": "Available EPS power and reported EPS values",
+          "description": "Task scheduling, suspension, resumption, and shutdown depend on EPS power availability and trigger-point evaluation.",
+          "linked_eps_exchange_ids": [
+            "eps-exchange-0250-01"
+          ],
+          "dependency_type": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-011",
+              "citation-0250-014",
+              "citation-0250-015"
+            ],
+            "value": "electrical_power"
+          },
+          "dependency_scope": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-014",
+              "citation-0250-015"
+            ],
+            "value": "cross_subsystem"
+          }
+        }
+      ],
+      "eps_modes_and_operations": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": [
+          "Stable operation when no critical EPS trigger is active",
+          "Energy-critical operation with noncritical tasks suspended",
+          "Controlled shutdown when power is insufficient and only critical tasks remain",
+          "Automatic resumption of suspended tasks after sufficient power returns"
+        ]
+      },
+      "eps_model_representations": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-028",
+          "citation-0250-029",
+          "citation-0250-032"
+        ],
+        "value": [
+          "EPS placement and data path in the UWE-5 system and OBC architecture diagrams",
+          "Task Manager decision flow for an EPS power-consumption report",
+          "Named EPS telemetry and trigger-point behavior in the software design narrative"
+        ]
+      },
+      "modeled_disciplinary_viewpoints": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-011",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-029",
+          "citation-0250-032"
+        ],
+        "value": [
+          "electrical_or_electronic",
+          "software_or_algorithmic",
+          "operational"
+        ]
+      },
+      "eps_model_bridges": [
+        {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-007",
+            "citation-0250-014",
+            "citation-0250-029"
+          ],
+          "eps_model_bridge_id": "eps-model-bridge-0250-01",
+          "eps_anchor_endpoint": "EPS subsystem and its power-status reports",
+          "model_or_second_concern_endpoint": "OBC shared-library, Task Manager, and process-logic architecture",
+          "relationship_or_mapping": "Figure 2 maps EPS through an I2C data path into the modeled onboard-computer software architecture.",
+          "reconstructed_meaning": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-014",
+              "citation-0250-029"
+            ],
+            "value": "The EPS telemetry interface is represented as an architecture and interface relationship to the software elements that consume it."
+          }
+        },
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-0250-014",
+            "citation-0250-015",
+            "citation-0250-032"
+          ],
+          "eps_model_bridge_id": "eps-model-bridge-0250-02",
+          "eps_anchor_endpoint": "Critical EPS values and insufficient or restored power",
+          "model_or_second_concern_endpoint": "Task Manager operational behavior and resource-management decisions",
+          "relationship_or_mapping": "Reported EPS values are evaluated at trigger points and mapped to stable operation, task suspension, controlled shutdown, or automatic resumption.",
+          "reconstructed_meaning": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-014",
+              "citation-0250-015",
+              "citation-0250-032"
+            ],
+            "value": "The model links an EPS interface and electrical constraints to software behavior, operational state, and design decisions."
+          }
+        }
+      ],
+      "eps_abstraction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-029",
+          "citation-0250-032"
+        ],
+        "value": "mixed",
+        "notes": "The case combines a physical subsystem and interface view with implementation-oriented Task Manager behavior."
+      },
+      "eps_decomposition_visibility": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-008",
+          "citation-0250-014",
+          "citation-0250-029"
+        ],
+        "value": "black_box",
+        "notes": "The model exposes EPS status outputs and interfaces without internal EPS elements or connections."
+      },
+      "eps_fidelity": {
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-010",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-029",
+          "citation-0250-032"
+        ],
+        "value": "implementation_representative",
+        "notes": "Named implementation interfaces and runtime decisions are represented, but trigger values and an implemented EPS test are not reported."
+      },
+      "purposes": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-005",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-018",
+          "citation-0250-029",
+          "citation-0250-032"
+        ],
+        "value": [
+          "definition_or_sizing",
+          "interface_management",
+          "verification_and_validation",
+          "communication"
+        ]
+      },
+      "supported_decisions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": [
+          "Whether current EPS values permit stable operation",
+          "Whether to suspend noncritical tasks",
+          "Whether to shut down when only critical tasks remain",
+          "When to resume suspended tasks after power recovery"
+        ]
+      },
+      "scope_deliberately_omitted": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-008"
+        ],
+        "value": [
+          "Detailed internal subsystem implementations are omitted from the system diagram.",
+          "Power-consumption evaluation of dynamic energy adaptation is deferred to upcoming work."
+        ]
+      },
+      "eps_model_maturity": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-001",
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": [
+          "prototype",
+          "used_on_project"
+        ],
+        "notes": "The EPS-linked design is part of the UWE-5 proof of concept, while its power-consumption evaluation remains planned."
+      },
+      "eps_model_availability": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-029",
+          "citation-0250-032"
+        ],
+        "value": "described_only"
+      }
+    }
+  ],
+  "implementation_records": [
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-002",
+        "citation-0250-004",
+        "citation-0250-007",
+        "citation-0250-010",
+        "citation-0250-011",
+        "citation-0250-018",
+        "citation-0250-019",
+        "citation-0250-020",
+        "citation-0250-022",
+        "citation-0250-023"
+      ],
+      "implementation_record_id": "implementation-record-0250-01",
+      "scope": "UWE-5 KronOS real-time onboard-software framework, target hardware integration, and reported failsafe tests",
+      "roles_and_affected_teams": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-004",
+          "citation-0250-005"
+        ],
+        "value": [
+          "Three university working groups developing subsystems",
+          "Developers writing application code and designing hardware",
+          "Subsystem teams responsible for hardware and software interfaces"
+        ]
+      },
+      "skills_and_training": {
+        "status": "not_reported",
+        "reason": "Required skills and training are not reported."
+      },
+      "staffing_and_number_of_people": {
+        "status": "not_reported",
+        "reason": "Staffing counts and allocation are not reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "workflow_execution_and_deviations": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified for execution comparison."
+      },
+      "automation": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-010",
+          "citation-0250-013",
+          "citation-0250-015",
+          "citation-0250-016",
+          "citation-0250-031",
+          "citation-0250-032",
+          "citation-0250-033"
+        ],
+        "value": "The Task Manager automatically monitors resources, applies trigger rules, schedules or suspends tasks, initiates shutdown, resumes tasks, and performs priority-dependent fault recovery."
+      },
+      "tools_licences_and_infrastructure": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-007",
+          "citation-0250-010",
+          "citation-0250-019",
+          "citation-0250-030"
+        ],
+        "value": [
+          "KronOS shared library and Task Manager",
+          "FreeRTOS and POSIX pthread interfaces",
+          "Windows development PC",
+          "MSP430F5438A OBC microcontroller",
+          "ATSAMV71Q20CB AODS microcontroller",
+          "External and internal watchdog hardware on the OBC"
+        ]
+      },
+      "model_preparation": {
+        "status": "not_reported",
+        "reason": "Model preparation effort and activities are not reported."
+      },
+      "data_preparation": {
+        "status": "not_reported",
+        "reason": "Data preparation effort and activities are not reported."
+      },
+      "computing_requirements": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-002",
+          "citation-0250-011",
+          "citation-0250-012"
+        ],
+        "value": "The framework targets a 128KB memory footprint. FreeRTOS supplies statically allocated task stacks, and stack size is estimated from prior testing with a safety margin. Available power and processor time are also managed resources."
+      },
+      "integration_or_migration_work_and_interoperability": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-007",
+          "citation-0250-010",
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-030"
+        ],
+        "value": "KronOS mediates between RTOS and process logic through APIs. POSIX separates mission code from FreeRTOS, and tests execute the framework on the OBC with internal and external watchdogs."
+      },
+      "governance_and_configuration_control": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-008",
+          "citation-0250-009",
+          "citation-0250-012",
+          "citation-0250-015",
+          "citation-0250-016",
+          "citation-0250-033"
+        ],
+        "value": "The design fixes three task-priority classes, permits requirements-based inclusion or exclusion of KronOS modules, requires configured timeouts, and uses priority-specific recovery actions. Repository, review, and version-control practices are not reported."
+      },
+      "effort_basis": {
+        "status": "not_reported",
+        "reason": "The report gives no measured, estimated, or asserted MBSE implementation effort."
+      },
+      "person_hours_or_person_days": {
+        "status": "not_reported",
+        "reason": "Person-hours and person-days are not reported."
+      },
+      "elapsed_duration": {
+        "status": "not_reported",
+        "reason": "Implementation duration is not reported."
+      },
+      "schedule_effect": {
+        "status": "not_reported",
+        "reason": "No measured or estimated schedule effect is reported."
+      },
+      "financial_cost": {
+        "status": "not_reported",
+        "reason": "Financial cost is not reported."
+      },
+      "manual_and_automated_work": {
+        "status": "not_reported",
+        "reason": "The report describes automated runtime functions but does not quantify manual and automated implementation work."
+      },
+      "review_and_assurance_effort": {
+        "status": "not_reported",
+        "reason": "Review and assurance effort is not reported."
+      },
+      "rework": {
+        "status": "not_reported",
+        "reason": "Rework is not reported."
+      },
+      "ongoing_maintenance": {
+        "status": "not_reported",
+        "reason": "Ongoing maintenance effort is not reported."
+      },
+      "burden_categories": {
+        "status": "not_reported",
+        "reason": "No implementation burden category is reported with an effort basis."
+      },
+      "burden_phase": {
+        "status": "not_reported",
+        "reason": "No implementation burden timing is reported."
+      },
+      "reported_burden": {
+        "status": "not_reported",
+        "reason": "No measured, estimated, or asserted MBSE adoption or use burden is reported."
+      },
+      "measurement_method": {
+        "status": "not_reported",
+        "reason": "No implementation-effort measurement method is reported."
+      },
+      "mitigation": {
+        "status": "not_applicable",
+        "reason": "No implementation burden was reported to mitigate."
+      },
+      "linked_benefit_or_trade_off": {
+        "status": "not_applicable",
+        "reason": "No quantified implementation burden or linked trade-off was reported."
+      }
+    }
+  ],
+  "input_groups": [
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-011",
+        "citation-0250-014",
+        "citation-0250-015",
+        "citation-0250-032"
+      ],
+      "input_group_id": "input-group-0250-01",
+      "category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014"
+        ],
+        "value": "scenario_inputs"
+      },
+      "eps_case_id": "eps-case-0250-01",
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "Task Manager power-aware load balancing during regular EPS reports"
+      },
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_report_reuse_record_ids": {
+        "status": "not_applicable",
+        "reason": "These inputs define the UWE-5 case rather than a reuse application."
+      },
+      "parameters_or_constructs": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": [
+          "current state of charge",
+          "overall power consumption",
+          "battery charging current",
+          "short-term consumption peaks",
+          "estimated remaining operating time at current consumption",
+          "Task Manager trigger points"
+        ]
+      },
+      "material_source_reported_values_or_descriptions": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": [
+          "EPS reports are received regularly.",
+          "Critical trigger points cover short-term peaks and longer-term predictable power events.",
+          "No numeric EPS values, trigger thresholds, reporting interval, or time basis are reported."
+        ]
+      },
+      "input_source_types": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014"
+        ],
+        "value": [
+          "other"
+        ],
+        "notes": "The schema has no dedicated onboard telemetry source code.",
+        "other_source_term": "onboard EPS telemetry reports"
+      },
+      "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014"
+        ],
+        "value": "The design distinguishes short-term peaks and predicted remaining time, but no uncertainty, sensitivity, margin, or degradation method is reported for the EPS values."
+      },
+      "rationale": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "Trigger points use EPS condition reports to keep software operation stable and conserve energy."
+      },
+      "linked_result_output_ids": {
+        "status": "not_applicable",
+        "reason": "The planned power evaluation reports no output."
+      },
+      "linked_result_criterion_ids": {
+        "status": "not_applicable",
+        "reason": "The planned power evaluation reports no explicit criterion."
+      },
+      "linked_rq3_activity_ids": [
+        "rq3-activity-0250-01"
+      ],
+      "linked_report_application_ids": {
+        "status": "not_applicable",
+        "reason": "No reuse or tailoring application was identified."
+      },
+      "decisions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": [
+          "remain stable",
+          "suspend noncritical tasks",
+          "shut down",
+          "resume suspended tasks"
+        ]
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-018",
+        "citation-0250-019",
+        "citation-0250-020"
+      ],
+      "input_group_id": "input-group-0250-02",
+      "category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "vv_configuration"
+      },
+      "eps_case_id": "eps-case-0250-01",
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "Watchdog response to a deliberate deadlock and missed heartbeat"
+      },
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_report_reuse_record_ids": {
+        "status": "not_applicable",
+        "reason": "The test configuration is not a reuse input."
+      },
+      "parameters_or_constructs": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": [
+          "KronOS watchdog task",
+          "two external OBC watchdogs",
+          "internal MSP430 software watchdog",
+          "deliberate secondary-task deadlock"
+        ]
+      },
+      "material_source_reported_values_or_descriptions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": [
+          "External watchdog timeout: 1.6 seconds",
+          "Internal software watchdog timeout: 1 second"
+        ]
+      },
+      "input_source_types": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": [
+          "analyst_assumption"
+        ],
+        "notes": "The report gives configured test values but does not identify an external requirement or data source."
+      },
+      "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
+        "status": "not_reported",
+        "reason": "Timing tolerance, repetitions, and sensitivity are not reported."
+      },
+      "rationale": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-020"
+        ],
+        "value": "The injected deadlock tests bounded-time watchdog detection, reset, and system availability."
+      },
+      "linked_result_output_ids": [
+        "result-output-0250-01"
+      ],
+      "linked_result_criterion_ids": [
+        "result-criterion-0250-01"
+      ],
+      "linked_rq3_activity_ids": [
+        "rq3-activity-0250-02"
+      ],
+      "linked_report_application_ids": {
+        "status": "not_applicable",
+        "reason": "No reuse or tailoring application was identified."
+      },
+      "decisions": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-020"
+        ],
+        "value": [
+          "Accept the watchdog mechanism as detecting and resolving deadlock in the tested configuration"
+        ]
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-016",
+        "citation-0250-021",
+        "citation-0250-022",
+        "citation-0250-033"
+      ],
+      "input_group_id": "input-group-0250-03",
+      "category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "vv_configuration"
+      },
+      "eps_case_id": "eps-case-0250-01",
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "Sequential injection of stack overflow, floating-point exception, and null-pointer exception"
+      },
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_report_reuse_record_ids": {
+        "status": "not_applicable",
+        "reason": "The test configuration is not a reuse input."
+      },
+      "parameters_or_constructs": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-016",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": [
+          "stack overflow",
+          "floating-point exception",
+          "null pointer exception",
+          "task timeout",
+          "affected task priority"
+        ]
+      },
+      "material_source_reported_values_or_descriptions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-021",
+          "citation-0250-022",
+          "citation-0250-033"
+        ],
+        "value": [
+          "Three fault types are introduced sequentially.",
+          "The health-check recovery action depends on task priority."
+        ]
+      },
+      "input_source_types": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-021"
+        ],
+        "value": [
+          "analyst_assumption"
+        ],
+        "notes": "The deliberate injected faults are test selections made by the investigators."
+      },
+      "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
+        "status": "not_reported",
+        "reason": "The number of tasks, repetitions, timeout settings, and fault-severity variation are not reported."
+      },
+      "rationale": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-022"
+        ],
+        "value": "The scenarios test cleanup, controlled resource release, and priority-dependent recovery after soft faults."
+      },
+      "linked_result_output_ids": [
+        "result-output-0250-02"
+      ],
+      "linked_result_criterion_ids": [
+        "result-criterion-0250-02"
+      ],
+      "linked_rq3_activity_ids": [
+        "rq3-activity-0250-03"
+      ],
+      "linked_report_application_ids": {
+        "status": "not_applicable",
+        "reason": "No reuse or tailoring application was identified."
+      },
+      "decisions": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-022"
+        ],
+        "value": [
+          "Accept timeout cleanup and priority-dependent recovery for the tested injected faults"
+        ]
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-023"
+      ],
+      "input_group_id": "input-group-0250-04",
+      "category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "vv_configuration"
+      },
+      "eps_case_id": "eps-case-0250-01",
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "Reception of incorrectly encoded, partial, or malformed messages"
+      },
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_report_reuse_record_ids": {
+        "status": "not_applicable",
+        "reason": "The test configuration is not a reuse input."
+      },
+      "parameters_or_constructs": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": [
+          "incorrect message encoding",
+          "partial message",
+          "malformed message",
+          "decoder timeout",
+          "maximum hardware-channel transmission rate",
+          "maximum message length"
+        ]
+      },
+      "material_source_reported_values_or_descriptions": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": [
+          "Timeout is configured from maximum channel transmission rate and maximum message length.",
+          "Numeric timeout, rate, and length values are not reported."
+        ]
+      },
+      "input_source_types": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": [
+          "calculation",
+          "analyst_assumption"
+        ],
+        "notes": "The timeout is calculated or configured from two bounds, while the malformed inputs are investigator selected."
+      },
+      "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
+        "status": "not_reported",
+        "reason": "No range, repetitions, sensitivity, or missing-message handling beyond the timeout is reported."
+      },
+      "rationale": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "The bounds are intended to free the receiver buffer before malformed traffic can cause denial of service."
+      },
+      "linked_result_output_ids": [
+        "result-output-0250-03"
+      ],
+      "linked_result_criterion_ids": [
+        "result-criterion-0250-03"
+      ],
+      "linked_rq3_activity_ids": [
+        "rq3-activity-0250-04"
+      ],
+      "linked_report_application_ids": {
+        "status": "not_applicable",
+        "reason": "No reuse or tailoring application was identified."
+      },
+      "decisions": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": [
+          "Accept decoder timeout handling for the tested malformed and incomplete messages"
+        ]
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-008",
+        "citation-0250-009",
+        "citation-0250-011",
+        "citation-0250-012",
+        "citation-0250-013",
+        "citation-0250-031"
+      ],
+      "input_group_id": "input-group-0250-05",
+      "category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-009",
+          "citation-0250-011",
+          "citation-0250-012"
+        ],
+        "value": "model_formulation"
+      },
+      "eps_case_id": "eps-case-0250-01",
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-012",
+          "citation-0250-013",
+          "citation-0250-031"
+        ],
+        "value": "Task creation and resource-aware scheduling model"
+      },
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_report_reuse_record_ids": {
+        "status": "not_applicable",
+        "reason": "These constructs define the target model rather than a reuse application."
+      },
+      "parameters_or_constructs": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-009",
+          "citation-0250-011",
+          "citation-0250-012",
+          "citation-0250-013"
+        ],
+        "value": [
+          "critical, normal, and low task priorities",
+          "available stack memory",
+          "available EPS power",
+          "processor time",
+          "required stack size",
+          "lower-priority task availability"
+        ]
+      },
+      "material_source_reported_values_or_descriptions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-009",
+          "citation-0250-012"
+        ],
+        "value": [
+          "Three priority levels are used.",
+          "Stack size is estimated from prior testing and receives a safety margin.",
+          "No formal schedulability analysis is used."
+        ]
+      },
+      "input_source_types": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-012"
+        ],
+        "value": [
+          "test_data",
+          "analyst_assumption"
+        ]
+      },
+      "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-012"
+        ],
+        "value": "Required stack size is an estimate based on prior testing with an added safety margin. The margin value is not reported."
+      },
+      "rationale": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-009",
+          "citation-0250-013"
+        ],
+        "value": "The three-level policy limits complexity while supporting load balancing and priority-dependent fault handling."
+      },
+      "linked_result_output_ids": {
+        "status": "not_applicable",
+        "reason": "No distinct result output is linked to the task-creation model."
+      },
+      "linked_result_criterion_ids": {
+        "status": "not_applicable",
+        "reason": "No distinct result criterion is linked to the task-creation model."
+      },
+      "linked_rq3_activity_ids": {
+        "status": "not_applicable",
+        "reason": "No distinct RQ3 activity tests the task-creation decision flow."
+      },
+      "linked_report_application_ids": {
+        "status": "not_applicable",
+        "reason": "No reuse or tailoring application was identified."
+      },
+      "decisions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-013",
+          "citation-0250-031"
+        ],
+        "value": [
+          "schedule a task",
+          "terminate lower-priority tasks",
+          "reject a noncritical task",
+          "declare a critical-resource configuration non-runnable"
+        ]
+      }
+    }
+  ],
+  "result_sets": [
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-018",
+        "citation-0250-019",
+        "citation-0250-020"
+      ],
+      "result_set_id": "result-set-0250-01",
+      "eps_case_id": "eps-case-0250-01",
+      "evaluation_design": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "model_or_simulation_evaluation"
+      },
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "KronOS watchdog task on the OBC with a deliberate deadlock in a secondary task"
+      },
+      "linked_input_group_ids": [
+        "input-group-0250-02"
+      ],
+      "cases_participants_or_observational_units": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "One reported KronOS and OBC configuration. The number of repetitions is not reported."
+      },
+      "data_sources": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": [
+          "Observed internal software-watchdog trigger and processor response on the OBC"
+        ]
+      },
+      "method": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "Introduce a deadlock in a secondary task while the dedicated watchdog task runs on the OBC, then observe trigger timing and reset behavior."
+      },
+      "execution_status": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-020"
+        ],
+        "value": "executed_complete"
+      },
+      "analysis_method": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-020"
+        ],
+        "value": "Direct observation against the configured timeout and intended reset behavior. No statistical analysis is reported."
+      },
+      "evaluation_level_missing_data_failures_exclusions_uncertainty_and_sensitivity": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-020"
+        ],
+        "value": "The report says the response occurred consistently but gives no repetition count, timing dispersion, exclusions, or sensitivity analysis."
+      },
+      "outputs": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-0250-020"
+          ],
+          "result_output_id": "result-output-0250-01",
+          "quantity_or_construct": "Software-watchdog response to a deliberate deadlock",
+          "source_reported_value": "The software watchdog consistently triggered after the 1-second timeout and initiated a soft reset of the processor.",
+          "unit": "seconds",
+          "time_basis": "Elapsed time from the induced deadlock to the software-watchdog trigger",
+          "denominator": {
+            "status": "not_reported",
+            "reason": "The number of test repetitions is not reported."
+          },
+          "observed_or_expected_status": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-0250-020"
+            ],
+            "value": "observed"
+          },
+          "output_specific_missing_observations_or_exclusions": "No trigger-time distribution, failed run, or exclusion is reported."
+        }
+      ],
+      "criteria": [
+        {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-019",
+            "citation-0250-020"
+          ],
+          "result_criterion_id": "result-criterion-0250-01",
+          "source_criterion_or_requirement_id": {
+            "status": "not_reported",
+            "reason": "No requirement or criterion identifier is reported."
+          },
+          "target": "KronOS and MSP430 watchdog implementation",
+          "threshold_or_expected_behavior": "After a deliberate deadlock, the configured 1-second software watchdog should trigger a processor reset and restore a bounded response.",
+          "source": "Configured software-watchdog timeout and the report's stated failsafe intent",
+          "criterion_applicability": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-019",
+              "citation-0250-020"
+            ],
+            "value": "applicable_with_conditions"
+          },
+          "result_or_verdict": "Met in the reported configuration. The watchdog triggered after 1 second and initiated a soft reset.",
+          "linked_result_output_ids": [
+            "result-output-0250-01"
+          ],
+          "scope": "KronOS instance on the UWE-5 OBC under the induced secondary-task deadlock",
+          "observed_or_expected_status": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-020"
+            ],
+            "value": "observed"
+          },
+          "why_criterion_or_oracle_is_authoritative_for_intended_use": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-019",
+              "citation-0250-020"
+            ],
+            "value": "The timeout is the configured implementation behavior used for this bounded check. No mission requirement ID or independent oracle is reported."
+          }
+        }
+      ],
+      "comparators": {
+        "status": "not_reported",
+        "reason": "No comparator is reported for the watchdog test."
+      },
+      "decision_informed": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-020"
+        ],
+        "value": "The authors treat the test as validation that deadlocks are detected and resolved with bounded-time recovery in the reported setup."
+      },
+      "physical_or_operational_link": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "The KronOS instance runs on the OBC, which has two external watchdogs and an internal MSP430 watchdog."
+      },
+      "reviewer_derived_values": {
+        "status": "not_applicable",
+        "reason": "No reviewer calculation or conversion was performed."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-016",
+        "citation-0250-018",
+        "citation-0250-021",
+        "citation-0250-022",
+        "citation-0250-033"
+      ],
+      "result_set_id": "result-set-0250-02",
+      "eps_case_id": "eps-case-0250-01",
+      "evaluation_design": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "model_or_simulation_evaluation"
+      },
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "Sequential task-level injection of stack overflow, floating-point exception, and null-pointer exception"
+      },
+      "linked_input_group_ids": [
+        "input-group-0250-03"
+      ],
+      "cases_participants_or_observational_units": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "Three named injected fault types. The number of tasks and repeated runs is not reported."
+      },
+      "data_sources": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": [
+          "Observed task responsiveness, timeout cleanup, resource release, and priority-dependent recovery"
+        ]
+      },
+      "method": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "Create tasks sequentially, inject each named soft fault, and observe timeout cleanup and the recovery strategy selected for the affected priority."
+      },
+      "execution_status": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-022"
+        ],
+        "value": "executed_complete"
+      },
+      "analysis_method": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-022"
+        ],
+        "value": "Qualitative observation of whether the timeout mechanism cleaned the faulty task, released resources, and invoked the priority-dependent recovery action."
+      },
+      "evaluation_level_missing_data_failures_exclusions_uncertainty_and_sensitivity": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-022"
+        ],
+        "value": "All tested cases are reported as cleaned up, but run counts, hardware configuration, timeout values, and variation are not reported."
+      },
+      "outputs": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-0250-022"
+          ],
+          "result_output_id": "result-output-0250-02",
+          "quantity_or_construct": "Cleanup and recovery after injected software faults",
+          "source_reported_value": "In all tested cases, faulty tasks were cleaned up, their resources were released, and the recovery strategy appropriate to the affected priority was executed.",
+          "unit": {
+            "status": "not_applicable",
+            "reason": "The output is categorical."
+          },
+          "time_basis": {
+            "status": "not_reported",
+            "reason": "Cleanup and recovery timing is not reported."
+          },
+          "denominator": "All tested cases across three named fault types; the number of runs is not reported",
+          "observed_or_expected_status": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-0250-022"
+            ],
+            "value": "observed"
+          },
+          "output_specific_missing_observations_or_exclusions": "The report gives no run count, outcome by individual fault type, or failed case."
+        }
+      ],
+      "criteria": [
+        {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-016",
+            "citation-0250-021",
+            "citation-0250-022",
+            "citation-0250-033"
+          ],
+          "result_criterion_id": "result-criterion-0250-02",
+          "source_criterion_or_requirement_id": {
+            "status": "not_reported",
+            "reason": "No requirement or criterion identifier is reported."
+          },
+          "target": "Task timeout and priority-dependent recovery mechanism",
+          "threshold_or_expected_behavior": "An unresponsive faulty task should be terminated, its resources released, and the recovery action selected according to task priority.",
+          "source": "Health-check behavior in Figure 6 and the reported intended response to injected soft faults",
+          "criterion_applicability": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-016",
+              "citation-0250-021",
+              "citation-0250-022",
+              "citation-0250-033"
+            ],
+            "value": "applicable_with_conditions"
+          },
+          "result_or_verdict": "Met for all reported tested cases.",
+          "linked_result_output_ids": [
+            "result-output-0250-02"
+          ],
+          "scope": "The three named injected soft-fault types in the tested task configuration",
+          "observed_or_expected_status": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-022"
+            ],
+            "value": "observed"
+          },
+          "why_criterion_or_oracle_is_authoritative_for_intended_use": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-016",
+              "citation-0250-022",
+              "citation-0250-033"
+            ],
+            "value": "The criterion is the design's stated timeout and priority-response behavior. No external requirement or independent oracle is identified."
+          }
+        }
+      ],
+      "comparators": {
+        "status": "not_reported",
+        "reason": "No comparator is reported for the soft-fault injection tests."
+      },
+      "decision_informed": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-022"
+        ],
+        "value": "The authors conclude that the timeout mechanism cleans faulty tasks and executes priority-dependent recovery for the tested faults."
+      },
+      "physical_or_operational_link": {
+        "status": "uncertain",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "notes": "The scenarios follow the report's HIL introduction, but this scenario does not explicitly identify the processor or hardware used."
+      },
+      "reviewer_derived_values": {
+        "status": "not_applicable",
+        "reason": "No reviewer calculation or conversion was performed."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-018",
+        "citation-0250-023"
+      ],
+      "result_set_id": "result-set-0250-03",
+      "eps_case_id": "eps-case-0250-01",
+      "evaluation_design": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "value": "model_or_simulation_evaluation"
+      },
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "Decoder receives incorrectly encoded, partial, or malformed messages"
+      },
+      "linked_input_group_ids": [
+        "input-group-0250-04"
+      ],
+      "cases_participants_or_observational_units": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "One described decoder-test configuration with malformed and incomplete message cases. Counts are not reported."
+      },
+      "data_sources": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": [
+          "Observed decoder discard and receiver-buffer release behavior"
+        ]
+      },
+      "method": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "Use an additional task to simulate incorrectly encoded messages and observe discard and buffer-release behavior after a timeout bounded by channel rate and message length."
+      },
+      "execution_status": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "executed_complete"
+      },
+      "analysis_method": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "Qualitative observation against the intended timeout and buffer-release behavior."
+      },
+      "evaluation_level_missing_data_failures_exclusions_uncertainty_and_sensitivity": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "No numeric timeout, transmission rate, message length, case count, or sensitivity analysis is reported."
+      },
+      "outputs": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-0250-023"
+          ],
+          "result_output_id": "result-output-0250-03",
+          "quantity_or_construct": "Decoder response to partial or malformed messages",
+          "source_reported_value": "Partially received or malformed messages were reliably discarded after a defined timeout, and the receiver buffer was freed in time to prevent buffer-overflow denial of service.",
+          "unit": {
+            "status": "not_applicable",
+            "reason": "The reported output is categorical."
+          },
+          "time_basis": "After a timeout configured from maximum channel transmission rate and maximum message length",
+          "denominator": {
+            "status": "not_reported",
+            "reason": "The number of message cases and test repetitions is not reported."
+          },
+          "observed_or_expected_status": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-0250-023"
+            ],
+            "value": "observed"
+          },
+          "output_specific_missing_observations_or_exclusions": "The report provides no failure count, discard latency, or excluded message case."
+        }
+      ],
+      "criteria": [
+        {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-023"
+          ],
+          "result_criterion_id": "result-criterion-0250-03",
+          "source_criterion_or_requirement_id": {
+            "status": "not_reported",
+            "reason": "No requirement or criterion identifier is reported."
+          },
+          "target": "Message decoder and receiver buffer",
+          "threshold_or_expected_behavior": "Discard incomplete or malformed messages after the bounded timeout and free the buffer before a denial-of-service buffer overflow.",
+          "source": "Maximum hardware-channel transmission rate, maximum message length, and intended decoder fault tolerance",
+          "criterion_applicability": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-023"
+            ],
+            "value": "applicable_with_conditions"
+          },
+          "result_or_verdict": "Met in the described experiment.",
+          "linked_result_output_ids": [
+            "result-output-0250-03"
+          ],
+          "scope": "Incorrectly encoded, partial, and malformed messages in the reported decoder test",
+          "observed_or_expected_status": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-023"
+            ],
+            "value": "observed"
+          },
+          "why_criterion_or_oracle_is_authoritative_for_intended_use": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-023"
+            ],
+            "value": "The source-defined channel-rate and message-length bounds set the intended implementation behavior. Their values and any external requirement are not reported."
+          }
+        }
+      ],
+      "comparators": {
+        "status": "not_reported",
+        "reason": "No comparator is reported for the decoder test."
+      },
+      "decision_informed": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "The authors accept the decoder timeout as fault tolerant against the tested corrupt and incomplete messages."
+      },
+      "physical_or_operational_link": {
+        "status": "uncertain",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "notes": "A hardware-channel bound is used and the scenario appears under the HIL discussion, but actual participating hardware is not identified."
+      },
+      "reviewer_derived_values": {
+        "status": "not_applicable",
+        "reason": "No reviewer calculation or conversion was performed."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-0250-003",
+        "citation-0250-014",
+        "citation-0250-015"
+      ],
+      "result_set_id": "result-set-0250-04",
+      "eps_case_id": "eps-case-0250-01",
+      "evaluation_design": {
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "model_or_simulation_evaluation",
+        "notes": "The report calls this an upcoming power-consumption evaluation but does not state the design."
+      },
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "author_claimed_or_planned",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "Planned evaluation of dynamic energy-use adaptation in response to EPS reports"
+      },
+      "linked_input_group_ids": [
+        "input-group-0250-01"
+      ],
+      "cases_participants_or_observational_units": {
+        "status": "not_reported",
+        "reason": "No cases or observational units are reported for the planned evaluation."
+      },
+      "data_sources": {
+        "coding_confidence": "high",
+        "provenance": "author_claimed_or_planned",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014"
+        ],
+        "value": [
+          "Planned EPS state-of-charge, power-consumption, and battery-charging-current reports"
+        ]
+      },
+      "method": {
+        "status": "not_reported",
+        "reason": "The planned power-consumption evaluation method is not reported."
+      },
+      "execution_status": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "planned"
+      },
+      "analysis_method": {
+        "status": "not_reported",
+        "reason": "The planned analysis method is not reported."
+      },
+      "evaluation_level_missing_data_failures_exclusions_uncertainty_and_sensitivity": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "The evaluation is upcoming. No setup, threshold, run, result, missing-data rule, or sensitivity analysis is reported."
+      },
+      "outputs": {
+        "status": "not_reported",
+        "reason": "No output is reported because the power-consumption evaluation is upcoming."
+      },
+      "criteria": {
+        "status": "not_reported",
+        "reason": "No explicit criterion or threshold is reported for the upcoming power-consumption evaluation."
+      },
+      "comparators": {
+        "status": "not_reported",
+        "reason": "No comparator is reported for the upcoming power-consumption evaluation."
+      },
+      "decision_informed": {
+        "coding_confidence": "high",
+        "provenance": "author_claimed_or_planned",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "The planned evaluation is intended to assess whether the system can dynamically adapt energy usage."
+      },
+      "physical_or_operational_link": {
+        "status": "not_reported",
+        "reason": "The hardware or operational setup for the planned evaluation is not reported."
+      },
+      "reviewer_derived_values": {
+        "status": "not_applicable",
+        "reason": "No reviewer calculation or conversion was performed."
+      }
+    }
+  ],
+  "rq1_claims": [
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-002"
+      ],
+      "rq1_claim_id": "rq1-claim-0250-01",
+      "claim_wording": "Designed for operation within a lightweight 128KB memory footprint",
+      "claimed_characteristic": "lightweight",
+      "claim_scope_and_object": "Memory footprint of the UWE-5 onboard-software framework",
+      "linked_model_artifact_ids": [
+        "model-artifact-0250-02",
+        "model-artifact-0250-03"
+      ],
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_eps_case_ids": [
+        "eps-case-0250-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-0250-02"
+      ],
+      "linked_result_set_ids": {
+        "status": "not_applicable",
+        "reason": "No reported result set measures the 128KB footprint."
+      },
+      "linked_result_output_ids": {
+        "status": "not_applicable",
+        "reason": "No reported output measures memory footprint."
+      },
+      "linked_result_criterion_ids": {
+        "status": "not_applicable",
+        "reason": "No reported criterion checks memory footprint."
+      },
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "The claim is not comparative."
+      },
+      "linked_implementation_record_ids": [
+        "implementation-record-0250-01"
+      ],
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-002"
+        ],
+        "value": [
+          "assertion_only"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-002"
+        ],
+        "value": "unsupported"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-002"
+        ],
+        "value": "The source states a 128KB design footprint, but it reports no memory measurement, criterion, or result that tests the lightweight characterization."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-007",
+        "citation-0250-008",
+        "citation-0250-024",
+        "citation-0250-025"
+      ],
+      "rq1_claim_id": "rq1-claim-0250-02",
+      "claim_wording": "This structured approach shows that reliability in nanosatellite software can be achieved without sacrificing modularity or maintainability, even under highly constrained conditions.",
+      "claimed_characteristic": "modular and maintainable under resource constraints",
+      "claim_scope_and_object": "UWE-5 structured MBSE and software-framework approach",
+      "linked_model_artifact_ids": [
+        "model-artifact-0250-01",
+        "model-artifact-0250-02",
+        "model-artifact-0250-03",
+        "model-artifact-0250-04"
+      ],
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_eps_case_ids": [
+        "eps-case-0250-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-0250-01",
+        "report-reuse-record-0250-02"
+      ],
+      "linked_result_set_ids": [
+        "result-set-0250-01",
+        "result-set-0250-02",
+        "result-set-0250-03"
+      ],
+      "linked_result_output_ids": [
+        "result-output-0250-01",
+        "result-output-0250-02",
+        "result-output-0250-03"
+      ],
+      "linked_result_criterion_ids": [
+        "result-criterion-0250-01",
+        "result-criterion-0250-02",
+        "result-criterion-0250-03"
+      ],
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "The claim is not based on a reported comparator."
+      },
+      "linked_implementation_record_ids": [
+        "implementation-record-0250-01"
+      ],
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-007",
+          "citation-0250-008",
+          "citation-0250-019",
+          "citation-0250-020",
+          "citation-0250-022",
+          "citation-0250-023"
+        ],
+        "value": [
+          "worked_example",
+          "executed_result",
+          "physical_or_operational_check"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-007",
+          "citation-0250-008",
+          "citation-0250-019",
+          "citation-0250-020",
+          "citation-0250-022",
+          "citation-0250-023",
+          "citation-0250-025"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-007",
+          "citation-0250-008",
+          "citation-0250-019",
+          "citation-0250-020",
+          "citation-0250-022",
+          "citation-0250-023",
+          "citation-0250-025"
+        ],
+        "value": "The report shows a modular architecture and successful failsafe tests, but it does not measure modularity or maintainability and provides no comparison with another approach."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-0250-001",
+        "citation-0250-027"
+      ],
+      "rq1_claim_id": "rq1-claim-0250-03",
+      "claim_wording": "The framework will be applied to systems of higher complexity with additional subsystems to evaluate scalability.",
+      "claimed_characteristic": "scalable",
+      "claim_scope_and_object": "KronOS and the structured software approach for more complex CubeSat and small-satellite systems",
+      "linked_model_artifact_ids": [
+        "model-artifact-0250-01",
+        "model-artifact-0250-02",
+        "model-artifact-0250-03",
+        "model-artifact-0250-04"
+      ],
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_eps_case_ids": [
+        "eps-case-0250-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-0250-02"
+      ],
+      "linked_result_set_ids": {
+        "status": "not_applicable",
+        "reason": "No scalability evaluation result is reported."
+      },
+      "linked_result_output_ids": {
+        "status": "not_applicable",
+        "reason": "No scalability output is reported."
+      },
+      "linked_result_criterion_ids": {
+        "status": "not_applicable",
+        "reason": "No scalability criterion is reported."
+      },
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "No scalability comparator is reported."
+      },
+      "linked_implementation_record_ids": [
+        "implementation-record-0250-01"
+      ],
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-001",
+          "citation-0250-027"
+        ],
+        "value": [
+          "assertion_only"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-001",
+          "citation-0250-027"
+        ],
+        "value": "unsupported"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-001",
+          "citation-0250-027"
+        ],
+        "value": "Scalability is presented as a future evaluation objective, and no higher-complexity application or scalability result is reported."
+      }
+    }
+  ],
+  "rq2_findings": [
+    {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-0250-003",
+        "citation-0250-014",
+        "citation-0250-015",
+        "citation-0250-032"
+      ],
+      "rq2_finding_id": "rq2-finding-0250-01",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "no"
+      },
+      "exclusion_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "The outcome is attributed to the implemented runtime control mechanism rather than an evaluated effect of the EPS-linked model, and the relevant power-consumption evaluation is still upcoming."
+      },
+      "exact_claim_wording": "This mechanism, shown in Fig. 5, ensures that energy-critical situations are handled gracefully, maintaining essential system functionality while preventing instability.",
+      "claim_kind": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-015"
+        ],
+        "value": "technical_performance"
+      },
+      "role": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-015"
+        ],
+        "value": "outcome"
+      },
+      "target": "EPS-report-driven Task Manager load-balancing mechanism",
+      "scope": "Energy-critical operation in the UWE-5 software design",
+      "outcome_category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-015"
+        ],
+        "value": "mission_or_system_assurance"
+      },
+      "reliability_subtype": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-015"
+        ],
+        "value": "mission_assurance"
+      },
+      "author_claimed_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-015"
+        ],
+        "value": "beneficial"
+      },
+      "evidence_supported_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-015"
+        ],
+        "value": "unsupported"
+      },
+      "eps_attribution": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "explicit_eps_attribution"
+      },
+      "mechanism": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": "The Task Manager evaluates EPS trigger points, suspends noncritical tasks before stronger action, shuts down if only critical tasks remain, and resumes suspended tasks after sufficient power returns."
+      },
+      "linked_model_artifact_ids": [
+        "model-artifact-0250-03"
+      ],
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_rq3_activity_ids": [
+        "rq3-activity-0250-01"
+      ],
+      "linked_input_group_ids": [
+        "input-group-0250-01"
+      ],
+      "linked_result_set_ids": [
+        "result-set-0250-04"
+      ],
+      "linked_result_output_ids": {
+        "status": "not_applicable",
+        "reason": "The planned power evaluation has no reported output."
+      },
+      "linked_result_criterion_ids": {
+        "status": "not_applicable",
+        "reason": "The planned power evaluation has no reported criterion."
+      },
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "No comparator is reported for the claim."
+      },
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-0250-01"
+      ],
+      "linked_implementation_record_ids": [
+        "implementation-record-0250-01"
+      ],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "intermediate_or_process"
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": "architecture_and_design"
+      },
+      "applicability": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-015"
+        ],
+        "value": "broader_claim"
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": [
+          "worked_example"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "unsupported"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": "The EPS-triggered behavior is shown and explained, but no power-consumption run or outcome is reported, so maintained functionality and prevented instability are not demonstrated."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-003"
+      ],
+      "rq2_finding_id": "rq2-finding-0250-02",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "no"
+      },
+      "exclusion_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "The phrase 'hardware load limitations' is not tied to a named EPS measure, model artifact, body-section test, or reported output, while EPS power-consumption testing is upcoming."
+      },
+      "exact_claim_wording": "Initial tests confirm that hardware load limitations effectively prevent instability",
+      "claim_kind": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "technical_performance"
+      },
+      "role": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "outcome"
+      },
+      "target": "Hardware load limitations in the UWE-5 framework",
+      "scope": "Initial framework tests described only in the abstract",
+      "outcome_category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "risk_reduction"
+      },
+      "reliability_subtype": {
+        "status": "not_applicable",
+        "reason": "The finding is coded as risk reduction rather than reliability."
+      },
+      "author_claimed_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "beneficial"
+      },
+      "evidence_supported_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "unclear"
+      },
+      "eps_attribution": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "ambiguous_attribution"
+      },
+      "mechanism": {
+        "status": "not_reported",
+        "reason": "The abstract does not explain how the tested load limitations prevent instability."
+      },
+      "linked_model_artifact_ids": [
+        "model-artifact-0250-03"
+      ],
+      "linked_model_generation_method_ids": {
+        "status": "not_applicable",
+        "reason": "No model generation method was reported."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "linked_rq3_activity_ids": {
+        "status": "not_applicable",
+        "reason": "No body-section test can be linked confidently to this abstract claim."
+      },
+      "linked_input_group_ids": [
+        "input-group-0250-05"
+      ],
+      "linked_result_set_ids": {
+        "status": "not_applicable",
+        "reason": "No result set can be matched confidently to this abstract-only claim."
+      },
+      "linked_result_output_ids": {
+        "status": "not_applicable",
+        "reason": "No matching output is reported."
+      },
+      "linked_result_criterion_ids": {
+        "status": "not_applicable",
+        "reason": "No matching criterion is reported."
+      },
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "No comparator is reported."
+      },
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-0250-02"
+      ],
+      "linked_implementation_record_ids": [
+        "implementation-record-0250-01"
+      ],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "unclear"
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "validation"
+      },
+      "applicability": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "unclear"
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": [
+          "executed_result"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "unclear"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "The abstract says initial tests confirm prevention of instability, but it gives no matching setup, measure, criterion, or result and does not resolve the EPS contribution."
+      }
+    }
+  ],
+  "rq3_activities": [
+    {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-0250-003",
+        "citation-0250-014",
+        "citation-0250-015",
+        "citation-0250-032"
+      ],
+      "rq3_activity_id": "rq3-activity-0250-01",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "no"
+      },
+      "failed_eligibility_condition_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": "The report plans a power-consumption evaluation but provides no explicit mapping from the EPS behavior model to a test artifact, no execution method or setting, and no criterion or result."
+      },
+      "eps_target": "Dynamic energy-use adaptation in response to EPS state of charge, consumption, and charging-current reports",
+      "target_type": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "eps_behavior_or_function"
+      },
+      "source_requirement_or_criterion_id": {
+        "status": "not_reported",
+        "reason": "No requirement or criterion identifier is reported."
+      },
+      "model_artifact_id": "model-artifact-0250-03",
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "explicit_model_to_vv_bridge": {
+        "status": "uncertain"
+      },
+      "source_vv_terminology": "upcoming power consumption evaluations",
+      "linkage_scope": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015"
+        ],
+        "value": "eps_specific"
+      },
+      "normalized_vv_object": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "unclear"
+      },
+      "normalized_vv_object_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "The source says the evaluation will assess dynamic adaptation, but it does not state whether the object is the model, software implementation, or system design."
+      },
+      "method": {
+        "status": "not_reported",
+        "reason": "The power-consumption evaluation method is not reported."
+      },
+      "execution_settings": {
+        "status": "not_reported",
+        "reason": "No execution setting is reported for the planned evaluation."
+      },
+      "hardware_present": {
+        "status": "not_reported",
+        "reason": "No participating hardware is reported for the planned evaluation."
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "validation"
+      },
+      "linked_result_set_ids": [
+        "result-set-0250-04"
+      ],
+      "linked_result_criterion_ids": {
+        "status": "not_applicable",
+        "reason": "No criterion is reported."
+      },
+      "linked_result_output_ids": {
+        "status": "not_applicable",
+        "reason": "No result is reported."
+      },
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "No comparative V&V claim is reported."
+      },
+      "status": [],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": "unclear"
+      },
+      "discrepancies_and_resolution": {
+        "status": "not_applicable",
+        "reason": "The evaluation has not been reported as executed."
+      },
+      "later_physical_link": {
+        "status": "not_reported",
+        "reason": "No later physical link is reported for the planned evaluation."
+      },
+      "model_to_test_closure": {
+        "status": "not_reported",
+        "reason": "No model-to-test comparison or discrepancy handling is reported."
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003"
+        ],
+        "value": [
+          "assertion_only"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": "unsupported"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-003",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-032"
+        ],
+        "value": "The EPS target and planned assessment are named, but the model-to-test mapping, criterion, execution setting, and result are absent."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-018",
+        "citation-0250-019",
+        "citation-0250-020"
+      ],
+      "rq3_activity_id": "rq3-activity-0250-02",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "no"
+      },
+      "failed_eligibility_condition_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "The executed watchdog test checks an OBC software and hardware target with no named EPS target or trace to EPS content."
+      },
+      "eps_target": "No named EPS target; the tested target is the KronOS and MSP430 watchdog mechanism on the OBC",
+      "target_type": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "other",
+        "notes": "The tested object is a wider software and hardware target without an EPS trace.",
+        "other_source_term": "OBC watchdog mechanism"
+      },
+      "source_requirement_or_criterion_id": {
+        "status": "not_reported",
+        "reason": "No requirement or criterion identifier is reported."
+      },
+      "model_artifact_id": "model-artifact-0250-03",
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "explicit_model_to_vv_bridge": "The validation section states that the scenarios validate implementation of the system model, and this scenario executes the named KronOS watchdog task represented within the task-management design.",
+      "source_vv_terminology": "Simulation-Driven Validation Tests; HIL tests; validates",
+      "linkage_scope": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "system_wide_cooccurrence"
+      },
+      "normalized_vv_object": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "system_or_design_verification"
+      },
+      "normalized_vv_object_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "The test checks the implemented watchdog response against its configured timeout and expected reset behavior, even though the source calls it validation."
+      },
+      "method": "Run a KronOS watchdog task on the OBC, induce a deadlock in a secondary task, and observe timeout and reset response.",
+      "execution_settings": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019"
+        ],
+        "value": [
+          "hil"
+        ]
+      },
+      "hardware_present": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "actual_target_component",
+        "notes": "The target OBC and MSP430 watchdog participate."
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "verification"
+      },
+      "linked_result_set_ids": [
+        "result-set-0250-01"
+      ],
+      "linked_result_criterion_ids": [
+        "result-criterion-0250-01"
+      ],
+      "linked_result_output_ids": [
+        "result-output-0250-01"
+      ],
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "No comparative V&V claim is reported."
+      },
+      "status": [
+        "proposed",
+        "prepared_or_generated",
+        "result_reported",
+        "downstream_physical_link"
+      ],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-020"
+        ],
+        "value": "direct"
+      },
+      "discrepancies_and_resolution": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-020"
+        ],
+        "value": "No discrepancy is reported. The induced deadlock consistently produced the expected timeout and reset response."
+      },
+      "later_physical_link": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "The modeled software behavior is exercised on the UWE-5 OBC with its internal and external watchdog hardware."
+      },
+      "model_to_test_closure": {
+        "status": "not_reported",
+        "reason": "The report does not compare model and physical results or describe discrepancy resolution."
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": [
+          "executed_result",
+          "physical_or_operational_check"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-019",
+          "citation-0250-020"
+        ],
+        "value": "The source gives a clear hardware test, timeout, and observed reset, but it reports no EPS target or EPS trace, so the activity is only a system-wide near miss for RQ3."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-016",
+        "citation-0250-018",
+        "citation-0250-021",
+        "citation-0250-022",
+        "citation-0250-033"
+      ],
+      "rq3_activity_id": "rq3-activity-0250-03",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-016",
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "no"
+      },
+      "failed_eligibility_condition_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-016",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "The fault-injection tests check task timeout and recovery behavior but identify no EPS target or trace to EPS content."
+      },
+      "eps_target": "No named EPS target; the tested target is task cleanup and priority-dependent recovery after software faults",
+      "target_type": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-016",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "other",
+        "notes": "The target has no reported trace to EPS content.",
+        "other_source_term": "task timeout and recovery mechanism"
+      },
+      "source_requirement_or_criterion_id": {
+        "status": "not_reported",
+        "reason": "No requirement or criterion identifier is reported."
+      },
+      "model_artifact_id": "model-artifact-0250-03",
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "explicit_model_to_vv_bridge": "The experiment checks the task timeout mechanism and explicitly points to the Figure 6 health-check behavior model.",
+      "source_vv_terminology": "Fault injection (soft faults) to observe system response; validation of failsafe mechanisms",
+      "linkage_scope": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "system_wide_cooccurrence"
+      },
+      "normalized_vv_object": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-016",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "system_or_design_verification"
+      },
+      "normalized_vv_object_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-016",
+          "citation-0250-021",
+          "citation-0250-022",
+          "citation-0250-033"
+        ],
+        "value": "The injected faults check whether implemented timeout cleanup and priority recovery match the design behavior."
+      },
+      "method": "Create tasks sequentially, inject stack overflow, floating-point exception, and null-pointer exception, then observe cleanup, resource release, and recovery.",
+      "execution_settings": {
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": [
+          "hil"
+        ],
+        "notes": "The scenarios follow the HIL introduction, but this subsection does not name the hardware."
+      },
+      "hardware_present": {
+        "status": "uncertain",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "notes": "The report places the scenarios under its HIL discussion but does not identify hardware for this specific test."
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": "verification"
+      },
+      "linked_result_set_ids": [
+        "result-set-0250-02"
+      ],
+      "linked_result_criterion_ids": [
+        "result-criterion-0250-02"
+      ],
+      "linked_result_output_ids": [
+        "result-output-0250-02"
+      ],
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "No comparative V&V claim is reported."
+      },
+      "status": [
+        "proposed",
+        "prepared_or_generated",
+        "result_reported"
+      ],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-022"
+        ],
+        "value": "direct"
+      },
+      "discrepancies_and_resolution": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-022"
+        ],
+        "value": "No failed case is reported. Every tested faulty task was cleaned up and followed a priority-dependent recovery strategy."
+      },
+      "later_physical_link": {
+        "status": "uncertain",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "notes": "Specific participating hardware is not stated for this scenario."
+      },
+      "model_to_test_closure": {
+        "status": "not_reported",
+        "reason": "No model-to-physical-result comparison or discrepancy handling is reported."
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-021",
+          "citation-0250-022"
+        ],
+        "value": [
+          "executed_result"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-016",
+          "citation-0250-021",
+          "citation-0250-022",
+          "citation-0250-033"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-016",
+          "citation-0250-018",
+          "citation-0250-021",
+          "citation-0250-022",
+          "citation-0250-033"
+        ],
+        "value": "The test has named injected faults, a model reference, and a reported result, but its hardware details are incomplete and it has no EPS target or EPS trace."
+      }
+    },
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-018",
+        "citation-0250-023"
+      ],
+      "rq3_activity_id": "rq3-activity-0250-04",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "value": "no"
+      },
+      "failed_eligibility_condition_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "value": "The malformed-message test identifies neither an EPS target nor a specific structured-model artifact and model-to-test bridge for the decoder."
+      },
+      "eps_target": "No named EPS target; the tested target is the message decoder and receiver buffer",
+      "target_type": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "other",
+        "notes": "The target has no reported trace to EPS content.",
+        "other_source_term": "message decoder fault-tolerance behavior"
+      },
+      "source_requirement_or_criterion_id": {
+        "status": "not_reported",
+        "reason": "No requirement or criterion identifier is reported."
+      },
+      "model_artifact_id": {
+        "status": "not_applicable",
+        "reason": "The report shows a transmitter model, but it does not identify a decoder model for this test."
+      },
+      "linked_workflow_ids": {
+        "status": "not_applicable",
+        "reason": "No qualifying engineering workflow was identified."
+      },
+      "explicit_model_to_vv_bridge": {
+        "status": "not_reported",
+        "reason": "No specific model-to-test bridge is reported for the decoder test."
+      },
+      "source_vv_terminology": "Fault tolerance in handling of corrupted or incomplete messages; experiment demonstrates",
+      "linkage_scope": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "value": "system_wide_cooccurrence"
+      },
+      "normalized_vv_object": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "system_or_design_verification"
+      },
+      "normalized_vv_object_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "The experiment checks decoder implementation behavior against a timeout bounded by channel rate and message length."
+      },
+      "method": "Simulate incorrectly encoded messages and observe whether partial or malformed messages are discarded and the receiver buffer is released after the defined timeout.",
+      "execution_settings": {
+        "status": "uncertain",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "notes": "The test follows the HIL introduction, but the subsection does not state whether this scenario is HIL or SIL."
+      },
+      "hardware_present": {
+        "status": "uncertain",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "notes": "A hardware-channel bound is named, but participating physical hardware is not identified."
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "value": "verification"
+      },
+      "linked_result_set_ids": [
+        "result-set-0250-03"
+      ],
+      "linked_result_criterion_ids": [
+        "result-criterion-0250-03"
+      ],
+      "linked_result_output_ids": [
+        "result-output-0250-03"
+      ],
+      "linked_comparator_ids": {
+        "status": "not_applicable",
+        "reason": "No comparative V&V claim is reported."
+      },
+      "status": [],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "direct"
+      },
+      "discrepancies_and_resolution": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": "No discrepancy or failed case is reported. Malformed or partial messages were discarded after the timeout."
+      },
+      "later_physical_link": {
+        "status": "uncertain",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "notes": "The source does not identify the hardware used for this specific scenario."
+      },
+      "model_to_test_closure": {
+        "status": "not_reported",
+        "reason": "No model-to-physical-result comparison or discrepancy handling is reported."
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-023"
+        ],
+        "value": [
+          "executed_result"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-0250-018",
+          "citation-0250-023"
+        ],
+        "value": "The decoder experiment and result are clear, but no decoder model bridge or EPS target is reported and the execution setting remains ambiguous."
+      }
+    }
+  ],
+  "reuse": {
+    "lineage_mentioned": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-008"
+      ],
+      "value": "no"
+    },
+    "lineage_mention_reason": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-008"
+      ],
+      "value": "The report identifies target-specific models and a configurable software framework but no parent-to-version, derived-instance, or adoption continuity for a structured model artifact."
+    },
+    "report_reuse_records": [
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-006",
+          "citation-0250-007",
+          "citation-0250-014",
+          "citation-0250-015",
+          "citation-0250-028",
+          "citation-0250-029",
+          "citation-0250-032"
+        ],
+        "report_reuse_record_id": "report-reuse-record-0250-01",
+        "lineage_id": "not_applicable",
+        "linked_model_artifact_ids": [
+          "model-artifact-0250-01",
+          "model-artifact-0250-02",
+          "model-artifact-0250-03"
+        ],
+        "linked_model_generation_method_ids": {
+          "status": "not_applicable",
+          "reason": "No model generation method was reported."
+        },
+        "linked_workflow_ids": {
+          "status": "not_applicable",
+          "reason": "No qualifying engineering workflow was identified."
+        },
+        "artifact_names_and_versions": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-006",
+            "citation-0250-007",
+            "citation-0250-014",
+            "citation-0250-028",
+            "citation-0250-029",
+            "citation-0250-032"
+          ],
+          "value": [
+            "UWE-5 system, onboard-computer, software-layer, and Task Manager behavior models (versions not reported)"
+          ]
+        },
+        "artifact_relationships": {
+          "status": "not_reported",
+          "reason": "No parent, version, derived instance, or adoption relationship is reported for the model artifacts."
+        },
+        "repository_or_location": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-006",
+            "citation-0250-007",
+            "citation-0250-014",
+            "citation-0250-016",
+            "citation-0250-028",
+            "citation-0250-029",
+            "citation-0250-031",
+            "citation-0250-032",
+            "citation-0250-033"
+          ],
+          "value": "Figures 1 through 6 and their descriptions in this report. No external model repository is identified."
+        },
+        "owner_or_developer": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-001",
+            "citation-0250-004"
+          ],
+          "value": "UWE-5 university development groups led in this report by Julius-Maximilians-Universität Würzburg"
+        },
+        "artifact_type": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-006",
+            "citation-0250-014",
+            "citation-0250-015",
+            "citation-0250-028",
+            "citation-0250-029",
+            "citation-0250-032"
+          ],
+          "value": "spacecraft_model_with_separable_eps_thread"
+        },
+        "artifact_generality": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-004",
+            "citation-0250-006",
+            "citation-0250-007"
+          ],
+          "value": "single_target"
+        },
+        "eps_scope": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-014",
+            "citation-0250-015",
+            "citation-0250-029",
+            "citation-0250-032"
+          ],
+          "value": "The separable EPS thread consists of EPS status reporting, its software interface, and Task Manager behavior for power-triggered suspension, shutdown, and resumption."
+        },
+        "availability": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-006",
+            "citation-0250-007",
+            "citation-0250-014",
+            "citation-0250-028",
+            "citation-0250-029",
+            "citation-0250-032"
+          ],
+          "value": "described_only"
+        },
+        "license_category": {
+          "status": "not_reported",
+          "reason": "No license for the underlying model artifacts is reported."
+        },
+        "exact_reuse_claim": {
+          "status": "none",
+          "citation_ids": [
+            "citation-0250-006",
+            "citation-0250-007",
+            "citation-0250-014",
+            "citation-0250-015"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "The report presents target-specific UWE-5 models and makes no claim that these structured model artifacts are reusable."
+        },
+        "claimed_reuse_object": {
+          "status": "none",
+          "citation_ids": [
+            "citation-0250-006",
+            "citation-0250-007",
+            "citation-0250-014",
+            "citation-0250-015"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "No model-artifact reuse object is claimed."
+        },
+        "possible_related_reports_or_artifacts": {
+          "status": "none",
+          "citation_ids": [
+            "citation-0250-006",
+            "citation-0250-007",
+            "citation-0250-027"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "No possible companion report or source-supported related model artifact is named."
+        },
+        "declared_applicability_envelope": {
+          "target_platforms_and_missions": {
+            "status": "not_reported",
+            "reason": "No reuse applicability envelope is reported."
+          },
+          "lifecycle_uses_and_decisions": {
+            "status": "not_reported",
+            "reason": "No reuse lifecycle envelope is reported."
+          },
+          "eps_boundary": {
+            "status": "not_reported",
+            "reason": "No reusable EPS boundary is declared."
+          },
+          "model_boundary_and_abstraction": {
+            "status": "not_reported",
+            "reason": "No reusable model boundary or abstraction envelope is declared."
+          },
+          "architecture_and_interfaces": {
+            "status": "not_reported",
+            "reason": "No reusable architecture or interface envelope is declared."
+          },
+          "environment_modes_and_loads": {
+            "status": "not_reported",
+            "reason": "No reuse environment, mode, or load envelope is declared."
+          },
+          "required_inputs": {
+            "status": "not_reported",
+            "reason": "No reuse inputs are declared."
+          },
+          "tools_and_versions": {
+            "status": "not_reported",
+            "reason": "No tools or versions are declared as reuse prerequisites."
+          },
+          "organizational_prerequisites": {
+            "status": "not_reported",
+            "reason": "No organizational prerequisites for reuse are reported."
+          },
+          "exclusions_and_limits": {
+            "status": "not_reported",
+            "reason": "No reuse exclusions or limits are declared."
+          }
+        },
+        "reuse_design": {
+          "reusable_core": {
+            "status": "not_reported",
+            "reason": "No reusable model core is identified."
+          },
+          "variation_points": {
+            "status": "not_reported",
+            "reason": "No variation point is reported for the structured model artifact."
+          },
+          "unchanged_use_rule": {
+            "status": "not_reported",
+            "reason": "No unchanged-use rule is reported."
+          },
+          "dependencies": {
+            "status": "not_reported",
+            "reason": "No reusable-artifact dependencies are reported."
+          },
+          "tailoring_rules": {
+            "status": "not_reported",
+            "reason": "No model-artifact tailoring rule is reported."
+          },
+          "tailoring_procedure_steps": {
+            "status": "not_reported",
+            "reason": "No model-artifact tailoring procedure steps are reported."
+          },
+          "required_roles_and_skills": {
+            "status": "not_reported",
+            "reason": "No roles or skills for model-artifact reuse are reported."
+          },
+          "required_tools_and_data": {
+            "status": "not_reported",
+            "reason": "No tools or data for model-artifact reuse are reported."
+          },
+          "automation": {
+            "status": "not_reported",
+            "reason": "No model-artifact tailoring automation is reported."
+          },
+          "governance_and_configuration_control": {
+            "status": "not_reported",
+            "reason": "No governance or configuration control for model-artifact reuse is reported."
+          },
+          "tailoring_procedure_reporting": {
+            "procedure_detail_level": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "ordered_or_connected_steps": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "material_inputs": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "outputs": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "roles_and_responsibilities": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "tools_and_settings": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "decision_rules": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "branching_and_iteration": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "quality_or_completion_checks": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "worked_example": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "supporting_materials": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            },
+            "detail_level_reason": {
+              "status": "not_applicable",
+              "reason": "No artifact tailoring procedure is reported."
+            }
+          }
+        },
+        "reuse_assessment": {
+          "linked_report_application_ids": {
+            "status": "not_applicable",
+            "reason": "No model-artifact reuse or tailoring application is reported."
+          },
+          "report_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007",
+              "citation-0250-014",
+              "citation-0250-015"
+            ],
+            "value": "R0_artifact_only"
+          },
+          "report_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007",
+              "citation-0250-014",
+              "citation-0250-015"
+            ],
+            "value": "A target-specific UWE-5 structured model artifact with a separable EPS thread is identifiable, but the report gives no artifact reuse claim or application."
+          },
+          "method_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007"
+            ],
+            "value": "NA"
+          },
+          "method_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007"
+            ],
+            "value": "No model generation method is identified in this record."
+          },
+          "workflow_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007"
+            ],
+            "value": "NA"
+          },
+          "workflow_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007"
+            ],
+            "value": "No engineering workflow is identified in this record."
+          },
+          "conflicting_evidence_within_report": {
+            "status": "none",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007",
+              "citation-0250-014",
+              "citation-0250-015"
+            ],
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "notes": "No conflicting evidence about artifact reuse is present."
+          },
+          "evidence_basis": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007",
+              "citation-0250-014",
+              "citation-0250-028",
+              "citation-0250-029",
+              "citation-0250-032"
+            ],
+            "value": [
+              "worked_example"
+            ]
+          },
+          "support": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007",
+              "citation-0250-014",
+              "citation-0250-015"
+            ],
+            "value": "supported"
+          },
+          "support_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-006",
+              "citation-0250-007",
+              "citation-0250-014",
+              "citation-0250-015",
+              "citation-0250-028",
+              "citation-0250-029",
+              "citation-0250-032"
+            ],
+            "value": "The figures and narrative clearly identify the target-specific model and EPS thread, while the absence of any stated transfer or reuse bounds the conclusion to R0."
+          }
+        }
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-0250-007",
+          "citation-0250-008",
+          "citation-0250-010",
+          "citation-0250-030"
+        ],
+        "report_reuse_record_id": "report-reuse-record-0250-02",
+        "lineage_id": "not_applicable",
+        "linked_model_artifact_ids": {
+          "status": "not_applicable",
+          "reason": "This record assesses toolchain and software-framework reuse, not a structured model artifact."
+        },
+        "linked_model_generation_method_ids": {
+          "status": "not_applicable",
+          "reason": "No model generation method was reported."
+        },
+        "linked_workflow_ids": {
+          "status": "not_applicable",
+          "reason": "No qualifying engineering workflow was identified."
+        },
+        "artifact_names_and_versions": {
+          "status": "not_applicable",
+          "reason": "A toolchain-only reuse record has no qualifying structured model artifact."
+        },
+        "artifact_relationships": {
+          "status": "not_applicable",
+          "reason": "Artifact relationships do not apply to a toolchain-only reuse record."
+        },
+        "repository_or_location": {
+          "status": "not_applicable",
+          "reason": "Artifact repository does not apply to a toolchain-only reuse record."
+        },
+        "owner_or_developer": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-004",
+            "citation-0250-007"
+          ],
+          "value": "UWE-5 university development groups"
+        },
+        "artifact_type": {
+          "status": "not_applicable",
+          "reason": "Artifact type does not apply to a toolchain-only reuse record."
+        },
+        "artifact_generality": {
+          "status": "not_applicable",
+          "reason": "Artifact generality does not apply to a toolchain-only reuse record."
+        },
+        "eps_scope": {
+          "status": "not_applicable",
+          "reason": "EPS artifact scope does not apply because this record assesses the software toolchain rather than a reusable EPS model artifact."
+        },
+        "availability": {
+          "status": "not_applicable",
+          "reason": "Model-artifact availability does not apply to this toolchain-only record."
+        },
+        "license_category": {
+          "status": "not_applicable",
+          "reason": "Model-artifact license does not apply to this toolchain-only record."
+        },
+        "exact_reuse_claim": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-0250-007",
+            "citation-0250-008"
+          ],
+          "value": "The software architecture is uniform across subsystems and independent of underlying hardware. KronOS modules are optional and can be included or excluded according to system requirements."
+        },
+        "claimed_reuse_object": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-0250-007",
+            "citation-0250-008",
+            "citation-0250-010"
+          ],
+          "value": [
+            "toolchain"
+          ]
+        },
+        "possible_related_reports_or_artifacts": {
+          "status": "none",
+          "citation_ids": [
+            "citation-0250-007",
+            "citation-0250-008",
+            "citation-0250-027"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "No companion report or source-supported related toolchain implementation is named."
+        },
+        "declared_applicability_envelope": {
+          "target_platforms_and_missions": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-004",
+              "citation-0250-007"
+            ],
+            "value": [
+              "Subsystem software within the UWE-5 CubeSat mission"
+            ]
+          },
+          "lifecycle_uses_and_decisions": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008"
+            ],
+            "value": [
+              "software architecture and implementation",
+              "requirements-based module inclusion or exclusion"
+            ]
+          },
+          "eps_boundary": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-014",
+              "citation-0250-029"
+            ],
+            "value": "The EPS is one subsystem connected to KronOS and process logic. The toolchain also serves other UWE-5 subsystems."
+          },
+          "model_boundary_and_abstraction": {
+            "status": "not_applicable",
+            "reason": "A model reuse boundary does not apply to this toolchain-only record."
+          },
+          "architecture_and_interfaces": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-010",
+              "citation-0250-030"
+            ],
+            "value": "Uniform subsystem architecture with KronOS middleware, documented APIs and hardware interfaces, POSIX abstraction, and FreeRTOS."
+          },
+          "environment_modes_and_loads": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-002",
+              "citation-0250-009",
+              "citation-0250-011"
+            ],
+            "value": "Resource-constrained real-time CubeSat software with task priority, memory, power, and processor-time management."
+          },
+          "required_inputs": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-0250-008"
+            ],
+            "value": [
+              "System requirements that determine which optional modules are included"
+            ]
+          },
+          "tools_and_versions": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-010",
+              "citation-0250-030"
+            ],
+            "value": [
+              "KronOS",
+              "POSIX pthread interfaces",
+              "FreeRTOS"
+            ]
+          },
+          "organizational_prerequisites": {
+            "status": "not_reported",
+            "reason": "No organizational prerequisites for applying the uniform architecture are reported."
+          },
+          "exclusions_and_limits": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-009",
+              "citation-0250-027"
+            ],
+            "value": [
+              "Only three task-priority levels are used.",
+              "Formal schedulability analysis is not used.",
+              "Scalability to more complex systems remains future work."
+            ]
+          }
+        },
+        "reuse_design": {
+          "reusable_core": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-010",
+              "citation-0250-030"
+            ],
+            "value": "Uniform subsystem software layers, KronOS middleware and APIs, POSIX abstraction, FreeRTOS integration, and Task Manager services."
+          },
+          "variation_points": [
+            {
+              "coding_confidence": "high",
+              "provenance": "source_reported",
+              "citation_ids": [
+                "citation-0250-008"
+              ],
+              "variation_point_id": "variation-point-0250-01",
+              "name_or_target": "Optional KronOS module set for a subsystem",
+              "target_type": {
+                "coding_confidence": "high",
+                "provenance": "reviewer_inferred",
+                "citation_ids": [
+                  "citation-0250-008"
+                ],
+                "value": "other",
+                "notes": "The variation point changes toolchain and software content rather than a structured model artifact, method step, or workflow activity.",
+                "other_source_term": "software-framework module configuration"
+              },
+              "linked_model_artifact_ids": {
+                "status": "not_applicable",
+                "reason": "This is a toolchain variation point."
+              },
+              "linked_model_generation_method_ids": {
+                "status": "not_applicable",
+                "reason": "No model generation method was reported."
+              },
+              "linked_workflow_ids": {
+                "status": "not_applicable",
+                "reason": "No qualifying engineering workflow was identified."
+              },
+              "allowed_options_ranges_and_defaults": [
+                "include a KronOS module",
+                "exclude a KronOS module"
+              ],
+              "dependencies_and_constraints": [
+                "system requirements"
+              ],
+              "selection_trigger_or_condition": "Include or exclude each optional module depending on system requirements.",
+              "unchanged_use_allowed_and_when": {
+                "status": "not_reported",
+                "reason": "The report does not state when the complete default module set can be used unchanged."
+              }
+            }
+          ],
+          "unchanged_use_rule": {
+            "status": "not_reported",
+            "reason": "No overall unchanged-use rule is reported."
+          },
+          "dependencies": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008",
+              "citation-0250-010"
+            ],
+            "value": [
+              "System requirements",
+              "well-specified APIs",
+              "available hardware interfaces",
+              "POSIX and FreeRTOS layers"
+            ]
+          },
+          "tailoring_rules": [
+            {
+              "coding_confidence": "high",
+              "provenance": "source_reported",
+              "citation_ids": [
+                "citation-0250-008"
+              ],
+              "tailoring_rule_id": "tailoring-rule-0250-01",
+              "linked_variation_point_ids": [
+                "variation-point-0250-01"
+              ],
+              "trigger_or_condition": "Subsystem system requirements call for or omit the module's function.",
+              "operation_types": {
+                "coding_confidence": "high",
+                "provenance": "reviewer_inferred",
+                "citation_ids": [
+                  "citation-0250-008"
+                ],
+                "value": [
+                  "selection"
+                ]
+              },
+              "required_inputs": [
+                "system requirements"
+              ],
+              "responsible_roles": {
+                "status": "not_reported",
+                "reason": "The responsible role is not reported."
+              },
+              "tools_and_automation": [
+                "KronOS shared library",
+                "manual or automated selection is not reported"
+              ],
+              "resulting_output": "A subsystem software configuration with the applicable KronOS modules included and other optional modules excluded.",
+              "constraints_and_exceptions": {
+                "status": "not_reported",
+                "reason": "Constraints and exceptions beyond system requirements are not reported."
+              },
+              "acceptance_check": {
+                "status": "not_reported",
+                "reason": "No post-selection acceptance check is reported."
+              },
+              "rationale": "Keep the software architecture uniform while enabling only functions required by each subsystem."
+            }
+          ],
+          "tailoring_procedure_steps": {
+            "status": "not_reported",
+            "reason": "No ordered module-tailoring procedure is reported."
+          },
+          "required_roles_and_skills": {
+            "status": "not_reported",
+            "reason": "No roles or skills for module selection are reported."
+          },
+          "required_tools_and_data": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008"
+            ],
+            "value": [
+              "KronOS shared library",
+              "system requirements",
+              "documented APIs and hardware interfaces"
+            ]
+          },
+          "automation": {
+            "status": "not_reported",
+            "reason": "The report does not state whether module selection is automated."
+          },
+          "governance_and_configuration_control": {
+            "status": "not_reported",
+            "reason": "No configuration identifier, ownership rule, or version-control process is reported for module selection."
+          },
+          "tailoring_procedure_reporting": {
+            "procedure_detail_level": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-0250-007",
+                "citation-0250-008"
+              ],
+              "value": "narrative_outline"
+            },
+            "ordered_or_connected_steps": {
+              "status": "not_reported",
+              "reason": "No ordered selection steps are reported."
+            },
+            "material_inputs": {
+              "coding_confidence": "high",
+              "provenance": "source_reported",
+              "citation_ids": [
+                "citation-0250-008"
+              ],
+              "value": "System requirements determine module inclusion or exclusion."
+            },
+            "outputs": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-0250-008"
+              ],
+              "value": "A subsystem configuration containing the selected optional KronOS modules."
+            },
+            "roles_and_responsibilities": {
+              "status": "not_reported",
+              "reason": "No responsible role is reported."
+            },
+            "tools_and_settings": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-0250-007",
+                "citation-0250-008"
+              ],
+              "value": "The configurable content is the KronOS shared library. Versions and settings are not reported."
+            },
+            "decision_rules": {
+              "coding_confidence": "high",
+              "provenance": "source_reported",
+              "citation_ids": [
+                "citation-0250-008"
+              ],
+              "value": "Include or exclude optional modules depending on system requirements."
+            },
+            "branching_and_iteration": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-0250-008"
+              ],
+              "value": "Each optional module has an include or exclude branch. Iteration is not reported."
+            },
+            "quality_or_completion_checks": {
+              "status": "not_reported",
+              "reason": "No quality or completion check is reported."
+            },
+            "worked_example": {
+              "status": "not_reported",
+              "reason": "The OBC architecture is shown, but the report does not identify its before and after module selections."
+            },
+            "supporting_materials": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-0250-029",
+                "citation-0250-030"
+              ],
+              "value": "Figures 2 and 3 show the shared-library and software-layer architecture, with no external material access route."
+            },
+            "detail_level_reason": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-0250-007",
+                "citation-0250-008"
+              ],
+              "value": "The report gives a reusable core, one variation point, its input, and an include-or-exclude rule, but it omits ordered steps, roles, settings, and checks."
+            }
+          }
+        },
+        "reuse_assessment": {
+          "linked_report_application_ids": {
+            "status": "not_applicable",
+            "reason": "The schema has no toolchain-only application object, and no artifact, method, or workflow application is reported."
+          },
+          "report_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008"
+            ],
+            "value": "NA"
+          },
+          "report_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008"
+            ],
+            "value": "The record concerns a software toolchain and framework rather than a qualifying reusable EPS model artifact."
+          },
+          "method_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008"
+            ],
+            "value": "NA"
+          },
+          "method_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008"
+            ],
+            "value": "No model generation method is identified."
+          },
+          "workflow_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008"
+            ],
+            "value": "NA"
+          },
+          "workflow_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008"
+            ],
+            "value": "No engineering workflow is identified."
+          },
+          "conflicting_evidence_within_report": {
+            "status": "none",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008",
+              "citation-0250-027"
+            ],
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "notes": "No conflicting evidence about the bounded toolchain reuse description is present."
+          },
+          "evidence_basis": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008",
+              "citation-0250-029",
+              "citation-0250-030"
+            ],
+            "value": [
+              "worked_example"
+            ]
+          },
+          "support": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008",
+              "citation-0250-029",
+              "citation-0250-030"
+            ],
+            "value": "limited"
+          },
+          "support_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-0250-007",
+              "citation-0250-008",
+              "citation-0250-029",
+              "citation-0250-030"
+            ],
+            "value": "The OBC example and uniform architecture support a bounded toolchain reuse description, but no distinct before-and-after application or post-configuration assurance is reported."
+          }
+        }
+      }
+    ],
+    "report_applications": {
+      "status": "not_reported",
+      "reason": "No artifact, model generation method, or engineering workflow reuse or tailoring application is reported. Toolchain-only reuse is retained in its reuse record."
+    }
+  },
+  "procedural_evidence_profile": {
+    "generic_or_reference_model_reported": {
+      "value": "no",
+      "basis_ids": [
+        "report-reuse-record-0250-01"
+      ],
+      "derivation_reason": "The only qualifying model artifact is single-target UWE-5 content, not a generic, reference, or template model."
+    },
+    "actionable_model_construction_procedure_reported": {
+      "value": "no",
+      "basis_ids": [
+        "report-reuse-record-0250-01"
+      ],
+      "derivation_reason": "No model generation method is reported for any generic or reference model."
+    },
+    "actionable_tailoring_procedure_reported": {
+      "value": "no",
+      "basis_ids": [
+        "report-reuse-record-0250-01"
+      ],
+      "derivation_reason": "No generic or reference model and no model-artifact tailoring procedure are reported. The module-selection outline concerns a software toolchain."
+    },
+    "worked_tailoring_example_reported": {
+      "value": "no",
+      "basis_ids": [],
+      "derivation_reason": "No report-level artifact tailoring application is identified."
+    },
+    "post_tailoring_assurance_reported": {
+      "value": "no",
+      "basis_ids": [],
+      "derivation_reason": "No report-level artifact tailoring application or post-tailoring assurance is identified."
+    },
+    "generic_model_with_actionable_construction_or_tailoring": {
+      "value": "no",
+      "basis_ids": [
+        "report-reuse-record-0250-01"
+      ],
+      "derivation_reason": "The report contains neither a generic model nor an actionable construction or tailoring procedure for one."
+    }
+  },
+  "limitations": {
+    "author_stated_limitations": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-0250-009",
+        "citation-0250-026"
+      ],
+      "value": [
+        "The task-priority model does not use formal schedulability analysis.",
+        "MBSE effectiveness depends on model quality.",
+        "Poorly specified or incomplete models do not improve implementation over conventional ad hoc approaches.",
+        "Only issues explicitly represented in models can be identified.",
+        "Complexity must be abstracted to remain comprehensible to stakeholders.",
+        "MBSE does not replace engineering judgment."
+      ]
+    },
+    "future_work": {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-0250-003",
+        "citation-0250-027"
+      ],
+      "value": [
+        "Evaluate power consumption and dynamic energy-use adaptation.",
+        "Characterize and mitigate concurrency issues from multithreading and unpredictable runtime behavior.",
+        "Apply the framework to more complex systems with additional subsystems to evaluate scalability.",
+        "Distill experience into best practices and documentation of common pitfalls."
+      ]
+    },
+    "source_conflicts": {
+      "status": "none",
+      "citation_ids": [
+        "citation-0250-003",
+        "citation-0250-018",
+        "citation-0250-024"
+      ],
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "notes": "No direct contradiction among reported source facts was identified. Differences between the abstract's broad V&V list and the detailed scenarios are treated as missing detail rather than a resolved conflict."
+    },
+    "reviewer_uncertainties": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-003",
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-017",
+        "citation-0250-018",
+        "citation-0250-021",
+        "citation-0250-022",
+        "citation-0250-023"
+      ],
+      "value": [
+        "The modeling language, modeling tool, model versions, and executability of the structured diagrams are unclear.",
+        "The section titled formal verification gives design reasoning and a literature reference but no reported formal method, property, tool, or verification output.",
+        "The report does not state whether the soft-fault and malformed-message scenarios specifically used HIL or SIL, or which hardware participated.",
+        "The abstract's hardware-load-limitation result cannot be matched confidently to a detailed body-section test or EPS measure."
+      ]
+    },
+    "missing_information_relevant_for_interpretation": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-0250-003",
+        "citation-0250-006",
+        "citation-0250-007",
+        "citation-0250-014",
+        "citation-0250-018",
+        "citation-0250-020",
+        "citation-0250-022",
+        "citation-0250-023"
+      ],
+      "value": [
+        "No model generation procedure, modeling tool version, model repository, or model license is reported.",
+        "No internal EPS architecture, numeric trigger threshold, report interval, or completed power-consumption result is reported.",
+        "No implementation effort, cost, schedule measurement, or comparator is reported.",
+        "The body does not provide separate SIL or digital-twin setup and results despite their mention in the abstract.",
+        "Test repetition counts, uncertainty, sensitivity, and most hardware configurations are not reported."
+      ]
+    }
+  },
+  "citations": [
+    {
+      "citation_id": "citation-0250-001",
+      "report_id": "review-report-0250",
+      "page": 1,
+      "quote": "The University of Wurzburg Experimental Satellite 5 (UWE-5) mission is advancing model-based systems engineering methodologies through the development of a modular, real-time capable on-board software framework."
+    },
+    {
+      "citation_id": "citation-0250-002",
+      "report_id": "review-report-0250",
+      "page": 1,
+      "quote": "Designed for operation within a lightweight 128KB memory footprint, this framework integrates formalized system modelling, fault-tolerant architectures, and dynamic resource management, enabling CubeSat missions to autonomously maintain critical functions under strict power and computational constraints."
+    },
+    {
+      "citation_id": "citation-0250-003",
+      "report_id": "review-report-0250",
+      "page": 1,
+      "quote": "The framework undergoes rigorous validation and verification using a combination of hardware-in-the-loop (HIL) and software-in-the-loop (SIL) simulations, digital twin analysis, and subsystem-level testing. Initial tests confirm that hardware load limitations effectively prevent instability, while upcoming power consumption evaluations will assess the system's ability to dynamically adapt energy usage."
+    },
+    {
+      "citation_id": "citation-0250-004",
+      "report_id": "review-report-0250",
+      "page": 2,
+      "quote": "The UWE-5 is a CubeSat project whose objective is the demonstration of a K-/KA-band communications payload. The development teams are comprised of three different working groups at different universities, namely the Embedded Systems and Sensors for Earth Observation (ESSEO) group at the Julius-Maximilians- Universität Würzburg, the Satellite Communications and Radar Systems chair at the Julius-Maximilians- Universität Würzburg, and the Electronic Systems and Sensors chair at Brandenburgische Technische Universität Cottbus. The mission consists of two 3U CubeSats operating in Low Earth Orbit. The project is supported by the German Aerospace Center (DLR) and estimated to launch in 2027."
+    },
+    {
+      "citation_id": "citation-0250-005",
+      "report_id": "review-report-0250",
+      "page": 3,
+      "quote": "In the context of the CubeSat project, the stakeholders are the various developer groups responsible for developing the different subsystems, writing the application code and designing the hardware. Particular attention is paid to the interfaces between the hardware and software, and to communication between the subsystems."
+    },
+    {
+      "citation_id": "citation-0250-006",
+      "report_id": "review-report-0250",
+      "page": 3,
+      "quote": "The system model of the UWE-5 project represents a complex interaction between two satellites, external applications, and internal subsystems (see Fig. 1)."
+    },
+    {
+      "citation_id": "citation-0250-007",
+      "report_id": "review-report-0250",
+      "page": 3,
+      "quote": "The software architecture of each subsystem is uniform and independent of the underlying hardware. Fig. 2 illustrates the system model of the onboard computer as an example. A shared library, KronOS, serves as middleware between the RTOS and the process logic. The interfaces between software layers are defined through well-specified APIs, and all available hardware interfaces are documented."
+    },
+    {
+      "citation_id": "citation-0250-008",
+      "report_id": "review-report-0250",
+      "page": 3,
+      "quote": "Each subsystem is further divided into modules, where each module is dedicated to a specific task and provides an API to other software modules. The modules within the KronOS library are optional and can be included or excluded depending on system requirements. The system diagram clearly conveys which functionalities are enabled and available within the satellite's subsystems, without requiring a detailed examination of their internal implementations."
+    },
+    {
+      "citation_id": "citation-0250-009",
+      "report_id": "review-report-0250",
+      "page": 4,
+      "quote": "To keep the system manageable and maintain effective load balancing, no additional priority levels are introduced. While this model does not rely on formal schedulability analysis, it is conceptually aligned with the notion of robust priority assignment as defined in realtime systems literature [12]."
+    },
+    {
+      "citation_id": "citation-0250-010",
+      "report_id": "review-report-0250",
+      "page": 4,
+      "quote": "A special layer, called the KronOS Task-Manager, extends the FreeRTOS scheduler with functionality for dynamic resource allocation, load balancing, and fault management."
+    },
+    {
+      "citation_id": "citation-0250-011",
+      "report_id": "review-report-0250",
+      "page": 4,
+      "quote": "Dynamic resources in the system include task-specific stack memory, available power from the EPS, and processor time. Each task receives its stack from a statically allocated heap managed by FreeRTOS. Power availability and power consumption are monitored to ensure stable operation."
+    },
+    {
+      "citation_id": "citation-0250-012",
+      "report_id": "review-report-0250",
+      "page": 4,
+      "quote": "Before a new task can be created, the system must be in a stable state. The required stack size is specified during task creation by the initiating process. This value is typically an estimate based on prior testing, with an added safety margin."
+    },
+    {
+      "citation_id": "citation-0250-013",
+      "report_id": "review-report-0250",
+      "page": 4,
+      "quote": "There are three possible outcomes: 1. Sufficient resources are available - the task is scheduled immediately. 2. Insufficient resources - the system attempts to free memory and processing capacity by terminating lower-priority tasks. 3. Insufficient resources with no lower-priority tasks available - if the new task is non-critical, it is rejected. If it is critical and still cannot be scheduled, the system enters a non-runnable state."
+    },
+    {
+      "citation_id": "citation-0250-014",
+      "report_id": "review-report-0250",
+      "page": 5,
+      "quote": "To incorporate power consumption into the loadbalancing process, the Task Manager receives regular external reports from the EPS. These reports include key parameters such as the current state of charge, overall power consumption, and charging current of the batteries. Within the Task Manager, trigger points are defined to respond to critical EPS values."
+    },
+    {
+      "citation_id": "citation-0250-015",
+      "report_id": "review-report-0250",
+      "page": 5,
+      "quote": "If a trigger point indicates a lack of power while only critical tasks are running, the system initiates a controlled shutdown to conserve energy. If non-critical tasks are still active, these are first moved to the suspended state before more drastic action is taken. Once sufficient power becomes available again, previously suspended tasks are resumed automatically. This mechanism, shown in Fig. 5, ensures that energy-critical situations are handled gracefully, maintaining essential system functionality while preventing instability."
+    },
+    {
+      "citation_id": "citation-0250-016",
+      "report_id": "review-report-0250",
+      "page": 5,
+      "quote": "In addition, each task is assigned an individual timeout that serves as an internal task watchdog. If a task stalls or becomes unresponsive, it is terminated by a dedicated health-check task (Fig. 6) and the allocated resources are released in a controlled manner."
+    },
+    {
+      "citation_id": "citation-0250-017",
+      "report_id": "review-report-0250",
+      "page": 6,
+      "quote": "Thus, a key benefit of MBSE lies in its ability to identify, at an early stage, which components of a system are vulnerable to concurrency issues such as thread preemption or interrupt handling. By employing formal verification within MBSE models, potential hazards can be detected more effectively during the design phase, significantly reducing debugging complexity in later implementation stages."
+    },
+    {
+      "citation_id": "citation-0250-018",
+      "report_id": "review-report-0250",
+      "page": 6,
+      "quote": "The Simulation-Driven Validation Tests are intended to validate the correct implementation of the system model and to reveal potential bugs and vulnerabilities in the design. A distinction is made between HIL and SIL tests. HIL tests aim to validate the integration of a system on actual hardware. Three types of test scenarios have been defined and conducted for the validation of failsafe mechanisms."
+    },
+    {
+      "citation_id": "citation-0250-019",
+      "report_id": "review-report-0250",
+      "page": 6,
+      "quote": "To evaluate the watchdog implementation, a KronOS instance with a dedicated watchdog task is executed on the OBC. The OBC incorporates two external watchdogs with a timeout of 1.6~seconds, enabling hot-swapping to a redundant processor or power source."
+    },
+    {
+      "citation_id": "citation-0250-020",
+      "report_id": "review-report-0250",
+      "page": 7,
+      "quote": "watchdog of the MSP430 is configured with a timeout of 1~second. During testing, a deliberate deadlock is introduced in a secondary task. This condition consistently causes the software watchdog to trigger after the 1-second timeout, initiating a soft reset of the processor. The experiment thereby validates that deadlocks are reliably detected and resolved through the watchdog mechanism, ensuring bounded-time recovery and system availability."
+    },
+    {
+      "citation_id": "citation-0250-021",
+      "report_id": "review-report-0250",
+      "page": 7,
+      "quote": "Tasks are created sequentially to deliberately trigger a stack overflow, a floating-point exception, and a null pointer exception."
+    },
+    {
+      "citation_id": "citation-0250-022",
+      "report_id": "review-report-0250",
+      "page": 7,
+      "quote": "In all tested cases, the faulty tasks are cleaned up by the task timeout mechanism (see Fig. 6), and the resources are released. Depending on the affected priority, the appropriate recovery strategy is executed."
+    },
+    {
+      "citation_id": "citation-0250-023",
+      "report_id": "review-report-0250",
+      "page": 7,
+      "quote": "An additional task simulates the reception of incorrectly encoded messages to evaluate the fault tolerance of the decoder. The experiment demonstrates that partially received or malformed messages are reliably discarded after a defined timeout. This timeout is configured according to the maximum transmission rate of the hardware channel and the maximum message length. By enforcing these bounds, the receiver buffer is freed in time to prevent denial-of-service conditions caused by buffer overflows."
+    },
+    {
+      "citation_id": "citation-0250-024",
+      "report_id": "review-report-0250",
+      "page": 7,
+      "quote": "The results demonstrate that combining Model-Based Systems Engineering with simulation-driven validation provides a systematic way to design and test fault-tolerant real-time software for CubeSats. Formal modelling exposes concurrency risks such as race conditions early in the development process, while SIL and HIL experiments confirm that watchdogs, fault injection handling, and message validation mechanisms can reliably recover from deadlocks, runtime faults, and corrupted inputs."
+    },
+    {
+      "citation_id": "citation-0250-025",
+      "report_id": "review-report-0250",
+      "page": 7,
+      "quote": "MBSE contributes by clarifying complex task interactions and making these critical mechanisms traceable and verifiable at the design stage. This structured approach shows that reliability in nanosatellite software can be achieved without sacrificing modularity or maintainability, even under highly constrained conditions."
+    },
+    {
+      "citation_id": "citation-0250-026",
+      "report_id": "review-report-0250",
+      "page": 7,
+      "quote": "At the same time, the effectiveness of MBSE is bounded by the quality of the models. Poorly specified or incomplete models will not yield better implementations than conventional ad hoc approaches. Moreover, issues can only be identified if they are explicitly represented in the models, and if complexity is abstracted to a level that remains comprehensible for all stakeholders. Thus, while MBSE improves transparency and reduces integration risks, it does not replace engineering judgment."
+    },
+    {
+      "citation_id": "citation-0250-027",
+      "report_id": "review-report-0250",
+      "page": 7,
+      "quote": "Future work will focus on characterizing and mitigating new concurrency issues that arise from multithreading and unpredictable runtime behaviour. The framework will be applied to systems of higher complexity with additional subsystems to evaluate scalability. Finally, accumulated experience will be distilled into best practices and documentation of common pitfalls, providing practical guidance for future CubeSat and small satellite developments."
+    },
+    {
+      "citation_id": "citation-0250-028",
+      "report_id": "review-report-0250",
+      "page": 3,
+      "quote": "Satellite A BUS Sidepanel 1 Sidepanel 2 Sidepanel 4 Sidepanel 3 OBC AOCS EPS Radio 1 Radio 2 Payload Satellite B Ground Station",
+      "graphic": "Figure 1, UWE-5 System Model Diagram",
+      "graphic_quote_description": "The diagram places EPS, OBC, AOCS, radios, payload, and side panels inside Satellite A and shows data-flow links across the spacecraft and external systems."
+    },
+    {
+      "citation_id": "citation-0250-029",
+      "report_id": "review-report-0250",
+      "page": 3,
+      "quote": "Shared Library Receiver Sender Taskmanager EPS AOCS I2C Process Logic",
+      "graphic": "Figure 2, UWE-5 onboard-computer system model",
+      "graphic_quote_description": "The diagram shows the EPS connected through an I2C data path to the shared library and process logic, including the Taskmanager API."
+    },
+    {
+      "citation_id": "citation-0250-030",
+      "report_id": "review-report-0250",
+      "page": 4,
+      "quote": "Application/Mission Code KronOS Sender/Receiver/Services KronOS Task Manager POSIX FreeRTOS Windows PC MSP430F5438A ATSAMV71Q20CB errors",
+      "graphic": "Figure 3, KronOS Software Layers",
+      "graphic_quote_description": "The layer diagram connects mission code, KronOS services and Task Manager, POSIX, FreeRTOS, and the named development and target hardware platforms."
+    },
+    {
+      "citation_id": "citation-0250-031",
+      "report_id": "review-report-0250",
+      "page": 5,
+      "quote": "create task resources available lower prio task available kill Tasks to free enough resources is critical schedule task reject task system not runable",
+      "graphic": "Figure 4, Load-Balancer flow during task creation",
+      "graphic_quote_description": "The flowchart gives the resource, lower-priority-task, and criticality decisions that lead to scheduling, rejection, resource release, or a non-runnable state."
+    },
+    {
+      "citation_id": "citation-0250-032",
+      "report_id": "review-report-0250",
+      "page": 5,
+      "quote": "report power consumption trigger points only critical tasks available stable state unstable state system shutdown suspend tasks according to the trigger point definition",
+      "graphic": "Figure 5, Load-Balancer flow during EPS report",
+      "graphic_quote_description": "The flowchart maps an EPS power report through trigger and task-criticality decisions to stable state, suspension, or system shutdown, with a loop back after suspension."
+    },
+    {
+      "citation_id": "citation-0250-033",
+      "report_id": "review-report-0250",
+      "page": 5,
+      "quote": "Health-Check Task for each task timeout collect debug infos critical task normal task low task system reset restart, max 3 delete",
+      "graphic": "Figure 6, Health-Check Task",
+      "graphic_quote_description": "The flowchart maps each task timeout and priority to debug collection, system reset, bounded restart, or deletion."
+    },
+    {
+      "citation_id": "citation-0250-034",
+      "report_id": "review-report-0250",
+      "page": 6,
+      "quote": "Transmitter send same (sub)-system Receiver broadcast channel enabled buffer lock channel lock encode (Compass, SLIP) write to channel register callback",
+      "graphic": "Figure 7, Thread-safe Transmitter data flow",
+      "graphic_quote_description": "The activity flow shows routing and broadcast decisions plus buffer and channel locks around encoding and channel writing."
+    }
+  ]
+}

@@ -1,0 +1,3962 @@
+{
+  "identity": {
+    "report_id": "review-report-1288",
+    "screening_record_id": "review-candidate-1288",
+    "possible_companion_reports_or_shared_implementations": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_derived",
+      "citation_ids": [
+        "citation-1288-22"
+      ],
+      "value": [
+        "Kaslow et al. (2017), Developing a CubeSat Model-Based Systems Engineering (MBSE) Reference Model - Interim Status #3"
+      ]
+    },
+    "family_lead": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-02",
+        "citation-1288-22"
+      ],
+      "value": "yes"
+    },
+    "report_family_lead_reason": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-02",
+        "citation-1288-03",
+        "citation-1288-22"
+      ],
+      "value": "The report identifies the same authors' 2017 interim-status paper on the CubeSat Reference Model and states that the present examples come from ongoing work on that model."
+    },
+    "source_file_path": "SLR/SLR1/pdfs/review-reports/review-report-1288.md"
+  },
+  "context": {
+    "mission_or_platform": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-1288-02",
+        "citation-1288-03"
+      ],
+      "value": "Generic CubeSat represented by the INCOSE Space Systems Working Group CubeSat Reference Model"
+    },
+    "form_factor_or_mass": {
+      "status": "not_reported",
+      "reason": "No CubeSat unit form factor or mass is reported."
+    },
+    "mission_purpose_or_domain": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-08",
+        "citation-1288-10"
+      ],
+      "value": "Generic CubeSat mission development, with illustrative concerns for operational lifetime and affordability"
+    },
+    "orbit_and_environment": {
+      "status": "not_reported",
+      "reason": "No specific orbit or environmental conditions are reported for the generic CubeSat example."
+    },
+    "organization_type": {
+      "status": "not_reported",
+      "reason": "The report identifies a professional working group and author affiliations but does not establish one organizational setting for the modeled work."
+    },
+    "development_setting": {
+      "status": "not_reported",
+      "reason": "The report does not characterize the development process setting."
+    },
+    "lifecycle_stages_demonstrated": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-03",
+        "citation-1288-05",
+        "citation-1288-09",
+        "citation-1288-10"
+      ],
+      "value": [
+        "requirements",
+        "architecture_and_design",
+        "implementation"
+      ]
+    },
+    "lifecycle_stages_claimed_or_planned": {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-1288-21"
+      ],
+      "value": [
+        "verification",
+        "validation"
+      ]
+    },
+    "project_maturity": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-02",
+        "citation-1288-03"
+      ],
+      "value": [
+        "reference_or_template"
+      ]
+    }
+  },
+  "mbse_approach": {
+    "problem_addressed": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-1288-01"
+      ],
+      "value": "Existing technical-measurement and MBSE literature did not provide a detailed way to implement technical measurement within an MBSE system model."
+    },
+    "intended_decision": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-05",
+        "citation-1288-14",
+        "citation-1288-16"
+      ],
+      "value": "Assess candidate system and subsystem solutions by predicting whether their MOPs and TPMs will satisfy mission MOEs, including CubeSat service life."
+    },
+    "reason_for_using_mbse": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-05",
+        "citation-1288-06",
+        "citation-1288-07"
+      ],
+      "value": "Use one coherent model to integrate and trace stakeholder concerns, objectives, requirements, technical measures, and parametric analysis rather than leaving technical measurement separate from the system model."
+    },
+    "model_generation_methods": [
+      {
+        "citation_ids": [
+          "citation-1288-03",
+          "citation-1288-04",
+          "citation-1288-05",
+          "citation-1288-07",
+          "citation-1288-14",
+          "citation-1288-16"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "model_generation_method_id": "model-generation-method-1288-01",
+        "eps_case_ids": [
+          "eps-case-1288-01"
+        ],
+        "source_method_name_or_description": "MBSE approach for incorporating technical measures into a system model",
+        "method_purpose_and_scope": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-03",
+            "citation-1288-04",
+            "citation-1288-05",
+            "citation-1288-07",
+            "citation-1288-16"
+          ],
+          "value": "Construct a technical-measure thread in a SysML CubeSat reference model from stakeholder concerns through mission objectives, MOEs, system MOPs, subsystem TPMs, requirements traces, constraints, and parametric bindings."
+        },
+        "generation_method_types": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-03",
+            "citation-1288-04",
+            "citation-1288-07"
+          ],
+          "value": [
+            "author_defined_process",
+            "manual_model_construction"
+          ]
+        },
+        "method_origin_types": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-07",
+            "citation-1288-08",
+            "citation-1288-12"
+          ],
+          "value": [
+            "requirements_or_standards_synthesis",
+            "literature_synthesis",
+            "manual_author_construction"
+          ]
+        },
+        "construction_sources": [
+          {
+            "citation_ids": [
+              "citation-1288-08",
+              "citation-1288-12"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "construction_source_id": "construction-source-1288-01",
+            "source_type": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-1288-08",
+                "citation-1288-12"
+              ],
+              "value": "standard"
+            },
+            "source_identification": "Technical-measurement guidance cited as References [1], [4], and [11]",
+            "selection_or_inclusion_basis": "The report adopts these sources' definitions and derivation relationships for MOEs, MOPs, and TPMs.",
+            "contribution_to_model": "Supplies technical-measure definitions, hierarchy, and the rule that critical stakeholder objectives lead to MOEs and lower-level measures.",
+            "linked_input_group_ids": [
+              "input-group-1288-01",
+              "input-group-1288-02"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-01",
+              "model-artifact-1288-03"
+            ]
+          },
+          {
+            "citation_ids": [
+              "citation-1288-07"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "construction_source_id": "construction-source-1288-02",
+            "source_type": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-1288-07"
+              ],
+              "value": "literature"
+            },
+            "source_identification": "Prior SysML approaches cited as References [2] and [10]",
+            "selection_or_inclusion_basis": "The report explicitly extends their approach for placing technical measures on system-hierarchy blocks and using constraints and parametrics.",
+            "contribution_to_model": "Supplies the value-property, constraint-block, and parametric-diagram pattern that the report extends with qualitative specifications and traceability.",
+            "linked_input_group_ids": [
+              "input-group-1288-02"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-01",
+              "model-artifact-1288-03"
+            ]
+          },
+          {
+            "citation_ids": [
+              "citation-1288-08",
+              "citation-1288-10"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "construction_source_id": "construction-source-1288-03",
+            "source_type": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-1288-08",
+                "citation-1288-10"
+              ],
+              "value": "expert_or_stakeholder_input"
+            },
+            "source_identification": "End-user and sponsor concerns in the worked CubeSat example",
+            "selection_or_inclusion_basis": "Stakeholder concerns and objectives deemed critical for mission success initiate the method.",
+            "contribution_to_model": "Provides the operational-lifetime and affordability concerns, mission objectives, and qualitative MOE specifications.",
+            "linked_input_group_ids": [
+              "input-group-1288-01"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ]
+          },
+          {
+            "citation_ids": [
+              "citation-1288-02",
+              "citation-1288-03",
+              "citation-1288-22"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "construction_source_id": "construction-source-1288-04",
+            "source_type": {
+              "coding_confidence": "high",
+              "provenance": "reviewer_inferred",
+              "citation_ids": [
+                "citation-1288-02",
+                "citation-1288-03"
+              ],
+              "value": "heritage_model_or_mission"
+            },
+            "source_identification": "INCOSE Space Systems Working Group CubeSat Reference Model",
+            "selection_or_inclusion_basis": "The current work was developed to incorporate technical measures into this reusable CubeSat reference model.",
+            "contribution_to_model": "Provides the base system-model structure and the CubeSat example into which the profile, measures, traces, constraints, and parametric diagrams are incorporated.",
+            "linked_input_group_ids": {
+              "status": "none"
+            },
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-02",
+              "model-artifact-1288-03"
+            ]
+          }
+        ],
+        "linked_input_group_ids": [
+          "input-group-1288-01",
+          "input-group-1288-02"
+        ],
+        "linked_source_model_artifact_ids": [
+          "model-artifact-1288-02"
+        ],
+        "linked_output_model_artifact_ids": [
+          "model-artifact-1288-01",
+          "model-artifact-1288-03"
+        ],
+        "entry_conditions": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-04",
+            "citation-1288-08"
+          ],
+          "value": "Stakeholder concerns, mission objectives, and applicable technical requirements are available for capture in a SysML system model."
+        },
+        "method_steps": [
+          {
+            "citation_ids": [
+              "citation-1288-03",
+              "citation-1288-09"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "method_step_id": "method-step-1288-01",
+            "sequence_label": "1",
+            "predecessor_method_step_ids": {
+              "status": "none"
+            },
+            "action": "Create and apply a Technical Measures Profile containing model elements for stakeholder concerns, mission objectives, MOEs, MOPs, TPMs, and qualitative measure specifications.",
+            "material_inputs": [
+              "SysML extension mechanism",
+              "Technical-measure concepts"
+            ],
+            "outputs": [
+              "Technical Measures Profile"
+            ],
+            "linked_input_group_ids": [
+              "input-group-1288-02"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-01",
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not assign a responsible role for profile creation."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "The report does not state whether profile creation is automated."
+            },
+            "decision_rules": "Create new stereotypes where SysML lacks a traceable or domain-specific technical-measure element.",
+            "quality_or_exit_checks": {
+              "status": "not_reported",
+              "reason": "No profile completion or quality check is reported."
+            },
+            "branching_iteration_or_rework": {
+              "status": "not_reported",
+              "reason": "No branching, iteration, or rework is reported for this step."
+            }
+          },
+          {
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-08",
+              "citation-1288-10"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "method_step_id": "method-step-1288-02",
+            "sequence_label": "2",
+            "predecessor_method_step_ids": [
+              "method-step-1288-01"
+            ],
+            "action": "Develop mission objectives from stakeholder concerns and connect each objective to its concern with a SysML trace relationship.",
+            "material_inputs": [
+              "Stakeholder concerns"
+            ],
+            "outputs": [
+              "Traced mission objectives"
+            ],
+            "linked_input_group_ids": [
+              "input-group-1288-01"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": [
+              "Stakeholders identify concerns and deem objectives critical for mission success; the modeler captures the resulting elements."
+            ],
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "The report does not state whether this step is automated."
+            },
+            "decision_rules": "Retain objectives that stakeholders deem critical for mission success.",
+            "quality_or_exit_checks": "A trace relationship connects each shown mission objective to its originating stakeholder concern.",
+            "branching_iteration_or_rework": {
+              "status": "not_reported",
+              "reason": "No branching, iteration, or rework is reported for this step."
+            }
+          },
+          {
+            "citation_ids": [
+              "citation-1288-07",
+              "citation-1288-08",
+              "citation-1288-10"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "method_step_id": "method-step-1288-03",
+            "sequence_label": "3",
+            "predecessor_method_step_ids": [
+              "method-step-1288-02"
+            ],
+            "action": "Capture critical objectives first as qualitative MOE Specification elements that stakeholders can understand.",
+            "material_inputs": [
+              "Critical mission objectives",
+              "Stakeholder natural-language descriptions"
+            ],
+            "outputs": [
+              "MOE Specification elements"
+            ],
+            "linked_input_group_ids": [
+              "input-group-1288-01"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-01",
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": [
+              "Stakeholders provide the qualitative need; the modeler captures it as an MOE Specification."
+            ],
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "The report does not state whether this step is automated."
+            },
+            "decision_rules": "Use the MOE Specification element for an unquantified or qualitative stakeholder statement.",
+            "quality_or_exit_checks": "The shown MOE Specifications trace to their mission objectives.",
+            "branching_iteration_or_rework": {
+              "status": "not_reported",
+              "reason": "No branching, iteration, or rework is reported for this step."
+            }
+          },
+          {
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-11"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "method_step_id": "method-step-1288-04",
+            "sequence_label": "4",
+            "predecessor_method_step_ids": [
+              "method-step-1288-03"
+            ],
+            "action": "Translate each qualitative MOE Specification into a quantified MOE value property of the Mission Enterprise block and trace the value property back to its specification.",
+            "material_inputs": [
+              "MOE Specifications",
+              "Quantified objective values"
+            ],
+            "outputs": [
+              "Enterprise-level MOE value properties",
+              "Trace relationships to MOE Specifications"
+            ],
+            "linked_input_group_ids": [
+              "input-group-1288-01",
+              "input-group-1288-02"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not identify who performs the translation and quantification."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "The report does not state whether translation is automated."
+            },
+            "decision_rules": "Represent quantified enterprise measures as value properties stereotyped «moe».",
+            "quality_or_exit_checks": "Each shown MOE value property traces to its qualitative MOE Specification and through it to the originating concern.",
+            "branching_iteration_or_rework": {
+              "status": "not_reported",
+              "reason": "No branching, iteration, or rework is reported for this step."
+            }
+          },
+          {
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-12",
+              "citation-1288-13"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "method_step_id": "method-step-1288-05",
+            "sequence_label": "5",
+            "predecessor_method_step_ids": [
+              "method-step-1288-04"
+            ],
+            "action": "Derive system-level MOPs from enterprise MOEs and the technical requirements that address them, then capture the MOPs as CubeSat value properties and trace them to requirements.",
+            "material_inputs": [
+              "Enterprise MOEs",
+              "System technical requirements"
+            ],
+            "outputs": [
+              "System-level MOP value properties",
+              "MOP-to-requirement traces"
+            ],
+            "linked_input_group_ids": [
+              "input-group-1288-01",
+              "input-group-1288-02"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not assign a responsible role for deriving MOPs."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "The report does not state whether MOP derivation is automated."
+            },
+            "decision_rules": "Derive MOPs from technical requirements that address the MOPs and trace to mission objectives.",
+            "quality_or_exit_checks": "MOPs are traced to system requirements and retain a path to the associated MOEs.",
+            "branching_iteration_or_rework": {
+              "status": "not_reported",
+              "reason": "No branching, iteration, or rework is reported for this step."
+            }
+          },
+          {
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-14",
+              "citation-1288-15"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "method_step_id": "method-step-1288-06",
+            "sequence_label": "6",
+            "predecessor_method_step_ids": [
+              "method-step-1288-05"
+            ],
+            "action": "Create constraint blocks for empirical MOP-to-MOE relationships and parametric diagrams that bind the constraint parameters to the technical-measure value properties.",
+            "material_inputs": [
+              "MOE value properties",
+              "MOP value properties",
+              "Empirical relationships and required parameters"
+            ],
+            "outputs": [
+              "Constraint blocks",
+              "Parametric bindings between MOPs and MOEs"
+            ],
+            "linked_input_group_ids": [
+              "input-group-1288-02"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not assign a responsible role for constructing constraints and bindings."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool, solver, equation implementation, or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "The report states that the representation supports analysis but does not report automated execution."
+            },
+            "decision_rules": "Choose the MOPs that empirically determine each MOE and bind all required constraint parameters to their model properties.",
+            "quality_or_exit_checks": {
+              "status": "not_reported",
+              "reason": "No executed constraint check, output, or pass criterion is reported."
+            },
+            "branching_iteration_or_rework": "The representation is intended to permit evaluation of different system solutions, but no iteration rule is specified."
+          },
+          {
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-16"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "method_step_id": "method-step-1288-07",
+            "sequence_label": "7",
+            "predecessor_method_step_ids": [
+              "method-step-1288-06"
+            ],
+            "action": "Repeat the system-level derivation at subsystem level by deriving TPMs from MOPs and subsystem requirements, then relate TPMs to MOPs with constraint blocks and parametric diagrams.",
+            "material_inputs": [
+              "System MOPs",
+              "Subsystem technical requirements",
+              "Subsystem performance parameters"
+            ],
+            "outputs": [
+              "Subsystem TPM value properties",
+              "TPM-to-MOP constraint and parametric relationships"
+            ],
+            "linked_input_group_ids": [
+              "input-group-1288-02"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not assign a responsible role for deriving TPMs."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or calculation settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "The report does not report execution or automation of the TPM calculations."
+            },
+            "decision_rules": "Derive TPMs directly from MOPs and represent them as properties of the applicable subsystem elements.",
+            "quality_or_exit_checks": "The approach ends with traceability from stakeholder concerns through MOEs and MOPs to TPMs.",
+            "branching_iteration_or_rework": "The process repeats the system-level pattern at subsystem level; no rework rule is reported."
+          }
+        ],
+        "branching_and_iteration": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-14",
+            "citation-1288-16"
+          ],
+          "value": "The system-level MOE-to-MOP pattern is repeated at subsystem level for MOP-to-TPM derivation, and the parametric structures are intended to support evaluation of multiple candidate solutions; no explicit rework loop is given."
+        },
+        "completion_conditions": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-07",
+            "citation-1288-16",
+            "citation-1288-17"
+          ],
+          "value": "The reported endpoint is a technical-measure model with traceability from stakeholder concerns to TPMs and parametric relationships that connect TPMs, MOPs, and MOEs."
+        },
+        "generic_model_derivation": {
+          "generic_model_target": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-02",
+              "citation-1288-03",
+              "citation-1288-09"
+            ],
+            "value": "CubeSat Reference Model augmented with a Technical Measures Profile and technical-measure thread"
+          },
+          "selection_and_exclusion_rules": {
+            "status": "not_reported",
+            "reason": "The report does not state how source missions, requirements, or measure types were selected or excluded when deriving the reference content."
+          },
+          "synthesis_and_generalization_operations": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-03",
+              "citation-1288-07",
+              "citation-1288-09"
+            ],
+            "value": "The authors extend prior block/value-property and parametric patterns by adding traceable stakeholder concerns, mission objectives, and qualitative MOE, MOP, and TPM Specification elements, then incorporate that extension into the CubeSat Reference Model."
+          },
+          "abstraction_and_normalization_rules": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-07",
+              "citation-1288-11",
+              "citation-1288-16"
+            ],
+            "value": "Place MOEs at enterprise level, MOPs at system level, TPMs on subsystem elements, represent quantitative measures as stereotyped value properties, and connect levels with traces, constraints, and parametric bindings."
+          },
+          "conflicts_and_resolution": {
+            "status": "not_reported",
+            "reason": "No conflicts among construction sources or conflict-resolution procedure are reported."
+          },
+          "trace_from_sources_to_model_content": {
+            "status": "not_reported",
+            "reason": "The report cites guidance used by the approach but does not provide a source-to-reference-model provenance trace."
+          },
+          "genericity_validation": {
+            "status": "not_reported",
+            "reason": "No multi-team application, independent transfer, or other validation of reference-model genericity is reported."
+          }
+        },
+        "supporting_material_location": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-1288-03",
+            "citation-1288-09",
+            "citation-1288-10",
+            "citation-1288-13",
+            "citation-1288-15"
+          ],
+          "value": "Section 5 and Figures 1 through 7 of the report"
+        },
+        "supporting_material_availability": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-03",
+            "citation-1288-09",
+            "citation-1288-10",
+            "citation-1288-13",
+            "citation-1288-15"
+          ],
+          "value": "described_only"
+        },
+        "procedure_reporting": {
+          "procedure_detail_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-03",
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-07",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "narrative_outline"
+          },
+          "ordered_or_connected_steps": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-08",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "The report orders concern capture, objective derivation, qualitative MOE specification, MOE quantification, MOP derivation, MOP-to-MOE parametric linkage, and repeated subsystem-level TPM derivation."
+          },
+          "material_inputs": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-08",
+              "citation-1288-14"
+            ],
+            "value": "Stakeholder concerns, mission objectives, technical requirements, qualitative and quantitative measure definitions, and empirical relationships among measures."
+          },
+          "outputs": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-07",
+              "citation-1288-09",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "Technical Measures Profile; traced concern, objective, specification, MOE, MOP, TPM, and requirement elements; constraint blocks; and parametric diagrams."
+          },
+          "roles_and_responsibilities": {
+            "status": "not_reported",
+            "reason": "Stakeholder and developer viewpoints are described, but implementation responsibilities are not assigned across the procedure."
+          },
+          "tools_and_settings": {
+            "status": "not_reported",
+            "reason": "SysML is identified, but no modeling tool, version, solver, equations, or execution settings are reported."
+          },
+          "decision_rules": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-08",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "Stakeholder-critical objectives drive MOEs; technical requirements associated with those objectives drive MOPs; TPMs derive from MOPs; empirical relations determine constraint parameters."
+          },
+          "branching_and_iteration": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "The process repeats at subsystem level and allows alternative solutions to be evaluated, but gives no selection, convergence, or rework rule."
+          },
+          "quality_or_completion_checks": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-07",
+              "citation-1288-17"
+            ],
+            "value": "The narrative expects complete traceability from concerns to TPMs, but reports no formal completeness check or executed acceptance criterion."
+          },
+          "worked_example": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-10",
+              "citation-1288-11",
+              "citation-1288-13",
+              "citation-1288-15",
+              "citation-1288-16"
+            ],
+            "value": "A populated CubeSat Reference Model example shows lifetime and affordability concerns, MOEs, CubeSat MOPs, propulsion TPMs, traces, and parametric relationships."
+          },
+          "supporting_materials": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-09",
+              "citation-1288-10",
+              "citation-1288-13",
+              "citation-1288-15"
+            ],
+            "value": "The report provides model extracts in Figures 1 through 7 but identifies no downloadable model, profile, script, or complete procedure package."
+          },
+          "detail_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "The ordered actions and worked diagrams establish a narrative outline, while missing roles, tool settings, implemented equations, decision rules for alternatives, and formal checks require material reconstruction."
+          }
+        }
+      }
+    ],
+    "workflows": [
+      {
+        "citation_ids": [
+          "citation-1288-04",
+          "citation-1288-05",
+          "citation-1288-08",
+          "citation-1288-14",
+          "citation-1288-16"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "workflow_id": "workflow-1288-01",
+        "eps_case_ids": [
+          "eps-case-1288-01"
+        ],
+        "source_workflow_name_and_version": "MBSE approach for technical measurement",
+        "workflow_scope_type": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-04",
+            "citation-1288-05",
+            "citation-1288-08",
+            "citation-1288-14",
+            "citation-1288-16"
+          ],
+          "value": "end_to_end_engineering"
+        },
+        "purpose_and_boundary": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-04",
+            "citation-1288-05",
+            "citation-1288-08",
+            "citation-1288-14",
+            "citation-1288-16"
+          ],
+          "value": "Carry stakeholder concerns and technical requirements through a connected model-based flow that defines MOEs, MOPs, and TPMs, preserves traceability, and prepares parametric analysis of candidate solutions."
+        },
+        "linked_model_generation_method_ids": [
+          "model-generation-method-1288-01"
+        ],
+        "linked_model_artifact_ids": [
+          "model-artifact-1288-01",
+          "model-artifact-1288-03"
+        ],
+        "entry_conditions": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-03",
+            "citation-1288-08"
+          ],
+          "value": "Stakeholder concerns and technical requirements are available and a system model can receive the technical-measure profile and content."
+        },
+        "workflow_activities": [
+          {
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-08",
+              "citation-1288-10"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "workflow_activity_id": "workflow-activity-1288-01",
+            "sequence_label": "1",
+            "predecessor_workflow_activity_ids": {
+              "status": "none"
+            },
+            "action": "Move stakeholder concerns into traced mission objectives and qualitative MOE Specifications in the system model.",
+            "inputs": [
+              "Stakeholder concerns"
+            ],
+            "outputs": [
+              "Traced mission objectives",
+              "Qualitative MOE Specifications"
+            ],
+            "linked_model_generation_method_ids": [
+              "model-generation-method-1288-01"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-01",
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": [
+              "Stakeholders and system modeler"
+            ],
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "No automation is reported."
+            },
+            "decision_rules": "Objectives selected as critical for mission success proceed to MOE definition.",
+            "quality_or_exit_checks": "Trace relationships retain the origin of each shown objective and specification.",
+            "branching_iteration_or_rework": {
+              "status": "not_reported",
+              "reason": "No branching or rework path is reported."
+            }
+          },
+          {
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-11"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "workflow_activity_id": "workflow-activity-1288-02",
+            "sequence_label": "2",
+            "predecessor_workflow_activity_ids": [
+              "workflow-activity-1288-01"
+            ],
+            "action": "Quantify the qualitative specifications as Mission Enterprise MOE value properties while retaining traces to their origins.",
+            "inputs": [
+              "MOE Specifications",
+              "Quantified targets"
+            ],
+            "outputs": [
+              "Enterprise MOE properties and traces"
+            ],
+            "linked_model_generation_method_ids": [
+              "model-generation-method-1288-01"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not assign the quantification activity to a role."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "No automation is reported."
+            },
+            "decision_rules": "Place MOEs at enterprise level and mark them with the MOE stereotype.",
+            "quality_or_exit_checks": "The shown properties trace back to the qualitative specifications.",
+            "branching_iteration_or_rework": {
+              "status": "not_reported",
+              "reason": "No branching or rework path is reported."
+            }
+          },
+          {
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-12",
+              "citation-1288-13"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "workflow_activity_id": "workflow-activity-1288-03",
+            "sequence_label": "3",
+            "predecessor_workflow_activity_ids": [
+              "workflow-activity-1288-02"
+            ],
+            "action": "Derive and trace CubeSat MOPs, including battery-cycle and solar-cell-life properties that contribute to service life.",
+            "inputs": [
+              "MOEs",
+              "Technical requirements"
+            ],
+            "outputs": [
+              "System MOPs and requirement traces"
+            ],
+            "linked_model_generation_method_ids": [
+              "model-generation-method-1288-01"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not assign MOP derivation to a role."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "No automation is reported."
+            },
+            "decision_rules": "Select MOPs based on technical requirements associated with the objectives and MOEs.",
+            "quality_or_exit_checks": "The MOPs have model relationships to requirements and MOEs.",
+            "branching_iteration_or_rework": {
+              "status": "not_reported",
+              "reason": "No branching or rework path is reported."
+            }
+          },
+          {
+            "citation_ids": [
+              "citation-1288-14",
+              "citation-1288-15"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "workflow_activity_id": "workflow-activity-1288-04",
+            "sequence_label": "4",
+            "predecessor_workflow_activity_ids": [
+              "workflow-activity-1288-03"
+            ],
+            "action": "Bind MOPs to MOE constraint parameters in parametric diagrams so candidate solutions can be assessed against MOEs.",
+            "inputs": [
+              "MOPs",
+              "MOEs",
+              "Empirical constraint relationships"
+            ],
+            "outputs": [
+              "MOP-to-MOE parametric analysis structure"
+            ],
+            "linked_model_generation_method_ids": [
+              "model-generation-method-1288-01"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not identify an analysis owner or decision maker."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No solver, model tool, values, or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "Execution or automated analysis is not reported."
+            },
+            "decision_rules": "Assess candidate solutions by their predicted ability to meet the MOEs.",
+            "quality_or_exit_checks": {
+              "status": "not_reported",
+              "reason": "No executed output or acceptance check is reported."
+            },
+            "branching_iteration_or_rework": "Different solutions may be evaluated, but selection and iteration rules are not reported."
+          },
+          {
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-16"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "workflow_activity_id": "workflow-activity-1288-05",
+            "sequence_label": "5",
+            "predecessor_workflow_activity_ids": [
+              "workflow-activity-1288-04"
+            ],
+            "action": "Repeat the derivation and parametric-link pattern at subsystem level for TPMs and their parent MOPs.",
+            "inputs": [
+              "MOPs",
+              "Subsystem requirements and properties"
+            ],
+            "outputs": [
+              "Subsystem TPMs, traces, and TPM-to-MOP analysis structure"
+            ],
+            "linked_model_generation_method_ids": [
+              "model-generation-method-1288-01"
+            ],
+            "linked_model_artifact_ids": [
+              "model-artifact-1288-03"
+            ],
+            "responsible_roles": {
+              "status": "not_reported",
+              "reason": "The report does not assign the subsystem activity to a role."
+            },
+            "tools_and_settings": {
+              "status": "not_reported",
+              "reason": "No modeling tool or settings are reported."
+            },
+            "automation": {
+              "status": "not_reported",
+              "reason": "Execution or automation is not reported."
+            },
+            "decision_rules": "Use the same derivation and relationship pattern at subsystem level.",
+            "quality_or_exit_checks": "The reported endpoint is traceability from stakeholder concerns to TPMs.",
+            "branching_iteration_or_rework": "The activity repeats a prior pattern; no additional iteration or rework rule is reported."
+          }
+        ],
+        "branching_and_iteration": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-14",
+            "citation-1288-16"
+          ],
+          "value": "The system-level pattern is repeated for subsystems and permits consideration of different solutions; no explicit branch, decision gate, or rework loop is reported."
+        },
+        "exit_conditions": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-16",
+            "citation-1288-17"
+          ],
+          "value": "The model contains stakeholder-to-TPM traceability and linked parametric structures for assessing measures across enterprise, system, and subsystem levels."
+        },
+        "handoffs_and_data_flow": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-04",
+            "citation-1288-05",
+            "citation-1288-08",
+            "citation-1288-14",
+            "citation-1288-16"
+          ],
+          "value": "Concerns feed objectives and qualitative specifications; specifications become MOE value properties; MOEs and requirements feed MOPs; MOP values bind into MOE constraints; MOPs and subsystem requirements feed TPMs; TPM values bind into MOP constraints."
+        },
+        "roles_and_responsibilities": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-08",
+            "citation-1288-10"
+          ],
+          "value": [
+            "Stakeholders express concerns and determine objectives critical to mission success",
+            "Developers use MOPs to characterize expected system performance",
+            "A modeler role is implicit but not assigned"
+          ]
+        },
+        "tools_and_versions": {
+          "status": "not_reported",
+          "reason": "The report identifies SysML as the language but names no modeling tool or version."
+        },
+        "automation": {
+          "status": "not_reported",
+          "reason": "The report does not report automated workflow activities or an executed toolchain."
+        },
+        "governance_and_configuration_control": {
+          "status": "not_reported",
+          "reason": "No review gates, ownership rules, baselines, or configuration-control practices are reported."
+        },
+        "supporting_material_location": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-1288-03",
+            "citation-1288-09",
+            "citation-1288-10",
+            "citation-1288-13",
+            "citation-1288-15"
+          ],
+          "value": "Section 5 and Figures 1 through 7 of the report"
+        },
+        "supporting_material_availability": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-03",
+            "citation-1288-09",
+            "citation-1288-10",
+            "citation-1288-13",
+            "citation-1288-15"
+          ],
+          "value": "described_only"
+        },
+        "procedure_reporting": {
+          "procedure_detail_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-08",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "narrative_outline"
+          },
+          "ordered_or_connected_steps": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "The flow is explicitly ordered from stakeholder concerns through objectives, MOEs, MOPs, and TPMs, with constraints and parametric bindings between measure levels."
+          },
+          "material_inputs": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-08",
+              "citation-1288-14"
+            ],
+            "value": "Stakeholder concerns, mission objectives, technical requirements, technical-measure values, and empirical relations."
+          },
+          "outputs": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-03",
+              "citation-1288-05",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "Traced technical-measure content and parametric analysis structures in the CubeSat Reference Model."
+          },
+          "roles_and_responsibilities": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-08",
+              "citation-1288-10"
+            ],
+            "value": "Stakeholders and developer viewpoints are identified, but activity ownership and handoff responsibility are incomplete."
+          },
+          "tools_and_settings": {
+            "status": "not_reported",
+            "reason": "No specific modeling tool, version, solver, equations, or settings are reported."
+          },
+          "decision_rules": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-08",
+              "citation-1288-14"
+            ],
+            "value": "Stakeholder criticality, requirement links, and empirical measure relationships determine the content that moves to the next level."
+          },
+          "branching_and_iteration": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "The workflow repeats the derivation pattern at subsystem level and permits alternative evaluation, but does not specify branching or iteration control."
+          },
+          "quality_or_completion_checks": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-17"
+            ],
+            "value": "End-to-end traceability is the stated endpoint, but the report gives no formal gate, coverage metric, or executed check."
+          },
+          "worked_example": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-10",
+              "citation-1288-11",
+              "citation-1288-13",
+              "citation-1288-15"
+            ],
+            "value": "The CubeSat Reference Model figures populate each major activity of the workflow."
+          },
+          "supporting_materials": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-09",
+              "citation-1288-10",
+              "citation-1288-13",
+              "citation-1288-15"
+            ],
+            "value": "Figures 1 through 7 provide partial model views; no complete model or workflow package and access route are identified."
+          },
+          "detail_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "The connected activity sequence and model handoffs are clear, while missing assigned roles, tool settings, complete equations, alternative-selection rules, and assurance gates prevent actionable reproduction."
+          }
+        }
+      }
+    ],
+    "modeling_languages": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-1288-06",
+        "citation-1288-09"
+      ],
+      "value": [
+        "SysML (version not reported)"
+      ]
+    },
+    "tools_and_versions": {
+      "status": "not_reported",
+      "reason": "No modeling software or version is named."
+    },
+    "toolchain_and_data_flow": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-04",
+        "citation-1288-05",
+        "citation-1288-07",
+        "citation-1288-14"
+      ],
+      "value": "Within the SysML model, natural-language concerns and measure specifications are translated into typed value properties, traces, constraints, and parametric bindings; no cross-tool data flow is identified."
+    },
+    "model_artifacts": [
+      {
+        "citation_ids": [
+          "citation-1288-09"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "model_artifact_id": "model-artifact-1288-01",
+        "name_or_description": "Technical Measures Profile containing stereotypes and specification elements for stakeholder concerns, mission objectives, MOEs, MOPs, and TPMs"
+      },
+      {
+        "citation_ids": [
+          "citation-1288-02",
+          "citation-1288-03",
+          "citation-1288-22"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "model_artifact_id": "model-artifact-1288-02",
+        "name_or_description": "INCOSE Space Systems Working Group CubeSat Reference Model used as the base artifact"
+      },
+      {
+        "citation_ids": [
+          "citation-1288-03",
+          "citation-1288-10",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "model_artifact_id": "model-artifact-1288-03",
+        "name_or_description": "CubeSat Reference Model technical-measure content with stakeholder traces, MOEs, MOPs, TPMs, constraints, and parametric diagrams"
+      }
+    ],
+    "modeled_systems_engineering_concerns": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-1288-04",
+        "citation-1288-05",
+        "citation-1288-07",
+        "citation-1288-08",
+        "citation-1288-14",
+        "citation-1288-21"
+      ],
+      "value": [
+        "Stakeholder concerns",
+        "Mission objectives",
+        "Requirements",
+        "System and subsystem structure",
+        "Measures of effectiveness",
+        "Measures of performance",
+        "Technical performance measures",
+        "Parametric analysis",
+        "Verification and validation planning"
+      ]
+    },
+    "explicit_relationships_among_concerns": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-1288-04",
+        "citation-1288-05",
+        "citation-1288-07",
+        "citation-1288-08",
+        "citation-1288-11",
+        "citation-1288-14",
+        "citation-1288-16"
+      ],
+      "value": [
+        "Trace from stakeholder concerns to mission objectives and qualitative measure specifications",
+        "Trace from quantified MOEs to qualitative specifications",
+        "Derivation of MOPs from MOEs and requirements",
+        "Trace from MOPs to system requirements",
+        "Constraint and parametric bindings from MOPs to MOEs",
+        "Derivation of TPMs from MOPs and subsystem requirements",
+        "Constraint and parametric bindings from TPMs to MOPs"
+      ]
+    },
+    "system_boundary": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "citation-1288-24",
+        "citation-1288-13"
+      ],
+      "value": "Mission Enterprise composed of the ground system, launch system, and CubeSat, with system-level CubeSat and subsystem-level elements represented below the enterprise."
+    },
+    "artifact_availability": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-03",
+        "citation-1288-09",
+        "citation-1288-10",
+        "citation-1288-13",
+        "citation-1288-15"
+      ],
+      "value": "described_only"
+    }
+  },
+  "eps_cases": [
+    {
+      "citation_ids": [
+        "citation-1288-12",
+        "citation-1288-13",
+        "citation-1288-14",
+        "citation-1288-15"
+      ],
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "notes": "This is a Route B embedded EPS thread. The report models battery-cycle and solar-cell-life performance inside a wider CubeSat technical-measure model rather than defining an EPS subsystem boundary.",
+      "eps_case_id": "eps-case-1288-01",
+      "eps_anchor": "CubeSat battery-cycle and solar-cell-life MOPs",
+      "model_anchor_for_route_b": "SysML CubeSat MOP value properties BatteryCycle and SolarCellLife bound through the ServiceLife constraint and parametric diagram to the Mission Enterprise service-life MOE",
+      "eps_boundary": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": "Embedded EPS scope limited to energy-storage battery cycles and power-generation solar-cell life as CubeSat-level performance properties; no complete EPS subsystem boundary is drawn."
+      },
+      "eps_elements": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": [
+          "Battery energy storage represented by the BatteryCycle MOP",
+          "Solar-cell power generation represented by the SolarCellLife MOP"
+        ]
+      },
+      "eps_architecture": {
+        "status": "not_reported",
+        "reason": "No EPS architecture, internal decomposition, or component interconnection is reported."
+      },
+      "eps_exchanges": {
+        "status": "not_reported",
+        "reason": "No electrical power, control, or resource exchange involving the EPS is shown or described."
+      },
+      "eps_dependencies": [
+        {
+          "citation_ids": [
+            "citation-1288-12",
+            "citation-1288-14",
+            "citation-1288-15"
+          ],
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "eps_dependency_id": "eps-dependency-1288-01",
+          "dependent_endpoint": "Mission Enterprise service-life MOE",
+          "provider_or_driver_endpoint": "CubeSat BatteryCycle MOP",
+          "description": "Service life is modeled as a function of battery cycles, and the BatteryCycle value property is bound to the ServiceLife constraint parameter.",
+          "linked_eps_exchange_ids": {
+            "status": "none"
+          },
+          "dependency_type": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-12",
+              "citation-1288-15"
+            ],
+            "value": "electrical_power"
+          },
+          "dependency_scope": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-12",
+              "citation-1288-15"
+            ],
+            "value": "cross_subsystem"
+          }
+        },
+        {
+          "citation_ids": [
+            "citation-1288-12",
+            "citation-1288-14",
+            "citation-1288-15"
+          ],
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "eps_dependency_id": "eps-dependency-1288-02",
+          "dependent_endpoint": "Mission Enterprise service-life MOE",
+          "provider_or_driver_endpoint": "CubeSat SolarCellLife MOP",
+          "description": "Service life is modeled as a function of solar-cell life, and the SolarCellLife value property is bound to the ServiceLife constraint parameter.",
+          "linked_eps_exchange_ids": {
+            "status": "none"
+          },
+          "dependency_type": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-12",
+              "citation-1288-15"
+            ],
+            "value": "electrical_power"
+          },
+          "dependency_scope": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-12",
+              "citation-1288-15"
+            ],
+            "value": "cross_subsystem"
+          }
+        }
+      ],
+      "eps_modes_and_operations": {
+        "status": "not_reported",
+        "reason": "No EPS mode, duty cycle, load profile, or operating schedule is reported."
+      },
+      "eps_model_representations": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-05",
+          "citation-1288-12",
+          "citation-1288-13",
+          "citation-1288-14",
+          "citation-1288-15"
+        ],
+        "value": [
+          "SysML MOP value properties on the CubeSat block",
+          "ServiceLife constraint block",
+          "Parametric diagram binding battery-cycle and solar-cell-life MOPs to service life",
+          "Trace relationships from MOPs to system requirements are described"
+        ]
+      },
+      "modeled_disciplinary_viewpoints": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": [
+          "electrical_or_electronic"
+        ]
+      },
+      "eps_model_bridges": [
+        {
+          "citation_ids": [
+            "citation-1288-12",
+            "citation-1288-14",
+            "citation-1288-15"
+          ],
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "eps_model_bridge_id": "eps-model-bridge-1288-01",
+          "eps_anchor_endpoint": "CubeSat BatteryCycle MOP value property",
+          "model_or_second_concern_endpoint": "Mission Enterprise Service Life MOE",
+          "relationship_or_mapping": "Binding to the BatteryCycle parameter of the ServiceLife constraint in a SysML parametric diagram",
+          "reconstructed_meaning": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-12",
+              "citation-1288-14",
+              "citation-1288-15"
+            ],
+            "value": "Battery-cycle capability contributes quantitatively to predicted CubeSat service life and thereby links an EPS energy-storage property to a mission-effectiveness objective."
+          }
+        },
+        {
+          "citation_ids": [
+            "citation-1288-12",
+            "citation-1288-14",
+            "citation-1288-15"
+          ],
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "eps_model_bridge_id": "eps-model-bridge-1288-02",
+          "eps_anchor_endpoint": "CubeSat SolarCellLife MOP value property",
+          "model_or_second_concern_endpoint": "Mission Enterprise Service Life MOE",
+          "relationship_or_mapping": "Binding to the SolarCellLife parameter of the ServiceLife constraint in a SysML parametric diagram",
+          "reconstructed_meaning": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-12",
+              "citation-1288-14",
+              "citation-1288-15"
+            ],
+            "value": "Solar-cell lifetime contributes quantitatively to predicted CubeSat service life and thereby links an EPS generation property to a mission-effectiveness objective."
+          }
+        },
+        {
+          "citation_ids": [
+            "citation-1288-05",
+            "citation-1288-12"
+          ],
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "eps_model_bridge_id": "eps-model-bridge-1288-03",
+          "eps_anchor_endpoint": "CubeSat BatteryCycle and SolarCellLife MOPs",
+          "model_or_second_concern_endpoint": "System requirements captured in the system model",
+          "relationship_or_mapping": "Reported MOP-to-system-requirement trace relationships",
+          "reconstructed_meaning": {
+            "coding_confidence": "moderate",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-12"
+            ],
+            "value": "The two EPS-linked properties are among the CubeSat MOPs that the approach traces to technical requirements, although the report does not show their specific requirement identifiers."
+          }
+        }
+      ],
+      "eps_abstraction": {
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": "conceptual"
+      },
+      "eps_decomposition_visibility": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": "black_box"
+      },
+      "eps_fidelity": {
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-13",
+          "citation-1288-14",
+          "citation-1288-15"
+        ],
+        "value": "idealized_quantitative",
+        "notes": "The properties are typed as real and connected by a quantitative constraint pattern, but the function, parameter values, and execution results are not reported."
+      },
+      "purposes": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-05",
+          "citation-1288-10",
+          "citation-1288-14",
+          "citation-1288-17",
+          "citation-1288-19"
+        ],
+        "value": [
+          "requirements_or_traceability",
+          "trade_study",
+          "executable_analysis",
+          "communication"
+        ]
+      },
+      "supported_decisions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-16",
+          "citation-1288-19"
+        ],
+        "value": [
+          "Assess whether candidate CubeSat solutions can meet the service-life MOE",
+          "Evaluate subsystem choices by their effect on higher-level MOPs and MOEs"
+        ]
+      },
+      "scope_deliberately_omitted": {
+        "coding_confidence": "high",
+        "provenance": "author_claimed_or_planned",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": [
+          "Model elements for verification and validation and their relationships to technical measures are deferred to future work"
+        ]
+      },
+      "eps_model_maturity": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-02",
+          "citation-1288-03",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": [
+          "reference_or_template"
+        ]
+      },
+      "eps_model_availability": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-03",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": "described_only"
+      }
+    }
+  ],
+  "implementation_records": [
+    {
+      "citation_ids": [
+        "citation-1288-03",
+        "citation-1288-07",
+        "citation-1288-09",
+        "citation-1288-10",
+        "citation-1288-13",
+        "citation-1288-15"
+      ],
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "implementation_record_id": "implementation-record-1288-01",
+      "scope": "Creation of the Technical Measures Profile and incorporation of traced technical measures and parametric relationships into the CubeSat Reference Model",
+      "roles_and_affected_teams": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-02",
+          "citation-1288-08",
+          "citation-1288-10"
+        ],
+        "value": [
+          "Stakeholders provide concerns and identify critical mission objectives",
+          "Developers use system-level MOPs",
+          "CubeSat development teams are the intended users of the reference model"
+        ]
+      },
+      "skills_and_training": {
+        "status": "not_reported",
+        "reason": "Required SysML, technical-measurement, or tool skills and training are not reported."
+      },
+      "staffing_and_number_of_people": {
+        "status": "not_reported",
+        "reason": "No staffing count or allocation is reported."
+      },
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "workflow_execution_and_deviations": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-03",
+          "citation-1288-09",
+          "citation-1288-10",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": "The report states that its worked examples are taken from the CubeSat Reference Model and shows the profile, traces, properties, constraints, and parametric diagrams; no deviations from the described flow are reported."
+      },
+      "automation": {
+        "status": "not_reported",
+        "reason": "No automated construction or executed analysis is reported."
+      },
+      "tools_licences_and_infrastructure": {
+        "status": "not_reported",
+        "reason": "SysML is identified, but no specific tool, licence, solver, repository, or infrastructure is reported."
+      },
+      "model_preparation": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-04",
+          "citation-1288-05",
+          "citation-1288-07",
+          "citation-1288-09",
+          "citation-1288-14",
+          "citation-1288-16"
+        ],
+        "value": "Create the profile elements, add stakeholder concerns and objectives, create qualitative and quantitative technical measures, and add traces, constraints, and parametric bindings."
+      },
+      "data_preparation": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-04",
+          "citation-1288-10",
+          "citation-1288-14"
+        ],
+        "value": "Translate natural-language stakeholder measure specifications into quantified value properties and formulate empirical relationships among MOEs, MOPs, and TPMs."
+      },
+      "computing_requirements": {
+        "status": "not_reported",
+        "reason": "No computing requirements are reported."
+      },
+      "integration_or_migration_work_and_interoperability": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-03",
+          "citation-1288-09"
+        ],
+        "value": "The Technical Measures Profile and technical-measure content are incorporated into an existing CubeSat Reference Model; no format migration or cross-tool interoperability work is described."
+      },
+      "governance_and_configuration_control": {
+        "status": "not_reported",
+        "reason": "No ownership, review, baseline, or configuration-control process is reported."
+      },
+      "effort_basis": {
+        "status": "not_reported",
+        "reason": "No measured, estimated, or asserted implementation-effort basis is reported."
+      },
+      "person_hours_or_person_days": {
+        "status": "not_reported",
+        "reason": "No person-hours or person-days are reported."
+      },
+      "elapsed_duration": {
+        "status": "not_reported",
+        "reason": "No implementation duration is reported."
+      },
+      "schedule_effect": {
+        "status": "not_reported",
+        "reason": "No schedule effect is reported."
+      },
+      "financial_cost": {
+        "status": "not_reported",
+        "reason": "No cost of implementing the MBSE approach is reported."
+      },
+      "manual_and_automated_work": {
+        "status": "not_reported",
+        "reason": "The division between manual and automated work is not reported."
+      },
+      "review_and_assurance_effort": {
+        "status": "not_reported",
+        "reason": "No review or assurance effort is reported."
+      },
+      "rework": {
+        "status": "not_reported",
+        "reason": "No rework is reported."
+      },
+      "ongoing_maintenance": {
+        "status": "not_reported",
+        "reason": "No maintenance effort is reported."
+      },
+      "burden_categories": {
+        "status": "not_reported",
+        "reason": "The report does not identify an implementation burden."
+      },
+      "burden_phase": {
+        "status": "not_reported",
+        "reason": "No burden phase is reported."
+      },
+      "reported_burden": {
+        "status": "not_reported",
+        "reason": "No implementation burden is reported."
+      },
+      "measurement_method": {
+        "status": "not_reported",
+        "reason": "No effort or burden measurement method is reported."
+      },
+      "mitigation": {
+        "status": "not_reported",
+        "reason": "No implementation-burden mitigation is reported."
+      },
+      "linked_benefit_or_trade_off": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17",
+          "citation-1288-18",
+          "citation-1288-19",
+          "citation-1288-20"
+        ],
+        "value": "The authors claim traceability, support for trade analyses, qualitative-measure coverage, and generalizability, without measuring implementation burden."
+      }
+    }
+  ],
+  "input_groups": [
+    {
+      "citation_ids": [
+        "citation-1288-08",
+        "citation-1288-10",
+        "citation-1288-11"
+      ],
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "input_group_id": "input-group-1288-01",
+      "category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-08",
+          "citation-1288-10"
+        ],
+        "value": "mission_requirements"
+      },
+      "eps_case_id": "eps-case-1288-01",
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-10",
+          "citation-1288-24"
+        ],
+        "value": "Illustrative generic CubeSat mission enterprise"
+      },
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "parameters_or_constructs": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-08",
+          "citation-1288-10"
+        ],
+        "value": [
+          "End-user operational-lifetime concern",
+          "Sponsor affordability concern",
+          "Mission objective MO1 Lifetime",
+          "Mission objective MO2 Affordable",
+          "Service Life MOE Specification",
+          "Total Cost MOE Specification"
+        ]
+      },
+      "material_source_reported_values_or_descriptions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-10"
+        ],
+        "value": [
+          "Service life target: 3 years",
+          "Total CubeSat mission cost target: $500,000"
+        ]
+      },
+      "input_source_types": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-08",
+          "citation-1288-10"
+        ],
+        "value": [
+          "requirement"
+        ]
+      },
+      "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
+        "status": "not_reported",
+        "reason": "No uncertainty, margin, distribution, sensitivity, or degradation treatment is reported for the example targets."
+      },
+      "rationale": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-08",
+          "citation-1288-10"
+        ],
+        "value": "The end user is concerned with successful CubeSat operation, and the sponsor is concerned with affordability because low cost is presented as a CubeSat advantage."
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_rq3_activity_ids": [
+        "rq3-activity-1288-01"
+      ],
+      "linked_report_application_ids": {
+        "status": "none"
+      },
+      "decisions": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-08",
+          "citation-1288-14"
+        ],
+        "value": [
+          "Define mission-effectiveness measures from stakeholder-critical objectives",
+          "Assess whether candidate solutions meet service-life and cost objectives"
+        ]
+      }
+    },
+    {
+      "citation_ids": [
+        "citation-1288-12",
+        "citation-1288-13",
+        "citation-1288-14",
+        "citation-1288-15"
+      ],
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "input_group_id": "input-group-1288-02",
+      "category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-14"
+        ],
+        "value": "model_formulation"
+      },
+      "eps_case_id": "eps-case-1288-01",
+      "scenario_or_configuration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-14",
+          "citation-1288-15"
+        ],
+        "value": "CubeSat service-life MOE parametric formulation"
+      },
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "parameters_or_constructs": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-13",
+          "citation-1288-14",
+          "citation-1288-15"
+        ],
+        "value": [
+          "Service Life MOE",
+          "DeltaV MOP",
+          "BatteryCycle MOP",
+          "SolarCellLife MOP",
+          "ServiceLife constraint block",
+          "Parametric bindings"
+        ]
+      },
+      "material_source_reported_values_or_descriptions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": [
+          "Service life is represented as a function of DeltaV, BatteryCycle, and SolarCellLife",
+          "BatteryCycle and SolarCellLife are real-valued CubeSat MOP properties"
+        ]
+      },
+      "input_source_types": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-14"
+        ],
+        "value": [
+          "literature",
+          "requirement"
+        ]
+      },
+      "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
+        "status": "not_reported",
+        "reason": "The report provides no parameter values, uncertainty treatment, margin, sensitivity analysis, or solar-cell or battery degradation model."
+      },
+      "rationale": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-12"
+        ],
+        "value": "The report follows Reference [1] in treating CubeSat service life as a function of orbital DeltaV, battery cycles, and solar-cell life."
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_rq3_activity_ids": [
+        "rq3-activity-1288-01"
+      ],
+      "linked_report_application_ids": {
+        "status": "none"
+      },
+      "decisions": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-14"
+        ],
+        "value": [
+          "Evaluate candidate solutions against the service-life MOE"
+        ]
+      }
+    }
+  ],
+  "result_sets": {
+    "status": "not_reported",
+    "reason": "The report presents a worked model structure but reports no executed evaluation, calculated output, verdict, participant result, or observational result set."
+  },
+  "rq1_claims": [
+    {
+      "citation_ids": [
+        "citation-1288-17"
+      ],
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "rq1_claim_id": "rq1-claim-1288-01",
+      "claim_wording": "Traceability. There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed.",
+      "claimed_characteristic": "Clear end-to-end traceability and easy change-impact assessment",
+      "claim_scope_and_object": "The technical-measure approach and resulting CubeSat Reference Model thread from stakeholder concerns through TPMs",
+      "linked_model_artifact_ids": [
+        "model-artifact-1288-03"
+      ],
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_eps_case_ids": [
+        "eps-case-1288-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "linked_result_set_ids": {
+        "status": "none"
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_comparator_ids": {
+        "status": "none"
+      },
+      "linked_implementation_record_ids": [
+        "implementation-record-1288-01"
+      ],
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-10",
+          "citation-1288-11",
+          "citation-1288-13",
+          "citation-1288-15"
+        ],
+        "value": [
+          "worked_example"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-10",
+          "citation-1288-11",
+          "citation-1288-13",
+          "citation-1288-15",
+          "citation-1288-17"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-10",
+          "citation-1288-11",
+          "citation-1288-13",
+          "citation-1288-15",
+          "citation-1288-17"
+        ],
+        "value": "The worked diagrams show trace and parametric relationships, but the report does not execute a change or measure assessment speed, effort, or trace coverage."
+      }
+    },
+    {
+      "citation_ids": [
+        "citation-1288-18"
+      ],
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "rq1_claim_id": "rq1-claim-1288-02",
+      "claim_wording": "Qualitative measures. The use of textual specifications for defining technical measures broadens the scope to include all types of technical measures within the system model.",
+      "claimed_characteristic": "Broad coverage of qualitative and quantitative technical measures",
+      "claim_scope_and_object": "MOE, MOP, and TPM Specification elements in the Technical Measures Profile",
+      "linked_model_artifact_ids": [
+        "model-artifact-1288-01",
+        "model-artifact-1288-03"
+      ],
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_eps_case_ids": [
+        "eps-case-1288-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "linked_result_set_ids": {
+        "status": "none"
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_comparator_ids": {
+        "status": "none"
+      },
+      "linked_implementation_record_ids": [
+        "implementation-record-1288-01"
+      ],
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-09",
+          "citation-1288-10",
+          "citation-1288-18"
+        ],
+        "value": [
+          "worked_example"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-09",
+          "citation-1288-10",
+          "citation-1288-18"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-09",
+          "citation-1288-10",
+          "citation-1288-18"
+        ],
+        "value": "The profile and example show natural-language MOE Specifications alongside value properties, but no systematic coverage check supports the claim about all technical-measure types."
+      }
+    },
+    {
+      "citation_ids": [
+        "citation-1288-19"
+      ],
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "rq1_claim_id": "rq1-claim-1288-03",
+      "claim_wording": "Trade analyses. This method allows for different solutions to be assessed as to their ability to meet MOEs.",
+      "claimed_characteristic": "Support for trade analysis of alternative solutions",
+      "claim_scope_and_object": "Constraint blocks and parametric diagrams connecting CubeSat MOPs and subsystem TPMs to MOEs",
+      "linked_model_artifact_ids": [
+        "model-artifact-1288-03"
+      ],
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_eps_case_ids": [
+        "eps-case-1288-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "linked_result_set_ids": {
+        "status": "none"
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_comparator_ids": {
+        "status": "none"
+      },
+      "linked_implementation_record_ids": [
+        "implementation-record-1288-01"
+      ],
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-15",
+          "citation-1288-16",
+          "citation-1288-19"
+        ],
+        "value": [
+          "worked_example"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-15",
+          "citation-1288-16",
+          "citation-1288-19"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-15",
+          "citation-1288-16",
+          "citation-1288-19"
+        ],
+        "value": "The model views show the constraint and binding structure needed for a trade analysis, but no candidate alternatives, parameter values, execution output, or decision are reported."
+      }
+    },
+    {
+      "citation_ids": [
+        "citation-1288-20"
+      ],
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "rq1_claim_id": "rq1-claim-1288-04",
+      "claim_wording": "Generalizability. This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies.",
+      "claimed_characteristic": "Tool independence, generalizability, and easy incorporation",
+      "claim_scope_and_object": "The MBSE technical-measure method and workflow",
+      "linked_model_artifact_ids": [
+        "model-artifact-1288-01",
+        "model-artifact-1288-03"
+      ],
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_eps_case_ids": [
+        "eps-case-1288-01"
+      ],
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "linked_result_set_ids": {
+        "status": "none"
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_comparator_ids": {
+        "status": "none"
+      },
+      "linked_implementation_record_ids": [
+        "implementation-record-1288-01"
+      ],
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-03",
+          "citation-1288-09",
+          "citation-1288-10",
+          "citation-1288-20"
+        ],
+        "value": [
+          "worked_example"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-03",
+          "citation-1288-09",
+          "citation-1288-10",
+          "citation-1288-20"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-03",
+          "citation-1288-09",
+          "citation-1288-10",
+          "citation-1288-20"
+        ],
+        "value": "One SysML CubeSat worked example demonstrates the approach's form, while no second tool, methodology, team, or target demonstrates generality or ease of incorporation."
+      }
+    }
+  ],
+  "rq2_findings": [
+    {
+      "citation_ids": [
+        "citation-1288-14",
+        "citation-1288-19"
+      ],
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "rq2_finding_id": "rq2-finding-1288-01",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-19"
+        ],
+        "value": "no"
+      },
+      "exclusion_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-19"
+        ],
+        "value": "The report shows a parametric structure and claims decision-support capability, but does not execute alternatives or report an EPS-attributed decision outcome."
+      },
+      "exact_claim_wording": "Trade analyses. This method allows for different solutions to be assessed as to their ability to meet MOEs.",
+      "claim_kind": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-19"
+        ],
+        "value": "feasibility_or_executed_result"
+      },
+      "role": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-19"
+        ],
+        "value": "outcome"
+      },
+      "target": "Alternative CubeSat system and subsystem solutions assessed through technical measures",
+      "scope": "Claimed analysis capability, including the battery-cycle and solar-cell-life service-life thread",
+      "outcome_category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-19"
+        ],
+        "value": "decision_support"
+      },
+      "reliability_subtype": {
+        "status": "not_applicable",
+        "reason": "This finding concerns decision support rather than reliability."
+      },
+      "author_claimed_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-19"
+        ],
+        "value": "beneficial"
+      },
+      "evidence_supported_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-19"
+        ],
+        "value": "unsupported"
+      },
+      "eps_attribution": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-14",
+          "citation-1288-19"
+        ],
+        "value": "ambiguous_attribution"
+      },
+      "mechanism": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-14"
+        ],
+        "value": "Constraint blocks capture empirical MOP-to-MOE relationships and parametric diagrams bind technical-measure values, allowing candidate solutions to be evaluated against MOEs."
+      },
+      "linked_model_artifact_ids": [
+        "model-artifact-1288-03"
+      ],
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_rq3_activity_ids": {
+        "status": "none"
+      },
+      "linked_input_group_ids": [
+        "input-group-1288-02"
+      ],
+      "linked_result_set_ids": {
+        "status": "none"
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_comparator_ids": {
+        "status": "none"
+      },
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "linked_implementation_record_ids": [
+        "implementation-record-1288-01"
+      ],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-19"
+        ],
+        "value": "intermediate_or_process"
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-19"
+        ],
+        "value": "architecture_and_design"
+      },
+      "applicability": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-19"
+        ],
+        "value": "broader_claim"
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-15",
+          "citation-1288-19"
+        ],
+        "value": [
+          "worked_example"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-15",
+          "citation-1288-19"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-14",
+          "citation-1288-15",
+          "citation-1288-19"
+        ],
+        "value": "The worked parametric diagram supports structural feasibility, but no alternative, model run, output, or decision supports a beneficial outcome direction."
+      }
+    },
+    {
+      "citation_ids": [
+        "citation-1288-17"
+      ],
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "rq2_finding_id": "rq2-finding-1288-02",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "no"
+      },
+      "exclusion_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "The report claims easy change-impact assessment but reports no change case, elapsed effort, trace-coverage measure, defect finding, or other observed EPS outcome."
+      },
+      "exact_claim_wording": "Traceability. There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed.",
+      "claim_kind": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "feasibility_or_executed_result"
+      },
+      "role": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "outcome"
+      },
+      "target": "Change-impact assessment through stakeholder-concern-to-TPM traceability",
+      "scope": "Generic technical-measure thread with an embedded EPS service-life example",
+      "outcome_category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "traceability_or_requirements_quality"
+      },
+      "reliability_subtype": {
+        "status": "not_applicable",
+        "reason": "This finding concerns traceability rather than reliability."
+      },
+      "author_claimed_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "beneficial"
+      },
+      "evidence_supported_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "unsupported"
+      },
+      "eps_attribution": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-17"
+        ],
+        "value": "ambiguous_attribution"
+      },
+      "mechanism": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "citation-1288-11",
+          "citation-1288-17"
+        ],
+        "value": "Trace relationships connect quantified technical measures back through specifications and objectives to stakeholder concerns, so a concern change can be followed to affected measures."
+      },
+      "linked_model_artifact_ids": [
+        "model-artifact-1288-03"
+      ],
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_rq3_activity_ids": {
+        "status": "none"
+      },
+      "linked_input_group_ids": [
+        "input-group-1288-01",
+        "input-group-1288-02"
+      ],
+      "linked_result_set_ids": {
+        "status": "none"
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_comparator_ids": {
+        "status": "none"
+      },
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "linked_implementation_record_ids": [
+        "implementation-record-1288-01"
+      ],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "intermediate_or_process"
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "requirements"
+      },
+      "applicability": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-17"
+        ],
+        "value": "broader_claim"
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-10",
+          "citation-1288-11",
+          "citation-1288-17"
+        ],
+        "value": [
+          "worked_example"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-10",
+          "citation-1288-11",
+          "citation-1288-17"
+        ],
+        "value": "limited"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-10",
+          "citation-1288-11",
+          "citation-1288-17"
+        ],
+        "value": "The diagrams show relevant traces, but no executed change-impact assessment measures the claimed ease or an EPS outcome."
+      }
+    },
+    {
+      "citation_ids": [
+        "citation-1288-23"
+      ],
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "rq2_finding_id": "rq2-finding-1288-03",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "no"
+      },
+      "exclusion_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "This is prospective motivation about CubeSat success, with no explicit EPS attribution, executed intervention, reliability measure, or observed mission outcome."
+      },
+      "exact_claim_wording": "Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions and the role technical measurement could play in increasing their success.",
+      "claim_kind": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "unclear"
+      },
+      "role": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "outcome"
+      },
+      "target": "CubeSat mission success",
+      "scope": "Prospective rationale for applying technical measurement to CubeSat development",
+      "outcome_category": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "mission_or_system_assurance"
+      },
+      "reliability_subtype": {
+        "status": "not_applicable",
+        "reason": "The finding concerns mission success broadly and is not an EPS reliability finding."
+      },
+      "author_claimed_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "beneficial"
+      },
+      "evidence_supported_direction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "unsupported"
+      },
+      "eps_attribution": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "generic_or_ineligible"
+      },
+      "mechanism": {
+        "status": "not_reported",
+        "reason": "The source does not explain how the embedded EPS model thread would increase CubeSat mission success."
+      },
+      "linked_model_artifact_ids": [
+        "model-artifact-1288-03"
+      ],
+      "linked_model_generation_method_ids": [
+        "model-generation-method-1288-01"
+      ],
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "linked_rq3_activity_ids": {
+        "status": "none"
+      },
+      "linked_input_group_ids": {
+        "status": "none"
+      },
+      "linked_result_set_ids": {
+        "status": "none"
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_comparator_ids": {
+        "status": "none"
+      },
+      "linked_report_reuse_record_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "linked_implementation_record_ids": {
+        "status": "none"
+      },
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "unclear"
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "cross_lifecycle"
+      },
+      "applicability": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "broader_claim"
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": [
+          "assertion_only"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "unsupported"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-23"
+        ],
+        "value": "The report supplies only a prospective statement and no EPS-specific execution, reliability result, comparison, or physical evidence."
+      }
+    }
+  ],
+  "rq3_activities": [
+    {
+      "citation_ids": [
+        "citation-1288-12",
+        "citation-1288-15",
+        "citation-1288-21"
+      ],
+      "coding_confidence": "moderate",
+      "provenance": "author_claimed_or_planned",
+      "rq3_activity_id": "rq3-activity-1288-01",
+      "direct_synthesis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": "no"
+      },
+      "failed_eligibility_condition_or_uncertainty_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": "The report states that future work must add V&V model elements and relationships, so it provides no current EPS-specific model-to-V&V bridge, criterion, executable method, or result."
+      },
+      "eps_target": "CubeSat BatteryCycle and SolarCellLife MOPs in the service-life technical-measure thread",
+      "target_type": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-15"
+        ],
+        "value": "eps_parameter_or_constraint"
+      },
+      "source_requirement_or_criterion_id": {
+        "status": "not_reported",
+        "reason": "No EPS verification or validation requirement or criterion ID is reported."
+      },
+      "model_artifact_id": "model-artifact-1288-03",
+      "linked_workflow_ids": [
+        "workflow-1288-01"
+      ],
+      "explicit_model_to_vv_bridge": {
+        "status": "not_reported",
+        "reason": "The report explicitly defers creation of model elements and relationships for V&V to future work."
+      },
+      "source_vv_terminology": "verification and validation",
+      "linkage_scope": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-12",
+          "citation-1288-15",
+          "citation-1288-21"
+        ],
+        "value": "system_wide_cooccurrence"
+      },
+      "normalized_vv_object": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": "multiple"
+      },
+      "normalized_vv_object_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": "The source jointly names verification and validation as future uses of technical measures but does not define a method or separate the objects."
+      },
+      "method": "Future incorporation of V&V model elements and relationships to technical measures",
+      "execution_settings": {
+        "status": "not_reported",
+        "reason": "No MIL, SIL, PIL, HIL, virtual testbed, or other execution setting is reported."
+      },
+      "hardware_present": {
+        "status": "not_reported",
+        "reason": "No V&V hardware configuration is reported."
+      },
+      "lifecycle_stage": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": "unclear",
+        "notes": "The source jointly plans verification and validation."
+      },
+      "linked_result_set_ids": {
+        "status": "none"
+      },
+      "linked_result_criterion_ids": {
+        "status": "none"
+      },
+      "linked_result_output_ids": {
+        "status": "none"
+      },
+      "linked_comparator_ids": {
+        "status": "none"
+      },
+      "status": [],
+      "measure_directness": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": "intermediate_or_process"
+      },
+      "discrepancies_and_resolution": {
+        "status": "not_reported",
+        "reason": "No V&V execution or discrepancy is reported."
+      },
+      "later_physical_link": {
+        "status": "not_reported",
+        "reason": "No later physical test or hardware link is reported."
+      },
+      "model_to_test_closure": {
+        "status": "not_reported",
+        "reason": "No comparison between model and physical-test results is reported."
+      },
+      "evidence_basis": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": [
+          "assertion_only"
+        ]
+      },
+      "support": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": "unsupported"
+      },
+      "support_reason": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "citation-1288-21"
+        ],
+        "value": "The source identifies V&V only as future work and provides no qualifying bridge, prepared criterion, execution, result, or physical continuity."
+      }
+    }
+  ],
+  "reuse": {
+    "lineage_mentioned": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-02",
+        "citation-1288-03",
+        "citation-1288-22"
+      ],
+      "value": "yes"
+    },
+    "lineage_mention_reason": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-02",
+        "citation-1288-03",
+        "citation-1288-22"
+      ],
+      "value": "The report identifies an existing CubeSat Reference Model, cites its 2017 interim-status report, and describes incorporation of new technical-measure profile and model content into that artifact."
+    },
+    "report_reuse_records": [
+      {
+        "citation_ids": [
+          "citation-1288-02",
+          "citation-1288-03",
+          "citation-1288-09",
+          "citation-1288-20",
+          "citation-1288-22"
+        ],
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "notes": "This combined record assesses the CubeSat Reference Model technical-measure package and the inseparable method and workflow. All three objects have source-bounded level-one reuse claims and no qualifying application.",
+        "report_reuse_record_id": "report-reuse-record-1288-01",
+        "lineage_id": "pending_resolution",
+        "linked_model_artifact_ids": [
+          "model-artifact-1288-01",
+          "model-artifact-1288-03"
+        ],
+        "linked_model_generation_method_ids": [
+          "model-generation-method-1288-01"
+        ],
+        "linked_workflow_ids": [
+          "workflow-1288-01"
+        ],
+        "artifact_names_and_versions": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-02",
+            "citation-1288-03",
+            "citation-1288-09"
+          ],
+          "value": [
+            "CubeSat Reference Model (version not reported)",
+            "Technical Measures Profile (version not reported)",
+            "CubeSat Reference Model with incorporated technical measures (version not reported)"
+          ]
+        },
+        "artifact_relationships": [
+          {
+            "citation_ids": [
+              "citation-1288-02",
+              "citation-1288-03",
+              "citation-1288-22"
+            ],
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "artifact_relationship_id": "artifact-relationship-1288-01",
+            "parent_artifact_name": "INCOSE Space Systems Working Group CubeSat Reference Model",
+            "parent_artifact_version": {
+              "status": "not_reported",
+              "reason": "The parent reference-model version is not reported."
+            },
+            "derived_artifact_name": "CubeSat Reference Model with incorporated technical measures and Technical Measures Profile",
+            "derived_artifact_version": {
+              "status": "not_reported",
+              "reason": "The derived artifact version is not reported."
+            },
+            "relationship_or_derivation": "Technical-measure stereotypes, specifications, value properties, traces, constraints, and parametric diagrams were incorporated into the existing CubeSat Reference Model.",
+            "identity_and_derivation_evidence": "The report describes the SSWG's ongoing reference-model effort, cites its interim-status report, states that the latest work incorporates technical measures into the model, and says the paper's examples are taken from that reference model."
+          }
+        ],
+        "repository_or_location": {
+          "status": "not_reported",
+          "reason": "No repository, model download, or request route is identified."
+        },
+        "owner_or_developer": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-1288-02",
+            "citation-1288-03"
+          ],
+          "value": "INCOSE Space Systems Working Group"
+        },
+        "artifact_type": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-02",
+            "citation-1288-03"
+          ],
+          "value": "reference_or_template_model"
+        },
+        "artifact_generality": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-02",
+            "citation-1288-20"
+          ],
+          "value": "mixed",
+          "notes": "The CubeSat Reference Model is mission-class specific, while the technical-measure approach is claimed to apply across tools and systems-engineering methodologies."
+        },
+        "eps_scope": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-12",
+            "citation-1288-13",
+            "citation-1288-15"
+          ],
+          "value": "The reported EPS thread consists of CubeSat battery-cycle and solar-cell-life MOPs bound to the service-life MOE; the wider reference model and profile are not EPS-specific."
+        },
+        "availability": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-03",
+            "citation-1288-09",
+            "citation-1288-10",
+            "citation-1288-13",
+            "citation-1288-15"
+          ],
+          "value": "described_only"
+        },
+        "license_category": {
+          "status": "not_reported",
+          "reason": "No licence or reuse terms are reported."
+        },
+        "exact_reuse_claim": {
+          "coding_confidence": "high",
+          "provenance": "author_claimed_or_planned",
+          "citation_ids": [
+            "citation-1288-02",
+            "citation-1288-20"
+          ],
+          "value": "The CubeSat Reference Model can be used by any CubeSat development team, and the technical-measure approach is claimed to be tool independent and easily incorporated into many systems-engineering methodologies."
+        },
+        "claimed_reuse_object": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "citation-1288-02",
+            "citation-1288-20"
+          ],
+          "value": [
+            "artifact",
+            "method",
+            "workflow"
+          ]
+        },
+        "possible_related_reports_or_artifacts": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "citation-1288-22"
+          ],
+          "value": [
+            "Kaslow et al. (2017), Developing a CubeSat Model-Based Systems Engineering (MBSE) Reference Model - Interim Status #3"
+          ]
+        },
+        "declared_applicability_envelope": {
+          "target_platforms_and_missions": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-02",
+              "citation-1288-20"
+            ],
+            "value": [
+              "CubeSat development teams for the CubeSat Reference Model",
+              "Systems-engineering projects using the technical-measure approach"
+            ]
+          },
+          "lifecycle_uses_and_decisions": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-14",
+              "citation-1288-21"
+            ],
+            "value": [
+              "Definition and development of the technical solution",
+              "Requirements, design, and performance analysis",
+              "Evaluation of candidate solutions against MOEs",
+              "Verification and validation are intended future uses"
+            ]
+          },
+          "eps_boundary": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-12",
+              "citation-1288-13",
+              "citation-1288-15"
+            ],
+            "value": "The demonstrated EPS content is limited to battery-cycle and solar-cell-life MOPs in a wider CubeSat model."
+          },
+          "model_boundary_and_abstraction": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-07",
+              "citation-1288-11",
+              "citation-1288-13",
+              "citation-1288-16"
+            ],
+            "value": "SysML technical-measure elements and relationships span mission-enterprise MOEs, CubeSat MOPs, and subsystem TPMs."
+          },
+          "architecture_and_interfaces": {
+            "status": "not_reported",
+            "reason": "No supported EPS architecture, interface family, or architecture constraint is declared for reuse."
+          },
+          "environment_modes_and_loads": {
+            "status": "not_reported",
+            "reason": "No reusable orbit, environment, EPS modes, or load envelope is declared."
+          },
+          "required_inputs": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-08",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": [
+              "Stakeholder concerns and critical mission objectives",
+              "Technical requirements",
+              "MOE, MOP, and TPM definitions",
+              "Empirical relationships and parameters for constraint blocks"
+            ]
+          },
+          "tools_and_versions": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-06",
+              "citation-1288-20"
+            ],
+            "value": [
+              "SysML; no SysML version or software tool is required by name"
+            ]
+          },
+          "organizational_prerequisites": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-02",
+              "citation-1288-08"
+            ],
+            "value": [
+              "A CubeSat development team",
+              "Stakeholder participation to supply concerns and identify critical objectives"
+            ]
+          },
+          "exclusions_and_limits": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-20",
+              "citation-1288-21"
+            ],
+            "value": [
+              "V&V model elements and their relationships to technical measures remain future work",
+              "No tool version, complete model package, tailoring limits, or EPS architecture envelope is reported"
+            ]
+          }
+        },
+        "reuse_design": {
+          "reusable_core": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-04",
+              "citation-1288-05",
+              "citation-1288-07",
+              "citation-1288-09",
+              "citation-1288-14",
+              "citation-1288-16"
+            ],
+            "value": "Technical Measures Profile plus the stable concern-to-objective-to-MOE-to-MOP-to-TPM pattern, including qualitative specifications, value properties, traces, constraints, and parametric bindings."
+          },
+          "variation_points": {
+            "status": "not_reported",
+            "reason": "The report implies target-specific concerns, measures, and equations but does not define source-identifiable options, ranges, defaults, or variation points for reuse."
+          },
+          "unchanged_use_rule": {
+            "status": "not_reported",
+            "reason": "No rule states when the artifact, method, or workflow may be used unchanged."
+          },
+          "dependencies": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-06",
+              "citation-1288-08",
+              "citation-1288-14"
+            ],
+            "value": [
+              "Stakeholder concerns and critical objectives",
+              "Technical requirements",
+              "Empirical relationships linking measure levels",
+              "SysML support for profiles, value properties, constraints, traces, and parametric diagrams"
+            ]
+          },
+          "tailoring_rules": {
+            "status": "not_reported",
+            "reason": "No explicit source-identifiable tailoring or adaptation rule is reported."
+          },
+          "tailoring_procedure_steps": {
+            "status": "not_reported",
+            "reason": "The construction method is described, but no procedure for tailoring a retained reference-model core to a materially distinct target is reported."
+          },
+          "required_roles_and_skills": {
+            "status": "not_reported",
+            "reason": "No reusable-artifact adoption roles, required skills, or training are specified."
+          },
+          "required_tools_and_data": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-05",
+              "citation-1288-06",
+              "citation-1288-08",
+              "citation-1288-14"
+            ],
+            "value": [
+              "A SysML modeling capability",
+              "Stakeholder concerns, requirements, and empirical measure relationships"
+            ]
+          },
+          "automation": {
+            "status": "not_reported",
+            "reason": "No reuse or tailoring automation is reported."
+          },
+          "governance_and_configuration_control": {
+            "status": "not_reported",
+            "reason": "No reusable-core ownership, versioning, change control, or acceptance governance is reported."
+          },
+          "tailoring_procedure_reporting": {
+            "procedure_detail_level": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "ordered_or_connected_steps": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "material_inputs": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "outputs": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "roles_and_responsibilities": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "tools_and_settings": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "decision_rules": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "branching_and_iteration": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "quality_or_completion_checks": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "worked_example": {
+              "status": "not_applicable",
+              "reason": "The CubeSat example is initial construction of the reported extension, not a documented tailoring application."
+            },
+            "supporting_materials": {
+              "status": "not_applicable",
+              "reason": "No reusable tailoring procedure is reported."
+            },
+            "detail_level_reason": {
+              "status": "not_applicable",
+              "reason": "A detail level cannot be assigned because no tailoring procedure is identified."
+            }
+          }
+        },
+        "reuse_assessment": {
+          "linked_report_application_ids": {
+            "status": "none"
+          },
+          "report_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-02"
+            ],
+            "value": "R1_reuse_claimed"
+          },
+          "report_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-02",
+              "citation-1288-12",
+              "citation-1288-13",
+              "citation-1288-15"
+            ],
+            "value": "The CubeSat Reference Model is an identifiable EPS-linked reference artifact claimed usable by any CubeSat team, but no bounded tailoring specification or qualifying reuse application is reported."
+          },
+          "method_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-20"
+            ],
+            "value": "M1_method_reuse_claimed"
+          },
+          "method_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-20"
+            ],
+            "value": "The identified model-generation approach is claimed general across tools and methodologies, but its adaptation envelope and a materially distinct application are not reported."
+          },
+          "workflow_reuse_level": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-20"
+            ],
+            "value": "W1_workflow_reuse_claimed"
+          },
+          "workflow_reuse_level_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-20"
+            ],
+            "value": "The connected technical-measure workflow is claimed easy to incorporate into many methodologies, but workflow variation, adaptation, and transfer are not demonstrated."
+          },
+          "conflicting_evidence_within_report": {
+            "status": "not_reported",
+            "reason": "No conflicting reuse evidence is reported."
+          },
+          "evidence_basis": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-03",
+              "citation-1288-09",
+              "citation-1288-10",
+              "citation-1288-13",
+              "citation-1288-15",
+              "citation-1288-20"
+            ],
+            "value": [
+              "worked_example"
+            ]
+          },
+          "support": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-02",
+              "citation-1288-03",
+              "citation-1288-09",
+              "citation-1288-10",
+              "citation-1288-13",
+              "citation-1288-15",
+              "citation-1288-20"
+            ],
+            "value": "limited"
+          },
+          "support_reason": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "citation-1288-02",
+              "citation-1288-03",
+              "citation-1288-09",
+              "citation-1288-10",
+              "citation-1288-13",
+              "citation-1288-15",
+              "citation-1288-20"
+            ],
+            "value": "An originator-produced CubeSat worked example and identifiable reference artifact support feasibility, while missing tailoring rules, bounded transfer, post-application checks, and an independent adopter limit all reuse claims to level one."
+          }
+        }
+      }
+    ],
+    "report_applications": {
+      "status": "not_reported",
+      "reason": "No actual reuse, adoption, or tailoring event in a materially distinct target setting is reported; the CubeSat example documents creation of the technical-measure extension in its originating reference model."
+    }
+  },
+  "procedural_evidence_profile": {
+    "generic_or_reference_model_reported": {
+      "value": "yes",
+      "basis_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "derivation_reason": "The reuse record identifies the CubeSat Reference Model as a reference/template artifact intended for CubeSat development teams."
+    },
+    "actionable_model_construction_procedure_reported": {
+      "value": "no",
+      "basis_ids": [
+        "model-generation-method-1288-01",
+        "report-reuse-record-1288-01"
+      ],
+      "derivation_reason": "The generic artifact is linked to a model-generation method assessed only as a narrative outline, not an actionable or reproduction-ready procedure."
+    },
+    "actionable_tailoring_procedure_reported": {
+      "value": "no",
+      "basis_ids": [
+        "report-reuse-record-1288-01"
+      ],
+      "derivation_reason": "The reuse design contains no identified tailoring procedure, variation points, or source-identifiable tailoring rules."
+    },
+    "worked_tailoring_example_reported": {
+      "value": "no",
+      "basis_ids": [],
+      "derivation_reason": "No report-level reuse or tailoring application is reported. The CubeSat diagrams show originating construction rather than transfer to a distinct target."
+    },
+    "post_tailoring_assurance_reported": {
+      "value": "no",
+      "basis_ids": [],
+      "derivation_reason": "No tailoring application, post-tailoring criterion, assurance method, timing, or result is reported."
+    },
+    "generic_model_with_actionable_construction_or_tailoring": {
+      "value": "no",
+      "basis_ids": [
+        "report-reuse-record-1288-01",
+        "model-generation-method-1288-01"
+      ],
+      "derivation_reason": "A generic reference model is reported, but neither its construction method nor a tailoring procedure reaches actionable-procedure detail."
+    }
+  },
+  "limitations": {
+    "author_stated_limitations": {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-1288-21"
+      ],
+      "value": [
+        "The current approach does not yet incorporate model elements for verification and validation or relate those elements to the technical measures"
+      ]
+    },
+    "future_work": {
+      "coding_confidence": "high",
+      "provenance": "author_claimed_or_planned",
+      "citation_ids": [
+        "citation-1288-21"
+      ],
+      "value": [
+        "Incorporate verification and validation model elements and relate them to the technical measures"
+      ]
+    },
+    "source_conflicts": {
+      "status": "not_reported",
+      "reason": "No internal source conflict is reported."
+    },
+    "reviewer_uncertainties": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-03",
+        "citation-1288-13",
+        "citation-1288-14",
+        "citation-1288-15"
+      ],
+      "value": [
+        "The figures establish typed parametric structure, but the report does not resolve whether the constraints were executable or run",
+        "The exact version and distribution state of the CubeSat Reference Model and Technical Measures Profile are unresolved"
+      ]
+    },
+    "missing_information_relevant_for_interpretation": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "citation-1288-03",
+        "citation-1288-14",
+        "citation-1288-20",
+        "citation-1288-21"
+      ],
+      "value": [
+        "No modeling tool or version, implemented empirical equations, parameter values, model-run outputs, physical checks, implementation effort, artifact access route, licence, tailoring process, or transfer application is reported"
+      ]
+    }
+  },
+  "citations": [
+    {
+      "citation_id": "citation-1288-01",
+      "report_id": "review-report-1288",
+      "page": 1,
+      "quote": "While much has been written about technical measurement and Model-Based Systems Engineering (MBSE), very little literature exists that ties the two together. What does exist treats the topic in a general manner and is void of details."
+    },
+    {
+      "citation_id": "citation-1288-02",
+      "report_id": "review-report-1288",
+      "page": 1,
+      "quote": "The SSWG's recent effort has been focused on the development of a CubeSat Reference Model that can be used by any CubeSat development team."
+    },
+    {
+      "citation_id": "citation-1288-03",
+      "report_id": "review-report-1288",
+      "page": 1,
+      "quote": "The SSWG's latest work has been on incorporating technical measures into the model. In support of that effort, an approach was developed to incorporate technical measures into a CubeSat Reference Model. This paper presents that approach."
+    },
+    {
+      "citation_id": "citation-1288-04",
+      "report_id": "review-report-1288",
+      "page": 1,
+      "quote": "This paper defines a MBSE approach for technical measurement that begins with a set of mission objectives derived from stakeholder concerns."
+    },
+    {
+      "citation_id": "citation-1288-05",
+      "report_id": "review-report-1288",
+      "page": 1,
+      "quote": "Next, Measures of Performance (MOPs) are derived from the enterprise-level MOEs and captured as value properties of the System block. The derivation of the MOPs is captured through the development of constraint blocks and parametric diagrams. This provides for traceability between MOPs and MOEs and supports performance analysis of the MOPs to predict if the MOEs will be met. MOPs are also traced to system requirements captured in the system model."
+    },
+    {
+      "citation_id": "citation-1288-06",
+      "report_id": "review-report-1288",
+      "page": 2,
+      "quote": "In comparison to the traditional approach, MBSE provides a more rigorous method for capturing, integrating, and maintaining outputs of systems engineering activities."
+    },
+    {
+      "citation_id": "citation-1288-07",
+      "report_id": "review-report-1288",
+      "page": 3,
+      "quote": "The approach in this paper extends the above approach to include traceability from stakeholder expectations to TPMs. It also provides for a means to capture qualitative statements of technical measures."
+    },
+    {
+      "citation_id": "citation-1288-08",
+      "report_id": "review-report-1288",
+      "page": 3,
+      "quote": "The approach starts with developing mission objectives derived from the concerns of stakeholders. This is an important first step as MOEs are subsequently derived from those objectives deemed by the stakeholder as critical for mission success [11]."
+    },
+    {
+      "citation_id": "citation-1288-09",
+      "report_id": "review-report-1288",
+      "page": 4,
+      "quote": "Profile Diagram Technical Measures Profile",
+      "graphic": "Figure 1",
+      "graphic_quote_description": "The figure title and profile diagram identify the Technical Measures Profile. The diagram shows stereotypes for StakeholderConcern, MissionObjective, MOE/MOP/TPM specifications, and MOP/TPM properties."
+    },
+    {
+      "citation_id": "citation-1288-10",
+      "report_id": "review-report-1288",
+      "page": 4,
+      "quote": "Text = \"The service life of the system must be 3 years.\"",
+      "graphic": "Figure 2",
+      "graphic_quote_description": "The quoted text appears in the Service Life MOE Specification. Figure 2 also shows trace relationships from end-user and sponsor concerns through mission objectives to service-life and total-cost MOE specifications."
+    },
+    {
+      "citation_id": "citation-1288-11",
+      "report_id": "review-report-1288",
+      "page": 5,
+      "quote": "For the mission enterprise, two value properties are created. The first corresponds to the service life MOE and the second to cost. These are shown in Figure 3. Note these value properties are clearly distinguished as MOEs as shown by \"<<moe>>\" stereotype. Traceability back to the MOE specifications is accomplished using the trace relationship."
+    },
+    {
+      "citation_id": "citation-1288-12",
+      "report_id": "review-report-1288",
+      "page": 5,
+      "quote": "For the service life MOE, following the example provided in Reference [1], service life of the CubeSat is a function of the delta V required to maintain the orbit for the duration of the mission, battery cycles, and solar cell life. These factors are captured as MOPs of the CubeSat in the form of value properties."
+    },
+    {
+      "citation_id": "citation-1288-13",
+      "report_id": "review-report-1288",
+      "page": 6,
+      "quote": "«mop» BatteryCycle : real",
+      "graphic": "Figure 4",
+      "graphic_quote_description": "The quote is the battery-cycle value property inside the CubeSat block. The same block shows SolarCellLife as an MOP, and the diagram places these properties in the mission-enterprise and system hierarchy."
+    },
+    {
+      "citation_id": "citation-1288-14",
+      "report_id": "review-report-1288",
+      "page": 6,
+      "quote": "First, a constraint block is created that captures the empirical relationship between the MOPs and MOEs. In this example, service life is a function of delta V, battery cycles, and solar cell life. A constraint block is created to capture this function and its required parameters. A parametric diagram is created to bind the values of these parameters to the technical measures. This allows different solutions to be evaluated against the MOEs."
+    },
+    {
+      "citation_id": "citation-1288-15",
+      "report_id": "review-report-1288",
+      "page": 7,
+      "quote": "{Service Life = f(DeltaV,BatteryCycle,SolarCellLife)}",
+      "graphic": "Figure 5",
+      "graphic_quote_description": "The equation appears inside the ServiceLife constraint in the parametric diagram. Binding lines connect CubeSat DeltaV, BatteryCycle, and SolarCellLife MOP properties to constraint parameters and connect the result to the Service Life MOE."
+    },
+    {
+      "citation_id": "citation-1288-16",
+      "report_id": "review-report-1288",
+      "page": 6,
+      "quote": "Again, constraint blocks and parametric diagrams are used to calculate MOP values based on the TPM values. This allows for evaluation of different subsystem solutions based on their impact to the MOP."
+    },
+    {
+      "citation_id": "citation-1288-17",
+      "report_id": "review-report-1288",
+      "page": 8,
+      "quote": "Traceability. There is clear traceability from stakeholder concerns to TPMs allowing for the impact of any changes to be easily assessed."
+    },
+    {
+      "citation_id": "citation-1288-18",
+      "report_id": "review-report-1288",
+      "page": 8,
+      "quote": "Qualitative measures. The use of textual specifications for defining technical measures broadens the scope to include all types of technical measures within the system model."
+    },
+    {
+      "citation_id": "citation-1288-19",
+      "report_id": "review-report-1288",
+      "page": 8,
+      "quote": "Trade analyses. This method allows for different solutions to be assessed as to their ability to meet MOEs."
+    },
+    {
+      "citation_id": "citation-1288-20",
+      "report_id": "review-report-1288",
+      "page": 8,
+      "quote": "Generalizability. This approach is not dependent on any specific tool and is general enough to be easily incorporated into many systems engineering methodologies."
+    },
+    {
+      "citation_id": "citation-1288-21",
+      "report_id": "review-report-1288",
+      "page": 8,
+      "quote": "As mentioned above, technical measures form a basis for which verification and validation can occur. Future work is needed to incorporate model elements associated with those activities and relate them to the technical measures discussed here."
+    },
+    {
+      "citation_id": "citation-1288-22",
+      "report_id": "review-report-1288",
+      "page": 9,
+      "quote": "D. Kaslow, B. Ayres, P. Cahill, L. Hart, and R. Yntema. \"Developing a CubeSat Model-Based Systems Engineering (MBSE) Reference Model - Interim Status #3.\" Proceedings of IEEE Aerospace Conference. Big Sky, MT. 2017."
+    },
+    {
+      "citation_id": "citation-1288-23",
+      "report_id": "review-report-1288",
+      "page": 1,
+      "quote": "Using a CubeSat example is appropriate given the historically high failure rate and rapid growth of these missions and the role technical measurement could play in increasing their success."
+    },
+    {
+      "citation_id": "citation-1288-24",
+      "report_id": "review-report-1288",
+      "page": 5,
+      "quote": "For the purposes of this example, the mission enterprise is comprised of a ground system, launch system, and CubeSat."
+    },
+    {
+      "citation_id": "citation-1288-25",
+      "report_id": "review-report-1288",
+      "page": 3,
+      "quote": "This approach allows for capturing textual descriptions of measures that can then be translated to properties that can be quantitatively assessed."
+    }
+  ]
+}
