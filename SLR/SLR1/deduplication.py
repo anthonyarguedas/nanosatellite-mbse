@@ -4,7 +4,8 @@
 Modes:
 - ``psr`` merges the final Scopus and Web of Science prior-review partitions.
 - ``citation-chasing`` combines final Scopus and Web of Science forward citation
-  artifacts with the deduplicated OCR backward reference ledger.
+  artifacts with the deduplicated OCR backward reference ledger, then applies
+  validated structured OCR metadata after candidate identity assignment.
 - ``review-searches`` uses final direct-review search artifacts.
 
 Source-event validation remains with the source-specific artifacts. This script
@@ -129,6 +130,33 @@ BACKWARD_REFERENCE_QUERY_LEDGER = (
 BACKWARD_REFERENCE_QUERY_SCHEMA = "slr1-backward-reference-query-ledger/v1"
 BACKWARD_REFERENCE_SOURCE_ID = "ocr_backward_reference"
 BACKWARD_REFERENCE_PARTITION = "citation-cycle-1-backward"
+BACKWARD_STRUCTURED_OCR_ENRICHMENT_DIR = (
+    SLR1_DIR
+    / "citation-chasing/backward/cycle-1/metadata/structured-ocr-enrichment"
+)
+BACKWARD_STRUCTURED_OCR_ENRICHMENT_SCHEMA = (
+    "slr1-ocr-structured-metadata-batch/v1"
+)
+BACKWARD_STRUCTURED_OCR_CONFIDENCE_VALUES = frozenset(
+    {"high", "moderate", "low"}
+)
+BACKWARD_STRUCTURED_OCR_RECORD_FIELDS = frozenset(
+    {
+        "candidate_id",
+        "backward_query_id",
+        "title",
+        "authors",
+        "publication_title",
+        "publication_year",
+        "doi",
+        "document_type_hint",
+        "coding_confidence",
+        "evidence_note",
+    }
+)
+BACKWARD_STRUCTURED_OCR_EXPECTED_BATCH_COUNT = 6
+BACKWARD_STRUCTURED_OCR_EXPECTED_RECORD_COUNT = 564
+BACKWARD_STRUCTURED_OCR_EXPECTED_TITLE_COUNT = 556
 OCR_SURNAME_PARTICLES = frozenset(
     {"da", "de", "del", "della", "der", "di", "dos", "du", "la", "le", "van", "von"}
 )
@@ -1680,6 +1708,175 @@ def load_backward_reference_query_ledger() -> dict[str, Any]:
     return ledger
 
 
+def optional_structured_ocr_text(
+    value: Any, field: str, path: Path
+) -> str | None:
+    if value is None:
+        return None
+    if not isinstance(value, str) or not value or value != value.strip():
+        raise ValueError(
+            f"A structured OCR {field} value is invalid: {path}"
+        )
+    return value
+
+
+def structured_ocr_enrichment_input_paths() -> list[Path]:
+    directory = BACKWARD_STRUCTURED_OCR_ENRICHMENT_DIR
+    if not directory.is_dir() or directory.is_symlink():
+        raise ValueError(
+            f"Expected a structured OCR enrichment directory: {directory}"
+        )
+    paths = sorted(directory.iterdir())
+    if len(paths) != BACKWARD_STRUCTURED_OCR_EXPECTED_BATCH_COUNT or any(
+        not re.fullmatch(r"batch-\d{4}\.json", path.name) for path in paths
+    ):
+        raise ValueError("The structured OCR enrichment batch ledger changed")
+    for path in paths:
+        require_regular(path)
+    return paths
+
+
+def load_structured_ocr_enrichments(
+    paths: list[Path] | None = None,
+    *,
+    expected_record_count: int = BACKWARD_STRUCTURED_OCR_EXPECTED_RECORD_COUNT,
+    expected_title_count: int = BACKWARD_STRUCTURED_OCR_EXPECTED_TITLE_COUNT,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Validate structured OCR batches without using their metadata for identity."""
+    selected_paths = paths or structured_ocr_enrichment_input_paths()
+    if not selected_paths:
+        raise ValueError("No structured OCR enrichment batches are available")
+
+    records: list[dict[str, Any]] = []
+    input_receipts: list[dict[str, Any]] = []
+    candidate_ids: set[str] = set()
+    query_ids: set[str] = set()
+    for position, path in enumerate(selected_paths, start=1):
+        require_regular(path)
+        payload = load_json(path)
+        batch_id = f"batch-{position:04d}"
+        batch_records = payload.get("records")
+        if (
+            path.name != f"{batch_id}.json"
+            or payload.get("schema_version")
+            != BACKWARD_STRUCTURED_OCR_ENRICHMENT_SCHEMA
+            or payload.get("batch_id") != batch_id
+            or not isinstance(batch_records, list)
+            or not batch_records
+            or len(batch_records) > 100
+            or payload.get("assigned_count") != len(batch_records)
+        ):
+            raise ValueError(f"A structured OCR enrichment batch is invalid: {path}")
+
+        for item in batch_records:
+            if not isinstance(item, dict) or set(item) != set(
+                BACKWARD_STRUCTURED_OCR_RECORD_FIELDS
+            ):
+                raise ValueError(f"A structured OCR enrichment row is malformed: {path}")
+            candidate_id = item.get("candidate_id")
+            query_id = item.get("backward_query_id")
+            if (
+                not isinstance(candidate_id, str)
+                or not re.fullmatch(r"citation-candidate-\d{4}", candidate_id)
+                or candidate_id in candidate_ids
+                or not isinstance(query_id, str)
+                or not re.fullmatch(r"backward-query-\d{5}", query_id)
+                or query_id in query_ids
+            ):
+                raise ValueError(
+                    f"A structured OCR enrichment identity is invalid: {path}"
+                )
+
+            optional_structured_ocr_text(item.get("title"), "title", path)
+            authors = item.get("authors")
+            if not isinstance(authors, list) or any(
+                not isinstance(author, str)
+                or not author
+                or author != author.strip()
+                for author in authors
+            ):
+                raise ValueError(
+                    f"A structured OCR authors value is invalid: {path}"
+                )
+            optional_structured_ocr_text(
+                item.get("publication_title"), "publication_title", path
+            )
+            year = item.get("publication_year")
+            if year is not None and (
+                isinstance(year, bool)
+                or not isinstance(year, int)
+                or not 1000 <= year <= 9999
+            ):
+                raise ValueError(
+                    f"A structured OCR publication_year value is invalid: {path}"
+                )
+            doi = optional_structured_ocr_text(item.get("doi"), "doi", path)
+            if doi is not None and (
+                doi != doi.casefold()
+                or not re.fullmatch(r"10\.\d{4,9}/\S+", doi)
+            ):
+                raise ValueError(f"A structured OCR DOI value is invalid: {path}")
+            optional_structured_ocr_text(
+                item.get("document_type_hint"), "document_type_hint", path
+            )
+            if item.get("coding_confidence") not in (
+                BACKWARD_STRUCTURED_OCR_CONFIDENCE_VALUES
+            ):
+                raise ValueError(
+                    f"A structured OCR confidence value is invalid: {path}"
+                )
+            optional_structured_ocr_text(
+                item.get("evidence_note"), "evidence_note", path
+            )
+
+            candidate_ids.add(candidate_id)
+            query_ids.add(query_id)
+            records.append(copy.deepcopy(item))
+
+        input_receipts.append(
+            {
+                "path": relative(path),
+                "sha256": digest(path),
+                "batch_id": batch_id,
+                "record_count": len(batch_records),
+            }
+        )
+
+    recovered_fields = {
+        "title": sum(bool(item["title"]) for item in records),
+        "authors": sum(bool(item["authors"]) for item in records),
+        "publication_title": sum(
+            bool(item["publication_title"]) for item in records
+        ),
+        "publication_year": sum(
+            item["publication_year"] is not None for item in records
+        ),
+        "doi": sum(bool(item["doi"]) for item in records),
+        "document_type_hint": sum(
+            bool(item["document_type_hint"]) for item in records
+        ),
+    }
+    if (
+        len(records) != expected_record_count
+        or len(candidate_ids) != expected_record_count
+        or len(query_ids) != expected_record_count
+        or recovered_fields["title"] != expected_title_count
+    ):
+        raise ValueError("The structured OCR enrichment coverage changed")
+
+    receipt = {
+        "schema_version": BACKWARD_STRUCTURED_OCR_ENRICHMENT_SCHEMA,
+        "inputs": input_receipts,
+        "batch_count": len(selected_paths),
+        "record_count": len(records),
+        "candidate_id_coverage": len(candidate_ids),
+        "backward_query_id_coverage": len(query_ids),
+        "recovered_fields": recovered_fields,
+        "remaining_title_null_records": len(records) - recovered_fields["title"],
+    }
+    return records, receipt
+
+
 def backward_stable_urls(identity: Mapping[str, Any]) -> list[str]:
     values = identity.get("other_stable_identifiers")
     values = values if isinstance(values, list) else []
@@ -1751,6 +1948,21 @@ def add_backward_source_record(candidate: dict[str, Any], query_id: str) -> None
         }
     )
     rows.sort(key=lambda row: text(row.get("source")))
+
+
+def candidate_backward_query_ids(candidate: Mapping[str, Any]) -> list[str]:
+    rows = candidate.get("source_records")
+    if not isinstance(rows, list):
+        return []
+    return [
+        text(record_id)
+        for row in rows
+        if isinstance(row, Mapping)
+        and row.get("source") == BACKWARD_REFERENCE_SOURCE_ID
+        and isinstance(row.get("record_ids"), list)
+        for record_id in row["record_ids"]
+        if text(record_id)
+    ]
 
 
 def augment_with_backward_references(
@@ -1836,6 +2048,73 @@ def augment_with_backward_references(
     return candidates, raw_occurrences, duplicate_occurrences, receipt
 
 
+def apply_structured_ocr_enrichments(
+    merger: Any,
+    candidates: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Enrich already identified candidates without changing candidate identity."""
+    enrichments, receipt = load_structured_ocr_enrichments()
+    original_candidate_ids = [candidate.get("candidate_id") for candidate in candidates]
+    if len(original_candidate_ids) != len(set(original_candidate_ids)):
+        raise ValueError("Citation candidate IDs are not unique before OCR enrichment")
+    by_candidate_id = {
+        text(candidate.get("candidate_id")): candidate for candidate in candidates
+    }
+    enrichment_ids = {item["candidate_id"] for item in enrichments}
+    prior_title_null_ids = {
+        text(candidate.get("candidate_id"))
+        for candidate in candidates
+        if not text(candidate.get("title"))
+    }
+    if prior_title_null_ids != enrichment_ids:
+        raise ValueError(
+            "Structured OCR enrichments do not exactly cover title-null candidates"
+        )
+
+    for item in enrichments:
+        candidate = by_candidate_id.get(item["candidate_id"])
+        if candidate is None or candidate_backward_query_ids(candidate) != [
+            item["backward_query_id"]
+        ]:
+            raise ValueError(
+                "A structured OCR enrichment is linked to the wrong backward query: "
+                f"{item['candidate_id']}"
+            )
+        candidate["title"] = text(item["title"])
+        candidate["authors"] = list(item["authors"])
+        candidate["publication_title"] = item["publication_title"]
+        candidate["publication_year"] = item["publication_year"]
+        candidate["doi"] = merger.normalize_doi(item["doi"])
+        candidate["document_type"] = item["document_type_hint"]
+        candidate["cutoff_date_screening_status"] = (
+            "pending_exact_cutoff_check"
+            if item["publication_year"] == 2026
+            else "not_required_by_source_year"
+        )
+
+    if original_candidate_ids != [
+        candidate.get("candidate_id") for candidate in candidates
+    ]:
+        raise ValueError("Structured OCR enrichment changed candidate IDs or order")
+    remaining_title_null = sum(
+        not text(by_candidate_id[candidate_id].get("title"))
+        for candidate_id in enrichment_ids
+    )
+    if remaining_title_null != receipt["remaining_title_null_records"]:
+        raise ValueError("Structured OCR title-null accounting changed")
+    receipt.update(
+        {
+            "prior_title_null_candidate_coverage": len(prior_title_null_ids),
+            "enriched_candidate_coverage": len(enrichment_ids),
+            "remaining_title_null_candidates": remaining_title_null,
+            "application_stage": (
+                "after backward query matching and candidate ID assignment"
+            ),
+        }
+    )
+    return candidates, receipt
+
+
 def build(mode: str) -> dict[str, Any]:
     merger = load_merger(mode)
     identity_link_receipt: dict[str, Any] | None = None
@@ -1892,9 +2171,13 @@ def build(mode: str) -> dict[str, Any]:
             backward_duplicates_removed,
             backward_receipt,
         ) = augment_with_backward_references(merger, candidates)
+        candidates, structured_ocr_receipt = apply_structured_ocr_enrichments(
+            merger, candidates
+        )
         raw_count += backward_raw_count
         duplicates_removed += backward_duplicates_removed
         metadata_enrichment["ocr_backward_references"] = backward_receipt
+        metadata_enrichment["ocr_structured_metadata"] = structured_ocr_receipt
         namespace = "citation_chasing"
     else:  # pragma: no cover - argparse guards this
         raise ValueError(f"Unknown mode: {mode}")

@@ -19,10 +19,12 @@ from deduplication import (  # noqa: E402
     FINAL_ARTIFACT_SELECTION_SCHEMA,
     accepted_final_direct_input_paths,
     apply_screening_decisions,
+    apply_structured_ocr_enrichments,
     augment_with_backward_references,
     author_names,
     cluster_manifestations,
     direct_manifestations,
+    load_structured_ocr_enrichments,
     normalized_ocr_identity_text,
     ocr_author_surnames,
     reviewer_screening_coding,
@@ -404,6 +406,143 @@ class BackwardReferenceCandidateTests(unittest.TestCase):
         self.assertEqual(len(records), 4)
         self.assertEqual(receipt["matched_forward_candidates"], 0)
         self.assertEqual(receipt["new_candidates_appended"], 3)
+
+    @staticmethod
+    def structured_ocr_row(
+        candidate_id: str = "citation-candidate-0002",
+        query_id: str = "backward-query-00001",
+        title: str | None = "Recovered CubeSat MBSE title",
+    ) -> dict[str, object]:
+        return {
+            "candidate_id": candidate_id,
+            "backward_query_id": query_id,
+            "title": title,
+            "authors": ["A. Author"],
+            "publication_title": "Proceedings",
+            "publication_year": 2026,
+            "doi": "10.1000/example",
+            "document_type_hint": "conference_paper",
+            "coding_confidence": "high",
+            "evidence_note": None,
+        }
+
+    def test_structured_ocr_batch_validation_and_receipt(self) -> None:
+        payload = {
+            "schema_version": "slr1-ocr-structured-metadata-batch/v1",
+            "batch_id": "batch-0001",
+            "assigned_count": 1,
+            "records": [self.structured_ocr_row()],
+        }
+        with tempfile.TemporaryDirectory(dir=SLR1_DIR) as temporary:
+            path = Path(temporary) / "batch-0001.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            rows, receipt = load_structured_ocr_enrichments(
+                [path], expected_record_count=1, expected_title_count=1
+            )
+            self.assertEqual(rows, payload["records"])
+            self.assertEqual(receipt["candidate_id_coverage"], 1)
+            self.assertEqual(receipt["backward_query_id_coverage"], 1)
+            self.assertEqual(receipt["recovered_fields"]["title"], 1)
+            self.assertEqual(receipt["inputs"][0]["record_count"], 1)
+
+            payload["records"][0]["coding_confidence"] = "guessed"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "confidence"):
+                load_structured_ocr_enrichments(
+                    [path], expected_record_count=1, expected_title_count=1
+                )
+
+    def test_structured_ocr_enrichment_preserves_assigned_ids_and_order(self) -> None:
+        forward = self.candidate(
+            "citation-candidate-0001", "Forward title", ["F. Author"], 2025
+        )
+        recovered = self.candidate(
+            "citation-candidate-0002", "", ["Bad parser value"], 2024
+        )
+        recovered["source_records"] = [
+            {
+                "source": "ocr_backward_reference",
+                "record_ids": ["backward-query-00001"],
+                "partitions": ["citation-cycle-1-backward"],
+            }
+        ]
+        unresolved = self.candidate(
+            "citation-candidate-0003", "", ["Bad parser value"], 2024
+        )
+        unresolved["source_records"] = [
+            {
+                "source": "ocr_backward_reference",
+                "record_ids": ["backward-query-00002"],
+                "partitions": ["citation-cycle-1-backward"],
+            }
+        ]
+        enrichments = [
+            self.structured_ocr_row(),
+            self.structured_ocr_row(
+                "citation-candidate-0003", "backward-query-00002", None
+            ),
+        ]
+        enrichments[1].update(
+            {
+                "authors": [],
+                "publication_title": None,
+                "publication_year": None,
+                "doi": None,
+                "document_type_hint": None,
+            }
+        )
+        receipt = {"remaining_title_null_records": 1}
+        candidates = [forward, recovered, unresolved]
+        with patch(
+            "deduplication.load_structured_ocr_enrichments",
+            return_value=(enrichments, receipt),
+        ):
+            enriched, result_receipt = apply_structured_ocr_enrichments(
+                self.Merger(), candidates
+            )
+
+        self.assertIs(enriched, candidates)
+        self.assertEqual(
+            [candidate["candidate_id"] for candidate in enriched],
+            [
+                "citation-candidate-0001",
+                "citation-candidate-0002",
+                "citation-candidate-0003",
+            ],
+        )
+        self.assertEqual(recovered["title"], "Recovered CubeSat MBSE title")
+        self.assertEqual(recovered["authors"], ["A. Author"])
+        self.assertEqual(recovered["publication_year"], 2026)
+        self.assertEqual(
+            recovered["cutoff_date_screening_status"],
+            "pending_exact_cutoff_check",
+        )
+        self.assertEqual(unresolved["authors"], [])
+        self.assertIsNone(unresolved["publication_year"])
+        self.assertEqual(result_receipt["remaining_title_null_candidates"], 1)
+
+    def test_structured_ocr_enrichment_rejects_cross_query_linkage(self) -> None:
+        candidate = self.candidate(
+            "citation-candidate-0002", "", ["A. Author"], 2024
+        )
+        candidate["source_records"] = [
+            {
+                "source": "ocr_backward_reference",
+                "record_ids": ["backward-query-99999"],
+                "partitions": ["citation-cycle-1-backward"],
+            }
+        ]
+        with (
+            patch(
+                "deduplication.load_structured_ocr_enrichments",
+                return_value=(
+                    [self.structured_ocr_row()],
+                    {"remaining_title_null_records": 0},
+                ),
+            ),
+            self.assertRaisesRegex(ValueError, "wrong backward query"),
+        ):
+            apply_structured_ocr_enrichments(self.Merger(), [candidate])
 
 
 class ReviewerScreeningCodingTests(unittest.TestCase):
