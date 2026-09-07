@@ -105,7 +105,7 @@ For PRISMA-S reporting, search rationales and strategies are linked to the cross
 
 Searches are finalized only after all 15 planned sources or collections have either a final run covering the entire source-specific schedule or a recorded final failure that excludes them from the review. Merge records only from complete successful events. Preserve separate Compendex and Inspec discovery instances and separate events for the two ProQuest sources.
 
-Start backward and forward citation searching from every included full-text report and relevant secondary review:
+Start backward and forward citation searching from every included full-text report and relevant secondary review. Treat the stored page-delimited OCR as sufficient evidence for backward reference-list completeness when the reference section and its final entry are identifiable. Human completeness attestation is optional. Preserve uncertain or damaged OCR entries as unresolved records with their source page and raw text.
 
 - inspect each seed's complete reference list;
 - search forward citations in both Scopus and Web of Science Core Collection;

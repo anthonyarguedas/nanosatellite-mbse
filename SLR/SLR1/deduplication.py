@@ -138,6 +138,7 @@ SCREENING_DECISIONS = {
     },
     "citation-chasing": {
         "none",
+        "already_included",
         "include_route_A_eps_primary",
         "include_route_B_embedded_eps",
         "exclude_no_qualifying_eps_thread",
@@ -226,7 +227,9 @@ def now() -> str:
 
 def load_merger(mode: str | None = None) -> Any:
     components = (
-        REVIEW_MERGER_COMPONENTS if mode == "review-searches" else MERGER_COMPONENTS
+        REVIEW_MERGER_COMPONENTS
+        if mode in {"review-searches", "citation-chasing"}
+        else MERGER_COMPONENTS
     )
     for name, expected in components.items():
         path = MERGER_DIR / name
