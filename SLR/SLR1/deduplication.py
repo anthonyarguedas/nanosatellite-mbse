@@ -3,7 +3,8 @@
 
 Modes:
 - ``psr`` merges the final Scopus and Web of Science prior-review partitions.
-- ``citation-chasing`` uses final Scopus and Web of Science citation artifacts.
+- ``citation-chasing`` combines final Scopus and Web of Science forward citation
+  artifacts with the deduplicated OCR backward reference ledger.
 - ``review-searches`` uses final direct-review search artifacts.
 
 Source-event validation remains with the source-specific artifacts. This script
@@ -22,6 +23,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -120,6 +122,16 @@ CITATION_SOURCE_DIRS = {
         SOURCE_SPECIFIC_DIR / "web-of-science-core-collection/final-searches"
     ),
 }
+BACKWARD_REFERENCE_QUERY_LEDGER = (
+    SLR1_DIR
+    / "citation-chasing/backward/cycle-1/metadata/deduplicated-reference-queries.json"
+)
+BACKWARD_REFERENCE_QUERY_SCHEMA = "slr1-backward-reference-query-ledger/v1"
+BACKWARD_REFERENCE_SOURCE_ID = "ocr_backward_reference"
+BACKWARD_REFERENCE_PARTITION = "citation-cycle-1-backward"
+OCR_SURNAME_PARTICLES = frozenset(
+    {"da", "de", "del", "della", "der", "di", "dos", "du", "la", "le", "van", "von"}
+)
 PSR_IDENTITY_LINKS_PATH = SLR1_DIR / "psr-deduplication-links.json"
 PSR_IDENTITY_LINKS_SCHEMA = "slr1-psr-deduplication-links/v1"
 SCREENING_DECISIONS = {
@@ -1555,6 +1567,275 @@ def citation_candidates(
     return candidates, raw_count, raw_count - len(candidates)
 
 
+def normalized_ocr_identity_text(value: Any) -> str:
+    normalized = unicodedata.normalize("NFKD", text(value)).casefold()
+    without_marks = "".join(
+        character
+        for character in normalized
+        if not unicodedata.combining(character)
+    )
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", without_marks).split())
+
+
+def ocr_author_surnames(value: Any) -> set[str]:
+    authors = value if isinstance(value, list) else []
+    result: set[str] = set()
+    for author in authors:
+        if not isinstance(author, str) or not author.strip():
+            continue
+        surname_text = author.split(",", 1)[0] if "," in author else author
+        words = normalized_ocr_identity_text(surname_text).split()
+        while len(words) > 1 and len(words[-1]) == 1:
+            words.pop()
+        surname = next(
+            (
+                word
+                for word in reversed(words)
+                if len(word) > 1 and word not in OCR_SURNAME_PARTICLES
+            ),
+            "",
+        )
+        if surname:
+            result.add(surname)
+    return result
+
+
+def load_backward_reference_query_ledger() -> dict[str, Any]:
+    require_regular(BACKWARD_REFERENCE_QUERY_LEDGER)
+    ledger = load_json(BACKWARD_REFERENCE_QUERY_LEDGER)
+    if ledger.get("schema_version") != BACKWARD_REFERENCE_QUERY_SCHEMA:
+        raise ValueError("The backward-reference query ledger schema changed")
+    counts = ledger.get("counts")
+    inputs = ledger.get("inputs")
+    units = ledger.get("query_units")
+    if (
+        not isinstance(counts, Mapping)
+        or not isinstance(inputs, list)
+        or not isinstance(units, list)
+    ):
+        raise ValueError("The backward-reference query ledger is malformed")
+    raw_occurrence_count = counts.get("raw_reference_occurrences")
+    unique_unit_count = counts.get("unique_query_units")
+    if (
+        isinstance(raw_occurrence_count, bool)
+        or not isinstance(raw_occurrence_count, int)
+        or raw_occurrence_count < 0
+        or isinstance(unique_unit_count, bool)
+        or not isinstance(unique_unit_count, int)
+        or unique_unit_count != len(units)
+    ):
+        raise ValueError("The backward-reference query counts changed")
+
+    input_occurrences = 0
+    for item in inputs:
+        if not isinstance(item, Mapping):
+            raise ValueError("A backward-reference input receipt is malformed")
+        raw_path = text(item.get("path"))
+        expected_digest = text(item.get("sha256"))
+        occurrence_count = item.get("raw_reference_occurrence_count")
+        if (
+            not raw_path
+            or not expected_digest
+            or isinstance(occurrence_count, bool)
+            or not isinstance(occurrence_count, int)
+            or occurrence_count < 0
+        ):
+            raise ValueError("A backward-reference input receipt is incomplete")
+        source_path = (REPOSITORY_ROOT / raw_path).resolve(strict=False)
+        try:
+            source_path.relative_to(REPOSITORY_ROOT)
+        except ValueError as error:
+            raise ValueError("A backward-reference input escaped the repository") from error
+        require_regular(source_path)
+        if digest(source_path) != expected_digest:
+            raise ValueError(f"A backward-reference input changed: {raw_path}")
+        input_occurrences += occurrence_count
+    if input_occurrences != raw_occurrence_count:
+        raise ValueError("Backward-reference input occurrence accounting changed")
+
+    query_ids: set[str] = set()
+    unit_occurrences = 0
+    for unit in units:
+        if not isinstance(unit, Mapping):
+            raise ValueError("A backward-reference query unit is malformed")
+        query_id = text(unit.get("query_unit_id"))
+        identity = unit.get("identity")
+        occurrences = unit.get("occurrences")
+        occurrence_count = unit.get("occurrence_count")
+        if (
+            not re.fullmatch(r"backward-query-\d{5}", query_id)
+            or query_id in query_ids
+            or not isinstance(identity, Mapping)
+            or not isinstance(occurrences, list)
+            or isinstance(occurrence_count, bool)
+            or not isinstance(occurrence_count, int)
+            or occurrence_count < 1
+            or occurrence_count != len(occurrences)
+        ):
+            raise ValueError("A backward-reference query unit failed validation")
+        query_ids.add(query_id)
+        unit_occurrences += len(occurrences)
+    if unit_occurrences != raw_occurrence_count:
+        raise ValueError("Backward-reference query occurrence accounting changed")
+    return ledger
+
+
+def backward_stable_urls(identity: Mapping[str, Any]) -> list[str]:
+    values = identity.get("other_stable_identifiers")
+    values = values if isinstance(values, list) else []
+    result: set[str] = set()
+    for value in values:
+        candidate = text(value)
+        if candidate.casefold().startswith("url:"):
+            candidate = candidate.split(":", 1)[1].strip()
+        if re.match(r"^https?://\S+$", candidate, re.I):
+            result.add(candidate)
+    return sorted(result)
+
+
+def backward_candidate(
+    merger: Any,
+    candidate_id: str,
+    unit: Mapping[str, Any],
+) -> dict[str, Any]:
+    identity = unit["identity"]
+    year = identity.get("publication_year")
+    if isinstance(year, bool) or not isinstance(year, int):
+        year = None
+    authors = identity.get("authors")
+    if not isinstance(authors, list) or not all(
+        isinstance(author, str) for author in authors
+    ):
+        authors = []
+    query_id = text(unit.get("query_unit_id"))
+    return {
+        "candidate_id": candidate_id,
+        "title": text(identity.get("title")),
+        "authors": authors,
+        "publication_year": year,
+        "publication_date": None,
+        "publication_date_source_value": None,
+        "publication_title": None,
+        "document_type": None,
+        "doi": merger.normalize_doi(identity.get("doi_normalized")),
+        "arxiv_records": [],
+        "stable_urls": backward_stable_urls(identity),
+        "abstract": None,
+        "abstract_snippet": None,
+        "keywords": [],
+        "source_records": [
+            {
+                "source": BACKWARD_REFERENCE_SOURCE_ID,
+                "record_ids": [query_id],
+                "partitions": [BACKWARD_REFERENCE_PARTITION],
+            }
+        ],
+        "screening_decision": "none",
+        "cutoff_date_screening_status": (
+            "pending_exact_cutoff_check"
+            if year == 2026
+            else "not_required_by_source_year"
+        ),
+    }
+
+
+def add_backward_source_record(candidate: dict[str, Any], query_id: str) -> None:
+    rows = candidate.get("source_records")
+    if not isinstance(rows, list):
+        raise ValueError("A citation candidate has no source-record list")
+    rows.append(
+        {
+            "source": BACKWARD_REFERENCE_SOURCE_ID,
+            "record_ids": [query_id],
+            "partitions": [BACKWARD_REFERENCE_PARTITION],
+        }
+    )
+    rows.sort(key=lambda row: text(row.get("source")))
+
+
+def augment_with_backward_references(
+    merger: Any,
+    candidates: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int, int, dict[str, Any]]:
+    ledger = load_backward_reference_query_ledger()
+    units = sorted(
+        ledger["query_units"], key=lambda unit: text(unit.get("query_unit_id"))
+    )
+    by_doi: dict[str, list[int]] = defaultdict(list)
+    by_title: dict[str, list[int]] = defaultdict(list)
+    for index, candidate in enumerate(candidates):
+        doi = merger.normalize_doi(candidate.get("doi"))
+        if doi:
+            by_doi[doi].append(index)
+        title = normalized_ocr_identity_text(candidate.get("title"))
+        if title:
+            by_title[title].append(index)
+
+    matched = 0
+    ambiguous = 0
+    appended = 0
+    title_bearing = 0
+    for unit in units:
+        identity = unit["identity"]
+        if text(identity.get("title")):
+            title_bearing += 1
+        indexes: list[int] = []
+        doi = merger.normalize_doi(identity.get("doi_normalized"))
+        if doi:
+            indexes = list(by_doi.get(doi, []))
+        if not indexes:
+            normalized_title = normalized_ocr_identity_text(identity.get("title"))
+            unit_year = identity.get("publication_year")
+            unit_surnames = ocr_author_surnames(identity.get("author_last_names"))
+            for index in by_title.get(normalized_title, []):
+                candidate = candidates[index]
+                candidate_doi = merger.normalize_doi(candidate.get("doi"))
+                if doi and candidate_doi and doi != candidate_doi:
+                    continue
+                candidate_year = candidate.get("publication_year")
+                if (
+                    isinstance(unit_year, int)
+                    and not isinstance(unit_year, bool)
+                    and isinstance(candidate_year, int)
+                    and not isinstance(candidate_year, bool)
+                    and unit_year != candidate_year
+                ):
+                    continue
+                candidate_surnames = ocr_author_surnames(candidate.get("authors"))
+                if (
+                    unit_surnames
+                    and candidate_surnames
+                    and not (unit_surnames & candidate_surnames)
+                ):
+                    continue
+                indexes.append(index)
+        indexes = sorted(set(indexes))
+        query_id = text(unit.get("query_unit_id"))
+        if len(indexes) == 1:
+            add_backward_source_record(candidates[indexes[0]], query_id)
+            matched += 1
+            continue
+        if len(indexes) > 1:
+            ambiguous += 1
+        candidate_id = f"citation-candidate-{len(candidates) + 1:04d}"
+        candidates.append(backward_candidate(merger, candidate_id, unit))
+        appended += 1
+
+    raw_occurrences = ledger["counts"]["raw_reference_occurrences"]
+    duplicate_occurrences = raw_occurrences - appended
+    receipt = {
+        "path": relative(BACKWARD_REFERENCE_QUERY_LEDGER),
+        "sha256": digest(BACKWARD_REFERENCE_QUERY_LEDGER),
+        "raw_reference_occurrences": raw_occurrences,
+        "unique_query_units": len(units),
+        "title_bearing_query_units": title_bearing,
+        "matched_forward_candidates": matched,
+        "ambiguous_matches_appended": ambiguous,
+        "new_candidates_appended": appended,
+    }
+    return candidates, raw_occurrences, duplicate_occurrences, receipt
+
+
 def build(mode: str) -> dict[str, Any]:
     merger = load_merger(mode)
     identity_link_receipt: dict[str, Any] | None = None
@@ -1605,6 +1886,15 @@ def build(mode: str) -> dict[str, Any]:
             paths,
             "citation",
         )
+        (
+            candidates,
+            backward_raw_count,
+            backward_duplicates_removed,
+            backward_receipt,
+        ) = augment_with_backward_references(merger, candidates)
+        raw_count += backward_raw_count
+        duplicates_removed += backward_duplicates_removed
+        metadata_enrichment["ocr_backward_references"] = backward_receipt
         namespace = "citation_chasing"
     else:  # pragma: no cover - argparse guards this
         raise ValueError(f"Unknown mode: {mode}")
@@ -1618,7 +1908,9 @@ def build(mode: str) -> dict[str, Any]:
         "metadata_enrichment": metadata_enrichment,
         "deduplication": {
             "algorithm": (
-                "shared merger identity key"
+                "shared merger identity key for forward artifacts, followed by "
+                "normalized DOI or guarded normalized title, year, and author "
+                "matching for OCR-extracted backward references"
                 if mode == "citation-chasing"
                 else (
                     "connected components over source-qualified record ID, normalized "

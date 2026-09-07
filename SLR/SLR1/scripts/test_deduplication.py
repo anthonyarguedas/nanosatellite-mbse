@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused tests for full-text screening coding in deduplication.py."""
+"""Focused tests for candidate deduplication and screening coding."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 SLR1_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SLR1_DIR))
@@ -18,9 +19,12 @@ from deduplication import (  # noqa: E402
     FINAL_ARTIFACT_SELECTION_SCHEMA,
     accepted_final_direct_input_paths,
     apply_screening_decisions,
+    augment_with_backward_references,
     author_names,
     cluster_manifestations,
     direct_manifestations,
+    normalized_ocr_identity_text,
+    ocr_author_surnames,
     reviewer_screening_coding,
 )
 
@@ -236,6 +240,170 @@ class ConservativeClusteringTests(unittest.TestCase):
             )
         self.assertEqual(raw_count, 1)
         self.assertEqual(rows[0]["abstract"], "complete saved abstract")
+
+
+class BackwardReferenceCandidateTests(unittest.TestCase):
+    class Merger:
+        @staticmethod
+        def normalize_doi(value: object) -> str:
+            return value.casefold() if isinstance(value, str) else ""
+
+    @staticmethod
+    def candidate(
+        candidate_id: str,
+        title: str,
+        authors: list[str],
+        year: int,
+        doi: str = "",
+    ) -> dict[str, object]:
+        return {
+            "candidate_id": candidate_id,
+            "title": title,
+            "authors": authors,
+            "publication_year": year,
+            "doi": doi,
+            "source_records": [],
+        }
+
+    @staticmethod
+    def unit(
+        number: int,
+        title: str,
+        authors: list[str],
+        surnames: list[str],
+        year: int,
+        doi: str = "",
+    ) -> dict[str, object]:
+        return {
+            "query_unit_id": f"backward-query-{number:05d}",
+            "identity": {
+                "doi_normalized": doi,
+                "title": title,
+                "authors": authors,
+                "author_last_names": surnames,
+                "publication_year": year,
+                "other_stable_identifiers": [],
+            },
+        }
+
+    def test_ocr_identity_normalization_and_surname_parsing(self) -> None:
+        self.assertEqual(
+            normalized_ocr_identity_text(" Étude / CubeSat: ÉPS "),
+            "etude cubesat eps",
+        )
+        self.assertEqual(
+            ocr_author_surnames(
+                ["Velthuizen M.A.J.", "de Weck O.L.", "Smith, Jane"]
+            ),
+            {"velthuizen", "weck", "smith"},
+        )
+
+    def test_backward_units_match_forward_candidates_before_append(self) -> None:
+        candidates = [
+            self.candidate(
+                "citation-candidate-0001",
+                "Café CubeSat",
+                ["García M."],
+                2024,
+            ),
+            self.candidate(
+                "citation-candidate-0002",
+                "A DOI match",
+                ["Doe J."],
+                2023,
+                "10.1/example",
+            ),
+        ]
+        ledger = {
+            "counts": {"raw_reference_occurrences": 5},
+            "query_units": [
+                self.unit(3, "Unmatched title", ["Roe A."], ["roe"], 2022),
+                self.unit(
+                    2,
+                    "Cafe—CubeSat",
+                    ["García, M."],
+                    ["garcia"],
+                    2024,
+                ),
+                self.unit(
+                    1,
+                    "Different OCR title",
+                    ["Doe, J."],
+                    ["doe"],
+                    2023,
+                    "10.1/EXAMPLE",
+                ),
+            ],
+        }
+        with (
+            patch(
+                "deduplication.load_backward_reference_query_ledger",
+                return_value=ledger,
+            ),
+            patch("deduplication.digest", return_value="test-digest"),
+            patch("deduplication.relative", return_value="test-ledger.json"),
+        ):
+            records, raw_count, duplicate_count, receipt = (
+                augment_with_backward_references(self.Merger(), candidates)
+            )
+
+        self.assertEqual(raw_count, 5)
+        self.assertEqual(duplicate_count, 4)
+        self.assertEqual(len(records), 3)
+        self.assertEqual(records[-1]["candidate_id"], "citation-candidate-0003")
+        self.assertEqual(
+            records[0]["source_records"][0]["record_ids"],
+            ["backward-query-00002"],
+        )
+        self.assertEqual(
+            records[1]["source_records"][0]["record_ids"],
+            ["backward-query-00001"],
+        )
+        self.assertEqual(receipt["matched_forward_candidates"], 2)
+        self.assertEqual(receipt["new_candidates_appended"], 1)
+        self.assertEqual(receipt["sha256"], "test-digest")
+
+    def test_title_match_requires_compatible_year_and_author(self) -> None:
+        candidates = [
+            self.candidate(
+                "citation-candidate-0001",
+                "Shared title",
+                ["Smith J."],
+                2020,
+                "10.1/forward",
+            )
+        ]
+        ledger = {
+            "counts": {"raw_reference_occurrences": 3},
+            "query_units": [
+                self.unit(2, "Shared title", ["Jones A."], ["jones"], 2020),
+                self.unit(1, "Shared title", ["Smith J."], ["smith"], 2021),
+                self.unit(
+                    3,
+                    "Shared title",
+                    ["Smith J."],
+                    ["smith"],
+                    2020,
+                    "10.1/backward",
+                ),
+            ],
+        }
+        with (
+            patch(
+                "deduplication.load_backward_reference_query_ledger",
+                return_value=ledger,
+            ),
+            patch("deduplication.digest", return_value="test-digest"),
+            patch("deduplication.relative", return_value="test-ledger.json"),
+        ):
+            records, _raw_count, duplicate_count, receipt = (
+                augment_with_backward_references(self.Merger(), candidates)
+            )
+
+        self.assertEqual(duplicate_count, 0)
+        self.assertEqual(len(records), 4)
+        self.assertEqual(receipt["matched_forward_candidates"], 0)
+        self.assertEqual(receipt["new_candidates_appended"], 3)
 
 
 class ReviewerScreeningCodingTests(unittest.TestCase):
