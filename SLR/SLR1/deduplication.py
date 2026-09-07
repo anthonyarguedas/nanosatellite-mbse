@@ -157,6 +157,14 @@ BACKWARD_STRUCTURED_OCR_RECORD_FIELDS = frozenset(
 BACKWARD_STRUCTURED_OCR_EXPECTED_BATCH_COUNT = 6
 BACKWARD_STRUCTURED_OCR_EXPECTED_RECORD_COUNT = 564
 BACKWARD_STRUCTURED_OCR_EXPECTED_TITLE_COUNT = 556
+BACKWARD_STRUCTURED_OCR_EXPECTED_FIELD_COUNTS = {
+    "title": 556,
+    "authors": 538,
+    "publication_title": 540,
+    "publication_year": 481,
+    "doi": 71,
+    "document_type_hint": 548,
+}
 OCR_SURNAME_PARTICLES = frozenset(
     {"da", "de", "del", "della", "der", "di", "dos", "du", "la", "le", "van", "von"}
 )
@@ -1743,7 +1751,10 @@ def load_structured_ocr_enrichments(
     expected_title_count: int = BACKWARD_STRUCTURED_OCR_EXPECTED_TITLE_COUNT,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Validate structured OCR batches without using their metadata for identity."""
-    selected_paths = paths or structured_ocr_enrichment_input_paths()
+    production_ledger = paths is None
+    selected_paths = (
+        structured_ocr_enrichment_input_paths() if paths is None else paths
+    )
     if not selected_paths:
         raise ValueError("No structured OCR enrichment batches are available")
 
@@ -1756,15 +1767,20 @@ def load_structured_ocr_enrichments(
         payload = load_json(path)
         batch_id = f"batch-{position:04d}"
         batch_records = payload.get("records")
+        assigned_count = payload.get("assigned_count")
         if (
-            path.name != f"{batch_id}.json"
+            set(payload)
+            != {"schema_version", "batch_id", "assigned_count", "records"}
+            or path.name != f"{batch_id}.json"
             or payload.get("schema_version")
             != BACKWARD_STRUCTURED_OCR_ENRICHMENT_SCHEMA
             or payload.get("batch_id") != batch_id
             or not isinstance(batch_records, list)
             or not batch_records
             or len(batch_records) > 100
-            or payload.get("assigned_count") != len(batch_records)
+            or isinstance(assigned_count, bool)
+            or not isinstance(assigned_count, int)
+            or assigned_count != len(batch_records)
         ):
             raise ValueError(f"A structured OCR enrichment batch is invalid: {path}")
 
@@ -1861,6 +1877,11 @@ def load_structured_ocr_enrichments(
         or len(candidate_ids) != expected_record_count
         or len(query_ids) != expected_record_count
         or recovered_fields["title"] != expected_title_count
+        or (
+            production_ledger
+            and recovered_fields
+            != BACKWARD_STRUCTURED_OCR_EXPECTED_FIELD_COUNTS
+        )
     ):
         raise ValueError("The structured OCR enrichment coverage changed")
 
