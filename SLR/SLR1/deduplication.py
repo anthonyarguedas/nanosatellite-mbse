@@ -5,7 +5,8 @@ Modes:
 - ``psr`` merges the final Scopus and Web of Science prior-review partitions.
 - ``citation-chasing`` combines final Scopus and Web of Science forward citation
   artifacts with the deduplicated OCR backward reference ledger, then applies
-  validated structured OCR metadata after candidate identity assignment.
+  validated structured OCR metadata and portal abstracts after candidate
+  identity assignment.
 - ``review-searches`` uses final direct-review search artifacts.
 
 Source-event validation remains with the source-specific artifacts. This script
@@ -164,6 +165,54 @@ BACKWARD_STRUCTURED_OCR_EXPECTED_FIELD_COUNTS = {
     "publication_year": 481,
     "doi": 71,
     "document_type_hint": 548,
+}
+CITATION_PORTAL_ABSTRACT_ENRICHMENT_DIR = (
+    SLR1_DIR
+    / "citation-chasing/backward/cycle-1/metadata/portal-abstract-enrichment/batches"
+)
+CITATION_PORTAL_ABSTRACT_ENRICHMENT_SCHEMA = (
+    "slr1-citation-portal-abstract-enrichment-batch/v1"
+)
+CITATION_PORTAL_ABSTRACT_STATUSES = frozenset(
+    {
+        "abstract_found_existing",
+        "abstract_found_live",
+        "matched_no_abstract",
+        "not_found",
+        "identity_ambiguous",
+        "source_failure",
+    }
+)
+CITATION_PORTAL_ABSTRACT_FOUND_STATUSES = frozenset(
+    {"abstract_found_existing", "abstract_found_live"}
+)
+CITATION_PORTAL_ABSTRACT_SOURCES = frozenset(
+    {"scopus", "web_of_science_core_collection"}
+)
+CITATION_PORTAL_ABSTRACT_RECORD_FIELDS = frozenset(
+    {
+        "candidate_id",
+        "status",
+        "abstract",
+        "abstract_source",
+        "source_record_id",
+        "matched_title",
+        "matched_authors",
+        "matched_publication_year",
+        "matched_doi",
+        "match_basis",
+        "source_artifact_paths",
+        "evidence_note",
+    }
+)
+CITATION_PORTAL_ABSTRACT_EXPECTED_BATCH_COUNT = 30
+CITATION_PORTAL_ABSTRACT_EXPECTED_RECORD_COUNT = 1468
+CITATION_PORTAL_ABSTRACT_EXPECTED_STATUS_COUNTS = {
+    "abstract_found_existing": 561,
+    "abstract_found_live": 310,
+    "identity_ambiguous": 63,
+    "matched_no_abstract": 10,
+    "not_found": 524,
 }
 OCR_SURNAME_PARTICLES = frozenset(
     {"da", "de", "del", "della", "der", "di", "dos", "du", "la", "le", "van", "von"}
@@ -2136,6 +2185,280 @@ def apply_structured_ocr_enrichments(
     return candidates, receipt
 
 
+def citation_portal_abstract_input_paths() -> list[Path]:
+    directory = CITATION_PORTAL_ABSTRACT_ENRICHMENT_DIR
+    if not directory.is_dir() or directory.is_symlink():
+        raise ValueError(
+            f"Expected a citation abstract enrichment directory: {directory}"
+        )
+    paths = sorted(directory.iterdir())
+    if len(paths) != CITATION_PORTAL_ABSTRACT_EXPECTED_BATCH_COUNT or any(
+        not re.fullmatch(r"batch-\d{4}\.json", path.name) for path in paths
+    ):
+        raise ValueError("The citation abstract enrichment batch ledger changed")
+    for path in paths:
+        require_regular(path)
+    return paths
+
+
+def load_citation_portal_abstract_enrichments(
+    paths: list[Path] | None = None,
+    *,
+    expected_record_count: int = CITATION_PORTAL_ABSTRACT_EXPECTED_RECORD_COUNT,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    production_ledger = paths is None
+    selected_paths = citation_portal_abstract_input_paths() if paths is None else paths
+    if not selected_paths:
+        raise ValueError("No citation abstract enrichment batches are available")
+
+    records: list[dict[str, Any]] = []
+    input_receipts: list[dict[str, Any]] = []
+    candidate_ids: set[str] = set()
+    status_counts: dict[str, int] = defaultdict(int)
+    for position, path in enumerate(selected_paths, start=1):
+        require_regular(path)
+        payload = load_json(path)
+        batch_id = f"batch-{position:04d}"
+        batch_records = payload.get("records")
+        assigned_count = payload.get("assigned_count")
+        source_artifacts = payload.get("source_artifacts")
+        if (
+            set(payload)
+            != {
+                "schema_version",
+                "batch_id",
+                "assigned_count",
+                "source_artifacts",
+                "records",
+            }
+            or path.name != f"{batch_id}.json"
+            or payload.get("schema_version")
+            != CITATION_PORTAL_ABSTRACT_ENRICHMENT_SCHEMA
+            or payload.get("batch_id") != batch_id
+            or not isinstance(batch_records, list)
+            or not batch_records
+            or len(batch_records) > 50
+            or isinstance(assigned_count, bool)
+            or not isinstance(assigned_count, int)
+            or assigned_count != len(batch_records)
+            or not isinstance(source_artifacts, list)
+        ):
+            raise ValueError(f"A citation abstract enrichment batch is invalid: {path}")
+
+        artifact_paths: set[str] = set()
+        for artifact in source_artifacts:
+            if not isinstance(artifact, Mapping) or set(artifact) != {
+                "path",
+                "sha256",
+                "byte_count",
+            }:
+                raise ValueError(
+                    f"A citation abstract source receipt is malformed: {path}"
+                )
+            raw_path = text(artifact.get("path"))
+            expected_hash = text(artifact.get("sha256"))
+            byte_count = artifact.get("byte_count")
+            if (
+                not raw_path
+                or raw_path in artifact_paths
+                or not re.fullmatch(r"[0-9a-f]{64}", expected_hash)
+                or isinstance(byte_count, bool)
+                or not isinstance(byte_count, int)
+                or byte_count < 1
+            ):
+                raise ValueError(
+                    f"A citation abstract source receipt is invalid: {path}"
+                )
+            source_path = (REPOSITORY_ROOT / raw_path).resolve(strict=False)
+            try:
+                source_path.relative_to(REPOSITORY_ROOT)
+            except ValueError as error:
+                raise ValueError(
+                    "A citation abstract source artifact escaped the repository"
+                ) from error
+            require_regular(source_path)
+            if (
+                source_path.stat().st_size != byte_count
+                or digest(source_path) != expected_hash
+            ):
+                raise ValueError(
+                    f"A citation abstract source artifact changed: {raw_path}"
+                )
+            artifact_paths.add(raw_path)
+
+        for item in batch_records:
+            if not isinstance(item, dict) or set(item) != set(
+                CITATION_PORTAL_ABSTRACT_RECORD_FIELDS
+            ):
+                raise ValueError(
+                    f"A citation abstract enrichment row is malformed: {path}"
+                )
+            candidate_id = item.get("candidate_id")
+            status = item.get("status")
+            if (
+                not isinstance(candidate_id, str)
+                or not re.fullmatch(r"citation-candidate-\d{4}", candidate_id)
+                or candidate_id in candidate_ids
+                or status not in CITATION_PORTAL_ABSTRACT_STATUSES
+            ):
+                raise ValueError(
+                    f"A citation abstract enrichment identity is invalid: {path}"
+                )
+            abstract = item.get("abstract")
+            if status in CITATION_PORTAL_ABSTRACT_FOUND_STATUSES:
+                if (
+                    not isinstance(abstract, str)
+                    or len(abstract.strip()) < 40
+                    or abstract != abstract.strip()
+                    or item.get("abstract_source")
+                    not in CITATION_PORTAL_ABSTRACT_SOURCES
+                    or not text(item.get("source_record_id"))
+                    or not text(item.get("matched_title"))
+                    or not text(item.get("match_basis"))
+                ):
+                    raise ValueError(f"A found citation abstract is incomplete: {path}")
+            elif abstract is not None:
+                raise ValueError(
+                    f"A citation abstract status has unexpected text: {path}"
+                )
+
+            matched_authors = item.get("matched_authors")
+            if not isinstance(matched_authors, list) or any(
+                not (
+                    isinstance(author, str)
+                    and author.strip()
+                    or isinstance(author, Mapping)
+                    and isinstance(author.get("name"), str)
+                    and author["name"].strip()
+                )
+                for author in matched_authors
+            ):
+                raise ValueError(f"A citation abstract author value is invalid: {path}")
+            matched_year = item.get("matched_publication_year")
+            if matched_year is not None and (
+                isinstance(matched_year, bool)
+                or not isinstance(matched_year, int)
+                or not 1000 <= matched_year <= 9999
+            ):
+                raise ValueError(f"A citation abstract year is invalid: {path}")
+            for field in (
+                "abstract_source",
+                "source_record_id",
+                "matched_title",
+                "matched_doi",
+                "match_basis",
+            ):
+                value = item.get(field)
+                if value is not None and (
+                    not isinstance(value, str)
+                    or not value.strip()
+                    or value != value.strip()
+                ):
+                    raise ValueError(
+                        f"A citation abstract {field} value is invalid: {path}"
+                    )
+            evidence_note = item.get("evidence_note")
+            source_paths = item.get("source_artifact_paths")
+            if (
+                not isinstance(evidence_note, str)
+                or not evidence_note.strip()
+                or evidence_note != evidence_note.strip()
+                or not isinstance(source_paths, list)
+                or any(
+                    not isinstance(source_path, str)
+                    or source_path not in artifact_paths
+                    for source_path in source_paths
+                )
+                or (
+                    status in CITATION_PORTAL_ABSTRACT_FOUND_STATUSES
+                    and not source_paths
+                )
+            ):
+                raise ValueError(
+                    f"A citation abstract evidence value is invalid: {path}"
+                )
+
+            candidate_ids.add(candidate_id)
+            status_counts[status] += 1
+            records.append(copy.deepcopy(item))
+
+        input_receipts.append(
+            {
+                "path": relative(path),
+                "sha256": digest(path),
+                "batch_id": batch_id,
+                "record_count": len(batch_records),
+                "source_artifact_count": len(source_artifacts),
+            }
+        )
+
+    if (
+        len(records) != expected_record_count
+        or len(candidate_ids) != expected_record_count
+        or (
+            production_ledger
+            and dict(sorted(status_counts.items()))
+            != CITATION_PORTAL_ABSTRACT_EXPECTED_STATUS_COUNTS
+        )
+    ):
+        raise ValueError("The citation abstract enrichment coverage changed")
+    receipt = {
+        "schema_version": CITATION_PORTAL_ABSTRACT_ENRICHMENT_SCHEMA,
+        "inputs": input_receipts,
+        "batch_count": len(selected_paths),
+        "record_count": len(records),
+        "candidate_id_coverage": len(candidate_ids),
+        "status_counts": dict(sorted(status_counts.items())),
+        "abstract_count": sum(
+            item["status"] in CITATION_PORTAL_ABSTRACT_FOUND_STATUSES
+            for item in records
+        ),
+    }
+    return records, receipt
+
+
+def apply_citation_portal_abstract_enrichments(
+    candidates: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    enrichments, receipt = load_citation_portal_abstract_enrichments()
+    original_candidate_ids = [candidate.get("candidate_id") for candidate in candidates]
+    by_candidate_id = {
+        text(candidate.get("candidate_id")): candidate for candidate in candidates
+    }
+    enrichment_ids = {item["candidate_id"] for item in enrichments}
+    if not enrichment_ids <= set(by_candidate_id):
+        raise ValueError("Citation abstract enrichments reference missing candidates")
+    for item in enrichments:
+        if item["status"] not in CITATION_PORTAL_ABSTRACT_FOUND_STATUSES:
+            continue
+        candidate = by_candidate_id[item["candidate_id"]]
+        if candidate.get("abstract") or candidate.get("abstract_snippet"):
+            raise ValueError(
+                "Citation portal enrichment would replace existing abstract text: "
+                f"{item['candidate_id']}"
+            )
+        candidate["abstract"] = item["abstract"]
+    if original_candidate_ids != [
+        candidate.get("candidate_id") for candidate in candidates
+    ]:
+        raise ValueError("Citation abstract enrichment changed candidate IDs or order")
+    receipt.update(
+        {
+            "enriched_candidate_coverage": len(enrichment_ids),
+            "applied_abstracts": sum(
+                bool(by_candidate_id[candidate_id].get("abstract"))
+                for candidate_id in enrichment_ids
+            ),
+            "application_stage": (
+                "after backward matching, structured OCR enrichment, and candidate ID assignment"
+            ),
+        }
+    )
+    if receipt["applied_abstracts"] != receipt["abstract_count"]:
+        raise ValueError("Citation abstract application accounting changed")
+    return candidates, receipt
+
+
 def build(mode: str) -> dict[str, Any]:
     merger = load_merger(mode)
     identity_link_receipt: dict[str, Any] | None = None
@@ -2195,10 +2518,14 @@ def build(mode: str) -> dict[str, Any]:
         candidates, structured_ocr_receipt = apply_structured_ocr_enrichments(
             merger, candidates
         )
+        candidates, portal_abstract_receipt = (
+            apply_citation_portal_abstract_enrichments(candidates)
+        )
         raw_count += backward_raw_count
         duplicates_removed += backward_duplicates_removed
         metadata_enrichment["ocr_backward_references"] = backward_receipt
         metadata_enrichment["ocr_structured_metadata"] = structured_ocr_receipt
+        metadata_enrichment["citation_portal_abstracts"] = portal_abstract_receipt
         namespace = "citation_chasing"
     else:  # pragma: no cover - argparse guards this
         raise ValueError(f"Unknown mode: {mode}")

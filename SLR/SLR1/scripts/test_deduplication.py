@@ -18,12 +18,14 @@ from deduplication import (  # noqa: E402
     FINAL_ARTIFACT_SELECTION_FILENAME,
     FINAL_ARTIFACT_SELECTION_SCHEMA,
     accepted_final_direct_input_paths,
+    apply_citation_portal_abstract_enrichments,
     apply_screening_decisions,
     apply_structured_ocr_enrichments,
     augment_with_backward_references,
     author_names,
     cluster_manifestations,
     direct_manifestations,
+    load_citation_portal_abstract_enrichments,
     load_structured_ocr_enrichments,
     normalized_ocr_identity_text,
     ocr_author_surnames,
@@ -543,6 +545,76 @@ class BackwardReferenceCandidateTests(unittest.TestCase):
             self.assertRaisesRegex(ValueError, "wrong backward query"),
         ):
             apply_structured_ocr_enrichments(self.Merger(), [candidate])
+
+    def test_citation_portal_abstract_batch_validation_and_application(self) -> None:
+        abstract = "A complete native source abstract for a CubeSat systems paper."
+        with tempfile.TemporaryDirectory(dir=SLR1_DIR) as temporary:
+            directory = Path(temporary)
+            source_path = directory / "source.json"
+            source_path.write_text(
+                json.dumps({"results": [{"abstract": abstract}]}),
+                encoding="utf-8",
+            )
+            repository_root = SLR1_DIR.parents[1]
+            source_bytes = source_path.read_bytes()
+            row = {
+                "candidate_id": "citation-candidate-0002",
+                "status": "abstract_found_live",
+                "abstract": abstract,
+                "abstract_source": "scopus",
+                "source_record_id": "SCOPUS-PUBLICATION:1",
+                "matched_title": "CubeSat systems paper",
+                "matched_authors": ["A. Author"],
+                "matched_publication_year": 2024,
+                "matched_doi": "10.1000/example",
+                "match_basis": "exact_doi",
+                "source_artifact_paths": [
+                    str(source_path.relative_to(repository_root))
+                ],
+                "evidence_note": "Exact DOI and compatible title.",
+            }
+            payload = {
+                "schema_version": ("slr1-citation-portal-abstract-enrichment-batch/v1"),
+                "batch_id": "batch-0001",
+                "assigned_count": 1,
+                "source_artifacts": [
+                    {
+                        "path": str(source_path.relative_to(repository_root)),
+                        "sha256": hashlib.sha256(source_bytes).hexdigest(),
+                        "byte_count": len(source_bytes),
+                    }
+                ],
+                "records": [row],
+            }
+            batch_path = directory / "batch-0001.json"
+            batch_path.write_text(json.dumps(payload), encoding="utf-8")
+            rows, receipt = load_citation_portal_abstract_enrichments(
+                [batch_path], expected_record_count=1
+            )
+            self.assertEqual(rows, [row])
+            self.assertEqual(receipt["abstract_count"], 1)
+            self.assertEqual(receipt["candidate_id_coverage"], 1)
+
+            candidate = self.candidate(
+                "citation-candidate-0002", "CubeSat systems paper", ["A. Author"], 2024
+            )
+            candidate.update({"abstract": None, "abstract_snippet": None})
+            with patch(
+                "deduplication.load_citation_portal_abstract_enrichments",
+                return_value=(rows, receipt),
+            ):
+                enriched, result_receipt = apply_citation_portal_abstract_enrichments(
+                    [candidate]
+                )
+            self.assertIs(enriched[0], candidate)
+            self.assertEqual(candidate["abstract"], abstract)
+            self.assertEqual(result_receipt["applied_abstracts"], 1)
+
+            source_path.write_text("{}", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "source artifact changed"):
+                load_citation_portal_abstract_enrichments(
+                    [batch_path], expected_record_count=1
+                )
 
 
 class ReviewerScreeningCodingTests(unittest.TestCase):
