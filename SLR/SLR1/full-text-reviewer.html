@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Full Text Needed Reviewer</title>
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --panel: #13151b;
+      --panel-2: #191c24;
+      --text: #f5f7fb;
+      --muted: #a9b0bd;
+      --line: #2a2f3a;
+      --red: #ef4444;
+      --red-dim: rgba(239, 68, 68, 0.15);
+      --purple: #a855f7;
+      --purple-dim: rgba(168, 85, 247, 0.15);
+      --orange: #f59e0b;
+      --orange-dim: rgba(245, 158, 11, 0.15);
+      --green: #22c55e;
+      --shadow: 0 16px 48px rgba(0,0,0,.35);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 18% 0%, #171a22 0, var(--bg) 38rem);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    button { font: inherit; }
+
+    .app {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(11,12,16,.82);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      min-width: 220px;
+    }
+
+    .brand h1 {
+      font-size: 15px;
+      margin: 0;
+      letter-spacing: .02em;
+      font-weight: 780;
+    }
+
+    .brand .file-name {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      max-width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .stats {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .dot { width: 7px; height: 7px; border-radius: 99px; background: var(--muted); }
+    .dot.orange { background: var(--orange); }
+    .dot.purple { background: var(--purple); }
+    .dot.red { background: var(--red); }
+    .dot.green { background: var(--green); }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .small-btn {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .small-btn:hover { border-color: #4a5160; }
+    .small-btn:disabled { opacity: .45; cursor: default; }
+
+    main {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      padding: 26px;
+    }
+
+    .card {
+      width: min(1050px, 100%);
+      height: min(700px, 100%);
+      min-height: 460px;
+      background: linear-gradient(180deg, rgba(25,28,36,.96), rgba(18,20,26,.98));
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--orange);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      overflow: hidden;
+    }
+
+    .paper-head {
+      padding: 30px 34px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .paper-id {
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(20px, 2.4vw, 30px);
+      line-height: 1.2;
+      letter-spacing: -.018em;
+      font-weight: 790;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(90px, .4fr) minmax(180px, .9fr);
+      gap: 14px 20px;
+      padding: 18px 34px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.015);
+    }
+
+    .meta-item { min-width: 0; }
+    .meta-item.authors { grid-column: 1 / -1; }
+    .meta-label {
+      font-size: 11px;
+      color: #7f8796;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .meta-value {
+      color: #dfe4ec;
+      font-size: 17px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .meta-value a {
+      color: #ffd28a;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    .meta-value a:hover { color: #ffe2ad; }
+
+    .abstract-wrap {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      padding: 22px 34px 28px;
+    }
+
+    .abstract-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .abstract {
+      overflow: auto;
+      padding-right: 12px;
+      white-space: pre-wrap;
+      font-size: 20px;
+      line-height: 1.58;
+      color: #edf0f5;
+      scrollbar-color: #4c5260 transparent;
+    }
+
+    .abstract.empty {
+      color: #7f8796;
+      font-style: italic;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      background: rgba(11,12,16,.9);
+      padding: 12px 20px 14px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+
+    .action {
+      border: 1px solid transparent;
+      border-radius: 11px;
+      min-height: 58px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 780;
+      transition: transform .06s ease, filter .12s ease, border-color .12s ease;
+    }
+    .action:active { transform: translateY(1px); }
+    .action:hover { filter: brightness(1.08); }
+    .action:disabled { opacity: .4; cursor: default; filter: none; }
+
+    .action.exclude { background: var(--red-dim); border-color: rgba(239,68,68,.42); color: #fecaca; }
+    .action.skip { background: var(--purple-dim); border-color: rgba(168,85,247,.45); color: #ead5ff; }
+    .action.ratify { background: var(--orange-dim); border-color: rgba(245,158,11,.48); color: #ffe1a6; }
+
+    kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      min-width: 24px;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+      color: white;
+      box-shadow: inset 0 -1px rgba(255,255,255,.06);
+    }
+
+    .reason-panel {
+      position: fixed;
+      left: 50%;
+      bottom: 88px;
+      transform: translateX(-50%);
+      width: min(880px, calc(100% - 36px));
+      max-height: min(520px, calc(100vh - 150px));
+      background: #16191f;
+      border: 1px solid rgba(239,68,68,.38);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      z-index: 30;
+      display: none;
+    }
+    .reason-panel.open { display: block; }
+
+    .reason-head {
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: var(--red-dim);
+    }
+    .reason-head strong { color: #fecaca; }
+    .reason-grid {
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+      overflow: auto;
+      max-height: 430px;
+    }
+    .reason-btn {
+      border: 1px solid rgba(239,68,68,.30);
+      background: rgba(239,68,68,.08);
+      color: #f7d4d4;
+      padding: 11px 12px;
+      border-radius: 9px;
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+    .reason-btn:hover { background: rgba(239,68,68,.16); border-color: rgba(239,68,68,.52); }
+    .reason-count { color: #9aa1ae; font-size: 11px; }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(2,3,5,.76);
+      backdrop-filter: blur(5px);
+      display: none;
+      place-items: center;
+      padding: 20px;
+    }
+    .overlay.open { display: grid; }
+    .modal {
+      width: min(720px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      background: #16191f;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .modal h2 { margin: 0 0 14px; font-size: 20px; }
+    .modal p { color: var(--muted); line-height: 1.5; }
+    .help-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 14px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .loader {
+      width: min(720px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .loader h2 { margin-top: 0; }
+    .loader p { color: var(--muted); line-height: 1.55; }
+    .loader-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .primary {
+      border: 1px solid rgba(245,158,11,.45);
+      color: #ffe2a9;
+      background: var(--orange-dim);
+      padding: 10px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .hidden { display: none !important; }
+    .toast {
+      position: fixed;
+      top: 74px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 80;
+      background: #22262f;
+      color: #f1f4f8;
+      border: 1px solid #383e49;
+      border-radius: 9px;
+      padding: 9px 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.3);
+      transition: .18s ease;
+      font-size: 13px;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.red { border-color: rgba(239,68,68,.55); }
+    .toast.purple { border-color: rgba(168,85,247,.55); }
+    .toast.orange { border-color: rgba(245,158,11,.55); }
+
+    .finished {
+      text-align: center;
+      padding: 34px;
+    }
+    .finished h2 { font-size: 30px; margin-bottom: 8px; }
+    .finished p { color: var(--muted); }
+
+    @media (max-width: 760px) {
+      body { overflow: auto; }
+      .app { min-height: 100%; height: auto; }
+      header { align-items: flex-start; flex-wrap: wrap; }
+      .stats { order: 3; width: 100%; justify-content: flex-start; }
+      main { padding: 14px; min-height: 65vh; }
+      .card { height: auto; min-height: 650px; }
+      .paper-head, .meta, .abstract-wrap { padding-left: 20px; padding-right: 20px; }
+      .meta { grid-template-columns: 1fr; }
+      .actions { grid-template-columns: 1fr; }
+      .reason-grid { grid-template-columns: 1fr; }
+      .reason-panel { bottom: 210px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <h1>Full-text screening reviewer</h1>
+      <div class="file-name" id="fileName">citation-candidates.json</div>
+    </div>
+
+    <div class="stats" id="stats">
+      <span class="stat"><span class="dot orange"></span><span id="remainingStat">— remaining</span></span>
+      <span class="stat"><span class="dot green"></span><span id="ratifiedStat">— ratified</span></span>
+      <span class="stat"><span class="dot red"></span><span id="excludedStat">— excluded</span></span>
+      <span class="stat"><span class="dot purple"></span><span id="skippedStat">— deferred</span></span>
+      <span class="stat"><span class="dot"></span><span id="passStat">pass —</span></span>
+    </div>
+
+    <div class="header-actions">
+      <button class="small-btn" id="undoBtn" title="Undo last action (U)">Undo</button>
+      <button class="small-btn" id="saveBtn" title="Save modified JSON (Ctrl/Cmd+S)">Save JSON</button>
+      <button class="small-btn" id="helpBtn" title="Keyboard help (?)">?</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="loader" id="loader">
+      <h2>Loading citation-candidates.json…</h2>
+      <p id="loaderText">Trying to read the JSON file from the same folder as this HTML file.</p>
+      <div class="loader-actions hidden" id="loaderActions">
+        <button class="primary" id="openBtn">Choose JSON file</button>
+        <button class="small-btn" id="retryBtn">Retry same-folder load</button>
+      </div>
+      <input type="file" id="fileInput" accept="application/json,.json" class="hidden" />
+    </section>
+
+    <article class="card hidden" id="paperCard">
+      <div class="paper-head">
+        <div class="paper-id" id="paperId"></div>
+        <h2 class="title" id="paperTitle"></h2>
+      </div>
+      <div class="meta">
+        <div class="meta-item authors">
+          <div class="meta-label">Authors</div>
+          <div class="meta-value" id="authors"></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Venue</div>
+          <div class="meta-value" id="venue"></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Year</div>
+          <div class="meta-value" id="year"></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">DOI</div>
+          <div class="meta-value" id="doi"></div>
+        </div>
+      </div>
+      <div class="abstract-wrap">
+        <div class="abstract-label">Abstract</div>
+        <div class="abstract" id="abstract" tabindex="0"></div>
+      </div>
+    </article>
+
+    <section class="loader hidden" id="finishedCard">
+      <div class="finished">
+        <h2>Pass complete</h2>
+        <p id="finishedText"></p>
+        <div class="loader-actions" style="justify-content:center">
+          <button class="primary" id="downloadFinishedBtn">Save JSON</button>
+          <button class="small-btn" id="resetRatifiedBtn">Reset local ratifications</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="actions">
+      <button class="action exclude" id="excludeBtn"><kbd>E</kbd> Exclude / choose reason</button>
+      <button class="action skip" id="skipBtn"><kbd>Space</kbd> Skip for this pass</button>
+      <button class="action ratify" id="ratifyBtn"><kbd>F</kbd> Ratify full_text_needed</button>
+    </div>
+  </footer>
+</div>
+
+<div class="reason-panel" id="reasonPanel" aria-hidden="true">
+  <div class="reason-head">
+    <strong>Choose an existing exclusion reason</strong>
+    <span style="color:#b3bac6;font-size:12px">Press 1–9 or Esc</span>
+  </div>
+  <div class="reason-grid" id="reasonGrid"></div>
+</div>
+
+<div class="overlay" id="helpOverlay">
+  <div class="modal">
+    <h2>Keyboard controls</h2>
+    <p>Designed so you can screen without reaching for the mouse.</p>
+    <div class="help-grid">
+      <kbd>1…9</kbd><div>Immediately exclude using the corresponding existing reason.</div>
+      <kbd>E</kbd><div>Open/close the red exclusion-reason panel.</div>
+      <kbd>Space</kbd><div>Skip this report. Skipped reports come back after the rest of the current pass. <kbd>S</kbd> also works.</div>
+      <kbd>F</kbd><div>Ratify <code>full_text_needed</code>. The JSON decision stays unchanged; the paper is remembered locally as reviewed.</div>
+      <kbd>Enter</kbd><div>Same as F: ratify <code>full_text_needed</code>.</div>
+      <kbd>U</kbd><div>Undo the last action.</div>
+      <kbd>↑ / ↓</kbd><div>Scroll the abstract.</div>
+      <kbd>PgUp / PgDn</kbd><div>Scroll the abstract by a larger amount.</div>
+      <kbd>Ctrl/⌘ + S</kbd><div>Save the modified JSON. If the browser cannot overwrite the source, it downloads a replacement.</div>
+      <kbd>?</kbd><div>Show/hide this help.</div>
+      <kbd>Esc</kbd><div>Close open panels.</div>
+    </div>
+    <p style="margin-top:20px">Ratifications are stored in <code>localStorage</code> using this file's schema / namespace / generation timestamp as the key. Use “Reset local ratifications” after completion if you want to review them again.</p>
+    <button class="small-btn" id="closeHelpBtn">Close</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const EXPECTED_NAME = 'citation-candidates.json';
+  const MAX_UNDO = 100;
+
+  let data = null;
+  let recordsById = new Map();
+  let currentId = null;
+  let activeQueue = [];
+  let deferredQueue = [];
+  let exclusionReasons = [];
+  let passNo = 1;
+  let fileHandle = null;
+  let sourceFileName = EXPECTED_NAME;
+  let dirty = false;
+  let undoStack = [];
+  let ratifiedSet = new Set();
+  let storageKey = '';
+  let initialFullTextCount = 0;
+  let sessionExcluded = 0;
+  let sessionRatified = 0;
+  let sessionSkips = 0;
+
+  const $ = (id) => document.getElementById(id);
+  const els = {
+    loader: $('loader'), loaderText: $('loaderText'), loaderActions: $('loaderActions'),
+    fileInput: $('fileInput'), openBtn: $('openBtn'), retryBtn: $('retryBtn'),
+    paperCard: $('paperCard'), finishedCard: $('finishedCard'), finishedText: $('finishedText'),
+    fileName: $('fileName'), paperId: $('paperId'), paperTitle: $('paperTitle'),
+    venue: $('venue'), authors: $('authors'), year: $('year'), doi: $('doi'), abstract: $('abstract'),
+    remainingStat: $('remainingStat'), ratifiedStat: $('ratifiedStat'), excludedStat: $('excludedStat'),
+    skippedStat: $('skippedStat'), passStat: $('passStat'),
+    excludeBtn: $('excludeBtn'), skipBtn: $('skipBtn'), ratifyBtn: $('ratifyBtn'),
+    undoBtn: $('undoBtn'), saveBtn: $('saveBtn'), helpBtn: $('helpBtn'),
+    reasonPanel: $('reasonPanel'), reasonGrid: $('reasonGrid'),
+    helpOverlay: $('helpOverlay'), closeHelpBtn: $('closeHelpBtn'), toast: $('toast'),
+    downloadFinishedBtn: $('downloadFinishedBtn'), resetRatifiedBtn: $('resetRatifiedBtn')
+  };
+
+  function humanizeReason(reason) {
+    return reason
+      .replace(/^exclude_/, '')
+      .split('_')
+      .map(s => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(' ');
+  }
+
+  function getStorageKey(obj) {
+    return [
+      'fullTextReviewer',
+      obj.schema_version || 'unknown-schema',
+      obj.review_namespace || 'unknown-namespace',
+      obj.generated_at || 'unknown-generation'
+    ].join(':');
+  }
+
+  function loadRatifications() {
+    storageKey = getStorageKey(data);
+    try {
+      const raw = localStorage.getItem(storageKey);
+      const ids = raw ? JSON.parse(raw) : [];
+      ratifiedSet = new Set(Array.isArray(ids) ? ids : []);
+    } catch (_) {
+      ratifiedSet = new Set();
+    }
+  }
+
+  function saveRatifications() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify([...ratifiedSet]));
+    } catch (_) {}
+  }
+
+  function validateData(obj) {
+    if (!obj || !Array.isArray(obj.records)) {
+      throw new Error('JSON does not contain a top-level "records" array.');
+    }
+    const ids = new Set();
+    for (const rec of obj.records) {
+      if (!rec || typeof rec !== 'object' || !rec.candidate_id) continue;
+      if (ids.has(rec.candidate_id)) throw new Error(`Duplicate candidate_id: ${rec.candidate_id}`);
+      ids.add(rec.candidate_id);
+    }
+  }
+
+  function initialize(obj, filename = EXPECTED_NAME) {
+    validateData(obj);
+    data = obj;
+    sourceFileName = filename || EXPECTED_NAME;
+    els.fileName.textContent = sourceFileName;
+    recordsById = new Map(data.records.map(r => [r.candidate_id, r]));
+
+    const reasonCounts = new Map();
+    for (const r of data.records) {
+      const d = r.screening_decision;
+      if (typeof d === 'string' && d.startsWith('exclude_')) {
+        reasonCounts.set(d, (reasonCounts.get(d) || 0) + 1);
+      }
+    }
+    exclusionReasons = [...reasonCounts.entries()]
+      .sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([reason, count]) => ({reason, count}));
+
+    loadRatifications();
+
+    const fullTextIds = data.records
+      .filter(r => r.screening_decision === 'full_text_needed')
+      .map(r => r.candidate_id);
+    initialFullTextCount = fullTextIds.length;
+
+    // Purge ratification IDs that are no longer full_text_needed in this file version.
+    const fullTextSet = new Set(fullTextIds);
+    ratifiedSet = new Set([...ratifiedSet].filter(id => fullTextSet.has(id)));
+    saveRatifications();
+
+    activeQueue = fullTextIds.filter(id => !ratifiedSet.has(id));
+    deferredQueue = [];
+    currentId = null;
+    passNo = 1;
+    sessionExcluded = 0;
+    sessionRatified = 0;
+    sessionSkips = 0;
+    undoStack = [];
+    dirty = false;
+
+    renderReasonPanel();
+    els.loader.classList.add('hidden');
+    els.paperCard.classList.remove('hidden');
+    els.finishedCard.classList.add('hidden');
+    setActionEnabled(true);
+    advanceToNext();
+    updateStats();
+    updateSaveLabel();
+  }
+
+  function renderReasonPanel() {
+    els.reasonGrid.innerHTML = '';
+    exclusionReasons.forEach(({reason, count}, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'reason-btn';
+      btn.type = 'button';
+      const key = i < 9 ? String(i + 1) : '•';
+      btn.innerHTML = `<kbd>${key}</kbd><span>${escapeHtml(humanizeReason(reason))}</span><span class="reason-count">${count.toLocaleString()}</span>`;
+      btn.addEventListener('click', () => applyExclusion(reason));
+      els.reasonGrid.appendChild(btn);
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
+  }
+
+  function recordForCurrent() {
+    return currentId ? recordsById.get(currentId) : null;
+  }
+
+  function advanceToNext() {
+    if (activeQueue.length === 0 && deferredQueue.length > 0) {
+      activeQueue = deferredQueue;
+      deferredQueue = [];
+      passNo += 1;
+      showToast(`Starting pass ${passNo}: revisiting skipped reports`, 'purple');
+    }
+
+    currentId = activeQueue.shift() || null;
+    if (!currentId) {
+      renderFinished();
+      return;
+    }
+    renderCurrent();
+  }
+
+  function renderCurrent() {
+    const r = recordForCurrent();
+    if (!r) return;
+
+    els.paperCard.classList.remove('hidden');
+    els.finishedCard.classList.add('hidden');
+    setActionEnabled(true);
+
+    els.paperId.textContent = r.candidate_id || '';
+    els.paperTitle.textContent = r.title || 'Untitled record';
+    els.venue.textContent = r.publication_title || r.document_type || 'Venue not available';
+    els.authors.textContent = Array.isArray(r.authors) && r.authors.length ? r.authors.join(', ') : '—';
+    els.year.textContent = r.publication_year ?? '—';
+
+    els.doi.replaceChildren();
+    if (r.doi) {
+      const doi = String(r.doi).trim().replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '');
+      const a = document.createElement('a');
+      a.href = `https://doi.org/${encodeURIComponent(doi).replace(/%2F/gi, '/')}`;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = doi;
+      a.title = `Open DOI ${doi}`;
+      els.doi.appendChild(a);
+    } else {
+      els.doi.textContent = '—';
+    }
+
+    const abstractText = r.abstract || r.abstract_snippet || '';
+    els.abstract.textContent = abstractText || 'No abstract available in this record.';
+    els.abstract.classList.toggle('empty', !abstractText);
+    els.abstract.scrollTop = 0;
+
+    closeReasonPanel();
+    updateStats();
+  }
+
+  function renderFinished() {
+    els.paperCard.classList.add('hidden');
+    els.finishedCard.classList.remove('hidden');
+    setActionEnabled(false);
+    closeReasonPanel();
+    const stored = ratifiedSet.size;
+    els.finishedText.textContent = `No unreviewed full_text_needed reports remain. ${stored.toLocaleString()} ratifications are remembered locally for this file version.`;
+    updateStats();
+  }
+
+  function setActionEnabled(enabled) {
+    els.excludeBtn.disabled = !enabled;
+    els.skipBtn.disabled = !enabled;
+    els.ratifyBtn.disabled = !enabled;
+  }
+
+  function pushUndo(actionType, extra = {}) {
+    if (!currentId) return;
+    const snapshot = {
+      actionType,
+      currentId,
+      activeQueue: [...activeQueue],
+      deferredQueue: [...deferredQueue],
+      passNo,
+      sessionExcluded,
+      sessionRatified,
+      sessionSkips,
+      decision: recordForCurrent()?.screening_decision,
+      wasRatified: ratifiedSet.has(currentId),
+      ...extra
+    };
+    undoStack.push(snapshot);
+    if (undoStack.length > MAX_UNDO) undoStack.shift();
+    els.undoBtn.disabled = false;
+  }
+
+  function applyExclusion(reason) {
+    if (!currentId || !reason) return;
+    pushUndo('exclude');
+    const rec = recordForCurrent();
+    rec.screening_decision = reason;
+    sessionExcluded += 1;
+    dirty = true;
+    showToast(`Excluded: ${humanizeReason(reason)}`, 'red');
+    advanceToNext();
+    updateSaveLabel();
+  }
+
+  function skipCurrent() {
+    if (!currentId) return;
+    pushUndo('skip');
+    deferredQueue.push(currentId);
+    sessionSkips += 1;
+    showToast('Skipped for this pass', 'purple');
+    advanceToNext();
+  }
+
+  function ratifyCurrent() {
+    if (!currentId) return;
+    pushUndo('ratify');
+    ratifiedSet.add(currentId);
+    saveRatifications();
+    sessionRatified += 1;
+    showToast('Ratified full_text_needed', 'orange');
+    advanceToNext();
+  }
+
+  function undoLast() {
+    const s = undoStack.pop();
+    if (!s) return;
+
+    // Put the post-action current record back into the queue before restoring the prior state.
+    // The snapshot already contains the exact prior queues, so no further reconstruction is needed.
+    activeQueue = [...s.activeQueue];
+    deferredQueue = [...s.deferredQueue];
+    currentId = s.currentId;
+    passNo = s.passNo;
+    sessionExcluded = s.sessionExcluded;
+    sessionRatified = s.sessionRatified;
+    sessionSkips = s.sessionSkips;
+
+    const rec = recordsById.get(s.currentId);
+    if (rec) rec.screening_decision = s.decision;
+
+    if (s.wasRatified) ratifiedSet.add(s.currentId);
+    else ratifiedSet.delete(s.currentId);
+    saveRatifications();
+
+    if (s.actionType === 'exclude') dirty = true;
+    renderCurrent();
+    els.undoBtn.disabled = undoStack.length === 0;
+    updateSaveLabel();
+    showToast('Undid last action');
+  }
+
+  function updateStats() {
+    if (!data) return;
+    const remaining = (currentId ? 1 : 0) + activeQueue.length + deferredQueue.length;
+    els.remainingStat.textContent = `${remaining.toLocaleString()} remaining`;
+    els.ratifiedStat.textContent = `${ratifiedSet.size.toLocaleString()} ratified`;
+    els.excludedStat.textContent = `${sessionExcluded.toLocaleString()} excluded this session`;
+    els.skippedStat.textContent = `${deferredQueue.length.toLocaleString()} deferred`;
+    els.passStat.textContent = `pass ${passNo}`;
+    els.undoBtn.disabled = undoStack.length === 0;
+  }
+
+  function updateSaveLabel() {
+    els.saveBtn.textContent = dirty ? 'Save JSON •' : 'Save JSON';
+  }
+
+  function toggleReasonPanel(force) {
+    if (!currentId) return;
+    const open = typeof force === 'boolean' ? force : !els.reasonPanel.classList.contains('open');
+    els.reasonPanel.classList.toggle('open', open);
+    els.reasonPanel.setAttribute('aria-hidden', String(!open));
+  }
+  function closeReasonPanel() { toggleReasonPanel(false); }
+
+  function toggleHelp(force) {
+    const open = typeof force === 'boolean' ? force : !els.helpOverlay.classList.contains('open');
+    els.helpOverlay.classList.toggle('open', open);
+  }
+
+  let toastTimer = null;
+  function showToast(message, tone = '') {
+    clearTimeout(toastTimer);
+    els.toast.textContent = message;
+    els.toast.className = `toast ${tone}`.trim();
+    requestAnimationFrame(() => els.toast.classList.add('show'));
+    toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1500);
+  }
+
+  async function tryAutoLoad() {
+    els.loader.classList.remove('hidden');
+    els.loaderActions.classList.add('hidden');
+    els.loaderText.textContent = `Trying to read ${EXPECTED_NAME} from the same folder as this HTML file.`;
+    try {
+      const res = await fetch(`./${EXPECTED_NAME}`, {cache: 'no-store'});
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const obj = await res.json();
+      initialize(obj, EXPECTED_NAME);
+    } catch (err) {
+      els.loaderText.innerHTML = `Same-folder loading was blocked or failed.<br><br><strong>${escapeHtml(err.message || String(err))}</strong><br><br>Choose the JSON file manually. This is common when opening HTML directly with <code>file://</code>.`;
+      els.loaderActions.classList.remove('hidden');
+    }
+  }
+
+  async function chooseFile() {
+    try {
+      if ('showOpenFilePicker' in window) {
+        const [handle] = await window.showOpenFilePicker({
+          multiple: false,
+          types: [{description: 'JSON', accept: {'application/json': ['.json']}}]
+        });
+        const file = await handle.getFile();
+        const obj = JSON.parse(await file.text());
+        fileHandle = handle;
+        initialize(obj, file.name);
+      } else {
+        els.fileInput.click();
+      }
+    } catch (err) {
+      if (err && err.name === 'AbortError') return;
+      showToast(`Could not open file: ${err.message || err}`, 'red');
+    }
+  }
+
+  async function saveJson() {
+    if (!data) return;
+    const text = JSON.stringify(data, null, 2) + '\n';
+
+    if (fileHandle && fileHandle.createWritable) {
+      try {
+        const writable = await fileHandle.createWritable();
+        await writable.write(text);
+        await writable.close();
+        dirty = false;
+        updateSaveLabel();
+        showToast('Saved JSON in place');
+        return;
+      } catch (err) {
+        showToast('Could not overwrite; downloading instead', 'red');
+      }
+    }
+
+    const blob = new Blob([text], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = sourceFileName || EXPECTED_NAME;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    dirty = false;
+    updateSaveLabel();
+    showToast('Downloaded modified JSON');
+  }
+
+  function resetRatifications() {
+    if (!data) return;
+    ratifiedSet.clear();
+    saveRatifications();
+    showToast('Local ratifications reset', 'orange');
+    initialize(data, sourceFileName);
+  }
+
+  function scrollAbstract(delta) {
+    if (!currentId) return;
+    els.abstract.scrollBy({top: delta, behavior: 'smooth'});
+  }
+
+  els.excludeBtn.addEventListener('click', () => toggleReasonPanel());
+  els.skipBtn.addEventListener('click', skipCurrent);
+  els.ratifyBtn.addEventListener('click', ratifyCurrent);
+  els.undoBtn.addEventListener('click', undoLast);
+  els.saveBtn.addEventListener('click', saveJson);
+  els.helpBtn.addEventListener('click', () => toggleHelp());
+  els.closeHelpBtn.addEventListener('click', () => toggleHelp(false));
+  els.helpOverlay.addEventListener('click', (e) => { if (e.target === els.helpOverlay) toggleHelp(false); });
+  els.openBtn.addEventListener('click', chooseFile);
+  els.retryBtn.addEventListener('click', tryAutoLoad);
+  els.downloadFinishedBtn.addEventListener('click', saveJson);
+  els.resetRatifiedBtn.addEventListener('click', resetRatifications);
+
+  els.fileInput.addEventListener('change', async () => {
+    const file = els.fileInput.files && els.fileInput.files[0];
+    if (!file) return;
+    try {
+      const obj = JSON.parse(await file.text());
+      fileHandle = null;
+      initialize(obj, file.name);
+    } catch (err) {
+      showToast(`Invalid JSON: ${err.message || err}`, 'red');
+    } finally {
+      els.fileInput.value = '';
+    }
+  });
+
+  window.addEventListener('keydown', (e) => {
+    const target = e.target;
+    const tag = target && target.tagName ? target.tagName.toLowerCase() : '';
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || (target && target.isContentEditable)) return;
+
+    const helpOpen = els.helpOverlay.classList.contains('open');
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeReasonPanel();
+      toggleHelp(false);
+      return;
+    }
+    if (helpOpen) return;
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      saveJson();
+      return;
+    }
+
+    if (e.key === '?') {
+      e.preventDefault();
+      toggleHelp();
+      return;
+    }
+
+    if (!currentId) {
+      if (e.key.toLowerCase() === 'u') { e.preventDefault(); undoLast(); }
+      return;
+    }
+
+    if (/^[1-9]$/.test(e.key)) {
+      const idx = Number(e.key) - 1;
+      if (exclusionReasons[idx]) {
+        e.preventDefault();
+        applyExclusion(exclusionReasons[idx].reason);
+      }
+      return;
+    }
+
+    switch (e.key.toLowerCase()) {
+      case 'e':
+        e.preventDefault();
+        toggleReasonPanel();
+        break;
+      case ' ':
+      case 's':
+        e.preventDefault();
+        skipCurrent();
+        break;
+      case 'f':
+        e.preventDefault();
+        ratifyCurrent();
+        break;
+      case 'u':
+        e.preventDefault();
+        undoLast();
+        break;
+      case 'arrowdown':
+        e.preventDefault();
+        scrollAbstract(120);
+        break;
+      case 'arrowup':
+        e.preventDefault();
+        scrollAbstract(-120);
+        break;
+      case 'pagedown':
+        e.preventDefault();
+        scrollAbstract(Math.max(300, els.abstract.clientHeight * .8));
+        break;
+      case 'pageup':
+        e.preventDefault();
+        scrollAbstract(-Math.max(300, els.abstract.clientHeight * .8));
+        break;
+      default:
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          ratifyCurrent();
+        }
+    }
+  });
+
+  window.addEventListener('beforeunload', (e) => {
+    if (!dirty) return;
+    e.preventDefault();
+    e.returnValue = '';
+  });
+
+  tryAutoLoad();
+})();
+</script>
+</body>
+</html>
