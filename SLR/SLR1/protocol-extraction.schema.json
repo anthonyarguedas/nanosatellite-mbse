@@ -841,6 +841,169 @@
         }
       ]
     },
+    "toolKindCode": {
+      "type": "string",
+      "enum": [
+        "modeling_environment",
+        "software_application",
+        "programming_language_or_runtime",
+        "library_plugin_or_add_on",
+        "integration_middleware",
+        "repository_or_collaboration_platform",
+        "data_format_or_schema",
+        "test_or_measurement_equipment",
+        "support_hardware_or_computing_platform",
+        "other",
+        "unclear"
+      ]
+    },
+    "toolKindValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/toolKindCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "toolKind": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/toolKindValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "toolRolesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "mbse_model_authoring",
+                  "requirements_management",
+                  "architecture_or_design",
+                  "simulation_or_analysis",
+                  "model_transformation_or_generation",
+                  "verification_or_validation",
+                  "test_management_or_execution",
+                  "integration_or_interoperability",
+                  "data_exchange_or_conversion",
+                  "configuration_or_repository",
+                  "documentation_or_reporting",
+                  "software_development",
+                  "test_or_measurement_equipment",
+                  "computing_or_execution_platform",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "toolRoles": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/toolRolesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "toolRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_name": {
+              "$ref": "#/$defs/rowString"
+            },
+            "version": {
+              "$ref": "#/$defs/rowString"
+            },
+            "tool_kind": {
+              "$ref": "#/$defs/toolKind"
+            },
+            "roles": {
+              "$ref": "#/$defs/toolRoles"
+            },
+            "provider_or_owner": {
+              "$ref": "#/$defs/rowString"
+            },
+            "availability": {
+              "$ref": "#/$defs/availability"
+            }
+          },
+          "required": [
+            "tool_id",
+            "source_name",
+            "version",
+            "tool_kind",
+            "roles",
+            "provider_or_owner",
+            "availability"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "toolRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/toolRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
     "generationMethodTypesValue": {
       "type": "object",
       "allOf": [
@@ -1021,7 +1184,13 @@
             "linked_input_group_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tool_ids": {
               "$ref": "#/$defs/rowIdArray"
             }
           },
@@ -1032,7 +1201,9 @@
             "selection_or_inclusion_basis",
             "contribution_to_model",
             "linked_input_group_ids",
-            "linked_model_artifact_ids"
+            "linked_eps_requirement_ids",
+            "linked_model_artifact_ids",
+            "linked_tool_ids"
           ]
         }
       ],
@@ -1184,6 +1355,9 @@
             "responsible_roles": {
               "$ref": "#/$defs/rowStringArray"
             },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "tools_and_settings": {
               "$ref": "#/$defs/rowStringArray"
             },
@@ -1210,6 +1384,7 @@
             "linked_input_group_ids",
             "linked_model_artifact_ids",
             "responsible_roles",
+            "linked_tool_ids",
             "tools_and_settings",
             "automation",
             "decision_rules",
@@ -1314,6 +1489,9 @@
             "linked_output_model_artifact_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "entry_conditions": {
               "$ref": "#/$defs/evidencedString"
             },
@@ -1350,6 +1528,7 @@
             "linked_input_group_ids",
             "linked_source_model_artifact_ids",
             "linked_output_model_artifact_ids",
+            "linked_tool_ids",
             "entry_conditions",
             "method_steps",
             "branching_and_iteration",
@@ -1377,11 +1556,15 @@
             },
             "name_or_description": {
               "$ref": "#/$defs/rowString"
+            },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
             "model_artifact_id",
-            "name_or_description"
+            "name_or_description",
+            "linked_tool_ids"
           ]
         }
       ],
@@ -1497,6 +1680,9 @@
             "responsible_roles": {
               "$ref": "#/$defs/rowStringArray"
             },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "tools_and_settings": {
               "$ref": "#/$defs/rowStringArray"
             },
@@ -1523,6 +1709,7 @@
             "linked_model_generation_method_ids",
             "linked_model_artifact_ids",
             "responsible_roles",
+            "linked_tool_ids",
             "tools_and_settings",
             "automation",
             "decision_rules",
@@ -1600,8 +1787,8 @@
             "roles_and_responsibilities": {
               "$ref": "#/$defs/evidencedStringArray"
             },
-            "tools_and_versions": {
-              "$ref": "#/$defs/evidencedStringArray"
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
             },
             "automation": {
               "$ref": "#/$defs/evidencedString"
@@ -1633,7 +1820,7 @@
             "exit_conditions",
             "handoffs_and_data_flow",
             "roles_and_responsibilities",
-            "tools_and_versions",
+            "linked_tool_ids",
             "automation",
             "governance_and_configuration_control",
             "supporting_material_location",
@@ -1711,6 +1898,1331 @@
           "notes"
         ]
       }
+    },
+    "epsElementTypeCode": {
+      "type": "string",
+      "enum": [
+        "stakeholder_or_external_actor",
+        "external_system",
+        "environment",
+        "spacecraft_or_system",
+        "subsystem",
+        "capability",
+        "use_case",
+        "operational_activity",
+        "function",
+        "behavior",
+        "component_unspecified",
+        "logical_component",
+        "physical_component",
+        "software_or_algorithm",
+        "interface_or_port",
+        "mode_or_state",
+        "scenario",
+        "parameter_or_constraint",
+        "hazard_or_risk_control",
+        "other",
+        "unclear"
+      ]
+    },
+    "epsElementTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/epsElementTypeCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsElementTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsElementTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsElementAbstractionLevelsValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/epsAbstractionCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsElementAbstractionLevels": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsElementAbstractionLevelsValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsBoundaryRoleCode": {
+      "type": "string",
+      "enum": [
+        "inside_eps",
+        "on_eps_boundary",
+        "outside_eps_within_spacecraft",
+        "spacecraft_environment",
+        "external_system",
+        "unclear"
+      ]
+    },
+    "epsBoundaryRoleValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/epsBoundaryRoleCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsBoundaryRole": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsBoundaryRoleValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "modelInclusionCode": {
+      "type": "string",
+      "enum": [
+        "explicit_model_element",
+        "represented_model_content",
+        "planned_model_content",
+        "reported_but_not_modeled",
+        "unclear"
+      ]
+    },
+    "modelInclusionValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/modelInclusionCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelInclusion": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/modelInclusionValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsModelElement": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eps_element_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_name_or_description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_element_type": {
+              "$ref": "#/$defs/rowString"
+            },
+            "normalized_element_types": {
+              "$ref": "#/$defs/epsElementTypes"
+            },
+            "abstraction_levels": {
+              "$ref": "#/$defs/epsElementAbstractionLevels"
+            },
+            "model_inclusion": {
+              "$ref": "#/$defs/modelInclusion"
+            },
+            "boundary_role": {
+              "$ref": "#/$defs/epsBoundaryRole"
+            },
+            "parent_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "eps_element_id",
+            "source_name_or_description",
+            "source_element_type",
+            "normalized_element_types",
+            "abstraction_levels",
+            "model_inclusion",
+            "boundary_role",
+            "parent_eps_element_ids",
+            "linked_model_artifact_ids"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsModelElements": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/epsModelElement"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "epsRequirementSpecificityCode": {
+      "type": "string",
+      "enum": [
+        "eps_specific",
+        "allocated_to_eps",
+        "system_or_mission_with_eps_relevance",
+        "external_constraint_on_eps",
+        "not_eps_specific",
+        "unclear"
+      ]
+    },
+    "epsRequirementSpecificityValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/epsRequirementSpecificityCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsRequirementSpecificity": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epsRequirementSpecificityValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "requirementLevelCode": {
+      "type": "string",
+      "enum": [
+        "stakeholder_need",
+        "mission",
+        "system",
+        "eps_subsystem",
+        "eps_component",
+        "interface",
+        "operational",
+        "other",
+        "unclear"
+      ]
+    },
+    "requirementLevelValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/requirementLevelCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "requirementLevel": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/requirementLevelValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "requirementTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "functional",
+                  "performance",
+                  "interface",
+                  "environmental",
+                  "operational",
+                  "safety",
+                  "reliability_or_availability",
+                  "design_constraint",
+                  "verification_or_acceptance",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "requirementTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/requirementTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "requirementMbseInclusionCode": {
+      "type": "string",
+      "enum": [
+        "modeled_as_requirement",
+        "linked_to_modeled_content",
+        "model_input_only",
+        "planned_for_model",
+        "reported_outside_mbse_model",
+        "unclear"
+      ]
+    },
+    "requirementMbseInclusionValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/requirementMbseInclusionCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "requirementMbseInclusion": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/requirementMbseInclusionValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsRequirement": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eps_requirement_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_requirement_id": {
+              "$ref": "#/$defs/rowString"
+            },
+            "statement_or_description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "eps_specificity": {
+              "$ref": "#/$defs/epsRequirementSpecificity"
+            },
+            "requirement_level": {
+              "$ref": "#/$defs/requirementLevel"
+            },
+            "requirement_types": {
+              "$ref": "#/$defs/requirementTypes"
+            },
+            "mbse_inclusion": {
+              "$ref": "#/$defs/requirementMbseInclusion"
+            },
+            "parent_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "eps_requirement_id",
+            "source_requirement_id",
+            "statement_or_description",
+            "eps_specificity",
+            "requirement_level",
+            "requirement_types",
+            "mbse_inclusion",
+            "parent_eps_requirement_ids",
+            "linked_eps_element_ids",
+            "linked_model_artifact_ids"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsRequirements": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/epsRequirement"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "modelRepresentationFormsValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "diagram",
+                  "table",
+                  "matrix",
+                  "model_tree_or_package_view",
+                  "generated_text_or_listing",
+                  "chart_or_plot",
+                  "executable_or_simulation_view",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelRepresentationForms": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/modelRepresentationFormsValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "modelViewTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "context_or_boundary",
+                  "requirements_or_traceability",
+                  "capability_or_use_case",
+                  "functional_or_behavioral",
+                  "activity_or_control_flow",
+                  "sequence_or_interaction",
+                  "state_or_mode",
+                  "structural_decomposition",
+                  "logical_structure",
+                  "physical_structure",
+                  "interface_or_exchange",
+                  "data_or_control_flow",
+                  "energy_or_resource_flow",
+                  "data_or_information_model",
+                  "parametric_or_constraint",
+                  "allocation_or_mapping",
+                  "deployment_or_configuration",
+                  "decision_or_trade_study",
+                  "risk_or_hazard",
+                  "vv_or_test",
+                  "model_organization_or_package",
+                  "generated_analysis_or_result",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelViewTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/modelViewTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "modelRepresentationOriginCode": {
+      "type": "string",
+      "enum": [
+        "native_model_view",
+        "source_redrawn_or_simplified",
+        "generated_from_model",
+        "reviewer_reconstructed",
+        "unclear"
+      ]
+    },
+    "modelRepresentationOriginValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/modelRepresentationOriginCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelRepresentationOrigin": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/modelRepresentationOriginValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "modelRepresentationCompletenessCode": {
+      "type": "string",
+      "enum": [
+        "complete_as_presented",
+        "partial_or_excerpt",
+        "composite_of_views",
+        "unclear"
+      ]
+    },
+    "modelRepresentationCompletenessValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/modelRepresentationCompletenessCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelRepresentationCompleteness": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/modelRepresentationCompletenessValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "behaviorOccurrenceTypeCode": {
+      "type": "string",
+      "enum": [
+        "action_or_activity",
+        "message_or_signal",
+        "exchange_occurrence",
+        "state_transition",
+        "state_entry_or_exit",
+        "decision_or_branch",
+        "merge_join_or_fork",
+        "loop_or_iteration",
+        "timing_event",
+        "other",
+        "unclear"
+      ]
+    },
+    "behaviorOccurrenceTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/behaviorOccurrenceTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "behaviorOccurrenceType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/behaviorOccurrenceTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "behaviorOccurrence": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "behavior_occurrence_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "occurrence_type": {
+              "$ref": "#/$defs/behaviorOccurrenceType"
+            },
+            "sequence_label": {
+              "$ref": "#/$defs/rowString"
+            },
+            "predecessor_behavior_occurrence_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "action_message_or_event": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "destination_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "context_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_exchange_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_model_bridge_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "guard_or_condition": {
+              "$ref": "#/$defs/rowString"
+            },
+            "branch_loop_or_parallelism": {
+              "$ref": "#/$defs/rowString"
+            },
+            "timing_or_duration": {
+              "$ref": "#/$defs/rowString"
+            },
+            "output_or_result": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "behavior_occurrence_id",
+            "occurrence_type",
+            "sequence_label",
+            "predecessor_behavior_occurrence_ids",
+            "action_message_or_event",
+            "source_eps_element_ids",
+            "destination_eps_element_ids",
+            "context_eps_element_ids",
+            "linked_eps_exchange_ids",
+            "linked_eps_model_bridge_ids",
+            "guard_or_condition",
+            "branch_loop_or_parallelism",
+            "timing_or_duration",
+            "output_or_result"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "behaviorOccurrences": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/behaviorOccurrence"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "epsModelRepresentation": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "model_representation_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_name_or_caption": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_representation_type": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_language_or_notation": {
+              "$ref": "#/$defs/rowString"
+            },
+            "representation_forms": {
+              "$ref": "#/$defs/modelRepresentationForms"
+            },
+            "normalized_view_types": {
+              "$ref": "#/$defs/modelViewTypes"
+            },
+            "reported_purpose": {
+              "$ref": "#/$defs/rowString"
+            },
+            "representation_origin": {
+              "$ref": "#/$defs/modelRepresentationOrigin"
+            },
+            "representation_completeness": {
+              "$ref": "#/$defs/modelRepresentationCompleteness"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_exchange_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_dependency_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_model_bridge_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_input_group_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_set_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_criterion_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "behavior_occurrences": {
+              "$ref": "#/$defs/behaviorOccurrences"
+            }
+          },
+          "required": [
+            "model_representation_id",
+            "source_name_or_caption",
+            "source_representation_type",
+            "source_language_or_notation",
+            "representation_forms",
+            "normalized_view_types",
+            "reported_purpose",
+            "representation_origin",
+            "representation_completeness",
+            "linked_model_artifact_ids",
+            "linked_tool_ids",
+            "linked_eps_element_ids",
+            "linked_eps_requirement_ids",
+            "linked_eps_exchange_ids",
+            "linked_eps_dependency_ids",
+            "linked_eps_model_bridge_ids",
+            "linked_input_group_ids",
+            "linked_result_set_ids",
+            "linked_result_output_ids",
+            "linked_result_criterion_ids",
+            "behavior_occurrences"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "epsModelRepresentations": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/epsModelRepresentation"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "modelRepresentationRelationshipTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "contains",
+                  "excerpt_of",
+                  "refines",
+                  "abstracts",
+                  "continues",
+                  "complements",
+                  "traces_to",
+                  "alternate_view_of",
+                  "generated_from",
+                  "same_content_different_notation",
+                  "cross_layer_mapping",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelRepresentationRelationshipTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/modelRepresentationRelationshipTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "modelRepresentationRelationship": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "model_representation_relationship_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_model_representation_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "target_model_representation_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_relationship_term": {
+              "$ref": "#/$defs/rowString"
+            },
+            "normalized_relationship_types": {
+              "$ref": "#/$defs/modelRepresentationRelationshipTypes"
+            },
+            "description": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "model_representation_relationship_id",
+            "source_model_representation_id",
+            "target_model_representation_id",
+            "source_relationship_term",
+            "normalized_relationship_types",
+            "description"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "modelRepresentationRelationships": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/modelRepresentationRelationship"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "coverageTargetTypeCode": {
+      "type": "string",
+      "enum": [
+        "eps_element",
+        "eps_requirement",
+        "eps_exchange",
+        "eps_dependency",
+        "model_representation",
+        "disciplinary_viewpoint",
+        "model_artifact",
+        "other",
+        "unclear"
+      ]
+    },
+    "coverageTargetTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/coverageTargetTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "coverageTargetType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/coverageTargetTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "coverageStatusCode": {
+      "type": "string",
+      "enum": [
+        "included",
+        "partially_included",
+        "deliberately_excluded",
+        "outside_declared_scope",
+        "planned_or_future",
+        "unclear"
+      ]
+    },
+    "coverageStatusValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/coverageStatusCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "coverageStatus": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/coverageStatusValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "coverageItem": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "coverage_item_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "target_type": {
+              "$ref": "#/$defs/coverageTargetType"
+            },
+            "source_name_or_description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "linked_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_exchange_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_dependency_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_representation_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "coverage_status": {
+              "$ref": "#/$defs/coverageStatus"
+            },
+            "reason": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "coverage_item_id",
+            "target_type",
+            "source_name_or_description",
+            "linked_eps_element_ids",
+            "linked_eps_requirement_ids",
+            "linked_eps_exchange_ids",
+            "linked_eps_dependency_ids",
+            "linked_model_artifact_ids",
+            "linked_model_representation_ids",
+            "coverage_status",
+            "reason"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "coverageItems": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/coverageItem"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "coverageExtentCode": {
+      "type": "string",
+      "enum": [
+        "complete_against_declared_scope",
+        "partial_against_declared_scope",
+        "selected_or_illustrative",
+        "not_assessable",
+        "unclear"
+      ]
+    },
+    "coverageExtentValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/coverageExtentCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "coverageExtent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/coverageExtentValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "coverageBasisValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "author_statement",
+                  "declared_scope_comparison",
+                  "enumerated_model_content",
+                  "available_artifact_inspection",
+                  "reviewer_inference",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "coverageBasis": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/coverageBasisValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "epsCoverageAssessment": {
+      "type": "object",
+      "properties": {
+        "declared_scope_or_denominator": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "coverage_extent": {
+          "$ref": "#/$defs/coverageExtent"
+        },
+        "coverage_basis": {
+          "$ref": "#/$defs/coverageBasis"
+        },
+        "coverage_items": {
+          "$ref": "#/$defs/coverageItems"
+        },
+        "linked_rq1_claim_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "assessment_reason": {
+          "$ref": "#/$defs/evidencedString"
+        }
+      },
+      "required": [
+        "declared_scope_or_denominator",
+        "coverage_extent",
+        "coverage_basis",
+        "coverage_items",
+        "linked_rq1_claim_ids",
+        "assessment_reason"
+      ],
+      "additionalProperties": false
     },
     "exchangeTypeCode": {
       "type": "string",
@@ -1808,6 +3320,15 @@
             "eps_exchange_id": {
               "$ref": "#/$defs/stableId"
             },
+            "source_eps_element_id": {
+              "$ref": "#/$defs/rowId"
+            },
+            "destination_eps_element_id": {
+              "$ref": "#/$defs/rowId"
+            },
+            "interface_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "source_endpoint": {
               "$ref": "#/$defs/rowString"
             },
@@ -1832,6 +3353,9 @@
           },
           "required": [
             "eps_exchange_id",
+            "source_eps_element_id",
+            "destination_eps_element_id",
+            "interface_eps_element_ids",
             "source_endpoint",
             "destination_endpoint",
             "named_eps_interface",
@@ -1958,6 +3482,12 @@
             "eps_dependency_id": {
               "$ref": "#/$defs/stableId"
             },
+            "dependent_eps_element_id": {
+              "$ref": "#/$defs/rowId"
+            },
+            "provider_or_driver_eps_element_id": {
+              "$ref": "#/$defs/rowId"
+            },
             "dependent_endpoint": {
               "$ref": "#/$defs/rowString"
             },
@@ -1970,6 +3500,9 @@
             "linked_eps_exchange_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "dependency_type": {
               "$ref": "#/$defs/dependencyType"
             },
@@ -1979,10 +3512,13 @@
           },
           "required": [
             "eps_dependency_id",
+            "dependent_eps_element_id",
+            "provider_or_driver_eps_element_id",
             "dependent_endpoint",
             "provider_or_driver_endpoint",
             "description",
             "linked_eps_exchange_ids",
+            "linked_eps_requirement_ids",
             "dependency_type",
             "dependency_scope"
           ]
@@ -2051,6 +3587,66 @@
         }
       ]
     },
+    "bridgeRelationshipTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "allocation",
+                  "association_or_participation",
+                  "include",
+                  "extend",
+                  "generalization",
+                  "decomposition",
+                  "derivation",
+                  "refinement",
+                  "realization",
+                  "satisfaction",
+                  "verification",
+                  "trace",
+                  "interface_or_flow",
+                  "state_transition",
+                  "parametric_binding",
+                  "transformation",
+                  "data_mapping",
+                  "behavior_or_function_mapping",
+                  "other",
+                  "unclear"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "bridgeRelationshipTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/bridgeRelationshipTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
     "epsModelBridge": {
       "type": "object",
       "allOf": [
@@ -2069,8 +3665,35 @@
             "model_or_second_concern_endpoint": {
               "$ref": "#/$defs/rowString"
             },
+            "eps_anchor_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "eps_anchor_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "second_concern_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "second_concern_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_exchange_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_dependency_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_result_criterion_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "relationship_or_mapping": {
               "$ref": "#/$defs/rowString"
+            },
+            "normalized_relationship_types": {
+              "$ref": "#/$defs/bridgeRelationshipTypes"
             },
             "reconstructed_meaning": {
               "$ref": "#/$defs/evidencedString"
@@ -2080,7 +3703,16 @@
             "eps_model_bridge_id",
             "eps_anchor_endpoint",
             "model_or_second_concern_endpoint",
+            "eps_anchor_element_ids",
+            "eps_anchor_requirement_ids",
+            "second_concern_element_ids",
+            "second_concern_requirement_ids",
+            "linked_model_artifact_ids",
+            "linked_eps_exchange_ids",
+            "linked_eps_dependency_ids",
+            "linked_result_criterion_ids",
             "relationship_or_mapping",
+            "normalized_relationship_types",
             "reconstructed_meaning"
           ]
         }
@@ -2281,7 +3913,10 @@
               "$ref": "#/$defs/evidencedString"
             },
             "eps_elements": {
-              "$ref": "#/$defs/evidencedStringArray"
+              "$ref": "#/$defs/epsModelElements"
+            },
+            "eps_requirements": {
+              "$ref": "#/$defs/epsRequirements"
             },
             "eps_architecture": {
               "$ref": "#/$defs/evidencedString"
@@ -2296,7 +3931,10 @@
               "$ref": "#/$defs/evidencedStringArray"
             },
             "eps_model_representations": {
-              "$ref": "#/$defs/evidencedStringArray"
+              "$ref": "#/$defs/epsModelRepresentations"
+            },
+            "eps_model_representation_relationships": {
+              "$ref": "#/$defs/modelRepresentationRelationships"
             },
             "modeled_disciplinary_viewpoints": {
               "$ref": "#/$defs/modeledDisciplinaryViewpoints"
@@ -2323,8 +3961,8 @@
             "supported_decisions": {
               "$ref": "#/$defs/evidencedStringArray"
             },
-            "scope_deliberately_omitted": {
-              "$ref": "#/$defs/evidencedStringArray"
+            "coverage_assessment": {
+              "$ref": "#/$defs/epsCoverageAssessment"
             },
             "eps_model_maturity": {
               "$ref": "#/$defs/projectMaturity"
@@ -2339,11 +3977,13 @@
             "model_anchor_for_route_b",
             "eps_boundary",
             "eps_elements",
+            "eps_requirements",
             "eps_architecture",
             "eps_exchanges",
             "eps_dependencies",
             "eps_modes_and_operations",
             "eps_model_representations",
+            "eps_model_representation_relationships",
             "modeled_disciplinary_viewpoints",
             "eps_model_bridges",
             "eps_abstraction",
@@ -2351,7 +3991,7 @@
             "eps_fidelity",
             "purposes",
             "supported_decisions",
-            "scope_deliberately_omitted",
+            "coverage_assessment",
             "eps_model_maturity",
             "eps_model_availability"
           ]
@@ -2519,6 +4159,9 @@
             "linked_workflow_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "workflow_execution_and_deviations": {
               "$ref": "#/$defs/evidencedString"
             },
@@ -2596,6 +4239,7 @@
             "skills_and_training",
             "staffing_and_number_of_people",
             "linked_workflow_ids",
+            "linked_tool_ids",
             "workflow_execution_and_deviations",
             "automation",
             "tools_licences_and_infrastructure",
@@ -2751,6 +4395,12 @@
             "linked_report_reuse_record_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "parameters_or_constructs": {
               "$ref": "#/$defs/evidencedStringArray"
             },
@@ -2791,6 +4441,8 @@
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
             "linked_report_reuse_record_ids",
+            "linked_eps_requirement_ids",
+            "linked_tool_ids",
             "parameters_or_constructs",
             "material_source_reported_values_or_descriptions",
             "input_source_types",
@@ -2999,6 +4651,9 @@
             "source_criterion_or_requirement_id": {
               "$ref": "#/$defs/rowString"
             },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "target": {
               "$ref": "#/$defs/rowString"
             },
@@ -3030,6 +4685,7 @@
           "required": [
             "result_criterion_id",
             "source_criterion_or_requirement_id",
+            "linked_eps_requirement_ids",
             "target",
             "threshold_or_expected_behavior",
             "source",
@@ -3497,6 +5153,9 @@
             "linked_input_group_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "cases_participants_or_observational_units": {
               "$ref": "#/$defs/evidencedString"
             },
@@ -3540,6 +5199,7 @@
             "evaluation_design",
             "scenario_or_configuration",
             "linked_input_group_ids",
+            "linked_tool_ids",
             "cases_participants_or_observational_units",
             "data_sources",
             "method",
@@ -3888,7 +5548,7 @@
         "required_inputs": {
           "$ref": "#/$defs/evidencedStringArray"
         },
-        "tools_and_versions": {
+        "linked_tool_ids": {
           "$ref": "#/$defs/evidencedStringArray"
         },
         "organizational_prerequisites": {
@@ -3906,7 +5566,7 @@
         "architecture_and_interfaces",
         "environment_modes_and_loads",
         "required_inputs",
-        "tools_and_versions",
+        "linked_tool_ids",
         "organizational_prerequisites",
         "exclusions_and_limits"
       ],
@@ -4118,6 +5778,9 @@
             "responsible_roles": {
               "$ref": "#/$defs/rowStringArray"
             },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "tools_and_automation": {
               "$ref": "#/$defs/rowStringArray"
             },
@@ -4141,6 +5804,7 @@
             "operation_types",
             "required_inputs",
             "responsible_roles",
+            "linked_tool_ids",
             "tools_and_automation",
             "resulting_output",
             "constraints_and_exceptions",
@@ -4201,6 +5865,9 @@
             "responsible_role": {
               "$ref": "#/$defs/rowString"
             },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "tools_and_settings": {
               "$ref": "#/$defs/rowStringArray"
             },
@@ -4227,6 +5894,7 @@
             "inputs",
             "outputs",
             "responsible_role",
+            "linked_tool_ids",
             "tools_and_settings",
             "automation",
             "decision_rule",
@@ -4275,7 +5943,10 @@
         "required_roles_and_skills": {
           "$ref": "#/$defs/evidencedStringArray"
         },
-        "required_tools_and_data": {
+        "required_tool_ids": {
+          "$ref": "#/$defs/evidencedStringArray"
+        },
+        "required_data_and_tool_settings": {
           "$ref": "#/$defs/evidencedStringArray"
         },
         "automation": {
@@ -4296,7 +5967,8 @@
         "tailoring_rules",
         "tailoring_procedure_steps",
         "required_roles_and_skills",
-        "required_tools_and_data",
+        "required_tool_ids",
+        "required_data_and_tool_settings",
         "automation",
         "governance_and_configuration_control",
         "tailoring_procedure_reporting"
@@ -4843,6 +6515,9 @@
             "responsible_role": {
               "$ref": "#/$defs/rowString"
             },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "tools_and_automation": {
               "$ref": "#/$defs/rowStringArray"
             },
@@ -4864,6 +6539,7 @@
             "reason",
             "inputs_and_assumptions",
             "responsible_role",
+            "linked_tool_ids",
             "tools_and_automation",
             "operation_check_and_result"
           ]
@@ -5747,6 +7423,62 @@
         }
       ]
     },
+    "claimCharacteristicCode": {
+      "type": "string",
+      "enum": [
+        "genericity",
+        "modularity",
+        "completeness",
+        "scalability",
+        "adaptability_or_tailorability",
+        "reusability",
+        "replicability_or_reproducibility",
+        "interoperability_or_integrability",
+        "traceability",
+        "consistency",
+        "maintainability_or_extensibility",
+        "usability_or_ease",
+        "lightweightness",
+        "automation_or_efficiency",
+        "resource_intensity",
+        "reliability_or_assurance",
+        "other",
+        "unclear"
+      ]
+    },
+    "claimCharacteristicValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/claimCharacteristicCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "claimCharacteristic": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/claimCharacteristicValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
     "rq1Claim": {
       "type": "object",
       "allOf": [
@@ -5765,10 +7497,19 @@
             "claimed_characteristic": {
               "$ref": "#/$defs/rowString"
             },
+            "claimed_characteristic_code": {
+              "$ref": "#/$defs/claimCharacteristic"
+            },
+            "author_stated_rationale": {
+              "$ref": "#/$defs/rowString"
+            },
             "claim_scope_and_object": {
               "$ref": "#/$defs/rowString"
             },
             "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_representation_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
             "linked_model_generation_method_ids": {
@@ -5778,6 +7519,18 @@
               "$ref": "#/$defs/rowIdArray"
             },
             "linked_eps_case_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_coverage_item_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
             "linked_report_reuse_record_ids": {
@@ -5812,11 +7565,18 @@
             "rq1_claim_id",
             "claim_wording",
             "claimed_characteristic",
+            "claimed_characteristic_code",
+            "author_stated_rationale",
             "claim_scope_and_object",
             "linked_model_artifact_ids",
+            "linked_model_representation_ids",
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
             "linked_eps_case_ids",
+            "linked_eps_element_ids",
+            "linked_eps_requirement_ids",
+            "linked_tool_ids",
+            "linked_coverage_item_ids",
             "linked_report_reuse_record_ids",
             "linked_result_set_ids",
             "linked_result_output_ids",
@@ -6136,10 +7896,25 @@
             "source_requirement_or_criterion_id": {
               "$ref": "#/$defs/rowString"
             },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_model_bridge_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "model_artifact_id": {
               "$ref": "#/$defs/rowId"
             },
+            "linked_model_representation_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_workflow_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tool_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
             "explicit_model_to_vv_bridge": {
@@ -6213,8 +7988,13 @@
             "eps_target",
             "target_type",
             "source_requirement_or_criterion_id",
+            "linked_eps_requirement_ids",
+            "linked_eps_element_ids",
+            "linked_eps_model_bridge_ids",
             "model_artifact_id",
+            "linked_model_representation_ids",
             "linked_workflow_ids",
+            "linked_tool_ids",
             "explicit_model_to_vv_bridge",
             "source_vv_terminology",
             "linkage_scope",
@@ -6334,6 +8114,15 @@
             "target": {
               "$ref": "#/$defs/rowString"
             },
+            "linked_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "scope": {
               "$ref": "#/$defs/rowString"
             },
@@ -6354,6 +8143,9 @@
             },
             "mechanism": {
               "$ref": "#/$defs/reportedMechanism"
+            },
+            "linked_model_representation_ids": {
+              "$ref": "#/$defs/rowIdArray"
             },
             "linked_model_artifact_ids": {
               "$ref": "#/$defs/rowIdArray"
@@ -6415,6 +8207,9 @@
             "claim_kind",
             "role",
             "target",
+            "linked_eps_element_ids",
+            "linked_eps_requirement_ids",
+            "linked_tool_ids",
             "scope",
             "outcome_category",
             "reliability_subtype",
@@ -6422,6 +8217,7 @@
             "evidence_supported_direction",
             "eps_attribution",
             "mechanism",
+            "linked_model_representation_ids",
             "linked_model_artifact_ids",
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
@@ -6690,7 +8486,7 @@
           "$ref": "#/$defs/evidencedStringArray"
         },
         "tools_and_versions": {
-          "$ref": "#/$defs/evidencedStringArray"
+          "$ref": "#/$defs/toolRecords"
         },
         "toolchain_and_data_flow": {
           "$ref": "#/$defs/evidencedString"

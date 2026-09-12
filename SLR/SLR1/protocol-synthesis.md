@@ -11,9 +11,10 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 #### Representation and use
 
 - Present Route A and Route B separately before combining them. Map report context, the problem addressed, intended decisions, reasons for using MBSE, lifecycle use, project maturity, and mission or platform context.
-- Map EPS anchors, boundaries, functions and elements, architecture, modes and operations, exchanges, dependencies, disciplinary viewpoints, model representations and bridges, abstraction, decomposition visibility, fidelity, purposes, supported decisions, deliberate omissions, maturity, and availability.
-- Synthesize model generation methods and engineering workflows separately from modeling languages, tools, and toolchains. Map method origins, construction sources, generic-model derivation, ordered method steps, workflow activities and handoffs, linked artifacts, inputs and outputs, automation, governance, supporting materials, and procedural-detail levels.
-- Synthesize grouped inputs and assumptions, source types and uncertainty handling, evaluation designs and execution, engineering outputs and criteria, implementation needs and footprint, limitations, and evaluative RQ1 claims. Compare author labels such as *lightweight* or *scalable* with linked results, footprint, and inline support.
+- Map EPS anchors and boundaries using typed elements, requirement records, linked exchanges, dependencies, and bridges. Compare functions, behaviors, actors, external systems, subsystems, logical and physical components, interfaces, modes, scenarios, parameters, hazards, element hierarchy, abstraction, model inclusion, and boundary roles. Synthesize declared coverage, item-level inclusions and exclusions, coverage basis, architecture, disciplinary viewpoints, decomposition visibility, fidelity, purposes, supported decisions, maturity, and availability.
+- Treat each structured model representation as a nested analytic unit. Map source and normalized view types, representation forms, origin, completeness, language or notation, containing artifacts, tools, represented content, and relationships among views. Compare context, requirement, use-case, behavior, activity, sequence, state, logical, physical, interface, data-flow, energy-flow, parametric, allocation, V&V, and generated-result views. For dynamic views, map behavior occurrences, order, actors or endpoints, exchanges, guards, branches, timing, and outputs.
+- Synthesize model generation methods and engineering workflows separately from modeling languages, typed tool and equipment records, and toolchains. Map tool kinds and roles, method origins, construction sources, generic-model derivation, ordered method steps, workflow activities and handoffs, linked artifacts, inputs and outputs, automation, governance, supporting materials, and procedural-detail levels.
+- Synthesize grouped inputs and assumptions, source types and uncertainty handling, evaluation designs and execution, engineering outputs and criteria, implementation needs and footprint, limitations, and evaluative RQ1 claims. Use normalized characteristic codes for genericity, modularity, completeness, scalability, adaptability, reuse, replication, interoperability, and related claims. Preserve source labels and author rationales. Compare each claim with linked results, footprint, coverage, and inline support.
 
 #### Reuse and tailoring
 
@@ -25,7 +26,7 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 ### RQ2
 
 - Use only findings with `direct_synthesis = yes` for direct conclusions. Present near misses separately.
-- Present claim kind and scope, role, category, author direction, evidence-supported direction, mechanism, measure directness, evidence basis, support, comparator adequacy and rival explanations when required, applicability, and lifecycle stage.
+- Present claim kind and scope, role, category, author direction, evidence-supported direction, mechanism, linked model representations, measure directness, evidence basis, support, comparator adequacy and rival explanations when required, applicability, and lifecycle stage.
 - Present assertion-only findings separately from executed, comparative, stakeholder, physical, operational, and independent-transfer evidence.
 - Preserve source-reported values, units, denominators, uncertainty, and practical interpretation. Label reviewer-derived values.
 - Keep benefits, null findings, adverse findings, and burdens visible without calculating a reviewer-defined net effect.
@@ -33,7 +34,7 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 ### RQ3
 
 - Use only activities with `direct_synthesis = yes` for direct conclusions. Present system-wide co-occurrence and other near misses separately.
-- Map target, bridge, V&V object, method, criterion, lifecycle stage, execution, cumulative status, result, evidence basis, support, and later physical continuity.
+- Map target, bridge, linked model representations, V&V object, method, criterion, lifecycle stage, execution, cumulative status, result, evidence basis, support, and later physical continuity.
 - Keep EPS-specific and system-wide EPS-linked activities separate.
 - Distinguish execution from validation and model-to-test closure.
 - Record comparator adequacy and rival explanations only for comparative or causal V&V-effectiveness claims.

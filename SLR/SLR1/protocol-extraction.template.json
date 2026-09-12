@@ -198,8 +198,14 @@
             "linked_input_group_ids": [
               "<input-group-id>"
             ],
+            "linked_eps_requirement_ids": [
+              "<eps-requirement-id>"
+            ],
             "linked_model_artifact_ids": [
               "<model-artifact-id>"
+            ],
+            "linked_tool_ids": [
+              "<tool-id>"
             ]
           }
         ],
@@ -211,6 +217,9 @@
         ],
         "linked_output_model_artifact_ids": [
           "<model-artifact-id>"
+        ],
+        "linked_tool_ids": [
+          "<tool-id>"
         ],
         "entry_conditions": {
           "coding_confidence": "high",
@@ -247,6 +256,9 @@
             ],
             "responsible_roles": [
               "<responsible role>"
+            ],
+            "linked_tool_ids": [
+              "<tool-id>"
             ],
             "tools_and_settings": [
               "<tool and setting>"
@@ -517,6 +529,9 @@
             "responsible_roles": [
               "<workflow activity role>"
             ],
+            "linked_tool_ids": [
+              "<tool-id>"
+            ],
             "tools_and_settings": [
               "<workflow activity tool and setting>"
             ],
@@ -560,16 +575,9 @@
             "<workflow role and responsibility>"
           ]
         },
-        "tools_and_versions": {
-          "coding_confidence": "high",
-          "provenance": "source_reported",
-          "citation_ids": [
-            "<citation-id>"
-          ],
-          "value": [
-            "<workflow tool and version>"
-          ]
-        },
+        "linked_tool_ids": [
+          "<tool-id>"
+        ],
         "automation": {
           "coding_confidence": "high",
           "provenance": "source_reported",
@@ -712,16 +720,45 @@
         "<modeling languages item>"
       ]
     },
-    "tools_and_versions": {
-      "coding_confidence": "high",
-      "provenance": "source_reported",
-      "citation_ids": [
-        "<citation-id>"
-      ],
-      "value": [
-        "<tools and versions item>"
-      ]
-    },
+    "tools_and_versions": [
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "tool_id": "<tool-id>",
+        "source_name": "<tool or equipment name>",
+        "version": "<tool version>",
+        "tool_kind": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": "unclear"
+        },
+        "roles": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": [
+            "unclear"
+          ]
+        },
+        "provider_or_owner": "<tool provider or owner>",
+        "availability": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": "unclear"
+        }
+      }
+    ],
     "toolchain_and_data_flow": {
       "coding_confidence": "high",
       "provenance": "source_reported",
@@ -738,7 +775,10 @@
           "<citation-id>"
         ],
         "model_artifact_id": "<model-artifact-id>",
-        "name_or_description": "<name or description>"
+        "name_or_description": "<name or description>",
+        "linked_tool_ids": [
+          "<tool-id>"
+        ]
       }
     ],
     "modeled_systems_engineering_concerns": {
@@ -796,16 +836,115 @@
         ],
         "value": "<eps boundary>"
       },
-      "eps_elements": {
-        "coding_confidence": "high",
-        "provenance": "source_reported",
-        "citation_ids": [
-          "<citation-id>"
-        ],
-        "value": [
-          "<eps elements item>"
-        ]
-      },
+      "eps_elements": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "eps_element_id": "<eps-element-id>",
+          "source_name_or_description": "<source element name or description>",
+          "source_element_type": "<source element type>",
+          "normalized_element_types": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "unclear"
+            ]
+          },
+          "abstraction_levels": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "unclear"
+            ]
+          },
+          "model_inclusion": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "unclear"
+          },
+          "boundary_role": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "unclear"
+          },
+          "parent_eps_element_ids": {
+            "status": "none"
+          },
+          "linked_model_artifact_ids": [
+            "<model-artifact-id>"
+          ]
+        }
+      ],
+      "eps_requirements": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "eps_requirement_id": "<eps-requirement-id>",
+          "source_requirement_id": "<source requirement id>",
+          "statement_or_description": "<requirement statement or description>",
+          "eps_specificity": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "unclear"
+          },
+          "requirement_level": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "unclear"
+          },
+          "requirement_types": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "unclear"
+            ]
+          },
+          "mbse_inclusion": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "unclear"
+          },
+          "parent_eps_requirement_ids": {
+            "status": "none"
+          },
+          "linked_eps_element_ids": [
+            "<eps-element-id>"
+          ],
+          "linked_model_artifact_ids": [
+            "<model-artifact-id>"
+          ]
+        }
+      ],
       "eps_architecture": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -822,6 +961,11 @@
             "<citation-id>"
           ],
           "eps_exchange_id": "<eps-exchange-id>",
+          "source_eps_element_id": "<eps-element-id>",
+          "destination_eps_element_id": "<eps-element-id>",
+          "interface_eps_element_ids": [
+            "<eps-element-id>"
+          ],
           "source_endpoint": "<source endpoint>",
           "destination_endpoint": "<destination endpoint>",
           "named_eps_interface": "<named eps interface>",
@@ -853,11 +997,16 @@
             "<citation-id>"
           ],
           "eps_dependency_id": "<eps-dependency-id>",
+          "dependent_eps_element_id": "<eps-element-id>",
+          "provider_or_driver_eps_element_id": "<eps-element-id>",
           "dependent_endpoint": "<dependent endpoint>",
           "provider_or_driver_endpoint": "<provider or driver endpoint>",
           "description": "<description>",
           "linked_eps_exchange_ids": [
             "<eps-exchange-id>"
+          ],
+          "linked_eps_requirement_ids": [
+            "<eps-requirement-id>"
           ],
           "dependency_type": {
             "coding_confidence": "high",
@@ -887,16 +1036,155 @@
           "<eps modes and operations item>"
         ]
       },
-      "eps_model_representations": {
-        "coding_confidence": "high",
-        "provenance": "source_reported",
-        "citation_ids": [
-          "<citation-id>"
-        ],
-        "value": [
-          "<eps model representations item>"
-        ]
-      },
+      "eps_model_representations": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "model_representation_id": "<model-representation-id>",
+          "source_name_or_caption": "<source representation name or caption>",
+          "source_representation_type": "<source representation type>",
+          "source_language_or_notation": "<source language or notation>",
+          "representation_forms": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "diagram"
+            ]
+          },
+          "normalized_view_types": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "sequence_or_interaction"
+            ]
+          },
+          "reported_purpose": "<reported representation purpose>",
+          "representation_origin": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "unclear"
+          },
+          "representation_completeness": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "unclear"
+          },
+          "linked_model_artifact_ids": [
+            "<model-artifact-id>"
+          ],
+          "linked_tool_ids": [
+            "<tool-id>"
+          ],
+          "linked_eps_element_ids": [
+            "<eps-element-id>"
+          ],
+          "linked_eps_requirement_ids": [
+            "<eps-requirement-id>"
+          ],
+          "linked_eps_exchange_ids": [
+            "<eps-exchange-id>"
+          ],
+          "linked_eps_dependency_ids": [
+            "<eps-dependency-id>"
+          ],
+          "linked_eps_model_bridge_ids": [
+            "<eps-model-bridge-id>"
+          ],
+          "linked_input_group_ids": [
+            "<input-group-id>"
+          ],
+          "linked_result_set_ids": [
+            "<result-set-id>"
+          ],
+          "linked_result_output_ids": [
+            "<result-output-id>"
+          ],
+          "linked_result_criterion_ids": [
+            "<result-criterion-id>"
+          ],
+          "behavior_occurrences": [
+            {
+              "coding_confidence": "high",
+              "provenance": "source_reported",
+              "citation_ids": [
+                "<citation-id>"
+              ],
+              "behavior_occurrence_id": "<behavior-occurrence-id>",
+              "occurrence_type": {
+                "coding_confidence": "high",
+                "provenance": "reviewer_inferred",
+                "citation_ids": [
+                  "<citation-id>"
+                ],
+                "value": "message_or_signal"
+              },
+              "sequence_label": "<behavior occurrence sequence label>",
+              "predecessor_behavior_occurrence_ids": {
+                "status": "none"
+              },
+              "action_message_or_event": "<action message or event>",
+              "source_eps_element_ids": [
+                "<eps-element-id>"
+              ],
+              "destination_eps_element_ids": [
+                "<eps-element-id>"
+              ],
+              "context_eps_element_ids": [
+                "<eps-element-id>"
+              ],
+              "linked_eps_exchange_ids": [
+                "<eps-exchange-id>"
+              ],
+              "linked_eps_model_bridge_ids": [
+                "<eps-model-bridge-id>"
+              ],
+              "guard_or_condition": "<guard or condition>",
+              "branch_loop_or_parallelism": "<branch loop or parallelism>",
+              "timing_or_duration": "<timing or duration>",
+              "output_or_result": "<behavior occurrence output or result>"
+            }
+          ]
+        }
+      ],
+      "eps_model_representation_relationships": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "model_representation_relationship_id": "<model-representation-relationship-id>",
+          "source_model_representation_id": "<model-representation-id>",
+          "target_model_representation_id": "<target-model-representation-id>",
+          "source_relationship_term": "<source representation relationship term>",
+          "normalized_relationship_types": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "unclear"
+            ]
+          },
+          "description": "<model representation relationship description>"
+        }
+      ],
       "modeled_disciplinary_viewpoints": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -917,7 +1205,41 @@
           "eps_model_bridge_id": "<eps-model-bridge-id>",
           "eps_anchor_endpoint": "<eps anchor endpoint>",
           "model_or_second_concern_endpoint": "<model or second concern endpoint>",
+          "eps_anchor_element_ids": [
+            "<eps-element-id>"
+          ],
+          "eps_anchor_requirement_ids": [
+            "<eps-requirement-id>"
+          ],
+          "second_concern_element_ids": [
+            "<eps-element-id>"
+          ],
+          "second_concern_requirement_ids": [
+            "<eps-requirement-id>"
+          ],
+          "linked_model_artifact_ids": [
+            "<model-artifact-id>"
+          ],
+          "linked_eps_exchange_ids": [
+            "<eps-exchange-id>"
+          ],
+          "linked_eps_dependency_ids": [
+            "<eps-dependency-id>"
+          ],
+          "linked_result_criterion_ids": [
+            "<result-criterion-id>"
+          ],
           "relationship_or_mapping": "<relationship or mapping>",
+          "normalized_relationship_types": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "unclear"
+            ]
+          },
           "reconstructed_meaning": {
             "coding_confidence": "high",
             "provenance": "source_reported",
@@ -972,15 +1294,90 @@
           "<supported decisions item>"
         ]
       },
-      "scope_deliberately_omitted": {
-        "coding_confidence": "high",
-        "provenance": "source_reported",
-        "citation_ids": [
-          "<citation-id>"
+      "coverage_assessment": {
+        "declared_scope_or_denominator": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": "<declared scope or coverage denominator>"
+        },
+        "coverage_extent": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": "unclear"
+        },
+        "coverage_basis": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": [
+            "unclear"
+          ]
+        },
+        "coverage_items": [
+          {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "coverage_item_id": "<coverage-item-id>",
+            "target_type": {
+              "coding_confidence": "high",
+              "provenance": "source_reported",
+              "citation_ids": [
+                "<citation-id>"
+              ],
+              "value": "unclear"
+            },
+            "source_name_or_description": "<coverage item name or description>",
+            "linked_eps_element_ids": [
+              "<eps-element-id>"
+            ],
+            "linked_eps_requirement_ids": [
+              "<eps-requirement-id>"
+            ],
+            "linked_eps_exchange_ids": [
+              "<eps-exchange-id>"
+            ],
+            "linked_eps_dependency_ids": [
+              "<eps-dependency-id>"
+            ],
+            "linked_model_artifact_ids": [
+              "<model-artifact-id>"
+            ],
+            "linked_model_representation_ids": [
+              "<model-representation-id>"
+            ],
+            "coverage_status": {
+              "coding_confidence": "high",
+              "provenance": "source_reported",
+              "citation_ids": [
+                "<citation-id>"
+              ],
+              "value": "unclear"
+            },
+            "reason": "<coverage status reason>"
+          }
         ],
-        "value": [
-          "<scope deliberately omitted item>"
-        ]
+        "linked_rq1_claim_ids": [
+          "<rq1-claim-id>"
+        ],
+        "assessment_reason": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": "<coverage assessment reason>"
+        }
       },
       "eps_model_maturity": {
         "coding_confidence": "high",
@@ -1041,6 +1438,9 @@
       },
       "linked_workflow_ids": [
         "<workflow-id>"
+      ],
+      "linked_tool_ids": [
+        "<tool-id>"
       ],
       "workflow_execution_and_deviations": {
         "coding_confidence": "high",
@@ -1266,6 +1666,12 @@
       "linked_report_reuse_record_ids": [
         "<report-reuse-record-id>"
       ],
+      "linked_eps_requirement_ids": [
+        "<eps-requirement-id>"
+      ],
+      "linked_tool_ids": [
+        "<tool-id>"
+      ],
       "parameters_or_constructs": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -1364,6 +1770,9 @@
       "linked_input_group_ids": [
         "<input-group-id>"
       ],
+      "linked_tool_ids": [
+        "<tool-id>"
+      ],
       "cases_participants_or_observational_units": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -1447,6 +1856,9 @@
           ],
           "result_criterion_id": "<result-criterion-id>",
           "source_criterion_or_requirement_id": "<source criterion or requirement id>",
+          "linked_eps_requirement_ids": [
+            "<eps-requirement-id>"
+          ],
           "target": "<target>",
           "threshold_or_expected_behavior": "<threshold or expected behavior>",
           "source": "<source>",
@@ -1587,9 +1999,21 @@
       "rq1_claim_id": "<rq1-claim-id>",
       "claim_wording": "<claim wording>",
       "claimed_characteristic": "<claimed characteristic>",
+      "claimed_characteristic_code": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "unclear"
+      },
+      "author_stated_rationale": "<author stated claim rationale>",
       "claim_scope_and_object": "<claim scope and object>",
       "linked_model_artifact_ids": [
         "<model-artifact-id>"
+      ],
+      "linked_model_representation_ids": [
+        "<model-representation-id>"
       ],
       "linked_model_generation_method_ids": [
         "<model-generation-method-id>"
@@ -1599,6 +2023,18 @@
       ],
       "linked_eps_case_ids": [
         "<eps-case-id>"
+      ],
+      "linked_eps_element_ids": [
+        "<eps-element-id>"
+      ],
+      "linked_eps_requirement_ids": [
+        "<eps-requirement-id>"
+      ],
+      "linked_tool_ids": [
+        "<tool-id>"
+      ],
+      "linked_coverage_item_ids": [
+        "<coverage-item-id>"
       ],
       "linked_report_reuse_record_ids": [
         "<report-reuse-record-id>"
@@ -1688,6 +2124,15 @@
         "value": "outcome"
       },
       "target": "<target>",
+      "linked_eps_element_ids": [
+        "<eps-element-id>"
+      ],
+      "linked_eps_requirement_ids": [
+        "<eps-requirement-id>"
+      ],
+      "linked_tool_ids": [
+        "<tool-id>"
+      ],
       "scope": "<scope>",
       "outcome_category": {
         "coding_confidence": "high",
@@ -1737,6 +2182,9 @@
         ],
         "value": "<mechanism>"
       },
+      "linked_model_representation_ids": [
+        "<model-representation-id>"
+      ],
       "linked_model_artifact_ids": [
         "<model-artifact-id>"
       ],
@@ -1856,9 +2304,24 @@
         "value": "unclear"
       },
       "source_requirement_or_criterion_id": "<source requirement or criterion id>",
+      "linked_eps_requirement_ids": [
+        "<eps-requirement-id>"
+      ],
+      "linked_eps_element_ids": [
+        "<eps-element-id>"
+      ],
+      "linked_eps_model_bridge_ids": [
+        "<eps-model-bridge-id>"
+      ],
       "model_artifact_id": "<model-artifact-id>",
+      "linked_model_representation_ids": [
+        "<model-representation-id>"
+      ],
       "linked_workflow_ids": [
         "<workflow-id>"
+      ],
+      "linked_tool_ids": [
+        "<tool-id>"
       ],
       "explicit_model_to_vv_bridge": "<explicit model to vv bridge>",
       "source_vv_terminology": "<source vv terminology>",
@@ -2196,14 +2659,14 @@
               "<required inputs item>"
             ]
           },
-          "tools_and_versions": {
+          "linked_tool_ids": {
             "coding_confidence": "high",
             "provenance": "source_reported",
             "citation_ids": [
               "<citation-id>"
             ],
             "value": [
-              "<tools and versions item>"
+              "<tool-id>"
             ]
           },
           "organizational_prerequisites": {
@@ -2318,6 +2781,9 @@
               "responsible_roles": [
                 "<tailoring rule responsible role>"
               ],
+              "linked_tool_ids": [
+                "<tool-id>"
+              ],
               "tools_and_automation": [
                 "<tailoring rule tool or automation>"
               ],
@@ -2355,6 +2821,9 @@
                 "<tailoring step output>"
               ],
               "responsible_role": "<tailoring step responsible role>",
+              "linked_tool_ids": [
+                "<tool-id>"
+              ],
               "tools_and_settings": [
                 "<tailoring step tool and setting>"
               ],
@@ -2374,14 +2843,24 @@
               "<required roles and skills item>"
             ]
           },
-          "required_tools_and_data": {
+          "required_tool_ids": {
             "coding_confidence": "high",
             "provenance": "source_reported",
             "citation_ids": [
               "<citation-id>"
             ],
             "value": [
-              "<required tools and data item>"
+              "<tool-id>"
+            ]
+          },
+          "required_data_and_tool_settings": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "<required data or tool setting>"
             ]
           },
           "automation": {
@@ -2740,6 +3219,9 @@
                 "<application operation input or assumption>"
               ],
               "responsible_role": "<application operation responsible role>",
+              "linked_tool_ids": [
+                "<tool-id>"
+              ],
               "tools_and_automation": [
                 "<application operation tool or automation>"
               ],
