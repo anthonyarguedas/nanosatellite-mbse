@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Route B Second Reviewer</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --panel: #141923;
+      --panel-raised: #1b2230;
+      --text: #f4f7fb;
+      --muted: #a9b3c3;
+      --faint: #718096;
+      --line: #2d3748;
+      --blue: #60a5fa;
+      --blue-dim: rgba(96, 165, 250, 0.15);
+      --green: #4ade80;
+      --green-dim: rgba(74, 222, 128, 0.15);
+      --red: #fb7185;
+      --red-dim: rgba(251, 113, 133, 0.13);
+      --orange: #fbbf24;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.34);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 15% 0%, #1c2637 0, var(--bg) 38rem);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    button, a { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: default; }
+
+    .app {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      outline: none;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(11, 13, 18, 0.9);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand { min-width: 225px; }
+    .brand h1 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 780;
+      letter-spacing: 0.015em;
+    }
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .stats {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+    }
+    .stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .dot.blue { background: var(--blue); }
+    .dot.green { background: var(--green); }
+    .dot.red { background: var(--red); }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .small-btn,
+    .open-pdf {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      background: var(--panel);
+      text-decoration: none;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .small-btn:hover,
+    .open-pdf:hover { border-color: #56657a; }
+    .small-btn:disabled { opacity: 0.45; }
+
+    main {
+      min-height: 0;
+      position: relative;
+    }
+
+    .loader,
+    .finished {
+      width: min(700px, calc(100% - 36px));
+      margin: 48px auto;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(28, 34, 48, 0.97), rgba(20, 25, 35, 0.98));
+      box-shadow: var(--shadow);
+    }
+    .loader h2,
+    .finished h2 { margin: 0 0 10px; font-size: 22px; }
+    .loader p,
+    .finished p { margin: 0; color: var(--muted); line-height: 1.55; }
+    .loader-actions,
+    .finished-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .primary-btn {
+      border: 1px solid rgba(96, 165, 250, 0.55);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: #dbeafe;
+      background: var(--blue-dim);
+    }
+    .primary-btn:hover { background: rgba(96, 165, 250, 0.23); }
+
+    .workspace {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(320px, 39%) minmax(0, 61%);
+    }
+
+    .record-panel,
+    .pdf-panel {
+      min-height: 0;
+      background: rgba(20, 25, 35, 0.82);
+    }
+
+    .record-panel {
+      overflow: auto;
+      padding: 28px clamp(22px, 3vw, 46px) 34px;
+      border-right: 1px solid var(--line);
+      scrollbar-color: #4b596c transparent;
+    }
+
+    .paper-id {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .paper-id::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1);
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(23px, 2.45vw, 36px);
+      line-height: 1.16;
+      letter-spacing: -0.025em;
+      overflow-wrap: anywhere;
+    }
+
+    .field {
+      margin-top: 30px;
+    }
+    .field-label {
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .venue {
+      color: #dce5f1;
+      font-size: 17px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+    .abstract {
+      color: #edf2f8;
+      font-size: 17px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .abstract.empty { color: var(--faint); font-style: italic; }
+
+    .record-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .record-links a {
+      color: #bfdbfe;
+      font-size: 12px;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    .record-links a:hover { color: #e0efff; }
+
+    .pdf-panel {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+    .pdf-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 53px;
+      padding: 10px 14px 10px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(13, 17, 24, 0.62);
+    }
+    .pdf-head strong { font-size: 13px; }
+    .pdf-head span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .pdf-shell {
+      min-height: 0;
+      position: relative;
+      background: #252a33;
+    }
+    .pdf-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #252a33;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: minmax(250px, 0.8fr) minmax(0, 2.2fr);
+      gap: 12px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(11, 13, 18, 0.94);
+    }
+
+    .ratify-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      border: 1px solid rgba(74, 222, 128, 0.5);
+      border-radius: 10px;
+      color: #d1fae5;
+      background: var(--green-dim);
+      font-weight: 800;
+    }
+    .ratify-btn:hover { background: rgba(74, 222, 128, 0.22); }
+    .ratify-btn:disabled { opacity: 0.4; }
+
+    .reason-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .reason-btn {
+      min-width: 0;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 8px;
+      border: 1px solid rgba(251, 113, 133, 0.35);
+      border-radius: 8px;
+      color: #fecdd3;
+      background: var(--red-dim);
+      text-align: left;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+    .reason-btn:hover { background: rgba(251, 113, 133, 0.22); }
+    .reason-btn:disabled { opacity: 0.38; }
+
+    kbd {
+      flex: 0 0 auto;
+      display: inline-block;
+      min-width: 23px;
+      padding: 3px 5px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.24);
+      color: white;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .overlay {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(2, 5, 10, 0.76);
+      backdrop-filter: blur(5px);
+    }
+    .overlay.open { display: grid; }
+    .modal {
+      width: min(650px, 100%);
+      max-height: min(85vh, 700px);
+      overflow: auto;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #171d28;
+      box-shadow: var(--shadow);
+    }
+    .modal h2 { margin: 0 0 10px; font-size: 21px; }
+    .modal p { color: var(--muted); line-height: 1.55; }
+    .help-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px 15px;
+      align-items: start;
+      margin: 20px 0;
+    }
+    .help-grid div { color: #dde5ef; line-height: 1.45; }
+    .modal code {
+      padding: 1px 4px;
+      border-radius: 4px;
+      color: #dbeafe;
+      background: rgba(96, 165, 250, 0.12);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 30;
+      top: 74px;
+      left: 50%;
+      max-width: calc(100% - 36px);
+      transform: translate(-50%, -10px);
+      padding: 9px 12px;
+      border: 1px solid #4a5668;
+      border-radius: 8px;
+      color: #f8fafc;
+      background: #202938;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .toast.green { border-color: rgba(74, 222, 128, 0.65); }
+    .toast.red { border-color: rgba(251, 113, 133, 0.65); }
+    .toast.blue { border-color: rgba(96, 165, 250, 0.65); }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 1040px) {
+      header { gap: 12px; flex-wrap: wrap; }
+      .stats { order: 3; flex-basis: 100%; justify-content: flex-start; }
+      .workspace { grid-template-columns: minmax(290px, 43%) minmax(0, 57%); }
+      .record-panel { padding: 24px; }
+      footer { grid-template-columns: 1fr; }
+      .reason-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      body { overflow: auto; }
+      .app { min-height: 100%; height: auto; }
+      header { padding: 12px 14px; }
+      .brand { min-width: 0; flex: 1; }
+      .header-actions { margin-left: auto; }
+      .workspace { height: auto; grid-template-columns: 1fr; }
+      .record-panel { min-height: 46vh; border-right: 0; border-bottom: 1px solid var(--line); }
+      .pdf-panel { height: 72vh; }
+      footer { position: sticky; bottom: 0; }
+      .reason-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .title { font-size: 27px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app" tabindex="-1">
+    <header>
+      <div class="brand">
+        <h1>Route B second reviewer</h1>
+        <p id="fileName">review-candidates.json</p>
+      </div>
+
+      <div class="stats" aria-live="polite">
+        <span class="stat"><span class="dot blue"></span><span id="remainingStat">Loading reports</span></span>
+        <span class="stat"><span class="dot green"></span><span id="ratifiedStat">0 ratified</span></span>
+        <span class="stat"><span class="dot red"></span><span id="excludedStat">0 excluded</span></span>
+      </div>
+
+      <div class="header-actions">
+        <button class="small-btn" id="undoBtn" type="button" title="Undo the last decision (U)" disabled>Undo</button>
+        <button class="small-btn" id="saveBtn" type="button" title="Save changed screening decisions (Ctrl or Command S)" disabled>Save JSON</button>
+        <button class="small-btn" id="helpBtn" type="button" title="Keyboard help (?)">?</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="loader" id="loader">
+        <h2>Loading Route B reports</h2>
+        <p id="loaderText">Trying to read <code>review-candidates.json</code> from this folder.</p>
+        <div class="loader-actions hidden" id="loaderActions">
+          <button class="primary-btn" id="openBtn" type="button">Choose JSON file</button>
+          <button class="small-btn" id="retryBtn" type="button">Retry</button>
+        </div>
+        <input class="hidden" id="fileInput" type="file" accept="application/json,.json" />
+      </section>
+
+      <section class="workspace hidden" id="workspace" aria-label="Route B screening review">
+        <article class="record-panel" id="recordPanel">
+          <div class="paper-id" id="paperId"></div>
+          <h2 class="title" id="paperTitle"></h2>
+
+          <section class="field" aria-labelledby="venueLabel">
+            <div class="field-label" id="venueLabel">Venue</div>
+            <div class="venue" id="venue"></div>
+          </section>
+
+          <section class="field" aria-labelledby="abstractLabel">
+            <div class="field-label" id="abstractLabel">Abstract</div>
+            <div class="abstract" id="abstract" tabindex="0"></div>
+          </section>
+
+          <nav class="record-links" id="recordLinks" aria-label="Report links"></nav>
+        </article>
+
+        <section class="pdf-panel" aria-label="Full text PDF">
+          <div class="pdf-head">
+            <div>
+              <strong>Corresponding PDF</strong>
+              <span id="pdfPath">Full text from the review candidate archive</span>
+            </div>
+            <a class="open-pdf" id="openPdf" href="#" target="_blank" rel="noopener noreferrer">Open PDF</a>
+          </div>
+          <div class="pdf-shell" id="pdfShell">
+            <iframe class="pdf-frame" id="pdfFrame" title="Report PDF" tabindex="-1"></iframe>
+          </div>
+        </section>
+      </section>
+
+      <section class="finished hidden" id="finished">
+        <h2>Second review complete</h2>
+        <p id="finishedText"></p>
+        <div class="finished-actions">
+          <button class="primary-btn" id="finishedSaveBtn" type="button">Save JSON</button>
+          <button class="small-btn" id="resetBtn" type="button">Reset local ratifications</button>
+        </div>
+      </section>
+    </main>
+
+    <footer id="decisionBar">
+      <button class="ratify-btn" id="ratifyBtn" type="button" disabled>
+        <kbd>Space</kbd>
+        <span>Ratify Route B and continue</span>
+      </button>
+      <div class="reason-list" id="reasonList" aria-label="Exclusion reasons"></div>
+    </footer>
+  </div>
+
+  <div class="overlay" id="helpOverlay" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <h2 id="helpTitle">Keyboard controls</h2>
+      <p>Review the metadata and full text, then keep or replace the current Route B decision.</p>
+      <div class="help-grid">
+        <kbd>Space</kbd><div>Ratify <code>include_route_B_embedded_eps</code> and open the next report.</div>
+        <kbd>1 to 7</kbd><div>Apply the matching exclusion reason and open the next report.</div>
+        <kbd>U</kbd><div>Undo the most recent decision.</div>
+        <kbd>Ctrl/⌘ S</kbd><div>Save changed screening decisions. A browser that cannot overwrite the source downloads a replacement JSON file.</div>
+        <kbd>?</kbd><div>Open or close this help.</div>
+        <kbd>Esc</kbd><div>Close this help.</div>
+      </div>
+      <p>Ratifications keep the existing Route B decision in the JSON and are remembered in this browser. Exclusions change <code>screening_decision</code> and require Save JSON.</p>
+      <button class="small-btn" id="closeHelpBtn" type="button">Close</button>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const DATA_FILE = 'review-candidates.json';
+      const ROUTE_B_DECISION = 'include_route_B_embedded_eps';
+      const PDF_DIRECTORY = 'pdfs/review-candidates';
+      const MAX_UNDO = 100;
+      const EXCLUSION_REASONS = [
+        { key: '1', decision: 'exclude_no_qualifying_eps_thread', label: 'No qualifying EPS thread' },
+        { key: '2', decision: 'exclude_not_mbse', label: 'Not MBSE' },
+        { key: '3', decision: 'exclude_wrong_population', label: 'Wrong population' },
+        { key: '4', decision: 'exclude_wrong_publication_type', label: 'Wrong publication type' },
+        { key: '5', decision: 'exclude_wrong_date', label: 'Wrong date' },
+        { key: '6', decision: 'exclude_wrong_language', label: 'Wrong language' },
+        { key: '7', decision: 'exclude_secondary_study', label: 'Secondary study' }
+      ];
+
+      let data = null;
+      let recordsById = new Map();
+      let currentId = null;
+      let queue = [];
+      let startingRouteBIds = [];
+      let ratifiedIds = new Set();
+      let baselineDecisions = new Map();
+      let undoStack = [];
+      let storageKey = '';
+      let sourceFileName = DATA_FILE;
+      let fileHandle = null;
+      let toastTimer = null;
+
+      const $ = (id) => document.getElementById(id);
+      const els = {
+        app: $('app'),
+        fileName: $('fileName'),
+        remainingStat: $('remainingStat'),
+        ratifiedStat: $('ratifiedStat'),
+        excludedStat: $('excludedStat'),
+        undoBtn: $('undoBtn'),
+        saveBtn: $('saveBtn'),
+        helpBtn: $('helpBtn'),
+        loader: $('loader'),
+        loaderText: $('loaderText'),
+        loaderActions: $('loaderActions'),
+        openBtn: $('openBtn'),
+        retryBtn: $('retryBtn'),
+        fileInput: $('fileInput'),
+        workspace: $('workspace'),
+        recordPanel: $('recordPanel'),
+        paperId: $('paperId'),
+        paperTitle: $('paperTitle'),
+        venue: $('venue'),
+        abstract: $('abstract'),
+        recordLinks: $('recordLinks'),
+        pdfPath: $('pdfPath'),
+        pdfShell: $('pdfShell'),
+        pdfFrame: $('pdfFrame'),
+        openPdf: $('openPdf'),
+        finished: $('finished'),
+        finishedText: $('finishedText'),
+        finishedSaveBtn: $('finishedSaveBtn'),
+        resetBtn: $('resetBtn'),
+        decisionBar: $('decisionBar'),
+        ratifyBtn: $('ratifyBtn'),
+        reasonList: $('reasonList'),
+        helpOverlay: $('helpOverlay'),
+        closeHelpBtn: $('closeHelpBtn'),
+        toast: $('toast')
+      };
+
+      function getStorageKey(payload) {
+        return [
+          'routeBSecondReviewer',
+          payload.schema_version || 'unknown-schema',
+          payload.review_namespace || 'unknown-namespace',
+          payload.generated_at || 'unknown-generation'
+        ].join(':');
+      }
+
+      function loadRatifications() {
+        storageKey = getStorageKey(data);
+        try {
+          const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+          ratifiedIds = new Set(Array.isArray(saved) ? saved : []);
+        } catch (_) {
+          ratifiedIds = new Set();
+        }
+      }
+
+      function saveRatifications() {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify([...ratifiedIds].sort()));
+        } catch (_) {
+          // The reviewer remains usable if browser storage is unavailable.
+        }
+      }
+
+      function validateData(payload) {
+        if (!payload || !Array.isArray(payload.records)) {
+          throw new Error('The JSON file needs a top-level "records" array.');
+        }
+        const ids = new Set();
+        for (const record of payload.records) {
+          if (!record || typeof record !== 'object' || typeof record.candidate_id !== 'string' || !record.candidate_id) {
+            throw new Error('Every record needs a non-empty candidate_id.');
+          }
+          if (ids.has(record.candidate_id)) {
+            throw new Error(`Duplicate candidate_id: ${record.candidate_id}`);
+          }
+          ids.add(record.candidate_id);
+        }
+      }
+
+      function routeBRecords() {
+        return data.records.filter((record) => record.screening_decision === ROUTE_B_DECISION);
+      }
+
+      function initialize(payload, filename = DATA_FILE) {
+        validateData(payload);
+        data = payload;
+        sourceFileName = filename || DATA_FILE;
+        recordsById = new Map(data.records.map((record) => [record.candidate_id, record]));
+        baselineDecisions = new Map(data.records.map((record) => [record.candidate_id, record.screening_decision]));
+        startingRouteBIds = routeBRecords().map((record) => record.candidate_id);
+
+        loadRatifications();
+        const routeBIdSet = new Set(startingRouteBIds);
+        ratifiedIds = new Set([...ratifiedIds].filter((id) => routeBIdSet.has(id)));
+        saveRatifications();
+
+        currentId = null;
+        queue = startingRouteBIds.filter((id) => !ratifiedIds.has(id));
+        undoStack = [];
+
+        els.fileName.textContent = sourceFileName;
+        renderReasonButtons();
+        els.loader.classList.add('hidden');
+        els.finished.classList.add('hidden');
+        els.workspace.classList.remove('hidden');
+        els.saveBtn.disabled = false;
+        advance();
+        updateUi();
+      }
+
+      function recordForCurrent() {
+        return currentId ? recordsById.get(currentId) : null;
+      }
+
+      function pdfUrl(candidateId) {
+        const path = `${PDF_DIRECTORY}/${candidateId}_images/${candidateId}.pdf`;
+        return encodeURI(path);
+      }
+
+      function addLink(label, href) {
+        const link = document.createElement('a');
+        link.href = href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = label;
+        return link;
+      }
+
+      function renderCurrent() {
+        const record = recordForCurrent();
+        if (!record) return;
+
+        els.workspace.classList.remove('hidden');
+        els.finished.classList.add('hidden');
+        els.decisionBar.classList.remove('hidden');
+        setDecisionEnabled(true);
+
+        els.paperId.textContent = record.candidate_id;
+        els.paperTitle.textContent = record.title || 'Untitled report';
+        els.venue.textContent = record.publication_title || 'Venue not available';
+
+        const abstractText = record.abstract || record.abstract_snippet || '';
+        els.abstract.textContent = abstractText || 'No abstract is available in this record.';
+        els.abstract.classList.toggle('empty', !abstractText);
+        els.recordPanel.scrollTop = 0;
+
+        els.recordLinks.replaceChildren();
+        if (record.doi) {
+          const doi = String(record.doi)
+            .trim()
+            .replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '')
+            .replace(/^doi:\s*/i, '');
+          if (doi) {
+            els.recordLinks.appendChild(addLink('Open DOI', `https://doi.org/${encodeURIComponent(doi).replace(/%2F/gi, '/')}`));
+          }
+        }
+        if (Array.isArray(record.stable_urls)) {
+          const stableUrl = record.stable_urls.find((url) => typeof url === 'string' && /^https?:\/\//i.test(url));
+          if (stableUrl) els.recordLinks.appendChild(addLink('Open source record', stableUrl));
+        }
+
+        const url = pdfUrl(record.candidate_id);
+        els.pdfPath.textContent = `pdfs/review-candidates/${record.candidate_id}_images/`;
+        els.openPdf.href = url;
+        els.pdfFrame.title = `PDF for ${record.title || record.candidate_id}`;
+        els.pdfFrame.src = 'about:blank';
+        requestAnimationFrame(() => { els.pdfFrame.src = url; });
+
+        updateUi();
+        focusHotkeys();
+      }
+
+      function renderFinished() {
+        els.workspace.classList.add('hidden');
+        els.finished.classList.remove('hidden');
+        els.decisionBar.classList.add('hidden');
+        setDecisionEnabled(false);
+        const excluded = exclusionCount();
+        const ratified = ratifiedIds.size;
+        els.finishedText.textContent = `${ratified.toLocaleString()} Route B decisions ratified and ${excluded.toLocaleString()} exclusion decisions applied in this review session.`;
+        updateUi();
+        focusHotkeys();
+      }
+
+      function advance() {
+        currentId = queue.shift() || null;
+        if (currentId) renderCurrent();
+        else renderFinished();
+      }
+
+      function setDecisionEnabled(enabled) {
+        els.ratifyBtn.disabled = !enabled;
+        for (const button of els.reasonList.querySelectorAll('button')) button.disabled = !enabled;
+      }
+
+      function renderReasonButtons() {
+        els.reasonList.replaceChildren();
+        for (const reason of EXCLUSION_REASONS) {
+          const button = document.createElement('button');
+          button.className = 'reason-btn';
+          button.type = 'button';
+          button.dataset.reason = reason.decision;
+          button.title = `${reason.key}: ${reason.label}`;
+          const key = document.createElement('kbd');
+          key.textContent = reason.key;
+          const label = document.createElement('span');
+          label.textContent = reason.label;
+          button.append(key, label);
+          button.addEventListener('click', () => applyExclusion(reason.decision));
+          els.reasonList.appendChild(button);
+        }
+      }
+
+      function snapshot(action) {
+        const record = recordForCurrent();
+        if (!record) return;
+        undoStack.push({
+          action,
+          candidateId: currentId,
+          decision: record.screening_decision,
+          queue: [...queue],
+          wasRatified: ratifiedIds.has(currentId)
+        });
+        if (undoStack.length > MAX_UNDO) undoStack.shift();
+      }
+
+      function ratifyCurrent() {
+        if (!currentId) return;
+        snapshot('ratify');
+        ratifiedIds.add(currentId);
+        saveRatifications();
+        showToast('Route B decision ratified', 'green');
+        advance();
+      }
+
+      function applyExclusion(decision) {
+        if (!currentId || !EXCLUSION_REASONS.some((reason) => reason.decision === decision)) return;
+        snapshot('exclude');
+        const record = recordForCurrent();
+        record.screening_decision = decision;
+        showToast(`Excluded: ${humanize(decision)}`, 'red');
+        advance();
+        updateUi();
+      }
+
+      function undoLast() {
+        const last = undoStack.pop();
+        if (!last) return;
+
+        const record = recordsById.get(last.candidateId);
+        if (record) record.screening_decision = last.decision;
+        if (last.wasRatified) ratifiedIds.add(last.candidateId);
+        else ratifiedIds.delete(last.candidateId);
+        saveRatifications();
+
+        currentId = last.candidateId;
+        queue = [...last.queue];
+        renderCurrent();
+        updateUi();
+        showToast('Last decision undone', 'blue');
+      }
+
+      function humanize(decision) {
+        return decision
+          .replace(/^exclude_/, '')
+          .split('_')
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+
+      function exclusionCount() {
+        return startingRouteBIds.reduce((count, id) => {
+          const record = recordsById.get(id);
+          return count + (record && record.screening_decision !== ROUTE_B_DECISION ? 1 : 0);
+        }, 0);
+      }
+
+      function hasUnsavedChanges() {
+        if (!data) return false;
+        return data.records.some((record) => baselineDecisions.get(record.candidate_id) !== record.screening_decision);
+      }
+
+      function updateUi() {
+        if (!data) return;
+        const remaining = (currentId ? 1 : 0) + queue.length;
+        const total = startingRouteBIds.length;
+        const excluded = exclusionCount();
+        const reviewed = ratifiedIds.size + excluded;
+        els.remainingStat.textContent = `${remaining.toLocaleString()} remaining of ${total.toLocaleString()}`;
+        els.ratifiedStat.textContent = `${ratifiedIds.size.toLocaleString()} ratified`;
+        els.excludedStat.textContent = `${excluded.toLocaleString()} excluded`;
+        els.undoBtn.disabled = undoStack.length === 0;
+        els.saveBtn.textContent = hasUnsavedChanges() ? 'Save JSON •' : 'Save JSON';
+        els.finishedSaveBtn.textContent = hasUnsavedChanges() ? 'Save JSON •' : 'Save JSON';
+        if (reviewed > total) {
+          // This can only occur if storage was manually changed. Keep counters bounded.
+          els.remainingStat.textContent = `0 remaining of ${total.toLocaleString()}`;
+        }
+      }
+
+      function markSaved() {
+        baselineDecisions = new Map(data.records.map((record) => [record.candidate_id, record.screening_decision]));
+        updateUi();
+      }
+
+      function focusHotkeys() {
+        try {
+          els.app.focus({ preventScroll: true });
+        } catch (_) {
+          els.app.focus();
+        }
+      }
+
+      function showToast(message, tone = '') {
+        clearTimeout(toastTimer);
+        els.toast.textContent = message;
+        els.toast.className = `toast ${tone}`.trim();
+        requestAnimationFrame(() => els.toast.classList.add('show'));
+        toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1800);
+      }
+
+      function toggleHelp(force) {
+        const open = typeof force === 'boolean' ? force : !els.helpOverlay.classList.contains('open');
+        els.helpOverlay.classList.toggle('open', open);
+        els.helpOverlay.setAttribute('aria-hidden', String(!open));
+        if (!open) focusHotkeys();
+      }
+
+      async function tryAutoLoad() {
+        els.loader.classList.remove('hidden');
+        els.loaderActions.classList.add('hidden');
+        els.loaderText.textContent = `Trying to read ${DATA_FILE} from this folder.`;
+        try {
+          const response = await fetch(`./${DATA_FILE}`, { cache: 'no-store' });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const payload = await response.json();
+          fileHandle = null;
+          initialize(payload, DATA_FILE);
+        } catch (error) {
+          const message = error && error.message ? error.message : String(error);
+          els.loaderText.textContent = `Same-folder loading failed (${message}). Run a local web server from SLR/SLR1 or choose review-candidates.json manually.`;
+          els.loaderActions.classList.remove('hidden');
+        }
+      }
+
+      async function chooseFile() {
+        try {
+          if ('showOpenFilePicker' in window) {
+            const [handle] = await window.showOpenFilePicker({
+              multiple: false,
+              types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+            });
+            const file = await handle.getFile();
+            initialize(JSON.parse(await file.text()), file.name);
+            fileHandle = handle;
+          } else {
+            els.fileInput.click();
+          }
+        } catch (error) {
+          if (error && error.name === 'AbortError') return;
+          showToast(`Could not open JSON: ${error && error.message ? error.message : error}`, 'red');
+        }
+      }
+
+      function downloadJson(text) {
+        const blob = new Blob([text], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = sourceFileName || DATA_FILE;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      async function saveJson() {
+        if (!data) return;
+        const text = `${JSON.stringify(data, null, 2)}\n`;
+        if (fileHandle && fileHandle.createWritable) {
+          try {
+            const writable = await fileHandle.createWritable();
+            await writable.write(text);
+            await writable.close();
+            markSaved();
+            showToast('Saved JSON in place', 'green');
+            return;
+          } catch (_) {
+            showToast('Could not overwrite the file. Downloading a replacement.', 'red');
+          }
+        }
+        downloadJson(text);
+        markSaved();
+        showToast('Downloaded changed JSON', 'green');
+      }
+
+      function resetRatifications() {
+        if (!data) return;
+        if (!window.confirm('Reset locally remembered Route B ratifications? Exclusion decisions remain unchanged.')) return;
+        ratifiedIds.clear();
+        saveRatifications();
+        currentId = null;
+        queue = routeBRecords().map((record) => record.candidate_id);
+        undoStack = [];
+        advance();
+        updateUi();
+        showToast('Local ratifications reset', 'blue');
+      }
+
+      els.ratifyBtn.addEventListener('click', ratifyCurrent);
+      els.undoBtn.addEventListener('click', undoLast);
+      els.saveBtn.addEventListener('click', saveJson);
+      els.finishedSaveBtn.addEventListener('click', saveJson);
+      els.resetBtn.addEventListener('click', resetRatifications);
+      els.helpBtn.addEventListener('click', () => toggleHelp());
+      els.closeHelpBtn.addEventListener('click', () => toggleHelp(false));
+      els.helpOverlay.addEventListener('click', (event) => {
+        if (event.target === els.helpOverlay) toggleHelp(false);
+      });
+      els.openBtn.addEventListener('click', chooseFile);
+      els.retryBtn.addEventListener('click', tryAutoLoad);
+
+      // PDF viewers can take keyboard focus. Refocus the app after mouse use so
+      // Space and the numbered decisions continue to work while reviewing pages.
+      for (const eventName of ['pointerup', 'click']) {
+        els.pdfShell.addEventListener(eventName, () => setTimeout(focusHotkeys, 0), true);
+      }
+
+      els.fileInput.addEventListener('change', async () => {
+        const file = els.fileInput.files && els.fileInput.files[0];
+        if (!file) return;
+        try {
+          fileHandle = null;
+          initialize(JSON.parse(await file.text()), file.name);
+        } catch (error) {
+          showToast(`Invalid JSON: ${error && error.message ? error.message : error}`, 'red');
+        } finally {
+          els.fileInput.value = '';
+        }
+      });
+
+      window.addEventListener('keydown', (event) => {
+        const target = event.target;
+        const tagName = target && target.tagName ? target.tagName.toLowerCase() : '';
+        if (tagName === 'input' || tagName === 'textarea' || tagName === 'select' || (target && target.isContentEditable)) return;
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+          event.preventDefault();
+          saveJson();
+          return;
+        }
+
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          toggleHelp(false);
+          return;
+        }
+
+        if (event.key === '?') {
+          event.preventDefault();
+          toggleHelp();
+          return;
+        }
+
+        if (els.helpOverlay.classList.contains('open')) return;
+
+        if (event.key.toLowerCase() === 'u') {
+          event.preventDefault();
+          undoLast();
+          return;
+        }
+
+        if (!currentId) return;
+
+        if (event.code === 'Space' || event.key === ' ') {
+          event.preventDefault();
+          ratifyCurrent();
+          return;
+        }
+
+        const reason = EXCLUSION_REASONS.find((item) => item.key === event.key);
+        if (reason) {
+          event.preventDefault();
+          applyExclusion(reason.decision);
+        }
+      }, true);
+
+      window.addEventListener('beforeunload', (event) => {
+        if (!hasUnsavedChanges()) return;
+        event.preventDefault();
+        event.returnValue = '';
+      });
+
+      tryAutoLoad();
+    })();
+  </script>
+</body>
+</html>
