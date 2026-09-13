@@ -12,10 +12,12 @@ from validate_extraction import (
     Location,
     application_deficiencies,
     audit_coverage_issues,
+    automation_profile_issues,
     build_indexes,
     citation_quote_issues,
     consolidation_issues,
     cross_record_reference_issues,
+    evaluation_design_issues,
     evidence_issues,
     family_consistency_issues,
     family_lead_issues,
@@ -70,6 +72,8 @@ class TemplateTests(unittest.TestCase):
                 issues.extend(report_reference_issues(document, indexes))
                 issues.extend(report_application_lineage_issues(document, indexes))
                 issues.extend(family_lead_issues(document))
+                issues.extend(automation_profile_issues(document, indexes))
+                issues.extend(evaluation_design_issues(document))
                 issues.extend(rq2_semantic_issues(document, indexes))
                 issues.extend(rq3_semantic_issues(document, indexes))
                 issues.extend(procedural_profile_issues(document))
@@ -111,6 +115,53 @@ class TemplateTests(unittest.TestCase):
         )
         self.assertTrue(issues)
 
+    def test_schemas_have_no_composite_classification_values(self) -> None:
+        forbidden = {
+            "multiple",
+            "mixed",
+            "both",
+            "cross_lifecycle",
+            "end_to_end_engineering",
+            "mixed_methods",
+            "mixed_trade_off",
+            "mixed_or_conditional",
+            "artifact_and_method",
+            "artifact_and_workflow",
+            "method_and_workflow",
+            "artifact_method_and_workflow",
+        }
+        found: set[str] = set()
+
+        def walk(node: object) -> None:
+            if isinstance(node, dict):
+                enum = node.get("enum")
+                if isinstance(enum, list):
+                    found.update(
+                        item for item in enum if isinstance(item, str) and item in forbidden
+                    )
+                for item in node.values():
+                    walk(item)
+            elif isinstance(node, list):
+                for item in node:
+                    walk(item)
+
+        for schema_path in SCHEMA_PATHS.values():
+            walk(load_object(schema_path))
+        self.assertEqual(found, set())
+
+    def test_representation_owns_multivalued_characteristics(self) -> None:
+        template = load_object(
+            SCHEMA_PATHS["report"].with_name("protocol-extraction.template.json")
+        )
+        case = template["eps_cases"][0]
+        self.assertNotIn("eps_abstraction", case)
+        self.assertNotIn("eps_decomposition_visibility", case)
+        self.assertNotIn("eps_fidelity", case)
+        for representation in case["eps_model_representations"]:
+            self.assertIn("abstraction_levels", representation)
+            self.assertIn("decomposition_visibilities", representation)
+            self.assertIn("fidelity_levels", representation)
+
 
 class NormalizationTests(unittest.TestCase):
     def test_unresolved_typed_record_reference_is_rejected(self) -> None:
@@ -148,7 +199,7 @@ class NormalizationTests(unittest.TestCase):
         )
         self.assertTrue(normalization_issues(report))
 
-    def test_plain_analytic_row_text_fails_the_v3_schema(self) -> None:
+    def test_plain_analytic_row_text_fails_the_v4_schema(self) -> None:
         schemas, registry = load_schemas()
         template_path = SCHEMA_PATHS["report"].with_name(
             "protocol-extraction.template.json"
@@ -286,7 +337,7 @@ class ReuseTests(unittest.TestCase):
             )
         }
         self.application = {
-            "application_object": value("artifact"),
+            "application_objects": value(["artifact"]),
             "setting": {
                 "material_setting_differences": value("different mission"),
                 "material_difference_relationship_ids": ["difference-1"],
@@ -358,7 +409,7 @@ class ReuseTests(unittest.TestCase):
         self.assertEqual(
             application_deficiencies(
                 self.application,
-                {"artifact", "artifact_and_method"},
+                {"artifact"},
                 True,
             ),
             [],
@@ -423,7 +474,13 @@ class ReuseTests(unittest.TestCase):
                         {
                             "report_reuse_record_id": "reuse-1",
                             "linked_model_artifact_ids": ["artifact-1"],
-                            "artifact_generality": value("mission_class_reference"),
+                            "artifact_types": value(["reference_or_template_model"]),
+                            "artifact_generality_scopes": [
+                                {
+                                    "artifact_generality_scope_id": "generality-1",
+                                    "generality": "mission_class_reference",
+                                }
+                            ],
                         }
                     ],
                     "report_applications": [],
@@ -454,6 +511,41 @@ class ReuseTests(unittest.TestCase):
         self.assertTrue(procedural_profile_issues(report))
 
 
+class CompositeClassificationTests(unittest.TestCase):
+    def test_multiple_evaluation_components_require_integration(self) -> None:
+        result_set = {
+            "evaluation_design_components": value(
+                ["survey", "interview_or_qualitative"]
+            ),
+            "methods_integration": {"status": "not_reported"},
+        }
+        report = Document(
+            "report",
+            Path("report.json"),
+            {"result_sets": [result_set]},
+        )
+        self.assertTrue(evaluation_design_issues(report))
+        result_set["methods_integration"] = value("integrated")
+        self.assertEqual(evaluation_design_issues(report), [])
+
+    def test_workflow_automation_is_derived_from_activities(self) -> None:
+        workflow = {
+            "workflow_activities": [{"automation_level": "manual"}],
+            "automation_levels": value(["tool_assisted"]),
+        }
+        report = Document(
+            "report",
+            Path("report.json"),
+            {"mbse_approach": {"workflows": [workflow]}},
+        )
+        self.assertTrue(automation_profile_issues(report, {"workflow": {}}))
+        workflow["automation_levels"] = value(["manual"])
+        self.assertEqual(
+            automation_profile_issues(report, {"workflow": {}}),
+            [],
+        )
+
+
 class RqTests(unittest.TestCase):
     def test_rq2_required_links_and_reliability_subtype(self) -> None:
         report = Document(
@@ -463,7 +555,7 @@ class RqTests(unittest.TestCase):
                 "rq2_findings": [
                     {
                         "claim_kind": value("comparative"),
-                        "role": value("implementation_burden"),
+                        "roles": value(["implementation_burden"]),
                         "outcome_category": value("eps_reliability"),
                         "reliability_subtype": {"status": "not_reported"},
                         "linked_comparator_ids": {"status": "not_reported"},
@@ -474,6 +566,24 @@ class RqTests(unittest.TestCase):
         )
         indexes = {"comparator": {}, "implementation_record": {}}
         self.assertEqual(len(rq2_semantic_issues(report, indexes)), 3)
+
+    def test_author_direction_cannot_be_unsupported(self) -> None:
+        report = Document(
+            "report",
+            Path("report.json"),
+            {
+                "rq2_findings": [
+                    {
+                        "author_claimed_directions": [
+                            {"direction": "unsupported"}
+                        ]
+                    }
+                ]
+            },
+        )
+        indexes = {"comparator": {}, "implementation_record": {}}
+        issues = rq2_semantic_issues(report, indexes)
+        self.assertTrue(any("reserved" in issue.message for issue in issues))
 
     def test_rq3_milestone_support(self) -> None:
         activity = {
@@ -640,7 +750,7 @@ class CrossRecordTests(unittest.TestCase):
         )
         application = {
             "report_application_id": "application-1",
-            "application_object": value("artifact"),
+            "application_objects": value(["artifact"]),
             "lineage_id": "lineage-1",
             "setting": {"linked_eps_case_ids": ["eps-1"]},
         }
@@ -658,7 +768,7 @@ class CrossRecordTests(unittest.TestCase):
             Path("consolidated.json"),
             {
                 "linked_report_application_ids": ["application-1"],
-                "application_object": value("artifact"),
+                "application_objects": value(["artifact"]),
                 "linked_model_generation_method_ids": {"status": "not_reported"},
                 "linked_workflow_ids": {"status": "not_reported"},
                 "linked_report_ids": ["report-1"],
@@ -694,7 +804,7 @@ class CrossRecordTests(unittest.TestCase):
         )
         resolved = {**artifact, "lineage_id": "lineage-1"}
         report_application = {
-            "application_object": value("artifact"),
+            "application_objects": value(["artifact"]),
             "lineage_id": "lineage-1",
             "linked_report_reuse_record_ids": ["reuse-1"],
         }

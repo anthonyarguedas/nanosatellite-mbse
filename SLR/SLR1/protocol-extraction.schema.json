@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction.schema.json",
-  "title": "SLR1 extraction schema v3",
-  "description": "Machine-readable schema for protocol-extraction.md. Version 3 adds linked V&V sequences, model and digital twin assurance, verification levels, and test phases.",
+  "title": "SLR1 extraction schema v4",
+  "description": "Machine-readable schema for protocol-extraction.md. Version 4 replaces composite classifications with explicit arrays and scoped records.",
   "$ref": "#/$defs/reportExtraction",
   "$defs": {
     "stableId": {
@@ -431,9 +431,28 @@
         "operations",
         "maintenance_and_sustainment",
         "retirement_or_disposal",
-        "cross_lifecycle",
         "other",
         "unclear"
+      ]
+    },
+    "lifecycleStageCodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/lifecycleStageCode"
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "allOf": [
+        {
+          "if": {
+            "contains": {
+              "const": "unclear"
+            }
+          },
+          "then": {
+            "maxItems": 1
+          }
+        }
       ]
     },
     "lifecycleStageArrayValue": {
@@ -446,12 +465,7 @@
           "type": "object",
           "properties": {
             "value": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/lifecycleStageCode"
-              },
-              "minItems": 1,
-              "uniqueItems": true
+              "$ref": "#/$defs/lifecycleStageCodes"
             }
           },
           "required": [
@@ -460,6 +474,9 @@
         },
         {
           "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
@@ -468,39 +485,6 @@
       "oneOf": [
         {
           "$ref": "#/$defs/lifecycleStageArrayValue"
-        },
-        {
-          "$ref": "#/$defs/evidenceStatusValue"
-        }
-      ]
-    },
-    "lifecycleStageValue": {
-      "type": "object",
-      "allOf": [
-        {
-          "$ref": "#/$defs/evidencedValueMetadata"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "value": {
-              "$ref": "#/$defs/lifecycleStageCode"
-            }
-          },
-          "required": [
-            "value"
-          ]
-        },
-        {
-          "$ref": "#/$defs/otherScalarCoding"
-        }
-      ],
-      "unevaluatedProperties": false
-    },
-    "lifecycleStage": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/lifecycleStageValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -1147,7 +1131,6 @@
                   "manual_author_construction",
                   "model_transformation",
                   "reverse_engineering",
-                  "mixed",
                   "other",
                   "unclear"
                 ]
@@ -1162,6 +1145,9 @@
         },
         {
           "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
@@ -1878,12 +1864,11 @@
         "analysis_or_decision",
         "verification_or_validation",
         "lifecycle_integration",
-        "end_to_end_engineering",
         "other",
         "unclear"
       ]
     },
-    "workflowScopeTypeValue": {
+    "workflowScopeTypesValue": {
       "type": "object",
       "allOf": [
         {
@@ -1893,7 +1878,12 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/workflowScopeTypeCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/workflowScopeTypeCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
@@ -1901,15 +1891,18 @@
           ]
         },
         {
-          "$ref": "#/$defs/otherScalarCoding"
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "workflowScopeType": {
+    "workflowScopeTypes": {
       "oneOf": [
         {
-          "$ref": "#/$defs/workflowScopeTypeValue"
+          "$ref": "#/$defs/workflowScopeTypesValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -2065,8 +2058,8 @@
             "source_workflow_name_and_version": {
               "$ref": "#/$defs/rowString"
             },
-            "workflow_scope_type": {
-              "$ref": "#/$defs/workflowScopeType"
+            "workflow_scope_types": {
+              "$ref": "#/$defs/workflowScopeTypes"
             },
             "purpose_and_boundary": {
               "$ref": "#/$defs/evidencedString"
@@ -2137,8 +2130,8 @@
             "responsible_role_entity_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
-            "automation_level": {
-              "$ref": "#/$defs/automationLevelCode"
+            "automation_levels": {
+              "$ref": "#/$defs/automationLevels"
             },
             "governance_rule_ids": {
               "$ref": "#/$defs/rowIdArray"
@@ -2151,7 +2144,7 @@
             "workflow_id",
             "eps_case_ids",
             "source_workflow_name_and_version",
-            "workflow_scope_type",
+            "workflow_scope_types",
             "purpose_and_boundary",
             "linked_model_generation_method_ids",
             "linked_model_artifact_ids",
@@ -2175,7 +2168,7 @@
             "control_flow_relationship_ids",
             "handoff_relationship_ids",
             "responsible_role_entity_ids",
-            "automation_level",
+            "automation_levels",
             "governance_rule_ids",
             "supporting_resource_ids"
           ]
@@ -2315,7 +2308,7 @@
         }
       ]
     },
-    "epsElementAbstractionLevelsValue": {
+    "epsAbstractionLevelsValue": {
       "type": "object",
       "allOf": [
         {
@@ -2336,14 +2329,17 @@
           "required": [
             "value"
           ]
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "epsElementAbstractionLevels": {
+    "epsAbstractionLevels": {
       "oneOf": [
         {
-          "$ref": "#/$defs/epsElementAbstractionLevelsValue"
+          "$ref": "#/$defs/epsAbstractionLevelsValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -2453,7 +2449,7 @@
               "$ref": "#/$defs/epsElementTypes"
             },
             "abstraction_levels": {
-              "$ref": "#/$defs/epsElementAbstractionLevels"
+              "$ref": "#/$defs/epsAbstractionLevels"
             },
             "model_inclusion": {
               "$ref": "#/$defs/modelInclusion"
@@ -3142,6 +3138,15 @@
             "representation_completeness": {
               "$ref": "#/$defs/modelRepresentationCompleteness"
             },
+            "abstraction_levels": {
+              "$ref": "#/$defs/epsAbstractionLevels"
+            },
+            "decomposition_visibilities": {
+              "$ref": "#/$defs/epsDecompositionVisibilities"
+            },
+            "fidelity_levels": {
+              "$ref": "#/$defs/epsFidelityLevels"
+            },
             "linked_model_artifact_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -3198,6 +3203,9 @@
             "reported_purpose",
             "representation_origin",
             "representation_completeness",
+            "abstraction_levels",
+            "decomposition_visibilities",
+            "fidelity_levels",
             "linked_model_artifact_ids",
             "linked_tool_ids",
             "linked_eps_element_ids",
@@ -3646,12 +3654,11 @@
         "energy",
         "information_or_control",
         "material_or_other_resource",
-        "mixed",
         "other",
         "unclear"
       ]
     },
-    "exchangeTypeValue": {
+    "exchangeTypesValue": {
       "type": "object",
       "allOf": [
         {
@@ -3661,7 +3668,12 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/exchangeTypeCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/exchangeTypeCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
@@ -3669,15 +3681,18 @@
           ]
         },
         {
-          "$ref": "#/$defs/otherScalarCoding"
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "exchangeType": {
+    "exchangeTypes": {
       "oneOf": [
         {
-          "$ref": "#/$defs/exchangeTypeValue"
+          "$ref": "#/$defs/exchangeTypesValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -3760,8 +3775,8 @@
             "direction": {
               "$ref": "#/$defs/rowString"
             },
-            "exchange_type": {
-              "$ref": "#/$defs/exchangeType"
+            "exchange_types": {
+              "$ref": "#/$defs/exchangeTypes"
             },
             "exchange_scope": {
               "$ref": "#/$defs/exchangeScope"
@@ -3789,7 +3804,7 @@
             "named_eps_interface",
             "exchanged_item",
             "direction",
-            "exchange_type",
+            "exchange_types",
             "exchange_scope",
             "exchanged_item_entity_ids",
             "exchange_quantity_ids",
@@ -3829,7 +3844,7 @@
         "unclear"
       ]
     },
-    "dependencyTypeValue": {
+    "dependencyTypesValue": {
       "type": "object",
       "allOf": [
         {
@@ -3839,7 +3854,12 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/dependencyTypeCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/dependencyTypeCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
@@ -3847,15 +3867,18 @@
           ]
         },
         {
-          "$ref": "#/$defs/otherScalarCoding"
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "dependencyType": {
+    "dependencyTypes": {
       "oneOf": [
         {
-          "$ref": "#/$defs/dependencyTypeValue"
+          "$ref": "#/$defs/dependencyTypesValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -3935,8 +3958,8 @@
             "linked_eps_requirement_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
-            "dependency_type": {
-              "$ref": "#/$defs/dependencyType"
+            "dependency_types": {
+              "$ref": "#/$defs/dependencyTypes"
             },
             "dependency_scope": {
               "$ref": "#/$defs/dependencyScope"
@@ -3951,7 +3974,7 @@
             "description",
             "linked_eps_exchange_ids",
             "linked_eps_requirement_ids",
-            "dependency_type",
+            "dependency_types",
             "dependency_scope"
           ]
         }
@@ -4158,38 +4181,7 @@
         "logical",
         "physical_design",
         "implementation",
-        "mixed",
         "unclear"
-      ]
-    },
-    "epsAbstractionValue": {
-      "type": "object",
-      "allOf": [
-        {
-          "$ref": "#/$defs/evidencedValueMetadata"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "value": {
-              "$ref": "#/$defs/epsAbstractionCode"
-            }
-          },
-          "required": [
-            "value"
-          ]
-        }
-      ],
-      "unevaluatedProperties": false
-    },
-    "epsAbstraction": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/epsAbstractionValue"
-        },
-        {
-          "$ref": "#/$defs/evidenceStatusValue"
-        }
       ]
     },
     "epsDecompositionVisibilityCode": {
@@ -4197,11 +4189,10 @@
       "enum": [
         "black_box",
         "white_box",
-        "mixed",
         "unclear"
       ]
     },
-    "epsDecompositionVisibilityValue": {
+    "epsDecompositionVisibilitiesValue": {
       "type": "object",
       "allOf": [
         {
@@ -4211,20 +4202,28 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/epsDecompositionVisibilityCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/epsDecompositionVisibilityCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
             "value"
           ]
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "epsDecompositionVisibility": {
+    "epsDecompositionVisibilities": {
       "oneOf": [
         {
-          "$ref": "#/$defs/epsDecompositionVisibilityValue"
+          "$ref": "#/$defs/epsDecompositionVisibilitiesValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -4239,11 +4238,10 @@
         "engineering_representative",
         "implementation_representative",
         "as_built_or_calibrated",
-        "mixed",
         "unclear"
       ]
     },
-    "epsFidelityValue": {
+    "epsFidelityLevelsValue": {
       "type": "object",
       "allOf": [
         {
@@ -4253,20 +4251,28 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/epsFidelityCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/epsFidelityCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
             "value"
           ]
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "epsFidelity": {
+    "epsFidelityLevels": {
       "oneOf": [
         {
-          "$ref": "#/$defs/epsFidelityValue"
+          "$ref": "#/$defs/epsFidelityLevelsValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -4378,15 +4384,6 @@
               },
               "minItems": 1
             },
-            "eps_abstraction": {
-              "$ref": "#/$defs/epsAbstraction"
-            },
-            "eps_decomposition_visibility": {
-              "$ref": "#/$defs/epsDecompositionVisibility"
-            },
-            "eps_fidelity": {
-              "$ref": "#/$defs/epsFidelity"
-            },
             "purposes": {
               "$ref": "#/$defs/epsPurposes"
             },
@@ -4421,9 +4418,6 @@
             "eps_model_representation_relationships",
             "modeled_disciplinary_viewpoints",
             "eps_model_bridges",
-            "eps_abstraction",
-            "eps_decomposition_visibility",
-            "eps_fidelity",
             "purposes",
             "supported_decisions",
             "coverage_assessment",
@@ -4534,11 +4528,10 @@
       "enum": [
         "adoption",
         "ongoing_use",
-        "both",
         "unclear"
       ]
     },
-    "burdenPhaseValue": {
+    "burdenPhasesValue": {
       "type": "object",
       "allOf": [
         {
@@ -4548,20 +4541,28 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/burdenPhaseCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/burdenPhaseCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
             "value"
           ]
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "burdenPhase": {
+    "burdenPhases": {
       "oneOf": [
         {
-          "$ref": "#/$defs/burdenPhaseValue"
+          "$ref": "#/$defs/burdenPhasesValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -4652,8 +4653,8 @@
             "burden_categories": {
               "$ref": "#/$defs/burdenCategories"
             },
-            "burden_phase": {
-              "$ref": "#/$defs/burdenPhase"
+            "burden_phases": {
+              "$ref": "#/$defs/burdenPhases"
             },
             "reported_burden": {
               "$ref": "#/$defs/evidencedString"
@@ -4700,8 +4701,8 @@
             "linked_rq2_finding_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
-            "automation_level": {
-              "$ref": "#/$defs/automationLevelCode"
+            "automation_levels": {
+              "$ref": "#/$defs/automationLevels"
             }
           },
           "required": [
@@ -4730,7 +4731,7 @@
             "rework",
             "ongoing_maintenance",
             "burden_categories",
-            "burden_phase",
+            "burden_phases",
             "reported_burden",
             "measurement_method",
             "mitigation",
@@ -4746,7 +4747,7 @@
             "issue_ids",
             "decision_ids",
             "linked_rq2_finding_ids",
-            "automation_level"
+            "automation_levels"
           ]
         }
       ],
@@ -5556,7 +5557,7 @@
         }
       ]
     },
-    "evaluationDesignCode": {
+    "evaluationDesignComponentCode": {
       "type": "string",
       "enum": [
         "model_or_simulation_evaluation",
@@ -5565,13 +5566,12 @@
         "controlled_or_quasi_experimental",
         "survey",
         "interview_or_qualitative",
-        "mixed_methods",
         "artifact_or_reuse_demonstration",
         "other",
         "unclear"
       ]
     },
-    "evaluationDesignValue": {
+    "evaluationDesignComponentsValue": {
       "type": "object",
       "allOf": [
         {
@@ -5581,7 +5581,12 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/evaluationDesignCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/evaluationDesignComponentCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
@@ -5589,15 +5594,57 @@
           ]
         },
         {
-          "$ref": "#/$defs/otherScalarCoding"
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "evaluationDesign": {
+    "evaluationDesignComponents": {
       "oneOf": [
         {
-          "$ref": "#/$defs/evaluationDesignValue"
+          "$ref": "#/$defs/evaluationDesignComponentsValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "methodsIntegrationCode": {
+      "type": "string",
+      "enum": [
+        "integrated",
+        "partially_integrated",
+        "not_integrated",
+        "unclear"
+      ]
+    },
+    "methodsIntegrationValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/methodsIntegrationCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "methodsIntegration": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/methodsIntegrationValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -5660,8 +5707,11 @@
             "eps_case_id": {
               "$ref": "#/$defs/stableId"
             },
-            "evaluation_design": {
-              "$ref": "#/$defs/evaluationDesign"
+            "evaluation_design_components": {
+              "$ref": "#/$defs/evaluationDesignComponents"
+            },
+            "methods_integration": {
+              "$ref": "#/$defs/methodsIntegration"
             },
             "scenario_or_configuration": {
               "$ref": "#/$defs/evidencedString"
@@ -5721,7 +5771,8 @@
           "required": [
             "result_set_id",
             "eps_case_id",
-            "evaluation_design",
+            "evaluation_design_components",
+            "methods_integration",
             "scenario_or_configuration",
             "linked_input_group_ids",
             "linked_tool_ids",
@@ -6003,7 +6054,7 @@
         "unclear"
       ]
     },
-    "artifactTypeValue": {
+    "artifactTypesValue": {
       "type": "object",
       "allOf": [
         {
@@ -6013,7 +6064,12 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/artifactTypeCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/artifactTypeCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
@@ -6021,15 +6077,18 @@
           ]
         },
         {
-          "$ref": "#/$defs/otherScalarCoding"
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "artifactType": {
+    "artifactTypes": {
       "oneOf": [
         {
-          "$ref": "#/$defs/artifactTypeValue"
+          "$ref": "#/$defs/artifactTypesValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -6043,37 +6102,52 @@
         "product_family",
         "mission_class_reference",
         "platform_agnostic",
-        "mixed",
         "unclear"
       ]
     },
-    "artifactGeneralityValue": {
+    "artifactGeneralityScope": {
       "type": "object",
       "allOf": [
         {
-          "$ref": "#/$defs/evidencedValueMetadata"
+          "$ref": "#/$defs/codedRowMetadata"
         },
         {
           "type": "object",
           "properties": {
-            "value": {
+            "artifact_generality_scope_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "generality": {
               "$ref": "#/$defs/artifactGeneralityCode"
+            },
+            "scope": {
+              "$ref": "#/$defs/rowString"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
             }
           },
           "required": [
-            "value"
+            "artifact_generality_scope_id",
+            "generality",
+            "scope",
+            "scope_refs"
           ]
         }
       ],
       "unevaluatedProperties": false
     },
-    "artifactGenerality": {
+    "artifactGeneralityScopes": {
       "oneOf": [
         {
-          "$ref": "#/$defs/artifactGeneralityValue"
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifactGeneralityScope"
+          },
+          "minItems": 1
         },
         {
-          "$ref": "#/$defs/evidenceStatusValue"
+          "$ref": "#/$defs/repeatableFieldStatus"
         }
       ]
     },
@@ -6221,12 +6295,11 @@
         "artifact_content",
         "method_step",
         "workflow_activity",
-        "multiple",
         "other",
         "unclear"
       ]
     },
-    "variationPointTargetValue": {
+    "variationPointTargetTypesValue": {
       "type": "object",
       "allOf": [
         {
@@ -6236,7 +6309,12 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/variationPointTargetCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/variationPointTargetCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
@@ -6244,15 +6322,18 @@
           ]
         },
         {
-          "$ref": "#/$defs/otherScalarCoding"
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
     },
-    "variationPointTarget": {
+    "variationPointTargetTypes": {
       "oneOf": [
         {
-          "$ref": "#/$defs/variationPointTargetValue"
+          "$ref": "#/$defs/variationPointTargetTypesValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -6274,8 +6355,8 @@
             "name_or_target": {
               "$ref": "#/$defs/rowString"
             },
-            "target_type": {
-              "$ref": "#/$defs/variationPointTarget"
+            "target_types": {
+              "$ref": "#/$defs/variationPointTargetTypes"
             },
             "linked_model_artifact_ids": {
               "$ref": "#/$defs/rowIdArray"
@@ -6317,7 +6398,7 @@
           "required": [
             "variation_point_id",
             "name_or_target",
-            "target_type",
+            "target_types",
             "linked_model_artifact_ids",
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
@@ -6982,11 +7063,11 @@
             "owner_or_developer": {
               "$ref": "#/$defs/evidencedString"
             },
-            "artifact_type": {
-              "$ref": "#/$defs/artifactType"
+            "artifact_types": {
+              "$ref": "#/$defs/artifactTypes"
             },
-            "artifact_generality": {
-              "$ref": "#/$defs/artifactGenerality"
+            "artifact_generality_scopes": {
+              "$ref": "#/$defs/artifactGeneralityScopes"
             },
             "eps_scope": {
               "$ref": "#/$defs/evidencedString"
@@ -7026,8 +7107,8 @@
             "artifact_relationships",
             "repository_or_location",
             "owner_or_developer",
-            "artifact_type",
-            "artifact_generality",
+            "artifact_types",
+            "artifact_generality_scopes",
             "eps_scope",
             "availability",
             "license_category",
@@ -7062,14 +7143,10 @@
         "artifact",
         "method",
         "workflow",
-        "artifact_and_method",
-        "artifact_and_workflow",
-        "method_and_workflow",
-        "artifact_method_and_workflow",
         "unclear"
       ]
     },
-    "applicationObjectValue": {
+    "applicationObjectsValue": {
       "type": "object",
       "allOf": [
         {
@@ -7079,12 +7156,20 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/applicationObjectCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/applicationObjectCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
             "value"
           ]
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
@@ -7617,8 +7702,8 @@
               "minItems": 1,
               "uniqueItems": true
             },
-            "application_object": {
-              "$ref": "#/$defs/applicationObjectValue"
+            "application_objects": {
+              "$ref": "#/$defs/applicationObjectsValue"
             },
             "lineage_id": {
               "$ref": "#/$defs/stableId"
@@ -7645,7 +7730,7 @@
           "required": [
             "report_application_id",
             "linked_report_reuse_record_ids",
-            "application_object",
+            "application_objects",
             "lineage_id",
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
@@ -7658,15 +7743,15 @@
         {
           "if": {
             "properties": {
-              "application_object": {
+              "application_objects": {
                 "type": "object",
                 "properties": {
                   "value": {
-                    "enum": [
-                      "method",
-                      "workflow",
-                      "method_and_workflow"
-                    ]
+                    "not": {
+                      "contains": {
+                        "const": "artifact"
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -7675,7 +7760,7 @@
               }
             },
             "required": [
-              "application_object"
+              "application_objects"
             ]
           },
           "then": {
@@ -7689,16 +7774,13 @@
         {
           "if": {
             "properties": {
-              "application_object": {
+              "application_objects": {
                 "type": "object",
                 "properties": {
                   "value": {
-                    "enum": [
-                      "method",
-                      "artifact_and_method",
-                      "method_and_workflow",
-                      "artifact_method_and_workflow"
-                    ]
+                    "contains": {
+                      "const": "method"
+                    }
                   }
                 },
                 "required": [
@@ -7707,7 +7789,7 @@
               }
             },
             "required": [
-              "application_object"
+              "application_objects"
             ]
           },
           "then": {
@@ -7722,16 +7804,13 @@
         {
           "if": {
             "properties": {
-              "application_object": {
+              "application_objects": {
                 "type": "object",
                 "properties": {
                   "value": {
-                    "enum": [
-                      "workflow",
-                      "artifact_and_workflow",
-                      "method_and_workflow",
-                      "artifact_method_and_workflow"
-                    ]
+                    "contains": {
+                      "const": "workflow"
+                    }
                   }
                 },
                 "required": [
@@ -7740,7 +7819,7 @@
               }
             },
             "required": [
-              "application_object"
+              "application_objects"
             ]
           },
           "then": {
@@ -7960,11 +8039,10 @@
       "type": "string",
       "enum": [
         "outcome",
-        "implementation_burden",
-        "mixed_trade_off"
+        "implementation_burden"
       ]
     },
-    "findingRoleValue": {
+    "findingRolesValue": {
       "type": "object",
       "allOf": [
         {
@@ -7974,7 +8052,12 @@
           "type": "object",
           "properties": {
             "value": {
-              "$ref": "#/$defs/findingRoleCode"
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/findingRoleCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
@@ -7984,10 +8067,10 @@
       ],
       "unevaluatedProperties": false
     },
-    "findingRole": {
+    "findingRoles": {
       "oneOf": [
         {
-          "$ref": "#/$defs/findingRoleValue"
+          "$ref": "#/$defs/findingRolesValue"
         },
         {
           "$ref": "#/$defs/evidenceStatusValue"
@@ -8094,84 +8177,67 @@
         }
       ]
     },
-    "authorClaimedDirectionCode": {
+    "outcomeDirectionCode": {
       "type": "string",
       "enum": [
         "beneficial",
         "null_or_no_observed_effect",
-        "mixed_or_conditional",
-        "adverse",
-        "unclear"
-      ]
-    },
-    "authorClaimedDirectionValue": {
-      "type": "object",
-      "allOf": [
-        {
-          "$ref": "#/$defs/evidencedValueMetadata"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "value": {
-              "$ref": "#/$defs/authorClaimedDirectionCode"
-            }
-          },
-          "required": [
-            "value"
-          ]
-        }
-      ],
-      "unevaluatedProperties": false
-    },
-    "authorClaimedDirection": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/authorClaimedDirectionValue"
-        },
-        {
-          "$ref": "#/$defs/evidenceStatusValue"
-        }
-      ]
-    },
-    "evidenceSupportedDirectionCode": {
-      "type": "string",
-      "enum": [
-        "beneficial",
-        "null_or_no_observed_effect",
-        "mixed_or_conditional",
         "adverse",
         "unclear",
         "unsupported"
       ]
     },
-    "evidenceSupportedDirectionValue": {
+    "directionComponent": {
       "type": "object",
       "allOf": [
         {
-          "$ref": "#/$defs/evidencedValueMetadata"
+          "$ref": "#/$defs/codedRowMetadata"
         },
         {
           "type": "object",
           "properties": {
-            "value": {
-              "$ref": "#/$defs/evidenceSupportedDirectionCode"
+            "direction_component_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "direction": {
+              "$ref": "#/$defs/outcomeDirectionCode"
+            },
+            "direction_description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "linked_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "condition_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
-            "value"
+            "direction_component_id",
+            "direction",
+            "direction_description",
+            "scope_refs",
+            "linked_result_output_ids",
+            "condition_rule_ids"
           ]
         }
       ],
       "unevaluatedProperties": false
     },
-    "evidenceSupportedDirection": {
+    "directionComponents": {
       "oneOf": [
         {
-          "$ref": "#/$defs/evidenceSupportedDirectionValue"
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/directionComponent"
+          },
+          "minItems": 1
         },
         {
-          "$ref": "#/$defs/evidenceStatusValue"
+          "$ref": "#/$defs/repeatableFieldStatus"
         }
       ]
     },
@@ -9131,8 +9197,8 @@
             "test_environment_refs": {
               "$ref": "#/$defs/rowRecordReferences"
             },
-            "lifecycle_stage": {
-              "$ref": "#/$defs/lifecycleStage"
+            "lifecycle_stages": {
+              "$ref": "#/$defs/lifecycleStages"
             },
             "linked_result_set_ids": {
               "$ref": "#/$defs/rowIdArray"
@@ -9231,7 +9297,7 @@
             "verification_levels",
             "test_phases",
             "test_environment_refs",
-            "lifecycle_stage",
+            "lifecycle_stages",
             "linked_result_set_ids",
             "linked_result_criterion_ids",
             "linked_result_output_ids",
@@ -9431,8 +9497,8 @@
             "claim_kind": {
               "$ref": "#/$defs/claimKind"
             },
-            "role": {
-              "$ref": "#/$defs/findingRole"
+            "roles": {
+              "$ref": "#/$defs/findingRoles"
             },
             "target": {
               "$ref": "#/$defs/rowString"
@@ -9455,11 +9521,11 @@
             "reliability_subtype": {
               "$ref": "#/$defs/reliabilitySubtype"
             },
-            "author_claimed_direction": {
-              "$ref": "#/$defs/authorClaimedDirection"
+            "author_claimed_directions": {
+              "$ref": "#/$defs/directionComponents"
             },
-            "evidence_supported_direction": {
-              "$ref": "#/$defs/evidenceSupportedDirection"
+            "evidence_supported_directions": {
+              "$ref": "#/$defs/directionComponents"
             },
             "eps_attribution": {
               "$ref": "#/$defs/epsAttribution"
@@ -9506,8 +9572,8 @@
             "measure_directness": {
               "$ref": "#/$defs/measureDirectness"
             },
-            "lifecycle_stage": {
-              "$ref": "#/$defs/lifecycleStage"
+            "lifecycle_stages": {
+              "$ref": "#/$defs/lifecycleStages"
             },
             "applicability": {
               "$ref": "#/$defs/applicability"
@@ -9545,7 +9611,7 @@
             "exclusion_or_uncertainty_reason",
             "exact_claim_wording",
             "claim_kind",
-            "role",
+            "roles",
             "target",
             "linked_eps_element_ids",
             "linked_eps_requirement_ids",
@@ -9553,8 +9619,8 @@
             "scope",
             "outcome_category",
             "reliability_subtype",
-            "author_claimed_direction",
-            "evidence_supported_direction",
+            "author_claimed_directions",
+            "evidence_supported_directions",
             "eps_attribution",
             "mechanism",
             "linked_model_representation_ids",
@@ -9570,7 +9636,7 @@
             "linked_report_reuse_record_ids",
             "linked_implementation_record_ids",
             "measure_directness",
-            "lifecycle_stage",
+            "lifecycle_stages",
             "applicability",
             "evidence_basis",
             "support",
@@ -10055,7 +10121,7 @@
       "type": "object",
       "properties": {
         "schema_version": {
-          "const": "slr1-extraction/v3"
+          "const": "slr1-extraction/v4"
         },
         "identity": {
           "$ref": "#/$defs/reportIdentity"
@@ -10262,7 +10328,7 @@
     },
     "recordReference": {
       "type": "string",
-      "pattern": "^(report|family|lineage|citation|entity|quantity|decision|relationship|rule|check|resource|issue|tool|model_artifact|model_generation_method|construction_source|method_step|workflow|workflow_activity|eps_case|eps_element|eps_requirement|eps_exchange|eps_dependency|model_representation|model_representation_relationship|behavior_occurrence|eps_model_bridge|coverage_item|implementation_record|input_group|input_item|result_set|evaluation_unit|result_output|statistical_evaluation|result_criterion|comparator|rival_explanation|reviewer_derived_value|rq1_claim|rq2_finding|rq3_activity|report_reuse_record|artifact_relationship|variation_point|tailoring_rule|tailoring_step|report_application|application_operation|tailoring_application):[^:]+$"
+      "pattern": "^(report|family|lineage|citation|entity|quantity|decision|relationship|rule|check|resource|issue|tool|model_artifact|model_generation_method|construction_source|method_step|workflow|workflow_activity|eps_case|eps_element|eps_requirement|eps_exchange|eps_dependency|model_representation|model_representation_relationship|behavior_occurrence|eps_model_bridge|coverage_item|implementation_record|input_group|input_item|result_set|evaluation_unit|result_output|statistical_evaluation|result_criterion|comparator|rival_explanation|reviewer_derived_value|rq1_claim|rq2_finding|direction_component|rq3_activity|report_reuse_record|artifact_relationship|artifact_generality_scope|variation_point|tailoring_rule|tailoring_step|report_application|application_operation|tailoring_application):[^:]+$"
     },
     "recordReferences": {
       "type": "array",
@@ -10830,8 +10896,8 @@
             "decision_type": {
               "$ref": "#/$defs/decisionTypeCode"
             },
-            "lifecycle_stage": {
-              "$ref": "#/$defs/lifecycleStageCode"
+            "lifecycle_stages": {
+              "$ref": "#/$defs/lifecycleStageCodes"
             },
             "decision_status": {
               "$ref": "#/$defs/decisionStatusCode"
@@ -10850,7 +10916,7 @@
             "decision_id",
             "source_description",
             "decision_type",
-            "lifecycle_stage",
+            "lifecycle_stages",
             "decision_status",
             "alternative_refs",
             "selected_refs",
@@ -11868,12 +11934,7 @@
           "type": "object",
           "properties": {
             "value": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/lifecycleStageCode"
-              },
-              "minItems": 1,
-              "uniqueItems": true
+              "$ref": "#/$defs/lifecycleStageCodes"
             }
           },
           "required": [
@@ -11882,6 +11943,9 @@
         },
         {
           "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
         }
       ],
       "unevaluatedProperties": false
@@ -11903,8 +11967,60 @@
         "tool_assisted",
         "partially_automated",
         "fully_automated",
-        "mixed",
         "unclear"
+      ]
+    },
+    "automationLevelCodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/automationLevelCode"
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "allOf": [
+        {
+          "if": {
+            "contains": {
+              "const": "unclear"
+            }
+          },
+          "then": {
+            "maxItems": 1
+          }
+        }
+      ]
+    },
+    "automationLevelsValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/automationLevelCodes"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "automationLevels": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/automationLevelsValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
       ]
     },
     "exchangeDirectionCode": {

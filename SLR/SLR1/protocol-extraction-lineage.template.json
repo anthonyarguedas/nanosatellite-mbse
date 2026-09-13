@@ -1,5 +1,5 @@
 {
-  "schema_version": "slr1-extraction-lineage/v2",
+  "schema_version": "slr1-extraction-lineage/v3",
   "contributing_report_ids": [
     "<report-id>"
   ],
@@ -96,7 +96,7 @@
       "entity:<entity-id>"
     ]
   },
-  "artifact_type": {
+  "artifact_types": {
     "contributing_report_ids": [
       "<report-id>"
     ],
@@ -105,19 +105,37 @@
     "citation_ids": [
       "<citation-id>"
     ],
-    "value": "unclear"
+    "value": [
+      "reference_or_template_model",
+      "parametric_model_package"
+    ]
   },
-  "artifact_generality": {
-    "contributing_report_ids": [
-      "<report-id>"
-    ],
-    "coding_confidence": "high",
-    "provenance": "source_reported",
-    "citation_ids": [
-      "<citation-id>"
-    ],
-    "value": "unclear"
-  },
+  "artifact_generality_scopes": [
+    {
+      "contributing_report_ids": [
+        "<report-id>"
+      ],
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "<citation-id>"
+      ],
+      "artifact_generality_scope_id": "<lineage-artifact-generality-scope-id>",
+      "linked_report_artifact_generality_scope_ids": [
+        "<artifact-generality-scope-id>"
+      ],
+      "generality": "mission_class_reference",
+      "scope": {
+        "source_text": "<artifact generality scope>",
+        "linked_record_refs": [
+          "model_artifact:<model-artifact-id>"
+        ]
+      },
+      "scope_refs": [
+        "model_artifact:<model-artifact-id>"
+      ]
+    }
+  ],
   "eps_scope": {
     "contributing_report_ids": [
       "<report-id>"
@@ -415,7 +433,7 @@
             "entity:<entity-id>"
           ]
         },
-        "target_type": {
+        "target_types": {
           "contributing_report_ids": [
             "<report-id>"
           ],
@@ -424,7 +442,11 @@
           "citation_ids": [
             "<citation-id>"
           ],
-          "value": "unclear"
+          "value": [
+            "artifact_content",
+            "method_step",
+            "workflow_activity"
+          ]
         },
         "linked_model_artifact_ids": [
           "<model-artifact-id>"

@@ -57,9 +57,9 @@ Discovery events, search ranks, raw-file provenance, and screening history remai
 
 ### Linked normalization records
 
-Report records use `schema_version = slr1-extraction/v3`. Lineage and consolidated application records continue to use their corresponding version 2 constants. A report record without the version 3 marker, or a cross-report record without its applicable version 2 marker, is a legacy record. Migrate it through source review before synthesis. Do not infer normalized links or typed values automatically from legacy prose.
+Report records use `schema_version = slr1-extraction/v4`. Lineage and consolidated application records use their corresponding version 3 constants. A record without its applicable current marker is a legacy record. Migrate it through source review before synthesis. Do not infer normalized links or typed values automatically from legacy prose.
 
-Version 3 replaces the RQ3 scalar fields `target_type` and `normalized_vv_object` with the arrays `target_types` and `normalized_vv_objects`. It replaces the single RQ3 `model_artifact_id` with `linked_model_artifact_ids`. It adds model roles, exact workflow-activity and configuration links, RQ3 predecessor links, verification levels, test phases, test environments, model assessment dimensions, and physical execution status. Revisit the source before migrating a version 2 `multiple` value and code every supported classification separately.
+Version 4 replaces composite or aggregate classifications with explicit arrays and scoped records. It pluralizes workflow scopes, exchange and dependency types, burden phases, evaluation design components, artifact types, variation-point targets, application objects, finding roles, and RQ2 and RQ3 lifecycle stages. It moves abstraction, decomposition visibility, and fidelity to representation records. It replaces artifact generality with scoped rows, aggregate automation with derived arrays, and aggregate direction codes with scoped direction-component rows. Revisit the source before migrating any legacy `multiple`, `mixed`, `both`, `cross_lifecycle`, `end_to_end_engineering`, combination application-object, or `mixed_methods` value.
 
 From report context onward, every ordinary free text field preserves source wording and links its analytic meaning to stable records. An evidenced scalar keeps its source text in `value` and supplies `linked_record_refs`. A source text item inside a coded row or array supplies `source_text` and `linked_record_refs`. Each reference uses `record_kind:stable_id`, for example `quantity:quantity-004` or `eps_element:eps-element-012`. Use `normalization_status = not_for_synthesis` instead of links only for verbatim wording or a source label that will never be compared directly. Controlled values, stable IDs, paths, and evidence statuses keep their existing shapes.
 
@@ -67,7 +67,7 @@ Create each normalized fact once in `reference_catalog`, then link every use to 
 
 - `entities` for missions, platforms, organizations, teams, people, roles, skills, modeling languages, concerns, problems, purposes, orbits, environment conditions, modes, scenarios, configurations, data sources, constructs, exchanged items, interfaces, procedure actions, methods, physical or operational items, artifact content, and study groups or arms. Each entity has a stable ID, controlled type, source name, review-wide canonical key, version when applicable, and parent IDs.
 - `quantities` for physical values, mass, dimensions, orbit parameters, environment values, inputs, outputs, thresholds, counts, effort, duration, schedule, cost, statistics, sample size, uncertainty, margin, sensitivity, and degradation. Store the raw source value, typed numeric value or bounds, canonical unit, value basis, time basis, denominator, currency, and price year separately.
-- `decisions` with a stable ID, decision type, lifecycle stage, status, alternatives, selected objects, and rationale.
+- `decisions` with a stable ID, decision type, lifecycle stages, status, alternatives, selected objects, and rationale.
 - `relationships` with typed source and target references. Use them for tool and data flows, concern relationships, boundaries, procedure control flow, derivation traces, physical links, differences, mechanisms, and before-and-after traces.
 - `rules` for entry, completion, decision, selection, inclusion, exclusion, normalization, abstraction, constraints, branching, iteration, unchanged use, tailoring, acceptance, quality, and missing-data handling.
 - `checks` for quality, completeness, correctness, completion, acceptance, verification, validation, assurance, genericity, and model-to-test closure. Link each check to its target, criterion, and result. Use the RQ3 model assessment dimensions for comparable model and digital twin assurance classifications.
@@ -156,9 +156,10 @@ Use these lifecycle-stage codes:
 - **`operations`:** active mission operations.
 - **`maintenance_and_sustainment`:** ongoing support or change during use.
 - **`retirement_or_disposal`:** end-of-life work.
-- **`cross_lifecycle`:** explicit continuity across several stages.
 - **`other`:** another identified lifecycle stage.
 - **`unclear`:** the lifecycle stage cannot be classified.
+
+Record every applicable lifecycle stage in the array. Represent continuity across stages through workflow scope, relationship, purpose, and lifecycle links rather than a composite stage code.
 
 Use project maturity as follows:
 
@@ -240,7 +241,7 @@ A model generation method is a reported procedure used to construct, populate, c
 - source method name or description.
 - method purpose and scope.
 - `generation_method_types`, using one or more of the codes below.
-- `method_origin_types`, using one or more of `named_method_adoption`, `requirements_or_standards_synthesis`, `literature_synthesis`, `heritage_generalization`, `expert_or_stakeholder_elicitation`, `empirical_or_operational_derivation`, `metamodel_or_ontology_driven`, `manual_author_construction`, `model_transformation`, `reverse_engineering`, `mixed`, `other`, or `unclear`.
+- `method_origin_types`, using one or more of `named_method_adoption`, `requirements_or_standards_synthesis`, `literature_synthesis`, `heritage_generalization`, `expert_or_stakeholder_elicitation`, `empirical_or_operational_derivation`, `metamodel_or_ontology_driven`, `manual_author_construction`, `model_transformation`, `reverse_engineering`, `other`, or `unclear`.
 - `construction_sources` as nested rows containing `construction_source_id`, source type, source identification, selection or inclusion basis, contribution to the model, and linked input-group, EPS-requirement, model-artifact, and tool IDs. Use source types `requirement`, `standard`, `literature`, `heritage_model_or_mission`, `expert_or_stakeholder_input`, `test_data`, `flight_or_operational_data`, `vendor_data`, `metamodel_or_ontology`, `tool_or_library`, `other`, or `unclear`.
 - linked input-group IDs, source model-artifact IDs, output model-artifact IDs, and tool IDs.
 - entry conditions.
@@ -280,11 +281,10 @@ Use method origin types as follows:
 - **`manual_author_construction`:** the authors formulate the method or model directly without another reported derivation basis.
 - **`model_transformation`:** transformation from another model or structured representation supplies the content.
 - **`reverse_engineering`:** existing documents, data, software, or hardware are reconstructed into model content.
-- **`mixed`:** several origins are reported but cannot be separated reliably.
 - **`other`:** another identified origin applies.
 - **`unclear`:** the origin cannot be classified.
 
-The method-origin code identifies how the authors obtained or formulated the method and its model content. Record every separable origin instead of `mixed` when the report permits it. Preserve the source description in the construction-source rows and generic-model-derivation fields. Construction-source types identify the concrete requirement, standard, publication, heritage model or mission, person or group, dataset, metamodel or ontology, tool or library, or other source used. Use links to input groups for detailed values and assumptions instead of copying them into a construction-source row. `unclear` means that relevant source evidence cannot be classified.
+The method-origin codes identify how the authors obtained or formulated the method and its model content. Record every supported origin in the array. Use `uncertain` for the complete field when the source reports a mixture but does not identify its components. Preserve the source description in the construction-source rows and generic-model-derivation fields. Construction-source types identify the concrete requirement, standard, publication, heritage model or mission, person or group, dataset, metamodel or ontology, tool or library, or other source used. Use links to input groups for detailed values and assumptions instead of copying them into a construction-source row. `unclear` means that relevant source evidence cannot be classified.
 
 #### Engineering workflows
 
@@ -293,7 +293,7 @@ An engineering workflow is a source-identifiable sequence or network of activiti
 Create one workflow row for each materially distinct workflow. Record:
 
 - `workflow_id`, linked EPS case IDs, and the source workflow name and version.
-- `workflow_scope_type`, using `model_generation`, `model_tailoring`, `analysis_or_decision`, `verification_or_validation`, `lifecycle_integration`, `end_to_end_engineering`, `other`, or `unclear`.
+- `workflow_scope_types`, recording every applicable value from `model_generation`, `model_tailoring`, `analysis_or_decision`, `verification_or_validation`, `lifecycle_integration`, `other`, or `unclear`.
 - purpose and boundary.
 - linked model-generation-method and model-artifact IDs.
 - entry conditions.
@@ -302,7 +302,7 @@ Create one workflow row for each materially distinct workflow. Record:
 - supporting-material location and availability.
 - `procedure_reporting` using the common procedural-detail fields below.
 
-Apply the method-step linking rules to every workflow activity. At workflow level, use `workflow_entity_ids`, `purpose_entity_ids`, `scope_refs`, entry and exit rule IDs, control-flow and handoff relationship IDs, responsible role entity IDs, `automation_level`, governance rule IDs, and supporting resource IDs. Derive workflow-level branching and handoff summaries from activity links.
+Apply the method-step linking rules to every workflow activity. At workflow level, use `workflow_entity_ids`, `purpose_entity_ids`, `scope_refs`, entry and exit rule IDs, control-flow and handoff relationship IDs, responsible role entity IDs, `automation_levels`, governance rule IDs, and supporting resource IDs. Derive the workflow automation-level array from its activity records when activity-level coding is available. Derive workflow-level branching and handoff summaries from activity links.
 
 Use workflow scope types as follows:
 
@@ -311,9 +311,10 @@ Use workflow scope types as follows:
 - **`analysis_or_decision`:** the workflow uses model content for analysis, trade studies, or decisions.
 - **`verification_or_validation`:** the workflow connects model content to checking, verification, or validation.
 - **`lifecycle_integration`:** the workflow carries model content across lifecycle stages or engineering functions.
-- **`end_to_end_engineering`:** the workflow integrates several of the above scopes as one connected process.
 - **`other`:** another identified workflow scope applies.
 - **`unclear`:** workflow scope cannot be classified.
+
+Code every supported scope for a workflow that the source calls end-to-end. Preserve that phrase in the source workflow name, purpose, or boundary. Use activity order and handoff relationships to establish integration among the scopes.
 
 #### Procedural reporting detail
 
@@ -351,16 +352,13 @@ For each report, record one EPS case section by default. Record:
 - `eps_elements` using the typed element records below.
 - `eps_requirements` using the requirement records below.
 - EPS architecture source wording, linked to the element, exchange, dependency, interface, and relationship records that define it.
-- `eps_exchanges` as nested rows containing `eps_exchange_id`, linked source, destination, and interface element IDs, source endpoint, destination endpoint, named EPS interface when present, exchanged item, direction, `exchange_type` using `energy`, `information_or_control`, `material_or_other_resource`, `mixed`, `other`, or `unclear`, and `exchange_scope` using `within_eps`, `cross_subsystem`, `spacecraft_environment`, `external_system`, or `unclear`.
-- `eps_dependencies` as nested rows containing `eps_dependency_id`, linked dependent and provider element IDs, dependent endpoint, provider or driver endpoint, description, linked exchange and EPS-requirement IDs when applicable, `dependency_type` using `electrical_power`, `information_or_control`, `thermal_or_environmental`, `mechanical_or_structural`, `functional_or_behavioral`, `operational_or_mode`, `requirement_or_constraint`, `shared_resource`, `other`, or `unclear`, and `dependency_scope` using `within_eps`, `cross_subsystem`, `spacecraft_environment`, `external_system`, or `unclear`.
+- `eps_exchanges` as nested rows containing `eps_exchange_id`, linked source, destination, and interface element IDs, source endpoint, destination endpoint, named EPS interface when present, exchanged item, direction, `exchange_types` using every applicable value from `energy`, `information_or_control`, `material_or_other_resource`, `other`, or `unclear`, and `exchange_scope` using `within_eps`, `cross_subsystem`, `spacecraft_environment`, `external_system`, or `unclear`.
+- `eps_dependencies` as nested rows containing `eps_dependency_id`, linked dependent and provider element IDs, dependent endpoint, provider or driver endpoint, description, linked exchange and EPS-requirement IDs when applicable, `dependency_types` using every applicable value from `electrical_power`, `information_or_control`, `thermal_or_environmental`, `mechanical_or_structural`, `functional_or_behavioral`, `operational_or_mode`, `requirement_or_constraint`, `shared_resource`, `other`, or `unclear`, and `dependency_scope` using `within_eps`, `cross_subsystem`, `spacecraft_environment`, `external_system`, or `unclear`.
 - EPS modes and operations. Use element records for each named mode, state, scenario, operational activity, function, or behavior. Link residual source descriptions to those elements and to scenario, rule, relationship, quantity, and result records. Use behavior occurrences in the applicable representations for ordered actions, messages, events, transitions, guards, branches, and timing.
-- `eps_model_representations` using the structured representation records below.
+- `eps_model_representations` using the structured representation records below. Record `abstraction_levels`, `decomposition_visibilities`, and `fidelity_levels` on each representation.
 - `eps_model_representation_relationships` for reported relationships among views.
 - `modeled_disciplinary_viewpoints`, using one or more of `electrical_or_electronic`, `thermal`, `software_or_algorithmic`, `mechanical_or_structural`, `operational`, `other`, or `unclear`.
 - EPS-to-model bridges using the structured relationship records below. Record every bridge needed to establish qualification and Route B eligibility.
-- `eps_abstraction`, using `conceptual`, `logical`, `physical_design`, `implementation`, `mixed`, or `unclear`.
-- `eps_decomposition_visibility`, using `black_box`, `white_box`, `mixed`, or `unclear`.
-- `eps_fidelity`, using `qualitative`, `idealized_quantitative`, `engineering_representative`, `implementation_representative`, `as_built_or_calibrated`, `mixed`, or `unclear`.
 - purposes, using one or more of `definition_or_sizing`, `requirements_or_traceability`, `trade_study`, `interface_management`, `executable_analysis`, `verification_and_validation`, `communication`, `lifecycle_continuity`, `reuse_or_tailoring`, or `other`, and the supported decisions.
 - `coverage_assessment` using the scope and coverage records below.
 - EPS model maturity, using the project-maturity codes at EPS-model scope.
@@ -405,7 +403,7 @@ Use parent requirement IDs for source-supported decomposition. Link each require
 
 Create one `model_representation_id` row for each source-identifiable diagram, table, matrix, model tree, package view, generated listing, chart, simulation view, or composite representation that contributes material EPS evidence. Keep the persistent model or repository as a model artifact and link each representation to that artifact. The representation row inherits the common citation metadata. Use `graphic` and `graphic_quote_description` to locate the published figure, table, panel, or excerpt.
 
-Record the source name or caption, source representation type, source language or notation, reported purpose, origin, completeness, linked artifacts and tools, and all represented content through IDs. Use `linked_modeling_language_entity_ids`, `purpose_entity_ids`, and `linked_decision_ids` for normalized language, purpose, and decision links. Link elements, requirements, exchanges, dependencies, model bridges, input groups, result sets, outputs, and criteria from the representation row. Keep these links in one direction. Do not add reverse representation links to every content record.
+Record the source name or caption, source representation type, source language or notation, reported purpose, origin, completeness, `abstraction_levels`, `decomposition_visibilities`, `fidelity_levels`, linked artifacts and tools, and all represented content through IDs. Use `linked_modeling_language_entity_ids`, `purpose_entity_ids`, and `linked_decision_ids` for normalized language, purpose, and decision links. Link elements, requirements, exchanges, dependencies, model bridges, input groups, result sets, outputs, and criteria from the representation row. Keep these links in one direction. Do not add reverse representation links to every content record.
 
 Use one or more `representation_forms`: `diagram`, `table`, `matrix`, `model_tree_or_package_view`, `generated_text_or_listing`, `chart_or_plot`, `executable_or_simulation_view`, `other`, or `unclear`. Use `composite_of_views` under representation completeness when one published representation combines several views or forms.
 
@@ -442,9 +440,10 @@ Use exchange type as follows:
 - **`energy`:** electrical or other energy crosses the identified interface.
 - **`information_or_control`:** data, status, commands, or control signals cross the identified interface.
 - **`material_or_other_resource`:** matter or another nonenergy resource crosses the identified interface.
-- **`mixed`:** inseparable exchanges of more than one type are represented.
 - **`other`:** another identified exchange type.
 - **`unclear`:** the exchange type cannot be classified.
+
+Record every applicable exchange type in `exchange_types`. Use `uncertain` for the complete field when evidence establishes a combined exchange but does not identify its types.
 
 Use exchange scope as follows:
 
@@ -467,6 +466,8 @@ Use dependency type as follows:
 - **`other`:** another identified dependency type.
 - **`unclear`:** the dependency type cannot be classified.
 
+Record every applicable dependency type in `dependency_types`.
+
 Use dependency scope as follows:
 
 - **`within_eps`:** both dependency endpoints are inside the EPS boundary.
@@ -485,31 +486,30 @@ Use modeled disciplinary viewpoints as follows:
 - **`other`:** another identified disciplinary viewpoint is represented.
 - **`unclear`:** the modeled disciplinary viewpoint cannot be classified.
 
-Use EPS abstraction as follows:
+Use representation and element abstraction levels as follows:
 
 - **`conceptual`:** high-level concepts and relationships without a complete logical architecture.
 - **`logical`:** technology-independent functions, behaviors, or logical elements.
 - **`physical_design`:** component-level architecture, technology choices, or design parameters.
 - **`implementation`:** realized software, hardware, interface, or configuration detail.
-- **`mixed`:** the representation explicitly integrates several abstraction levels.
 - **`unclear`:** the abstraction level cannot be classified.
 
-Use EPS decomposition visibility as follows:
+Use representation decomposition visibilities as follows:
 
 - **`black_box`:** the representation shows externally visible EPS behavior, exchanges, or interfaces without internal decomposition.
 - **`white_box`:** the representation shows internal EPS elements and their relationships.
-- **`mixed`:** both black-box and white-box representations are used.
 - **`unclear`:** decomposition visibility cannot be classified.
 
-Use EPS fidelity as follows:
+Use representation fidelity levels as follows:
 
 - **`qualitative`:** the representation contains no quantitative behavior.
 - **`idealized_quantitative`:** simplified quantitative relations support bounded analysis.
 - **`engineering_representative`:** mission-relevant parameters and constraints support engineering decisions.
 - **`implementation_representative`:** the representation reflects implementation interfaces, timing, or configuration.
 - **`as_built_or_calibrated`:** the representation is calibrated or parameterized against a physical instance.
-- **`mixed`:** materially different fidelity levels are integrated.
 - **`unclear`:** fidelity cannot be classified.
+
+Record every supported abstraction, visibility, and fidelity classification on the representation. Derive EPS-case summaries as unions of the linked representation values. Use element abstraction levels for element-specific analyses. Do not copy the derived unions into the EPS case.
 
 Use EPS purposes as follows:
 
@@ -566,7 +566,7 @@ For each implementation record, record:
 - rework.
 - ongoing maintenance.
 - `burden_categories`, using one or more of `effort`, `schedule_or_time`, `financial_cost`, `staffing`, `skills_or_training`, `tools_or_licensing`, `infrastructure`, `model_preparation`, `data_preparation`, `computing`, `integration_or_migration`, `governance_or_configuration`, `maintenance`, `rework`, `other`, or `unclear`.
-- `burden_phase`, using `adoption`, `ongoing_use`, `both`, or `unclear`.
+- `burden_phases`, recording every applicable value from `adoption`, `ongoing_use`, or `unclear`.
 - reported burden.
 - measurement method.
 - mitigation.
@@ -578,16 +578,15 @@ Use effort basis as follows:
 - **`author_estimated`:** the source provides a quantified estimate without direct tracking.
 - **`asserted`:** the source characterizes effort without a reported measurement or estimation method.
 
-Use burden phase as follows:
+Use burden phases as follows:
 
 - **`adoption`:** the burden occurs during initial introduction, setup, migration, or training.
 - **`ongoing_use`:** the burden occurs during routine operation, update, or maintenance.
-- **`both`:** material burden occurs in both phases.
-- **`unclear`:** timing cannot be separated.
+- **`unclear`:** timing cannot be classified.
 
-The burden-category codes identify labor, elapsed time, money, people, competence, tools, infrastructure, preparation, computing, integration, governance, maintenance, or rework burdens according to their labels.
+The burden-category codes identify labor, elapsed time, money, people, competence, tools, infrastructure, preparation, computing, integration, governance, maintenance, or rework burdens according to their labels. Record both `adoption` and `ongoing_use` when a burden occurs in both phases.
 
-Keep measured values, author estimates, and unsupported characterizations distinct. Each implementation record supplies `scope_refs`, team, role, and skill entity IDs, quantity, resource, relationship, rule, issue, and decision IDs, linked RQ2 finding IDs, and a controlled `automation_level`. Use automation levels `manual`, `tool_assisted`, `partially_automated`, `fully_automated`, `mixed`, or `unclear`. Link each implementation source text item to these normalized records. Use team, role, and skill entities for people and competence. Use quantities for staffing, effort, duration, schedule, cost, computing, review, rework, and maintenance. Use resources for tools, licences, and infrastructure. Use relationships for workflow execution, deviations, integration, migration, and interoperability. Use rules for governance and configuration control. Use issues for burdens and rework, and decisions for mitigations and trade-offs. Link each implementation record to every applicable workflow. Link RQ2 burden findings and reuse or tailoring applications to the implementation record instead of copying its details.
+Keep measured values, author estimates, and unsupported characterizations distinct. Each implementation record supplies `scope_refs`, team, role, and skill entity IDs, quantity, resource, relationship, rule, issue, and decision IDs, linked RQ2 finding IDs, and controlled `automation_levels`. Use `manual`, `tool_assisted`, `partially_automated`, `fully_automated`, or `unclear`. Keep one `automation_level` on each atomic method step, workflow activity, tailoring step, and application operation. Derive workflow-level automation arrays from their activities and code their provenance as `reviewer_derived`. Record every additional implementation-level automation classification supported by work outside those linked workflows. Link each implementation source text item to these normalized records. Use team, role, and skill entities for people and competence. Use quantities for staffing, effort, duration, schedule, cost, computing, review, rework, and maintenance. Use resources for tools, licences, and infrastructure. Use relationships for workflow execution, deviations, integration, migration, and interoperability. Use rules for governance and configuration control. Use issues for burdens and rework, and decisions for mitigations and trade-offs. Link each implementation record to every applicable workflow. Link RQ2 burden findings and reuse or tailoring applications to the implementation record instead of copying its details.
 
 ### Input and assumption groups
 
@@ -640,7 +639,8 @@ For each result set, record:
 
 - `result_set_id`.
 - linked EPS case.
-- `evaluation_design`, using `model_or_simulation_evaluation`, `case_or_experience_report`, `comparative_observational`, `controlled_or_quasi_experimental`, `survey`, `interview_or_qualitative`, `mixed_methods`, `artifact_or_reuse_demonstration`, `other`, or `unclear`.
+- `evaluation_design_components`, recording every applicable value from `model_or_simulation_evaluation`, `case_or_experience_report`, `comparative_observational`, `controlled_or_quasi_experimental`, `survey`, `interview_or_qualitative`, `artifact_or_reuse_demonstration`, `other`, or `unclear`.
+- `methods_integration`, using `integrated`, `partially_integrated`, `not_integrated`, or `unclear`. Use `not_applicable` when the result set has one design component and no methods integration question arises.
 - scenario or configuration source wording plus linked scenario and configuration entity IDs.
 - linked input groups and tool IDs.
 - `evaluation_units` as nested rows containing `evaluation_unit_id`, controlled unit type, linked entity IDs, count or sample size quantity IDs, selection rule IDs, assignment rule IDs, and source description.
@@ -656,7 +656,7 @@ For each result set, record:
 - decision IDs.
 - physical or operational relationship IDs.
 
-Use evaluation design as follows:
+Use evaluation design components as follows:
 
 - **`model_or_simulation_evaluation`:** a model or simulation is analyzed or executed to evaluate behavior or performance.
 - **`case_or_experience_report`:** one or more implementations are described without a designed comparison.
@@ -664,10 +664,18 @@ Use evaluation design as follows:
 - **`controlled_or_quasi_experimental`:** a designed comparison uses controlled or nonrandom assignment.
 - **`survey`:** data come primarily from a structured questionnaire.
 - **`interview_or_qualitative`:** data come primarily from interviews, observations, or qualitative analysis.
-- **`mixed_methods`:** quantitative and qualitative methods are deliberately integrated.
 - **`artifact_or_reuse_demonstration`:** the main evaluation is an artifact instantiation, transfer, or reuse demonstration.
 - **`other`:** another identifiable evaluation design.
 - **`unclear`:** the reported method cannot be classified.
+
+Record each component of a mixed methods evaluation in `evaluation_design_components`. Use `methods_integration` as follows:
+
+- **`integrated`:** the evaluation deliberately combines component methods in its design, analysis, or interpretation.
+- **`partially_integrated`:** some component methods are connected while others remain separate.
+- **`not_integrated`:** several methods are used in parallel without reported integration.
+- **`unclear`:** several relevant methods are reported, but their integration cannot be established.
+
+Preserve *mixed methods* in the source method wording when the report uses that term. A result set with several resolved components must also resolve `methods_integration`.
 
 Use execution status as follows:
 
@@ -766,17 +774,17 @@ Record:
 - exclusion or uncertainty reason when not in direct synthesis, plus one or more `eligibility_reason_codes`. Use `not_applicable` when direct synthesis is `yes`.
 - exact claim wording.
 - `claim_kind`, using `descriptive_occurrence`, `feasibility_or_executed_result`, `technical_performance`, `comparative`, `causal_attribution`, `experiential_or_perceived`, `implementation_burden`, `transfer_or_generalization`, `other`, or `unclear`.
-- `role`, using `outcome`, `implementation_burden`, or `mixed_trade_off`.
+- `roles`, recording `outcome`, `implementation_burden`, or both when a trade-off cannot be split into separate findings.
 - target and scope source wording, plus typed `target_refs` and `scope_refs`.
 - `outcome_category`, using `eps_reliability`, `mission_or_system_assurance`, `defect_or_error_reduction`, `risk_reduction`, `reproducibility`, `reuse`, `integration_or_interoperability`, `interface_consistency`, `traceability_or_requirements_quality`, `completeness`, `lifecycle_continuity`, `decision_support`, `cost`, `schedule`, `effort_or_automation`, `communication_or_knowledge`, `governance`, `value_realization`, or `other`.
 - `reliability_subtype` for a reliability finding, using `eps_reliability`, `system_or_mission_reliability`, `process_reliability`, `model_consistency`, `mission_assurance`, `defect_or_error_reduction`, `generic_reliability_claim`, or `unclear`.
-- `author_claimed_direction`, using `beneficial`, `null_or_no_observed_effect`, `mixed_or_conditional`, `adverse`, or `unclear`.
-- `evidence_supported_direction`, using `beneficial`, `null_or_no_observed_effect`, `mixed_or_conditional`, `adverse`, `unclear`, or `unsupported`.
+- `author_claimed_directions` as direction-component rows containing `direction_component_id`, controlled direction, source description, scope references, linked result-output IDs, and condition-rule IDs.
+- `evidence_supported_directions` using the same direction-component structure. This table also permits `unsupported`.
 - `eps_attribution`, using `explicit_eps_attribution`, `ambiguous_attribution`, or `generic_or_ineligible`.
 - mechanism, which is the explanation given by the source of how an EPS-linked model artifact or activity led to a claimed outcome or burden. Link each reported causal step through `mechanism_relationship_ids`. Do not infer a mechanism. Use `not_reported` when the source provides no explanation. A missing mechanism makes the claim harder to interpret but does not remove an otherwise clear EPS-attributed finding.
 - linked EPS element, EPS requirement, tool, model representation, model artifact, model generation method, workflow, RQ3 activity, input group, result set, result output, result criterion, comparator, report reuse record, or implementation record IDs.
 - `measure_directness`, using `direct`, `surrogate`, `intermediate_or_process`, or `unclear`.
-- lifecycle stage, using the shared lifecycle-stage codes.
+- lifecycle stages, using every applicable shared lifecycle-stage code.
 - `applicability`, using `reported_case_only`, `bounded_conditions`, `declared_envelope`, `broader_claim`, or `unclear`.
 - `evidence_basis`.
 - `support`.
@@ -803,20 +811,22 @@ Use claim kind as follows:
 - **`other`:** another identifiable claim kind.
 - **`unclear`:** the inferential form cannot be classified.
 
-Use role as follows:
+Use roles as follows:
 
-- **`outcome`:** the finding reports an outcome without an inseparable burden.
-- **`implementation_burden`:** the finding reports a burden without an inseparable benefit.
-- **`mixed_trade_off`:** the finding combines a linked benefit and burden that cannot be represented clearly as separate findings.
+- **`outcome`:** the finding reports an outcome.
+- **`implementation_burden`:** the finding reports an implementation burden.
 
-Use outcome direction as follows:
+Record both values when the source presents an inseparable trade-off. The shared finding row establishes that the roles belong to one inseparable statement.
+
+Use direction components as follows:
 
 - **`beneficial`:** movement toward the stated objective, target, or desired condition.
 - **`null_or_no_observed_effect`:** no meaningful or observed change is reported.
-- **`mixed_or_conditional`:** direction differs by measure, actor, scenario, or condition.
 - **`adverse`:** movement away from the objective or an increase in burden, harm, or failure.
 - **`unclear`:** the statement is directional, but its direction cannot be classified.
-- **`unsupported`:** no direction is warranted by the evidence. Use this only for evidence-supported direction.
+- **`unsupported`:** no direction is warranted by the evidence. Use this only in `evidence_supported_directions`.
+
+Create one component for each direction and link its measure, actor, scenario, or condition through `scope_refs`, `linked_result_output_ids`, and `condition_rule_ids`. Split the RQ2 finding when the components have materially different evidence or scope and can stand as separate findings. Keep direction components together only when the source statement is inseparable.
 
 Use EPS attribution as follows:
 
@@ -882,7 +892,7 @@ A power or energy margin does not become a reliability finding without an explic
 
 Create one activity row for each materially distinct target, method, and scenario combination. Keep several criteria and verdicts in one activity when the method and scenario are shared. Create separate linked rows for successive MIL, SIL, PIL, HIL, physical, commissioning, or operational stages. Capture activities that assess the completeness, correctness, consistency, conformance, fidelity, or currency of an EPS-linked MBSE model, transformation, configuration, representation, or digital twin itself. Retain relevant near misses with `direct_synthesis = no`.
 
-Reuse existing records to form the end-to-end thread. Represent a source-defined V&V campaign as a `verification_or_validation` or `end_to_end_engineering` workflow and link each RQ3 row to its exact workflow activities. Use report-application `linked_rq3_activity_ids` and `assurance_rq3_activity_ids` as the canonical links from tailoring to V&V. Use `target_refs`, model artifact links, configuration links, criteria, checks, and relationship records instead of copying their content into the activity.
+Reuse existing records to form the end-to-end thread. Represent a source-defined V&V campaign as a workflow whose `workflow_scope_types` include `verification_or_validation` and every other applicable scope, and link each RQ3 row to its exact workflow activities. Use report-application `linked_rq3_activity_ids` and `assurance_rq3_activity_ids` as the canonical links from tailoring to V&V. Use `target_refs`, model artifact links, configuration links, criteria, checks, and relationship records instead of copying their content into the activity.
 
 Record:
 
@@ -907,7 +917,7 @@ Record:
 - `verification_levels`, recording every applicable product or integration level.
 - `test_phases`, recording every applicable test purpose or campaign phase.
 - `test_environment_refs`, pointing to the environment, plant, simulator, testbed, facility, configuration, data source, or other records that define the test environment.
-- lifecycle stage, using the shared lifecycle-stage codes.
+- lifecycle stages, using every applicable shared lifecycle-stage code.
 - linked result-set, result-criterion, result-output, and comparator IDs.
 - `status`, a derived cumulative set using any attained values from `proposed`, `prepared_or_generated`, `result_reported`, `executed_virtual`, `executed_physical`, `downstream_physical_link`, and `model_to_test_closure`.
 - measure directness, using `direct`, `surrogate`, `intermediate_or_process`, or `unclear` and the definitions under RQ2.
@@ -916,7 +926,7 @@ Record:
 - `model_to_test_closure` source wording plus `closure_check_ids`.
 - `evidence_basis`, `support`, and `support_reason`.
 
-The RQ3 target, V&V object, verification level, test phase, model role, assessment aspect, and assessment method dimensions use arrays when several classifications can apply. Record each applicable value directly. Do not use a composite `multiple` value. Code `unclear` alone. An evidence status applies to the complete field in place of the array.
+The RQ3 target, V&V object, verification level, test phase, lifecycle stage, model role, assessment aspect, and assessment method dimensions use arrays when several classifications can apply. Record each applicable value directly. Do not use a composite `multiple` value. Code `unclear` alone. An evidence status applies to the complete field in place of the array.
 
 #### V&V targets and objects
 
@@ -1065,8 +1075,8 @@ For each report-level reuse record, record identity and provenance:
 - artifact relationships using the structured rows defined above.
 - repository or location, linked to resource IDs.
 - owner or developer, linked to organization or team entities.
-- `artifact_type`, using `reference_or_template_model`, `metamodel_or_profile`, `model_library_or_pattern`, `interface_contract`, `parametric_model_package`, `transformation_or_generator`, `spacecraft_model_with_separable_eps_thread`, `other`, or `unclear`.
-- `artifact_generality`, using `single_target`, `product_family`, `mission_class_reference`, `platform_agnostic`, `mixed`, or `unclear`.
+- `artifact_types`, recording every applicable value from `reference_or_template_model`, `metamodel_or_profile`, `model_library_or_pattern`, `interface_contract`, `parametric_model_package`, `transformation_or_generator`, `spacecraft_model_with_separable_eps_thread`, `other`, or `unclear`.
+- `artifact_generality_scopes` as nested rows containing `artifact_generality_scope_id`, one controlled `generality`, source scope wording, and exact `scope_refs`. Use `single_target`, `product_family`, `mission_class_reference`, `platform_agnostic`, or `unclear`.
 - EPS scope source wording, linked to EPS cases, elements, requirements, representations, or artifacts.
 - availability, using the shared availability codes and the linked artifact and resource records.
 - `license_category`, using `open_permissive`, `open_copyleft`, `public_domain`, `research_or_noncommercial`, `proprietary_or_commercial`, `custom_other`, `no_license_declared`, or `unclear`.
@@ -1074,9 +1084,9 @@ For each report-level reuse record, record identity and provenance:
 - `claimed_reuse_object`, using one or more of `artifact`, `method`, `workflow`, `toolchain`, `language`, `other`, or `unclear`.
 - possible related reports or artifacts, linked to report IDs, model-artifact IDs, or typed candidate entities when unresolved.
 
-For a method-only or workflow-only record, use `not_applicable` for linked model artifacts, artifact names and relationships, repository or location, artifact type, artifact generality, EPS artifact scope, artifact availability, and licence. Keep method and workflow identity, supporting-material location, and availability in their linked records. Use the reuse record for the DAE, reusable procedural core, adaptation design, level, and support.
+For a method-only or workflow-only record, use `not_applicable` for linked model artifacts, artifact names and relationships, repository or location, artifact types, artifact generality scopes, EPS artifact scope, artifact availability, and licence. Keep method and workflow identity, supporting-material location, and availability in their linked records. Use the reuse record for the DAE, reusable procedural core, adaptation design, level, and support.
 
-Use artifact type as follows:
+Use artifact types as follows:
 
 - **`reference_or_template_model`:** a generic model intended for configuration or instantiation.
 - **`metamodel_or_profile`:** a metamodel, profile, or domain extension that carries EPS meaning.
@@ -1088,14 +1098,15 @@ Use artifact type as follows:
 - **`other`:** another qualifying reusable artifact type.
 - **`unclear`:** artifact type cannot be classified.
 
-Use artifact generality as follows:
+Use each artifact generality scope as follows:
 
-- **`single_target`:** the artifact is intended only for one named mission, platform, or configuration.
-- **`product_family`:** the artifact covers a defined family of related platform variants.
-- **`mission_class_reference`:** the artifact is a generic or reference representation for a mission or platform class, such as CubeSats.
-- **`platform_agnostic`:** the artifact is intended to apply without a specific target platform or mission class.
-- **`mixed`:** materially different parts have different generality.
-- **`unclear`:** the intended generality cannot be classified.
+- **`single_target`:** the linked scope is intended only for one named mission, platform, or configuration.
+- **`product_family`:** the linked scope covers a defined family of related platform variants.
+- **`mission_class_reference`:** the linked scope is a generic or reference representation for a mission or platform class, such as CubeSats.
+- **`platform_agnostic`:** the linked scope is intended to apply without a specific target platform or mission class.
+- **`unclear`:** the intended generality of the linked scope cannot be classified.
+
+Create separate scope rows when materially different parts of an artifact have different generality. Link each row to the artifact, core members, model content, or other records that bound that classification. Do not store an artifact-wide mixed classification.
 
 Use licence category as follows:
 
@@ -1136,7 +1147,7 @@ Each limit rule identifies its dimension, condition, operator, and linked quanti
 Record the reuse design:
 
 - reusable-core source wording and `core_member_refs` to artifact content, method steps, workflow activities, rules, relationships, and checks.
-- `variation_points` as nested rows containing `variation_point_id`, source name or target, controlled target type, exact `target_refs`, linked artifact, method, and workflow IDs, source option wording, typed option quantity IDs, dependency relationship IDs, selection rule IDs, and controlled unchanged-use status.
+- `variation_points` as nested rows containing `variation_point_id`, source name or target, controlled `target_types`, exact `target_refs`, linked artifact, method, and workflow IDs, source option wording, typed option quantity IDs, dependency relationship IDs, selection rule IDs, and controlled unchanged-use status. Record every applicable target type from `artifact_content`, `method_step`, `workflow_activity`, `other`, or `unclear`.
 - overall unchanged-use source wording linked to rule IDs.
 - overall dependency source wording plus `dependency_relationship_ids`.
 - `tailoring_rules` as nested rows containing `tailoring_rule_id`, linked variation-point and tool IDs, source trigger wording and trigger rule IDs, operation types, source required inputs and typed input references, source responsible roles and role entity IDs, tool configuration IDs, source resulting output and output references, constraint rule IDs, acceptance check IDs, and rationale.
@@ -1249,7 +1260,7 @@ Record identity and setting:
 
 - `report_application_id`.
 - linked `report_reuse_record_id` values.
-- `application_object`, using `artifact`, `method`, `workflow`, `artifact_and_method`, `artifact_and_workflow`, `method_and_workflow`, `artifact_method_and_workflow`, or `unclear`.
+- `application_objects`, recording every applicable value from `artifact`, `method`, `workflow`, or `unclear`. Derive the resolved values from the artifact reuse record, model-generation-method links, and workflow links.
 - `lineage_id`, inherited from the linked artifact reuse record until cross-report resolution, or `not_applicable` for an application without an artifact.
 - linked `model_generation_method_id` values when applicable.
 - linked `workflow_id` values when applicable.
@@ -1263,18 +1274,14 @@ Record identity and setting:
 
 Read shared mission or platform, EPS architecture and interfaces, orbit, environment, modes and loads, model abstraction, tools and versions, and organization and process from the linked report, EPS case, MBSE approach, and implementation records. Do not copy them into the application.
 
-Use application object as follows:
+Use application objects as follows:
 
 - **`artifact`:** the application reuses or tailors an identifiable artifact.
 - **`method`:** the application reuses or adapts an identifiable model generation method.
 - **`workflow`:** the application reuses or adapts an identifiable engineering workflow.
-- **`artifact_and_method`:** the application inseparably reuses an artifact and a method.
-- **`artifact_and_workflow`:** the application inseparably reuses an artifact and a workflow.
-- **`method_and_workflow`:** the application inseparably reuses a method and a workflow without an identifiable artifact lineage.
-- **`artifact_method_and_workflow`:** the application inseparably reuses all three objects.
-- **`unclear`:** the application object cannot be classified.
+- **`unclear`:** the application objects cannot be classified.
 
-Each artifact-containing application links an artifact reuse record. Each method-containing application links at least one `model_generation_method_id` and its method reuse record. Each workflow-containing application links at least one `workflow_id` and its workflow reuse record.
+Record every applicable object in the same array. Each application containing `artifact` links an artifact reuse record. Each application containing `method` links at least one `model_generation_method_id` and its method reuse record. Each application containing `workflow` links at least one `workflow_id` and its workflow reuse record.
 
 Use relationship to the originator as follows:
 
@@ -1352,7 +1359,7 @@ After completing and validating the report extraction, derive the following repo
 
 Derive the flags as follows:
 
-- A generic or reference model is reported when an artifact reuse record identifies `product_family`, `mission_class_reference`, or `platform_agnostic` generality, or explicitly identifies a generic, reference, or template model. Use `uncertain` when genericity remains unresolved.
+- A generic or reference model is reported when an artifact reuse record contains an artifact generality scope coded `product_family`, `mission_class_reference`, or `platform_agnostic`, or its `artifact_types` include `reference_or_template_model`. Use `uncertain` when genericity remains unresolved.
 - An actionable construction procedure is reported when a model generation method has `actionable_procedure` or `reproduction_ready` detail and is linked as an output-producing method for the generic or reference model. A detailed one-off method for another artifact does not satisfy this flag.
 - An actionable tailoring procedure is reported when the reuse design for the generic or reference model has `actionable_procedure` or `reproduction_ready` tailoring detail.
 - A worked tailoring example is reported when an application of the generic or reference model records executed operations, or a justified unchanged use, and identifies the resulting application.
@@ -1399,8 +1406,8 @@ Record identity and provenance:
 - artifact names and versions.
 - artifact relationships using the structured rows defined above.
 - owner or developer.
-- artifact type, using the artifact-type codes defined above.
-- artifact generality, using the artifact-generality codes defined above.
+- artifact types, using the artifact-type codes defined above.
+- artifact generality scopes, linking each consolidated scope row to its contributing report-level scope rows.
 - EPS scope.
 - availability, using the shared availability codes.
 - `license_category`, using the licence-category codes defined above.
@@ -1431,14 +1438,14 @@ After resolving the lineage, assign its `lineage_id` to each matching report-lev
 
 ### Consolidated tailoring application
 
-Create one separate row for each actual artifact adoption or tailoring event represented across the lineage reports. Include every report-level application whose `application_object` contains `artifact`. Applications without an artifact are not consolidated in the artifact-lineage pass. Merge repeated reporting of the same event only in this consolidated row. Keep every contributing report-level application unchanged.
+Create one separate row for each actual artifact adoption or tailoring event represented across the lineage reports. Include every report-level application whose `application_objects` contains `artifact`. Applications without an artifact are not consolidated in the artifact-lineage pass. Merge repeated reporting of the same event only in this consolidated row. Keep every contributing report-level application unchanged.
 
 Record identity and setting:
 
 - `tailoring_application_id`.
 - `lineage_id`.
 - linked `report_application_id` values.
-- `application_object`, using `artifact`, `artifact_and_method`, `artifact_and_workflow`, or `artifact_method_and_workflow`.
+- `application_objects`, which always contains `artifact` and also contains `method` or `workflow` when their links are present.
 - linked `model_generation_method_id` values when applicable.
 - linked `workflow_id` values when applicable.
 - linked report IDs, family IDs, and `eps_case_id` values.
@@ -1487,7 +1494,7 @@ Record comparator adequacy only for comparative or causal claims. Record relatio
 Before full extraction:
 
 1. [ ] Test report-level eligibility and Route A or Route B coding on clear and borderline examples.
-2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, reference catalog entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed tools and equipment, per artifact identity, model roles and availability, model generation methods, engineering workflows, construction sources, ordered method steps and workflow activities, generic-model derivation, linked procedural-detail assessments, typed EPS elements and requirements, linked exchanges, dependencies and bridges, multiple structured model representations, relationships among views, sequence or activity behavior occurrences, boundary roles, coverage assessments, disciplinary viewpoints, decomposition visibility, item level inputs, typed outputs and statistics, normalized RQ1 claims, RQ2 findings, ordered RQ3 activities, model and digital twin assessment aspects and methods, verification levels, test phases, virtual and physical execution, exact model configurations, figures or tables, structured variation points, tailoring rules and procedure steps, executed tailoring operations, procedural-evidence flags, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded artifact, method, and workflow reuse levels. Include a report that can reach R3 or R4, M3 or M4, or W3 or W4 by itself when available.
+2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, reference catalog entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed tools and equipment, per artifact identity, model roles and availability, model generation methods, workflow-scope arrays, construction sources, ordered method steps and workflow activities, atomic and aggregate automation levels, generic-model derivation, linked procedural-detail assessments, typed EPS elements and requirements, linked exchange-type and dependency-type arrays and bridges, several structured model representations, relationships among views, sequence or activity behavior occurrences, boundary roles, coverage assessments, disciplinary viewpoints, representation-level abstraction, decomposition visibility and fidelity, item level inputs, evaluation-design components, methods integration, typed outputs and statistics, normalized RQ1 claims, RQ2 role, direction-component and lifecycle-stage arrays, ordered RQ3 activities, model and digital twin assessment aspects and methods, verification levels, test phases, virtual and physical execution, exact model configurations, figures or tables, structured variation points with target-type arrays, tailoring rules and procedure steps, executed tailoring operations, artifact-type arrays, scoped artifact generality, application-object arrays, procedural-evidence flags, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded artifact, method, and workflow reuse levels. Include a report that can reach R3 or R4, M3 or M4, or W3 or W4 by itself when available.
 3. [ ] Test cross-report family and lineage-identity resolution, immutable report-level records, separate lineage-level extraction, and separate consolidated application, effort, assurance, independence, and reuse-level fields on at least one multi-report example.
 4. [ ] Calibrate `named_only`, `narrative_outline`, `actionable_procedure`, `reproduction_ready`, and `unclear` on model generation, workflow, and tailoring examples. Confirm that procedural detail remains separate from reuse level.
 5. [ ] Calibrate the difference between assertion, worked example, execution, comparison, physical or operational checking, and independent transfer.
@@ -1501,7 +1508,7 @@ One LLM reviewer performs the primary extraction, cross-report extraction, testâ
 Apply this sequence:
 
 1. **Primary extraction.** The LLM reviewer extracts the complete report into the frozen report-level form.
-2. **Focused audit.** For every included report, the human auditor checks eligibility and route, canonical entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed record references, typed tool records, per artifact metadata and model roles, item level inputs, typed outputs and statistics, EPS elements and requirements, model representations and relationships among views, dynamic behavior occurrences, boundary roles, Route B anchors and bridges, coverage coding, omitted or duplicated groups, method steps, workflow activities, generic-model derivation, procedural-detail levels, normalized RQ1 claims, direct RQ2 attribution, direct RQ3 linkage, RQ3 activity order, exact artifact and configuration links, verification levels, test phases, model and digital twin assessment coding, virtual and physical execution, model-to-test closure, `lineage_mentioned`, complete report-level reuse and application coding, structured tailoring evidence, every report-level R3/R4, M3/M4, or W3/W4 assignment, procedural-evidence flags, citations, source-versus-inference distinctions, and reviewer-derived values. The auditor may see the extraction because the audit's purpose is error detection.
+2. **Focused audit.** For every included report, the human auditor checks eligibility and route, canonical entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed record references, typed tool records, per artifact metadata and model roles, artifact-type arrays and scoped generality, item level inputs, evaluation-design components, methods integration, typed outputs and statistics, EPS elements and requirements, exchange-type and dependency-type arrays, model representations, representation-level abstraction, decomposition visibility and fidelity, relationships among views, dynamic behavior occurrences, boundary roles, Route B anchors and bridges, coverage coding, omitted or duplicated groups, method steps, workflow activities, workflow-scope and aggregate automation arrays, generic-model derivation, procedural-detail levels, normalized RQ1 claims, direct RQ2 attribution, RQ2 role, direction-component and lifecycle-stage arrays, direct RQ3 linkage, RQ3 activity order, exact artifact and configuration links, verification levels, test phases, model and digital twin assessment coding, virtual and physical execution, model-to-test closure, `lineage_mentioned`, complete report-level reuse and application-object coding, variation-point target arrays, structured tailoring evidence, every report-level R3/R4, M3/M4, or W3/W4 assignment, procedural-evidence flags, citations, source-versus-inference distinctions, and reviewer-derived values. The auditor may see the extraction because the audit's purpose is error detection.
 3. **Deterministic validation.** Validate schema versions, controlled values, canonical keys, IDs, typed record references, required fields, links, procedure-level prerequisites, reuse-level prerequisites, procedural-evidence flags, quantity forms, units, currencies, sample sizes, and reproducible calculations. Confirm each citation's report and page range. For citations without `graphic` or `graphic_quote_description`, confirm the verbatim quotation against the stored source using the frozen page-text extraction and normalization rule. Preserve source values and reviewer-derived values separately.
 4. **Adjudication.** The LLM reviewer resolves every audit or deterministic issue against the full source and gives the final review judgment. The human auditor records the disposition in the relevant Git commit and applies accepted changes. No automated process writes directly to the canonical extraction.
 5. **Cross-report pass.** After report extraction, the LLM reviewer resolves report families and artifact-lineage identity, updates only report-level `lineage_id` values, and creates separate lineage-level and consolidated tailoring-application records. The human auditor performs one focused cross-report audit for every uncertain merge or split and every lineage-level R3 or R4 assignment.

@@ -1,5 +1,5 @@
 {
-  "schema_version": "slr1-extraction/v3",
+  "schema_version": "slr1-extraction/v4",
   "identity": {
     "report_id": "<report-id>",
     "screening_record_id": "<screening-record-id>",
@@ -116,7 +116,9 @@
           "normalization_status": "not_for_synthesis"
         },
         "decision_type": "selection",
-        "lifecycle_stage": "architecture_and_design",
+        "lifecycle_stages": [
+          "architecture_and_design"
+        ],
         "decision_status": "made",
         "alternative_refs": [
           "model_artifact:<model-artifact-id>"
@@ -975,13 +977,16 @@
             "relationship:<relationship-id>"
           ]
         },
-        "workflow_scope_type": {
+        "workflow_scope_types": {
           "coding_confidence": "high",
           "provenance": "source_reported",
           "citation_ids": [
             "<citation-id>"
           ],
-          "value": "unclear"
+          "value": [
+            "model_generation",
+            "verification_or_validation"
+          ]
         },
         "purpose_and_boundary": {
           "coding_confidence": "high",
@@ -1373,7 +1378,13 @@
         "responsible_role_entity_ids": [
           "<entity-id>"
         ],
-        "automation_level": "tool_assisted",
+        "automation_levels": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_derived",
+          "value": [
+            "tool_assisted"
+          ]
+        },
         "governance_rule_ids": [
           "<rule-id>"
         ],
@@ -1801,13 +1812,16 @@
               "entity:<entity-id>"
             ]
           },
-          "exchange_type": {
+          "exchange_types": {
             "coding_confidence": "high",
             "provenance": "source_reported",
             "citation_ids": [
               "<citation-id>"
             ],
-            "value": "unclear"
+            "value": [
+              "energy",
+              "information_or_control"
+            ]
           },
           "exchange_scope": {
             "coding_confidence": "high",
@@ -1863,13 +1877,16 @@
           "linked_eps_requirement_ids": [
             "<eps-requirement-id>"
           ],
-          "dependency_type": {
+          "dependency_types": {
             "coding_confidence": "high",
             "provenance": "source_reported",
             "citation_ids": [
               "<citation-id>"
             ],
-            "value": "unclear"
+            "value": [
+              "electrical_power",
+              "operational_or_mode"
+            ]
           },
           "dependency_scope": {
             "coding_confidence": "high",
@@ -1904,6 +1921,39 @@
             "<citation-id>"
           ],
           "model_representation_id": "<model-representation-id>",
+          "abstraction_levels": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "logical",
+              "physical_design"
+            ]
+          },
+          "decomposition_visibilities": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "black_box",
+              "white_box"
+            ]
+          },
+          "fidelity_levels": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "idealized_quantitative",
+              "engineering_representative"
+            ]
+          },
           "source_name_or_caption": {
             "source_text": "<source representation name or caption>",
             "linked_record_refs": [
@@ -2101,6 +2151,36 @@
             "<citation-id>"
           ],
           "model_representation_id": "<target-model-representation-id>",
+          "abstraction_levels": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "physical_design"
+            ]
+          },
+          "decomposition_visibilities": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "white_box"
+            ]
+          },
+          "fidelity_levels": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": [
+              "engineering_representative"
+            ]
+          },
           "source_name_or_caption": {
             "source_text": "<target representation name or caption>",
             "linked_record_refs": [
@@ -2407,30 +2487,6 @@
           }
         }
       ],
-      "eps_abstraction": {
-        "coding_confidence": "high",
-        "provenance": "source_reported",
-        "citation_ids": [
-          "<citation-id>"
-        ],
-        "value": "unclear"
-      },
-      "eps_decomposition_visibility": {
-        "coding_confidence": "high",
-        "provenance": "source_reported",
-        "citation_ids": [
-          "<citation-id>"
-        ],
-        "value": "unclear"
-      },
-      "eps_fidelity": {
-        "coding_confidence": "high",
-        "provenance": "source_reported",
-        "citation_ids": [
-          "<citation-id>"
-        ],
-        "value": "unclear"
-      },
       "purposes": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -2857,13 +2913,16 @@
           "unclear"
         ]
       },
-      "burden_phase": {
+      "burden_phases": {
         "coding_confidence": "high",
         "provenance": "source_reported",
         "citation_ids": [
           "<citation-id>"
         ],
-        "value": "unclear"
+        "value": [
+          "adoption",
+          "ongoing_use"
+        ]
       },
       "reported_burden": {
         "coding_confidence": "high",
@@ -2942,7 +3001,18 @@
       "linked_rq2_finding_ids": [
         "<rq2-finding-id>"
       ],
-      "automation_level": "mixed"
+      "automation_levels": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": [
+          "manual",
+          "tool_assisted",
+          "partially_automated"
+        ]
+      }
     }
   ],
   "input_groups": [
@@ -3064,13 +3134,24 @@
       ],
       "result_set_id": "<result-set-id>",
       "eps_case_id": "<eps-case-id>",
-      "evaluation_design": {
+      "evaluation_design_components": {
         "coding_confidence": "high",
         "provenance": "source_reported",
         "citation_ids": [
           "<citation-id>"
         ],
-        "value": "unclear"
+        "value": [
+          "survey",
+          "interview_or_qualitative"
+        ]
+      },
+      "methods_integration": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "integrated"
       },
       "scenario_or_configuration": {
         "coding_confidence": "high",
@@ -3673,13 +3754,16 @@
         ],
         "value": "unclear"
       },
-      "role": {
+      "roles": {
         "coding_confidence": "high",
         "provenance": "source_reported",
         "citation_ids": [
           "<citation-id>"
         ],
-        "value": "outcome"
+        "value": [
+          "outcome",
+          "implementation_burden"
+        ]
       },
       "target": {
         "source_text": "<target>",
@@ -3718,22 +3802,58 @@
         ],
         "value": "unclear"
       },
-      "author_claimed_direction": {
-        "coding_confidence": "high",
-        "provenance": "source_reported",
-        "citation_ids": [
-          "<citation-id>"
-        ],
-        "value": "unclear"
-      },
-      "evidence_supported_direction": {
-        "coding_confidence": "high",
-        "provenance": "source_reported",
-        "citation_ids": [
-          "<citation-id>"
-        ],
-        "value": "unclear"
-      },
+      "author_claimed_directions": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "direction_component_id": "<author-direction-component-id>",
+          "direction": "beneficial",
+          "direction_description": {
+            "source_text": "<author claimed direction>",
+            "linked_record_refs": [
+              "result_output:<result-output-id>"
+            ]
+          },
+          "scope_refs": [
+            "entity:<entity-id>"
+          ],
+          "linked_result_output_ids": [
+            "<result-output-id>"
+          ],
+          "condition_rule_ids": [
+            "<rule-id>"
+          ]
+        }
+      ],
+      "evidence_supported_directions": [
+        {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "direction_component_id": "<supported-direction-component-id>",
+          "direction": "beneficial",
+          "direction_description": {
+            "source_text": "<evidence supported direction>",
+            "linked_record_refs": [
+              "result_output:<result-output-id>"
+            ]
+          },
+          "scope_refs": [
+            "entity:<entity-id>"
+          ],
+          "linked_result_output_ids": [
+            "<result-output-id>"
+          ],
+          "condition_rule_ids": [
+            "<rule-id>"
+          ]
+        }
+      ],
       "eps_attribution": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -3797,13 +3917,16 @@
         ],
         "value": "unclear"
       },
-      "lifecycle_stage": {
+      "lifecycle_stages": {
         "coding_confidence": "high",
         "provenance": "source_reported",
         "citation_ids": [
           "<citation-id>"
         ],
-        "value": "unclear"
+        "value": [
+          "architecture_and_design",
+          "verification"
+        ]
       },
       "applicability": {
         "coding_confidence": "high",
@@ -4046,13 +4169,16 @@
       "test_environment_refs": [
         "entity:<entity-id>"
       ],
-      "lifecycle_stage": {
+      "lifecycle_stages": {
         "coding_confidence": "high",
         "provenance": "source_reported",
         "citation_ids": [
           "<citation-id>"
         ],
-        "value": "unclear"
+        "value": [
+          "verification",
+          "integration"
+        ]
       },
       "linked_result_set_ids": [
         "<result-set-id>"
@@ -4289,22 +4415,37 @@
             "entity:<entity-id>"
           ]
         },
-        "artifact_type": {
+        "artifact_types": {
           "coding_confidence": "high",
           "provenance": "source_reported",
           "citation_ids": [
             "<citation-id>"
           ],
-          "value": "unclear"
+          "value": [
+            "reference_or_template_model",
+            "parametric_model_package"
+          ]
         },
-        "artifact_generality": {
-          "coding_confidence": "high",
-          "provenance": "source_reported",
-          "citation_ids": [
-            "<citation-id>"
-          ],
-          "value": "unclear"
-        },
+        "artifact_generality_scopes": [
+          {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "artifact_generality_scope_id": "<artifact-generality-scope-id>",
+            "generality": "mission_class_reference",
+            "scope": {
+              "source_text": "<artifact generality scope>",
+              "linked_record_refs": [
+                "model_artifact:<model-artifact-id>"
+              ]
+            },
+            "scope_refs": [
+              "model_artifact:<model-artifact-id>"
+            ]
+          }
+        ],
         "eps_scope": {
           "coding_confidence": "high",
           "provenance": "source_reported",
@@ -4562,13 +4703,17 @@
                   "entity:<entity-id>"
                 ]
               },
-              "target_type": {
+              "target_types": {
                 "coding_confidence": "high",
                 "provenance": "source_reported",
                 "citation_ids": [
                   "<citation-id>"
                 ],
-                "value": "unclear"
+                "value": [
+                  "artifact_content",
+                  "method_step",
+                  "workflow_activity"
+                ]
               },
               "linked_model_artifact_ids": [
                 "<model-artifact-id>"
@@ -5194,13 +5339,17 @@
         "linked_report_reuse_record_ids": [
           "<report-reuse-record-id>"
         ],
-        "application_object": {
+        "application_objects": {
           "coding_confidence": "high",
-          "provenance": "source_reported",
+          "provenance": "reviewer_derived",
           "citation_ids": [
             "<citation-id>"
           ],
-          "value": "artifact_method_and_workflow"
+          "value": [
+            "artifact",
+            "method",
+            "workflow"
+          ]
         },
         "lineage_id": "<lineage-id>",
         "linked_model_generation_method_ids": [

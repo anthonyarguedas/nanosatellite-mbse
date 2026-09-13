@@ -40,29 +40,6 @@ LINEAGE_SENTINELS = {
     "not_applicable",
     "unresolved_after_review",
 }
-ARTIFACT_APPLICATION_OBJECTS = {
-    "artifact",
-    "artifact_and_method",
-    "artifact_and_workflow",
-    "artifact_method_and_workflow",
-}
-METHOD_APPLICATION_OBJECTS = {
-    "method",
-    "artifact_and_method",
-    "method_and_workflow",
-    "artifact_method_and_workflow",
-}
-WORKFLOW_APPLICATION_OBJECTS = {
-    "workflow",
-    "artifact_and_workflow",
-    "method_and_workflow",
-    "artifact_method_and_workflow",
-}
-NON_ARTIFACT_APPLICATION_OBJECTS = {
-    "method",
-    "workflow",
-    "method_and_workflow",
-}
 MODEL_ASSESSMENT_TARGET_TYPES = {
     "mbse_model_artifact",
     "digital_twin",
@@ -223,6 +200,7 @@ DIRECT_REFERENCE_FIELDS = {
     "linked_report_tailoring_rule_ids": "tailoring_rule",
     "linked_report_tailoring_step_ids": "tailoring_step",
     "linked_report_application_operation_ids": "application_operation",
+    "linked_report_artifact_generality_scope_ids": "artifact_generality_scope",
 }
 RECORD_REFERENCE_KINDS = {
     "report": "report",
@@ -267,9 +245,11 @@ RECORD_REFERENCE_KINDS = {
     "reviewer_derived_value": "reviewer_derived_value",
     "rq1_claim": "rq1_claim",
     "rq2_finding": "rq2_finding",
+    "direction_component": "direction_component",
     "rq3_activity": "rq3_activity",
     "report_reuse_record": "report_reuse_record",
     "artifact_relationship": "artifact_relationship",
+    "artifact_generality_scope": "artifact_generality_scope",
     "variation_point": "variation_point",
     "tailoring_rule": "tailoring_rule",
     "tailoring_step": "tailoring_step",
@@ -338,27 +318,26 @@ def has_ordinary_value(value: Any) -> bool:
     return isinstance(value, Mapping) and "value" in value
 
 
-def application_object_for(
+def coded_values(value: Any) -> set[str]:
+    coded = coded_value(value)
+    if not isinstance(coded, list):
+        return set()
+    return {item for item in coded if isinstance(item, str)}
+
+
+def application_objects_for(
     has_artifact: bool,
     has_method: bool,
     has_workflow: bool,
-    fallback: Any = None,
-) -> Any:
-    if has_artifact and has_method and has_workflow:
-        return "artifact_method_and_workflow"
-    if has_artifact and has_method:
-        return "artifact_and_method"
-    if has_artifact and has_workflow:
-        return "artifact_and_workflow"
+) -> set[str]:
+    objects: set[str] = set()
     if has_artifact:
-        return "artifact"
-    if has_method and has_workflow:
-        return "method_and_workflow"
+        objects.add("artifact")
     if has_method:
-        return "method"
+        objects.add("method")
     if has_workflow:
-        return "workflow"
-    return fallback
+        objects.add("workflow")
+    return objects
 
 
 def has_resolved_evidence(value: Any) -> bool:
@@ -847,6 +826,24 @@ def index_report(
                 row,
                 issues,
             )
+            if table_name == "rq2_findings":
+                for direction_field in (
+                    "author_claimed_directions",
+                    "evidence_supported_directions",
+                ):
+                    for component_index, component in enumerate(
+                        rows(row.get(direction_field))
+                    ):
+                        register(
+                            indexes,
+                            "direction_component",
+                            component.get("direction_component_id"),
+                            document,
+                            f"/rq2_findings/{row_index}/{direction_field}/"
+                            f"{component_index}/direction_component_id",
+                            component,
+                            issues,
+                        )
             if table_name == "input_groups":
                 for item_index, item in enumerate(rows(row.get("input_items"))):
                     register(
@@ -945,6 +942,19 @@ def index_report(
                 record,
                 issues,
             )
+            for generality_index, generality_scope in enumerate(
+                rows(record.get("artifact_generality_scopes"))
+            ):
+                register(
+                    indexes,
+                    "artifact_generality_scope",
+                    generality_scope.get("artifact_generality_scope_id"),
+                    document,
+                    f"{record_pointer}/artifact_generality_scopes/"
+                    f"{generality_index}/artifact_generality_scope_id",
+                    generality_scope,
+                    issues,
+                )
             for relationship_index, relationship in enumerate(
                 rows(record.get("artifact_relationships"))
             ):
@@ -1054,8 +1064,10 @@ def build_indexes(
         "reviewer_derived_value",
         "rq1_claim",
         "rq2_finding",
+        "direction_component",
         "rq3_activity",
         "artifact_relationship",
+        "artifact_generality_scope",
         "variation_point",
         "tailoring_rule",
         "tailoring_step",
@@ -1101,6 +1113,19 @@ def build_indexes(
                     row.get("artifact_relationship_id"),
                     document,
                     f"/artifact_relationships/{row_index}/artifact_relationship_id",
+                    row,
+                    issues,
+                )
+            for row_index, row in enumerate(
+                rows(document.data.get("artifact_generality_scopes"))
+            ):
+                register(
+                    indexes,
+                    "artifact_generality_scope",
+                    row.get("artifact_generality_scope_id"),
+                    document,
+                    f"/artifact_generality_scopes/{row_index}/"
+                    "artifact_generality_scope_id",
                     row,
                     issues,
                 )
@@ -1465,12 +1490,9 @@ def application_assurance_trace_issues(
 ) -> list[Issue]:
     """Link post-tailoring assurance to the exact artifact and configuration."""
 
-    application_object = coded_value(application.get("application_object"))
+    application_objects = coded_values(application.get("application_objects"))
     result = application.get("result_and_assurance", {})
-    if (
-        application_object not in ARTIFACT_APPLICATION_OBJECTS
-        or not isinstance(result, Mapping)
-    ):
+    if "artifact" not in application_objects or not isinstance(result, Mapping):
         return []
 
     assurance_ids = result.get("assurance_rq3_activity_ids")
@@ -1864,6 +1886,20 @@ def report_reference_issues(
                 indexes,
                 issues,
             )
+            for scope_index, scope in enumerate(
+                rows(record.get("artifact_generality_scopes"))
+            ):
+                if scope.get("generality") != "unclear" and not has_recorded_content(
+                    scope.get("scope_refs")
+                ):
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"{base}/artifact_generality_scopes/{scope_index}/"
+                            "scope_refs",
+                            "artifact generality scope lacks a resolved target",
+                        )
+                    )
             design = record.get("reuse_design", {})
             if isinstance(design, Mapping):
                 issues.extend(
@@ -2028,6 +2064,50 @@ def cross_record_reference_issues(
             indexes,
             issues,
         )
+        for scope_index, scope in enumerate(
+            rows(data.get("artifact_generality_scopes"))
+        ):
+            if scope.get("generality") != "unclear" and not has_recorded_content(
+                scope.get("scope_refs")
+            ):
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"/artifact_generality_scopes/{scope_index}/scope_refs",
+                        "artifact generality scope lacks a resolved target",
+                    )
+                )
+            linked_scope_ids = scope.get(
+                "linked_report_artifact_generality_scope_ids"
+            )
+            if not isinstance(linked_scope_ids, list):
+                continue
+            for linked_index, identifier in enumerate(linked_scope_ids):
+                location = indexes["artifact_generality_scope"].get(identifier)
+                issue_pointer = (
+                    f"/artifact_generality_scopes/{scope_index}/"
+                    "linked_report_artifact_generality_scope_ids/"
+                    f"{linked_index}"
+                )
+                if location is not None and location.document.kind != "report":
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            issue_pointer,
+                            "lineage generality scope must link a report-level scope",
+                        )
+                    )
+                elif (
+                    location is not None
+                    and location.node.get("generality") != scope.get("generality")
+                ):
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            issue_pointer,
+                            "lineage and report generality scopes use different codes",
+                        )
+                    )
         design = data.get("reuse_design", {})
         if isinstance(design, Mapping):
             issues.extend(
@@ -2373,24 +2453,35 @@ def report_application_lineage_issues(
     if not isinstance(reuse, Mapping):
         return issues
     for index, application in enumerate(rows(reuse.get("report_applications"))):
-        application_object = coded_value(application.get("application_object"))
-        has_artifact = application_object in ARTIFACT_APPLICATION_OBJECTS
+        application_objects = coded_values(application.get("application_objects"))
+        linked_records = linked_locations(
+            application.get("linked_report_reuse_record_ids"),
+            indexes["report_reuse_record"],
+            containing_report=document,
+        )
+        artifact_records = [
+            location.node
+            for location in linked_records
+            if is_artifact_reuse_record(location.node)
+        ]
+        has_artifact = bool(artifact_records)
         method_ids = application.get("linked_model_generation_method_ids")
         workflow_ids = application.get("linked_workflow_ids")
         has_method = isinstance(method_ids, list) and bool(method_ids)
         has_workflow = isinstance(workflow_ids, list) and bool(workflow_ids)
-        expected_object = application_object_for(
+        expected_objects = application_objects_for(
             has_artifact,
             has_method,
             has_workflow,
-            application_object,
         )
-        if application_object != "unclear" and application_object != expected_object:
+        if "unclear" not in application_objects and (
+            application_objects != expected_objects
+        ):
             issues.append(
                 Issue(
                     str(document.path),
-                    f"/reuse/report_applications/{index}/application_object/value",
-                    "application object does not match its method and workflow links",
+                    f"/reuse/report_applications/{index}/application_objects/value",
+                    "application objects do not match their method and workflow links",
                 )
             )
         if not has_artifact:
@@ -2404,26 +2495,7 @@ def report_application_lineage_issues(
                     )
                 )
             continue
-        linked_records = linked_locations(
-            application.get("linked_report_reuse_record_ids"),
-            indexes["report_reuse_record"],
-            containing_report=document,
-        )
-        artifact_records = [
-            location.node
-            for location in linked_records
-            if is_artifact_reuse_record(location.node)
-        ]
         value_pointer = f"/reuse/report_applications/{index}/lineage_id"
-        if not artifact_records:
-            issues.append(
-                Issue(
-                    str(document.path),
-                    value_pointer,
-                    "artifact application has no linked artifact reuse record",
-                )
-            )
-            continue
         inherited = {record.get("lineage_id") for record in artifact_records}
         if len(inherited) != 1 or application.get("lineage_id") not in inherited:
             issues.append(
@@ -2539,14 +2611,16 @@ def consolidation_issues(
             location = indexes["report_application"].get(identifier)
             if location is None:
                 continue
-            application_object = coded_value(location.node.get("application_object"))
-            if application_object not in ARTIFACT_APPLICATION_OBJECTS:
+            application_objects = coded_values(
+                location.node.get("application_objects")
+            )
+            if "artifact" not in application_objects:
                 issues.append(
                     Issue(
                         str(document.path),
                         f"/linked_report_application_ids/{index}",
                         f"consolidated application links ineligible "
-                        f"{application_object!r} application {identifier!r}",
+                        f"{sorted(application_objects)!r} application {identifier!r}",
                     )
                 )
             containing_report_id = report_id(location.document)
@@ -2618,27 +2692,27 @@ def consolidation_issues(
                     "application union",
                 )
             )
-        expected_object = application_object_for(
+        expected_objects = application_objects_for(
             True,
             bool(expected_method_ids),
             bool(expected_workflow_ids),
         )
-        if coded_value(document.data.get("application_object")) != expected_object:
+        if coded_values(document.data.get("application_objects")) != expected_objects:
             issues.append(
                 Issue(
                     str(document.path),
-                    "/application_object/value",
-                    "application object does not match the contributing method and "
+                    "/application_objects/value",
+                    "application objects do not match the contributing method and "
                     "workflow links",
                 )
             )
 
     for identifier, location in indexes["report_application"].items():
-        application_object = coded_value(location.node.get("application_object"))
+        application_objects = coded_values(location.node.get("application_objects"))
         lineage_id = location.node.get("lineage_id")
         count = len(memberships.get(identifier, []))
         if (
-            application_object in ARTIFACT_APPLICATION_OBJECTS
+            "artifact" in application_objects
             and isinstance(lineage_id, str)
             and lineage_id not in LINEAGE_SENTINELS
             and count != 1
@@ -2651,7 +2725,7 @@ def consolidation_issues(
                     f"{count} consolidated applications; exactly one is required",
                 )
             )
-        if application_object in NON_ARTIFACT_APPLICATION_OBJECTS and count:
+        if "artifact" not in application_objects and count:
             issues.append(
                 Issue(
                     str(location.document.path),
@@ -2942,6 +3016,86 @@ def family_lead_issues(document: Document) -> list[Issue]:
     return issues
 
 
+def automation_profile_issues(
+    document: Document,
+    indexes: Mapping[str, Mapping[str, Location]],
+) -> list[Issue]:
+    issues: list[Issue] = []
+    mbse = document.data.get("mbse_approach", {})
+    if isinstance(mbse, Mapping):
+        for index, workflow in enumerate(rows(mbse.get("workflows"))):
+            activity_levels = {
+                activity.get("automation_level")
+                for activity in rows(workflow.get("workflow_activities"))
+                if activity.get("automation_level")
+                in {
+                    "manual",
+                    "tool_assisted",
+                    "partially_automated",
+                    "fully_automated",
+                }
+            }
+            aggregate_levels = coded_values(workflow.get("automation_levels")) - {
+                "unclear"
+            }
+            if activity_levels and aggregate_levels != activity_levels:
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"/mbse_approach/workflows/{index}/automation_levels",
+                        "workflow automation levels do not equal the levels of its "
+                        "activities",
+                    )
+                )
+
+    for index, implementation in enumerate(
+        rows(document.data.get("implementation_records"))
+    ):
+        workflow_levels: set[str] = set()
+        for location in linked_locations(
+            implementation.get("linked_workflow_ids"),
+            indexes.get("workflow", {}),
+            containing_report=document,
+        ):
+            workflow_levels.update(
+                coded_values(location.node.get("automation_levels")) - {"unclear"}
+            )
+        represented_levels = coded_values(
+            implementation.get("automation_levels")
+        ) - {"unclear"}
+        if workflow_levels and not workflow_levels.issubset(represented_levels):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"/implementation_records/{index}/automation_levels",
+                    "implementation automation levels omit a linked workflow level",
+                )
+            )
+    return issues
+
+
+def evaluation_design_issues(document: Document) -> list[Issue]:
+    issues: list[Issue] = []
+    for index, result_set in enumerate(rows(document.data.get("result_sets"))):
+        components = coded_values(result_set.get("evaluation_design_components"))
+        resolved_components = components - {"unclear"}
+        integration = coded_value(result_set.get("methods_integration"))
+        if len(resolved_components) > 1 and integration not in {
+            "integrated",
+            "partially_integrated",
+            "not_integrated",
+        }:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"/result_sets/{index}/methods_integration",
+                    "multiple evaluation design components lack a resolved methods "
+                    "integration classification",
+                )
+            )
+    return issues
+
+
 def rq2_semantic_issues(
     document: Document,
     indexes: Mapping[str, Mapping[str, Location]],
@@ -2963,21 +3117,32 @@ def rq2_semantic_issues(
                 )
             )
 
-        role = coded_value(finding.get("role"))
-        if role in {"implementation_burden", "mixed_trade_off"} and not (
-            linked_locations(
-                finding.get("linked_implementation_record_ids"),
-                indexes["implementation_record"],
-                containing_report=document,
-            )
+        roles = coded_values(finding.get("roles"))
+        if "implementation_burden" in roles and not linked_locations(
+            finding.get("linked_implementation_record_ids"),
+            indexes["implementation_record"],
+            containing_report=document,
         ):
             issues.append(
                 Issue(
                     str(document.path),
                     f"{base}/linked_implementation_record_ids",
-                    f"{role} finding has no implementation record in the report",
+                    "implementation burden finding has no implementation record "
+                    "in the report",
                 )
             )
+
+        for direction_index, component in enumerate(
+            rows(finding.get("author_claimed_directions"))
+        ):
+            if component.get("direction") == "unsupported":
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"{base}/author_claimed_directions/{direction_index}/direction",
+                        "unsupported is reserved for evidence-supported directions",
+                    )
+                )
 
         if (
             coded_value(finding.get("outcome_category")) == "eps_reliability"
@@ -3447,13 +3612,17 @@ def procedural_profile_issues(document: Document) -> list[Issue]:
     records = rows(reuse.get("report_reuse_records"))
     generic_records: list[Mapping[str, Any]] = []
     for record in records:
-        generality = coded_value(record.get("artifact_generality"))
-        artifact_type = coded_value(record.get("artifact_type"))
-        if generality in {
+        generalities = {
+            scope.get("generality")
+            for scope in rows(record.get("artifact_generality_scopes"))
+            if isinstance(scope.get("generality"), str)
+        }
+        artifact_types = coded_values(record.get("artifact_types"))
+        if generalities & {
             "product_family",
             "mission_class_reference",
             "platform_agnostic",
-        } or artifact_type == "reference_or_template_model":
+        } or "reference_or_template_model" in artifact_types:
             generic_records.append(record)
     generic_record_ids = {
         item.get("report_reuse_record_id")
@@ -3676,13 +3845,13 @@ def reuse_specification_deficiencies(
 
 def application_deficiencies(
     application: Mapping[str, Any],
-    allowed_objects: set[str],
+    required_objects: set[str],
     require_independence: bool,
 ) -> list[str]:
     deficiencies: list[str] = []
-    application_object = coded_value(application.get("application_object"))
-    if application_object not in allowed_objects:
-        deficiencies.append("application object")
+    application_objects = coded_values(application.get("application_objects"))
+    if not required_objects.issubset(application_objects):
+        deficiencies.append("application objects")
 
     setting = application.get("setting", {})
     tailoring = application.get("tailoring_or_adaptation", {})
@@ -3781,7 +3950,7 @@ def application_deficiencies(
 def qualifying_application_exists(
     application_ids: Any,
     index: Mapping[str, Location],
-    allowed_objects: set[str],
+    required_objects: set[str],
     require_independence: bool,
     containing_report: Document | None = None,
 ) -> tuple[bool, list[str]]:
@@ -3800,7 +3969,7 @@ def qualifying_application_exists(
             continue
         deficiencies = application_deficiencies(
             location.node,
-            allowed_objects,
+            required_objects,
             require_independence,
         )
         if not deficiencies:
@@ -3866,7 +4035,7 @@ def reuse_level_issues(
                             "R3_reuse_demonstrated",
                             "R4_independent_reuse_demonstrated",
                         },
-                        ARTIFACT_APPLICATION_OBJECTS,
+                        {"artifact"},
                         "artifact",
                     ),
                     (
@@ -3880,7 +4049,7 @@ def reuse_level_issues(
                             "M3_method_reuse_demonstrated",
                             "M4_independent_method_reuse_demonstrated",
                         },
-                        METHOD_APPLICATION_OBJECTS,
+                        {"method"},
                         "method",
                     ),
                     (
@@ -3894,7 +4063,7 @@ def reuse_level_issues(
                             "W3_workflow_reuse_demonstrated",
                             "W4_independent_workflow_reuse_demonstrated",
                         },
-                        WORKFLOW_APPLICATION_OBJECTS,
+                        {"workflow"},
                         "workflow",
                     ),
                 ):
@@ -3959,7 +4128,7 @@ def reuse_level_issues(
                 valid, deficiencies = qualifying_application_exists(
                     assessment.get("linked_tailoring_application_ids"),
                     indexes["tailoring_application"],
-                    ARTIFACT_APPLICATION_OBJECTS,
+                    {"artifact"},
                     level == "R4_independent_reuse_demonstrated",
                 )
                 if not valid:
@@ -4218,6 +4387,8 @@ def main() -> int:
             issues.extend(family_lead_issues(document))
             issues.extend(report_source_file_issues(document))
             issues.extend(reviewer_derived_script_issues(document))
+            issues.extend(automation_profile_issues(document, indexes))
+            issues.extend(evaluation_design_issues(document))
             issues.extend(rq2_semantic_issues(document, indexes))
             issues.extend(rq3_semantic_issues(document, indexes))
             issues.extend(procedural_profile_issues(document))

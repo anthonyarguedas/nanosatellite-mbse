@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction-tailoring-application.schema.json",
-  "title": "SLR1 consolidated tailoring application schema v2",
+  "title": "SLR1 consolidated tailoring application schema v3",
   "$ref": "#/$defs/consolidatedTailoringApplication",
   "$defs": {
-    "crossConsolidatedApplicationObjectValue": {
+    "crossConsolidatedApplicationObjectsValue": {
       "type": "object",
       "allOf": [
         {
@@ -14,13 +14,20 @@
           "type": "object",
           "properties": {
             "value": {
-              "type": "string",
-              "enum": [
-                "artifact",
-                "artifact_and_method",
-                "artifact_and_workflow",
-                "artifact_method_and_workflow"
-              ]
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/applicationObjectCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "contains": {
+                "const": "artifact"
+              },
+              "not": {
+                "contains": {
+                  "const": "unclear"
+                }
+              }
             }
           },
           "required": [
@@ -588,7 +595,7 @@
           "type": "object",
           "properties": {
             "schema_version": {
-              "const": "slr1-extraction-tailoring-application/v2"
+              "const": "slr1-extraction-tailoring-application/v3"
             },
             "tailoring_application_id": {
               "$ref": "protocol-extraction.schema.json#/$defs/stableId"
@@ -604,8 +611,8 @@
               "minItems": 1,
               "uniqueItems": true
             },
-            "application_object": {
-              "$ref": "#/$defs/crossConsolidatedApplicationObjectValue"
+            "application_objects": {
+              "$ref": "#/$defs/crossConsolidatedApplicationObjectsValue"
             },
             "linked_model_generation_method_ids": {
               "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
@@ -655,7 +662,7 @@
             "tailoring_application_id",
             "lineage_id",
             "linked_report_application_ids",
-            "application_object",
+            "application_objects",
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
             "linked_report_ids",
@@ -670,14 +677,13 @@
         {
           "if": {
             "properties": {
-              "application_object": {
+              "application_objects": {
                 "type": "object",
                 "properties": {
                   "value": {
-                    "enum": [
-                      "artifact_and_method",
-                      "artifact_method_and_workflow"
-                    ]
+                    "contains": {
+                      "const": "method"
+                    }
                   }
                 },
                 "required": [
@@ -686,7 +692,7 @@
               }
             },
             "required": [
-              "application_object"
+              "application_objects"
             ]
           },
           "then": {
@@ -701,14 +707,13 @@
         {
           "if": {
             "properties": {
-              "application_object": {
+              "application_objects": {
                 "type": "object",
                 "properties": {
                   "value": {
-                    "enum": [
-                      "artifact_and_workflow",
-                      "artifact_method_and_workflow"
-                    ]
+                    "contains": {
+                      "const": "workflow"
+                    }
                   }
                 },
                 "required": [
@@ -717,7 +722,7 @@
               }
             },
             "required": [
-              "application_object"
+              "application_objects"
             ]
           },
           "then": {
