@@ -37,7 +37,7 @@ Before the first final primary-evidence search, conduct the bounded [prior-secon
 
 ## Review objective
 
-The review will map how MBSE represents and supports nanosatellite EPS work, including typed EPS elements and requirements, structured model representations and relationships among views, dynamic behavior occurrences, exchanges, dependencies, boundaries, coverage, viewpoints and abstraction, tools and equipment, model generation methods, engineering workflows, procedural reporting detail, inputs and assumptions, implementation, artifact, method, and workflow reuse or tailoring, reported outcomes and burdens, model and digital twin assurance, and links from virtual V&V to physical verification.
+The review will map how MBSE represents and supports nanosatellite EPS work, including typed EPS elements and requirements, structured model representations and relationships among views, dynamic behavior occurrences, exchanges, dependencies, boundaries, coverage, viewpoints and abstraction, tools and equipment, model generation methods, engineering workflows, procedural reporting detail, inputs and assumptions, implementation, artifact, method, and workflow reuse or tailoring, reported outcomes and burdens, and links to V&V before physical integration or testing.
 
 ## PICOC
 
@@ -45,7 +45,7 @@ The review will map how MBSE represents and supports nanosatellite EPS work, inc
 |---|---|---|---|---|---|
 | EPSs for orbital CubeSat or nanosatellite-class missions | EPS-primary MBSE or a clear embedded EPS model thread | Not required | Typed EPS functions, behaviors, actors, subsystems, logical and physical components, interfaces, modes, scenarios, and requirements; structured context, requirement, use-case, sequence, state, activity, structural, interface, data-flow, energy-flow, parametric, allocation, V&V, and result representations; behavior occurrences and relationships among views; exchanges, dependencies, coverage, viewpoints, boundaries, architecture, decomposition visibility, and abstraction; model generation method, engineering workflow, modeling language, and typed tools or equipment; how generic or reference models were derived; why the model is used; method and model inputs and assumptions; artifact identity and lineage; artifact, method, and workflow applicability, reusable core, variation points, tailoring or adaptation rules and steps, demonstrated uses and checks, reuse levels, and required roles and resources | Nanosatellite systems engineering throughout the lifecycle | RQ1 |
 | EPSs for orbital CubeSat or nanosatellite-class missions | EPS-linked MBSE artifacts, analyses, and model-enabled work | When reported: document-based practice, manual analysis, another toolchain, an earlier mission or model, or another clear comparator | Beneficial, null, mixed, or adverse EPS-linked technical and process outcomes, plus implementation burdens. Priority topics are reliability and mission assurance, reproducibility and reuse, and integration and interoperability | Nanosatellite development and decision-making | RQ2 |
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-specific or system-wide but EPS-linked model assurance and model-based V&V before physical integration or test | When reported: separate or document-based V&V, manual checking, another method, or no comparator | Model and digital twin completeness, correctness, consistency, conformance, fidelity, and currency assessments. V&V scope and object, linked activity sequence, verification level, test phase, executable checks, results, virtual integration, and continuity from model to physical test | Analysis and V&V before physical work, with linked downstream physical activities retained for continuity | RQ3 |
+| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-specific or system-wide but EPS-linked model-based V&V before physical integration or test | When reported: separate or document-based V&V, manual checking, another method, or no comparator | V&V scope and object, links to V&V artifacts, executable checks, results, virtual integration, and continuity from model to test | Analysis and V&V before physical work, with later physical links recorded separately | RQ3 |
 
 ## Research questions
 
@@ -53,7 +53,7 @@ The review will map how MBSE represents and supports nanosatellite EPS work, inc
 
 2. **RQ2** What technical or process outcomes and implementation burdens do sources attribute to EPS-linked MBSE? For each attribution, how does the source say the MBSE artifact or activity led to the outcome or burden, and what evidence supports that claimed link?
 
-3. **RQ3** How is EPS-linked MBSE connected to model and digital twin assurance and to V&V before physical integration or testing? What evidence is reported for model completeness and correctness, pass/fail criteria, activity sequence, verification level, test phase, execution, results, and model-to-test continuity?
+3. **RQ3** How is EPS-linked MBSE connected to V&V before physical integration or testing, and what evidence is reported for its pass/fail criteria, execution, results, and model-to-test continuity?
 
 ### Report eligibility versus question contribution
 
@@ -119,7 +119,7 @@ Use the following linked units:
 7. **Reusable EPS artifact lineage:** one identifiable base artifact and its source-supported versions or derived instances, resolved in the cross-report pass and represented by a separate lineage-level extraction.
 8. **Reuse or tailoring application:** one use of an artifact lineage, model generation method, engineering workflow, or a reported combination in one target setting, including a justified unchanged adoption. The first pass keeps each report's account in a report-level application row. The cross-report pass consolidates repeated reports of artifact-containing applications. Method-only, workflow-only, and method-and-workflow applications remain source-bounded report-level records.
 9. **RQ2 finding:** one materially distinct outcome, burden, trade-off, or direction. Split only when evidence, scope, actor, scenario, or direction differs materially.
-10. **RQ3 activity:** one target, method, and scenario activity. Keep several criteria and verdicts together when method and scenario are shared. Link successive virtual and physical stages through predecessor, workflow-activity, artifact, configuration, and relationship IDs.
+10. **RQ3 activity:** one target–method–scenario activity. Keep several criteria and verdicts together when method and scenario are shared.
 
 PRISMA identification and selection counts remain at record and report level. Report separate analytic denominators for report families, reports, EPS cases, model representations, model generation methods, engineering workflows, artifact lineages, report-level applications by application object, consolidated artifact-containing applications, direct RQ2 findings, and direct RQ3 activities. A report count is not a count of independent implementations or transfers.
 
