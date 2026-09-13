@@ -33,10 +33,12 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 
 ### RQ3
 
-- Use only activities with `direct_synthesis = yes` for direct conclusions. Present system-wide co-occurrence and other near misses separately.
-- Map target, bridge, linked model representations, V&V object, method, criterion, lifecycle stage, execution, cumulative status, result, evidence basis, support, and later physical continuity.
+- Use only activities with `direct_synthesis = yes` for direct conclusions. Present system-wide co-occurrence, downstream physical activities retained only for continuity, and other near misses separately.
+- Map each linked activity sequence from its EPS target, requirements, tailored model artifact and configuration through its workflow activities, V&V objects, verification levels, test phases, environments, methods, criteria, execution settings, hardware presence, results, discrepancies, cumulative status, and model-to-test closure.
+- Compare model and digital twin assurance by target type, model role, assessment aspect, assessment method, declared completeness denominator, correctness or validation oracle, result, evidence basis, and support.
+- Compare the controlled arrays by their individual values and reported combinations. Do not collapse combinations into a `multiple` category.
 - Keep EPS-specific and system-wide EPS-linked activities separate.
-- Distinguish execution from validation and model-to-test closure.
+- Distinguish model verification, model validation, system or design verification, system or design validation, virtual execution, physical execution, and model-to-test closure.
 - Record comparator adequacy and rival explanations only for comparative or causal V&V-effectiveness claims.
 
 ### Cross-cutting safeguards

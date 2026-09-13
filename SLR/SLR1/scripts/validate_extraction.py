@@ -63,6 +63,28 @@ NON_ARTIFACT_APPLICATION_OBJECTS = {
     "workflow",
     "method_and_workflow",
 }
+MODEL_ASSESSMENT_TARGET_TYPES = {
+    "mbse_model_artifact",
+    "digital_twin",
+    "model_configuration_or_baseline",
+    "model_transformation_or_generator",
+    "model_representation_or_view",
+}
+COMPLETENESS_ASSESSMENT_ASPECTS = {
+    "declared_scope_completeness",
+    "requirements_coverage",
+    "traceability_completeness",
+    "viewpoint_coverage",
+    "interface_coverage",
+    "scenario_or_mode_coverage",
+    "data_or_parameter_completeness",
+}
+TARGET_HARDWARE_PRESENCE = {
+    "representative_target_hardware",
+    "actual_target_component",
+    "actual_target_eps",
+    "integrated_spacecraft_hardware",
+}
 PAGE_MARKER = re.compile(r"<!--\s*PDF_PAGE:\s*([1-9][0-9]*)\s*-->")
 SCREENING_SCHEMA = "slr1-screening-candidates/v2"
 SCREENING_ID_PREFIXES = {
@@ -189,6 +211,8 @@ DIRECT_REFERENCE_FIELDS = {
     "trade_off_rq2_finding_ids": "rq2_finding",
     "linked_rq3_activity_ids": "rq3_activity",
     "assurance_rq3_activity_ids": "rq3_activity",
+    "predecessor_rq3_activity_ids": "rq3_activity",
+    "linked_coverage_item_ids": "coverage_item",
     "linked_report_reuse_record_ids": "report_reuse_record",
     "linked_report_application_ids": "report_application",
     "linked_tailoring_application_ids": "tailoring_application",
@@ -1431,12 +1455,96 @@ def tailoring_adaptation_reference_issues(
     return issues
 
 
+def application_assurance_trace_issues(
+    document: Document,
+    base: str,
+    application: Mapping[str, Any],
+    indexes: Mapping[str, Mapping[str, Location]],
+    *,
+    same_report: bool,
+) -> list[Issue]:
+    """Link post-tailoring assurance to the exact artifact and configuration."""
+
+    application_object = coded_value(application.get("application_object"))
+    result = application.get("result_and_assurance", {})
+    if (
+        application_object not in ARTIFACT_APPLICATION_OBJECTS
+        or not isinstance(result, Mapping)
+    ):
+        return []
+
+    assurance_ids = result.get("assurance_rq3_activity_ids")
+    if not isinstance(assurance_ids, list):
+        return []
+
+    resulting_artifact_ids = result.get("resulting_model_artifact_ids")
+    configuration_ids = result.get("configuration_entity_ids")
+    issues: list[Issue] = []
+    for assurance_index, activity_id in enumerate(assurance_ids):
+        location = indexes["rq3_activity"].get(activity_id)
+        if location is None:
+            continue
+        issue_pointer = (
+            f"{base}/result_and_assurance/"
+            f"assurance_rq3_activity_ids/{assurance_index}"
+        )
+        if same_report and location.document is not document:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    issue_pointer,
+                    "report-level assurance activity belongs to another report",
+                )
+            )
+            continue
+
+        activity_artifact_ids = location.node.get("linked_model_artifact_ids")
+        if (
+            isinstance(resulting_artifact_ids, list)
+            and resulting_artifact_ids
+            and not (
+                isinstance(activity_artifact_ids, list)
+                and set(resulting_artifact_ids) & set(activity_artifact_ids)
+            )
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    issue_pointer,
+                    "post-tailoring assurance activity does not link the resulting "
+                    "model artifact",
+                )
+            )
+
+        activity_configuration_ids = location.node.get(
+            "linked_configuration_entity_ids"
+        )
+        if (
+            isinstance(configuration_ids, list)
+            and configuration_ids
+            and not (
+                isinstance(activity_configuration_ids, list)
+                and set(configuration_ids) & set(activity_configuration_ids)
+            )
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    issue_pointer,
+                    "post-tailoring assurance activity does not link the resulting "
+                    "model configuration",
+                )
+            )
+    return issues
+
+
 def report_reference_issues(
     document: Document,
     indexes: Mapping[str, Mapping[str, Location]],
 ) -> list[Issue]:
     issues = record_reference_issues(document, indexes)
     data = document.data
+    workflow_activity_parent_ids: dict[str, str] = {}
     mbse = data.get("mbse_approach", {})
     if isinstance(mbse, Mapping):
         for index, row in enumerate(rows(mbse.get("model_generation_methods"))):
@@ -1518,10 +1626,16 @@ def report_reference_issues(
                 for activity in activities
                 if isinstance(activity.get("workflow_activity_id"), str)
             }
+            workflow_id = row.get("workflow_id")
             for activity_index, activity in enumerate(activities):
                 activity_base = (
                     f"{workflow_base}/workflow_activities/{activity_index}"
                 )
+                workflow_activity_id = activity.get("workflow_activity_id")
+                if isinstance(workflow_id, str) and isinstance(
+                    workflow_activity_id, str
+                ):
+                    workflow_activity_parent_ids[workflow_activity_id] = workflow_id
                 check_field_references(
                     document,
                     activity_base,
@@ -1614,8 +1728,12 @@ def report_reference_issues(
             ("linked_implementation_record_ids", "implementation_record"),
         ),
         "rq3_activities": (
-            ("model_artifact_id", "model_artifact"),
+            ("linked_model_artifact_ids", "model_artifact"),
             ("linked_workflow_ids", "workflow"),
+            ("linked_workflow_activity_ids", "workflow_activity"),
+            ("linked_configuration_entity_ids", "entity"),
+            ("linked_coverage_item_ids", "coverage_item"),
+            ("predecessor_rq3_activity_ids", "rq3_activity"),
             ("linked_result_set_ids", "result_set"),
             ("linked_result_criterion_ids", "result_criterion"),
             ("linked_result_output_ids", "result_output"),
@@ -1632,6 +1750,58 @@ def report_reference_issues(
                 indexes,
                 issues,
             )
+
+    rq3_rows = rows(data.get("rq3_activities"))
+    local_rq3_ids = {
+        activity.get("rq3_activity_id")
+        for activity in rq3_rows
+        if isinstance(activity.get("rq3_activity_id"), str)
+    }
+    for activity_index, activity in enumerate(rq3_rows):
+        linked_workflow_ids = activity.get("linked_workflow_ids")
+        linked_workflow_id_set = (
+            set(linked_workflow_ids)
+            if isinstance(linked_workflow_ids, list)
+            else set()
+        )
+        linked_workflow_activity_ids = activity.get("linked_workflow_activity_ids")
+        if isinstance(linked_workflow_activity_ids, list):
+            for workflow_activity_index, workflow_activity_id in enumerate(
+                linked_workflow_activity_ids
+            ):
+                parent_id = workflow_activity_parent_ids.get(workflow_activity_id)
+                if parent_id is not None and parent_id not in linked_workflow_id_set:
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"/rq3_activities/{activity_index}/"
+                            f"linked_workflow_activity_ids/{workflow_activity_index}",
+                            "RQ3 workflow activity does not belong to a linked workflow",
+                        )
+                    )
+
+        predecessors = activity.get("predecessor_rq3_activity_ids")
+        if not isinstance(predecessors, list):
+            continue
+        for predecessor_index, identifier in enumerate(predecessors):
+            if identifier not in local_rq3_ids:
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"/rq3_activities/{activity_index}/"
+                        f"predecessor_rq3_activity_ids/{predecessor_index}",
+                        f"RQ3 activity ID {identifier!r} is not in the same report",
+                    )
+                )
+            elif identifier == activity.get("rq3_activity_id"):
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"/rq3_activities/{activity_index}/"
+                        f"predecessor_rq3_activity_ids/{predecessor_index}",
+                        "RQ3 activity cannot precede itself",
+                    )
+                )
 
     for set_index, result_set in enumerate(rows(data.get("result_sets"))):
         set_pointer = f"/result_sets/{set_index}"
@@ -1784,6 +1954,15 @@ def report_reference_issues(
                     indexes,
                     issues,
                 )
+                issues.extend(
+                    application_assurance_trace_issues(
+                        document,
+                        base,
+                        application,
+                        indexes,
+                        same_report=True,
+                    )
+                )
 
     profile = data.get("procedural_evidence_profile", {})
     if isinstance(profile, Mapping):
@@ -1909,6 +2088,15 @@ def cross_record_reference_issues(
                 ),
                 indexes,
                 issues,
+            )
+            issues.extend(
+                application_assurance_trace_issues(
+                    document,
+                    "",
+                    data,
+                    indexes,
+                    same_report=False,
+                )
             )
     elif document.kind == "audit":
         if "report_id" in data:
@@ -2814,6 +3002,18 @@ def rq3_semantic_issues(
         base = f"/rq3_activities/{index}"
         status_value = activity.get("status")
         statuses = set(status_value) if isinstance(status_value, list) else set()
+        target_type_value = coded_value(activity.get("target_types"))
+        target_types = (
+            set(target_type_value) if isinstance(target_type_value, list) else set()
+        )
+        assessment_aspect_value = coded_value(
+            activity.get("model_assessment_aspects")
+        )
+        assessment_aspects = (
+            set(assessment_aspect_value)
+            if isinstance(assessment_aspect_value, list)
+            else set()
+        )
 
         if "proposed" in statuses:
             proposed_requirements = (
@@ -2824,8 +3024,8 @@ def rq3_semantic_issues(
                     "EPS target",
                 ),
                 (
-                    has_recorded_content(activity.get("model_artifact_id")),
-                    "model_artifact_id",
+                    has_recorded_content(activity.get("linked_model_artifact_ids")),
+                    "linked_model_artifact_ids",
                     "model artifact",
                 ),
                 (
@@ -2859,6 +3059,16 @@ def rq3_semantic_issues(
         outputs = linked_locations(
             activity.get("linked_result_output_ids"),
             indexes["result_output"],
+            containing_report=document,
+        )
+        coverage_items = linked_locations(
+            activity.get("linked_coverage_item_ids"),
+            indexes.get("coverage_item", {}),
+            containing_report=document,
+        )
+        model_artifacts = linked_locations(
+            activity.get("linked_model_artifact_ids"),
+            indexes.get("model_artifact", {}),
             containing_report=document,
         )
         if "prepared_or_generated" in statuses and not any(
@@ -2905,6 +3115,18 @@ def rq3_semantic_issues(
                     )
                 )
 
+        if "executed_physical" in statuses and coded_value(
+            activity.get("hardware_present")
+        ) not in TARGET_HARDWARE_PRESENCE:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"{base}/hardware_present",
+                    "executed_physical milestone has no representative or actual "
+                    "target hardware",
+                )
+            )
+
         if "downstream_physical_link" in statuses and not (
             isinstance(activity.get("later_physical_relationship_ids"), list)
             and activity["later_physical_relationship_ids"]
@@ -2928,11 +3150,120 @@ def rq3_semantic_issues(
                 )
             )
 
-        normalized_object = coded_value(activity.get("normalized_vv_object"))
-        if normalized_object in {
+        predecessors = activity.get("predecessor_rq3_activity_ids")
+        if isinstance(predecessors, list) and predecessors:
+            control_flow_relationships = linked_locations(
+                activity.get("control_flow_relationship_ids"),
+                indexes.get("relationship", {}),
+                containing_report=document,
+            )
+            if not control_flow_relationships:
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"{base}/control_flow_relationship_ids",
+                        "ordered RQ3 activity lacks a control-flow relationship",
+                    )
+                )
+            else:
+                current_ref = f"rq3_activity:{activity.get('rq3_activity_id')}"
+                for predecessor_index, predecessor_id in enumerate(predecessors):
+                    predecessor_ref = f"rq3_activity:{predecessor_id}"
+                    if not any(
+                        location.node.get("relationship_type") == "precedes"
+                        and location.node.get("source_ref") == predecessor_ref
+                        and location.node.get("target_ref") == current_ref
+                        for location in control_flow_relationships
+                    ):
+                        issues.append(
+                            Issue(
+                                str(document.path),
+                                f"{base}/predecessor_rq3_activity_ids/"
+                                f"{predecessor_index}",
+                                "RQ3 predecessor lacks a matching precedes "
+                                "relationship",
+                            )
+                        )
+
+        resolved_assessment_aspects = assessment_aspects - {"unclear"}
+        if resolved_assessment_aspects and not (
+            target_types & MODEL_ASSESSMENT_TARGET_TYPES
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"{base}/target_types",
+                    "model assessment aspects lack a model, representation, "
+                    "configuration, transformation, or digital-twin target",
+                )
+            )
+        if (
+            resolved_assessment_aspects & COMPLETENESS_ASSESSMENT_ASPECTS
+            and statuses & {"prepared_or_generated", "result_reported"}
+            and not criteria
+            and not coverage_items
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"{base}/linked_coverage_item_ids",
+                    "executed or prepared completeness assessment lacks a linked "
+                    "criterion or coverage denominator",
+                )
+            )
+        if "digital_twin" in target_types and model_artifacts and not any(
+            isinstance(coded_value(location.node.get("model_roles")), list)
+            and "digital_twin" in coded_value(location.node.get("model_roles"))
+            for location in model_artifacts
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"{base}/linked_model_artifact_ids",
+                    "digital twin target lacks a linked artifact with the digital twin "
+                    "model role",
+                )
+            )
+        if (
+            "model_configuration_or_baseline" in target_types
+            and not has_recorded_content(
+                activity.get("linked_configuration_entity_ids")
+            )
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"{base}/linked_configuration_entity_ids",
+                    "model configuration or baseline target lacks a configuration link",
+                )
+            )
+        if (
+            "model_representation_or_view" in target_types
+            and not has_recorded_content(
+                activity.get("linked_model_representation_ids")
+            )
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"{base}/linked_model_representation_ids",
+                    "model representation or view target lacks a representation link",
+                )
+            )
+
+        normalized_object_value = coded_value(
+            activity.get("normalized_vv_objects")
+        )
+        normalized_objects = (
+            set(normalized_object_value)
+            if isinstance(normalized_object_value, list)
+            else set()
+        )
+        validation_objects = normalized_objects & {
             "model_validation",
             "system_or_design_validation",
-        } and not any(
+        }
+        if validation_objects and not any(
             (
                 isinstance(location.node.get("authority_check_ids"), list)
                 and bool(location.node["authority_check_ids"])
@@ -2948,7 +3279,8 @@ def rq3_semantic_issues(
                 Issue(
                     str(document.path),
                     f"{base}/linked_result_criterion_ids",
-                    f"{normalized_object} has no linked criterion authority reason",
+                    f"{', '.join(sorted(validation_objects))} has no linked "
+                    "criterion authority reason",
                 )
             )
     return issues

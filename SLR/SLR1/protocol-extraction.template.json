@@ -1,5 +1,5 @@
 {
-  "schema_version": "slr1-extraction/v2",
+  "schema_version": "slr1-extraction/v3",
   "identity": {
     "report_id": "<report-id>",
     "screening_record_id": "<screening-record-id>",
@@ -1490,6 +1490,16 @@
           ]
         },
         "artifact_kind": "persistent_model",
+        "model_roles": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "value": [
+            "mbse_system_model"
+          ]
+        },
         "linked_resource_ids": [
           "<resource-id>"
         ],
@@ -3857,6 +3867,9 @@
         "<citation-id>"
       ],
       "rq3_activity_id": "<rq3-activity-id>",
+      "predecessor_rq3_activity_ids": {
+        "status": "none"
+      },
       "direct_synthesis": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -3882,13 +3895,16 @@
           "entity:<entity-id>"
         ]
       },
-      "target_type": {
+      "target_types": {
         "coding_confidence": "high",
         "provenance": "source_reported",
         "citation_ids": [
           "<citation-id>"
         ],
-        "value": "unclear"
+        "value": [
+          "mbse_model_artifact",
+          "eps_requirement_or_criterion"
+        ]
       },
       "source_requirement_or_criterion_id": "<source requirement or criterion id>",
       "linked_eps_requirement_ids": [
@@ -3900,12 +3916,23 @@
       "linked_eps_model_bridge_ids": [
         "<eps-model-bridge-id>"
       ],
-      "model_artifact_id": "<model-artifact-id>",
+      "linked_model_artifact_ids": [
+        "<model-artifact-id>"
+      ],
       "linked_model_representation_ids": [
         "<model-representation-id>"
       ],
+      "linked_configuration_entity_ids": [
+        "<entity-id>"
+      ],
+      "linked_coverage_item_ids": [
+        "<coverage-item-id>"
+      ],
       "linked_workflow_ids": [
         "<workflow-id>"
+      ],
+      "linked_workflow_activity_ids": [
+        "<workflow-activity-id>"
       ],
       "linked_tool_ids": [
         "<tool-id>"
@@ -3928,13 +3955,16 @@
         ],
         "value": "unclear"
       },
-      "normalized_vv_object": {
+      "normalized_vv_objects": {
         "coding_confidence": "high",
         "provenance": "source_reported",
         "citation_ids": [
           "<citation-id>"
         ],
-        "value": "unclear"
+        "value": [
+          "model_verification",
+          "model_validation"
+        ]
       },
       "normalized_vv_object_reason": {
         "coding_confidence": "high",
@@ -3953,6 +3983,28 @@
           "entity:<entity-id>"
         ]
       },
+      "model_assessment_aspects": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": [
+          "requirements_coverage",
+          "semantic_correctness"
+        ]
+      },
+      "model_assessment_method_types": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": [
+          "trace_or_coverage_analysis",
+          "stakeholder_or_expert_review"
+        ]
+      },
       "execution_settings": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -3969,8 +4021,31 @@
         "citation_ids": [
           "<citation-id>"
         ],
-        "value": "unclear"
+        "value": "no_hardware"
       },
+      "verification_levels": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": [
+          "eps_subsystem"
+        ]
+      },
+      "test_phases": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": [
+          "development_verification"
+        ]
+      },
+      "test_environment_refs": [
+        "entity:<entity-id>"
+      ],
       "lifecycle_stage": {
         "coding_confidence": "high",
         "provenance": "source_reported",
@@ -4087,7 +4162,10 @@
       ],
       "closure_check_ids": [
         "<check-id>"
-      ]
+      ],
+      "control_flow_relationship_ids": {
+        "status": "none"
+      }
     }
   ],
   "reuse": {

@@ -94,6 +94,23 @@ class TemplateTests(unittest.TestCase):
 
         self.assertEqual(evidence_issues(report, indexes), [])
 
+    def test_rq3_comparable_dimensions_are_arrays_without_multiple(self) -> None:
+        schemas, registry = load_schemas()
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        activity = template["rq3_activities"][0]
+        self.assertIsInstance(activity["target_types"]["value"], list)
+        self.assertIsInstance(activity["normalized_vv_objects"]["value"], list)
+        self.assertIsInstance(activity["verification_levels"]["value"], list)
+        self.assertIsInstance(activity["test_phases"]["value"], list)
+        activity["target_types"]["value"] = ["multiple"]
+        issues = schema_issues(
+            [Document("report", template_path, template)], schemas, registry
+        )
+        self.assertTrue(issues)
+
 
 class NormalizationTests(unittest.TestCase):
     def test_unresolved_typed_record_reference_is_rejected(self) -> None:
@@ -131,7 +148,7 @@ class NormalizationTests(unittest.TestCase):
         )
         self.assertTrue(normalization_issues(report))
 
-    def test_plain_analytic_row_text_fails_the_v2_schema(self) -> None:
+    def test_plain_analytic_row_text_fails_the_v3_schema(self) -> None:
         schemas, registry = load_schemas()
         template_path = SCHEMA_PATHS["report"].with_name(
             "protocol-extraction.template.json"
@@ -467,13 +484,13 @@ class RqTests(unittest.TestCase):
                 "executed_virtual",
             ],
             "eps_target": "EPS output",
-            "model_artifact_id": "model-1",
+            "linked_model_artifact_ids": ["model-1"],
             "explicit_model_to_vv_bridge": "verify link",
             "method": "simulation",
             "execution_settings": value(["mil"]),
             "linked_result_criterion_ids": ["criterion-1"],
             "linked_result_output_ids": ["output-1"],
-            "normalized_vv_object": value("model_validation"),
+            "normalized_vv_objects": value(["model_validation"]),
         }
         report = Document(
             "report",
@@ -496,6 +513,100 @@ class RqTests(unittest.TestCase):
             "result_output": {"output-1": Location(report, "/output", output)},
         }
         self.assertEqual(rq3_semantic_issues(report, indexes), [])
+
+    def test_rq3_model_assessment_uses_comparable_arrays(self) -> None:
+        activity = {
+            "target_types": value(["mbse_model_artifact", "digital_twin"]),
+            "model_assessment_aspects": value(
+                ["requirements_coverage", "synchronization_or_currency"]
+            ),
+            "normalized_vv_objects": value(
+                ["model_verification", "model_validation"]
+            ),
+            "linked_model_artifact_ids": ["model-1"],
+            "eps_target": "EPS digital twin",
+            "explicit_model_to_vv_bridge": "model quality check",
+            "method": "coverage and synchronization assessment",
+            "linked_result_criterion_ids": ["criterion-1"],
+            "status": ["proposed", "prepared_or_generated"],
+        }
+        report = Document(
+            "report",
+            Path("report.json"),
+            {"rq3_activities": [activity]},
+        )
+        criterion = {
+            "source_criterion_or_requirement_id": "REQ-1",
+            "why_criterion_or_oracle_is_authoritative_for_intended_use": value(
+                "Mission requirement"
+            ),
+        }
+        indexes = {
+            "result_criterion": {
+                "criterion-1": Location(report, "/criterion", criterion)
+            },
+            "result_output": {},
+            "coverage_item": {},
+        }
+        self.assertEqual(rq3_semantic_issues(report, indexes), [])
+
+    def test_rq3_physical_execution_requires_target_hardware(self) -> None:
+        activity = {
+            "status": ["proposed", "result_reported", "executed_physical"],
+            "hardware_present": value("support_hardware_only"),
+            "linked_result_output_ids": ["output-1"],
+        }
+        report = Document(
+            "report",
+            Path("report.json"),
+            {"rq3_activities": [activity]},
+        )
+        indexes = {
+            "result_criterion": {},
+            "result_output": {
+                "output-1": Location(
+                    report,
+                    "/output",
+                    {"source_reported_value": "pass"},
+                )
+            },
+            "coverage_item": {},
+        }
+        issues = rq3_semantic_issues(report, indexes)
+        self.assertTrue(any("target hardware" in issue.message for issue in issues))
+        activity["hardware_present"] = value("actual_target_eps")
+        issues = rq3_semantic_issues(report, indexes)
+        self.assertFalse(any("target hardware" in issue.message for issue in issues))
+
+    def test_rq3_predecessor_has_matching_relationship(self) -> None:
+        activity = {
+            "rq3_activity_id": "activity-2",
+            "predecessor_rq3_activity_ids": ["activity-1"],
+            "control_flow_relationship_ids": ["relationship-1"],
+            "status": [],
+        }
+        report = Document(
+            "report",
+            Path("report.json"),
+            {"rq3_activities": [activity]},
+        )
+        relationship = {
+            "relationship_type": "precedes",
+            "source_ref": "rq3_activity:activity-1",
+            "target_ref": "rq3_activity:activity-2",
+        }
+        indexes = {
+            "result_criterion": {},
+            "result_output": {},
+            "coverage_item": {},
+            "relationship": {
+                "relationship-1": Location(report, "/relationship", relationship)
+            },
+        }
+        self.assertEqual(rq3_semantic_issues(report, indexes), [])
+        relationship["target_ref"] = "rq3_activity:activity-3"
+        issues = rq3_semantic_issues(report, indexes)
+        self.assertTrue(any("matching precedes" in issue.message for issue in issues))
 
 
 class CrossRecordTests(unittest.TestCase):

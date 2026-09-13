@@ -2,7 +2,7 @@
 
 ## Extraction design
 
-Extraction is report-level by default. Create one extraction file for each included report. Use nested groups for EPS content, model representations, dynamic behavior occurrences, inputs, results, findings, and V&V activities. Create another EPS case section only when a report contains materially separate models, implementations, or evaluations that cannot be represented clearly together.
+Extraction is report-level by default. Create one extraction file for each included report. Use nested groups for EPS content, model representations, dynamic behavior occurrences, inputs, results, findings, and linked V&V and model assurance activities. Create another EPS case section only when a report contains materially separate models, implementations, or evaluations that cannot be represented clearly together.
 
 Keep report-family resolution and cross-report artifact identity pending during the first report pass. Record concise family leads. Fully extract every material EPS model representation, model generation method, engineering workflow, reusable artifact, reported lineage, reuse claim, and reuse or tailoring application described by each report, including relationships among views, dynamic behavior when shown, procedural reporting detail, and report-bounded artifact, method, and workflow reuse levels. Resolve families and cross-report artifact-lineage identity after all report extractions are available, then create separate lineage-level and consolidated artifact-containing application records.
 
@@ -57,7 +57,9 @@ Discovery events, search ranks, raw-file provenance, and screening history remai
 
 ### Linked normalization records
 
-Report records use `schema_version = slr1-extraction/v2`. Lineage and consolidated application records use their corresponding version 2 constants. Records without a version 2 marker are legacy records. Migrate them through source review before synthesis. Do not infer normalized links or typed values automatically from legacy prose.
+Report records use `schema_version = slr1-extraction/v3`. Lineage and consolidated application records continue to use their corresponding version 2 constants. A report record without the version 3 marker, or a cross-report record without its applicable version 2 marker, is a legacy record. Migrate it through source review before synthesis. Do not infer normalized links or typed values automatically from legacy prose.
+
+Version 3 replaces the RQ3 scalar fields `target_type` and `normalized_vv_object` with the arrays `target_types` and `normalized_vv_objects`. It replaces the single RQ3 `model_artifact_id` with `linked_model_artifact_ids`. It adds model roles, exact workflow-activity and configuration links, RQ3 predecessor links, verification levels, test phases, test environments, model assessment dimensions, and physical execution status. Revisit the source before migrating a version 2 `multiple` value and code every supported classification separately.
 
 From report context onward, every ordinary free text field preserves source wording and links its analytic meaning to stable records. An evidenced scalar keeps its source text in `value` and supplies `linked_record_refs`. A source text item inside a coded row or array supplies `source_text` and `linked_record_refs`. Each reference uses `record_kind:stable_id`, for example `quantity:quantity-004` or `eps_element:eps-element-012`. Use `normalization_status = not_for_synthesis` instead of links only for verbatim wording or a source label that will never be compared directly. Controlled values, stable IDs, paths, and evidence statuses keep their existing shapes.
 
@@ -68,7 +70,7 @@ Create each normalized fact once in `reference_catalog`, then link every use to 
 - `decisions` with a stable ID, decision type, lifecycle stage, status, alternatives, selected objects, and rationale.
 - `relationships` with typed source and target references. Use them for tool and data flows, concern relationships, boundaries, procedure control flow, derivation traces, physical links, differences, mechanisms, and before-and-after traces.
 - `rules` for entry, completion, decision, selection, inclusion, exclusion, normalization, abstraction, constraints, branching, iteration, unchanged use, tailoring, acceptance, quality, and missing-data handling.
-- `checks` for quality, completion, acceptance, verification, validation, assurance, genericity, and model-to-test closure. Link each check to its target, criterion, and result.
+- `checks` for quality, completeness, correctness, completion, acceptance, verification, validation, assurance, genericity, and model-to-test closure. Link each check to its target, criterion, and result. Use the RQ3 model assessment dimensions for comparable model and digital twin assurance classifications.
 - `resources` for repositories, model files, datasets, standards, publications, scripts, procedures, documentation, infrastructure, and licences. Store location and availability once.
 - `issues` for missing data, failures, exclusions, uncertainty, sensitivity, discrepancies, conflicts, limitations, future work, rival explanations, rework, and missing information. Link each issue to the affected records and its handling or resolution.
 
@@ -181,7 +183,7 @@ Record:
 - `modeling_languages`, preserving source-reported names and versions and linking each item through `linked_modeling_language_entity_ids`.
 - `tools_and_versions` as structured tool or equipment records using the rules below. Link providers through `provider_organization_entity_ids`.
 - toolchain and data flow, linked through `toolchain_entity_ids` and `toolchain_relationship_ids` whose endpoints are tool, resource, artifact, or entity IDs.
-- `model_artifacts` as nested rows containing `model_artifact_id`, canonical key, source name or description, version, controlled artifact kind, linked tool and resource IDs, per artifact availability, and parent artifact IDs.
+- `model_artifacts` as nested rows containing `model_artifact_id`, canonical key, source name or description, version, controlled artifact kind, controlled model roles, linked tool and resource IDs, per artifact availability, and parent artifact IDs.
 - modeled systems-engineering concerns plus `linked_concern_entity_ids`.
 - explicit relationships among concerns plus `concern_relationship_ids`.
 - system boundary source wording plus `system_boundary_relationship_ids` that identify inside and outside objects.
@@ -189,6 +191,16 @@ Record:
 A `model_artifact_id` identifies a persistent model, repository, package, file, export, script, dataset, documentation set, or other engineering asset. Use `artifact_kind` for this distinction. Give each artifact a review-wide `canonical_key` and source version identifier. Link its distribution location through `linked_resource_ids`, and record availability on the artifact. Use `parent_model_artifact_ids` only for source-supported containment or version structure. An individual diagram, table, matrix, tree, or generated view is a model representation within an EPS case. Link each representation to its containing artifacts. Create a separate model artifact for a representation only when the source identifies that representation as an independently persistent asset.
 
 Use `artifact_kind` values `persistent_model`, `repository`, `package`, `file`, `export`, `script`, `dataset`, `documentation`, `other`, or `unclear`.
+
+Record every applicable `model_roles` value for an artifact. Use an evidence status for an artifact that has no model role or whose role is unavailable. Use the roles as follows:
+
+- **`mbse_system_model`:** the artifact contains a structured systems model used for an MBSE purpose.
+- **`analysis_or_simulation_model`:** the artifact contains an analysis or simulation model.
+- **`digital_twin`:** the source identifies the artifact as a digital twin with a physical counterpart or operational data connection. Do not infer this role from a stand-alone simulation.
+- **`test_or_environment_model`:** the artifact represents a test environment, plant, stimulus, oracle, or other execution environment.
+- **`transformation_or_generator`:** the artifact transforms or generates persistent model content.
+- **`other`:** another source-described model role applies.
+- **`unclear`:** relevant evidence does not resolve the model role.
 
 Use these availability codes for report artifacts, EPS assets, reusable artifacts, procedure materials, workflows, and resulting tailored artifacts:
 
@@ -776,7 +788,7 @@ Use `direct_synthesis` for RQ2 findings and RQ3 activities as follows:
 - **`no`:** at least one required condition fails.
 - **`uncertain`:** relevant evidence exists, but at least one required condition cannot be resolved.
 
-Use one or more eligibility-reason codes for a retained near miss: `missing_eps_attribution`, `missing_target`, `missing_model_link`, `missing_vv_intent`, `generic_only`, `system_wide_cooccurrence`, `ambiguous_scope`, `other`, or `unclear`. Use only `not_applicable` for a directly synthesized row.
+Use one or more eligibility-reason codes for a retained near miss: `missing_eps_attribution`, `missing_target`, `missing_model_link`, `missing_vv_intent`, `generic_only`, `system_wide_cooccurrence`, `ambiguous_scope`, `downstream_physical_only`, `other`, or `unclear`. Use `downstream_physical_only` for a physical activity retained to complete a V&V chain that lies outside the direct prephysical scope of RQ3. Use only `not_applicable` for a directly synthesized row.
 
 Use claim kind as follows:
 
@@ -866,44 +878,105 @@ For burdens, link every applicable `implementation_record_id`. Keep all roles, a
 
 A power or energy margin does not become a reliability finding without an explicit reliability or assurance link. Model availability does not establish reproducibility. Co-occurring diagrams do not establish interoperability.
 
-### RQ3 V&V activities
+### RQ3 V&V and model assurance activities
 
-Create one activity row for each materially distinct target–method–scenario combination. Keep several criteria and verdicts in one activity when the method and scenario are shared. Retain relevant near misses with `direct_synthesis = no`.
+Create one activity row for each materially distinct target, method, and scenario combination. Keep several criteria and verdicts in one activity when the method and scenario are shared. Create separate linked rows for successive MIL, SIL, PIL, HIL, physical, commissioning, or operational stages. Capture activities that assess the completeness, correctness, consistency, conformance, fidelity, or currency of an EPS-linked MBSE model, transformation, configuration, representation, or digital twin itself. Retain relevant near misses with `direct_synthesis = no`.
+
+Reuse existing records to form the end-to-end thread. Represent a source-defined V&V campaign as a `verification_or_validation` or `end_to_end_engineering` workflow and link each RQ3 row to its exact workflow activities. Use report-application `linked_rq3_activity_ids` and `assurance_rq3_activity_ids` as the canonical links from tailoring to V&V. Use `target_refs`, model artifact links, configuration links, criteria, checks, and relationship records instead of copying their content into the activity.
 
 Record:
 
-- `rq3_activity_id`.
+- `rq3_activity_id` and `predecessor_rq3_activity_ids` for source-supported activity order.
+- `control_flow_relationship_ids` for the corresponding order, branch, iteration, or rework evidence.
 - `direct_synthesis`, using `yes`, `no`, or `uncertain` and the definitions under RQ2.
 - failed eligibility condition or uncertainty reason when applicable, plus one or more `eligibility_reason_codes`. Use `not_applicable` when direct synthesis is `yes`.
 - EPS target source wording plus typed `target_refs`.
-- `target_type`, using `eps_requirement_or_criterion`, `eps_model_element`, `eps_parameter_or_constraint`, `eps_mode_or_scenario`, `eps_interface_or_flow`, `eps_behavior_or_function`, `eps_component_or_architecture`, `eps_hazard_or_risk_control`, `system_target_traced_to_eps`, `multiple`, `other`, or `unclear`.
+- `target_types`, recording every applicable code from `eps_requirement_or_criterion`, `eps_model_element`, `eps_parameter_or_constraint`, `eps_mode_or_scenario`, `eps_interface_or_flow`, `eps_behavior_or_function`, `eps_component_or_architecture`, `eps_hazard_or_risk_control`, `system_target_traced_to_eps`, `mbse_model_artifact`, `digital_twin`, `model_configuration_or_baseline`, `model_transformation_or_generator`, `model_representation_or_view`, `other`, or `unclear`.
 - source requirement or criterion ID when present, plus linked normalized EPS-requirement IDs.
-- linked EPS element and EPS-model-bridge IDs.
-- linked `model_artifact_id` and model-representation IDs.
-- linked `workflow_id` and `tool_id` values when applicable.
+- linked EPS element, EPS-model-bridge, model-artifact, model-representation, model-configuration entity, and coverage-item IDs.
+- linked workflow, workflow-activity, and tool IDs when applicable.
 - explicit model-to-V&V bridge wording and `model_to_vv_relationship_ids`.
-- source terminology for verification, validation, V&V, checking, or analysis.
+- source terminology for verification, validation, V&V, checking, analysis, review, assurance, or assessment.
 - linkage scope, using `eps_specific`, `system_wide_eps_linked`, `system_wide_cooccurrence`, or `unclear`.
-- normalized V&V object, using `model_verification`, `model_validation`, `system_or_design_verification`, `system_or_design_validation`, `multiple`, or `unclear`.
+- `normalized_vv_objects`, recording every applicable code from `model_verification`, `model_validation`, `system_or_design_verification`, `system_or_design_validation`, or `unclear`.
 - normalized V&V object reason.
 - method source wording and linked `vv_method_entity_ids`.
+- `model_assessment_aspects` and `model_assessment_method_types` when the model, representation, transformation, configuration, or digital twin is assessed. Use `not_applicable` when the activity assesses only the represented design or physical system.
 - `execution_settings`, using one or more of `mil`, `sil`, `pil`, `hil`, `virtual_testbed`, `other`, or `unclear`.
 - `hardware_present`, using `no_hardware`, `support_hardware_only`, `representative_target_hardware`, `actual_target_component`, `actual_target_eps`, `integrated_spacecraft_hardware`, or `unclear`.
+- `verification_levels`, recording every applicable product or integration level.
+- `test_phases`, recording every applicable test purpose or campaign phase.
+- `test_environment_refs`, pointing to the environment, plant, simulator, testbed, facility, configuration, data source, or other records that define the test environment.
 - lifecycle stage, using the shared lifecycle-stage codes.
-- linked `result_set_id`, `result_criterion_id`, and `result_output_id` values.
-- linked `comparator_id` values when the report makes a comparative or causal V&V-effectiveness claim.
-- `status`, a derived cumulative set using one or more of `proposed`, `prepared_or_generated`, `result_reported`, `executed_virtual`, `downstream_physical_link`, and `model_to_test_closure`.
+- linked result-set, result-criterion, result-output, and comparator IDs.
+- `status`, a derived cumulative set using any attained values from `proposed`, `prepared_or_generated`, `result_reported`, `executed_virtual`, `executed_physical`, `downstream_physical_link`, and `model_to_test_closure`.
 - measure directness, using `direct`, `surrogate`, `intermediate_or_process`, or `unclear` and the definitions under RQ2.
 - discrepancies and resolution source wording plus `discrepancy_issue_ids`.
 - `later_physical_link` source wording plus `later_physical_relationship_ids`.
 - `model_to_test_closure` source wording plus `closure_check_ids`.
-- `evidence_basis`.
-- `support`.
-- `support_reason`.
+- `evidence_basis`, `support`, and `support_reason`.
 
-For validation, link the criterion row that states why the criterion or oracle is authoritative for the intended use. Do not create a separate `oracle_adequacy` field. Record the authority reason in the criterion and reflect any limitation in support.
+The RQ3 target, V&V object, verification level, test phase, model role, assessment aspect, and assessment method dimensions use arrays when several classifications can apply. Record each applicable value directly. Do not use a composite `multiple` value. Code `unclear` alone. An evidence status applies to the complete field in place of the array.
 
-Use target type to identify the primary object being checked. Use `multiple` only when the activity has inseparable target types.
+#### V&V targets and objects
+
+Use the existing EPS target types for requirements, model elements, parameters, modes, interfaces, behavior, architecture, hazards, and wider system targets. Use the model assessment target types as follows:
+
+- **`mbse_model_artifact`:** a persistent structured system model is itself assessed.
+- **`digital_twin`:** a source-identified digital twin is itself assessed. A stand-alone simulation does not establish this type.
+- **`model_configuration_or_baseline`:** a selected model version, configuration, or baseline is assessed.
+- **`model_transformation_or_generator`:** a transformation, generator, or its persistent output logic is assessed.
+- **`model_representation_or_view`:** a diagram, matrix, table, view, export, or other representation is assessed.
+
+Use every applicable normalized V&V object:
+
+- **`model_verification`:** checking whether a model, transformation, configuration, or executable representation was implemented correctly against its specification or formulation.
+- **`model_validation`:** checking whether a model or digital twin is adequate or credible for its intended use against an authoritative reference, data, or expected behavior.
+- **`system_or_design_verification`:** checking whether the EPS or wider design meets stated requirements or criteria.
+- **`system_or_design_validation`:** checking whether the design meets stakeholder, operational, or mission needs.
+- **`unclear`:** relevant evidence does not resolve the V&V object.
+
+For validation, link the criterion row that states why the criterion or oracle is authoritative for the intended use. Record the authority reason in the criterion and reflect any limitation in support. Running a method in a model does not establish model verification or model validation by itself. A virtual requirement check can be system or design verification.
+
+An **EPS target** is a named EPS requirement, model element, parameter, mode, interface, behavior, function, hazard, model artifact, model configuration, or digital twin, or a wider system target clearly decomposed, allocated, or traced to named EPS content. A **model-to-V&V bridge** is a reported trace, shared ID, binding, port or data mapping, transformation, generated artifact, allocation, or another clear link. A **V&V method, intent, or artifact** is work presented as verification, validation, compliance or requirement checking, model assurance, virtual integration, model-derived testing, or another V&V function.
+
+Use linkage scope as follows:
+
+- **`eps_specific`:** both the target and the activity are clearly about the EPS.
+- **`system_wide_eps_linked`:** a wider system activity includes a named EPS target and a bridge that can be reconstructed.
+- **`system_wide_cooccurrence`:** system-wide V&V and EPS content appear in the same report without the required direct link.
+- **`unclear`:** the report does not make the scope clear.
+
+#### Verification levels and test phases
+
+`verification_levels` identify the represented product or integration levels. They are independent of the V&V object, execution setting, hardware presence, lifecycle stage, and test phase.
+
+- **`unit_or_component`:** one hardware, software, firmware, logical, or model element is checked independently.
+- **`assembly_or_module`:** several integrated items are checked below complete EPS level.
+- **`eps_subsystem`:** the complete EPS design, model scope, or implemented EPS is checked.
+- **`cross_subsystem_integration`:** EPS interfaces or behavior are checked with one or more other spacecraft subsystems.
+- **`integrated_spacecraft`:** the EPS is checked within the assembled spacecraft.
+- **`mission_end_to_end`:** the activity includes the spacecraft and ground, operations, environment, or other mission elements as one thread.
+- **`other`:** another source-described level applies.
+- **`unclear`:** relevant evidence does not resolve the level.
+
+Use `not_applicable` when a model assurance activity has no represented product or integration level, such as a general metamodel conformance check.
+
+`test_phases` identify the purpose or maturity of the test campaign. They do not impose activity order. Use predecessor and control-flow links for reported order.
+
+- **`exploratory_or_characterization`:** the activity learns behavior, estimates parameters, or characterizes limits before formal verification.
+- **`development_verification`:** early or iterative verification occurs during design or implementation.
+- **`qualification`:** the activity demonstrates that a design meets its specified operational or environmental envelope, including applicable qualification margins.
+- **`acceptance`:** the activity checks a particular delivered or flight item for intended use and unacceptable workmanship defects.
+- **`integration_and_checkout`:** the activity checks interfaces and behavior while items or subsystems are assembled, when no clearer qualification or acceptance purpose is reported.
+- **`prelaunch_checkout`:** final checks are performed on integrated flight hardware before launch.
+- **`commissioning`:** initial in-orbit verification is performed after deployment.
+- **`operational_or_in_flight`:** verification or monitoring occurs during mission operations.
+- **`regression_or_reverification`:** a check is repeated after a change, correction, discrepancy, or configuration update.
+- **`other`:** another source-described phase applies.
+- **`unclear`:** a test is reported, but its phase cannot be established.
+
+Code a source-described protoflight campaign with both `qualification` and `acceptance`, and preserve *protoflight* in the source terminology. Use `not_applicable` for an activity, such as a static formal proof, that has no test campaign. Do not infer a test phase from MIL, SIL, PIL, HIL, hardware presence, or lifecycle stage.
 
 Use execution settings as follows:
 
@@ -925,32 +998,38 @@ Use hardware presence as follows:
 - **`integrated_spacecraft_hardware`:** the target EPS participates within integrated spacecraft hardware.
 - **`unclear`:** hardware presence cannot be classified.
 
-- **EPS target**: a named EPS requirement, model element, parameter, mode, interface, behavior, function, or hazard; or a wider system target that is clearly decomposed, allocated, or traced to named EPS content;
-- **model-to-V&V bridge**: a reported trace, shared ID, binding, port or data mapping, transformation, generated artifact, allocation, or another clear link; and
-- **V&V method, intent, or artifact**: the source presents the work as verification, validation, compliance or requirement checking, virtual integration, a model-derived test activity, or another V&V function.
+#### Model and digital twin assessment
 
-- **`eps_specific`:** both the target and the V&V activity are clearly about the EPS;
-- **`system_wide_eps_linked`:** a wider system activity includes a named EPS target and a bridge that can be reconstructed;
-- **`system_wide_cooccurrence`:** system-wide V&V and EPS content appear in the same report without the required direct link; or
-- **`unclear`:** the report does not make the scope clear.
+Record all applicable `model_assessment_aspects`:
 
-- **model verification:** checking whether a model, transformation, or executable representation was implemented correctly against its specification or formulation;
-- **model validation:** checking whether a model is adequate or credible for its intended use against an authoritative reference, data, or expected behavior;
-- **system/design verification:** checking whether the EPS or wider design meets stated requirements or criteria;
-- **system/design validation:** checking whether the design meets stakeholder, operational, or mission needs;
-- **multiple:** the source clearly demonstrates more than one of these objects; or
-- **unclear.**
+- **Completeness:** `declared_scope_completeness`, `requirements_coverage`, `traceability_completeness`, `viewpoint_coverage`, `interface_coverage`, `scenario_or_mode_coverage`, and `data_or_parameter_completeness`.
+- **Correctness and consistency:** `syntactic_or_metamodel_conformance`, `semantic_correctness`, `internal_consistency`, `cross_view_consistency`, `behavioral_correctness`, `constraint_or_equation_correctness`, `transformation_or_generation_correctness`, and `configuration_or_version_consistency`.
+- **Digital twin quality:** `physical_correspondence`, `data_mapping_correctness`, `calibration_adequacy`, `fidelity`, `predictive_accuracy`, `synchronization_or_currency`, `uncertainty_adequacy`, and `provenance_or_data_quality`.
+- **Residual classifications:** `other` and `unclear`.
 
-Keep the source's own term as well as the reviewer's normalized code and reason. Running a method in a model does not automatically make it model verification or model validation. For example, a virtual requirement check can be system or design verification. Keep execution settings separate from the V&V object.
+Record all applicable `model_assessment_method_types`:
 
-Keep `later_physical_link` and `model_to_test_closure` as required source-evidence fields in every activity. Link ordinary values to the corresponding relationship and check records. Derive and store every attained status milestone. Do not code status independently from its supporting activity evidence and linked criteria or results. Every milestone after `proposed` requires `proposed`, and each attained prerequisite remains in the cumulative set. A retained near miss can have an empty status set when it attains no milestone.
+- **Review and rule checking:** `manual_model_review`, `automated_rule_check`, and `metamodel_conformance_check`.
+- **Coverage and consistency:** `trace_or_coverage_analysis` and `consistency_analysis`.
+- **Execution and formal analysis:** `formal_analysis_or_model_checking` and `simulation_based_check`.
+- **Comparison and empirical assessment:** `reference_model_comparison`, `test_or_operational_data_comparison`, `calibration_assessment`, and `stakeholder_or_expert_review`.
+- **Residual classifications:** `other` and `unclear`.
 
-- `proposed`: the target, bridge, and V&V method, intent, or artifact are reported.
-- `prepared_or_generated`: a linked criterion row gives a requirement, threshold, expected behavior, formal property, or pass/fail criterion.
-- `result_reported`: a linked output or criterion row reports a result or verdict.
-- `executed_virtual`: cited activity evidence establishes that the linked method was run before physical integration or testing of the target EPS, and `result_reported` is attained.
-- `downstream_physical_link`: at least one `later_physical_relationship_id` connects the activity to a later physical artifact or activity.
-- `model_to_test_closure`: at least one `closure_check_id` links model and physical results, comparison quantities or tolerances, discrepancies, and resolution. This milestone also requires `downstream_physical_link`.
+Keep the exact method in `method` and `vv_method_entity_ids`. For a completeness assessment, link the declared scope or denominator, applicable coverage items, criterion, and result. A completeness assertion without an assessed denominator remains an RQ1 claim rather than an executed completeness result. For correctness or validation, link the governing specification, metamodel, expected behavior, reference model, stakeholder judgment, test data, flight data, or other oracle through the criterion, resource, input, and check records. For a digital twin, use relationships to connect the twin to its physical counterpart and use input groups and result sets for operational data, timing, uncertainty, and comparison results.
+
+#### Activity sequence and status
+
+Keep `later_physical_link` and `model_to_test_closure` as required source-evidence fields in every activity. Link ordinary values to the corresponding relationship and check records. Link each post-tailoring assurance activity to the resulting model artifact and configuration recorded by its report application. Derive and store every attained status milestone. Every milestone after `proposed` requires `proposed`, and each attained execution milestone requires `result_reported`. A retained near miss can have an empty status set when it attains no milestone.
+
+- **`proposed`:** the target, bridge, and V&V method, intent, or artifact are reported.
+- **`prepared_or_generated`:** a linked criterion row gives a requirement, threshold, expected behavior, formal property, completeness denominator, or pass/fail criterion.
+- **`result_reported`:** a linked output or criterion row reports a result or verdict.
+- **`executed_virtual`:** cited evidence establishes execution before physical integration or testing of the target EPS, with `result_reported` attained.
+- **`executed_physical`:** cited evidence establishes execution with representative or actual target hardware, with `result_reported` attained.
+- **`downstream_physical_link`:** at least one `later_physical_relationship_id` connects the activity to a later physical artifact or activity.
+- **`model_to_test_closure`:** at least one `closure_check_id` links model and physical results, comparison quantities or tolerances, discrepancies, and resolution. This milestone also requires `downstream_physical_link`.
+
+A downstream physical activity retained only to complete the chain receives `direct_synthesis = no` and `eligibility_reason_codes = [downstream_physical_only]` under the current prephysical scope of RQ3. A physical activity can qualify directly when it independently meets the applicable RQ3 scope and linkage rules.
 
 ### Artifact and method reuse
 
@@ -1408,7 +1487,7 @@ Record comparator adequacy only for comparative or causal claims. Record relatio
 Before full extraction:
 
 1. [ ] Test report-level eligibility and Route A or Route B coding on clear and borderline examples.
-2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, reference catalog entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed tools and equipment, per artifact identity and availability, model generation methods, engineering workflows, construction sources, ordered method steps and workflow activities, generic-model derivation, linked procedural-detail assessments, typed EPS elements and requirements, linked exchanges, dependencies and bridges, multiple structured model representations, relationships among views, sequence or activity behavior occurrences, boundary roles, coverage assessments, disciplinary viewpoints, decomposition visibility, item level inputs, typed outputs and statistics, normalized RQ1 claims, RQ2 findings, RQ3 activities, figures or tables, structured variation points, tailoring rules and procedure steps, executed tailoring operations, procedural-evidence flags, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded artifact, method, and workflow reuse levels. Include a report that can reach R3 or R4, M3 or M4, or W3 or W4 by itself when available.
+2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, reference catalog entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed tools and equipment, per artifact identity, model roles and availability, model generation methods, engineering workflows, construction sources, ordered method steps and workflow activities, generic-model derivation, linked procedural-detail assessments, typed EPS elements and requirements, linked exchanges, dependencies and bridges, multiple structured model representations, relationships among views, sequence or activity behavior occurrences, boundary roles, coverage assessments, disciplinary viewpoints, decomposition visibility, item level inputs, typed outputs and statistics, normalized RQ1 claims, RQ2 findings, ordered RQ3 activities, model and digital twin assessment aspects and methods, verification levels, test phases, virtual and physical execution, exact model configurations, figures or tables, structured variation points, tailoring rules and procedure steps, executed tailoring operations, procedural-evidence flags, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded artifact, method, and workflow reuse levels. Include a report that can reach R3 or R4, M3 or M4, or W3 or W4 by itself when available.
 3. [ ] Test cross-report family and lineage-identity resolution, immutable report-level records, separate lineage-level extraction, and separate consolidated application, effort, assurance, independence, and reuse-level fields on at least one multi-report example.
 4. [ ] Calibrate `named_only`, `narrative_outline`, `actionable_procedure`, `reproduction_ready`, and `unclear` on model generation, workflow, and tailoring examples. Confirm that procedural detail remains separate from reuse level.
 5. [ ] Calibrate the difference between assertion, worked example, execution, comparison, physical or operational checking, and independent transfer.
@@ -1422,7 +1501,7 @@ One LLM reviewer performs the primary extraction, cross-report extraction, test�
 Apply this sequence:
 
 1. **Primary extraction.** The LLM reviewer extracts the complete report into the frozen report-level form.
-2. **Focused audit.** For every included report, the human auditor checks eligibility and route, canonical entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed record references, typed tool records, per artifact metadata, item level inputs, typed outputs and statistics, EPS elements and requirements, model representations and relationships among views, dynamic behavior occurrences, boundary roles, Route B anchors and bridges, coverage coding, omitted or duplicated groups, method steps, workflow activities, generic-model derivation, procedural-detail levels, normalized RQ1 claims, direct RQ2 attribution, direct RQ3 linkage, `lineage_mentioned`, complete report-level reuse and application coding, structured tailoring evidence, every report-level R3/R4, M3/M4, or W3/W4 assignment, procedural-evidence flags, citations, source-versus-inference distinctions, and reviewer-derived values. The auditor may see the extraction because the audit's purpose is error detection.
+2. **Focused audit.** For every included report, the human auditor checks eligibility and route, canonical entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed record references, typed tool records, per artifact metadata and model roles, item level inputs, typed outputs and statistics, EPS elements and requirements, model representations and relationships among views, dynamic behavior occurrences, boundary roles, Route B anchors and bridges, coverage coding, omitted or duplicated groups, method steps, workflow activities, generic-model derivation, procedural-detail levels, normalized RQ1 claims, direct RQ2 attribution, direct RQ3 linkage, RQ3 activity order, exact artifact and configuration links, verification levels, test phases, model and digital twin assessment coding, virtual and physical execution, model-to-test closure, `lineage_mentioned`, complete report-level reuse and application coding, structured tailoring evidence, every report-level R3/R4, M3/M4, or W3/W4 assignment, procedural-evidence flags, citations, source-versus-inference distinctions, and reviewer-derived values. The auditor may see the extraction because the audit's purpose is error detection.
 3. **Deterministic validation.** Validate schema versions, controlled values, canonical keys, IDs, typed record references, required fields, links, procedure-level prerequisites, reuse-level prerequisites, procedural-evidence flags, quantity forms, units, currencies, sample sizes, and reproducible calculations. Confirm each citation's report and page range. For citations without `graphic` or `graphic_quote_description`, confirm the verbatim quotation against the stored source using the frozen page-text extraction and normalization rule. Preserve source values and reviewer-derived values separately.
 4. **Adjudication.** The LLM reviewer resolves every audit or deterministic issue against the full source and gives the final review judgment. The human auditor records the disposition in the relevant Git commit and applies accepted changes. No automated process writes directly to the canonical extraction.
 5. **Cross-report pass.** After report extraction, the LLM reviewer resolves report families and artifact-lineage identity, updates only report-level `lineage_id` values, and creates separate lineage-level and consolidated tailoring-application records. The human auditor performs one focused cross-report audit for every uncertain merge or split and every lineage-level R3 or R4 assignment.
