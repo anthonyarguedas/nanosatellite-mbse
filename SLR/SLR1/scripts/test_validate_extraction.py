@@ -162,6 +162,57 @@ class TemplateTests(unittest.TestCase):
             self.assertIn("decomposition_visibilities", representation)
             self.assertIn("fidelity_levels", representation)
 
+    def test_scenarios_are_dedicated_and_linked(self) -> None:
+        template = load_object(
+            SCHEMA_PATHS["report"].with_name("protocol-extraction.template.json")
+        )
+        scenario = template["scenarios"][0]
+        self.assertIn("scenario_entity_id", scenario)
+        self.assertIn("source_scenario_type", scenario)
+        self.assertIn("source_operating_condition", scenario)
+        self.assertIn("scenario_roles", scenario)
+        self.assertIn("scenario_types", scenario)
+        self.assertIn("operating_conditions", scenario)
+        self.assertIn("test_steps", scenario)
+        self.assertIn("source_step_type", scenario["test_steps"][0])
+        self.assertIn("linked_scenario_ids", template["rq3_activities"][0])
+        self.assertIn("linked_scenario_ids", template["result_sets"][0])
+        for representation in template["eps_cases"][0]["eps_model_representations"]:
+            self.assertIn("linked_scenario_ids", representation)
+            for occurrence in representation["behavior_occurrences"]:
+                self.assertIn("linked_scenario_ids", occurrence)
+
+    def test_rq3_requires_a_direct_scenario_link_field(self) -> None:
+        schemas, registry = load_schemas()
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        del template["rq3_activities"][0]["linked_scenario_ids"]
+        issues = schema_issues(
+            [Document("report", template_path, template)], schemas, registry
+        )
+        self.assertTrue(issues)
+
+    def test_safety_and_scenario_codes_are_separate(self) -> None:
+        schema = load_object(SCHEMA_PATHS["report"])
+        definitions = schema["$defs"]
+        element_codes = set(definitions["epsElementTypeCode"]["enum"])
+        self.assertTrue(
+            {"hazard", "feared_event", "fault_or_failure", "risk_control"}
+            <= element_codes
+        )
+        self.assertNotIn("hazard_or_risk_control", element_codes)
+        view_codes = set(
+            definitions["modelViewTypesValue"]["allOf"][1]["properties"]["value"]
+            ["items"]["enum"]
+        )
+        self.assertTrue(
+            {"use_case", "scenario", "feared_event", "test_case", "test_procedure"}
+            <= view_codes
+        )
+        self.assertNotIn("vv_or_test", view_codes)
+
 
 class NormalizationTests(unittest.TestCase):
     def test_unresolved_typed_record_reference_is_rejected(self) -> None:
@@ -199,7 +250,7 @@ class NormalizationTests(unittest.TestCase):
         )
         self.assertTrue(normalization_issues(report))
 
-    def test_plain_analytic_row_text_fails_the_v4_schema(self) -> None:
+    def test_plain_analytic_row_text_fails_the_v5_schema(self) -> None:
         schemas, registry = load_schemas()
         template_path = SCHEMA_PATHS["report"].with_name(
             "protocol-extraction.template.json"
@@ -224,6 +275,53 @@ class NormalizationTests(unittest.TestCase):
         self.assertIn("linked_quantity_ids", output)
         self.assertIn("statistical_evaluations", output)
         self.assertIn("sample_size_quantity_ids", output["statistical_evaluations"][0])
+
+    def test_scenario_entity_must_have_scenario_type(self) -> None:
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        scenario_entity_id = template["scenarios"][0]["scenario_entity_id"]
+        for entity in template["reference_catalog"]["entities"]:
+            if entity["entity_id"] == scenario_entity_id:
+                entity["entity_type"] = "mission"
+        document = Document("report", template_path, template)
+        indexes, issues = build_indexes([document])
+        issues.extend(report_reference_issues(document, indexes))
+        self.assertTrue(
+            any("must identify an entity coded scenario" in issue.message for issue in issues)
+        )
+
+    def test_test_step_predecessor_must_be_in_same_test_case(self) -> None:
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        template["scenarios"][0]["test_steps"][0][
+            "predecessor_test_step_ids"
+        ] = ["missing-test-step"]
+        document = Document("report", template_path, template)
+        indexes, issues = build_indexes([document])
+        issues.extend(report_reference_issues(document, indexes))
+        self.assertTrue(
+            any("is not in the same test case" in issue.message for issue in issues)
+        )
+
+    def test_application_assurance_links_its_scenario(self) -> None:
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        template["rq3_activities"][0]["linked_scenario_ids"] = {"status": "none"}
+        document = Document("report", template_path, template)
+        indexes, issues = build_indexes([document])
+        issues.extend(report_reference_issues(document, indexes))
+        self.assertTrue(
+            any(
+                "does not link an application scenario" in issue.message
+                for issue in issues
+            )
+        )
 
 
 class QuoteTests(unittest.TestCase):

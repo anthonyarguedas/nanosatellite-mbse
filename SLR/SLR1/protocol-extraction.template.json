@@ -1,5 +1,5 @@
 {
-  "schema_version": "slr1-extraction/v4",
+  "schema_version": "slr1-extraction/v5",
   "identity": {
     "report_id": "<report-id>",
     "screening_record_id": "<screening-record-id>",
@@ -46,6 +46,27 @@
         "version_identifier": {
           "status": "not_applicable",
           "reason": "Not applicable to the illustrative value."
+        },
+        "parent_entity_ids": {
+          "status": "none"
+        }
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "entity_id": "<scenario-entity-id>",
+        "entity_type": "scenario",
+        "source_name": {
+          "source_text": "<scenario source name>",
+          "normalization_status": "not_for_synthesis"
+        },
+        "canonical_key": "example:scenario",
+        "version_identifier": {
+          "status": "not_applicable",
+          "reason": "The illustrative scenario has no separate version."
         },
         "parent_entity_ids": {
           "status": "none"
@@ -1652,7 +1673,9 @@
               "<citation-id>"
             ],
             "value": [
-              "unclear"
+              "scenario",
+              "feared_event",
+              "fault_or_failure"
             ]
           },
           "abstraction_levels": {
@@ -1921,6 +1944,9 @@
             "<citation-id>"
           ],
           "model_representation_id": "<model-representation-id>",
+          "linked_scenario_ids": [
+            "<scenario-id>"
+          ],
           "abstraction_levels": {
             "coding_confidence": "high",
             "provenance": "reviewer_inferred",
@@ -1989,7 +2015,11 @@
               "<citation-id>"
             ],
             "value": [
-              "sequence_or_interaction"
+              "sequence_or_interaction",
+              "scenario",
+              "feared_event",
+              "test_case",
+              "test_procedure"
             ]
           },
           "reported_purpose": {
@@ -2055,6 +2085,9 @@
                 "<citation-id>"
               ],
               "behavior_occurrence_id": "<behavior-occurrence-id>",
+              "linked_scenario_ids": [
+                "<scenario-id>"
+              ],
               "occurrence_type": {
                 "coding_confidence": "high",
                 "provenance": "reviewer_inferred",
@@ -2151,6 +2184,9 @@
             "<citation-id>"
           ],
           "model_representation_id": "<target-model-representation-id>",
+          "linked_scenario_ids": [
+            "<scenario-id>"
+          ],
           "abstraction_levels": {
             "coding_confidence": "high",
             "provenance": "reviewer_inferred",
@@ -2216,7 +2252,11 @@
               "<citation-id>"
             ],
             "value": [
-              "sequence_or_interaction"
+              "use_case",
+              "scenario",
+              "hazard",
+              "feared_event",
+              "fault_or_failure"
             ]
           },
           "reported_purpose": {
@@ -2282,6 +2322,9 @@
                 "<citation-id>"
               ],
               "behavior_occurrence_id": "<target-behavior-occurrence-id>",
+              "linked_scenario_ids": [
+                "<scenario-id>"
+              ],
               "occurrence_type": {
                 "coding_confidence": "high",
                 "provenance": "reviewer_inferred",
@@ -2425,7 +2468,7 @@
           "eps_anchor_endpoint": {
             "source_text": "<eps anchor endpoint>",
             "linked_record_refs": [
-              "entity:<entity-id>"
+              "scenario:<scenario-id>"
             ]
           },
           "model_or_second_concern_endpoint": {
@@ -2440,12 +2483,18 @@
           "eps_anchor_requirement_ids": [
             "<eps-requirement-id>"
           ],
+          "eps_anchor_scenario_ids": [
+            "<scenario-id>"
+          ],
           "second_concern_element_ids": [
             "<eps-element-id>"
           ],
           "second_concern_requirement_ids": [
             "<eps-requirement-id>"
           ],
+          "second_concern_scenario_ids": {
+            "status": "none"
+          },
           "linked_model_artifact_ids": [
             "<model-artifact-id>"
           ],
@@ -2550,18 +2599,21 @@
               "<citation-id>"
             ],
             "coverage_item_id": "<coverage-item-id>",
+            "linked_scenario_ids": [
+              "<scenario-id>"
+            ],
             "target_type": {
               "coding_confidence": "high",
-              "provenance": "source_reported",
+              "provenance": "reviewer_inferred",
               "citation_ids": [
                 "<citation-id>"
               ],
-              "value": "unclear"
+              "value": "scenario"
             },
             "source_name_or_description": {
               "source_text": "<coverage item name or description>",
               "linked_record_refs": [
-                "eps_element:<eps-element-id>"
+                "scenario:<scenario-id>"
               ]
             },
             "linked_eps_element_ids": [
@@ -2619,7 +2671,8 @@
           ]
         },
         "denominator_refs": [
-          "eps_element:<eps-element-id>"
+          "eps_element:<eps-element-id>",
+          "scenario:<scenario-id>"
         ],
         "assessment_rule_ids": [
           "<rule-id>"
@@ -2648,6 +2701,247 @@
       },
       "linked_decision_ids": [
         "<decision-id>"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "<citation-id>"
+      ],
+      "scenario_id": "<scenario-id>",
+      "scenario_entity_id": "<scenario-entity-id>",
+      "eps_case_ids": [
+        "<eps-case-id>"
+      ],
+      "source_scenario_or_test_case_id": "<source scenario or test case id>",
+      "source_scenario_type": {
+        "source_text": "<source scenario type>",
+        "normalization_status": "not_for_synthesis"
+      },
+      "source_operating_condition": {
+        "source_text": "<source operating condition>",
+        "normalization_status": "not_for_synthesis"
+      },
+      "source_description": {
+        "source_text": "<source scenario or test case description>",
+        "linked_record_refs": [
+          "entity:<scenario-entity-id>"
+        ]
+      },
+      "scenario_roles": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": [
+          "modeled_scenario",
+          "evaluation_scenario",
+          "vv_test_case"
+        ]
+      },
+      "scenario_types": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": [
+          "test_case",
+          "feared_event",
+          "fault_or_failure_propagation"
+        ]
+      },
+      "operating_conditions": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": [
+          "off_nominal",
+          "fault_or_failure"
+        ]
+      },
+      "model_inclusion": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "explicit_model_element"
+      },
+      "parent_scenario_ids": {
+        "status": "none"
+      },
+      "scope_refs": [
+        "eps_case:<eps-case-id>",
+        "entity:<entity-id>"
+      ],
+      "linked_configuration_entity_ids": [
+        "<entity-id>"
+      ],
+      "linked_scenario_eps_element_ids": [
+        "<eps-element-id>"
+      ],
+      "linked_use_case_eps_element_ids": {
+        "status": "none"
+      },
+      "participant_eps_element_ids": [
+        "<eps-element-id>"
+      ],
+      "initial_mode_or_state_eps_element_ids": {
+        "status": "not_reported",
+        "reason": "The illustrative source does not identify an initial mode."
+      },
+      "final_mode_or_state_eps_element_ids": {
+        "status": "not_reported",
+        "reason": "The illustrative source does not identify a final mode."
+      },
+      "trigger_or_initiating_event": {
+        "source_text": "<trigger or initiating event>",
+        "linked_record_refs": [
+          "eps_element:<eps-element-id>"
+        ]
+      },
+      "trigger_refs": [
+        "eps_element:<eps-element-id>"
+      ],
+      "preconditions": {
+        "source_text": "<scenario or test case preconditions>",
+        "linked_record_refs": [
+          "rule:<rule-id>"
+        ]
+      },
+      "precondition_rule_ids": [
+        "<rule-id>"
+      ],
+      "postconditions": {
+        "source_text": "<scenario or test case postconditions>",
+        "linked_record_refs": [
+          "rule:<rule-id>"
+        ]
+      },
+      "postcondition_rule_ids": [
+        "<rule-id>"
+      ],
+      "linked_eps_requirement_ids": [
+        "<eps-requirement-id>"
+      ],
+      "linked_hazard_eps_element_ids": {
+        "status": "not_reported",
+        "reason": "The illustrative source does not distinguish a separate hazard element."
+      },
+      "linked_fault_or_failure_eps_element_ids": [
+        "<eps-element-id>"
+      ],
+      "linked_risk_control_eps_element_ids": {
+        "status": "not_reported",
+        "reason": "The illustrative source does not distinguish a separate risk-control element."
+      },
+      "consequences": {
+        "source_text": "<feared event or failure consequence>",
+        "linked_record_refs": [
+          "entity:<entity-id>"
+        ]
+      },
+      "consequence_refs": [
+        "entity:<entity-id>"
+      ],
+      "likelihood_quantity_ids": {
+        "status": "not_reported",
+        "reason": "The illustrative source does not quantify likelihood."
+      },
+      "severity_quantity_ids": {
+        "status": "not_reported",
+        "reason": "The illustrative source does not quantify severity."
+      },
+      "risk_quantity_ids": {
+        "status": "not_reported",
+        "reason": "The illustrative source does not quantify risk."
+      },
+      "scenario_relationship_ids": [
+        "<relationship-id>"
+      ],
+      "linked_model_artifact_ids": [
+        "<model-artifact-id>"
+      ],
+      "test_objective": {
+        "source_text": "<test objective>",
+        "linked_record_refs": [
+          "eps_requirement:<eps-requirement-id>"
+        ]
+      },
+      "test_procedure_resource_ids": [
+        "<resource-id>"
+      ],
+      "test_steps": [
+        {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "<citation-id>"
+          ],
+          "test_step_id": "<test-step-id>",
+          "sequence_label": {
+            "source_text": "<test step sequence label>",
+            "normalization_status": "not_for_synthesis"
+          },
+          "predecessor_test_step_ids": {
+            "status": "none"
+          },
+          "source_step_type": {
+            "source_text": "<source test step type>",
+            "normalization_status": "not_for_synthesis"
+          },
+          "step_type": {
+            "coding_confidence": "high",
+            "provenance": "reviewer_inferred",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "stimulus"
+          },
+          "action_or_stimulus": {
+            "source_text": "<test action or stimulus>",
+            "linked_record_refs": [
+              "entity:<entity-id>"
+            ]
+          },
+          "source_eps_element_ids": [
+            "<eps-element-id>"
+          ],
+          "destination_eps_element_ids": [
+            "<eps-element-id>"
+          ],
+          "context_eps_element_ids": [
+            "<eps-element-id>"
+          ],
+          "input_refs": [
+            "input_item:<input-item-id>"
+          ],
+          "linked_behavior_occurrence_ids": [
+            "<behavior-occurrence-id>"
+          ],
+          "expected_result_criterion_ids": [
+            "<result-criterion-id>"
+          ],
+          "observed_result_output_ids": [
+            "<result-output-id>"
+          ],
+          "timing_quantity_ids": [
+            "<quantity-id>"
+          ],
+          "check_ids": [
+            "<check-id>"
+          ],
+          "control_flow_relationship_ids": [
+            "<relationship-id>"
+          ]
+        }
       ]
     }
   ],
@@ -3040,9 +3334,16 @@
         ],
         "value": "<scenario or configuration>",
         "linked_record_refs": [
+          "scenario:<scenario-id>",
           "entity:<entity-id>"
         ]
       },
+      "linked_scenario_ids": [
+        "<scenario-id>"
+      ],
+      "linked_configuration_entity_ids": [
+        "<entity-id>"
+      ],
       "linked_model_generation_method_ids": [
         "<model-generation-method-id>"
       ],
@@ -3161,6 +3462,7 @@
         ],
         "value": "<scenario or configuration>",
         "linked_record_refs": [
+          "scenario:<scenario-id>",
           "entity:<entity-id>"
         ]
       },
@@ -3545,8 +3847,8 @@
           ]
         }
       ],
-      "linked_scenario_entity_ids": [
-        "<entity-id>"
+      "linked_scenario_ids": [
+        "<scenario-id>"
       ],
       "linked_configuration_entity_ids": [
         "<entity-id>"
@@ -3559,7 +3861,10 @@
             "<citation-id>"
           ],
           "evaluation_unit_id": "<evaluation-unit-id>",
-          "unit_type": "simulation_run",
+          "unit_type": "test_execution",
+          "linked_scenario_ids": [
+            "<scenario-id>"
+          ],
           "linked_entity_ids": [
             "<entity-id>"
           ],
@@ -3990,6 +4295,9 @@
         "<citation-id>"
       ],
       "rq3_activity_id": "<rq3-activity-id>",
+      "linked_scenario_ids": [
+        "<scenario-id>"
+      ],
       "predecessor_rq3_activity_ids": {
         "status": "none"
       },
@@ -4026,7 +4334,10 @@
         ],
         "value": [
           "mbse_model_artifact",
-          "eps_requirement_or_criterion"
+          "eps_requirement_or_criterion",
+          "eps_scenario",
+          "eps_feared_event",
+          "eps_fault_or_failure"
         ]
       },
       "source_requirement_or_criterion_id": "<source requirement or criterion id>",
@@ -4114,6 +4425,9 @@
         ],
         "value": [
           "requirements_coverage",
+          "scenario_coverage",
+          "feared_event_coverage",
+          "test_case_coverage",
           "semantic_correctness"
         ]
       },
@@ -4584,6 +4898,17 @@
               "entity:<entity-id>"
             ]
           },
+          "scenarios_and_test_cases": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "<applicable scenarios and test cases>",
+            "linked_record_refs": [
+              "scenario:<scenario-id>"
+            ]
+          },
           "required_inputs": {
             "coding_confidence": "high",
             "provenance": "source_reported",
@@ -4667,6 +4992,9 @@
           "environment_mode_and_load_refs": [
             "entity:<entity-id>"
           ],
+          "scenario_refs": [
+            "scenario:<scenario-id>"
+          ],
           "required_input_refs": [
             "input_item:<input-item-id>"
           ],
@@ -4711,6 +5039,7 @@
                 ],
                 "value": [
                   "artifact_content",
+                  "scenario",
                   "method_step",
                   "workflow_activity"
                 ]
@@ -4723,6 +5052,9 @@
               ],
               "linked_workflow_ids": [
                 "<workflow-id>"
+              ],
+              "linked_scenario_ids": [
+                "<scenario-id>"
               ],
               "allowed_options_ranges_and_defaults": [
                 {
@@ -4753,7 +5085,8 @@
                 ]
               },
               "target_refs": [
-                "model_artifact:<model-artifact-id>"
+                "model_artifact:<model-artifact-id>",
+                "scenario:<scenario-id>"
               ],
               "option_quantity_ids": [
                 "<quantity-id>"
@@ -5422,6 +5755,20 @@
               "relationship:<relationship-id>"
             ]
           },
+          "scenario_scope": {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "value": "<application scenario scope>",
+            "linked_record_refs": [
+              "scenario:<scenario-id>"
+            ]
+          },
+          "linked_scenario_ids": [
+            "<scenario-id>"
+          ],
           "target_refs": [
             "model_artifact:<model-artifact-id>"
           ],

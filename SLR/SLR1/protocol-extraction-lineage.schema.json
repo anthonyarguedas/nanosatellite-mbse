@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction-lineage.schema.json",
-  "title": "SLR1 lineage-level reusable artifact schema v3",
+  "title": "SLR1 lineage-level reusable artifact schema v4",
   "$ref": "#/$defs/lineageRecord",
   "$defs": {
     "crossArtifactRelationship": {
@@ -465,6 +465,9 @@
         "environment_modes_and_loads": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
         },
+        "scenarios_and_test_cases": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
         "required_inputs": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
         },
@@ -498,6 +501,9 @@
         "environment_mode_and_load_refs": {
           "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
         },
+        "scenario_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
         "required_input_refs": {
           "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
         },
@@ -515,6 +521,7 @@
         "model_boundary_and_abstraction",
         "architecture_and_interfaces",
         "environment_modes_and_loads",
+        "scenarios_and_test_cases",
         "required_inputs",
         "linked_tool_ids",
         "organizational_prerequisites",
@@ -526,6 +533,7 @@
         "model_scope_refs",
         "architecture_and_interface_refs",
         "environment_mode_and_load_refs",
+        "scenario_refs",
         "required_input_refs",
         "organizational_prerequisite_refs",
         "limit_rule_ids"
@@ -732,6 +740,9 @@
             "linked_workflow_ids": {
               "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
             },
+            "linked_scenario_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
             "allowed_options_ranges_and_defaults": {
               "$ref": "protocol-extraction.schema.json#/$defs/rowStringArray"
             },
@@ -768,6 +779,7 @@
             "linked_model_artifact_ids",
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
+            "linked_scenario_ids",
             "allowed_options_ranges_and_defaults",
             "dependencies_and_constraints",
             "selection_trigger_or_condition",
@@ -1172,7 +1184,7 @@
           "type": "object",
           "properties": {
             "schema_version": {
-              "const": "slr1-extraction-lineage/v3"
+              "const": "slr1-extraction-lineage/v4"
             },
             "lineage_id": {
               "$ref": "protocol-extraction.schema.json#/$defs/stableId"
@@ -1200,6 +1212,9 @@
               },
               "minItems": 1,
               "uniqueItems": true
+            },
+            "linked_scenario_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
             },
             "artifact_names_and_versions": {
               "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
@@ -1247,6 +1262,7 @@
             "linked_report_reuse_record_ids",
             "linked_report_ids",
             "linked_family_ids",
+            "linked_scenario_ids",
             "artifact_names_and_versions",
             "artifact_relationships",
             "owner_or_developer",

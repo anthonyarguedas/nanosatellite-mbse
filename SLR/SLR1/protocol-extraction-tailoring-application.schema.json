@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction-tailoring-application.schema.json",
-  "title": "SLR1 consolidated tailoring application schema v3",
+  "title": "SLR1 consolidated tailoring application schema v4",
   "$ref": "#/$defs/consolidatedTailoringApplication",
   "$defs": {
     "crossConsolidatedApplicationObjectsValue": {
@@ -148,6 +148,12 @@
         "material_setting_differences": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
         },
+        "scenario_scope": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+        },
+        "linked_scenario_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
         "target_refs": {
           "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
         },
@@ -171,6 +177,8 @@
         "lifecycle_purpose",
         "relationship_to_declared_applicability_envelope",
         "material_setting_differences",
+        "scenario_scope",
+        "linked_scenario_ids",
         "target_refs",
         "adopting_team_entity_ids",
         "lifecycle_stages",
@@ -595,7 +603,7 @@
           "type": "object",
           "properties": {
             "schema_version": {
-              "const": "slr1-extraction-tailoring-application/v3"
+              "const": "slr1-extraction-tailoring-application/v4"
             },
             "tailoring_application_id": {
               "$ref": "protocol-extraction.schema.json#/$defs/stableId"

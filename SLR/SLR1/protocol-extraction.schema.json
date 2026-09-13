@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction.schema.json",
-  "title": "SLR1 extraction schema v4",
-  "description": "Machine-readable schema for protocol-extraction.md. Version 4 replaces composite classifications with explicit arrays and scoped records.",
+  "title": "SLR1 extraction schema v5",
+  "description": "Machine-readable schema for protocol-extraction.md. Version 5 adds dedicated scenario and test-case records, explicit safety semantics, and scenario links across report and reuse evidence.",
   "$ref": "#/$defs/reportExtraction",
   "$defs": {
     "stableId": {
@@ -1708,6 +1708,8 @@
         "analysis_or_simulation_model",
         "digital_twin",
         "test_or_environment_model",
+        "test_case_definition",
+        "test_procedure",
         "transformation_or_generator",
         "other",
         "unclear"
@@ -2265,7 +2267,10 @@
         "mode_or_state",
         "scenario",
         "parameter_or_constraint",
-        "hazard_or_risk_control",
+        "hazard",
+        "feared_event",
+        "fault_or_failure",
+        "risk_control",
         "other",
         "unclear"
       ]
@@ -2820,11 +2825,13 @@
                 "enum": [
                   "context_or_boundary",
                   "requirements_or_traceability",
-                  "capability_or_use_case",
+                  "capability",
+                  "use_case",
                   "functional_or_behavioral",
                   "activity_or_control_flow",
                   "sequence_or_interaction",
                   "state_or_mode",
+                  "scenario",
                   "structural_decomposition",
                   "logical_structure",
                   "physical_structure",
@@ -2836,8 +2843,14 @@
                   "allocation_or_mapping",
                   "deployment_or_configuration",
                   "decision_or_trade_study",
-                  "risk_or_hazard",
-                  "vv_or_test",
+                  "risk",
+                  "hazard",
+                  "feared_event",
+                  "fault_or_failure",
+                  "risk_control",
+                  "verification_or_validation",
+                  "test_case",
+                  "test_procedure",
                   "model_organization_or_package",
                   "generated_analysis_or_result",
                   "other",
@@ -3061,6 +3074,9 @@
             },
             "output_refs": {
               "$ref": "#/$defs/rowRecordReferences"
+            },
+            "linked_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -3082,7 +3098,8 @@
             "guard_rule_ids",
             "control_flow_relationship_ids",
             "timing_quantity_ids",
-            "output_refs"
+            "output_refs",
+            "linked_scenario_ids"
           ]
         }
       ],
@@ -3180,6 +3197,9 @@
             "linked_result_criterion_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "behavior_occurrences": {
               "$ref": "#/$defs/behaviorOccurrences"
             },
@@ -3217,6 +3237,7 @@
             "linked_result_set_ids",
             "linked_result_output_ids",
             "linked_result_criterion_ids",
+            "linked_scenario_ids",
             "behavior_occurrences",
             "linked_modeling_language_entity_ids",
             "purpose_entity_ids",
@@ -3354,6 +3375,7 @@
         "eps_requirement",
         "eps_exchange",
         "eps_dependency",
+        "scenario",
         "model_representation",
         "disciplinary_viewpoint",
         "model_artifact",
@@ -3465,6 +3487,9 @@
             "linked_eps_dependency_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_model_artifact_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -3492,6 +3517,7 @@
             "linked_eps_requirement_ids",
             "linked_eps_exchange_ids",
             "linked_eps_dependency_ids",
+            "linked_scenario_ids",
             "linked_model_artifact_ids",
             "linked_model_representation_ids",
             "coverage_status",
@@ -4126,10 +4152,16 @@
             "eps_anchor_requirement_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "eps_anchor_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "second_concern_element_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
             "second_concern_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "second_concern_scenario_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
             "linked_model_artifact_ids": {
@@ -4160,8 +4192,10 @@
             "model_or_second_concern_endpoint",
             "eps_anchor_element_ids",
             "eps_anchor_requirement_ids",
+            "eps_anchor_scenario_ids",
             "second_concern_element_ids",
             "second_concern_requirement_ids",
+            "second_concern_scenario_ids",
             "linked_model_artifact_ids",
             "linked_eps_exchange_ids",
             "linked_eps_dependency_ids",
@@ -4428,6 +4462,495 @@
         }
       ],
       "unevaluatedProperties": false
+    },
+    "scenarioRoleCode": {
+      "type": "string",
+      "enum": [
+        "modeled_scenario",
+        "evaluation_scenario",
+        "vv_test_case",
+        "other",
+        "unclear"
+      ]
+    },
+    "scenarioRolesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/scenarioRoleCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "scenarioRoles": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/scenarioRolesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "scenarioTypeCode": {
+      "type": "string",
+      "enum": [
+        "use_case",
+        "mission_or_operational",
+        "functional_or_behavioral",
+        "interaction",
+        "state_or_mode",
+        "analysis_case",
+        "test_case",
+        "feared_event",
+        "fault_or_failure_propagation",
+        "recovery",
+        "other",
+        "unclear"
+      ]
+    },
+    "scenarioTypesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/scenarioTypeCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "scenarioTypes": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/scenarioTypesValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "scenarioOperatingConditionCode": {
+      "type": "string",
+      "enum": [
+        "nominal",
+        "alternate",
+        "off_nominal",
+        "degraded",
+        "fault_or_failure",
+        "emergency_or_safe",
+        "recovery",
+        "other",
+        "unclear"
+      ]
+    },
+    "scenarioOperatingConditionsValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/scenarioOperatingConditionCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        },
+        {
+          "$ref": "#/$defs/unclearArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "scenarioOperatingConditions": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/scenarioOperatingConditionsValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "testStepTypeCode": {
+      "type": "string",
+      "enum": [
+        "setup",
+        "stimulus",
+        "action",
+        "observation",
+        "teardown",
+        "other",
+        "unclear"
+      ]
+    },
+    "testStepTypeValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/testStepTypeCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherScalarCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "testStepType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/testStepTypeValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "scenarioTestStep": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "test_step_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "sequence_label": {
+              "$ref": "#/$defs/rowString"
+            },
+            "predecessor_test_step_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "source_step_type": {
+              "$ref": "#/$defs/rowString"
+            },
+            "step_type": {
+              "$ref": "#/$defs/testStepType"
+            },
+            "action_or_stimulus": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "destination_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "context_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "input_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "linked_behavior_occurrence_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "expected_result_criterion_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "observed_result_output_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "timing_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "check_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "test_step_id",
+            "sequence_label",
+            "predecessor_test_step_ids",
+            "source_step_type",
+            "step_type",
+            "action_or_stimulus",
+            "source_eps_element_ids",
+            "destination_eps_element_ids",
+            "context_eps_element_ids",
+            "input_refs",
+            "linked_behavior_occurrence_ids",
+            "expected_result_criterion_ids",
+            "observed_result_output_ids",
+            "timing_quantity_ids",
+            "check_ids",
+            "control_flow_relationship_ids"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "scenarioTestSteps": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scenarioTestStep"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "scenarioRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "scenario_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "scenario_entity_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "eps_case_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "source_scenario_or_test_case_id": {
+              "$ref": "#/$defs/legacyRowString"
+            },
+            "source_scenario_type": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_operating_condition": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "scenario_roles": {
+              "$ref": "#/$defs/scenarioRoles"
+            },
+            "scenario_types": {
+              "$ref": "#/$defs/scenarioTypes"
+            },
+            "operating_conditions": {
+              "$ref": "#/$defs/scenarioOperatingConditions"
+            },
+            "model_inclusion": {
+              "$ref": "#/$defs/modelInclusion"
+            },
+            "parent_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "linked_configuration_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_scenario_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_use_case_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "participant_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "initial_mode_or_state_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "final_mode_or_state_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "trigger_or_initiating_event": {
+              "$ref": "#/$defs/rowString"
+            },
+            "trigger_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "preconditions": {
+              "$ref": "#/$defs/rowString"
+            },
+            "precondition_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "postconditions": {
+              "$ref": "#/$defs/rowString"
+            },
+            "postcondition_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_hazard_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_fault_or_failure_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_risk_control_eps_element_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "consequences": {
+              "$ref": "#/$defs/rowString"
+            },
+            "consequence_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "likelihood_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "severity_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "risk_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "scenario_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "test_objective": {
+              "$ref": "#/$defs/rowString"
+            },
+            "test_procedure_resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "test_steps": {
+              "$ref": "#/$defs/scenarioTestSteps"
+            }
+          },
+          "required": [
+            "scenario_id",
+            "scenario_entity_id",
+            "eps_case_ids",
+            "source_scenario_or_test_case_id",
+            "source_scenario_type",
+            "source_operating_condition",
+            "source_description",
+            "scenario_roles",
+            "scenario_types",
+            "operating_conditions",
+            "model_inclusion",
+            "parent_scenario_ids",
+            "scope_refs",
+            "linked_configuration_entity_ids",
+            "linked_scenario_eps_element_ids",
+            "linked_use_case_eps_element_ids",
+            "participant_eps_element_ids",
+            "initial_mode_or_state_eps_element_ids",
+            "final_mode_or_state_eps_element_ids",
+            "trigger_or_initiating_event",
+            "trigger_refs",
+            "preconditions",
+            "precondition_rule_ids",
+            "postconditions",
+            "postcondition_rule_ids",
+            "linked_eps_requirement_ids",
+            "linked_hazard_eps_element_ids",
+            "linked_fault_or_failure_eps_element_ids",
+            "linked_risk_control_eps_element_ids",
+            "consequences",
+            "consequence_refs",
+            "likelihood_quantity_ids",
+            "severity_quantity_ids",
+            "risk_quantity_ids",
+            "scenario_relationship_ids",
+            "linked_model_artifact_ids",
+            "test_objective",
+            "test_procedure_resource_ids",
+            "test_steps"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "scenarioRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scenarioRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
     },
     "effortBasisCode": {
       "type": "string",
@@ -4871,6 +5394,12 @@
             "scenario_or_configuration": {
               "$ref": "#/$defs/evidencedString"
             },
+            "linked_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_configuration_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_model_generation_method_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -4907,6 +5436,8 @@
             "category",
             "eps_case_id",
             "scenario_or_configuration",
+            "linked_scenario_ids",
+            "linked_configuration_entity_ids",
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
             "linked_report_reuse_record_ids",
@@ -5743,7 +6274,7 @@
             "reviewer_derived_values": {
               "$ref": "#/$defs/reviewerDerivedValues"
             },
-            "linked_scenario_entity_ids": {
+            "linked_scenario_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
             "linked_configuration_entity_ids": {
@@ -5783,7 +6314,7 @@
             "criteria",
             "comparators",
             "reviewer_derived_values",
-            "linked_scenario_entity_ids",
+            "linked_scenario_ids",
             "linked_configuration_entity_ids",
             "evaluation_units",
             "data_source_resource_ids",
@@ -6222,6 +6753,9 @@
         "environment_modes_and_loads": {
           "$ref": "#/$defs/evidencedString"
         },
+        "scenarios_and_test_cases": {
+          "$ref": "#/$defs/evidencedString"
+        },
         "required_inputs": {
           "$ref": "#/$defs/evidencedStringArray"
         },
@@ -6255,6 +6789,9 @@
         "environment_mode_and_load_refs": {
           "$ref": "#/$defs/rowRecordReferences"
         },
+        "scenario_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
         "required_input_refs": {
           "$ref": "#/$defs/rowRecordReferences"
         },
@@ -6272,6 +6809,7 @@
         "model_boundary_and_abstraction",
         "architecture_and_interfaces",
         "environment_modes_and_loads",
+        "scenarios_and_test_cases",
         "required_inputs",
         "linked_tool_ids",
         "organizational_prerequisites",
@@ -6283,6 +6821,7 @@
         "model_scope_refs",
         "architecture_and_interface_refs",
         "environment_mode_and_load_refs",
+        "scenario_refs",
         "required_input_refs",
         "organizational_prerequisite_refs",
         "limit_rule_ids"
@@ -6293,6 +6832,7 @@
       "type": "string",
       "enum": [
         "artifact_content",
+        "scenario",
         "method_step",
         "workflow_activity",
         "other",
@@ -6367,6 +6907,9 @@
             "linked_workflow_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "allowed_options_ranges_and_defaults": {
               "$ref": "#/$defs/rowStringArray"
             },
@@ -6402,6 +6945,7 @@
             "linked_model_artifact_ids",
             "linked_model_generation_method_ids",
             "linked_workflow_ids",
+            "linked_scenario_ids",
             "allowed_options_ranges_and_defaults",
             "dependencies_and_constraints",
             "selection_trigger_or_condition",
@@ -7291,6 +7835,12 @@
         "material_setting_differences": {
           "$ref": "#/$defs/evidencedString"
         },
+        "scenario_scope": {
+          "$ref": "#/$defs/evidencedString"
+        },
+        "linked_scenario_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
         "target_refs": {
           "$ref": "#/$defs/rowRecordReferences"
         },
@@ -7315,6 +7865,8 @@
         "lifecycle_purpose",
         "relationship_to_declared_applicability_envelope",
         "material_setting_differences",
+        "scenario_scope",
+        "linked_scenario_ids",
         "target_refs",
         "adopting_team_entity_ids",
         "lifecycle_stages",
@@ -8561,11 +9113,15 @@
         "eps_requirement_or_criterion",
         "eps_model_element",
         "eps_parameter_or_constraint",
-        "eps_mode_or_scenario",
+        "eps_mode_or_state",
+        "eps_scenario",
         "eps_interface_or_flow",
         "eps_behavior_or_function",
         "eps_component_or_architecture",
-        "eps_hazard_or_risk_control",
+        "eps_hazard",
+        "eps_feared_event",
+        "eps_fault_or_failure",
+        "eps_risk_control",
         "system_target_traced_to_eps",
         "mbse_model_artifact",
         "digital_twin",
@@ -8823,7 +9379,11 @@
         "traceability_completeness",
         "viewpoint_coverage",
         "interface_coverage",
-        "scenario_or_mode_coverage",
+        "scenario_coverage",
+        "mode_coverage",
+        "nominal_and_off_nominal_scenario_coverage",
+        "feared_event_coverage",
+        "test_case_coverage",
         "data_or_parameter_completeness",
         "syntactic_or_metamodel_conformance",
         "semantic_correctness",
@@ -9146,6 +9706,9 @@
             "linked_configuration_entity_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_coverage_item_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -9280,6 +9843,7 @@
             "linked_model_artifact_ids",
             "linked_model_representation_ids",
             "linked_configuration_entity_ids",
+            "linked_scenario_ids",
             "linked_coverage_item_ids",
             "linked_workflow_ids",
             "linked_workflow_activity_ids",
@@ -9821,7 +10385,10 @@
               "$ref": "#/$defs/legacyEvidencedString"
             },
             "shared_data_models_methods_scenarios_or_results": {
-              "$ref": "#/$defs/legacyEvidencedStringArray"
+              "$ref": "#/$defs/evidencedStringArray"
+            },
+            "linked_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
             },
             "preferred_or_most_complete_version_for_overlapping_content": {
               "$ref": "#/$defs/legacyEvidencedString"
@@ -9836,6 +10403,7 @@
             "shared_investigation_or_implementation",
             "relationship_among_reports",
             "shared_data_models_methods_scenarios_or_results",
+            "linked_scenario_ids",
             "preferred_or_most_complete_version_for_overlapping_content",
             "dependence_reason"
           ]
@@ -10121,7 +10689,7 @@
       "type": "object",
       "properties": {
         "schema_version": {
-          "const": "slr1-extraction/v4"
+          "const": "slr1-extraction/v5"
         },
         "identity": {
           "$ref": "#/$defs/reportIdentity"
@@ -10141,6 +10709,9 @@
             "$ref": "#/$defs/epsCase"
           },
           "minItems": 1
+        },
+        "scenarios": {
+          "$ref": "#/$defs/scenarioRecords"
         },
         "implementation_records": {
           "type": "array",
@@ -10239,6 +10810,7 @@
         "context",
         "mbse_approach",
         "eps_cases",
+        "scenarios",
         "implementation_records",
         "input_groups",
         "result_sets",
@@ -10328,7 +10900,7 @@
     },
     "recordReference": {
       "type": "string",
-      "pattern": "^(report|family|lineage|citation|entity|quantity|decision|relationship|rule|check|resource|issue|tool|model_artifact|model_generation_method|construction_source|method_step|workflow|workflow_activity|eps_case|eps_element|eps_requirement|eps_exchange|eps_dependency|model_representation|model_representation_relationship|behavior_occurrence|eps_model_bridge|coverage_item|implementation_record|input_group|input_item|result_set|evaluation_unit|result_output|statistical_evaluation|result_criterion|comparator|rival_explanation|reviewer_derived_value|rq1_claim|rq2_finding|direction_component|rq3_activity|report_reuse_record|artifact_relationship|artifact_generality_scope|variation_point|tailoring_rule|tailoring_step|report_application|application_operation|tailoring_application):[^:]+$"
+      "pattern": "^(report|family|lineage|citation|entity|quantity|decision|relationship|rule|check|resource|issue|tool|model_artifact|model_generation_method|construction_source|method_step|workflow|workflow_activity|eps_case|eps_element|eps_requirement|eps_exchange|eps_dependency|model_representation|model_representation_relationship|behavior_occurrence|eps_model_bridge|scenario|test_step|coverage_item|implementation_record|input_group|input_item|result_set|evaluation_unit|result_output|statistical_evaluation|result_criterion|comparator|rival_explanation|reviewer_derived_value|rq1_claim|rq2_finding|direction_component|rq3_activity|report_reuse_record|artifact_relationship|artifact_generality_scope|variation_point|tailoring_rule|tailoring_step|report_application|application_operation|tailoring_application):[^:]+$"
     },
     "recordReferences": {
       "type": "array",
@@ -10495,6 +11067,9 @@
         "environment_condition",
         "mode_or_operation",
         "scenario",
+        "hazard",
+        "fault_or_failure",
+        "risk_control",
         "configuration",
         "data_source",
         "quantity_or_construct",
@@ -10599,6 +11174,9 @@
         "input_value",
         "output_value",
         "threshold",
+        "probability_or_likelihood",
+        "severity",
+        "risk",
         "count",
         "effort",
         "duration",
@@ -10983,6 +11561,14 @@
         "differs_from",
         "causes",
         "contributes_to",
+        "triggers",
+        "leads_to",
+        "results_in",
+        "detects",
+        "prevents",
+        "mitigates",
+        "controls",
+        "recovers_from",
         "supports",
         "limits",
         "inside_boundary",
@@ -11589,7 +12175,8 @@
         "mission",
         "model",
         "simulation_run",
-        "test",
+        "test_case",
+        "test_execution",
         "observation",
         "other",
         "unclear"
@@ -11613,6 +12200,9 @@
             "linked_entity_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_scenario_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "count_quantity_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -11630,6 +12220,7 @@
             "evaluation_unit_id",
             "unit_type",
             "linked_entity_ids",
+            "linked_scenario_ids",
             "count_quantity_ids",
             "sampling_or_selection_rule_ids",
             "assignment_rule_ids",

@@ -53,7 +53,11 @@ COMPLETENESS_ASSESSMENT_ASPECTS = {
     "traceability_completeness",
     "viewpoint_coverage",
     "interface_coverage",
-    "scenario_or_mode_coverage",
+    "scenario_coverage",
+    "mode_coverage",
+    "nominal_and_off_nominal_scenario_coverage",
+    "feared_event_coverage",
+    "test_case_coverage",
     "data_or_parameter_completeness",
 }
 TARGET_HARDWARE_PRESENCE = {
@@ -80,7 +84,11 @@ DIRECT_REFERENCE_FIELDS = {
     "linked_entity_ids": "entity",
     "group_or_arm_entity_ids": "entity",
     "method_entity_ids": "entity",
-    "linked_scenario_entity_ids": "entity",
+    "scenario_entity_id": "entity",
+    "linked_scenario_ids": "scenario",
+    "parent_scenario_ids": "scenario",
+    "eps_anchor_scenario_ids": "scenario",
+    "second_concern_scenario_ids": "scenario",
     "linked_configuration_entity_ids": "entity",
     "analysis_method_entity_ids": "entity",
     "adopting_team_entity_ids": "entity",
@@ -121,6 +129,8 @@ DIRECT_REFERENCE_FIELDS = {
     "assignment_rule_ids": "rule",
     "threshold_rule_ids": "rule",
     "trigger_rule_ids": "rule",
+    "precondition_rule_ids": "rule",
+    "postcondition_rule_ids": "rule",
     "constraint_rule_ids": "rule",
     "governance_rule_ids": "rule",
     "reason_rule_ids": "rule",
@@ -136,6 +146,7 @@ DIRECT_REFERENCE_FIELDS = {
     "linked_resource_ids": "resource",
     "source_resource_ids": "resource",
     "data_source_resource_ids": "resource",
+    "test_procedure_resource_ids": "resource",
     "linked_issue_ids": "issue",
     "discrepancy_issue_ids": "issue",
     "linked_tool_ids": "tool",
@@ -162,6 +173,14 @@ DIRECT_REFERENCE_FIELDS = {
     "context_eps_element_ids": "eps_element",
     "parent_eps_element_ids": "eps_element",
     "interface_eps_element_ids": "eps_element",
+    "linked_scenario_eps_element_ids": "eps_element",
+    "linked_use_case_eps_element_ids": "eps_element",
+    "participant_eps_element_ids": "eps_element",
+    "initial_mode_or_state_eps_element_ids": "eps_element",
+    "final_mode_or_state_eps_element_ids": "eps_element",
+    "linked_hazard_eps_element_ids": "eps_element",
+    "linked_fault_or_failure_eps_element_ids": "eps_element",
+    "linked_risk_control_eps_element_ids": "eps_element",
     "eps_anchor_element_ids": "eps_element",
     "second_concern_element_ids": "eps_element",
     "linked_eps_requirement_ids": "eps_requirement",
@@ -172,12 +191,15 @@ DIRECT_REFERENCE_FIELDS = {
     "linked_eps_dependency_ids": "eps_dependency",
     "linked_eps_model_bridge_ids": "eps_model_bridge",
     "linked_model_representation_ids": "model_representation",
+    "linked_behavior_occurrence_ids": "behavior_occurrence",
     "source_model_representation_id": "model_representation",
     "target_model_representation_id": "model_representation",
     "model_artifact_id": "model_artifact",
     "linked_result_set_ids": "result_set",
     "linked_result_output_ids": "result_output",
+    "observed_result_output_ids": "result_output",
     "linked_result_criterion_ids": "result_criterion",
+    "expected_result_criterion_ids": "result_criterion",
     "post_application_criterion_ids": "result_criterion",
     "linked_comparator_ids": "comparator",
     "linked_input_group_ids": "input_group",
@@ -189,6 +211,7 @@ DIRECT_REFERENCE_FIELDS = {
     "linked_rq3_activity_ids": "rq3_activity",
     "assurance_rq3_activity_ids": "rq3_activity",
     "predecessor_rq3_activity_ids": "rq3_activity",
+    "predecessor_test_step_ids": "test_step",
     "linked_coverage_item_ids": "coverage_item",
     "linked_report_reuse_record_ids": "report_reuse_record",
     "linked_report_application_ids": "report_application",
@@ -231,6 +254,8 @@ RECORD_REFERENCE_KINDS = {
     "model_representation_relationship": "model_representation_relationship",
     "behavior_occurrence": "behavior_occurrence",
     "eps_model_bridge": "eps_model_bridge",
+    "scenario": "scenario",
+    "test_step": "test_step",
     "coverage_item": "coverage_item",
     "implementation_record": "implementation_record",
     "input_group": "input_group",
@@ -809,6 +834,28 @@ def index_report(
                     issues,
                 )
 
+    for scenario_index, scenario in enumerate(rows(data.get("scenarios"))):
+        scenario_pointer = f"/scenarios/{scenario_index}"
+        register(
+            indexes,
+            "scenario",
+            scenario.get("scenario_id"),
+            document,
+            f"{scenario_pointer}/scenario_id",
+            scenario,
+            issues,
+        )
+        for step_index, step in enumerate(rows(scenario.get("test_steps"))):
+            register(
+                indexes,
+                "test_step",
+                step.get("test_step_id"),
+                document,
+                f"{scenario_pointer}/test_steps/{step_index}/test_step_id",
+                step,
+                issues,
+            )
+
     for table_name, id_name, id_kind in (
         ("implementation_records", "implementation_record_id", "implementation_record"),
         ("input_groups", "input_group_id", "input_group"),
@@ -1050,6 +1097,8 @@ def build_indexes(
         "model_representation_relationship",
         "behavior_occurrence",
         "eps_model_bridge",
+        "scenario",
+        "test_step",
         "coverage_item",
         "implementation_record",
         "input_group",
@@ -1557,6 +1606,30 @@ def application_assurance_trace_issues(
                     "model configuration",
                 )
             )
+
+        setting = application.get("setting")
+        application_scenario_ids = (
+            setting.get("linked_scenario_ids")
+            if isinstance(setting, Mapping)
+            else None
+        )
+        activity_scenario_ids = location.node.get("linked_scenario_ids")
+        if (
+            isinstance(application_scenario_ids, list)
+            and application_scenario_ids
+            and not (
+                isinstance(activity_scenario_ids, list)
+                and set(application_scenario_ids) & set(activity_scenario_ids)
+            )
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    issue_pointer,
+                    "post-tailoring assurance activity does not link an application "
+                    "scenario",
+                )
+            )
     return issues
 
 
@@ -1566,6 +1639,12 @@ def report_reference_issues(
 ) -> list[Issue]:
     issues = record_reference_issues(document, indexes)
     data = document.data
+    scenario_rows = rows(data.get("scenarios"))
+    local_scenario_ids = {
+        scenario.get("scenario_id")
+        for scenario in scenario_rows
+        if isinstance(scenario.get("scenario_id"), str)
+    }
     workflow_activity_parent_ids: dict[str, str] = {}
     mbse = data.get("mbse_approach", {})
     if isinstance(mbse, Mapping):
@@ -1708,6 +1787,199 @@ def report_reference_issues(
                                 f"EPS exchange ID {identifier!r} is not in the same EPS case",
                             )
                         )
+
+    for scenario_index, scenario in enumerate(scenario_rows):
+        scenario_base = f"/scenarios/{scenario_index}"
+        entity_id = scenario.get("scenario_entity_id")
+        entity_location = (
+            indexes.get("entity", {}).get(entity_id)
+            if isinstance(entity_id, str)
+            else None
+        )
+        if entity_location is not None:
+            if entity_location.document is not document:
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"{scenario_base}/scenario_entity_id",
+                        "scenario entity belongs to another report",
+                    )
+                )
+            elif entity_location.node.get("entity_type") != "scenario":
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"{scenario_base}/scenario_entity_id",
+                        "scenario_entity_id must identify an entity coded scenario",
+                    )
+                )
+
+        parent_ids = scenario.get("parent_scenario_ids")
+        if isinstance(parent_ids, list):
+            for parent_index, identifier in enumerate(parent_ids):
+                if identifier not in local_scenario_ids:
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"{scenario_base}/parent_scenario_ids/{parent_index}",
+                            f"parent scenario ID {identifier!r} is not in the same report",
+                        )
+                    )
+
+        scenario_roles = coded_values(scenario.get("scenario_roles"))
+        scenario_types = coded_values(scenario.get("scenario_types"))
+        test_steps = rows(scenario.get("test_steps"))
+        if test_steps and not (
+            "vv_test_case" in scenario_roles or "test_case" in scenario_types
+        ):
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"{scenario_base}/test_steps",
+                    "test steps require a V&V test-case role or test-case type",
+                )
+            )
+        if "vv_test_case" in scenario_roles and "test_case" not in scenario_types:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    f"{scenario_base}/scenario_types",
+                    "a V&V test-case role requires the test_case scenario type",
+                )
+            )
+
+        if coded_value(scenario.get("model_inclusion")) == "explicit_model_element":
+            represented_ids = scenario.get("linked_scenario_eps_element_ids")
+            use_case_ids = scenario.get("linked_use_case_eps_element_ids")
+            if not (
+                isinstance(represented_ids, list)
+                and represented_ids
+                or isinstance(use_case_ids, list)
+                and use_case_ids
+            ):
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"{scenario_base}/model_inclusion",
+                        "explicit scenario model inclusion requires a linked scenario "
+                        "or use-case EPS element",
+                    )
+                )
+
+        for field, expected_type in (
+            ("linked_scenario_eps_element_ids", "scenario"),
+            ("linked_use_case_eps_element_ids", "use_case"),
+            ("linked_hazard_eps_element_ids", "hazard"),
+            ("linked_fault_or_failure_eps_element_ids", "fault_or_failure"),
+            ("linked_risk_control_eps_element_ids", "risk_control"),
+        ):
+            identifiers = scenario.get(field)
+            if not isinstance(identifiers, list):
+                continue
+            for link_index, identifier in enumerate(identifiers):
+                location = indexes.get("eps_element", {}).get(identifier)
+                if location is None or location.document is not document:
+                    continue
+                element_types = coded_values(
+                    location.node.get("normalized_element_types")
+                )
+                if (
+                    element_types
+                    and "unclear" not in element_types
+                    and expected_type not in element_types
+                ):
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"{scenario_base}/{field}/{link_index}",
+                            f"linked EPS element lacks {expected_type!r} classification",
+                        )
+                    )
+
+        for field, expected_kind in (
+            ("likelihood_quantity_ids", "probability_or_likelihood"),
+            ("severity_quantity_ids", "severity"),
+            ("risk_quantity_ids", "risk"),
+        ):
+            identifiers = scenario.get(field)
+            if not isinstance(identifiers, list):
+                continue
+            for link_index, identifier in enumerate(identifiers):
+                location = indexes.get("quantity", {}).get(identifier)
+                if location is None or location.document is not document:
+                    continue
+                quantity_kind = location.node.get("quantity_kind")
+                if quantity_kind not in {expected_kind, "unclear"}:
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"{scenario_base}/{field}/{link_index}",
+                            f"linked quantity must use {expected_kind!r} kind",
+                        )
+                    )
+
+        local_test_step_ids = {
+            step.get("test_step_id")
+            for step in test_steps
+            if isinstance(step.get("test_step_id"), str)
+        }
+        for step_index, step in enumerate(test_steps):
+            predecessors = step.get("predecessor_test_step_ids")
+            if not isinstance(predecessors, list):
+                continue
+            for predecessor_index, identifier in enumerate(predecessors):
+                if identifier not in local_test_step_ids:
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"{scenario_base}/test_steps/{step_index}/"
+                            f"predecessor_test_step_ids/{predecessor_index}",
+                            f"test step ID {identifier!r} is not in the same test case",
+                        )
+                    )
+
+    def check_local_scenario_links(node: Any, base: str = "") -> None:
+        if isinstance(node, Mapping):
+            for key, value in node.items():
+                child = pointer(base, key)
+                if key in {
+                    "linked_scenario_ids",
+                    "eps_anchor_scenario_ids",
+                    "second_concern_scenario_ids",
+                } and isinstance(value, list):
+                    for link_index, identifier in enumerate(value):
+                        if identifier not in local_scenario_ids:
+                            issues.append(
+                                Issue(
+                                    str(document.path),
+                                    pointer(child, link_index),
+                                    f"scenario ID {identifier!r} is not in the same report",
+                                )
+                            )
+                check_local_scenario_links(value, child)
+        elif isinstance(node, list):
+            for item_index, item in enumerate(node):
+                check_local_scenario_links(item, pointer(base, item_index))
+
+    check_local_scenario_links(data)
+
+    for case_index, case in enumerate(rows(data.get("eps_cases"))):
+        coverage = case.get("coverage_assessment")
+        if not isinstance(coverage, Mapping):
+            continue
+        for item_index, item in enumerate(rows(coverage.get("coverage_items"))):
+            if coded_value(item.get("target_type")) != "scenario":
+                continue
+            scenario_ids = item.get("linked_scenario_ids")
+            if not isinstance(scenario_ids, list) or not scenario_ids:
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        f"/eps_cases/{case_index}/coverage_assessment/coverage_items/"
+                        f"{item_index}/linked_scenario_ids",
+                        "scenario coverage item must link a scenario record",
+                    )
+                )
 
     reuse = data.get("reuse", {})
     common_specs = {
@@ -2211,6 +2483,10 @@ SOURCE_ONLY_FIELDS = {
     "exact_reuse_claim",
     "source_vv_terminology",
     "source_element_type",
+    "source_scenario_type",
+    "source_operating_condition",
+    "source_step_type",
+    "sequence_label",
     "source_relationship_term",
     "parent_artifact_name",
     "parent_artifact_version",
@@ -2809,6 +3085,30 @@ def family_consistency_issues(
         for linked_report_id in linked_report_ids:
             if isinstance(linked_report_id, str):
                 memberships.setdefault(linked_report_id, []).append(family_id)
+
+    for family in family_documents:
+        linked_report_ids = family.data.get("linked_report_ids")
+        linked_scenario_ids = family.data.get("linked_scenario_ids")
+        if not isinstance(linked_report_ids, list) or not isinstance(
+            linked_scenario_ids, list
+        ):
+            continue
+        linked_report_id_set = {
+            identifier for identifier in linked_report_ids if isinstance(identifier, str)
+        }
+        for scenario_index, scenario_id in enumerate(linked_scenario_ids):
+            location = indexes.get("scenario", {}).get(scenario_id)
+            if location is None or location.document.kind != "report":
+                continue
+            owner_report_id = report_id(location.document)
+            if owner_report_id not in linked_report_id_set:
+                issues.append(
+                    Issue(
+                        str(family.path),
+                        f"/linked_scenario_ids/{scenario_index}",
+                        "shared scenario belongs to a report outside the family",
+                    )
+                )
 
     for identifier, location in indexes["report"].items():
         containing_families = memberships.get(identifier, [])

@@ -1,5 +1,5 @@
 {
-  "schema_version": "slr1-extraction-lineage/v3",
+  "schema_version": "slr1-extraction-lineage/v4",
   "contributing_report_ids": [
     "<report-id>"
   ],
@@ -17,6 +17,9 @@
   ],
   "linked_family_ids": [
     "<family-id>"
+  ],
+  "linked_scenario_ids": [
+    "<scenario-id>"
   ],
   "artifact_names_and_versions": {
     "contributing_report_ids": [
@@ -290,6 +293,20 @@
         "entity:<entity-id>"
       ]
     },
+    "scenarios_and_test_cases": {
+      "contributing_report_ids": [
+        "<report-id>"
+      ],
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "<citation-id>"
+      ],
+      "value": "<applicable scenarios and test cases>",
+      "linked_record_refs": [
+        "scenario:<scenario-id>"
+      ]
+    },
     "required_inputs": {
       "contributing_report_ids": [
         "<report-id>"
@@ -388,6 +405,9 @@
     "environment_mode_and_load_refs": [
       "entity:<entity-id>"
     ],
+    "scenario_refs": [
+      "scenario:<scenario-id>"
+    ],
     "required_input_refs": [
       "input_item:<input-item-id>"
     ],
@@ -444,6 +464,7 @@
           ],
           "value": [
             "artifact_content",
+            "scenario",
             "method_step",
             "workflow_activity"
           ]
@@ -456,6 +477,9 @@
         ],
         "linked_workflow_ids": [
           "<workflow-id>"
+        ],
+        "linked_scenario_ids": [
+          "<scenario-id>"
         ],
         "allowed_options_ranges_and_defaults": [
           {
@@ -486,7 +510,8 @@
           ]
         },
         "target_refs": [
-          "model_artifact:<model-artifact-id>"
+          "model_artifact:<model-artifact-id>",
+          "scenario:<scenario-id>"
         ],
         "option_quantity_ids": [
           "<quantity-id>"
