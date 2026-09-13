@@ -1,6 +1,6 @@
 # Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Synthesis
 
-Use a structured evidence map and narrative synthesis. Do not pool effect estimates because the models, outcomes, and evidence designs are expected to differ too much.
+Use a structured evidence map and narrative synthesis. Resolve every `record_kind:stable_id` reference before compiling a table. Compare controlled fields, canonical entity keys, typed quantities, and explicit relationships. Preserve linked source wording for auditability and exclude fields marked `not_for_synthesis` from direct comparison. Do not pool effect estimates because the models, outcomes, and evidence designs are expected to differ too much.
 
 ### Relationship to Buruso et al. (2026)
 
@@ -10,11 +10,11 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 
 #### Representation and use
 
-- Present Route A and Route B separately before combining them. Map report context, the problem addressed, intended decisions, reasons for using MBSE, lifecycle use, project maturity, and mission or platform context.
-- Map EPS anchors and boundaries using typed elements, requirement records, linked exchanges, dependencies, and bridges. Compare functions, behaviors, actors, external systems, subsystems, logical and physical components, interfaces, modes, scenarios, parameters, hazards, element hierarchy, abstraction, model inclusion, and boundary roles. Synthesize declared coverage, item-level inclusions and exclusions, coverage basis, architecture, disciplinary viewpoints, decomposition visibility, fidelity, purposes, supported decisions, maturity, and availability.
+- Present Route A and Route B separately before combining them. Map report context through linked mission, platform, organization, problem, purpose, quantity, and decision records. Compare lifecycle use and project maturity through their controlled codes.
+- Map EPS anchors and boundaries using typed elements, requirement records, linked exchanges, dependencies, and bridges. Compare functions, behaviors, actors, external systems, subsystems, logical and physical components, interfaces, modes, scenarios, parameters, hazards, element hierarchy, abstraction, model inclusion, and boundary roles. Synthesize declared coverage, item level inclusions and exclusions, coverage basis, architecture, disciplinary viewpoints, decomposition visibility, fidelity, purposes, supported decisions, maturity, and availability.
 - Treat each structured model representation as a nested analytic unit. Map source and normalized view types, representation forms, origin, completeness, language or notation, containing artifacts, tools, represented content, and relationships among views. Compare context, requirement, use-case, behavior, activity, sequence, state, logical, physical, interface, data-flow, energy-flow, parametric, allocation, V&V, and generated-result views. For dynamic views, map behavior occurrences, order, actors or endpoints, exchanges, guards, branches, timing, and outputs.
 - Synthesize model generation methods and engineering workflows separately from modeling languages, typed tool and equipment records, and toolchains. Map tool kinds and roles, method origins, construction sources, generic-model derivation, ordered method steps, workflow activities and handoffs, linked artifacts, inputs and outputs, automation, governance, supporting materials, and procedural-detail levels.
-- Synthesize grouped inputs and assumptions, source types and uncertainty handling, evaluation designs and execution, engineering outputs and criteria, implementation needs and footprint, limitations, and evaluative RQ1 claims. Use normalized characteristic codes for genericity, modularity, completeness, scalability, adaptability, reuse, replication, interoperability, and related claims. Preserve source labels and author rationales. Compare each claim with linked results, footprint, coverage, and inline support.
+- Synthesize item level inputs and assumptions, typed values, source types, uncertainty records, evaluation units, evaluation designs and execution, typed engineering outputs and statistics, criteria, implementation needs and footprint, linked issues, and evaluative RQ1 claims. Use normalized characteristic codes for genericity, modularity, completeness, scalability, adaptability, reuse, replication, interoperability, and related claims. Preserve source labels and author rationales. Compare each claim with linked results, footprint, coverage, and inline support.
 
 #### Reuse and tailoring
 
@@ -28,7 +28,7 @@ Buruso et al. (2026) is a broad secondary review of 126 selected space-MBSE stud
 - Use only findings with `direct_synthesis = yes` for direct conclusions. Present near misses separately.
 - Present claim kind and scope, role, category, author direction, evidence-supported direction, mechanism, linked model representations, measure directness, evidence basis, support, comparator adequacy and rival explanations when required, applicability, and lifecycle stage.
 - Present assertion-only findings separately from executed, comparative, stakeholder, physical, operational, and independent-transfer evidence.
-- Preserve source-reported values, units, denominators, uncertainty, and practical interpretation. Label reviewer-derived values.
+- Preserve raw source values through their links. Compare typed values using canonical units, explicit time bases, denominators, groups or arms, sample sizes, and uncertainty records. Label reviewer-derived quantities.
 - Keep benefits, null findings, adverse findings, and burdens visible without calculating a reviewer-defined net effect.
 
 ### RQ3

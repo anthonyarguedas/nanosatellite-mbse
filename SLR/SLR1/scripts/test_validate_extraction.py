@@ -25,6 +25,7 @@ from validate_extraction import (
     load_object,
     load_schemas,
     normalize_quote_text,
+    normalization_issues,
     procedural_detail_issues,
     procedural_profile_issues,
     report_application_lineage_issues,
@@ -67,10 +68,18 @@ class TemplateTests(unittest.TestCase):
         for document in documents:
             if document.kind == "report":
                 issues.extend(report_reference_issues(document, indexes))
+                issues.extend(report_application_lineage_issues(document, indexes))
+                issues.extend(family_lead_issues(document))
+                issues.extend(rq2_semantic_issues(document, indexes))
+                issues.extend(rq3_semantic_issues(document, indexes))
+                issues.extend(procedural_profile_issues(document))
             else:
                 issues.extend(cross_record_reference_issues(document, indexes))
+            issues.extend(evidence_issues(document, indexes))
+            issues.extend(normalization_issues(document))
         issues.extend(lineage_consistency_issues(documents, indexes))
         issues.extend(consolidation_issues(documents, indexes))
+        issues.extend(family_consistency_issues(documents, indexes))
         issues.extend(reuse_level_issues(documents, indexes))
         issues.extend(procedural_detail_issues(documents))
         self.assertEqual(issues, [])
@@ -84,6 +93,69 @@ class TemplateTests(unittest.TestCase):
         indexes = {"report": {}, "citation": {}}
 
         self.assertEqual(evidence_issues(report, indexes), [])
+
+
+class NormalizationTests(unittest.TestCase):
+    def test_unresolved_typed_record_reference_is_rejected(self) -> None:
+        report = Document(
+            "report",
+            Path("report.json"),
+            {
+                "identity": {"report_id": "report-1"},
+                "context": {
+                    "mission_or_platform": {
+                        "value": "Mission",
+                        "linked_record_refs": ["entity:missing-entity"],
+                    }
+                },
+            },
+        )
+        indexes, issues = build_indexes([report])
+        issues.extend(report_reference_issues(report, indexes))
+        self.assertTrue(
+            any("unresolved entity record reference" in issue.message for issue in issues)
+        )
+
+    def test_source_only_status_is_rejected_for_an_analytic_field(self) -> None:
+        report = Document(
+            "report",
+            Path("report.json"),
+            {
+                "context": {
+                    "mission_or_platform": {
+                        "value": "Mission",
+                        "normalization_status": "not_for_synthesis",
+                    }
+                }
+            },
+        )
+        self.assertTrue(normalization_issues(report))
+
+    def test_plain_analytic_row_text_fails_the_v2_schema(self) -> None:
+        schemas, registry = load_schemas()
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        template["mbse_approach"]["model_generation_methods"][0]["method_steps"][
+            0
+        ]["action"] = "unlinked action"
+        issues = schema_issues(
+            [Document("report", template_path, template)], schemas, registry
+        )
+        self.assertTrue(issues)
+
+    def test_template_uses_item_level_inputs_and_typed_outputs(self) -> None:
+        template = load_object(
+            SCHEMA_PATHS["report"].with_name("protocol-extraction.template.json")
+        )
+        input_group = template["input_groups"][0]
+        self.assertIn("input_items", input_group)
+        self.assertNotIn("parameters_or_constructs", input_group)
+        output = template["result_sets"][0]["outputs"][0]
+        self.assertIn("linked_quantity_ids", output)
+        self.assertIn("statistical_evaluations", output)
+        self.assertIn("sample_size_quantity_ids", output["statistical_evaluations"][0])
 
 
 class QuoteTests(unittest.TestCase):
@@ -191,7 +263,7 @@ class ReuseTests(unittest.TestCase):
                 "architecture_and_interfaces",
                 "environment_modes_and_loads",
                 "required_inputs",
-                "tools_and_versions",
+                "linked_tool_ids",
                 "organizational_prerequisites",
                 "exclusions_and_limits",
             )
@@ -200,30 +272,39 @@ class ReuseTests(unittest.TestCase):
             "application_object": value("artifact"),
             "setting": {
                 "material_setting_differences": value("different mission"),
+                "material_difference_relationship_ids": ["difference-1"],
                 "relationship_to_originator": value("outside_originating_organization"),
             },
             "tailoring_or_adaptation": {
                 "retained_artifact_core_method_steps_or_workflow_activities": value(
                     "core"
                 ),
+                "retained_refs": ["model_artifact:artifact-1"],
                 "configured_or_changed_artifact_content_method_steps_or_workflow_activities": value(
                     "loads"
                 ),
+                "changed_refs": ["quantity:load-1"],
                 "executed_operations": [{"application_operation_id": "operation-1"}],
                 "reasons_for_changes_or_unchanged_use": value("mission loads differ"),
             },
             "result_and_assurance": {
                 "post_tailoring_or_application_criterion": value("requirements pass"),
+                "post_application_criterion_ids": ["criterion-1"],
                 "assurance_method": value("simulation"),
                 "assurance_timing": value("after tailoring"),
                 "assurance_result": value("pass"),
+                "assurance_check_ids": ["check-1"],
                 "application_result": value("success"),
             },
             "independence": {
                 "personnel_overlap": {"status": "none"},
+                "personnel_overlap_status": "none",
                 "implementation_control": value("adopter"),
+                "controlling_team_entity_ids": ["team-1"],
                 "adopter_attributable_evidence_for_adoption": value("adopter report"),
+                "adoption_evidence_refs": ["report_application:application-1"],
                 "adopter_attributable_evidence_for_assurance": value("adopter test"),
+                "assurance_evidence_refs": ["check:check-1"],
             },
         }
 
@@ -232,6 +313,7 @@ class ReuseTests(unittest.TestCase):
             "declared_applicability_envelope": self.envelope,
             "reuse_design": {
                 "reusable_core": value("core"),
+                "core_member_refs": ["model_artifact:artifact-1"],
                 "variation_points": [{"variation_point_id": "variation-1"}],
                 "unchanged_use_rule": {"status": "not_reported"},
                 "tailoring_rules": {"status": "not_reported"},
@@ -239,9 +321,10 @@ class ReuseTests(unittest.TestCase):
                     {"tailoring_step_id": "tailoring-step-1"}
                 ],
                 "required_roles_and_skills": {"status": "none"},
-                "required_tools_and_data": {
+                "required_tool_ids": {"status": "none"},
+                "required_data_and_tool_settings": {
                     "status": "not_applicable",
-                    "reason": "No tools required",
+                    "reason": "No data or settings required",
                 },
             },
         }
@@ -272,16 +355,17 @@ class ReuseTests(unittest.TestCase):
         )
 
     def test_actionable_procedure_requires_structured_and_complete_reporting(self) -> None:
+        reported = {"value": "reported", "basis_refs": ["method_step:step-1"]}
         reporting = {
             "procedure_detail_level": value("actionable_procedure"),
-            "ordered_or_connected_steps": value("step 1"),
-            "material_inputs": value("requirements"),
+            "ordered_or_connected_steps": reported,
+            "material_inputs": reported,
             "outputs": {"status": "not_reported"},
-            "roles_and_responsibilities": value("modeler"),
-            "tools_and_settings": value("tool v1"),
+            "roles_and_responsibilities": reported,
+            "tools_and_settings": reported,
             "decision_rules": {"status": "none"},
             "branching_and_iteration": {"status": "none"},
-            "quality_or_completion_checks": value("review"),
+            "quality_or_completion_checks": reported,
             "detail_level_reason": value("all required components are reported"),
         }
         report = Document(
@@ -296,7 +380,7 @@ class ReuseTests(unittest.TestCase):
             },
         )
         self.assertTrue(procedural_detail_issues([report]))
-        reporting["outputs"] = value("reference model")
+        reporting["outputs"] = reported
         self.assertEqual(procedural_detail_issues([report]), [])
 
     def test_procedural_profile_checks_generic_actionable_method(self) -> None:

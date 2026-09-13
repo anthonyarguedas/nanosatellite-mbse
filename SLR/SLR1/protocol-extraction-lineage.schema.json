@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction-lineage.schema.json",
-  "title": "SLR1 lineage-level reusable artifact schema",
+  "title": "SLR1 lineage-level reusable artifact schema v2",
   "$ref": "#/$defs/lineageRecord",
   "$defs": {
     "crossArtifactRelationship": {
@@ -33,6 +33,25 @@
             },
             "identity_and_derivation_evidence": {
               "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "parent_model_artifact_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "derived_model_artifact_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "relationship_type": {
+              "$ref": "protocol-extraction.schema.json#/$defs/artifactDerivationTypeCode"
             }
           },
           "required": [
@@ -42,8 +61,28 @@
             "derived_artifact_name",
             "derived_artifact_version",
             "relationship_or_derivation",
-            "identity_and_derivation_evidence"
+            "identity_and_derivation_evidence",
+            "parent_model_artifact_ids",
+            "derived_model_artifact_ids",
+            "relationship_type"
           ]
+        },
+        {
+          "if": {
+            "properties": {
+              "relationship_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "relationship_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
         }
       ],
       "unevaluatedProperties": false
@@ -326,12 +365,48 @@
             "value": {
               "type": "string"
             },
-            "citation_ids": true
+            "citation_ids": true,
+            "basis_refs": {
+              "$ref": "protocol-extraction.schema.json#/$defs/recordReferences"
+            },
+            "limitation_codes": {
+              "type": "array",
+              "items": {
+                "$ref": "protocol-extraction.schema.json#/$defs/supportLimitationCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
           },
           "required": [
             "value",
-            "citation_ids"
+            "citation_ids",
+            "basis_refs",
+            "limitation_codes"
           ]
+        },
+        {
+          "if": {
+            "properties": {
+              "limitation_codes": {
+                "type": "array",
+                "contains": {
+                  "const": "none"
+                }
+              }
+            },
+            "required": [
+              "limitation_codes"
+            ]
+          },
+          "then": {
+            "properties": {
+              "limitation_codes": {
+                "type": "array",
+                "maxItems": 1
+              }
+            }
+          }
         }
       ],
       "unevaluatedProperties": false
@@ -361,13 +436,43 @@
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
         },
         "linked_tool_ids": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedIdArray"
         },
         "organizational_prerequisites": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
         },
         "exclusions_and_limits": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+        },
+        "target_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "lifecycle_stages": {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossLifecycleStages"
+        },
+        "linked_decision_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "eps_scope_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "model_scope_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "architecture_and_interface_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "environment_mode_and_load_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "required_input_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "organizational_prerequisite_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "limit_rule_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -380,7 +485,17 @@
         "required_inputs",
         "linked_tool_ids",
         "organizational_prerequisites",
-        "exclusions_and_limits"
+        "exclusions_and_limits",
+        "target_refs",
+        "lifecycle_stages",
+        "linked_decision_ids",
+        "eps_scope_refs",
+        "model_scope_refs",
+        "architecture_and_interface_refs",
+        "environment_mode_and_load_refs",
+        "required_input_refs",
+        "organizational_prerequisite_refs",
+        "limit_rule_ids"
       ],
       "additionalProperties": false
     },
@@ -421,34 +536,34 @@
           "$ref": "#/$defs/crossProcedureDetailLevel"
         },
         "ordered_or_connected_steps": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "material_inputs": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "outputs": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "roles_and_responsibilities": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "tools_and_settings": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "decision_rules": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "branching_and_iteration": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "quality_or_completion_checks": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "worked_example": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "supporting_materials": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
+          "$ref": "#/$defs/crossProcedureComponent"
         },
         "detail_level_reason": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
@@ -587,6 +702,21 @@
             },
             "unchanged_use_allowed_and_when": {
               "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "target_refs": {
+              "$ref": "protocol-extraction.schema.json#/$defs/recordReferences"
+            },
+            "option_quantity_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "dependency_relationship_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "selection_rule_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "unchanged_use": {
+              "$ref": "protocol-extraction.schema.json#/$defs/unchangedUseCode"
             }
           },
           "required": [
@@ -600,7 +730,12 @@
             "allowed_options_ranges_and_defaults",
             "dependencies_and_constraints",
             "selection_trigger_or_condition",
-            "unchanged_use_allowed_and_when"
+            "unchanged_use_allowed_and_when",
+            "target_refs",
+            "option_quantity_ids",
+            "dependency_relationship_ids",
+            "selection_rule_ids",
+            "unchanged_use"
           ]
         }
       ],
@@ -672,6 +807,27 @@
             },
             "rationale": {
               "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "trigger_rule_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "required_input_refs": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+            },
+            "responsible_role_entity_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "tool_configuration_entity_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "output_refs": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+            },
+            "constraint_rule_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "acceptance_check_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -687,7 +843,14 @@
             "resulting_output",
             "constraints_and_exceptions",
             "acceptance_check",
-            "rationale"
+            "rationale",
+            "trigger_rule_ids",
+            "required_input_refs",
+            "responsible_role_entity_ids",
+            "tool_configuration_entity_ids",
+            "output_refs",
+            "constraint_rule_ids",
+            "acceptance_check_ids"
           ]
         }
       ],
@@ -768,6 +931,33 @@
             },
             "branching_or_iteration": {
               "$ref": "protocol-extraction.schema.json#/$defs/rowString"
+            },
+            "input_refs": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+            },
+            "output_refs": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+            },
+            "responsible_role_entity_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "tool_configuration_entity_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "automation_level": {
+              "$ref": "protocol-extraction.schema.json#/$defs/automationLevelCode"
+            },
+            "decision_rule_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "quality_check_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+            },
+            "rework_issue_ids": {
+              "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -786,7 +976,16 @@
             "automation",
             "decision_rule",
             "quality_or_exit_check",
-            "branching_or_iteration"
+            "branching_or_iteration",
+            "input_refs",
+            "output_refs",
+            "responsible_role_entity_ids",
+            "tool_configuration_entity_ids",
+            "automation_level",
+            "decision_rule_ids",
+            "quality_check_ids",
+            "control_flow_relationship_ids",
+            "rework_issue_ids"
           ]
         }
       ],
@@ -831,7 +1030,7 @@
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
         },
         "required_tool_ids": {
-          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedIdArray"
         },
         "required_data_and_tool_settings": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedStringArray"
@@ -844,6 +1043,24 @@
         },
         "tailoring_procedure_reporting": {
           "$ref": "#/$defs/crossProcedureReporting"
+        },
+        "core_member_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "dependency_relationship_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "required_role_entity_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "required_skill_entity_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
+        },
+        "required_data_and_configuration_refs": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowRecordReferences"
+        },
+        "governance_rule_ids": {
+          "$ref": "protocol-extraction.schema.json#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -858,7 +1075,13 @@
         "required_data_and_tool_settings",
         "automation",
         "governance_and_configuration_control",
-        "tailoring_procedure_reporting"
+        "tailoring_procedure_reporting",
+        "core_member_refs",
+        "dependency_relationship_ids",
+        "required_role_entity_ids",
+        "required_skill_entity_ids",
+        "required_data_and_configuration_refs",
+        "governance_rule_ids"
       ],
       "additionalProperties": false
     },
@@ -907,6 +1130,9 @@
         {
           "type": "object",
           "properties": {
+            "schema_version": {
+              "const": "slr1-extraction-lineage/v2"
+            },
             "lineage_id": {
               "$ref": "protocol-extraction.schema.json#/$defs/stableId"
             },
@@ -975,6 +1201,7 @@
             }
           },
           "required": [
+            "schema_version",
             "lineage_id",
             "linked_report_reuse_record_ids",
             "linked_report_ids",
@@ -996,6 +1223,40 @@
         }
       ],
       "unevaluatedProperties": false
+    },
+    "crossProcedureComponentValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "const": "reported"
+            },
+            "basis_refs": {
+              "$ref": "protocol-extraction.schema.json#/$defs/recordReferences"
+            }
+          },
+          "required": [
+            "value",
+            "basis_refs"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossProcedureComponent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossProcedureComponentValue"
+        },
+        {
+          "$ref": "protocol-extraction.schema.json#/$defs/crossEvidenceStatusValue"
+        }
+      ]
     }
   }
 }

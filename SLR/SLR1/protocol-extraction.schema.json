@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction.schema.json",
-  "title": "SLR1 extraction schema",
-  "description": "Machine-readable schema for protocol-extraction.md. This schema is being defined incrementally.",
+  "title": "SLR1 extraction schema v2",
+  "description": "Machine-readable schema for protocol-extraction.md. Version 2 adds linked normalization records for every synthesis field.",
   "$ref": "#/$defs/reportExtraction",
   "$defs": {
     "stableId": {
@@ -101,10 +101,31 @@
           "properties": {
             "value": {
               "type": "string"
+            },
+            "linked_record_refs": {
+              "$ref": "#/$defs/recordReferences"
+            },
+            "normalization_status": {
+              "const": "not_for_synthesis"
             }
           },
           "required": [
             "value"
+          ],
+          "oneOf": [
+            {
+              "required": [
+                "linked_record_refs"
+              ]
+            },
+            {
+              "required": [
+                "normalization_status"
+              ],
+              "properties": {
+                "linked_record_refs": false
+              }
+            }
           ]
         }
       ],
@@ -222,7 +243,7 @@
             "value": {
               "type": "array",
               "items": {
-                "type": "string"
+                "$ref": "#/$defs/sourceTextItem"
               },
               "minItems": 1
             }
@@ -713,10 +734,31 @@
           "properties": {
             "value": {
               "type": "string"
+            },
+            "linked_record_refs": {
+              "$ref": "#/$defs/recordReferences"
+            },
+            "normalization_status": {
+              "const": "not_for_synthesis"
             }
           },
           "required": [
             "value"
+          ],
+          "oneOf": [
+            {
+              "required": [
+                "linked_record_refs"
+              ]
+            },
+            {
+              "required": [
+                "normalization_status"
+              ],
+              "properties": {
+                "linked_record_refs": false
+              }
+            }
           ]
         }
       ],
@@ -744,7 +786,7 @@
             "value": {
               "type": "array",
               "items": {
-                "type": "string"
+                "$ref": "#/$defs/sourceTextItem"
               },
               "minItems": 1
             }
@@ -820,7 +862,7 @@
     "rowString": {
       "oneOf": [
         {
-          "type": "string"
+          "$ref": "#/$defs/sourceTextItem"
         },
         {
           "$ref": "#/$defs/rowFieldStatus"
@@ -832,7 +874,7 @@
         {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/$defs/sourceTextItem"
           },
           "minItems": 1
         },
@@ -975,6 +1017,9 @@
             },
             "availability": {
               "$ref": "#/$defs/availability"
+            },
+            "provider_organization_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -984,7 +1029,8 @@
             "tool_kind",
             "roles",
             "provider_or_owner",
-            "availability"
+            "availability",
+            "provider_organization_entity_ids"
           ]
         }
       ],
@@ -1192,6 +1238,15 @@
             },
             "linked_tool_ids": {
               "$ref": "#/$defs/rowIdArray"
+            },
+            "source_resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "selection_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "contribution_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -1203,7 +1258,10 @@
             "linked_input_group_ids",
             "linked_eps_requirement_ids",
             "linked_model_artifact_ids",
-            "linked_tool_ids"
+            "linked_tool_ids",
+            "source_resource_ids",
+            "selection_rule_ids",
+            "contribution_relationship_ids"
           ]
         }
       ],
@@ -1270,34 +1328,34 @@
           "$ref": "#/$defs/procedureDetailLevel"
         },
         "ordered_or_connected_steps": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "material_inputs": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "outputs": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "roles_and_responsibilities": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "tools_and_settings": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "decision_rules": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "branching_and_iteration": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "quality_or_completion_checks": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "worked_example": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "supporting_materials": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/procedureComponent"
         },
         "detail_level_reason": {
           "$ref": "#/$defs/evidencedString"
@@ -1372,6 +1430,33 @@
             },
             "branching_iteration_or_rework": {
               "$ref": "#/$defs/rowString"
+            },
+            "input_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "output_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "responsible_role_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "tool_configuration_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "automation_level": {
+              "$ref": "#/$defs/automationLevelCode"
+            },
+            "decision_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "quality_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "rework_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -1389,7 +1474,16 @@
             "automation",
             "decision_rules",
             "quality_or_exit_checks",
-            "branching_iteration_or_rework"
+            "branching_iteration_or_rework",
+            "input_refs",
+            "output_refs",
+            "responsible_role_entity_ids",
+            "tool_configuration_entity_ids",
+            "automation_level",
+            "decision_rule_ids",
+            "quality_check_ids",
+            "control_flow_relationship_ids",
+            "rework_issue_ids"
           ]
         }
       ],
@@ -1432,6 +1526,27 @@
         },
         "genericity_validation": {
           "$ref": "#/$defs/evidencedString"
+        },
+        "target_model_artifact_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "selection_and_exclusion_rule_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "derivation_relationship_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "abstraction_and_normalization_rule_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "conflict_issue_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "source_to_model_relationship_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "genericity_check_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -1441,7 +1556,14 @@
         "abstraction_and_normalization_rules",
         "conflicts_and_resolution",
         "trace_from_sources_to_model_content",
-        "genericity_validation"
+        "genericity_validation",
+        "target_model_artifact_ids",
+        "selection_and_exclusion_rule_ids",
+        "derivation_relationship_ids",
+        "abstraction_and_normalization_rule_ids",
+        "conflict_issue_ids",
+        "source_to_model_relationship_ids",
+        "genericity_check_ids"
       ],
       "additionalProperties": false
     },
@@ -1515,6 +1637,27 @@
             },
             "procedure_reporting": {
               "$ref": "#/$defs/procedureReporting"
+            },
+            "method_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "purpose_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "entry_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "completion_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "supporting_resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -1536,7 +1679,14 @@
             "generic_model_derivation",
             "supporting_material_location",
             "supporting_material_availability",
-            "procedure_reporting"
+            "procedure_reporting",
+            "method_entity_ids",
+            "purpose_entity_ids",
+            "scope_refs",
+            "entry_rule_ids",
+            "completion_rule_ids",
+            "control_flow_relationship_ids",
+            "supporting_resource_ids"
           ]
         }
       ],
@@ -1559,13 +1709,55 @@
             },
             "linked_tool_ids": {
               "$ref": "#/$defs/rowIdArray"
+            },
+            "canonical_key": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._:/+-]*$"
+            },
+            "version_identifier": {
+              "$ref": "#/$defs/rowString"
+            },
+            "artifact_kind": {
+              "$ref": "#/$defs/modelArtifactKindCode"
+            },
+            "linked_resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "availability": {
+              "$ref": "#/$defs/availability"
+            },
+            "parent_model_artifact_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
             "model_artifact_id",
             "name_or_description",
-            "linked_tool_ids"
+            "linked_tool_ids",
+            "canonical_key",
+            "version_identifier",
+            "artifact_kind",
+            "linked_resource_ids",
+            "availability",
+            "parent_model_artifact_ids"
           ]
+        },
+        {
+          "if": {
+            "properties": {
+              "artifact_kind": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "artifact_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
         }
       ],
       "unevaluatedProperties": false
@@ -1697,6 +1889,33 @@
             },
             "branching_iteration_or_rework": {
               "$ref": "#/$defs/rowString"
+            },
+            "input_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "output_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "responsible_role_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "tool_configuration_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "automation_level": {
+              "$ref": "#/$defs/automationLevelCode"
+            },
+            "decision_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "quality_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "rework_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -1714,7 +1933,16 @@
             "automation",
             "decision_rules",
             "quality_or_exit_checks",
-            "branching_iteration_or_rework"
+            "branching_iteration_or_rework",
+            "input_refs",
+            "output_refs",
+            "responsible_role_entity_ids",
+            "tool_configuration_entity_ids",
+            "automation_level",
+            "decision_rule_ids",
+            "quality_check_ids",
+            "control_flow_relationship_ids",
+            "rework_issue_ids"
           ]
         }
       ],
@@ -1804,6 +2032,39 @@
             },
             "procedure_reporting": {
               "$ref": "#/$defs/procedureReporting"
+            },
+            "workflow_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "purpose_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "entry_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "exit_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "handoff_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "responsible_role_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "automation_level": {
+              "$ref": "#/$defs/automationLevelCode"
+            },
+            "governance_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "supporting_resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -1825,7 +2086,18 @@
             "governance_and_configuration_control",
             "supporting_material_location",
             "supporting_material_availability",
-            "procedure_reporting"
+            "procedure_reporting",
+            "workflow_entity_ids",
+            "purpose_entity_ids",
+            "scope_refs",
+            "entry_rule_ids",
+            "exit_rule_ids",
+            "control_flow_relationship_ids",
+            "handoff_relationship_ids",
+            "responsible_role_entity_ids",
+            "automation_level",
+            "governance_rule_ids",
+            "supporting_resource_ids"
           ]
         }
       ],
@@ -2338,7 +2610,7 @@
               "$ref": "#/$defs/stableId"
             },
             "source_requirement_id": {
-              "$ref": "#/$defs/rowString"
+              "$ref": "#/$defs/legacyRowString"
             },
             "statement_or_description": {
               "$ref": "#/$defs/rowString"
@@ -2363,6 +2635,15 @@
             },
             "linked_model_artifact_ids": {
               "$ref": "#/$defs/rowIdArray"
+            },
+            "constraint_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "verification_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -2375,7 +2656,10 @@
             "mbse_inclusion",
             "parent_eps_requirement_ids",
             "linked_eps_element_ids",
-            "linked_model_artifact_ids"
+            "linked_model_artifact_ids",
+            "constraint_rule_ids",
+            "quantity_ids",
+            "verification_check_ids"
           ]
         }
       ],
@@ -2686,6 +2970,21 @@
             },
             "output_or_result": {
               "$ref": "#/$defs/rowString"
+            },
+            "action_or_item_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "guard_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "timing_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "output_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
             }
           },
           "required": [
@@ -2702,7 +3001,12 @@
             "guard_or_condition",
             "branch_loop_or_parallelism",
             "timing_or_duration",
-            "output_or_result"
+            "output_or_result",
+            "action_or_item_entity_ids",
+            "guard_rule_ids",
+            "control_flow_relationship_ids",
+            "timing_quantity_ids",
+            "output_refs"
           ]
         }
       ],
@@ -2793,6 +3097,15 @@
             },
             "behavior_occurrences": {
               "$ref": "#/$defs/behaviorOccurrences"
+            },
+            "linked_modeling_language_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "purpose_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_decision_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -2816,7 +3129,10 @@
             "linked_result_set_ids",
             "linked_result_output_ids",
             "linked_result_criterion_ids",
-            "behavior_occurrences"
+            "behavior_occurrences",
+            "linked_modeling_language_entity_ids",
+            "purpose_entity_ids",
+            "linked_decision_ids"
           ]
         }
       ],
@@ -3072,6 +3388,12 @@
             },
             "reason": {
               "$ref": "#/$defs/rowString"
+            },
+            "reason_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -3085,7 +3407,9 @@
             "linked_model_artifact_ids",
             "linked_model_representation_ids",
             "coverage_status",
-            "reason"
+            "reason",
+            "reason_rule_ids",
+            "linked_issue_ids"
           ]
         }
       ],
@@ -3212,6 +3536,15 @@
         },
         "assessment_reason": {
           "$ref": "#/$defs/evidencedString"
+        },
+        "denominator_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "assessment_rule_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_issue_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -3220,7 +3553,10 @@
         "coverage_basis",
         "coverage_items",
         "linked_rq1_claim_ids",
-        "assessment_reason"
+        "assessment_reason",
+        "denominator_refs",
+        "assessment_rule_ids",
+        "linked_issue_ids"
       ],
       "additionalProperties": false
     },
@@ -3349,6 +3685,18 @@
             },
             "exchange_scope": {
               "$ref": "#/$defs/exchangeScope"
+            },
+            "exchanged_item_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "exchange_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "normalized_direction": {
+              "$ref": "#/$defs/exchangeDirectionCode"
+            },
+            "relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -3362,7 +3710,11 @@
             "exchanged_item",
             "direction",
             "exchange_type",
-            "exchange_scope"
+            "exchange_scope",
+            "exchanged_item_entity_ids",
+            "exchange_quantity_ids",
+            "normalized_direction",
+            "relationship_ids"
           ]
         }
       ],
@@ -3969,6 +4321,9 @@
             },
             "eps_model_availability": {
               "$ref": "#/$defs/availability"
+            },
+            "linked_decision_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -3993,7 +4348,8 @@
             "supported_decisions",
             "coverage_assessment",
             "eps_model_maturity",
-            "eps_model_availability"
+            "eps_model_availability",
+            "linked_decision_ids"
           ]
         }
       ],
@@ -4230,6 +4586,42 @@
             },
             "linked_benefit_or_trade_off": {
               "$ref": "#/$defs/evidencedString"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "team_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "role_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "skill_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "decision_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_rq2_finding_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "automation_level": {
+              "$ref": "#/$defs/automationLevelCode"
             }
           },
           "required": [
@@ -4262,7 +4654,19 @@
             "reported_burden",
             "measurement_method",
             "mitigation",
-            "linked_benefit_or_trade_off"
+            "linked_benefit_or_trade_off",
+            "scope_refs",
+            "team_entity_ids",
+            "role_entity_ids",
+            "skill_entity_ids",
+            "quantity_ids",
+            "resource_ids",
+            "relationship_ids",
+            "rule_ids",
+            "issue_ids",
+            "decision_ids",
+            "linked_rq2_finding_ids",
+            "automation_level"
           ]
         }
       ],
@@ -4401,22 +4805,6 @@
             "linked_tool_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
-            "parameters_or_constructs": {
-              "$ref": "#/$defs/evidencedStringArray"
-            },
-            "material_source_reported_values_or_descriptions": {
-              "description": "Preserve material source values or descriptions with units, time basis, and nominal, worst-case, range, or distribution basis when reported.",
-              "$ref": "#/$defs/evidencedStringArray"
-            },
-            "input_source_types": {
-              "$ref": "#/$defs/inputSourceTypes"
-            },
-            "material_uncertainty_variability_margin_sensitivity_or_degradation_handling": {
-              "$ref": "#/$defs/evidencedString"
-            },
-            "rationale": {
-              "$ref": "#/$defs/evidencedString"
-            },
             "linked_result_output_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
@@ -4429,8 +4817,8 @@
             "linked_report_application_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
-            "decisions": {
-              "$ref": "#/$defs/evidencedStringArray"
+            "input_items": {
+              "$ref": "#/$defs/inputItems"
             }
           },
           "required": [
@@ -4443,16 +4831,11 @@
             "linked_report_reuse_record_ids",
             "linked_eps_requirement_ids",
             "linked_tool_ids",
-            "parameters_or_constructs",
-            "material_source_reported_values_or_descriptions",
-            "input_source_types",
-            "material_uncertainty_variability_margin_sensitivity_or_degradation_handling",
-            "rationale",
             "linked_result_output_ids",
             "linked_result_criterion_ids",
             "linked_rq3_activity_ids",
             "linked_report_application_ids",
-            "decisions"
+            "input_items"
           ]
         }
       ],
@@ -4495,42 +4878,6 @@
         }
       ]
     },
-    "statisticalEvaluation": {
-      "type": "object",
-      "properties": {
-        "central_tendency": {
-          "$ref": "#/$defs/rowString"
-        },
-        "dispersion": {
-          "$ref": "#/$defs/rowString"
-        },
-        "absolute_or_relative_difference": {
-          "$ref": "#/$defs/rowString"
-        },
-        "effect_estimate": {
-          "$ref": "#/$defs/rowString"
-        },
-        "confidence_interval": {
-          "$ref": "#/$defs/rowString"
-        },
-        "exact_p_value": {
-          "$ref": "#/$defs/rowString"
-        },
-        "statistical_method": {
-          "$ref": "#/$defs/rowString"
-        }
-      },
-      "required": [
-        "central_tendency",
-        "dispersion",
-        "absolute_or_relative_difference",
-        "effect_estimate",
-        "confidence_interval",
-        "exact_p_value",
-        "statistical_method"
-      ],
-      "additionalProperties": false
-    },
     "resultOutput": {
       "type": "object",
       "allOf": [
@@ -4549,34 +4896,39 @@
             "source_reported_value": {
               "$ref": "#/$defs/rowString"
             },
-            "unit": {
-              "$ref": "#/$defs/rowString"
-            },
-            "time_basis": {
-              "$ref": "#/$defs/rowString"
-            },
-            "denominator": {
-              "$ref": "#/$defs/rowString"
-            },
             "observed_or_expected_status": {
               "$ref": "#/$defs/observationStatus"
             },
-            "output_specific_missing_observations_or_exclusions": {
-              "$ref": "#/$defs/rowString"
+            "linked_construct_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
             },
-            "statistical_evaluation": {
-              "$ref": "#/$defs/statisticalEvaluation"
+            "linked_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_comparator_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "group_or_arm_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "statistical_evaluations": {
+              "$ref": "#/$defs/statisticalEvaluationRecords"
             }
           },
           "required": [
             "result_output_id",
             "quantity_or_construct",
             "source_reported_value",
-            "unit",
-            "time_basis",
-            "denominator",
             "observed_or_expected_status",
-            "output_specific_missing_observations_or_exclusions"
+            "linked_construct_entity_ids",
+            "linked_quantity_ids",
+            "linked_comparator_ids",
+            "group_or_arm_entity_ids",
+            "linked_issue_ids",
+            "statistical_evaluations"
           ]
         }
       ],
@@ -4649,7 +5001,7 @@
               "$ref": "#/$defs/stableId"
             },
             "source_criterion_or_requirement_id": {
-              "$ref": "#/$defs/rowString"
+              "$ref": "#/$defs/legacyRowString"
             },
             "linked_eps_requirement_ids": {
               "$ref": "#/$defs/rowIdArray"
@@ -4680,6 +5032,27 @@
             },
             "why_criterion_or_oracle_is_authoritative_for_intended_use": {
               "$ref": "#/$defs/evidencedString"
+            },
+            "target_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "threshold_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "threshold_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "source_resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "verdict": {
+              "$ref": "#/$defs/criterionVerdictCode"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "authority_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -4694,7 +5067,14 @@
             "linked_result_output_ids",
             "scope",
             "observed_or_expected_status",
-            "why_criterion_or_oracle_is_authoritative_for_intended_use"
+            "why_criterion_or_oracle_is_authoritative_for_intended_use",
+            "target_refs",
+            "threshold_rule_ids",
+            "threshold_quantity_ids",
+            "source_resource_ids",
+            "verdict",
+            "scope_refs",
+            "authority_check_ids"
           ]
         }
       ],
@@ -4771,13 +5151,25 @@
             },
             "how_the_source_handled_it": {
               "$ref": "#/$defs/rowString"
+            },
+            "linked_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "handling_code": {
+              "$ref": "#/$defs/rivalHandlingCode"
+            },
+            "linked_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
             "rival_explanation_id",
             "origin",
             "explanation",
-            "how_the_source_handled_it"
+            "how_the_source_handled_it",
+            "linked_issue_ids",
+            "handling_code",
+            "linked_check_ids"
           ]
         }
       ],
@@ -4911,6 +5303,15 @@
             },
             "rival_explanations": {
               "$ref": "#/$defs/rivalExplanations"
+            },
+            "target_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "material_difference_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -4919,7 +5320,10 @@
             "comparator_type",
             "material_differences",
             "comparator_adequacy",
-            "rival_explanations"
+            "rival_explanations",
+            "target_refs",
+            "material_difference_relationship_ids",
+            "linked_issue_ids"
           ]
         }
       ],
@@ -4973,7 +5377,7 @@
               "$ref": "#/$defs/rowString"
             },
             "analysis_script_path": {
-              "$ref": "#/$defs/rowString"
+              "$ref": "#/$defs/legacyRowString"
             },
             "reviewer_derived_result": {
               "$ref": "#/$defs/rowString"
@@ -4983,6 +5387,30 @@
             },
             "provenance": {
               "const": "reviewer_derived"
+            },
+            "linked_input_item_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_source_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "formula_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "unit_conversion_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "assumption_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "result_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "sensitivity_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -4996,7 +5424,15 @@
             "missing_data_handling",
             "analysis_script_path",
             "reviewer_derived_result",
-            "sensitivity_to_reasonable_alternatives"
+            "sensitivity_to_reasonable_alternatives",
+            "linked_input_item_ids",
+            "linked_source_quantity_ids",
+            "formula_rule_ids",
+            "unit_conversion_relationship_ids",
+            "assumption_rule_ids",
+            "linked_issue_ids",
+            "result_quantity_ids",
+            "sensitivity_quantity_ids"
           ]
         },
         {
@@ -5156,12 +5592,6 @@
             "linked_tool_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
-            "cases_participants_or_observational_units": {
-              "$ref": "#/$defs/evidencedString"
-            },
-            "data_sources": {
-              "$ref": "#/$defs/evidencedStringArray"
-            },
             "method": {
               "$ref": "#/$defs/evidencedString"
             },
@@ -5169,9 +5599,6 @@
               "$ref": "#/$defs/executionStatus"
             },
             "analysis_method": {
-              "$ref": "#/$defs/evidencedString"
-            },
-            "evaluation_level_missing_data_failures_exclusions_uncertainty_and_sensitivity": {
               "$ref": "#/$defs/evidencedString"
             },
             "outputs": {
@@ -5183,14 +5610,32 @@
             "comparators": {
               "$ref": "#/$defs/resultComparators"
             },
-            "decision_informed": {
-              "$ref": "#/$defs/evidencedString"
-            },
-            "physical_or_operational_link": {
-              "$ref": "#/$defs/evidencedString"
-            },
             "reviewer_derived_values": {
               "$ref": "#/$defs/reviewerDerivedValues"
+            },
+            "linked_scenario_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_configuration_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "evaluation_units": {
+              "$ref": "#/$defs/evaluationUnits"
+            },
+            "data_source_resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "analysis_method_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_decision_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_physical_or_operational_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -5200,18 +5645,21 @@
             "scenario_or_configuration",
             "linked_input_group_ids",
             "linked_tool_ids",
-            "cases_participants_or_observational_units",
-            "data_sources",
             "method",
             "execution_status",
             "analysis_method",
-            "evaluation_level_missing_data_failures_exclusions_uncertainty_and_sensitivity",
             "outputs",
             "criteria",
             "comparators",
-            "decision_informed",
-            "physical_or_operational_link",
-            "reviewer_derived_values"
+            "reviewer_derived_values",
+            "linked_scenario_entity_ids",
+            "linked_configuration_entity_ids",
+            "evaluation_units",
+            "data_source_resource_ids",
+            "analysis_method_entity_ids",
+            "linked_issue_ids",
+            "linked_decision_ids",
+            "linked_physical_or_operational_relationship_ids"
           ]
         }
       ],
@@ -5318,12 +5766,48 @@
             "value": {
               "type": "string"
             },
-            "citation_ids": true
+            "citation_ids": true,
+            "basis_refs": {
+              "$ref": "#/$defs/recordReferences"
+            },
+            "limitation_codes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/supportLimitationCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
           },
           "required": [
             "value",
-            "citation_ids"
+            "citation_ids",
+            "basis_refs",
+            "limitation_codes"
           ]
+        },
+        {
+          "if": {
+            "properties": {
+              "limitation_codes": {
+                "type": "array",
+                "contains": {
+                  "const": "none"
+                }
+              }
+            },
+            "required": [
+              "limitation_codes"
+            ]
+          },
+          "then": {
+            "properties": {
+              "limitation_codes": {
+                "type": "array",
+                "maxItems": 1
+              }
+            }
+          }
         }
       ],
       "unevaluatedProperties": false
@@ -5357,6 +5841,25 @@
             },
             "identity_and_derivation_evidence": {
               "$ref": "#/$defs/rowString"
+            },
+            "parent_model_artifact_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "derived_model_artifact_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "relationship_type": {
+              "$ref": "#/$defs/artifactDerivationTypeCode"
             }
           },
           "required": [
@@ -5366,8 +5869,28 @@
             "derived_artifact_name",
             "derived_artifact_version",
             "relationship_or_derivation",
-            "identity_and_derivation_evidence"
+            "identity_and_derivation_evidence",
+            "parent_model_artifact_ids",
+            "derived_model_artifact_ids",
+            "relationship_type"
           ]
+        },
+        {
+          "if": {
+            "properties": {
+              "relationship_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "relationship_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
         }
       ],
       "unevaluatedProperties": false
@@ -5549,13 +6072,43 @@
           "$ref": "#/$defs/evidencedStringArray"
         },
         "linked_tool_ids": {
-          "$ref": "#/$defs/evidencedStringArray"
+          "$ref": "#/$defs/evidencedIdArray"
         },
         "organizational_prerequisites": {
           "$ref": "#/$defs/evidencedStringArray"
         },
         "exclusions_and_limits": {
           "$ref": "#/$defs/evidencedStringArray"
+        },
+        "target_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "lifecycle_stages": {
+          "$ref": "#/$defs/lifecycleStages"
+        },
+        "linked_decision_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "eps_scope_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "model_scope_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "architecture_and_interface_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "environment_mode_and_load_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "required_input_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "organizational_prerequisite_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "limit_rule_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -5568,7 +6121,17 @@
         "required_inputs",
         "linked_tool_ids",
         "organizational_prerequisites",
-        "exclusions_and_limits"
+        "exclusions_and_limits",
+        "target_refs",
+        "lifecycle_stages",
+        "linked_decision_ids",
+        "eps_scope_refs",
+        "model_scope_refs",
+        "architecture_and_interface_refs",
+        "environment_mode_and_load_refs",
+        "required_input_refs",
+        "organizational_prerequisite_refs",
+        "limit_rule_ids"
       ],
       "additionalProperties": false
     },
@@ -5654,6 +6217,21 @@
             },
             "unchanged_use_allowed_and_when": {
               "$ref": "#/$defs/rowString"
+            },
+            "target_refs": {
+              "$ref": "#/$defs/recordReferences"
+            },
+            "option_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "dependency_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "selection_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "unchanged_use": {
+              "$ref": "#/$defs/unchangedUseCode"
             }
           },
           "required": [
@@ -5666,7 +6244,12 @@
             "allowed_options_ranges_and_defaults",
             "dependencies_and_constraints",
             "selection_trigger_or_condition",
-            "unchanged_use_allowed_and_when"
+            "unchanged_use_allowed_and_when",
+            "target_refs",
+            "option_quantity_ids",
+            "dependency_relationship_ids",
+            "selection_rule_ids",
+            "unchanged_use"
           ]
         }
       ],
@@ -5795,6 +6378,27 @@
             },
             "rationale": {
               "$ref": "#/$defs/rowString"
+            },
+            "trigger_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "required_input_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "responsible_role_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "tool_configuration_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "output_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "constraint_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "acceptance_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -5809,7 +6413,14 @@
             "resulting_output",
             "constraints_and_exceptions",
             "acceptance_check",
-            "rationale"
+            "rationale",
+            "trigger_rule_ids",
+            "required_input_refs",
+            "responsible_role_entity_ids",
+            "tool_configuration_entity_ids",
+            "output_refs",
+            "constraint_rule_ids",
+            "acceptance_check_ids"
           ]
         }
       ],
@@ -5882,6 +6493,33 @@
             },
             "branching_or_iteration": {
               "$ref": "#/$defs/rowString"
+            },
+            "input_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "output_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "responsible_role_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "tool_configuration_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "automation_level": {
+              "$ref": "#/$defs/automationLevelCode"
+            },
+            "decision_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "quality_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "rework_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -5899,7 +6537,16 @@
             "automation",
             "decision_rule",
             "quality_or_exit_check",
-            "branching_or_iteration"
+            "branching_or_iteration",
+            "input_refs",
+            "output_refs",
+            "responsible_role_entity_ids",
+            "tool_configuration_entity_ids",
+            "automation_level",
+            "decision_rule_ids",
+            "quality_check_ids",
+            "control_flow_relationship_ids",
+            "rework_issue_ids"
           ]
         }
       ],
@@ -5944,7 +6591,7 @@
           "$ref": "#/$defs/evidencedStringArray"
         },
         "required_tool_ids": {
-          "$ref": "#/$defs/evidencedStringArray"
+          "$ref": "#/$defs/evidencedIdArray"
         },
         "required_data_and_tool_settings": {
           "$ref": "#/$defs/evidencedStringArray"
@@ -5957,6 +6604,24 @@
         },
         "tailoring_procedure_reporting": {
           "$ref": "#/$defs/procedureReporting"
+        },
+        "core_member_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "dependency_relationship_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "required_role_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "required_skill_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "required_data_and_configuration_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "governance_rule_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -5971,7 +6636,13 @@
         "required_data_and_tool_settings",
         "automation",
         "governance_and_configuration_control",
-        "tailoring_procedure_reporting"
+        "tailoring_procedure_reporting",
+        "core_member_refs",
+        "dependency_relationship_ids",
+        "required_role_entity_ids",
+        "required_skill_entity_ids",
+        "required_data_and_configuration_refs",
+        "governance_rule_ids"
       ],
       "additionalProperties": false
     },
@@ -6454,6 +7125,21 @@
         },
         "material_setting_differences": {
           "$ref": "#/$defs/evidencedString"
+        },
+        "target_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "adopting_team_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "lifecycle_stages": {
+          "$ref": "#/$defs/lifecycleStages"
+        },
+        "linked_decision_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "material_difference_relationship_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -6463,7 +7149,12 @@
         "relationship_to_originator",
         "lifecycle_purpose",
         "relationship_to_declared_applicability_envelope",
-        "material_setting_differences"
+        "material_setting_differences",
+        "target_refs",
+        "adopting_team_entity_ids",
+        "lifecycle_stages",
+        "linked_decision_ids",
+        "material_difference_relationship_ids"
       ],
       "additionalProperties": false
     },
@@ -6523,6 +7214,39 @@
             },
             "operation_check_and_result": {
               "$ref": "#/$defs/rowString"
+            },
+            "target_refs": {
+              "$ref": "#/$defs/recordReferences"
+            },
+            "before_state_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "after_state_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "reason_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "input_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "responsible_role_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "tool_configuration_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "check_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "operation_result": {
+              "$ref": "#/$defs/operationResultCode"
+            },
+            "automation_level": {
+              "$ref": "#/$defs/automationLevelCode"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -6541,7 +7265,18 @@
             "responsible_role",
             "linked_tool_ids",
             "tools_and_automation",
-            "operation_check_and_result"
+            "operation_check_and_result",
+            "target_refs",
+            "before_state_refs",
+            "after_state_refs",
+            "reason_rule_ids",
+            "input_refs",
+            "responsible_role_entity_ids",
+            "tool_configuration_entity_ids",
+            "check_ids",
+            "operation_result",
+            "automation_level",
+            "control_flow_relationship_ids"
           ]
         }
       ],
@@ -6601,6 +7336,24 @@
           },
           "minItems": 1,
           "uniqueItems": true
+        },
+        "base_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "retained_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "changed_refs": {
+          "$ref": "#/$defs/rowRecordReferences"
+        },
+        "before_after_relationship_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "reason_rule_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_input_item_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -6614,7 +7367,13 @@
         "before_and_after_trace",
         "reasons_for_changes_or_unchanged_use",
         "tailoring_or_adaptation_inputs_and_assumptions",
-        "linked_implementation_record_ids"
+        "linked_implementation_record_ids",
+        "base_refs",
+        "retained_refs",
+        "changed_refs",
+        "before_after_relationship_ids",
+        "reason_rule_ids",
+        "linked_input_item_ids"
       ],
       "additionalProperties": false
     },
@@ -6662,6 +7421,30 @@
         },
         "linked_rq3_activity_ids": {
           "$ref": "#/$defs/rowIdArray"
+        },
+        "resulting_model_artifact_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "configuration_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_decision_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "trade_off_rq2_finding_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "post_application_criterion_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "assurance_check_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "assurance_rq3_activity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "discrepancy_issue_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -6678,7 +7461,15 @@
         "discrepancies_and_resolution",
         "linked_result_set_ids",
         "linked_rq2_finding_ids",
-        "linked_rq3_activity_ids"
+        "linked_rq3_activity_ids",
+        "resulting_model_artifact_ids",
+        "configuration_entity_ids",
+        "linked_decision_ids",
+        "trade_off_rq2_finding_ids",
+        "post_application_criterion_ids",
+        "assurance_check_ids",
+        "assurance_rq3_activity_ids",
+        "discrepancy_issue_ids"
       ],
       "additionalProperties": false
     },
@@ -6696,13 +7487,33 @@
         },
         "adopter_attributable_evidence_for_assurance": {
           "$ref": "#/$defs/evidencedString"
+        },
+        "personnel_overlap_status": {
+          "$ref": "#/$defs/personnelOverlapCode"
+        },
+        "implementing_team_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "controlling_team_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "adoption_evidence_refs": {
+          "$ref": "#/$defs/recordReferences"
+        },
+        "assurance_evidence_refs": {
+          "$ref": "#/$defs/recordReferences"
         }
       },
       "required": [
         "personnel_overlap",
         "implementation_control",
         "adopter_attributable_evidence_for_adoption",
-        "adopter_attributable_evidence_for_assurance"
+        "adopter_attributable_evidence_for_assurance",
+        "personnel_overlap_status",
+        "implementing_team_entity_ids",
+        "controlling_team_entity_ids",
+        "adoption_evidence_refs",
+        "assurance_evidence_refs"
       ],
       "additionalProperties": false
     },
@@ -6946,14 +7757,17 @@
           "uniqueItems": true
         },
         "derivation_reason": {
-          "type": "string",
-          "minLength": 1
+          "$ref": "#/$defs/sourceTextItem"
+        },
+        "derivation_rule": {
+          "$ref": "#/$defs/profileDerivationRuleCode"
         }
       },
       "required": [
         "value",
         "basis_ids",
-        "derivation_reason"
+        "derivation_reason",
+        "derivation_rule"
       ],
       "additionalProperties": false
     },
@@ -7559,6 +8373,9 @@
             },
             "support_reason": {
               "$ref": "#/$defs/supportReasonValue"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
             }
           },
           "required": [
@@ -7585,7 +8402,8 @@
             "linked_implementation_record_ids",
             "evidence_basis",
             "support",
-            "support_reason"
+            "support_reason",
+            "scope_refs"
           ]
         }
       ],
@@ -7894,7 +8712,7 @@
               "$ref": "#/$defs/rq3TargetType"
             },
             "source_requirement_or_criterion_id": {
-              "$ref": "#/$defs/rowString"
+              "$ref": "#/$defs/legacyRowString"
             },
             "linked_eps_requirement_ids": {
               "$ref": "#/$defs/rowIdArray"
@@ -7979,6 +8797,32 @@
             },
             "support_reason": {
               "$ref": "#/$defs/supportReasonValue"
+            },
+            "eligibility_reason_codes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/eligibilityReasonCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "target_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "model_to_vv_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "vv_method_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "discrepancy_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "later_physical_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "closure_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -8015,7 +8859,14 @@
             "model_to_test_closure",
             "evidence_basis",
             "support",
-            "support_reason"
+            "support_reason",
+            "eligibility_reason_codes",
+            "target_refs",
+            "model_to_vv_relationship_ids",
+            "vv_method_entity_ids",
+            "discrepancy_issue_ids",
+            "later_physical_relationship_ids",
+            "closure_check_ids"
           ]
         },
         {
@@ -8079,6 +8930,93 @@
                 }
               }
             }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "direct_synthesis": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "const": "yes"
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "direct_synthesis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "eligibility_reason_codes": {
+                "type": "array",
+                "items": {
+                  "const": "not_applicable"
+                },
+                "minItems": 1,
+                "maxItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "direct_synthesis": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "enum": [
+                      "no",
+                      "uncertain"
+                    ]
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "direct_synthesis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "eligibility_reason_codes": {
+                "type": "array",
+                "not": {
+                  "contains": {
+                    "const": "not_applicable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "eligibility_reason_codes": {
+                "type": "array",
+                "contains": {
+                  "const": "other"
+                }
+              }
+            },
+            "required": [
+              "eligibility_reason_codes"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
           }
         }
       ],
@@ -8197,6 +9135,23 @@
             },
             "support_reason": {
               "$ref": "#/$defs/supportReasonValue"
+            },
+            "eligibility_reason_codes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/eligibilityReasonCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "target_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "scope_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "mechanism_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
             }
           },
           "required": [
@@ -8234,7 +9189,11 @@
             "applicability",
             "evidence_basis",
             "support",
-            "support_reason"
+            "support_reason",
+            "eligibility_reason_codes",
+            "target_refs",
+            "scope_refs",
+            "mechanism_relationship_ids"
           ]
         },
         {
@@ -8293,6 +9252,93 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "direct_synthesis": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "const": "yes"
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "direct_synthesis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "eligibility_reason_codes": {
+                "type": "array",
+                "items": {
+                  "const": "not_applicable"
+                },
+                "minItems": 1,
+                "maxItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "direct_synthesis": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "enum": [
+                      "no",
+                      "uncertain"
+                    ]
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "direct_synthesis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "eligibility_reason_codes": {
+                "type": "array",
+                "not": {
+                  "contains": {
+                    "const": "not_applicable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "eligibility_reason_codes": {
+                "type": "array",
+                "contains": {
+                  "const": "other"
+                }
+              }
+            },
+            "required": [
+              "eligibility_reason_codes"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
         }
       ],
       "unevaluatedProperties": false
@@ -8318,19 +9364,19 @@
               "uniqueItems": true
             },
             "shared_investigation_or_implementation": {
-              "$ref": "#/$defs/evidencedString"
+              "$ref": "#/$defs/legacyEvidencedString"
             },
             "relationship_among_reports": {
-              "$ref": "#/$defs/evidencedString"
+              "$ref": "#/$defs/legacyEvidencedString"
             },
             "shared_data_models_methods_scenarios_or_results": {
-              "$ref": "#/$defs/evidencedStringArray"
+              "$ref": "#/$defs/legacyEvidencedStringArray"
             },
             "preferred_or_most_complete_version_for_overlapping_content": {
-              "$ref": "#/$defs/evidencedString"
+              "$ref": "#/$defs/legacyEvidencedString"
             },
             "dependence_reason": {
-              "$ref": "#/$defs/evidencedString"
+              "$ref": "#/$defs/legacyEvidencedString"
             }
           },
           "required": [
@@ -8397,13 +9443,13 @@
           "$ref": "#/$defs/stableId"
         },
         "possible_companion_reports_or_shared_implementations": {
-          "$ref": "#/$defs/evidencedStringArray"
+          "$ref": "#/$defs/legacyEvidencedStringArray"
         },
         "family_lead": {
           "$ref": "#/$defs/familyLeadValue"
         },
         "report_family_lead_reason": {
-          "$ref": "#/$defs/evidencedString"
+          "$ref": "#/$defs/legacyEvidencedString"
         },
         "source_file_path": {
           "type": "string",
@@ -8449,6 +9495,33 @@
         },
         "project_maturity": {
           "$ref": "#/$defs/projectMaturity"
+        },
+        "mission_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "platform_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "purpose_or_domain_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "form_factor_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "mass_quantity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "orbit_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "orbit_quantity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "environment_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "environment_quantity_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -8460,7 +9533,16 @@
         "development_setting",
         "lifecycle_stages_demonstrated",
         "lifecycle_stages_claimed_or_planned",
-        "project_maturity"
+        "project_maturity",
+        "mission_entity_ids",
+        "platform_entity_ids",
+        "purpose_or_domain_entity_ids",
+        "form_factor_entity_ids",
+        "mass_quantity_ids",
+        "orbit_entity_ids",
+        "orbit_quantity_ids",
+        "environment_entity_ids",
+        "environment_quantity_ids"
       ],
       "additionalProperties": false
     },
@@ -8503,8 +9585,32 @@
         "system_boundary": {
           "$ref": "#/$defs/evidencedString"
         },
-        "artifact_availability": {
-          "$ref": "#/$defs/availability"
+        "problem_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_decision_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "motivation_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_modeling_language_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "toolchain_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "toolchain_relationship_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "linked_concern_entity_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "concern_relationship_ids": {
+          "$ref": "#/$defs/rowIdArray"
+        },
+        "system_boundary_relationship_ids": {
+          "$ref": "#/$defs/rowIdArray"
         }
       },
       "required": [
@@ -8520,7 +9626,15 @@
         "modeled_systems_engineering_concerns",
         "explicit_relationships_among_concerns",
         "system_boundary",
-        "artifact_availability"
+        "problem_entity_ids",
+        "linked_decision_ids",
+        "motivation_entity_ids",
+        "linked_modeling_language_entity_ids",
+        "toolchain_entity_ids",
+        "toolchain_relationship_ids",
+        "linked_concern_entity_ids",
+        "concern_relationship_ids",
+        "system_boundary_relationship_ids"
       ],
       "additionalProperties": false
     },
@@ -8555,8 +9669,14 @@
     "reportExtraction": {
       "type": "object",
       "properties": {
+        "schema_version": {
+          "const": "slr1-extraction/v2"
+        },
         "identity": {
           "$ref": "#/$defs/reportIdentity"
+        },
+        "reference_catalog": {
+          "$ref": "#/$defs/referenceCatalog"
         },
         "context": {
           "$ref": "#/$defs/reportContext"
@@ -8662,7 +9782,9 @@
         }
       },
       "required": [
+        "schema_version",
         "identity",
+        "reference_catalog",
         "context",
         "mbse_approach",
         "eps_cases",
@@ -8678,6 +9800,1748 @@
         "citations"
       ],
       "additionalProperties": false
+    },
+    "legacyRowString": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "legacyEvidencedStringValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "legacyEvidencedString": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/legacyEvidencedStringValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "legacyEvidencedStringArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "legacyEvidencedStringArray": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/legacyEvidencedStringArrayValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "recordReference": {
+      "type": "string",
+      "pattern": "^(report|family|lineage|citation|entity|quantity|decision|relationship|rule|check|resource|issue|tool|model_artifact|model_generation_method|construction_source|method_step|workflow|workflow_activity|eps_case|eps_element|eps_requirement|eps_exchange|eps_dependency|model_representation|model_representation_relationship|behavior_occurrence|eps_model_bridge|coverage_item|implementation_record|input_group|input_item|result_set|evaluation_unit|result_output|statistical_evaluation|result_criterion|comparator|rival_explanation|reviewer_derived_value|rq1_claim|rq2_finding|rq3_activity|report_reuse_record|artifact_relationship|variation_point|tailoring_rule|tailoring_step|report_application|application_operation|tailoring_application):[^:]+$"
+    },
+    "recordReferences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/recordReference"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "sourceTextItem": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "source_text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "linked_record_refs": {
+              "$ref": "#/$defs/recordReferences"
+            }
+          },
+          "required": [
+            "source_text",
+            "linked_record_refs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "source_text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "normalization_status": {
+              "const": "not_for_synthesis"
+            }
+          },
+          "required": [
+            "source_text",
+            "normalization_status"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "rowIdentifier": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "rowNumber": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "rowInteger": {
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "evidencedIdArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "evidencedIdArray": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/evidencedIdArrayValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "crossEvidencedIdArrayValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossEvidencedIdArray": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossEvidencedIdArrayValue"
+        },
+        {
+          "$ref": "#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "entityTypeCode": {
+      "type": "string",
+      "enum": [
+        "mission",
+        "platform",
+        "organization",
+        "team",
+        "person",
+        "role",
+        "skill",
+        "modeling_language",
+        "systems_engineering_concern",
+        "problem",
+        "purpose_or_domain",
+        "orbit",
+        "environment_condition",
+        "mode_or_operation",
+        "scenario",
+        "configuration",
+        "data_source",
+        "quantity_or_construct",
+        "exchanged_item",
+        "interface",
+        "procedure_action",
+        "analysis_or_evaluation_method",
+        "physical_or_operational_item",
+        "artifact_content",
+        "group_or_arm",
+        "toolchain",
+        "boundary",
+        "scope",
+        "method",
+        "workflow",
+        "criterion",
+        "outcome",
+        "other",
+        "unclear"
+      ]
+    },
+    "canonicalEntity": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "entity_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "entity_type": {
+              "$ref": "#/$defs/entityTypeCode"
+            },
+            "source_name": {
+              "$ref": "#/$defs/sourceTextItem"
+            },
+            "canonical_key": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._:/+-]*$"
+            },
+            "version_identifier": {
+              "$ref": "#/$defs/rowString"
+            },
+            "parent_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "entity_id",
+            "entity_type",
+            "source_name",
+            "canonical_key",
+            "version_identifier",
+            "parent_entity_ids"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "entity_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "entity_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "canonicalEntities": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/canonicalEntity"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "quantityKindCode": {
+      "type": "string",
+      "enum": [
+        "physical_quantity",
+        "mass",
+        "length",
+        "orbit_parameter",
+        "environment",
+        "input_value",
+        "output_value",
+        "threshold",
+        "count",
+        "effort",
+        "duration",
+        "schedule_effect",
+        "financial_cost",
+        "statistic",
+        "sample_size",
+        "uncertainty",
+        "margin",
+        "sensitivity",
+        "degradation",
+        "other",
+        "unclear"
+      ]
+    },
+    "quantityValueFormCode": {
+      "type": "string",
+      "enum": [
+        "number",
+        "interval",
+        "distribution",
+        "categorical",
+        "boolean",
+        "text",
+        "unclear"
+      ]
+    },
+    "quantityValueBasisCode": {
+      "type": "string",
+      "enum": [
+        "nominal",
+        "worst_case",
+        "minimum",
+        "maximum",
+        "range",
+        "distribution",
+        "observed",
+        "expected",
+        "derived",
+        "other",
+        "unclear"
+      ]
+    },
+    "quantityRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "construct_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "quantity_kind": {
+              "$ref": "#/$defs/quantityKindCode"
+            },
+            "value_form": {
+              "$ref": "#/$defs/quantityValueFormCode"
+            },
+            "raw_source_value": {
+              "$ref": "#/$defs/sourceTextItem"
+            },
+            "numeric_value": {
+              "$ref": "#/$defs/rowNumber"
+            },
+            "lower_bound": {
+              "$ref": "#/$defs/rowNumber"
+            },
+            "upper_bound": {
+              "$ref": "#/$defs/rowNumber"
+            },
+            "unit_code": {
+              "$ref": "#/$defs/rowIdentifier"
+            },
+            "value_basis": {
+              "$ref": "#/$defs/quantityValueBasisCode"
+            },
+            "time_basis_quantity_id": {
+              "$ref": "#/$defs/rowId"
+            },
+            "denominator_quantity_id": {
+              "$ref": "#/$defs/rowId"
+            },
+            "currency_code": {
+              "$ref": "#/$defs/rowIdentifier"
+            },
+            "price_year": {
+              "$ref": "#/$defs/rowInteger"
+            },
+            "distribution_description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "unit_vocabulary": {
+              "$ref": "#/$defs/unitVocabularyCode"
+            }
+          },
+          "required": [
+            "quantity_id",
+            "construct_entity_ids",
+            "quantity_kind",
+            "value_form",
+            "raw_source_value",
+            "numeric_value",
+            "lower_bound",
+            "upper_bound",
+            "unit_code",
+            "unit_vocabulary",
+            "value_basis",
+            "time_basis_quantity_id",
+            "denominator_quantity_id",
+            "currency_code",
+            "price_year",
+            "distribution_description"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "value_form": {
+                "const": "number"
+              }
+            },
+            "required": [
+              "value_form"
+            ]
+          },
+          "then": {
+            "properties": {
+              "numeric_value": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_form": {
+                "const": "interval"
+              }
+            },
+            "required": [
+              "value_form"
+            ]
+          },
+          "then": {
+            "properties": {
+              "lower_bound": {
+                "type": "number"
+              },
+              "upper_bound": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "financial_cost"
+              }
+            },
+            "required": [
+              "quantity_kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "currency_code": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_form": {
+                "const": "distribution"
+              }
+            },
+            "required": [
+              "value_form"
+            ]
+          },
+          "then": {
+            "properties": {
+              "distribution_description": {
+                "$ref": "#/$defs/sourceTextItem"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "quantity_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_basis": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "value_basis"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "quantityRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/quantityRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "decisionTypeCode": {
+      "type": "string",
+      "enum": [
+        "selection",
+        "sizing",
+        "trade_study",
+        "architecture",
+        "interface",
+        "verification_or_validation",
+        "risk",
+        "reuse_or_tailoring",
+        "governance",
+        "other",
+        "unclear"
+      ]
+    },
+    "decisionStatusCode": {
+      "type": "string",
+      "enum": [
+        "intended",
+        "considered",
+        "made",
+        "revised",
+        "deferred",
+        "planned",
+        "unclear"
+      ]
+    },
+    "decisionRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "decision_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_description": {
+              "$ref": "#/$defs/sourceTextItem"
+            },
+            "decision_type": {
+              "$ref": "#/$defs/decisionTypeCode"
+            },
+            "lifecycle_stage": {
+              "$ref": "#/$defs/lifecycleStageCode"
+            },
+            "decision_status": {
+              "$ref": "#/$defs/decisionStatusCode"
+            },
+            "alternative_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "selected_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "rationale": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "decision_id",
+            "source_description",
+            "decision_type",
+            "lifecycle_stage",
+            "decision_status",
+            "alternative_refs",
+            "selected_refs",
+            "rationale"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "decision_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "decision_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "decisionRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decisionRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "relationshipTypeCode": {
+      "type": "string",
+      "enum": [
+        "contains",
+        "part_of",
+        "uses",
+        "produces",
+        "consumes",
+        "provides",
+        "depends_on",
+        "precedes",
+        "branches_to",
+        "iterates_to",
+        "reworks",
+        "maps_to",
+        "traces_to",
+        "derives_from",
+        "transforms_to",
+        "refines",
+        "satisfies",
+        "verifies",
+        "validates",
+        "compares_with",
+        "differs_from",
+        "causes",
+        "contributes_to",
+        "supports",
+        "limits",
+        "inside_boundary",
+        "outside_boundary",
+        "same_as",
+        "version_of",
+        "tailors",
+        "other",
+        "unclear"
+      ]
+    },
+    "relationshipRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "relationship_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_ref": {
+              "$ref": "#/$defs/recordReference"
+            },
+            "target_ref": {
+              "$ref": "#/$defs/recordReference"
+            },
+            "relationship_type": {
+              "$ref": "#/$defs/relationshipTypeCode"
+            },
+            "source_term": {
+              "$ref": "#/$defs/rowString"
+            },
+            "description": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "relationship_id",
+            "source_ref",
+            "target_ref",
+            "relationship_type",
+            "source_term",
+            "description"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "relationship_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "relationship_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "relationshipRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationshipRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "ruleTypeCode": {
+      "type": "string",
+      "enum": [
+        "entry_condition",
+        "completion_condition",
+        "decision",
+        "selection",
+        "inclusion",
+        "exclusion",
+        "normalization",
+        "abstraction",
+        "constraint",
+        "branch",
+        "iteration",
+        "unchanged_use",
+        "tailoring",
+        "acceptance",
+        "quality_or_exit",
+        "missing_data",
+        "other",
+        "unclear"
+      ]
+    },
+    "ruleRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "rule_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "rule_type": {
+              "$ref": "#/$defs/ruleTypeCode"
+            },
+            "source_expression": {
+              "$ref": "#/$defs/sourceTextItem"
+            },
+            "input_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "output_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "linked_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "rule_id",
+            "rule_type",
+            "source_expression",
+            "input_refs",
+            "output_refs",
+            "linked_quantity_ids"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "rule_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "rule_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "ruleRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ruleRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "checkTypeCode": {
+      "type": "string",
+      "enum": [
+        "quality",
+        "completion",
+        "acceptance",
+        "verification",
+        "validation",
+        "assurance",
+        "model_to_test_closure",
+        "genericity",
+        "other",
+        "unclear"
+      ]
+    },
+    "checkOutcomeCode": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "partial",
+        "fail",
+        "not_executed",
+        "inconclusive",
+        "unclear"
+      ]
+    },
+    "checkRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "check_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "check_type": {
+              "$ref": "#/$defs/checkTypeCode"
+            },
+            "target_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "criterion_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "result_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "outcome": {
+              "$ref": "#/$defs/checkOutcomeCode"
+            },
+            "source_description": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "check_id",
+            "check_type",
+            "target_refs",
+            "criterion_refs",
+            "result_refs",
+            "outcome",
+            "source_description"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "check_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "check_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "checkRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/checkRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "resourceKindCode": {
+      "type": "string",
+      "enum": [
+        "repository",
+        "model_file",
+        "dataset",
+        "standard",
+        "publication",
+        "script",
+        "procedure",
+        "documentation",
+        "infrastructure",
+        "license",
+        "other",
+        "unclear"
+      ]
+    },
+    "resourceRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "resource_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "resource_kind": {
+              "$ref": "#/$defs/resourceKindCode"
+            },
+            "source_name": {
+              "$ref": "#/$defs/sourceTextItem"
+            },
+            "location": {
+              "$ref": "#/$defs/rowIdentifier"
+            },
+            "availability": {
+              "$ref": "#/$defs/availability"
+            },
+            "linked_tool_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "resource_id",
+            "resource_kind",
+            "source_name",
+            "location",
+            "availability",
+            "linked_tool_ids"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "resource_kind": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "resource_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "resourceRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resourceRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "issueTypeCode": {
+      "type": "string",
+      "enum": [
+        "missing_data",
+        "failure",
+        "exclusion",
+        "uncertainty",
+        "sensitivity",
+        "discrepancy",
+        "conflict",
+        "limitation",
+        "future_work",
+        "reviewer_uncertainty",
+        "missing_information",
+        "rival_explanation",
+        "rework",
+        "other",
+        "unclear"
+      ]
+    },
+    "issueStatusCode": {
+      "type": "string",
+      "enum": [
+        "open",
+        "handled",
+        "resolved",
+        "accepted",
+        "rejected",
+        "planned",
+        "unclear"
+      ]
+    },
+    "issueRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "issue_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "issue_type": {
+              "$ref": "#/$defs/issueTypeCode"
+            },
+            "target_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "source_description": {
+              "$ref": "#/$defs/sourceTextItem"
+            },
+            "handling_or_resolution": {
+              "$ref": "#/$defs/rowString"
+            },
+            "issue_status": {
+              "$ref": "#/$defs/issueStatusCode"
+            }
+          },
+          "required": [
+            "issue_id",
+            "issue_type",
+            "target_refs",
+            "source_description",
+            "handling_or_resolution",
+            "issue_status"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "issue_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "issue_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "issueRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/issueRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "referenceCatalog": {
+      "type": "object",
+      "properties": {
+        "entities": {
+          "$ref": "#/$defs/canonicalEntities"
+        },
+        "quantities": {
+          "$ref": "#/$defs/quantityRecords"
+        },
+        "decisions": {
+          "$ref": "#/$defs/decisionRecords"
+        },
+        "relationships": {
+          "$ref": "#/$defs/relationshipRecords"
+        },
+        "rules": {
+          "$ref": "#/$defs/ruleRecords"
+        },
+        "checks": {
+          "$ref": "#/$defs/checkRecords"
+        },
+        "resources": {
+          "$ref": "#/$defs/resourceRecords"
+        },
+        "issues": {
+          "$ref": "#/$defs/issueRecords"
+        }
+      },
+      "required": [
+        "entities",
+        "quantities",
+        "decisions",
+        "relationships",
+        "rules",
+        "checks",
+        "resources",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "modelArtifactKindCode": {
+      "type": "string",
+      "enum": [
+        "persistent_model",
+        "repository",
+        "package",
+        "file",
+        "export",
+        "script",
+        "dataset",
+        "documentation",
+        "other",
+        "unclear"
+      ]
+    },
+    "inputItem": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "input_item_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_parameter_or_construct": {
+              "$ref": "#/$defs/rowString"
+            },
+            "linked_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_eps_requirement_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "value_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "input_source_types": {
+              "$ref": "#/$defs/inputSourceTypes"
+            },
+            "source_resource_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "uncertainty_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_issue_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "rationale": {
+              "$ref": "#/$defs/rowString"
+            },
+            "linked_decision_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "input_item_id",
+            "source_parameter_or_construct",
+            "linked_entity_ids",
+            "linked_eps_requirement_ids",
+            "value_quantity_ids",
+            "input_source_types",
+            "source_resource_ids",
+            "uncertainty_quantity_ids",
+            "linked_issue_ids",
+            "rationale",
+            "linked_decision_ids"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "inputItems": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/inputItem"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "evaluationUnitTypeCode": {
+      "type": "string",
+      "enum": [
+        "case",
+        "participant",
+        "organization",
+        "mission",
+        "model",
+        "simulation_run",
+        "test",
+        "observation",
+        "other",
+        "unclear"
+      ]
+    },
+    "evaluationUnit": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "evaluation_unit_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "unit_type": {
+              "$ref": "#/$defs/evaluationUnitTypeCode"
+            },
+            "linked_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "count_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "sampling_or_selection_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "assignment_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "source_description": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "evaluation_unit_id",
+            "unit_type",
+            "linked_entity_ids",
+            "count_quantity_ids",
+            "sampling_or_selection_rule_ids",
+            "assignment_rule_ids",
+            "source_description"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "unit_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "unit_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "evaluationUnits": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evaluationUnit"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "statisticTypeCode": {
+      "type": "string",
+      "enum": [
+        "central_tendency",
+        "dispersion",
+        "absolute_difference",
+        "relative_difference",
+        "effect_estimate",
+        "confidence_interval",
+        "p_value",
+        "other",
+        "unclear"
+      ]
+    },
+    "statisticalEvaluationRecord": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "statistical_evaluation_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "statistic_type": {
+              "$ref": "#/$defs/statisticTypeCode"
+            },
+            "estimate_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "confidence_interval_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "p_value_quantity_id": {
+              "$ref": "#/$defs/rowId"
+            },
+            "sample_size_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_comparator_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "group_or_arm_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "method_entity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "source_statistic_term": {
+              "$ref": "#/$defs/rowString"
+            }
+          },
+          "required": [
+            "statistical_evaluation_id",
+            "statistic_type",
+            "estimate_quantity_ids",
+            "confidence_interval_quantity_ids",
+            "p_value_quantity_id",
+            "sample_size_quantity_ids",
+            "linked_comparator_ids",
+            "group_or_arm_entity_ids",
+            "method_entity_ids",
+            "source_statistic_term"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "statistic_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "statistic_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "statisticalEvaluationRecords": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/statisticalEvaluationRecord"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "criterionVerdictCode": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "partial",
+        "fail",
+        "not_evaluated",
+        "inconclusive",
+        "unclear"
+      ]
+    },
+    "rivalHandlingCode": {
+      "type": "string",
+      "enum": [
+        "controlled",
+        "adjusted",
+        "tested",
+        "discussed_only",
+        "unhandled",
+        "unclear"
+      ]
+    },
+    "procedureComponentValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "const": "reported"
+            },
+            "basis_refs": {
+              "$ref": "#/$defs/recordReferences"
+            }
+          },
+          "required": [
+            "value",
+            "basis_refs"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "procedureComponent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/procedureComponentValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
+    "supportLimitationCode": {
+      "type": "string",
+      "enum": [
+        "none",
+        "method",
+        "directness",
+        "comparison",
+        "precision",
+        "independence",
+        "applicability",
+        "reporting",
+        "conflicting_evidence",
+        "missing_data",
+        "other"
+      ]
+    },
+    "artifactDerivationTypeCode": {
+      "type": "string",
+      "enum": [
+        "version_of",
+        "derived_from",
+        "configured_from",
+        "specialized_from",
+        "extended_from",
+        "transformed_from",
+        "generated_from",
+        "same_artifact",
+        "other",
+        "unclear"
+      ]
+    },
+    "unchangedUseCode": {
+      "type": "string",
+      "enum": [
+        "allowed",
+        "not_allowed",
+        "conditional",
+        "unclear"
+      ]
+    },
+    "eligibilityReasonCode": {
+      "type": "string",
+      "enum": [
+        "missing_eps_attribution",
+        "missing_target",
+        "missing_model_link",
+        "missing_vv_intent",
+        "generic_only",
+        "system_wide_cooccurrence",
+        "ambiguous_scope",
+        "other",
+        "unclear",
+        "not_applicable"
+      ]
+    },
+    "profileDerivationRuleCode": {
+      "type": "string",
+      "enum": [
+        "generic_or_reference_model",
+        "actionable_model_construction",
+        "actionable_tailoring",
+        "worked_tailoring_example",
+        "post_tailoring_assurance",
+        "generic_with_actionable_procedure"
+      ]
+    },
+    "personnelOverlapCode": {
+      "type": "string",
+      "enum": [
+        "none",
+        "partial",
+        "substantial",
+        "complete",
+        "unclear"
+      ]
+    },
+    "operationResultCode": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "partial",
+        "fail",
+        "not_checked",
+        "unclear"
+      ]
+    },
+    "rowRecordReferences": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/recordReferences"
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "crossLifecycleStagesValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/crossReportEvidenceMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/lifecycleStageCode"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "$ref": "#/$defs/otherArrayCoding"
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "crossLifecycleStages": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/crossLifecycleStagesValue"
+        },
+        {
+          "$ref": "#/$defs/crossEvidenceStatusValue"
+        }
+      ]
+    },
+    "automationLevelCode": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "tool_assisted",
+        "partially_automated",
+        "fully_automated",
+        "mixed",
+        "unclear"
+      ]
+    },
+    "exchangeDirectionCode": {
+      "type": "string",
+      "enum": [
+        "source_to_destination",
+        "destination_to_source",
+        "bidirectional",
+        "undirected",
+        "variable",
+        "unclear"
+      ]
+    },
+    "unitVocabularyCode": {
+      "type": "string",
+      "enum": [
+        "UCUM",
+        "ISO_4217",
+        "count",
+        "source_only",
+        "not_applicable",
+        "unclear"
+      ]
     }
   }
 }

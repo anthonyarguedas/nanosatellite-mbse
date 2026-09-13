@@ -70,6 +70,189 @@ SCREENING_ID_PREFIXES = {
     "review-searches": "review-candidate-",
     "citation-chasing": "citation-candidate-",
 }
+RECORD_REFERENCE = re.compile(r"^([a-z][a-z0-9_]*):(.+)$")
+DIRECT_REFERENCE_FIELDS = {
+    "citation_ids": "citation",
+    "contributing_report_ids": "report",
+    "linked_report_ids": "report",
+    "linked_family_ids": "family",
+    "parent_entity_ids": "entity",
+    "construct_entity_ids": "entity",
+    "linked_entity_ids": "entity",
+    "group_or_arm_entity_ids": "entity",
+    "method_entity_ids": "entity",
+    "linked_scenario_entity_ids": "entity",
+    "linked_configuration_entity_ids": "entity",
+    "analysis_method_entity_ids": "entity",
+    "adopting_team_entity_ids": "entity",
+    "responsible_role_entity_ids": "entity",
+    "tool_configuration_entity_ids": "entity",
+    "configuration_entity_ids": "entity",
+    "implementing_team_entity_ids": "entity",
+    "controlling_team_entity_ids": "entity",
+    "required_role_entity_ids": "entity",
+    "required_skill_entity_ids": "entity",
+    "quantity_id": "quantity",
+    "linked_quantity_ids": "quantity",
+    "value_quantity_ids": "quantity",
+    "uncertainty_quantity_ids": "quantity",
+    "count_quantity_ids": "quantity",
+    "estimate_quantity_ids": "quantity",
+    "confidence_interval_quantity_ids": "quantity",
+    "sample_size_quantity_ids": "quantity",
+    "linked_source_quantity_ids": "quantity",
+    "result_quantity_ids": "quantity",
+    "sensitivity_quantity_ids": "quantity",
+    "option_quantity_ids": "quantity",
+    "threshold_quantity_ids": "quantity",
+    "time_basis_quantity_id": "quantity",
+    "denominator_quantity_id": "quantity",
+    "p_value_quantity_id": "quantity",
+    "linked_decision_ids": "decision",
+    "linked_physical_or_operational_relationship_ids": "relationship",
+    "material_difference_relationship_ids": "relationship",
+    "dependency_relationship_ids": "relationship",
+    "mechanism_relationship_ids": "relationship",
+    "model_to_vv_relationship_ids": "relationship",
+    "later_physical_relationship_ids": "relationship",
+    "before_after_relationship_ids": "relationship",
+    "unit_conversion_relationship_ids": "relationship",
+    "selection_rule_ids": "rule",
+    "sampling_or_selection_rule_ids": "rule",
+    "assignment_rule_ids": "rule",
+    "threshold_rule_ids": "rule",
+    "trigger_rule_ids": "rule",
+    "constraint_rule_ids": "rule",
+    "governance_rule_ids": "rule",
+    "reason_rule_ids": "rule",
+    "formula_rule_ids": "rule",
+    "assumption_rule_ids": "rule",
+    "limit_rule_ids": "rule",
+    "authority_check_ids": "check",
+    "linked_check_ids": "check",
+    "acceptance_check_ids": "check",
+    "check_ids": "check",
+    "assurance_check_ids": "check",
+    "closure_check_ids": "check",
+    "linked_resource_ids": "resource",
+    "source_resource_ids": "resource",
+    "data_source_resource_ids": "resource",
+    "linked_issue_ids": "issue",
+    "discrepancy_issue_ids": "issue",
+    "linked_tool_ids": "tool",
+    "required_tool_ids": "tool",
+    "parent_model_artifact_ids": "model_artifact",
+    "derived_model_artifact_ids": "model_artifact",
+    "resulting_model_artifact_ids": "model_artifact",
+    "linked_model_artifact_ids": "model_artifact",
+    "linked_source_model_artifact_ids": "model_artifact",
+    "linked_output_model_artifact_ids": "model_artifact",
+    "linked_model_generation_method_ids": "model_generation_method",
+    "linked_workflow_ids": "workflow",
+    "linked_workflow_activity_ids": "workflow_activity",
+    "eps_case_ids": "eps_case",
+    "linked_eps_case_ids": "eps_case",
+    "eps_case_id": "eps_case",
+    "linked_eps_element_ids": "eps_element",
+    "source_eps_element_id": "eps_element",
+    "destination_eps_element_id": "eps_element",
+    "dependent_eps_element_id": "eps_element",
+    "provider_or_driver_eps_element_id": "eps_element",
+    "source_eps_element_ids": "eps_element",
+    "destination_eps_element_ids": "eps_element",
+    "context_eps_element_ids": "eps_element",
+    "parent_eps_element_ids": "eps_element",
+    "interface_eps_element_ids": "eps_element",
+    "eps_anchor_element_ids": "eps_element",
+    "second_concern_element_ids": "eps_element",
+    "linked_eps_requirement_ids": "eps_requirement",
+    "parent_eps_requirement_ids": "eps_requirement",
+    "eps_anchor_requirement_ids": "eps_requirement",
+    "second_concern_requirement_ids": "eps_requirement",
+    "linked_eps_exchange_ids": "eps_exchange",
+    "linked_eps_dependency_ids": "eps_dependency",
+    "linked_eps_model_bridge_ids": "eps_model_bridge",
+    "linked_model_representation_ids": "model_representation",
+    "source_model_representation_id": "model_representation",
+    "target_model_representation_id": "model_representation",
+    "model_artifact_id": "model_artifact",
+    "linked_result_set_ids": "result_set",
+    "linked_result_output_ids": "result_output",
+    "linked_result_criterion_ids": "result_criterion",
+    "post_application_criterion_ids": "result_criterion",
+    "linked_comparator_ids": "comparator",
+    "linked_input_group_ids": "input_group",
+    "linked_input_item_ids": "input_item",
+    "linked_implementation_record_ids": "implementation_record",
+    "linked_rq1_claim_ids": "rq1_claim",
+    "linked_rq2_finding_ids": "rq2_finding",
+    "trade_off_rq2_finding_ids": "rq2_finding",
+    "linked_rq3_activity_ids": "rq3_activity",
+    "assurance_rq3_activity_ids": "rq3_activity",
+    "linked_report_reuse_record_ids": "report_reuse_record",
+    "linked_report_application_ids": "report_application",
+    "linked_tailoring_application_ids": "tailoring_application",
+    "linked_variation_point_ids": "variation_point",
+    "linked_tailoring_rule_ids": "tailoring_rule",
+    "linked_tailoring_step_ids": "tailoring_step",
+    "linked_report_variation_point_ids": "variation_point",
+    "linked_report_tailoring_rule_ids": "tailoring_rule",
+    "linked_report_tailoring_step_ids": "tailoring_step",
+    "linked_report_application_operation_ids": "application_operation",
+}
+RECORD_REFERENCE_KINDS = {
+    "report": "report",
+    "family": "family",
+    "lineage": "lineage",
+    "citation": "citation",
+    "entity": "entity",
+    "quantity": "quantity",
+    "decision": "decision",
+    "relationship": "relationship",
+    "rule": "rule",
+    "check": "check",
+    "resource": "resource",
+    "issue": "issue",
+    "tool": "tool",
+    "model_artifact": "model_artifact",
+    "model_generation_method": "model_generation_method",
+    "construction_source": "construction_source",
+    "method_step": "method_step",
+    "workflow": "workflow",
+    "workflow_activity": "workflow_activity",
+    "eps_case": "eps_case",
+    "eps_element": "eps_element",
+    "eps_requirement": "eps_requirement",
+    "eps_exchange": "eps_exchange",
+    "eps_dependency": "eps_dependency",
+    "model_representation": "model_representation",
+    "model_representation_relationship": "model_representation_relationship",
+    "behavior_occurrence": "behavior_occurrence",
+    "eps_model_bridge": "eps_model_bridge",
+    "coverage_item": "coverage_item",
+    "implementation_record": "implementation_record",
+    "input_group": "input_group",
+    "input_item": "input_item",
+    "result_set": "result_set",
+    "evaluation_unit": "evaluation_unit",
+    "result_output": "result_output",
+    "statistical_evaluation": "statistical_evaluation",
+    "result_criterion": "result_criterion",
+    "comparator": "comparator",
+    "rival_explanation": "rival_explanation",
+    "reviewer_derived_value": "reviewer_derived_value",
+    "rq1_claim": "rq1_claim",
+    "rq2_finding": "rq2_finding",
+    "rq3_activity": "rq3_activity",
+    "report_reuse_record": "report_reuse_record",
+    "artifact_relationship": "artifact_relationship",
+    "variation_point": "variation_point",
+    "tailoring_rule": "tailoring_rule",
+    "tailoring_step": "tailoring_step",
+    "report_application": "report_application",
+    "application_operation": "application_operation",
+    "tailoring_application": "tailoring_application",
+}
 
 
 @dataclass(frozen=True)
@@ -178,8 +361,11 @@ def has_recorded_content(value: Any) -> bool:
         return bool(value)
     if isinstance(value, list):
         return bool(value)
-    if isinstance(value, Mapping) and "value" in value:
-        return has_recorded_content(value["value"])
+    if isinstance(value, Mapping):
+        if "value" in value:
+            return has_recorded_content(value["value"])
+        if "source_text" in value:
+            return has_recorded_content(value["source_text"])
     return False
 
 
@@ -432,6 +618,29 @@ def index_report(
             issues,
         )
 
+    catalog = data.get("reference_catalog", {})
+    if isinstance(catalog, Mapping):
+        for table_name, id_name, id_kind in (
+            ("entities", "entity_id", "entity"),
+            ("quantities", "quantity_id", "quantity"),
+            ("decisions", "decision_id", "decision"),
+            ("relationships", "relationship_id", "relationship"),
+            ("rules", "rule_id", "rule"),
+            ("checks", "check_id", "check"),
+            ("resources", "resource_id", "resource"),
+            ("issues", "issue_id", "issue"),
+        ):
+            for row_index, row in enumerate(rows(catalog.get(table_name))):
+                register(
+                    indexes,
+                    id_kind,
+                    row.get(id_name),
+                    document,
+                    f"/reference_catalog/{table_name}/{row_index}/{id_name}",
+                    row,
+                    issues,
+                )
+
     for index, row in enumerate(rows(data.get("citations"))):
         register(
             indexes,
@@ -511,6 +720,16 @@ def index_report(
                 row,
                 issues,
             )
+        for index, row in enumerate(rows(mbse.get("tools_and_versions"))):
+            register(
+                indexes,
+                "tool",
+                row.get("tool_id"),
+                document,
+                f"/mbse_approach/tools_and_versions/{index}/tool_id",
+                row,
+                issues,
+            )
 
     for case_index, case in enumerate(rows(data.get("eps_cases"))):
         case_pointer = f"/eps_cases/{case_index}"
@@ -524,8 +743,15 @@ def index_report(
             issues,
         )
         for table_name, id_name, id_kind in (
+            ("eps_elements", "eps_element_id", "eps_element"),
+            ("eps_requirements", "eps_requirement_id", "eps_requirement"),
             ("eps_exchanges", "eps_exchange_id", "eps_exchange"),
             ("eps_dependencies", "eps_dependency_id", "eps_dependency"),
+            (
+                "eps_model_representation_relationships",
+                "model_representation_relationship_id",
+                "model_representation_relationship",
+            ),
             ("eps_model_bridges", "eps_model_bridge_id", "eps_model_bridge"),
         ):
             for row_index, row in enumerate(rows(case.get(table_name))):
@@ -536,6 +762,47 @@ def index_report(
                     document,
                     f"{case_pointer}/{table_name}/{row_index}/{id_name}",
                     row,
+                    issues,
+                )
+        for representation_index, representation in enumerate(
+            rows(case.get("eps_model_representations"))
+        ):
+            representation_pointer = (
+                f"{case_pointer}/eps_model_representations/{representation_index}"
+            )
+            register(
+                indexes,
+                "model_representation",
+                representation.get("model_representation_id"),
+                document,
+                f"{representation_pointer}/model_representation_id",
+                representation,
+                issues,
+            )
+            for occurrence_index, occurrence in enumerate(
+                rows(representation.get("behavior_occurrences"))
+            ):
+                register(
+                    indexes,
+                    "behavior_occurrence",
+                    occurrence.get("behavior_occurrence_id"),
+                    document,
+                    f"{representation_pointer}/behavior_occurrences/"
+                    f"{occurrence_index}/behavior_occurrence_id",
+                    occurrence,
+                    issues,
+                )
+        coverage = case.get("coverage_assessment", {})
+        if isinstance(coverage, Mapping):
+            for item_index, item in enumerate(rows(coverage.get("coverage_items"))):
+                register(
+                    indexes,
+                    "coverage_item",
+                    item.get("coverage_item_id"),
+                    document,
+                    f"{case_pointer}/coverage_assessment/coverage_items/"
+                    f"{item_index}/coverage_item_id",
+                    item,
                     issues,
                 )
 
@@ -556,6 +823,18 @@ def index_report(
                 row,
                 issues,
             )
+            if table_name == "input_groups":
+                for item_index, item in enumerate(rows(row.get("input_items"))):
+                    register(
+                        indexes,
+                        "input_item",
+                        item.get("input_item_id"),
+                        document,
+                        f"/input_groups/{row_index}/input_items/{item_index}/"
+                        "input_item_id",
+                        item,
+                        issues,
+                    )
 
     for set_index, result_set in enumerate(rows(data.get("result_sets"))):
         set_pointer = f"/result_sets/{set_index}"
@@ -569,6 +848,7 @@ def index_report(
             issues,
         )
         for table_name, id_name, id_kind in (
+            ("evaluation_units", "evaluation_unit_id", "evaluation_unit"),
             ("outputs", "result_output_id", "result_output"),
             ("criteria", "result_criterion_id", "result_criterion"),
             (
@@ -587,6 +867,21 @@ def index_report(
                     row,
                     issues,
                 )
+                if table_name == "outputs":
+                    for statistic_index, statistic in enumerate(
+                        rows(row.get("statistical_evaluations"))
+                    ):
+                        register(
+                            indexes,
+                            "statistical_evaluation",
+                            statistic.get("statistical_evaluation_id"),
+                            document,
+                            f"{set_pointer}/outputs/{row_index}/"
+                            f"statistical_evaluations/{statistic_index}/"
+                            "statistical_evaluation_id",
+                            statistic,
+                            issues,
+                        )
         for comparator_index, comparator in enumerate(
             rows(result_set.get("comparators"))
         ):
@@ -697,6 +992,15 @@ def build_indexes(
     index_kinds = (
         "report",
         "citation",
+        "entity",
+        "quantity",
+        "decision",
+        "relationship",
+        "rule",
+        "check",
+        "resource",
+        "issue",
+        "tool",
         "model_generation_method",
         "construction_source",
         "method_step",
@@ -704,13 +1008,22 @@ def build_indexes(
         "workflow_activity",
         "model_artifact",
         "eps_case",
+        "eps_element",
+        "eps_requirement",
         "eps_exchange",
         "eps_dependency",
+        "model_representation",
+        "model_representation_relationship",
+        "behavior_occurrence",
         "eps_model_bridge",
+        "coverage_item",
         "implementation_record",
         "input_group",
+        "input_item",
         "result_set",
+        "evaluation_unit",
         "result_output",
+        "statistical_evaluation",
         "result_criterion",
         "comparator",
         "rival_explanation",
@@ -874,6 +1187,121 @@ def check_field_references(
             )
 
 
+def record_reference_issues(
+    document: Document,
+    indexes: Mapping[str, Mapping[str, Location]],
+) -> list[Issue]:
+    """Resolve every typed ``record_kind:stable_id`` reference."""
+
+    issues: list[Issue] = []
+
+    def check(
+        value: Any,
+        value_pointer: str,
+        contributing_report_ids: set[str] | None,
+    ) -> None:
+        if not isinstance(value, str):
+            return
+        match = RECORD_REFERENCE.fullmatch(value)
+        if match is None:
+            return
+        reference_kind, identifier = match.groups()
+        index_kind = RECORD_REFERENCE_KINDS.get(reference_kind)
+        location = (
+            indexes.get(index_kind, {}).get(identifier)
+            if index_kind is not None
+            else None
+        )
+        if location is None:
+            issues.append(
+                Issue(
+                    str(document.path),
+                    value_pointer,
+                    f"unresolved {reference_kind} record reference {identifier!r}",
+                )
+            )
+            return
+        if contributing_report_ids and location.document.kind == "report":
+            owner_report_id = report_id(location.document)
+            if owner_report_id not in contributing_report_ids:
+                issues.append(
+                    Issue(
+                        str(document.path),
+                        value_pointer,
+                        f"record reference {value!r} is outside its contributing reports",
+                    )
+                )
+
+    def walk(
+        node: Any,
+        base: str,
+        reference_context: bool = False,
+        inherited_contributing_report_ids: set[str] | None = None,
+    ) -> None:
+        if isinstance(node, Mapping):
+            contributing = node.get("contributing_report_ids")
+            active_contributing_report_ids = (
+                {item for item in contributing if isinstance(item, str)}
+                if isinstance(contributing, list)
+                else inherited_contributing_report_ids
+            )
+            for key, value in node.items():
+                child = pointer(base, key)
+                direct_kind = DIRECT_REFERENCE_FIELDS.get(key)
+                if direct_kind is None:
+                    for suffix, inferred_kind in (
+                        ("_entity_ids", "entity"),
+                        ("_quantity_ids", "quantity"),
+                        ("_quantity_id", "quantity"),
+                        ("_relationship_ids", "relationship"),
+                        ("_rule_ids", "rule"),
+                        ("_check_ids", "check"),
+                        ("_resource_ids", "resource"),
+                        ("_issue_ids", "issue"),
+                        ("_decision_ids", "decision"),
+                        ("_model_artifact_ids", "model_artifact"),
+                    ):
+                        if key.endswith(suffix):
+                            direct_kind = inferred_kind
+                            break
+                if direct_kind is not None:
+                    direct_value = (
+                        value.get("value")
+                        if isinstance(value, Mapping) and "value" in value
+                        else value
+                    )
+                    check_references(
+                        document,
+                        child,
+                        direct_value,
+                        direct_kind,
+                        indexes,
+                        issues,
+                    )
+                is_reference = key in {"source_ref", "target_ref"} or key.endswith(
+                    "_refs"
+                )
+                walk(
+                    value,
+                    child,
+                    is_reference,
+                    active_contributing_report_ids,
+                )
+        elif isinstance(node, list):
+            for index, value in enumerate(node):
+                walk(
+                    value,
+                    pointer(base, index),
+                    reference_context,
+                    inherited_contributing_report_ids,
+                )
+        elif reference_context:
+            check(node, base, inherited_contributing_report_ids)
+
+    walk(document.data, "")
+    return issues
+
+
 def reuse_design_reference_issues(
     document: Document,
     base: str,
@@ -1007,7 +1435,7 @@ def report_reference_issues(
     document: Document,
     indexes: Mapping[str, Mapping[str, Location]],
 ) -> list[Issue]:
-    issues: list[Issue] = []
+    issues = record_reference_issues(document, indexes)
     data = document.data
     mbse = data.get("mbse_approach", {})
     if isinstance(mbse, Mapping):
@@ -1397,7 +1825,7 @@ def cross_record_reference_issues(
     document: Document,
     indexes: Mapping[str, Mapping[str, Location]],
 ) -> list[Issue]:
-    issues: list[Issue] = []
+    issues = record_reference_issues(document, indexes)
     data = document.data
     if document.kind == "family":
         check_field_references(
@@ -1501,6 +1929,52 @@ def cross_record_reference_issues(
                 indexes,
                 issues,
             )
+    return issues
+
+
+SOURCE_ONLY_FIELDS = {
+    "source_name",
+    "source_description",
+    "raw_source_value",
+    "source_expression",
+    "claim_wording",
+    "exact_claim_wording",
+    "claimed_characteristic",
+    "exact_reuse_claim",
+    "source_vv_terminology",
+    "source_element_type",
+    "source_relationship_term",
+    "parent_artifact_name",
+    "parent_artifact_version",
+    "derived_artifact_name",
+    "derived_artifact_version",
+    "identity_and_derivation_evidence",
+}
+
+
+def normalization_issues(document: Document) -> list[Issue]:
+    """Keep source-only escape hatches out of fields used for synthesis."""
+
+    issues: list[Issue] = []
+
+    def walk(node: Any, base: str, field_name: str | None = None) -> None:
+        if isinstance(node, Mapping):
+            if node.get("normalization_status") == "not_for_synthesis":
+                if field_name not in SOURCE_ONLY_FIELDS:
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            pointer(base, "normalization_status"),
+                            "not_for_synthesis is not allowed for this analytic field",
+                        )
+                    )
+            for key, value in node.items():
+                walk(value, pointer(base, key), key)
+        elif isinstance(node, list):
+            for index, value in enumerate(node):
+                walk(value, pointer(base, index), field_name)
+
+    walk(document.data, "")
     return issues
 
 
@@ -2193,6 +2667,19 @@ def reviewer_derived_script_issues(document: Document) -> list[Issue]:
     return issues
 
 
+def source_text_values(value: Any) -> list[str]:
+    ordinary = coded_value(value)
+    if not isinstance(ordinary, list):
+        return []
+    result: list[str] = []
+    for item in ordinary:
+        if isinstance(item, str):
+            result.append(item)
+        elif isinstance(item, Mapping) and isinstance(item.get("source_text"), str):
+            result.append(item["source_text"])
+    return result
+
+
 def family_lead_issues(document: Document) -> list[Issue]:
     issues: list[Issue] = []
     identity = document.data.get("identity", {})
@@ -2202,9 +2689,9 @@ def family_lead_issues(document: Document) -> list[Issue]:
 
     expected: set[str] = set()
     for record in rows(reuse.get("report_reuse_records")):
-        candidates = coded_value(record.get("possible_related_reports_or_artifacts"))
-        if isinstance(candidates, list):
-            expected.update(item for item in candidates if isinstance(item, str))
+        expected.update(
+            source_text_values(record.get("possible_related_reports_or_artifacts"))
+        )
 
     recorded_field = identity.get(
         "possible_companion_reports_or_shared_implementations"
@@ -2329,13 +2816,33 @@ def rq3_semantic_issues(
         statuses = set(status_value) if isinstance(status_value, list) else set()
 
         if "proposed" in statuses:
-            for field, label in (
-                ("eps_target", "EPS target"),
-                ("model_artifact_id", "model artifact"),
-                ("explicit_model_to_vv_bridge", "model-to-V&V bridge"),
-                ("method", "V&V method"),
-            ):
-                if not has_recorded_content(activity.get(field)):
+            proposed_requirements = (
+                (
+                    bool(activity.get("target_refs"))
+                    or has_recorded_content(activity.get("eps_target")),
+                    "target_refs",
+                    "EPS target",
+                ),
+                (
+                    has_recorded_content(activity.get("model_artifact_id")),
+                    "model_artifact_id",
+                    "model artifact",
+                ),
+                (
+                    bool(activity.get("model_to_vv_relationship_ids"))
+                    or has_recorded_content(activity.get("explicit_model_to_vv_bridge")),
+                    "model_to_vv_relationship_ids",
+                    "model-to-V&V bridge",
+                ),
+                (
+                    bool(activity.get("vv_method_entity_ids"))
+                    or has_recorded_content(activity.get("method")),
+                    "vv_method_entity_ids",
+                    "V&V method",
+                ),
+            )
+            for complete, field, label in proposed_requirements:
+                if not complete:
                     issues.append(
                         Issue(
                             str(document.path),
@@ -2398,24 +2905,26 @@ def rq3_semantic_issues(
                     )
                 )
 
-        if "downstream_physical_link" in statuses and not has_ordinary_value(
-            activity.get("later_physical_link")
+        if "downstream_physical_link" in statuses and not (
+            isinstance(activity.get("later_physical_relationship_ids"), list)
+            and activity["later_physical_relationship_ids"]
         ):
             issues.append(
                 Issue(
                     str(document.path),
-                    f"{base}/later_physical_link",
-                    "downstream_physical_link milestone lacks its evidence field",
+                    f"{base}/later_physical_relationship_ids",
+                    "downstream_physical_link milestone lacks a relationship record",
                 )
             )
-        if "model_to_test_closure" in statuses and not has_ordinary_value(
-            activity.get("model_to_test_closure")
+        if "model_to_test_closure" in statuses and not (
+            isinstance(activity.get("closure_check_ids"), list)
+            and activity["closure_check_ids"]
         ):
             issues.append(
                 Issue(
                     str(document.path),
-                    f"{base}/model_to_test_closure",
-                    "model_to_test_closure milestone lacks its evidence field",
+                    f"{base}/closure_check_ids",
+                    "model_to_test_closure milestone lacks a closure check record",
                 )
             )
 
@@ -2424,7 +2933,11 @@ def rq3_semantic_issues(
             "model_validation",
             "system_or_design_validation",
         } and not any(
-            has_ordinary_value(
+            (
+                isinstance(location.node.get("authority_check_ids"), list)
+                and bool(location.node["authority_check_ids"])
+            )
+            or has_ordinary_value(
                 location.node.get(
                     "why_criterion_or_oracle_is_authoritative_for_intended_use"
                 )
@@ -2439,6 +2952,22 @@ def rq3_semantic_issues(
                 )
             )
     return issues
+
+
+def procedure_component_is_reported(value: Any) -> bool:
+    return (
+        isinstance(value, Mapping)
+        and value.get("value") == "reported"
+        and isinstance(value.get("basis_refs"), list)
+        and bool(value["basis_refs"])
+    )
+
+
+def procedure_component_is_resolved(value: Any) -> bool:
+    return procedure_component_is_reported(value) or (
+        isinstance(value, Mapping)
+        and value.get("status") in {"none", "not_applicable"}
+    )
 
 
 def procedure_reporting_deficiencies(
@@ -2468,13 +2997,13 @@ def procedure_reporting_deficiencies(
     ):
         value = reporting.get(field)
         complete = (
-            has_ordinary_value(value)
+            procedure_component_is_reported(value)
             if requires_ordinary
-            else has_resolved_component(value)
+            else procedure_component_is_resolved(value)
         )
         if not complete:
             deficiencies.append(label)
-    if level == "reproduction_ready" and not has_ordinary_value(
+    if level == "reproduction_ready" and not procedure_component_is_reported(
         reporting.get("supporting_materials")
     ):
         deficiencies.append("accessible supporting materials")
@@ -2666,21 +3195,25 @@ def procedural_profile_issues(document: Document) -> list[Issue]:
             result = {}
         if not isinstance(setting, Mapping):
             setting = {}
-        resulting_application_identified = has_ordinary_value(
-            result.get("resulting_artifact")
-        ) or has_ordinary_value(setting.get("target_model_or_configuration"))
+        resulting_application_identified = has_resolved_links(
+            result.get("resulting_model_artifact_ids")
+        ) or has_resolved_links(setting.get("target_refs"))
         if resulting_application_identified and (
             bool(rows(tailoring.get("executed_operations")))
-            or has_ordinary_value(tailoring.get("reasons_for_changes_or_unchanged_use"))
+            or (
+                has_ordinary_value(
+                    tailoring.get("reasons_for_changes_or_unchanged_use")
+                )
+                and has_resolved_links(tailoring.get("reason_rule_ids"))
+            )
         ):
             worked_applications.append(application)
-        if all(
-            has_ordinary_value(result.get(field))
-            for field in (
-                "post_tailoring_or_application_criterion",
-                "assurance_method",
-                "assurance_timing",
-                "assurance_result",
+        if (
+            has_resolved_links(result.get("post_application_criterion_ids"))
+            and has_ordinary_value(result.get("assurance_timing"))
+            and (
+                has_resolved_links(result.get("assurance_check_ids"))
+                or has_resolved_links(result.get("assurance_rq3_activity_ids"))
             )
         ):
             assured_applications.append(application)
@@ -2728,6 +3261,13 @@ def procedural_profile_issues(document: Document) -> list[Issue]:
     return issues
 
 
+def has_resolved_links(value: Any) -> bool:
+    return (isinstance(value, list) and bool(value)) or (
+        isinstance(value, Mapping)
+        and value.get("status") in {"none", "not_applicable"}
+    )
+
+
 def reuse_specification_deficiencies(
     record: Mapping[str, Any],
 ) -> list[str]:
@@ -2739,23 +3279,39 @@ def reuse_specification_deficiencies(
     if not isinstance(design, Mapping):
         design = {}
 
-    for field in (
-        "target_platforms_and_missions",
-        "lifecycle_uses_and_decisions",
-        "eps_boundary",
-        "model_boundary_and_abstraction",
-        "architecture_and_interfaces",
-        "environment_modes_and_loads",
-        "required_inputs",
-        "tools_and_versions",
-        "organizational_prerequisites",
-        "exclusions_and_limits",
-    ):
-        if not has_resolved_dimension(envelope.get(field)):
-            deficiencies.append(f"resolved envelope dimension {field}")
+    dimensions = (
+        ("target_platforms_and_missions", "target_refs"),
+        ("lifecycle_uses_and_decisions", "lifecycle_stages"),
+        ("eps_boundary", "eps_scope_refs"),
+        ("model_boundary_and_abstraction", "model_scope_refs"),
+        ("architecture_and_interfaces", "architecture_and_interface_refs"),
+        ("environment_modes_and_loads", "environment_mode_and_load_refs"),
+        ("required_inputs", "required_input_refs"),
+        ("linked_tool_ids", "linked_tool_ids"),
+        ("organizational_prerequisites", "organizational_prerequisite_refs"),
+        ("exclusions_and_limits", "limit_rule_ids"),
+    )
+    for source_field, normalized_field in dimensions:
+        source_value = envelope.get(source_field)
+        if not has_resolved_dimension(source_value):
+            deficiencies.append(f"resolved envelope dimension {source_field}")
+            continue
+        if has_ordinary_value(source_value):
+            normalized = envelope.get(normalized_field)
+            normalized_is_resolved = (
+                has_resolved_dimension(normalized)
+                if normalized_field in {"lifecycle_stages", "linked_tool_ids"}
+                else has_resolved_links(normalized)
+            )
+            if not normalized_is_resolved:
+                deficiencies.append(
+                    f"normalized links for envelope dimension {source_field}"
+                )
 
     if not has_ordinary_value(design.get("reusable_core")):
         deficiencies.append("reusable core")
+    elif not has_resolved_links(design.get("core_member_refs")):
+        deficiencies.append("linked reusable-core members")
     variation_points = rows(design.get("variation_points"))
     tailoring_rules = rows(design.get("tailoring_rules"))
     tailoring_steps = rows(design.get("tailoring_procedure_steps"))
@@ -2770,8 +3326,19 @@ def reuse_specification_deficiencies(
         deficiencies.append("tailoring or adaptation process")
     if not has_resolved_dimension(design.get("required_roles_and_skills")):
         deficiencies.append("resolved required roles and skills")
-    if not has_resolved_dimension(design.get("required_tools_and_data")):
-        deficiencies.append("resolved required tools and data")
+    elif has_ordinary_value(design.get("required_roles_and_skills")) and not (
+        has_resolved_links(design.get("required_role_entity_ids"))
+        and has_resolved_links(design.get("required_skill_entity_ids"))
+    ):
+        deficiencies.append("linked required roles and skills")
+    if not has_resolved_dimension(design.get("required_tool_ids")):
+        deficiencies.append("resolved required tools")
+    if not has_resolved_dimension(design.get("required_data_and_tool_settings")):
+        deficiencies.append("resolved required data and settings")
+    elif has_ordinary_value(
+        design.get("required_data_and_tool_settings")
+    ) and not has_resolved_links(design.get("required_data_and_configuration_refs")):
+        deficiencies.append("linked required data and configurations")
     return deficiencies
 
 
@@ -2800,22 +3367,32 @@ def application_deficiencies(
 
     if not has_ordinary_value(setting.get("material_setting_differences")):
         deficiencies.append("material setting differences")
+    elif not has_resolved_links(
+        setting.get("material_difference_relationship_ids")
+    ):
+        deficiencies.append("linked material setting differences")
     if not has_ordinary_value(
         tailoring.get(
             "retained_artifact_core_method_steps_or_workflow_activities"
         )
     ):
         deficiencies.append("retained core, method steps, or workflow activities")
+    elif not has_resolved_links(tailoring.get("retained_refs")):
+        deficiencies.append("linked retained core or procedure members")
     changed = tailoring.get(
         "configured_or_changed_artifact_content_method_steps_or_workflow_activities"
     )
     unchanged_reason = tailoring.get("reasons_for_changes_or_unchanged_use")
     if not has_ordinary_value(changed) and not has_ordinary_value(unchanged_reason):
         deficiencies.append("changed content or justified unchanged use")
+    if has_ordinary_value(changed) and not has_resolved_links(
+        tailoring.get("changed_refs")
+    ):
+        deficiencies.append("linked changed content or procedure members")
     if has_ordinary_value(changed) and not rows(tailoring.get("executed_operations")):
         deficiencies.append("structured executed operation")
 
-    if not has_ordinary_value(result.get("post_tailoring_or_application_criterion")):
+    if not has_resolved_links(result.get("post_application_criterion_ids")):
         deficiencies.append("post-application criterion")
     if not has_ordinary_value(result.get("assurance_method")):
         deficiencies.append("assurance method")
@@ -2823,6 +3400,11 @@ def application_deficiencies(
         deficiencies.append("assurance timing")
     if not has_ordinary_value(result.get("assurance_result")):
         deficiencies.append("assurance result")
+    if not (
+        has_resolved_links(result.get("assurance_check_ids"))
+        or has_resolved_links(result.get("assurance_rq3_activity_ids"))
+    ):
+        deficiencies.append("linked assurance evidence")
     if coded_value(result.get("application_result")) not in {
         "success",
         "partial",
@@ -2853,6 +3435,14 @@ def application_deficiencies(
         ):
             if not has_resolved_evidence(independence.get(field)):
                 deficiencies.append(label)
+        if independence.get("personnel_overlap_status") in {None, "unclear"}:
+            deficiencies.append("resolved personnel-overlap status")
+        if not has_resolved_links(independence.get("controlling_team_entity_ids")):
+            deficiencies.append("controlling-team links")
+        if not has_resolved_links(independence.get("adoption_evidence_refs")):
+            deficiencies.append("linked adopter-attributable adoption evidence")
+        if not has_resolved_links(independence.get("assurance_evidence_refs")):
+            deficiencies.append("linked adopter-attributable assurance evidence")
     return deficiencies
 
 
@@ -3302,6 +3892,7 @@ def main() -> int:
         else:
             issues.extend(cross_record_reference_issues(document, indexes))
         issues.extend(evidence_issues(document, indexes))
+        issues.extend(normalization_issues(document))
     issues.extend(
         screening_record_issues(
             (document for document in documents if document.kind == "report"),
